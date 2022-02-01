@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <LangVersion>default</LangVersion>
+        <RootNamespace>KaiHeiLa.Rest</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Text.Json" Version="6.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="API\Common" />
+      <Folder Include="Net\Queue" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\KaiHeiLa.Net.Core\KaiHeiLa.Net.Core.csproj" />
+    </ItemGroup>
+
+</Project>

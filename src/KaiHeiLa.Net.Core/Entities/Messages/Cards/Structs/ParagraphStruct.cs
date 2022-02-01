@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace KaiHeiLa;
 
 /// <summary>
@@ -32,9 +34,9 @@ public class ParagraphStruct : IStruct
         }
     }
 
-    public List<IStruct> Fields { get; init; }
+    public List<IStruct> Fields { get; internal set; }
 
-    public void Add(IStruct field)
+    public ParagraphStruct Add(IStruct field)
     {
         if (Fields.Count >= 50)
         {
@@ -46,19 +48,6 @@ public class ParagraphStruct : IStruct
                 $"{Fields} 可以的元素为 {nameof(PlainTextElement)} 或 {nameof(KMarkdownElement)}");
         }
         Fields.Add(field);
-    }
-
-    public void AddRange(ICollection<IStruct> fields)
-    {
-        if (Fields.Count + fields.Count > 50)
-        {
-            throw new ArgumentOutOfRangeException(nameof(Fields), $"{nameof(Fields)} 最多有 50 个元素");
-        }
-        if (fields.Any(e => e is not (PlainTextElement or KMarkdownElement)))
-        {
-            throw new ArgumentOutOfRangeException(nameof(fields),
-                $"{Fields} 可以的元素为 {nameof(PlainTextElement)} 或 {nameof(KMarkdownElement)}");
-        }
-        Fields.AddRange(fields);
+        return this;
     }
 }

@@ -18,7 +18,7 @@ public class PlainTextElement : IElement
     public string Content
     {
         get => _content;
-        init
+        internal set
         {
             if (value.Length > 2000)
             {

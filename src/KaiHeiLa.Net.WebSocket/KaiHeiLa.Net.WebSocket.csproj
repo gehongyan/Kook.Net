@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <RootNamespace>KaiHeiLa.WebSocket</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\KaiHeiLa.Net.Core\KaiHeiLa.Net.Core.csproj" />
+      <ProjectReference Include="..\KaiHeiLa.Net.Rest\KaiHeiLa.Net.Rest.csproj" />
+    </ItemGroup>
+
+</Project>

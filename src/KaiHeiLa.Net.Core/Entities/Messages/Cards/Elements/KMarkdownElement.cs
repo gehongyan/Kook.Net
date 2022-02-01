@@ -20,7 +20,7 @@ public class KMarkdownElement : IElement
     public string Content
     {
         get => _content;
-        init
+        internal set
         {
             if (_content.Length > 5000)
             {

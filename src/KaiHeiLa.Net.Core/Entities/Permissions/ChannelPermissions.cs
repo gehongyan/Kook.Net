@@ -1,4 +1,6 @@
-﻿namespace KaiHeiLa;
+﻿using System.Diagnostics;
+
+namespace KaiHeiLa;
 
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct ChannelPermissions

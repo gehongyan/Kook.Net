@@ -2,6 +2,20 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaiHeiLa.Net.Core", "KaiHeiLa.Net.Core\KaiHeiLa.Net.Core.csproj", "{8E872B01-8D8A-498A-A31F-0D6599299876}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Implementations", "Implementations", "{58B166AB-82DD-472F-AC70-9318DA4F881E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{1E3AD043-5861-4B7F-8CE6-0EE9B4D6CB91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaiHeiLa.Net.Rest", "KaiHeiLa.Net.Rest\KaiHeiLa.Net.Rest.csproj", "{57F76D67-0E55-4609-A61C-3A4C3073CA0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaiHeiLa.Net.Tests.Unit", "..\test\KaiHeiLa.Net.Tests.Unit\KaiHeiLa.Net.Tests.Unit.csproj", "{0DC41632-CF8D-4E1C-85E7-9B60308B5834}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaiHeiLa.Net.WebSocket", "KaiHeiLa.Net.WebSocket\KaiHeiLa.Net.WebSocket.csproj", "{9A4ED2A6-5560-434A-89A6-5EAA8024383F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{8DE556F9-829D-48D3-A41C-FA57207CAE72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaiHeiLa.Net.Samples.SimpleBot", "..\samples\KaiHeiLa.Net.Samples.SimpleBot\KaiHeiLa.Net.Samples.SimpleBot.csproj", "{FD42006A-B8F2-468B-816F-67914EAEA943}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +26,27 @@ Global
 		{8E872B01-8D8A-498A-A31F-0D6599299876}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E872B01-8D8A-498A-A31F-0D6599299876}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E872B01-8D8A-498A-A31F-0D6599299876}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57F76D67-0E55-4609-A61C-3A4C3073CA0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57F76D67-0E55-4609-A61C-3A4C3073CA0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57F76D67-0E55-4609-A61C-3A4C3073CA0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57F76D67-0E55-4609-A61C-3A4C3073CA0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DC41632-CF8D-4E1C-85E7-9B60308B5834}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DC41632-CF8D-4E1C-85E7-9B60308B5834}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DC41632-CF8D-4E1C-85E7-9B60308B5834}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DC41632-CF8D-4E1C-85E7-9B60308B5834}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A4ED2A6-5560-434A-89A6-5EAA8024383F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A4ED2A6-5560-434A-89A6-5EAA8024383F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A4ED2A6-5560-434A-89A6-5EAA8024383F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A4ED2A6-5560-434A-89A6-5EAA8024383F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD42006A-B8F2-468B-816F-67914EAEA943}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD42006A-B8F2-468B-816F-67914EAEA943}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD42006A-B8F2-468B-816F-67914EAEA943}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD42006A-B8F2-468B-816F-67914EAEA943}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{57F76D67-0E55-4609-A61C-3A4C3073CA0E} = {58B166AB-82DD-472F-AC70-9318DA4F881E}
+		{0DC41632-CF8D-4E1C-85E7-9B60308B5834} = {1E3AD043-5861-4B7F-8CE6-0EE9B4D6CB91}
+		{9A4ED2A6-5560-434A-89A6-5EAA8024383F} = {58B166AB-82DD-472F-AC70-9318DA4F881E}
+		{FD42006A-B8F2-468B-816F-67914EAEA943} = {8DE556F9-829D-48D3-A41C-FA57207CAE72}
 	EndGlobalSection
 EndGlobal

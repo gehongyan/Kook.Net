@@ -15,24 +15,15 @@ public class ImageGroupModule : IModule
     
     public ModuleType Type => ModuleType.ImageGroup;
 
-    public List<ImageElement> Elements { get; init; }
+    public List<ImageElement> Elements { get; internal set; }
 
-    public void Add(ImageElement element)
+    public ImageGroupModule Add(ImageElement element)
     {
         if (Elements.Count >= 9)
         {
             throw new ArgumentOutOfRangeException(nameof(Elements), $"{nameof(Elements)} 只能有 1-9 张图片");
         }
         Elements.Add(element);
+        return this;
     }
-        
-    public void AddRange(ICollection<ImageElement> elements)
-    {
-        if (Elements.Count + elements.Count > 9)
-        {
-            throw new ArgumentOutOfRangeException(nameof(Elements), $"{nameof(Elements)} 只能有 1-9 张图片");
-        }
-        Elements.AddRange(elements);
-    }
-    
 }

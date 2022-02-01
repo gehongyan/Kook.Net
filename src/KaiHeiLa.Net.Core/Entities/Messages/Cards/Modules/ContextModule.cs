@@ -10,9 +10,9 @@ public class ContextModule : IModule
 {
     public ModuleType Type => ModuleType.Context;
     
-    public List<IElement> Elements { get; init; }
+    public List<IElement> Elements { get; internal set; }
     
-    public void Add(IElement field)
+    public ContextModule Add(IElement field)
     {
         if (Elements.Count >= 10)
         {
@@ -24,19 +24,6 @@ public class ContextModule : IModule
                 $"{Elements} 可以的元素为 {nameof(PlainTextElement)} 或 {nameof(KMarkdownElement)}");
         }
         Elements.Add(field);
-    }
-
-    public void AddRange(ICollection<IElement> fields)
-    {
-        if (Elements.Count + fields.Count > 10)
-        {
-            throw new ArgumentOutOfRangeException(nameof(Elements), $"{nameof(Elements)} 最多可包含 10 个元素");
-        }
-        if (fields.Any(e => e is not (PlainTextElement or KMarkdownElement or ImageElement)))
-        {
-            throw new ArgumentOutOfRangeException(nameof(fields),
-                $"{Elements} 可以的元素为 {nameof(PlainTextElement)} 或 {nameof(KMarkdownElement)}");
-        }
-        Elements.AddRange(fields);
+        return this;
     }
 }

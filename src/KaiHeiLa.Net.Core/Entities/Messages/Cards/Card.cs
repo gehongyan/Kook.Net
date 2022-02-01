@@ -1,4 +1,6 @@
-﻿namespace KaiHeiLa;
+﻿using System.Drawing;
+
+namespace KaiHeiLa;
 
 /// <summary>
 ///     卡片

@@ -1,4 +1,6 @@
-﻿namespace KaiHeiLa;
+﻿using System.Drawing;
+
+namespace KaiHeiLa;
 
 public interface IRole : IEntity<uint>, IMentionable
 {
