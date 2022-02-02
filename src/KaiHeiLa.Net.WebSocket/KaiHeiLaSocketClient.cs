@@ -1,51 +1,83 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.Json;
 using KaiHeiLa.API;
+using KaiHeiLa.API.Gateway;
 using KaiHeiLa.Logging;
 
 namespace KaiHeiLa.WebSocket;
 
-public partial class KaiHeiLaSocketClient
+public partial class KaiHeiLaSocketClient : BaseSocketClient
 {
-    public event Func<LogMessage, Task> Log
-    {
-        add => _logEvent.Add(value);
-        remove => _logEvent.Remove(value);
-    }
-    internal readonly AsyncEvent<Func<LogMessage, Task>> _logEvent = new AsyncEvent<Func<LogMessage, Task>>();
+    #region KaiHeiLaSocketClient
 
+    private readonly JsonSerializerOptions _serializerOptions;
+
+    private readonly ConcurrentQueue<long> _heartbeatTimes;
     private readonly ConnectionManager _connection;
     private readonly Logger _gatewayLogger;
     private readonly SemaphoreSlim _stateLock;
 
-    private int _lastSeq = 0;
-    private long _lastMessageTime;
     private Guid _sessionId;
-
+    private int _lastSeq = 0;
     private Task _heartbeatTask;
-    private readonly ConcurrentQueue<long> _heartbeatTimes;
-    
-    public KaiHeiLaSocketClient(KaiHeiLaSocketConfig config)
+    private long _lastMessageTime;
+
+    private bool _isDisposed;
+
+    public ConnectionState ConnectionState => _connection.State;
+    public override int Latency { get; protected set; }
+
+    #endregion
+
+    // From KaiHeiLaSocketConfig
+    internal ClientState State { get; private set; }
+    internal int? HandlerTimeout { get; private set; }
+    internal new KaiHeiLaSocketApiClient ApiClient => base.ApiClient;
+
+    public KaiHeiLaSocketClient(KaiHeiLaSocketConfig config) : this(config, CreateApiClient(config))
     {
-        ApiClient = new KaiHeiLaSocketApiClient();
-        LogManager = new LogManager(config.LogLevel);
-        LogManager.Message += async msg => await _logEvent.InvokeAsync(msg).ConfigureAwait(false);
-        
+    }
+
+    private KaiHeiLaSocketClient(KaiHeiLaSocketConfig config, KaiHeiLaSocketApiClient client)
+        : base(config, client)
+    {
+        HandlerTimeout = config.HandlerTimeout;
+        State = new ClientState(0, 0);
         _heartbeatTimes = new ConcurrentQueue<long>();
-        
+
         _stateLock = new SemaphoreSlim(1, 1);
         _gatewayLogger = LogManager.CreateLogger("Gateway");
         _connection = new ConnectionManager(_stateLock, _gatewayLogger, config.ConnectionTimeout,
             OnConnectingAsync, OnDisconnectingAsync, x => ApiClient.Disconnected += x);
-        
-        ApiClient.SentGatewayMessage += async socketFrameType => await _gatewayLogger.DebugAsync($"Sent {socketFrameType}").ConfigureAwait(false);
+        _connection.Connected += () => TimedInvokeAsync(_connectedEvent, nameof(Connected));
+        _connection.Disconnected += (ex, recon) => TimedInvokeAsync(_disconnectedEvent, nameof(Disconnected), ex);
+
+        _serializerOptions = client.SerializerOptions;
+
+        ApiClient.SentGatewayMessage += async socketFrameType =>
+            await _gatewayLogger.DebugAsync($"Sent {socketFrameType}").ConfigureAwait(false);
         ApiClient.ReceivedGatewayEvent += ProcessMessageAsync;
     }
 
-    public int Latency { get; protected set; }
-    public ConnectionState ConnectionState => _connection.State;
-    internal LogManager LogManager { get; }
-    internal int? HandlerTimeout { get; private set; }
+    private static KaiHeiLaSocketApiClient CreateApiClient(KaiHeiLaSocketConfig config)
+        => new KaiHeiLaSocketApiClient();
+
+    internal override void Dispose(bool disposing)
+    {
+        if (!_isDisposed)
+        {
+            if (disposing)
+            {
+                StopAsync().GetAwaiter().GetResult();
+                ApiClient?.Dispose();
+                _stateLock?.Dispose();
+            }
+
+            _isDisposed = true;
+        }
+
+        base.Dispose(disposing);
+    }
 
     private async Task OnConnectingAsync()
     {
@@ -54,7 +86,9 @@ public partial class KaiHeiLaSocketClient
             await _gatewayLogger.DebugAsync("Connecting ApiClient").ConfigureAwait(false);
             await ApiClient.ConnectAsync().ConfigureAwait(false);
         }
-        catch { }
+        catch
+        {
+        }
 
         await _connection.WaitAsync().ConfigureAwait(false);
     }
@@ -70,33 +104,101 @@ public partial class KaiHeiLaSocketClient
         if (heartbeatTask != null)
             await heartbeatTask.ConfigureAwait(false);
         _heartbeatTask = null;
-        
-        while (_heartbeatTimes.TryDequeue(out _)) { }
+
+        while (_heartbeatTimes.TryDequeue(out _))
+        {
+        }
+
         _lastMessageTime = 0;
     }
 
-    internal KaiHeiLaSocketApiClient ApiClient { get; set; }
 
     private async Task ProcessMessageAsync(SocketFrameType socketFrameType, int? sequence, object payload)
     {
         if (sequence != null)
             _lastSeq = sequence.Value;
         _lastMessageTime = Environment.TickCount;
-        
+
         try
         {
-            await _gatewayLogger.DebugAsync($"Received {socketFrameType}").ConfigureAwait(false);
             switch (socketFrameType)
             {
                 case SocketFrameType.Event:
+                    GatewayEvent gatewayEvent =
+                        ((JsonElement) payload).Deserialize<GatewayEvent>(_serializerOptions);
+
+                    dynamic eventExtraData = gatewayEvent!.Type switch
+                    {
+                        MessageType.System => ((JsonElement) gatewayEvent.ExtraData)
+                            .Deserialize<GatewaySystemEventExtraData>(_serializerOptions),
+                        _ => ((JsonElement) gatewayEvent.ExtraData).Deserialize<GatewayMessageExtraData>(
+                            _serializerOptions)
+                    };
+
+                    switch (gatewayEvent.Type)
+                    {
+                        case MessageType.Text:
+                        {
+                            await _gatewayLogger.DebugAsync("Received Message (Text)").ConfigureAwait(false);
+                            GatewayMessageExtraData extraData = eventExtraData as GatewayMessageExtraData;
+                        }
+
+                            break;
+                        // case MessageType.Image:
+                        //     break;
+                        // case MessageType.Video:
+                        //     break;
+                        // case MessageType.File:
+                        //     break;
+                        // case MessageType.Audio:
+                        //     break;
+                        // case MessageType.KMarkdown:
+                        //     break;
+                        // case MessageType.Card:
+                        //     break;
+                        case MessageType.System:
+                        {
+                            GatewaySystemEventExtraData extraData = eventExtraData as GatewaySystemEventExtraData;
+                            switch (gatewayEvent.ChannelType, extraData!.Type)
+                            {
+                                #region Channels
+
+                                // 频道内用户添加 reaction
+                                case ("GROUP", "added_reaction"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (added_reaction)")
+                                        .ConfigureAwait(false);
+                                    ReactionAddedInChannel body =
+                                        ((JsonElement) extraData.Body).Deserialize<ReactionAddedInChannel>(
+                                            _serializerOptions);
+                                    // TODO: 频道内用户添加 reaction
+                                }
+                                    break;
+
+                                #endregion
+
+                                default:
+                                    await _gatewayLogger.WarningAsync($"Unknown System Event Type ({extraData.Type})")
+                                        .ConfigureAwait(false);
+                                    break;
+                            }
+                        }
+                            break;
+                        default:
+                            await _gatewayLogger.WarningAsync($"Unknown Event Type ({gatewayEvent.Type})")
+                                .ConfigureAwait(false);
+                            break;
+                    }
+
                     break;
 
                 case SocketFrameType.Hello:
+                    await _gatewayLogger.DebugAsync("Received Hello").ConfigureAwait(false);
                     try
                     {
-                        SocketHelloPayload socketHelloPayload =
-                            ((JsonElement) payload).Deserialize<SocketHelloPayload>(ApiClient.SerializerOptions);
-                        _sessionId = socketHelloPayload?.SessionId ?? Guid.Empty;
+                        GatewayHelloPayload gatewayHelloPayload =
+                            ((JsonElement) payload).Deserialize<GatewayHelloPayload>(_serializerOptions);
+                        _sessionId = gatewayHelloPayload?.SessionId ?? Guid.Empty;
                         _heartbeatTask = RunHeartbeatAsync(_connection.CancelToken);
                     }
                     catch (Exception ex)
@@ -104,37 +206,44 @@ public partial class KaiHeiLaSocketClient
                         _connection.CriticalError(new Exception("Processing Hello failed", ex));
                         return;
                     }
+
                     _ = _connection.CompleteAsync();
                     break;
 
-                case SocketFrameType.Ping:
-                    break;
-                
                 case SocketFrameType.Pong:
+                    await _gatewayLogger.DebugAsync("Received Pong").ConfigureAwait(false);
                     if (_heartbeatTimes.TryDequeue(out long time))
                     {
-                        int latency = (int)(Environment.TickCount - time);
+                        int latency = (int) (Environment.TickCount - time);
                         int before = Latency;
                         Latency = latency;
 
-                        await TimedInvokeAsync(_latencyUpdatedEvent, nameof(LatencyUpdated), before, latency).ConfigureAwait(false);
+                        await TimedInvokeAsync(_latencyUpdatedEvent, nameof(LatencyUpdated), before, latency)
+                            .ConfigureAwait(false);
                     }
+
                     break;
-                
-                case SocketFrameType.Resume:
-                    break;
+
                 case SocketFrameType.Reconnect:
+                    await _gatewayLogger.DebugAsync("Received Reconnect").ConfigureAwait(false);
+                    _connection.Error(new GatewayReconnectException("Server requested a reconnect"));
                     break;
+
                 case SocketFrameType.ResumeAck:
+                    await _gatewayLogger.DebugAsync("Received ResumeAck").ConfigureAwait(false);
+                    _ = _connection.CompleteAsync();
+                    await _gatewayLogger.InfoAsync("Resumed previous session").ConfigureAwait(false);
                     break;
+
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(socketFrameType), socketFrameType, null);
+                    await _gatewayLogger.WarningAsync($"Unknown Socket Frame Type ({socketFrameType})")
+                        .ConfigureAwait(false);
+                    break;
             }
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e);
-            throw;
+            await _gatewayLogger.ErrorAsync($"Error handling {socketFrameType}", ex).ConfigureAwait(false);
         }
     }
 
@@ -145,7 +254,8 @@ public partial class KaiHeiLaSocketClient
         return Task.CompletedTask;
     }
 
-    public async Task StartAsync() => await _connection.StartAsync().ConfigureAwait(false);
+    public override async Task StartAsync() => await _connection.StartAsync().ConfigureAwait(false);
+    public override async Task StopAsync() => await _connection.StopAsync().ConfigureAwait(false);
 
     private async Task RunHeartbeatAsync(CancellationToken cancelToken)
     {
@@ -179,6 +289,7 @@ public partial class KaiHeiLaSocketClient
 
                 await Task.Delay(intervalMillis, cancelToken).ConfigureAwait(false);
             }
+
             await _gatewayLogger.DebugAsync("Heartbeat Stopped").ConfigureAwait(false);
         }
         catch (OperationCanceledException)

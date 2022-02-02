@@ -13,7 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="API\Common" />
       <Folder Include="Net\Queue" />
     </ItemGroup>
 

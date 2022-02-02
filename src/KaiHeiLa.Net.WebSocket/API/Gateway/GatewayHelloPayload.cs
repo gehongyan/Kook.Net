@@ -1,9 +1,9 @@
 using System.Text.Json.Serialization;
 using KaiHeiLa.API.Converters;
 
-namespace KaiHeiLa.API;
+namespace KaiHeiLa.API.Gateway;
 
-public class SocketHelloPayload
+internal class GatewayHelloPayload
 {
     [JsonPropertyName("code")]
     public int Code { get; set; }

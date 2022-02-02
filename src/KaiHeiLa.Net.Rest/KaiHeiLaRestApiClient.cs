@@ -6,11 +6,13 @@ using KaiHeiLa.API;
 
 namespace KaiHeiLa.API;
 
-internal class KaiHeiLaRestApiClient
+internal class KaiHeiLaRestApiClient : IDisposable
 {
     internal readonly JsonSerializerOptions SerializerOptions = new()
         { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
 
+    protected bool _isDisposed;
+    
     public KaiHeiLaRestApiClient()
     {
         
@@ -19,7 +21,17 @@ internal class KaiHeiLaRestApiClient
     public TokenType TokenType { get; set; }
     public string AuthToken { get; set; }
     public LoginState LoginState { get; internal set; }
-
+    
+    
+    internal virtual void Dispose(bool disposing)
+    {
+        if (!_isDisposed)
+        {
+            _isDisposed = true;
+        }
+    }
+    public void Dispose() => Dispose(true);
+    
     public void SetAuthToken(TokenType tokenType, string authToken)
     {
         TokenType = tokenType;

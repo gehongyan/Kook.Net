@@ -1,6 +1,6 @@
 namespace KaiHeiLa.API;
 
-public enum SocketFrameType
+internal enum SocketFrameType
 {
     Event,
     Hello,

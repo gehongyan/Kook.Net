@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace KaiHeiLa.API.Converters;
 
-public class GuidConverter : JsonConverter<Guid>
+internal class GuidConverter : JsonConverter<Guid>
 {
     public override Guid Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

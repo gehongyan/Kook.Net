@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace KaiHeiLa.API.Converters;
 
-public class SocketFrameTypeConverter : JsonConverter<SocketFrameType>
+internal class SocketFrameTypeConverter : JsonConverter<SocketFrameType>
 {
     public override SocketFrameType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
