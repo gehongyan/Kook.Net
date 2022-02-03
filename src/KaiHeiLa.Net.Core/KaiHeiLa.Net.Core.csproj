@@ -10,17 +10,7 @@
 
     <ItemGroup>
       <Folder Include="Entities\Gateway" />
-      <Folder Include="Extensions" />
-      <Folder Include="Net\Rest" />
       <Folder Include="Net\Signaling" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="Net\Rest\RestResponse.cs" />
-      <Compile Remove="Net\Rest\RestClientProvider.cs" />
-      <Compile Remove="Net\IRequest.cs" />
-      <Compile Remove="Net\BucketId.cs" />
-      <Compile Remove="RetryMode.cs" />
     </ItemGroup>
 
     <ItemGroup>

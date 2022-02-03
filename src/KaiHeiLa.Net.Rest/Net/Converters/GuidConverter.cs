@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace KaiHeiLa.API.Converters;
+namespace KaiHeiLa.Net.Converters;
 
 internal class GuidConverter : JsonConverter<Guid>
 {

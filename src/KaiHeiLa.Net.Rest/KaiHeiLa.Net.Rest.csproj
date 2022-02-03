@@ -13,10 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Net\Queue" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\KaiHeiLa.Net.Core\KaiHeiLa.Net.Core.csproj" />
     </ItemGroup>
 

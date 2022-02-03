@@ -1,12 +1,15 @@
 ﻿using System.Collections.Concurrent;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using KaiHeiLa.API;
 using KaiHeiLa.API.Gateway;
 using KaiHeiLa.Logging;
+using KaiHeiLa.Net.WebSockets;
+using KaiHeiLa.Rest;
 
 namespace KaiHeiLa.WebSocket;
 
-public partial class KaiHeiLaSocketClient : BaseSocketClient
+public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
 {
     #region KaiHeiLaSocketClient
 
@@ -24,6 +27,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient
 
     private bool _isDisposed;
 
+    public override KaiHeiLaSocketRestClient Rest { get; }
     public ConnectionState ConnectionState => _connection.State;
     public override int Latency { get; protected set; }
 
@@ -31,18 +35,19 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient
 
     // From KaiHeiLaSocketConfig
     internal ClientState State { get; private set; }
+    internal WebSocketProvider WebSocketProvider { get; private set; }
     internal int? HandlerTimeout { get; private set; }
     internal new KaiHeiLaSocketApiClient ApiClient => base.ApiClient;
 
-    public KaiHeiLaSocketClient(KaiHeiLaSocketConfig config) : this(config, CreateApiClient(config))
-    {
-    }
+    public KaiHeiLaSocketClient(KaiHeiLaSocketConfig config) : this(config, CreateApiClient(config)) { }
 
     private KaiHeiLaSocketClient(KaiHeiLaSocketConfig config, KaiHeiLaSocketApiClient client)
         : base(config, client)
     {
+        WebSocketProvider = config.WebSocketProvider;
         HandlerTimeout = config.HandlerTimeout;
         State = new ClientState(0, 0);
+        Rest = new KaiHeiLaSocketRestClient(config, ApiClient);
         _heartbeatTimes = new ConcurrentQueue<long>();
 
         _stateLock = new SemaphoreSlim(1, 1);
@@ -52,7 +57,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient
         _connection.Connected += () => TimedInvokeAsync(_connectedEvent, nameof(Connected));
         _connection.Disconnected += (ex, recon) => TimedInvokeAsync(_disconnectedEvent, nameof(Disconnected), ex);
 
-        _serializerOptions = client.SerializerOptions;
+        _serializerOptions = new JsonSerializerOptions {Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping};
 
         ApiClient.SentGatewayMessage += async socketFrameType =>
             await _gatewayLogger.DebugAsync($"Sent {socketFrameType}").ConfigureAwait(false);
@@ -60,7 +65,8 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient
     }
 
     private static KaiHeiLaSocketApiClient CreateApiClient(KaiHeiLaSocketConfig config)
-        => new KaiHeiLaSocketApiClient();
+        => new KaiHeiLaSocketApiClient(config.RestClientProvider, config.WebSocketProvider, KaiHeiLaRestConfig.UserAgent, 
+            config.GatewayHost, defaultRatelimitCallback: config.DefaultRatelimitCallback);
 
     internal override void Dispose(bool disposing)
     {
@@ -105,14 +111,25 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient
             await heartbeatTask.ConfigureAwait(false);
         _heartbeatTask = null;
 
-        while (_heartbeatTimes.TryDequeue(out _))
-        {
-        }
-
+        while (_heartbeatTimes.TryDequeue(out _)) { }
         _lastMessageTime = 0;
+        
+        //Raise virtual GUILD_UNAVAILABLEs
+        await _gatewayLogger.DebugAsync("Raising virtual GuildUnavailables").ConfigureAwait(false);
+        foreach (var guild in State.Guilds)
+        {
+            if (guild.IsAvailable)
+                await GuildUnavailableAsync(guild).ConfigureAwait(false);
+        }
     }
 
-
+    
+    /// <inheritdoc />
+    public override SocketGuild GetGuild(ulong id)
+        => State.GetGuild(id);
+    
+    #region ProcessMessageAsync
+    
     private async Task ProcessMessageAsync(SocketFrameType socketFrameType, int? sequence, object payload)
     {
         if (sequence != null)
@@ -141,8 +158,9 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient
                         {
                             await _gatewayLogger.DebugAsync("Received Message (Text)").ConfigureAwait(false);
                             GatewayMessageExtraData extraData = eventExtraData as GatewayMessageExtraData;
+                            
+                            
                         }
-
                             break;
                         // case MessageType.Image:
                         //     break;
@@ -178,7 +196,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient
                                 #endregion
 
                                 default:
-                                    await _gatewayLogger.WarningAsync($"Unknown System Event Type ({extraData.Type})")
+                                    await _gatewayLogger.WarningAsync($"Unknown SystemEventType ({extraData.Type})")
                                         .ConfigureAwait(false);
                                     break;
                             }
@@ -193,6 +211,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient
                     break;
 
                 case SocketFrameType.Hello:
+                {
                     await _gatewayLogger.DebugAsync("Received Hello").ConfigureAwait(false);
                     try
                     {
@@ -208,9 +227,11 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient
                     }
 
                     _ = _connection.CompleteAsync();
+                }
                     break;
 
                 case SocketFrameType.Pong:
+                {
                     await _gatewayLogger.DebugAsync("Received Pong").ConfigureAwait(false);
                     if (_heartbeatTimes.TryDequeue(out long time))
                     {
@@ -221,18 +242,30 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient
                         await TimedInvokeAsync(_latencyUpdatedEvent, nameof(LatencyUpdated), before, latency)
                             .ConfigureAwait(false);
                     }
-
+                }
                     break;
 
                 case SocketFrameType.Reconnect:
+                {
                     await _gatewayLogger.DebugAsync("Received Reconnect").ConfigureAwait(false);
                     _connection.Error(new GatewayReconnectException("Server requested a reconnect"));
+                }
                     break;
 
                 case SocketFrameType.ResumeAck:
+                {
                     await _gatewayLogger.DebugAsync("Received ResumeAck").ConfigureAwait(false);
                     _ = _connection.CompleteAsync();
+
+                    //Notify the client that these guilds are available again
+                    foreach (var guild in State.Guilds)
+                    {
+                        if (guild.IsAvailable)
+                            await GuildAvailableAsync(guild).ConfigureAwait(false);
+                    }
+
                     await _gatewayLogger.InfoAsync("Resumed previous session").ConfigureAwait(false);
+                }
                     break;
 
                 default:
@@ -246,6 +279,8 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient
             await _gatewayLogger.ErrorAsync($"Error handling {socketFrameType}", ex).ConfigureAwait(false);
         }
     }
+
+    #endregion
 
     public Task LoginAsync(TokenType tokenType, string token)
     {
@@ -302,6 +337,33 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient
         }
     }
 
+    internal SocketGuild AddGuild(API.Guild model, ClientState state)
+    {
+        // var guild = SocketGuild.Create(this, state, model);
+        // state.AddGuild(guild);
+        // return guild;
+        return default;
+    }
+    internal SocketGuild RemoveGuild(ulong id)
+        => State.RemoveGuild(id);
+
+    private async Task GuildAvailableAsync(SocketGuild guild)
+    {
+        if (!guild.IsConnected)
+        {
+            guild.IsConnected = true;
+            await TimedInvokeAsync(_guildAvailableEvent, nameof(GuildAvailable), guild).ConfigureAwait(false);
+        }
+    }
+    private async Task GuildUnavailableAsync(SocketGuild guild)
+    {
+        if (guild.IsConnected)
+        {
+            guild.IsConnected = false;
+            await TimedInvokeAsync(_guildUnavailableEvent, nameof(GuildUnavailable), guild).ConfigureAwait(false);
+        }
+    }
+    
     private async Task TimedInvokeAsync(AsyncEvent<Func<Task>> eventHandler, string name)
     {
         if (eventHandler.HasSubscribers)

@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace KaiHeiLa.API;
 
-internal class RestResponse<TData>
+internal class RestResponseBase<TData>
 {
     [JsonPropertyName("code")]
     public int Code { get; set; }

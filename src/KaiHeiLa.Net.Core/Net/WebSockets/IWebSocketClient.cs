@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace KaiHeiLa.Net.WebSockets
+﻿namespace KaiHeiLa.Net.WebSockets
 {
     public interface IWebSocketClient : IDisposable
     {

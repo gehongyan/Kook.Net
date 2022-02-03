@@ -18,7 +18,7 @@ public interface IGuild : IULongEntity
 
     string OpenId { get; }
 
-    ITextChannel DefaultChannel { get; }
+    ulong DefaultChannelId { get; }
 
-    ITextChannel WelcomeChannel { get; }
+    ulong WelcomeChannelId { get; }
 }

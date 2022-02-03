@@ -39,5 +39,23 @@ namespace KaiHeiLa.WebSocket
         private readonly AsyncEvent<Func<int, int, Task>> _latencyUpdatedEvent = new AsyncEvent<Func<int, int, Task>>();
 
         #endregion
+
+        #region Guilds
+        /// <summary> Fired when a guild becomes available. </summary>
+        public event Func<SocketGuild, Task> GuildAvailable
+        {
+            add { _guildAvailableEvent.Add(value); }
+            remove { _guildAvailableEvent.Remove(value); }
+        }
+        internal readonly AsyncEvent<Func<SocketGuild, Task>> _guildAvailableEvent = new AsyncEvent<Func<SocketGuild, Task>>();
+        /// <summary> Fired when a guild becomes unavailable. </summary>
+        public event Func<SocketGuild, Task> GuildUnavailable
+        {
+            add { _guildUnavailableEvent.Add(value); }
+            remove { _guildUnavailableEvent.Remove(value); }
+        }
+        internal readonly AsyncEvent<Func<SocketGuild, Task>> _guildUnavailableEvent = new AsyncEvent<Func<SocketGuild, Task>>();
+
+        #endregion
     }
 }

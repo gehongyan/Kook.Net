@@ -1,5 +1,7 @@
 using System.Text;
 using System.Text.Json;
+using KaiHeiLa.Net.Queue;
+using KaiHeiLa.Net.Rest;
 using KaiHeiLa.Net.WebSockets;
 using KaiHeiLa.WebSocket;
 
@@ -28,19 +30,34 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
 
     private readonly AsyncEvent<Func<Exception, Task>> _disconnectedEvent = new AsyncEvent<Func<Exception, Task>>();
     
+    private readonly bool _isExplicitUrl;
     private CancellationTokenSource _connectCancelToken;
     private string _gatewayUrl;
     private string _resumeQueryParams;
-    protected readonly SemaphoreSlim _stateLock;
     public ConnectionState ConnectionState { get; private set; }
     internal IWebSocketClient WebSocketClient { get; }
     
-    public KaiHeiLaSocketApiClient()
+    public KaiHeiLaSocketApiClient(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider, string userAgent,
+            string url = null, RetryMode defaultRetryMode = RetryMode.AlwaysRetry, JsonSerializerOptions serializerOptions = null,
+            Func<IRateLimitInfo, Task> defaultRatelimitCallback = null)
+        : base(restClientProvider, userAgent, defaultRetryMode, serializerOptions, defaultRatelimitCallback)
     {
-        WebSocketClient = new DefaultWebSocketClient();
+        _gatewayUrl = url;
+        if (url != null)
+            _isExplicitUrl = true;
+        
+        WebSocketClient = webSocketProvider();
         WebSocketClient.TextMessage += OnTextMessage;
+        WebSocketClient.Closed += async ex =>
+        {
+#if DEBUG_PACKETS
+                Console.WriteLine(ex);
+#endif
+
+            await DisconnectAsync().ConfigureAwait(false);
+            await _disconnectedEvent.InvokeAsync(ex).ConfigureAwait(false);
+        };
         _resumeQueryParams = null;
-        _stateLock = new SemaphoreSlim(1, 1);
     }
     
     private async Task OnTextMessage(string message)
@@ -52,11 +69,6 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         }
     }
 
-    public void LoginAsync(TokenType tokenType, string token)
-    {
-        SetAuthToken(tokenType, token);
-    }
-    
     public async Task StartAsync()
     {
         
@@ -97,7 +109,7 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
             _connectCancelToken = new CancellationTokenSource();
             WebSocketClient?.SetCancelToken(_connectCancelToken.Token);
 
-            RestResponse<GetGatewayResponse> gatewayResponse = await GetGatewayAsync().ConfigureAwait(false);
+            RestResponseBase<GetGatewayResponse> gatewayResponse = await GetGatewayAsync().ConfigureAwait(false);
             _gatewayUrl = $"{gatewayResponse.Data.Url}{_resumeQueryParams}";
             await WebSocketClient.ConnectAsync(_gatewayUrl).ConfigureAwait(false);
             ConnectionState = ConnectionState.Connected;
@@ -139,22 +151,31 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         ConnectionState = ConnectionState.Disconnected;
     }
     
-    public async Task SendHeartbeatAsync(int lastSeq)
+    public async Task SendHeartbeatAsync(int lastSeq, RequestOptions options = null)
     {
-        await SendGatewayAsync(SocketFrameType.Ping, lastSeq).ConfigureAwait(false);
+        options = RequestOptions.CreateOrClone(options);
+        await SendGatewayAsync(SocketFrameType.Ping, lastSeq, options: options).ConfigureAwait(false);
     }
-    public Task SendGatewayAsync(SocketFrameType socketFrameType, object payload = null, int? sequence = null)
-        => SendGatewayInternalAsync(socketFrameType, payload, sequence);
-
-    private async Task SendGatewayInternalAsync(SocketFrameType opCode, object payload = null, int? sequence = null)
+    
+    public Task SendGatewayAsync(SocketFrameType socketFrameType, object payload = null, int? sequence = null, RequestOptions options = null)
+        => SendGatewayInternalAsync(socketFrameType, options, payload, sequence);
+    private async Task SendGatewayInternalAsync(SocketFrameType socketFrameType, RequestOptions options, object payload = null, int? sequence = null)
     {
         CheckState();
         
         byte[] bytes = null;
-        payload = new SocketFrame { Type = opCode, Payload = payload, Sequence = sequence };
+        payload = new SocketFrame { Type = socketFrameType, Payload = payload, Sequence = sequence };
         if (payload != null)
             bytes = Encoding.UTF8.GetBytes(SerializeJson(payload));
-        await WebSocketClient.SendAsync(bytes, 0, bytes.Length, true);
-        await _sentGatewayMessageEvent.InvokeAsync(opCode).ConfigureAwait(false);
+        
+        options.IsGatewayBucket = true;
+        if (options.BucketId == null)
+            options.BucketId = GatewayBucket.Get(GatewayBucketType.Unbucketed).Id;
+        await RequestQueue.SendAsync(new WebSocketRequest(WebSocketClient, bytes, true, socketFrameType == SocketFrameType.Ping, options)).ConfigureAwait(false);
+        await _sentGatewayMessageEvent.InvokeAsync(socketFrameType).ConfigureAwait(false);
+        
+#if DEBUG_PACKETS
+        Console.WriteLine($"-> {opCode}:\n{SerializeJson(payload)}");
+#endif
     }
 }

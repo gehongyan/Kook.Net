@@ -1,7 +1,8 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using KaiHeiLa.API;
 
-namespace KaiHeiLa.API.Converters;
+namespace KaiHeiLa.Net.Converters;
 
 internal class SocketFrameTypeConverter : JsonConverter<SocketFrameType>
 {
