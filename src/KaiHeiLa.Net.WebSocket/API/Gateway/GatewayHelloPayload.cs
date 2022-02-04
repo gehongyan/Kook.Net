@@ -6,7 +6,7 @@ namespace KaiHeiLa.API.Gateway;
 internal class GatewayHelloPayload
 {
     [JsonPropertyName("code")]
-    public int Code { get; set; }
+    public KaiHeiLaErrorCode Code { get; set; }
     
     [JsonPropertyName("session_id")]
     [JsonConverter(typeof(GuidConverter))]

@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq.Expressions;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -207,17 +208,42 @@ internal class KaiHeiLaRestApiClient : IDisposable
     /// <summary>
     ///     获取网关地址
     /// </summary>
-    public async Task<RestResponseBase<GetGatewayResponse>> GetGatewayAsync(RequestOptions options = null)
+    public async Task<GetGatewayResponse> GetGatewayAsync(RequestOptions options = null)
     {
         options = RequestOptions.CreateOrClone(options);
-        return await SendAsync<RestResponseBase<GetGatewayResponse>>(HttpMethod.Get, () => "gateway/index?compress=0", new BucketIds(), options: options).ConfigureAwait(false);
+        return await SendAsync<GetGatewayResponse>(HttpMethod.Get, () => "gateway/index?compress=0", new BucketIds(), options: options).ConfigureAwait(false);
     }
 
     #endregion
 
     #region Guilds
 
+    public async Task<IReadOnlyCollection<Guild>> GetGuildsAsync(RequestOptions options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+
+        try
+        {
+            var ids = new BucketIds();
+            return (await SendAsync<PagedResponseBase<Guild>>(HttpMethod.Get, () => $"guild/list", ids, options: options)
+                .ConfigureAwait(false)).Items;
+        }
+        catch (HttpException ex) when (ex.HttpCode == HttpStatusCode.NotFound) { return null; }
+    }
     
+    
+    public async Task<ExtendedGuild> GetGuildAsync(ulong guildId, RequestOptions options = null)
+    {
+        Preconditions.NotEqual(guildId, 0, nameof(guildId));
+        options = RequestOptions.CreateOrClone(options);
+
+        try
+        {
+            var ids = new BucketIds(guildId: guildId);
+            return await SendAsync<ExtendedGuild>(HttpMethod.Get, () => $"guild/view?guild_id={guildId}", ids, options: options).ConfigureAwait(false);
+        }
+        catch (HttpException ex) when (ex.HttpCode == HttpStatusCode.NotFound) { return null; }
+    }
 
     #endregion
     

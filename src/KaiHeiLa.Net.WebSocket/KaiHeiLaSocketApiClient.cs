@@ -109,8 +109,8 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
             _connectCancelToken = new CancellationTokenSource();
             WebSocketClient?.SetCancelToken(_connectCancelToken.Token);
 
-            RestResponseBase<GetGatewayResponse> gatewayResponse = await GetGatewayAsync().ConfigureAwait(false);
-            _gatewayUrl = $"{gatewayResponse.Data.Url}{_resumeQueryParams}";
+            GetGatewayResponse gatewayResponse = await GetGatewayAsync().ConfigureAwait(false);
+            _gatewayUrl = $"{gatewayResponse.Url}{_resumeQueryParams}";
             await WebSocketClient.ConnectAsync(_gatewayUrl).ConfigureAwait(false);
             ConnectionState = ConnectionState.Connected;
         }

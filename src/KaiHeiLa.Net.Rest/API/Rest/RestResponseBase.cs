@@ -2,14 +2,14 @@ using System.Text.Json.Serialization;
 
 namespace KaiHeiLa.API;
 
-internal class RestResponseBase<TData>
+internal class RestResponseBase
 {
     [JsonPropertyName("code")]
-    public int Code { get; set; }
+    public KaiHeiLaErrorCode Code { get; set; }
     
     [JsonPropertyName("message")]
     public string Message { get; set; }
     
     [JsonPropertyName("data")]
-    public TData Data { get; set; }
+    public object Data { get; set; }
 }

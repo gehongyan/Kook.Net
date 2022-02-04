@@ -161,8 +161,8 @@ namespace KaiHeiLa
                     // no validation is performed on Bearer tokens
                     break;
                 case TokenType.Bot:
-                    // bot tokens are assumed to be at least 58 characters in length
-                    // this value was determined by referencing examples in the discord documentation, and by comparing with
+                    // bot tokens are assumed to be at least 45 characters in length
+                    // this value was determined by referencing examples in the KaiHeiLa documentation, and by comparing with
                     // pre-existing tokens
                     if (token.Length < MinBotTokenLength)
                         throw new ArgumentException(message: $"A Bot token must be at least {MinBotTokenLength} characters in length. " +

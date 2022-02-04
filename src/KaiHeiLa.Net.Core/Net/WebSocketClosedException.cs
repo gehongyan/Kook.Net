@@ -6,12 +6,12 @@ namespace KaiHeiLa.Net
     public class WebSocketClosedException : Exception
     {
         /// <summary>
-        ///     Gets the close code sent by Discord.
+        ///     Gets the close code sent by KaiHeiLa.
         /// </summary>
         /// <returns>
         ///     A 
-        ///     <see href="https://discord.com/developers/docs/topics/opcodes-and-status-codes#gateway-gateway-close-event-codes">close code</see>
-        ///     from Discord.
+        ///     <see href="https://developer.kaiheila.cn/doc/websocket">close code</see>
+        ///     from KaiHeiLa.
         /// </returns>
         public int CloseCode { get; }
         /// <summary>

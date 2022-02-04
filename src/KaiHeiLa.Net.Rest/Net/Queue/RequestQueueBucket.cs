@@ -1,7 +1,9 @@
 using System.Net;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using KaiHeiLa.API;
+using KaiHeiLa.Rest;
 #if DEBUG_LIMITS
 using System.Diagnostics;
 #endif
@@ -98,12 +100,12 @@ namespace KaiHeiLa.Net.Queue
 
                                 continue; //Retry
                             default:
-                                API.KaiHeiLaError error = null;
+                                API.RestResponseBase responseBase = null;
                                 if (response.Stream != null)
                                 {
                                     try
                                     {
-                                        error = await JsonSerializer.DeserializeAsync<API.KaiHeiLaError>(response.Stream, _serializerOptions);
+                                        responseBase = await JsonSerializer.DeserializeAsync<API.RestResponseBase>(response.Stream, _serializerOptions);
                                     }
                                     catch { }
                                 }
@@ -111,14 +113,14 @@ namespace KaiHeiLa.Net.Queue
                                 throw new HttpException(
                                     response.StatusCode,
                                     request,
-                                    error?.Code,
-                                    error?.Message,
-                                    error?.Data is not null
+                                    responseBase?.Code,
+                                    responseBase?.Message,
+                                    responseBase?.Data is not null
                                         ? new KaiHeiLaJsonError[]
                                         {
                                             new KaiHeiLaJsonError("root",
                                                 new KaiHeiLaError[]
-                                                    {new KaiHeiLaError(((int) error.Code).ToString(), error.Message)}
+                                                    {new KaiHeiLaError(((int) responseBase.Code).ToString(), responseBase.Message)}
                                             )
                                         }
                                         : null
@@ -130,7 +132,26 @@ namespace KaiHeiLa.Net.Queue
 #if DEBUG_LIMITS
                         Debug.WriteLine($"[{id}] Success");
 #endif
-                        return response.Stream;
+                        API.RestResponseBase responseBase = await JsonSerializer.DeserializeAsync<API.RestResponseBase>(response.Stream, _serializerOptions);
+                        if (responseBase.Code > (KaiHeiLaErrorCode)0 )
+                        {
+                            throw new HttpException(
+                                response.StatusCode,
+                                request,
+                                responseBase?.Code,
+                                responseBase?.Message,
+                                responseBase?.Data is not null
+                                    ? new KaiHeiLaJsonError[]
+                                    {
+                                        new KaiHeiLaJsonError("root",
+                                            new KaiHeiLaError[]
+                                                {new KaiHeiLaError(((int) responseBase.Code).ToString(), responseBase.Message)}
+                                        )
+                                    }
+                                    : null
+                            );
+                        }
+                        return new MemoryStream(Encoding.UTF8.GetBytes(responseBase.Data.ToString() ?? string.Empty));
                     }
                 }
                 //catch (HttpException) { throw; } //Pass through

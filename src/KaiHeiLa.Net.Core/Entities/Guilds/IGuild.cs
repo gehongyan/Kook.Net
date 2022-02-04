@@ -6,7 +6,7 @@ public interface IGuild : IULongEntity
 
     string Topic { get; }
 
-    string MasterId { get; }
+    uint MasterId { get; }
 
     string Icon { get; }
 
@@ -16,7 +16,7 @@ public interface IGuild : IULongEntity
 
     bool IsOpenEnabled { get; }
 
-    string OpenId { get; }
+    uint OpenId { get; }
 
     ulong DefaultChannelId { get; }
 

@@ -22,8 +22,9 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
 
     private Guid _sessionId;
     private int _lastSeq = 0;
-    private Task _heartbeatTask;
-    private long _lastMessageTime;
+    private Task _heartbeatTask, _guildDownloadTask;
+    private int _unavailableGuildCount;
+    private long _lastGuildAvailableTime, _lastMessageTime;
 
     private bool _isDisposed;
 
@@ -226,6 +227,64 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                         return;
                     }
 
+                    try
+                    {
+                        IReadOnlyCollection<Guild> guilds = await ApiClient.GetGuildsAsync();
+                        var state = new ClientState(guilds.Count, 0);
+                        int unavailableGuilds = 0;
+                        foreach (Guild guild in guilds)
+                        {
+                            var model = guild;
+                            var socketGuild = AddGuild(model, state);
+                            if (!socketGuild.IsAvailable)
+                                unavailableGuilds++;
+                            else
+                                await GuildAvailableAsync(socketGuild).ConfigureAwait(false);
+                        }
+                        _unavailableGuildCount = unavailableGuilds;
+                        State = state;
+                    }
+                    catch (Exception ex)
+                    {
+                        _connection.CriticalError(new Exception("Processing Guilds failed", ex));
+                        return;
+                    }
+                    
+                    _lastGuildAvailableTime = Environment.TickCount;
+                    _guildDownloadTask = WaitForGuildsAsync(_connection.CancelToken, _gatewayLogger)
+                        .ContinueWith(async x =>
+                        {
+                            if (x.IsFaulted)
+                            {
+                                _connection.Error(x.Exception);
+                                return;
+                            }
+                            else if (_connection.CancelToken.IsCancellationRequested)
+                                return;
+
+                            await TimedInvokeAsync(_readyEvent, nameof(Ready)).ConfigureAwait(false);
+                            await _gatewayLogger.InfoAsync("Ready").ConfigureAwait(false);
+                        });
+
+                    try
+                    {
+                        foreach (SocketGuild socketGuild in State.Guilds)
+                        {
+                            ExtendedGuild model = await ApiClient.GetGuildAsync(socketGuild.Id);
+                            if (model is not null)
+                            {
+                                socketGuild.Update(State, model);
+                                if (_unavailableGuildCount != 0)
+                                    _unavailableGuildCount--;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _connection.CriticalError(new Exception("Processing Guilds failed", ex));
+                        return;
+                    }
+                    
                     _ = _connection.CompleteAsync();
                 }
                     break;
@@ -337,11 +396,31 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
         }
     }
 
+    private async Task WaitForGuildsAsync(CancellationToken cancelToken, Logger logger)
+    {
+        //Wait for GUILD_AVAILABLEs
+        try
+        {
+            await logger.DebugAsync("GuildDownloader Started").ConfigureAwait(false);
+            while ((_unavailableGuildCount != 0) && (Environment.TickCount - _lastGuildAvailableTime < BaseConfig.MaxWaitBetweenGuildAvailablesBeforeReady))
+                await Task.Delay(500, cancelToken).ConfigureAwait(false);
+            await logger.DebugAsync("GuildDownloader Stopped").ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            await logger.DebugAsync("GuildDownloader Stopped").ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            await logger.ErrorAsync("GuildDownloader Errored", ex).ConfigureAwait(false);
+        }
+    }
+    
     internal SocketGuild AddGuild(API.Guild model, ClientState state)
     {
-        // var guild = SocketGuild.Create(this, state, model);
-        // state.AddGuild(guild);
-        // return guild;
+        var guild = SocketGuild.Create(this, state, model);
+        state.AddGuild(guild);
+        return guild;
         return default;
     }
     internal SocketGuild RemoveGuild(ulong id)

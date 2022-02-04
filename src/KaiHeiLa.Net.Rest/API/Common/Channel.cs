@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using KaiHeiLa.Net.Converters;
 
 namespace KaiHeiLa.API;
 
@@ -22,8 +23,9 @@ internal class Channel
     [JsonPropertyName("is_category")] public bool IsCategory { get; set; }
 
     [JsonPropertyName("parent_id")]
+    [JsonConverter(typeof(NullableUInt64Converter))]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
-    public ulong ParentId { get; set; }
+    public ulong? ParentId { get; set; }
 
     [JsonPropertyName("level")] public int Level { get; set; }
     [JsonPropertyName("slow_mode")] public int SlowMode { get; set; }

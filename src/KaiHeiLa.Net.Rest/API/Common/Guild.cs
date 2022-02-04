@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using KaiHeiLa.Net.Converters;
 
 namespace KaiHeiLa.API;
 
@@ -16,7 +17,11 @@ internal class Guild
     public uint MasterId { get; set; }
 
     [JsonPropertyName("icon")] public string Icon { get; set; }
-    [JsonPropertyName("notify_type")] public int NotifyType { get; set; }
+
+    [JsonPropertyName("notify_type")]
+    [JsonConverter(typeof(NotifyTypeConverter))]
+    public NotifyType NotifyType { get; set; }
+
     [JsonPropertyName("region")] public string Region { get; set; }
     [JsonPropertyName("enable_open")] public bool EnableOpen { get; set; }
 

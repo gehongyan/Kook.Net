@@ -39,8 +39,39 @@ public class KaiHeiLaSocketConfig : KaiHeiLaRestConfig
     public WebSocketProvider WebSocketProvider { get; set; }
     
     
+    /// <summary>
+    ///     Gets or sets the maximum wait time in milliseconds between GUILD_AVAILABLE events before firing READY.
+    ///     If zero, READY will fire as soon as it is received and all guilds will be unavailable.
+    /// </summary>
+    /// <remarks>
+    ///     <para>This property is measured in milliseconds; negative values will throw an exception.</para>
+    ///     <para>If a guild is not received before READY, it will be unavailable.</para>
+    /// </remarks>
+    /// <returns>
+    ///     A <see cref="int"/> representing the maximum wait time in milliseconds between GUILD_AVAILABLE events
+    ///     before firing READY.
+    /// </returns>
+    /// <exception cref="System.ArgumentException">Value must be at least 0.</exception>
+    public int MaxWaitBetweenGuildAvailablesBeforeReady
+    {
+        get
+        {
+            return maxWaitForGuildAvailable;
+        }
+
+        set
+        {
+            Preconditions.AtLeast(value, 0, nameof(MaxWaitBetweenGuildAvailablesBeforeReady));
+            maxWaitForGuildAvailable = value;
+        }
+    }
+
+    private int maxWaitForGuildAvailable = 10000;
+    
     public KaiHeiLaSocketConfig()
     {
         WebSocketProvider = DefaultWebSocketProvider.Instance;
     }
+    
+    internal KaiHeiLaSocketConfig Clone() => MemberwiseClone() as KaiHeiLaSocketConfig;
 }

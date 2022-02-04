@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using KaiHeiLa.Rest;
 
 namespace KaiHeiLa.Net.Queue
 {
@@ -141,11 +142,11 @@ namespace KaiHeiLa.Net.Queue
         {
             await RateLimitTriggered(bucketId, info, endpoint).ConfigureAwait(false);
         }
-        internal (RequestBucket, BucketId) UpdateBucketHash(BucketId id, string discordHash)
+        internal (RequestBucket, BucketId) UpdateBucketHash(BucketId id, string kaiHeiLaHash)
         {
             if (!id.IsHashBucket)
             {
-                var bucket = BucketId.Create(discordHash, id);
+                var bucket = BucketId.Create(kaiHeiLaHash, id);
                 var hashReqQueue = (RequestBucket)_buckets.GetOrAdd(bucket, _buckets[id]);
                 _buckets.AddOrUpdate(id, bucket, (oldBucket, oldObj) => bucket);
                 return (hashReqQueue, bucket);
