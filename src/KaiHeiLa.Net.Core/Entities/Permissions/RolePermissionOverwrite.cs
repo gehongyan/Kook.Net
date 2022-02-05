@@ -1,12 +1,12 @@
 ﻿namespace KaiHeiLa;
 
-public class RolePermissionOverwrite : IPermissionOverwrite<int>
+public class RolePermissionOverwrite : IPermissionOverwrite<uint>
 {
-    public int Target { get; }
+    public uint Target { get; }
     
     public OverwritePermissions Permissions { get; }
     
-    public RolePermissionOverwrite(int target, OverwritePermissions permissions)
+    public RolePermissionOverwrite(uint target, OverwritePermissions permissions)
     {
         Target = target;
         Permissions = permissions;

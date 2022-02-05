@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using KaiHeiLa.API;
 using Model = KaiHeiLa.API.Guild;
@@ -13,6 +14,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
 {
     #region SocketGuild
 
+    private ConcurrentDictionary<ulong, SocketRole> _roles;
+    
     public string Name { get; private set; }
     public string Topic { get; private set; }
     public uint MasterId { get; private set; }
@@ -44,6 +47,16 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     /// <summary> Indicates whether the client is connected to this guild. </summary>
     public bool IsConnected { get; internal set; }
 
+    
+    /// <summary>
+    ///     Gets a collection of all roles in this guild.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of roles found within this guild.
+    /// </returns>
+    public IReadOnlyCollection<SocketRole> Roles => _roles.ToReadOnlyCollection();
+    
+    
     internal SocketGuild(KaiHeiLaSocketClient kaiHeiLa, ulong id) : base(kaiHeiLa, id)
     {
     }
@@ -79,6 +92,17 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
         OpenId = model.OpenId;
         DefaultChannelId = model.DefaultChannelId;
         WelcomeChannelId = model.WelcomeChannelId;
+        
+        var roles = new ConcurrentDictionary<ulong, SocketRole>(ConcurrentHashSet.DefaultConcurrencyLevel, (int)((model.Roles ?? Array.Empty<Role>()).Length * 1.05));
+        if (model.Roles != null)
+        {
+            for (int i = 0; i < model.Roles.Length; i++)
+            {
+                var role = SocketRole.Create(this, state, model.Roles[i]);
+                roles.TryAdd(role.Id, role);
+            }
+        }
+        _roles = roles;
     }
     #endregion
     
@@ -97,5 +121,29 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     {
     }
 
+    #endregion
+
+    #region Roles
+
+    /// <summary>
+    ///     Gets a role in this guild.
+    /// </summary>
+    /// <param name="id">The snowflake identifier for the role.</param>
+    /// <returns>
+    ///     A role that is associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    /// </returns>
+    public SocketRole GetRole(ulong id)
+    {
+        if (_roles.TryGetValue(id, out SocketRole value))
+            return value;
+        return null;
+    }
+
+    #endregion
+    
+    #region Users
+    
+
+    
     #endregion
 }

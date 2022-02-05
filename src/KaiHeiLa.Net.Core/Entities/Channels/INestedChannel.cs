@@ -6,9 +6,9 @@
 public interface INestedChannel : IGuildChannel
 {
     /// <summary>
-    ///     上级分组的 ID
+    ///     所属分组的 ID
     /// </summary>
-    string CategoryId { get; }
+    ulong? CategoryId { get; }
     
     /// <summary>
     ///     权限设置是否与分组同步

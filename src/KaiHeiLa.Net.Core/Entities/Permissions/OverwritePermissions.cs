@@ -37,7 +37,7 @@ public class OverwritePermissions
     public PermValue MuteMembers => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.MuteMembers);
     public PermValue PlaySoundtrack => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.PlaySoundtrack);
 
-    public OverwritePermissions(uint allowValue, uint denyValue)
+    public OverwritePermissions(ulong allowValue, ulong denyValue)
     {
         AllowValue = allowValue;
         DenyValue = denyValue;

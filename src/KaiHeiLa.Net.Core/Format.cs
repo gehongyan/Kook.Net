@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace KaiHeiLa;
 
-public static class KMarkdownFormat
+public static class Format
 {
     public static string Bold(string text) => $"**{text}**";
     
@@ -56,5 +56,15 @@ public static class KMarkdownFormat
             return $"```{language ?? ""}\n{text}\n```";
         else
             return $"`{text}`";
+    }
+    
+    /// <summary>
+    ///     Formats a user's username + discriminator while maintaining bidirectional unicode
+    /// </summary>
+    /// <param name="user">The user whos username and discriminator to format</param>
+    /// <returns>The username + discriminator</returns>
+    public static string UsernameAndDiscriminator(IUser user)
+    {
+        return $"\u2066{user.Username}\u2069#{user.IdentifyNumber}";
     }
 }

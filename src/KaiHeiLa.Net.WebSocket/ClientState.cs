@@ -10,12 +10,16 @@ internal class ClientState
     private const double CollectionMultiplier = 1.05; //Add 5% buffer to handle growth
     
     private readonly ConcurrentDictionary<ulong, SocketGuild> _guilds;
+    private readonly ConcurrentDictionary<ulong, SocketGlobalUser> _users;
     
     internal IReadOnlyCollection<SocketGuild> Guilds => _guilds.ToReadOnlyCollection();
+    internal IReadOnlyCollection<SocketGlobalUser> Users => _users.ToReadOnlyCollection();
     
     public ClientState(int guildCount, int dmChannelCount)
     {
+        double estimatedUsersCount = guildCount * AverageUsersPerGuild;
         _guilds = new ConcurrentDictionary<ulong, SocketGuild>(ConcurrentHashSet.DefaultConcurrencyLevel, (int)(guildCount * CollectionMultiplier));
+        _users = new ConcurrentDictionary<ulong, SocketGlobalUser>(ConcurrentHashSet.DefaultConcurrencyLevel, (int)(estimatedUsersCount * CollectionMultiplier));
     }
 
     internal SocketGuild GetGuild(ulong id)
@@ -38,4 +42,22 @@ internal class ClientState
         }
         return null;
     }
+    
+    internal SocketGlobalUser GetUser(ulong id)
+    {
+        if (_users.TryGetValue(id, out SocketGlobalUser user))
+            return user;
+        return null;
+    }
+    internal SocketGlobalUser GetOrAddUser(ulong id, Func<ulong, SocketGlobalUser> userFactory)
+    {
+        return _users.GetOrAdd(id, userFactory);
+    }
+    internal SocketGlobalUser RemoveUser(ulong id)
+    {
+        if (_users.TryRemove(id, out SocketGlobalUser user))
+            return user;
+        return null;
+    }
+    
 }

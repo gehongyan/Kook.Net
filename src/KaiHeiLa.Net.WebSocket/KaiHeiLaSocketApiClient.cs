@@ -94,7 +94,7 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         finally { _stateLock.Release(); }
     }
 
-    internal async Task ConnectInternalAsync()
+    internal override async Task ConnectInternalAsync()
     {
         if (LoginState != LoginState.LoggedIn)
             throw new InvalidOperationException("The client must be logged in before connecting.");
@@ -109,14 +109,19 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
             _connectCancelToken = new CancellationTokenSource();
             WebSocketClient?.SetCancelToken(_connectCancelToken.Token);
 
-            GetGatewayResponse gatewayResponse = await GetGatewayAsync().ConfigureAwait(false);
-            _gatewayUrl = $"{gatewayResponse.Url}{_resumeQueryParams}";
+            if (!_isExplicitUrl)
+            {
+                GetGatewayResponse gatewayResponse = await GetGatewayAsync().ConfigureAwait(false);
+                _gatewayUrl = $"{gatewayResponse.Url}{_resumeQueryParams}";
+            }
+            
             await WebSocketClient.ConnectAsync(_gatewayUrl).ConfigureAwait(false);
             ConnectionState = ConnectionState.Connected;
         }
         catch
         {
-            _gatewayUrl = null;
+            if (!_isExplicitUrl)
+                _gatewayUrl = null;
             await DisconnectInternalAsync().ConfigureAwait(false);
             throw;
         }
@@ -132,7 +137,7 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         finally { _stateLock.Release(); }
     }
 
-    internal async Task DisconnectInternalAsync(Exception ex = null)
+    internal override async Task DisconnectInternalAsync(Exception ex = null)
     {
         if (WebSocketClient == null)
             throw new NotSupportedException("This client is not configured with WebSocket support.");

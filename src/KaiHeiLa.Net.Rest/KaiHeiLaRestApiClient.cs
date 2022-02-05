@@ -225,12 +225,28 @@ internal class KaiHeiLaRestApiClient : IDisposable
         try
         {
             var ids = new BucketIds();
-            return (await SendAsync<PagedResponseBase<Guild>>(HttpMethod.Get, () => $"guild/list", ids, options: options)
-                .ConfigureAwait(false)).Items;
+            List<Guild> guilds = new();
+            PageMeta pageMeta = new PageMeta()
+            {
+                Page = 0,
+                PageTotal = 1,
+                PageSize = 100
+            };
+
+            while (pageMeta.Page < pageMeta.PageTotal)
+            {
+                PagedResponseBase<Guild> pagedGuilds = await SendAsync<PagedResponseBase<Guild>>(
+                        HttpMethod.Get, () => $"guild/list?page_size={pageMeta.PageSize}&page={pageMeta.Page}", 
+                        ids, options: options)
+                    .ConfigureAwait(false);
+                guilds.AddRange(pagedGuilds.Items);
+                pageMeta = pagedGuilds.Meta;
+            }
+            
+            return guilds;
         }
         catch (HttpException ex) when (ex.HttpCode == HttpStatusCode.NotFound) { return null; }
     }
-    
     
     public async Task<ExtendedGuild> GetGuildAsync(ulong guildId, RequestOptions options = null)
     {

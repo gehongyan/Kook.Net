@@ -129,6 +129,22 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     public override SocketGuild GetGuild(ulong id)
         => State.GetGuild(id);
     
+    internal SocketGlobalUser GetOrCreateUser(ClientState state, KaiHeiLa.API.User model)
+    {
+        return state.GetOrAddUser(model.Id, x => SocketGlobalUser.Create(this, state, model));
+    }
+    internal SocketGlobalUser GetOrCreateSelfUser(ClientState state, KaiHeiLa.API.User model)
+    {
+        return state.GetOrAddUser(model.Id, x =>
+        {
+            var user = SocketGlobalUser.Create(this, state, model);
+            user.GlobalUser.AddRef();
+            return user;
+        });
+    }
+    internal void RemoveUser(ulong id)
+        => State.RemoveUser(id);
+    
     #region ProcessMessageAsync
     
     private async Task ProcessMessageAsync(SocketFrameType socketFrameType, int? sequence, object payload)

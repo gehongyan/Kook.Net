@@ -3,6 +3,8 @@ namespace KaiHeiLa;
 public interface IGuildChannel : IChannel
 {
     IGuild Guild { get; }
+    
+    ulong GuildId { get; }
 
     int Position { get; }
 

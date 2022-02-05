@@ -38,7 +38,13 @@ public class GuildPermissions
     public bool MuteMembers => Permissions.GetValue(RawValue, GuildPermission.MuteMembers);
     public bool ManageNicknames => Permissions.GetValue(RawValue, GuildPermission.ManageNicknames);
     public bool PlaySoundtrack => Permissions.GetValue(RawValue, GuildPermission.PlaySoundtrack);
+    
+    /// <summary> Creates a new <see cref="GuildPermissions"/> with the provided packed value. </summary>
+    public GuildPermissions(ulong rawValue) { RawValue = rawValue; }
 
+    /// <summary> Creates a new <see cref="GuildPermissions"/> with the provided packed value after converting to ulong. </summary>
+    public GuildPermissions(string rawValue) { RawValue = ulong.Parse(rawValue); }
+    
     private GuildPermissions(ulong initialValue,
         bool? administrator = null,
         bool? manageGuild = null,

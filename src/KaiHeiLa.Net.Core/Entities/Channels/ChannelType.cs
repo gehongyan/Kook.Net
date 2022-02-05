@@ -3,6 +3,11 @@
 public enum ChannelType
 {
     /// <summary>
+    ///     分组频道
+    /// </summary>
+    Category = 0,
+    
+    /// <summary>
     ///     文字频道
     /// </summary>
     Text = 1,

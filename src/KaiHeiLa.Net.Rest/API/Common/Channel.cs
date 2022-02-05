@@ -13,7 +13,7 @@ internal class Channel
 
     [JsonPropertyName("user_id")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
-    public uint UserId { get; set; }
+    public uint CreateUserId { get; set; }
 
     [JsonPropertyName("guild_id")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
@@ -25,17 +25,17 @@ internal class Channel
     [JsonPropertyName("parent_id")]
     [JsonConverter(typeof(NullableUInt64Converter))]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
-    public ulong? ParentId { get; set; }
+    public ulong? CategoryId { get; set; }
 
     [JsonPropertyName("level")] public int Level { get; set; }
     [JsonPropertyName("slow_mode")] public int SlowMode { get; set; }
-    [JsonPropertyName("type")] public int Type { get; set; }
+    [JsonPropertyName("type")] public ChannelType Type { get; set; }
 
     [JsonPropertyName("permission_overwrites")]
-    public RolePermissionOverwrite[] PermissionOverwrites { get; set; }
+    public RolePermissionOverwrite[] RolePermissionOverwrites { get; set; }
 
     [JsonPropertyName("permission_users")] 
-    public UserPermissionOverwrite[] PermissionUsers { get; set; }
+    public UserPermissionOverwrite[] UserPermissionOverwrites { get; set; }
 
     [JsonPropertyName("permission_sync")] public int PermissionSync { get; set; }
 }

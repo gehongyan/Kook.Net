@@ -3,7 +3,7 @@
 public static class MentionUtils
 {
     internal static string MentionUser(string id) => $"(met){id}(met)";
-    public static string MentionUser(uint id) => MentionUser(id.ToString());
+    public static string MentionUser(ulong id) => MentionUser(id.ToString());
     
     internal static string MentionChannel(string id) => $"(chn){id}(chn)";
     public static string MentionChannel(ulong id) => MentionChannel(id.ToString());

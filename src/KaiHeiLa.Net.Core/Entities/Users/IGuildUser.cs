@@ -20,5 +20,7 @@ public interface IGuildUser : IUser
     /// <summary>
     ///     此服务器用户所属服务器的ID
     /// </summary>
-    string GuildId { get; }
+    ulong GuildId { get; }
+
+    bool IsMobileVerified { get; }
 }

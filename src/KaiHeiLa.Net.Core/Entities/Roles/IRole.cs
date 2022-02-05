@@ -4,6 +4,8 @@ namespace KaiHeiLa;
 
 public interface IRole : IEntity<uint>, IMentionable
 {
+    IGuild Guild { get; }
+    
     string Name { get; }
 
     Color Color { get; }
@@ -14,5 +16,5 @@ public interface IRole : IEntity<uint>, IMentionable
 
     bool IsMentionable { get; }
 
-    GuildPermission Permissions { get; }
+    GuildPermissions Permissions { get; }
 }

@@ -1,24 +1,22 @@
 ﻿namespace KaiHeiLa;
 
-public interface IUser : IEntity<uint>
+public interface IUser : IEntity<ulong>, IMentionable
 {
-    public string Username { get; set; }
+    string Username { get; }
 
-    public string IdentifyNumber { get; set; }
+    string IdentifyNumber { get; }
     
-    public ushort IdentifyNumberValue { get; set; }
+    ushort IdentifyNumberValue { get; }
 
-    public bool IsOnline { get; set; }
+    bool IsOnline { get; }
 
-    public bool IsBot { get; set; }
+    bool IsBot { get; }
 
-    public bool IsBanned { get; set; }
+    bool IsBanned { get; }
 
-    public bool IsVIP { get; set; }
+    bool IsVIP { get; }
 
-    public string Avatar { get; set; }
+    string Avatar { get; }
 
-    public string VIPAvatar { get; set; }
-
-    public bool IsMobileVerified { get; set; }
+    string VIPAvatar { get; }
 }
