@@ -12,6 +12,7 @@ using KaiHeiLa.API;
 using KaiHeiLa.Net;
 using KaiHeiLa.Net.Queue;
 using KaiHeiLa.Net.Rest;
+using System.Linq;
 
 namespace KaiHeiLa.API;
 
@@ -39,6 +40,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
     public TokenType AuthTokenType { get; set; }
     public string AuthToken { get; set; }
     internal IRestClient RestClient { get; private set; }
+    internal ulong? CurrentUserId { get; set; }
     internal Func<IRateLimitInfo, Task> DefaultRatelimitCallback { get; set; }
     
     
@@ -158,6 +160,9 @@ internal class KaiHeiLaRestApiClient : IDisposable
     internal async Task<TResponse> SendAsync<TResponse>(HttpMethod method, Expression<Func<string>> endpointExpr, BucketIds ids,
         ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null) where TResponse : class
         => await SendAsync<TResponse>(method, GetEndpoint(endpointExpr), GetBucketId(method, ids, endpointExpr, funcName), clientBucket, options);
+    internal async Task<TResponse> SendAsync<TResponse, TArg1, TArg2>(HttpMethod method, Expression<Func<TArg1, TArg2, string>> endpointExpr, TArg1 arg1, TArg2 arg2, BucketIds ids,
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null) where TResponse : class
+        => await SendAsync<TResponse>(method, GetEndpoint(endpointExpr, arg1, arg2), GetBucketId(method, ids, endpointExpr, arg1, arg2, funcName), clientBucket, options);
     public async Task<TResponse> SendAsync<TResponse>(HttpMethod method, string endpoint,
         BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null) where TResponse : class
     {
@@ -200,19 +205,51 @@ internal class KaiHeiLaRestApiClient : IDisposable
         
         return responseStream;
     }
-
-    #endregion
     
-    #region Gateway
-    
-    /// <summary>
-    ///     获取网关地址
-    /// </summary>
-    public async Task<GetGatewayResponse> GetGatewayAsync(RequestOptions options = null)
+    /// <param name="endpointExpr">
+    ///     <example>
+    ///         <c>$"endpoint?params=args&amp;page_size={pageSize}&amp;page={page}"</c>
+    ///     </example>
+    /// </param>
+    private async Task<IReadOnlyCollection<T>> SendPaginationAsync<T>(HttpMethod method, 
+        Expression<Func<int, int, string>> endpointExpr,
+        BucketIds ids, PageMeta pageMeta = null, RequestOptions options = null)
+        where T : class
     {
-        options = RequestOptions.CreateOrClone(options);
-        return await SendAsync<GetGatewayResponse>(HttpMethod.Get, () => "gateway/index?compress=0", new BucketIds(), options: options).ConfigureAwait(false);
+        List<T> combinedData = new();
+        pageMeta ??= PageMeta.Default;
+    
+        while (pageMeta.Page <= pageMeta.PageTotal)
+        {
+            PagedResponseBase<T> pagedChannels = await SendAsync<PagedResponseBase<T>, int, int>(
+                    method, endpointExpr, pageMeta.PageSize, pageMeta.Page,
+                    ids, options: options)
+                .ConfigureAwait(false);
+            combinedData.AddRange(pagedChannels.Items);
+            pageMeta = pagedChannels.Meta;
+            pageMeta.Page++;
+        }
+    
+        return combinedData.ToReadOnlyCollection();
     }
+
+    // private async IAsyncEnumerable<IReadOnlyCollection<T>> SendPaginationAsync<T>(HttpMethod method,
+    //     Expression<Func<int, int, string>> endpointExpr,
+    //     BucketIds ids, PageMeta pageMeta = null, RequestOptions options = null)
+    //     where T : class
+    // {
+    //     pageMeta ??= PageMeta.Default;
+    //     
+    //     while (pageMeta.Page < pageMeta.PageTotal)
+    //     {
+    //         PagedResponseBase<T> pagedChannels = await SendAsync<PagedResponseBase<T>, int, int>(
+    //                 method, endpointExpr, pageMeta.PageSize, pageMeta.Page,
+    //                 ids, options: options)
+    //             .ConfigureAwait(false);
+    //         pageMeta = pagedChannels.Meta;
+    //         yield return pagedChannels.Items;
+    //     }
+    // }
 
     #endregion
 
@@ -221,29 +258,13 @@ internal class KaiHeiLaRestApiClient : IDisposable
     public async Task<IReadOnlyCollection<Guild>> GetGuildsAsync(RequestOptions options = null)
     {
         options = RequestOptions.CreateOrClone(options);
-
+        
         try
         {
             var ids = new BucketIds();
-            List<Guild> guilds = new();
-            PageMeta pageMeta = new PageMeta()
-            {
-                Page = 0,
-                PageTotal = 1,
-                PageSize = 100
-            };
-
-            while (pageMeta.Page < pageMeta.PageTotal)
-            {
-                PagedResponseBase<Guild> pagedGuilds = await SendAsync<PagedResponseBase<Guild>>(
-                        HttpMethod.Get, () => $"guild/list?page_size={pageMeta.PageSize}&page={pageMeta.Page}", 
-                        ids, options: options)
-                    .ConfigureAwait(false);
-                guilds.AddRange(pagedGuilds.Items);
-                pageMeta = pagedGuilds.Meta;
-            }
-            
-            return guilds;
+            return await SendPaginationAsync<Guild>(HttpMethod.Get,
+                (pageSize, page) => $"guild/list?page_size={pageSize}&page={page}",
+                ids, pageMeta: PageMeta.Default, options: options);
         }
         catch (HttpException ex) when (ex.HttpCode == HttpStatusCode.NotFound) { return null; }
     }
@@ -256,16 +277,142 @@ internal class KaiHeiLaRestApiClient : IDisposable
         try
         {
             var ids = new BucketIds(guildId: guildId);
-            return await SendAsync<ExtendedGuild>(HttpMethod.Get, () => $"guild/view?guild_id={guildId}", ids, options: options).ConfigureAwait(false);
+            return await SendAsync<ExtendedGuild>(HttpMethod.Get, 
+                () => $"guild/view?guild_id={guildId}", ids, options: options).ConfigureAwait(false);
+        }
+        catch (HttpException ex) when (ex.HttpCode == HttpStatusCode.NotFound) { return null; }
+    }
+    
+    public async ValueTask<int> GetGuildMemberCountAsync(ulong guildId, RequestOptions options = null)
+    {
+        Preconditions.NotEqual(guildId, 0, nameof(guildId));
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds(guildId: guildId);
+        var response = await SendAsync<GetGuildMemberCountResponse>(HttpMethod.Get, 
+            () => $"guild/user-list?guild_id={guildId}", ids, options: options).ConfigureAwait(false);
+        return response.UserCount;
+    }
+
+    public async Task<IReadOnlyCollection<GuildMember>> GetGuildMembersAsync(ulong guildId, RequestOptions options = null)
+    {
+        Preconditions.NotEqual(guildId, 0, nameof(guildId));
+        options = RequestOptions.CreateOrClone(options);
+
+        try
+        {
+            var ids = new BucketIds(guildId: guildId);
+            return await SendPaginationAsync<GuildMember>(HttpMethod.Get,
+                (pageSize, page) => $"guild/user-list?guild_id={guildId}&page={page}",
+                ids, pageMeta: new PageMeta(pageSize: 50), options: options);
         }
         catch (HttpException ex) when (ex.HttpCode == HttpStatusCode.NotFound) { return null; }
     }
 
     #endregion
+
+    #region Channels
+
+    public async Task<IReadOnlyCollection<Channel>> GetGuildChannelsAsync(ulong guildId, RequestOptions options = null)
+    {
+        Preconditions.NotEqual(guildId, 0, nameof(guildId));
+        options = RequestOptions.CreateOrClone(options);
+
+        try
+        {
+            var ids = new BucketIds(guildId: guildId);
+            return await SendPaginationAsync<Channel>(HttpMethod.Get,
+                (pageSize, page) => $"channel/list?guild_id={guildId}&page_size={pageSize}&page={page}",
+                ids, pageMeta: PageMeta.Default, options: options);
+        }
+        catch (HttpException ex) when (ex.HttpCode == HttpStatusCode.NotFound) { return null; }
+    }
+
+    #endregion
+
+    #region Messages
+
+    
+
+    #endregion
+
+    #region DM Channels
+
+    
+
+    #endregion
+
+    #region DM Messages
+
+    
+
+    #endregion
+    
+    #region Gateway
+    
+    public async Task<GetGatewayResponse> GetGatewayAsync(RequestOptions options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+        return await SendAsync<GetGatewayResponse>(HttpMethod.Get, () => "gateway/index?compress=0", new BucketIds(), options: options).ConfigureAwait(false);
+    }
+
+    #endregion
+    
+    #region Users
+    
+    public async Task<SelfUser> GetSelfUserAsync(RequestOptions options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+        return await SendAsync<SelfUser>(HttpMethod.Get, () => "user/me", new BucketIds(), options: options).ConfigureAwait(false);
+    }
+
+    #endregion
+
+    #region Media
+
+    
+
+    #endregion
+
+    #region Guild Roles
+
+    
+
+    #endregion
+
+    #region Intimacy
+
+    
+
+    #endregion
+
+    #region Guild Emoji
+
+    
+
+    #endregion
+
+    #region Guild Invites
+
+    
+
+    #endregion
+
+    #region Guild Bans
+
+    
+
+    #endregion
+
+    #region Badges
+
+    
+
+    #endregion
     
     
     #region Helpers
-    
+
     protected void CheckState()
     {
         if (LoginState != LoginState.LoggedIn)
@@ -325,11 +472,26 @@ internal class KaiHeiLaRestApiClient : IDisposable
     {
         return endpointExpr.Compile()();
     }
+    private static string GetEndpoint<T1, T2>(Expression<Func<T1, T2, string>> endpointExpr, T1 arg1, T2 arg2)
+    {
+        return endpointExpr.Compile()(arg1, arg2);
+    }
     private static BucketId GetBucketId(HttpMethod httpMethod, BucketIds ids, Expression<Func<string>> endpointExpr, string callingMethod)
     {
         ids.HttpMethod = httpMethod;
         return _bucketIdGenerators.GetOrAdd(callingMethod, x => CreateBucketId(endpointExpr))(ids);
     }
+    private static BucketId GetBucketId<TArg1, TArg2>(HttpMethod httpMethod, BucketIds ids, Expression<Func<TArg1, TArg2, string>> endpointExpr, TArg1 arg1, TArg2 arg2, string callingMethod)
+    {
+        ids.HttpMethod = httpMethod;
+        return _bucketIdGenerators.GetOrAdd(callingMethod, x => CreateBucketId(endpointExpr, arg1, arg2))(ids);
+    }
+
+    private static Func<BucketIds, BucketId> CreateBucketId<TArg1, TArg2>(Expression<Func<TArg1, TArg2, string>> endpoint, TArg1 arg1, TArg2 arg2)
+    {
+        return CreateBucketId(() => endpoint.Compile().Invoke(arg1, arg2));
+    }
+
     private static Func<BucketIds, BucketId> CreateBucketId(Expression<Func<string>> endpoint)
     {
         try
@@ -341,7 +503,9 @@ internal class KaiHeiLaRestApiClient : IDisposable
             var builder = new StringBuilder();
             var methodCall = endpoint.Body as MethodCallExpression;
             var methodArgs = methodCall.Arguments.ToArray();
-            string format = (methodArgs[0] as ConstantExpression).Value as string;
+            string format = methodArgs[0].NodeType == ExpressionType.Constant
+                ? (methodArgs[0] as ConstantExpression).Value as string
+                : endpoint.Compile()();
 
             //Unpack the array, if one exists (happens with 4+ parameters)
             if (methodArgs.Length > 1 && methodArgs[1].NodeType == ExpressionType.NewArrayInit)

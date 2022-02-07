@@ -38,6 +38,10 @@ public class KaiHeiLaSocketConfig : KaiHeiLaRestConfig
     /// </summary>
     public WebSocketProvider WebSocketProvider { get; set; }
     
+    /// <summary>
+    ///     Gets or sets whether or not all users should be downloaded as guilds come available.
+    /// </summary>
+    public bool AlwaysDownloadUsers { get; set; } = false;
     
     /// <summary>
     ///     Gets or sets the maximum wait time in milliseconds between GUILD_AVAILABLE events before firing READY.
@@ -56,17 +60,17 @@ public class KaiHeiLaSocketConfig : KaiHeiLaRestConfig
     {
         get
         {
-            return maxWaitForGuildAvailable;
+            return _maxWaitForGuildAvailable;
         }
 
         set
         {
             Preconditions.AtLeast(value, 0, nameof(MaxWaitBetweenGuildAvailablesBeforeReady));
-            maxWaitForGuildAvailable = value;
+            _maxWaitForGuildAvailable = value;
         }
     }
 
-    private int maxWaitForGuildAvailable = 10000;
+    private int _maxWaitForGuildAvailable = 10000;
     
     public KaiHeiLaSocketConfig()
     {

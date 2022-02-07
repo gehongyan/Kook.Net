@@ -23,6 +23,18 @@ public abstract partial class BaseSocketClient : BaseKaiHeiLaClient
     
     internal new KaiHeiLaSocketApiClient ApiClient => base.ApiClient as KaiHeiLaSocketApiClient;
     
+    /// <summary>
+    ///     Gets the current logged-in user.
+    /// </summary>
+    public new virtual SocketSelfUser CurrentUser { get => base.CurrentUser as SocketSelfUser; protected set => base.CurrentUser = value; }
+    /// <summary>
+    ///     Gets a collection of guilds that the user is currently in.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of guilds that the current user is in.
+    /// </returns>
+    public abstract IReadOnlyCollection<SocketGuild> Guilds { get; }
+    
     internal BaseSocketClient(KaiHeiLaSocketConfig config, KaiHeiLaRestApiClient client)
         : base(config, client) => BaseConfig = config;
     

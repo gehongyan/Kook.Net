@@ -7,7 +7,10 @@ using KaiHeiLa.WebSocket;
 string token = Environment.GetEnvironmentVariable("KaiHeiLaDebugToken", EnvironmentVariableTarget.User) 
          ?? throw new ArgumentNullException(nameof(token));
 
-KaiHeiLaSocketClient client = new(new KaiHeiLaSocketConfig());
+KaiHeiLaSocketClient client = new(new KaiHeiLaSocketConfig()
+{
+    AlwaysDownloadUsers = true
+});
 client.Log += log =>
 {
     Console.WriteLine(log.ToString());
@@ -15,7 +18,6 @@ client.Log += log =>
 };
 client.Ready += () =>
 {
-    var result = client.GetGuild(1990044438283387);
     return Task.CompletedTask;
 };
 await client.LoginAsync(TokenType.Bot, token);

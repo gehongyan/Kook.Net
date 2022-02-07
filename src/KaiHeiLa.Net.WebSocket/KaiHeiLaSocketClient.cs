@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Immutable;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using KaiHeiLa.API;
@@ -37,8 +38,11 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     // From KaiHeiLaSocketConfig
     internal ClientState State { get; private set; }
     internal WebSocketProvider WebSocketProvider { get; private set; }
+    internal bool AlwaysDownloadUsers { get; private set; }
     internal int? HandlerTimeout { get; private set; }
     internal new KaiHeiLaSocketApiClient ApiClient => base.ApiClient;
+    /// <inheritdoc />
+    public override IReadOnlyCollection<SocketGuild> Guilds => State.Guilds;
 
     public KaiHeiLaSocketClient(KaiHeiLaSocketConfig config) : this(config, CreateApiClient(config)) { }
 
@@ -46,6 +50,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
         : base(config, client)
     {
         WebSocketProvider = config.WebSocketProvider;
+        AlwaysDownloadUsers = config.AlwaysDownloadUsers;
         HandlerTimeout = config.HandlerTimeout;
         State = new ClientState(0, 0);
         Rest = new KaiHeiLaSocketRestClient(config, ApiClient);
@@ -63,6 +68,21 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
         ApiClient.SentGatewayMessage += async socketFrameType =>
             await _gatewayLogger.DebugAsync($"Sent {socketFrameType}").ConfigureAwait(false);
         ApiClient.ReceivedGatewayEvent += ProcessMessageAsync;
+        
+        // LeftGuild += async g => await _gatewayLogger.InfoAsync($"Left {g.Name}").ConfigureAwait(false);
+        // JoinedGuild += async g => await _gatewayLogger.InfoAsync($"Joined {g.Name}").ConfigureAwait(false);
+        GuildAvailable += async g => await _gatewayLogger.VerboseAsync($"Connected to {g.Name}").ConfigureAwait(false);
+        GuildUnavailable += async g => await _gatewayLogger.VerboseAsync($"Disconnected from {g.Name}").ConfigureAwait(false);
+        LatencyUpdated += async (old, val) => await _gatewayLogger.DebugAsync($"Latency = {val} ms").ConfigureAwait(false);
+
+        GuildAvailable += g =>
+        {
+            if (_guildDownloadTask?.IsCompleted == true && ConnectionState == ConnectionState.Connected && AlwaysDownloadUsers && !g.HasAllMembers)
+            {
+                var _ = g.DownloadUsersAsync();
+            }
+            return Task.Delay(0);
+        };
     }
 
     private static KaiHeiLaSocketApiClient CreateApiClient(KaiHeiLaSocketConfig config)
@@ -123,7 +143,6 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                 await GuildUnavailableAsync(guild).ConfigureAwait(false);
         }
     }
-
     
     /// <inheritdoc />
     public override SocketGuild GetGuild(ulong id)
@@ -144,6 +163,25 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     }
     internal void RemoveUser(ulong id)
         => State.RemoveUser(id);
+    
+    public async Task DownloadUsersAsync(IEnumerable<IGuild> guilds)
+    {
+        if (ConnectionState == ConnectionState.Connected)
+        {
+            // EnsureGatewayIntent(GatewayIntents.GuildMembers);
+    
+            //Race condition leads to guilds being requested twice, probably okay
+            await ProcessUserDownloadsAsync(guilds.Select(x => GetGuild(x.Id)).Where(x => x != null)).ConfigureAwait(false);
+        }
+    }
+    private async Task ProcessUserDownloadsAsync(IEnumerable<SocketGuild> guilds)
+    {
+        foreach (SocketGuild socketGuild in guilds)
+        {
+            IReadOnlyCollection<GuildMember> guildMembers = await ApiClient.GetGuildMembersAsync(socketGuild.Id).ConfigureAwait(false);
+            socketGuild.Update(State, guildMembers);
+        }
+    }
     
     #region ProcessMessageAsync
     
@@ -229,6 +267,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
 
                 case SocketFrameType.Hello:
                 {
+                    // Process Hello
                     await _gatewayLogger.DebugAsync("Received Hello").ConfigureAwait(false);
                     try
                     {
@@ -242,7 +281,22 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                         _connection.CriticalError(new Exception("Processing Hello failed", ex));
                         return;
                     }
-
+                    
+                    // Get current user
+                    try
+                    {
+                        SelfUser selfUser = await ApiClient.GetSelfUserAsync();
+                        var currentUser = SocketSelfUser.Create(this, State, selfUser);
+                        ApiClient.CurrentUserId = currentUser.Id;
+                        CurrentUser = currentUser;
+                    }
+                    catch (Exception ex)
+                    {
+                        _connection.CriticalError(new Exception("Processing SelfUser failed", ex));
+                        return;
+                    }
+                    
+                    // Download guild data
                     try
                     {
                         IReadOnlyCollection<Guild> guilds = await ApiClient.GetGuildsAsync();
@@ -277,11 +331,20 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                             }
                             else if (_connection.CancelToken.IsCancellationRequested)
                                 return;
+                            
+                            foreach (SocketGuild socketGuild in State.Guilds)
+                                socketGuild.MemberCount = await ApiClient.GetGuildMemberCountAsync(socketGuild.Id);
+                            
+                            if (BaseConfig.AlwaysDownloadUsers)
+                                _ = DownloadUsersAsync(Guilds.Where(x => x.IsAvailable && !x.HasAllMembers));
 
                             await TimedInvokeAsync(_readyEvent, nameof(Ready)).ConfigureAwait(false);
                             await _gatewayLogger.InfoAsync("Ready").ConfigureAwait(false);
                         });
 
+                    _ = _connection.CompleteAsync();
+                    
+                    // Download extended guild data
                     try
                     {
                         foreach (SocketGuild socketGuild in State.Guilds)
@@ -290,6 +353,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                             if (model is not null)
                             {
                                 socketGuild.Update(State, model);
+                                
                                 if (_unavailableGuildCount != 0)
                                     _unavailableGuildCount--;
                             }
@@ -301,7 +365,6 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                         return;
                     }
                     
-                    _ = _connection.CompleteAsync();
                 }
                     break;
 
@@ -437,7 +500,6 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
         var guild = SocketGuild.Create(this, state, model);
         state.AddGuild(guild);
         return guild;
-        return default;
     }
     internal SocketGuild RemoveGuild(ulong id)
         => State.RemoveGuild(id);

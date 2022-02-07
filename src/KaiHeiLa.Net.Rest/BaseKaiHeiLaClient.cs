@@ -12,13 +12,23 @@ public abstract class BaseKaiHeiLaClient : IKaiHeiLaClient
     public event Func<Task> LoggedOut { add { _loggedOutEvent.Add(value); } remove { _loggedOutEvent.Remove(value); } }
     private readonly AsyncEvent<Func<Task>> _loggedOutEvent = new AsyncEvent<Func<Task>>();
     
+    internal readonly Logger _restLogger;
     private readonly SemaphoreSlim _stateLock;
     private bool _isFirstLogin, _isDisposed;
     
     internal API.KaiHeiLaRestApiClient ApiClient { get; }
     
     internal LogManager LogManager { get; }
+    /// <summary>
+    ///     Gets the login state of the client.
+    /// </summary>
     public LoginState LoginState { get; private set; }
+    /// <summary>
+    ///     Gets the logged-in user.
+    /// </summary>
+    public ISelfUser CurrentUser { get; protected set; }
+    /// <inheritdoc />
+    public TokenType TokenType => ApiClient.AuthTokenType;
     
     internal BaseKaiHeiLaClient(KaiHeiLaRestConfig config, API.KaiHeiLaRestApiClient client)
     {
@@ -27,6 +37,16 @@ public abstract class BaseKaiHeiLaClient : IKaiHeiLaClient
         LogManager.Message += async msg => await _logEvent.InvokeAsync(msg).ConfigureAwait(false);
         
         _stateLock = new SemaphoreSlim(1, 1);
+        _restLogger = LogManager.CreateLogger("Rest");
+        
+        ApiClient.RequestQueue.RateLimitTriggered += async (id, info, endpoint) =>
+        {
+            if (info == null)
+                await _restLogger.VerboseAsync($"Preemptive Rate limit triggered: {endpoint} {(id.IsHashBucket ? $"(Bucket: {id.BucketHash})" : "")}").ConfigureAwait(false);
+            else
+                await _restLogger.WarningAsync($"Rate limit triggered: {endpoint} {(id.IsHashBucket ? $"(Bucket: {id.BucketHash})" : "")}").ConfigureAwait(false);
+        };
+        ApiClient.SentRequest += async (method, endpoint, millis) => await _restLogger.VerboseAsync($"{method} {endpoint}: {millis} ms").ConfigureAwait(false);
     }
     
     internal virtual void Dispose(bool disposing)
@@ -119,15 +139,23 @@ public abstract class BaseKaiHeiLaClient : IKaiHeiLaClient
         await ApiClient.LogoutAsync().ConfigureAwait(false);
 
         await OnLogoutAsync().ConfigureAwait(false);
-        // CurrentUser = null;
+        CurrentUser = null;
         LoginState = LoginState.LoggedOut;
 
         await _loggedOutEvent.InvokeAsync().ConfigureAwait(false);
     }
     internal virtual Task OnLogoutAsync()
         => Task.Delay(0);
+    
+    #endregion
 
+    #region IKaiHeiLaClient
     
+    /// <inheritdoc />
+    ConnectionState IKaiHeiLaClient.ConnectionState => ConnectionState.Disconnected;
     
+    /// <inheritdoc />
+    ISelfUser IKaiHeiLaClient.CurrentUser => CurrentUser;
+
     #endregion
 }
