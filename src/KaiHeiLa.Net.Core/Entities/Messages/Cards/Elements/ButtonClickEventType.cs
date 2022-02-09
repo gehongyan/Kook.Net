@@ -2,6 +2,7 @@
 
 public enum ButtonClickEventType
 {
+    None,
     Link,
     ReturnValue
 }

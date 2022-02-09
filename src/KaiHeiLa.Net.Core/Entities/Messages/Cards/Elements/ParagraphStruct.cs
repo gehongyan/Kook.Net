@@ -8,19 +8,18 @@ namespace KaiHeiLa;
 /// <remarks>
 ///     支持分栏结构，将模块分为左右两栏，根据顺序自动排列，支持更自由的文字排版模式，提高可维护性
 /// </remarks>
-public class ParagraphStruct : IStruct
+public class ParagraphStruct : IElement
 {
     private int _columnCount;
 
     public ParagraphStruct(int columnCount)
     {
         _columnCount = columnCount;
-        Fields = new List<IStruct>();
+        Fields = new List<IElement>();
     }
     
-    public StructType Type => StructType.Paragraph;
+    public ElementType Type => ElementType.Paragraph;
 
-    [JsonPropertyName("cols")]
     public int ColumnCount
     {
         get => _columnCount;
@@ -34,9 +33,9 @@ public class ParagraphStruct : IStruct
         }
     }
 
-    public List<IStruct> Fields { get; internal set; }
+    public List<IElement> Fields { get; internal set; }
 
-    public ParagraphStruct Add(IStruct field)
+    public ParagraphStruct Add(IElement field)
     {
         if (Fields.Count >= 50)
         {

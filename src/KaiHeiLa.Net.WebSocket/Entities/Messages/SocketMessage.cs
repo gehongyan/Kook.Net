@@ -46,7 +46,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
 
     public virtual Attachment Attachment { get; private set; }
 
-    public virtual IReadOnlyCollection<Card> Cards => ImmutableArray.Create<Card>();
+    public virtual IReadOnlyCollection<ICard> Cards => ImmutableArray.Create<ICard>();
     
     /// <summary>
     ///     Returns the roles mentioned in this message.

@@ -1,6 +1,11 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using KaiHeiLa.API;
 using KaiHeiLa.API.Gateway;
+using KaiHeiLa.Net.Converters;
 using KaiHeiLa.Rest;
 using Model = KaiHeiLa.API.Gateway.GatewayMessageExtraData;
 
@@ -16,7 +21,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     private bool _isMentioningHere;
     private Quote _quote;
     private Attachment _attachment;
-    private ImmutableArray<Card> _cards = ImmutableArray.Create<Card>();
+    private ImmutableArray<ICard> _cards = ImmutableArray.Create<ICard>();
     private ImmutableArray<SocketRole> _roleMentions = ImmutableArray.Create<SocketRole>();
 
     public Quote Quote => _quote;
@@ -25,7 +30,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     /// <inheritdoc />
     public override Attachment Attachment => _attachment;
     /// <inheritdoc />  
-    public override IReadOnlyCollection<Card> Cards => _cards;
+    public IReadOnlyCollection<ICard> Cards => _cards;
     /// <inheritdoc />
     public override IReadOnlyCollection<SocketRole> MentionedRoles => _roleMentions;
     /// <inheritdoc />
@@ -63,11 +68,27 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
         if (model.Type == MessageType.Card)
         {
-            // TODO 反序列化Cards
+            string json = gatewayEvent.Content;
+            JsonSerializerOptions serializerOptions = new()
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                Converters =
+                {
+                    new CardConverter(),
+                    new ModuleConverter(),
+                    new ElementConverter()
+                }
+            };
+            CardBase[] cardBases = JsonSerializer.Deserialize<CardBase[]>(json, serializerOptions);
+            
+            var cards = ImmutableArray.CreateBuilder<ICard>(cardBases.Length);
+            // for (int i = 0; i < cardBases.Length; i++)
+            //     cards.Add(cards[i].ToEntity());
+            _cards = cards.ToImmutable();
         }
         else
         {
-            _cards = ImmutableArray.Create<Card>();
+            _cards = ImmutableArray.Create<ICard>();
         }
         
         Guild = guild;
@@ -80,6 +101,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
     IGuild IUserMessage.Guild => Guild;
     IQuote IUserMessage.Quote => _quote;
+    IReadOnlyCollection<ICard> IMessage.Cards => Cards;
 
     #endregion
 }

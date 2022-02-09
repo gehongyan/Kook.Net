@@ -8,5 +8,6 @@ public enum ElementType
     PlainText,
     KMarkdown,
     Image,
-    Button
+    Button,
+    Paragraph
 }
