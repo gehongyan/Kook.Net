@@ -29,7 +29,14 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
 
     public IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites => _rolePermissionOverwrites;
     public IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites => _userPermissionOverwrites;
-    
+    /// <summary>
+    ///     Gets a collection of users that are able to view the channel.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of users that can access the channel (i.e. the users seen in the user list).
+    /// </returns>
+    public new virtual IReadOnlyCollection<SocketGuildUser> Users => ImmutableArray.Create<SocketGuildUser>();
+
     internal SocketGuildChannel(KaiHeiLaSocketClient kaiHeiLa, ulong id, SocketGuild guild)
         : base(kaiHeiLa, id)
     {
@@ -64,7 +71,42 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
             newUserOverwrites.Add(userPermissionOverwrites[i].ToEntity(KaiHeiLa, state));
         _userPermissionOverwrites = newUserOverwrites.ToImmutable();
     }
-
+    
+    /// <summary>
+    ///     Gets the permission overwrite for a specific user.
+    /// </summary>
+    /// <param name="user">The user to get the overwrite from.</param>
+    /// <returns>
+    ///     An overwrite object for the targeted user; <c>null</c> if none is set.
+    /// </returns>
+    public virtual OverwritePermissions? GetPermissionOverwrite(IUser user)
+    {
+        for (int i = 0; i < _userPermissionOverwrites.Length; i++)
+        {
+            if (_userPermissionOverwrites[i].Target.Id == user.Id)
+                return _userPermissionOverwrites[i].Permissions;
+        }
+        return null;
+    }
+    /// <summary>
+    ///     Gets the permission overwrite for a specific role.
+    /// </summary>
+    /// <param name="role">The role to get the overwrite from.</param>
+    /// <returns>
+    ///     An overwrite object for the targeted role; <c>null</c> if none is set.
+    /// </returns>
+    public virtual OverwritePermissions? GetPermissionOverwrite(IRole role)
+    {
+        for (int i = 0; i < _rolePermissionOverwrites.Length; i++)
+        {
+            if (_rolePermissionOverwrites[i].Target == role.Id)
+                return _rolePermissionOverwrites[i].Permissions;
+        }
+        return null;
+    }
+    
+    public new virtual SocketGuildUser GetUser(ulong id) => null;
+    
     /// <summary>
     ///     Gets the name of the channel.
     /// </summary>
@@ -77,11 +119,31 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     
     #endregion
 
-    #region SocketChannel
 
-    IGuild IGuildChannel.Guild => Guild;
+    #region SocketChannel
     
+    /// <inheritdoc />
+    internal override SocketUser GetUserInternal(ulong id) => GetUser(id);
+    /// <inheritdoc />
+    internal override IReadOnlyCollection<SocketUser> GetUsersInternal() => Users;
+    
+    #endregion
+    
+    #region IGuildChannel
+    IGuild IGuildChannel.Guild => Guild;
     ulong IGuildChannel.GuildId => Guild.Id;
+    
+    /// <inheritdoc />
+    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<IGuildUser>(GetUser(id));
+    
+    #endregion
+
+    #region IChannel
+    
+    /// <inheritdoc />
+    Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<IUser>(GetUser(id)); //Overridden in Text/Voice
 
     #endregion
 }

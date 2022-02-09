@@ -31,6 +31,16 @@ public class KaiHeiLaSocketConfig : KaiHeiLaRestConfig
     /// </summary>
     public int? HandlerTimeout { get; set; } = 3000;
     
+    /// <summary>
+    ///     Gets or sets the number of messages per channel that should be kept in cache. Setting this to zero
+    ///     disables the message cache entirely.
+    /// </summary>
+    public int MessageCacheSize { get; set; } = 0;
+    
+    /// <summary>
+    ///     Gets or sets the max number of users a guild may have for offline users to be included in the READY
+    ///     packet. The maximum value allowed is 250.
+    /// </summary>
     public int LargeThreshold { get; set; } = 250;
 
     /// <summary>

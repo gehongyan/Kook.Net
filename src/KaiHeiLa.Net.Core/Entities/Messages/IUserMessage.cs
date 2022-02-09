@@ -2,9 +2,7 @@
 
 public interface IUserMessage : IMessage
 {
-    IMessage Quote { get; }
-    
-    IUser Author { get; }
+    IQuote Quote { get; }
     
     IGuild Guild { get; }
 }

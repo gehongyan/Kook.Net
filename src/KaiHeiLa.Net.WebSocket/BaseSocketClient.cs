@@ -50,4 +50,7 @@ public abstract partial class BaseSocketClient : BaseKaiHeiLaClient
     
     public abstract Task StartAsync();
     public abstract Task StopAsync();
+
+    public abstract SocketChannel GetChannel(ulong id);
+    
 }

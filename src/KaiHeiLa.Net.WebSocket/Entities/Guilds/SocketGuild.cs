@@ -410,4 +410,15 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     }
     
     #endregion
+
+    #region IGuild
+    
+    /// <inheritdoc />
+    IRole IGuild.GetRole(ulong id)
+        => GetRole(id);
+
+    /// <inheritdoc />
+    IRole IGuild.EveryoneRole => EveryoneRole;
+    
+    #endregion
 }

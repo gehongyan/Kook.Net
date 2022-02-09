@@ -95,5 +95,84 @@ namespace KaiHeiLa
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void UnsetFlag(ref ulong value, ulong flag) => value &= ~flag;
+        
+        
+        public static ChannelPermissions ToChannelPerms(IGuildChannel channel, ulong guildPermissions)
+            => new ChannelPermissions(guildPermissions & ChannelPermissions.All(channel).RawValue);
+        public static ulong ResolveGuild(IGuild guild, IGuildUser user)
+        {
+            ulong resolvedPermissions = 0;
+
+            // if (user.Id == guild.)
+            //     resolvedPermissions = GuildPermissions.All.RawValue; //Owners always have all permissions
+            foreach (var roleId in user.RoleIds)
+                resolvedPermissions |= guild.GetRole(roleId)?.Permissions.RawValue ?? 0;
+            if (GetValue(resolvedPermissions, GuildPermission.Administrator))
+                resolvedPermissions = GuildPermissions.All.RawValue; //Administrators always have all permissions
+            return resolvedPermissions;
+        }
+
+        /*public static ulong ResolveChannel(IGuildUser user, IGuildChannel channel)
+        {
+            return ResolveChannel(user, channel, ResolveGuild(user));
+        }*/
+        public static ulong ResolveChannel(IGuild guild, IGuildUser user, IGuildChannel channel, ulong guildPermissions)
+        {
+            ulong resolvedPermissions = 0;
+
+            ulong mask = ChannelPermissions.All(channel).RawValue;
+            if (GetValue(guildPermissions, GuildPermission.Administrator)) //Includes owner
+                resolvedPermissions = mask; //Owners and administrators always have all permissions
+            else
+            {
+                //Start with this user's guild permissions
+                resolvedPermissions = guildPermissions;
+
+                //Give/Take Everyone permissions
+                var perms = channel.GetPermissionOverwrite(guild.EveryoneRole);
+                if (perms != null)
+                    resolvedPermissions = (resolvedPermissions & ~perms.DenyValue) | perms.AllowValue;
+
+                //Give/Take Role permissions
+                ulong deniedPermissions = 0UL, allowedPermissions = 0UL;
+                foreach (var roleId in user.RoleIds)
+                {
+                    IRole role;
+                    if (roleId != guild.EveryoneRole.Id && (role = guild.GetRole(roleId)) != null)
+                    {
+                        perms = channel.GetPermissionOverwrite(role);
+                        if (perms != null)
+                        {
+                            allowedPermissions |= perms.AllowValue;
+                            deniedPermissions |= perms.DenyValue;
+                        }
+                    }
+                }
+                resolvedPermissions = (resolvedPermissions & ~deniedPermissions) | allowedPermissions;
+
+                //Give/Take User permissions
+                perms = channel.GetPermissionOverwrite(user);
+                if (perms != null)
+                    resolvedPermissions = (resolvedPermissions  & ~perms.DenyValue) | perms.AllowValue;
+
+                if (channel is ITextChannel)
+                {
+                    if (!GetValue(resolvedPermissions, ChannelPermission.ViewChannels))
+                    {
+                        //No read permission on a text channel removes all other permissions
+                        resolvedPermissions = 0;
+                    }
+                    else if (!GetValue(resolvedPermissions, ChannelPermission.SendMessages))
+                    {
+                        //No send permissions on a text channel removes all send-related permissions
+                        resolvedPermissions &= ~(ulong)ChannelPermission.MentionEveryone;
+                        resolvedPermissions &= ~(ulong)ChannelPermission.AttachFiles;
+                    }
+                }
+                resolvedPermissions &= mask; //Ensure we didn't get any permissions this channel doesn't support (from guildPerms, for example)
+            }
+
+            return resolvedPermissions;
+        }
     }
 }

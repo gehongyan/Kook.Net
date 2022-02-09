@@ -4,6 +4,5 @@ public enum MessageSource
 {
     System,
     User,
-    Bot,
-    Webhook
+    Bot
 }

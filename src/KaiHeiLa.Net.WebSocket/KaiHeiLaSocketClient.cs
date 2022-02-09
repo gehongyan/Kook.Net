@@ -36,6 +36,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     #endregion
 
     // From KaiHeiLaSocketConfig
+    internal int MessageCacheSize { get; private set; }
     internal ClientState State { get; private set; }
     internal WebSocketProvider WebSocketProvider { get; private set; }
     internal bool AlwaysDownloadUsers { get; private set; }
@@ -49,6 +50,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     private KaiHeiLaSocketClient(KaiHeiLaSocketConfig config, KaiHeiLaSocketApiClient client)
         : base(config, client)
     {
+        MessageCacheSize = config.MessageCacheSize;
         WebSocketProvider = config.WebSocketProvider;
         AlwaysDownloadUsers = config.AlwaysDownloadUsers;
         HandlerTimeout = config.HandlerTimeout;
@@ -147,6 +149,9 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     /// <inheritdoc />
     public override SocketGuild GetGuild(ulong id)
         => State.GetGuild(id);
+    /// <inheritdoc />
+    public override SocketChannel GetChannel(ulong id)
+        => State.GetChannel(id);
     
     internal SocketGlobalUser GetOrCreateUser(ClientState state, KaiHeiLa.API.User model)
     {
@@ -210,25 +215,42 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                     switch (gatewayEvent.Type)
                     {
                         case MessageType.Text:
+                        case MessageType.Image:
+                        case MessageType.Video:
+                        case MessageType.File:
+                        case MessageType.Audio:
+                        case MessageType.KMarkdown:
+                        case MessageType.Card:
                         {
                             await _gatewayLogger.DebugAsync("Received Message (Text)").ConfigureAwait(false);
                             GatewayMessageExtraData extraData = eventExtraData as GatewayMessageExtraData;
+                            ISocketMessageChannel channel = GetChannel(gatewayEvent.TargetId) as ISocketMessageChannel;
+                            SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
+
+                            SocketUser author;
+                            if (guild != null)
+                                author = guild.GetUser(extraData.Author.Id);
+                            else
+                                author = (channel as SocketChannel).GetUser(extraData.Author.Id);
+                            if (author == null)
+                            {
+                                if (guild != null)
+                                {
+                                    author = guild.AddOrUpdateUser(extraData.Author);
+                                }
+                                else
+                                {
+                                    await UnknownChannelUserAsync(gatewayEvent.Type.ToString(), extraData.Author.Id, channel.Id).ConfigureAwait(false);
+                                    return;
+                                }
+                            }
                             
-                            
+                            var msg = SocketMessage.Create(this, State, author, channel, extraData, gatewayEvent);
+                            SocketChannelHelper.AddMessage(channel, this, msg);
+                            await TimedInvokeAsync(_messageReceivedEvent, nameof(MessageReceived), msg).ConfigureAwait(false);
                         }
                             break;
-                        // case MessageType.Image:
-                        //     break;
-                        // case MessageType.Video:
-                        //     break;
-                        // case MessageType.File:
-                        //     break;
-                        // case MessageType.Audio:
-                        //     break;
-                        // case MessageType.KMarkdown:
-                        //     break;
-                        // case MessageType.Card:
-                        //     break;
+
                         case MessageType.System:
                         {
                             GatewaySystemEventExtraData extraData = eventExtraData as GatewaySystemEventExtraData;
@@ -611,5 +633,16 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
             await _gatewayLogger.WarningAsync($"A {name} handler has thrown an unhandled exception.", ex)
                 .ConfigureAwait(false);
         }
+    }
+    
+    private async Task UnknownChannelUserAsync(string evnt, ulong userId, ulong channelId)
+    {
+        string details = $"{evnt} User={userId} Channel={channelId}";
+        await _gatewayLogger.WarningAsync($"Unknown User ({details}).").ConfigureAwait(false);
+    }
+    private async Task UnsyncedGuildAsync(string evnt, ulong guildId)
+    {
+        string details = $"{evnt} Guild={guildId}";
+        await _gatewayLogger.DebugAsync($"Unsynced Guild ({details}).").ConfigureAwait(false);
     }
 }

@@ -8,7 +8,7 @@ public interface IAttachment
 
     string Filename { get; }
 
-    int Size { get; }
+    int? Size { get; }
     
     string FileType { get; }
     

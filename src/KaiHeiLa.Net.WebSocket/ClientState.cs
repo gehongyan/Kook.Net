@@ -32,6 +32,10 @@ internal class ClientState
             return channel;
         return null;
     }
+    internal SocketChannel GetChannel(ulong guildId, string channelName)
+    {
+        return _guilds[guildId].Channels.SingleOrDefault(c => c.Name == channelName);
+    }
     internal void AddChannel(SocketChannel channel)
     {
         _channels[channel.Id] = channel;

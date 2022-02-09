@@ -10,11 +10,13 @@ public interface IMessage : IGuidEntity
     
     IMessageChannel Channel { get; }
     
+    IUser Author { get; }
+    
     string Content { get; }
     
     DateTimeOffset Timestamp { get; }
     
-    IReadOnlyCollection<uint> MentionedUserIds { get; }
+    IReadOnlyCollection<ulong> MentionedUserIds { get; }
     
     IReadOnlyCollection<uint> MentionedRoleIds { get; }
     

@@ -17,7 +17,8 @@ internal class GatewayMessageExtraData
     public string ChannelName { get; set; }
 
     [JsonPropertyName("mention")]
-    public uint[] Mention { get; set; }
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
+    public ulong[] Mention { get; set; }
 
     [JsonPropertyName("mention_all")]
     public bool MentionAll { get; set; }
@@ -30,4 +31,10 @@ internal class GatewayMessageExtraData
 
     [JsonPropertyName("author")]
     public User Author { get; set; }
+
+    [JsonPropertyName("quote")]
+    public Quote Quote { get; set; }
+    
+    [JsonPropertyName("attachments")]
+    public Attachment Attachment { get; set; }
 }
