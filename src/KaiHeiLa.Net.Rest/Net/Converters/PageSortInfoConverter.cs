@@ -1,6 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using KaiHeiLa.API;
+using KaiHeiLa.API.Rest;
 
 namespace KaiHeiLa.Net.Converters;
 

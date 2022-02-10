@@ -100,12 +100,12 @@ namespace KaiHeiLa.Net.Queue
 
                                 continue; //Retry
                             default:
-                                API.RestResponseBase responseBase = null;
+                                API.Rest.RestResponseBase responseBase = null;
                                 if (response.Stream != null)
                                 {
                                     try
                                     {
-                                        responseBase = await JsonSerializer.DeserializeAsync<API.RestResponseBase>(response.Stream, _serializerOptions);
+                                        responseBase = await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream, _serializerOptions);
                                     }
                                     catch { }
                                 }
@@ -132,7 +132,7 @@ namespace KaiHeiLa.Net.Queue
 #if DEBUG_LIMITS
                         Debug.WriteLine($"[{id}] Success");
 #endif
-                        API.RestResponseBase responseBase = await JsonSerializer.DeserializeAsync<API.RestResponseBase>(response.Stream, _serializerOptions);
+                        API.Rest.RestResponseBase responseBase = await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream, _serializerOptions);
                         if (responseBase.Code > (KaiHeiLaErrorCode)0 )
                         {
                             throw new HttpException(

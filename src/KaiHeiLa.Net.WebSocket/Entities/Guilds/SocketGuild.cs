@@ -2,11 +2,11 @@ using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using KaiHeiLa.API;
-using KaiHeiLa.Rest;
+using KaiHeiLa.API.Rest;
 using Model = KaiHeiLa.API.Guild;
 using ChannelModel = KaiHeiLa.API.Channel;
-using MemberModel = KaiHeiLa.API.GuildMember;
-using ExtendedModel = KaiHeiLa.API.ExtendedGuild;
+using MemberModel = KaiHeiLa.API.Rest.GuildMember;
+using ExtendedModel = KaiHeiLa.API.Rest.ExtendedGuild;
 using RoleModel = KaiHeiLa.API.Role;
 using UserModel = KaiHeiLa.API.User;
 
@@ -247,6 +247,29 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
 
     #region Channels
 
+    /// <summary>
+    ///     Gets a channel in this guild.
+    /// </summary>
+    /// <param name="id">The snowflake identifier for the channel.</param>
+    /// <returns>
+    ///     A generic channel associated with the specified <paramref name="id" />; <see langword="null"/> if none is found.
+    /// </returns>
+    public SocketGuildChannel GetChannel(ulong id)
+    {
+        var channel = KaiHeiLa.State.GetChannel(id) as SocketGuildChannel;
+        if (channel?.Guild.Id == Id)
+            return channel;
+        return null;
+    }
+    /// <summary>
+    ///     Gets a text channel in this guild.
+    /// </summary>
+    /// <param name="id">The snowflake identifier for the text channel.</param>
+    /// <returns>
+    ///     A text channel associated with the specified <paramref name="id" />; <see langword="null"/> if none is found.
+    /// </returns>
+    public SocketTextChannel GetTextChannel(ulong id)
+        => GetChannel(id) as SocketTextChannel;
     
     internal SocketGuildChannel AddChannel(ClientState state, ChannelModel model)
     {

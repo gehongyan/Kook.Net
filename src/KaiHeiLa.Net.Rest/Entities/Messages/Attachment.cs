@@ -36,9 +36,9 @@ public class Attachment : IAttachment
             "file" => AttachmentType.File,
             _ => throw new ArgumentOutOfRangeException(nameof(model.Type))
         };
-        TimeSpan? duration = model.Duration is null
-            ? null
-            : TimeSpan.FromSeconds(model.Duration.Value);
+        TimeSpan? duration = model.Duration.HasValue
+            ? TimeSpan.FromSeconds(model.Duration.Value)
+            : null;
         return new Attachment(type, model.Url, model.Name, model.Size, model.FileType, duration, model.Width, model.Height);
     }
     
@@ -49,5 +49,5 @@ public class Attachment : IAttachment
     ///     A string containing the filename of this attachment.
     /// </returns>
     public override string ToString() => Filename;
-    private string DebuggerDisplay => $"{Filename}{(Size is null ? "" : $" ({Size} bytes)")}";
+    private string DebuggerDisplay => $"{Filename}{(Size.HasValue ? $" ({Size} bytes)" : "")}";
 }

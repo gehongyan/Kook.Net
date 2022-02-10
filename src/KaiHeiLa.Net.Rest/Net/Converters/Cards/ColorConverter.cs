@@ -15,8 +15,6 @@ public class ColorConverter : JsonConverter<Color?>
 
     public override void Write(Utf8JsonWriter writer, Color? value, JsonSerializerOptions options)
     {
-        if (value is null)
-            writer.WriteStringValue(string.Empty);
-        writer.WriteStringValue($"#{value.Value.RawValue:X6}");
+        writer.WriteStringValue(value.HasValue ? $"#{value.Value.RawValue:X6}" : string.Empty);
     }
 }

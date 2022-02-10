@@ -1,4 +1,4 @@
-namespace KaiHeiLa.API;
+namespace KaiHeiLa.API.Rest;
 
 internal enum SortMode
 {

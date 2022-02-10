@@ -34,11 +34,29 @@ public class KaiHeiLaConfig
     ///     The user agent used in each KaiHeiLa.Net request.
     /// </returns>
     public static string UserAgent { get; } = $"KaiHeiLaBot (https://github.com/gehongyan/KaiHeiLa.Net, v{Version})";
-    
+    /// <summary>
+    ///     Returns the base KaiHeiLa API URL.
+    /// </summary>
+    /// <returns>
+    ///     The Discord API URL using <see cref="APIVersion"/>.
+    /// </returns>
     public static readonly string APIUrl = $"https://www.kaiheila.cn/api/v{APIVersion}/";
     
+    /// <summary> 
+    ///     Returns the default timeout for requests. 
+    /// </summary>
+    /// <returns>
+    ///     The amount of time it takes in milliseconds before a request is timed out.
+    /// </returns>
     public const int DefaultRequestTimeout = 6000;
     
+    /// <summary> 
+    ///     Returns the max length for a KaiHeiLa message. 
+    /// </summary>
+    /// <returns>
+    ///     The maximum length of a message allowed by KaiHeiLa.
+    /// </returns>
+    public const int MaxMessageSize = 50000;
 
     /// <summary>
     ///     Gets or sets how a request should act in the case of an error, by default.
@@ -49,7 +67,7 @@ public class KaiHeiLaConfig
     public RetryMode DefaultRetryMode { get; set; } = RetryMode.AlwaysRetry;
 
     /// <summary>
-    ///     Gets or sets the default callback for ratelimits.
+    ///     Gets or sets the default callback for rate limits.
     /// </summary>
     /// <remarks>
     ///     This property is mutually exclusive with <see cref="RequestOptions.RatelimitCallback"/>.

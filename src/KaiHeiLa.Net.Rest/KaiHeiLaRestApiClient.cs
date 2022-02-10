@@ -13,6 +13,7 @@ using KaiHeiLa.Net;
 using KaiHeiLa.Net.Queue;
 using KaiHeiLa.Net.Rest;
 using System.Linq;
+using KaiHeiLa.API.Rest;
 
 namespace KaiHeiLa.API;
 
@@ -332,7 +333,19 @@ internal class KaiHeiLaRestApiClient : IDisposable
 
     #region Messages
 
-    
+    public async Task<CreateMessageResponse> CreateMessageAsync(CreateMessageParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
+        
+        if (args.Content?.Length > KaiHeiLaConfig.MaxMessageSize)
+            throw new ArgumentException(message: $"Message content is too long, length must be less or equal to {KaiHeiLaConfig.MaxMessageSize}.", paramName: nameof(args.Content));
+        options = RequestOptions.CreateOrClone(options);
+        
+        var ids = new BucketIds(channelId: args.ChannelId);
+        return await SendJsonAsync<CreateMessageResponse>(HttpMethod.Post, () => $"message/create", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+
+    }
 
     #endregion
 

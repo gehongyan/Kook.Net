@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
 using UserModel = KaiHeiLa.API.User;
-using MemberModel = KaiHeiLa.API.GuildMember;
+using MemberModel = KaiHeiLa.API.Rest.GuildMember;
 
 namespace KaiHeiLa.WebSocket;
 

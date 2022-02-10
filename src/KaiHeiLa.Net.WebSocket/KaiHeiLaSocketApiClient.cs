@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using KaiHeiLa.API.Rest;
 using KaiHeiLa.Net.Queue;
 using KaiHeiLa.Net.Rest;
 using KaiHeiLa.Net.WebSockets;

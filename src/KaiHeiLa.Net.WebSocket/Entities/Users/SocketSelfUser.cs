@@ -1,4 +1,4 @@
-using Model = KaiHeiLa.API.SelfUser;
+using Model = KaiHeiLa.API.Rest.SelfUser;
 
 using System.Diagnostics;
 using System.Globalization;

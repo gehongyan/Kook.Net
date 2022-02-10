@@ -16,13 +16,17 @@ client.Log += log =>
     Console.WriteLine(log.ToString());
     return Task.CompletedTask;
 };
-client.Ready += () =>
+client.MessageReceived += async message =>
 {
-    return Task.CompletedTask;
-};
-client.MessageReceived += message =>
-{
-    return Task.CompletedTask;
+    // if (message.Author.Id == client.CurrentUser.Id)
+    // {
+    //     return;
+    // }
+    // const ulong guildId = 0;
+    // const ulong channelId = 0;
+    // (Guid Messageid, DateTimeOffset MessageTimestamp) response = await client.GetGuild(guildId)
+    //         .GetTextChannel(channelId)
+    //         .SendTextMessageAsync(message.Content, quote: new Quote(message.Id));
 };
 await client.LoginAsync(TokenType.Bot, token);
 await client.StartAsync();

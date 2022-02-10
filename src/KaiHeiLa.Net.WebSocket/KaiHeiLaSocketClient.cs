@@ -4,6 +4,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using KaiHeiLa.API;
 using KaiHeiLa.API.Gateway;
+using KaiHeiLa.API.Rest;
 using KaiHeiLa.Logging;
 using KaiHeiLa.Net.WebSockets;
 using KaiHeiLa.Rest;

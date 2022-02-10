@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using Model = KaiHeiLa.API.Channel;
 
 using System.Diagnostics;
+using KaiHeiLa.Rest;
 
 namespace KaiHeiLa.WebSocket;
 
@@ -21,6 +22,14 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     public int SlowModeInterval { get; set; }
     /// <inheritdoc />
     public ulong? CategoryId { get; private set; }
+    /// <summary>
+    ///     Gets the parent (category) of this channel in the guild's channel list.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="ICategoryChannel"/> representing the parent of this channel; <c>null</c> if none is set.
+    /// </returns>
+    public ICategoryChannel Category
+        => CategoryId.HasValue ? Guild.GetChannel(CategoryId.Value) as ICategoryChannel : null;
     /// <inheritdoc />
     public bool IsPermissionSynced { get; set; }
     /// <inheritdoc />
@@ -60,6 +69,14 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         => _messages?.Remove(id);
     #endregion
 
+    #region Messages
+    
+    /// <exception cref="ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="KaiHeiLaConfig.MaxMessageSize"/>.</exception>
+    public Task<(Guid Messageid, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        => ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Text, text, options, quote: quote, ephemeralUser: ephemeralUser);
+
+    #endregion
+    
     #region Users
     /// <inheritdoc />
     public override SocketGuildUser GetUser(ulong id)

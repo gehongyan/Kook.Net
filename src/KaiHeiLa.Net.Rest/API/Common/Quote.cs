@@ -5,7 +5,8 @@ namespace KaiHeiLa.API;
 
 internal class Quote
 {
-    [JsonPropertyName("id")] public Guid Id { get; set; }
+    [JsonPropertyName("id")] public string Id { get; set; }
+    [JsonPropertyName("rong_id")] public Guid QuotedMessageId { get; set; }
     [JsonPropertyName("type")] public MessageType Type { get; set; }
     [JsonPropertyName("content")] public string Content { get; set; }
 
