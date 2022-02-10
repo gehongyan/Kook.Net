@@ -20,6 +20,10 @@ client.Ready += () =>
 {
     return Task.CompletedTask;
 };
+client.MessageReceived += message =>
+{
+    return Task.CompletedTask;
+};
 await client.LoginAsync(TokenType.Bot, token);
 await client.StartAsync();
 await Task.Delay(-1);

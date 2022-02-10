@@ -1,4 +1,6 @@
-﻿namespace KaiHeiLa;
+﻿using System.Diagnostics;
+
+namespace KaiHeiLa;
 
 /// <summary>
 ///     文件模块
@@ -6,6 +8,7 @@
 /// <remarks>
 ///     展示文件
 /// </remarks>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class FileModule : IMediaModule
 {
     internal FileModule(string source, string title)
@@ -19,4 +22,6 @@ public class FileModule : IMediaModule
     public string Source { get; internal set; }
     
     public string Title { get; internal set; }
+    
+    private string DebuggerDisplay => $"{Type}: {Title}";
 }

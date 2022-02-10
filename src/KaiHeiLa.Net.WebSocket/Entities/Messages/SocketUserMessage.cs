@@ -82,8 +82,9 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             CardBase[] cardBases = JsonSerializer.Deserialize<CardBase[]>(json, serializerOptions);
             
             var cards = ImmutableArray.CreateBuilder<ICard>(cardBases.Length);
-            // for (int i = 0; i < cardBases.Length; i++)
-            //     cards.Add(cards[i].ToEntity());
+            foreach (CardBase cardBase in cardBases)
+                cards.Add(cardBase.ToEntity());
+
             _cards = cards.ToImmutable();
         }
         else

@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace KaiHeiLa;
 
 /// <summary>
@@ -6,6 +8,7 @@ namespace KaiHeiLa;
 /// <remarks>
 ///     显示图片
 /// </remarks>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ImageElement : IElement
 {
     internal ImageElement(string source, string alternative = null, ImageSize? size = null, bool? circle = null)
@@ -30,4 +33,6 @@ public class ImageElement : IElement
     public bool? Circle { get; internal set; }
 
     public static implicit operator ImageElement(string source) => new(source);
+    
+    private string DebuggerDisplay => $"{Type}: {Source}";
 }

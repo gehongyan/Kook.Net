@@ -1,5 +1,8 @@
-﻿namespace KaiHeiLa;
+﻿using System.Diagnostics;
 
+namespace KaiHeiLa;
+
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class DividerModule : IModule
 {
     internal DividerModule()
@@ -8,4 +11,7 @@ public class DividerModule : IModule
     }
     
     public ModuleType Type => ModuleType.Divider;
+    
+    private string DebuggerDisplay => $"{Type}";
+
 }
