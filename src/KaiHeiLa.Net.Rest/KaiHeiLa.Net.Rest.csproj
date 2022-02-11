@@ -4,8 +4,18 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <LangVersion>default</LangVersion>
         <RootNamespace>KaiHeiLa.Rest</RootNamespace>
+        <LangVersion>default</LangVersion>
+        <PackageVersion>0.0.1-alpha</PackageVersion>
+        <Authors>gehongyan</Authors>
+        <Description>KaiHeiLa.Net is an unofficial C# .NET implementation for KaiHeiLa API.</Description>
+        <PackageProjectUrl>https://github.com/gehongyan/KaiHeiLa.Net</PackageProjectUrl>
+        <PackageIconUrl>https://developer.kaiheila.cn/img/logo.jpg</PackageIconUrl>
+        <RepositoryUrl>https://github.com/gehongyan/KaiHeiLa.Net</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageReleaseNotes>Simply implementation of messages receiving and sending</PackageReleaseNotes>
+        <Company>gehongyan</Company>
+        <AssemblyVersion>0.0.0.1</AssemblyVersion>
     </PropertyGroup>
 
     <ItemGroup>
