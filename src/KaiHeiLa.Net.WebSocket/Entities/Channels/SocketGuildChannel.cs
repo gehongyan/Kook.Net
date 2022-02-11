@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
-using KaiHeiLa.Rest;
 using Model = KaiHeiLa.API.Channel;
 
 namespace KaiHeiLa.WebSocket;
@@ -25,7 +24,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <inheritdoc />
     public int Position { get; private set; }
     /// <inheritdoc />
-    public ChannelType Type { get; internal init; }
+    public ChannelType Type { get; internal set; }
 
     public IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites => _rolePermissionOverwrites;
     public IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites => _userPermissionOverwrites;
