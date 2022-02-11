@@ -24,17 +24,17 @@ jobs:
 #    - name: Test
 #      run: dotnet test src --no-build --verbosity normal
     - name: Publish Core NuGet
-      uses: brandedoutcast/publish-nuget@v2.5.2
+      uses: brandedoutcast/publish-nuget@v2.5.5
       with:
         PROJECT_FILE_PATH: src/KaiHeiLa.Net.Core/KaiHeiLa.Net.Core.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
     - name: Publish Rest NuGet
-      uses: brandedoutcast/publish-nuget@v2.5.2
+      uses: brandedoutcast/publish-nuget@v2.5.5
       with:
         PROJECT_FILE_PATH: src/KaiHeiLa.Net.Rest/KaiHeiLa.Net.Rest.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
     - name: Publish WebSocket NuGet
-      uses: brandedoutcast/publish-nuget@v2.5.2
+      uses: brandedoutcast/publish-nuget@v2.5.5
       with:
         PROJECT_FILE_PATH: src/KaiHeiLa.Net.WebSocket/KaiHeiLa.Net.WebSocket.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}

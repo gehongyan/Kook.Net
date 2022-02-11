@@ -5,7 +5,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <RootNamespace>KaiHeiLa.WebSocket</RootNamespace>
-        <LangVersion>latestmajor</LangVersion>
+        <LangVersion>default</LangVersion>
+        <Version>0.0.1-alpha</Version>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageVersion>0.0.1-alpha</PackageVersion>
         <Authors>gehongyan</Authors>
         <Description>KaiHeiLa.Net is an unofficial C# .NET implementation for KaiHeiLa API.</Description>
