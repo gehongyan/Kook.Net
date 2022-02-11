@@ -20,7 +20,14 @@ internal class CardConverter : JsonConverter<CardBase>
     }
 
     public override void Write(Utf8JsonWriter writer, CardBase value, JsonSerializerOptions options)
-    {
-        throw new NotImplementedException();
+    {   
+        switch (value.Type)
+        {
+            case CardType.Card:
+                writer.WriteRawValue(JsonSerializer.Serialize(value as API.Card, options));
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(CardType));
+        }
     }
 }

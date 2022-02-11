@@ -18,15 +18,16 @@ client.Log += log =>
 };
 client.MessageReceived += async message =>
 {
-    // if (message.Author.Id == client.CurrentUser.Id)
-    // {
-    //     return;
-    // }
-    // const ulong guildId = 0;
-    // const ulong channelId = 0;
-    // (Guid Messageid, DateTimeOffset MessageTimestamp) response = await client.GetGuild(guildId)
-    //         .GetTextChannel(channelId)
-    //         .SendTextMessageAsync(message.Content, quote: new Quote(message.Id));
+    if (message.Author.Id == client.CurrentUser.Id)
+    {
+        return;
+    }
+    const ulong guildId = 0;
+    const ulong channelId = 0;
+    SocketGuildUser user = client.GetGuild(guildId).GetUser(0);
+    (Guid Messageid, DateTimeOffset MessageTimestamp) response = await client.GetGuild(guildId)
+            .GetTextChannel(channelId)
+            .SendTextMessageAsync("Text", quote: new Quote(message.Id), ephemeralUser: user);
 };
 await client.LoginAsync(TokenType.Bot, token);
 await client.StartAsync();

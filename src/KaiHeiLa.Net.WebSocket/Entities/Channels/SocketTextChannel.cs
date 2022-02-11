@@ -2,6 +2,11 @@ using System.Collections.Immutable;
 using Model = KaiHeiLa.API.Channel;
 
 using System.Diagnostics;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using KaiHeiLa.API;
+using KaiHeiLa.API.Rest;
+using KaiHeiLa.Net.Converters;
 using KaiHeiLa.Rest;
 
 namespace KaiHeiLa.WebSocket;
@@ -71,10 +76,53 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
 
     #region Messages
     
-    /// <exception cref="ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="KaiHeiLaConfig.MaxMessageSize"/>.</exception>
     public Task<(Guid Messageid, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Text, text, options, quote: quote, ephemeralUser: ephemeralUser);
+    public async Task<(Guid Messageid, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    {
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(path, fileName, options);
+        return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Image, createAssetResponse.Url, options, quote: quote,
+            ephemeralUser: ephemeralUser);
+    }
+    public async Task<(Guid Messageid, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    {
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(path, fileName, options);
+        return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Video, createAssetResponse.Url, options, quote: quote,
+            ephemeralUser: ephemeralUser);
+    }
+    public async Task<(Guid Messageid, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    {
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(path, fileName, options);
+        return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.File, createAssetResponse.Url, options, quote: quote,
+            ephemeralUser: ephemeralUser);
+    }
+    // public async Task<(Guid Messageid, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    // {
+    //     CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(path, fileName, options);
+    //     return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Audio, createAssetResponse.Url, options, quote: quote,
+    //         ephemeralUser: ephemeralUser);
+    // }
+    public Task<(Guid Messageid, DateTimeOffset MessageTimestamp)> SendKMarkdownMessageAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        => ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.KMarkdown, text, options, quote: quote, ephemeralUser: ephemeralUser);
 
+    public async Task<(Guid Messageid, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(IEnumerable<ICard> cards, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    {
+        CardBase[] cardBases = cards.Select(c => c.ToModel()).ToArray();
+        JsonSerializerOptions serializerOptions = new()
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Converters =
+            {
+                new CardConverter(),
+                new ModuleConverter(),
+                new ElementConverter()
+            }
+        };
+        string json = JsonSerializer.Serialize(cardBases, serializerOptions);
+        return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Card, json, options, quote: quote,
+            ephemeralUser: ephemeralUser);
+    }
+    
     #endregion
     
     #region Users

@@ -24,6 +24,25 @@ internal class ElementConverter : JsonConverter<ElementBase>
 
     public override void Write(Utf8JsonWriter writer, ElementBase value, JsonSerializerOptions options)
     {
-        throw new NotImplementedException();
+        switch (value.Type)
+        {
+            case ElementType.PlainText:
+                writer.WriteRawValue(JsonSerializer.Serialize(value as API.PlainTextElement, options));
+                break;
+            case ElementType.KMarkdown:
+                writer.WriteRawValue(JsonSerializer.Serialize(value as API.KMarkdownElement, options));
+                break;
+            case ElementType.Image:
+                writer.WriteRawValue(JsonSerializer.Serialize(value as API.ImageElement, options));
+                break;
+            case ElementType.Button:
+                writer.WriteRawValue(JsonSerializer.Serialize(value as API.ButtonElement, options));
+                break;
+            case ElementType.Paragraph:
+                writer.WriteRawValue(JsonSerializer.Serialize(value as API.ParagraphStruct, options));
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(ElementType));
+        }
     }
 }

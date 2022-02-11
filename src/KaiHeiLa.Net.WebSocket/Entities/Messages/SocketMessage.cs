@@ -102,6 +102,15 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
     
     #endregion
 
+    /// <summary>
+    ///     Gets the content of the message.
+    /// </summary>
+    /// <returns>
+    ///     Content of the message.
+    /// </returns>
+    public override string ToString() => Content;
+    internal SocketMessage Clone() => MemberwiseClone() as SocketMessage;
+    
     #region IMessage
 
     /// <inheritdoc />

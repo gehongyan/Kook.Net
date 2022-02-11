@@ -21,7 +21,7 @@ public interface IGuildChannel : IChannel
     /// <returns>
     ///     An overwrite object for the targeted role; <c>null</c> if none is set.
     /// </returns>
-    OverwritePermissions? GetPermissionOverwrite(IRole role);
+    OverwritePermissions GetPermissionOverwrite(IRole role);
     /// <summary>
     ///     Gets the permission overwrite for a specific user.
     /// </summary>
@@ -29,8 +29,8 @@ public interface IGuildChannel : IChannel
     /// <returns>
     ///     An overwrite object for the targeted user; <c>null</c> if none is set.
     /// </returns>
-    OverwritePermissions? GetPermissionOverwrite(IUser user);/// <summary>
-                                                             /// 
+    OverwritePermissions GetPermissionOverwrite(IUser user);
+    /// <summary>
     ///     Gets a user in this channel.
     /// </summary>
     /// <param name="id">The snowflake identifier of the user.</param>

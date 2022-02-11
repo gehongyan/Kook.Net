@@ -22,6 +22,7 @@ internal class CreateMessageParams
 
     [JsonPropertyName("temp_target_id")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong? EphemeralUserId { get; set; }
     
     public CreateMessageParams(MessageType messageType, ulong channelId, string content)

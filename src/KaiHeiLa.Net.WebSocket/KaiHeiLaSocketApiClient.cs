@@ -70,21 +70,6 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         }
     }
 
-    public async Task StartAsync()
-    {
-        
-    }
-
-    public void SetResumeParams(int lastSeq, Guid sessionId)
-    {
-        _resumeQueryParams = $"&resume=1&sn={lastSeq}&session_id={sessionId}";
-    }
-
-    public void ClearResumeParams()
-    {
-        _resumeQueryParams = null;
-    }
-    
     public async Task ConnectAsync()
     {
         await _stateLock.WaitAsync().ConfigureAwait(false);

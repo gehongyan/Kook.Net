@@ -27,6 +27,7 @@ internal class ElementTypeConverter : JsonConverter<ElementType>
             ElementType.KMarkdown => "kmarkdown",
             ElementType.Image => "image",
             ElementType.Button => "button",
+            ElementType.Paragraph => "paragraph",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
     }

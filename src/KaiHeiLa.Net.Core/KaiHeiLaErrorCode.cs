@@ -17,13 +17,16 @@ namespace KaiHeiLa
 
         #endregion
 
+        RequestEntityTooLarge = 40014,
+        
         #region Reconnect
 
         MissingResumeArgument = 40106,
         SessionExpired = 40107,
-        InvalidSequenceNumber = 40108
+        InvalidSequenceNumber = 40108,
 
         #endregion
         
+        MissingPermissions = 40300
     }
 }

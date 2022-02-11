@@ -189,6 +189,19 @@ internal class KaiHeiLaRestApiClient : IDisposable
         return DeserializeJson<TResponse>(await SendInternalAsync(method, endpoint, request).ConfigureAwait(false));
     }
 
+    internal Task<TResponse> SendMultipartAsync<TResponse>(HttpMethod method, Expression<Func<string>> endpointExpr, IReadOnlyDictionary<string, object> multipartArgs, BucketIds ids,
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null)
+        => SendMultipartAsync<TResponse>(method, GetEndpoint(endpointExpr), multipartArgs, GetBucketId(method, ids, endpointExpr, funcName), clientBucket, options);
+    public async Task<TResponse> SendMultipartAsync<TResponse>(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartArgs,
+        BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null)
+    {
+        options ??= new RequestOptions();
+        options.BucketId = bucketId;
+
+        var request = new MultipartRestRequest(RestClient, method, endpoint, multipartArgs, options);
+        return DeserializeJson<TResponse>(await SendInternalAsync(method, endpoint, request).ConfigureAwait(false));
+    }
+    
     private async Task<Stream> SendInternalAsync(HttpMethod method, string endpoint, RestRequest request)
     {
         if (!request.Options.IgnoreState)
@@ -344,7 +357,6 @@ internal class KaiHeiLaRestApiClient : IDisposable
         
         var ids = new BucketIds(channelId: args.ChannelId);
         return await SendJsonAsync<CreateMessageResponse>(HttpMethod.Post, () => $"message/create", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
-
     }
 
     #endregion
@@ -381,9 +393,20 @@ internal class KaiHeiLaRestApiClient : IDisposable
 
     #endregion
 
-    #region Media
+    #region Assets
 
-    
+    public async Task<CreateAssetResponse> CreateAssetAsync(string path, string fileName = null, RequestOptions options = null)
+    {
+        Preconditions.NotNull(path, nameof(path));
+        options = RequestOptions.CreateOrClone(options);
+        
+        Dictionary<string, object> dictionary = new();
+        await using FileStream fileStream = File.OpenRead(path);
+        dictionary["file"] = new MultipartFile(fileStream, fileName ?? Path.GetFileName(path));
+        
+        var ids = new BucketIds();
+        return await SendMultipartAsync<CreateAssetResponse>(HttpMethod.Post, () => $"asset/create", dictionary, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
 
     #endregion
 

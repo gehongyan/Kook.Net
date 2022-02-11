@@ -11,8 +11,6 @@ namespace KaiHeiLa;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class HeaderModule : IModule
 {
-    private PlainTextElement _text;
-
     internal HeaderModule(string content)
     {
         Text = content;

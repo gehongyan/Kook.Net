@@ -15,7 +15,7 @@ public enum MessageType
     /// </summary>
     Video = 3,
     /// <summary>
-    ///     视频消息
+    ///     文件消息
     /// </summary>
     File = 4,
     /// <summary>

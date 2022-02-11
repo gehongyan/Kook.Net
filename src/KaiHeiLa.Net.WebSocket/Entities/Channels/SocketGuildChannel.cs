@@ -79,7 +79,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     An overwrite object for the targeted user; <c>null</c> if none is set.
     /// </returns>
-    public virtual OverwritePermissions? GetPermissionOverwrite(IUser user)
+    public virtual OverwritePermissions GetPermissionOverwrite(IUser user)
     {
         for (int i = 0; i < _userPermissionOverwrites.Length; i++)
         {
@@ -95,7 +95,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     An overwrite object for the targeted role; <c>null</c> if none is set.
     /// </returns>
-    public virtual OverwritePermissions? GetPermissionOverwrite(IRole role)
+    public virtual OverwritePermissions GetPermissionOverwrite(IRole role)
     {
         for (int i = 0; i < _rolePermissionOverwrites.Length; i++)
         {

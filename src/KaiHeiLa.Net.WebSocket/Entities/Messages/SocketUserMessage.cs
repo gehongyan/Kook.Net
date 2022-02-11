@@ -30,7 +30,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     /// <inheritdoc />
     public override Attachment Attachment => _attachment;
     /// <inheritdoc />  
-    public IReadOnlyCollection<ICard> Cards => _cards;
+    public override IReadOnlyCollection<ICard> Cards => _cards;
     /// <inheritdoc />
     public override IReadOnlyCollection<SocketRole> MentionedRoles => _roleMentions;
     /// <inheritdoc />
@@ -54,7 +54,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         SocketGuild guild = (Channel as SocketGuildChannel)?.Guild;
         _isMentioningEveryone = model.MentionAll;
         _isMentioningHere = model.MentionHere;
-        _roleMentions = model.MentionRoles.Select(x => guild.GetRole(x)).ToImmutableArray();
+        _roleMentions = model.MentionRoles?.Select(x => guild.GetRole(x)).ToImmutableArray()
+            ?? new ImmutableArray<SocketRole>();
         Content = gatewayEvent.Content;
         if (model.Quote is not null)
         {
