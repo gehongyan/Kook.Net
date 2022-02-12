@@ -28,18 +28,6 @@ public class ButtonElement : IElement
     public ButtonClickEventType Click { get; internal set; }
 
     public IElement Text { get; internal set; }
-    // {
-    //     get => _text;
-    //     internal set
-    //     {
-    //         if (value is not (PlainTextElement or KMarkdownElement))
-    //         {
-    //             throw new ArgumentOutOfRangeException(nameof(value),
-    //                 $"{Text} 可以为 {nameof(PlainTextElement)}, {nameof(KMarkdownElement)}");
-    //         }
-    //         _text = value;
-    //     }
-    // }
     
     private string DebuggerDisplay => $"{Type}: {Text} ({Click}, {Value}, {Theme})";
 }

@@ -20,16 +20,6 @@ public class ContainerModule : IModule
     public ModuleType Type => ModuleType.Container;
     
     public ImmutableArray<ImageElement> Elements { get; internal set; }
-
-    // public ContainerModule Add(ImageElement element)
-    // {
-    //     if (Elements.Length >= 9)
-    //     {
-    //         throw new ArgumentOutOfRangeException(nameof(Elements), $"{nameof(Elements)} 只能有 1-9 张图片");
-    //     }
-    //     Elements.Add(element);
-    //     return this;
-    // }
     
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";
 }

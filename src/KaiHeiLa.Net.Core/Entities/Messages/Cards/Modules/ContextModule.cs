@@ -21,19 +21,5 @@ public class ContextModule : IModule
     
     public ImmutableArray<IElement> Elements { get; internal set; }
     
-    // public ContextModule Add(IElement field)
-    // {
-    //     if (Elements.Length >= 10)
-    //     {
-    //         throw new ArgumentOutOfRangeException(nameof(Elements), $"{nameof(Elements)} 最多可包含 10 个元素");
-    //     }
-    //     if (field is not (PlainTextElement or KMarkdownElement or ImageElement))
-    //     {
-    //         throw new ArgumentOutOfRangeException(nameof(field),
-    //             $"{Elements} 可以的元素为 {nameof(PlainTextElement)} 或 {nameof(KMarkdownElement)}");
-    //     }
-    //     Elements.Add(field);
-    //     return this;
-    // }
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";
 }

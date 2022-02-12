@@ -355,7 +355,7 @@ internal static class EntityExtensions
     public static Card ToEntity(this API.Card model)
     {
         if (model is null) return null;
-        return new Card(model.Theme, model.Size, model.Modules.Select(m => m.ToEntity()).ToImmutableArray(), model.Color);
+        return new Card(model.Theme, model.Size, model.Color, model.Modules.Select(m => m.ToEntity()).ToImmutableArray());
     }
     
     public static API.CardBase ToModel(this ICard entity)

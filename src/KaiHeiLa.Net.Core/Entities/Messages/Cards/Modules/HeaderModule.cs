@@ -11,11 +11,6 @@ namespace KaiHeiLa;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class HeaderModule : IModule
 {
-    internal HeaderModule(string content)
-    {
-        Text = content;
-    }
-    
     internal HeaderModule(PlainTextElement text)
     {
         Text = text;
@@ -36,8 +31,6 @@ public class HeaderModule : IModule
     //         
     //     }
     // }
-
-    public static implicit operator HeaderModule(string content) => new(content);
     
     public override string ToString() => Text.ToString();
     private string DebuggerDisplay => $"{Type}: {Text}";

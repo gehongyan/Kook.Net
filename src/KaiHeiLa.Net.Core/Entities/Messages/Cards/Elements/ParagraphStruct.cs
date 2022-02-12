@@ -22,33 +22,8 @@ public class ParagraphStruct : IElement
     public ElementType Type => ElementType.Paragraph;
 
     public int ColumnCount { get; internal set; }
-    // {
-    //     get => _columnCount;
-    //     internal set
-    //     {
-    //         if (value is < 1 or > 3)
-    //         {
-    //             throw new ArgumentOutOfRangeException(nameof(value), "可以的取值为 1-3");
-    //         }
-    //         _columnCount = value; 
-    //     }
-    // }
 
     public ImmutableArray<IElement> Fields { get; internal set; }
 
-    // public ParagraphStruct Add(IElement field)
-    // {
-    //     if (Fields.Length >= 50)
-    //     {
-    //         throw new ArgumentOutOfRangeException(nameof(Fields), $"{nameof(Fields)} 最多有 50 个元素");
-    //     }
-    //     if (field is not (PlainTextElement or KMarkdownElement))
-    //     {
-    //         throw new ArgumentOutOfRangeException(nameof(field),
-    //             $"{Fields} 可以的元素为 {nameof(PlainTextElement)} 或 {nameof(KMarkdownElement)}");
-    //     }
-    //     Fields.Add(field);
-    //     return this;
-    // }
     private string DebuggerDisplay => $"{Type} ({ColumnCount} Columns, {Fields.Length} Fields)";
 }

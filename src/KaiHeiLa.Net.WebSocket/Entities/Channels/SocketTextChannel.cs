@@ -4,6 +4,7 @@ using Model = KaiHeiLa.API.Channel;
 using System.Diagnostics;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using KaiHeiLa.API;
 using KaiHeiLa.API.Rest;
 using KaiHeiLa.Net.Converters;
@@ -107,7 +108,15 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
 
     public async Task<(Guid Messageid, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(IEnumerable<ICard> cards, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     {
-        CardBase[] cardBases = cards.Select(c => c.ToModel()).ToArray();
+        const int maxModuleCount = 50;
+
+        IEnumerable<ICard> cardEnumerable = cards as ICard[] ?? cards.ToArray();
+        if (cardEnumerable.Sum(c => c.ModuleCount) > maxModuleCount)
+            throw new ArgumentException(
+                message: $"Card count must be less than or equal to {maxModuleCount}.",
+                paramName: nameof(cards));
+        
+        CardBase[] cardBases = cardEnumerable.Select(c => c.ToModel()).ToArray();
         JsonSerializerOptions serializerOptions = new()
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -116,13 +125,16 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
                 new CardConverter(),
                 new ModuleConverter(),
                 new ElementConverter()
-            }
+            },
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
         string json = JsonSerializer.Serialize(cardBases, serializerOptions);
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Card, json, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
-    
+    public Task<(Guid Messageid, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null) => 
+        SendCardMessageAsync(new[] { card }, quote, ephemeralUser, options);
+
     #endregion
     
     #region Users

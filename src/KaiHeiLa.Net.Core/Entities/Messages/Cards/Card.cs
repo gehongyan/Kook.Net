@@ -10,7 +10,7 @@ namespace KaiHeiLa;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Card : ICard
 {
-    internal Card(CardTheme theme, CardSize size, ImmutableArray<IModule> modules, Color? color = null)
+    internal Card(CardTheme theme, CardSize size, Color? color, ImmutableArray<IModule> modules)
     {
         Theme = theme;
         Color = color;
@@ -19,6 +19,8 @@ public class Card : ICard
     }
 
     public CardType Type => CardType.Card;
+
+    public int ModuleCount => Modules.Length;
 
     public CardTheme Theme { get; internal set; }
 

@@ -12,9 +12,9 @@ namespace KaiHeiLa;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ImageGroupModule : IModule
 {
-    internal ImageGroupModule(ImmutableArray<ImageElement> images)
+    internal ImageGroupModule(ImmutableArray<ImageElement> elements)
     {
-        Elements = images;
+        Elements = elements;
     }
     
     public ModuleType Type => ModuleType.ImageGroup;

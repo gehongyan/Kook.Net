@@ -19,8 +19,6 @@ public class InviteModule : IModule
     public ModuleType Type => ModuleType.Invite;
 
     public string Code { get; internal set; }
-
-    public static implicit operator InviteModule(string code) => new InviteModule(code);
     
     private string DebuggerDisplay => $"{Type}: {Code}";
 }
