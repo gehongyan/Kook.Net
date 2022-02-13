@@ -88,9 +88,29 @@ public class KMarkdownElementBuilder : IElementBuilder
 
 public class ImageElementBuilder : IElementBuilder
 {
+    private string _alternative;
+
+    /// <summary>
+    ///     Gets the maximum image alternative length allowed by KaiHeiLa.
+    /// </summary>
+    public const int MaxAlternativeLength = 20;
+    
     public ElementType Type => ElementType.Image;
     public string Source { get; set; }
-    public string Alternative { get; set; }
+
+    public string Alternative
+    {
+        get => _alternative;
+        set
+        {
+            if (value?.Length > MaxAlternativeLength)
+                throw new ArgumentException(
+                    message: $"Image alternative length must be less than or equal to {MaxAlternativeLength}.",
+                    paramName: nameof(Alternative));
+            _alternative = value;
+        }
+    }
+
     public ImageSize? Size { get; set; }
     public bool? Circle { get; set; }
     
