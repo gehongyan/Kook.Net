@@ -106,7 +106,7 @@ public class ImageElementBuilder : IElementBuilder
     }
     public ImageElementBuilder WithSize(ImageSize size)
     {
-        Size = Size;
+        Size = size;
         return this;
     }
     public ImageElementBuilder WithCircle(bool circle)
