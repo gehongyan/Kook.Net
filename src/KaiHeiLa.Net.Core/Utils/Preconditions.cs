@@ -79,6 +79,8 @@ public class Preconditions
         /// <exception cref="ArgumentException">Value may not be equal to <paramref name="value"/>.</exception>
         public static void NotEqual(ulong obj, ulong value, string name, string msg = null) { if (obj == value) throw CreateNotEqualException(name, msg, value); }
         /// <exception cref="ArgumentException">Value may not be equal to <paramref name="value"/>.</exception>
+        public static void NotEqual(Guid obj, Guid value, string name, string msg = null) { if (obj == value) throw CreateNotEqualException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value may not be equal to <paramref name="value"/>.</exception>
         public static void NotEqual(Optional<sbyte> obj, sbyte value, string name, string msg = null) { if (obj.IsSpecified && obj.Value == value) throw CreateNotEqualException(name, msg, value); }
         /// <exception cref="ArgumentException">Value may not be equal to <paramref name="value"/>.</exception>
         public static void NotEqual(Optional<byte> obj, byte value, string name, string msg = null) { if (obj.IsSpecified && obj.Value == value) throw CreateNotEqualException(name, msg, value); }
@@ -94,6 +96,8 @@ public class Preconditions
         public static void NotEqual(Optional<long> obj, long value, string name, string msg = null) { if (obj.IsSpecified && obj.Value == value) throw CreateNotEqualException(name, msg, value); }
         /// <exception cref="ArgumentException">Value may not be equal to <paramref name="value"/>.</exception>
         public static void NotEqual(Optional<ulong> obj, ulong value, string name, string msg = null) { if (obj.IsSpecified && obj.Value == value) throw CreateNotEqualException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value may not be equal to <paramref name="value"/>.</exception>
+        public static void NotEqual(Optional<Guid> obj, Guid value, string name, string msg = null) { if (obj.IsSpecified && obj.Value == value) throw CreateNotEqualException(name, msg, value); }
         /// <exception cref="ArgumentException">Value may not be equal to <paramref name="value"/>.</exception>
         public static void NotEqual(sbyte? obj, sbyte value, string name, string msg = null) { if (obj == value) throw CreateNotEqualException(name, msg, value); }
         /// <exception cref="ArgumentException">Value may not be equal to <paramref name="value"/>.</exception>
@@ -111,6 +115,8 @@ public class Preconditions
         /// <exception cref="ArgumentException">Value may not be equal to <paramref name="value"/>.</exception>
         public static void NotEqual(ulong? obj, ulong value, string name, string msg = null) { if (obj == value) throw CreateNotEqualException(name, msg, value); }
         /// <exception cref="ArgumentException">Value may not be equal to <paramref name="value"/>.</exception>
+        public static void NotEqual(Guid? obj, Guid value, string name, string msg = null) { if (obj == value) throw CreateNotEqualException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value may not be equal to <paramref name="value"/>.</exception>
         public static void NotEqual(Optional<sbyte?> obj, sbyte value, string name, string msg = null) { if (obj.IsSpecified && obj.Value == value) throw CreateNotEqualException(name, msg, value); }
         /// <exception cref="ArgumentException">Value may not be equal to <paramref name="value"/>.</exception>
         public static void NotEqual(Optional<byte?> obj, byte value, string name, string msg = null) { if (obj.IsSpecified && obj.Value == value) throw CreateNotEqualException(name, msg, value); }
@@ -126,6 +132,8 @@ public class Preconditions
         public static void NotEqual(Optional<long?> obj, long value, string name, string msg = null) { if (obj.IsSpecified && obj.Value == value) throw CreateNotEqualException(name, msg, value); }
         /// <exception cref="ArgumentException">Value may not be equal to <paramref name="value"/>.</exception>
         public static void NotEqual(Optional<ulong?> obj, ulong value, string name, string msg = null) { if (obj.IsSpecified && obj.Value == value) throw CreateNotEqualException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value may not be equal to <paramref name="value"/>.</exception>
+        public static void NotEqual(Optional<Guid?> obj, Guid value, string name, string msg = null) { if (obj.IsSpecified && obj.Value == value) throw CreateNotEqualException(name, msg, value); }
 
         private static ArgumentException CreateNotEqualException<T>(string name, string msg, T value)
             => new ArgumentException(message: msg ?? $"Value may not be equal to {value}.", paramName: name);

@@ -67,6 +67,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         CategoryId = model.CategoryId;
         Topic = model.Topic;
         SlowModeInterval = model.SlowMode; // some guilds haven't been patched to include this yet?
+        IsPermissionSynced = model.PermissionSync == 1;
     }
     
     internal void AddMessage(SocketMessage msg)

@@ -6,15 +6,15 @@ public interface IUser : IEntity<ulong>, IMentionable
 
     string IdentifyNumber { get; }
     
-    ushort IdentifyNumberValue { get; }
+    ushort? IdentifyNumberValue { get; }
 
-    bool IsOnline { get; }
+    bool? IsOnline { get; }
 
-    bool IsBot { get; }
+    bool? IsBot { get; }
 
-    bool IsBanned { get; }
+    bool? IsBanned { get; }
 
-    bool IsVIP { get; }
+    bool? IsVIP { get; }
 
     string Avatar { get; }
 

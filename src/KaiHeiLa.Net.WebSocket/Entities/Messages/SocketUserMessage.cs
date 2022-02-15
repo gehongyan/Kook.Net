@@ -44,7 +44,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     }
     internal new static SocketUserMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, Model model, GatewayEvent gatewayEvent)
     {
-        var entity = new SocketUserMessage(kaiHeiLa, gatewayEvent.MessageId, channel, author, MessageHelper.GetSource(model));
+        var entity = new SocketUserMessage(kaiHeiLa, gatewayEvent.MessageId, channel, author, SocketMessageHelper.GetSource(model));
         entity.Update(state, model, gatewayEvent);
         return entity;
     }

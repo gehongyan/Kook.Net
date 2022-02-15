@@ -15,8 +15,7 @@ internal class NullableUInt64Converter : JsonConverter<ulong?>
 
     public override void Write(Utf8JsonWriter writer, ulong? value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.HasValue
-            ? value.ToString()
-            : string.Empty);
+        if (value is null) writer.WriteNullValue();
+        else writer.WriteStringValue(value.ToString());
     }
 }

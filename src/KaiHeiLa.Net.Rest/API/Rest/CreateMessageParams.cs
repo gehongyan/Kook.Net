@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using KaiHeiLa.Net.Converters;
 
 namespace KaiHeiLa.API.Rest;
 
@@ -21,8 +22,8 @@ internal class CreateMessageParams
     public string Nonce { get; set; }
 
     [JsonPropertyName("temp_target_id")]
+    [JsonConverter(typeof(NullableUInt64Converter))]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong? EphemeralUserId { get; set; }
     
     public CreateMessageParams(MessageType messageType, ulong channelId, string content)

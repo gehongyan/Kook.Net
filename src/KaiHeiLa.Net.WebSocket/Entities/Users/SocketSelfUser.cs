@@ -14,23 +14,23 @@ public class SocketSelfUser : SocketUser, ISelfUser
     internal override SocketGlobalUser GlobalUser { get; }
     
     /// <inheritdoc />
-    public override bool IsBot { get => GlobalUser.IsBot; internal set => GlobalUser.IsBot = value; }
+    public override bool? IsBot { get => GlobalUser.IsBot; internal set => GlobalUser.IsBot = value; }
     /// <inheritdoc />
     public override string Username { get => GlobalUser.Username; internal set => GlobalUser.Username = value; }
     /// <inheritdoc />
     public override string IdentifyNumber { get => GlobalUser.IdentifyNumber; internal set => GlobalUser.IdentifyNumber = value; }
     /// <inheritdoc />
-    public override ushort IdentifyNumberValue { get => GlobalUser.IdentifyNumberValue; internal set => GlobalUser.IdentifyNumberValue = value; }
+    public override ushort? IdentifyNumberValue { get => GlobalUser.IdentifyNumberValue; internal set => GlobalUser.IdentifyNumberValue = value; }
     /// <inheritdoc />
     public override string Avatar { get => GlobalUser.Avatar; internal set => GlobalUser.Avatar = value; }
     /// <inheritdoc />
     public override string VIPAvatar { get => GlobalUser.VIPAvatar; internal set => GlobalUser.VIPAvatar = value; }
     /// <inheritdoc />
-    public override bool IsBanned { get => GlobalUser.IsBanned; internal set => GlobalUser.IsBanned = value; }
+    public override bool? IsBanned { get => GlobalUser.IsBanned; internal set => GlobalUser.IsBanned = value; }
     /// <inheritdoc />
-    public override bool IsOnline { get => GlobalUser.IsOnline; internal set => GlobalUser.IsOnline = value; }
+    public override bool? IsOnline { get => GlobalUser.IsOnline; internal set => GlobalUser.IsOnline = value; }
     /// <inheritdoc />
-    public override bool IsVIP { get => GlobalUser.IsVIP; internal set => GlobalUser.IsVIP = value; }
+    public override bool? IsVIP { get => GlobalUser.IsVIP; internal set => GlobalUser.IsVIP = value; }
     /// <inheritdoc />
     
     public string MobilePrefix { get; internal set; }
@@ -76,6 +76,6 @@ public class SocketSelfUser : SocketUser, ISelfUser
         return hasGlobalChanges;
     }
     
-    private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ? ", Bot" : "")}, Self)";
+    private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ?? false ? ", Bot" : "")}, Self)";
     internal new SocketSelfUser Clone() => MemberwiseClone() as SocketSelfUser;
 }

@@ -64,4 +64,8 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage //, IUpdateable
     //     else
     //         return RestSystemMessage.Create(kaiHeiLa, channel, author, model);
     // }
+    
+    /// <inheritdoc />
+    public Task DeleteAsync(RequestOptions options = null)
+        => MessageHelper.DeleteAsync(this, KaiHeiLa, options);
 }

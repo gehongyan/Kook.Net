@@ -17,7 +17,13 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     public string Mention => MentionUtils.MentionChannel(Id);
     /// <inheritdoc />
     public bool IsPermissionSynced { get; set; }
+
+    public VoiceQuality VoiceQuality { get; set; }
     
+    public int LimitAmount { get; set; }
+    
+    public string ServerUrl { get; set; }
+
     internal SocketVoiceChannel(KaiHeiLaSocketClient kaiHeiLa, ulong id, SocketGuild guild) 
         : base(kaiHeiLa, id, guild)
     {
@@ -34,11 +40,14 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     {
         base.Update(state, model);
         CategoryId = model.CategoryId;
+        VoiceQuality = model.VoiceQuality ?? VoiceQuality.Unspecified;
+        LimitAmount = model.LimitAmount ?? 0;
+        ServerUrl = model.ServerUrl;
+        IsPermissionSynced = model.PermissionSync == 1;
     }
     
     #endregion
 
     private string DebuggerDisplay => $"{Name} ({Id}, Voice)";
     internal new SocketVoiceChannel Clone() => MemberwiseClone() as SocketVoiceChannel;
-
 }

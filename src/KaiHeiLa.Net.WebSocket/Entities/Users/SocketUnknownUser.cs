@@ -16,11 +16,11 @@ public class SocketUnknownUser : SocketUser
     public override string Username { get; internal set; }
 
     public override string IdentifyNumber { get; internal set; }
-    public override ushort IdentifyNumberValue { get; internal set; }
-    public override bool IsOnline { get; internal set; }
-    public override bool IsBot { get; internal set; }
-    public override bool IsBanned { get; internal set; }
-    public override bool IsVIP { get; internal set; }
+    public override ushort? IdentifyNumberValue { get; internal set; }
+    public override bool? IsOnline { get; internal set; }
+    public override bool? IsBot { get; internal set; }
+    public override bool? IsBanned { get; internal set; }
+    public override bool? IsVIP { get; internal set; }
     public override string Avatar { get; internal set; }
     public override string VIPAvatar { get; internal set; }
 
@@ -39,6 +39,6 @@ public class SocketUnknownUser : SocketUser
         return entity;
     }
     
-    private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ? ", Bot" : "")}, Unknown)";
+    private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ?? false ? ", Bot" : "")}, Unknown)";
     internal new SocketUnknownUser Clone() => MemberwiseClone() as SocketUnknownUser;
 }

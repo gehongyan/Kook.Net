@@ -8,11 +8,11 @@ internal class SocketGlobalUser : SocketUser
 {
     public override string Username { get; internal set; }
     public override string IdentifyNumber { get; internal set; }
-    public override ushort IdentifyNumberValue { get; internal set; }
-    public override bool IsOnline { get; internal set; }
-    public override bool IsBot { get; internal set; }
-    public override bool IsBanned { get; internal set; }
-    public override bool IsVIP { get; internal set; }
+    public override ushort? IdentifyNumberValue { get; internal set; }
+    public override bool? IsOnline { get; internal set; }
+    public override bool? IsBot { get; internal set; }
+    public override bool? IsBanned { get; internal set; }
+    public override bool? IsVIP { get; internal set; }
     public override string Avatar { get; internal set; }
     public override string VIPAvatar { get; internal set; }
     
@@ -49,6 +49,6 @@ internal class SocketGlobalUser : SocketUser
         }
     }
     
-    private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ? ", Bot" : "")}, Global)";
+    private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ?? false ? ", Bot" : "")}, Global)";
     internal new SocketGlobalUser Clone() => MemberwiseClone() as SocketGlobalUser;
 }

@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using KaiHeiLa.API.Gateway;
+using KaiHeiLa.Rest;
 using Model = KaiHeiLa.API.Gateway.GatewayMessageExtraData;
 
 namespace KaiHeiLa.WebSocket;
@@ -99,6 +100,10 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
             }
         }
     }
+    
+    /// <inheritdoc />
+    public Task DeleteAsync(RequestOptions options = null)
+        => MessageHelper.DeleteAsync(this, KaiHeiLa, options);
     
     #endregion
 

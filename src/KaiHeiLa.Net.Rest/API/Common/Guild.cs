@@ -19,7 +19,6 @@ internal class Guild
     [JsonPropertyName("icon")] public string Icon { get; set; }
 
     [JsonPropertyName("notify_type")]
-    [JsonConverter(typeof(NotifyTypeConverter))]
     public NotifyType NotifyType { get; set; }
 
     [JsonPropertyName("region")] public string Region { get; set; }

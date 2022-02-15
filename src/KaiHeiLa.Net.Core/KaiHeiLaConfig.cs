@@ -57,6 +57,22 @@ public class KaiHeiLaConfig
     ///     The maximum length of a message allowed by KaiHeiLa.
     /// </returns>
     public const int MaxMessageSize = 50000;
+    
+    /// <summary> 
+    ///     Returns the min length for a KaiHeiLa guild nickname. 
+    /// </summary>
+    /// <returns>
+    ///     The minimum length of a nickname allowed by KaiHeiLa.
+    /// </returns>
+    public const int MinNicknameSize = 2;
+    
+    /// <summary> 
+    ///     Returns the max length for a KaiHeiLa guild nickname. 
+    /// </summary>
+    /// <returns>
+    ///     The maximum length of a nickname allowed by KaiHeiLa.
+    /// </returns>
+    public const int MaxNicknameSize = 64;
 
     /// <summary>
     ///     Gets or sets how a request should act in the case of an error, by default.

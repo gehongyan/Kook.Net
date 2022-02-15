@@ -1,6 +1,6 @@
 ﻿namespace KaiHeiLa;
 
-public interface IMessage : IGuidEntity
+public interface IMessage : IGuidEntity, IDeletable
 {
     ChannelType ChannelType { get; }
     

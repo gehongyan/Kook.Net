@@ -19,16 +19,13 @@ internal class Channel
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong GuildId { get; set; }
 
-    [JsonPropertyName("topic")] public string Topic { get; set; }
     [JsonPropertyName("is_category")] public bool IsCategory { get; set; }
 
     [JsonPropertyName("parent_id")]
     [JsonConverter(typeof(NullableUInt64Converter))]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong? CategoryId { get; set; }
 
     [JsonPropertyName("level")] public int Level { get; set; }
-    [JsonPropertyName("slow_mode")] public int SlowMode { get; set; }
     [JsonPropertyName("type")] public ChannelType Type { get; set; }
 
     [JsonPropertyName("permission_overwrites")]
@@ -38,4 +35,21 @@ internal class Channel
     public UserPermissionOverwrite[] UserPermissionOverwrites { get; set; }
 
     [JsonPropertyName("permission_sync")] public int PermissionSync { get; set; }
+    
+    // Text
+    [JsonPropertyName("topic")] public string Topic { get; set; }
+    [JsonPropertyName("slow_mode")] public int SlowMode { get; set; }
+    
+    // Voice
+    [JsonPropertyName("limit_amount")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? LimitAmount { get; set; }
+
+    [JsonPropertyName("voice_quality")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public VoiceQuality? VoiceQuality { get; set; }
+
+    [JsonPropertyName("server_url")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public string ServerUrl { get; set; }
 }

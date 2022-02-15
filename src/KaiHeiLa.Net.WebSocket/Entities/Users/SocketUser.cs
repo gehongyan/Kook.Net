@@ -12,11 +12,11 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
 {
     public abstract string Username { get; internal set; }
     public abstract string IdentifyNumber { get; internal set; }
-    public abstract ushort IdentifyNumberValue { get; internal set; }
-    public abstract bool IsOnline { get; internal set; }
-    public abstract bool IsBot { get; internal set; }
-    public abstract bool IsBanned { get; internal set; }
-    public abstract bool IsVIP { get; internal set; }
+    public abstract ushort? IdentifyNumberValue { get; internal set; }
+    public abstract bool? IsOnline { get; internal set; }
+    public abstract bool? IsBot { get; internal set; }
+    public abstract bool? IsBanned { get; internal set; }
+    public abstract bool? IsVIP { get; internal set; }
     public abstract string Avatar { get; internal set; }
     public abstract string VIPAvatar { get; internal set; }
     internal abstract SocketGlobalUser GlobalUser { get; }
@@ -88,6 +88,6 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     ///     The full name of the user.
     /// </returns>
     public override string ToString() => Format.UsernameAndDiscriminator(this);
-    private string DebuggerDisplay => $"{Format.UsernameAndDiscriminator(this)} ({Id}{(IsBot ? ", Bot" : "")})";
+    private string DebuggerDisplay => $"{Format.UsernameAndDiscriminator(this)} ({Id}{(IsBot ?? false ? ", Bot" : "")})";
     internal SocketUser Clone() => MemberwiseClone() as SocketUser;
 }
