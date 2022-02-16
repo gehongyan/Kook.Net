@@ -1,11 +1,19 @@
+using KaiHeiLa.API.Gateway;
 using KaiHeiLa.Rest;
-using Model = KaiHeiLa.API.Gateway.GatewayMessageExtraData;
 
 namespace KaiHeiLa.WebSocket;
 
 internal static class SocketMessageHelper
 {
-    public static MessageSource GetSource(Model msg)
+    public static MessageSource GetSource(GatewayGroupMessageExtraData msg)
+    {
+        if (msg.Author.Bot ?? false)
+            return MessageSource.Bot;
+        if (msg.Type == MessageType.System)
+            return MessageSource.System;
+        return MessageSource.User;
+    }
+    public static MessageSource GetSource(GatewayPersonMessageExtraData msg)
     {
         if (msg.Author.Bot ?? false)
             return MessageSource.Bot;

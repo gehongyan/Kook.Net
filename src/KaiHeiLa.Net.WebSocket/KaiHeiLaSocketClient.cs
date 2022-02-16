@@ -158,6 +158,10 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     {
         return state.GetOrAddUser(model.Id, x => SocketGlobalUser.Create(this, state, model));
     }
+    internal SocketUser GetOrCreateTemporaryUser(ClientState state, KaiHeiLa.API.User model)
+    {
+        return state.GetUser(model.Id) ?? (SocketUser)SocketUnknownUser.Create(this, state, model.Id);
+    }
     internal SocketGlobalUser GetOrCreateSelfUser(ClientState state, KaiHeiLa.API.User model)
     {
         return state.GetOrAddUser(model.Id, x =>
@@ -209,8 +213,10 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                     {
                         MessageType.System => ((JsonElement) gatewayEvent.ExtraData)
                             .Deserialize<GatewaySystemEventExtraData>(_serializerOptions),
-                        _ => ((JsonElement) gatewayEvent.ExtraData).Deserialize<GatewayMessageExtraData>(
-                            _serializerOptions)
+                        _  when gatewayEvent.ChannelType == "GROUP" => ((JsonElement) gatewayEvent.ExtraData).Deserialize<GatewayGroupMessageExtraData>(
+                            _serializerOptions),
+                        _  when gatewayEvent.ChannelType == "PERSON" => ((JsonElement) gatewayEvent.ExtraData).Deserialize<GatewayPersonMessageExtraData>(
+                            _serializerOptions),
                     };
 
                     switch (gatewayEvent.Type)
@@ -224,31 +230,51 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                         case MessageType.Card:
                         {
                             await _gatewayLogger.DebugAsync("Received Message (Text)").ConfigureAwait(false);
-                            GatewayMessageExtraData extraData = eventExtraData as GatewayMessageExtraData;
-                            ISocketMessageChannel channel = GetChannel(gatewayEvent.TargetId) as ISocketMessageChannel;
-                            SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
-
-                            SocketUser author;
-                            if (guild != null)
-                                author = guild.GetUser(extraData.Author.Id);
-                            else
-                                author = (channel as SocketChannel).GetUser(extraData.Author.Id);
-                            if (author == null)
+                            if (gatewayEvent.ChannelType == "GROUP")
                             {
+                                GatewayGroupMessageExtraData extraData = eventExtraData as GatewayGroupMessageExtraData;
+                            
+                                var channel = GetChannel(gatewayEvent.TargetId) as ISocketMessageChannel;
+                                SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
+
+                                SocketUser author;
                                 if (guild != null)
-                                {
-                                    author = guild.AddOrUpdateUser(extraData.Author);
-                                }
+                                    author = guild.GetUser(extraData.Author.Id);
                                 else
+                                    author = (channel as SocketChannel).GetUser(extraData.Author.Id);
+                                if (author == null)
                                 {
-                                    await UnknownChannelUserAsync(gatewayEvent.Type.ToString(), extraData.Author.Id, channel.Id).ConfigureAwait(false);
+                                    if (guild != null)
+                                    {
+                                        author = guild.AddOrUpdateUser(extraData.Author);
+                                    }
+                                    else
+                                    {
+                                        await UnknownChannelUserAsync(gatewayEvent.Type.ToString(), extraData.Author.Id, channel.Id).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                            
+                                var msg = SocketMessage.Create(this, State, author, channel, extraData, gatewayEvent);
+                                SocketChannelHelper.AddMessage(channel, this, msg);
+                                await TimedInvokeAsync(_messageReceivedEvent, nameof(MessageReceived), msg).ConfigureAwait(false);
+                            }
+                            else if (gatewayEvent.ChannelType == "PERSON")
+                            {
+                                GatewayPersonMessageExtraData extraData = eventExtraData as GatewayPersonMessageExtraData;
+                                var channel = CreateDMChannel(extraData.Code, extraData.Author, State);
+                                
+                                SocketUser author = (channel as SocketChannel).GetUser(extraData.Author.Id);
+                                if (author == null)
+                                {
+                                    await UnknownChannelUserAsync(gatewayEvent.Type.ToString(), extraData.Author.Id, extraData.Code).ConfigureAwait(false);
                                     return;
                                 }
+                                var msg = SocketMessage.Create(this, State, author, channel, extraData, gatewayEvent);
+                                SocketChannelHelper.AddMessage(channel, this, msg);
+                                await TimedInvokeAsync(_messageReceivedEvent, nameof(MessageReceived), msg).ConfigureAwait(false);
                             }
                             
-                            var msg = SocketMessage.Create(this, State, author, channel, extraData, gatewayEvent);
-                            SocketChannelHelper.AddMessage(channel, this, msg);
-                            await TimedInvokeAsync(_messageReceivedEvent, nameof(MessageReceived), msg).ConfigureAwait(false);
                         }
                             break;
 
@@ -527,6 +553,15 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     internal SocketGuild RemoveGuild(ulong id)
         => State.RemoveGuild(id);
 
+    internal SocketDMChannel CreateDMChannel(Guid chatCode, API.User model, ClientState state)
+    {
+        return SocketDMChannel.Create(this, state, chatCode, model);
+    }
+    internal SocketDMChannel CreateDMChannel(Guid chatCode, SocketUser user, ClientState state)
+    {
+        return new SocketDMChannel(this, chatCode, user);
+    }
+    
     private async Task GuildAvailableAsync(SocketGuild guild)
     {
         if (!guild.IsConnected)
@@ -639,6 +674,11 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     private async Task UnknownChannelUserAsync(string evnt, ulong userId, ulong channelId)
     {
         string details = $"{evnt} User={userId} Channel={channelId}";
+        await _gatewayLogger.WarningAsync($"Unknown User ({details}).").ConfigureAwait(false);
+    }
+    private async Task UnknownChannelUserAsync(string evnt, ulong userId, Guid chatCode)
+    {
+        string details = $"{evnt} User={userId} ChatCode={chatCode}";
         await _gatewayLogger.WarningAsync($"Unknown User ({details}).").ConfigureAwait(false);
     }
     private async Task UnsyncedGuildAsync(string evnt, ulong guildId)

@@ -470,7 +470,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         return await SendJsonAsync<Channel>(HttpMethod.Post, () => $"channel/create", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
-    public async Task CreateGuildChannelAsync(DeleteChannelParams args, RequestOptions options = null)
+    public async Task DeleteGuildChannelAsync(DeleteGuildChannelParams args, RequestOptions options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
@@ -631,6 +631,16 @@ internal class KaiHeiLaRestApiClient : IDisposable
     #region DM Channels
 
     
+    
+    
+    public async Task DeleteDMChannelAsync(DeleteDMChannelParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
+        
+        var ids = new BucketIds();
+        await SendJsonAsync(HttpMethod.Post, () => $"user-chat/delete", args, ids, options: options).ConfigureAwait(false);
+    }
 
     #endregion
 

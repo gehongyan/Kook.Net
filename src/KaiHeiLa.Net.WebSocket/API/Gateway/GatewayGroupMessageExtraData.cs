@@ -3,7 +3,7 @@ using KaiHeiLa.Net.Converters;
 
 namespace KaiHeiLa.API.Gateway;
 
-internal class GatewayMessageExtraData
+internal class GatewayGroupMessageExtraData
 {
     [JsonPropertyName("type")]
     [JsonConverter(typeof(MessageTypeConverter))]

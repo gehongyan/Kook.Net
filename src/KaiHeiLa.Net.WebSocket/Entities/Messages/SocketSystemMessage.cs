@@ -1,5 +1,3 @@
-using Model = KaiHeiLa.API.Gateway.GatewayMessageExtraData;
-
 using System.Diagnostics;
 using KaiHeiLa.API.Gateway;
 
@@ -17,13 +15,24 @@ public class SocketSystemMessage : SocketMessage, ISystemMessage
         : base(discord, id, channel, author, MessageSource.System)
     {
     }
-    internal new static SocketSystemMessage Create(KaiHeiLaSocketClient discord, ClientState state, SocketUser author, ISocketMessageChannel channel, Model model, GatewayEvent gatewayEvent)
+    internal new static SocketSystemMessage Create(KaiHeiLaSocketClient discord, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
     {
         var entity = new SocketSystemMessage(discord, gatewayEvent.MessageId, channel, author);
         entity.Update(state, model, gatewayEvent);
         return entity;
     }
-    internal override void Update(ClientState state, Model model, GatewayEvent gatewayEvent)
+    internal new static SocketSystemMessage Create(KaiHeiLaSocketClient discord, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
+    {
+        var entity = new SocketSystemMessage(discord, gatewayEvent.MessageId, channel, author);
+        entity.Update(state, model, gatewayEvent);
+        return entity;
+    }
+    internal override void Update(ClientState state, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
+    {
+        base.Update(state, model, gatewayEvent);
+        // TODO: SystemMessageType
+    }
+    internal override void Update(ClientState state, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
     {
         base.Update(state, model, gatewayEvent);
         // TODO: SystemMessageType

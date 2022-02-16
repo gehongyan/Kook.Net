@@ -1,7 +1,6 @@
 using System.Collections.Immutable;
 using KaiHeiLa.API.Gateway;
 using KaiHeiLa.Rest;
-using Model = KaiHeiLa.API.Gateway.GatewayMessageExtraData;
 
 namespace KaiHeiLa.WebSocket;
 
@@ -38,9 +37,9 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
     /// <inheritdoc />
     public DateTimeOffset Timestamp { get; private set; }
     /// <inheritdoc />
-    public virtual bool MentionedEveryone => false;
+    public virtual bool? MentionedEveryone => false;
     /// <inheritdoc />
-    public virtual bool MentionedHere => false;
+    public virtual bool? MentionedHere => false;
 
     /// <inheritdoc/>
     public MessageType Type { get; private set; }
@@ -71,14 +70,14 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
         Author = author;
         Source = source;
     }
-    internal static SocketMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, Model model, GatewayEvent gatewayEvent)
+    internal static SocketMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
     {
         if (model.Type == MessageType.System)
             return SocketSystemMessage.Create(kaiHeiLa, state, author, channel, model, gatewayEvent);
         else
             return SocketUserMessage.Create(kaiHeiLa, state, author, channel, model, gatewayEvent);
     }
-    internal virtual void Update(ClientState state, Model model, GatewayEvent gatewayEvent)
+    internal virtual void Update(ClientState state, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
     {
         Type = model.Type;
         Timestamp = gatewayEvent.MessageTimestamp;
@@ -99,6 +98,19 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
                 _userMentions = newMentions.ToImmutable();
             }
         }
+    }
+    internal static SocketMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
+    {
+        if (model.Type == MessageType.System)
+            return SocketSystemMessage.Create(kaiHeiLa, state, author, channel, model, gatewayEvent);
+        else
+            return SocketUserMessage.Create(kaiHeiLa, state, author, channel, model, gatewayEvent);
+    }
+    internal virtual void Update(ClientState state, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
+    {
+        Type = model.Type;
+        Timestamp = gatewayEvent.MessageTimestamp;
+        Content = gatewayEvent.Content;
     }
     
     /// <inheritdoc />

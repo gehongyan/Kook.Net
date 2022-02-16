@@ -20,9 +20,9 @@ public interface IMessage : IGuidEntity, IDeletable
     
     IReadOnlyCollection<uint> MentionedRoleIds { get; }
     
-    bool MentionedEveryone { get; }
+    bool? MentionedEveryone { get; }
     
-    bool MentionedHere { get; }
+    bool? MentionedHere { get; }
     
     IAttachment Attachment { get; }
     

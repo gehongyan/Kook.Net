@@ -7,7 +7,6 @@ using KaiHeiLa.API;
 using KaiHeiLa.API.Gateway;
 using KaiHeiLa.Net.Converters;
 using KaiHeiLa.Rest;
-using Model = KaiHeiLa.API.Gateway.GatewayMessageExtraData;
 
 namespace KaiHeiLa.WebSocket;
 
@@ -17,8 +16,8 @@ namespace KaiHeiLa.WebSocket;
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
 public class SocketUserMessage : SocketMessage, IUserMessage
 {
-    private bool _isMentioningEveryone;
-    private bool _isMentioningHere;
+    private bool? _isMentioningEveryone;
+    private bool? _isMentioningHere;
     private Quote _quote;
     private Attachment _attachment;
     private ImmutableArray<ICard> _cards = ImmutableArray.Create<ICard>();
@@ -34,21 +33,21 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     /// <inheritdoc />
     public override IReadOnlyCollection<SocketRole> MentionedRoles => _roleMentions;
     /// <inheritdoc />
-    public override bool MentionedEveryone => _isMentioningEveryone;
+    public override bool? MentionedEveryone => _isMentioningEveryone;
     /// <inheritdoc />
-    public override bool MentionedHere => _isMentioningHere;
+    public override bool? MentionedHere => _isMentioningHere;
     
     internal SocketUserMessage(KaiHeiLaSocketClient discord, Guid id, ISocketMessageChannel channel, SocketUser author, MessageSource source)
         : base(discord, id, channel, author, source)
     {
     }
-    internal new static SocketUserMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, Model model, GatewayEvent gatewayEvent)
+    internal new static SocketUserMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
     {
         var entity = new SocketUserMessage(kaiHeiLa, gatewayEvent.MessageId, channel, author, SocketMessageHelper.GetSource(model));
         entity.Update(state, model, gatewayEvent);
         return entity;
     }
-    internal override void Update(ClientState state, Model model, GatewayEvent gatewayEvent)
+    internal override void Update(ClientState state, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
     {
         base.Update(state, model, gatewayEvent);
         SocketGuild guild = (Channel as SocketGuildChannel)?.Guild;
@@ -94,6 +93,53 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         }
         
         Guild = guild;
+    }
+    
+    internal new static SocketUserMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
+    {
+        var entity = new SocketUserMessage(kaiHeiLa, gatewayEvent.MessageId, channel, author, SocketMessageHelper.GetSource(model));
+        entity.Update(state, model, gatewayEvent);
+        return entity;
+    }
+    internal override void Update(ClientState state, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
+    {
+        base.Update(state, model, gatewayEvent);
+        Content = gatewayEvent.Content;
+        if (model.Quote is not null)
+        {
+            _quote = Quote.Create(model.Quote, state.GetUser(model.Quote.Author.Id));
+        }
+        
+        if (model.Attachment is not null)
+        {
+            _attachment = Attachment.Create(model.Attachment);
+        }
+
+        if (model.Type == MessageType.Card)
+        {
+            string json = gatewayEvent.Content;
+            JsonSerializerOptions serializerOptions = new()
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                Converters =
+                {
+                    new CardConverter(),
+                    new ModuleConverter(),
+                    new ElementConverter()
+                }
+            };
+            CardBase[] cardBases = JsonSerializer.Deserialize<CardBase[]>(json, serializerOptions);
+            
+            var cards = ImmutableArray.CreateBuilder<ICard>(cardBases.Length);
+            foreach (CardBase cardBase in cardBases)
+                cards.Add(cardBase.ToEntity());
+
+            _cards = cards.ToImmutable();
+        }
+        else
+        {
+            _cards = ImmutableArray.Create<ICard>();
+        }
     }
     
     private string DebuggerDisplay => $"{Author}: {Content} ({Id}{(Attachment is not null ? ", Attachment" : "")})";

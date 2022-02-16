@@ -7,6 +7,7 @@ internal static class SocketChannelHelper
     {
         switch (channel)
         {
+            case SocketDMChannel dmChannel: dmChannel.AddMessage(msg); break;
             case SocketTextChannel textChannel: textChannel.AddMessage(msg); break;
             default: throw new NotSupportedException($"Unexpected {nameof(ISocketMessageChannel)} type.");
         }

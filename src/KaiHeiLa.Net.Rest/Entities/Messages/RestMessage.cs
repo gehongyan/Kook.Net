@@ -25,9 +25,9 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage //, IUpdateable
 
     public DateTimeOffset Timestamp { get; private set; }
     /// <inheritdoc />
-    public virtual bool MentionedEveryone => false;
+    public virtual bool? MentionedEveryone => false;
     /// <inheritdoc />
-    public virtual bool MentionedHere => false;
+    public virtual bool? MentionedHere => false;
     
     /// <summary>
     ///     Gets the <see cref="Attachment"/> on the message.
