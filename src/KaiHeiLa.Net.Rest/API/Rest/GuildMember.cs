@@ -5,6 +5,7 @@ namespace KaiHeiLa.API.Rest;
 
 internal class GuildMember : User
 {
+    [JsonPropertyName("nickname")] public string Nickname { get; set; }
     [JsonPropertyName("mobile_verified")] public bool MobileVerified { get; set; }
 
     [JsonPropertyName("joined_at")]

@@ -3,7 +3,7 @@ using KaiHeiLa.Net.Converters;
 
 namespace KaiHeiLa.API;
 
-internal class Message
+internal class DirectMessage
 {
     [JsonPropertyName("id")]
     public Guid Id { get; set; }
@@ -14,19 +14,7 @@ internal class Message
     [JsonPropertyName("content")]
     public string Content { get; set; }
     
-    [JsonPropertyName("mention")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
-    public ulong[] Mention { get; set; }
-
-    [JsonPropertyName("mention_all")]
-    public bool MentionAll { get; set; }
-
-    [JsonPropertyName("mention_roles")]
-    public uint[] MentionRoles { get; set; }
-
-    [JsonPropertyName("mention_here")]
-    public bool MentionHere { get; set; }
-
+    
     [JsonPropertyName("embeds")]
     public Embed[] Embeds { get; set; }
 
@@ -43,9 +31,10 @@ internal class Message
 
     [JsonPropertyName("reactions")]
     public Reaction[] Reactions { get; set; }
-    
-    [JsonPropertyName("author")]
-    public User Author { get; set; }
+
+    [JsonPropertyName("author_id")]
+    [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
+    public ulong AuthorId { get; set; }
 
     [JsonPropertyName("image_name")]
     public string ImageName { get; set; }
@@ -55,7 +44,7 @@ internal class Message
 
     [JsonPropertyName("quote")]
     public Quote Quote { get; set; }
-
+    
     [JsonPropertyName("mention_info")]
     public MentionInfo MentionInfo { get; set; }
 }

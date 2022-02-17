@@ -13,7 +13,7 @@ internal static class ChannelHelper
     public static async Task DeleteDMChannelAsync(IDMChannel channel, BaseKaiHeiLaClient client,
         RequestOptions options)
     {
-        await client.ApiClient.DeleteDMChannelAsync(channel.Recipient.Id, options).ConfigureAwait(false);
+        await client.ApiClient.DeleteUserChatAsync(channel.Recipient.Id, options).ConfigureAwait(false);
     }
     
     public static async Task<(Guid Messageid, DateTimeOffset MessageTimestamp)> SendMessageAsync(IMessageChannel channel, 

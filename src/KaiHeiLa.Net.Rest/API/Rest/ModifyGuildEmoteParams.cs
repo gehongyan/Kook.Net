@@ -1,15 +1,12 @@
 using System.Text.Json.Serialization;
 
-namespace KaiHeiLa.API;
+namespace KaiHeiLa.API.Rest;
 
-internal class Emoji
+internal class ModifyGuildEmoteParams
 {
     [JsonPropertyName("id")]
     public string Id { get; set; }
     
     [JsonPropertyName("name")]
     public string Name { get; set; }
-
-    [JsonPropertyName("user_info")]
-    public User UploadedBy { get; set; }
 }

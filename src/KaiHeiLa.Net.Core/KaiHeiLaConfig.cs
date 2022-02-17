@@ -74,6 +74,22 @@ public class KaiHeiLaConfig
     /// </returns>
     public const int MaxNicknameSize = 64;
 
+    /// <summary> 
+    ///     Returns the min value for a KaiHeiLa intimacy score. 
+    /// </summary>
+    /// <returns>
+    ///     The minimum value of a intimacy score allowed by KaiHeiLa.
+    /// </returns>
+    public const int MinIntimacyScore = 0;
+    
+    /// <summary> 
+    ///     Returns the max value for a KaiHeiLa intimacy score. 
+    /// </summary>
+    /// <returns>
+    ///     The maximum value of a intimacy score allowed by KaiHeiLa.
+    /// </returns>
+    public const int MaxIntimacyScore = 2200;
+    
     /// <summary>
     ///     Gets or sets how a request should act in the case of an error, by default.
     /// </summary>

@@ -9,7 +9,6 @@ internal class User
     public ulong Id { get; set; }
 
     [JsonPropertyName("username")] public string Username { get; set; }
-    [JsonPropertyName("nickname")] public string Nickname { get; set; }
     [JsonPropertyName("identify_num")] public string IdentifyNumber { get; set; }
     [JsonPropertyName("online")] public bool Online { get; set; }
     [JsonPropertyName("os")] public string OperatingSystem { get; set; }
