@@ -20,8 +20,8 @@ internal class Invite
     [JsonPropertyName("type")] public ChannelType ChannelType { get; set; }
     [JsonPropertyName("url_code")] public string UrlCode { get; set; }
     [JsonPropertyName("url")] public string Url { get; set; }
-    [JsonPropertyName("user")] public User Creator { get; set; }
-    [JsonPropertyName("expire_time")] public DateTimeOffset? ExpireAt { get; set; }
+    [JsonPropertyName("user")] public User Inviter { get; set; }
+    [JsonPropertyName("expire_time")] public DateTimeOffset? ExpiresAt { get; set; }
 
     [JsonConverter(typeof(NullableDateTimeOffsetConverter))]
     [JsonPropertyName("remaining_times")]

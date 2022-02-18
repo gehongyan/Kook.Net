@@ -152,7 +152,7 @@ namespace KaiHeiLa.Net.Rest
                 var headers = response.Headers.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault(), StringComparer.OrdinalIgnoreCase);
                 var stream = !headerOnly ? await response.Content.ReadAsStreamAsync().ConfigureAwait(false) : null;
 
-                return new RestResponse(response.StatusCode, headers, stream);
+                return new RestResponse(response.StatusCode, headers, stream, response.Content.Headers.ContentType);
             }
         }
 

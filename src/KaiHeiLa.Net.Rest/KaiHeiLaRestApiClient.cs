@@ -15,6 +15,7 @@ using KaiHeiLa.Net.Rest;
 using System.Linq;
 using System.Web;
 using KaiHeiLa.API.Rest;
+using KaiHeiLa.Badges;
 
 namespace KaiHeiLa.API;
 
@@ -203,26 +204,27 @@ internal class KaiHeiLaRestApiClient : IDisposable
     }
 
     internal async Task<TResponse> SendAsync<TResponse>(HttpMethod method, Expression<Func<string>> endpointExpr, BucketIds ids,
-        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null) where TResponse : class
-        => await SendAsync<TResponse>(method, GetEndpoint(endpointExpr), GetBucketId(method, ids, endpointExpr, funcName), clientBucket, options);
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null, bool bypassDeserialization = false) where TResponse : class
+        => await SendAsync<TResponse>(method, GetEndpoint(endpointExpr), GetBucketId(method, ids, endpointExpr, funcName), clientBucket, bypassDeserialization, options);
     internal async Task<TResponse> SendAsync<TResponse, TArg1, TArg2>(HttpMethod method, Expression<Func<TArg1, TArg2, string>> endpointExpr, TArg1 arg1, TArg2 arg2, BucketIds ids,
-        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null) where TResponse : class
-        => await SendAsync<TResponse>(method, GetEndpoint(endpointExpr, arg1, arg2), GetBucketId(method, ids, endpointExpr, arg1, arg2, funcName), clientBucket, options);
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null, bool bypassDeserialization = false) where TResponse : class
+        => await SendAsync<TResponse>(method, GetEndpoint(endpointExpr, arg1, arg2), GetBucketId(method, ids, endpointExpr, arg1, arg2, funcName), clientBucket, bypassDeserialization, options);
     public async Task<TResponse> SendAsync<TResponse>(HttpMethod method, string endpoint,
-        BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null) where TResponse : class
+        BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, bool bypassDeserialization = false, RequestOptions options = null) where TResponse : class
     {
         options ??= new RequestOptions();
         options.BucketId = bucketId;
         
         var request = new RestRequest(RestClient, method, endpoint, options);
-        return DeserializeJson<TResponse>(await SendInternalAsync(method, endpoint, request).ConfigureAwait(false));
+        Stream response = await SendInternalAsync(method, endpoint, request).ConfigureAwait(false);
+        return bypassDeserialization ? response as TResponse : DeserializeJson<TResponse>(response);
     }
 
     internal async Task<TResponse> SendJsonAsync<TResponse>(HttpMethod method, Expression<Func<string>> endpointExpr, object payload, BucketIds ids,
-        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null)
-        => await SendJsonAsync<TResponse>(method, GetEndpoint(endpointExpr), payload, GetBucketId(method, ids, endpointExpr, funcName), clientBucket, options);
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null, bool bypassDeserialization = false) where TResponse : class
+        => await SendJsonAsync<TResponse>(method, GetEndpoint(endpointExpr), payload, GetBucketId(method, ids, endpointExpr, funcName), clientBucket, bypassDeserialization, options);
     public async Task<TResponse> SendJsonAsync<TResponse>(HttpMethod method, string endpoint, object payload,
-        BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null)
+        BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, bool bypassDeserialization = false, RequestOptions options = null) where TResponse : class
     {
         options ??= new RequestOptions();
         options.BucketId = bucketId;
@@ -230,20 +232,22 @@ internal class KaiHeiLaRestApiClient : IDisposable
         string json = payload != null ? SerializeJson(payload) : null;
         
         var request = new JsonRestRequest(RestClient, method, endpoint, json, options);
-        return DeserializeJson<TResponse>(await SendInternalAsync(method, endpoint, request).ConfigureAwait(false));
+        Stream response = await SendInternalAsync(method, endpoint, request).ConfigureAwait(false);
+        return bypassDeserialization ? response as TResponse : DeserializeJson<TResponse>(response);
     }
 
     internal Task<TResponse> SendMultipartAsync<TResponse>(HttpMethod method, Expression<Func<string>> endpointExpr, IReadOnlyDictionary<string, object> multipartArgs, BucketIds ids,
-        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null)
-        => SendMultipartAsync<TResponse>(method, GetEndpoint(endpointExpr), multipartArgs, GetBucketId(method, ids, endpointExpr, funcName), clientBucket, options);
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null, bool bypassDeserialization = false) where TResponse : class
+        => SendMultipartAsync<TResponse>(method, GetEndpoint(endpointExpr), multipartArgs, GetBucketId(method, ids, endpointExpr, funcName), clientBucket, bypassDeserialization, options);
     public async Task<TResponse> SendMultipartAsync<TResponse>(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartArgs,
-        BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null)
+        BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, bool bypassDeserialization = false, RequestOptions options = null) where TResponse : class
     {
         options ??= new RequestOptions();
         options.BucketId = bucketId;
 
         var request = new MultipartRestRequest(RestClient, method, endpoint, multipartArgs, options);
-        return DeserializeJson<TResponse>(await SendInternalAsync(method, endpoint, request).ConfigureAwait(false));
+        Stream response = await SendInternalAsync(method, endpoint, request).ConfigureAwait(false);
+        return bypassDeserialization ? response as TResponse : DeserializeJson<TResponse>(response);
     }
     
     private async Task<Stream> SendInternalAsync(HttpMethod method, string endpoint, RestRequest request)
@@ -271,7 +275,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
     /// </param>
     private async Task<IReadOnlyCollection<T>> SendRecursivelyAsync<T>(HttpMethod method, 
         Expression<Func<int, int, string>> endpointExpr,
-        BucketIds ids, PageMeta pageMeta = null, RequestOptions options = null)
+        BucketIds ids, ClientBucketType clientBucket = ClientBucketType.Unbucketed, PageMeta pageMeta = null, RequestOptions options = null)
         where T : class
     {
         List<T> combinedData = new();
@@ -281,7 +285,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         {
             PagedResponseBase<T> pagedChannels = await SendAsync<PagedResponseBase<T>, int, int>(
                     method, endpointExpr, pageMeta.PageSize, pageMeta.Page,
-                    ids, options: options)
+                    ids, clientBucket, options: options)
                 .ConfigureAwait(false);
             combinedData.AddRange(pagedChannels.Items);
             pageMeta = pagedChannels.Meta;
@@ -302,7 +306,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         var ids = new BucketIds();
         return await SendRecursivelyAsync<Guild>(HttpMethod.Get,
             (pageSize, page) => $"guild/list?page_size={pageSize}&page={page}",
-            ids, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
     }
     
     public async Task<ExtendedGuild> GetGuildAsync(ulong guildId, RequestOptions options = null)
@@ -314,7 +318,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         {
             var ids = new BucketIds(guildId: guildId);
             return await SendAsync<ExtendedGuild>(HttpMethod.Get, 
-                () => $"guild/view?guild_id={guildId}", ids, options: options).ConfigureAwait(false);
+                () => $"guild/view?guild_id={guildId}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
         }
         catch (HttpException ex) when (ex.HttpCode == HttpStatusCode.NotFound) { return null; }
     }
@@ -326,7 +330,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
 
         var ids = new BucketIds(guildId: guildId);
         var response = await SendAsync<GetGuildMemberCountResponse>(HttpMethod.Get, 
-            () => $"guild/user-list?guild_id={guildId}", ids, options: options).ConfigureAwait(false);
+            () => $"guild/user-list?guild_id={guildId}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
         return response.UserCount;
     }
 
@@ -338,7 +342,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         var ids = new BucketIds(guildId: guildId);
         return await SendRecursivelyAsync<GuildMember>(HttpMethod.Get,
             (pageSize, page) => $"guild/user-list?guild_id={guildId}&page={page}",
-            ids, pageMeta: new PageMeta(pageSize: 50), options: options).ConfigureAwait(false);
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(pageSize: 50), options: options).ConfigureAwait(false);
     }
 
     public async Task ModifyGuildMemberNicknameAsync(ModifyGuildMemberNicknameParams args, RequestOptions options = null)
@@ -355,7 +359,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds(guildId: args.GuildId);
-        await SendJsonAsync(HttpMethod.Post, () => $"guild/nickname", args, ids, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"guild/nickname", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task LeaveGuildAsync(LeaveGuildParams args, RequestOptions options = null)
@@ -365,7 +369,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds(guildId: args.GuildId);
-        await SendJsonAsync(HttpMethod.Post, () => $"guild/leave", args, ids, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"guild/leave", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task KickOutGuildMemberAsync(KickOutGuildMemberParams args, RequestOptions options = null)
@@ -376,7 +380,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds(guildId: args.GuildId);
-        await SendJsonAsync(HttpMethod.Post, () => $"guild/kickout", args, ids, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"guild/kickout", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task<GetGuildMuteDeafListResponse> GetGuildMuteDeafListAsync(ulong guildId, RequestOptions options = null)
@@ -385,7 +389,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds(guildId: guildId);
-        return await SendAsync<GetGuildMuteDeafListResponse>(HttpMethod.Post, () => $"guild-mute/list?guild_id={guildId}&return_type=detail", ids, options: options).ConfigureAwait(false);
+        return await SendAsync<GetGuildMuteDeafListResponse>(HttpMethod.Post, () => $"guild-mute/list?guild_id={guildId}&return_type=detail", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task CreateGuildMuteDeafAsync(CreateOrRemoveGuildMuteDeafParams args, RequestOptions options = null)
@@ -396,7 +400,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds(guildId: args.GuildId);
-        await SendJsonAsync(HttpMethod.Post, () => $"guild-mute/delete", args, ids, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"guild-mute/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
     
     #endregion
@@ -411,7 +415,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         var ids = new BucketIds(guildId: guildId);
         return await SendRecursivelyAsync<Channel>(HttpMethod.Get,
             (pageSize, page) => $"channel/list?guild_id={guildId}&page_size={pageSize}&page={page}",
-            ids, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
     }
 
     public async Task<Channel> GetGuildChannelAsync(ulong channelId, RequestOptions options = null)
@@ -564,7 +568,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds();
-        await SendJsonAsync(HttpMethod.Post, () => $"message/delete", args, ids, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"message/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task<IReadOnlyCollection<ReactionUserResponse>> GetReactionUsersAsync(Guid messageId, string emojiId, RequestOptions options = null)
@@ -573,7 +577,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds();
-        return await SendAsync<IReadOnlyCollection<ReactionUserResponse>>(HttpMethod.Get, () => $"message/reaction-list?msg_id={messageId}&emoji={HttpUtility.UrlEncode(emojiId)}", ids, options: options).ConfigureAwait(false);
+        return await SendAsync<IReadOnlyCollection<ReactionUserResponse>>(HttpMethod.Get, () => $"message/reaction-list?msg_id={messageId}&emoji={HttpUtility.UrlEncode(emojiId)}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task AddReactionAsync(AddReactionParams args, RequestOptions options = null)
@@ -582,7 +586,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
         
         var ids = new BucketIds();
-        await SendJsonAsync(HttpMethod.Post, () => $"message/add-reaction", args, ids, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"message/add-reaction", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task RemoveReactionAsync(RemoveReactionParams args, RequestOptions options = null)
@@ -593,11 +597,28 @@ internal class KaiHeiLaRestApiClient : IDisposable
             Preconditions.NotEqual(args.UserId, 0, nameof(args.MessageId));
         
         var ids = new BucketIds();
-        await SendJsonAsync(HttpMethod.Post, () => $"message/delete-reaction", args, ids, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"message/delete-reaction", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     #endregion
 
+    #region Guild Users
+
+    public async Task<IReadOnlyCollection<Channel>> GetAudioChannelsUserConnectsAsync(ulong? guildId = null, ulong? userId = null, RequestOptions options = null)
+    {
+        Preconditions.NotEqual(guildId, 0, nameof(guildId));
+        Preconditions.NotEqual(userId, 0, nameof(userId));
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds(guildId: guildId ?? 0);
+        return await SendRecursivelyAsync<Channel>(HttpMethod.Get,
+            (pageSize, page) => $"channel-user/get-joined-channel?guild_id={guildId}&user_id={userId}&page_size={pageSize}&page={page}",
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
+    }
+
+
+    #endregion
+    
     #region User Chats
 
     public async Task<IReadOnlyCollection<UserChat>> GetUserChatsAsync(RequestOptions options = null)
@@ -607,7 +628,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         var ids = new BucketIds();
         return await SendRecursivelyAsync<UserChat>(HttpMethod.Get,
             (pageSize, page) => $"user-chat/list?page_size={pageSize}&page={page}",
-            ids, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);;
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);;
     }
 
     public async Task<UserChat> GetUserChatAsync(Guid chatCode, RequestOptions options = null)
@@ -625,7 +646,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
         
         var ids = new BucketIds();
-        return await SendJsonAsync<UserChat>(HttpMethod.Post, () => $"user-chat/create", args, ids, options: options).ConfigureAwait(false);
+        return await SendJsonAsync<UserChat>(HttpMethod.Post, () => $"user-chat/create", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task DeleteUserChatAsync(CreateOrDeleteUserChatParams args, RequestOptions options = null)
@@ -634,7 +655,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
         
         var ids = new BucketIds();
-        await SendJsonAsync(HttpMethod.Post, () => $"user-chat/delete", args, ids, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"user-chat/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     #endregion
@@ -697,7 +718,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds();
-        await SendJsonAsync(HttpMethod.Post, () => $"direct-message/delete", args, ids, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"direct-message/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
     
     public async Task<IReadOnlyCollection<ReactionUserResponse>> GetDirectMessageReactionUsersAsync(Guid messageId, string emojiId, RequestOptions options = null)
@@ -706,7 +727,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds();
-        return await SendAsync<IReadOnlyCollection<ReactionUserResponse>>(HttpMethod.Get, () => $"direct-message/reaction-list?msg_id={messageId}&emoji={HttpUtility.UrlEncode(emojiId)}", ids, options: options).ConfigureAwait(false);
+        return await SendAsync<IReadOnlyCollection<ReactionUserResponse>>(HttpMethod.Get, () => $"direct-message/reaction-list?msg_id={messageId}&emoji={HttpUtility.UrlEncode(emojiId)}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task AddDirectMessageReactionAsync(AddReactionParams args, RequestOptions options = null)
@@ -715,7 +736,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
         
         var ids = new BucketIds();
-        await SendJsonAsync(HttpMethod.Post, () => $"message/add-reaction", args, ids, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"message/add-reaction", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task RemoveDirectMessageReactionAsync(RemoveReactionParams args, RequestOptions options = null)
@@ -726,7 +747,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
             Preconditions.NotEqual(args.UserId, 0, nameof(args.MessageId));
         
         var ids = new BucketIds();
-        await SendJsonAsync(HttpMethod.Post, () => $"message/delete-reaction", args, ids, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"message/delete-reaction", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
     
     #endregion
@@ -748,7 +769,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds();
-        return await SendAsync<SelfUser>(HttpMethod.Get, () => "user/me", ids, options: options).ConfigureAwait(false);
+        return await SendAsync<SelfUser>(HttpMethod.Get, () => "user/me", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
     
     public async Task<User> GetUserAsync(ulong userId, RequestOptions options = null)
@@ -756,7 +777,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         Preconditions.NotEqual(userId, 0, nameof(userId));
         
         var ids = new BucketIds();
-        return await SendAsync<User>(HttpMethod.Get, () => $"user/view?user_id={userId}", ids, options: options).ConfigureAwait(false);
+        return await SendAsync<User>(HttpMethod.Get, () => $"user/view?user_id={userId}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task<GuildMember> GetGuildMemberAsync(ulong userId, ulong guildId, RequestOptions options = null)
@@ -765,13 +786,13 @@ internal class KaiHeiLaRestApiClient : IDisposable
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         
         var ids = new BucketIds(guildId: guildId);
-        return await SendAsync<GuildMember>(HttpMethod.Get, () => $"user/view?user_id={userId}&guild_id={guildId}", ids, options: options).ConfigureAwait(false);
+        return await SendAsync<GuildMember>(HttpMethod.Get, () => $"user/view?user_id={userId}&guild_id={guildId}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
     
     public async Task GoOfflineAsync(RequestOptions options = null)
     {
         var ids = new BucketIds();
-        await SendAsync(HttpMethod.Get, () => $"user/offline", ids, options: options).ConfigureAwait(false);
+        await SendAsync(HttpMethod.Get, () => $"user/offline", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     #endregion
@@ -799,7 +820,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         var ids = new BucketIds();
         return await SendRecursivelyAsync<Role>(HttpMethod.Get,
             (pageSize, page) => $"guild-role/list?guild={guildId}&page_size={pageSize}&page={page}",
-            ids, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
     }
     
     public async Task<Role> CreateGuildRoleAsync(CreateGuildRoleParams args, RequestOptions options = null)
@@ -809,7 +830,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds(guildId: args.GuildId);
-        return await SendJsonAsync<Role>(HttpMethod.Post, () => $"guild-role/create", args, ids, options: options).ConfigureAwait(false);
+        return await SendJsonAsync<Role>(HttpMethod.Post, () => $"guild-role/create", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
     
     public async Task<Role> ModifyGuildRoleAsync(ModifyGuildRoleParams args, RequestOptions options = null)
@@ -819,7 +840,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds(guildId: args.GuildId);
-        return await SendJsonAsync<Role>(HttpMethod.Post, () => $"guild-role/update", args, ids, options: options).ConfigureAwait(false);
+        return await SendJsonAsync<Role>(HttpMethod.Post, () => $"guild-role/update", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task DeleteGuildRoleAsync(DeleteGuildRoleParams args, RequestOptions options = null)
@@ -829,7 +850,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds(guildId: args.GuildId);
-        await SendJsonAsync(HttpMethod.Post, () => $"guild-role/delete", args, ids, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"guild-role/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task<AddOrRemoveRoleResponse> AddRoleAsync(AddOrRemoveRoleParams args, RequestOptions options = null)
@@ -839,7 +860,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds(guildId: args.GuildId);
-        return await SendJsonAsync<AddOrRemoveRoleResponse>(HttpMethod.Post, () => $"guild-role/grant", args, ids, options: options).ConfigureAwait(false);
+        return await SendJsonAsync<AddOrRemoveRoleResponse>(HttpMethod.Post, () => $"guild-role/grant", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
     
     public async Task<AddOrRemoveRoleResponse> RemoveRoleAsync(AddOrRemoveRoleParams args, RequestOptions options = null)
@@ -849,7 +870,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds(guildId: args.GuildId);
-        return await SendJsonAsync<AddOrRemoveRoleResponse>(HttpMethod.Post, () => $"guild-role/revoke", args, ids, options: options).ConfigureAwait(false);
+        return await SendJsonAsync<AddOrRemoveRoleResponse>(HttpMethod.Post, () => $"guild-role/revoke", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     #endregion
@@ -862,7 +883,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds();
-        return await SendAsync<Intimacy>(HttpMethod.Get, () => $"intimacy/index", ids, options: options).ConfigureAwait(false);
+        return await SendAsync<Intimacy>(HttpMethod.Get, () => $"intimacy/index", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task ModifyIntimacyAsync(ModifyIntimacyParams args, RequestOptions options = null)
@@ -875,7 +896,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds();
-        await SendJsonAsync(HttpMethod.Post, () => $"intimacy/update", args, ids, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"intimacy/update", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     #endregion
@@ -890,7 +911,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         var ids = new BucketIds(guildId: guildId);
         return await SendRecursivelyAsync<Emoji>(HttpMethod.Get,
             (pageSize, page) => $"guild-emoji/list?guild_id={guildId}&page_size={pageSize}&page={page}",
-            ids, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
     }
     
     public async Task<Emoji> CreateGuildEmoteAsync(CreateGuildEmoteParams args, RequestOptions options = null)
@@ -954,24 +975,92 @@ internal class KaiHeiLaRestApiClient : IDisposable
         };
         return await SendRecursivelyAsync<Invite>(HttpMethod.Get,
             (pageSize, page) => $"invite/list{query}&page_size={pageSize}&page={page}",
-            ids, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);}
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);}
 
-    // TODO: /api/v3/invite/create and else
-    
+    public async Task<CreateGuildInviteResponse> CreateGuildInviteAsync(CreateGuildInviteParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        if (args.GuildId is null && args.ChannelId is null)
+            throw new ArgumentException(message: $"At least one argument must be provided between {nameof(args.GuildId)} and {nameof(args.ChannelId)}.", paramName: $"{nameof(args.GuildId)}&{nameof(args.ChannelId)}");
+        if (args.GuildId is not null)
+            Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
+        if (args.ChannelId is not null)
+            Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
+        options = RequestOptions.CreateOrClone(options);
+        
+        var ids = new BucketIds(guildId: args.GuildId ?? 0, channelId: args.ChannelId ?? 0);
+        return await SendJsonAsync<CreateGuildInviteResponse>(HttpMethod.Post, () => $"invite/create", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+
+    public async Task DeleteGuildInviteAsync(DeleteGuildInviteParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotNullOrWhitespace(args.UrlCode, nameof(args.UrlCode));
+        if (args.GuildId is not null)
+            Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
+        if (args.ChannelId is not null)
+            Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
+        options = RequestOptions.CreateOrClone(options);
+        
+        var ids = new BucketIds(guildId: args.GuildId ?? 0, channelId: args.ChannelId ?? 0);
+        await SendJsonAsync(HttpMethod.Post, () => $"invite/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+
     #endregion
 
     #region Guild Bans
 
+    public async Task<IReadOnlyCollection<Ban>> GetGuildBansAsync(ulong guildId, RequestOptions options = null)
+    {
+        Preconditions.NotEqual(guildId, 0, nameof(guildId));
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds(guildId: guildId);
+        return await SendAsync<IReadOnlyCollection<Ban>>(HttpMethod.Get, () => $"blacklist/list?guild_id={guildId}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+    
+    public async Task CreateGuildBanAsync(CreateGuildBanParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
+        if (args.DeleteMessageDays is not null)
+        {
+            Preconditions.AtLeast(args.DeleteMessageDays.Value, 0, nameof(args.DeleteMessageDays), "Prune length must be within [0, 7]");
+            Preconditions.AtMost(args.DeleteMessageDays.Value, 7, nameof(args.DeleteMessageDays), "Prune length must be within [0, 7]");
+        }
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds(guildId: args.GuildId);
+        await SendAsync(HttpMethod.Post, () => $"blacklist/create", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+    
+    public async Task RemoveGuildBanAsync(RemoveGuildBanParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds(guildId: args.GuildId);
+        await SendAsync(HttpMethod.Post, () => $"blacklist/delete", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
     
 
     #endregion
 
     #region Badges
 
-    
+    public async Task<Stream> GetGuildBadgeAsync(ulong guildId, BadgeStyle style = BadgeStyle.GuildName, RequestOptions options = null)
+    {
+        Preconditions.NotEqual(guildId, 0, nameof(guildId));
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds(guildId: guildId);
+        return await SendAsync<Stream>(HttpMethod.Get, () => $"badge/guild", ids, clientBucket: ClientBucketType.SendEdit, bypassDeserialization: true, options: options).ConfigureAwait(false);
+    }
 
     #endregion
-    
     
     #region Helpers
 

@@ -413,7 +413,6 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                         _connection.CriticalError(new Exception("Processing Guilds failed", ex));
                         return;
                     }
-                    
                 }
                     break;
 

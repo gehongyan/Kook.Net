@@ -132,26 +132,33 @@ namespace KaiHeiLa.Net.Queue
 #if DEBUG_LIMITS
                         Debug.WriteLine($"[{id}] Success");
 #endif
-                        API.Rest.RestResponseBase responseBase = await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream, _serializerOptions);
-                        if (responseBase.Code > (KaiHeiLaErrorCode)0 )
+                        if (response.MediaTypeHeader.MediaType == "application/json")
                         {
-                            throw new HttpException(
-                                response.StatusCode,
-                                request,
-                                responseBase?.Code,
-                                responseBase?.Message,
-                                responseBase?.Data is not null
-                                    ? new KaiHeiLaJsonError[]
-                                    {
-                                        new KaiHeiLaJsonError("root",
-                                            new KaiHeiLaError[]
-                                                {new KaiHeiLaError(((int) responseBase.Code).ToString(), responseBase.Message)}
-                                        )
-                                    }
-                                    : null
-                            );
+                            API.Rest.RestResponseBase responseBase = await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream, _serializerOptions);
+                            if (responseBase.Code > (KaiHeiLaErrorCode)0 )
+                            {
+                                throw new HttpException(
+                                    response.StatusCode,
+                                    request,
+                                    responseBase?.Code,
+                                    responseBase?.Message,
+                                    responseBase?.Data is not null
+                                        ? new KaiHeiLaJsonError[]
+                                        {
+                                            new KaiHeiLaJsonError("root",
+                                                new KaiHeiLaError[]
+                                                    {new KaiHeiLaError(((int) responseBase.Code).ToString(), responseBase.Message)}
+                                            )
+                                        }
+                                        : null
+                                );
+                            }
+                            return new MemoryStream(Encoding.UTF8.GetBytes(responseBase.Data.ToString() ?? string.Empty));
                         }
-                        return new MemoryStream(Encoding.UTF8.GetBytes(responseBase.Data.ToString() ?? string.Empty));
+                        else if (response.MediaTypeHeader.MediaType == "image/svg+xml")
+                        {
+                            return response.Stream;
+                        }
                     }
                 }
                 //catch (HttpException) { throw; } //Pass through
