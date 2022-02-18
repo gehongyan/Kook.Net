@@ -60,14 +60,7 @@ public abstract class BaseKaiHeiLaClient : IKaiHeiLaClient
     }
     /// <inheritdoc />
     public void Dispose() => Dispose(true);
-    
-    /// <inheritdoc />
-    Task IKaiHeiLaClient.StartAsync()
-        => Task.Delay(0);
-    /// <inheritdoc />
-    Task IKaiHeiLaClient.StopAsync()
-        => Task.Delay(0);
-    
+
     public async Task LoginAsync(TokenType tokenType, string token, bool validateToken = true)
     {
         await _stateLock.WaitAsync().ConfigureAwait(false);
@@ -157,5 +150,16 @@ public abstract class BaseKaiHeiLaClient : IKaiHeiLaClient
     /// <inheritdoc />
     ISelfUser IKaiHeiLaClient.CurrentUser => CurrentUser;
 
+    /// <inheritdoc />
+    Task<IGuild> IKaiHeiLaClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<IGuild>(null);
+        
+    /// <inheritdoc />
+    Task IKaiHeiLaClient.StartAsync()
+        => Task.Delay(0);
+    /// <inheritdoc />
+    Task IKaiHeiLaClient.StopAsync()
+        => Task.Delay(0);
+    
     #endregion
 }

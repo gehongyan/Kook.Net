@@ -8,6 +8,7 @@ using KaiHeiLa.API.Rest;
 using KaiHeiLa.Logging;
 using KaiHeiLa.Net.WebSockets;
 using KaiHeiLa.Rest;
+using Reaction = KaiHeiLa.API.Gateway.Reaction;
 
 namespace KaiHeiLa.WebSocket;
 
@@ -153,6 +154,33 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     /// <inheritdoc />
     public override SocketChannel GetChannel(ulong id)
         => State.GetChannel(id);
+    /// <summary>
+    ///     Gets a generic channel from the cache or does a rest request if unavailable.
+    /// </summary>
+    /// <example>
+    ///     <code language="cs" title="Example method">
+    ///     var channel = await _client.GetChannelAsync(381889909113225237);
+    ///     if (channel != null &amp;&amp; channel is IMessageChannel msgChannel)
+    ///     {
+    ///         await msgChannel.SendMessageAsync($"{msgChannel} is created at {msgChannel.CreatedAt}");
+    ///     }
+    ///     </code>
+    /// </example>
+    /// <param name="id">The identifier of the channel (e.g. `381889909113225237`).</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the channel associated
+    ///     with the identifier; <c>null</c> when the channel cannot be found.
+    /// </returns>
+    public async ValueTask<IChannel> GetChannelAsync(ulong id, RequestOptions options = null)
+        => GetChannel(id) ?? (IChannel)await ClientHelper.GetChannelAsync(this, id, options).ConfigureAwait(false);
+    
+    /// <inheritdoc />
+    public override SocketUser GetUser(ulong id)
+        => State.GetUser(id);
+    /// <inheritdoc />
+    public override SocketUser GetUser(string username, string discriminator)
+        => State.Users.FirstOrDefault(x => x.IdentifyNumber == discriminator && x.Username == username);
     
     internal SocketGlobalUser GetOrCreateUser(ClientState state, KaiHeiLa.API.User model)
     {
@@ -288,12 +316,35 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                 // 频道内用户添加 reaction
                                 case ("GROUP", "added_reaction"):
                                 {
-                                    await _gatewayLogger.DebugAsync("Received Event (added_reaction)")
-                                        .ConfigureAwait(false);
-                                    ReactionAddedInChannel body =
-                                        ((JsonElement) extraData.Body).Deserialize<ReactionAddedInChannel>(
-                                            _serializerOptions);
-                                    // TODO: 频道内用户添加 reaction
+                                    await _gatewayLogger.DebugAsync("Received Event (added_reaction)").ConfigureAwait(false);
+                                    
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.Reaction>(_serializerOptions);
+                                    var channel = GetChannel(data.ChannelId) as ISocketMessageChannel;
+                                    
+                                    var cachedMsg = channel?.GetCachedMessage(data.MessageId) as SocketUserMessage;
+                                    bool isMsgCached = cachedMsg is not null;
+                                    var optionalMsg = !isMsgCached
+                                        ? Optional.Create<SocketUserMessage>()
+                                        : Optional.Create(cachedMsg);
+                                    
+                                    IUser user = channel is not null
+                                        ? await channel.GetUserAsync(data.UserId, CacheMode.CacheOnly).ConfigureAwait(false)
+                                        : GetUser(data.UserId);
+                                    var optionalUser = user is null
+                                        ? Optional.Create<IUser>()
+                                        : Optional.Create(user);
+                                    
+                                    var cacheableChannel = new Cacheable<IMessageChannel, ulong>(channel, data.ChannelId, channel != null, async () => await GetChannelAsync(data.ChannelId).ConfigureAwait(false) as IMessageChannel);
+                                    var cacheableMsg = new Cacheable<IUserMessage, Guid>(cachedMsg, data.MessageId, isMsgCached, async () =>
+                                    {
+                                        var channelObj = await cacheableChannel.GetOrDownloadAsync().ConfigureAwait(false);
+                                        return await channelObj.GetMessageAsync(data.MessageId).ConfigureAwait(false) as IUserMessage;
+                                    });
+                                    var reaction = SocketReaction.Create(data, channel, optionalMsg, optionalUser);
+                                    
+                                    cachedMsg?.AddReaction(reaction);
+                                    
+                                    await TimedInvokeAsync(_reactionAddedEvent, nameof(ReactionAdded), cacheableMsg, cacheableChannel, reaction).ConfigureAwait(false);
                                 }
                                     break;
 

@@ -8,9 +8,9 @@ public class Emote : IEmote
     
     public string Name { get; }
     
-    public bool Animated { get; }
+    public bool? Animated { get; }
     
-    internal Emote(string id, string name, bool animated)
+    internal Emote(string id, string name, bool? animated = null)
     {
         Id = id;
         Name = name;

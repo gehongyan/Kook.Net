@@ -56,7 +56,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     internal override void Update(ClientState state, Model model)
     {
         Name = model.Name;
-        Position = model.Level;
+        Position = model.Position;
 
         var rolePermissionOverwrites = model.RolePermissionOverwrites;
         var newRoleOverwrites = ImmutableArray.CreateBuilder<RolePermissionOverwrite>(rolePermissionOverwrites.Length);
@@ -70,7 +70,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
             newUserOverwrites.Add(userPermissionOverwrites[i].ToEntity(KaiHeiLa, state));
         _userPermissionOverwrites = newUserOverwrites.ToImmutable();
     }
-    
+
     /// <summary>
     ///     Gets the permission overwrite for a specific user.
     /// </summary>
@@ -78,7 +78,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     An overwrite object for the targeted user; <c>null</c> if none is set.
     /// </returns>
-    public virtual OverwritePermissions GetPermissionOverwrite(IUser user)
+    public virtual OverwritePermissions? GetPermissionOverwrite(IUser user)
     {
         for (int i = 0; i < _userPermissionOverwrites.Length; i++)
         {
@@ -87,6 +87,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
         }
         return null;
     }
+
     /// <summary>
     ///     Gets the permission overwrite for a specific role.
     /// </summary>
@@ -94,7 +95,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     An overwrite object for the targeted role; <c>null</c> if none is set.
     /// </returns>
-    public virtual OverwritePermissions GetPermissionOverwrite(IRole role)
+    public virtual OverwritePermissions? GetPermissionOverwrite(IRole role)
     {
         for (int i = 0; i < _rolePermissionOverwrites.Length; i++)
         {

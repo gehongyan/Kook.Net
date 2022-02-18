@@ -381,4 +381,17 @@ internal static class EntityExtensions
     }
 
     #endregion
+
+    #region Overwrites
+
+    public static UserPermissionOverwrite ToEntity(this API.UserPermissionOverwrite model)
+    {
+        return new UserPermissionOverwrite(RestUser.Create(null, model.User), new OverwritePermissions(model.Allow, model.Deny));
+    }
+    public static RolePermissionOverwrite ToEntity(this API.RolePermissionOverwrite model)
+    {
+        return new RolePermissionOverwrite(model.RoleId, new OverwritePermissions(model.Allow, model.Deny));
+    }
+
+    #endregion
 }

@@ -4,6 +4,9 @@ namespace KaiHeiLa.API;
 
 internal class Emoji
 {
+    [JsonPropertyName("emoji_type")]
+    public EmojiType Type { get; set; }
+    
     [JsonPropertyName("id")]
     public string Id { get; set; }
     

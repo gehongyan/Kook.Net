@@ -6,7 +6,7 @@ namespace KaiHeiLa.WebSocket;
 public abstract partial class BaseSocketClient : BaseKaiHeiLaClient
 {
     protected readonly KaiHeiLaSocketConfig BaseConfig;
-    
+
     /// <summary>
     ///     Gets the estimated round-trip latency, in milliseconds, to the gateway server.
     /// </summary>
@@ -20,13 +20,18 @@ public abstract partial class BaseSocketClient : BaseKaiHeiLaClient
     ///     Provides access to a REST-only client with a shared state from this client.
     /// </summary>
     public abstract KaiHeiLaSocketRestClient Rest { get; }
-    
+
     internal new KaiHeiLaSocketApiClient ApiClient => base.ApiClient as KaiHeiLaSocketApiClient;
-    
+
     /// <summary>
     ///     Gets the current logged-in user.
     /// </summary>
-    public new virtual SocketSelfUser CurrentUser { get => base.CurrentUser as SocketSelfUser; protected set => base.CurrentUser = value; }
+    public new virtual SocketSelfUser CurrentUser
+    {
+        get => base.CurrentUser as SocketSelfUser;
+        protected set => base.CurrentUser = value;
+    }
+
     /// <summary>
     ///     Gets a collection of guilds that the user is currently in.
     /// </summary>
@@ -34,23 +39,69 @@ public abstract partial class BaseSocketClient : BaseKaiHeiLaClient
     ///     A read-only collection of guilds that the current user is in.
     /// </returns>
     public abstract IReadOnlyCollection<SocketGuild> Guilds { get; }
-    
+
     internal BaseSocketClient(KaiHeiLaSocketConfig config, KaiHeiLaRestApiClient client)
         : base(config, client) => BaseConfig = config;
-    
+
     /// <summary>
     ///     Gets a guild.
     /// </summary>
     /// <param name="id">The guild identifier.</param>
     /// <returns>
-    ///     A WebSocket-based guild associated with the snowflake identifier; <c>null</c> when the guild cannot be
+    ///     A WebSocket-based guild associated with the identifier; <c>null</c> when the guild cannot be
     ///     found.
     /// </returns>
     public abstract SocketGuild GetGuild(ulong id);
-    
+
     public abstract Task StartAsync();
     public abstract Task StopAsync();
 
     public abstract SocketChannel GetChannel(ulong id);
-    
+
+    /// <summary>
+    ///     Gets a generic user.
+    /// </summary>
+    /// <param name="id">The user ID.</param>
+    /// <remarks>
+    ///     This method gets the user present in the WebSocket cache with the given condition.
+    ///     <note type="warning">
+    ///         Sometimes a user may return <c>null</c> due to KaiHeiLa not sending offline users in large guilds
+    ///         (i.e. guild with 100+ members) actively. To download users on startup and to see more information
+    ///         about this subject, see <see cref="KaiHeiLa.WebSocket.KaiHeiLaSocketConfig.AlwaysDownloadUsers" />.
+    ///     </note>
+    ///     <note>
+    ///         This method does not attempt to fetch users that the logged-in user does not have access to (i.e.
+    ///         users who don't share mutual guild(s) with the current user). If you wish to get a user that you do
+    ///         not have access to, consider using the REST implementation of
+    ///         <see cref="KaiHeiLaRestClient.GetUserAsync(System.UInt64,KaiHeiLa.RequestOptions)" />.
+    ///     </note>
+    /// </remarks>
+    /// <returns>
+    ///     A generic WebSocket-based user; <c>null</c> when the user cannot be found.
+    /// </returns>
+    public abstract SocketUser GetUser(ulong id);
+
+    /// <summary>
+    ///     Gets a user.
+    /// </summary>
+    /// <remarks>
+    ///     This method gets the user present in the WebSocket cache with the given condition.
+    ///     <note type="warning">
+    ///         Sometimes a user may return <c>null</c> due to KaiHeiLa not sending offline users in large guilds
+    ///         (i.e. guild with 100+ members) actively. To download users on startup and to see more information
+    ///         about this subject, see <see cref="KaiHeiLa.WebSocket.KaiHeiLaSocketConfig.AlwaysDownloadUsers" />.
+    ///     </note>
+    ///     <note>
+    ///         This method does not attempt to fetch users that the logged-in user does not have access to (i.e.
+    ///         users who don't share mutual guild(s) with the current user). If you wish to get a user that you do
+    ///         not have access to, consider using the REST implementation of
+    ///         <see cref="KaiHeiLaRestClient.GetUserAsync(System.UInt64,KaiHeiLa.RequestOptions)" />.
+    ///     </note>
+    /// </remarks>
+    /// <param name="username">The name of the user.</param>
+    /// <param name="discriminator">The discriminator value of the user.</param>
+    /// <returns>
+    ///     A generic WebSocket-based user; <c>null</c> when the user cannot be found.
+    /// </returns>
+    public abstract SocketUser GetUser(string username, string discriminator);
 }

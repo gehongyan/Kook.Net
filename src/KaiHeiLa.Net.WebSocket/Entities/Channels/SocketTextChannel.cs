@@ -78,6 +78,29 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
 
     #region Messages
     
+    /// <inheritdoc />
+    public SocketMessage GetCachedMessage(Guid id)
+        => _messages?.Get(id);
+    /// <summary>
+    ///     Gets a message from this message channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method follows the same behavior as described in <see cref="IMessageChannel.GetMessageAsync"/>.
+    ///     Please visit its documentation for more details on this method.
+    /// </remarks>
+    /// <param name="id">The identifier of the message.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents an asynchronous get operation for retrieving the message. The task result contains
+    ///     the retrieved message; <c>null</c> if no message is found with the specified identifier.
+    /// </returns>
+    public async Task<IMessage> GetMessageAsync(Guid id, RequestOptions options = null)
+    {
+        IMessage msg = _messages?.Get(id);
+        if (msg == null)
+            msg = await ChannelHelper.GetMessageAsync(this, KaiHeiLa, id, options).ConfigureAwait(false);
+        return msg;
+    }
     public Task<(Guid Messageid, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Text, text, options, quote: quote, ephemeralUser: ephemeralUser);
     public async Task<(Guid Messageid, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
@@ -164,5 +187,17 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         => Task.FromResult<IGuildUser>(GetUser(id));
 
     #endregion
-    
+
+    #region IMessageChannel
+
+    /// <inheritdoc />
+    async Task<IMessage> IMessageChannel.GetMessageAsync(Guid id, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetMessageAsync(id, options).ConfigureAwait(false);
+        else
+            return GetCachedMessage(id);
+    }
+
+    #endregion
 }

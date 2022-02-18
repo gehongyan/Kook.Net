@@ -5,7 +5,7 @@ using StandardColor = System.Drawing.Color;
 namespace KaiHeiLa
 {
     /// <summary>
-    ///     Represents a color used in Discord.
+    ///     Represents a color used in KaiHeiLa.
     /// </summary>
     [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
     public struct Color

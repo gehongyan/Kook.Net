@@ -780,7 +780,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         return await SendAsync<User>(HttpMethod.Get, () => $"user/view?user_id={userId}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
-    public async Task<GuildMember> GetGuildMemberAsync(ulong userId, ulong guildId, RequestOptions options = null)
+    public async Task<GuildMember> GetGuildMemberAsync(ulong guildId, ulong userId, RequestOptions options = null)
     {
         Preconditions.NotEqual(userId, 0, nameof(userId));
         Preconditions.NotEqual(guildId, 0, nameof(guildId));

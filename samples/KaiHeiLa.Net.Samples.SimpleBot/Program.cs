@@ -21,7 +21,7 @@ client.MessageReceived += async message =>
     if (message.Author.Id == client.CurrentUser.Id) return;
     const ulong guildId = 0;
     const ulong channelId = 0;
-    SocketGuildUser user = client.GetGuild(guildId).GetUser(0);
+    // SocketGuildUser user = client.GetGuild(guildId).GetUser(0);
 
     if (message.Content != "/test") return;
 

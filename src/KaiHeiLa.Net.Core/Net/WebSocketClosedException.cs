@@ -1,7 +1,7 @@
 namespace KaiHeiLa.Net
 {
     /// <summary>
-    ///     The exception that is thrown when the WebSocket session is closed by Discord.
+    ///     The exception that is thrown when the WebSocket session is closed by KaiHeiLa.
     /// </summary>
     public class WebSocketClosedException : Exception
     {
@@ -20,7 +20,7 @@ namespace KaiHeiLa.Net
         public string Reason { get; }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="WebSocketClosedException" /> using a Discord close code
+        ///     Initializes a new instance of the <see cref="WebSocketClosedException" /> using a KaiHeiLa close code
         ///     and an optional reason.
         /// </summary>
         public WebSocketClosedException(int closeCode, string reason = null)

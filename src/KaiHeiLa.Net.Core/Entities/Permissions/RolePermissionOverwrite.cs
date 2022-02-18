@@ -6,9 +6,9 @@ public class RolePermissionOverwrite : IPermissionOverwrite<uint>
     
     public OverwritePermissions Permissions { get; }
     
-    public RolePermissionOverwrite(uint target, OverwritePermissions permissions)
+    public RolePermissionOverwrite(uint targetId, OverwritePermissions permissions)
     {
-        Target = target;
+        Target = targetId;
         Permissions = permissions;
     }
 }

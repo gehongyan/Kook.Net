@@ -11,7 +11,6 @@ namespace KaiHeiLa.WebSocket;
 public abstract class SocketUser : SocketEntity<ulong>, IUser
 {
     public abstract string Username { get; internal set; }
-    public abstract string IdentifyNumber { get; internal set; }
     public abstract ushort? IdentifyNumberValue { get; internal set; }
     public abstract bool? IsOnline { get; internal set; }
     public abstract bool? IsBot { get; internal set; }
@@ -21,6 +20,8 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     public abstract string VIPAvatar { get; internal set; }
     internal abstract SocketGlobalUser GlobalUser { get; }
     
+    /// <inheritdoc />
+    public string IdentifyNumber => IdentifyNumberValue?.ToString("D4");
     public string Mention => MentionUtils.MentionUser(Id);
     
     protected SocketUser(KaiHeiLaSocketClient kaiHeiLa, ulong id) 
@@ -42,7 +43,6 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
             ushort newVal = ushort.Parse(model.IdentifyNumber, NumberStyles.None, CultureInfo.InvariantCulture);
             if (newVal != IdentifyNumberValue)
             {
-                IdentifyNumber = model.IdentifyNumber;
                 IdentifyNumberValue = newVal;
                 hasChanges = true;
             }
@@ -87,7 +87,7 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     /// <returns>
     ///     The full name of the user.
     /// </returns>
-    public override string ToString() => Format.UsernameAndDiscriminator(this);
-    private string DebuggerDisplay => $"{Format.UsernameAndDiscriminator(this)} ({Id}{(IsBot ?? false ? ", Bot" : "")})";
+    public override string ToString() => Format.UsernameAndIdentifyNumber(this);
+    private string DebuggerDisplay => $"{Format.UsernameAndIdentifyNumber(this)} ({Id}{(IsBot ?? false ? ", Bot" : "")})";
     internal SocketUser Clone() => MemberwiseClone() as SocketUser;
 }

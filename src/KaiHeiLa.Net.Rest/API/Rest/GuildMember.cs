@@ -14,11 +14,19 @@ internal class GuildMember : User
 
     [JsonPropertyName("active_time")]
     [JsonConverter(typeof(DateTimeOffsetConverter))]
-    public DateTimeOffset ActiveTime { get; set; }
+    public DateTimeOffset ActiveAt { get; set; }
 
     [JsonPropertyName("hoist_info")] public HoistInfo HoistInfo { get; set; }
     [JsonPropertyName("color")] public uint Color { get; set; }
     [JsonPropertyName("roles")] public uint[] Roles { get; set; }
+
+    [JsonPropertyName("is_master")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public bool? IsMaster { get; set; }
+
+    [JsonPropertyName("desc")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Description { get; set; }
 }
 
 internal class HoistInfo

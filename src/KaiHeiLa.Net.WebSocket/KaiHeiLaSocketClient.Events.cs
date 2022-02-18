@@ -57,5 +57,50 @@ namespace KaiHeiLa.WebSocket
         internal readonly AsyncEvent<Func<SocketGuild, Task>> _guildUnavailableEvent = new AsyncEvent<Func<SocketGuild, Task>>();
 
         #endregion
+
+        #region Channels
+
+        /// <summary> Fired when a reaction is added to a message. </summary>
+        /// <remarks>
+        ///     <para>
+        ///         This event is fired when a reaction is added to a user message. The event handler must return a
+        ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, an 
+        ///         <see cref="ISocketMessageChannel"/>, and a <see cref="SocketReaction"/> as its parameter.
+        ///     </para>
+        ///     <para>
+        ///         If caching is enabled via <see cref="KaiHeiLaSocketConfig"/>, the
+        ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
+        ///         that the message cannot be retrieved, the ID of the message is preserved in the 
+        ///         <see cref="ulong"/>.
+        ///     </para>
+        ///     <para>
+        ///         The source channel of the reaction addition will be passed into the 
+        ///         <see cref="ISocketMessageChannel"/> parameter.
+        ///     </para>
+        ///     <para>
+        ///         The reaction that was added will be passed into the <see cref="SocketReaction"/> parameter.
+        ///     </para>
+        ///     <note>
+        ///         When fetching the reaction from this event, a user may not be provided under 
+        ///         <see cref="SocketReaction.User"/>. Please see the documentation of the property for more
+        ///         information.
+        ///     </note>
+        /// </remarks>
+        public event Func<Cacheable<IUserMessage, Guid>, Cacheable<IMessageChannel, ulong>, SocketReaction, Task> ReactionAdded
+        {
+            add { _reactionAddedEvent.Add(value); }
+            remove { _reactionAddedEvent.Remove(value); }
+        }
+        internal readonly AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IMessageChannel, ulong>, SocketReaction, Task>> _reactionAddedEvent = new AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IMessageChannel, ulong>, SocketReaction, Task>>();
+        /// <summary> Fired when a reaction is removed from a message. </summary>
+        public event Func<Cacheable<IUserMessage, Guid>, Cacheable<IMessageChannel, ulong>, SocketReaction, Task> ReactionRemoved
+        {
+            add { _reactionRemovedEvent.Add(value); }
+            remove { _reactionRemovedEvent.Remove(value); }
+        }
+        internal readonly AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IMessageChannel, ulong>, SocketReaction, Task>> _reactionRemovedEvent = new AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IMessageChannel, ulong>, SocketReaction, Task>>();
+        
+
+        #endregion
     }
 }

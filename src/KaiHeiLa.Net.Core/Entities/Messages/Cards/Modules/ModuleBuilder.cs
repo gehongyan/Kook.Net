@@ -8,7 +8,7 @@ public class HeaderModuleBuilder : IModuleBuilder
     private PlainTextElementBuilder _text;
 
     /// <summary>
-    ///     Gets the maximum content length for header allowed by Discord.
+    ///     Gets the maximum content length for header allowed by KaiHeiLa.
     /// </summary>
     public const int MaxTitleContentLength = 100;
     

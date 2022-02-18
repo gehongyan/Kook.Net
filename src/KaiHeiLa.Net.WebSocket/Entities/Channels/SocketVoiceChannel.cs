@@ -20,7 +20,7 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
 
     public VoiceQuality VoiceQuality { get; set; }
     
-    public int LimitAmount { get; set; }
+    public int? UserLimit { get; set; }
     
     public string ServerUrl { get; set; }
 
@@ -41,7 +41,7 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
         base.Update(state, model);
         CategoryId = model.CategoryId;
         VoiceQuality = model.VoiceQuality ?? VoiceQuality.Unspecified;
-        LimitAmount = model.LimitAmount ?? 0;
+        UserLimit = model.UserLimit ?? 0;
         ServerUrl = model.ServerUrl;
         IsPermissionSynced = model.PermissionSync == 1;
     }

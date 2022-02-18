@@ -7,7 +7,6 @@ namespace KaiHeiLa.WebSocket;
 internal class SocketGlobalUser : SocketUser
 {
     public override string Username { get; internal set; }
-    public override string IdentifyNumber { get; internal set; }
     public override ushort? IdentifyNumberValue { get; internal set; }
     public override bool? IsOnline { get; internal set; }
     public override bool? IsBot { get; internal set; }

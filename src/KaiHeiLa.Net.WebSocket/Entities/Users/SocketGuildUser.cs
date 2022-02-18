@@ -22,13 +22,20 @@ public class SocketGuildUser : SocketUser, IGuildUser
     public string Nickname { get; private set; }
     /// <inheritdoc />
     public bool IsMobileVerified { get; private set; }
-
+    
+    /// <inheritdoc />
+    public DateTimeOffset JoinedAt { get; private set; }
+    /// <inheritdoc />
+    public DateTimeOffset ActiveAt { get; private set; }
+    /// <inheritdoc />
+    public Color Color { get; private set; }
+    /// <inheritdoc />
+    public bool? IsMaster { get; private set; }
+    
     /// <inheritdoc />
     public override bool? IsBot { get => GlobalUser.IsBot; internal set => GlobalUser.IsBot = value; }
     /// <inheritdoc />
     public override string Username { get => GlobalUser.Username; internal set => GlobalUser.Username = value; }
-    /// <inheritdoc />
-    public override string IdentifyNumber { get => GlobalUser.IdentifyNumber; internal set => GlobalUser.IdentifyNumber = value; }
     /// <inheritdoc />
     public override ushort? IdentifyNumberValue { get => GlobalUser.IdentifyNumberValue; internal set => GlobalUser.IdentifyNumberValue = value; }
     /// <inheritdoc />
@@ -69,14 +76,18 @@ public class SocketGuildUser : SocketUser, IGuildUser
         base.Update(state, model);
         Nickname = model.Nickname;
         IsMobileVerified = model.MobileVerified;
+        JoinedAt = model.JoinedAt;
+        ActiveAt = model.ActiveAt;
+        Color = new Color(model.Color);
+        IsMaster = model.IsMaster;
         UpdateRoles(model.Roles);
     }
     
     private void UpdateRoles(uint[] roleIds)
     {
         ImmutableArray<uint>.Builder roles = ImmutableArray.CreateBuilder<uint>(roleIds.Length + 1);
-        foreach (uint roleId in roleIds)
-            roles.Add(roleId);
+        for (int i = 0; i < roleIds.Length; i++)
+            roles.Add(roleIds[i]);
         _roleIds = roles.ToImmutable();
     }
     

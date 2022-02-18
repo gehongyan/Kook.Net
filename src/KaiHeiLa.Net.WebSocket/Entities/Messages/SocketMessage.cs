@@ -11,6 +11,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
 {
     #region SocketMessage
 
+    private readonly List<SocketReaction> _reactions = new List<SocketReaction>();
     private ImmutableArray<SocketUser> _userMentions = ImmutableArray.Create<SocketUser>();
     /// <summary>
     ///     Gets the author of this message.
@@ -62,7 +63,8 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
     ///     Collection of WebSocket-based users.
     /// </returns>
     public IReadOnlyCollection<SocketUser> MentionedUsers => _userMentions; 
-    
+    public IReadOnlyDictionary<IEmote, ReactionMetadata> Reactions => _reactions.GroupBy(r => r.Emote).ToDictionary(x => x.Key, x => new ReactionMetadata { ReactionCount = x.Count(), IsMe = x.Any(y => y.UserId == KaiHeiLa.CurrentUser.Id) });
+
     internal SocketMessage(KaiHeiLaSocketClient kaiHeiLa, Guid id, ISocketMessageChannel channel, SocketUser author, MessageSource source)
         : base(kaiHeiLa, id)
     {
@@ -116,6 +118,25 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
         => MessageHelper.DeleteAsync(this, KaiHeiLa, options);
+    
+    
+    internal void AddReaction(SocketReaction reaction)
+    {
+        _reactions.Add(reaction);
+    }
+    internal void RemoveReaction(SocketReaction reaction)
+    {
+        if (_reactions.Contains(reaction))
+            _reactions.Remove(reaction);
+    }
+    internal void ClearReactions()
+    {
+        _reactions.Clear();
+    }
+    internal void RemoveReactionsForEmote(IEmote emote)
+    {
+        _reactions.RemoveAll(x => x.Emote.Equals(emote));
+    }
     
     #endregion
 

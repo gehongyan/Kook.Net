@@ -18,7 +18,7 @@ namespace KaiHeiLa.Logging
         public LogManager(LogSeverity minSeverity)
         {
             Level = minSeverity;
-            ClientLogger = new Logger(this, "Discord");
+            ClientLogger = new Logger(this, "KaiHeiLa");
         }
 
         public async Task LogAsync(LogSeverity severity, string source, Exception ex)
@@ -103,7 +103,7 @@ namespace KaiHeiLa.Logging
 
         public async Task WriteInitialLog()
         {
-            await ClientLogger.InfoAsync($"Discord.Net v{KaiHeiLaConfig.Version} (API v{KaiHeiLaConfig.APIVersion})").ConfigureAwait(false);
+            await ClientLogger.InfoAsync($"KaiHeiLa.Net v{KaiHeiLaConfig.Version} (API v{KaiHeiLaConfig.APIVersion})").ConfigureAwait(false);
         }
     }
 }

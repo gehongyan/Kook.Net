@@ -5,7 +5,7 @@ using System.Text;
 namespace KaiHeiLa
 {
     /// <summary>
-    ///     Provides a series of helper methods for handling Discord login tokens.
+    ///     Provides a series of helper methods for handling KaiHeiLa login tokens.
     /// </summary>
     public static class TokenUtils
     {
@@ -13,7 +13,7 @@ namespace KaiHeiLa
         ///     The minimum length of a Bot token.
         /// </summary>
         /// <remarks>
-        ///     This value was determined by comparing against the examples in the Discord
+        ///     This value was determined by comparing against the examples in the KaiHeiLa
         ///     documentation, and pre-existing tokens.
         /// </remarks>
         internal const int MinBotTokenLength = 45;
@@ -28,7 +28,7 @@ namespace KaiHeiLa
         /// </summary>
         /// <remarks>
         ///     A string that would require 3 padding characters is considered to be already corrupt.
-        ///     Some older bot tokens may require padding, as the format provided by Discord
+        ///     Some older bot tokens may require padding, as the format provided by KaiHeiLa
         ///     does not include this padding in the token.
         /// </remarks>
         /// <param name="encodedBase64">The base64 encoded string to pad with characters.</param>

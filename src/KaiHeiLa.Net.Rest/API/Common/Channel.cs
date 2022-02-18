@@ -25,7 +25,7 @@ internal class Channel
     [JsonConverter(typeof(NullableUInt64Converter))]
     public ulong? CategoryId { get; set; }
 
-    [JsonPropertyName("level")] public int Level { get; set; }
+    [JsonPropertyName("level")] public int Position { get; set; }
     [JsonPropertyName("type")] public ChannelType Type { get; set; }
 
     [JsonPropertyName("permission_overwrites")]
@@ -43,7 +43,7 @@ internal class Channel
     // Voice
     [JsonPropertyName("limit_amount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int? LimitAmount { get; set; }
+    public int? UserLimit { get; set; }
 
     [JsonPropertyName("voice_quality")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

@@ -5,7 +5,7 @@ namespace KaiHeiLa.Utils
         /// <summary>
         ///     Not full URL validation right now. Just ensures protocol is present and that it's either http or https.
         /// </summary>
-        /// <param name="url">The URL to validate before sending to Discord.</param>
+        /// <param name="url">The URL to validate before sending to KaiHeiLa.</param>
         /// <exception cref="InvalidOperationException">A URL must include a protocol (http or https).</exception>
         /// <returns>true if URL is valid by our standard, false if null, throws an error upon invalid.</returns>
         public static bool Validate(string url)

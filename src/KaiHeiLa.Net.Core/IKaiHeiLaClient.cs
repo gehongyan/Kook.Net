@@ -16,10 +16,10 @@ public interface IKaiHeiLaClient : IDisposable
     TokenType TokenType { get; }
 
     /// <summary>
-    ///     Starts the connection between Discord and the client..
+    ///     Starts the connection between KaiHeiLa and the client..
     /// </summary>
     /// <remarks>
-    ///     This method will initialize the connection between the client and Discord.
+    ///     This method will initialize the connection between the client and KaiHeiLa.
     ///     <note type="important">
     ///         This method will immediately return after it is called, as it will initialize the connection on
     ///         another thread.
@@ -30,10 +30,22 @@ public interface IKaiHeiLaClient : IDisposable
     /// </returns>
     Task StartAsync();
     /// <summary>
-    ///     Stops the connection between Discord and the client.
+    ///     Stops the connection between KaiHeiLa and the client.
     /// </summary>
     /// <returns>
     ///     A task that represents the asynchronous stop operation.
     /// </returns>
     Task StopAsync();
+    
+    /// <summary>
+    ///     Gets a guild.
+    /// </summary>
+    /// <param name="id">The guild identifier.</param>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the guild associated
+    ///     with the identifier; <c>null</c> when the guild cannot be found.
+    /// </returns>
+    Task<IGuild> GetGuildAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
 }

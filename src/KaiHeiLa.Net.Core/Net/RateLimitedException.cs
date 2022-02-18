@@ -1,7 +1,7 @@
 namespace KaiHeiLa.Net
 {
     /// <summary>
-    ///     The exception that is thrown when the user is being rate limited by Discord.
+    ///     The exception that is thrown when the user is being rate limited by KaiHeiLa.
     /// </summary>
     public class RateLimitedException : TimeoutException
     {

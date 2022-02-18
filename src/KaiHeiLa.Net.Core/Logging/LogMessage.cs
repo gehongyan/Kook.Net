@@ -33,7 +33,7 @@ namespace KaiHeiLa
         ///     Gets the exception of this log entry.
         /// </summary>
         /// <returns>
-        ///     An <see cref="Discord.LogMessage.Exception" /> object associated with an incident; otherwise <c>null</c>.
+        ///     An <see cref="KaiHeiLa.LogMessage.Exception" /> object associated with an incident; otherwise <c>null</c>.
         /// </returns>
         public Exception Exception { get; }
 

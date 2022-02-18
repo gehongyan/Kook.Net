@@ -22,7 +22,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
 
     private ConcurrentDictionary<ulong, SocketGuildChannel> _channels;
     private ConcurrentDictionary<ulong, SocketGuildUser> _members;
-    private ConcurrentDictionary<ulong, SocketRole> _roles;
+    private ConcurrentDictionary<uint, SocketRole> _roles;
     
     public string Name { get; private set; }
     public string Topic { get; private set; }
@@ -55,10 +55,10 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     ///     Gets the number of members.
     /// </summary>
     /// <remarks>
-    ///     This property retrieves the number of members returned by Discord.
+    ///     This property retrieves the number of members returned by KaiHeiLa.
     ///     <note type="tip">
     ///     <para>
-    ///         Due to how this property is returned by Discord instead of relying on the WebSocket cache, the
+    ///         Due to how this property is returned by KaiHeiLa instead of relying on the WebSocket cache, the
     ///         number here is the most accurate in terms of counting the number of users within this guild.
     ///     </para>
     ///     <para>
@@ -200,7 +200,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
 
         IsAvailable = true;
 
-        var roles = new ConcurrentDictionary<ulong, SocketRole>(ConcurrentHashSet.DefaultConcurrencyLevel,
+        var roles = new ConcurrentDictionary<uint, SocketRole>(ConcurrentHashSet.DefaultConcurrencyLevel,
             (int) ((model.Roles ?? Array.Empty<Role>()).Length * 1.05));
         if (model.Roles != null)
         {
@@ -239,9 +239,16 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
 
     #region IGuild
 
+    /// <inheritdoc />
+    bool IGuild.Available => true;
+    
     public void Dispose()
     {
     }
+    
+    /// <inheritdoc />
+    Task<IGuildUser> IGuild.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<IGuildUser>(GetUser(id));
 
     #endregion
 
@@ -250,7 +257,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     /// <summary>
     ///     Gets a channel in this guild.
     /// </summary>
-    /// <param name="id">The snowflake identifier for the channel.</param>
+    /// <param name="id">The identifier for the channel.</param>
     /// <returns>
     ///     A generic channel associated with the specified <paramref name="id" />; <see langword="null"/> if none is found.
     /// </returns>
@@ -264,7 +271,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     /// <summary>
     ///     Gets a text channel in this guild.
     /// </summary>
-    /// <param name="id">The snowflake identifier for the text channel.</param>
+    /// <param name="id">The identifier for the text channel.</param>
     /// <returns>
     ///     A text channel associated with the specified <paramref name="id" />; <see langword="null"/> if none is found.
     /// </returns>
@@ -313,11 +320,11 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     /// <summary>
     ///     Gets a role in this guild.
     /// </summary>
-    /// <param name="id">The snowflake identifier for the role.</param>
+    /// <param name="id">The identifier for the role.</param>
     /// <returns>
     ///     A role that is associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
     /// </returns>
-    public SocketRole GetRole(ulong id)
+    public SocketRole GetRole(uint id)
     {
         if (_roles.TryGetValue(id, out SocketRole value))
             return value;
@@ -338,7 +345,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     ///         large guilds.
     ///     </note>
     /// </remarks>
-    /// <param name="id">The snowflake identifier of the user.</param>
+    /// <param name="id">The identifier of the user.</param>
     /// <returns>
     ///     A guild user associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
     /// </returns>
@@ -425,7 +432,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     // {
     //     if (HasAllMembers)
     //         return ImmutableArray.Create(Users).ToAsyncEnumerable<IReadOnlyCollection<IGuildUser>>();
-    //     return GuildHelper.GetUsersAsync(this, Discord, null, null, options);
+    //     return GuildHelper.GetUsersAsync(this, KaiHeiLa, null, null, options);
     // }
     public async Task DownloadUsersAsync()
     {
@@ -437,7 +444,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     #region IGuild
     
     /// <inheritdoc />
-    IRole IGuild.GetRole(ulong id)
+    IRole IGuild.GetRole(uint id)
         => GetRole(id);
 
     /// <inheritdoc />

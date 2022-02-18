@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace KaiHeiLa.API.Gateway;
 
-internal class ReactionAddedInChannel
+internal class Reaction
 {
     [JsonPropertyName("channel_id")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]

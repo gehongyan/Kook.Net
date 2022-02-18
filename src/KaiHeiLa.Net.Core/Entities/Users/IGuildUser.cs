@@ -23,4 +23,12 @@ public interface IGuildUser : IUser
     ulong GuildId { get; }
 
     bool IsMobileVerified { get; }
+    
+    DateTimeOffset JoinedAt { get; }
+    
+    DateTimeOffset ActiveAt { get; }
+    
+    Color Color { get; }
+    
+    bool? IsMaster { get; }
 }

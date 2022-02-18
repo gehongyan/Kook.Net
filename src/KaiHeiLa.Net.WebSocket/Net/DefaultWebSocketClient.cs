@@ -254,7 +254,7 @@ namespace KaiHeiLa.Net.WebSockets
             catch (OperationCanceledException) { }
             catch (Exception ex)
             {
-                //This cannot be awaited otherwise we'll deadlock when DiscordApiClient waits for this task to complete.
+                //This cannot be awaited otherwise we'll deadlock when KaiHeiLaApiClient waits for this task to complete.
                 var _ = OnClosed(ex);
             }
         }

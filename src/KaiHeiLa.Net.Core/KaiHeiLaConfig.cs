@@ -38,7 +38,7 @@ public class KaiHeiLaConfig
     ///     Returns the base KaiHeiLa API URL.
     /// </summary>
     /// <returns>
-    ///     The Discord API URL using <see cref="APIVersion"/>.
+    ///     The KaiHeiLa API URL using <see cref="APIVersion"/>.
     /// </returns>
     public static readonly string APIUrl = $"https://www.kaiheila.cn/api/v{APIVersion}/";
     

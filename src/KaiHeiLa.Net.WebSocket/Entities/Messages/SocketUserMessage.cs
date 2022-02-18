@@ -57,14 +57,10 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             ?? new ImmutableArray<SocketRole>();
         Content = gatewayEvent.Content;
         if (model.Quote is not null)
-        {
             _quote = Quote.Create(model.Quote, guild.GetUser(model.Quote.Author.Id));
-        }
 
         if (model.Attachment is not null)
-        {
             _attachment = Attachment.Create(model.Attachment);
-        }
 
         if (model.Type == MessageType.Card)
         {
@@ -147,7 +143,6 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
     #region IUserMessage
 
-    IGuild IUserMessage.Guild => Guild;
     IQuote IUserMessage.Quote => _quote;
     IReadOnlyCollection<ICard> IMessage.Cards => Cards;
 

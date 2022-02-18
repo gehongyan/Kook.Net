@@ -3,7 +3,7 @@
 namespace KaiHeiLa;
 
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-public class OverwritePermissions
+public struct OverwritePermissions
 {
     public static OverwritePermissions InheritAll { get; } = new OverwritePermissions();
 

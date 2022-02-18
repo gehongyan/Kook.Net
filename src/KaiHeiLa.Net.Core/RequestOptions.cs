@@ -78,7 +78,7 @@ namespace KaiHeiLa
 
         /// <summary>
         ///     Initializes a new <see cref="RequestOptions" /> class with the default request timeout set in
-        ///     <see cref="DiscordConfig"/>.
+        ///     <see cref="KaiHeiLaConfig"/>.
         /// </summary>
         public RequestOptions()
         {

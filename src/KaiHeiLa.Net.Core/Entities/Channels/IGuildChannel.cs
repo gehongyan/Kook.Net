@@ -13,7 +13,7 @@ public interface IGuildChannel : IChannel
     IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites { get; }
     
     IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites { get; }
-    
+
     /// <summary>
     ///     Gets the permission overwrite for a specific role.
     /// </summary>
@@ -21,7 +21,8 @@ public interface IGuildChannel : IChannel
     /// <returns>
     ///     An overwrite object for the targeted role; <c>null</c> if none is set.
     /// </returns>
-    OverwritePermissions GetPermissionOverwrite(IRole role);
+    OverwritePermissions? GetPermissionOverwrite(IRole role);
+
     /// <summary>
     ///     Gets the permission overwrite for a specific user.
     /// </summary>
@@ -29,11 +30,11 @@ public interface IGuildChannel : IChannel
     /// <returns>
     ///     An overwrite object for the targeted user; <c>null</c> if none is set.
     /// </returns>
-    OverwritePermissions GetPermissionOverwrite(IUser user);
+    OverwritePermissions? GetPermissionOverwrite(IUser user);
     /// <summary>
     ///     Gets a user in this channel.
     /// </summary>
-    /// <param name="id">The snowflake identifier of the user.</param>
+    /// <param name="id">The identifier of the user.</param>
     /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>

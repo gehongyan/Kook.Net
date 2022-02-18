@@ -18,8 +18,6 @@ public class SocketSelfUser : SocketUser, ISelfUser
     /// <inheritdoc />
     public override string Username { get => GlobalUser.Username; internal set => GlobalUser.Username = value; }
     /// <inheritdoc />
-    public override string IdentifyNumber { get => GlobalUser.IdentifyNumber; internal set => GlobalUser.IdentifyNumber = value; }
-    /// <inheritdoc />
     public override ushort? IdentifyNumberValue { get => GlobalUser.IdentifyNumberValue; internal set => GlobalUser.IdentifyNumberValue = value; }
     /// <inheritdoc />
     public override string Avatar { get => GlobalUser.Avatar; internal set => GlobalUser.Avatar = value; }

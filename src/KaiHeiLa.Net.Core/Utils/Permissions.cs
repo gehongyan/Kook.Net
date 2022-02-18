@@ -103,8 +103,8 @@ namespace KaiHeiLa
         {
             ulong resolvedPermissions = 0;
 
-            // if (user.Id == guild.)
-            //     resolvedPermissions = GuildPermissions.All.RawValue; //Owners always have all permissions
+            if (user.IsMaster ?? false)
+                resolvedPermissions = GuildPermissions.All.RawValue; //Owners always have all permissions
             foreach (var roleId in user.RoleIds)
                 resolvedPermissions |= guild.GetRole(roleId)?.Permissions.RawValue ?? 0;
             if (GetValue(resolvedPermissions, GuildPermission.Administrator))
@@ -131,7 +131,7 @@ namespace KaiHeiLa
                 //Give/Take Everyone permissions
                 var perms = channel.GetPermissionOverwrite(guild.EveryoneRole);
                 if (perms != null)
-                    resolvedPermissions = (resolvedPermissions & ~perms.DenyValue) | perms.AllowValue;
+                    resolvedPermissions = (resolvedPermissions & ~perms.Value.DenyValue) | perms.Value.AllowValue;
 
                 //Give/Take Role permissions
                 ulong deniedPermissions = 0UL, allowedPermissions = 0UL;
@@ -143,8 +143,8 @@ namespace KaiHeiLa
                         perms = channel.GetPermissionOverwrite(role);
                         if (perms != null)
                         {
-                            allowedPermissions |= perms.AllowValue;
-                            deniedPermissions |= perms.DenyValue;
+                            allowedPermissions |= perms.Value.AllowValue;
+                            deniedPermissions |= perms.Value.DenyValue;
                         }
                     }
                 }
@@ -153,7 +153,7 @@ namespace KaiHeiLa
                 //Give/Take User permissions
                 perms = channel.GetPermissionOverwrite(user);
                 if (perms != null)
-                    resolvedPermissions = (resolvedPermissions  & ~perms.DenyValue) | perms.AllowValue;
+                    resolvedPermissions = (resolvedPermissions  & ~perms.Value.DenyValue) | perms.Value.AllowValue;
 
                 if (channel is ITextChannel)
                 {

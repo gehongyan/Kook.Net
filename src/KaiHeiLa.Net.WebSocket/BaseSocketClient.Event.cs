@@ -20,11 +20,6 @@ public abstract partial class BaseSocketClient
     ///         derived classes of <see cref="SocketMessage"/> for more details.
     ///     </para>
     /// </remarks>
-    /// <example>
-    ///     <para>The example below checks if the newly received message contains the target user.</para>
-    ///     <code language="cs" region="MessageReceived"
-    ///           source="..\Discord.Net.Examples\WebSocket\BaseSocketClient.Events.Examples.cs"/>
-    /// </example>
     public event Func<SocketMessage, Task> MessageReceived
     {
         add { _messageReceivedEvent.Add(value); }

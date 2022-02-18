@@ -2,8 +2,6 @@
 
 public interface IMessage : IGuidEntity, IDeletable
 {
-    ChannelType ChannelType { get; }
-    
     MessageType Type { get; }
     
     MessageSource Source { get; }

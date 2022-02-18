@@ -30,9 +30,9 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel
     /// <summary>
     ///     Gets a generic user from this channel.
     /// </summary>
-    /// <param name="id">The snowflake identifier of the user.</param>
+    /// <param name="id">The identifier of the user.</param>
     /// <returns>
-    ///     A generic WebSocket-based user associated with the snowflake identifier.
+    ///     A generic WebSocket-based user associated with the identifier.
     /// </returns>
     public SocketUser GetUser(ulong id) => GetUserInternal(id);
     internal abstract SocketUser GetUserInternal(ulong id);
@@ -46,7 +46,7 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel
     #region IChannel
 
     string IChannel.Name => null;
-    uint IChannel.CreateUserId => default;
+    ulong IChannel.CreateUserId => default;
     /// <inheritdoc />
     /// 
     Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
