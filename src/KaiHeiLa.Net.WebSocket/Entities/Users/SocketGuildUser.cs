@@ -30,7 +30,10 @@ public class SocketGuildUser : SocketUser, IGuildUser
     /// <inheritdoc />
     public Color Color { get; private set; }
     /// <inheritdoc />
-    public bool? IsMaster { get; private set; }
+    public bool? IsOwner { get; private set; }
+    
+    /// <inheritdoc />
+    public new string PlainTextMention => MentionUtils.PlainTextMentionUser(Nickname ?? Username, Id);
     
     /// <inheritdoc />
     public override bool? IsBot { get => GlobalUser.IsBot; internal set => GlobalUser.IsBot = value; }
@@ -79,7 +82,7 @@ public class SocketGuildUser : SocketUser, IGuildUser
         JoinedAt = model.JoinedAt;
         ActiveAt = model.ActiveAt;
         Color = new Color(model.Color);
-        IsMaster = model.IsMaster;
+        IsOwner = model.IsOwner;
         UpdateRoles(model.Roles);
     }
     

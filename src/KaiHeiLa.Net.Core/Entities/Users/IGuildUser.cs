@@ -30,5 +30,5 @@ public interface IGuildUser : IUser
     
     Color Color { get; }
     
-    bool? IsMaster { get; }
+    bool? IsOwner { get; }
 }

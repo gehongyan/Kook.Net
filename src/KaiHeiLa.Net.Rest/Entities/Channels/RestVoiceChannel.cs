@@ -23,7 +23,9 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     /// <inheritdoc />
     public bool IsPermissionSynced { get; private set; }
     
-    public string Mention => MentionUtils.MentionChannel(Id);
+    public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
+    /// <inheritdoc />
+    public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
 
     internal RestVoiceChannel(BaseKaiHeiLaClient kaiHeiLa, IGuild guild, ulong id)
         : base(kaiHeiLa, guild, id, ChannelType.Voice)

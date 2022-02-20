@@ -14,7 +14,7 @@ internal class Guild
 
     [JsonPropertyName("master_id")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
-    public uint MasterId { get; set; }
+    public uint OwnerId { get; set; }
 
     [JsonPropertyName("icon")] public string Icon { get; set; }
 

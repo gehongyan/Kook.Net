@@ -26,7 +26,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     
     public string Name { get; private set; }
     public string Topic { get; private set; }
-    public uint MasterId { get; private set; }
+    public ulong OwnerId { get; private set; }
     public string Icon { get; private set; }
     public NotifyType NotifyType { get; private set; }
     public string Region { get; private set; }
@@ -189,7 +189,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     {
         Name = model.Name;
         Topic = model.Topic;
-        MasterId = model.MasterId;
+        OwnerId = model.OwnerId;
         Icon = model.Icon;
         NotifyType = model.NotifyType;
         Region = model.Region;

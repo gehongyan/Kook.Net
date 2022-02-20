@@ -34,7 +34,10 @@ public class SocketRole : SocketEntity<uint>, IRole
     /// </returns>
     public bool IsEveryone => Id == 0;
     /// <inheritdoc />
-    public string Mention => IsEveryone ? "@everyone" : MentionUtils.MentionRole(Id);
+    public string KMarkdownMention => IsEveryone ? "@everyone" : MentionUtils.KMarkdownMentionRole(Id);
+
+    public string PlainTextMention => IsEveryone ? "@全体成员" : MentionUtils.PlainTextMentionRole(Id);
+
     internal SocketRole(SocketGuild guild, uint id)
         : base(guild.KaiHeiLa, id)
     {

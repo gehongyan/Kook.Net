@@ -22,7 +22,9 @@ internal class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextCha
     public bool IsPermissionSynced { get; set; }
     
     /// <inheritdoc />
-    public string Mention => MentionUtils.MentionChannel(Id);
+    public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
+    /// <inheritdoc />
+    public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
 
     
     internal RestTextChannel(BaseKaiHeiLaClient kaiHeiLa, IGuild guild, ulong id)

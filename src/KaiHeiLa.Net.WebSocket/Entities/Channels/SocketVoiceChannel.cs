@@ -14,7 +14,10 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     /// <inheritdoc />
     public ulong? CategoryId { get; set; }
     /// <inheritdoc />
-    public string Mention => MentionUtils.MentionChannel(Id);
+    public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
+    /// <inheritdoc />
+    public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
+
     /// <inheritdoc />
     public bool IsPermissionSynced { get; set; }
 

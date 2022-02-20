@@ -25,8 +25,10 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     /// <inheritdoc />
     public string IdentifyNumber => IdentifyNumberValue?.ToString("D4");
     /// <inheritdoc />
-    public string Mention => MentionUtils.MentionUser(Id);
-    
+    public string KMarkdownMention => MentionUtils.KMarkdownMentionUser(Id);
+    /// <inheritdoc />
+    public string PlainTextMention => MentionUtils.PlainTextMentionUser(Username, Id);
+
     internal RestUser(BaseKaiHeiLaClient kaiHeiLa, ulong id)
         : base(kaiHeiLa, id)
     {

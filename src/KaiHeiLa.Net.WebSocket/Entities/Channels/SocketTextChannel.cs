@@ -39,8 +39,10 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <inheritdoc />
     public bool IsPermissionSynced { get; set; }
     /// <inheritdoc />
-    public string Mention => MentionUtils.MentionChannel(Id);
-    
+    public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
+    /// <inheritdoc />
+    public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
+
     public IReadOnlyCollection<SocketMessage> CachedMessages => _messages?.Messages ?? ImmutableArray.Create<SocketMessage>();
     /// <inheritdoc />
     public override IReadOnlyCollection<SocketGuildUser> Users

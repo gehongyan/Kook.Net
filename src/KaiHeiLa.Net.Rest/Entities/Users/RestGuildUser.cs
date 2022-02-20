@@ -30,10 +30,13 @@ public class RestGuildUser : RestUser, IGuildUser
     /// <inheritdoc />
     public Color Color { get; private set; }
     /// <inheritdoc />
-    public bool? IsMaster { get; set; }
+    public bool? IsOwner { get; set; }
     
     /// <inheritdoc />
     public IReadOnlyCollection<uint> RoleIds => _roleIds;
+    
+    /// <inheritdoc />
+    public new string PlainTextMention => MentionUtils.PlainTextMentionUser(Nickname ?? Username, Id);
     
     internal RestGuildUser(BaseKaiHeiLaClient kaiHeiLa, IGuild guild, ulong id)
         : base(kaiHeiLa, id)
@@ -55,7 +58,7 @@ public class RestGuildUser : RestUser, IGuildUser
         JoinedAt = model.JoinedAt;
         ActiveAt = model.ActiveAt;
         Color = new Color(model.Color);
-        IsMaster = model.IsMaster;
+        IsOwner = model.IsOwner;
         UpdateRoles(model.Roles);
     }
     private void UpdateRoles(uint[] roleIds)

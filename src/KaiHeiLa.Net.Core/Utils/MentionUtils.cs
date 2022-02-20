@@ -34,14 +34,23 @@ public static class MentionUtils
 
     private const char SanitizeChar = '\x200b';
     
-    internal static string MentionUser(string id) => $"(met){id}(met)";
-    public static string MentionUser(ulong id) => MentionUser(id.ToString());
+    internal static string KMarkdownMentionUser(string id) => $"(met){id}(met)";
+    public static string KMarkdownMentionUser(ulong id) => KMarkdownMentionUser(id.ToString());
     
-    internal static string MentionChannel(string id) => $"(chn){id}(chn)";
-    public static string MentionChannel(ulong id) => MentionChannel(id.ToString());
+    internal static string KMarkdownMentionChannel(string id) => $"(chn){id}(chn)";
+    public static string KMarkdownMentionChannel(ulong id) => KMarkdownMentionChannel(id.ToString());
     
-    internal static string MentionRole(string id) => $"(rol){id}(rol)";
-    public static string MentionRole(ulong id) => MentionRole(id.ToString());
+    internal static string KMarkdownMentionRole(string id) => $"(rol){id}(rol)";
+    public static string KMarkdownMentionRole(uint id) => KMarkdownMentionRole(id.ToString());
+    
+    internal static string PlainTextMentionUser(string username, string id) => $"@{username}#{id}";
+    public static string PlainTextMentionUser(string username, ulong id) => PlainTextMentionUser(username, id.ToString());
+    
+    internal static string PlainTextMentionChannel(string id) => $"#channel:{id};";
+    public static string PlainTextMentionChannel(ulong id) => PlainTextMentionChannel(id.ToString());
+    
+    internal static string PlainTextMentionRole(string id) => $"@role:{id};";
+    public static string PlainTextMentionRole(uint id) => PlainTextMentionRole(id.ToString());
 
 
     /// <summary>
@@ -217,9 +226,9 @@ public static class MentionUtils
                         return "";
                 case TagHandling.Sanitize:
                     if (guildUser != null && guildUser.Nickname == null)
-                        return MentionUser($"{SanitizeChar}{tag.Key}");
+                        return KMarkdownMentionUser($"{SanitizeChar}{tag.Key}");
                     else
-                        return MentionUser($"{SanitizeChar}{tag.Key}");
+                        return KMarkdownMentionUser($"{SanitizeChar}{tag.Key}");
             }
         }
         return "";
@@ -245,7 +254,7 @@ public static class MentionUtils
                     else
                         return "";
                 case TagHandling.Sanitize:
-                    return MentionChannel($"{SanitizeChar}{tag.Key}");
+                    return KMarkdownMentionChannel($"{SanitizeChar}{tag.Key}");
             }
         }
         return "";
@@ -270,7 +279,7 @@ public static class MentionUtils
                         else
                             return "";
                     case TagHandling.Sanitize:
-                        return MentionRole($"{SanitizeChar}{tag.Key}");
+                        return KMarkdownMentionRole($"{SanitizeChar}{tag.Key}");
                 }
             }
             return "";

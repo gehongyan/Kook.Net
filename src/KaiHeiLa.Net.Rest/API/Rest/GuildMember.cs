@@ -22,7 +22,7 @@ internal class GuildMember : User
 
     [JsonPropertyName("is_master")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public bool? IsMaster { get; set; }
+    public bool? IsOwner { get; set; }
 
     [JsonPropertyName("desc")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

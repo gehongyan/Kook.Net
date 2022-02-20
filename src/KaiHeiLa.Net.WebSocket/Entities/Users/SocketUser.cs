@@ -22,7 +22,8 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     
     /// <inheritdoc />
     public string IdentifyNumber => IdentifyNumberValue?.ToString("D4");
-    public string Mention => MentionUtils.MentionUser(Id);
+    public string KMarkdownMention => MentionUtils.KMarkdownMentionUser(Id);
+    public string PlainTextMention => MentionUtils.PlainTextMentionUser(Username, Id);
     
     protected SocketUser(KaiHeiLaSocketClient kaiHeiLa, ulong id) 
         : base(kaiHeiLa, id)

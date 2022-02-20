@@ -6,7 +6,7 @@ public interface IGuild : IULongEntity
 
     string Topic { get; }
 
-    uint MasterId { get; }
+    ulong OwnerId { get; }
 
     string Icon { get; }
 

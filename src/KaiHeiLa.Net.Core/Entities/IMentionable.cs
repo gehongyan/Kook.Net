@@ -2,5 +2,7 @@
 
 public interface IMentionable
 {
-    string Mention { get; }
+    string KMarkdownMention { get; }
+    
+    string PlainTextMention { get; }
 }

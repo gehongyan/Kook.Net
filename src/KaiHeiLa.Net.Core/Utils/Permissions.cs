@@ -103,7 +103,7 @@ namespace KaiHeiLa
         {
             ulong resolvedPermissions = 0;
 
-            if (user.IsMaster ?? false)
+            if (user.IsOwner ?? false)
                 resolvedPermissions = GuildPermissions.All.RawValue; //Owners always have all permissions
             foreach (var roleId in user.RoleIds)
                 resolvedPermissions |= guild.GetRole(roleId)?.Permissions.RawValue ?? 0;

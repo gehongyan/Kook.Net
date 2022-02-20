@@ -23,7 +23,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     public string Topic { get; private set; }
     /// <inheritdoc />
-    public uint MasterId { get; private set; }
+    public ulong OwnerId { get; private set; }
     /// <inheritdoc />
     public string Icon { get; private set; }
     /// <inheritdoc />
@@ -66,7 +66,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     {
         Name = model.Name;
         Topic = model.Topic;
-        MasterId = model.MasterId;
+        OwnerId = model.OwnerId;
         Icon = model.Icon;
         NotifyType = model.NotifyType;
         Region = model.Region;

@@ -33,7 +33,9 @@ public class RestRole : RestEntity<uint>, IRole
     /// </returns>
     public bool IsEveryone => Id == 0;
     /// <inheritdoc />
-    public string Mention => IsEveryone ? "@everyone" : MentionUtils.MentionRole(Id);
+    public string KMarkdownMention => IsEveryone ? "(met)all(met)" : MentionUtils.KMarkdownMentionRole(Id);
+    /// <inheritdoc />
+    public string PlainTextMention => IsEveryone ? "@全体成员" : MentionUtils.PlainTextMentionRole(Id);
 
     internal RestRole(BaseKaiHeiLaClient kaiHeiLa, IGuild guild, uint id)
         : base(kaiHeiLa, id)
