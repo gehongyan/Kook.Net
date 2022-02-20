@@ -250,6 +250,9 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     Task<IGuildUser> IGuild.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IGuildUser>(GetUser(id));
 
+    /// <inheritdoc />
+    Task<IGuildChannel> IGuild.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<IGuildChannel>(GetChannel(id));
     #endregion
 
     #region Channels

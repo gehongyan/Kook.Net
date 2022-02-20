@@ -20,6 +20,7 @@ public class RestUserMessage : RestMessage, IUserMessage
     private Attachment _attachment;
     private ImmutableArray<ICard> _cards = ImmutableArray.Create<ICard>();
     private ImmutableArray<uint> _roleMentionIds = ImmutableArray.Create<uint>();
+    private ImmutableArray<ITag> _tags = ImmutableArray.Create<ITag>();
     
     public Quote Quote => _quote;
     
@@ -33,6 +34,8 @@ public class RestUserMessage : RestMessage, IUserMessage
     public override bool? MentionedHere => _isMentioningHere;
     /// <inheritdoc />
     public override IReadOnlyCollection<uint> MentionedRoleIds => _roleMentionIds;
+    /// <inheritdoc />
+    public override IReadOnlyCollection<ITag> Tags => _tags;
     
     internal RestUserMessage(BaseKaiHeiLaClient kaiHeiLa, Guid id, MessageType messageType, IMessageChannel channel, IUser author, MessageSource source)
         : base(kaiHeiLa, id, messageType, channel, author, source)
@@ -48,6 +51,12 @@ public class RestUserMessage : RestMessage, IUserMessage
     internal override void Update(Model model)
     {
         base.Update(model);
+        var guildId = (Channel as IGuildChannel)?.GuildId;
+        var guild = guildId != null ? (KaiHeiLa as IKaiHeiLaClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).Result : null;
+        if (model.Type == MessageType.Text)
+            _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.PlainText);
+        else if (model.Type == MessageType.KMarkdown)
+            _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.KMarkdown);
         _isMentioningEveryone = model.MentionAll;
         _roleMentionIds = model.MentionRoles.ToImmutableArray();
         

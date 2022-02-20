@@ -102,6 +102,17 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     public async Task UpdateAsync(RequestOptions options = null)
         => Update(await KaiHeiLa.ApiClient.GetGuildAsync(Id, options).ConfigureAwait(false));
 
+    /// <summary>
+    ///     Gets a channel in this guild.
+    /// </summary>
+    /// <param name="id">The snowflake identifier for the channel.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the generic channel
+    ///     associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    /// </returns>
+    public Task<RestGuildChannel> GetChannelAsync(ulong id, RequestOptions options = null)
+        => GuildHelper.GetChannelAsync(this, KaiHeiLa, id, options);
     #endregion
     
     #region Roles
@@ -141,7 +152,14 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
-    
+    /// <inheritdoc />
+    async Task<IGuildChannel> IGuild.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetChannelAsync(id, options).ConfigureAwait(false);
+        else
+            return null;
+    }
     #endregion
 
     #region Users

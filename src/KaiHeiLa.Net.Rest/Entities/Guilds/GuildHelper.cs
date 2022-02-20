@@ -14,4 +14,17 @@ internal static class GuildHelper
     }
 
     #endregion
+
+    #region Channels
+
+    public static async Task<RestGuildChannel> GetChannelAsync(IGuild guild, BaseKaiHeiLaClient client,
+        ulong id, RequestOptions options)
+    {
+        var model = await client.ApiClient.GetGuildChannelAsync(id, options).ConfigureAwait(false);
+        if (model != null)
+            return RestGuildChannel.Create(client, guild, model);
+        return null;
+    }
+
+    #endregion
 }

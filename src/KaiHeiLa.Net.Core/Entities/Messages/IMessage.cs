@@ -12,6 +12,8 @@ public interface IMessage : IGuidEntity, IDeletable
     
     string Content { get; }
     
+    string CleanContent { get; }
+    
     DateTimeOffset Timestamp { get; }
     
     IReadOnlyCollection<ulong> MentionedUserIds { get; }
@@ -21,6 +23,8 @@ public interface IMessage : IGuidEntity, IDeletable
     bool? MentionedEveryone { get; }
     
     bool? MentionedHere { get; }
+    
+    IReadOnlyCollection<ITag> Tags { get; }
     
     IAttachment Attachment { get; }
     

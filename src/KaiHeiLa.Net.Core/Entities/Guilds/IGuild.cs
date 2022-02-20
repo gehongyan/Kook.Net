@@ -71,4 +71,16 @@ public interface IGuild : IULongEntity
     ///     associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
     /// </returns>
     Task<IGuildUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Gets a channel in this guild.
+    /// </summary>
+    /// <param name="id">The snowflake identifier for the channel.</param>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the generic channel
+    ///     associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
+    /// </returns>
+    Task<IGuildChannel> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
 }

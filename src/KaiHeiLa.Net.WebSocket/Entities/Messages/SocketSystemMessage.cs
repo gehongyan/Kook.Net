@@ -11,19 +11,19 @@ public class SocketSystemMessage : SocketMessage, ISystemMessage
 {
     public SystemMessageType SystemMessageType { get; private set; }
     
-    internal SocketSystemMessage(KaiHeiLaSocketClient discord, Guid id, ISocketMessageChannel channel, SocketUser author)
-        : base(discord, id, channel, author, MessageSource.System)
+    internal SocketSystemMessage(KaiHeiLaSocketClient kaiHeiLa, Guid id, ISocketMessageChannel channel, SocketUser author)
+        : base(kaiHeiLa, id, channel, author, MessageSource.System)
     {
     }
-    internal new static SocketSystemMessage Create(KaiHeiLaSocketClient discord, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
+    internal new static SocketSystemMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
     {
-        var entity = new SocketSystemMessage(discord, gatewayEvent.MessageId, channel, author);
+        var entity = new SocketSystemMessage(kaiHeiLa, gatewayEvent.MessageId, channel, author);
         entity.Update(state, model, gatewayEvent);
         return entity;
     }
-    internal new static SocketSystemMessage Create(KaiHeiLaSocketClient discord, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
+    internal new static SocketSystemMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
     {
-        var entity = new SocketSystemMessage(discord, gatewayEvent.MessageId, channel, author);
+        var entity = new SocketSystemMessage(kaiHeiLa, gatewayEvent.MessageId, channel, author);
         entity.Update(state, model, gatewayEvent);
         return entity;
     }

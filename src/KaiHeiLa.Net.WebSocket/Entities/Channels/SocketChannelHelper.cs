@@ -2,7 +2,7 @@ namespace KaiHeiLa.WebSocket;
 
 internal static class SocketChannelHelper
 {
-    public static void AddMessage(ISocketMessageChannel channel, KaiHeiLaSocketClient discord,
+    public static void AddMessage(ISocketMessageChannel channel, KaiHeiLaSocketClient kaiHeiLa,
         SocketMessage msg)
     {
         switch (channel)

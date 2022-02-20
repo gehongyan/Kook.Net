@@ -25,6 +25,9 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     public string Content { get; private set; }
 
+    /// <inheritdoc />
+    public string CleanContent => MessageHelper.SanitizeMessage(this);
+    
     public virtual Attachment Attachment { get; private set; }
     
     public DateTimeOffset Timestamp { get; private set; }
@@ -32,6 +35,8 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     public virtual bool? MentionedEveryone => false;
     /// <inheritdoc />
     public virtual bool? MentionedHere => false;
+    /// <inheritdoc />
+    public virtual IReadOnlyCollection<ITag> Tags => ImmutableArray.Create<ITag>();
 
     /// <summary>
     ///     Gets the <see cref="Content"/> of the message.

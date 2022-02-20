@@ -33,6 +33,9 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
     /// <inheritdoc />
     public string Content { get; internal set; }
 
+    /// <inheritdoc />
+    public string CleanContent => MessageHelper.SanitizeMessage(this);
+
     // TODO: Sanitize
     // public string CleanContent => MessageHelper.SanitizeMessage(this);
     /// <inheritdoc />
@@ -63,6 +66,9 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
     ///     Collection of WebSocket-based users.
     /// </returns>
     public IReadOnlyCollection<SocketUser> MentionedUsers => _userMentions; 
+    /// <inheritdoc />
+    public virtual IReadOnlyCollection<ITag> Tags => ImmutableArray.Create<ITag>();
+    
     public IReadOnlyDictionary<IEmote, ReactionMetadata> Reactions => _reactions.GroupBy(r => r.Emote).ToDictionary(x => x.Key, x => new ReactionMetadata { ReactionCount = x.Count(), IsMe = x.Any(y => y.UserId == KaiHeiLa.CurrentUser.Id) });
 
     internal SocketMessage(KaiHeiLaSocketClient kaiHeiLa, Guid id, ISocketMessageChannel channel, SocketUser author, MessageSource source)

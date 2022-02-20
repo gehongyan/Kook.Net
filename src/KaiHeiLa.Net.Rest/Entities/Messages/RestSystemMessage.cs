@@ -15,9 +15,9 @@ public class RestSystemMessage : RestMessage, ISystemMessage
         : base(kaiHeiLa, id, messageType, channel, author, MessageSource.System)
     {
     }
-    internal new static RestSystemMessage Create(BaseKaiHeiLaClient discord, IMessageChannel channel, IUser author, Model model)
+    internal new static RestSystemMessage Create(BaseKaiHeiLaClient kaiHeiLa, IMessageChannel channel, IUser author, Model model)
     {
-        var entity = new RestSystemMessage(discord, model.Id, model.Type, channel, author);
+        var entity = new RestSystemMessage(kaiHeiLa, model.Id, model.Type, channel, author);
         entity.Update(model);
         return entity;
     }

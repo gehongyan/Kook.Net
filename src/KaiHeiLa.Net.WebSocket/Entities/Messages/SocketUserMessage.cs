@@ -22,6 +22,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     private Attachment _attachment;
     private ImmutableArray<ICard> _cards = ImmutableArray.Create<ICard>();
     private ImmutableArray<SocketRole> _roleMentions = ImmutableArray.Create<SocketRole>();
+    private ImmutableArray<ITag> _tags = ImmutableArray.Create<ITag>();
 
     public Quote Quote => _quote;
     public SocketGuild Guild { get; private set; }
@@ -36,9 +37,11 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     public override bool? MentionedEveryone => _isMentioningEveryone;
     /// <inheritdoc />
     public override bool? MentionedHere => _isMentioningHere;
+    /// <inheritdoc />
+    public override IReadOnlyCollection<ITag> Tags => _tags;
     
-    internal SocketUserMessage(KaiHeiLaSocketClient discord, Guid id, ISocketMessageChannel channel, SocketUser author, MessageSource source)
-        : base(discord, id, channel, author, source)
+    internal SocketUserMessage(KaiHeiLaSocketClient kaiHeiLa, Guid id, ISocketMessageChannel channel, SocketUser author, MessageSource source)
+        : base(kaiHeiLa, id, channel, author, source)
     {
     }
     internal new static SocketUserMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
@@ -56,6 +59,10 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         _roleMentions = model.MentionRoles?.Select(x => guild.GetRole(x)).ToImmutableArray()
             ?? new ImmutableArray<SocketRole>();
         Content = gatewayEvent.Content;
+        if (model.Type == MessageType.Text)
+            _tags = MessageHelper.ParseTags(gatewayEvent.Content, Channel, guild, MentionedUsers, TagMode.PlainText);
+        else if (model.Type == MessageType.KMarkdown)
+            _tags = MessageHelper.ParseTags(gatewayEvent.Content, Channel, guild, MentionedUsers, TagMode.KMarkdown);
         if (model.Quote is not null)
             _quote = Quote.Create(model.Quote, guild.GetUser(model.Quote.Author.Id));
 

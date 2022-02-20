@@ -59,6 +59,18 @@ public static class Format
     }
     
     /// <summary>
+    /// Remove KaiHeiLa supported markdown from text.
+    /// </summary>
+    /// <param name="text">The to remove markdown from.</param>
+    /// <returns>Gets the unformatted text.</returns>
+    public static string StripMarkDown(string text)
+    {
+        //Remove KaiHeiLa supported markdown
+        var newText = Regex.Replace(text, @"(\*|ins|spl|`|~|>)", "");
+        return newText;
+    }
+    
+    /// <summary>
     ///     Formats a user's username + discriminator while maintaining bidirectional unicode
     /// </summary>
     /// <param name="user">The user whos username and discriminator to format</param>
