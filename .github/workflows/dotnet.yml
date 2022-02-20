@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -25,28 +25,33 @@ jobs:
 #    - name: Test
 #      run: dotnet test src --no-build --verbosity normal
     
-    - name: Publish Core to NuGet
-      uses: brandedoutcast/publish-nuget@v2.5.5
-      with:
-        PROJECT_FILE_PATH: src/KaiHeiLa.Net.Core/KaiHeiLa.Net.Core.csproj
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        
-    - name: Publish Rest NuGet
-      uses: brandedoutcast/publish-nuget@v2.5.5
-      with:
-        PROJECT_FILE_PATH: src/KaiHeiLa.Net.Rest/KaiHeiLa.Net.Rest.csproj
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        
-    - name: Publish WebSocket to NuGet
-      uses: brandedoutcast/publish-nuget@v2.5.5
-      with:
-        PROJECT_FILE_PATH: src/KaiHeiLa.Net.WebSocket/KaiHeiLa.Net.WebSocket.csproj
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+#    - name: Publish Core to NuGet
+#      uses: brandedoutcast/publish-nuget@v2.5.5
+#      with:
+#        PROJECT_FILE_PATH: src/KaiHeiLa.Net.Core/KaiHeiLa.Net.Core.csproj
+#        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+#        
+#    - name: Publish Rest NuGet
+#      uses: brandedoutcast/publish-nuget@v2.5.5
+#      with:
+#        PROJECT_FILE_PATH: src/KaiHeiLa.Net.Rest/KaiHeiLa.Net.Rest.csproj
+#        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+#        
+#    - name: Publish WebSocket to NuGet
+#      uses: brandedoutcast/publish-nuget@v2.5.5
+#      with:
+#        PROJECT_FILE_PATH: src/KaiHeiLa.Net.WebSocket/KaiHeiLa.Net.WebSocket.csproj
+#        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
      
-    - name: Generate Packages for Github
+    - name: Generate Packages
       run: dotnet pack src --configuration Release --output packages
       
-    - name: Publish Packages to Github
+    - name: Push Packages to NuGet
+      run: dotnet nuget push ./packages/*.nupkg -k ${NUGET_TOKEN} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      env:
+        NUGET_TOKEN: ${{secrets.NUGET_API_KEY}}
+      
+    - name: Push Packages to Github
       run: dotnet nuget push ./packages/*.nupkg -k ${GITHUB_TOKEN} -s https://nuget.pkg.github.com/gehongyan/index.json --skip-duplicate
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
