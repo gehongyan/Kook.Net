@@ -524,7 +524,12 @@ internal class KaiHeiLaRestApiClient : IDisposable
         string query = $"?target_id={channelId}";
         if (referenceMessageId is not null) query += $"&msg_id={referenceMessageId}";
         if (queryPin is not null) query += $"&pin={queryPin switch { true => 1, false => 0 }}";
-        if (mode != MessageQueryMode.Unspecified) query += $"&flag={mode switch { MessageQueryMode.Before => "before", MessageQueryMode.Around => "around", MessageQueryMode.After => "after" }}";
+        string flag = mode switch
+        {
+            MessageQueryMode.Before => "before", MessageQueryMode.Around => "around",
+            MessageQueryMode.After => "after"
+        };
+        if (mode != MessageQueryMode.Unspecified) query += $"&flag={flag}";
         query += $"&page_size={count}";
         QueryMessagesResponse queryMessagesResponse = await SendAsync<QueryMessagesResponse>(HttpMethod.Get, () => $"message/list{query}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
         return queryMessagesResponse.Items;
@@ -682,7 +687,12 @@ internal class KaiHeiLaRestApiClient : IDisposable
             _ => string.Empty
         };
         if (referenceMessageId is not null) query += $"&msg_id={referenceMessageId}";
-        if (mode != MessageQueryMode.Unspecified) query += $"&flag={mode switch { MessageQueryMode.Before => "before", MessageQueryMode.Around => "around", MessageQueryMode.After => "after" }}";
+        string flag = mode switch
+        {
+            MessageQueryMode.Before => "before", MessageQueryMode.Around => "around",
+            MessageQueryMode.After => "after"
+        };
+        if (mode != MessageQueryMode.Unspecified) query += $"&flag={flag}";
         query += $"&page_size={count}";
         QueryUserChatMessagesResponse queryMessagesResponse = await SendAsync<QueryUserChatMessagesResponse>(HttpMethod.Get, () => $"direct-message/list{query}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
         return queryMessagesResponse.Items;

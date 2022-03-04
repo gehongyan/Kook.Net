@@ -34,8 +34,6 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     {
     }
     internal static RestUser Create(BaseKaiHeiLaClient kaiHeiLa, Model model)
-        => Create(kaiHeiLa, null, model);
-    internal static RestUser Create(BaseKaiHeiLaClient kaiHeiLa, IGuild guild, Model model)
     {
         RestUser entity = new RestUser(kaiHeiLa, model.Id);
         entity.Update(model);

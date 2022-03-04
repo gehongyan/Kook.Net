@@ -58,6 +58,7 @@ public class RestUserMessage : RestMessage, IUserMessage
         else if (model.Type == MessageType.KMarkdown)
             _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.KMarkdown);
         _isMentioningEveryone = model.MentionAll;
+        _isMentioningHere = model.MentionHere;
         _roleMentionIds = model.MentionRoles.ToImmutableArray();
         
         if (model.Quote is not null)

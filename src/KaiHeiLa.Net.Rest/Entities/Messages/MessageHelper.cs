@@ -106,7 +106,7 @@ internal static class MessageHelper
         {
             index = match.Index;
             if (CheckWrappedCode()) break;
-            string content = match.Groups.First().Value;
+            string content = match.Groups[0].Value;
             if (MentionUtils.TryParseUser(content, out ulong id, tagMode))
             {
                 IUser mentionedUser = null;
@@ -203,7 +203,7 @@ internal static class MessageHelper
         if (guild != null)
             author = guild.GetUserAsync(model.Id, CacheMode.CacheOnly).Result;
         if (author == null)
-            author = RestUser.Create(client, guild, model);
+            author = RestUser.Create(client, model);
         return author;
     }
 }
