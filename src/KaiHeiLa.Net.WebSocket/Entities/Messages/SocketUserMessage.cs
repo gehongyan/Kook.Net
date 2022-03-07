@@ -144,6 +144,12 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             _cards = ImmutableArray.Create<ICard>();
         }
     }
+
+    /// <inheritdoc />
+    /// <exception cref="InvalidOperationException">Only the author of a message may modify the message.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="DiscordConfig.MaxMessageSize"/>.</exception>
+    public Task ModifyAsync(Action<MessageProperties> func, RequestOptions options = null)
+        => MessageHelper.ModifyAsync(this, KaiHeiLa, func, options);
     
     private string DebuggerDisplay => $"{Author}: {Content} ({Id}{(Attachment is not null ? ", Attachment" : "")})";
     internal new SocketUserMessage Clone() => MemberwiseClone() as SocketUserMessage;

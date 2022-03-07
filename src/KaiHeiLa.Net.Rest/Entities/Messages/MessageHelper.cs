@@ -1,5 +1,11 @@
 using System.Collections.Immutable;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using KaiHeiLa.API;
+using KaiHeiLa.API.Rest;
+using KaiHeiLa.Net.Converters;
 
 namespace KaiHeiLa.Rest;
 using Model = KaiHeiLa.API.Message;
@@ -29,12 +35,129 @@ internal static class MessageHelper
     private static Regex KMarkdownTagRegex => MentionUtils.KMarkdownTagRegex;
     
     public static Task DeleteAsync(IMessage msg, BaseKaiHeiLaClient client, RequestOptions options)
-        => DeleteAsync(msg.Channel.Id, msg.Id, client, options);
-
-    public static async Task DeleteAsync(ulong channelId, Guid msgId, BaseKaiHeiLaClient client,
+        => DeleteAsync(msg.Id, client, options);
+    public static async Task DeleteAsync(Guid msgId, BaseKaiHeiLaClient client,
         RequestOptions options)
     {
         await client.ApiClient.DeleteMessageAsync(msgId, options).ConfigureAwait(false);
+    }
+
+    public static Task DeleteDirectAsync(IMessage msg, BaseKaiHeiLaClient client, RequestOptions options)
+        => DeleteDirectAsync(msg.Id, client, options);
+    public static async Task DeleteDirectAsync(Guid msgId, BaseKaiHeiLaClient client,
+        RequestOptions options)
+    {
+        await client.ApiClient.DeleteDirectMessageAsync(msgId, options);
+    }
+
+    public static async Task ModifyAsync(IUserMessage msg, BaseKaiHeiLaClient client, Action<MessageProperties> func,
+        RequestOptions options)
+    {
+        if (msg.Type == MessageType.KMarkdown)
+        {
+            MessageProperties args = new MessageProperties()
+            {
+                Content = msg.Content,
+                Quote = msg.Quote as Quote
+            };
+            func(args);
+            Preconditions.NotNullOrEmpty(args.Content, nameof(args.Content));
+            await ModifyAsync(msg.Id, client, args.Content, options, args.Quote, args.EphemeralUser);
+            return;
+        }
+
+        if (msg.Type == MessageType.Card)
+        {
+            MessageProperties args = new MessageProperties()
+            {
+                Cards = msg.Cards.Select(c => c as Card).ToList(),
+                Quote = msg.Quote as Quote
+            };
+            func(args);
+            if (args.Cards is null || !args.Cards.Any())
+                throw new ArgumentNullException(nameof(args.Cards), "CardMessage must contains cards.");
+
+            string json = SerializeCards(args.Cards);
+            await ModifyAsync(msg.Id, client, json, options, args.Quote, args.EphemeralUser);
+            return;
+        }
+        
+        throw new NotSupportedException("Only the modification of KMarkdown and CardMessage are supported.");
+    }
+
+    public static async Task ModifyAsync(Guid msgId, BaseKaiHeiLaClient client, Action<MessageProperties> func,
+        RequestOptions options, IQuote quote = null, IUser ephemeralUser = null)
+    {
+        var properties = new MessageProperties();
+        func(properties);
+        if (string.IsNullOrEmpty(properties.Content) ^ (properties.Cards is not null && properties.Cards.Any()))
+            throw new InvalidOperationException("Only one of arguments can be set between Content and Cards");
+
+        string content = string.Empty;
+        if (!string.IsNullOrEmpty(properties.Content))
+            content = properties.Content;
+        if (properties.Cards is not null && properties.Cards.Any())
+            content = SerializeCards(properties.Cards);
+        
+        await ModifyAsync(msgId, client, content, options, quote, ephemeralUser);
+    }
+    public static async Task ModifyAsync(Guid msgId, BaseKaiHeiLaClient client, string content,
+        RequestOptions options, IQuote quote = null, IUser ephemeralUser = null)
+    {
+        ModifyMessageParams args = new(msgId, content)
+        {
+            QuotedMessageId = quote?.QuotedMessageId,
+            EphemeralUserId = ephemeralUser?.Id
+        };
+        await client.ApiClient.ModifyMessageAsync(args, options);
+    }
+
+    public static async Task ModifyDirectAsync(Guid msgId, BaseKaiHeiLaClient client, Action<MessageProperties> func,
+        RequestOptions options, IQuote quote = null)
+    {
+        var properties = new MessageProperties();
+        func(properties);
+        if (!(string.IsNullOrEmpty(properties.Content) ^ (properties.Cards is not null && properties.Cards.Any())))
+            throw new InvalidOperationException("Only one of arguments can be set between Content and Cards");
+
+        string content = string.Empty;
+        if (!string.IsNullOrEmpty(properties.Content))
+            content = properties.Content;
+        if (properties.Cards is not null && properties.Cards.Any())
+            content = SerializeCards(properties.Cards);
+        
+        await ModifyDirectAsync(msgId, client, content, options, quote);
+    }
+    public static async Task ModifyDirectAsync(Guid msgId, BaseKaiHeiLaClient client, string content,
+        RequestOptions options, IQuote quote = null)
+    {
+        ModifyDirectMessageParams args = new(msgId, content)
+        {
+            QuotedMessageId = quote?.QuotedMessageId,
+        };
+        await client.ApiClient.ModifyDirectMessageAsync(args, options);
+    }
+    
+    public static string SerializeCards(IEnumerable<ICard> cards)
+    {
+        const int maxModuleCount = 50;
+        IEnumerable<ICard> enumerable = cards as ICard[] ?? cards.ToArray();
+        Preconditions.AtMost(enumerable.Sum(c => c.ModuleCount), maxModuleCount, nameof(cards), 
+            $"A max of {maxModuleCount} modules are allowed.");
+        
+        CardBase[] cardBases = enumerable.Select(c => c.ToModel()).ToArray();
+        JsonSerializerOptions serializerOptions = new()
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Converters =
+            {
+                new CardConverter(),
+                new ModuleConverter(),
+                new ElementConverter()
+            },
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
+        return JsonSerializer.Serialize(cardBases, serializerOptions);
     }
 
     public static string SanitizeMessage(IMessage message)

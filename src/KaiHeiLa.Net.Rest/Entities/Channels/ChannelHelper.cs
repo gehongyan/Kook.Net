@@ -34,7 +34,7 @@ internal static class ChannelHelper
         return RestMessage.Create(client, channel, author, model);
     }
     
-    public static async Task<(Guid Messageid, DateTimeOffset MessageTimestamp)> SendMessageAsync(IMessageChannel channel, 
+    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendMessageAsync(IMessageChannel channel, 
         BaseKaiHeiLaClient client, MessageType messageType, string content, RequestOptions options, IQuote quote = null, IUser ephemeralUser = null)
     {
         CreateMessageParams args = new(messageType, channel.Id, content)
@@ -46,5 +46,36 @@ internal static class ChannelHelper
         return (model.MessageId, model.MessageTimestamp);
     }
 
+    public static Task DeleteMessageAsync(IMessageChannel channel, Guid messageId, BaseKaiHeiLaClient client,
+        RequestOptions options)
+        => MessageHelper.DeleteAsync(messageId, client, options);
+
+    public static Task DeleteDirectMessageAsync(IMessageChannel channel, Guid messageId, BaseKaiHeiLaClient client,
+        RequestOptions options)
+        => MessageHelper.DeleteDirectAsync(messageId, client, options);
+
+    
+    public static async Task ModifyMessageAsync(IMessageChannel channel, Guid messageId, Action<MessageProperties> func,
+        BaseKaiHeiLaClient client, RequestOptions options)
+        => await MessageHelper.ModifyAsync(messageId, client, func, options).ConfigureAwait(false);
+    
+    #endregion
+
+    #region Direct Messages
+    
+    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectMessageAsync(IDMChannel channel, 
+        BaseKaiHeiLaClient client, MessageType messageType, string content, RequestOptions options, IQuote quote = null)
+    {
+        CreateDirectMessageParams args = new(messageType, channel.Recipient.Id, content)
+        {
+            QuotedMessageId = quote?.QuotedMessageId,
+        };
+        CreateDirectMessageResponse model = await client.ApiClient.CreateDirectMessageAsync(args, options).ConfigureAwait(false);
+        return (model.MessageId, model.MessageTimestamp);
+    }
+
+    public static async Task ModifyDirectMessageAsync(IDMChannel channel, Guid messageId, Action<MessageProperties> func,
+        BaseKaiHeiLaClient client, RequestOptions options)
+        => await MessageHelper.ModifyDirectAsync(messageId, client, func, options).ConfigureAwait(false);
     #endregion
 }

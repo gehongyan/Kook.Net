@@ -1,5 +1,10 @@
 using System.Collections.Immutable;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using KaiHeiLa.API;
+using KaiHeiLa.API.Rest;
+using KaiHeiLa.Net.Converters;
 using KaiHeiLa.Rest;
 
 namespace KaiHeiLa.WebSocket;
@@ -62,6 +67,50 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         return await ChannelHelper.GetMessageAsync(this, KaiHeiLa, id, options).ConfigureAwait(false);
     }
     
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, Quote quote = null, RequestOptions options = null)
+        => ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Text, text, options, quote: quote);
+    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)
+    {
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options);
+        return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Image, createAssetResponse.Url, options, quote: quote);
+    }
+    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)
+    {
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options);
+        return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Video, createAssetResponse.Url, options, quote: quote);
+    }
+    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)
+    {
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options);
+        return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.File, createAssetResponse.Url, options, quote: quote);
+    }
+    // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)
+    // {
+    //     CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(path, fileName, options);
+    //     return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Audio, createAssetResponse.Url, options, quote: quote);
+    // }
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendKMarkdownMessageAsync(string text, Quote quote = null, RequestOptions options = null)
+        => ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.KMarkdown, text, options, quote: quote);
+
+    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(IEnumerable<ICard> cards, Quote quote = null, RequestOptions options = null)
+    {
+        string json = MessageHelper.SerializeCards(cards);
+        return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Card, json, options, quote: quote);
+    }
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card, Quote quote = null, RequestOptions options = null) => 
+        SendCardMessageAsync(new[] { card }, quote, options);
+    
+    /// <inheritdoc />
+    public async Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions options = null)
+        => await ChannelHelper.ModifyDirectMessageAsync(this, messageId, func, KaiHeiLa, options).ConfigureAwait(false);
+    
+    /// <inheritdoc />
+    public Task DeleteMessageAsync(Guid messageId, RequestOptions options = null)
+        => ChannelHelper.DeleteDirectMessageAsync(this, messageId, KaiHeiLa, options);
+    /// <inheritdoc />
+    public Task DeleteMessageAsync(IMessage message, RequestOptions options = null)
+        => ChannelHelper.DeleteDirectMessageAsync(this, message.Id, KaiHeiLa, options);
+    
     internal void AddMessage(SocketMessage msg)
     {
     }
@@ -122,7 +171,37 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     #endregion
 
     #region IMessageChannel
-
+    
+    /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendTextMessageAsync(string text,
+        IQuote quote, RequestOptions options)
+        => SendTextMessageAsync(text, (Quote) quote, options);
+    /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendImageMessageAsync(string path, string fileName,
+        IQuote quote, RequestOptions options)
+        => SendImageMessageAsync(path, fileName, (Quote) quote, options);
+    /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendVideoMessageAsync(string path, string fileName,
+        IQuote quote, RequestOptions options)
+        => SendVideoMessageAsync(path, fileName, (Quote) quote, options);
+    /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendFileMessageAsync(string path, string fileName,
+        IQuote quote, RequestOptions options)
+        => SendFileMessageAsync(path, fileName, (Quote) quote, options);
+    // /// <inheritdoc />
+    // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendAudioMessageAsync(string path, string fileName = null,
+    //     IQuote quote, RequestOptions options)
+    //     => SendAudioMessageAsync(path, fileName, (Quote) quote, options);
+    /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendKMarkdownMessageAsync(string text,
+        IQuote quote, RequestOptions options)
+        => SendKMarkdownMessageAsync(text, (Quote) quote, options);
+    /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendCardMessageAsync(IEnumerable<ICard> cards,
+        IQuote quote, RequestOptions options)
+        => SendCardMessageAsync(cards, (Quote) quote, options);
+    
+    
     /// <inheritdoc />
     async Task<IMessage> IMessageChannel.GetMessageAsync(Guid id, CacheMode mode, RequestOptions options)
     {

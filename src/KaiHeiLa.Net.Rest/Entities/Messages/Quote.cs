@@ -12,6 +12,11 @@ public class Quote : IQuote
     public DateTimeOffset CreateAt { get; internal set; }
     public IUser Author { get; internal set; }
 
+    /// <summary>
+    ///     Used to delete a quote when modifying a message
+    /// </summary>
+    public Quote Empty => new Quote(Guid.Empty);
+    
     public Quote(Guid quotedMessageId)
     {
         QuotedMessageId = quotedMessageId;
@@ -29,5 +34,4 @@ public class Quote : IQuote
 
     internal static Quote Create(Model model, IUser author)
         => new Quote(model.Id, model.QuotedMessageId, model.Type, model.Content, model.CreateAt, author);
-    
 }

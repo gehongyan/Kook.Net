@@ -1,11 +1,14 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using KaiHeiLa;
-using KaiHeiLa.API;
 using KaiHeiLa.WebSocket;
 
 string token = Environment.GetEnvironmentVariable("KaiHeiLaDebugToken", EnvironmentVariableTarget.User) 
-         ?? throw new ArgumentNullException(nameof(token));
+               ?? throw new ArgumentNullException(nameof(token));
+ulong guildId = ulong.Parse(Environment.GetEnvironmentVariable("KaiHeiLaDebugGuild", EnvironmentVariableTarget.User) 
+                            ?? throw new ArgumentNullException(nameof(token)));
+ulong channelId = ulong.Parse(Environment.GetEnvironmentVariable("KaiHeiLaDebugChannel", EnvironmentVariableTarget.User) 
+                              ?? throw new ArgumentNullException(nameof(token)));
 
 KaiHeiLaSocketClient client = new(new KaiHeiLaSocketConfig()
 {
@@ -16,11 +19,17 @@ client.Log += log =>
     Console.WriteLine(log.ToString());
     return Task.CompletedTask;
 };
-client.MessageReceived += async message =>
+client.MessageReceived += ClientOnMessageReceived;
+client.Ready += ModifyMessageDemo;
+
+async Task ClientOnMessageReceived(SocketMessage msg)
+{
+    await CardDemo(msg);
+}
+
+async Task CardDemo(SocketMessage message)
 {
     if (message.Author.Id == client.CurrentUser.Id) return;
-    const ulong guildId = 0;
-    const ulong channelId = 0;
     // SocketGuildUser user = client.GetGuild(guildId).GetUser(0);
     string messageCleanContent = message.CleanContent;
 
@@ -74,10 +83,37 @@ client.MessageReceived += async message =>
         .AddModule(new CountdownModuleBuilder().WithMode(CountdownMode.Hour).WithEndTime(DateTimeOffset.Now.AddMinutes(1)))
         .AddModule(new CountdownModuleBuilder().WithMode(CountdownMode.Second).WithEndTime(DateTimeOffset.Now.AddMinutes(2)).WithStartTime(DateTimeOffset.Now.AddMinutes(1)));
     
-    (Guid Messageid, DateTimeOffset MessageTimestamp) response = await client.GetGuild(guildId)
+    (Guid MessageId, DateTimeOffset MessageTimestamp) response = await client.GetGuild(guildId)
         .GetTextChannel(channelId)
         .SendCardMessageAsync(cardBuilder.Build(), quote: new Quote(message.Id));
 };
+
+async Task ModifyMessageDemo()
+{
+    await Task.Delay(TimeSpan.FromSeconds(1));
+    
+    SocketTextChannel channel = client.GetGuild(guildId).GetTextChannel(channelId);
+    (Guid MessageId, DateTimeOffset MessageTimestamp) response = await channel
+        .SendKMarkdownMessageAsync("BeforeModification");
+    await Task.Delay(TimeSpan.FromSeconds(1));
+    
+    IUserMessage msg = await channel.GetMessageAsync(response.MessageId) as IUserMessage;
+    await msg!.ModifyAsync(properties => properties.Content += "\n==========\nModified");
+    await Task.Delay(TimeSpan.FromSeconds(1));
+    
+    await msg.DeleteAsync();
+    await Task.Delay(TimeSpan.FromSeconds(1));
+
+    response = await channel.SendCardMessageAsync(new CardBuilder()
+        .AddModule(new HeaderModuleBuilder().WithText("Test")).Build());
+    await Task.Delay(TimeSpan.FromSeconds(1));
+    
+    msg = await channel.GetMessageAsync(response.MessageId) as IUserMessage;
+    await msg!.ModifyAsync(properties => properties.Cards.Add(new CardBuilder()
+        .AddModule(new DividerModuleBuilder())
+        .AddModule(new HeaderModuleBuilder().WithText("ModificationHeader")).Build()));
+}
+
 await client.LoginAsync(TokenType.Bot, token);
 await client.StartAsync();
 await Task.Delay(-1);

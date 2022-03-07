@@ -12,4 +12,10 @@ internal class ModifyDirectMessageParams
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonConverter(typeof(NullableGuidConverter))]
     public Guid? QuotedMessageId { get; set; }
+
+    public ModifyDirectMessageParams(Guid messageId, string content)
+    {
+        MessageId = messageId;
+        Content = content;
+    }
 }

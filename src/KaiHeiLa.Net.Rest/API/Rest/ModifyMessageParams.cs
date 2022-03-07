@@ -17,4 +17,10 @@ internal class ModifyMessageParams
     [JsonConverter(typeof(NullableUInt64Converter))]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ulong? EphemeralUserId { get; set; }
+
+    public ModifyMessageParams(Guid messageId, string content)
+    {
+        MessageId = messageId;
+        Content = content;
+    }
 }

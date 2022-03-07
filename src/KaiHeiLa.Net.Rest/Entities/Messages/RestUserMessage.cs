@@ -101,7 +101,23 @@ public class RestUserMessage : RestMessage, IUserMessage
     
     
     #region IUserMessage
-
+    
+    /// <inheritdoc />
+    public async Task ModifyAsync(Action<MessageProperties> func, RequestOptions options = null)
+    {
+        await MessageHelper.ModifyAsync(this, KaiHeiLa, func, options).ConfigureAwait(false);
+        MessageProperties properties = new()
+        {
+            Content = Content,
+            Cards = Cards.Select(c => (Card) c).ToList(),
+            Quote = Quote
+        };
+        func(properties);
+        Content = properties.Content;
+        _cards = (ImmutableArray<ICard>) properties.Cards?.Select(c => (ICard) c).ToImmutableArray();
+        _quote = properties.Quote?.QuotedMessageId == Guid.Empty ? null : (Quote) properties.Quote;
+    }
+    
     IQuote IUserMessage.Quote => _quote;
     IReadOnlyCollection<ICard> IMessage.Cards => Cards;
 

@@ -23,7 +23,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     public MessageSource Source { get; }
 
     /// <inheritdoc />
-    public string Content { get; private set; }
+    public string Content { get; protected set; }
 
     /// <inheritdoc />
     public string CleanContent => MessageHelper.SanitizeMessage(this);
