@@ -5,6 +5,9 @@ namespace KaiHeiLa;
 
 public static class Format
 {
+    private static readonly string[] SensitiveCharacters = {
+        "\\", "*", "~", "`", ":", "-", "]", ")", ">" };
+    
     public static string Bold(string text) => $"**{text}**";
     
     public static string Italics(string text) => $"*{text}*";
@@ -13,6 +16,13 @@ public static class Format
     
     public static string Url(string text, string url) => $"[{text}]({url})";
 
+    /// <summary> Sanitizes the string, safely escaping any Markdown sequences. </summary>
+    public static string Sanitize(string text)
+    {
+        return SensitiveCharacters.Aggregate(text,
+            (current, unsafeChar) => current.Replace(unsafeChar, $"\\{unsafeChar}"));
+    }
+    
     public static string Quote(string text)
     {
         // do not modify null or whitespace text
@@ -66,7 +76,7 @@ public static class Format
     public static string StripMarkDown(string text)
     {
         //Remove KaiHeiLa supported markdown
-        var newText = Regex.Replace(text, @"(\*|ins|spl|`|~|>)", "");
+        var newText = Regex.Replace(text, @"(\*|\(ins\)|\(spl\)|`|~|>|\\)", "");
         return newText;
     }
     
