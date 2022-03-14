@@ -1042,7 +1042,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds(guildId: args.GuildId);
-        await SendAsync(HttpMethod.Post, () => $"blacklist/create", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"blacklist/create", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
     
     public async Task RemoveGuildBanAsync(RemoveGuildBanParams args, RequestOptions options = null)
@@ -1053,7 +1053,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds(guildId: args.GuildId);
-        await SendAsync(HttpMethod.Post, () => $"blacklist/delete", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"blacklist/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
     
 
@@ -1068,6 +1068,69 @@ internal class KaiHeiLaRestApiClient : IDisposable
 
         var ids = new BucketIds(guildId: guildId);
         return await SendAsync<Stream>(HttpMethod.Get, () => $"badge/guild", ids, clientBucket: ClientBucketType.SendEdit, bypassDeserialization: true, options: options).ConfigureAwait(false);
+    }
+
+    #endregion
+
+    #region Games
+
+    public async Task<IReadOnlyCollection<Game>> GetGamesAsync(RequestOptions options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds();
+        return await SendRecursivelyAsync<Game>(HttpMethod.Get,
+            (pageSize, page) => $"game?page_size={pageSize}&page={page}",
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
+    }
+    
+    public async Task<Game> CreateGameAsync(CreateGameParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotNullOrWhitespace(args.Name, nameof(args.Name));
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds();
+        return await SendJsonAsync<Game>(HttpMethod.Post, () => $"game/create", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+    
+    public async Task<Game> ModifyGameAsync(ModifyGameParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.GreaterThan(args.Id, 0, nameof(args.Id));
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds();
+        return await SendJsonAsync<Game>(HttpMethod.Post, () => $"game/update", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+    
+    public async Task DeleteGameAsync(DeleteGameParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.GreaterThan(args.Id, 0, nameof(args.Id));
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds();
+        await SendJsonAsync(HttpMethod.Post, () => $"game/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+    
+    public async Task BeginGameActivityAsync(BeginGameActivityParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.GreaterThan(args.Id, 0, nameof(args.Id));
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds();
+        await SendJsonAsync(HttpMethod.Post, () => $"game/activity", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+    
+    public async Task EndGameActivityAsync(EndGameActivityParams args = null, RequestOptions options = null)
+    {
+        args ??= new EndGameActivityParams();
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds();
+        await SendJsonAsync(HttpMethod.Post, () => $"game/delete-activity", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     #endregion
