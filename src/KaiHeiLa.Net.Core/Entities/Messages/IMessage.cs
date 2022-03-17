@@ -6,6 +6,8 @@ public interface IMessage : IGuidEntity, IDeletable
     
     MessageSource Source { get; }
     
+    bool? IsPinned { get; }
+    
     IMessageChannel Channel { get; }
     
     IUser Author { get; }
@@ -15,6 +17,8 @@ public interface IMessage : IGuidEntity, IDeletable
     string CleanContent { get; }
     
     DateTimeOffset Timestamp { get; }
+    
+    DateTimeOffset? EditedTimestamp { get; }
     
     IReadOnlyCollection<ulong> MentionedUserIds { get; }
     

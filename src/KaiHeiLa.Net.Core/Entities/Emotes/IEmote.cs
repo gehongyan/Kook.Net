@@ -1,6 +1,6 @@
 ﻿namespace KaiHeiLa;
 
-public interface IEmote : IStringEntity
+public interface IEmote : IEntity<string>
 {
     string Name { get; }
 }

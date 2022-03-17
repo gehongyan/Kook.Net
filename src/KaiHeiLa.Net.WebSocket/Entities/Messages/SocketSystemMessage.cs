@@ -27,6 +27,12 @@ public class SocketSystemMessage : SocketMessage, ISystemMessage
         entity.Update(state, model, gatewayEvent);
         return entity;
     }
+    internal new static SocketUserMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, API.Message model)
+    {
+        var entity = new SocketUserMessage(kaiHeiLa, model.Id, channel, author, SocketMessageHelper.GetSource(model));
+        entity.Update(state, model);
+        return entity;
+    }
     internal override void Update(ClientState state, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
     {
         base.Update(state, model, gatewayEvent);
@@ -35,6 +41,16 @@ public class SocketSystemMessage : SocketMessage, ISystemMessage
     internal override void Update(ClientState state, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
     {
         base.Update(state, model, gatewayEvent);
+        // TODO: SystemMessageType
+    }
+    internal override void Update(ClientState state, API.Message model)
+    {
+        base.Update(state, model);
+        // TODO: SystemMessageType
+    }
+    internal override void Update(ClientState state, MessageUpdateEvent model)
+    {
+        base.Update(state, model);
         // TODO: SystemMessageType
     }
         

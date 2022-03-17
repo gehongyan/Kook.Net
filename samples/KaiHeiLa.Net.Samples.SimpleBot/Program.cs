@@ -19,12 +19,19 @@ client.Log += log =>
     Console.WriteLine(log.ToString());
     return Task.CompletedTask;
 };
-client.MessageReceived += ClientOnMessageReceived;
-client.Ready += ModifyMessageDemo;
-
+// client.MessageReceived += ClientOnMessageReceived;
+// client.Ready += ModifyMessageDemo;
+client.ReactionRemoved += (cacheable, cacheable1, arg3) =>
+{
+    return Task.CompletedTask;
+};
+client.MessageUpdated += async (cacheable, message, arg3) =>
+{
+    await cacheable.DownloadAsync();
+};
 async Task ClientOnMessageReceived(SocketMessage msg)
 {
-    await CardDemo(msg);
+    // await CardDemo(msg);
 }
 
 async Task CardDemo(SocketMessage message)

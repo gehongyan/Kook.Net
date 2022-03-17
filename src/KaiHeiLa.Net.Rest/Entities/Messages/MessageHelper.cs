@@ -47,7 +47,7 @@ internal static class MessageHelper
     public static async Task DeleteDirectAsync(Guid msgId, BaseKaiHeiLaClient client,
         RequestOptions options)
     {
-        await client.ApiClient.DeleteDirectMessageAsync(msgId, options);
+        await client.ApiClient.DeleteDirectMessageAsync(msgId, options).ConfigureAwait(false);
     }
 
     public static async Task ModifyAsync(IUserMessage msg, BaseKaiHeiLaClient client, Action<MessageProperties> func,
@@ -109,7 +109,7 @@ internal static class MessageHelper
             QuotedMessageId = quote?.QuotedMessageId,
             EphemeralUserId = ephemeralUser?.Id
         };
-        await client.ApiClient.ModifyMessageAsync(args, options);
+        await client.ApiClient.ModifyMessageAsync(args, options).ConfigureAwait(false);
     }
 
     public static async Task ModifyDirectAsync(Guid msgId, BaseKaiHeiLaClient client, Action<MessageProperties> func,
@@ -135,7 +135,7 @@ internal static class MessageHelper
         {
             QuotedMessageId = quote?.QuotedMessageId,
         };
-        await client.ApiClient.ModifyDirectMessageAsync(args, options);
+        await client.ApiClient.ModifyDirectMessageAsync(args, options).ConfigureAwait(false);
     }
     
     public static string SerializeCards(IEnumerable<ICard> cards)
@@ -328,5 +328,26 @@ internal static class MessageHelper
         if (author == null)
             author = RestUser.Create(client, model);
         return author;
+    }
+
+    public static ImmutableArray<ICard> ParseCards(string json)
+    {
+        JsonSerializerOptions serializerOptions = new()
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Converters =
+            {
+                new CardConverter(),
+                new ModuleConverter(),
+                new ElementConverter()
+            }
+        };
+        CardBase[] cardBases = JsonSerializer.Deserialize<CardBase[]>(json, serializerOptions);
+            
+        var cards = ImmutableArray.CreateBuilder<ICard>(cardBases.Length);
+        foreach (CardBase cardBase in cardBases)
+            cards.Add(cardBase.ToEntity());
+
+        return cards.ToImmutable();
     }
 }

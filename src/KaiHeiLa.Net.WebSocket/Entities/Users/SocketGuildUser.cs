@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
+using KaiHeiLa.API.Gateway;
 using UserModel = KaiHeiLa.API.User;
 using MemberModel = KaiHeiLa.API.Rest.GuildMember;
 
@@ -85,6 +86,11 @@ public class SocketGuildUser : SocketUser, IGuildUser
         IsOwner = model.IsOwner;
         UpdateRoles(model.Roles);
     }
+
+    internal void Update(ClientState state, GuildMemberUpdateEvent model)
+    {
+        Nickname = model.Nickname;
+    }
     
     private void UpdateRoles(uint[] roleIds)
     {
@@ -113,6 +119,6 @@ public class SocketGuildUser : SocketUser, IGuildUser
 
     #endregion
     
-    private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ?? false ? ", Bot" : "")}, Self)";
-    internal new SocketSelfUser Clone() => MemberwiseClone() as SocketSelfUser;
+    private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ?? false ? ", Bot" : "")}, Guild)";
+    internal new SocketGuildUser Clone() => MemberwiseClone() as SocketGuildUser;
 }

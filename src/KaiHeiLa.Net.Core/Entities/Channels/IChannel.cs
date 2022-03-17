@@ -3,7 +3,7 @@
 /// <summary>
 ///     频道
 /// </summary>
-public interface IChannel : IULongEntity
+public interface IChannel : IEntity<ulong>
 {
     /// <summary>
     ///     频道名称

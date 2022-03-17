@@ -71,17 +71,17 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         => ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Text, text, options, quote: quote);
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)
     {
-        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options);
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
         return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Image, createAssetResponse.Url, options, quote: quote);
     }
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)
     {
-        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options);
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
         return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Video, createAssetResponse.Url, options, quote: quote);
     }
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)
     {
-        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options);
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
         return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.File, createAssetResponse.Url, options, quote: quote);
     }
     // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)

@@ -1,6 +1,6 @@
 ﻿namespace KaiHeiLa;
 
-public interface IGuild : IULongEntity
+public interface IGuild : IEntity<ulong>
 {
     string Name { get; }
 

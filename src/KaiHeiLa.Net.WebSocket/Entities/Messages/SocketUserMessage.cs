@@ -27,6 +27,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     public Quote Quote => _quote;
     public SocketGuild Guild { get; private set; }
     
+    public new bool? IsPinned { get; internal set; }
+
     /// <inheritdoc />
     public override Attachment Attachment => _attachment;
     /// <inheritdoc />  
@@ -50,6 +52,12 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         entity.Update(state, model, gatewayEvent);
         return entity;
     }
+    internal new static SocketUserMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, API.Message model)
+    {
+        var entity = new SocketUserMessage(kaiHeiLa, model.Id, channel, author, SocketMessageHelper.GetSource(model));
+        entity.Update(state, model);
+        return entity;
+    }
     internal override void Update(ClientState state, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
     {
         base.Update(state, model, gatewayEvent);
@@ -69,31 +77,9 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         if (model.Attachment is not null)
             _attachment = Attachment.Create(model.Attachment);
 
-        if (model.Type == MessageType.Card)
-        {
-            string json = gatewayEvent.Content;
-            JsonSerializerOptions serializerOptions = new()
-            {
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                Converters =
-                {
-                    new CardConverter(),
-                    new ModuleConverter(),
-                    new ElementConverter()
-                }
-            };
-            CardBase[] cardBases = JsonSerializer.Deserialize<CardBase[]>(json, serializerOptions);
-            
-            var cards = ImmutableArray.CreateBuilder<ICard>(cardBases.Length);
-            foreach (CardBase cardBase in cardBases)
-                cards.Add(cardBase.ToEntity());
-
-            _cards = cards.ToImmutable();
-        }
-        else
-        {
-            _cards = ImmutableArray.Create<ICard>();
-        }
+        _cards = model.Type == MessageType.Card 
+            ? MessageHelper.ParseCards(gatewayEvent.Content) 
+            : ImmutableArray.Create<ICard>();
         
         Guild = guild;
     }
@@ -118,33 +104,55 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             _attachment = Attachment.Create(model.Attachment);
         }
 
-        if (model.Type == MessageType.Card)
-        {
-            string json = gatewayEvent.Content;
-            JsonSerializerOptions serializerOptions = new()
-            {
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                Converters =
-                {
-                    new CardConverter(),
-                    new ModuleConverter(),
-                    new ElementConverter()
-                }
-            };
-            CardBase[] cardBases = JsonSerializer.Deserialize<CardBase[]>(json, serializerOptions);
-            
-            var cards = ImmutableArray.CreateBuilder<ICard>(cardBases.Length);
-            foreach (CardBase cardBase in cardBases)
-                cards.Add(cardBase.ToEntity());
-
-            _cards = cards.ToImmutable();
-        }
-        else
-        {
-            _cards = ImmutableArray.Create<ICard>();
-        }
+        _cards = model.Type == MessageType.Card 
+            ? MessageHelper.ParseCards(gatewayEvent.Content) 
+            : ImmutableArray.Create<ICard>();
     }
 
+    internal override void Update(ClientState state, API.Message model)
+    {
+        base.Update(state, model);
+        SocketGuild guild = (Channel as SocketGuildChannel)?.Guild;
+        _isMentioningEveryone = model.MentionAll;
+        _isMentioningHere = model.MentionHere;
+        _roleMentions = model.MentionRoles?.Select(x => Guild.GetRole(x)).ToImmutableArray()
+                        ?? new ImmutableArray<SocketRole>();
+        Content = model.Content;
+        if (Type == MessageType.Text)
+            _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText);
+        else if (Type == MessageType.KMarkdown)
+            _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown);
+        
+        if (model.Attachment is not null)
+            _attachment = Attachment.Create(model.Attachment);
+        
+        _cards = Type == MessageType.Card 
+            ? MessageHelper.ParseCards(model.Content) 
+            : ImmutableArray.Create<ICard>();
+        
+        Guild = guild;
+    }
+    internal virtual void Update(ClientState state, MessageUpdateEvent model)
+    {
+        base.Update(state, model);
+        SocketGuild guild = (Channel as SocketGuildChannel)?.Guild;
+        _isMentioningEveryone = model.MentionAll;
+        _isMentioningHere = model.MentionHere;
+        _roleMentions = model.MentionRoles?.Select(x => Guild.GetRole(x)).ToImmutableArray()
+                        ?? new ImmutableArray<SocketRole>();
+        Content = model.Content;
+        if (Type == MessageType.Text)
+            _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText);
+        else if (Type == MessageType.KMarkdown)
+            _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown);
+        
+        _cards = Type == MessageType.Card 
+            ? MessageHelper.ParseCards(model.Content) 
+            : ImmutableArray.Create<ICard>();
+        
+        Guild = guild;
+    }
+    
     /// <inheritdoc />
     /// <exception cref="InvalidOperationException">Only the author of a message may modify the message.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="DiscordConfig.MaxMessageSize"/>.</exception>
@@ -156,6 +164,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
     #region IUserMessage
 
+    bool? IMessage.IsPinned => IsPinned;
     IQuote IUserMessage.Quote => _quote;
     IReadOnlyCollection<ICard> IMessage.Cards => Cards;
 

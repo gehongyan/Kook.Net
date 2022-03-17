@@ -13,6 +13,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     
     /// <inheritdoc />
     public MessageType Type { get; }
+
     /// <inheritdoc />
     public IMessageChannel Channel { get; }
     /// <summary>
@@ -30,7 +31,10 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     
     public virtual Attachment Attachment { get; private set; }
     
+    /// <inheritdoc />
     public DateTimeOffset Timestamp { get; private set; }
+    /// <inheritdoc />
+    public DateTimeOffset? EditedTimestamp { get; private set; }
     /// <inheritdoc />
     public virtual bool? MentionedEveryone => false;
     /// <inheritdoc />
@@ -84,6 +88,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     internal virtual void Update(Model model)
     {
         Timestamp = model.CreateAt;
+        EditedTimestamp = model.UpdateAt;
         Content = model.Content;
         if (model.MentionInfo?.MentionUsers is not null)
         {
@@ -112,4 +117,11 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         var model = await KaiHeiLa.ApiClient.GetMessageAsync(Id, options).ConfigureAwait(false);
         Update(model);
     }
+
+    #region IMessage
+
+    /// <inheritdoc />
+    bool? IMessage.IsPinned => null;
+
+    #endregion
 }

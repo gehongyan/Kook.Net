@@ -37,7 +37,7 @@ internal class Message
     [JsonConverter(typeof(DateTimeOffsetConverter))]
     public DateTimeOffset CreateAt { get; set; }
     
-    [JsonPropertyName("update_at")]
+    [JsonPropertyName("updated_at")]
     [JsonConverter(typeof(DateTimeOffsetConverter))]
     public DateTimeOffset UpdateAt { get; set; }
 

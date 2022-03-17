@@ -16,7 +16,7 @@ namespace KaiHeiLa
         ///     This value was determined by comparing against the examples in the KaiHeiLa
         ///     documentation, and pre-existing tokens.
         /// </remarks>
-        internal const int MinBotTokenLength = 45;
+        internal const int MinBotTokenLength = 35;
 
         internal const char Base64Padding = '=';
 
@@ -111,7 +111,7 @@ namespace KaiHeiLa
                 return false;
 
             // split each component of the JWT
-            var segments = message.Split('.');
+            var segments = message.Split('/');
 
             // ensure that there are three parts
             if (segments.Length != 3)

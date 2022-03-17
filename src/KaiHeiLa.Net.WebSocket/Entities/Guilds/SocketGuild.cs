@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using KaiHeiLa.API;
+using KaiHeiLa.API.Gateway;
 using KaiHeiLa.API.Rest;
 using Model = KaiHeiLa.API.Guild;
 using ChannelModel = KaiHeiLa.API.Channel;

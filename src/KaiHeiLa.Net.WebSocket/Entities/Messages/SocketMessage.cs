@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using KaiHeiLa.API;
 using KaiHeiLa.API.Gateway;
 using KaiHeiLa.Rest;
 
@@ -36,10 +37,12 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
     /// <inheritdoc />
     public string CleanContent => MessageHelper.SanitizeMessage(this);
 
-    // TODO: Sanitize
-    // public string CleanContent => MessageHelper.SanitizeMessage(this);
     /// <inheritdoc />
     public DateTimeOffset Timestamp { get; private set; }
+    /// <inheritdoc />
+    public DateTimeOffset? EditedTimestamp { get; private set; }
+    /// <inheritdoc />
+    public virtual bool? IsPinned => null;
     /// <inheritdoc />
     public virtual bool? MentionedEveryone => false;
     /// <inheritdoc />
@@ -120,7 +123,57 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
         Timestamp = gatewayEvent.MessageTimestamp;
         Content = gatewayEvent.Content;
     }
-    
+    internal static SocketMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, API.Message model)
+    {
+        if (model.Type == MessageType.System)
+            return SocketSystemMessage.Create(kaiHeiLa, state, author, channel, model);
+        else
+            return SocketUserMessage.Create(kaiHeiLa, state, author, channel, model);
+    }
+    internal virtual void Update(ClientState state, API.Message model)
+    {
+        Type = model.Type;
+        Timestamp = model.CreateAt;
+        EditedTimestamp = model.UpdateAt;
+        Content = model.Content;
+        
+        if (model.Mention is not null)
+        {
+            var ids = model.Mention;
+            if (ids.Length > 0)
+            {
+                var newMentions = ImmutableArray.CreateBuilder<SocketUser>(ids.Length);
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    var id = ids[i];
+                    var user = Channel.GetUserAsync(id, CacheMode.CacheOnly).GetAwaiter().GetResult() as SocketUser;
+                    newMentions.Add(user ?? SocketUnknownUser.Create(KaiHeiLa, state, id));
+                }
+                _userMentions = newMentions.ToImmutable();
+            }
+        }
+    }
+    internal virtual void Update(ClientState state, MessageUpdateEvent model)
+    {
+        EditedTimestamp = model.UpdatedAt;
+        Content = model.Content;
+        
+        if (model.Mention is not null)
+        {
+            var ids = model.Mention;
+            if (ids.Length > 0)
+            {
+                var newMentions = ImmutableArray.CreateBuilder<SocketUser>(ids.Length);
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    var id = ids[i];
+                    var user = Channel.GetUserAsync(id, CacheMode.CacheOnly).GetAwaiter().GetResult() as SocketUser;
+                    newMentions.Add(user ?? SocketUnknownUser.Create(KaiHeiLa, state, id));
+                }
+                _userMentions = newMentions.ToImmutable();
+            }
+        }
+    }
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
         => MessageHelper.DeleteAsync(this, KaiHeiLa, options);
