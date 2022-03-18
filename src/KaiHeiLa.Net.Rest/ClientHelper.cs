@@ -11,6 +11,15 @@ internal static class ClientHelper
         return null;
     }
     
+    public static async Task<RestChannel> GetDMChannelAsync(BaseKaiHeiLaClient client,
+        Guid chatCode, RequestOptions options)
+    {
+        var model = await client.ApiClient.GetUserChatAsync(chatCode, options).ConfigureAwait(false);
+        if (model != null)
+            return RestDMChannel.Create(client, model);
+        return null;
+    }
+    
     public static async Task<RestUser> GetUserAsync(BaseKaiHeiLaClient client,
         ulong id, RequestOptions options)
     {

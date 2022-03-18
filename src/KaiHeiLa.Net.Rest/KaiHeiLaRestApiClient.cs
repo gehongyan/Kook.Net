@@ -667,6 +667,14 @@ internal class KaiHeiLaRestApiClient : IDisposable
 
     #region Direct Messages
 
+    public async Task<DirectMessage> GetDirectMessageAsync(Guid messageId, Guid? chatCode = null, ulong? userId = null,
+        RequestOptions options = null)
+    {
+        // TODO: API returns wrong message
+        IReadOnlyCollection<DirectMessage> messages = await QueryDirectMessagesAsync(chatCode, userId, messageId, MessageQueryMode.Around, 1, options);
+        return messages.FirstOrDefault();
+    }
+    
     public async Task<IReadOnlyCollection<DirectMessage>> QueryDirectMessagesAsync(Guid? chatCode = null, ulong? userId = null, Guid? referenceMessageId = null,
         MessageQueryMode mode = MessageQueryMode.Unspecified, int count = 50, RequestOptions options = null)
     {
@@ -689,8 +697,10 @@ internal class KaiHeiLaRestApiClient : IDisposable
         if (referenceMessageId is not null) query += $"&msg_id={referenceMessageId}";
         string flag = mode switch
         {
-            MessageQueryMode.Before => "before", MessageQueryMode.Around => "around",
-            MessageQueryMode.After => "after"
+            MessageQueryMode.Before => "before", 
+            MessageQueryMode.Around => "around",
+            MessageQueryMode.After => "after",
+            _ => string.Empty
         };
         if (mode != MessageQueryMode.Unspecified) query += $"&flag={flag}";
         query += $"&page_size={count}";

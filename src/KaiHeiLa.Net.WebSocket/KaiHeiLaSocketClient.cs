@@ -74,8 +74,8 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
             await _gatewayLogger.DebugAsync($"Sent {socketFrameType}").ConfigureAwait(false);
         ApiClient.ReceivedGatewayEvent += ProcessMessageAsync;
         
-        // LeftGuild += async g => await _gatewayLogger.InfoAsync($"Left {g.Name}").ConfigureAwait(false);
-        // JoinedGuild += async g => await _gatewayLogger.InfoAsync($"Joined {g.Name}").ConfigureAwait(false);
+        LeftGuild += async g => await _gatewayLogger.InfoAsync($"Left {g.Name}").ConfigureAwait(false);
+        JoinedGuild += async g => await _gatewayLogger.InfoAsync($"Joined {g.Name}").ConfigureAwait(false);
         GuildAvailable += async g => await _gatewayLogger.VerboseAsync($"Connected to {g.Name}").ConfigureAwait(false);
         GuildUnavailable += async g => await _gatewayLogger.VerboseAsync($"Disconnected from {g.Name}").ConfigureAwait(false);
         LatencyUpdated += async (old, val) => await _gatewayLogger.DebugAsync($"Latency = {val} ms").ConfigureAwait(false);
@@ -155,6 +155,8 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     /// <inheritdoc />
     public override SocketChannel GetChannel(ulong id)
         => State.GetChannel(id);
+    public SocketDMChannel GetDMChannel(Guid chatCode)
+        => State.GetDMChannel(chatCode);
     /// <summary>
     ///     Gets a generic channel from the cache or does a rest request if unavailable.
     /// </summary>
@@ -175,6 +177,9 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     /// </returns>
     public async ValueTask<IChannel> GetChannelAsync(ulong id, RequestOptions options = null)
         => GetChannel(id) ?? (IChannel)await ClientHelper.GetChannelAsync(this, id, options).ConfigureAwait(false);
+    
+    public async ValueTask<IDMChannel> GetDMChannelAsync(Guid chatCode, RequestOptions options = null)
+        => GetDMChannel(chatCode) ?? (IDMChannel)await ClientHelper.GetDMChannelAsync(this, chatCode, options).ConfigureAwait(false);
     
     /// <inheritdoc />
     public override SocketUser GetUser(ulong id)
@@ -301,7 +306,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                 }
                                 var msg = SocketMessage.Create(this, State, author, channel, extraData, gatewayEvent);
                                 SocketChannelHelper.AddMessage(channel, this, msg);
-                                await TimedInvokeAsync(_messageReceivedEvent, nameof(MessageReceived), msg).ConfigureAwait(false);
+                                await TimedInvokeAsync(_directMessageReceivedEvent, nameof(DirectMessageReceived), msg).ConfigureAwait(false);
                             }
                             
                         }
@@ -387,7 +392,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                 // 频道消息更新
                                 case ("GROUP", "updated_message"):
                                 {
-                                    await _gatewayLogger.DebugAsync("Received Dispatch (updated_message)").ConfigureAwait(false);
+                                    await _gatewayLogger.DebugAsync("Received Event (updated_message)").ConfigureAwait(false);
                                     var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.MessageUpdateEvent>(_serializerOptions);
                                     var channel = GetChannel(data.ChannelId) as ISocketMessageChannel;
                                     var guild = (channel as SocketGuildChannel)?.Guild;
@@ -425,7 +430,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                 // 频道消息被删除
                                 case ("GROUP", "deleted_message"):
                                 {
-                                    await _gatewayLogger.DebugAsync("Received Dispatch (updated_message)").ConfigureAwait(false);
+                                    await _gatewayLogger.DebugAsync("Received Event (updated_message)").ConfigureAwait(false);
                                     var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.MessageDeleteEvent>(_serializerOptions);
                                     var channel = GetChannel(data.ChannelId) as ISocketMessageChannel;
                                     var guild = (channel as SocketGuildChannel)?.Guild;
@@ -443,7 +448,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                 // 新增频道
                                 case ("GROUP", "added_channel"):
                                 {
-                                    await _gatewayLogger.DebugAsync("Received Dispatch (added_channel)").ConfigureAwait(false);
+                                    await _gatewayLogger.DebugAsync("Received Event (added_channel)").ConfigureAwait(false);
                                     var data = ((JsonElement) extraData.Body).Deserialize<API.Channel>(_serializerOptions);
                                     SocketChannel channel = null;
                                     var guild = State.GetGuild(data.GuildId);
@@ -464,7 +469,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                 // 修改频道信息
                                 case ("GROUP", "updated_channel"):
                                 {
-                                    await _gatewayLogger.DebugAsync("Received Dispatch (updated_channel)").ConfigureAwait(false);
+                                    await _gatewayLogger.DebugAsync("Received Event (updated_channel)").ConfigureAwait(false);
                                     var data = ((JsonElement) extraData.Body).Deserialize<API.Channel>(_serializerOptions);
                                     var channel = State.GetChannel(data.Id);
                                     if (channel != null)
@@ -486,7 +491,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                 // 删除频道
                                 case ("GROUP", "deleted_channel"):
                                 {
-                                    await _gatewayLogger.DebugAsync("Received Dispatch (deleted_channel)").ConfigureAwait(false);
+                                    await _gatewayLogger.DebugAsync("Received Event (deleted_channel)").ConfigureAwait(false);
                                     var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.ChannelDeleteEvent>(_serializerOptions);
                                     var channel = State.GetChannel(data.ChannelId);
                                     
@@ -515,7 +520,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                 // 新的频道置顶消息
                                 case ("GROUP", "pinned_message"):
                                 {
-                                    await _gatewayLogger.DebugAsync("Received Dispatch (pinned_message)").ConfigureAwait(false);
+                                    await _gatewayLogger.DebugAsync("Received Event (pinned_message)").ConfigureAwait(false);
                                     var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.PinnedMessageEvent>(_serializerOptions);
                                     var channel = GetChannel(data.ChannelId) as ISocketMessageChannel;
                                     
@@ -528,11 +533,11 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                     var guild = (channel as SocketGuildChannel)?.Guild;
                                     if (guild != null)
                                     {
-                                        SocketGuildUser @operator = guild.GetUser(data.OperatorUserId);
-                                        if (@operator == null)
+                                        SocketGuildUser operatorUser = guild.GetUser(data.OperatorUserId);
+                                        if (operatorUser == null)
                                         {
                                             GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.OperatorUserId).ConfigureAwait(false);
-                                            @operator = guild.AddOrUpdateUser(model);
+                                            operatorUser = guild.AddOrUpdateUser(model);
                                         }    
                                         
                                         Cacheable<IMessage, Guid> cacheableBefore;
@@ -558,7 +563,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                             
                                             cacheableBefore = new Cacheable<IMessage, Guid>(null, data.MessageId, false, async () => await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false));
                                         }
-                                        await TimedInvokeAsync(_messagePinnedEvent, nameof(MessagePinned), cacheableBefore, after, channel, @operator).ConfigureAwait(false);
+                                        await TimedInvokeAsync(_messagePinnedEvent, nameof(MessagePinned), cacheableBefore, after, channel, operatorUser).ConfigureAwait(false);
                                     }
                                     else
                                     {
@@ -571,7 +576,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                 // 取消频道置顶消息
                                 case ("GROUP", "unpinned_message"):
                                 {
-                                    await _gatewayLogger.DebugAsync("Received Dispatch (unpinned_message)").ConfigureAwait(false);
+                                    await _gatewayLogger.DebugAsync("Received Event (unpinned_message)").ConfigureAwait(false);
                                     var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.UnpinnedMessageEvent>(_serializerOptions);
                                     var channel = GetChannel(data.ChannelId) as ISocketMessageChannel;
                                     
@@ -584,11 +589,11 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                     var guild = (channel as SocketGuildChannel)?.Guild;
                                     if (guild != null)
                                     {
-                                        SocketGuildUser @operator = guild.GetUser(data.OperatorUserId);
-                                        if (@operator == null)
+                                        SocketGuildUser operatorUser = guild.GetUser(data.OperatorUserId);
+                                        if (operatorUser == null)
                                         {
                                             GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.OperatorUserId).ConfigureAwait(false);
-                                            @operator = guild.AddOrUpdateUser(model);
+                                            operatorUser = guild.AddOrUpdateUser(model);
                                         }    
                                         
                                         Cacheable<IMessage, Guid> cacheableBefore;
@@ -614,7 +619,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                             
                                             cacheableBefore = new Cacheable<IMessage, Guid>(null, data.MessageId, false, async () => await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false));
                                         }
-                                        await TimedInvokeAsync(_messageUnpinnedEvent, nameof(MessageUnpinned), cacheableBefore, after, channel, @operator).ConfigureAwait(false);
+                                        await TimedInvokeAsync(_messageUnpinnedEvent, nameof(MessageUnpinned), cacheableBefore, after, channel, operatorUser).ConfigureAwait(false);
                                     }
                                     else
                                     {
@@ -628,33 +633,130 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
 
                                 #region Direct Messages
 
-                                // // 私聊消息更新
-                                // case ("PERSON", "updated_private_message"):
-                                // {
-                                //     
-                                // }
-                                //     break;
-                                //
-                                // // 私聊消息被删除
-                                // case ("PERSON", "deleted_private_message"):
-                                // {
-                                //     
-                                // }
-                                //     break;
-                                //
-                                // // 私聊内用户添加 reaction
-                                // case ("PERSON", "private_added_reaction"):
-                                // {
-                                //     
-                                // }
-                                //     break;
-                                //
-                                // // 私聊内用户取消 reaction
-                                // case ("PERSON", "private_deleted_reaction"):
-                                // {
-                                //     
-                                // }
-                                //     break;
+                                // 私聊消息更新
+                                case ("PERSON", "updated_private_message"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (updated_private_message)").ConfigureAwait(false);
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.DirectMessageUpdateEvent>(_serializerOptions);
+                                    var user = await ApiClient.GetUserAsync(data.AuthorId).ConfigureAwait(false);
+                                    var channel = CreateDMChannel(data.ChatCode, user, State);
+                                    
+                                    SocketMessage before = null, after = null;
+                                    SocketMessage cachedMsg = channel?.GetCachedMessage(data.MessageId);
+                                    bool isCached = cachedMsg != null;
+                                    if (isCached)
+                                    {
+                                        before = cachedMsg.Clone();
+                                        cachedMsg.Update(State, data);
+                                        after = cachedMsg;
+                                    }
+                                    else
+                                    {
+                                        var msg = await ApiClient.GetDirectMessageAsync(data.MessageId, chatCode: data.ChatCode).ConfigureAwait(false);
+                                        SocketUser author = State.GetUser(msg?.AuthorId ?? 0) 
+                                                            ?? (SocketUser) new SocketUnknownUser(this, id: 0);
+                                        
+                                        if (channel == null)
+                                        {
+                                            await UnknownPrivateChannelAsync(extraData.Type, data.ChatCode).ConfigureAwait(false);
+                                            return;
+                                        }
+                                        
+                                        after = SocketMessage.Create(this, State, author, channel, msg);
+                                    }
+                                    var cacheableBefore = new Cacheable<IMessage, Guid>(before, data.MessageId, isCached, async () => await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false));
+
+                                    await TimedInvokeAsync(_directMessageUpdatedEvent, nameof(DirectMessageUpdated), cacheableBefore, after, channel).ConfigureAwait(false);
+                                }
+                                    break;
+                                
+                                // 私聊消息被删除
+                                case ("PERSON", "deleted_private_message"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (deleted_private_message)").ConfigureAwait(false);
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.DirectMessageDeleteEvent>(_serializerOptions);
+                                    var user = await ApiClient.GetUserAsync(data.AuthorId).ConfigureAwait(false);
+                                    var channel = CreateDMChannel(data.ChatCode, user, State);
+                                    
+                                    SocketMessage msg = null;
+                                    if (channel != null)
+                                        msg = SocketChannelHelper.RemoveMessage(channel, this, data.MessageId);
+                                    var cacheableMsg = new Cacheable<IMessage, Guid>(msg, data.MessageId, msg != null, () => Task.FromResult((IMessage)null));
+                                    var cacheableChannel = new Cacheable<IDMChannel, Guid>(channel, data.ChatCode, channel != null, async () => await GetDMChannelAsync(data.ChatCode).ConfigureAwait(false));
+
+                                    await TimedInvokeAsync(_directMessageDeletedEvent, nameof(DirectMessageDeleted), cacheableMsg, cacheableChannel).ConfigureAwait(false);
+                                }
+                                    break;
+                                
+                                // 私聊内用户添加 reaction
+                                case ("PERSON", "private_added_reaction"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (private_added_reaction)").ConfigureAwait(false);
+                                    
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.PrivateReaction>(_serializerOptions);
+                                    var channel = GetDMChannel(data.ChatCode) as ISocketMessageChannel;
+                                    
+                                    var cachedMsg = channel?.GetCachedMessage(data.MessageId) as SocketUserMessage;
+                                    bool isMsgCached = cachedMsg is not null;
+                                    var optionalMsg = !isMsgCached
+                                        ? Optional.Create<SocketUserMessage>()
+                                        : Optional.Create(cachedMsg);
+                                    
+                                    IUser user = channel is not null
+                                        ? await channel.GetUserAsync(data.UserId, CacheMode.CacheOnly).ConfigureAwait(false)
+                                        : GetUser(data.UserId);
+                                    var optionalUser = user is null
+                                        ? Optional.Create<IUser>()
+                                        : Optional.Create(user);
+                                    
+                                    var cacheableChannel = new Cacheable<IDMChannel, Guid>((IDMChannel) channel, data.ChatCode, channel != null, async () => await GetDMChannelAsync(data.ChatCode).ConfigureAwait(false));
+                                    var cacheableMsg = new Cacheable<IUserMessage, Guid>(cachedMsg, data.MessageId, isMsgCached, async () =>
+                                    {
+                                        var channelObj = await cacheableChannel.GetOrDownloadAsync().ConfigureAwait(false);
+                                        return await channelObj.GetMessageAsync(data.MessageId).ConfigureAwait(false) as IUserMessage;
+                                    });
+                                    var reaction = SocketReaction.Create(data, (IDMChannel) channel, optionalMsg, optionalUser);
+                                    
+                                    cachedMsg?.AddReaction(reaction);
+
+                                    await TimedInvokeAsync(_directReactionAddedEvent, nameof(DirectReactionAdded), cacheableMsg, cacheableChannel, reaction).ConfigureAwait(false);
+                                }
+                                    break;
+                                
+                                // 私聊内用户取消 reaction
+                                case ("PERSON", "private_deleted_reaction"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (private_deleted_reaction)").ConfigureAwait(false);
+                                    
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.PrivateReaction>(_serializerOptions);
+                                    var channel = GetDMChannel(data.ChatCode) as ISocketMessageChannel;
+                                    
+                                    var cachedMsg = channel?.GetCachedMessage(data.MessageId) as SocketUserMessage;
+                                    bool isMsgCached = cachedMsg is not null;
+                                    var optionalMsg = !isMsgCached
+                                        ? Optional.Create<SocketUserMessage>()
+                                        : Optional.Create(cachedMsg);
+                                    
+                                    IUser user = channel is not null
+                                        ? await channel.GetUserAsync(data.UserId, CacheMode.CacheOnly).ConfigureAwait(false)
+                                        : GetUser(data.UserId);
+                                    var optionalUser = user is null
+                                        ? Optional.Create<IUser>()
+                                        : Optional.Create(user);
+                                    
+                                    var cacheableChannel = new Cacheable<IDMChannel, Guid>((IDMChannel) channel, data.ChatCode, channel != null, async () => await GetDMChannelAsync(data.ChatCode).ConfigureAwait(false));
+                                    var cacheableMsg = new Cacheable<IUserMessage, Guid>(cachedMsg, data.MessageId, isMsgCached, async () =>
+                                    {
+                                        var channelObj = await cacheableChannel.GetOrDownloadAsync().ConfigureAwait(false);
+                                        return await channelObj.GetMessageAsync(data.MessageId).ConfigureAwait(false) as IUserMessage;
+                                    });
+                                    var reaction = SocketReaction.Create(data, (IDMChannel) channel, optionalMsg, optionalUser);
+                                    
+                                    cachedMsg?.RemoveReaction(reaction);
+                                    
+                                    await TimedInvokeAsync(_directReactionRemovedEvent, nameof(DirectReactionRemoved), cacheableMsg, cacheableChannel, reaction).ConfigureAwait(false);
+                                }
+                                    break;
 
                                 #endregion
 
@@ -694,7 +796,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                         
                                         user ??= State.GetUser(data.UserId);
 
-                                        User model = await ApiClient.GetUserAsync(data.UserId);
+                                        User model = await ApiClient.GetUserAsync(data.UserId).ConfigureAwait(false);
                                         if (user != null)
                                             user.Update(State, model);
                                         else
@@ -827,108 +929,317 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
 
                                 #region Guild Roles
 
-                                // // 服务器角色增加
-                                // case ("GROUP", "added_role"):
-                                // {
-                                //     
-                                // }
-                                //     break;
-                                //
-                                // // 服务器角色删除
-                                // case ("GROUP", "deleted_role"):
-                                // {
-                                //     
-                                // }
-                                //     break;
-                                //
-                                // // 服务器角色更新
-                                // case ("GROUP", "updated_role"):
-                                // {
-                                //     
-                                // }
-                                //     break;
+                                // 服务器角色增加
+                                case ("GROUP", "added_role"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (added_role)").ConfigureAwait(false);
+                                    
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Role>(_serializerOptions);
+                                    var guild = State.GetGuild(gatewayEvent.TargetId);
+                                    if (guild != null)
+                                    {
+                                        var role = guild.AddRole(data);
+                                        await TimedInvokeAsync(_roleCreatedEvent, nameof(RoleCreated), role).ConfigureAwait(false);
+                                    }
+                                    else
+                                    {
+                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                                    break;
+                                
+                                // 服务器角色删除
+                                case ("GROUP", "deleted_role"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (deleted_role)").ConfigureAwait(false);
+                                    
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Role>(_serializerOptions);
+                                    var guild = State.GetGuild(gatewayEvent.TargetId);
+                                    if (guild != null)
+                                    {
+                                        var role = guild.RemoveRole(data.Id);
+                                        await TimedInvokeAsync(_roleDeletedEvent, nameof(RoleDeleted), role).ConfigureAwait(false);
+                                    }
+                                    else
+                                    {
+                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                                    break;
+                                
+                                // 服务器角色更新
+                                case ("GROUP", "updated_role"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (updated_role)").ConfigureAwait(false);
+
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Role>(_serializerOptions);
+                                    var guild = State.GetGuild(gatewayEvent.TargetId);
+                                    if (guild != null)
+                                    {
+                                        var role = guild.GetRole(data.Id);
+                                        if (role != null)
+                                        {
+                                            var before = role.Clone();
+                                            role.Update(State, data);
+
+                                            await TimedInvokeAsync(_roleUpdatedEvent, nameof(RoleUpdated), before, role).ConfigureAwait(false);
+                                        }
+                                        else
+                                        {
+                                            await UnknownRoleAsync(extraData.Type, data.Id, guild.Id).ConfigureAwait(false);
+                                            return;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                                    break;
 
                                 #endregion
 
                                 #region Guilds
 
-                                // // 服务器信息更新
-                                // case ("GROUP", "updated_guild"):
-                                // {
-                                //     
-                                // }
-                                //     break;
-                                //
-                                // // 服务器删除
-                                // case ("GROUP", "deleted_guild"):
-                                // {
-                                //     
-                                // }
-                                //     break;
-                                //
-                                // // 服务器封禁用户
-                                // case ("GROUP", "added_block_list"):
-                                // {
-                                //     
-                                // }
-                                //     break;
-                                //
-                                // // 服务器取消封禁用户
-                                // case ("GROUP", "deleted_block_list"):
-                                // {
-                                //     
-                                // }
-                                //     break;
+                                // 服务器信息更新
+                                case ("GROUP", "updated_guild"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (updated_guild)").ConfigureAwait(false);
+
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.GuildEvent>(_serializerOptions);
+                                    var guild = State.GetGuild(data.GuildId);
+                                    if (guild != null)
+                                    {
+                                        var before = guild.Clone();
+                                        guild.Update(State, data);
+                                        await TimedInvokeAsync(_guildUpdatedEvent, nameof(GuildUpdated), before, guild).ConfigureAwait(false);
+                                    }
+                                    else
+                                    {
+                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                                    break;
+                                
+                                // 服务器删除
+                                case ("GROUP", "deleted_guild"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (deleted_guild)").ConfigureAwait(false);
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.GuildEvent>(_serializerOptions);
+
+                                    var guild = RemoveGuild(data.GuildId);
+                                    if (guild != null)
+                                    {
+                                        await GuildUnavailableAsync(guild).ConfigureAwait(false);
+                                        await TimedInvokeAsync(_leftGuildEvent, nameof(LeftGuild), guild).ConfigureAwait(false);
+                                        ((IDisposable) guild).Dispose();
+                                    }
+                                    else
+                                    {
+                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                                    break;
+                                
+                                // 服务器封禁用户
+                                case ("GROUP", "added_block_list"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (added_block_list)").ConfigureAwait(false);
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.GuildBanEvent>(_serializerOptions);
+                                    var guild = State.GetGuild(gatewayEvent.TargetId);
+                                    if (guild != null)
+                                    {
+                                        SocketUser operatorUser = guild.GetUser(data.OperatorUserId) 
+                                                                  ?? (SocketUser) SocketUnknownUser.Create(this, State, data.OperatorUserId);
+                                        var bannedUsers = data.UserIds.Select(id => guild.GetUser(id) 
+                                            ?? (SocketUser) SocketUnknownUser.Create(this, State, data.OperatorUserId))
+                                            .ToReadOnlyCollection(() => data.UserIds.Length);
+                                        await TimedInvokeAsync(_userBannedEvent, nameof(UserBanned), bannedUsers, operatorUser, guild).ConfigureAwait(false);
+                                    }
+                                    else
+                                    {
+                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                                    break;
+                                
+                                // 服务器取消封禁用户
+                                case ("GROUP", "deleted_block_list"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (deleted_block_list)").ConfigureAwait(false);
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.GuildBanEvent>(_serializerOptions);
+                                    var guild = State.GetGuild(gatewayEvent.TargetId);
+                                    if (guild != null)
+                                    {
+                                        SocketUser operatorUser = guild.GetUser(data.OperatorUserId) 
+                                                                  ?? (SocketUser) SocketUnknownUser.Create(this, State, data.OperatorUserId);
+                                        var bannedUsers = data.UserIds.Select(id => guild.GetUser(id) 
+                                                ?? (SocketUser) SocketUnknownUser.Create(this, State, data.OperatorUserId))
+                                            .ToReadOnlyCollection(() => data.UserIds.Length);
+                                        await TimedInvokeAsync(_userBannedEvent, nameof(UserBanned), bannedUsers, operatorUser, guild).ConfigureAwait(false);
+                                    }
+                                    else
+                                    {
+                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                                    break;
 
                                 #endregion
 
                                 #region Users
 
-                                // // 用户加入语音频道
-                                // case ("GROUP", "joined_channel"):
-                                // {
-                                //     
-                                // }
-                                //     break;
-                                //
-                                // // 用户退出语音频道
-                                // case ("GROUP", "exited_channel"):
-                                // {
-                                //     
-                                // }
-                                //     break;
-                                //
-                                // // 用户信息更新
-                                // case ("PERSON", "user_updated"):
-                                // {
-                                //     
-                                // }
-                                //     break;
-                                //
-                                // // 自己新加入服务器
-                                // case ("PERSON", "self_joined_guild"):
-                                // {
-                                //     
-                                // }
-                                //     break;
-                                //
-                                // // 自己退出服务器
-                                // case ("PERSON", "self_exited_guild"):
-                                // {
-                                //     
-                                // }
-                                //     break;
+                                // 用户加入语音频道
+                                case ("GROUP", "joined_channel"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (joined_channel)").ConfigureAwait(false);
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.UserVoiceEvent>(_serializerOptions);
+                                    var guild = State.GetGuild(gatewayEvent.TargetId);
+                                    if (guild != null)
+                                    {
+                                        var channel = GetChannel(gatewayEvent.TargetId) as SocketVoiceChannel;
+                                        
+                                        if (channel == null)
+                                        {
+                                            await UnknownChannelAsync(extraData.Type, data.ChannelId).ConfigureAwait(false);
+                                            return;
+                                        }
+                                        
+                                        var user = guild.GetUser(data.UserId) 
+                                                    ?? SocketUnknownUser.Create(this, State, data.UserId) as SocketUser;
+                                        
+                                        await TimedInvokeAsync(_userConnectedEvent, nameof(UserConnected), user, channel, guild, data.At).ConfigureAwait(false);
+                                    }
+                                    else
+                                    {
+                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                                    break;
+                                
+                                // 用户退出语音频道
+                                case ("GROUP", "exited_channel"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (exited_channel)").ConfigureAwait(false);
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.UserVoiceEvent>(_serializerOptions);
+                                    var guild = State.GetGuild(gatewayEvent.TargetId);
+                                    if (guild != null)
+                                    {
+                                        var channel = GetChannel(gatewayEvent.TargetId) as SocketVoiceChannel;
+                                        
+                                        if (channel == null)
+                                        {
+                                            await UnknownChannelAsync(extraData.Type, data.ChannelId).ConfigureAwait(false);
+                                            return;
+                                        }
+                                        
+                                        var user = guild.GetUser(data.UserId) 
+                                                   ?? SocketUnknownUser.Create(this, State, data.UserId) as SocketUser;
+                                        
+                                        await TimedInvokeAsync(_userDisconnectedEvent, nameof(UserDisconnected), user, channel, guild, data.At).ConfigureAwait(false);
+                                    }
+                                    else
+                                    {
+                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                                    break;
+                                
+                                // 用户信息更新
+                                case ("PERSON", "user_updated"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (user_updated)").ConfigureAwait(false);
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.UserUpdateEvent>(_serializerOptions);
+                                    if (data.UserId == CurrentUser.Id)
+                                    {
+                                        var before = CurrentUser.Clone();
+                                        CurrentUser.Update(State, data);
+                                        await TimedInvokeAsync(_selfUpdatedEvent, nameof(CurrentUserUpdated), before, CurrentUser).ConfigureAwait(false);
+                                    }
+                                    else
+                                    {
+                                        SocketUser user = GetUser(data.UserId);
+                                        var before = user.Clone();
+                                        user.Update(State, data);
+                                        await TimedInvokeAsync(_userUpdatedEvent, nameof(UserUpdated), before, CurrentUser).ConfigureAwait(false);
+                                    }
+                                }
+                                    break;
+                                
+                                // 自己新加入服务器
+                                case ("PERSON", "self_joined_guild"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (self_joined_guild)").ConfigureAwait(false);
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.SelfGuildEvent>(_serializerOptions);
+
+                                    ExtendedGuild model = await ApiClient.GetGuildAsync(data.GuildId).ConfigureAwait(false);
+                                    var guild = AddGuild(model, State);
+                                    guild.Update(State, model);
+                                    await TimedInvokeAsync(_joinedGuildEvent, nameof(JoinedGuild), guild).ConfigureAwait(false);
+                                    await GuildAvailableAsync(guild).ConfigureAwait(false);
+                                }
+                                    break;
+                                
+                                // 自己退出服务器
+                                case ("PERSON", "self_exited_guild"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (self_exited_guild)").ConfigureAwait(false);
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.SelfGuildEvent>(_serializerOptions);
+
+                                    var guild = RemoveGuild(data.GuildId);
+                                    if (guild != null)
+                                    {
+                                        await GuildUnavailableAsync(guild).ConfigureAwait(false);
+                                        await TimedInvokeAsync(_leftGuildEvent, nameof(LeftGuild), guild).ConfigureAwait(false);
+                                        ((IDisposable) guild).Dispose();
+                                    }
+                                    else
+                                    {
+                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                                    break;
 
                                 #endregion
 
                                 #region Interactions
 
-                                // // Card 消息中的 Button 点击事件
-                                // case ("PERSON", "message_btn_click"):
-                                // {
-                                //     
-                                // }
-                                //     break;
+                                // Card 消息中的 Button 点击事件
+                                case ("PERSON", "message_btn_click"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (message_btn_click)").ConfigureAwait(false);
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.MessageButtonClickEvent>(_serializerOptions);
+                                    SocketTextChannel channel = GetChannel(data.ChannelId) as SocketTextChannel;
+                                    SocketGuild guild = GetGuild(data.GuildId);
+                                    if (guild != null)
+                                    {
+                                        if (channel == null)
+                                        {
+                                            await UnknownChannelAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                            return;
+                                        }
+                                        SocketUser user = channel.GetUser(data.UserId) 
+                                                          ?? SocketUnknownUser.Create(this, State, data.UserId) as SocketUser;
+                                        IMessage msg = await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false);
+                                        await TimedInvokeAsync(_messageButtonClickedEvent, nameof(MessageButtonClicked), data.Value, user, msg, channel, guild).ConfigureAwait(false);
+                                    }
+                                    else
+                                    {
+                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                                    break;
 
                                 #endregion
                                 
@@ -1327,6 +1638,11 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     {
         string details = $"{evnt} User={userId} Guild={guildId}";
         await _gatewayLogger.DebugAsync($"User has not been downloaded ({details}).").ConfigureAwait(false);
+    }
+    private async Task UnknownPrivateChannelAsync(string evnt, Guid chatCode)
+    {
+        string details = $"{evnt} Channel={chatCode}";
+        await _gatewayLogger.WarningAsync($"Unknown Private Channel ({details}).").ConfigureAwait(false);
     }
     private async Task UnknownChannelAsync(string evnt, ulong channelId)
     {

@@ -319,6 +319,14 @@ internal static class MessageHelper
             return MessageSource.System;
         return MessageSource.User;
     }
+    public static MessageSource GetSource(DirectMessage msg, IUser author)
+    {
+        if (author.IsBot ?? false)
+            return MessageSource.Bot;
+        if (msg.Type == MessageType.System)
+            return MessageSource.System;
+        return MessageSource.User;
+    }
 
     public static IUser GetAuthor(BaseKaiHeiLaClient client, IGuild guild, UserModel model)
     {

@@ -1,5 +1,3 @@
-using Model = KaiHeiLa.API.Gateway.Reaction;
-
 namespace KaiHeiLa.WebSocket;
 
 public class SocketReaction : IReaction
@@ -70,7 +68,7 @@ public class SocketReaction : IReaction
         User = user;
         Emote = emoji;
     }
-    internal static SocketReaction Create(Model model, ISocketMessageChannel channel, Optional<SocketUserMessage> message, Optional<IUser> user)
+    internal static SocketReaction Create(API.Gateway.Reaction model, ISocketMessageChannel channel, Optional<SocketUserMessage> message, Optional<IUser> user)
     {
         IEmote emote;
         if (model.Emoji.Id.Length == 33)
@@ -78,5 +76,14 @@ public class SocketReaction : IReaction
         else
             emote = new Emoji(model.Emoji.Name);
         return new SocketReaction(channel, model.MessageId, message, model.UserId, user, emote);
+    }
+    internal static SocketReaction Create(API.Gateway.PrivateReaction model, IDMChannel channel, Optional<SocketUserMessage> message, Optional<IUser> user)
+    {
+        IEmote emote;
+        if (model.Emoji.Id.Length == 33)
+            emote = new Emote(model.Emoji.Id, model.Emoji.Name);
+        else
+            emote = new Emoji(model.Emoji.Name);
+        return new SocketReaction(channel as ISocketMessageChannel, model.MessageId, message, model.UserId, user, emote);
     }
 }

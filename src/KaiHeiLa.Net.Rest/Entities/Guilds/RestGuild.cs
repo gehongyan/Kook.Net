@@ -105,7 +105,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets a channel in this guild.
     /// </summary>
-    /// <param name="id">The snowflake identifier for the channel.</param>
+    /// <param name="id">The identifier for the channel.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the generic channel

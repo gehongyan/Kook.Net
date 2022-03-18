@@ -13,7 +13,7 @@ internal class Channel
 
     [JsonPropertyName("user_id")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
-    public uint CreateUserId { get; set; }
+    public ulong CreateUserId { get; set; }
 
     [JsonPropertyName("guild_id")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]

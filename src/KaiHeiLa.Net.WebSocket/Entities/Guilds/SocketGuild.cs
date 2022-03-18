@@ -227,6 +227,24 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
 
         _members ??= new ConcurrentDictionary<ulong, SocketGuildUser>();
     }
+    internal void Update(ClientState state, GuildEvent model)
+    {
+        Name = model.Name;
+        Icon = model.Icon;
+        NotifyType = model.NotifyType;
+        Region = model.Region;
+        IsOpenEnabled = model.EnableOpen == 1;
+        OpenId = model.OpenId;
+        DefaultChannelId = model.DefaultChannelId;
+        WelcomeChannelId = model.WelcomeChannelId;
+        BoostNumber = model.BoostNumber;
+        BufferBoostNumber = model.BufferBoostNumber;
+        BoostLevel = model.BoostLevel;
+        Status = model.Status;
+
+        IsAvailable = true;
+    }
+    
     #endregion
     
     /// <summary>
@@ -237,7 +255,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     /// </returns>
     public override string ToString() => Name;
     private string DebuggerDisplay => $"{Name} ({Id})";
-
+    internal SocketGuild Clone() => MemberwiseClone() as SocketGuild;
+    
     #region IGuild
 
     /// <inheritdoc />
@@ -335,6 +354,28 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
         return null;
     }
 
+    internal SocketRole AddRole(RoleModel model)
+    {
+        var role = SocketRole.Create(this, KaiHeiLa.State, model);
+        _roles[model.Id] = role;
+        return role;
+    }
+    internal SocketRole RemoveRole(uint id)
+    {
+        if (_roles.TryRemove(id, out SocketRole role))
+            return role;
+        return null;
+    }
+    internal SocketRole AddOrUpdateRole(RoleModel model)
+    {
+        if (_roles.TryGetValue(model.Id, out SocketRole role))
+            _roles[model.Id].Update(KaiHeiLa.State, model);
+        else
+            role = AddRole(model);
+
+        return role;
+    }
+    
     #endregion
     
     #region Users

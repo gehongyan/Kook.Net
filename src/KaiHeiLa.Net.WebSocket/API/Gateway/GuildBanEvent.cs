@@ -1,17 +1,15 @@
 using System.Text.Json.Serialization;
+using KaiHeiLa.Net.Converters;
 
-namespace KaiHeiLa.API.Rest;
+namespace KaiHeiLa.API.Gateway;
 
-internal class AddOrRemoveRoleParams
+internal class GuildBanEvent
 {
-    [JsonPropertyName("guild_id")]
+    [JsonPropertyName("operator_id")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
-    public ulong GuildId { get; set; }
-
+    public ulong OperatorUserId { get; set; }
+    
     [JsonPropertyName("user_id")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
-    public ulong UserId { get; set; }
-
-    [JsonPropertyName("role_id")] 
-    public uint RoleId { get; set; }
+    public ulong[] UserIds { get; set; }
 }

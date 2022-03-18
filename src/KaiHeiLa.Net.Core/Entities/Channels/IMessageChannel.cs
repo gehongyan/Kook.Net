@@ -87,7 +87,7 @@ public interface IMessageChannel : IChannel
     /// <summary>
     ///     Deletes a message.
     /// </summary>
-    /// <param name="messageId">The snowflake identifier of the message that would be removed.</param>
+    /// <param name="messageId">The identifier of the message that would be removed.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous removal operation.
@@ -108,7 +108,7 @@ public interface IMessageChannel : IChannel
     ///     This method modifies this message with the specified properties. To see an example of this
     ///     method and what properties are available, please refer to <see cref="MessageProperties"/>.
     /// </remarks>
-    /// <param name="messageId">The snowflake identifier of the message that would be changed.</param>
+    /// <param name="messageId">The identifier of the message that would be changed.</param>
     /// <param name="func">A delegate containing the properties to modify the message with.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>

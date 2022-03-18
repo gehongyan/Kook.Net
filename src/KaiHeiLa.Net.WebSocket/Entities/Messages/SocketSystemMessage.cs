@@ -33,6 +33,12 @@ public class SocketSystemMessage : SocketMessage, ISystemMessage
         entity.Update(state, model);
         return entity;
     }
+    internal new static SocketUserMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, API.DirectMessage model)
+    {
+        var entity = new SocketUserMessage(kaiHeiLa, model.Id, channel, author, SocketMessageHelper.GetSource(model, author));
+        entity.Update(state, model);
+        return entity;
+    }
     internal override void Update(ClientState state, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
     {
         base.Update(state, model, gatewayEvent);

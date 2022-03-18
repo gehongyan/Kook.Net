@@ -21,6 +21,12 @@ public class RestSystemMessage : RestMessage, ISystemMessage
         entity.Update(model);
         return entity;
     }
+    internal new static RestSystemMessage Create(BaseKaiHeiLaClient kaiHeiLa, IMessageChannel channel, IUser author, API.DirectMessage model)
+    {
+        var entity = new RestSystemMessage(kaiHeiLa, model.Id, model.Type, channel, author);
+        entity.Update(model);
+        return entity;
+    }
     internal override void Update(Model model)
     {
         base.Update(model);

@@ -30,6 +30,24 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     {
     }
 
+    internal virtual bool Update(ClientState state, API.Gateway.UserUpdateEvent model)
+    {
+        bool hasChanges = false;
+        
+        if (model.Username != Username)
+        {
+            Username = model.Username;
+            hasChanges = true;
+        }
+        
+        if (model.Avatar != Avatar)
+        {
+            Avatar = model.Avatar;
+            hasChanges = true;
+        }
+
+        return hasChanges;
+    }
     internal virtual bool Update(ClientState state, Model model)
     {
         bool hasChanges = false;

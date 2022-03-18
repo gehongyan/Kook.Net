@@ -13,6 +13,14 @@ internal static class SocketMessageHelper
             return MessageSource.System;
         return MessageSource.User;
     }
+    public static MessageSource GetSource(API.DirectMessage msg, SocketUser user)
+    {
+        if (user.IsBot ?? false)
+            return MessageSource.Bot;
+        if (msg.Type == MessageType.System)
+            return MessageSource.System;
+        return MessageSource.User;
+    }
     public static MessageSource GetSource(GatewayGroupMessageExtraData msg)
     {
         if (msg.Author.Bot ?? false)

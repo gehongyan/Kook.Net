@@ -21,6 +21,10 @@ client.Log += log =>
 };
 // client.MessageReceived += ClientOnMessageReceived;
 // client.Ready += ModifyMessageDemo;
+client.MessageButtonClicked += (s, user, arg3, arg4, arg5) =>
+{
+    return Task.CompletedTask;
+};
 client.ReactionRemoved += (cacheable, cacheable1, arg3) =>
 {
     return Task.CompletedTask;

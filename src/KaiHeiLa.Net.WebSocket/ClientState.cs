@@ -25,7 +25,9 @@ internal class ClientState
         _guilds = new ConcurrentDictionary<ulong, SocketGuild>(ConcurrentHashSet.DefaultConcurrencyLevel, (int)(guildCount * CollectionMultiplier));
         _users = new ConcurrentDictionary<ulong, SocketGlobalUser>(ConcurrentHashSet.DefaultConcurrencyLevel, (int)(estimatedUsersCount * CollectionMultiplier));
     }
-    
+
+    internal SocketDMChannel GetDMChannel(Guid chatCode) 
+        => (SocketDMChannel) null;
     internal SocketChannel GetChannel(ulong id)
     {
         if (_channels.TryGetValue(id, out SocketChannel channel))

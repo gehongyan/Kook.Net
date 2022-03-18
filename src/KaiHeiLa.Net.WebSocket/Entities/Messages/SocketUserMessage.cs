@@ -58,6 +58,12 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         entity.Update(state, model);
         return entity;
     }
+    internal new static SocketUserMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, API.DirectMessage model)
+    {
+        var entity = new SocketUserMessage(kaiHeiLa, model.Id, channel, author, SocketMessageHelper.GetSource(model, author));
+        entity.Update(state, model);
+        return entity;
+    }
     internal override void Update(ClientState state, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
     {
         base.Update(state, model, gatewayEvent);
@@ -132,7 +138,26 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         
         Guild = guild;
     }
-    internal virtual void Update(ClientState state, MessageUpdateEvent model)
+    internal override void Update(ClientState state, API.DirectMessage model)
+    {
+        base.Update(state, model);
+        SocketGuild guild = (Channel as SocketGuildChannel)?.Guild;
+        Content = model.Content;
+        if (Type == MessageType.Text)
+            _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText);
+        else if (Type == MessageType.KMarkdown)
+            _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown);
+        
+        if (model.Attachment is not null)
+            _attachment = Attachment.Create(model.Attachment);
+        
+        _cards = Type == MessageType.Card 
+            ? MessageHelper.ParseCards(model.Content) 
+            : ImmutableArray.Create<ICard>();
+        
+        Guild = guild;
+    }
+    internal override void Update(ClientState state, MessageUpdateEvent model)
     {
         base.Update(state, model);
         SocketGuild guild = (Channel as SocketGuildChannel)?.Guild;
@@ -140,6 +165,22 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         _isMentioningHere = model.MentionHere;
         _roleMentions = model.MentionRoles?.Select(x => Guild.GetRole(x)).ToImmutableArray()
                         ?? new ImmutableArray<SocketRole>();
+        Content = model.Content;
+        if (Type == MessageType.Text)
+            _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText);
+        else if (Type == MessageType.KMarkdown)
+            _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown);
+        
+        _cards = Type == MessageType.Card 
+            ? MessageHelper.ParseCards(model.Content) 
+            : ImmutableArray.Create<ICard>();
+        
+        Guild = guild;
+    }
+    internal override void Update(ClientState state, DirectMessageUpdateEvent model)
+    {
+        base.Update(state, model);
+        SocketGuild guild = (Channel as SocketGuildChannel)?.Guild;
         Content = model.Content;
         if (Type == MessageType.Text)
             _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText);

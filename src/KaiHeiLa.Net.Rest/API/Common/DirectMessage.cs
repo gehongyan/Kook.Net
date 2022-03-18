@@ -14,7 +14,6 @@ internal class DirectMessage
     [JsonPropertyName("content")]
     public string Content { get; set; }
     
-    
     [JsonPropertyName("embeds")]
     public Embed[] Embeds { get; set; }
 

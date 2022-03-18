@@ -47,6 +47,12 @@ public class RestUserMessage : RestMessage, IUserMessage
         entity.Update(model);
         return entity;
     }
+    internal new static RestUserMessage Create(BaseKaiHeiLaClient kaiHeiLa, IMessageChannel channel, IUser author, DirectMessage model)
+    {
+        var entity = new RestUserMessage(kaiHeiLa, model.Id, model.Type, channel, author, MessageHelper.GetSource(model, author));
+        entity.Update(model);
+        return entity;
+    }
 
     internal override void Update(Model model)
     {
@@ -60,6 +66,52 @@ public class RestUserMessage : RestMessage, IUserMessage
         _isMentioningEveryone = model.MentionAll;
         _isMentioningHere = model.MentionHere;
         _roleMentionIds = model.MentionRoles.ToImmutableArray();
+        
+        if (model.Quote is not null)
+        {
+            IUser refMsgAuthor = MessageHelper.GetAuthor(KaiHeiLa, null, model.Quote.Author);
+            _quote = Quote.Create(model.Quote, refMsgAuthor);
+        }
+
+        if (model.Attachment is not null)
+            _attachment = Attachment.Create(model.Attachment);
+        
+        if (model.Type == MessageType.Card)
+        {
+            string json = model.Content;
+            JsonSerializerOptions serializerOptions = new()
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                Converters =
+                {
+                    new CardConverter(),
+                    new ModuleConverter(),
+                    new ElementConverter()
+                }
+            };
+            CardBase[] cardBases = JsonSerializer.Deserialize<CardBase[]>(json, serializerOptions);
+            
+            var cards = ImmutableArray.CreateBuilder<ICard>(cardBases.Length);
+            foreach (CardBase cardBase in cardBases)
+                cards.Add(cardBase.ToEntity());
+
+            _cards = cards.ToImmutable();
+        }
+        else
+        {
+            _cards = ImmutableArray.Create<ICard>();
+        }
+    }
+    
+    internal override void Update(DirectMessage model)
+    {
+        base.Update(model);
+        var guildId = (Channel as IGuildChannel)?.GuildId;
+        var guild = guildId != null ? (KaiHeiLa as IKaiHeiLaClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).Result : null;
+        if (model.Type == MessageType.Text)
+            _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.PlainText);
+        else if (model.Type == MessageType.KMarkdown)
+            _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.KMarkdown);
         
         if (model.Quote is not null)
         {

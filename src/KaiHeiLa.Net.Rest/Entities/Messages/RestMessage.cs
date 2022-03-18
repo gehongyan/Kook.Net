@@ -84,8 +84,37 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         else
             return RestSystemMessage.Create(kaiHeiLa, channel, author, model);
     }
+    internal static RestMessage Create(BaseKaiHeiLaClient kaiHeiLa, IMessageChannel channel, IUser author, API.DirectMessage model)
+    {
+        if (model.Type != MessageType.System)
+            return RestUserMessage.Create(kaiHeiLa, channel, author, model);
+        else
+            return RestSystemMessage.Create(kaiHeiLa, channel, author, model);
+    }
 
     internal virtual void Update(Model model)
+    {
+        Timestamp = model.CreateAt;
+        EditedTimestamp = model.UpdateAt;
+        Content = model.Content;
+        if (model.MentionInfo?.MentionUsers is not null)
+        {
+            var value = model.MentionInfo.MentionUsers;
+            if (value.Length > 0)
+            {
+                var newMentions = ImmutableArray.CreateBuilder<RestUser>(value.Length);
+                for (int i = 0; i < value.Length; i++)
+                {
+                    var val = value[i];
+                    if (val != null)
+                        newMentions.Add(RestUser.Create(KaiHeiLa, val));
+                }
+                _userMentions = newMentions.ToImmutable();
+            }
+        }
+    }
+    
+    internal virtual void Update(API.DirectMessage model)
     {
         Timestamp = model.CreateAt;
         EditedTimestamp = model.UpdateAt;

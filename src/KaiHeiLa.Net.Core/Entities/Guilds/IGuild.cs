@@ -74,7 +74,7 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets a channel in this guild.
     /// </summary>
-    /// <param name="id">The snowflake identifier for the channel.</param>
+    /// <param name="id">The identifier for the channel.</param>
     /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>

@@ -1,3 +1,4 @@
+using KaiHeiLa.API;
 using KaiHeiLa.API.Rest;
 
 namespace KaiHeiLa.Rest;
@@ -62,6 +63,17 @@ internal static class ChannelHelper
     #endregion
 
     #region Direct Messages
+
+    public static async Task<RestMessage> GetDirectMessageAsync(IDMChannel channel, BaseKaiHeiLaClient client,
+        Guid id, RequestOptions options)
+    {
+        var model = await client.ApiClient.GetDirectMessageAsync(id, chatCode: channel.Id, options: options).ConfigureAwait(false);
+        if (model == null)
+            return null;
+        User userModel = await client.ApiClient.GetUserAsync(model.AuthorId, options);
+        var author = MessageHelper.GetAuthor(client, null, userModel);
+        return RestMessage.Create(client, channel, author, model);
+    }
     
     public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectMessageAsync(IDMChannel channel, 
         BaseKaiHeiLaClient client, MessageType messageType, string content, RequestOptions options, IQuote quote = null)

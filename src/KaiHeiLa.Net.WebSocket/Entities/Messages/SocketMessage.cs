@@ -130,6 +130,13 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
         else
             return SocketUserMessage.Create(kaiHeiLa, state, author, channel, model);
     }
+    internal static SocketMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, API.DirectMessage model)
+    {
+        if (model.Type == MessageType.System)
+            return SocketSystemMessage.Create(kaiHeiLa, state, author, channel, model);
+        else
+            return SocketUserMessage.Create(kaiHeiLa, state, author, channel, model);
+    }
     internal virtual void Update(ClientState state, API.Message model)
     {
         Type = model.Type;
@@ -153,6 +160,13 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
             }
         }
     }
+    internal virtual void Update(ClientState state, API.DirectMessage model)
+    {
+        Type = model.Type;
+        Timestamp = model.CreateAt;
+        EditedTimestamp = model.UpdateAt;
+        Content = model.Content;
+    }
     internal virtual void Update(ClientState state, MessageUpdateEvent model)
     {
         EditedTimestamp = model.UpdatedAt;
@@ -173,6 +187,11 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
                 _userMentions = newMentions.ToImmutable();
             }
         }
+    }
+    internal virtual void Update(ClientState state, DirectMessageUpdateEvent model)
+    {
+        EditedTimestamp = model.UpdatedAt;
+        Content = model.Content;
     }
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
