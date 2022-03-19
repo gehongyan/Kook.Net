@@ -54,6 +54,21 @@ public interface IGuild : IEntity<ulong>
     IRole GetRole(uint id);
     
     /// <summary>
+    ///     Leaves this guild.
+    /// </summary>
+    /// <remarks>
+    ///     This method will make the currently logged-in user leave the guild.
+    ///     <note>
+    ///         If the user is the owner of this guild, use <see cref="IDeletable.DeleteAsync"/> instead.
+    ///     </note>
+    /// </remarks>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous leave operation.
+    /// </returns>
+    Task LeaveAsync(RequestOptions options = null);
+    
+    /// <summary>
     ///     Gets a user from this guild.
     /// </summary>
     /// <remarks>
@@ -82,5 +97,14 @@ public interface IGuild : IEntity<ulong>
     ///     associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
     /// </returns>
     Task<IGuildChannel> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
-
+    /// <summary>
+    ///     Gets the users who are muted or deafened in this guild.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains
+    ///     the collection of muted or deafened users in this guild.
+    /// </returns>
+    Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> GetGuildMuteDeafListAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
 }

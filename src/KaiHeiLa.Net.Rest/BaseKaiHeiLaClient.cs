@@ -120,6 +120,7 @@ public abstract class BaseKaiHeiLaClient : IKaiHeiLaClient
         await _stateLock.WaitAsync().ConfigureAwait(false);
         try
         {
+            await ApiClient.GoOfflineAsync();
             await LogoutInternalAsync().ConfigureAwait(false);
         }
         finally { _stateLock.Release(); }
@@ -153,7 +154,11 @@ public abstract class BaseKaiHeiLaClient : IKaiHeiLaClient
     /// <inheritdoc />
     Task<IGuild> IKaiHeiLaClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IGuild>(null);
-        
+
+    /// <inheritdoc />
+    Task<IUser> IKaiHeiLaClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<IUser>(null);
+
     /// <inheritdoc />
     Task IKaiHeiLaClient.StartAsync()
         => Task.Delay(0);

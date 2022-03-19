@@ -59,6 +59,14 @@ public class KaiHeiLaConfig
     public const int MaxMessageSize = 50000;
     
     /// <summary> 
+    ///     Returns the max messages allowed to be in a request. 
+    /// </summary>
+    /// <returns>
+    ///     The maximum number of messages that can be gotten per-batch.
+    /// </returns>
+    public const int MaxMessagesPerBatch = 100;
+    
+    /// <summary> 
     ///     Returns the min length for a KaiHeiLa guild nickname. 
     /// </summary>
     /// <returns>

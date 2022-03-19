@@ -196,7 +196,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     
     /// <inheritdoc />
     /// <exception cref="InvalidOperationException">Only the author of a message may modify the message.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="DiscordConfig.MaxMessageSize"/>.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="KaiHeiLaConfig.MaxMessageSize"/>.</exception>
     public Task ModifyAsync(Action<MessageProperties> func, RequestOptions options = null)
         => MessageHelper.ModifyAsync(this, KaiHeiLa, func, options);
     

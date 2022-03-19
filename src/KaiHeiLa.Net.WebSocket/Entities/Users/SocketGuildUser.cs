@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
 using KaiHeiLa.API.Gateway;
+using KaiHeiLa.Rest;
 using UserModel = KaiHeiLa.API.User;
 using MemberModel = KaiHeiLa.API.Rest.GuildMember;
 
@@ -100,6 +101,29 @@ public class SocketGuildUser : SocketUser, IGuildUser
         _roleIds = roles.ToImmutable();
     }
     
+    /// <inheritdoc />
+    public Task ModifyNicknameAsync(Action<string> func, RequestOptions options = null)
+        => UserHelper.ModifyNicknameAsync(this, KaiHeiLa, func, options);
+    /// <inheritdoc />
+    public Task KickAsync(RequestOptions options = null)
+        => UserHelper.KickAsync(this, KaiHeiLa, options);
+    
+    /// <inheritdoc />
+    public Task MuteAsync(RequestOptions options = null) 
+        => GuildHelper.MuteUserAsync(this, KaiHeiLa, options);
+    /// <inheritdoc />
+    public Task DeafenAsync(RequestOptions options = null) 
+        => GuildHelper.DeafenUserAsync(this, KaiHeiLa, options);
+    /// <inheritdoc />
+    public Task UnmuteAsync(RequestOptions options = null) 
+        => GuildHelper.UnmuteUserAsync(this, KaiHeiLa, options);
+    /// <inheritdoc />
+    public Task UndeafenAsync(RequestOptions options = null) 
+        => GuildHelper.UndeafenUserAsync(this, KaiHeiLa, options);
+    /// <inheritdoc />
+    public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelAsync(RequestOptions options = null)
+        => SocketUserHelper.GetConnectedChannelAsync(this, KaiHeiLa, options);
+
     #endregion
     
     /// <summary>

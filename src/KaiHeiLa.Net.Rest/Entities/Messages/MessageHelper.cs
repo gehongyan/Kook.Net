@@ -49,7 +49,106 @@ internal static class MessageHelper
     {
         await client.ApiClient.DeleteDirectMessageAsync(msgId, options).ConfigureAwait(false);
     }
+    
+    public static async Task AddReactionAsync(Guid messageId, IEmote emote, BaseKaiHeiLaClient client,
+        RequestOptions options)
+    {
+        AddReactionParams args = new AddReactionParams()
+        {
+            EmojiId = emote.Id,
+            MessageId = messageId
+        };
+        await client.ApiClient.AddReactionAsync(args, options).ConfigureAwait(false);
+    }
+    public static async Task AddReactionAsync(IMessage msg, IEmote emote, BaseKaiHeiLaClient client, RequestOptions options)
+    {
+        AddReactionParams args = new AddReactionParams()
+        {
+            EmojiId = emote.Id,
+            MessageId = msg.Id
+        };
+        
+        await client.ApiClient.AddReactionAsync(args, options).ConfigureAwait(false);
+    }
 
+    public static async Task AddDirectMessageReactionAsync(Guid messageId, IEmote emote, BaseKaiHeiLaClient client,
+        RequestOptions options)
+    {
+        AddReactionParams args = new AddReactionParams()
+        {
+            EmojiId = emote.Id,
+            MessageId = messageId
+        };
+        await client.ApiClient.AddDirectMessageReactionAsync(args, options).ConfigureAwait(false);
+    }
+    public static async Task AddDirectMessageReactionAsync(IMessage msg, IEmote emote, BaseKaiHeiLaClient client, RequestOptions options)
+    {
+        AddReactionParams args = new AddReactionParams()
+        {
+            EmojiId = emote.Id,
+            MessageId = msg.Id
+        };
+        
+        await client.ApiClient.AddDirectMessageReactionAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task RemoveReactionAsync(ulong channelId, Guid messageId, ulong userId, IEmote emote,
+        BaseKaiHeiLaClient client, RequestOptions options)
+    {
+        RemoveReactionParams args = new RemoveReactionParams()
+        {
+            EmojiId = emote.Id,
+            MessageId = messageId,
+            UserId = userId == client.CurrentUser.Id ? null : userId
+        };
+        await client.ApiClient.RemoveReactionAsync(args, options).ConfigureAwait(false);
+    }
+    public static async Task RemoveReactionAsync(IMessage msg, ulong userId, IEmote emote, BaseKaiHeiLaClient client, RequestOptions options)
+    {
+        
+        RemoveReactionParams args = new RemoveReactionParams()
+        {
+            EmojiId = emote.Id,
+            MessageId = msg.Id,
+            UserId = userId == client.CurrentUser.Id ? null : userId
+        };
+        await client.ApiClient.RemoveReactionAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task RemoveDirectMessageReactionAsync(ulong channelId, Guid messageId, ulong userId, IEmote emote,
+        BaseKaiHeiLaClient client, RequestOptions options)
+    {
+        RemoveReactionParams args = new RemoveReactionParams()
+        {
+            EmojiId = emote.Id,
+            MessageId = messageId,
+            UserId = userId == client.CurrentUser.Id ? null : userId
+        };
+        await client.ApiClient.RemoveDirectMessageReactionAsync(args, options).ConfigureAwait(false);
+    }
+    public static async Task RemoveDirectMessageReactionAsync(IMessage msg, ulong userId, IEmote emote, BaseKaiHeiLaClient client, RequestOptions options)
+    {
+        
+        RemoveReactionParams args = new RemoveReactionParams()
+        {
+            EmojiId = emote.Id,
+            MessageId = msg.Id,
+            UserId = userId == client.CurrentUser.Id ? null : userId
+        };
+        await client.ApiClient.RemoveDirectMessageReactionAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task<IReadOnlyCollection<IUser>> GetReactionUsersAsync(IMessage msg, IEmote emote, BaseKaiHeiLaClient client, RequestOptions options)
+    {
+        var models = await client.ApiClient.GetReactionUsersAsync(msg.Id, emote.Id, options).ConfigureAwait(false);
+        return models.Select(x => RestUser.Create(client, x)).ToImmutableArray();
+    }
+    public static async Task<IReadOnlyCollection<IUser>> GetDirectMessageReactionUsersAsync(IMessage msg, IEmote emote, BaseKaiHeiLaClient client, RequestOptions options)
+    {
+        var models = await client.ApiClient.GetDirectMessageReactionUsersAsync(msg.Id, emote.Id, options).ConfigureAwait(false);
+        return models.Select(x => RestUser.Create(client, x)).ToImmutableArray();
+    }
+    
     public static async Task ModifyAsync(IUserMessage msg, BaseKaiHeiLaClient client, Action<MessageProperties> func,
         RequestOptions options)
     {
@@ -223,6 +322,7 @@ internal static class MessageHelper
         {
             TagMode.PlainText => PlainTextTagRegex.Matches(text),
             TagMode.KMarkdown => KMarkdownTagRegex.Matches(text),
+            _ => throw new ArgumentOutOfRangeException(nameof(tagMode), tagMode, null)
         };
 
         foreach (Match match in matchCollection.Where(m => m.Success))

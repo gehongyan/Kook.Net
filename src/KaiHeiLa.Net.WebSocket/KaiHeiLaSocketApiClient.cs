@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using KaiHeiLa.API.Rest;
 using KaiHeiLa.Net.Queue;
 using KaiHeiLa.Net.Rest;
@@ -49,6 +50,7 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         
         WebSocketClient = webSocketProvider();
         WebSocketClient.TextMessage += OnTextMessage;
+        WebSocketClient.BinaryMessage += OnBinaryMessage;
         WebSocketClient.Closed += async ex =>
         {
 #if DEBUG_PACKETS
@@ -60,7 +62,24 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         };
         _resumeQueryParams = null;
     }
-    
+
+    private async Task OnBinaryMessage(byte[] data, int index, int count)
+    {
+        await using var decompressed = new MemoryStream();
+        using (var compressedStream = new MemoryStream(data))
+        await using (var compressed = new InflaterInputStream(compressedStream))
+        {
+            await compressed.CopyToAsync(decompressed);
+            decompressed.Position = 0;
+        }
+        
+        SocketFrame socketFrame = JsonSerializer.Deserialize<SocketFrame>(decompressed, SerializerOptions);
+        if (socketFrame is not null)
+        {
+            await _receivedGatewayEvent.InvokeAsync(socketFrame.Type, socketFrame.Sequence, socketFrame.Payload).ConfigureAwait(false);
+        }
+    }
+
     private async Task OnTextMessage(string message)
     {
         SocketFrame socketFrame = JsonSerializer.Deserialize<SocketFrame>(message, SerializerOptions);
@@ -68,6 +87,21 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         {
             await _receivedGatewayEvent.InvokeAsync(socketFrame.Type, socketFrame.Sequence, socketFrame.Payload).ConfigureAwait(false);
         }
+    }
+
+    internal override void Dispose(bool disposing)
+    {
+        if (!_isDisposed)
+        {
+            if (disposing)
+            {
+                _connectCancelToken?.Dispose();
+                WebSocketClient?.Dispose();
+            }
+            _isDisposed = true;
+        }
+
+        base.Dispose(disposing);
     }
 
     public async Task ConnectAsync()
@@ -87,6 +121,8 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         if (WebSocketClient == null)
             throw new NotSupportedException("This client is not configured with WebSocket support.");
         
+        RequestQueue.ClearGatewayBuckets();
+
         ConnectionState = ConnectionState.Connecting;
 
         try
@@ -101,7 +137,7 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
                 _gatewayUrl = $"{gatewayResponse.Url}{_resumeQueryParams}";
             }
             
-            await WebSocketClient.ConnectAsync(_gatewayUrl).ConfigureAwait(false);
+            await WebSocketClient!.ConnectAsync(_gatewayUrl).ConfigureAwait(false);
             ConnectionState = ConnectionState.Connected;
         }
         catch
@@ -132,8 +168,11 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         ConnectionState = ConnectionState.Disconnecting;
         
         try { _connectCancelToken?.Cancel(false); }
-        catch { }
-        
+        catch
+        {
+            // ignored
+        }
+
         if (ex is GatewayReconnectException)
             await WebSocketClient.DisconnectAsync(4000).ConfigureAwait(false);
         else
@@ -153,11 +192,9 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
     private async Task SendGatewayInternalAsync(SocketFrameType socketFrameType, RequestOptions options, object payload = null, int? sequence = null)
     {
         CheckState();
-        
-        byte[] bytes = null;
+
         payload = new SocketFrame { Type = socketFrameType, Payload = payload, Sequence = sequence };
-        if (payload != null)
-            bytes = Encoding.UTF8.GetBytes(SerializeJson(payload));
+        byte[] bytes = Encoding.UTF8.GetBytes(SerializeJson(payload));
         
         options.IsGatewayBucket = true;
         if (options.BucketId == null)

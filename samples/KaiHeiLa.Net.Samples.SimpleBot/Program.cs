@@ -21,9 +21,12 @@ client.Log += log =>
 };
 // client.MessageReceived += ClientOnMessageReceived;
 // client.Ready += ModifyMessageDemo;
-client.MessageButtonClicked += (s, user, arg3, arg4, arg5) =>
+client.MessageButtonClicked += async (s, user, arg3, arg4, arg5) =>
 {
-    return Task.CompletedTask;
+    // await arg3.AddReactionAsync(Emote.Parse("[:djbigfan:1990044438283387/hvBcVC4nHX03k03k]", TagMode.PlainText));
+    // await arg3.AddReactionAsync(Emote.Parse("(emj)djbigfan(emj)[1990044438283387/hvBcVC4nHX03k03k]", TagMode.KMarkdown));
+    // await arg3.RemoveReactionAsync(Emote.Parse("[:djbigfan:1990044438283387/hvBcVC4nHX03k03k]", TagMode.PlainText), client.CurrentUser);
+    IEnumerable<IMessage> selectMany = (await client.GetGuild(1990044438283387).GetTextChannel(6286033651700207).GetMessagesAsync(Guid.Parse("ed260ee9-1616-44ec-abff-d5cfcf9903a0"), Direction.Around, 5).ToListAsync()).SelectMany(x => x.ToList());
 };
 client.ReactionRemoved += (cacheable, cacheable1, arg3) =>
 {

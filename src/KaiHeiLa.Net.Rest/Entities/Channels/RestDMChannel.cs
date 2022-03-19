@@ -15,6 +15,13 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
 
     public new Guid Id { get; set; }
 
+    /// <inheritdoc />
+    public Guid ChatCode
+    {
+        get => Id;
+        set => Id = value;
+    }
+    
     /// <summary>
     ///     Gets the current logged-in user.
     /// </summary>
@@ -37,7 +44,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
         Recipient = new RestUser(KaiHeiLa, recipientId);
         CurrentUser = new RestUser(KaiHeiLa, kaiHeiLa.CurrentUser.Id);
     }
-    internal new static RestDMChannel Create(BaseKaiHeiLaClient kaiHeiLa, Model model)
+    internal static RestDMChannel Create(BaseKaiHeiLaClient kaiHeiLa, Model model)
     {
         var entity = new RestDMChannel(kaiHeiLa, model.Code, model.Recipient.Id);
         entity.Update(model);
@@ -85,6 +92,15 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// <inheritdoc />
     public Task<RestMessage> GetMessageAsync(Guid id, RequestOptions options = null)
         => ChannelHelper.GetDirectMessageAsync(this, KaiHeiLa, id, options);
+    /// <inheritdoc />
+    public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(int limit = KaiHeiLaConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        => ChannelHelper.GetDirectMessagesAsync(this, KaiHeiLa, null, Direction.Before, limit, true, options);
+    /// <inheritdoc />
+    public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        => ChannelHelper.GetDirectMessagesAsync(this, KaiHeiLa, referenceMessageId, dir, limit, true, options);
+    /// <inheritdoc />
+    public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        => ChannelHelper.GetDirectMessagesAsync(this, KaiHeiLa, referenceMessage.Id, dir, limit, true, options);
     
     #endregion
 
@@ -130,7 +146,30 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
         else
             return null;
     }
-
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(int limit, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return GetMessagesAsync(limit, options);
+        else
+            return AsyncEnumerable.Empty<IReadOnlyCollection<IMessage>>();
+    }
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return GetMessagesAsync(referenceMessageId, dir, limit, options);
+        else
+            return AsyncEnumerable.Empty<IReadOnlyCollection<IMessage>>();
+    }
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return GetMessagesAsync(referenceMessage, dir, limit, options);
+        else
+            return AsyncEnumerable.Empty<IReadOnlyCollection<IMessage>>();
+    }
     #endregion
     
     /// <summary>

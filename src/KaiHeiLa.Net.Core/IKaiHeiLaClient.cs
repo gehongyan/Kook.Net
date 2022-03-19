@@ -48,4 +48,16 @@ public interface IKaiHeiLaClient : IDisposable
     ///     with the identifier; <c>null</c> when the guild cannot be found.
     /// </returns>
     Task<IGuild> GetGuildAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    
+    /// <summary>
+    ///     Gets a user.
+    /// </summary>
+    /// <param name="id">The identifier of the user (e.g. `168693960628371456`).</param>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the user associated with
+    ///     the identifier; <c>null</c> if the user is not found.
+    /// </returns>
+    Task<IUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
 }

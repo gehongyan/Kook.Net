@@ -75,6 +75,31 @@ public class RestGuildUser : RestUser, IGuildUser
         Update(model);
     }
     
+    /// <inheritdoc />
+    public async Task ModifyNicknameAsync(Action<string> func, RequestOptions options = null)
+    {
+        var nickname = await UserHelper.ModifyNicknameAsync(this, KaiHeiLa, func, options);
+        Nickname = nickname;
+    }
+    /// <inheritdoc />
+    public Task KickAsync(RequestOptions options = null)
+        => UserHelper.KickAsync(this, KaiHeiLa, options);
+    /// <inheritdoc />
+    public Task MuteAsync(RequestOptions options = null) 
+        => GuildHelper.MuteUserAsync(this, KaiHeiLa, options);
+    /// <inheritdoc />
+    public Task DeafenAsync(RequestOptions options = null) 
+        => GuildHelper.DeafenUserAsync(this, KaiHeiLa, options);
+    /// <inheritdoc />
+    public Task UnmuteAsync(RequestOptions options = null) 
+        => GuildHelper.UnmuteUserAsync(this, KaiHeiLa, options);
+    /// <inheritdoc />
+    public Task UndeafenAsync(RequestOptions options = null) 
+        => GuildHelper.UndeafenUserAsync(this, KaiHeiLa, options);
+    /// <inheritdoc />
+    public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelAsync(RequestOptions options = null)
+        => UserHelper.GetConnectedChannelAsync(this, KaiHeiLa, options);
+    
     #endregion
     
     #region IGuildUser

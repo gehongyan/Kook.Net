@@ -22,7 +22,7 @@ internal class PermissionOverwriteTargetTypeConverter : JsonConverter<Permission
         {
             PermissionOverwriteTargetType.Role => "role_id",
             PermissionOverwriteTargetType.User => "user_id",
-            PermissionOverwriteTargetType.Unspecified => "user_id"
+            _ => "user_id"
         });
     }
 }

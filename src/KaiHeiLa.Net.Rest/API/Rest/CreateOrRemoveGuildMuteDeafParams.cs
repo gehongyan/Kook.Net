@@ -11,7 +11,7 @@ internal class CreateOrRemoveGuildMuteDeafParams
     
     [JsonPropertyName("target_id")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
-    public ulong TargetUserId { get; set; }
+    public ulong UserId { get; set; }
 
     [JsonPropertyName("type")]
     public MuteOrDeafType Type { get; set; }

@@ -26,5 +26,4 @@ public interface IChannel : IEntity<ulong>
     ///     represents the found user; <c>null</c> if none is found.
     /// </returns>
     Task<IUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
-
 }

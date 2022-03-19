@@ -77,7 +77,8 @@ public static class MentionUtils
         Match match = tagMode switch
         {
             TagMode.PlainText => PlainTextUserRegex.Match(text),
-            TagMode.KMarkdown => KMarkdownUserRegex.Match(text)
+            TagMode.KMarkdown => KMarkdownUserRegex.Match(text),
+            _ => throw new ArgumentOutOfRangeException(nameof(tagMode), tagMode, null)
         };
 
         if (match.Success 
@@ -107,7 +108,8 @@ public static class MentionUtils
         Match match = tagMode switch
         {
             TagMode.PlainText => PlainTextChannelRegex.Match(text),
-            TagMode.KMarkdown => KMarkdownChannelRegex.Match(text)
+            TagMode.KMarkdown => KMarkdownChannelRegex.Match(text),
+            _ => throw new ArgumentOutOfRangeException(nameof(tagMode), tagMode, null)
         };
 
         if (match.Success 
@@ -136,7 +138,8 @@ public static class MentionUtils
         Match match = tagMode switch
         {
             TagMode.PlainText => PlainTextRoleRegex.Match(text),
-            TagMode.KMarkdown => KMarkdownRoleRegex.Match(text)
+            TagMode.KMarkdown => KMarkdownRoleRegex.Match(text),
+            _ => throw new ArgumentOutOfRangeException(nameof(tagMode), tagMode, null)
         };
 
         if (match.Success 

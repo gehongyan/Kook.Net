@@ -10,5 +10,5 @@ internal class KickOutGuildMemberParams
     
     [JsonPropertyName("target_id")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
-    public ulong TargetUserId { get; set; }
+    public ulong UserId { get; set; }
 }

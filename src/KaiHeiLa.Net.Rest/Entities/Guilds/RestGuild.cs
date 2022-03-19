@@ -113,6 +113,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public Task<RestGuildChannel> GetChannelAsync(ulong id, RequestOptions options = null)
         => GuildHelper.GetChannelAsync(this, KaiHeiLa, id, options);
+    
+    /// <inheritdoc />
+    public Task LeaveAsync(RequestOptions options = null)
+        => GuildHelper.LeaveAsync(this, KaiHeiLa, options);
     #endregion
     
     #region Roles
@@ -160,6 +164,15 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
+    /// <inheritdoc />
+    async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> IGuild.GetGuildMuteDeafListAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetGuildMuteDeafListAsync(options).ConfigureAwait(false);
+        else
+            return (null, null);
+    }
+
     #endregion
 
     #region Users
@@ -179,6 +192,17 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     public Task<RestGuildUser> GetUserAsync(ulong id, RequestOptions options = null)
         => GuildHelper.GetUserAsync(this, KaiHeiLa, id, options);
 
+    /// <summary>
+    ///     Gets the users who are muted or deafened in this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains
+    ///     the collection of muted or deafened users in this guild.
+    /// </returns>
+    public Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> GetGuildMuteDeafListAsync(RequestOptions options = null) 
+        => GuildHelper.GetGuildMuteDeafListAsync(this, KaiHeiLa, options);
+    
     #endregion
     
     /// <summary>

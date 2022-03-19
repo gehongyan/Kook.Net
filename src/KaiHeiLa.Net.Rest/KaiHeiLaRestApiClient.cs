@@ -376,7 +376,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
-        Preconditions.NotEqual(args.TargetUserId, 0, nameof(args.TargetUserId));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds(guildId: args.GuildId);
@@ -396,7 +396,18 @@ internal class KaiHeiLaRestApiClient : IDisposable
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
-        Preconditions.NotEqual(args.TargetUserId, 0, nameof(args.TargetUserId));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
+        options = RequestOptions.CreateOrClone(options);
+        
+        var ids = new BucketIds(guildId: args.GuildId);
+        await SendJsonAsync(HttpMethod.Post, () => $"guild-mute/create", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+
+    public async Task RemoveGuildMuteDeafAsync(CreateOrRemoveGuildMuteDeafParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds(guildId: args.GuildId);
@@ -511,7 +522,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
     #region Messages
 
     public async Task<IReadOnlyCollection<Message>> QueryMessagesAsync(ulong channelId, Guid? referenceMessageId = null,
-        bool? queryPin = null, MessageQueryMode mode = MessageQueryMode.Unspecified, int count = 50, RequestOptions options = null)
+        bool? queryPin = null, Direction dir = Direction.Unspecified, int count = 50, RequestOptions options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         if (referenceMessageId is not null)
@@ -524,12 +535,15 @@ internal class KaiHeiLaRestApiClient : IDisposable
         string query = $"?target_id={channelId}";
         if (referenceMessageId is not null) query += $"&msg_id={referenceMessageId}";
         if (queryPin is not null) query += $"&pin={queryPin switch { true => 1, false => 0 }}";
-        string flag = mode switch
+        string flag = dir switch
         {
-            MessageQueryMode.Before => "before", MessageQueryMode.Around => "around",
-            MessageQueryMode.After => "after"
+            Direction.Before => "&flag=before", 
+            Direction.Around => "&flag=around",
+            Direction.After => "&flag=after",
+            Direction.Unspecified => "",
+            _ => throw new ArgumentOutOfRangeException(nameof(dir), dir, null)
         };
-        if (mode != MessageQueryMode.Unspecified) query += $"&flag={flag}";
+        query += flag;
         query += $"&page_size={count}";
         QueryMessagesResponse queryMessagesResponse = await SendAsync<QueryMessagesResponse>(HttpMethod.Get, () => $"message/list{query}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
         return queryMessagesResponse.Items;
@@ -671,12 +685,13 @@ internal class KaiHeiLaRestApiClient : IDisposable
         RequestOptions options = null)
     {
         // TODO: API returns wrong message
-        IReadOnlyCollection<DirectMessage> messages = await QueryDirectMessagesAsync(chatCode, userId, messageId, MessageQueryMode.Around, 1, options);
+        IReadOnlyCollection<DirectMessage> messages = await QueryDirectMessagesAsync(chatCode, userId, messageId, Direction.Around, 1, options);
         return messages.FirstOrDefault();
     }
     
-    public async Task<IReadOnlyCollection<DirectMessage>> QueryDirectMessagesAsync(Guid? chatCode = null, ulong? userId = null, Guid? referenceMessageId = null,
-        MessageQueryMode mode = MessageQueryMode.Unspecified, int count = 50, RequestOptions options = null)
+    public async Task<IReadOnlyCollection<DirectMessage>> QueryDirectMessagesAsync(Guid? chatCode = null,
+        ulong? userId = null, Guid? referenceMessageId = null,
+        Direction dir = Direction.Unspecified, int count = 50, RequestOptions options = null)
     {
         if (chatCode is null && userId is null)
             throw new ArgumentException(message: $"At least one argument must be provided between {nameof(chatCode)} and {nameof(userId)}.", paramName: $"{nameof(chatCode)}&{nameof(userId)}");
@@ -695,14 +710,14 @@ internal class KaiHeiLaRestApiClient : IDisposable
             _ => string.Empty
         };
         if (referenceMessageId is not null) query += $"&msg_id={referenceMessageId}";
-        string flag = mode switch
+        string flag = dir switch
         {
-            MessageQueryMode.Before => "before", 
-            MessageQueryMode.Around => "around",
-            MessageQueryMode.After => "after",
+            Direction.Before => "before", 
+            Direction.Around => "around",
+            Direction.After => "after",
             _ => string.Empty
         };
-        if (mode != MessageQueryMode.Unspecified) query += $"&flag={flag}";
+        if (dir != Direction.Unspecified) query += $"&flag={flag}";
         query += $"&page_size={count}";
         QueryUserChatMessagesResponse queryMessagesResponse = await SendAsync<QueryUserChatMessagesResponse>(HttpMethod.Get, () => $"direct-message/list{query}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
         return queryMessagesResponse.Items;
@@ -756,7 +771,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
         
         var ids = new BucketIds();
-        await SendJsonAsync(HttpMethod.Post, () => $"message/add-reaction", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"direct-message/add-reaction", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task RemoveDirectMessageReactionAsync(RemoveReactionParams args, RequestOptions options = null)
@@ -767,14 +782,14 @@ internal class KaiHeiLaRestApiClient : IDisposable
             Preconditions.NotEqual(args.UserId, 0, nameof(args.MessageId));
         
         var ids = new BucketIds();
-        await SendJsonAsync(HttpMethod.Post, () => $"message/delete-reaction", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"direct-message/delete-reaction", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
     
     #endregion
     
     #region Gateway
     
-    public async Task<GetGatewayResponse> GetGatewayAsync(bool isCompressed = false, RequestOptions options = null)
+    public async Task<GetGatewayResponse> GetGatewayAsync(bool isCompressed = true, RequestOptions options = null)
     {
         options = RequestOptions.CreateOrClone(options);
         return await SendAsync<GetGatewayResponse>(HttpMethod.Get, () => $"gateway/index?compress={(isCompressed ? 1 : 0)}", new BucketIds(), options: options).ConfigureAwait(false);

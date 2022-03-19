@@ -160,15 +160,6 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     /// <summary>
     ///     Gets a generic channel from the cache or does a rest request if unavailable.
     /// </summary>
-    /// <example>
-    ///     <code language="cs" title="Example method">
-    ///     var channel = await _client.GetChannelAsync(381889909113225237);
-    ///     if (channel != null &amp;&amp; channel is IMessageChannel msgChannel)
-    ///     {
-    ///         await msgChannel.SendMessageAsync($"{msgChannel} is created at {msgChannel.CreatedAt}");
-    ///     }
-    ///     </code>
-    /// </example>
     /// <param name="id">The identifier of the channel (e.g. `381889909113225237`).</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
@@ -177,9 +168,36 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     /// </returns>
     public async ValueTask<IChannel> GetChannelAsync(ulong id, RequestOptions options = null)
         => GetChannel(id) ?? (IChannel)await ClientHelper.GetChannelAsync(this, id, options).ConfigureAwait(false);
-    
+    /// <summary>
+    ///     Gets a direct message channel from the cache or does a rest request if unavailable.
+    /// </summary>
+    /// <param name="chatCode">The identifier of the channel.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the channel associated
+    ///     with the identifier; <c>null</c> when the channel cannot be found.
+    /// </returns>
     public async ValueTask<IDMChannel> GetDMChannelAsync(Guid chatCode, RequestOptions options = null)
         => GetDMChannel(chatCode) ?? (IDMChannel)await ClientHelper.GetDMChannelAsync(this, chatCode, options).ConfigureAwait(false);
+    
+    /// <summary>
+    ///     Gets a user from the cache or does a rest request if unavailable.
+    /// </summary>
+    /// <example>
+    ///     <code language="cs" title="Example method">
+    ///     var user = await _client.GetUserAsync(168693960628371456);
+    ///     if (user != null)
+    ///         Console.WriteLine($"{user} is created at {user.CreatedAt}.";
+    ///     </code>
+    /// </example>
+    /// <param name="id">The snowflake identifier of the user (e.g. `168693960628371456`).</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the user associated with
+    ///     the snowflake identifier; <c>null</c> if the user is not found.
+    /// </returns>
+    public async ValueTask<IUser> GetUserAsync(ulong id, RequestOptions options = null)
+        => await ClientHelper.GetUserAsync(this, id, options).ConfigureAwait(false);
     
     /// <inheritdoc />
     public override SocketUser GetUser(ulong id)
@@ -251,6 +269,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                             _serializerOptions),
                         _  when gatewayEvent.ChannelType == "PERSON" => ((JsonElement) gatewayEvent.ExtraData).Deserialize<GatewayPersonMessageExtraData>(
                             _serializerOptions),
+                        _ => throw new InvalidOperationException("Unknown event type")
                     };
 
                     switch (gatewayEvent.Type)

@@ -216,6 +216,50 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
         _reactions.RemoveAll(x => x.Emote.Equals(emote));
     }
     
+    /// <inheritdoc />
+    public Task AddReactionAsync(IEmote emote, RequestOptions options = null)
+    {
+        return Channel switch
+        {
+            ITextChannel => MessageHelper.AddReactionAsync(this, emote, KaiHeiLa, options),
+            IDMChannel => MessageHelper.AddDirectMessageReactionAsync(this, emote, KaiHeiLa, options),
+            _ => Task.CompletedTask
+        };
+    }
+
+    /// <inheritdoc />
+    public Task RemoveReactionAsync(IEmote emote, IUser user, RequestOptions options = null)
+    {
+        return Channel switch
+        {
+            ITextChannel => MessageHelper.RemoveReactionAsync(this, user.Id, emote, KaiHeiLa, options),
+            IDMChannel => MessageHelper.RemoveDirectMessageReactionAsync(this, user.Id, emote, KaiHeiLa, options),
+            _ => Task.CompletedTask
+        };
+    }
+
+    /// <inheritdoc />
+    public Task RemoveReactionAsync(IEmote emote, ulong userId, RequestOptions options = null)
+    {
+        return Channel switch
+        {
+            ITextChannel => MessageHelper.RemoveReactionAsync(this, userId, emote, KaiHeiLa, options),
+            IDMChannel => MessageHelper.RemoveDirectMessageReactionAsync(this, userId, emote, KaiHeiLa, options),
+            _ => Task.CompletedTask
+        };
+    }
+
+    /// <inheritdoc />
+    public Task<IReadOnlyCollection<IUser>> GetReactionUsersAsync(IEmote emote, RequestOptions options = null)
+    {
+        return Channel switch
+        {
+            ITextChannel => MessageHelper.GetReactionUsersAsync(this, emote, KaiHeiLa, options),
+            IDMChannel => MessageHelper.GetDirectMessageReactionUsersAsync(this, emote, KaiHeiLa, options),
+            _ => Task.FromResult<IReadOnlyCollection<IUser>>(null)
+        };
+    }
+
     #endregion
 
     /// <summary>

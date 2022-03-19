@@ -56,6 +56,15 @@ internal class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextCha
     /// <inheritdoc />
     public Task<RestMessage> GetMessageAsync(Guid id, RequestOptions options = null)
         => ChannelHelper.GetMessageAsync(this, KaiHeiLa, id, options);
+    /// <inheritdoc />
+    public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(int limit = KaiHeiLaConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        => ChannelHelper.GetMessagesAsync(this, KaiHeiLa, null, Direction.Before, limit, true, options);
+    /// <inheritdoc />
+    public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        => ChannelHelper.GetMessagesAsync(this, KaiHeiLa, referenceMessageId, dir, limit, true, options);
+    /// <inheritdoc />
+    public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        => ChannelHelper.GetMessagesAsync(this, KaiHeiLa, referenceMessage.Id, dir, limit, true, options);
     
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Text, text, options, quote: quote, ephemeralUser: ephemeralUser);
@@ -138,6 +147,31 @@ internal class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextCha
             return await GetMessageAsync(id, options).ConfigureAwait(false);
         else
             return null;
+    }
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(int limit, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return GetMessagesAsync(limit, options);
+        else
+            return AsyncEnumerable.Empty<IReadOnlyCollection<IMessage>>();
+    }
+
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return GetMessagesAsync(referenceMessageId, dir, limit, options);
+        else
+            return AsyncEnumerable.Empty<IReadOnlyCollection<IMessage>>();
+    }
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return GetMessagesAsync(referenceMessage, dir, limit, options);
+        else
+            return AsyncEnumerable.Empty<IReadOnlyCollection<IMessage>>();
     }
     
     /// <inheritdoc />

@@ -8,6 +8,11 @@ namespace KaiHeiLa
     public interface IDMChannel : IMessageChannel, IPrivateChannel, IGuidEntity
     {
         new Guid Id { get; }
+
+        /// <summary>
+        ///     Chat code of the direct-message channel.
+        /// </summary>
+        Guid ChatCode { get; }
         
         /// <summary>
         ///     Gets the recipient of all messages in this channel.

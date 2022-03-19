@@ -40,9 +40,13 @@ public class Emote : IEmote
         => Id.GetHashCode();
     
     /// <summary> Parses an <see cref="Emote"/> from its raw format. </summary>
-    /// <param name="text">The raw encoding of an emote (e.g. <c>&lt;:dab:277855270321782784&gt;</c>).</param>
-    /// <returns>An emote.</returns>
+    /// <param name="text">
+    ///     The raw encoding of an emote; for example,
+    ///     [:djbigfan:1990044438283387/hvBcVC4nHX03k03k] when <paramref name="tagMode"/> is <c>TagMode.PlainText</c>,
+    ///     or (emj)djbigfan(emj)[1990044438283387/hvBcVC4nHX03k03k] when <paramref name="tagMode"/> is <c>TagMode.KMarkdown</c>.
+    /// </param>
     /// <param name="tagMode"></param>
+    /// <returns>An emote.</returns>
     /// <exception cref="ArgumentException">Invalid emote format.</exception>
     public static Emote Parse(string text, TagMode tagMode)
     {
@@ -52,7 +56,11 @@ public class Emote : IEmote
     }
     
     /// <summary> Tries to parse an <see cref="Emote"/> from its raw format. </summary>
-    /// <param name="text">The raw encoding of an emote; for example, [:dab:277855270321782784].</param>
+    /// <param name="text">
+    ///     The raw encoding of an emote; for example,
+    ///     [:djbigfan:1990044438283387/hvBcVC4nHX03k03k] when <paramref name="tagMode"/> is <c>TagMode.PlainText</c>,
+    ///     or (emj)djbigfan(emj)[1990044438283387/hvBcVC4nHX03k03k] when <paramref name="tagMode"/> is <c>TagMode.KMarkdown</c>.
+    /// </param>
     /// <param name="result">An emote.</param>
     /// <param name="tagMode"></param>
     public static bool TryParse(string text, out Emote result, TagMode tagMode)
@@ -65,7 +73,8 @@ public class Emote : IEmote
         Match match = tagMode switch
         {
             TagMode.PlainText => PlainTextEmojiRegex.Match(text),
-            TagMode.KMarkdown => KMarkdownEmojiRegex.Match(text)
+            TagMode.KMarkdown => KMarkdownEmojiRegex.Match(text),
+            _ => throw new ArgumentOutOfRangeException(nameof(tagMode), tagMode, null)
         };
 
         if (match.Success)

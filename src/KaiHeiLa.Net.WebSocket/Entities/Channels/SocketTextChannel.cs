@@ -103,6 +103,54 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
             msg = await ChannelHelper.GetMessageAsync(this, KaiHeiLa, id, options).ConfigureAwait(false);
         return msg;
     }
+    
+    /// <summary>
+    ///     Gets the last N messages from this message channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method follows the same behavior as described in <see cref="IMessageChannel.GetMessagesAsync(int, CacheMode, RequestOptions)"/>.
+    ///     Please visit its documentation for more details on this method.
+    /// </remarks>
+    /// <param name="limit">The numbers of message to be gotten from.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     Paged collection of messages.
+    /// </returns>
+    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(int limit = KaiHeiLaConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        => SocketChannelHelper.GetMessagesAsync(this, KaiHeiLa, _messages, null, Direction.Before, limit, CacheMode.AllowDownload, options);
+    /// <summary>
+    ///     Gets a collection of messages in this channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method follows the same behavior as described in <see cref="IMessageChannel.GetMessagesAsync(ulong, Direction, int, CacheMode, RequestOptions)"/>.
+    ///     Please visit its documentation for more details on this method.
+    /// </remarks>
+    /// <param name="referenceMessageId">The ID of the starting message to get the messages from.</param>
+    /// <param name="dir">The direction of the messages to be gotten from.</param>
+    /// <param name="limit">The numbers of message to be gotten from.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     Paged collection of messages.
+    /// </returns>
+    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        => SocketChannelHelper.GetMessagesAsync(this, KaiHeiLa, _messages, referenceMessageId, dir, limit, CacheMode.AllowDownload, options);
+    /// <summary>
+    ///     Gets a collection of messages in this channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method follows the same behavior as described in <see cref="IMessageChannel.GetMessagesAsync(IMessage, Direction, int, CacheMode, RequestOptions)"/>.
+    ///     Please visit its documentation for more details on this method.
+    /// </remarks>
+    /// <param name="referenceMessage">The starting message to get the messages from.</param>
+    /// <param name="dir">The direction of the messages to be gotten from.</param>
+    /// <param name="limit">The numbers of message to be gotten from.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     Paged collection of messages.
+    /// </returns>
+    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        => SocketChannelHelper.GetMessagesAsync(this, KaiHeiLa, _messages, referenceMessage.Id, dir, limit, CacheMode.AllowDownload, options);
+    
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Text, text, options, quote: quote, ephemeralUser: ephemeralUser);
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
@@ -220,6 +268,15 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         else
             return GetCachedMessage(id);
     }
-
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(int limit, CacheMode mode, RequestOptions options)
+        => SocketChannelHelper.GetMessagesAsync(this, KaiHeiLa, _messages, null, Direction.Before, limit, mode, options);
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit, CacheMode mode, RequestOptions options)
+        => SocketChannelHelper.GetMessagesAsync(this, KaiHeiLa, _messages, referenceMessageId, dir, limit, mode, options);
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit, CacheMode mode, RequestOptions options)
+        => SocketChannelHelper.GetMessagesAsync(this, KaiHeiLa, _messages, referenceMessage.Id, dir, limit, mode, options);
+    
     #endregion
 }

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using KaiHeiLa.API;
 using KaiHeiLa.API.Gateway;
 using KaiHeiLa.API.Rest;
+using KaiHeiLa.Rest;
 using Model = KaiHeiLa.API.Guild;
 using ChannelModel = KaiHeiLa.API.Channel;
 using MemberModel = KaiHeiLa.API.Rest.GuildMember;
@@ -256,6 +257,14 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     public override string ToString() => Name;
     private string DebuggerDisplay => $"{Name} ({Id})";
     internal SocketGuild Clone() => MemberwiseClone() as SocketGuild;
+
+    #region General
+
+    /// <inheritdoc />
+    public Task LeaveAsync(RequestOptions options = null)
+        => GuildHelper.LeaveAsync(this, KaiHeiLa, options);
+
+    #endregion
     
     #region IGuild
 
@@ -401,6 +410,29 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
         return null;
     }
 
+    /// <summary>
+    ///     Gets the users who are muted or deafened in this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains
+    ///     the collection of muted or deafened users in this guild.
+    /// </returns>
+    public async Task<(IReadOnlyCollection<SocketUser> Muted, IReadOnlyCollection<SocketUser> Deafened)> GetGuildMuteDeafListAsync(RequestOptions options = null)
+    {
+        SocketUser ParseUser(ulong id)
+        {
+            SocketUser user = Users.SingleOrDefault(x => x.Id == id);
+            user ??= SocketUnknownUser.Create(KaiHeiLa, KaiHeiLa.State, id);
+            return user;
+        }
+
+        (IReadOnlyCollection<ulong> muted, IReadOnlyCollection<ulong> deafened) = await GuildHelper.GetGuildMuteDeafListAsync(this, KaiHeiLa, options);
+        var mutedUsers = muted.Select(ParseUser).ToImmutableArray();
+        var deafenedUsers = deafened.Select(ParseUser).ToImmutableArray();
+        return (mutedUsers, deafenedUsers);
+    }
+
     internal SocketGuildUser AddOrUpdateUser(UserModel model)
     {
         if (_members.TryGetValue(model.Id, out SocketGuildUser member))
@@ -494,6 +526,18 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
 
     /// <inheritdoc />
     IRole IGuild.EveryoneRole => EveryoneRole;
+    
+    /// <inheritdoc />
+    async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> IGuild.GetGuildMuteDeafListAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+        {
+            (IReadOnlyCollection<SocketUser> muted, IReadOnlyCollection<SocketUser> deafened) = await GetGuildMuteDeafListAsync(options).ConfigureAwait(false);
+            return (muted.Select(x => x.Id).ToImmutableArray(), deafened.Select(x => x.Id).ToImmutableArray());
+        }
+        else
+            return (null, null);
+    }
     
     #endregion
 }

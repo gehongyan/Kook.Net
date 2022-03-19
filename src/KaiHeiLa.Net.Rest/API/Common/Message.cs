@@ -22,6 +22,7 @@ internal class Message
     public bool MentionAll { get; set; }
 
     [JsonPropertyName("mention_roles")]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public uint[] MentionRoles { get; set; }
 
     [JsonPropertyName("mention_here")]
