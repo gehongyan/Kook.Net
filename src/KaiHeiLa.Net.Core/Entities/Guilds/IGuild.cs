@@ -2,6 +2,8 @@
 
 public interface IGuild : IEntity<ulong>
 {
+    #region General
+
     string Name { get; }
 
     string Topic { get; }
@@ -52,7 +54,11 @@ public interface IGuild : IEntity<ulong>
     ///     A role that is associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
     /// </returns>
     IRole GetRole(uint id);
-    
+
+    #endregion
+
+    #region Guilds
+
     /// <summary>
     ///     Leaves this guild.
     /// </summary>
@@ -67,7 +73,110 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous leave operation.
     /// </returns>
     Task LeaveAsync(RequestOptions options = null);
+
+    #endregion
+
+    #region Guild Bans
+
+    // TODO: Implement Bans
+
+    #endregion
     
+    #region Channels
+    
+    /// <summary>
+    ///     Gets a collection of all channels in this guild.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
+    ///     generic channels found within this guild.
+    /// </returns>
+    Task<IReadOnlyCollection<IGuildChannel>> GetChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Gets a channel in this guild.
+    /// </summary>
+    /// <param name="id">The identifier for the channel.</param>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the generic channel
+    ///     associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
+    /// </returns>
+    Task<IGuildChannel> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Gets a collection of all text channels in this guild.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
+    ///     message channels found within this guild.
+    /// </returns>
+    Task<IReadOnlyCollection<ITextChannel>> GetTextChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Gets a text channel in this guild.
+    /// </summary>
+    /// <param name="id">The snowflake identifier for the text channel.</param>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the text channel
+    ///     associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
+    /// </returns>
+    Task<ITextChannel> GetTextChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Gets a collection of all voice channels in this guild.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
+    ///     voice channels found within this guild.
+    /// </returns>
+    Task<IReadOnlyCollection<IVoiceChannel>> GetVoiceChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Gets a voice channel in this guild.
+    /// </summary>
+    /// <param name="id">The snowflake identifier for the voice channel.</param>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the voice channel associated
+    ///     with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
+    /// </returns>
+    Task<IVoiceChannel> GetVoiceChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Gets a collection of all category channels in this guild.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
+    ///     category channels found within this guild.
+    /// </returns>
+    Task<IReadOnlyCollection<ICategoryChannel>> GetCategoriesAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    
+    // TODO: DefaultChannel
+    // TODO: Create Channels
+
+    #endregion
+
+    #region Invites
+
+    // TODO: Implement Invites
+
+    #endregion
+
+    #region Roles
+
+    // TODO: Implement Roles
+
+    #endregion
+
+    #region Users
+
     /// <summary>
     ///     Gets a user from this guild.
     /// </summary>
@@ -86,17 +195,19 @@ public interface IGuild : IEntity<ulong>
     ///     associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
     /// </returns>
     Task<IGuildUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
-    /// <summary>
-    ///     Gets a channel in this guild.
-    /// </summary>
-    /// <param name="id">The identifier for the channel.</param>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the generic channel
-    ///     associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
-    /// </returns>
-    Task<IGuildChannel> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
+    // TODO: SearchUsersAsync & GetCurrentUserAsync & GetOwnerAsync & DownloadUsersAsync
+    
+    #endregion
+
+    #region Emotes
+
+    // TODO: Implement Emotes
+
+    #endregion
+
+    #region Voice
+    
     /// <summary>
     ///     Gets the users who are muted or deafened in this guild.
     /// </summary>
@@ -107,4 +218,6 @@ public interface IGuild : IEntity<ulong>
     ///     the collection of muted or deafened users in this guild.
     /// </returns>
     Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> GetGuildMuteDeafListAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
+    #endregion
 }

@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using KaiHeiLa.API.Rest;
 
 namespace KaiHeiLa.Rest;
@@ -87,6 +88,12 @@ internal static class GuildHelper
         if (model != null)
             return RestGuildChannel.Create(client, guild, model);
         return null;
+    }
+    public static async Task<IReadOnlyCollection<RestGuildChannel>> GetChannelsAsync(IGuild guild, BaseKaiHeiLaClient client,
+        RequestOptions options)
+    {
+        var models = await client.ApiClient.GetGuildChannelsAsync(guild.Id, options).ConfigureAwait(false);
+        return models.Select(x => RestGuildChannel.Create(client, guild, x)).ToImmutableArray();
     }
 
     #endregion

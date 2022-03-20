@@ -2,6 +2,8 @@
 
 public interface IMessageChannel : IChannel
 {
+    #region Send Messages
+    
     /// <summary>
     ///     Sends a plain text to this message channel.
     /// </summary>
@@ -84,6 +86,10 @@ public interface IMessageChannel : IChannel
     /// </returns>
     Task<IMessage> GetMessageAsync(Guid id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
 
+    #endregion
+    
+    #region Get Messages
+    
     /// <summary>
     ///     Gets the last N messages from this message channel.
     /// </summary>
@@ -189,6 +195,12 @@ public interface IMessageChannel : IChannel
     IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch, 
         CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
     
+    // TODO: GetPinnedMessagesAsync
+    
+    #endregion
+    
+    #region Delete Messages
+
     /// <summary>
     ///     Deletes a message.
     /// </summary>
@@ -206,6 +218,10 @@ public interface IMessageChannel : IChannel
     /// </returns>
     Task DeleteMessageAsync(IMessage message, RequestOptions options = null);
 
+    #endregion
+    
+    #region Modify Messages
+
     /// <summary>
     ///     Modifies a message.
     /// </summary>
@@ -220,4 +236,6 @@ public interface IMessageChannel : IChannel
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
     Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions options = null);
+
+    #endregion
 }

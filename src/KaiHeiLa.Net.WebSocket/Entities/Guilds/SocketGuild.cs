@@ -91,6 +91,38 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     ///     A role object that represents an <c>@everyone</c> role in this guild.
     /// </returns>
     public SocketRole EveryoneRole => GetRole(0);
+    
+    /// <summary>
+    ///     Gets a collection of all text channels in this guild.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of message channels found within this guild.
+    /// </returns>
+    public IReadOnlyCollection<SocketTextChannel> TextChannels
+        => Channels.OfType<SocketTextChannel>().ToImmutableArray();
+    /// <summary>
+    ///     Gets a collection of all voice channels in this guild.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of voice channels found within this guild.
+    /// </returns>
+    public IReadOnlyCollection<SocketVoiceChannel> VoiceChannels
+        => Channels.OfType<SocketVoiceChannel>().ToImmutableArray();
+    /// <summary>
+    ///     Gets a collection of all stage channels in this guild.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of stage channels found within this guild.
+    /// </returns>
+    /// <summary>
+    ///     Gets a collection of all category channels in this guild.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of category channels found within this guild.
+    /// </returns>
+    public IReadOnlyCollection<SocketCategoryChannel> CategoryChannels
+        => Channels.OfType<SocketCategoryChannel>().ToImmutableArray();
+    
     /// <summary>
     ///     Gets a collection of all channels in this guild.
     /// </summary>
@@ -279,9 +311,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     Task<IGuildUser> IGuild.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IGuildUser>(GetUser(id));
 
-    /// <inheritdoc />
-    Task<IGuildChannel> IGuild.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
-        => Task.FromResult<IGuildChannel>(GetChannel(id));
     #endregion
 
     #region Channels
@@ -309,6 +338,15 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     /// </returns>
     public SocketTextChannel GetTextChannel(ulong id)
         => GetChannel(id) as SocketTextChannel;
+    /// <summary>
+    ///     Gets a voice channel in this guild.
+    /// </summary>
+    /// <param name="id">The snowflake identifier for the voice channel.</param>
+    /// <returns>
+    ///     A voice channel associated with the specified <paramref name="id" />; <see langword="null"/> if none is found.
+    /// </returns>
+    public SocketVoiceChannel GetVoiceChannel(ulong id)
+        => GetChannel(id) as SocketVoiceChannel;
     
     internal SocketGuildChannel AddChannel(ClientState state, ChannelModel model)
     {
@@ -526,6 +564,30 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
 
     /// <inheritdoc />
     IRole IGuild.EveryoneRole => EveryoneRole;
+    
+    /// <inheritdoc />
+    Task<IReadOnlyCollection<IGuildChannel>> IGuild.GetChannelsAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<IReadOnlyCollection<IGuildChannel>>(Channels);
+    /// <inheritdoc />
+    Task<IGuildChannel> IGuild.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<IGuildChannel>(GetChannel(id));
+    /// <inheritdoc />
+    Task<IReadOnlyCollection<ITextChannel>> IGuild.GetTextChannelsAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<IReadOnlyCollection<ITextChannel>>(TextChannels);
+    /// <inheritdoc />
+    Task<ITextChannel> IGuild.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<ITextChannel>(GetTextChannel(id));
+    
+    /// <inheritdoc />
+    Task<IReadOnlyCollection<IVoiceChannel>> IGuild.GetVoiceChannelsAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<IReadOnlyCollection<IVoiceChannel>>(VoiceChannels);
+    /// <inheritdoc />
+    Task<IVoiceChannel> IGuild.GetVoiceChannelAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<IVoiceChannel>(GetVoiceChannel(id));
+    /// <inheritdoc />
+    Task<IReadOnlyCollection<ICategoryChannel>> IGuild.GetCategoriesAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<IReadOnlyCollection<ICategoryChannel>>(CategoryChannels);
+    
     
     /// <inheritdoc />
     async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> IGuild.GetGuildMuteDeafListAsync(CacheMode mode, RequestOptions options)

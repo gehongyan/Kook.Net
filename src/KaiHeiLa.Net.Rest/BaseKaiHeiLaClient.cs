@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using KaiHeiLa.Logging;
 
 namespace KaiHeiLa.Rest;
@@ -154,11 +155,22 @@ public abstract class BaseKaiHeiLaClient : IKaiHeiLaClient
     /// <inheritdoc />
     Task<IGuild> IKaiHeiLaClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IGuild>(null);
-
+    /// <inheritdoc />
+    Task<IReadOnlyCollection<IGuild>> IKaiHeiLaClient.GetGuildsAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<IReadOnlyCollection<IGuild>>(ImmutableArray.Create<IGuild>());
+    /// <inheritdoc />
+    public Task<IChannel> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
+        => Task.FromResult<IChannel>(null);
+    /// <inheritdoc />
+    public Task<IDMChannel> GetDMChannelAsync(Guid chatCode, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
+        => Task.FromResult<IDMChannel>(null);
+    /// <inheritdoc />
+    public Task<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
+        => Task.FromResult<IReadOnlyCollection<IDMChannel>>(ImmutableArray.Create<IDMChannel>());
     /// <inheritdoc />
     Task<IUser> IKaiHeiLaClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IUser>(null);
-
+    
     /// <inheritdoc />
     Task IKaiHeiLaClient.StartAsync()
         => Task.Delay(0);

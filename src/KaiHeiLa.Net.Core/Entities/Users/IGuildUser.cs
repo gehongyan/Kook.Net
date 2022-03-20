@@ -2,6 +2,8 @@
 
 public interface IGuildUser : IUser
 {
+    #region General
+
     /// <summary>
     ///     用户在当前服务器的昵称
     /// </summary>
@@ -32,6 +34,16 @@ public interface IGuildUser : IUser
     
     bool? IsOwner { get; }
     
+    #endregion
+
+    #region Permissions
+
+    // TODO: Implement Permissions
+
+    #endregion
+
+    #region Guild
+
     /// <summary>
     ///     Kicks this user from this guild.
     /// </summary>
@@ -53,6 +65,16 @@ public interface IGuildUser : IUser
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
     Task ModifyNicknameAsync(Action<string> func, RequestOptions options = null);
+    
+    #endregion
+
+    #region Roles
+
+    // TODO: Implement Roles
+
+    #endregion
+    
+    #region Voice
     
     /// <summary>
     ///     Mute this user in this guild.
@@ -96,4 +118,6 @@ public interface IGuildUser : IUser
     /// <param name="options"></param>
     /// <returns></returns>
     Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelAsync(RequestOptions options = null);
+    
+    #endregion
 }

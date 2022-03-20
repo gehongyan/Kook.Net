@@ -2,6 +2,8 @@ namespace KaiHeiLa;
 
 public interface IGuildChannel : IChannel
 {
+    #region General
+    
     IGuild Guild { get; }
     
     ulong GuildId { get; }
@@ -13,6 +15,10 @@ public interface IGuildChannel : IChannel
     IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites { get; }
     
     IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites { get; }
+
+    #endregion
+
+    #region Permissions
 
     /// <summary>
     ///     Gets the permission overwrite for a specific role.
@@ -31,6 +37,15 @@ public interface IGuildChannel : IChannel
     ///     An overwrite object for the targeted user; <c>null</c> if none is set.
     /// </returns>
     OverwritePermissions? GetPermissionOverwrite(IUser user);
+
+    // TODO: Add, Remove, Modify Permission Overwrites
+    
+    #endregion
+
+    #region Users
+
+    // TODO: GetUsersAsync
+    
     /// <summary>
     ///     Gets a user in this channel.
     /// </summary>
@@ -42,5 +57,7 @@ public interface IGuildChannel : IChannel
     ///     represents the user; <c>null</c> if none is found.
     /// </returns>
     new Task<IGuildUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
+    #endregion
 
 }

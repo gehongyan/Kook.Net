@@ -14,7 +14,7 @@ namespace KaiHeiLa.Rest;
 ///     Represents a REST-based channel in a guild that can send and receive messages.
 /// </summary>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-internal class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChannel
+public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChannel
 {
     #region RestTextChannel
     

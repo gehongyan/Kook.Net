@@ -102,18 +102,6 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     public async Task UpdateAsync(RequestOptions options = null)
         => Update(await KaiHeiLa.ApiClient.GetGuildAsync(Id, options).ConfigureAwait(false));
 
-    /// <summary>
-    ///     Gets a channel in this guild.
-    /// </summary>
-    /// <param name="id">The identifier for the channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the generic channel
-    ///     associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
-    /// </returns>
-    public Task<RestGuildChannel> GetChannelAsync(ulong id, RequestOptions options = null)
-        => GuildHelper.GetChannelAsync(this, KaiHeiLa, id, options);
-    
     /// <inheritdoc />
     public Task LeaveAsync(RequestOptions options = null)
         => GuildHelper.LeaveAsync(this, KaiHeiLa, options);
@@ -137,6 +125,99 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
     #endregion
 
+    #region Channels
+    
+    /// <summary>
+    ///     Gets a collection of all channels in this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
+    ///     generic channels found within this guild.
+    /// </returns>
+    public Task<IReadOnlyCollection<RestGuildChannel>> GetChannelsAsync(RequestOptions options = null)
+        => GuildHelper.GetChannelsAsync(this, KaiHeiLa, options);
+    /// <summary>
+    ///     Gets a channel in this guild.
+    /// </summary>
+    /// <param name="id">The identifier for the channel.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the generic channel
+    ///     associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    /// </returns>
+    public Task<RestGuildChannel> GetChannelAsync(ulong id, RequestOptions options = null)
+        => GuildHelper.GetChannelAsync(this, KaiHeiLa, id, options);
+    /// <summary>
+    ///     Gets a text channel in this guild.
+    /// </summary>
+    /// <param name="id">The snowflake identifier for the text channel.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the text channel
+    ///     associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    /// </returns>
+    public async Task<RestTextChannel> GetTextChannelAsync(ulong id, RequestOptions options = null)
+    {
+        var channel = await GuildHelper.GetChannelAsync(this, KaiHeiLa, id, options).ConfigureAwait(false);
+        return channel as RestTextChannel;
+    }
+    /// <summary>
+    ///     Gets a collection of all text channels in this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
+    ///     message channels found within this guild.
+    /// </returns>
+    public async Task<IReadOnlyCollection<RestTextChannel>> GetTextChannelsAsync(RequestOptions options = null)
+    {
+        var channels = await GuildHelper.GetChannelsAsync(this, KaiHeiLa, options).ConfigureAwait(false);
+        return channels.OfType<RestTextChannel>().ToImmutableArray();
+    }
+    /// <summary>
+    ///     Gets a voice channel in this guild.
+    /// </summary>
+    /// <param name="id">The snowflake identifier for the voice channel.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the voice channel associated
+    ///     with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    /// </returns>
+    public async Task<RestVoiceChannel> GetVoiceChannelAsync(ulong id, RequestOptions options = null)
+    {
+        var channel = await GuildHelper.GetChannelAsync(this, KaiHeiLa, id, options).ConfigureAwait(false);
+        return channel as RestVoiceChannel;
+    }
+    /// <summary>
+    ///     Gets a collection of all voice channels in this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
+    ///     voice channels found within this guild.
+    /// </returns>
+    public async Task<IReadOnlyCollection<RestVoiceChannel>> GetVoiceChannelsAsync(RequestOptions options = null)
+    {
+        var channels = await GuildHelper.GetChannelsAsync(this, KaiHeiLa, options).ConfigureAwait(false);
+        return channels.OfType<RestVoiceChannel>().ToImmutableArray();
+    }
+    /// <summary>
+    ///     Gets a collection of all category channels in this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
+    ///     category channels found within this guild.
+    /// </returns>
+    public async Task<IReadOnlyCollection<RestCategoryChannel>> GetCategoryChannelsAsync(RequestOptions options = null)
+    {
+        var channels = await GuildHelper.GetChannelsAsync(this, KaiHeiLa, options).ConfigureAwait(false);
+        return channels.OfType<RestCategoryChannel>().ToImmutableArray();
+    }
+    
+    #endregion
+    
     #region IGuild
     /// <inheritdoc />
     bool IGuild.Available => Available;
@@ -156,6 +237,15 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
+    
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IGuildChannel>> IGuild.GetChannelsAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetChannelsAsync(options).ConfigureAwait(false);
+        else
+            return ImmutableArray.Create<IGuildChannel>();
+    }
     /// <inheritdoc />
     async Task<IGuildChannel> IGuild.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
     {
@@ -164,6 +254,48 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
+    
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<ITextChannel>> IGuild.GetTextChannelsAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetTextChannelsAsync(options).ConfigureAwait(false);
+        else
+            return ImmutableArray.Create<ITextChannel>();
+    }
+    /// <inheritdoc />
+    async Task<ITextChannel> IGuild.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetTextChannelAsync(id, options).ConfigureAwait(false);
+        else
+            return null;
+    }
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IVoiceChannel>> IGuild.GetVoiceChannelsAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetVoiceChannelsAsync(options).ConfigureAwait(false);
+        else
+            return ImmutableArray.Create<IVoiceChannel>();
+    }
+    /// <inheritdoc />
+    async Task<IVoiceChannel> IGuild.GetVoiceChannelAsync(ulong id, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetVoiceChannelAsync(id, options).ConfigureAwait(false);
+        else
+            return null;
+    }
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<ICategoryChannel>> IGuild.GetCategoriesAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetCategoryChannelsAsync(options).ConfigureAwait(false);
+        else
+            return null;
+    }
+    
     /// <inheritdoc />
     async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> IGuild.GetGuildMuteDeafListAsync(CacheMode mode, RequestOptions options)
     {

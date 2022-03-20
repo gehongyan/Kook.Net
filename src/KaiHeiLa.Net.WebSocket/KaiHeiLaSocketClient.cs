@@ -47,7 +47,21 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     internal new KaiHeiLaSocketApiClient ApiClient => base.ApiClient;
     /// <inheritdoc />
     public override IReadOnlyCollection<SocketGuild> Guilds => State.Guilds;
-
+    /// <summary>
+    ///     Gets a collection of direct message channels opened in this session.
+    /// </summary>
+    /// <remarks>
+    ///     This method returns a collection of currently opened direct message channels.
+    ///     <note type="warning">
+    ///         This method will not return previously opened DM channels outside of the current session! If you
+    ///         have just started the client, this may return an empty collection.
+    ///     </note>
+    /// </remarks>
+    /// <returns>
+    ///     A collection of DM channels that have been opened in this session.
+    /// </returns>
+    public IReadOnlyCollection<SocketDMChannel> DMChannels
+        => State.DMChannels.OfType<SocketDMChannel>().ToImmutableArray();
     public KaiHeiLaSocketClient(KaiHeiLaSocketConfig config) : this(config, CreateApiClient(config)) { }
 
     private KaiHeiLaSocketClient(KaiHeiLaSocketConfig config, KaiHeiLaSocketApiClient client)
@@ -179,6 +193,17 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     /// </returns>
     public async ValueTask<IDMChannel> GetDMChannelAsync(Guid chatCode, RequestOptions options = null)
         => GetDMChannel(chatCode) ?? (IDMChannel)await ClientHelper.GetDMChannelAsync(this, chatCode, options).ConfigureAwait(false);
+
+    /// <summary>
+    ///     Gets a collection of direct message channels from the cache or does a rest request if unavailable.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the channel associated
+    ///     with the identifier; <c>null</c> when the channel cannot be found.
+    /// </returns>
+    public async ValueTask<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(RequestOptions options = null)
+        => DMChannels as IReadOnlyCollection<IDMChannel> ?? (await ClientHelper.GetDMChannelsAsync(this, options).ConfigureAwait(false)).ToImmutableArray();
     
     /// <summary>
     ///     Gets a user from the cache or does a rest request if unavailable.
@@ -1515,6 +1540,13 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     internal SocketGuild RemoveGuild(ulong id)
         => State.RemoveGuild(id);
 
+    /// <exception cref="InvalidOperationException">Unexpected channel type is created.</exception>
+    internal ISocketPrivateChannel AddDMChannel(API.UserChat model, ClientState state)
+    {
+        var channel = SocketDMChannel.Create(this, state, model.Code, model.Recipient);
+        state.AddDMChannel(channel);
+        return channel;
+    }
     internal SocketDMChannel CreateDMChannel(Guid chatCode, API.User model, ClientState state)
     {
         return SocketDMChannel.Create(this, state, chatCode, model);
@@ -1699,4 +1731,24 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
         string details = $"{evnt} Guild={guildId}";
         await _gatewayLogger.DebugAsync($"Unsynced Guild ({details}).").ConfigureAwait(false);
     }
+
+    #region IKaiHeiLaClient
+
+    /// <inheritdoc />
+    Task<IReadOnlyCollection<IGuild>> IKaiHeiLaClient.GetGuildsAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<IReadOnlyCollection<IGuild>>(Guilds);
+    /// <inheritdoc />
+    Task<IGuild> IKaiHeiLaClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<IGuild>(GetGuild(id));
+    /// <inheritdoc />
+    async Task<IChannel> IKaiHeiLaClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
+        => mode == CacheMode.AllowDownload ? await GetChannelAsync(id, options).ConfigureAwait(false) : GetChannel(id);
+    /// <inheritdoc />
+    async Task<IDMChannel> IKaiHeiLaClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions options)
+        => mode == CacheMode.AllowDownload ? await GetDMChannelAsync(chatCode, options).ConfigureAwait(false) : GetDMChannel(chatCode);
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IDMChannel>> IKaiHeiLaClient.GetDMChannelsAsync(CacheMode mode, RequestOptions options)
+        => mode == CacheMode.AllowDownload ? await GetDMChannelsAsync(options).ConfigureAwait(false) : DMChannels;
+    
+    #endregion
 }

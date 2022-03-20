@@ -17,4 +17,6 @@ public interface IRole : IEntity<uint>, IMentionable
     bool IsMentionable { get; }
 
     GuildPermissions Permissions { get; }
+    
+    // TODO: ModifyAsync
 }

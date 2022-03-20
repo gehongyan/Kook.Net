@@ -9,11 +9,13 @@ internal class ClientState
     private const double AverageUsersPerGuild = 47.78; //Source: Googie2149
     private const double CollectionMultiplier = 1.05; //Add 5% buffer to handle growth
     
-    private readonly ConcurrentDictionary<ulong, SocketChannel> _channels;
+    private readonly ConcurrentDictionary<ulong, SocketChannel> _guildChannels;
+    private readonly ConcurrentDictionary<Guid, SocketDMChannel> _dmChannels;
     private readonly ConcurrentDictionary<ulong, SocketGuild> _guilds;
     private readonly ConcurrentDictionary<ulong, SocketGlobalUser> _users;
     
-    internal IReadOnlyCollection<SocketChannel> Channels => _channels.ToReadOnlyCollection();
+    internal IReadOnlyCollection<SocketChannel> GuildChannels => _guildChannels.ToReadOnlyCollection();
+    internal IReadOnlyCollection<SocketDMChannel> DMChannels => _dmChannels.ToReadOnlyCollection();
     internal IReadOnlyCollection<SocketGuild> Guilds => _guilds.ToReadOnlyCollection();
     internal IReadOnlyCollection<SocketGlobalUser> Users => _users.ToReadOnlyCollection();
     
@@ -21,30 +23,35 @@ internal class ClientState
     {
         double estimatedChannelCount = guildCount * AverageChannelsPerGuild + dmChannelCount;
         double estimatedUsersCount = guildCount * AverageUsersPerGuild;
-        _channels = new ConcurrentDictionary<ulong, SocketChannel>(ConcurrentHashSet.DefaultConcurrencyLevel, (int)(estimatedChannelCount * CollectionMultiplier));
+        _guildChannels = new ConcurrentDictionary<ulong, SocketChannel>(ConcurrentHashSet.DefaultConcurrencyLevel, (int)(estimatedChannelCount * CollectionMultiplier));
+        _dmChannels = new ConcurrentDictionary<Guid, SocketDMChannel>(ConcurrentHashSet.DefaultConcurrencyLevel, (int)(dmChannelCount * CollectionMultiplier));
         _guilds = new ConcurrentDictionary<ulong, SocketGuild>(ConcurrentHashSet.DefaultConcurrencyLevel, (int)(guildCount * CollectionMultiplier));
         _users = new ConcurrentDictionary<ulong, SocketGlobalUser>(ConcurrentHashSet.DefaultConcurrencyLevel, (int)(estimatedUsersCount * CollectionMultiplier));
     }
-
-    internal SocketDMChannel GetDMChannel(Guid chatCode) 
-        => (SocketDMChannel) null;
+    
     internal SocketChannel GetChannel(ulong id)
     {
-        if (_channels.TryGetValue(id, out SocketChannel channel))
+        if (_guildChannels.TryGetValue(id, out SocketChannel channel))
             return channel;
         return null;
     }
-    internal SocketChannel GetChannel(ulong guildId, string channelName)
+    internal SocketDMChannel GetDMChannel(Guid userId)
     {
-        return _guilds[guildId].Channels.SingleOrDefault(c => c.Name == channelName);
+        if (_dmChannels.TryGetValue(userId, out SocketDMChannel channel))
+            return channel;
+        return null;
     }
     internal void AddChannel(SocketChannel channel)
     {
-        _channels[channel.Id] = channel;
+        _guildChannels[channel.Id] = channel;
+    }
+    internal void AddDMChannel(SocketDMChannel channel)
+    {
+        _dmChannels[channel.Id] = channel;
     }
     internal SocketChannel RemoveChannel(ulong id)
     {
-        if (_channels.TryRemove(id, out SocketChannel channel))
+        if (_guildChannels.TryRemove(id, out SocketChannel channel))
         {
             return channel;
         }
@@ -54,6 +61,10 @@ internal class ClientState
     {
         foreach (var guild in _guilds.Values)
             guild.PurgeChannelCache(this);
+    }
+    internal void PurgeDMChannels()
+    {
+        _dmChannels.Clear();
     }
     
     internal SocketGuild GetGuild(ulong id)

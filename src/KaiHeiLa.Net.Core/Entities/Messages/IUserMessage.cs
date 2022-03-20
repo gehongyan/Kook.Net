@@ -17,4 +17,8 @@ public interface IUserMessage : IMessage
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
     Task ModifyAsync(Action<MessageProperties> func, RequestOptions options = null);
+
+    // TODO: Pins
+    // TODO: Resolve
+    
 }

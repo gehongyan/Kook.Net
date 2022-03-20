@@ -2,6 +2,8 @@ namespace KaiHeiLa;
 
 public interface IKaiHeiLaClient : IDisposable
 {
+    #region General
+
     /// <summary>
     ///     Gets the current state of connection.
     /// </summary>
@@ -37,6 +39,54 @@ public interface IKaiHeiLaClient : IDisposable
     /// </returns>
     Task StopAsync();
     
+    #endregion
+
+    #region Channels
+    
+    /// <summary>
+    ///     Gets a generic channel.
+    /// </summary>
+    /// <param name="id">The identifier of the channel (e.g. `381889909113225237`).</param>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the channel associated
+    ///     with the snowflake identifier; <c>null</c> when the channel cannot be found.
+    /// </returns>
+    Task<IChannel> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Gets a direct message channel.
+    /// </summary>
+    /// <param name="chatCode">The identifier of the channel.</param>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
+    ///     of direct-message channels that the user currently partakes in.
+    /// </returns>
+    Task<IDMChannel> GetDMChannelAsync(Guid chatCode, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Gets a collection of direct message channels opened in this session.
+    /// </summary>
+    /// <remarks>
+    ///     This method returns a collection of currently opened direct message channels.
+    ///     <note type="warning">
+    ///         This method will not return previously opened DM channels outside of the current session! If you
+    ///         have just started the client, this may return an empty collection.
+    ///     </note>
+    /// </remarks>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
+    ///     of direct-message channels that the user currently partakes in.
+    /// </returns>
+    Task<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
+    #endregion
+    
+    #region Guilds
+    
     /// <summary>
     ///     Gets a guild.
     /// </summary>
@@ -48,6 +98,26 @@ public interface IKaiHeiLaClient : IDisposable
     ///     with the identifier; <c>null</c> when the guild cannot be found.
     /// </returns>
     Task<IGuild> GetGuildAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Gets a collection of guilds that the user is currently in.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
+    ///     of guilds that the current user is in.
+    /// </returns>
+    Task<IReadOnlyCollection<IGuild>> GetGuildsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    
+    #endregion
+
+    #region Guild Invites
+
+    // TODO: Implement Invites
+
+    #endregion
+    
+    #region Users
     
     /// <summary>
     ///     Gets a user.
@@ -60,4 +130,12 @@ public interface IKaiHeiLaClient : IDisposable
     ///     the identifier; <c>null</c> if the user is not found.
     /// </returns>
     Task<IUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    
+    #endregion
+
+    #region Gateway
+
+    // TODO: Implement Gateway
+
+    #endregion
 }

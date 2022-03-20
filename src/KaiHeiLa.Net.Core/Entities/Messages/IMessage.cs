@@ -2,6 +2,8 @@
 
 public interface IMessage : IGuidEntity, IDeletable
 {
+    #region General
+
     MessageType Type { get; }
     
     MessageSource Source { get; }
@@ -33,6 +35,10 @@ public interface IMessage : IGuidEntity, IDeletable
     IAttachment Attachment { get; }
     
     IReadOnlyCollection<ICard> Cards { get; }
+    
+    #endregion
+
+    #region Reactions
     
     /// <summary>
     ///     Adds a reaction to this message.
@@ -88,4 +94,6 @@ public interface IMessage : IGuidEntity, IDeletable
     ///      Collection of users.
     /// </returns>
     Task<IReadOnlyCollection<IUser>> GetReactionUsersAsync(IEmote emote, RequestOptions options = null);
+    
+    #endregion
 }

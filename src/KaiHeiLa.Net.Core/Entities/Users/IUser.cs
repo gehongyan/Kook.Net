@@ -19,4 +19,6 @@ public interface IUser : IEntity<ulong>, IMentionable
     string Avatar { get; }
 
     string VIPAvatar { get; }
+    
+    // TODO: CreateDMChannelAsync
 }
