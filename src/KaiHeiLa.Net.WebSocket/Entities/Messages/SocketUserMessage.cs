@@ -21,6 +21,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     private Quote _quote;
     private Attachment _attachment;
     private ImmutableArray<ICard> _cards = ImmutableArray.Create<ICard>();
+    private ImmutableArray<IEmbed>? _embeds;
     private ImmutableArray<SocketRole> _roleMentions = ImmutableArray.Create<SocketRole>();
     private ImmutableArray<ITag> _tags = ImmutableArray.Create<ITag>();
 
@@ -33,6 +34,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     public override Attachment Attachment => _attachment;
     /// <inheritdoc />  
     public override IReadOnlyCollection<ICard> Cards => _cards;
+    /// <inheritdoc />  
+    public override IReadOnlyCollection<IEmbed> Embeds => _embeds;
     /// <inheritdoc />
     public override IReadOnlyCollection<SocketRole> MentionedRoles => _roleMentions;
     /// <inheritdoc />
@@ -47,6 +50,12 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     {
     }
     internal new static SocketUserMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
+    {
+        var entity = new SocketUserMessage(kaiHeiLa, gatewayEvent.MessageId, channel, author, SocketMessageHelper.GetSource(model));
+        entity.Update(state, model, gatewayEvent);
+        return entity;
+    }
+    internal new static SocketUserMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
     {
         var entity = new SocketUserMessage(kaiHeiLa, gatewayEvent.MessageId, channel, author, SocketMessageHelper.GetSource(model));
         entity.Update(state, model, gatewayEvent);
@@ -90,12 +99,6 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         Guild = guild;
     }
     
-    internal new static SocketUserMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
-    {
-        var entity = new SocketUserMessage(kaiHeiLa, gatewayEvent.MessageId, channel, author, SocketMessageHelper.GetSource(model));
-        entity.Update(state, model, gatewayEvent);
-        return entity;
-    }
     internal override void Update(ClientState state, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
     {
         base.Update(state, model, gatewayEvent);
@@ -135,6 +138,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         _cards = Type == MessageType.Card 
             ? MessageHelper.ParseCards(model.Content) 
             : ImmutableArray.Create<ICard>();
+        
+        _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
         
         Guild = guild;
     }

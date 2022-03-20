@@ -76,31 +76,9 @@ public class RestUserMessage : RestMessage, IUserMessage
         if (model.Attachment is not null)
             _attachment = Attachment.Create(model.Attachment);
         
-        if (model.Type == MessageType.Card)
-        {
-            string json = model.Content;
-            JsonSerializerOptions serializerOptions = new()
-            {
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                Converters =
-                {
-                    new CardConverter(),
-                    new ModuleConverter(),
-                    new ElementConverter()
-                }
-            };
-            CardBase[] cardBases = JsonSerializer.Deserialize<CardBase[]>(json, serializerOptions);
-            
-            var cards = ImmutableArray.CreateBuilder<ICard>(cardBases.Length);
-            foreach (CardBase cardBase in cardBases)
-                cards.Add(cardBase.ToEntity());
-
-            _cards = cards.ToImmutable();
-        }
-        else
-        {
-            _cards = ImmutableArray.Create<ICard>();
-        }
+        _cards = model.Type == MessageType.Card 
+            ? MessageHelper.ParseCards(model.Content) 
+            : ImmutableArray.Create<ICard>();
     }
     
     internal override void Update(DirectMessage model)
@@ -122,31 +100,9 @@ public class RestUserMessage : RestMessage, IUserMessage
         if (model.Attachment is not null)
             _attachment = Attachment.Create(model.Attachment);
         
-        if (model.Type == MessageType.Card)
-        {
-            string json = model.Content;
-            JsonSerializerOptions serializerOptions = new()
-            {
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                Converters =
-                {
-                    new CardConverter(),
-                    new ModuleConverter(),
-                    new ElementConverter()
-                }
-            };
-            CardBase[] cardBases = JsonSerializer.Deserialize<CardBase[]>(json, serializerOptions);
-            
-            var cards = ImmutableArray.CreateBuilder<ICard>(cardBases.Length);
-            foreach (CardBase cardBase in cardBases)
-                cards.Add(cardBase.ToEntity());
-
-            _cards = cards.ToImmutable();
-        }
-        else
-        {
-            _cards = ImmutableArray.Create<ICard>();
-        }
+        _cards = model.Type == MessageType.Card 
+            ? MessageHelper.ParseCards(model.Content) 
+            : ImmutableArray.Create<ICard>();
     }
     
     private string DebuggerDisplay => $"{Author}: {Content} ({Id}{(Attachment is not null ? ", Attachment" : "")})";

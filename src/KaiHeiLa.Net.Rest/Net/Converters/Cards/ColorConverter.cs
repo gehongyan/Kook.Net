@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace KaiHeiLa.Net.Converters;
 
-public class ColorConverter : JsonConverter<Color?>
+public class NullableColorConverter : JsonConverter<Color?>
 {
     public override Color? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

@@ -54,6 +54,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
     public virtual Attachment Attachment { get; private set; }
 
     public virtual IReadOnlyCollection<ICard> Cards => ImmutableArray.Create<ICard>();
+    public virtual IReadOnlyCollection<IEmbed> Embeds => null;
     
     /// <summary>
     ///     Returns the roles mentioned in this message.
@@ -215,6 +216,9 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage
     {
         _reactions.RemoveAll(x => x.Emote.Equals(emote));
     }
+
+    public Task ReloadAsync(RequestOptions options = null)
+        => SocketMessageHelper.ReloadAsync(this, KaiHeiLa, options);
     
     /// <inheritdoc />
     public Task AddReactionAsync(IEmote emote, RequestOptions options = null)

@@ -29,7 +29,7 @@ internal class Message
     public bool MentionHere { get; set; }
 
     [JsonPropertyName("embeds")]
-    public Embed[] Embeds { get; set; }
+    public EmbedBase[] Embeds { get; set; }
 
     [JsonPropertyName("attachment")]
     public Attachment Attachment { get; set; }

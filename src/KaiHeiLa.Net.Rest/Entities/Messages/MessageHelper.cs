@@ -236,6 +236,27 @@ internal static class MessageHelper
         };
         await client.ApiClient.ModifyDirectMessageAsync(args, options).ConfigureAwait(false);
     }
+
+    public static ImmutableArray<ICard> ParseCards(string json)
+    {
+        JsonSerializerOptions serializerOptions = new()
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Converters =
+            {
+                new CardConverter(),
+                new ModuleConverter(),
+                new ElementConverter()
+            }
+        };
+        CardBase[] cardBases = JsonSerializer.Deserialize<CardBase[]>(json, serializerOptions);
+            
+        var cards = ImmutableArray.CreateBuilder<ICard>(cardBases.Length);
+        foreach (CardBase cardBase in cardBases)
+            cards.Add(cardBase.ToEntity());
+
+        return cards.ToImmutable();
+    }
     
     public static string SerializeCards(IEnumerable<ICard> cards)
     {
@@ -436,26 +457,5 @@ internal static class MessageHelper
         if (author == null)
             author = RestUser.Create(client, model);
         return author;
-    }
-
-    public static ImmutableArray<ICard> ParseCards(string json)
-    {
-        JsonSerializerOptions serializerOptions = new()
-        {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            Converters =
-            {
-                new CardConverter(),
-                new ModuleConverter(),
-                new ElementConverter()
-            }
-        };
-        CardBase[] cardBases = JsonSerializer.Deserialize<CardBase[]>(json, serializerOptions);
-            
-        var cards = ImmutableArray.CreateBuilder<ICard>(cardBases.Length);
-        foreach (CardBase cardBase in cardBases)
-            cards.Add(cardBase.ToEntity());
-
-        return cards.ToImmutable();
     }
 }

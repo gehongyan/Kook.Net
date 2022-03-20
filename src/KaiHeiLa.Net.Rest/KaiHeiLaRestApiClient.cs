@@ -16,6 +16,7 @@ using System.Linq;
 using System.Web;
 using KaiHeiLa.API.Rest;
 using KaiHeiLa.Badges;
+using KaiHeiLa.Net.Converters;
 
 namespace KaiHeiLa.API;
 
@@ -46,7 +47,6 @@ internal class KaiHeiLaRestApiClient : IDisposable
     internal ulong? CurrentUserId { get; set; }
     internal Func<IRateLimitInfo, Task> DefaultRatelimitCallback { get; set; }
     
-    
     public KaiHeiLaRestApiClient(RestClientProvider restClientProvider, string userAgent, RetryMode defaultRetryMode = RetryMode.AlwaysRetry,
         JsonSerializerOptions serializerOptions = null, Func<IRateLimitInfo, Task> defaultRatelimitCallback = null)
     {
@@ -54,6 +54,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         UserAgent = userAgent;
         DefaultRetryMode = defaultRetryMode;
         SerializerOptions = serializerOptions ?? new JsonSerializerOptions {Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping};
+        // SerializerOptions.Converters.Add(new EmbedConverter());
         DefaultRatelimitCallback = defaultRatelimitCallback;
         
         RequestQueue = new RequestQueue();
@@ -62,7 +63,6 @@ internal class KaiHeiLaRestApiClient : IDisposable
     }
 
     internal void SetBaseUrl(string baseUrl)
-    
     {
         RestClient?.Dispose();
         RestClient = _restClientProvider(baseUrl);

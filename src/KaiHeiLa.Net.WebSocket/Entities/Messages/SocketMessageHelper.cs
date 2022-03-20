@@ -38,4 +38,18 @@ internal static class SocketMessageHelper
         return MessageSource.User;
     }
 
+    public static async Task ReloadAsync(SocketMessage msg, KaiHeiLaSocketClient client, RequestOptions options)
+    {
+        switch (msg.Channel)
+        {
+            case SocketTextChannel channel:
+                msg.Update(client.State, await client.ApiClient.GetMessageAsync(msg.Id, options: options).ConfigureAwait(false));
+                break;
+            case SocketDMChannel channel:
+                msg.Update(client.State, await client.ApiClient.GetDirectMessageAsync(msg.Id, chatCode: channel.ChatCode, options: options).ConfigureAwait(false));
+                break;
+            default:
+                throw new InvalidOperationException("Cannot reload a message from a non-SocketTextChannel or non-SocketTextChannel.");
+        }
+    }
 }

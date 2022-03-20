@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Reflection;
+using System.Text.Json;
 using KaiHeiLa.API;
 
 namespace KaiHeiLa.Rest;
@@ -345,7 +346,6 @@ internal static class EntityExtensions
     public static ICard ToEntity(this API.CardBase model)
     {
         if (model is null) return null;
-        if (model is null) return null;
         return model.Type switch
         {
              CardType.Card => (model as API.Card).ToEntity(),
@@ -364,7 +364,7 @@ internal static class EntityExtensions
         return entity.Type switch
         {
             CardType.Card => (entity as Card).ToModel(),
-            _ => throw new ArgumentOutOfRangeException(nameof(API.ICard))
+            _ => throw new ArgumentOutOfRangeException(nameof(ICard))
         };
     }
     public static API.Card ToModel(this Card entity)
@@ -382,6 +382,43 @@ internal static class EntityExtensions
 
     #endregion
 
+    #region Embeds
+    
+    public static IEmbed ToEntity(this API.EmbedBase model)
+    {
+        if (model is null) return null;
+        return model.Type switch
+        {
+            EmbedType.Link => (model as API.LinkEmbed).ToEntity(),
+            EmbedType.Image => (model as API.ImageEmbed).ToEntity(),
+            EmbedType.BilibiliVideo => (model as API.BilibiliVideoEmbed).ToEntity(),
+            _ => (model as API.NotImplementedEmbed).ToNotImplementedEntity()
+        };
+    }
+    public static NotImplementedEmbed ToNotImplementedEntity(this API.NotImplementedEmbed model)
+    {
+        if (model is null) return null;
+        return new NotImplementedEmbed(model.RawType, model.RawJsonNode);
+    }
+    public static LinkEmbed ToEntity(this API.LinkEmbed model)
+    {
+        if (model is null) return null;
+        return new LinkEmbed(model.Url, model.Title, model.Description, model.SiteName, model.Color, model.Image);
+    }
+    public static ImageEmbed ToEntity(this API.ImageEmbed model)
+    {
+        if (model is null) return null;
+        return new ImageEmbed(model.Url, model.OriginUrl);
+    }
+    public static BilibiliVideoEmbed ToEntity(this API.BilibiliVideoEmbed model)
+    {
+        if (model is null) return null;
+        return new BilibiliVideoEmbed(model.Url, model.OriginUrl, model.BvNumber, model.IframePath,
+            TimeSpan.FromSeconds(model.Duration), model.Title, model.Cover);
+    }
+
+    #endregion
+    
     #region Overwrites
 
     public static UserPermissionOverwrite ToEntity(this API.UserPermissionOverwrite model)
