@@ -96,6 +96,25 @@ internal static class ChannelHelper
             count: limit
         );
     }
+    
+    public static async Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(IMessageChannel channel, BaseKaiHeiLaClient client,
+        RequestOptions options)
+    {
+        var guildId = (channel as IGuildChannel)?.GuildId;
+        var guild = guildId != null ? await (client as IKaiHeiLaClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).ConfigureAwait(false) : null;
+        var models = await client.ApiClient.QueryMessagesAsync(channel.Id, queryPin: true, options: options).ConfigureAwait(false);
+        var builder = ImmutableArray.CreateBuilder<RestMessage>();
+        foreach (var model in models)
+        {
+            var author = MessageHelper.GetAuthor(client, guild, model.Author);
+            RestMessage message = RestMessage.Create(client, channel, author, model);
+            if (message is RestUserMessage userMessage)
+                userMessage.IsPinned = true;
+            builder.Add(message);
+        }
+        return builder.ToImmutable();
+    }
+    
     public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendMessageAsync(IMessageChannel channel, 
         BaseKaiHeiLaClient client, MessageType messageType, string content, RequestOptions options, IQuote quote = null, IUser ephemeralUser = null)
     {

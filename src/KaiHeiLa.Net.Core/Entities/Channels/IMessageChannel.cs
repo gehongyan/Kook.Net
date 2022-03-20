@@ -110,12 +110,6 @@ public interface IMessageChannel : IChannel
     ///     be split into 5 individual requests; thus returning 5 individual asynchronous responses, hence the need
     ///     of flattening.
     /// </remarks>
-    /// <example>
-    ///     <para>The following example downloads 300 messages and gets messages that belong to the user 
-    ///     <c>53905483156684800</c>.</para>
-    ///     <code language="cs" region="GetMessagesAsync.FromLimit.Standard"
-    ///           source="..\..\..\KaiHeiLa.Net.Examples\Core\Entities\Channels\IMessageChannel.Examples.cs" />
-    /// </example>
     /// <param name="limit">The numbers of message to be gotten from.</param>
     /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from
     /// cache.</param>
@@ -178,11 +172,6 @@ public interface IMessageChannel : IChannel
     ///     be split into 5 individual requests; thus returning 5 individual asynchronous responses, hence the need
     ///     of flattening.
     /// </remarks>
-    /// <example>
-    ///     <para>The following example gets 5 message prior to a specific message, <c>oldMessage</c>.</para>
-    ///     <code language="cs" region="GetMessagesAsync.FromMessage"
-    ///           source="..\..\..\KaiHeiLa.Net.Examples\Core\Entities\Channels\IMessageChannel.Examples.cs" />
-    /// </example>
     /// <param name="referenceMessage">The starting message to get the messages from.</param>
     /// <param name="dir">The direction of the messages to be gotten from.</param>
     /// <param name="limit">The numbers of message to be gotten from.</param>
@@ -194,9 +183,7 @@ public interface IMessageChannel : IChannel
     /// </returns>
     IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch, 
         CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
-    
-    // TODO: GetPinnedMessagesAsync
-    
+
     #endregion
     
     #region Delete Messages

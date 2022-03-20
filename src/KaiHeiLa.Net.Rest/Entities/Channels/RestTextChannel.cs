@@ -65,6 +65,8 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     /// <inheritdoc />
     public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch, RequestOptions options = null)
         => ChannelHelper.GetMessagesAsync(this, KaiHeiLa, referenceMessage.Id, dir, limit, true, options);
+    public Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions options = null)
+        => ChannelHelper.GetPinnedMessagesAsync(this, KaiHeiLa, options);
     
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Text, text, options, quote: quote, ephemeralUser: ephemeralUser);
@@ -173,6 +175,9 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         else
             return AsyncEnumerable.Empty<IReadOnlyCollection<IMessage>>();
     }
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IMessage>> ITextChannel.GetPinnedMessagesAsync(RequestOptions options)
+        => await GetPinnedMessagesAsync(options).ConfigureAwait(false);
     
     /// <inheritdoc />
     public Task DeleteMessageAsync(Guid messageId, RequestOptions options = null)

@@ -133,9 +133,4 @@ public interface IKaiHeiLaClient : IDisposable
     
     #endregion
 
-    #region Gateway
-
-    // TODO: Implement Gateway
-
-    #endregion
 }

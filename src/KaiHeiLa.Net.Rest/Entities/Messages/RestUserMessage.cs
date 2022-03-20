@@ -24,6 +24,7 @@ public class RestUserMessage : RestMessage, IUserMessage
     
     public Quote Quote => _quote;
     
+    public new bool? IsPinned { get; internal set; }
     /// <inheritdoc />
     public override Attachment Attachment => _attachment;
     /// <inheritdoc />  
@@ -122,10 +123,11 @@ public class RestUserMessage : RestMessage, IUserMessage
         };
         func(properties);
         Content = properties.Content;
-        _cards = (ImmutableArray<ICard>) properties.Cards?.Select(c => (ICard) c).ToImmutableArray();
+        _cards = properties.Cards?.Select(c => (ICard) c).ToImmutableArray() ?? ImmutableArray<ICard>.Empty;
         _quote = properties.Quote?.QuotedMessageId == Guid.Empty ? null : (Quote) properties.Quote;
     }
     
+    bool? IMessage.IsPinned => IsPinned;
     IQuote IUserMessage.Quote => _quote;
     IReadOnlyCollection<ICard> IMessage.Cards => Cards;
 

@@ -39,26 +39,11 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     public virtual bool? MentionedEveryone => false;
     /// <inheritdoc />
     public virtual bool? MentionedHere => false;
-    /// <inheritdoc />
-    public virtual IReadOnlyCollection<ITag> Tags => ImmutableArray.Create<ITag>();
-
-    /// <summary>
-    ///     Gets the <see cref="Content"/> of the message.
-    /// </summary>
-    /// <returns>
-    ///     A string that is the <see cref="Content"/> of the message.
-    /// </returns>
-    public override string ToString() => Content;
     
-    IUser IMessage.Author => Author;
-    /// <inheritdoc />
-    IAttachment IMessage.Attachment => Attachment;
     /// <summary>
     ///     Gets a collection of the <see cref="ICard"/>'s on the message.
     /// </summary>
     public virtual IReadOnlyCollection<ICard> Cards => ImmutableArray.Create<ICard>();
-    /// <inheritdoc />
-    IReadOnlyCollection<ICard> IMessage.Cards => Cards;
     /// <inheritdoc />
     public virtual IReadOnlyCollection<uint> MentionedRoleIds => ImmutableArray.Create<uint>();
     /// <summary>
@@ -66,8 +51,18 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// </summary>
     public IReadOnlyCollection<RestUser> MentionedUsers => _userMentions;
     /// <inheritdoc />
-    IReadOnlyCollection<ulong> IMessage.MentionedUserIds => MentionedUsers.Select(x => x.Id).ToImmutableArray();
+    public virtual IReadOnlyCollection<ITag> Tags => ImmutableArray.Create<ITag>();
+    /// <inheritdoc />
+    public virtual bool? IsPinned => null;
     
+    /// <summary>
+    ///     Gets the <see cref="Content"/> of the message.
+    /// </summary>
+    /// <returns>
+    ///     A string that is the <see cref="Content"/> of the message.
+    /// </returns>
+    public override string ToString() => Content;
+
     internal RestMessage(BaseKaiHeiLaClient kaiHeiLa, Guid id, MessageType messageType, 
         IMessageChannel channel, IUser author, MessageSource source)
         : base(kaiHeiLa, id)
@@ -194,8 +189,14 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
 
     #region IMessage
 
+    
+    IUser IMessage.Author => Author;
     /// <inheritdoc />
-    bool? IMessage.IsPinned => null;
+    IAttachment IMessage.Attachment => Attachment;
+    /// <inheritdoc />
+    IReadOnlyCollection<ICard> IMessage.Cards => Cards;
+    /// <inheritdoc />
+    IReadOnlyCollection<ulong> IMessage.MentionedUserIds => MentionedUsers.Select(x => x.Id).ToImmutableArray();
 
     #endregion
 }

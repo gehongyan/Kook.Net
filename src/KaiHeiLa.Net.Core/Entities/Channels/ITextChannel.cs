@@ -18,4 +18,14 @@ public interface ITextChannel : INestedChannel, IMentionable, IMessageChannel
     int SlowModeInterval { get; }
 
     #endregion
+    
+    /// <summary>
+    ///     Gets a collection of pinned messages in this channel.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation for retrieving pinned messages in this channel.
+    ///     The task result contains a collection of messages found in the pinned messages.
+    /// </returns>
+    Task<IReadOnlyCollection<IMessage>> GetPinnedMessagesAsync(RequestOptions options = null);
 }

@@ -43,12 +43,6 @@ public interface IMessage : IGuidEntity, IDeletable
     /// <summary>
     ///     Adds a reaction to this message.
     /// </summary>
-    /// <example>
-    ///     <para>The following example adds the reaction, <c>💕</c>, to the message.</para>
-    ///     <code language="cs">
-    ///     await msg.AddReactionAsync(new Emoji("\U0001f495"));
-    ///     </code>
-    /// </example>
     /// <param name="emote">The emoji used to react to this message.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
@@ -59,12 +53,6 @@ public interface IMessage : IGuidEntity, IDeletable
     /// <summary>
     ///     Removes a reaction from message.
     /// </summary>
-    /// <example>
-    ///     <para>The following example removes the reaction, <c>💕</c>, added by the message author from the message.</para>
-    ///     <code language="cs">
-    ///     await msg.RemoveReactionAsync(new Emoji("\U0001f495"), msg.Author);
-    ///     </code>
-    /// </example>
     /// <param name="emote">The emoji used to react to this message.</param>
     /// <param name="user">The user that added the emoji.</param>
     /// <param name="options">The options to be used when sending the request.</param>

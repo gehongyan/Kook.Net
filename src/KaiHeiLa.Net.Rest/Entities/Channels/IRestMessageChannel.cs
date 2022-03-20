@@ -62,5 +62,4 @@ public interface IRestMessageChannel : IMessageChannel
     ///     Paged collection of messages.
     /// </returns>
     IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch, RequestOptions options = null);
-    
 }

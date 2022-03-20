@@ -103,7 +103,6 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
             msg = await ChannelHelper.GetMessageAsync(this, KaiHeiLa, id, options).ConfigureAwait(false);
         return msg;
     }
-    
     /// <summary>
     ///     Gets the last N messages from this message channel.
     /// </summary>
@@ -150,6 +149,8 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch, RequestOptions options = null)
         => SocketChannelHelper.GetMessagesAsync(this, KaiHeiLa, _messages, referenceMessage.Id, dir, limit, CacheMode.AllowDownload, options);
+    public Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions options = null)
+        => ChannelHelper.GetPinnedMessagesAsync(this, KaiHeiLa, options);
     
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Text, text, options, quote: quote, ephemeralUser: ephemeralUser);
@@ -277,6 +278,8 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit, CacheMode mode, RequestOptions options)
         => SocketChannelHelper.GetMessagesAsync(this, KaiHeiLa, _messages, referenceMessage.Id, dir, limit, mode, options);
-    
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IMessage>> ITextChannel.GetPinnedMessagesAsync(RequestOptions options)
+        => await GetPinnedMessagesAsync(options).ConfigureAwait(false);
     #endregion
 }

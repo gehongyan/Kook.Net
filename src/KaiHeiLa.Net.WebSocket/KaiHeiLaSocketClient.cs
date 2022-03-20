@@ -208,13 +208,6 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     /// <summary>
     ///     Gets a user from the cache or does a rest request if unavailable.
     /// </summary>
-    /// <example>
-    ///     <code language="cs" title="Example method">
-    ///     var user = await _client.GetUserAsync(168693960628371456);
-    ///     if (user != null)
-    ///         Console.WriteLine($"{user} is created at {user.CreatedAt}.";
-    ///     </code>
-    /// </example>
     /// <param name="id">The snowflake identifier of the user (e.g. `168693960628371456`).</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>

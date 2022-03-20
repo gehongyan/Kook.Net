@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using KaiHeiLa;
+using KaiHeiLa.Rest;
 using KaiHeiLa.WebSocket;
 
 string token = Environment.GetEnvironmentVariable("KaiHeiLaDebugToken", EnvironmentVariableTarget.User) 
@@ -28,6 +29,7 @@ client.MessageButtonClicked += async (s, user, arg3, arg4, arg5) =>
     // await arg3.RemoveReactionAsync(Emote.Parse("[:djbigfan:1990044438283387/hvBcVC4nHX03k03k]", TagMode.PlainText), client.CurrentUser);
     // IEnumerable<IMessage> selectMany = (await client.GetGuild(1990044438283387).GetTextChannel(6286033651700207).GetMessagesAsync(Guid.Parse("ed260ee9-1616-44ec-abff-d5cfcf9903a0"), Direction.Around, 5).ToListAsync()).SelectMany(x => x.ToList());
     // await client.GetUserAsync(0);
+    // IReadOnlyCollection<RestMessage> pinnedMessagesAsync = await client.GetGuild(1990044438283387).GetTextChannel(6286033651700207).GetPinnedMessagesAsync();
 };
 client.ReactionRemoved += (cacheable, cacheable1, arg3) =>
 {
