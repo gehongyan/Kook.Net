@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace KaiHeiLa.Net.Converters;
 
-internal class DateTimeOffsetConverter : JsonConverter<DateTimeOffset>
+internal class DateTimeOffsetUnixTimeMillisecondsConverter : JsonConverter<DateTimeOffset>
 {
     public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -12,6 +12,9 @@ internal class DateTimeOffsetConverter : JsonConverter<DateTimeOffset>
 
     public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
     {
-        writer.WriteNumberValue(value.ToUnixTimeMilliseconds());
+        if (value == DateTimeOffset.MinValue || value == DateTimeOffset.FromUnixTimeMilliseconds(0))
+            writer.WriteNullValue();
+        else
+            writer.WriteNumberValue(value.ToUnixTimeMilliseconds());
     }
 }

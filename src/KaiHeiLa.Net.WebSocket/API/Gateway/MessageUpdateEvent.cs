@@ -26,7 +26,7 @@ internal class MessageUpdateEvent
     public uint[] MentionRoles { get; set; }
     
     [JsonPropertyName("updated_at")] 
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset UpdatedAt { get; set; }
     
     [JsonPropertyName("msg_id")]

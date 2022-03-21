@@ -9,7 +9,7 @@ internal class CreateMessageResponse
     public Guid MessageId { get; set; }
 
     [JsonPropertyName("msg_timestamp")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset MessageTimestamp { get; set; }
 
     [JsonPropertyName("nonce")]

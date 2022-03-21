@@ -891,7 +891,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                     break;
                                 
                                 // 服务器成员上线
-                                case ("GROUP", "guild_member_online"):
+                                case ("PERSON", "guild_member_online"):
                                 {
                                     await _gatewayLogger.DebugAsync("Received Event (guild_member_online)").ConfigureAwait(false);
                                     var guild = State.GetGuild(gatewayEvent.TargetId);
@@ -927,7 +927,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                     break;
                                 
                                 // 服务器成员下线
-                                case ("GROUP", "guild_member_offline"):
+                                case ("PERSON", "guild_member_offline"):
                                 {
                                     await _gatewayLogger.DebugAsync("Received Event (guild_member_offline)").ConfigureAwait(false);
                                     var guild = State.GetGuild(gatewayEvent.TargetId);

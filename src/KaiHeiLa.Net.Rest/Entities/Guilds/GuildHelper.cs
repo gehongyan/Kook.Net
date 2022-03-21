@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using KaiHeiLa.API;
 using KaiHeiLa.API.Rest;
 
 namespace KaiHeiLa.Rest;
@@ -95,7 +96,117 @@ internal static class GuildHelper
         var models = await client.ApiClient.GetGuildChannelsAsync(guild.Id, options).ConfigureAwait(false);
         return models.Select(x => RestGuildChannel.Create(client, guild, x)).ToImmutableArray();
     }
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
+    public static async Task<RestTextChannel> CreateTextChannelAsync(IGuild guild, BaseKaiHeiLaClient client, 
+        string name, RequestOptions options, Action<TextChannelProperties> func)
+    {
+        if (name == null) throw new ArgumentNullException(paramName: nameof(name));
+
+        var props = new TextChannelProperties();
+        func?.Invoke(props);
+        
+        var args = new CreateGuildChannelParams
+        {
+            Name = name,
+            CategoryId = props.CategoryId,
+            GuildId = guild.Id,
+            Type = ChannelType.Text
+        };
+        var model = await client.ApiClient.CreateGuildChannelAsync(args, options).ConfigureAwait(false);
+        return RestTextChannel.Create(client, guild, model);
+    }
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
+    public static async Task<RestVoiceChannel> CreateVoiceChannelAsync(IGuild guild, BaseKaiHeiLaClient client, 
+        string name, RequestOptions options, Action<VoiceChannelProperties> func)
+    {
+        if (name == null) throw new ArgumentNullException(paramName: nameof(name));
+
+        var props = new VoiceChannelProperties();
+        func?.Invoke(props);
+        
+        var args = new CreateGuildChannelParams
+        {
+            Name = name,
+            CategoryId = props.CategoryId,
+            GuildId = guild.Id,
+            Type = ChannelType.Voice,
+            LimitAmount = props.UserLimit,
+            VoiceQuality = props.VoiceQuality
+        };
+        var model = await client.ApiClient.CreateGuildChannelAsync(args, options).ConfigureAwait(false);
+        return RestVoiceChannel.Create(client, guild, model);
+    }
 
     #endregion
 
+    #region Bans
+
+    public static async Task<IReadOnlyCollection<RestBan>> GetBansAsync(IGuild guild, BaseKaiHeiLaClient client,
+        RequestOptions options)
+    {
+        var models = await client.ApiClient.GetGuildBansAsync(guild.Id, options).ConfigureAwait(false);
+        return models.Select(x => RestBan.Create(client, x)).ToImmutableArray();
+    }
+    public static async Task<RestBan> GetBanAsync(IGuild guild, BaseKaiHeiLaClient client, ulong userId, RequestOptions options)
+    {
+        var models = await client.ApiClient.GetGuildBansAsync(guild.Id, options).ConfigureAwait(false);
+        Ban model = models.FirstOrDefault(x => x.User.Id == userId);
+        return model == null ? null : RestBan.Create(client, model);
+    }
+
+    public static async Task AddBanAsync(IGuild guild, BaseKaiHeiLaClient client,
+        ulong userId, int pruneDays, string reason, RequestOptions options)
+    {
+        var args = new CreateGuildBanParams { DeleteMessageDays = pruneDays, Reason = reason, GuildId = guild.Id, UserId = userId };
+        await client.ApiClient.CreateGuildBanAsync(args, options).ConfigureAwait(false);
+    }
+    public static async Task RemoveBanAsync(IGuild guild, BaseKaiHeiLaClient client,
+        ulong userId, RequestOptions options)
+    {
+        var args = new RemoveGuildBanParams { GuildId = guild.Id, UserId = userId };
+        await client.ApiClient.RemoveGuildBanAsync(args, options).ConfigureAwait(false);
+    }
+
+    #endregion
+
+    #region Emotes
+    
+    public static async Task<IReadOnlyCollection<GuildEmote>> GetEmotesAsync(IGuild guild, BaseKaiHeiLaClient client, RequestOptions options)
+    {
+        var models = await client.ApiClient.GetGuildEmotesAsync(guild.Id, options).ConfigureAwait(false);
+        return models.Select(x => x.ToEntity(client, guild.Id)).ToImmutableArray();
+    }
+    public static async Task<GuildEmote> GetEmoteAsync(IGuild guild, BaseKaiHeiLaClient client, string id, RequestOptions options)
+    {
+        var emote = await client.ApiClient.GetGuildEmotesAsync(guild.Id, options).ConfigureAwait(false);
+        return emote.FirstOrDefault(x => x.Id == id)?.ToEntity(client, guild.Id);
+    }
+    public static async Task<GuildEmote> CreateEmoteAsync(IGuild guild, BaseKaiHeiLaClient client, string name, Image image, RequestOptions options)
+    {
+        var args = new CreateGuildEmoteParams
+        {
+            Name = name,
+            File = image.Stream,
+            GuildId = guild.Id
+        };
+
+        var emote = await client.ApiClient.CreateGuildEmoteAsync(args, options).ConfigureAwait(false);
+        return emote.ToEntity(client, guild.Id);
+    }
+    /// <exception cref="ArgumentNullException"><paramref name="func"/> is <c>null</c>.</exception>
+    public static async Task ModifyEmoteNameAsync(IGuild guild, BaseKaiHeiLaClient client, IEmote emote, Action<string> func,
+        RequestOptions options)
+    {
+        if (func == null) throw new ArgumentNullException(paramName: nameof(func));
+
+        string name = emote.Name;
+        func(name);
+
+        var args = new ModifyGuildEmoteParams { Name = name, Id = emote.Id };
+        await client.ApiClient.ModifyGuildEmoteAsync(args, options).ConfigureAwait(false);
+    }
+    public static async Task DeleteEmoteAsync(IGuild guild, BaseKaiHeiLaClient client, string id, RequestOptions options) 
+        => await client.ApiClient.DeleteGuildEmoteAsync(id, options).ConfigureAwait(false);
+
+    #endregion
 }

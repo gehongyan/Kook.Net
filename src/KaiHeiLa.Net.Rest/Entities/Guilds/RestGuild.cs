@@ -107,6 +107,56 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         => GuildHelper.LeaveAsync(this, KaiHeiLa, options);
     #endregion
     
+    #region Bans
+    /// <summary>
+    ///     Gets a collection of all users banned in this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
+    ///     ban objects that this guild currently possesses, with each object containing the user banned and reason
+    ///     behind the ban.
+    /// </returns>
+    public Task<IReadOnlyCollection<RestBan>> GetBansAsync(RequestOptions options = null)
+        => GuildHelper.GetBansAsync(this, KaiHeiLa, options);
+    /// <summary>
+    ///     Gets a ban object for a banned user.
+    /// </summary>
+    /// <param name="user">The banned user.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
+    ///     contains the user information and the reason for the ban; <see langword="null"/> if the ban entry cannot be found.
+    /// </returns>
+    public Task<RestBan> GetBanAsync(IUser user, RequestOptions options = null)
+        => GuildHelper.GetBanAsync(this, KaiHeiLa, user.Id, options);
+    /// <summary>
+    ///     Gets a ban object for a banned user.
+    /// </summary>
+    /// <param name="userId">The identifier for the banned user.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
+    ///     contains the user information and the reason for the ban; <see langword="null"/> if the ban entry cannot be found.
+    /// </returns>
+    public Task<RestBan> GetBanAsync(ulong userId, RequestOptions options = null)
+        => GuildHelper.GetBanAsync(this, KaiHeiLa, userId, options);
+
+    /// <inheritdoc />
+    public Task AddBanAsync(IUser user, int pruneDays = 0, string reason = null, RequestOptions options = null)
+        => GuildHelper.AddBanAsync(this, KaiHeiLa, user.Id, pruneDays, reason, options);
+    /// <inheritdoc />
+    public Task AddBanAsync(ulong userId, int pruneDays = 0, string reason = null, RequestOptions options = null)
+        => GuildHelper.AddBanAsync(this, KaiHeiLa, userId, pruneDays, reason, options);
+
+    /// <inheritdoc />
+    public Task RemoveBanAsync(IUser user, RequestOptions options = null)
+        => GuildHelper.RemoveBanAsync(this, KaiHeiLa, user.Id, options);
+    /// <inheritdoc />
+    public Task RemoveBanAsync(ulong userId, RequestOptions options = null)
+        => GuildHelper.RemoveBanAsync(this, KaiHeiLa, userId, options);
+    #endregion
+
     #region Roles
 
     /// <summary>
@@ -125,6 +175,36 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
     #endregion
 
+    #region Users
+    
+    /// <summary>
+    ///     Gets a user from this guild.
+    /// </summary>
+    /// <remarks>
+    ///     This method retrieves a user found within this guild.
+    /// </remarks>
+    /// <param name="id">The identifier of the user.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the guild user
+    ///     associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    /// </returns>
+    public Task<RestGuildUser> GetUserAsync(ulong id, RequestOptions options = null)
+        => GuildHelper.GetUserAsync(this, KaiHeiLa, id, options);
+
+    /// <summary>
+    ///     Gets the users who are muted or deafened in this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains
+    ///     the collection of muted or deafened users in this guild.
+    /// </returns>
+    public Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> GetGuildMuteDeafListAsync(RequestOptions options = null) 
+        => GuildHelper.GetGuildMuteDeafListAsync(this, KaiHeiLa, options);
+    
+    #endregion
+    
     #region Channels
     
     /// <summary>
@@ -216,6 +296,52 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         return channels.OfType<RestCategoryChannel>().ToImmutableArray();
     }
     
+    /// <summary>
+    ///     Creates a new text channel in this guild.
+    /// </summary>
+    /// <param name="name">The new name for the text channel.</param>
+    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
+    ///     text channel.
+    /// </returns>
+    public Task<RestTextChannel> CreateTextChannelAsync(string name, Action<TextChannelProperties> func = null, RequestOptions options = null)
+        => GuildHelper.CreateTextChannelAsync(this, KaiHeiLa, name, options, func);
+    /// <summary>
+    ///     Creates a voice channel with the provided name.
+    /// </summary>
+    /// <param name="name">The name of the new channel.</param>
+    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="name" /> is <see langword="null"/>.</exception>
+    /// <returns>
+    ///     The created voice channel.
+    /// </returns>
+    public Task<RestVoiceChannel> CreateVoiceChannelAsync(string name, Action<VoiceChannelProperties> func = null, RequestOptions options = null)
+        => GuildHelper.CreateVoiceChannelAsync(this, KaiHeiLa, name, options, func);
+    
+    #endregion
+    
+    #region Emotes
+    
+    /// <inheritdoc />
+    public Task<IReadOnlyCollection<GuildEmote>> GetEmotesAsync(RequestOptions options = null)
+        => GuildHelper.GetEmotesAsync(this, KaiHeiLa, options);
+    /// <inheritdoc />
+    public Task<GuildEmote> GetEmoteAsync(string id, RequestOptions options = null)
+        => GuildHelper.GetEmoteAsync(this, KaiHeiLa, id, options);
+    /// <inheritdoc />
+    public Task<GuildEmote> CreateEmoteAsync(string name, Image image, RequestOptions options = null)
+        => GuildHelper.CreateEmoteAsync(this, KaiHeiLa, name, image, options);
+    /// <inheritdoc />
+    /// <exception cref="ArgumentNullException"><paramref name="func"/> is <see langword="null"/>.</exception>
+    public Task ModifyEmoteNameAsync(GuildEmote emote, Action<string> func, RequestOptions options = null)
+        => GuildHelper.ModifyEmoteNameAsync(this, KaiHeiLa, emote, func, options);
+    /// <inheritdoc />
+    public Task DeleteEmoteAsync(GuildEmote emote, RequestOptions options = null)
+        => GuildHelper.DeleteEmoteAsync(this, KaiHeiLa, emote.Id, options);
+    
     #endregion
     
     #region IGuild
@@ -237,6 +363,16 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
+    
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IBan>> IGuild.GetBansAsync(RequestOptions options)
+        => await GetBansAsync(options).ConfigureAwait(false);
+    /// <inheritdoc/>
+    async Task<IBan> IGuild.GetBanAsync(IUser user, RequestOptions options)
+        => await GetBanAsync(user, options).ConfigureAwait(false);
+    /// <inheritdoc/>
+    async Task<IBan> IGuild.GetBanAsync(ulong userId, RequestOptions options)
+        => await GetBanAsync(userId, options).ConfigureAwait(false);
     
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IGuildChannel>> IGuild.GetChannelsAsync(CacheMode mode, RequestOptions options)
@@ -297,6 +433,13 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
     
     /// <inheritdoc />
+    async Task<ITextChannel> IGuild.CreateTextChannelAsync(string name, Action<TextChannelProperties> func, RequestOptions options)
+        => await CreateTextChannelAsync(name, func, options).ConfigureAwait(false);
+    /// <inheritdoc />
+    async Task<IVoiceChannel> IGuild.CreateVoiceChannelAsync(string name, Action<VoiceChannelProperties> func, RequestOptions options)
+        => await CreateVoiceChannelAsync(name, func, options).ConfigureAwait(false);
+    
+    /// <inheritdoc />
     async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> IGuild.GetGuildMuteDeafListAsync(CacheMode mode, RequestOptions options)
     {
         if (mode == CacheMode.AllowDownload)
@@ -307,36 +450,6 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
     #endregion
 
-    #region Users
-    
-    /// <summary>
-    ///     Gets a user from this guild.
-    /// </summary>
-    /// <remarks>
-    ///     This method retrieves a user found within this guild.
-    /// </remarks>
-    /// <param name="id">The identifier of the user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the guild user
-    ///     associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
-    /// </returns>
-    public Task<RestGuildUser> GetUserAsync(ulong id, RequestOptions options = null)
-        => GuildHelper.GetUserAsync(this, KaiHeiLa, id, options);
-
-    /// <summary>
-    ///     Gets the users who are muted or deafened in this guild.
-    /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains
-    ///     the collection of muted or deafened users in this guild.
-    /// </returns>
-    public Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> GetGuildMuteDeafListAsync(RequestOptions options = null) 
-        => GuildHelper.GetGuildMuteDeafListAsync(this, KaiHeiLa, options);
-    
-    #endregion
-    
     /// <summary>
     ///     Returns the name of the guild.
     /// </summary>

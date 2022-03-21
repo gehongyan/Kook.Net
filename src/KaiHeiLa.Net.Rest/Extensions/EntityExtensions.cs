@@ -7,6 +7,17 @@ namespace KaiHeiLa.Rest;
 
 internal static class EntityExtensions
 {
+    #region Emotes
+
+    public static GuildEmote ToEntity(this API.Emoji model, BaseKaiHeiLaClient client, ulong guildId)
+        => new GuildEmote(model.Id,
+            model.Name,
+            model.Type == EmojiType.Animated,
+            guildId,
+            RestUser.Create(client, model.UploadedBy));
+
+    #endregion
+    
     #region Elements
 
     public static IElement ToEntity(this API.ElementBase model)
@@ -428,6 +439,30 @@ internal static class EntityExtensions
     public static RolePermissionOverwrite ToEntity(this API.RolePermissionOverwrite model)
     {
         return new RolePermissionOverwrite(model.RoleId, new OverwritePermissions(model.Allow, model.Deny));
+    }
+
+    #endregion
+
+    #region RecommendationInfos
+    
+    public static RecommendInfo ToEntity(this API.RecommendInfo model)
+    {
+        if (model is null) return null;
+        return new RecommendInfo()
+        {
+            Id = model.Id,
+            GuildId = model.GuildId,
+            Type = model.Type,
+            Status = model.Status,
+            Banner = model.Banner,
+            Desc = model.Desc,
+            TagID = model.TagID,
+            CreatedAt = model.CreatedAt,
+            UpdatedAt = model.UpdatedAt,
+            RecommendAt = model.RecommendAt,
+            IsOfficialPartner = model.IsOfficialPartner,
+            Sort = model.Sort
+        };
     }
 
     #endregion

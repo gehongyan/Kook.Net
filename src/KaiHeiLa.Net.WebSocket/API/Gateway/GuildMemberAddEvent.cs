@@ -10,6 +10,6 @@ internal class GuildMemberAddEvent
     public ulong UserId { get; set; }
     
     [JsonPropertyName("joined_at")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset JoinedAt { get; set; }
 }

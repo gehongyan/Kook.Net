@@ -21,11 +21,11 @@ internal class DirectMessage
     public Attachment Attachment { get; set; }
 
     [JsonPropertyName("create_at")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset CreateAt { get; set; }
     
     [JsonPropertyName("update_at")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset UpdateAt { get; set; }
 
     [JsonPropertyName("reactions")]

@@ -21,7 +21,7 @@ internal class DirectMessageUpdateEvent
     public string Content { get; set; }
     
     [JsonPropertyName("updated_at")] 
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset UpdatedAt { get; set; }
     
     [JsonPropertyName("chat_code")]

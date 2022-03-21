@@ -684,9 +684,28 @@ internal class KaiHeiLaRestApiClient : IDisposable
     public async Task<DirectMessage> GetDirectMessageAsync(Guid messageId, Guid? chatCode = null, ulong? userId = null,
         RequestOptions options = null)
     {
-        // TODO: API returns wrong message
-        IReadOnlyCollection<DirectMessage> messages = await QueryDirectMessagesAsync(chatCode, userId, messageId, Direction.Around, 1, options);
-        return messages.FirstOrDefault();
+        // Waiting for direct-message/view endpoint
+        // Try getting by fetching all messages
+        var messages = await QueryDirectMessagesAsync(chatCode, userId, messageId, Direction.Unspecified, 100, options);
+        int count = messages.Count;
+        DirectMessage message = messages.SingleOrDefault(x => x.Id == messageId);
+        if (message is not null) return message;
+
+        // We have fetched all messages, but the message we're looking for is not there, hence null
+        if (count < 100) return null;
+
+        // Try getting by fetching the message next to the targeted one
+        // Try getting by before mode
+        DirectMessage messageBefore = (await QueryDirectMessagesAsync(chatCode, userId, messageId, Direction.Before, 1, options)).SingleOrDefault(x => x.Id == messageId);
+        if (messageBefore is not null)
+            return (await QueryDirectMessagesAsync(chatCode, userId, messageBefore.Id, Direction.After, 1, options)).SingleOrDefault(x => x.Id == messageId);
+        
+        // Try getting by after mode
+        DirectMessage messageAfter = (await QueryDirectMessagesAsync(chatCode, userId, messageId, Direction.After, 1, options)).SingleOrDefault(x => x.Id == messageId);
+        if (messageAfter is not null)
+            return (await QueryDirectMessagesAsync(chatCode, userId, messageAfter.Id, Direction.Before, 1, options)).SingleOrDefault(x => x.Id == messageId);
+        
+        return null;
     }
     
     public async Task<IReadOnlyCollection<DirectMessage>> QueryDirectMessagesAsync(Guid? chatCode = null,
@@ -977,7 +996,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"guild-emoji/update", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
     
-    public async Task ModifyGuildEmoteAsync(DeleteGuildEmoteParams args, RequestOptions options = null)
+    public async Task DeleteGuildEmoteAsync(DeleteGuildEmoteParams args, RequestOptions options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         options = RequestOptions.CreateOrClone(options);

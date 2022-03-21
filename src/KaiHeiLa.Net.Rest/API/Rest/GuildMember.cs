@@ -9,11 +9,11 @@ internal class GuildMember : User
     [JsonPropertyName("mobile_verified")] public bool MobileVerified { get; set; }
 
     [JsonPropertyName("joined_at")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset JoinedAt { get; set; }
 
     [JsonPropertyName("active_time")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset ActiveAt { get; set; }
 
     [JsonPropertyName("hoist_info")] public HoistInfo HoistInfo { get; set; }

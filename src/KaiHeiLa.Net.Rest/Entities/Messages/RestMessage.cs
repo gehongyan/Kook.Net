@@ -3,7 +3,6 @@ using Model = KaiHeiLa.API.Message;
 
 namespace KaiHeiLa.Rest;
 
-// TODO: RestMessage
 /// <summary>
 ///     Represents a REST-based message.
 /// </summary>

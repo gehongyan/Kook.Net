@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using KaiHeiLa.Net.Converters;
 
-namespace KaiHeiLa.API.Rest;
+namespace KaiHeiLa.API;
 
 internal class RecommendInfo
 {
@@ -14,11 +14,11 @@ internal class RecommendInfo
     [JsonPropertyName("tag_id")] public int TagID { get; set; }
 
     [JsonPropertyName("created_at")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeSecondsConverter))]
     public DateTimeOffset CreatedAt { get; set; }
 
     [JsonPropertyName("updated_at")] 
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeSecondsConverter))]
     public DateTimeOffset UpdatedAt { get; set; }
     
     [JsonPropertyName("recommend_at")] 

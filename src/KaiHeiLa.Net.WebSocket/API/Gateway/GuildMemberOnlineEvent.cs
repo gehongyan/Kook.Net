@@ -10,7 +10,7 @@ internal class GuildMemberOnlineEvent
     public ulong UserId { get; set; }
     
     [JsonPropertyName("event_time")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset OnlineAt { get; set; }
 
     [JsonPropertyName("guilds")]

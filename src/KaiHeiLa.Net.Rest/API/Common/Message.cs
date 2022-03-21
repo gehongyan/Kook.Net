@@ -35,11 +35,11 @@ internal class Message
     public Attachment Attachment { get; set; }
 
     [JsonPropertyName("create_at")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset CreateAt { get; set; }
     
     [JsonPropertyName("updated_at")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset UpdateAt { get; set; }
 
     [JsonPropertyName("reactions")]

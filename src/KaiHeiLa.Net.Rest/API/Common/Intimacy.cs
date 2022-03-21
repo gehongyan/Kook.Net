@@ -9,7 +9,7 @@ internal class Intimacy
     [JsonPropertyName("social_info")] public string SocialInfo { get; set; }
 
     [JsonPropertyName("last_read")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset LastReadAt { get; set; }
 
     [JsonPropertyName("score")] public int Score { get; set; }

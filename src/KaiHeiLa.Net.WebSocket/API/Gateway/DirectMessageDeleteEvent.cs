@@ -17,7 +17,7 @@ internal class DirectMessageDeleteEvent
     public Guid MessageId { get; set; }
     
     [JsonPropertyName("deleted_at")] 
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset DeletedAt { get; set; }
     
     [JsonPropertyName("chat_code")]

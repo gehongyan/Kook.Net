@@ -14,6 +14,6 @@ public class UserVoiceEvent
     public ulong ChannelId { get; set; }
     
     [JsonPropertyName("joined_at")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset At { get; set; }
 }

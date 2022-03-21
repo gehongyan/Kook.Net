@@ -10,6 +10,6 @@ internal class ChannelDeleteEvent
     public ulong ChannelId { get; set; }
     
     [JsonPropertyName("deleted_at")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset DeletedAt { get; set; }
 }

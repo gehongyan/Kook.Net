@@ -49,9 +49,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     public int Status { get; private set; }
 
     public string AutoDeleteTime { get; private set; }
-
-    // TODO: Public RecommendInfo
-    internal RecommendInfo RecommendInfo { get; private set; }
+    
+    public RecommendInfo RecommendInfo { get; private set; }
     
     /// <summary>
     ///     Gets the number of members.
@@ -216,7 +215,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
         BoostLevel = model.BoostLevel;
         Status = model.Status;
         AutoDeleteTime = model.AutoDeleteTime;
-        RecommendInfo = model.RecommendInfo;
+        RecommendInfo = model.RecommendInfo?.ToEntity();
     }
     
     internal void Update(ClientState state, Model model)
@@ -298,19 +297,54 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
 
     #endregion
     
-    #region IGuild
+    #region Bans
+    /// <summary>
+    ///     Gets a collection of all users banned in this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
+    ///     ban objects that this guild currently possesses, with each object containing the user banned and reason
+    ///     behind the ban.
+    /// </returns>
+    public Task<IReadOnlyCollection<RestBan>> GetBansAsync(RequestOptions options = null)
+        => GuildHelper.GetBansAsync(this, KaiHeiLa, options);
+    /// <summary>
+    ///     Gets a ban object for a banned user.
+    /// </summary>
+    /// <param name="user">The banned user.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
+    ///     contains the user information and the reason for the ban; <see langword="null"/> if the ban entry cannot be found.
+    /// </returns>
+    public Task<RestBan> GetBanAsync(IUser user, RequestOptions options = null)
+        => GuildHelper.GetBanAsync(this, KaiHeiLa, user.Id, options);
+    /// <summary>
+    ///     Gets a ban object for a banned user.
+    /// </summary>
+    /// <param name="userId">The identifier for the banned user.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
+    ///     contains the user information and the reason for the ban; <see langword="null"/> if the ban entry cannot be found.
+    /// </returns>
+    public Task<RestBan> GetBanAsync(ulong userId, RequestOptions options = null)
+        => GuildHelper.GetBanAsync(this, KaiHeiLa, userId, options);
 
     /// <inheritdoc />
-    bool IGuild.Available => true;
-    
-    public void Dispose()
-    {
-    }
-    
+    public Task AddBanAsync(IUser user, int pruneDays = 0, string reason = null, RequestOptions options = null)
+        => GuildHelper.AddBanAsync(this, KaiHeiLa, user.Id, pruneDays, reason, options);
     /// <inheritdoc />
-    Task<IGuildUser> IGuild.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
-        => Task.FromResult<IGuildUser>(GetUser(id));
+    public Task AddBanAsync(ulong userId, int pruneDays = 0, string reason = null, RequestOptions options = null)
+        => GuildHelper.AddBanAsync(this, KaiHeiLa, userId, pruneDays, reason, options);
 
+    /// <inheritdoc />
+    public Task RemoveBanAsync(IUser user, RequestOptions options = null)
+        => GuildHelper.RemoveBanAsync(this, KaiHeiLa, user.Id, options);
+    /// <inheritdoc />
+    public Task RemoveBanAsync(ulong userId, RequestOptions options = null)
+        => GuildHelper.RemoveBanAsync(this, KaiHeiLa, userId, options);
     #endregion
 
     #region Channels
@@ -355,6 +389,32 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
         state.AddChannel(channel);
         return channel;
     }
+
+    /// <summary>
+    ///     Creates a new text channel in this guild.
+    /// </summary>
+    /// <param name="name">The new name for the text channel.</param>
+    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
+    ///     text channel.
+    /// </returns>
+    public Task<RestTextChannel> CreateTextChannelAsync(string name, Action<TextChannelProperties> func = null, RequestOptions options = null)
+        => GuildHelper.CreateTextChannelAsync(this, KaiHeiLa, name, options, func);
+    /// <summary>
+    ///     Creates a new voice channel in this guild.
+    /// </summary>
+    /// <param name="name">The new name for the voice channel.</param>
+    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <returns>
+    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
+    ///     voice channel.
+    /// </returns>
+    public Task<RestVoiceChannel> CreateVoiceChannelAsync(string name, Action<VoiceChannelProperties> func = null, RequestOptions options = null)
+        => GuildHelper.CreateVoiceChannelAsync(this, KaiHeiLa, name, options, func);
 
     internal SocketGuildChannel AddOrUpdateChannel(ClientState state, ChannelModel model)
     {
@@ -556,14 +616,54 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     
     #endregion
 
+    #region Emotes
+
+    /// <inheritdoc />
+    public Task<IReadOnlyCollection<GuildEmote>> GetEmotesAsync(RequestOptions options = null)
+        => GuildHelper.GetEmotesAsync(this, KaiHeiLa, options);
+    /// <inheritdoc />
+    public Task<GuildEmote> GetEmoteAsync(string id, RequestOptions options = null)
+        => GuildHelper.GetEmoteAsync(this, KaiHeiLa, id, options);
+    /// <inheritdoc />
+    public Task<GuildEmote> CreateEmoteAsync(string name, Image image , RequestOptions options = null)
+        => GuildHelper.CreateEmoteAsync(this, KaiHeiLa, name, image, options);
+    /// <inheritdoc />
+    /// <exception cref="ArgumentNullException"><paramref name="func"/> is <see langword="null"/>.</exception>
+    public Task ModifyEmoteNameAsync(GuildEmote emote, Action<string> func, RequestOptions options = null)
+        => GuildHelper.ModifyEmoteNameAsync(this, KaiHeiLa, emote, func, options);
+    /// <inheritdoc />
+    public Task DeleteEmoteAsync(GuildEmote emote, RequestOptions options = null)
+        => GuildHelper.DeleteEmoteAsync(this, KaiHeiLa, emote.Id, options);
+
+    #endregion
+    
     #region IGuild
     
+    /// <inheritdoc />
+    bool IGuild.Available => true;
+    
+    public void Dispose() { }
+    
+    /// <inheritdoc />
+    Task<IGuildUser> IGuild.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<IGuildUser>(GetUser(id));
+
     /// <inheritdoc />
     IRole IGuild.GetRole(uint id)
         => GetRole(id);
 
     /// <inheritdoc />
     IRole IGuild.EveryoneRole => EveryoneRole;
+    
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IBan>> IGuild.GetBansAsync(RequestOptions options)
+        => await GetBansAsync(options).ConfigureAwait(false);
+    /// <inheritdoc/>
+    async Task<IBan> IGuild.GetBanAsync(IUser user, RequestOptions options)
+        => await GetBanAsync(user, options).ConfigureAwait(false);
+    /// <inheritdoc/>
+    async Task<IBan> IGuild.GetBanAsync(ulong userId, RequestOptions options)
+        => await GetBanAsync(userId, options).ConfigureAwait(false);
     
     /// <inheritdoc />
     Task<IReadOnlyCollection<IGuildChannel>> IGuild.GetChannelsAsync(CacheMode mode, RequestOptions options)
@@ -577,7 +677,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     /// <inheritdoc />
     Task<ITextChannel> IGuild.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<ITextChannel>(GetTextChannel(id));
-    
     /// <inheritdoc />
     Task<IReadOnlyCollection<IVoiceChannel>> IGuild.GetVoiceChannelsAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult<IReadOnlyCollection<IVoiceChannel>>(VoiceChannels);
@@ -588,6 +687,12 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     Task<IReadOnlyCollection<ICategoryChannel>> IGuild.GetCategoriesAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult<IReadOnlyCollection<ICategoryChannel>>(CategoryChannels);
     
+    /// <inheritdoc />
+    async Task<ITextChannel> IGuild.CreateTextChannelAsync(string name, Action<TextChannelProperties> func, RequestOptions options)
+        => await CreateTextChannelAsync(name, func, options).ConfigureAwait(false);
+    /// <inheritdoc />
+    async Task<IVoiceChannel> IGuild.CreateVoiceChannelAsync(string name, Action<VoiceChannelProperties> func, RequestOptions options)
+        => await CreateVoiceChannelAsync(name, func, options).ConfigureAwait(false);
     
     /// <inheritdoc />
     async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> IGuild.GetGuildMuteDeafListAsync(CacheMode mode, RequestOptions options)

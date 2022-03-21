@@ -10,6 +10,6 @@ internal class GuildMemberRemoveEvent
     public ulong UserId { get; set; }
     
     [JsonPropertyName("exited_at")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset ExitedAt { get; set; }
 }

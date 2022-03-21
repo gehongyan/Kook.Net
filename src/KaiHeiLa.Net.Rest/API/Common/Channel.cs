@@ -19,7 +19,8 @@ internal class Channel
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong GuildId { get; set; }
 
-    [JsonPropertyName("is_category")] public bool IsCategory { get; set; }
+    // [JsonPropertyName("is_category")] 
+    // public bool IsCategory { get; set; } // TODO: Bool when API but int when event
 
     [JsonPropertyName("parent_id")]
     [JsonConverter(typeof(NullableUInt64Converter))]

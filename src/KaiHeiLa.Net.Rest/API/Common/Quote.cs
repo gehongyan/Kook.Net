@@ -11,7 +11,7 @@ internal class Quote
     [JsonPropertyName("content")] public string Content { get; set; }
 
     [JsonPropertyName("create_at")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset CreateAt { get; set; }
 
     [JsonPropertyName("author")] public User Author { get; set; }

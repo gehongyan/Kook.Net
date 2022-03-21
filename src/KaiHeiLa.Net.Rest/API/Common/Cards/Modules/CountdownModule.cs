@@ -6,11 +6,11 @@ namespace KaiHeiLa.API;
 internal class CountdownModule : ModuleBase
 {
     [JsonPropertyName("endTime")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset EndTime { get; set; }
     
     [JsonPropertyName("startTime")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset? StartTime { get; set; }
     
     [JsonPropertyName("mode")]

@@ -7,10 +7,10 @@ internal class Ban
 {
     [JsonPropertyName("user_id")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
-    public ulong Id { get; set; }
+    public ulong UserId { get; set; }
 
     [JsonPropertyName("created_time")]
-    [JsonConverter(typeof(DateTimeOffsetConverter))]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset CreatedAt { get; set; }
 
     [JsonPropertyName("remark")]
