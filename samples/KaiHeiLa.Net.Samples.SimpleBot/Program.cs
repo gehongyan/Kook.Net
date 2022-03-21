@@ -30,6 +30,7 @@ client.MessageButtonClicked += async (s, user, arg3, arg4, arg5) =>
     // IEnumerable<IMessage> selectMany = (await client.GetGuild(1990044438283387).GetTextChannel(6286033651700207).GetMessagesAsync(Guid.Parse("ed260ee9-1616-44ec-abff-d5cfcf9903a0"), Direction.Around, 5).ToListAsync()).SelectMany(x => x.ToList());
     // await client.GetUserAsync(0);
     // IReadOnlyCollection<RestMessage> pinnedMessagesAsync = await client.GetGuild(1990044438283387).GetTextChannel(6286033651700207).GetPinnedMessagesAsync();
+    // await (user as SocketGuildUser).AddRoleAsync(1681537);
 };
 client.ReactionRemoved += (cacheable, cacheable1, arg3) =>
 {

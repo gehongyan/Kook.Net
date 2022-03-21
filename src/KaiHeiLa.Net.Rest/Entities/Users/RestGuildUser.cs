@@ -85,6 +85,30 @@ public class RestGuildUser : RestUser, IGuildUser
     public Task KickAsync(RequestOptions options = null)
         => UserHelper.KickAsync(this, KaiHeiLa, options);
     /// <inheritdoc />
+    public Task AddRoleAsync(uint roleId, RequestOptions options = null)
+        => AddRolesAsync(new[] { roleId }, options);
+    /// <inheritdoc />
+    public Task AddRoleAsync(IRole role, RequestOptions options = null)
+        => AddRoleAsync(role.Id, options);
+    /// <inheritdoc />
+    public Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null)
+        => UserHelper.AddRolesAsync(this, KaiHeiLa, roleIds, options);
+    /// <inheritdoc />
+    public Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null)
+        => AddRolesAsync(roles.Select(x => x.Id), options);
+    /// <inheritdoc />
+    public Task RemoveRoleAsync(uint roleId, RequestOptions options = null)
+        => RemoveRolesAsync(new[] { roleId }, options);
+    /// <inheritdoc />
+    public Task RemoveRoleAsync(IRole role, RequestOptions options = null)
+        => RemoveRoleAsync(role.Id, options);
+    /// <inheritdoc />
+    public Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null)
+        => UserHelper.RemoveRolesAsync(this, KaiHeiLa, roleIds, options);
+    /// <inheritdoc />
+    public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null)
+        => RemoveRolesAsync(roles.Select(x => x.Id));
+    /// <inheritdoc />
     public Task MuteAsync(RequestOptions options = null) 
         => GuildHelper.MuteUserAsync(this, KaiHeiLa, options);
     /// <inheritdoc />

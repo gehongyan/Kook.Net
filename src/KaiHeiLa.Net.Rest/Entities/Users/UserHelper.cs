@@ -32,6 +32,30 @@ internal static class UserHelper
         await client.ApiClient.KickOutGuildMemberAsync(args, options).ConfigureAwait(false);
     }
     
+    public static async Task AddRolesAsync(IGuildUser user, BaseKaiHeiLaClient client, IEnumerable<uint> roleIds, RequestOptions options)
+    {
+        var args = roleIds.Select(x => new AddOrRemoveRoleParams()
+        {
+            GuildId = user.GuildId,
+            RoleId = x,
+            UserId = user.Id
+        });
+        foreach (var arg in args)
+            await client.ApiClient.AddRoleAsync(arg, options).ConfigureAwait(false);
+    }
+
+    public static async Task RemoveRolesAsync(IGuildUser user, BaseKaiHeiLaClient client, IEnumerable<uint> roleIds, RequestOptions options)
+    {
+        var args = roleIds.Select(x => new AddOrRemoveRoleParams()
+        {
+            GuildId = user.GuildId,
+            RoleId = x,
+            UserId = user.Id
+        });
+        foreach (var arg in args)
+            await client.ApiClient.RemoveRoleAsync(arg, options).ConfigureAwait(false);
+    }
+    
     public static async Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedChannelAsync(IGuildUser user, BaseKaiHeiLaClient client, RequestOptions options)
     {
         var channels = await client.ApiClient.GetAudioChannelsUserConnectsAsync(user.GuildId, user.Id, options).ConfigureAwait(false);

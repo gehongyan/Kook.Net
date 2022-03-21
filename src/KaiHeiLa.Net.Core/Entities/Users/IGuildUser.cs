@@ -69,9 +69,80 @@ public interface IGuildUser : IUser
     #endregion
 
     #region Roles
-
-    // TODO: Implement Roles
-
+    
+    /// <summary>
+    ///     Adds the specified role to this user in the guild.
+    /// </summary>
+    /// <param name="roleId">The role to be added to the user.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous role addition operation.
+    /// </returns>
+    Task AddRoleAsync(uint roleId, RequestOptions options = null);
+    /// <summary>
+    ///     Adds the specified role to this user in the guild.
+    /// </summary>
+    /// <param name="role">The role to be added to the user.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous role addition operation.
+    /// </returns>
+    Task AddRoleAsync(IRole role, RequestOptions options = null);
+    /// <summary>
+    ///     Adds the specified <paramref name="roleIds"/> to this user in the guild.
+    /// </summary>
+    /// <param name="roleIds">The roles to be added to the user.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous role addition operation.
+    /// </returns>
+    Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null);
+    /// <summary>
+    ///     Adds the specified <paramref name="roles"/> to this user in the guild.
+    /// </summary>
+    /// <param name="roles">The roles to be added to the user.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous role addition operation.
+    /// </returns>
+    Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null);
+    /// <summary>
+    ///     Removes the specified <paramref name="roleId"/> from this user in the guild.
+    /// </summary>
+    /// <param name="roleId">The role to be removed from the user.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous role removal operation.
+    /// </returns>
+    Task RemoveRoleAsync(uint roleId, RequestOptions options = null);
+    /// <summary>
+    ///     Removes the specified <paramref name="role"/> from this user in the guild.
+    /// </summary>
+    /// <param name="role">The role to be removed from the user.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous role removal operation.
+    /// </returns>
+    Task RemoveRoleAsync(IRole role, RequestOptions options = null);
+    /// <summary>
+    ///     Removes the specified <paramref name="roleIds"/> from this user in the guild.
+    /// </summary>
+    /// <param name="roleIds">The roles to be removed from the user.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous role removal operation.
+    /// </returns>
+    Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null);
+    /// <summary>
+    ///     Removes the specified <paramref name="roles"/> from this user in the guild.
+    /// </summary>
+    /// <param name="roles">The roles to be removed from the user.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous role removal operation.
+    /// </returns>
+    Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null);
+    
     #endregion
     
     #region Voice
