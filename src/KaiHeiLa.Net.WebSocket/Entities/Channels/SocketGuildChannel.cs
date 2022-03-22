@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
+using KaiHeiLa.Rest;
 using Model = KaiHeiLa.API.Channel;
 
 namespace KaiHeiLa.WebSocket;
@@ -104,7 +105,84 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
         }
         return null;
     }
+
+    /// <summary>
+    ///     Adds or updates the permission overwrite for the given user.
+    /// </summary>
+    /// <param name="user">The user to add the overwrite to.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
+    /// </returns>
+    public async Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions options = null)
+    {
+        await ChannelHelper.AddPermissionOverwriteAsync(this, KaiHeiLa, user, options).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    ///     Adds or updates the permission overwrite for the given role.
+    /// </summary>
+    /// <param name="role">The role to add the overwrite to.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
+    /// </returns>
+    public async Task AddPermissionOverwriteAsync(IRole role, RequestOptions options = null)
+    {
+        await ChannelHelper.AddPermissionOverwriteAsync(this, KaiHeiLa, role, options).ConfigureAwait(false);
+    }
+    /// <summary>
+    ///     Removes the permission overwrite for the given user, if one exists.
+    /// </summary>
+    /// <param name="user">The user to remove the overwrite from.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
+    /// </returns>
+    public async Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions options = null)
+    {
+        await ChannelHelper.RemovePermissionOverwriteAsync(this, KaiHeiLa, user, options).ConfigureAwait(false);
+    }
+    /// <summary>
+    ///     Removes the permission overwrite for the given role, if one exists.
+    /// </summary>
+    /// <param name="role">The role to remove the overwrite from.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
+    /// </returns>
+    public async Task RemovePermissionOverwriteAsync(IRole role, RequestOptions options = null)
+    {
+        await ChannelHelper.RemovePermissionOverwriteAsync(this, KaiHeiLa, role, options).ConfigureAwait(false);
+    }
     
+    /// <summary>
+    ///     Updates the permission overwrite for the given user, if one exists.
+    /// </summary>
+    /// <param name="user">The user to modify the overwrite for.</param>
+    /// <param name="func">A delegate containing the values to modify the permission overwrite with.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
+    /// </returns>
+    public async Task ModifyPermissionOverwriteAsync(IGuildUser user, Action<OverwritePermissions> func, RequestOptions options = null)
+    {
+        await ChannelHelper.ModifyPermissionOverwriteAsync(this, KaiHeiLa, user, func, options).ConfigureAwait(false);
+    }
+    
+    /// <summary>
+    ///     Updates the permission overwrite for the given role, if one exists.
+    /// </summary>
+    /// <param name="role">The role to remove the overwrite for.</param>
+    /// <param name="func">A delegate containing the values to modify the permission overwrite with.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
+    /// </returns>
+    public async Task ModifyPermissionOverwriteAsync(IRole role, Action<OverwritePermissions> func, RequestOptions options = null)
+    {
+        await ChannelHelper.ModifyPermissionOverwriteAsync(this, KaiHeiLa, role, func, options).ConfigureAwait(false);
+    }
     public new virtual SocketGuildUser GetUser(ulong id) => null;
     
     /// <summary>
@@ -118,8 +196,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     internal new SocketGuildChannel Clone() => MemberwiseClone() as SocketGuildChannel;
     
     #endregion
-
-
+    
     #region SocketChannel
     
     /// <inheritdoc />
@@ -130,20 +207,45 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     #endregion
     
     #region IGuildChannel
+    
     IGuild IGuildChannel.Guild => Guild;
     ulong IGuildChannel.GuildId => Guild.Id;
     
     /// <inheritdoc />
-    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
-        => Task.FromResult<IGuildUser>(GetUser(id));
+    async Task IGuildChannel.AddPermissionOverwriteAsync(IRole role, RequestOptions options)
+        => await AddPermissionOverwriteAsync(role, options).ConfigureAwait(false);
+    /// <inheritdoc />
+    async Task IGuildChannel.AddPermissionOverwriteAsync(IGuildUser user, RequestOptions options)
+        => await AddPermissionOverwriteAsync(user, options).ConfigureAwait(false);
+    /// <inheritdoc />
+    async Task IGuildChannel.RemovePermissionOverwriteAsync(IRole role, RequestOptions options)
+        => await RemovePermissionOverwriteAsync(role, options).ConfigureAwait(false);
+    /// <inheritdoc />
+    async Task IGuildChannel.RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions options)
+        => await RemovePermissionOverwriteAsync(user, options).ConfigureAwait(false);
+    /// <inheritdoc />
+    async Task IGuildChannel.ModifyPermissionOverwriteAsync(IRole role, Action<OverwritePermissions> func, RequestOptions options)
+        => await ModifyPermissionOverwriteAsync(role, func, options).ConfigureAwait(false);
+    /// <inheritdoc />
+    async Task IGuildChannel.ModifyPermissionOverwriteAsync(IGuildUser user, Action<OverwritePermissions> func, RequestOptions options)
+        => await ModifyPermissionOverwriteAsync(user, func, options).ConfigureAwait(false);
     
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
+        => ImmutableArray.Create<IReadOnlyCollection<IGuildUser>>(Users).ToAsyncEnumerable(); //Overridden in Text/Voice
+    /// <inheritdoc />
+    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<IGuildUser>(GetUser(id)); //Overridden in Text/Voice
     #endregion
 
     #region IChannel
     
     /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
+        => ImmutableArray.Create<IReadOnlyCollection<IUser>>(Users).ToAsyncEnumerable(); //Overridden in Text/Voice
+    /// <inheritdoc />
     Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IUser>(GetUser(id)); //Overridden in Text/Voice
-
+    
     #endregion
 }

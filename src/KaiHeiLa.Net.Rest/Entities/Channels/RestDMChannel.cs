@@ -50,9 +50,26 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
         entity.Update(model);
         return entity;
     }
-     void Update(Model model)
+    void Update(Model model)
     {
         Recipient.Update(model.Recipient);
+    }
+
+    /// <summary>
+    ///     Gets a user in this channel from the provided <paramref name="id"/>.
+    /// </summary>
+    /// <param name="id">The snowflake identifier of the user.</param>
+    /// <returns>
+    ///     A <see cref="RestUser"/> object that is a recipient of this channel; otherwise <c>null</c>.
+    /// </returns>
+    public RestUser GetUser(ulong id)
+    {
+        if (id == Recipient.Id)
+            return Recipient;
+        else if (id == KaiHeiLa.CurrentUser.Id)
+            return CurrentUser;
+        else
+            return null;
     }
 
     /// <inheritdoc />
@@ -120,7 +137,6 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
 
     #endregion
 
-
     #region IDMChannel
     /// <inheritdoc />
     IUser IDMChannel.Recipient => Recipient;
@@ -180,4 +196,16 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// </returns>
     public override string ToString() => $"@{Recipient}";
     private string DebuggerDisplay => $"@{Recipient} ({Id}, DM)";
+
+    #region IChannel
+    
+    /// <inheritdoc />
+    Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<IUser>(GetUser(id));
+    
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
+        => ImmutableArray.Create<IReadOnlyCollection<IUser>>(Users).ToAsyncEnumerable();
+
+    #endregion
 }

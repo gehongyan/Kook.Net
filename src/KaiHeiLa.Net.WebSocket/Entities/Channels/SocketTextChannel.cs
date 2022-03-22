@@ -76,6 +76,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         => _messages?.Add(msg);
     internal SocketMessage RemoveMessage(Guid id)
         => _messages?.Remove(id);
+    
     #endregion
 
     #region Messages
@@ -201,8 +202,15 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     public Task DeleteMessageAsync(IMessage message, RequestOptions options = null)
         => ChannelHelper.DeleteMessageAsync(this, message.Id, KaiHeiLa, options);
     
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null)
+        => await ChannelHelper.GetInvitesAsync(this, KaiHeiLa, options).ConfigureAwait(false);
+
     #endregion
     
+    private string DebuggerDisplay => $"{Name} ({Id}, Text)";
+    internal new SocketTextChannel Clone() => MemberwiseClone() as SocketTextChannel;
+
     #region Users
     /// <inheritdoc />
     public override SocketGuildUser GetUser(ulong id)
@@ -219,14 +227,23 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     }
     #endregion
     
-    private string DebuggerDisplay => $"{Name} ({Id}, Text)";
-    internal new SocketTextChannel Clone() => MemberwiseClone() as SocketTextChannel;
-
     #region IGuildChannel
-
     /// <inheritdoc />
-    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
-        => Task.FromResult<IGuildUser>(GetUser(id));
+    async Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    {
+        var user = GetUser(id);
+        if (user is not null || mode == CacheMode.CacheOnly)
+            return user;
+
+        return await ChannelHelper.GetUserAsync(this, Guild, KaiHeiLa, id, options).ConfigureAwait(false);
+    }
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
+    {
+        return mode == CacheMode.AllowDownload
+            ? ChannelHelper.GetUsersAsync(this, Guild, KaiHeiLa, KaiHeiLaConfig.MaxUsersPerBatch, 1, options)
+            : ImmutableArray.Create<IReadOnlyCollection<IGuildUser>>(Users).ToAsyncEnumerable();
+    }
 
     #endregion
 
@@ -281,5 +298,13 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IMessage>> ITextChannel.GetPinnedMessagesAsync(RequestOptions options)
         => await GetPinnedMessagesAsync(options).ConfigureAwait(false);
+    #endregion
+    
+    #region  INestedChannel
+    
+    /// <inheritdoc />
+    Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult(Category);
+    
     #endregion
 }

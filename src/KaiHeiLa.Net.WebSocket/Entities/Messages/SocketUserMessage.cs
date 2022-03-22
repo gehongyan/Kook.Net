@@ -205,6 +205,14 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     public Task ModifyAsync(Action<MessageProperties> func, RequestOptions options = null)
         => MessageHelper.ModifyAsync(this, KaiHeiLa, func, options);
     
+    public string Resolve(int startIndex, TagHandling userHandling = TagHandling.Name, TagHandling channelHandling = TagHandling.Name,
+        TagHandling roleHandling = TagHandling.Name, TagHandling everyoneHandling = TagHandling.Ignore, TagHandling emojiHandling = TagHandling.Name)
+        => MentionUtils.Resolve(this, startIndex, userHandling, channelHandling, roleHandling, everyoneHandling, emojiHandling);
+    /// <inheritdoc />
+    public string Resolve(TagHandling userHandling = TagHandling.Name, TagHandling channelHandling = TagHandling.Name,
+        TagHandling roleHandling = TagHandling.Name, TagHandling everyoneHandling = TagHandling.Ignore, TagHandling emojiHandling = TagHandling.Name)
+        => MentionUtils.Resolve(this, 0, userHandling, channelHandling, roleHandling, everyoneHandling, emojiHandling);
+    
     private string DebuggerDisplay => $"{Author}: {Content} ({Id}{(Attachment is not null ? ", Attachment" : "")})";
     internal new SocketUserMessage Clone() => MemberwiseClone() as SocketUserMessage;
 

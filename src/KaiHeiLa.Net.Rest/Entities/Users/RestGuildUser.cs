@@ -33,6 +33,17 @@ public class RestGuildUser : RestUser, IGuildUser
     public bool? IsOwner { get; set; }
     
     /// <inheritdoc />
+    /// <exception cref="InvalidOperationException" accessor="get">Resolving permissions requires the parent guild to be downloaded.</exception>
+    public GuildPermissions GuildPermissions
+    {
+        get
+        {
+            if (!Guild.Available)
+                throw new InvalidOperationException("Resolving permissions requires the parent guild to be downloaded.");
+            return new GuildPermissions(Permissions.ResolveGuild(Guild, this));
+        }
+    }
+    /// <inheritdoc />
     public IReadOnlyCollection<uint> RoleIds => _roleIds;
     
     /// <inheritdoc />
@@ -123,6 +134,14 @@ public class RestGuildUser : RestUser, IGuildUser
     /// <inheritdoc />
     public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelAsync(RequestOptions options = null)
         => UserHelper.GetConnectedChannelAsync(this, KaiHeiLa, options);
+    
+    /// <inheritdoc />
+    /// <exception cref="InvalidOperationException">Resolving permissions requires the parent guild to be downloaded.</exception>
+    public ChannelPermissions GetPermissions(IGuildChannel channel)
+    {
+        var guildPerms = GuildPermissions;
+        return new ChannelPermissions(Permissions.ResolveChannel(Guild, this, channel, guildPerms.RawValue));
+    }
     
     #endregion
     

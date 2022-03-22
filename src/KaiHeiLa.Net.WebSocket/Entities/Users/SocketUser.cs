@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Globalization;
+using KaiHeiLa.Rest;
 using Model = KaiHeiLa.API.User;
 
 namespace KaiHeiLa.WebSocket;
@@ -100,6 +101,10 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
         return hasChanges;
     }
     
+    /// <inheritdoc />
+    public async Task<IDMChannel> CreateDMChannelAsync(RequestOptions options = null)
+        => await UserHelper.CreateDMChannelAsync(this, KaiHeiLa, options).ConfigureAwait(false);
+
     /// <summary>
     ///     Gets the full name of the user (e.g. Example#0001).
     /// </summary>

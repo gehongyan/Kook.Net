@@ -110,12 +110,6 @@ public interface IKaiHeiLaClient : IDisposable
     Task<IReadOnlyCollection<IGuild>> GetGuildsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
     
     #endregion
-
-    #region Guild Invites
-
-    // TODO: Implement Invites
-
-    #endregion
     
     #region Users
     

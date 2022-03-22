@@ -16,4 +16,11 @@ internal class CreateOrRemoveChannelPermissionOverwriteParams
     [JsonPropertyName("value")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
     public ulong TargetId { get; set; }
+
+    public CreateOrRemoveChannelPermissionOverwriteParams(ulong channelId, PermissionOverwriteTargetType targetType, ulong targetId)
+    {
+        ChannelId = channelId;
+        TargetType = targetType;
+        TargetId = targetId;
+    }
 }

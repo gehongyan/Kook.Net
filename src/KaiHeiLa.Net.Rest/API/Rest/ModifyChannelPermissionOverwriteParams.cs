@@ -26,4 +26,13 @@ internal class ModifyChannelPermissionOverwriteParams
     [JsonConverter(typeof(NullableUInt64Converter))]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ulong? Deny { get; set; }
+
+    public ModifyChannelPermissionOverwriteParams(ulong channelId, PermissionOverwriteTargetType targetType, ulong targetId, ulong? allow, ulong? deny)
+    {
+        ChannelId = channelId;
+        TargetType = targetType;
+        TargetId = targetId;
+        Allow = allow;
+        Deny = deny;
+    }
 }

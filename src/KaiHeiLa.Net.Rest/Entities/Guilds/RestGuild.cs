@@ -51,6 +51,13 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </summary>
     public IReadOnlyCollection<RestRole> Roles => _roles.ToReadOnlyCollection();
     
+    /// <summary>
+    ///     Gets a collection of all channels in this guild.
+    /// </summary>
+    public IReadOnlyCollection<RestChannel> Channels => _channels.ToReadOnlyCollection();
+    
+    /// <inheritdoc />
+    public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
     internal RestGuild(BaseKaiHeiLaClient client, ulong id)
         : base(client, id)
     {
@@ -108,6 +115,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     #endregion
     
     #region Bans
+    
     /// <summary>
     ///     Gets a collection of all users banned in this guild.
     /// </summary>
@@ -155,8 +163,24 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     public Task RemoveBanAsync(ulong userId, RequestOptions options = null)
         => GuildHelper.RemoveBanAsync(this, KaiHeiLa, userId, options);
+    
     #endregion
 
+    #region Invites
+    
+    /// <summary>
+    ///     Gets a collection of all invites in this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
+    ///     invite metadata, each representing information for an invite found within this guild.
+    /// </returns>
+    public Task<IReadOnlyCollection<RestInvite>> GetInvitesAsync(RequestOptions options = null)
+        => GuildHelper.GetInvitesAsync(this, KaiHeiLa, options);
+
+    #endregion
+    
     #region Roles
 
     /// <summary>
@@ -172,11 +196,41 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
             return value;
         return null;
     }
+    
+    /// <summary>
+    ///     Creates a new role with the provided name.
+    /// </summary>
+    /// <param name="name">The new name for the role.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
+    ///     role.
+    /// </returns>
+    public async Task<RestRole> CreateRoleAsync(string name, RequestOptions options = null)
+    {
+        var role = await GuildHelper.CreateRoleAsync(this, KaiHeiLa, name, options).ConfigureAwait(false);
+        _roles = _roles.Add(role.Id, role);
+        return role;
+    }
 
     #endregion
 
     #region Users
     
+    /// <summary>
+    ///     Gets a collection of all users in this guild.
+    /// </summary>
+    /// <remarks>
+    ///     This method retrieves all users found within this guild.
+    /// </remarks>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
+    ///     users found within this guild.
+    /// </returns>
+    public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> GetUsersAsync(RequestOptions options = null)
+        => GuildHelper.GetUsersAsync(this, KaiHeiLa, KaiHeiLaConfig.MaxUsersPerBatch, 1, options);
+
     /// <summary>
     ///     Gets a user from this guild.
     /// </summary>
@@ -193,6 +247,27 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         => GuildHelper.GetUserAsync(this, KaiHeiLa, id, options);
 
     /// <summary>
+    ///     Gets the current user for this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the currently logged-in
+    ///     user within this guild.
+    /// </returns>
+    public Task<RestGuildUser> GetCurrentUserAsync(RequestOptions options = null)
+        => GuildHelper.GetUserAsync(this, KaiHeiLa, KaiHeiLa.CurrentUser.Id, options);
+
+    /// <summary>
+    ///     Gets the owner of this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the owner of this guild.
+    /// </returns>
+    public Task<RestGuildUser> GetOwnerAsync(RequestOptions options = null)
+        => GuildHelper.GetUserAsync(this, KaiHeiLa, OwnerId, options);
+
+    /// <summary>
     ///     Gets the users who are muted or deafened in this guild.
     /// </summary>
     /// <param name="options">The options to be used when sending the request.</param>
@@ -200,8 +275,26 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     A task that represents the asynchronous get operation. The task result contains
     ///     the collection of muted or deafened users in this guild.
     /// </returns>
-    public Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> GetGuildMuteDeafListAsync(RequestOptions options = null) 
+    public Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)>
+        GetGuildMutedDeafenedUsersAsync(RequestOptions options = null) 
         => GuildHelper.GetGuildMuteDeafListAsync(this, KaiHeiLa, options);
+    
+    /// <summary>
+    ///     Gets a collection of users in this guild that the name or nickname contains the
+    ///     provided <see cref="string"/> at <paramref name="query"/>.
+    /// </summary>
+    /// <remarks>
+    ///     The <paramref name="limit"/> can not be higher than <see cref="KaiHeiLaConfig.MaxUsersPerBatch"/>.
+    /// </remarks>
+    /// <param name="func">A delegate containing the properties to search users with.</param>
+    /// <param name="limit">The maximum number of users to be gotten.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
+    ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/> at <paramref name="func"/>.
+    /// </returns>
+    public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func, int limit = KaiHeiLaConfig.MaxUsersPerBatch, RequestOptions options = null)
+        => GuildHelper.SearchUsersAsync(this, KaiHeiLa, func, limit, options);
     
     #endregion
     
@@ -297,6 +390,23 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
     
     /// <summary>
+    ///     Gets the first viewable text channel in this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the first viewable text
+    ///     channel in this guild; <see langword="null"/> if none is found.
+    /// </returns>
+    public async Task<RestTextChannel> GetDefaultChannelAsync(RequestOptions options = null)
+    {
+        var channels = await GetTextChannelsAsync(options).ConfigureAwait(false);
+        var user = await GetCurrentUserAsync(options).ConfigureAwait(false);
+        return channels
+            .Where(c => user.GetPermissions(c).ViewChannels)
+            .MinBy(c => c.Position);
+    }
+    
+    /// <summary>
     ///     Creates a new text channel in this guild.
     /// </summary>
     /// <param name="name">The new name for the text channel.</param>
@@ -345,16 +455,64 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     #endregion
     
     #region IGuild
+    
     /// <inheritdoc />
     bool IGuild.Available => Available;
     
     /// <inheritdoc />
-    IRole IGuild.GetRole(uint id)
-        => GetRole(id);
+    IReadOnlyCollection<IRole> IGuild.Roles => Roles;
     
     /// <inheritdoc />
     IRole IGuild.EveryoneRole => EveryoneRole;
 
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IInvite>> IGuild.GetInvitesAsync(RequestOptions options)
+        => await GetInvitesAsync(options).ConfigureAwait(false);
+    
+    /// <inheritdoc />
+    IRole IGuild.GetRole(uint id) => GetRole(id);
+    
+    /// <inheritdoc />
+    async Task<IRole> IGuild.CreateRoleAsync(string name, RequestOptions options)
+        => await CreateRoleAsync(name, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    async Task<IGuildUser> IGuild.GetCurrentUserAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetCurrentUserAsync(options).ConfigureAwait(false);
+        else
+            return null;
+    }
+    /// <inheritdoc />
+    async Task<IGuildUser> IGuild.GetOwnerAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetOwnerAsync(options).ConfigureAwait(false);
+        else
+            return null;
+    }
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IGuildUser>> IGuild.GetUsersAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return (await GetUsersAsync(options).FlattenAsync().ConfigureAwait(false)).ToImmutableArray();
+        else
+            return ImmutableArray.Create<IGuildUser>();
+    }
+    /// <inheritdoc />
+    /// <exception cref="NotSupportedException">Downloading users is not supported for a REST-based guild.</exception>
+    Task IGuild.DownloadUsersAsync() =>
+        throw new NotSupportedException();
+
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuild.SearchUsersAsync(Action<SearchGuildMemberProperties> func, int limit, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return SearchUsersAsync(func, limit, options);
+        else
+            return AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
+    }
     /// <inheritdoc />
     async Task<IGuildUser> IGuild.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
     {
@@ -390,7 +548,14 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
-    
+    /// <inheritdoc />
+    async Task<ITextChannel> IGuild.GetDefaultChannelAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetDefaultChannelAsync(options).ConfigureAwait(false);
+        else
+            return null;
+    }
     /// <inheritdoc />
     async Task<IReadOnlyCollection<ITextChannel>> IGuild.GetTextChannelsAsync(CacheMode mode, RequestOptions options)
     {
@@ -424,7 +589,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
             return null;
     }
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<ICategoryChannel>> IGuild.GetCategoriesAsync(CacheMode mode, RequestOptions options)
+    async Task<IReadOnlyCollection<ICategoryChannel>> IGuild.GetCategoryChannelsAsync(CacheMode mode,
+        RequestOptions options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetCategoryChannelsAsync(options).ConfigureAwait(false);
@@ -440,12 +606,18 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         => await CreateVoiceChannelAsync(name, func, options).ConfigureAwait(false);
     
     /// <inheritdoc />
-    async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> IGuild.GetGuildMuteDeafListAsync(CacheMode mode, RequestOptions options)
+    async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> IGuild.GetGuildMutedDeafenedUsersAsync(CacheMode mode, RequestOptions options = null)
     {
         if (mode == CacheMode.AllowDownload)
-            return await GetGuildMuteDeafListAsync(options).ConfigureAwait(false);
+            return await GetGuildMutedDeafenedUsersAsync(options).ConfigureAwait(false);
         else
             return (null, null);
+    }
+
+    /// <inheritdoc />
+    public async Task<Stream> GetBadgeAsync(BadgeStyle style = BadgeStyle.GuildName, RequestOptions options = null)
+    {
+        return await GuildHelper.GetBadgeAsync(this, KaiHeiLa, style, options).ConfigureAwait(false);
     }
 
     #endregion

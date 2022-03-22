@@ -8,7 +8,7 @@ internal class PageSortInfoConverter : JsonConverter<PageSortInfo>
 {
     public override PageSortInfo Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        PageSortInfo pageSortInfo = new() {SortKey = null, SortMode = SortMode.Unspecified};
+        PageSortInfo pageSortInfo = new() {SortKey = null, SortMode = API.Rest.SortMode.Unspecified};
         while (reader.Read())
         {
             switch (reader.TokenType)
@@ -19,9 +19,9 @@ internal class PageSortInfoConverter : JsonConverter<PageSortInfo>
                 case JsonTokenType.Number:
                     pageSortInfo.SortMode = reader.GetInt32() switch
                     {
-                        -1 => SortMode.Descending,
-                        1 => SortMode.Ascending,
-                        _ => SortMode.Unspecified,
+                        -1 => API.Rest.SortMode.Descending,
+                        1 => API.Rest.SortMode.Ascending,
+                        _ => API.Rest.SortMode.Unspecified,
                     };
                     break;
                 case JsonTokenType.EndObject:
@@ -36,10 +36,10 @@ internal class PageSortInfoConverter : JsonConverter<PageSortInfo>
         writer.WriteStartObject();
         switch (value.SortMode)
         {
-            case SortMode.Ascending:
+            case API.Rest.SortMode.Ascending:
                 writer.WriteNumber(value.SortKey, 1);
                 break;
-            case SortMode.Descending:
+            case API.Rest.SortMode.Descending:
                 writer.WriteNumber(value.SortKey, -1);
                 break;
         }

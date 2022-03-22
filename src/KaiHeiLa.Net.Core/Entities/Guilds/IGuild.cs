@@ -47,14 +47,21 @@ public interface IGuild : IEntity<ulong>
     IRole EveryoneRole { get; }
 
     /// <summary>
-    ///     Gets a role in this guild.
+    ///     Gets a collection of all custom emotes for this guild.
     /// </summary>
-    /// <param name="id">The identifier for the role.</param>
     /// <returns>
-    ///     A role that is associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
+    ///     A read-only collection of all custom emotes for this guild.
     /// </returns>
-    IRole GetRole(uint id);
-
+    IReadOnlyCollection<GuildEmote> Emotes { get; }
+    
+    /// <summary>
+    ///     Gets a collection of all roles in this guild.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of roles found within this guild.
+    /// </returns>
+    IReadOnlyCollection<IRole> Roles { get; }
+    
     #endregion
 
     #region Guilds
@@ -218,6 +225,7 @@ public interface IGuild : IEntity<ulong>
     ///     with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
     /// </returns>
     Task<IVoiceChannel> GetVoiceChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a collection of all category channels in this guild.
     /// </summary>
@@ -227,9 +235,19 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     category channels found within this guild.
     /// </returns>
-    Task<IReadOnlyCollection<ICategoryChannel>> GetCategoriesAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IReadOnlyCollection<ICategoryChannel>> GetCategoryChannelsAsync(CacheMode mode = CacheMode.AllowDownload,
+        RequestOptions options = null);
     
-    // TODO: DefaultChannel
+    /// <summary>
+    ///     Gets the first viewable text channel in this guild.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the first viewable text
+    ///     channel in this guild; <see langword="null" /> if none is found.
+    /// </returns>
+    Task<ITextChannel> GetDefaultChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
     
     /// <summary>
     ///     Creates a new text channel in this guild.
@@ -258,18 +276,55 @@ public interface IGuild : IEntity<ulong>
 
     #region Invites
 
-    // TODO: Implement Invites
+    /// <summary>
+    ///     Gets a collection of all invites in this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
+    ///     invite, each representing information for an invite found within this guild.
+    /// </returns>
+    Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null);
 
     #endregion
 
     #region Roles
 
-    // TODO: Implement Roles
-
+    /// <summary>
+    ///     Gets a role in this guild.
+    /// </summary>
+    /// <param name="id">The identifier for the role.</param>
+    /// <returns>
+    ///     A role that is associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
+    /// </returns>
+    IRole GetRole(uint id);
+    /// <summary>
+    ///     Creates a new role with the provided name.
+    /// </summary>
+    /// <param name="name">The new name for the role.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous creation operation. The task result contains the newly created role.
+    /// </returns>
+    Task<IRole> CreateRoleAsync(string name, RequestOptions options = null);
+    
     #endregion
 
     #region Users
-
+    
+    /// <summary>
+    ///     Gets a collection of all users in this guild.
+    /// </summary>
+    /// <remarks>
+    ///     This method retrieves all users found within this guild.
+    /// </remarks>
+    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
+    ///     users found within this guild.
+    /// </returns>
+    Task<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
     /// <summary>
     ///     Gets a user from this guild.
     /// </summary>
@@ -288,8 +343,52 @@ public interface IGuild : IEntity<ulong>
     ///     associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
     /// </returns>
     Task<IGuildUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Gets the current user for this guild.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the currently logged-in
+    ///     user within this guild.
+    /// </returns>
+    Task<IGuildUser> GetCurrentUserAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Gets the owner of this guild.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the owner of this guild.
+    /// </returns>
+    Task<IGuildUser> GetOwnerAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Downloads all users for this guild if the current list is incomplete.
+    /// </summary>
+    /// <remarks>
+    ///     This method downloads all users found within this guild through the Gateway and caches them.
+    /// </remarks>
+    /// <returns>
+    ///     A task that represents the asynchronous download operation.
+    /// </returns>
+    Task DownloadUsersAsync();
 
-    // TODO: SearchUsersAsync & GetCurrentUserAsync & GetOwnerAsync & DownloadUsersAsync
+    /// <summary>
+    ///     Gets a collection of users in this guild that the name or nickname contains the
+    ///     provided <see cref="string"/> at <paramref name="func"/>.
+    /// </summary>
+    /// <remarks>
+    ///     The <paramref name="limit"/> can not be higher than <see cref="KaiHeiLaConfig.MaxUsersPerBatch"/>.
+    /// </remarks>
+    /// <param name="func">A delegate containing the properties to search users with.</param>
+    /// <param name="limit">The maximum number of users to be gotten.</param>
+    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
+    ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/> at <paramref name="func"/>.
+    /// </returns>
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func, int limit = KaiHeiLaConfig.MaxUsersPerBatch, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
     
     #endregion
 
@@ -360,7 +459,23 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains
     ///     the collection of muted or deafened users in this guild.
     /// </returns>
-    Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> GetGuildMuteDeafListAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> GetGuildMutedDeafenedUsersAsync(
+        CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
+    #endregion
+
+    #region Badges
+
+    /// <summary>
+    ///     Gets a badge which is associated with this guild.
+    /// </summary>
+    /// <param name="style">The <see cref="BadgeStyle"/> that specifies the style of the badge.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the stream of the badge
+    ///     associated with this guild.
+    /// </returns>
+    Task<Stream> GetBadgeAsync(BadgeStyle style = BadgeStyle.GuildName, RequestOptions options = null);
 
     #endregion
 }

@@ -57,6 +57,20 @@ public class RestRole : RestEntity<uint>, IRole
         Color = new Color(model.Color);
         Permissions = new GuildPermissions(model.Permissions);
     }
+    
+    /// <inheritdoc />
+    public async Task ModifyAsync(Action<RoleProperties> func, RequestOptions options = null)
+    {
+        var model = await RoleHelper.ModifyAsync(this, KaiHeiLa, func, options).ConfigureAwait(false);
+        Update(model);
+    }
+    
+    public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions options = null)
+    {
+        void Func(SearchGuildMemberProperties p) => p.RoleId = Id;
+        return GuildHelper.SearchUsersAsync(Guild, KaiHeiLa, Func, KaiHeiLaConfig.MaxUsersPerBatch, options);
+    }
+    
     #endregion
     
     #region IRole
@@ -70,6 +84,16 @@ public class RestRole : RestEntity<uint>, IRole
             throw new InvalidOperationException("Unable to return this entity's parent unless it was fetched through that object.");
         }
     }
+    
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IRole.GetUsersAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return GetUsersAsync(options);
+        else
+            return AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
+    }
+    
     #endregion
     
     /// <summary>

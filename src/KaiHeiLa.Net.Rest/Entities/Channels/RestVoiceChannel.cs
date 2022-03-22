@@ -48,7 +48,48 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
         ServerUrl = model.ServerUrl;
         IsPermissionSynced = model.PermissionSync == 1;
     }
+    
+    /// <summary>
+    ///     Gets the parent (category) channel of this channel.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the category channel
+    ///     representing the parent of this channel; <c>null</c> if none is set.
+    /// </returns>
+    public Task<ICategoryChannel> GetCategoryAsync(RequestOptions options = null)
+        => ChannelHelper.GetCategoryAsync(this, KaiHeiLa, options);
+
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null)
+        => await ChannelHelper.GetInvitesAsync(this, KaiHeiLa, options).ConfigureAwait(false);
+
     #endregion
     
     private string DebuggerDisplay => $"{Name} ({Id}, Voice)";
+    
+    
+    #region IGuildChannel
+    
+    /// <inheritdoc />
+    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<IGuildUser>(null);
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
+        => AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
+    
+    #endregion
+    
+    #region INestedChannel
+    
+    /// <inheritdoc />
+    async Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
+    {
+        if (CategoryId.HasValue && mode == CacheMode.AllowDownload)
+            return (await Guild.GetChannelAsync(CategoryId.Value, mode, options).ConfigureAwait(false)) as ICategoryChannel;
+        return null;
+    }
+    
+    #endregion
+    
 }

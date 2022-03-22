@@ -32,6 +32,12 @@ internal static class UserHelper
         await client.ApiClient.KickOutGuildMemberAsync(args, options).ConfigureAwait(false);
     }
     
+    public static async Task<RestDMChannel> CreateDMChannelAsync(IUser user, BaseKaiHeiLaClient client,
+        RequestOptions options)
+    {
+        return RestDMChannel.Create(client, await client.ApiClient.CreateUserChatAsync(user.Id, options).ConfigureAwait(false));
+    }
+    
     public static async Task AddRolesAsync(IGuildUser user, BaseKaiHeiLaClient client, IEnumerable<uint> roleIds, RequestOptions options)
     {
         var args = roleIds.Select(x => new AddOrRemoveRoleParams()
@@ -58,7 +64,7 @@ internal static class UserHelper
     
     public static async Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedChannelAsync(IGuildUser user, BaseKaiHeiLaClient client, RequestOptions options)
     {
-        var channels = await client.ApiClient.GetAudioChannelsUserConnectsAsync(user.GuildId, user.Id, options).ConfigureAwait(false);
+        var channels = await client.ApiClient.GetAudioChannelsUserConnectsAsync(user.GuildId, user.Id, options: options).FlattenAsync().ConfigureAwait(false);
         return channels.Select(x => RestChannel.Create(client, x) as IVoiceChannel).ToImmutableArray();
     }
 }

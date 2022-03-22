@@ -1,6 +1,7 @@
 using Model = KaiHeiLa.API.Role;
 
 using System.Diagnostics;
+using KaiHeiLa.Rest;
 
 namespace KaiHeiLa.WebSocket;
 /// <summary>
@@ -69,6 +70,16 @@ public class SocketRole : SocketEntity<uint>, IRole
         Permissions = new GuildPermissions(model.Permissions);
     }
     
+    /// <inheritdoc />
+    public Task ModifyAsync(Action<RoleProperties> func, RequestOptions options = null)
+        => RoleHelper.ModifyAsync(this, KaiHeiLa, func, options);
+    
+    public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions options = null)
+    {
+        void Func(SearchGuildMemberProperties p) => p.RoleId = Id;
+        return GuildHelper.SearchUsersAsync(Guild, KaiHeiLa, Func, KaiHeiLaConfig.MaxUsersPerBatch, options);
+    }
+    
     #endregion
     
     /// <summary>
@@ -82,7 +93,18 @@ public class SocketRole : SocketEntity<uint>, IRole
     internal SocketRole Clone() => MemberwiseClone() as SocketRole;
     
     #region IRole
+    
     /// <inheritdoc />
     IGuild IRole.Guild => Guild;
+    
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IRole.GetUsersAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return GetUsersAsync(options);
+        else
+            return AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
+    }
+    
     #endregion
 }

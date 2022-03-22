@@ -224,4 +224,107 @@ internal static class ChannelHelper
         BaseKaiHeiLaClient client, RequestOptions options)
         => await MessageHelper.ModifyDirectAsync(messageId, client, func, options).ConfigureAwait(false);
     #endregion
+
+    #region Permission Overwrites
+    
+    public static async Task<UserPermissionOverwrite> AddPermissionOverwriteAsync(IGuildChannel channel, BaseKaiHeiLaClient client,
+        IUser user, RequestOptions options)
+    {
+        var args = new CreateOrRemoveChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.User, user.Id);
+        var resp = await client.ApiClient.CreateChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
+        return new UserPermissionOverwrite(user, new OverwritePermissions(resp.Allow, resp.Deny));
+    }
+    public static async Task<RolePermissionOverwrite> AddPermissionOverwriteAsync(IGuildChannel channel, BaseKaiHeiLaClient client,
+        IRole role, RequestOptions options)
+    {
+        var args = new CreateOrRemoveChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.Role, role.Id);
+        var resp = await client.ApiClient.CreateChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
+        return new RolePermissionOverwrite(role.Id, new OverwritePermissions(resp.Allow, resp.Deny));
+    }
+    public static async Task RemovePermissionOverwriteAsync(IGuildChannel channel, BaseKaiHeiLaClient client,
+        IUser user, RequestOptions options)
+    {
+        var args = new CreateOrRemoveChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.Role, user.Id);
+        await client.ApiClient.RemoveChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
+    }
+    public static async Task RemovePermissionOverwriteAsync(IGuildChannel channel, BaseKaiHeiLaClient client,
+        IRole role, RequestOptions options)
+    {
+        var args = new CreateOrRemoveChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.Role, role.Id);
+        await client.ApiClient.RemoveChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
+    }
+    public static async Task<UserPermissionOverwrite> ModifyPermissionOverwriteAsync(IGuildChannel channel, BaseKaiHeiLaClient client,
+        IGuildUser user, Action<OverwritePermissions> func, RequestOptions options)
+    {
+        var perms = channel.UserPermissionOverwrites.SingleOrDefault(x => x.Target.Id == user.Id)?.Permissions;
+        if (!perms.HasValue) return null;
+        func(perms.Value);
+        var args = new ModifyChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.User, user.Id, perms.Value.AllowValue, perms.Value.DenyValue);
+        var resp = await client.ApiClient.ModifyChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
+        return new UserPermissionOverwrite(user, new OverwritePermissions(resp.Allow, resp.Deny));
+    }
+    public static async Task<RolePermissionOverwrite> ModifyPermissionOverwriteAsync(IGuildChannel channel, BaseKaiHeiLaClient client,
+        IRole role, Action<OverwritePermissions> func, RequestOptions options)
+    {
+        var perms = channel.RolePermissionOverwrites.SingleOrDefault(x => x.Target == role.Id)?.Permissions;
+        if (!perms.HasValue) return null;
+        func(perms.Value);
+        var args = new ModifyChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.Role, role.Id, perms.Value.AllowValue, perms.Value.DenyValue);
+        var resp = await client.ApiClient.ModifyChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
+        return new RolePermissionOverwrite(role.Id, new OverwritePermissions(resp.Allow, resp.Deny));
+    }
+    
+    #endregion
+    
+    #region Invites
+
+    public static async Task<IReadOnlyCollection<RestInvite>> GetInvitesAsync(IGuildChannel channel, BaseKaiHeiLaClient client,
+        RequestOptions options)
+    {
+        var models = await client.ApiClient.GetGuildInvitesAsync(channel.GuildId, channel.Id, options: options).FlattenAsync().ConfigureAwait(false);
+        return models.Select(x => RestInvite.Create(client, channel.Guild, channel, x)).ToImmutableArray();
+    }
+
+    #endregion
+    
+    #region Categories
+    
+    public static async Task<ICategoryChannel> GetCategoryAsync(INestedChannel channel, BaseKaiHeiLaClient client, RequestOptions options)
+    {
+        // if no category id specified, return null
+        if (!channel.CategoryId.HasValue)
+            return null;
+        // CategoryId will contain a value here
+        var model = await client.ApiClient.GetGuildChannelAsync(channel.CategoryId.Value, options).ConfigureAwait(false);
+        return RestCategoryChannel.Create(client, model) as ICategoryChannel;
+    }
+    
+    #endregion
+
+    #region Users
+
+    /// <exception cref="InvalidOperationException">Resolving permissions requires the parent guild to be downloaded.</exception>
+    public static async Task<RestGuildUser> GetUserAsync(IGuildChannel channel, IGuild guild, BaseKaiHeiLaClient client,
+        ulong id, RequestOptions options)
+    {
+        var model = await client.ApiClient.GetGuildMemberAsync(channel.GuildId, id, options).ConfigureAwait(false);
+        if (model == null)
+            return null;
+        var user = RestGuildUser.Create(client, guild, model);
+        if (!user.GetPermissions(channel).ViewChannels)
+            return null;
+
+        return user;
+    }
+    /// <exception cref="InvalidOperationException">Resolving permissions requires the parent guild to be downloaded.</exception>
+    public static IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> GetUsersAsync(IGuildChannel channel, IGuild guild, BaseKaiHeiLaClient client,
+        int limit, int fromPage, RequestOptions options)
+    {
+        return client.ApiClient.GetGuildMembersAsync(guild.Id, limit: limit, fromPage: fromPage, options: options)
+            .Select(x => x.Select(y => RestGuildUser.Create(client, guild, y))
+                .Where(y => y.GetPermissions(channel).ViewChannels)
+                .ToImmutableArray() as IReadOnlyCollection<RestGuildUser>);
+    }
+
+    #endregion
 }

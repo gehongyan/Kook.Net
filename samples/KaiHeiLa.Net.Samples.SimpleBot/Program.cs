@@ -38,9 +38,10 @@ class Program
         await Task.Delay(-1);
     }
 
-    private Task ClientOnReady()
+    private async Task ClientOnReady()
     {
-        return Task.CompletedTask;
+        var asyncEnumerable = _client.GetGuild(1990044438283387).GetUsersAsync();
+        IEnumerable<IGuildUser> flattenAsync = await asyncEnumerable.FlattenAsync();
     }
 
     private async Task ClientOnMessageReceived(SocketMessage arg)
@@ -64,6 +65,7 @@ class Program
         // await _client.GetUserAsync(0);
         // IReadOnlyCollection<RestMessage> pinnedMessagesAsync = await _client.GetGuild(1990044438283387).GetTextChannel(6286033651700207).GetPinnedMessagesAsync();
         // await (user as SocketGuildUser).AddRoleAsync(1681537);
+        // IEnumerable<IGuildUser> flattenAsync = await _client.GetGuild(1990044438283387).GetRole(300643).GetUsersAsync().FlattenAsync().ConfigureAwait(false);
     }
 
     private async Task CardDemo(SocketMessage message)

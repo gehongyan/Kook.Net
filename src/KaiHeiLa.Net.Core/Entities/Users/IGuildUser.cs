@@ -38,7 +38,24 @@ public interface IGuildUser : IUser
 
     #region Permissions
 
-    // TODO: Implement Permissions
+    /// <summary>
+    ///     Gets the guild-level permissions for this user.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="KaiHeiLa.GuildPermissions"/> structure for this user, representing what
+    ///     permissions this user has in the guild.
+    /// </returns>
+    GuildPermissions GuildPermissions { get; }
+    
+    /// <summary>
+    ///     Gets the level permissions granted to this user to a given channel.
+    /// </summary>
+    /// <param name="channel">The channel to get the permission from.</param>
+    /// <returns>
+    ///     A <see cref="KaiHeiLa.ChannelPermissions"/> structure representing the permissions that a user has in the
+    ///     specified channel.
+    /// </returns>
+    ChannelPermissions GetPermissions(IGuildChannel channel);
 
     #endregion
 

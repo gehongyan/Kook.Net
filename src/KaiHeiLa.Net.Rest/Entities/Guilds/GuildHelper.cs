@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
 using KaiHeiLa.API;
 using KaiHeiLa.API.Rest;
 
@@ -15,9 +16,48 @@ internal static class GuildHelper
     }
 
     #endregion
+
+    #region Invites
+
+    public static async Task<IReadOnlyCollection<RestInvite>> GetInvitesAsync(IGuild guild, BaseKaiHeiLaClient client,
+        RequestOptions options)
+    {
+        var models = await client.ApiClient.GetGuildInvitesAsync(guild.Id, null, options: options).FlattenAsync().ConfigureAwait(false);
+        return models.Select(x => RestInvite.Create(client, guild, null, x)).ToImmutableArray();
+    }
+
+    #endregion
+    
+    #region Roles
+    
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
+    public static async Task<RestRole> CreateRoleAsync(IGuild guild, BaseKaiHeiLaClient client,
+        string name, RequestOptions options)
+    {
+        if (name == null) throw new ArgumentNullException(paramName: nameof(name));
+
+        var createGuildRoleParams = new CreateGuildRoleParams
+        {
+            Name = name,
+            GuildId = guild.Id
+        };
+
+        var model = await client.ApiClient.CreateGuildRoleAsync(createGuildRoleParams, options).ConfigureAwait(false);
+
+        return RestRole.Create(client, guild, model);
+    }
+    
+    #endregion
     
     #region Users
 
+    public static IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> GetUsersAsync(IGuild guild, BaseKaiHeiLaClient client, int limit, int fromPage, RequestOptions options)
+    {
+        return client.ApiClient.GetGuildMembersAsync(guild.Id, limit: limit, fromPage: fromPage, options: options)
+            .Select(x => x
+                .Select(y => RestGuildUser.Create(client, guild, y)).ToImmutableArray() as IReadOnlyCollection<RestGuildUser>);
+    }
+    
     public static async Task<RestGuildUser> GetUserAsync(IGuild guild, BaseKaiHeiLaClient client,
         ulong id, RequestOptions options)
     {
@@ -78,6 +118,12 @@ internal static class GuildHelper
         await client.ApiClient.RemoveGuildMuteDeafAsync(args, options).ConfigureAwait(false);
     }
     
+    public static IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> SearchUsersAsync(IGuild guild, BaseKaiHeiLaClient client, Action<SearchGuildMemberProperties> func, int limit, RequestOptions options)
+    {
+        var models = client.ApiClient.GetGuildMembersAsync(guild.Id, func, limit, 1, options);
+        return models.Select(x => x.Select(y => RestGuildUser.Create(client, guild, y)).ToImmutableArray() as IReadOnlyCollection<RestGuildUser>);
+    }
+    
     #endregion
 
     #region Channels
@@ -93,7 +139,7 @@ internal static class GuildHelper
     public static async Task<IReadOnlyCollection<RestGuildChannel>> GetChannelsAsync(IGuild guild, BaseKaiHeiLaClient client,
         RequestOptions options)
     {
-        var models = await client.ApiClient.GetGuildChannelsAsync(guild.Id, options).ConfigureAwait(false);
+        var models = await client.ApiClient.GetGuildChannelsAsync(guild.Id, options: options).FlattenAsync().ConfigureAwait(false);
         return models.Select(x => RestGuildChannel.Create(client, guild, x)).ToImmutableArray();
     }
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
@@ -173,12 +219,12 @@ internal static class GuildHelper
     
     public static async Task<IReadOnlyCollection<GuildEmote>> GetEmotesAsync(IGuild guild, BaseKaiHeiLaClient client, RequestOptions options)
     {
-        var models = await client.ApiClient.GetGuildEmotesAsync(guild.Id, options).ConfigureAwait(false);
+        var models = await client.ApiClient.GetGuildEmotesAsync(guild.Id, options: options).FlattenAsync().ConfigureAwait(false);
         return models.Select(x => x.ToEntity(client, guild.Id)).ToImmutableArray();
     }
     public static async Task<GuildEmote> GetEmoteAsync(IGuild guild, BaseKaiHeiLaClient client, string id, RequestOptions options)
     {
-        var emote = await client.ApiClient.GetGuildEmotesAsync(guild.Id, options).ConfigureAwait(false);
+        var emote = await client.ApiClient.GetGuildEmotesAsync(guild.Id, options: options).FlattenAsync().ConfigureAwait(false);
         return emote.FirstOrDefault(x => x.Id == id)?.ToEntity(client, guild.Id);
     }
     public static async Task<GuildEmote> CreateEmoteAsync(IGuild guild, BaseKaiHeiLaClient client, string name, Image image, RequestOptions options)
@@ -207,6 +253,15 @@ internal static class GuildHelper
     }
     public static async Task DeleteEmoteAsync(IGuild guild, BaseKaiHeiLaClient client, string id, RequestOptions options) 
         => await client.ApiClient.DeleteGuildEmoteAsync(id, options).ConfigureAwait(false);
+
+    #endregion
+
+    #region Badges
+    
+    public static async Task<Stream> GetBadgeAsync(IGuild guild, BaseKaiHeiLaClient client, BadgeStyle style, RequestOptions options)
+    {
+        return await client.ApiClient.GetGuildBadgeAsync(guild.Id, style, options).ConfigureAwait(false);
+    }
 
     #endregion
 }

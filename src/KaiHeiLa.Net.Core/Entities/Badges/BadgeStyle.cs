@@ -1,4 +1,4 @@
-namespace KaiHeiLa.Badges;
+namespace KaiHeiLa;
 
 public enum BadgeStyle
 {

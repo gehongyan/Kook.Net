@@ -41,7 +41,7 @@ public class KaiHeiLaConfig
     ///     The KaiHeiLa API URL using <see cref="APIVersion"/>.
     /// </returns>
     public static readonly string APIUrl = $"https://www.kaiheila.cn/api/v{APIVersion}/";
-    
+
     /// <summary> 
     ///     Returns the default timeout for requests. 
     /// </summary>
@@ -59,12 +59,28 @@ public class KaiHeiLaConfig
     public const int MaxMessageSize = 50000;
     
     /// <summary> 
+    ///     Returns the max users allowed to be in a request.
+    /// </summary>
+    /// <returns>
+    ///     The maximum number of users that can be gotten per-batch.
+    /// </returns>
+    public const int MaxUsersPerBatch = 50;
+    
+    /// <summary> 
     ///     Returns the max messages allowed to be in a request. 
     /// </summary>
     /// <returns>
     ///     The maximum number of messages that can be gotten per-batch.
     /// </returns>
     public const int MaxMessagesPerBatch = 100;
+    
+    /// <summary> 
+    ///     Returns the max items allowed to be in a request by default. 
+    /// </summary>
+    /// <returns>
+    ///     The maximum number of items that can be gotten per-batch by default.
+    /// </returns>
+    public const int MaxItemsPerBatchByDefault = 100;
     
     /// <summary> 
     ///     Returns the min length for a KaiHeiLa guild nickname. 
@@ -97,7 +113,7 @@ public class KaiHeiLaConfig
     ///     The maximum value of a intimacy score allowed by KaiHeiLa.
     /// </returns>
     public const int MaxIntimacyScore = 2200;
-    
+
     /// <summary>
     ///     Gets or sets how a request should act in the case of an error, by default.
     /// </summary>

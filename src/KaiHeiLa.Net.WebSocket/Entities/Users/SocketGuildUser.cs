@@ -147,13 +147,20 @@ public class SocketGuildUser : SocketUser, IGuildUser
     public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelAsync(RequestOptions options = null)
         => SocketUserHelper.GetConnectedChannelAsync(this, KaiHeiLa, options);
 
-    #endregion
+    /// <inheritdoc />
+    public GuildPermissions GuildPermissions => new GuildPermissions(Permissions.ResolveGuild(Guild, this));
     
     /// <summary>
     ///     Returns a collection of roles that the user possesses.
     /// </summary>
     public IReadOnlyCollection<SocketRole> Roles
         => _roleIds.Select(id => Guild.GetRole(id)).Where(x => x != null).ToReadOnlyCollection(() => _roleIds.Length);
+    
+    /// <inheritdoc />
+    public ChannelPermissions GetPermissions(IGuildChannel channel)
+        => new ChannelPermissions(Permissions.ResolveChannel(Guild, this, channel, GuildPermissions.RawValue));
+    
+    #endregion
 
     #region IGuildUser
     

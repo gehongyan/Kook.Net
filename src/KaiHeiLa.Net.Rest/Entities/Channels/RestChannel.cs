@@ -47,5 +47,8 @@ public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
     /// <inheritdoc />
     Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IUser>(null); //Overridden
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
+        => AsyncEnumerable.Empty<IReadOnlyCollection<IUser>>(); //Overridden
     #endregion
 }

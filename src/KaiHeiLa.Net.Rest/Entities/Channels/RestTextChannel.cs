@@ -31,7 +31,6 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
     /// <inheritdoc />
     public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
-
     
     internal RestTextChannel(BaseKaiHeiLaClient kaiHeiLa, IGuild guild, ulong id)
         : base(kaiHeiLa, guild, id, ChannelType.Text)
@@ -53,6 +52,37 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         SlowModeInterval = model.SlowMode;
         IsPermissionSynced = model.PermissionSync == 1;
     }
+    
+    /// <summary>
+    ///     Gets a user in this channel.
+    /// </summary>
+    /// <param name="id">The snowflake identifier of the user.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <exception cref="InvalidOperationException">
+    /// Resolving permissions requires the parent guild to be downloaded.
+    /// </exception>
+    /// <returns>
+    ///     A task representing the asynchronous get operation. The task result contains a guild user object that
+    ///     represents the user; <c>null</c> if none is found.
+    /// </returns>
+    public Task<RestGuildUser> GetUserAsync(ulong id, RequestOptions options = null)
+        => ChannelHelper.GetUserAsync(this, Guild, KaiHeiLa, id, options);
+
+    /// <summary>
+    ///     Gets a collection of users that are able to view the channel.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <exception cref="InvalidOperationException">
+    /// Resolving permissions requires the parent guild to be downloaded.
+    /// </exception>
+    /// <returns>
+    ///     A paged collection containing a collection of guild users that can access this channel. Flattening the
+    ///     paginated response into a collection of users with
+    ///     <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/> is required if you wish to access the users.
+    /// </returns>
+    public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> GetUsersAsync(RequestOptions options = null)
+        => ChannelHelper.GetUsersAsync(this, Guild, KaiHeiLa, KaiHeiLaConfig.MaxUsersPerBatch, 1, options: options);
+
     /// <inheritdoc />
     public Task<RestMessage> GetMessageAsync(Guid id, RequestOptions options = null)
         => ChannelHelper.GetMessageAsync(this, KaiHeiLa, id, options);
@@ -106,11 +136,67 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null) => 
         SendCardMessageAsync(new[] { card }, quote, ephemeralUser, options);
 
+    /// <summary>
+    ///     Gets the parent (category) channel of this channel.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the category channel
+    ///     representing the parent of this channel; <c>null</c> if none is set.
+    /// </returns>
+    public Task<ICategoryChannel> GetCategoryAsync(RequestOptions options = null)
+        => ChannelHelper.GetCategoryAsync(this, KaiHeiLa, options);
     
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null)
+        => await ChannelHelper.GetInvitesAsync(this, KaiHeiLa, options).ConfigureAwait(false);
+
     #endregion
 
     private string DebuggerDisplay => $"{Name} ({Id}, Text)";
 
+    #region IChannel
+    
+    /// <inheritdoc />
+    async Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetUserAsync(id, options).ConfigureAwait(false);
+        else
+            return null;
+    }
+    
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return GetUsersAsync(options);
+        else
+            return AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
+    }
+
+    #endregion
+    
+    #region IGuildChannel
+    
+    /// <inheritdoc />
+    async Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetUserAsync(id, options).ConfigureAwait(false);
+        else
+            return null;
+    }
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
+    {
+        return mode == CacheMode.AllowDownload
+            ? GetUsersAsync(options)
+            : AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
+    }
+    
+    #endregion
+    
     #region IMessageChannel
     
     /// <inheritdoc />
@@ -190,5 +276,17 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     public async Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions options = null)
         => await ChannelHelper.ModifyMessageAsync(this, messageId, func, KaiHeiLa, options).ConfigureAwait(false);
 
+    #endregion
+    
+    #region INestedChannel
+    
+    /// <inheritdoc />
+    async Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
+    {
+        if (CategoryId.HasValue && mode == CacheMode.AllowDownload)
+            return (await Guild.GetChannelAsync(CategoryId.Value, mode, options).ConfigureAwait(false)) as ICategoryChannel;
+        return null;
+    }
+    
     #endregion
 }

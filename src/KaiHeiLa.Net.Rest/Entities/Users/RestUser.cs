@@ -73,6 +73,17 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         var model = await KaiHeiLa.ApiClient.GetUserAsync(Id, options).ConfigureAwait(false);
         Update(model);
     }
+    
+    /// <summary>
+    ///     Creates a direct message channel to this user.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a rest DM channel where the user is the recipient.
+    /// </returns>
+    public Task<RestDMChannel> CreateDMChannelAsync(RequestOptions options = null)
+        => UserHelper.CreateDMChannelAsync(this, KaiHeiLa, options);
+    
     #endregion
     
     /// <summary>
@@ -84,4 +95,11 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     public override string ToString() => Format.UsernameAndIdentifyNumber(this);
 
     private string DebuggerDisplay => $"{Format.UsernameAndIdentifyNumber(this)} ({Id}{(IsBot ?? false ? ", Bot" : "")})";
+    
+    
+    #region IUser
+    /// <inheritdoc />
+    async Task<IDMChannel> IUser.CreateDMChannelAsync(RequestOptions options)
+        => await CreateDMChannelAsync(options).ConfigureAwait(false);
+    #endregion
 }

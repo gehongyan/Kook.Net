@@ -258,8 +258,8 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     {
         foreach (SocketGuild socketGuild in guilds)
         {
-            IReadOnlyCollection<GuildMember> guildMembers = await ApiClient.GetGuildMembersAsync(socketGuild.Id).ConfigureAwait(false);
-            socketGuild.Update(State, guildMembers);
+            var guildMembers = await ApiClient.GetGuildMembersAsync(socketGuild.Id).FlattenAsync().ConfigureAwait(false);
+            socketGuild.Update(State, guildMembers.ToImmutableArray());
         }
     }
     
@@ -1329,7 +1329,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                     // Download guild data
                     try
                     {
-                        IReadOnlyCollection<Guild> guilds = await ApiClient.GetGuildsAsync().ConfigureAwait(false);
+                        var guilds = (await ApiClient.GetGuildsAsync().FlattenAsync().ConfigureAwait(false)).ToList();
                         var state = new ClientState(guilds.Count, 0);
                         int unavailableGuilds = 0;
                         foreach (Guild guild in guilds)

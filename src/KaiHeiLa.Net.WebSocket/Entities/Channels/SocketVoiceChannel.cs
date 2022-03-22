@@ -1,4 +1,6 @@
+using System.Collections.Immutable;
 using System.Diagnostics;
+using KaiHeiLa.Rest;
 using Model = KaiHeiLa.API.Channel;
 
 namespace KaiHeiLa.WebSocket;
@@ -13,6 +15,14 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
 
     /// <inheritdoc />
     public ulong? CategoryId { get; set; }
+    /// <summary>
+    ///     Gets the parent (category) of this channel in the guild's channel list.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="ICategoryChannel"/> representing the parent of this channel; <c>null</c> if none is set.
+    /// </returns>
+    public ICategoryChannel Category
+        => CategoryId.HasValue ? Guild.GetChannel(CategoryId.Value) as ICategoryChannel : null;
     /// <inheritdoc />
     public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
     /// <inheritdoc />
@@ -49,8 +59,40 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
         IsPermissionSynced = model.PermissionSync == 1;
     }
     
+    // /// <inheritdoc />
+    // public override SocketGuildUser GetUser(ulong id)
+    // {
+    //     var user = Guild.GetUser(id);
+    //     if (user?.VoiceChannel?.Id == Id)
+    //         return user;
+    //     return null;
+    // }
+    
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null)
+        => await ChannelHelper.GetInvitesAsync(this, KaiHeiLa, options).ConfigureAwait(false);
+
     #endregion
 
     private string DebuggerDisplay => $"{Name} ({Id}, Voice)";
     internal new SocketVoiceChannel Clone() => MemberwiseClone() as SocketVoiceChannel;
+    
+    #region IGuildChannel
+    
+    /// <inheritdoc />
+    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+        => Task.FromResult<IGuildUser>(GetUser(id));
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
+        => ImmutableArray.Create<IReadOnlyCollection<IGuildUser>>(Users).ToAsyncEnumerable();
+    
+    #endregion
+    
+    #region INestedChannel
+    
+    /// <inheritdoc />
+    Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult(Category);
+    
+    #endregion
 }

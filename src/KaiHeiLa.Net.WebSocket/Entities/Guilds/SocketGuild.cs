@@ -25,18 +25,32 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     private ConcurrentDictionary<ulong, SocketGuildChannel> _channels;
     private ConcurrentDictionary<ulong, SocketGuildUser> _members;
     private ConcurrentDictionary<uint, SocketRole> _roles;
+    private ImmutableArray<GuildEmote> _emotes;
     
+    /// <inheritdoc />
     public string Name { get; private set; }
+
+    /// <inheritdoc />
     public string Topic { get; private set; }
+
+    /// <inheritdoc />
     public ulong OwnerId { get; private set; }
+    /// <summary> Gets the user that owns this guild. </summary>
+    public SocketGuildUser Owner => GetUser(OwnerId);
+    /// <inheritdoc />
     public string Icon { get; private set; }
+    /// <inheritdoc />
     public NotifyType NotifyType { get; private set; }
+    /// <inheritdoc />
     public string Region { get; private set; }
+    /// <inheritdoc />
     public bool IsOpenEnabled { get; private set; }
+    /// <inheritdoc />
     public uint OpenId { get; private set; }
+    /// <inheritdoc />
     public ulong DefaultChannelId { get; private set; }
+    /// <inheritdoc />
     public ulong WelcomeChannelId { get; private set; }
-    
     
     public object[] Features { get; private set; }
 
@@ -137,6 +151,24 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
             return channels.Select(x => x.Value).Where(x => x != null).ToReadOnlyCollection(channels);
         }
     }
+    /// <summary>
+    ///     Gets the default channel in this guild.
+    /// </summary>
+    /// <remarks>
+    ///     This property retrieves the first viewable text channel for this guild.
+    ///     <note type="warning">
+    ///         This channel does not guarantee the user can send message to it, as it only looks for the first viewable
+    ///         text channel.
+    ///     </note>
+    /// </remarks>
+    /// <returns>
+    ///     A <see cref="SocketTextChannel"/> representing the first viewable channel that the user has access to.
+    /// </returns>
+    public SocketTextChannel DefaultChannel => TextChannels
+        .Where(c => CurrentUser.GetPermissions(c).ViewChannels)
+        .MinBy(c => c.Position);
+    /// <inheritdoc />
+    public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
     /// <summary>
     ///     Gets a collection of users in this guild.
     /// </summary>
@@ -444,6 +476,21 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     }
 
     #endregion
+
+    #region Invites
+
+    /// <summary>
+    ///     Gets a collection of all invites in this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
+    ///     invite metadata, each representing information for an invite found within this guild.
+    /// </returns>
+    public Task<IReadOnlyCollection<RestInvite>> GetInvitesAsync(RequestOptions options = null)
+        => GuildHelper.GetInvitesAsync(this, KaiHeiLa, options);
+
+    #endregion
     
     #region Roles
 
@@ -461,6 +508,19 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
         return null;
     }
 
+    /// <summary>
+    ///     Creates a new role with the provided name.
+    /// </summary>
+    /// <param name="name">The new name for the role.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <returns>
+    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
+    ///     role.
+    /// </returns>
+    public Task<RestRole> CreateRoleAsync(string name, RequestOptions options = null)
+        => GuildHelper.CreateRoleAsync(this, KaiHeiLa, name, options);
+    
     internal SocketRole AddRole(RoleModel model)
     {
         var role = SocketRole.Create(this, KaiHeiLa.State, model);
@@ -591,28 +651,47 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
         DownloadedMemberCount = _members.Count;
     }
 
-    // /// <summary>
-    // ///     Gets a collection of all users in this guild.
-    // /// </summary>
-    // /// <remarks>
-    // ///     <para>This method retrieves all users found within this guild through REST.</para>
-    // ///     <para>Users returned by this method are not cached.</para>
-    // /// </remarks>
-    // /// <param name="options">The options to be used when sending the request.</param>
-    // /// <returns>
-    // ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
-    // ///     users found within this guild.
-    // /// </returns>
-    // public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions options = null)
-    // {
-    //     if (HasAllMembers)
-    //         return ImmutableArray.Create(Users).ToAsyncEnumerable<IReadOnlyCollection<IGuildUser>>();
-    //     return GuildHelper.GetUsersAsync(this, KaiHeiLa, null, null, options);
-    // }
+    /// <summary>
+    ///     Gets a collection of all users in this guild.
+    /// </summary>
+    /// <remarks>
+    ///     <para>This method retrieves all users found within this guild through REST.</para>
+    ///     <para>Users returned by this method are not cached.</para>
+    /// </remarks>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
+    ///     users found within this guild.
+    /// </returns>
+    public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions options = null)
+    {
+        if (HasAllMembers)
+            return ImmutableArray.Create(Users).ToAsyncEnumerable<IReadOnlyCollection<IGuildUser>>();
+        return GuildHelper.GetUsersAsync(this, KaiHeiLa, KaiHeiLaConfig.MaxUsersPerBatch, 1, options);
+    }
+    
     public async Task DownloadUsersAsync()
     {
         await KaiHeiLa.DownloadUsersAsync(new[] { this }).ConfigureAwait(false);
     }
+
+    /// <summary>
+    ///     Gets a collection of users in this guild that the name or nickname contains the
+    ///     provided <see cref="string"/> at <paramref name="func"/>.
+    /// </summary>
+    /// <remarks>
+    ///     The <paramref name="limit"/> can not be higher than <see cref="KaiHeiLaConfig.MaxUsersPerBatch"/>.
+    /// </remarks>
+    /// <param name="func">A delegate containing the properties to search users with.</param>
+    /// <param name="limit">The maximum number of users to be gotten.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
+    ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/> at <paramref name="func"/>.
+    /// </returns>
+    public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func, 
+        int limit = KaiHeiLaConfig.MaxUsersPerBatch, RequestOptions options = null)
+        => GuildHelper.SearchUsersAsync(this, KaiHeiLa, func, limit, options);
     
     #endregion
 
@@ -645,15 +724,44 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     public void Dispose() { }
     
     /// <inheritdoc />
+    async Task<IReadOnlyCollection<IGuildUser>> IGuild.GetUsersAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload && !HasAllMembers)
+            return (await GetUsersAsync(options).FlattenAsync().ConfigureAwait(false)).ToImmutableArray();
+        else
+            return Users;
+    }
+    /// <inheritdoc />
     Task<IGuildUser> IGuild.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IGuildUser>(GetUser(id));
-
     /// <inheritdoc />
-    IRole IGuild.GetRole(uint id)
-        => GetRole(id);
-
+    Task<IGuildUser> IGuild.GetCurrentUserAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<IGuildUser>(CurrentUser);
+    /// <inheritdoc />
+    Task<IGuildUser> IGuild.GetOwnerAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<IGuildUser>(Owner);
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuild.SearchUsersAsync(Action<SearchGuildMemberProperties> func, int limit, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return SearchUsersAsync(func, limit, options);
+        else
+            return AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
+    }
     /// <inheritdoc />
     IRole IGuild.EveryoneRole => EveryoneRole;
+    /// <inheritdoc />
+    IReadOnlyCollection<IRole> IGuild.Roles => Roles;
+    
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IInvite>> IGuild.GetInvitesAsync(RequestOptions options)
+        => await GetInvitesAsync(options).ConfigureAwait(false);
+    
+    /// <inheritdoc />
+    IRole IGuild.GetRole(uint id) => GetRole(id);
+    /// <inheritdoc />
+    async Task<IRole> IGuild.CreateRoleAsync(string name, RequestOptions options)
+        => await CreateRoleAsync(name, options).ConfigureAwait(false);
     
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IBan>> IGuild.GetBansAsync(RequestOptions options)
@@ -672,6 +780,9 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     Task<IGuildChannel> IGuild.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IGuildChannel>(GetChannel(id));
     /// <inheritdoc />
+    Task<ITextChannel> IGuild.GetDefaultChannelAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<ITextChannel>(DefaultChannel);
+    /// <inheritdoc />
     Task<IReadOnlyCollection<ITextChannel>> IGuild.GetTextChannelsAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult<IReadOnlyCollection<ITextChannel>>(TextChannels);
     /// <inheritdoc />
@@ -684,7 +795,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     Task<IVoiceChannel> IGuild.GetVoiceChannelAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IVoiceChannel>(GetVoiceChannel(id));
     /// <inheritdoc />
-    Task<IReadOnlyCollection<ICategoryChannel>> IGuild.GetCategoriesAsync(CacheMode mode, RequestOptions options)
+    Task<IReadOnlyCollection<ICategoryChannel>> IGuild.GetCategoryChannelsAsync(CacheMode mode,
+        RequestOptions options = null)
         => Task.FromResult<IReadOnlyCollection<ICategoryChannel>>(CategoryChannels);
     
     /// <inheritdoc />
@@ -695,7 +807,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
         => await CreateVoiceChannelAsync(name, func, options).ConfigureAwait(false);
     
     /// <inheritdoc />
-    async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> IGuild.GetGuildMuteDeafListAsync(CacheMode mode, RequestOptions options)
+    async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> IGuild.GetGuildMutedDeafenedUsersAsync(CacheMode mode, RequestOptions options = null)
     {
         if (mode == CacheMode.AllowDownload)
         {
@@ -705,6 +817,12 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
         else
             return (null, null);
     }
-    
+
+    /// <inheritdoc />
+    public async Task<Stream> GetBadgeAsync(BadgeStyle style = BadgeStyle.GuildName, RequestOptions options = null)
+    {
+        return await GuildHelper.GetBadgeAsync(this, KaiHeiLa, style, options).ConfigureAwait(false);
+    }
+
     #endregion
 }

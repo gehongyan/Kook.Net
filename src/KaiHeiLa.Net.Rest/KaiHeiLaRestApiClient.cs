@@ -15,7 +15,6 @@ using KaiHeiLa.Net.Rest;
 using System.Linq;
 using System.Web;
 using KaiHeiLa.API.Rest;
-using KaiHeiLa.Badges;
 using KaiHeiLa.Net.Converters;
 
 namespace KaiHeiLa.API;
@@ -273,40 +272,37 @@ internal class KaiHeiLaRestApiClient : IDisposable
     ///         <c>$"endpoint?params=args&amp;page_size={pageSize}&amp;page={page}"</c>
     ///     </example>
     /// </param>
-    private async Task<IReadOnlyCollection<T>> SendRecursivelyAsync<T>(HttpMethod method, 
+    private async IAsyncEnumerable<IReadOnlyCollection<T>> SendPagedAsync<T>(HttpMethod method, 
         Expression<Func<int, int, string>> endpointExpr,
         BucketIds ids, ClientBucketType clientBucket = ClientBucketType.Unbucketed, PageMeta pageMeta = null, RequestOptions options = null)
         where T : class
     {
-        List<T> combinedData = new();
         pageMeta ??= PageMeta.Default;
     
         while (pageMeta.Page <= pageMeta.PageTotal)
         {
-            PagedResponseBase<T> pagedChannels = await SendAsync<PagedResponseBase<T>, int, int>(
+            PagedResponseBase<T> pagedResp = await SendAsync<PagedResponseBase<T>, int, int>(
                     method, endpointExpr, pageMeta.PageSize, pageMeta.Page,
                     ids, clientBucket, options: options)
                 .ConfigureAwait(false);
-            combinedData.AddRange(pagedChannels.Items);
-            pageMeta = pagedChannels.Meta;
+            pageMeta = pagedResp.Meta;
             pageMeta.Page++;
+            yield return pagedResp.Items;
         }
-    
-        return combinedData.ToReadOnlyCollection();
     }
 
     #endregion
 
     #region Guilds
 
-    public async Task<IReadOnlyCollection<Guild>> GetGuildsAsync(RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<Guild>> GetGuildsAsync(int limit = KaiHeiLaConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions options = null)
     {
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds();
-        return await SendRecursivelyAsync<Guild>(HttpMethod.Get,
+        return SendPagedAsync<Guild>(HttpMethod.Get,
             (pageSize, page) => $"guild/list?page_size={pageSize}&page={page}",
-            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);
     }
     
     public async Task<ExtendedGuild> GetGuildAsync(ulong guildId, RequestOptions options = null)
@@ -333,16 +329,29 @@ internal class KaiHeiLaRestApiClient : IDisposable
             () => $"guild/user-list?guild_id={guildId}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
         return response.UserCount;
     }
-
-    public async Task<IReadOnlyCollection<GuildMember>> GetGuildMembersAsync(ulong guildId, RequestOptions options = null)
+    
+    public IAsyncEnumerable<IReadOnlyCollection<GuildMember>> GetGuildMembersAsync(ulong guildId, Action<SearchGuildMemberProperties> func = null,
+        int limit = KaiHeiLaConfig.MaxUsersPerBatch, int fromPage = 1, RequestOptions options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
+        Preconditions.GreaterThan(limit, 0, nameof(limit));
+        Preconditions.AtMost(limit, KaiHeiLaConfig.MaxUsersPerBatch, nameof(limit));
         options = RequestOptions.CreateOrClone(options);
-
+        
+        string extendedQuery = string.Empty;
+        if (func is not null)
+        {
+            SearchGuildMemberProperties properties = new();
+            func(properties);
+            if (!string.IsNullOrWhiteSpace(properties.SearchName)) extendedQuery += $"&search={Uri.EscapeDataString(properties.SearchName)}";
+            if (properties.RoleId.HasValue) extendedQuery += $"&role_id={properties.RoleId.Value}";
+            if (properties.IsMobileVerified.HasValue) extendedQuery += $"&mobile_verified={properties.IsMobileVerified.Value switch {true => 1, false => 0}}";
+            if (properties.SortedByActiveTime.HasValue) extendedQuery += $"&active_time={(int)properties.SortedByActiveTime.Value}";
+            if (properties.SortedByJoinTime.HasValue) extendedQuery += $"&joined_at={(int)properties.SortedByJoinTime.Value}";
+        }
         var ids = new BucketIds(guildId: guildId);
-        return await SendRecursivelyAsync<GuildMember>(HttpMethod.Get,
-            (pageSize, page) => $"guild/user-list?guild_id={guildId}&page={page}",
-            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(pageSize: 50), options: options).ConfigureAwait(false);
+        return SendPagedAsync<GuildMember>(HttpMethod.Get, (pageSize, page) => $"guild/user-list?guild_id={guildId}&page_size={pageSize}&page={page}{extendedQuery}",
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);
     }
 
     public async Task ModifyGuildMemberNicknameAsync(ModifyGuildMemberNicknameParams args, RequestOptions options = null)
@@ -418,15 +427,15 @@ internal class KaiHeiLaRestApiClient : IDisposable
 
     #region Channels
 
-    public async Task<IReadOnlyCollection<Channel>> GetGuildChannelsAsync(ulong guildId, RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<Channel>> GetGuildChannelsAsync(ulong guildId, int limit = KaiHeiLaConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds(guildId: guildId);
-        return await SendRecursivelyAsync<Channel>(HttpMethod.Get,
+        return SendPagedAsync<Channel>(HttpMethod.Get,
             (pageSize, page) => $"channel/list?guild_id={guildId}&page_size={pageSize}&page={page}",
-            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);
     }
 
     public async Task<Channel> GetGuildChannelAsync(ulong channelId, RequestOptions options = null)
@@ -623,16 +632,19 @@ internal class KaiHeiLaRestApiClient : IDisposable
 
     #region Guild Users
 
-    public async Task<IReadOnlyCollection<Channel>> GetAudioChannelsUserConnectsAsync(ulong? guildId = null, ulong? userId = null, RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<Channel>> GetAudioChannelsUserConnectsAsync(ulong? guildId = null,
+        ulong? userId = null, int limit = KaiHeiLaConfig.MaxItemsPerBatchByDefault, int fromPage = 1,
+        RequestOptions options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         Preconditions.NotEqual(userId, 0, nameof(userId));
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds(guildId: guildId ?? 0);
-        return await SendRecursivelyAsync<Channel>(HttpMethod.Get,
-            (pageSize, page) => $"channel-user/get-joined-channel?guild_id={guildId}&user_id={userId}&page_size={pageSize}&page={page}",
-            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
+        return SendPagedAsync<Channel>(HttpMethod.Get,
+                (pageSize, page) =>
+                    $"channel-user/get-joined-channel?guild_id={guildId}&user_id={userId}&page_size={pageSize}&page={page}",
+                ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);
     }
 
 
@@ -640,14 +652,14 @@ internal class KaiHeiLaRestApiClient : IDisposable
     
     #region User Chats
 
-    public async Task<IReadOnlyCollection<UserChat>> GetUserChatsAsync(RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<UserChat>> GetUserChatsAsync(int limit = KaiHeiLaConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions options = null)
     {
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds();
-        return await SendRecursivelyAsync<UserChat>(HttpMethod.Get,
+        return SendPagedAsync<UserChat>(HttpMethod.Get,
             (pageSize, page) => $"user-chat/list?page_size={pageSize}&page={page}",
-            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);;
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);;
     }
 
     public async Task<UserChat> GetUserChatAsync(Guid chatCode, RequestOptions options = null)
@@ -866,15 +878,15 @@ internal class KaiHeiLaRestApiClient : IDisposable
 
     #region Guild Roles
 
-    public async Task<IReadOnlyCollection<Role>> GetGuildRolesAsync(ulong guildId, RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<Role>> GetGuildRolesAsync(ulong guildId, int limit = KaiHeiLaConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds();
-        return await SendRecursivelyAsync<Role>(HttpMethod.Get,
+        return SendPagedAsync<Role>(HttpMethod.Get,
             (pageSize, page) => $"guild-role/list?guild={guildId}&page_size={pageSize}&page={page}",
-            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);
     }
     
     public async Task<Role> CreateGuildRoleAsync(CreateGuildRoleParams args, RequestOptions options = null)
@@ -957,15 +969,15 @@ internal class KaiHeiLaRestApiClient : IDisposable
 
     #region Guild Emoji
 
-    public async Task<IReadOnlyCollection<Emoji>> GetGuildEmotesAsync(ulong guildId, RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<Emoji>> GetGuildEmotesAsync(ulong guildId, int limit = KaiHeiLaConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds(guildId: guildId);
-        return await SendRecursivelyAsync<Emoji>(HttpMethod.Get,
+        return SendPagedAsync<Emoji>(HttpMethod.Get,
             (pageSize, page) => $"guild-emoji/list?guild_id={guildId}&page_size={pageSize}&page={page}",
-            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);
     }
     
     public async Task<Emoji> CreateGuildEmoteAsync(CreateGuildEmoteParams args, RequestOptions options = null)
@@ -1009,7 +1021,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
 
     #region Guild Invites
 
-    public async Task<IReadOnlyCollection<Invite>> GetGuildInvitesAsync(ulong? guildId = null, ulong? channelId = null, RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<Invite>> GetGuildInvitesAsync(ulong? guildId = null, ulong? channelId = null, int limit = KaiHeiLaConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions options = null)
     {
         if (guildId is null && channelId is null)
             throw new ArgumentException(message: $"At least one argument must be provided between {nameof(guildId)} and {nameof(channelId)}.", paramName: $"{nameof(guildId)}&{nameof(channelId)}");
@@ -1027,9 +1039,10 @@ internal class KaiHeiLaRestApiClient : IDisposable
             (false, true) => $"?channel_id={channelId}",
             _ => string.Empty
         };
-        return await SendRecursivelyAsync<Invite>(HttpMethod.Get,
+        return SendPagedAsync<Invite>(HttpMethod.Get,
             (pageSize, page) => $"invite/list{query}&page_size={pageSize}&page={page}",
-            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);}
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);
+    }
 
     public async Task<CreateGuildInviteResponse> CreateGuildInviteAsync(CreateGuildInviteParams args, RequestOptions options = null)
     {
@@ -1118,14 +1131,14 @@ internal class KaiHeiLaRestApiClient : IDisposable
 
     #region Games
 
-    public async Task<IReadOnlyCollection<Game>> GetGamesAsync(RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<Game>> GetGamesAsync(int limit = KaiHeiLaConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions options = null)
     {
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds();
-        return await SendRecursivelyAsync<Game>(HttpMethod.Get,
+        return SendPagedAsync<Game>(HttpMethod.Get,
             (pageSize, page) => $"game?page_size={pageSize}&page={page}",
-            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: PageMeta.Default, options: options).ConfigureAwait(false);
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);
     }
     
     public async Task<Game> CreateGameAsync(CreateGameParams args, RequestOptions options = null)

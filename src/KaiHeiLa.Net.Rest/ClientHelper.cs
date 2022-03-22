@@ -15,7 +15,7 @@ internal static class ClientHelper
     }
     public static async Task<IReadOnlyCollection<RestGuild>> GetGuildsAsync(BaseKaiHeiLaClient client, RequestOptions options)
     {
-        var models = await client.ApiClient.GetGuildsAsync(options).ConfigureAwait(false);
+        var models = await client.ApiClient.GetGuildsAsync(options: options).FlattenAsync().ConfigureAwait(false);
         var guilds = ImmutableArray.CreateBuilder<RestGuild>();
         foreach (var model in models)
         {
@@ -45,7 +45,7 @@ internal static class ClientHelper
     
     public static async Task<IReadOnlyCollection<RestDMChannel>> GetDMChannelsAsync(BaseKaiHeiLaClient client, RequestOptions options)
     {
-        var model = await client.ApiClient.GetUserChatsAsync(options).ConfigureAwait(false);
+        var model = await client.ApiClient.GetUserChatsAsync(options: options).FlattenAsync().ConfigureAwait(false);
         if (model != null)
             return model.Select(x => RestDMChannel.Create(client, x)).ToImmutableArray();
         return null;
