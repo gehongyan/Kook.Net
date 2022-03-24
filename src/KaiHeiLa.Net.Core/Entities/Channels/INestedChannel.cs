@@ -42,6 +42,30 @@ public interface INestedChannel : IGuildChannel
     /// </returns>
     Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null);
 
+    /// <summary>
+    ///     Creates a new invite to this channel.
+    /// </summary>
+    /// <param name="maxAge">The time until the invite expires. Set to <c>InviteMaxAge.NeverExpires</c> to never expire.</param>
+    /// <param name="maxUses">The max amount of times this invite may be used. Set to <c>InviteMaxUses.Unlimited</c> to have unlimited uses.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous invite creation operation. The task result contains an invite
+    ///     metadata object containing information for the created invite.
+    /// </returns>
+    Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge.OneWeek, InviteMaxUses maxUses = InviteMaxUses.Unlimited, RequestOptions options = null);
+    
+    /// <summary>
+    ///     Creates a new invite to this channel.
+    /// </summary>
+    /// <param name="maxAge">The time (in seconds) until the invite expires. Set to <c>null</c> to never expire.</param>
+    /// <param name="maxUses">The max amount of times this invite may be used. Set to <c>null</c> to have unlimited uses.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous invite creation operation. The task result contains an invite
+    ///     metadata object containing information for the created invite.
+    /// </returns>
+    Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null, RequestOptions options = null);
+    
     #endregion
     
 }

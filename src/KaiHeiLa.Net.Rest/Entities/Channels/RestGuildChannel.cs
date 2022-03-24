@@ -22,7 +22,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// <inheritdoc />
     public string Name { get; private set; }
     /// <inheritdoc />
-    public int Position { get; private set; }
+    public int? Position { get; private set; }
     /// <inheritdoc />
     public ulong GuildId => Guild.Id;
     

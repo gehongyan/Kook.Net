@@ -66,6 +66,8 @@ class Program
         // IReadOnlyCollection<RestMessage> pinnedMessagesAsync = await _client.GetGuild(1990044438283387).GetTextChannel(6286033651700207).GetPinnedMessagesAsync();
         // await (user as SocketGuildUser).AddRoleAsync(1681537);
         // IEnumerable<IGuildUser> flattenAsync = await _client.GetGuild(1990044438283387).GetRole(300643).GetUsersAsync().FlattenAsync().ConfigureAwait(false);
+        // IReadOnlyCollection<IInvite> readOnlyCollection = await _client.GetGuild(1990044438283387).GetInvitesAsync();
+        // IInvite invite = await _client.GetGuild(1990044438283387).CreateInviteAsync(InviteMaxAge.NeverExpires, InviteMaxUses.Fifty);
     }
 
     private async Task CardDemo(SocketMessage message)

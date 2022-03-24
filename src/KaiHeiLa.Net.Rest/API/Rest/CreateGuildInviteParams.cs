@@ -17,9 +17,9 @@ internal class CreateGuildInviteParams
 
     [JsonPropertyName("duration")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public InviteExpiresAfter? ExpiresAfter { get; set; }
+    public InviteMaxAge? MaxAge { get; set; }
 
     [JsonPropertyName("setting_times")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public InviteAvailableTimes? AvailableTimes { get; set; }
+    public InviteMaxUses? MaxUses { get; set; }
 }

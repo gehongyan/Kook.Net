@@ -1,6 +1,6 @@
 namespace KaiHeiLa;
 
-public enum InviteAvailableTimes
+public enum InviteMaxUses
 {
     Unlimited = -1,
     One = 1,

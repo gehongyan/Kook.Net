@@ -285,6 +285,32 @@ internal static class ChannelHelper
         return models.Select(x => RestInvite.Create(client, channel.Guild, channel, x)).ToImmutableArray();
     }
 
+    /// <exception cref="ArgumentException">
+    /// <paramref name="channel.Id"/> may not be equal to zero.
+    /// <paramref name="maxAge"/> and <paramref name="maxUses"/> must be greater than zero.
+    /// <paramref name="maxAge"/> must be lesser than 604800.
+    /// </exception>
+    public static async Task<RestInvite> CreateInviteAsync(IGuildChannel channel, BaseKaiHeiLaClient client,
+        int? maxAge, int? maxUses, RequestOptions options)
+    {
+        var args = new CreateGuildInviteParams()
+        {
+            GuildId = channel.GuildId,
+            ChannelId = channel.Id,
+            MaxAge = (InviteMaxAge) (maxAge ?? 0),
+            MaxUses = (InviteMaxUses) (maxUses ?? -1),
+        };
+        var model = await client.ApiClient.CreateGuildInviteAsync(args, options).ConfigureAwait(false);
+        var invites = await client.ApiClient.GetGuildInvitesAsync(channel.GuildId, channel.Id, options: options).FlattenAsync().ConfigureAwait(false);
+        return RestInvite.Create(client, channel.Guild, channel, invites.SingleOrDefault(x => x.Url == model.Url));
+    }
+    
+    public static Task<RestInvite> CreateInviteAsync(IGuildChannel channel, BaseKaiHeiLaClient client,
+        InviteMaxAge maxAge, InviteMaxUses maxUses, RequestOptions options)
+    {
+        return CreateInviteAsync(channel, client, (int?) maxAge, (int?) maxUses, options);
+    }
+    
     #endregion
     
     #region Categories

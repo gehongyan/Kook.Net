@@ -1,8 +1,8 @@
 namespace KaiHeiLa;
 
-public enum InviteExpiresAfter
+public enum InviteMaxAge
 {
-    Never = 0,
+    NeverExpires = 0,
     HalfAnHour = 1800,
     OneHour = 3600,
     SixHours = 21600,

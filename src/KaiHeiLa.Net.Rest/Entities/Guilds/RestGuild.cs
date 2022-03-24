@@ -166,20 +166,20 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     
     #endregion
 
-    #region Invites
-    
-    /// <summary>
-    ///     Gets a collection of all invites in this guild.
-    /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
-    ///     invite metadata, each representing information for an invite found within this guild.
-    /// </returns>
-    public Task<IReadOnlyCollection<RestInvite>> GetInvitesAsync(RequestOptions options = null)
-        => GuildHelper.GetInvitesAsync(this, KaiHeiLa, options);
-
-    #endregion
+    // #region Invites
+    //
+    // /// <summary>
+    // ///     Gets a collection of all invites in this guild.
+    // /// </summary>
+    // /// <param name="options">The options to be used when sending the request.</param>
+    // /// <returns>
+    // ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
+    // ///     invite metadata, each representing information for an invite found within this guild.
+    // /// </returns>
+    // public Task<IReadOnlyCollection<RestInvite>> GetInvitesAsync(RequestOptions options = null)
+    //     => GuildHelper.GetInvitesAsync(this, KaiHeiLa, options);
+    //
+    // #endregion
     
     #region Roles
 
@@ -453,6 +453,20 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         => GuildHelper.DeleteEmoteAsync(this, KaiHeiLa, emote.Id, options);
     
     #endregion
+
+    #region Invites
+    
+    /// <inheritdoc />
+    public async Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null)
+        => await GuildHelper.GetInvitesAsync(this, KaiHeiLa, options).ConfigureAwait(false);
+    /// <inheritdoc />
+    public async Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null, RequestOptions options = null)
+        => await GuildHelper.CreateInviteAsync(this, KaiHeiLa, maxAge, maxUses, options).ConfigureAwait(false);
+    /// <inheritdoc />
+    public async Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge.OneWeek, InviteMaxUses maxUses = InviteMaxUses.Unlimited, RequestOptions options = null)
+        => await GuildHelper.CreateInviteAsync(this, KaiHeiLa, maxAge, maxUses, options).ConfigureAwait(false);
+
+    #endregion
     
     #region IGuild
     
@@ -465,10 +479,6 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     IRole IGuild.EveryoneRole => EveryoneRole;
 
-    /// <inheritdoc />
-    async Task<IReadOnlyCollection<IInvite>> IGuild.GetInvitesAsync(RequestOptions options)
-        => await GetInvitesAsync(options).ConfigureAwait(false);
-    
     /// <inheritdoc />
     IRole IGuild.GetRole(uint id) => GetRole(id);
     

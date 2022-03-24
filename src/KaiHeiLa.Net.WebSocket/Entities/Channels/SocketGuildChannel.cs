@@ -23,7 +23,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <inheritdoc />
     public string Name { get; private set; }
     /// <inheritdoc />
-    public int Position { get; private set; }
+    public int? Position { get; private set; }
     /// <inheritdoc />
     public ChannelType Type { get; internal set; }
 

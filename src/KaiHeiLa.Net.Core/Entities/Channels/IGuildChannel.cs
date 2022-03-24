@@ -8,7 +8,7 @@ public interface IGuildChannel : IChannel
     
     ulong GuildId { get; }
 
-    int Position { get; }
+    int? Position { get; }
 
     ChannelType Type { get; }
     

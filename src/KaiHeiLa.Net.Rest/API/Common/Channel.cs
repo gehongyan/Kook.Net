@@ -26,7 +26,7 @@ internal class Channel
     [JsonConverter(typeof(NullableUInt64Converter))]
     public ulong? CategoryId { get; set; }
 
-    [JsonPropertyName("level")] public int Position { get; set; }
+    [JsonPropertyName("level")] public int? Position { get; set; }
     [JsonPropertyName("type")] public ChannelType Type { get; set; }
 
     [JsonPropertyName("permission_overwrites")]

@@ -23,7 +23,37 @@ internal static class GuildHelper
         RequestOptions options)
     {
         var models = await client.ApiClient.GetGuildInvitesAsync(guild.Id, null, options: options).FlattenAsync().ConfigureAwait(false);
-        return models.Select(x => RestInvite.Create(client, guild, null, x)).ToImmutableArray();
+        return models.Select(x => RestInvite.Create(client, guild, x.ChannelId.HasValue
+            ? guild.GetChannelAsync(x.ChannelId.Value, CacheMode.CacheOnly).GetAwaiter().GetResult()
+            : null, x)).ToImmutableArray();
+    }
+    
+    /// <exception cref="ArgumentException">
+    /// <paramref name="guild.Id"/> may not be equal to zero.
+    /// <paramref name="maxAge"/> and <paramref name="maxUses"/> must be greater than zero.
+    /// <paramref name="maxAge"/> must be lesser than 604800.
+    /// </exception>
+    public static async Task<RestInvite> CreateInviteAsync(IGuild guild, BaseKaiHeiLaClient client,
+        int? maxAge, int? maxUses, RequestOptions options)
+    {
+        var args = new CreateGuildInviteParams()
+        {
+            GuildId = guild.Id,
+            MaxAge = (InviteMaxAge) (maxAge ?? 0),
+            MaxUses = (InviteMaxUses) (maxUses ?? -1),
+        };
+        var model = await client.ApiClient.CreateGuildInviteAsync(args, options).ConfigureAwait(false);
+        var invites = await client.ApiClient.GetGuildInvitesAsync(guild.Id, options: options).FlattenAsync().ConfigureAwait(false);
+        Invite invite = invites.SingleOrDefault(x => x.Url == model.Url);
+        return RestInvite.Create(client, guild, invite?.ChannelId.HasValue ?? false
+            ? guild.GetChannelAsync(invite.ChannelId.Value, CacheMode.CacheOnly).GetAwaiter().GetResult()
+            : null, invite);
+    }
+    
+    public static Task<RestInvite> CreateInviteAsync(IGuild channel, BaseKaiHeiLaClient client,
+        InviteMaxAge maxAge, InviteMaxUses maxUses, RequestOptions options)
+    {
+        return CreateInviteAsync(channel, client, (int?) maxAge, (int?) maxUses, options);
     }
 
     #endregion
