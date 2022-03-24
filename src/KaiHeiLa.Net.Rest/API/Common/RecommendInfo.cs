@@ -5,28 +5,55 @@ namespace KaiHeiLa.API;
 
 internal class RecommendInfo
 {
-    [JsonPropertyName("id")] public int Id { get; set; }
-    [JsonPropertyName("guild_id")] public int GuildId { get; set; }
-    [JsonPropertyName("type")] public int Type { get; set; }
-    [JsonPropertyName("status")] public int Status { get; set; }
-    [JsonPropertyName("banner")] public string Banner { get; set; }
-    [JsonPropertyName("desc")] public string Desc { get; set; }
-    [JsonPropertyName("tag_id")] public int TagID { get; set; }
-
-    [JsonPropertyName("created_at")]
-    [JsonConverter(typeof(DateTimeOffsetUnixTimeSecondsConverter))]
-    public DateTimeOffset CreatedAt { get; set; }
-
-    [JsonPropertyName("updated_at")] 
-    [JsonConverter(typeof(DateTimeOffsetUnixTimeSecondsConverter))]
-    public DateTimeOffset UpdatedAt { get; set; }
+    [JsonPropertyName("guild_id")] 
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
+    public ulong GuildId { get; set; }
     
-    [JsonPropertyName("recommend_at")] 
-    public int RecommendAt { get; set; }
-
+    [JsonPropertyName("open_id")]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
+    public uint OpenId { get; set; }
+    
+    [JsonPropertyName("default_channel_id")]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
+    public ulong DefaultChannelId { get; set; }
+    
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
+    
+    [JsonPropertyName("icon")]
+    public string Icon { get; set; }
+    
+    [JsonPropertyName("banner")] 
+    public string Banner { get; set; }
+    
+    [JsonPropertyName("desc")] 
+    public string Description { get; set; }
+    
+    [JsonPropertyName("status")] 
+    public int Status { get; set; }
+    
+    [JsonPropertyName("tag")] 
+    public string Tag { get; set; }
+    
+    [JsonPropertyName("features")]
+    public object[] Features { get; set; }
+    
+    [JsonPropertyName("level")]
+    public BoostLevel BoostLevel { get; set; }
+    
+    [JsonPropertyName("custom_id")] 
+    public string CustomId { get; set; }
+    
     [JsonPropertyName("is_official_partner")]
     public int IsOfficialPartner { get; set; }
 
     [JsonPropertyName("sort")] 
     public int Sort { get; set; }
+    
+    [JsonPropertyName("audit_status")] 
+    public int AuditStatus { get; set; }
+    
+    [JsonPropertyName("update_day_gap")]
+
+    public int UpdateDayInterval { get; set; }
 }

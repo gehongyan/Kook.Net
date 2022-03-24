@@ -20,10 +20,10 @@ internal class Game
     public bool KmHookAdmin { get; set; }
     
     [JsonPropertyName("process_name")]
-    public string[] ProcessName { get; set; }
+    public string[] ProcessNames { get; set; }
     
     [JsonPropertyName("product_name")]
-    public string[] ProductName { get; set; }
+    public string[] ProductNames { get; set; }
     
     [JsonPropertyName("icon")]
     public string Icon { get; set; }

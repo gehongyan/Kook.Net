@@ -1,22 +1,21 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 
-namespace KaiHeiLa.Net.Rest
-{
-    public struct RestResponse
-    {
-        public HttpStatusCode StatusCode { get; }
-        public Dictionary<string, string> Headers { get; }
-        public Stream Stream { get; }
-        
-        public MediaTypeHeaderValue MediaTypeHeader { get; }
+namespace KaiHeiLa.Net.Rest;
 
-        public RestResponse(HttpStatusCode statusCode, Dictionary<string, string> headers, Stream stream, MediaTypeHeaderValue mediaTypeHeader)
-        {
-            StatusCode = statusCode;
-            Headers = headers;
-            Stream = stream;
-            MediaTypeHeader = mediaTypeHeader;
-        }
+public struct RestResponse
+{
+    public HttpStatusCode StatusCode { get; }
+    public Dictionary<string, string> Headers { get; }
+    public Stream Stream { get; }
+        
+    public MediaTypeHeaderValue MediaTypeHeader { get; }
+
+    public RestResponse(HttpStatusCode statusCode, Dictionary<string, string> headers, Stream stream, MediaTypeHeaderValue mediaTypeHeader)
+    {
+        StatusCode = statusCode;
+        Headers = headers;
+        Stream = stream;
+        MediaTypeHeader = mediaTypeHeader;
     }
 }

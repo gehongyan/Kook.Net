@@ -60,6 +60,15 @@ internal static class ClientHelper
         return null;
     }
 
+    public static async Task MoveUsersAsync(BaseKaiHeiLaClient client, IEnumerable<IGuildUser> userIds, IVoiceChannel targetChannel, RequestOptions options)
+    {
+        MoveUsersParams args = new()
+        {
+            ChannelId = targetChannel.Id,
+            UserIds = userIds.Select(x => x.Id).ToArray()
+        };
+        await client.ApiClient.MoveUsersAsync(args, options).ConfigureAwait(false);
+    } 
     public static async Task<string> CreateAssetAsync(BaseKaiHeiLaClient client, Stream stream, string fileName, RequestOptions options)
     {
         var model = await client.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options);
@@ -67,4 +76,28 @@ internal static class ClientHelper
             return model.Url;
         return null;
     }
+
+    public static IAsyncEnumerable<IReadOnlyCollection<RestGame>> GetGamesAsync(BaseKaiHeiLaClient client, RequestOptions options)
+    {
+        return client.ApiClient.GetGamesAsync(options: options)
+            .Select(x => x.Select(y => RestGame.Create(client, y)).ToImmutableArray() as IReadOnlyCollection<RestGame>);
+    }
+
+    public static async Task<RestGame> CreateGameAsync(BaseKaiHeiLaClient client, string name, string processName, string iconUrl, RequestOptions options)
+    {
+        CreateGameParams args = new()
+        {
+            Icon = iconUrl,
+            Name = name,
+            ProcessName = processName
+        };
+        var model = await client.ApiClient.CreateGameAsync(args, options).ConfigureAwait(false);
+        return RestGame.Create(client, model);
+    }
+    
+    public static async Task DeleteGameAsync(BaseKaiHeiLaClient client, int id, RequestOptions options)
+    {
+        await client.ApiClient.DeleteGameAsync(id, options).ConfigureAwait(false);
+    }
+    
 }

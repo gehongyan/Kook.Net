@@ -205,7 +205,7 @@ public interface IGuildUser : IUser
     /// </summary>
     /// <param name="options"></param>
     /// <returns></returns>
-    Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelAsync(RequestOptions options = null);
+    Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null);
     
     #endregion
 }

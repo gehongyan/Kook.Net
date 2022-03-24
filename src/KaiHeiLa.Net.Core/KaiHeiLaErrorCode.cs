@@ -1,32 +1,31 @@
-namespace KaiHeiLa
+namespace KaiHeiLa;
+
+/// <summary>
+///     Represents a set of json error codes received by KaiHeiLa.
+/// </summary>
+public enum KaiHeiLaErrorCode
 {
-    /// <summary>
-    ///     Represents a set of json error codes received by KaiHeiLa.
-    /// </summary>
-    public enum KaiHeiLaErrorCode
-    {
-        Success = 0,
-        GeneralError = 40000,
+    Success = 0,
+    GeneralError = 40000,
 
-        #region Hello
+    #region Hello
 
-        MissingArgument = 40100,
-        InvalidAuthenticationToken = 40101,
-        TokenVerificationFailed = 40102,
-        TokenExpired = 40103,
+    MissingArgument = 40100,
+    InvalidAuthenticationToken = 40101,
+    TokenVerificationFailed = 40102,
+    TokenExpired = 40103,
 
-        #endregion
+    #endregion
 
-        RequestEntityTooLarge = 40014,
+    RequestEntityTooLarge = 40014,
         
-        #region Reconnect
+    #region Reconnect
 
-        MissingResumeArgument = 40106,
-        SessionExpired = 40107,
-        InvalidSequenceNumber = 40108,
+    MissingResumeArgument = 40106,
+    SessionExpired = 40107,
+    InvalidSequenceNumber = 40108,
 
-        #endregion
+    #endregion
         
-        MissingPermissions = 40300
-    }
+    MissingPermissions = 40300
 }

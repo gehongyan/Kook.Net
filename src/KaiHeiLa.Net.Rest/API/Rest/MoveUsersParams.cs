@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace KaiHeiLa.API.Rest;
 
-internal class MoveUserToVoiceChannelParams
+internal class MoveUsersParams
 {
     [JsonPropertyName("target_id")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]

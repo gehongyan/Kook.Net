@@ -2,7 +2,7 @@
 
 namespace KaiHeiLa;
 
-public interface IRole : IEntity<uint>, IMentionable
+public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IRole>
 {
     IGuild Guild { get; }
     

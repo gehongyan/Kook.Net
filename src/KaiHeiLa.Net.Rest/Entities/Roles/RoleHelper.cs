@@ -6,6 +6,16 @@ internal static class RoleHelper
 {
     #region General
 
+    public static async Task DeleteAsync(IRole role, BaseKaiHeiLaClient client,
+        RequestOptions options)
+    {
+        var args = new API.Rest.DeleteGuildRoleParams()
+        {
+            Id = role.Id,
+            GuildId = role.Guild.Id
+        };
+        await client.ApiClient.DeleteGuildRoleAsync(args, options).ConfigureAwait(false);
+    }
     public static async Task<Model> ModifyAsync(IRole role, BaseKaiHeiLaClient client,
         Action<RoleProperties> func, RequestOptions options)
     {

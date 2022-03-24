@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using KaiHeiLa.API;
 using Model = KaiHeiLa.API.Guild;
+using ExtendedModel = KaiHeiLa.API.Rest.ExtendedGuild;
 
 namespace KaiHeiLa.Rest;
 
@@ -58,6 +59,24 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     
     /// <inheritdoc />
     public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
+    
+    public object[] Features { get; private set; }
+
+    public int BoostNumber { get; private set; }
+    
+    public int BufferBoostNumber { get; private set; }
+
+    public BoostLevel BoostLevel { get; private set; }
+    
+    public int Status { get; private set; }
+
+    public string AutoDeleteTime { get; private set; }
+    
+    /// <summary>
+    ///     Gets the recommendation information for this guild.
+    /// </summary>
+    public RecommendInfo RecommendInfo { get; private set; }
+    
     internal RestGuild(BaseKaiHeiLaClient client, ulong id)
         : base(client, id)
     {
@@ -69,6 +88,18 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         return entity;
     }
 
+    internal void Update(ExtendedModel model)
+    {
+        Update(model as Model);
+
+        Features = model.Features;
+        BoostNumber = model.BoostNumber;
+        BufferBoostNumber = model.BufferBoostNumber;
+        BoostLevel = model.BoostLevel;
+        Status = model.Status;
+        AutoDeleteTime = model.AutoDeleteTime;
+        RecommendInfo = model.RecommendInfo?.ToEntity();
+    }
     internal void Update(Model model)
     {
         Name = model.Name;
@@ -275,13 +306,21 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     A task that represents the asynchronous get operation. The task result contains
     ///     the collection of muted or deafened users in this guild.
     /// </returns>
-    public Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)>
-        GetGuildMutedDeafenedUsersAsync(RequestOptions options = null) 
-        => GuildHelper.GetGuildMuteDeafListAsync(this, KaiHeiLa, options);
+    public async Task<(IReadOnlyCollection<Cacheable<RestUser, ulong>> Muted, IReadOnlyCollection<Cacheable<RestUser, ulong>> Deafened)> 
+        GetMutedDeafenedUsersAsync(RequestOptions options = null)
+    {
+        Cacheable<RestUser, ulong> ParseUser(ulong id) => new(null, id, false,
+            async () => await ClientHelper.GetUserAsync(KaiHeiLa, id, options).ConfigureAwait(false));
+
+        var users = await GuildHelper.GetGuildMutedDeafenedUsersAsync(this, KaiHeiLa, options);
+        var mutedUsers = users.Muted.Select(ParseUser).ToImmutableArray();
+        var deafenedUsers = users.Deafened.Select(ParseUser).ToImmutableArray();
+        return (mutedUsers, deafenedUsers);
+    }
     
     /// <summary>
     ///     Gets a collection of users in this guild that the name or nickname contains the
-    ///     provided <see cref="string"/> at <paramref name="query"/>.
+    ///     provided <see cref="string"/> at <paramref name="func"/>.
     /// </summary>
     /// <remarks>
     ///     The <paramref name="limit"/> can not be higher than <see cref="KaiHeiLaConfig.MaxUsersPerBatch"/>.
@@ -432,6 +471,14 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         => GuildHelper.CreateVoiceChannelAsync(this, KaiHeiLa, name, options, func);
     
     #endregion
+
+    #region Voices
+    
+    /// <inheritdoc />
+    public async Task MoveUsersAsync(IEnumerable<IGuildUser> users, IVoiceChannel targetChannel, RequestOptions options)
+        => await ClientHelper.MoveUsersAsync(KaiHeiLa, users, targetChannel, options).ConfigureAwait(false);
+
+    #endregion
     
     #region Emotes
     
@@ -475,6 +522,9 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     
     /// <inheritdoc />
     IReadOnlyCollection<IRole> IGuild.Roles => Roles;
+
+    /// <inheritdoc />
+    IRecommendInfo IGuild.RecommendInfo => RecommendInfo;
     
     /// <inheritdoc />
     IRole IGuild.EveryoneRole => EveryoneRole;
@@ -614,14 +664,17 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     async Task<IVoiceChannel> IGuild.CreateVoiceChannelAsync(string name, Action<VoiceChannelProperties> func, RequestOptions options)
         => await CreateVoiceChannelAsync(name, func, options).ConfigureAwait(false);
-    
     /// <inheritdoc />
-    async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> IGuild.GetGuildMutedDeafenedUsersAsync(CacheMode mode, RequestOptions options = null)
+    async Task<(IReadOnlyCollection<Cacheable<IUser, ulong>> Muted, IReadOnlyCollection<Cacheable<IUser, ulong>> Deafened)> IGuild.GetMutedDeafenedUsersAsync(RequestOptions options)
     {
-        if (mode == CacheMode.AllowDownload)
-            return await GetGuildMutedDeafenedUsersAsync(options).ConfigureAwait(false);
-        else
-            return (null, null);
+        var users = await GetMutedDeafenedUsersAsync(options).ConfigureAwait(false);
+        var muted = users.Muted.Select(x =>
+                new Cacheable<IUser, ulong>(x.Value, x.Id, x.HasValue, async () => await x.DownloadAsync()))
+            .ToImmutableArray();
+        var deafened = users.Deafened.Select(x =>
+                new Cacheable<IUser, ulong>(x.Value, x.Id, x.HasValue, async () => await x.DownloadAsync()))
+            .ToImmutableArray();
+        return (muted, deafened);
     }
 
     /// <inheritdoc />

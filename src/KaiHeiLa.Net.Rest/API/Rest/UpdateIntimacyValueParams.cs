@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace KaiHeiLa.API.Rest;
 
-internal class ModifyIntimacyParams
+internal class UpdateIntimacyValueParams
 {
     [JsonPropertyName("user_id")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]

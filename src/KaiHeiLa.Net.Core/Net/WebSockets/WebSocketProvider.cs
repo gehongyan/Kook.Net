@@ -1,4 +1,3 @@
-﻿namespace KaiHeiLa.Net.WebSockets
-{
-    public delegate IWebSocketClient WebSocketProvider();
-}
+﻿namespace KaiHeiLa.Net.WebSockets;
+
+public delegate IWebSocketClient WebSocketProvider();

@@ -192,7 +192,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     ///     with the identifier; <c>null</c> when the channel cannot be found.
     /// </returns>
     public async ValueTask<IDMChannel> GetDMChannelAsync(Guid chatCode, RequestOptions options = null)
-        => GetDMChannel(chatCode) ?? (IDMChannel)await ClientHelper.GetDMChannelAsync(this, chatCode, options).ConfigureAwait(false);
+        => await ClientHelper.GetDMChannelAsync(this, chatCode, options).ConfigureAwait(false);
 
     /// <summary>
     ///     Gets a collection of direct message channels from the cache or does a rest request if unavailable.
@@ -203,7 +203,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     ///     with the identifier; <c>null</c> when the channel cannot be found.
     /// </returns>
     public async ValueTask<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(RequestOptions options = null)
-        => DMChannels as IReadOnlyCollection<IDMChannel> ?? (await ClientHelper.GetDMChannelsAsync(this, options).ConfigureAwait(false)).ToImmutableArray();
+        => (await ClientHelper.GetDMChannelsAsync(this, options).ConfigureAwait(false)).ToImmutableArray();
     
     /// <summary>
     ///     Gets a user from the cache or does a rest request if unavailable.
@@ -1317,7 +1317,9 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                     {
                         SelfUser selfUser = await ApiClient.GetSelfUserAsync().ConfigureAwait(false);
                         var currentUser = SocketSelfUser.Create(this, State, selfUser);
+                        Rest.CreateRestSelfUser(selfUser);
                         ApiClient.CurrentUserId = currentUser.Id;
+                        Rest.CurrentUser = RestSelfUser.Create(this, selfUser);
                         CurrentUser = currentUser;
                     }
                     catch (Exception ex)

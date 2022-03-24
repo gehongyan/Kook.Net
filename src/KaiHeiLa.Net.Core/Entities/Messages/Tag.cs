@@ -1,28 +1,27 @@
 ﻿using System.Diagnostics;
 
-namespace KaiHeiLa
+namespace KaiHeiLa;
+
+[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+public class Tag<T> : ITag
 {
-    [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-    public class Tag<T> : ITag
+    public TagType Type { get; }
+    public int Index { get; }
+    public int Length { get; }
+    public dynamic Key { get; }
+    public T Value { get; }
+
+    internal Tag(TagType type, int index, int length, dynamic key, T value)
     {
-        public TagType Type { get; }
-        public int Index { get; }
-        public int Length { get; }
-        public dynamic Key { get; }
-        public T Value { get; }
-
-        internal Tag(TagType type, int index, int length, dynamic key, T value)
-        {
-            Type = type;
-            Index = index;
-            Length = length;
-            Key = key;
-            Value = value;
-        }
-
-        private string DebuggerDisplay => $"{Value?.ToString() ?? "null"} ({Type})";
-        public override string ToString() => $"{Value?.ToString() ?? "null"} ({Type})";
-
-        object ITag.Value => Value;
+        Type = type;
+        Index = index;
+        Length = length;
+        Key = key;
+        Value = value;
     }
+
+    private string DebuggerDisplay => $"{Value?.ToString() ?? "null"} ({Type})";
+    public override string ToString() => $"{Value?.ToString() ?? "null"} ({Type})";
+
+    object ITag.Value => Value;
 }

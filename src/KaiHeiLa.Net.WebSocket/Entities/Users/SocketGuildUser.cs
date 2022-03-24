@@ -144,8 +144,8 @@ public class SocketGuildUser : SocketUser, IGuildUser
     public Task UndeafenAsync(RequestOptions options = null) 
         => GuildHelper.UndeafenUserAsync(this, KaiHeiLa, options);
     /// <inheritdoc />
-    public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelAsync(RequestOptions options = null)
-        => SocketUserHelper.GetConnectedChannelAsync(this, KaiHeiLa, options);
+    public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null)
+        => SocketUserHelper.GetConnectedChannelsAsync(this, KaiHeiLa, options);
 
     /// <inheritdoc />
     public GuildPermissions GuildPermissions => new GuildPermissions(Permissions.ResolveGuild(Guild, this));

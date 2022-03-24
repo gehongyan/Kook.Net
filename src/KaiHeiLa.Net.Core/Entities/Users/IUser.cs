@@ -39,4 +39,22 @@ public interface IUser : IEntity<ulong>, IMentionable
     ///     contains the DM channel associated with this user.
     /// </returns>
     Task<IDMChannel> CreateDMChannelAsync(RequestOptions options = null);
+    
+    /// <summary>
+    ///     Gets the intimacy information with this user.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous operation for getting the intimacy information. The task result
+    ///     contains the intimacy information associated with this user.
+    /// </returns>
+    Task<IIntimacy> GetIntimacyAsync(RequestOptions options = null);
+    
+    /// <summary>
+    ///     Updates the intimacy information with this user.
+    /// </summary>
+    /// <param name="func">A delegate containing the properties to modify the <see cref="IIntimacy"/> with.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>A task that represents the asynchronous operation for updating the intimacy information.</returns>
+    Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options);
 }

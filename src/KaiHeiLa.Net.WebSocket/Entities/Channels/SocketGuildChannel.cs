@@ -72,6 +72,10 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
         _userPermissionOverwrites = newUserOverwrites.ToImmutable();
     }
 
+    /// <inheritdoc />
+    public Task DeleteAsync(RequestOptions options = null)
+        => ChannelHelper.DeleteGuildChannelAsync(this, KaiHeiLa, options);
+    
     /// <summary>
     ///     Gets the permission overwrite for a specific user.
     /// </summary>

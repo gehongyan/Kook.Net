@@ -1,48 +1,47 @@
 using System.Collections.Immutable;
 
-namespace KaiHeiLa
+namespace KaiHeiLa;
+
+/// <summary>
+///     Represents a generic parsed json error received from KaiHeiLa after performing a rest request.
+/// </summary>
+public struct KaiHeiLaJsonError
 {
     /// <summary>
-    ///     Represents a generic parsed json error received from KaiHeiLa after performing a rest request.
+    ///     Gets the json path of the error.
     /// </summary>
-    public struct KaiHeiLaJsonError
-    {
-        /// <summary>
-        ///     Gets the json path of the error.
-        /// </summary>
-        public string Path { get; }
-
-        /// <summary>
-        ///     Gets a collection of errors associated with the specific property at the path.
-        /// </summary>
-        public IReadOnlyCollection<KaiHeiLaError> Errors { get; }
-
-        internal KaiHeiLaJsonError(string path, KaiHeiLaError[] errors)
-        {
-            Path = path;
-            Errors = errors.ToImmutableArray();
-        }
-    }
+    public string Path { get; }
 
     /// <summary>
-    ///     Represents an error with a property.
+    ///     Gets a collection of errors associated with the specific property at the path.
     /// </summary>
-    public struct KaiHeiLaError
+    public IReadOnlyCollection<KaiHeiLaError> Errors { get; }
+
+    internal KaiHeiLaJsonError(string path, KaiHeiLaError[] errors)
     {
-        /// <summary>
-        ///     Gets the code of the error.
-        /// </summary>
-        public string Code { get; }
+        Path = path;
+        Errors = errors.ToImmutableArray();
+    }
+}
 
-        /// <summary>
-        ///     Gets the message describing what went wrong.
-        /// </summary>
-        public string Message { get; }
+/// <summary>
+///     Represents an error with a property.
+/// </summary>
+public struct KaiHeiLaError
+{
+    /// <summary>
+    ///     Gets the code of the error.
+    /// </summary>
+    public string Code { get; }
 
-        internal KaiHeiLaError(string code, string message)
-        {
-            Code = code;
-            Message = message;
-        }
+    /// <summary>
+    ///     Gets the message describing what went wrong.
+    /// </summary>
+    public string Message { get; }
+
+    internal KaiHeiLaError(string code, string message)
+    {
+        Code = code;
+        Message = message;
     }
 }

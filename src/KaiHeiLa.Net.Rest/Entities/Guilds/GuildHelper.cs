@@ -97,10 +97,10 @@ internal static class GuildHelper
         return null;
     }
     
-    public static async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> GetGuildMuteDeafListAsync(IGuild guild, BaseKaiHeiLaClient client, 
+    public static async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> GetGuildMutedDeafenedUsersAsync(IGuild guild, BaseKaiHeiLaClient client, 
         RequestOptions options)
     {
-        var models = await client.ApiClient.GetGuildMuteDeafListAsync(guild.Id, options).ConfigureAwait(false);
+        var models = await client.ApiClient.GetGuildMutedDeafenedUsersAsync(guild.Id, options).ConfigureAwait(false);
         return (models.Mute.UserIds, models.Deaf.UserIds);
     }
     

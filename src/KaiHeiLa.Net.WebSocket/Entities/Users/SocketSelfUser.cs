@@ -2,6 +2,7 @@ using Model = KaiHeiLa.API.Rest.SelfUser;
 
 using System.Diagnostics;
 using System.Globalization;
+using KaiHeiLa.Rest;
 
 namespace KaiHeiLa.WebSocket;
 
@@ -30,10 +31,12 @@ public class SocketSelfUser : SocketUser, ISelfUser
     /// <inheritdoc />
     public override bool? IsVIP { get => GlobalUser.IsVIP; internal set => GlobalUser.IsVIP = value; }
     /// <inheritdoc />
-    
     public string MobilePrefix { get; internal set; }
+    /// <inheritdoc />
     public string Mobile { get; internal set; }
+    /// <inheritdoc />
     public int InvitedCount { get; internal set; }
+    /// <inheritdoc />
     public bool IsMobileVerified { get; internal set; }
 
     internal SocketSelfUser(KaiHeiLaSocketClient kaiHeiLa, SocketGlobalUser globalUser)
@@ -76,4 +79,19 @@ public class SocketSelfUser : SocketUser, ISelfUser
     
     private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ?? false ? ", Bot" : "")}, Self)";
     internal new SocketSelfUser Clone() => MemberwiseClone() as SocketSelfUser;
+
+    #region ISelfUser
+    
+    /// <inheritdoc />
+    public async Task StartPlayingAsync(IGame game, RequestOptions options = null)
+    {
+        await UserHelper.StartPlayingAsync(this, KaiHeiLa, game, options).ConfigureAwait(false);
+    }
+    /// <inheritdoc />
+    public async Task StopPlayingAsync(RequestOptions options = null)
+    {
+        await UserHelper.StopPlayingAsync(this, KaiHeiLa, options).ConfigureAwait(false);
+    }
+
+    #endregion
 }

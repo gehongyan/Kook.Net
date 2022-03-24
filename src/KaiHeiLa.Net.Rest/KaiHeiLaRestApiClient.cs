@@ -392,7 +392,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"guild/kickout", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
-    public async Task<GetGuildMuteDeafListResponse> GetGuildMuteDeafListAsync(ulong guildId, RequestOptions options = null)
+    public async Task<GetGuildMuteDeafListResponse> GetGuildMutedDeafenedUsersAsync(ulong guildId, RequestOptions options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
@@ -474,7 +474,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"channel/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
-    public async Task MoveUserToVoiceChannelAsync(MoveUserToVoiceChannelParams args, RequestOptions options = null)
+    public async Task MoveUsersAsync(MoveUsersParams args, RequestOptions options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
@@ -646,7 +646,6 @@ internal class KaiHeiLaRestApiClient : IDisposable
                     $"channel-user/get-joined-channel?guild_id={guildId}&user_id={userId}&page_size={pageSize}&page={page}",
                 ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);
     }
-
 
     #endregion
     
@@ -952,7 +951,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         return await SendAsync<Intimacy>(HttpMethod.Get, () => $"intimacy/index", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
-    public async Task ModifyIntimacyAsync(ModifyIntimacyParams args, RequestOptions options = null)
+    public async Task UpdateIntimacyValueAsync(UpdateIntimacyValueParams args, RequestOptions options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));

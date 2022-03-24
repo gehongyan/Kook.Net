@@ -39,6 +39,7 @@ public abstract class BaseKaiHeiLaClient : IKaiHeiLaClient
         
         _stateLock = new SemaphoreSlim(1, 1);
         _restLogger = LogManager.CreateLogger("Rest");
+        _isFirstLogin = config.DisplayInitialLog;
         
         ApiClient.RequestQueue.RateLimitTriggered += async (id, info, endpoint) =>
         {
@@ -121,13 +122,14 @@ public abstract class BaseKaiHeiLaClient : IKaiHeiLaClient
         await _stateLock.WaitAsync().ConfigureAwait(false);
         try
         {
-            await ApiClient.GoOfflineAsync();
             await LogoutInternalAsync().ConfigureAwait(false);
         }
         finally { _stateLock.Release(); }
     }
     internal virtual async Task LogoutInternalAsync()
     {
+        await ApiClient.GoOfflineAsync();
+        
         if (LoginState == LoginState.LoggedOut) return;
         LoginState = LoginState.LoggingOut;
 

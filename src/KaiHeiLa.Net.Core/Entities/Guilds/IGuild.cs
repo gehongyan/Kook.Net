@@ -62,6 +62,14 @@ public interface IGuild : IEntity<ulong>
     /// </returns>
     IReadOnlyCollection<IRole> Roles { get; }
     
+    /// <summary>
+    ///     Gets the recommendation information for this guild.
+    /// </summary>
+    /// <returns>
+    ///     A recommendation object that represents the recommendation information for this guild.
+    /// </returns>
+    IRecommendInfo RecommendInfo { get; }
+    
     #endregion
 
     #region Guilds
@@ -475,16 +483,24 @@ public interface IGuild : IEntity<ulong>
     #region Voice
 
     /// <summary>
+    /// Moves the user to the voice channel.
+    /// </summary>
+    /// <param name="users">The users to move.</param>
+    /// <param name="targetChannel">the channel where the user gets moved to.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>A task that represents the asynchronous operation for moving a user.</returns>
+    Task MoveUsersAsync(IEnumerable<IGuildUser> users, IVoiceChannel targetChannel, RequestOptions options = null);
+    
+    /// <summary>
     ///     Gets the users who are muted or deafened in this guild.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains
     ///     the collection of muted or deafened users in this guild.
     /// </returns>
-    Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> GetGuildMutedDeafenedUsersAsync(
-        CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<(IReadOnlyCollection<Cacheable<IUser, ulong>> Muted, IReadOnlyCollection<Cacheable<IUser, ulong>> Deafened)>
+        GetMutedDeafenedUsersAsync(RequestOptions options = null);
 
     #endregion
 

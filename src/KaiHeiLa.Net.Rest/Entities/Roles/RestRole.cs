@@ -64,12 +64,17 @@ public class RestRole : RestEntity<uint>, IRole
         var model = await RoleHelper.ModifyAsync(this, KaiHeiLa, func, options).ConfigureAwait(false);
         Update(model);
     }
-    
+    /// <inheritdoc />
+    public Task DeleteAsync(RequestOptions options = null)
+        => RoleHelper.DeleteAsync(this, KaiHeiLa, options);
     public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions options = null)
     {
         void Func(SearchGuildMemberProperties p) => p.RoleId = Id;
         return GuildHelper.SearchUsersAsync(Guild, KaiHeiLa, Func, KaiHeiLaConfig.MaxUsersPerBatch, options);
     }
+    
+    /// <inheritdoc />
+    public int CompareTo(IRole role) => RoleUtils.Compare(this, role);
     
     #endregion
     

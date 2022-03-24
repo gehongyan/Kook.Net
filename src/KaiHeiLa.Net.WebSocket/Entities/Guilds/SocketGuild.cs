@@ -3,12 +3,12 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using KaiHeiLa.API;
 using KaiHeiLa.API.Gateway;
-using KaiHeiLa.API.Rest;
 using KaiHeiLa.Rest;
 using Model = KaiHeiLa.API.Guild;
 using ChannelModel = KaiHeiLa.API.Channel;
 using MemberModel = KaiHeiLa.API.Rest.GuildMember;
 using ExtendedModel = KaiHeiLa.API.Rest.ExtendedGuild;
+using RecommendInfo = KaiHeiLa.Rest.RecommendInfo;
 using RoleModel = KaiHeiLa.API.Role;
 using UserModel = KaiHeiLa.API.User;
 
@@ -166,7 +166,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     /// </returns>
     public SocketTextChannel DefaultChannel => TextChannels
         .Where(c => CurrentUser.GetPermissions(c).ViewChannels)
-        .MinBy(c => c.Position);
+        .SingleOrDefault(c => c.Id == DefaultChannelId);
     /// <inheritdoc />
     public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
     /// <summary>
@@ -266,10 +266,10 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
         IsAvailable = true;
 
         var roles = new ConcurrentDictionary<uint, SocketRole>(ConcurrentHashSet.DefaultConcurrencyLevel,
-            (int) ((model.Roles ?? Array.Empty<Role>()).Length * 1.05));
+            (int) ((model.Roles ?? Array.Empty<RoleModel>()).Length * 1.05));
         if (model.Roles != null)
         {
-            for (int i = 0; i < (model.Roles ?? Array.Empty<Role>()).Length; i++)
+            for (int i = 0; i < (model.Roles ?? Array.Empty<RoleModel>()).Length; i++)
             {
                 var role = SocketRole.Create(this, state, model.Roles![i]);
                 roles.TryAdd(role.Id, role);
@@ -576,18 +576,37 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     ///     A task that represents the asynchronous get operation. The task result contains
     ///     the collection of muted or deafened users in this guild.
     /// </returns>
-    public async Task<(IReadOnlyCollection<SocketUser> Muted, IReadOnlyCollection<SocketUser> Deafened)> GetGuildMuteDeafListAsync(RequestOptions options = null)
+    public async Task<(IReadOnlyCollection<Cacheable<SocketUser, ulong>> Muted, IReadOnlyCollection<Cacheable<SocketUser, ulong>> Deafened)> 
+        GetMutedDeafenedUsersAsync(RequestOptions options = null)
     {
-        SocketUser ParseUser(ulong id)
+        Cacheable<SocketUser, ulong> ParseUser(ulong id)
         {
+            Cacheable<SocketUser, ulong> cacheable;
             SocketUser user = Users.SingleOrDefault(x => x.Id == id);
-            user ??= SocketUnknownUser.Create(KaiHeiLa, KaiHeiLa.State, id);
-            return user;
+            if (user is not null)
+            {
+                cacheable = new Cacheable<SocketUser, ulong>(user, id, true, () => Task.FromResult(user));
+            }
+            else
+            {
+                user = SocketUnknownUser.Create(KaiHeiLa, KaiHeiLa.State, id);
+
+                async Task<SocketUser> DownloadFunc()
+                {
+                    var model = await KaiHeiLa.ApiClient.GetUserAsync(id, options)
+                        .ConfigureAwait(false);
+                    var guildUser = SocketGlobalUser.Create(KaiHeiLa, KaiHeiLa.State, model);
+                    return guildUser;
+                }
+
+                cacheable = new Cacheable<SocketUser, ulong>(user, id, false, DownloadFunc);
+            }
+            return cacheable;
         }
 
-        (IReadOnlyCollection<ulong> muted, IReadOnlyCollection<ulong> deafened) = await GuildHelper.GetGuildMuteDeafListAsync(this, KaiHeiLa, options);
-        var mutedUsers = muted.Select(ParseUser).ToImmutableArray();
-        var deafenedUsers = deafened.Select(ParseUser).ToImmutableArray();
+        var users = await GuildHelper.GetGuildMutedDeafenedUsersAsync(this, KaiHeiLa, options);
+        var mutedUsers = users.Muted.Select(ParseUser).ToImmutableArray();
+        var deafenedUsers = users.Deafened.Select(ParseUser).ToImmutableArray();
         return (mutedUsers, deafenedUsers);
     }
 
@@ -695,6 +714,14 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     
     #endregion
 
+    #region Voices
+    
+    /// <inheritdoc />
+    public async Task MoveUsersAsync(IEnumerable<IGuildUser> users, IVoiceChannel targetChannel, RequestOptions options)
+        => await ClientHelper.MoveUsersAsync(KaiHeiLa, users, targetChannel, options).ConfigureAwait(false);
+
+    #endregion
+    
     #region Emotes
 
     /// <inheritdoc />
@@ -770,6 +797,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     /// <inheritdoc />
     IRole IGuild.GetRole(uint id) => GetRole(id);
     /// <inheritdoc />
+    IRecommendInfo IGuild.RecommendInfo => RecommendInfo;
+    /// <inheritdoc />
     async Task<IRole> IGuild.CreateRoleAsync(string name, RequestOptions options)
         => await CreateRoleAsync(name, options).ConfigureAwait(false);
     
@@ -806,7 +835,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
         => Task.FromResult<IVoiceChannel>(GetVoiceChannel(id));
     /// <inheritdoc />
     Task<IReadOnlyCollection<ICategoryChannel>> IGuild.GetCategoryChannelsAsync(CacheMode mode,
-        RequestOptions options = null)
+        RequestOptions options)
         => Task.FromResult<IReadOnlyCollection<ICategoryChannel>>(CategoryChannels);
     
     /// <inheritdoc />
@@ -817,15 +846,16 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
         => await CreateVoiceChannelAsync(name, func, options).ConfigureAwait(false);
     
     /// <inheritdoc />
-    async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> IGuild.GetGuildMutedDeafenedUsersAsync(CacheMode mode, RequestOptions options = null)
+    async Task<(IReadOnlyCollection<Cacheable<IUser, ulong>> Muted, IReadOnlyCollection<Cacheable<IUser, ulong>> Deafened)> IGuild.GetMutedDeafenedUsersAsync(RequestOptions options)
     {
-        if (mode == CacheMode.AllowDownload)
-        {
-            (IReadOnlyCollection<SocketUser> muted, IReadOnlyCollection<SocketUser> deafened) = await GetGuildMuteDeafListAsync(options).ConfigureAwait(false);
-            return (muted.Select(x => x.Id).ToImmutableArray(), deafened.Select(x => x.Id).ToImmutableArray());
-        }
-        else
-            return (null, null);
+        var users = await GetMutedDeafenedUsersAsync(options).ConfigureAwait(false);
+        var muted = users.Muted.Select(x =>
+                new Cacheable<IUser, ulong>(x.Value, x.Id, x.HasValue, async () => await x.DownloadAsync()))
+            .ToImmutableArray();
+        var deafened = users.Deafened.Select(x =>
+                new Cacheable<IUser, ulong>(x.Value, x.Id, x.HasValue, async () => await x.DownloadAsync()))
+            .ToImmutableArray();
+        return (muted, deafened);
     }
 
     /// <inheritdoc />

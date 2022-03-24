@@ -132,7 +132,7 @@ public class RestGuildUser : RestUser, IGuildUser
     public Task UndeafenAsync(RequestOptions options = null) 
         => GuildHelper.UndeafenUserAsync(this, KaiHeiLa, options);
     /// <inheritdoc />
-    public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelAsync(RequestOptions options = null)
+    public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null)
         => UserHelper.GetConnectedChannelAsync(this, KaiHeiLa, options);
     
     /// <inheritdoc />

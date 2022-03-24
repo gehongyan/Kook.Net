@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using KaiHeiLa.API;
 using KaiHeiLa.API.Rest;
 using Model = KaiHeiLa.API.User;
 
@@ -67,4 +68,35 @@ internal static class UserHelper
         var channels = await client.ApiClient.GetAudioChannelsUserConnectsAsync(user.GuildId, user.Id, options: options).FlattenAsync().ConfigureAwait(false);
         return channels.Select(x => RestChannel.Create(client, x) as IVoiceChannel).ToImmutableArray();
     }
+    
+    public static async Task StartPlayingAsync(ISelfUser user, BaseKaiHeiLaClient client, IGame game, RequestOptions options)
+    { 
+        await client.ApiClient.BeginGameActivityAsync(game.Id, options).ConfigureAwait(false);
+    }
+    
+    public static async Task StopPlayingAsync(ISelfUser user, BaseKaiHeiLaClient client, RequestOptions options)
+    { 
+        await client.ApiClient.EndGameActivityAsync(options: options).ConfigureAwait(false);
+    }
+    
+    public static async Task<RestIntimacy> GetIntimacyAsync(IUser user, BaseKaiHeiLaClient client, RequestOptions options)
+    {
+        Intimacy intimacy = await client.ApiClient.GetIntimacyAsync(user.Id, options: options).ConfigureAwait(false);
+        return RestIntimacy.Create(client, user, intimacy);
+    }
+    
+    public static async Task UpdateIntimacyAsync(IUser user, BaseKaiHeiLaClient client, Action<IntimacyProperties> func, RequestOptions options)
+    {
+        IntimacyProperties properties = new();
+        func(properties);
+        var args = new UpdateIntimacyValueParams()
+        {
+            UserId = user.Id,
+            Score = properties.Score,
+            SocialInfo = properties.SocialInfo,
+            ImageId = properties.ImageId
+        };
+        await client.ApiClient.UpdateIntimacyValueAsync(args, options).ConfigureAwait(false);
+    }
+        
 }

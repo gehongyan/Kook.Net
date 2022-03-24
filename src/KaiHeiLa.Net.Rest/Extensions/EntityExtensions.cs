@@ -443,26 +443,12 @@ internal static class EntityExtensions
 
     #endregion
 
-    #region RecommendationInfos
+    #region Recommendation Infos
     
     public static RecommendInfo ToEntity(this API.RecommendInfo model)
     {
         if (model is null) return null;
-        return new RecommendInfo()
-        {
-            Id = model.Id,
-            GuildId = model.GuildId,
-            Type = model.Type,
-            Status = model.Status,
-            Banner = model.Banner,
-            Desc = model.Desc,
-            TagID = model.TagID,
-            CreatedAt = model.CreatedAt,
-            UpdatedAt = model.UpdatedAt,
-            RecommendAt = model.RecommendAt,
-            IsOfficialPartner = model.IsOfficialPartner,
-            Sort = model.Sort
-        };
+        return RecommendInfo.Create(model);
     }
 
     #endregion

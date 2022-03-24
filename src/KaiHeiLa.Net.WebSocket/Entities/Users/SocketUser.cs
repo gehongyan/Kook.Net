@@ -106,6 +106,23 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
         => await UserHelper.CreateDMChannelAsync(this, KaiHeiLa, options).ConfigureAwait(false);
 
     /// <summary>
+    ///     Gets the intimacy information with this user.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous operation for getting the intimacy information. The task result
+    ///     contains the intimacy information associated with this user.
+    /// </returns>
+    public Task<RestIntimacy> GetIntimacyAsync(RequestOptions options = null)
+        => UserHelper.GetIntimacyAsync(this, KaiHeiLa, options);
+
+    /// <inheritdoc />
+    public async Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options = null)
+    {
+        await UserHelper.UpdateIntimacyAsync(this, KaiHeiLa, func, options).ConfigureAwait(false);
+    }
+    
+    /// <summary>
     ///     Gets the full name of the user (e.g. Example#0001).
     /// </summary>
     /// <returns>
@@ -114,4 +131,12 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     public override string ToString() => Format.UsernameAndIdentifyNumber(this);
     private string DebuggerDisplay => $"{Format.UsernameAndIdentifyNumber(this)} ({Id}{(IsBot ?? false ? ", Bot" : "")})";
     internal SocketUser Clone() => MemberwiseClone() as SocketUser;
+    
+    #region IUser
+    
+    /// <inheritdoc />
+    async Task<IIntimacy> IUser.GetIntimacyAsync(RequestOptions options)
+        => await GetIntimacyAsync(options).ConfigureAwait(false);
+    
+    #endregion
 }

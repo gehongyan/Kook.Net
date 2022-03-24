@@ -73,12 +73,18 @@ public class SocketRole : SocketEntity<uint>, IRole
     /// <inheritdoc />
     public Task ModifyAsync(Action<RoleProperties> func, RequestOptions options = null)
         => RoleHelper.ModifyAsync(this, KaiHeiLa, func, options);
+    /// <inheritdoc />
+    public Task DeleteAsync(RequestOptions options = null)
+        => RoleHelper.DeleteAsync(this, KaiHeiLa, options);
     
     public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions options = null)
     {
         void Func(SearchGuildMemberProperties p) => p.RoleId = Id;
         return GuildHelper.SearchUsersAsync(Guild, KaiHeiLa, Func, KaiHeiLaConfig.MaxUsersPerBatch, options);
     }
+    
+    /// <inheritdoc />
+    public int CompareTo(IRole role) => RoleUtils.Compare(this, role);
     
     #endregion
     

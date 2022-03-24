@@ -1,6 +1,6 @@
 namespace KaiHeiLa;
 
-public interface IGuildChannel : IChannel
+public interface IGuildChannel : IChannel, IDeletable
 {
     #region General
     
