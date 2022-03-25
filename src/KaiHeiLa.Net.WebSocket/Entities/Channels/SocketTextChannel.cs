@@ -37,7 +37,21 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     public ICategoryChannel Category
         => CategoryId.HasValue ? Guild.GetChannel(CategoryId.Value) as ICategoryChannel : null;
     /// <inheritdoc />
-    public bool IsPermissionSynced { get; set; }
+    public bool IsPermissionSynced { get; private set; }
+    /// <inheritdoc />
+    public ulong CreatorId { get; private set; }
+    /// <summary>
+    ///     Gets the creator of this channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method will try to get the user as a member of this channel. If the user is not a member of this guild,
+    ///     this method will return <c>null</c>. To get the creator under this circumstance, use
+    ///     <see cref="KaiHeiLa.Rest.KaiHeiLaRestClient.GetUserAsync(ulong,RequestOptions)"/>.
+    /// </remarks>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
+    /// </returns>
+    public SocketGuildUser Creator => GetUser(CreatorId);
     /// <inheritdoc />
     public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
     /// <inheritdoc />
@@ -68,8 +82,9 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         base.Update(state, model);
         CategoryId = model.CategoryId;
         Topic = model.Topic;
-        SlowModeInterval = model.SlowMode; // some guilds haven't been patched to include this yet?
+        SlowModeInterval = model.SlowMode;
         IsPermissionSynced = model.PermissionSync == 1;
+        CreatorId = model.CreatorId;
     }
     
     internal void AddMessage(SocketMessage msg)
@@ -315,6 +330,20 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <inheritdoc />
     Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult(Category);
+    
+    /// <summary>
+    ///     Gets the creator of this channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method will try to get the user as a member of this channel. If the user is not a member of this guild,
+    ///     this method will return <c>null</c>. To get the creator under this circumstance, use
+    ///     <see cref="KaiHeiLa.Rest.KaiHeiLaRestClient.GetUserAsync(ulong,RequestOptions)"/>.
+    /// </remarks>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
+    /// </returns>
+    Task<IUser> INestedChannel.GetCreatorAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<IUser>(Creator);
     
     #endregion
 }

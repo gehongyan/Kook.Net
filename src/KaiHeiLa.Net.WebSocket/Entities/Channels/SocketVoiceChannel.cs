@@ -29,13 +29,29 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
 
     /// <inheritdoc />
-    public bool IsPermissionSynced { get; set; }
-
+    public bool IsPermissionSynced { get; private set; }
+    /// <inheritdoc />
+    public ulong CreatorId { get; private set; }
+    /// <summary>
+    ///     Gets the creator of this channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method will try to get the user as a member of this channel. If the user is not a member of this guild,
+    ///     this method will return <c>null</c>. To get the creator under this circumstance, use
+    ///     <see cref="KaiHeiLa.Rest.KaiHeiLaRestClient.GetUserAsync(ulong,RequestOptions)"/>.
+    /// </remarks>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
+    /// </returns>
+    public SocketGuildUser Creator => GetUser(CreatorId);
+    /// <inheritdoc />
     public VoiceQuality VoiceQuality { get; set; }
-    
+    /// <inheritdoc />
     public int? UserLimit { get; set; }
-    
+    /// <inheritdoc />
     public string ServerUrl { get; set; }
+    /// <inheritdoc />
+    public bool HasPassword { get; set; }
 
     internal SocketVoiceChannel(KaiHeiLaSocketClient kaiHeiLa, ulong id, SocketGuild guild) 
         : base(kaiHeiLa, id, guild)
@@ -57,6 +73,8 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
         UserLimit = model.UserLimit ?? 0;
         ServerUrl = model.ServerUrl;
         IsPermissionSynced = model.PermissionSync == 1;
+        HasPassword = model.HasPassword;
+        CreatorId = model.CreatorId;
     }
     
     // /// <inheritdoc />
@@ -104,5 +122,19 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult(Category);
     
+    /// <summary>
+    ///     Gets the creator of this channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method will try to get the user as a member of this channel. If the user is not a member of this guild,
+    ///     this method will return <c>null</c>. To get the creator under this circumstance, use
+    ///     <see cref="KaiHeiLa.Rest.KaiHeiLaRestClient.GetUserAsync(ulong,RequestOptions)"/>.
+    /// </remarks>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
+    /// </returns>
+    Task<IUser> INestedChannel.GetCreatorAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<IUser>(Creator);
+
     #endregion
 }

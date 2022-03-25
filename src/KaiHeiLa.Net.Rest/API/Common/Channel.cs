@@ -13,7 +13,7 @@ internal class Channel
 
     [JsonPropertyName("user_id")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
-    public ulong CreateUserId { get; set; }
+    public ulong CreatorId { get; set; }
 
     [JsonPropertyName("guild_id")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
@@ -53,4 +53,7 @@ internal class Channel
     [JsonPropertyName("server_url")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public string ServerUrl { get; set; }
+
+    [JsonPropertyName("has_password")]
+    public bool HasPassword { get; set; }
 }

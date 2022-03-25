@@ -35,7 +35,7 @@ public class KaiHeiLaSocketConfig : KaiHeiLaRestConfig
     ///     Gets or sets the number of messages per channel that should be kept in cache. Setting this to zero
     ///     disables the message cache entirely.
     /// </summary>
-    public int MessageCacheSize { get; set; } = 0;
+    public int MessageCacheSize { get; set; } = 10;
     
     /// <summary>
     ///     Gets or sets the max number of users a guild may have for offline users to be included in the READY

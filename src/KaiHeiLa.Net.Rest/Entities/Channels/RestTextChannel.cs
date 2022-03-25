@@ -25,8 +25,9 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     /// <inheritdoc />
     public ulong? CategoryId { get; private set; }
     /// <inheritdoc />
-    public bool IsPermissionSynced { get; set; }
-    
+    public bool IsPermissionSynced { get; private set; }
+    /// <inheritdoc />
+    public ulong CreatorId { get; private set; }
     /// <inheritdoc />
     public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
     /// <inheritdoc />
@@ -51,6 +52,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         Topic = model.Topic;
         SlowModeInterval = model.SlowMode;
         IsPermissionSynced = model.PermissionSync == 1;
+        CreatorId = model.CreatorId;
     }
     
     /// <summary>
@@ -82,6 +84,21 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     /// </returns>
     public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> GetUsersAsync(RequestOptions options = null)
         => ChannelHelper.GetUsersAsync(this, Guild, KaiHeiLa, KaiHeiLaConfig.MaxUsersPerBatch, 1, options: options);
+
+    /// <summary>
+    ///     Gets the creator of this channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method will try to get the user as a global user. To get the creator as a guild member,
+    ///     you will need to get the user through
+    ///     <see cref="IGuild.GetUserAsync(ulong,CacheMode,RequestOptions)"/>."/>
+    /// </remarks>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
+    /// </returns>
+    public Task<RestUser> GetCreatorAsync(RequestOptions options = null)
+        => ClientHelper.GetUserAsync(KaiHeiLa, CreatorId, options);
 
     /// <inheritdoc />
     public Task<RestMessage> GetMessageAsync(Guid id, RequestOptions options = null)
@@ -296,6 +313,14 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         if (CategoryId.HasValue && mode == CacheMode.AllowDownload)
             return (await Guild.GetChannelAsync(CategoryId.Value, mode, options).ConfigureAwait(false)) as ICategoryChannel;
         return null;
+    }
+    /// <inheritdoc />
+    async Task<IUser> INestedChannel.GetCreatorAsync(CacheMode mode, RequestOptions options = null)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetCreatorAsync(options).ConfigureAwait(false);
+        else
+            return null;
     }
     
     #endregion

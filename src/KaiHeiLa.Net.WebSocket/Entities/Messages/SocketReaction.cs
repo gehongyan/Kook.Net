@@ -71,7 +71,7 @@ public class SocketReaction : IReaction
     internal static SocketReaction Create(API.Gateway.Reaction model, ISocketMessageChannel channel, Optional<SocketUserMessage> message, Optional<IUser> user)
     {
         IEmote emote;
-        if (model.Emoji.Id.Length == 33)
+        if (model.Emoji.Id.Length >= 33)
             emote = new Emote(model.Emoji.Id, model.Emoji.Name);
         else
             emote = new Emoji(model.Emoji.Name);
@@ -80,7 +80,7 @@ public class SocketReaction : IReaction
     internal static SocketReaction Create(API.Gateway.PrivateReaction model, IDMChannel channel, Optional<SocketUserMessage> message, Optional<IUser> user)
     {
         IEmote emote;
-        if (model.Emoji.Id.Length == 33)
+        if (model.Emoji.Id.Length >= 33)
             emote = new Emote(model.Emoji.Id, model.Emoji.Name);
         else
             emote = new Emoji(model.Emoji.Name);

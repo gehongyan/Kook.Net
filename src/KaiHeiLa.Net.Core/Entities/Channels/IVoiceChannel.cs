@@ -10,4 +10,6 @@ public interface IVoiceChannel : INestedChannel, IAudioChannel, IMentionable
     int? UserLimit { get; }
 
     string ServerUrl { get; }
+    
+    bool HasPassword { get; }
 }
