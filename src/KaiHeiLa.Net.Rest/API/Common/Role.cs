@@ -11,5 +11,5 @@ internal class Role
     [JsonPropertyName("hoist")] public int Hoist { get; set; }
     [JsonPropertyName("mentionable")] public int Mentionable { get; set; }
     [JsonPropertyName("permissions")] public ulong Permissions { get; set; }
-    [JsonPropertyName("type")] public RoleType Type { get; set; }
+    [JsonPropertyName("type")] public RoleType? Type { get; set; }
 }

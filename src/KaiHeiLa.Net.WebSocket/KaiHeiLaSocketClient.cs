@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Immutable;
+using System.Net;
 using System.Net.Sockets;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -7,6 +8,7 @@ using KaiHeiLa.API;
 using KaiHeiLa.API.Gateway;
 using KaiHeiLa.API.Rest;
 using KaiHeiLa.Logging;
+using KaiHeiLa.Net;
 using KaiHeiLa.Net.WebSockets;
 using KaiHeiLa.Rest;
 using Reaction = KaiHeiLa.API.Gateway.Reaction;
@@ -1036,7 +1038,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                     }
                                     else
                                     {
-                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        await UnknownGuildAsync(extraData.Type, data.GuildId).ConfigureAwait(false);
                                         return;
                                     }
                                 }
@@ -1074,7 +1076,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                         SocketUser operatorUser = guild.GetUser(data.OperatorUserId) 
                                                                   ?? (SocketUser) SocketUnknownUser.Create(this, State, data.OperatorUserId);
                                         var bannedUsers = data.UserIds.Select(id => guild.GetUser(id) 
-                                            ?? (SocketUser) SocketUnknownUser.Create(this, State, data.OperatorUserId))
+                                            ?? (SocketUser) SocketUnknownUser.Create(this, State, id))
                                             .ToReadOnlyCollection(() => data.UserIds.Length);
                                         await TimedInvokeAsync(_userBannedEvent, nameof(UserBanned), bannedUsers, operatorUser, guild).ConfigureAwait(false);
                                     }
@@ -1097,7 +1099,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                         SocketUser operatorUser = guild.GetUser(data.OperatorUserId) 
                                                                   ?? (SocketUser) SocketUnknownUser.Create(this, State, data.OperatorUserId);
                                         var bannedUsers = data.UserIds.Select(id => guild.GetUser(id) 
-                                                ?? (SocketUser) SocketUnknownUser.Create(this, State, data.OperatorUserId))
+                                                ?? (SocketUser) SocketUnknownUser.Create(this, State, id))
                                             .ToReadOnlyCollection(() => data.UserIds.Length);
                                         await TimedInvokeAsync(_userBannedEvent, nameof(UserBanned), bannedUsers, operatorUser, guild).ConfigureAwait(false);
                                     }
@@ -1198,7 +1200,18 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                     await _gatewayLogger.DebugAsync("Received Event (self_joined_guild)").ConfigureAwait(false);
                                     var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.SelfGuildEvent>(_serializerOptions);
 
-                                    ExtendedGuild model = await ApiClient.GetGuildAsync(data.GuildId).ConfigureAwait(false);
+                                    var task = new Func<ulong, Task<ExtendedGuild>>(async id =>
+                                    {
+                                        int maxRetryTime = 5;
+                                        while (true)
+                                        {
+                                            try { return await ApiClient.GetGuildAsync(id).ConfigureAwait(false); }
+                                            catch (HttpException ex) when (ex.HttpCode == HttpStatusCode.Forbidden) { if (--maxRetryTime == 0) throw; }
+                                            await Task.Delay(500).ConfigureAwait(false);
+                                        }
+                                    });
+                                    
+                                    ExtendedGuild model = await task(data.GuildId).ConfigureAwait(false);
                                     var guild = AddGuild(model, State);
                                     guild.Update(State, model);
                                     await TimedInvokeAsync(_joinedGuildEvent, nameof(JoinedGuild), guild).ConfigureAwait(false);
