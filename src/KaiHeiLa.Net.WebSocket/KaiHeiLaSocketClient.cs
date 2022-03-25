@@ -1155,7 +1155,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                     var guild = State.GetGuild(gatewayEvent.TargetId);
                                     if (guild != null)
                                     {
-                                        var channel = GetChannel(gatewayEvent.TargetId) as SocketVoiceChannel;
+                                        var channel = GetChannel(data.ChannelId) as SocketVoiceChannel;
                                         
                                         if (channel == null)
                                         {
@@ -1184,7 +1184,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                     var guild = State.GetGuild(gatewayEvent.TargetId);
                                     if (guild != null)
                                     {
-                                        var channel = GetChannel(gatewayEvent.TargetId) as SocketVoiceChannel;
+                                        var channel = GetChannel(data.ChannelId) as SocketVoiceChannel;
                                         
                                         if (channel == null)
                                         {
