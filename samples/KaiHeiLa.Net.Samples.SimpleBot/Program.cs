@@ -70,6 +70,8 @@ class Program
         // IInvite invite = await _client.GetGuild(1990044438283387).CreateInviteAsync(InviteMaxAge.NeverExpires, InviteMaxUses.Fifty);
         // SocketGuild socketGuild = _client.GetGuild(1990044438283387);
         // IEnumerable<RestGame> games = await _client.Rest.GetGamesAsync().FlattenAsync().ConfigureAwait(false);
+        await _client.GetGuild(1990044438283387).GetTextChannel(6286033651700207)
+            .SendImageMessageAsync("E:\\OneDrive\\Pictures\\86840227_p0_新年.png");
     }
 
     private async Task CardDemo(SocketMessage message)

@@ -59,6 +59,20 @@ internal static class ClientHelper
             return RestUser.Create(client, model);
         return null;
     }
+    
+    public static async Task<RestGuildUser> GetGuildMemberAsync(BaseKaiHeiLaClient client,
+        ulong guildId, ulong id, RequestOptions options)
+    {
+        var guild = await GetGuildAsync(client, guildId, options).ConfigureAwait(false);
+        if (guild == null)
+            return null;
+
+        var model = await client.ApiClient.GetGuildMemberAsync(guildId, id, options).ConfigureAwait(false);
+        if (model != null)
+            return RestGuildUser.Create(client, guild, model);
+
+        return null;
+    }
 
     public static async Task MoveUsersAsync(BaseKaiHeiLaClient client, IEnumerable<IGuildUser> userIds, IVoiceChannel targetChannel, RequestOptions options)
     {
@@ -100,4 +114,25 @@ internal static class ClientHelper
         await client.ApiClient.DeleteGameAsync(id, options).ConfigureAwait(false);
     }
     
+    public static async Task AddRoleAsync(BaseKaiHeiLaClient client, ulong guildId, ulong userId, uint roleId, RequestOptions options = null)
+    {
+        AddOrRemoveRoleParams args = new()
+        {
+            GuildId = guildId,
+            RoleId = roleId,
+            UserId = userId
+        };
+        await client.ApiClient.AddRoleAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task RemoveRoleAsync(BaseKaiHeiLaClient client, ulong guildId, ulong userId, uint roleId, RequestOptions options = null)
+    {
+        AddOrRemoveRoleParams args = new()
+        {
+            GuildId = guildId,
+            RoleId = roleId,
+            UserId = userId
+        };
+        await client.ApiClient.RemoveRoleAsync(args, options).ConfigureAwait(false);
+    }
 }

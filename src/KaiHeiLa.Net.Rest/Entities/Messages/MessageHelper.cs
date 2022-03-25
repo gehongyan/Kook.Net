@@ -53,7 +53,7 @@ internal static class MessageHelper
     public static async Task AddReactionAsync(Guid messageId, IEmote emote, BaseKaiHeiLaClient client,
         RequestOptions options)
     {
-        AddReactionParams args = new AddReactionParams()
+        AddReactionParams args = new()
         {
             EmojiId = emote.Id,
             MessageId = messageId
@@ -62,7 +62,7 @@ internal static class MessageHelper
     }
     public static async Task AddReactionAsync(IMessage msg, IEmote emote, BaseKaiHeiLaClient client, RequestOptions options)
     {
-        AddReactionParams args = new AddReactionParams()
+        AddReactionParams args = new()
         {
             EmojiId = emote.Id,
             MessageId = msg.Id
@@ -74,7 +74,7 @@ internal static class MessageHelper
     public static async Task AddDirectMessageReactionAsync(Guid messageId, IEmote emote, BaseKaiHeiLaClient client,
         RequestOptions options)
     {
-        AddReactionParams args = new AddReactionParams()
+        AddReactionParams args = new()
         {
             EmojiId = emote.Id,
             MessageId = messageId
@@ -83,7 +83,7 @@ internal static class MessageHelper
     }
     public static async Task AddDirectMessageReactionAsync(IMessage msg, IEmote emote, BaseKaiHeiLaClient client, RequestOptions options)
     {
-        AddReactionParams args = new AddReactionParams()
+        AddReactionParams args = new()
         {
             EmojiId = emote.Id,
             MessageId = msg.Id
@@ -92,10 +92,9 @@ internal static class MessageHelper
         await client.ApiClient.AddDirectMessageReactionAsync(args, options).ConfigureAwait(false);
     }
 
-    public static async Task RemoveReactionAsync(ulong channelId, Guid messageId, ulong userId, IEmote emote,
-        BaseKaiHeiLaClient client, RequestOptions options)
+    public static async Task RemoveReactionAsync(Guid messageId, ulong userId, IEmote emote, BaseKaiHeiLaClient client, RequestOptions options)
     {
-        RemoveReactionParams args = new RemoveReactionParams()
+        RemoveReactionParams args = new()
         {
             EmojiId = emote.Id,
             MessageId = messageId,
@@ -106,7 +105,7 @@ internal static class MessageHelper
     public static async Task RemoveReactionAsync(IMessage msg, ulong userId, IEmote emote, BaseKaiHeiLaClient client, RequestOptions options)
     {
         
-        RemoveReactionParams args = new RemoveReactionParams()
+        RemoveReactionParams args = new()
         {
             EmojiId = emote.Id,
             MessageId = msg.Id,
@@ -115,10 +114,9 @@ internal static class MessageHelper
         await client.ApiClient.RemoveReactionAsync(args, options).ConfigureAwait(false);
     }
 
-    public static async Task RemoveDirectMessageReactionAsync(ulong channelId, Guid messageId, ulong userId, IEmote emote,
-        BaseKaiHeiLaClient client, RequestOptions options)
+    public static async Task RemoveDirectMessageReactionAsync(Guid messageId, ulong userId, IEmote emote, BaseKaiHeiLaClient client, RequestOptions options)
     {
-        RemoveReactionParams args = new RemoveReactionParams()
+        RemoveReactionParams args = new()
         {
             EmojiId = emote.Id,
             MessageId = messageId,
@@ -129,7 +127,7 @@ internal static class MessageHelper
     public static async Task RemoveDirectMessageReactionAsync(IMessage msg, ulong userId, IEmote emote, BaseKaiHeiLaClient client, RequestOptions options)
     {
         
-        RemoveReactionParams args = new RemoveReactionParams()
+        RemoveReactionParams args = new()
         {
             EmojiId = emote.Id,
             MessageId = msg.Id,
