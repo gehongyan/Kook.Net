@@ -894,35 +894,42 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                 case ("PERSON", "guild_member_online"):
                                 {
                                     await _gatewayLogger.DebugAsync("Received Event (guild_member_online)").ConfigureAwait(false);
-                                    var guild = State.GetGuild(gatewayEvent.TargetId);
-                                    if (guild != null)
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.GuildMemberOnlineEvent>(_serializerOptions);
+                                    List<(Cacheable<SocketGuildUser, ulong>, SocketGuildUser)> users = new();
+                                    foreach (var guildId in data.CommonGuilds)
                                     {
-                                        var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.GuildMemberOnlineEvent>(_serializerOptions);
-                                        SocketGuildUser user = guild.GetUser(data.UserId);
-                                        if (user != null)
+                                        var guild = State.GetGuild(guildId);
+                                        if (guild != null)
                                         {
-                                            if (user.IsOnline != true)
+                                            SocketGuildUser user = guild.GetUser(data.UserId);
+                                            if (user != null)
                                             {
-                                                var before = user.Clone();
-                                                user.IsOnline = true;
-                                            
-                                                var cacheableBefore = new Cacheable<SocketGuildUser, ulong>(before, user.Id, true, () => null);
-                                                await TimedInvokeAsync(_guildMemberOnlineEvent, nameof(GuildMemberOnline), cacheableBefore, user, data.OnlineAt).ConfigureAwait(false);
+                                                if (user.IsOnline != true)
+                                                {
+                                                    var before = user.Clone();
+                                                    var cacheableBefore = new Cacheable<SocketGuildUser, ulong>(before, user.Id, true, () => null);
+                                                    users.Add((cacheableBefore, user));
+                                                }
+                                            }
+                                            else
+                                            {
+                                                GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.UserId).ConfigureAwait(false);
+                                                user = guild.AddOrUpdateUser(model);
+                                                var cacheableBefore = new Cacheable<SocketGuildUser, ulong>(null, user.Id, false, () => null);
+                                                users.Add((cacheableBefore, user));
                                             }
                                         }
                                         else
                                         {
-                                            GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.UserId).ConfigureAwait(false);
-                                            user = guild.AddOrUpdateUser(model);
-                                            var cacheableBefore = new Cacheable<SocketGuildUser, ulong>(null, user.Id, false, () => null);
-                                            await TimedInvokeAsync(_guildMemberOnlineEvent, nameof(GuildMemberOnline), cacheableBefore, user, data.OnlineAt).ConfigureAwait(false);
+                                            await UnknownGuildAsync(extraData.Type, guildId).ConfigureAwait(false);
+                                            return;
                                         }
                                     }
-                                    else
-                                    {
-                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
-                                        return;
-                                    }
+                                    SocketGlobalUser globalUser = State.GetUser(data.UserId);
+                                    if (globalUser?.IsOnline != true)
+                                        globalUser.IsOnline = true;
+                                    
+                                    await TimedInvokeAsync(_guildMemberOnlineEvent, nameof(GuildMemberOnline), users, data.OnlineAt).ConfigureAwait(false);
                                 }
                                     break;
                                 
@@ -930,35 +937,42 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                 case ("PERSON", "guild_member_offline"):
                                 {
                                     await _gatewayLogger.DebugAsync("Received Event (guild_member_offline)").ConfigureAwait(false);
-                                    var guild = State.GetGuild(gatewayEvent.TargetId);
-                                    if (guild != null)
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.GuildMemberOfflineEvent>(_serializerOptions);
+                                    List<(Cacheable<SocketGuildUser, ulong>, SocketGuildUser)> users = new();
+                                    foreach (var guildId in data.CommonGuilds)
                                     {
-                                        var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.GuildMemberOfflineEvent>(_serializerOptions);
-                                        SocketGuildUser user = guild.GetUser(data.UserId);
-                                        if (user != null)
+                                        var guild = State.GetGuild(guildId);
+                                        if (guild != null)
                                         {
-                                            if (user.IsOnline != true)
+                                            SocketGuildUser user = guild.GetUser(data.UserId);
+                                            if (user != null)
                                             {
-                                                var before = user.Clone();
-                                                user.IsOnline = false;
-                                            
-                                                var cacheableBefore = new Cacheable<SocketGuildUser, ulong>(before, user.Id, true, () => null);
-                                                await TimedInvokeAsync(_guildMemberOfflineEvent, nameof(GuildMemberOffline), cacheableBefore, user, data.OfflineAt).ConfigureAwait(false);
+                                                if (user.IsOnline != false)
+                                                {
+                                                    var before = user.Clone();
+                                                    var cacheableBefore = new Cacheable<SocketGuildUser, ulong>(before, user.Id, true, () => null);
+                                                    users.Add((cacheableBefore, user));
+                                                }
+                                            }
+                                            else
+                                            {
+                                                GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.UserId).ConfigureAwait(false);
+                                                user = guild.AddOrUpdateUser(model);
+                                                var cacheableBefore = new Cacheable<SocketGuildUser, ulong>(null, user.Id, false, () => null);
+                                                users.Add((cacheableBefore, user));
                                             }
                                         }
                                         else
                                         {
-                                            GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.UserId).ConfigureAwait(false);
-                                            user = guild.AddOrUpdateUser(model);
-                                            var cacheableBefore = new Cacheable<SocketGuildUser, ulong>(null, user.Id, false, () => null);
-                                            await TimedInvokeAsync(_guildMemberOfflineEvent, nameof(GuildMemberOffline), cacheableBefore, user, data.OfflineAt).ConfigureAwait(false);
+                                            await UnknownGuildAsync(extraData.Type, guildId).ConfigureAwait(false);
+                                            return;
                                         }
                                     }
-                                    else
-                                    {
-                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
-                                        return;
-                                    }
+                                    SocketGlobalUser globalUser = State.GetUser(data.UserId);
+                                    if (globalUser?.IsOnline != false)
+                                        globalUser.IsOnline = false;
+                                    
+                                    await TimedInvokeAsync(_guildMemberOfflineEvent, nameof(GuildMemberOffline), users, data.OfflineAt).ConfigureAwait(false);
                                 }
                                     break;
 

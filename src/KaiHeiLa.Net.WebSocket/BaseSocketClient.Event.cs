@@ -379,19 +379,19 @@ public abstract partial class BaseSocketClient
     }
     internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketGuildUser, Task>> _guildMemberUpdatedEvent = new AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketGuildUser, Task>>();
     /// <summary> Fired when a guild member is online. </summary>
-    public event Func<Cacheable<SocketGuildUser, ulong>, SocketGuildUser, DateTimeOffset, Task> GuildMemberOnline
+    public event Func<IReadOnlyCollection<(Cacheable<SocketGuildUser, ulong>, SocketGuildUser)>, DateTimeOffset, Task> GuildMemberOnline
     {
         add => _guildMemberOnlineEvent.Add(value);
         remove => _guildMemberOnlineEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketGuildUser, DateTimeOffset, Task>> _guildMemberOnlineEvent = new AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketGuildUser, DateTimeOffset, Task>>();
+    internal readonly AsyncEvent<Func<IReadOnlyCollection<(Cacheable<SocketGuildUser, ulong>, SocketGuildUser)>, DateTimeOffset, Task>> _guildMemberOnlineEvent = new AsyncEvent<Func<IReadOnlyCollection<(Cacheable<SocketGuildUser, ulong>, SocketGuildUser)>, DateTimeOffset, Task>>();
     /// <summary> Fired when a guild member is offline. </summary>
-    public event Func<Cacheable<SocketGuildUser, ulong>, SocketGuildUser, DateTimeOffset, Task> GuildMemberOffline
+    public event Func<IReadOnlyCollection<(Cacheable<SocketGuildUser, ulong>, SocketGuildUser)>, DateTimeOffset, Task> GuildMemberOffline
     {
         add => _guildMemberOfflineEvent.Add(value);
         remove => _guildMemberOfflineEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketGuildUser, DateTimeOffset, Task>> _guildMemberOfflineEvent = new AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketGuildUser, DateTimeOffset, Task>>();
+    internal readonly AsyncEvent<Func<IReadOnlyCollection<(Cacheable<SocketGuildUser, ulong>, SocketGuildUser)>, DateTimeOffset, Task>> _guildMemberOfflineEvent = new AsyncEvent<Func<IReadOnlyCollection<(Cacheable<SocketGuildUser, ulong>, SocketGuildUser)>, DateTimeOffset, Task>>();
     
     #endregion
 
