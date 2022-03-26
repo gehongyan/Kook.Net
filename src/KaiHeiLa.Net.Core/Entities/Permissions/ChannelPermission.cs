@@ -3,8 +3,8 @@
 [Flags]
 public enum ChannelPermission : uint
 {
-    ManageGuild          = 1 << 1,
-    ManageInvites        = 1 << 4,
+    CreateInvites        = 1 << 3,
+    ManageChannels       = 1 << 5,
     ManageRoles          = 1 << 10,
     ViewChannels         = 1 << 11,
     SendMessages         = 1 << 12,

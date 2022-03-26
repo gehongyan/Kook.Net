@@ -6,9 +6,9 @@ namespace KaiHeiLa;
 public struct ChannelPermissions
 {
     public static readonly ChannelPermissions None = new ChannelPermissions();
-    public static readonly ChannelPermissions Text = new ChannelPermissions(0b0_11111_0101100_0000000_1111111110001_010001);
-    public static readonly ChannelPermissions Voice = new ChannelPermissions(0b1_00000_0000100_1111110_0000000011100_010001);
-    public static readonly ChannelPermissions Category = new ChannelPermissions(0b01100_1111110_1111111110001_010001);
+    public static readonly ChannelPermissions Text = new ChannelPermissions(0b_0000_0000_0110_0111_1100_0010_1000);
+    public static readonly ChannelPermissions Voice = new ChannelPermissions(0b_1011_1101_0001_1000_1100_0010_1000);
+    public static readonly ChannelPermissions Category = new ChannelPermissions(0b1011_1101_0111_1111_1100_0010_1000);
 
     public static ChannelPermissions All(IChannel channel)
     {
@@ -23,8 +23,8 @@ public struct ChannelPermissions
     
     public ulong RawValue { get; }
     
-    public bool ManageGuild => Permissions.GetValue(RawValue, ChannelPermission.ManageGuild);
-    public bool ManageInvites => Permissions.GetValue(RawValue, ChannelPermission.ManageInvites);
+    public bool ManageChannels => Permissions.GetValue(RawValue, ChannelPermission.ManageChannels);
+    public bool CreateInvites => Permissions.GetValue(RawValue, ChannelPermission.CreateInvites);
     public bool ManageRoles => Permissions.GetValue(RawValue, ChannelPermission.ManageRoles);
     public bool ViewChannels => Permissions.GetValue(RawValue, ChannelPermission.ViewChannels);
     public bool SendMessages => Permissions.GetValue(RawValue, ChannelPermission.SendMessages);
@@ -44,8 +44,8 @@ public struct ChannelPermissions
     public ChannelPermissions(ulong rawValue) { RawValue = rawValue; }
 
     private ChannelPermissions(ulong initialValue,
-        bool? manageGuild = null,
-        bool? manageInvites = null,
+        bool? createInvites = null,
+        bool? manageChannels = null,
         bool? manageRoles = null,
         bool? viewChannels = null,
         bool? sendMessages = null,
@@ -64,8 +64,8 @@ public struct ChannelPermissions
     {
         ulong value = initialValue;
 
-        Permissions.SetValue(ref value, manageGuild, ChannelPermission.ManageGuild);
-        Permissions.SetValue(ref value, manageInvites, ChannelPermission.ManageInvites);
+        Permissions.SetValue(ref value, createInvites, ChannelPermission.CreateInvites);
+        Permissions.SetValue(ref value, manageChannels, ChannelPermission.ManageChannels);
         Permissions.SetValue(ref value, manageRoles, ChannelPermission.ManageRoles);
         Permissions.SetValue(ref value, viewChannels, ChannelPermission.ViewChannels);
         Permissions.SetValue(ref value, sendMessages, ChannelPermission.SendMessages);
@@ -86,8 +86,8 @@ public struct ChannelPermissions
     }
 
     public ChannelPermissions(
-        bool? manageGuild = false,
-        bool? manageInvites = false,
+        bool? createInvites = false,
+        bool? manageChannels = false,
         bool? manageRoles = false,
         bool? viewChannels = false,
         bool? sendMessages = false,
@@ -103,14 +103,14 @@ public struct ChannelPermissions
         bool? deafenMembers = false,
         bool? muteMembers = false,
         bool? playSoundtrack = false)
-        : this(0, manageGuild, manageInvites, manageRoles, viewChannels, sendMessages, manageMessages, attachFiles,
+        : this(0, createInvites, manageChannels, manageRoles, viewChannels, sendMessages, manageMessages, attachFiles,
             connect, manageVoice, mentionEveryone, addReactions, passiveConnect, useVoiceActivity, speak, deafenMembers,
             muteMembers, playSoundtrack)
     { }
 
     public ChannelPermissions Modify(
-        bool? manageGuild = null,
-        bool? manageInvites = null,
+        bool? createInvites = null,
+        bool? manageChannels = null,
         bool? manageRoles = null,
         bool? viewChannels = null,
         bool? sendMessages = null,
@@ -127,8 +127,8 @@ public struct ChannelPermissions
         bool? muteMembers = null,
         bool? playSoundtrack = null)
         => new ChannelPermissions(RawValue,
-            manageGuild,
-            manageInvites,
+            createInvites,
+            manageChannels,
             manageRoles,
             viewChannels,
             sendMessages,

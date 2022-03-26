@@ -16,8 +16,8 @@ public struct OverwritePermissions
     public ulong AllowValue { get; }
     public ulong DenyValue { get; }
 
-    public PermValue ManageGuild => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageGuild);
-    public PermValue ManageInvites => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageInvites);
+    public PermValue CreateInvites => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.CreateInvites);
+    public PermValue ManageChannels => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageChannels);
     public PermValue ManageRoles => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageRoles);
     public PermValue ViewChannels => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ViewChannels);
     public PermValue SendMessages => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.SendMessages);
@@ -28,10 +28,7 @@ public struct OverwritePermissions
     public PermValue MentionEveryone => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.MentionEveryone);
     public PermValue AddReactions => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.AddReactions);
     public PermValue PassiveConnect => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.PassiveConnect);
-
-    public PermValue UseVoiceActivity =>
-        Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.UseVoiceActivity);
-
+    public PermValue UseVoiceActivity => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.UseVoiceActivity);
     public PermValue Speak => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.Speak);
     public PermValue DeafenMembers => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.DeafenMembers);
     public PermValue MuteMembers => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.MuteMembers);
@@ -50,8 +47,8 @@ public struct OverwritePermissions
     }
 
     private OverwritePermissions(ulong allowValue, ulong denyValue,
-        PermValue? manageGuild = null,
-        PermValue? manageInvites = null,
+        PermValue? createInvites = null,
+        PermValue? manageChannels = null,
         PermValue? manageRoles = null,
         PermValue? viewChannels = null,
         PermValue? sendMessages = null,
@@ -68,8 +65,8 @@ public struct OverwritePermissions
         PermValue? muteMembers = null,
         PermValue? playSoundtrack = null)
     {
-        Permissions.SetValue(ref allowValue, ref denyValue, manageGuild, ChannelPermission.ManageGuild);
-        Permissions.SetValue(ref allowValue, ref denyValue, manageInvites, ChannelPermission.ManageInvites);
+        Permissions.SetValue(ref allowValue, ref denyValue, createInvites, ChannelPermission.CreateInvites);
+        Permissions.SetValue(ref allowValue, ref denyValue, manageChannels, ChannelPermission.ManageChannels);
         Permissions.SetValue(ref allowValue, ref denyValue, manageRoles, ChannelPermission.ManageRoles);
         Permissions.SetValue(ref allowValue, ref denyValue, viewChannels, ChannelPermission.ViewChannels);
         Permissions.SetValue(ref allowValue, ref denyValue, sendMessages, ChannelPermission.SendMessages);
@@ -91,8 +88,8 @@ public struct OverwritePermissions
     }
 
     public OverwritePermissions(
-        PermValue manageGuild = PermValue.Inherit,
-        PermValue manageInvites = PermValue.Inherit,
+        PermValue createInvites = PermValue.Inherit,
+        PermValue manageChannels = PermValue.Inherit,
         PermValue manageRoles = PermValue.Inherit,
         PermValue viewChannels = PermValue.Inherit,
         PermValue sendMessages = PermValue.Inherit,
@@ -108,15 +105,15 @@ public struct OverwritePermissions
         PermValue deafenMembers = PermValue.Inherit,
         PermValue muteMembers = PermValue.Inherit,
         PermValue playSoundtrack = PermValue.Inherit)
-        : this(0, 0, manageGuild, manageInvites, manageRoles, viewChannels, sendMessages, manageMessages, attachFiles,
-            connect, manageVoice, mentionEveryone, addReactions, passiveConnect, useVoiceActivity, speak, deafenMembers,
-            muteMembers, playSoundtrack)
+        : this(0, 0, createInvites, manageChannels, manageRoles, viewChannels, sendMessages, manageMessages,
+            attachFiles, connect, manageVoice, mentionEveryone, addReactions, passiveConnect, useVoiceActivity, speak,
+            deafenMembers, muteMembers, playSoundtrack)
     {
     }
 
     public OverwritePermissions Modify(
-        PermValue? manageGuild = null,
-        PermValue? manageInvites = null,
+        PermValue? createInvites = null,
+        PermValue? manageChannels = null,
         PermValue? manageRoles = null,
         PermValue? viewChannels = null,
         PermValue? sendMessages = null,
@@ -132,9 +129,9 @@ public struct OverwritePermissions
         PermValue? deafenMembers = null,
         PermValue? muteMembers = null,
         PermValue? playSoundtrack = null)
-        => new OverwritePermissions(AllowValue, DenyValue, manageGuild, manageInvites, manageRoles, viewChannels,
-            sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone, addReactions,
-            passiveConnect, useVoiceActivity, speak, deafenMembers, muteMembers, playSoundtrack);
+        => new OverwritePermissions(AllowValue, DenyValue, createInvites, manageChannels, manageRoles,
+            viewChannels, sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone,
+            addReactions, passiveConnect, useVoiceActivity, speak, deafenMembers, muteMembers, playSoundtrack);
 
     public List<ChannelPermission> ToAllowList()
     {

@@ -4,7 +4,7 @@ namespace KaiHeiLa;
 
 internal static class Permissions
 {
-    public const int MaxBits = 53;
+    public const int MaxBits = 28;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PermValue GetValue(ulong allow, ulong deny, ChannelPermission flag)
