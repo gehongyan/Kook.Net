@@ -81,8 +81,8 @@ internal class ClientState
     {
         if (_guilds.TryRemove(id, out SocketGuild guild))
         {
-            // guild.PurgeChannelCache(this);
-            // guild.PurgeUserCache();
+            guild.PurgeChannelCache(this);
+            guild.PurgeUserCache();
             return guild;
         }
         return null;

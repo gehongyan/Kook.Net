@@ -23,12 +23,22 @@ class Program
                                ?? throw new ArgumentNullException(nameof(_token)));
         _channelId = ulong.Parse(Environment.GetEnvironmentVariable("KaiHeiLaDebugChannel", EnvironmentVariableTarget.User) 
                                  ?? throw new ArgumentNullException(nameof(_token)));
-        _client = new(new KaiHeiLaSocketConfig() {AlwaysDownloadUsers = true});
+        _client = new(new KaiHeiLaSocketConfig() {AlwaysDownloadUsers = true, MessageCacheSize = 100});
         
         _client.Log += ClientOnLog;
         _client.MessageReceived += ClientOnMessageReceived;
-        _client.Ready += ClientOnReady;
-        _client.MessageButtonClicked += ClientOnMessageButtonClicked;
+        _client.DirectMessageReceived += ClientOnDirectMessageReceived;
+        // _client.Ready += ClientOnReady;
+        // _client.MessageButtonClicked += ClientOnMessageButtonClicked;
+        // _client.MessageDeleted += async (msg, channel) =>
+        // {
+        //     Console.WriteLine($"Message {(await msg.GetOrDownloadAsync()).CleanContent} deleted in {(await channel.GetOrDownloadAsync()).Name}");
+        // };
+    }
+
+    private Task ClientOnDirectMessageReceived(SocketMessage arg)
+    {
+        return Task.CompletedTask;
     }
 
     public async Task MainAsync()
@@ -38,17 +48,21 @@ class Program
         await Task.Delay(-1);
     }
 
-    private async Task ClientOnReady()
-    {
-        var asyncEnumerable = _client.GetGuild(1990044438283387).GetUsersAsync();
-        IEnumerable<IGuildUser> flattenAsync = await asyncEnumerable.FlattenAsync();
-    }
-
     private async Task ClientOnMessageReceived(SocketMessage arg)
     {
+        if (arg.Author.Id == _client.CurrentUser.Id) return;
+        if (arg.Author.IsBot == true) return;
+        if (arg.Content != "/test") return;
+        await arg.Channel.SendTextMessageAsync("收到了！", quote: new Quote(arg.Id));
         // await msg.ReloadAsync();
         // await CardDemo(msg);
     }
+
+    // private async Task ClientOnReady()
+    // {
+    //     var asyncEnumerable = _client.GetGuild(1990044438283387).GetUsersAsync();
+    //     IEnumerable<IGuildUser> flattenAsync = await asyncEnumerable.FlattenAsync();
+    // }
 
     private Task ClientOnLog(LogMessage arg)
     {

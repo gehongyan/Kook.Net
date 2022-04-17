@@ -469,7 +469,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                 // 频道消息被删除
                                 case ("GROUP", "deleted_message"):
                                 {
-                                    await _gatewayLogger.DebugAsync("Received Event (updated_message)").ConfigureAwait(false);
+                                    await _gatewayLogger.DebugAsync("Received Event (deleted_message)").ConfigureAwait(false);
                                     var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.MessageDeleteEvent>(_serializerOptions);
                                     var channel = GetChannel(data.ChannelId) as ISocketMessageChannel;
                                     var guild = (channel as SocketGuildChannel)?.Guild;

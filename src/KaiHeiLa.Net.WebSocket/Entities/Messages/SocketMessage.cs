@@ -28,7 +28,6 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     ///     A WebSocket-based message channel.
     /// </returns>
     public ISocketMessageChannel Channel { get; }
-    public ChannelType ChannelType { get; }
     /// <inheritdoc />
     public MessageSource Source { get; }
     /// <inheritdoc />
