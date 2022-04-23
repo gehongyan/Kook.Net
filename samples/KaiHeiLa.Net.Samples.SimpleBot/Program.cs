@@ -34,6 +34,10 @@ class Program
         // {
         //     Console.WriteLine($"Message {(await msg.GetOrDownloadAsync()).CleanContent} deleted in {(await channel.GetOrDownloadAsync()).Name}");
         // };
+        _client.MessageButtonClicked += async (value, user, message, channel, guild) =>
+        {
+            
+        };
     }
 
     private Task ClientOnDirectMessageReceived(SocketMessage arg)
@@ -50,6 +54,7 @@ class Program
 
     private async Task ClientOnMessageReceived(SocketMessage arg)
     {
+        string argCleanContent = arg.CleanContent;
         if (arg.Author.Id == _client.CurrentUser.Id) return;
         if (arg.Author.IsBot == true) return;
         if (arg.Content != "/test") return;
