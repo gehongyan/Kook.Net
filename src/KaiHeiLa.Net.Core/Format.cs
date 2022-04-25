@@ -10,7 +10,7 @@ public static class Format
 
     private static readonly Regex MarkdownEscapeRegex = new Regex(
 
-        @"((?<!\\)([*]{1,3}|~{2}|`(``\w*\n)?|\((spl|ins)\)))" +       // Unescaped asterisks, tildes, backticks, (spl) and (ins)
+        @"((?<!\\)([*]{1,3}|~{2}|`(``\w*\n)?|\((spl|ins)\)))" +         // Unescaped asterisks, tildes, backticks, (spl) and (ins)
         @"(\\(?=[\*~`\(\)\[\]\\]))" +                                       // All escaping backslashes
         @"((?<=((?<!\\)\[).*?[^\\])\]\(https?://.*?\))" +                   // Tales of links
         @"((?<!\\)(?=.*?[^\\]\]\(https?://.*?\))\[)" +                      // Open bracket of links
