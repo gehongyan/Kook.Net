@@ -1,0 +1,43 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../src",
+          "files": ["**.csproj"]
+        }
+      ],
+      "dest": "api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": ["api/**.yml", "api/index.md"]
+      },
+      {
+        "files": ["toc.yml", "index.md"]
+      },
+      {
+        "files": ["guides/**.md", "guides/**/toc.yml"]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "**/images/**"
+        ]
+      }
+    ],
+    "dest": "_site",
+    "template": [
+      "default"
+    ],
+    "globalMetadata": {
+      "_appTitle": "Discord.Net Documentation",
+      "_appFooter": "KaiHeiLa.Net (c) 2022",
+      "_enableSearch": true,
+      "_appFaviconPath": "favicon.ico"
+    }
+  }
+}
