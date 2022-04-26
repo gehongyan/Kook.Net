@@ -45,20 +45,26 @@ jobs:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     # DocFX
-
+    
     - uses: nikeee/docfx-action@v1.0.0
       name: Build Doc
       with:
         args: ./docs/docfx.json
+
+    - uses: finnp/create-file-action@master
+      name: Add CNAME
+      env:
+        FILE_NAME: "docs/_site/CNAME"
+        FILE_DATA: "kaiheila.net"
 
     - name: Publish Doc
       uses: cpina/github-action-push-to-another-repository@main
       env:
         API_TOKEN_GITHUB: ${{ secrets.ACTIONS_DEPLOY_KEY }}
       with:
-        source-directory: 'docs/_site/'
-        destination-github-username: 'gehongyan'
-        destination-repository-username: 'gehongyan'
-        destination-repository-name: 'KaiHeiLa.Net.Doc'
-        target-branch: master
+        source-directory: docs/_site/
+        destination-github-username: gehongyan
+        destination-repository-username: gehongyan
+        destination-repository-name: KaiHeiLa.Net.Doc
+        target-directory: docs
         user-email: gehongyan1996@126.com
