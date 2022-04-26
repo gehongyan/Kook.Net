@@ -1,6 +1,6 @@
-- name: Guides
+- name: 指南
   href: guides/
   topicUid: Guides.Introduction
-- name: API Documentation
+- name: API 文档
   href: api/
   topicUid: API.Docs
