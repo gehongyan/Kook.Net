@@ -1,9 +1,9 @@
 ---
 uid: Root.Landing
-title: Home
+title: 首页
 ---
 
-# Discord.NET Documentation
+# KaiHeiLa.NET 文档
 
 <div class="big-logo logo-switcher"></div>
 

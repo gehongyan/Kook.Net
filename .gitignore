@@ -32,8 +32,8 @@ bld/
 [Ll]ogs/
 
 # DocFX
-/docs/_site
-/docs/api
+#/docs/_site
+#/docs/api
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

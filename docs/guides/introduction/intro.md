@@ -1,4 +1,4 @@
 ---
 uid: Guides.Introduction
-title: Introduction to Discord.Net
+title: KaiHeiLa.Net 简介
 ---

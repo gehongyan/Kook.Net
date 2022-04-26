@@ -1,0 +1,8 @@
+- name: 简介
+  topicUid: Guides.Introduction
+- name: Getting Started
+  items:
+    - name: 安装
+      topicUid: Guides.GettingStarted.Installation
+    - name: 从零开始
+      topicUid: Guides.GettingStarted.FirstBot

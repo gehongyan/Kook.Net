@@ -1,4 +1,4 @@
 ---
 uid: Guides.GettingStarted.Installation
-title: Installing Discord.Net
+title: 安装 KaiHeiLa.Net
 ---
