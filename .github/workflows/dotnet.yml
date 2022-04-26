@@ -42,7 +42,7 @@ jobs:
     - name: Push Packages to Github
       run: dotnet nuget push ./packages/*.nupkg -k ${GITHUB_TOKEN} -s https://nuget.pkg.github.com/gehongyan/index.json --skip-duplicate
       env:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        GITHUB_TOKEN: ${{secrets.PACKAGES_KEY}}
 
     # DocFX
     
