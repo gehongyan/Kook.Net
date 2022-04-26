@@ -17,7 +17,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
     private ImmutableDictionary<uint, RestRole> _roles;
     private ImmutableDictionary<ulong, RestChannel> _channels;
-    private ImmutableArray<GuildEmote> _emotes;
+    // private ImmutableArray<GuildEmote> _emotes;
     
     /// <inheritdoc />
     public string Name { get; private set; }
@@ -46,7 +46,9 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     Gets the built-in role containing all users in this guild.
     /// </summary>
     public RestRole EveryoneRole => GetRole(0);
-    
+
+    public IReadOnlyCollection<GuildEmote> Emotes { get; set; }
+
     /// <summary>
     ///     Gets a collection of all roles in this guild.
     /// </summary>
@@ -57,8 +59,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </summary>
     public IReadOnlyCollection<RestChannel> Channels => _channels.ToReadOnlyCollection();
     
-    /// <inheritdoc />
-    public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
+    // /// <inheritdoc />
+    // public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
     
     public object[] Features { get; private set; }
 
@@ -524,6 +526,12 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     IReadOnlyCollection<IRole> IGuild.Roles => Roles;
 
     /// <inheritdoc />
+    /// <remarks>
+    ///     Not implemented.
+    /// </remarks>
+    IReadOnlyCollection<GuildEmote> IGuild.Emotes => null;
+
+    /// <inheritdoc />
     IRecommendInfo IGuild.RecommendInfo => RecommendInfo;
     
     /// <inheritdoc />
@@ -650,7 +658,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
     /// <inheritdoc />
     async Task<IReadOnlyCollection<ICategoryChannel>> IGuild.GetCategoryChannelsAsync(CacheMode mode,
-        RequestOptions options = null)
+        RequestOptions options)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetCategoryChannelsAsync(options).ConfigureAwait(false);

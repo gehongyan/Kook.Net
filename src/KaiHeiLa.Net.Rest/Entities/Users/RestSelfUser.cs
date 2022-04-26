@@ -22,7 +22,7 @@ public class RestSelfUser : RestUser, ISelfUser
         : base(discord, id)
     {
     }
-    internal new static RestSelfUser Create(BaseKaiHeiLaClient discord, Model model)
+    internal static RestSelfUser Create(BaseKaiHeiLaClient discord, Model model)
     {
         var entity = new RestSelfUser(discord, model.Id);
         entity.Update(model);

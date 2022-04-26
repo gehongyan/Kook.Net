@@ -315,7 +315,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         return null;
     }
     /// <inheritdoc />
-    async Task<IUser> INestedChannel.GetCreatorAsync(CacheMode mode, RequestOptions options = null)
+    async Task<IUser> INestedChannel.GetCreatorAsync(CacheMode mode, RequestOptions options)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetCreatorAsync(options).ConfigureAwait(false);

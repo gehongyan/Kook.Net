@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaiHeiLa.Net.Samples.Simple
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaiHeiLa.Net.Samples.ApiHelper", "..\samples\KaiHeiLa.Net.Samples.ApiHelper\KaiHeiLa.Net.Samples.ApiHelper.csproj", "{B66A4E45-C260-4FDE-A122-FAB36D9234D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaiHeiLa.Net", "KaiHeiLa.Net\KaiHeiLa.Net.csproj", "{DBDF4A03-8FF0-4A0F-BB88-EBB061E35A77}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{B66A4E45-C260-4FDE-A122-FAB36D9234D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B66A4E45-C260-4FDE-A122-FAB36D9234D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B66A4E45-C260-4FDE-A122-FAB36D9234D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBDF4A03-8FF0-4A0F-BB88-EBB061E35A77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBDF4A03-8FF0-4A0F-BB88-EBB061E35A77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBDF4A03-8FF0-4A0F-BB88-EBB061E35A77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBDF4A03-8FF0-4A0F-BB88-EBB061E35A77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{57F76D67-0E55-4609-A61C-3A4C3073CA0E} = {58B166AB-82DD-472F-AC70-9318DA4F881E}

@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using KaiHeiLa.Rest;
+#pragma warning disable CS8073
 
 namespace KaiHeiLa.Net.Queue
 {

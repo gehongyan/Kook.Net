@@ -25,7 +25,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     private ConcurrentDictionary<ulong, SocketGuildChannel> _channels;
     private ConcurrentDictionary<ulong, SocketGuildUser> _members;
     private ConcurrentDictionary<uint, SocketRole> _roles;
-    private ImmutableArray<GuildEmote> _emotes;
+    // private ImmutableArray<GuildEmote> _emotes;
     
     /// <inheritdoc />
     public string Name { get; private set; }
@@ -167,8 +167,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     public SocketTextChannel DefaultChannel => TextChannels
         .Where(c => CurrentUser.GetPermissions(c).ViewChannels)
         .SingleOrDefault(c => c.Id == DefaultChannelId);
-    /// <inheritdoc />
-    public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
+    // /// <inheritdoc />
+    // public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
     /// <summary>
     ///     Gets a collection of users in this guild.
     /// </summary>
@@ -793,7 +793,11 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     IRole IGuild.EveryoneRole => EveryoneRole;
     /// <inheritdoc />
     IReadOnlyCollection<IRole> IGuild.Roles => Roles;
-    
+    /// <inheritdoc />
+    /// <remarks>
+    ///     Not implemented.
+    /// </remarks>
+    IReadOnlyCollection<GuildEmote> IGuild.Emotes => null;
     /// <inheritdoc />
     IRole IGuild.GetRole(uint id) => GetRole(id);
     /// <inheritdoc />
