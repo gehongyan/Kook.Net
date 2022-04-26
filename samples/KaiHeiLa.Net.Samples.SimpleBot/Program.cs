@@ -34,10 +34,10 @@ class Program
         // {
         //     Console.WriteLine($"Message {(await msg.GetOrDownloadAsync()).CleanContent} deleted in {(await channel.GetOrDownloadAsync()).Name}");
         // };
-        _client.MessageButtonClicked += async (value, user, message, channel, guild) =>
-        {
-            
-        };
+        // _client.MessageButtonClicked += async (value, user, message, channel, guild) =>
+        // {
+        //     
+        // };
     }
 
     private Task ClientOnDirectMessageReceived(SocketMessage arg)
