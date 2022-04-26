@@ -3,8 +3,8 @@
 <p align="center">
 <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/gehongyan/KaiHeiLa.Net/KaiHeiLa.Net%20Deploy?label=build">
 <img alt="GitHub Top Language" src="https://img.shields.io/github/languages/top/gehongyan/KaiHeiLa.Net">
-<img alt="Nuget Version" src="https://img.shields.io/nuget/v/KaiHeiLa.Net.Core">
-<img alt="Nuget" src="https://img.shields.io/nuget/dt/KaiHeiLa.Net.Core?color=%230099ff">
+<a href="https://www.nuget.org/packages/KaiHeiLa.Net"><img alt="Nuget Version" src="https://img.shields.io/nuget/v/KaiHeiLa.Net"></a>
+<a href="https://www.nuget.org/packages/KaiHeiLa.Net"><img alt="Nuget" src="https://img.shields.io/nuget/dt/KaiHeiLa.Net.Core?color=%230099ff"></a>
 <img alt="License" src="https://img.shields.io/github/license/gehongyan/KaiHeiLa.Net">
 <a href="https://kaihei.co/EvxnOb"><img alt="Chat on KaiHeiLa" src="https://www.kaiheila.cn/api/v3/badge/guild?guild_id=1591057729615250"></a>
 </p>
@@ -26,12 +26,14 @@
 
 ### Nuget
 
+- [KaiHeiLa.Net](https://www.nuget.org/packages/KaiHeiLa.Net/)
 - [KaiHeiLa.Net.Core](https://www.nuget.org/packages/KaiHeiLa.Net.Core/)
 - [KaiHeiLa.Net.Rest](https://www.nuget.org/packages/KaiHeiLa.Net.Rest/)
 - [KaiHeiLa.Net.WebSocket](https://www.nuget.org/packages/KaiHeiLa.Net.WebSocket/)
 
 ### Github Packages
 
+- [KaiHeiLa.Net](https://github.com/gehongyan/KaiHeiLa.Net/packages/1386169)
 - [KaiHeiLa.Net.Core](https://github.com/gehongyan/KaiHeiLa.Net/packages/1249886)
 - [KaiHeiLa.Net.Rest](https://github.com/gehongyan/KaiHeiLa.Net/packages/1249887)
 - [KaiHeiLa.Net.WebSocket](https://github.com/gehongyan/KaiHeiLa.Net/packages/1249888)

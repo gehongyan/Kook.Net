@@ -34,8 +34,10 @@
       "default",
       "templates/singulinkfx"
     ],
+    "postProcessors": ["ExtractSearchIndex"],
     "globalMetadata": {
-      "_appTitle": "KaiHeiLa.Net Documentation",
+      "_appTitle": "KaiHeiLa.Net 文档",
+      "_appName": "KaiHeiLa.Net 文档",
       "_appFooter": "KaiHeiLa.Net (c) 2022",
       "_enableSearch": true,
       "_appFaviconPath": "favicon.ico"
