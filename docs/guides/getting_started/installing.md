@@ -26,39 +26,39 @@ KaiHeiLa.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧�
 1. 找到 `解决方案资源管理器` 窗口，在 Bot 项目下找到 `依赖项`
 2. 右键点击 `依赖项`，选择 `管理 NuGet 程序包`
 
-![img.png](images/install-vs-dependencies.png)
+    ![img.png](images/install-vs-dependencies.png)
 
 3. 在 `浏览` 选项卡中，搜索 `KaiHeiLa.Net`
 
-> [!NOTE]
-> 在正式版发布前，搜索 KaiHeiLa.Net 需勾选 `包括预发行版`，否则，该搜索结果无法展示在列表中。
+    > [!NOTE]
+    > 在正式版发布前，搜索 KaiHeiLa.Net 需勾选 `包括预发行版`，否则，该搜索结果无法展示在列表中。
 
-![img.png](images/install-vs-nuget.png)
+    ![img.png](images/install-vs-nuget.png)
 
-5. 选择 `KaiHeiLa.Net`，点击 `安装`
+4. 选择 `KaiHeiLa.Net`，点击 `安装`
 
 ### 通过 JetBrains Rider
 
 1. 找到 `Explorer` 窗口，在 Bot 项目下找到 `Dependencies`
 2. 右键点击 `Dependencies`，选择 `Manage NuGet Packages`
 
-![img.png](images/install-rider-dependencies.png)
+    ![img.png](images/install-rider-dependencies.png)
 
 3. 在 `Packages` 选项卡中，搜索 `KaiHeiLa.Net`
 
-> [!NOTE]
-> 在正式版发布前，搜索 KaiHeiLa.Net 需勾选 `Prerelease` ，否则，该搜索结果无法展示在列表中。
+    > [!NOTE]
+    > 在正式版发布前，搜索 KaiHeiLa.Net 需勾选 `Prerelease` ，否则，该搜索结果无法展示在列表中。
 
 4. 右键点击 `KaiHeiLa.Net`，点击 `Install KaiHeiLa.Net ...`
 
-![img.png](images/install-rider-nuget.png)
+    ![img.png](images/install-rider-nuget.png)
 
 ### 使用 Visual Studio Code
 
 1. 找到 Bot 项目的 `*.csproj` 文件
 2. 添加 `Discord.Net` 到 `*.csproj` 中
 
-[!code[SampleProject.csproj](samples/project.xml)]
+    [!code[SampleProject.csproj](samples/project.xml)]
 
 ### 使用 dotnet CLI
 
@@ -66,9 +66,9 @@ KaiHeiLa.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧�
 2. 导航至 Bot 项目中 `*.csproj` 文件的所在目录
 3. 执行 `dotnet add package KaiHeiLa.Net`
 
-> [!NOTE]
-> 在正式版发布前，通过 dotnet CLI 添加 KaiHeiLa.Net 需附加 `--prerelease` 选项，
-> 否则，dotnet CLI 将只尝试为项目添加稳定版本的 NuGet 包。
+    > [!NOTE]
+    > 在正式版发布前，通过 dotnet CLI 添加 KaiHeiLa.Net 需附加 `--prerelease` 选项，
+    > 否则，dotnet CLI 将只尝试为项目添加稳定版本的 NuGet 包。
 
 ---
 
