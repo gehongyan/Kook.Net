@@ -3,11 +3,8 @@
 namespace KaiHeiLa;
 
 /// <summary>
-///     视频模块
+///     Represents a video module in card.
 /// </summary>
-/// <remarks>
-///     展示视频
-/// </remarks>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class VideoModule : IMediaModule
 {

@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace KaiHeiLa.API.Rest;
 
-public class EndGameActivityParams
+internal class EndGameActivityParams
 {
     [JsonInclude]
     [JsonPropertyName("data_type")]

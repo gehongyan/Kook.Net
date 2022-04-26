@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace KaiHeiLa.Net.Queue
 {
-    public class RestRequest : IRequest
+    internal class RestRequest : IRequest
     {
         public IRestClient Client { get; }
         public HttpMethod Method { get; }

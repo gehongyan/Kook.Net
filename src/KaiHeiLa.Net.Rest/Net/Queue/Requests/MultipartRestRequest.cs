@@ -2,7 +2,7 @@ using KaiHeiLa.Net.Rest;
 
 namespace KaiHeiLa.Net.Queue;
 
-public class MultipartRestRequest : RestRequest
+internal class MultipartRestRequest : RestRequest
 {
     public IReadOnlyDictionary<string, object> MultipartParams { get; }
         

@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace KaiHeiLa.Net.Converters;
 
-public class NullableTimeSpanConverter : JsonConverter<TimeSpan?>
+internal class NullableTimeSpanConverter : JsonConverter<TimeSpan?>
 {
     public override TimeSpan? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

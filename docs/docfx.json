@@ -31,7 +31,8 @@
     ],
     "dest": "_site",
     "template": [
-      "default"
+      "default",
+      "templates/singulinkfx"
     ],
     "globalMetadata": {
       "_appTitle": "KaiHeiLa.Net Documentation",

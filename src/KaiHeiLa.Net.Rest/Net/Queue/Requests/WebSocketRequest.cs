@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KaiHeiLa.Net.Queue
 {
-    public class WebSocketRequest : IRequest
+    internal class WebSocketRequest : IRequest
     {
         public IWebSocketClient Client { get; }
         public byte[] Data { get; }

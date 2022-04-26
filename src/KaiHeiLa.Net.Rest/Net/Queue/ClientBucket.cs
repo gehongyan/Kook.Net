@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 
 namespace KaiHeiLa.Net.Queue
 {
-    public enum ClientBucketType
+    internal enum ClientBucketType
     {
         Unbucketed = 0,
         SendEdit = 1

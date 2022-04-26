@@ -2,7 +2,7 @@
 
 namespace KaiHeiLa.Net.Queue
 {
-    public class JsonRestRequest : RestRequest
+    internal class JsonRestRequest : RestRequest
     {
         public string Json { get; }
 

@@ -3,7 +3,7 @@ using KaiHeiLa.Net.Converters;
 
 namespace KaiHeiLa.API.Gateway;
 
-public class UserVoiceEvent
+internal class UserVoiceEvent
 {
     [JsonPropertyName("user_id")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]

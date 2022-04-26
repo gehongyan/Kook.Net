@@ -3,11 +3,8 @@ using System.Diagnostics;
 namespace KaiHeiLa;
 
 /// <summary>
-///     内容模块
+///     Represents a section module in card.
 /// </summary>
-/// <remarks>
-///     结构化的内容，显示文本+其它元素
-/// </remarks>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SectionModule : IModule
 {
@@ -21,7 +18,7 @@ public class SectionModule : IModule
     public ModuleType Type => ModuleType.Section;
 
     /// <summary>
-    ///     mode 代表 accessory 是放置在左侧还是在右侧
+    ///     Specifies that the <see cref="Accessory"/> is on the left or right of <see cref="Text"/>
     /// </summary>
     public SectionAccessoryMode Mode { get; internal set; }
 

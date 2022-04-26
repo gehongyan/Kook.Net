@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace KaiHeiLa.API.Rest;
 
-public class BeginGameActivityParams
+internal class BeginGameActivityParams
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }

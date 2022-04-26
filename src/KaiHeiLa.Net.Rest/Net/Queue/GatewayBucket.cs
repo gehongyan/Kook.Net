@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 
 namespace KaiHeiLa.Net.Queue
 {
-    public enum GatewayBucketType
+    internal enum GatewayBucketType
     {
         Unbucketed = 0,
     }
