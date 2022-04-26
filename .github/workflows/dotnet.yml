@@ -8,41 +8,29 @@ on:
 
 jobs:
   deploy:
+    
+    # Build Solution
+    
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-    
+
     - name: Restore Dependencies
       run: dotnet restore src
-      
+
     - name: Build
       run: dotnet build src --no-restore
+
 #    - name: Test
 #      run: dotnet test src --no-build --verbosity normal
-    
-#    - name: Publish Core to NuGet
-#      uses: brandedoutcast/publish-nuget@v2.5.5
-#      with:
-#        PROJECT_FILE_PATH: src/KaiHeiLa.Net.Core/KaiHeiLa.Net.Core.csproj
-#        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-#        
-#    - name: Publish Rest NuGet
-#      uses: brandedoutcast/publish-nuget@v2.5.5
-#      with:
-#        PROJECT_FILE_PATH: src/KaiHeiLa.Net.Rest/KaiHeiLa.Net.Rest.csproj
-#        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-#        
-#    - name: Publish WebSocket to NuGet
-#      uses: brandedoutcast/publish-nuget@v2.5.5
-#      with:
-#        PROJECT_FILE_PATH: src/KaiHeiLa.Net.WebSocket/KaiHeiLa.Net.WebSocket.csproj
-#        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-     
+
+    # Packages
+
     - name: Generate Packages
       run: dotnet pack src --configuration Release --output packages
       
@@ -50,8 +38,27 @@ jobs:
       run: dotnet nuget push ./packages/*.nupkg -k ${NUGET_TOKEN} -s https://api.nuget.org/v3/index.json --skip-duplicate
       env:
         NUGET_TOKEN: ${{secrets.NUGET_API_KEY}}
-      
+
     - name: Push Packages to Github
       run: dotnet nuget push ./packages/*.nupkg -k ${GITHUB_TOKEN} -s https://nuget.pkg.github.com/gehongyan/index.json --skip-duplicate
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    # DocFX
+
+    - uses: nikeee/docfx-action@v1.0.0
+      name: Build Doc
+      with:
+        args: ./docs/docfx.json
+
+    - name: Publish Doc
+      uses: cpina/github-action-push-to-another-repository@main
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+      with:
+        source-directory: 'docs/_site/'
+        destination-github-username: 'gehongyan'
+        destination-repository-username: 'gehongyan'
+        destination-repository-name: 'KaiHeiLa.Net.Doc'
+        target-branch: master
+        user-email: gehongyan1996@126.com
