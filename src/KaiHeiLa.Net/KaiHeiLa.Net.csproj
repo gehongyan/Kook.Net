@@ -11,7 +11,7 @@
         <Authors>gehongyan</Authors>
         <Description>KaiHeiLa.Net is an unofficial C# .NET implementation for KaiHeiLa API.</Description>
         <PackageProjectUrl>https://github.com/gehongyan/KaiHeiLa.Net</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/gehongyan/KaiHeiLa.Net</RepositoryUrl>
+        <RepositoryUrl>https://github.com/gehongyan/KaiHeiLa.Net.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageReleaseNotes>Simply implementation of messages receiving and sending</PackageReleaseNotes>
         <Company>gehongyan</Company>
