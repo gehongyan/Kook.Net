@@ -4,7 +4,7 @@ public interface IEntity<TId>
     where TId : IEquatable<TId>
 {
     /// <summary>
-    ///     唯一标识
+    ///     Gets the unique identifier for this object.
     /// </summary>
-    TId Id { get; }
+    TId Id { get; } 
 }

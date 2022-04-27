@@ -1,15 +1,41 @@
 ﻿namespace KaiHeiLa;
 
 /// <summary>
-///     语音频道
+///     Represents a generic voice channel in a guild.
 /// </summary>
 public interface IVoiceChannel : INestedChannel, IAudioChannel, IMentionable
 {
+    /// <summary>
+    ///     Gets the voice quality that the clients in this voice channel are requested to use.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="VoiceQuality"/> representing the voice quality that this voice channel defines and requests the
+    ///     client(s) to use.
+    /// </returns>
     VoiceQuality VoiceQuality { get; }
     
+    /// <summary>
+    ///     Gets the max number of users allowed to be connected to this channel at once.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="int"/> representing the maximum number of users that are allowed to be connected to this
+    ///     channel at once; <c>null</c> if a limit is not set.
+    /// </returns>
     int? UserLimit { get; }
 
+    /// <summary>
+    ///     Gets the server url that clients should connect to to join this voice channel.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="string"/> representing the url that clients should connect to to join this voice channel.
+    /// </returns>
     string ServerUrl { get; }
     
+    /// <summary>
+    ///     Gets whether this voice channel is locked by a password.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="bool"/> representing whether this voice channel is locked by a password.
+    /// </returns>
     bool HasPassword { get; }
 }

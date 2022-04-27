@@ -152,17 +152,13 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
         }
     }
     /// <summary>
-    ///     Gets the default channel in this guild.
+    ///     Gets the default text channel for this guild.
     /// </summary>
     /// <remarks>
-    ///     This property retrieves the first viewable text channel for this guild.
-    ///     <note type="warning">
-    ///         This channel does not guarantee the user can send message to it, as it only looks for the first viewable
-    ///         text channel.
-    ///     </note>
+    ///     This property retrieves default text channel for this guild.
     /// </remarks>
     /// <returns>
-    ///     A <see cref="SocketTextChannel"/> representing the first viewable channel that the user has access to.
+    ///     A <see cref="SocketTextChannel"/> representing the default text channel for this guild.
     /// </returns>
     public SocketTextChannel DefaultChannel => TextChannels
         .Where(c => CurrentUser.GetPermissions(c).ViewChannels)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace KaiHeiLa;
 
 /// <summary>
-///     Represents a generic channel that is private to select recipients.
+///     Represents a generic channel that is private to selected recipients.
 /// </summary>
 public interface IPrivateChannel : IChannel
 {

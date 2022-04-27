@@ -1,19 +1,60 @@
 namespace KaiHeiLa;
 
+/// <summary>
+///     Represents a generic guild channel.
+/// </summary>
 public interface IGuildChannel : IChannel, IDeletable
 {
     #region General
     
+    /// <summary>
+    ///     Gets the guild associated with this channel.
+    /// </summary>
+    /// <returns>
+    ///     A guild object that this channel belongs to.
+    /// </returns>
     IGuild Guild { get; }
     
+    /// <summary>
+    ///     Gets the guild ID associated with this channel.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="ulong"/> representing the guild identifier for the guild that this channel
+    ///     belongs to.
+    /// </returns>
     ulong GuildId { get; }
 
+    /// <summary>
+    ///     Gets the position of this channel.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="int"/> representing the position of this channel in the guild's channel list relative to
+    ///     others of the same type.
+    /// </returns>
     int? Position { get; }
 
+    /// <summary>
+    ///     Gets the type of this channel.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="ChannelType"/> representing the type of this channel.
+    /// </returns>
     ChannelType Type { get; }
     
+    /// <summary>
+    ///     Gets a collection of permission overwrites for roles for this channel.
+    /// </summary>
+    /// <returns>
+    ///     A collection of overwrites for roles associated with this channel.
+    /// </returns>
     IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites { get; }
     
+    /// <summary>
+    ///     Gets a collection of permission overwrites for users for this channel.
+    /// </summary>
+    /// <returns>
+    ///     A collection of overwrites for users associated with this channel.
+    /// </returns>
     IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites { get; }
 
     #endregion

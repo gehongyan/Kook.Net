@@ -5,11 +5,8 @@ using System.Text.Json.Serialization;
 namespace KaiHeiLa;
 
 /// <summary>
-///     区域文本
+///     A paragraph struct that can be used in modules.
 /// </summary>
-/// <remarks>
-///     支持分栏结构，将模块分为左右两栏，根据顺序自动排列，支持更自由的文字排版模式，提高可维护性
-/// </remarks>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ParagraphStruct : IElement
 {
@@ -19,10 +16,28 @@ public class ParagraphStruct : IElement
         Fields = fields;
     }
     
+    /// <summary>
+    ///     Gets the type of the element.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="ElementType"/> value that represents the theme of the button.
+    /// </returns>
     public ElementType Type => ElementType.Paragraph;
 
+    /// <summary>
+    ///     Gets the number of columns in the paragraph.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="int"/> value that represents the number of columns in the paragraph.
+    /// </returns>
     public int ColumnCount { get; internal set; }
 
+    /// <summary>
+    ///     Gets the fields in the paragraph.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="ImmutableArray{IElement}"/> array that contains the fields in the paragraph.
+    /// </returns>
     public ImmutableArray<IElement> Fields { get; internal set; }
 
     private string DebuggerDisplay => $"{Type} ({ColumnCount} Columns, {Fields.Length} Fields)";

@@ -247,13 +247,13 @@ public interface IGuild : IEntity<ulong>
         RequestOptions options = null);
     
     /// <summary>
-    ///     Gets the first viewable text channel in this guild.
+    ///     Gets the default text channel for this guild.
     /// </summary>
     /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the first viewable text
-    ///     channel in this guild; <see langword="null" /> if none is found.
+    ///     A task that represents the asynchronous get operation. The task result contains the default text channel for this guild;
+    ///     <see langword="null" /> if none is found.
     /// </returns>
     Task<ITextChannel> GetDefaultChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
     

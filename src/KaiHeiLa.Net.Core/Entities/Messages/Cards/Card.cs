@@ -5,7 +5,7 @@ using System.Drawing;
 namespace KaiHeiLa;
 
 /// <summary>
-///     卡片
+///     Represents a card object seen in an <see cref="IUserMessage"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Card : ICard
@@ -18,16 +18,52 @@ public class Card : ICard
         Modules = modules;
     }
 
+    /// <summary>
+    ///     Gets the type of this card.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="CardType"/> value that represents the type of this card.
+    /// </returns>
     public CardType Type => CardType.Card;
 
+    /// <summary>
+    ///     Gets how many modules are in this card.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="int"/> value that represents how many modules are in this card.
+    /// </returns>
     public int ModuleCount => Modules.Length;
 
+    /// <summary>
+    ///     Gets the theme of this card.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="CardTheme"/> value that represents the theme of this card.
+    /// </returns>
     public CardTheme Theme { get; internal set; }
 
+    /// <summary>
+    ///     Gets the color of this embed.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="Color"/> represents a color present on the side of the card, or <c>null</c> if none is set.
+    /// </returns>
     public Color? Color { get; internal set; }
 
+    /// <summary>
+    ///     Gets the size of this card.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="CardSize"/> value that represents the size of this card.
+    /// </returns>
     public CardSize Size { get; internal set; }
 
+    /// <summary>
+    ///     Gets the modules in this card.
+    /// </summary>
+    /// <returns>
+    ///     An array of the modules of the card.
+    /// </returns>
     public ImmutableArray<IModule> Modules { get; internal set; }
     
     private string DebuggerDisplay => $"{Type} ({Modules.Length} Modules)";

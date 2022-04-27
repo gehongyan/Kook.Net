@@ -1,24 +1,27 @@
 ﻿namespace KaiHeiLa;
 
+/// <summary>
+///     Specifies the type of a guild channel.
+/// </summary>
 public enum ChannelType
 {
     /// <summary>
-    ///     未定类型
+    ///     Specifies that the type of the channel is unknown.
     /// </summary>
     Unspecified = -1,
     
     /// <summary>
-    ///     分组频道
+    ///     Specifies that the channel is a guild category channel.
     /// </summary>
     Category = 0,
     
     /// <summary>
-    ///     文字频道
+    ///     Specifies that the channel is a guild text channel.
     /// </summary>
     Text = 1,
     
     /// <summary>
-    ///     语音频道
+    ///     Specifies that the channel is a guild voice channel.
     /// </summary>
     Voice = 2
 }

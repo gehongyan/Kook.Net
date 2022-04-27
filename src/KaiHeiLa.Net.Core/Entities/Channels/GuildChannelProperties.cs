@@ -6,13 +6,6 @@ namespace KaiHeiLa;
 public class GuildChannelProperties
 {
     /// <summary>
-    ///     Gets or sets the channel to this name.
-    /// </summary>
-    /// <remarks>
-    ///     This property defines the new name for this channel.
-    /// </remarks>
-    public string Name { get; set; }
-    /// <summary>
     ///     Gets or sets the category ID for this channel.
     /// </summary>
     /// <remarks>

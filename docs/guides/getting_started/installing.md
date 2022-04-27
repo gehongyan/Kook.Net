@@ -6,7 +6,7 @@ title: 安装 KaiHeiLa.Net
 # 安装 KaiHeiLa.Net
 
 KaiHeiLa.Net 通过 NuGet 分发，推荐通过 NuGet 包管理工具安装，
-如可有需要，也可从源代码进行编译。
+如有需要，也可从源代码进行编译。
 
 ## 支持的平台
 

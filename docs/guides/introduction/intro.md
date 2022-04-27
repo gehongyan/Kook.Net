@@ -21,7 +21,7 @@ title: KaiHeiLa.Net 简介
 
 ## 还不熟悉 .NET 与 C#？
 
-本类库的样例、代码片段、文档都是以 .NET 和 C# 开发的，如有相关，可参考以下文档：
+本类库的样例、代码片段、文档都是以 .NET 和 C# 开发的，如有需要，可参考以下文档：
 
 - [C# 编程指南](https://docs.microsoft.com/zh-cn/dotnet/csharp/programming-guide/)
 - [C# 文档](https://docs.microsoft.com/zh-cn/dotnet/csharp/)

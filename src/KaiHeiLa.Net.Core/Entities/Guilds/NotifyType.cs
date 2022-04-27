@@ -1,27 +1,27 @@
 ﻿namespace KaiHeiLa;
 
 /// <summary>
-///     服务器通知类型
+///     Specifies that how the guild should notify the user.
 /// </summary>
 public enum NotifyType
 {
     /// <summary>
-    ///     服务器默认通知设置
+    ///     Notifies the user as the default behavior of the guild.
     /// </summary>
     Default = 0,
     
     /// <summary>
-    ///     接收所有通知
+    ///     Notifies the user of all messages.
     /// </summary>
     AcceptAll = 1,
     
     /// <summary>
-    ///     仅@被提及
+    ///     Notifies the user of the messages which mention the user.
     /// </summary>
     OnlyMentioned = 2,
     
     /// <summary>
-    ///     不接收通知
+    ///      ]Never notifies the user.
     /// </summary>
     Muted = 3
 }

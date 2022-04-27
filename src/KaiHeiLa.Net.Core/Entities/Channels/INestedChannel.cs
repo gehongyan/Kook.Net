@@ -1,25 +1,35 @@
 ﻿namespace KaiHeiLa;
 
 /// <summary>
-///     分组内的频道
+///     Represents a type of guild channel that can be nested within a category.
 /// </summary>
 public interface INestedChannel : IGuildChannel
 {
     #region General
 
     /// <summary>
-    ///     所属分组的 ID
+    ///     Gets the parent (category) ID of this channel in the guild's channel list.
     /// </summary>
+    /// <returns>
+    ///     A <see cref="ulong"/> representing the identifier of the parent of this channel;
+    ///     <c>null</c> if none is set.
+    /// </returns>
     ulong? CategoryId { get; }
     
     /// <summary>
-    ///     权限设置是否与分组同步
+    ///     Specifies whether the permissions of this channel is synchronized with its parent channel.
     /// </summary>
+    /// <returns>
+    ///     A <see cref="bool"/> indicating whether the permissions of this channel is synchronized with its parent channel.
+    /// </returns>
     bool IsPermissionSynced { get; }
     
     /// <summary>
-    ///     创建者用户ID
+    ///     Gets the identifier of the user who created this channel.
     /// </summary>
+    /// <returns>
+    ///     A <see cref="ulong"/> representing the identifier of the user who created this channel.
+    /// </returns>
     ulong CreatorId { get; }
     
     /// <summary>

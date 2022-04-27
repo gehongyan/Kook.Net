@@ -431,12 +431,12 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
     
     /// <summary>
-    ///     Gets the first viewable text channel in this guild.
+    ///     Gets the default text channel in this guild.
     /// </summary>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the first viewable text
-    ///     channel in this guild; <see langword="null"/> if none is found.
+    ///     A task that represents the asynchronous get operation. The task result contains the default text channel of this guild;
+    ///     <see langword="null" /> if none is found.
     /// </returns>
     public async Task<RestTextChannel> GetDefaultChannelAsync(RequestOptions options = null)
     {

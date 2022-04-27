@@ -1,20 +1,26 @@
 ﻿namespace KaiHeiLa;
 
 /// <summary>
-///     文字频道
+///     Represents a generic channel in a guild that can send and receive messages.
 /// </summary>
 public interface ITextChannel : INestedChannel, IMentionable, IMessageChannel
 {
     #region General
 
     /// <summary>
-    ///     频道简介
+    ///     Gets the current topic for this text channel.
     /// </summary>
+    /// <returns>
+    ///     A string representing the topic set in the channel; <c>null</c> if none is set.
+    /// </returns>
     string Topic { get; }
     
     /// <summary>
-    ///     慢速模式下限制发言的最短时间间隔, 单位为秒(s)
+    ///     Gets the current slow-mode delay for this channel.
     /// </summary>
+    /// <returns>
+    ///     An int representing the time in seconds required before the user can send another message; 0 if disabled.
+    /// </returns>
     int SlowModeInterval { get; }
 
     #endregion

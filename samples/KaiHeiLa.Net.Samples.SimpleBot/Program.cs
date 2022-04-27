@@ -10,10 +10,7 @@ class Program
     private readonly string _token;
     private readonly ulong _guildId;
     private readonly ulong _channelId;
-    static void Main(string[] args)
-    {
-        new Program().MainAsync().GetAwaiter().GetResult();
-    }
+    public static Task Main(string[] args) => new Program().MainAsync();
 
     public Program()
     {

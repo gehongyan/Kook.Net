@@ -1,20 +1,26 @@
 ﻿namespace KaiHeiLa;
 
 /// <summary>
-///     频道
+///     Represents a generic channel.
 /// </summary>
 public interface IChannel : IEntity<ulong>
 {
     #region General
 
     /// <summary>
-    ///     频道名称
+    ///     Gets the name of this channel.
     /// </summary>
+    /// <returns>
+    ///     A string containing the name of this channel.
+    /// </returns>
     string Name { get; }
 
     /// <summary>
-    ///     创建者 ID
+    ///     Gets the identifier of the user who created this channel.
     /// </summary>
+    /// <returns>
+    ///     A <see cref="ulong"/> that represents the identifier of the user who created this channel.
+    /// </returns>
     ulong CreateUserId { get; }
 
     #endregion
@@ -31,8 +37,8 @@ public interface IChannel : IEntity<ulong>
     ///         collection.
     ///     </note>
     ///     This method will attempt to fetch all users that is able to view this channel or is currently in this channel.
-    ///     The library will attempt to split up the requests according to and <see cref="DiscordConfig.MaxUsersPerBatch"/>.
-    ///     In other words, if there are 3000 users, and the <see cref="Discord.DiscordConfig.MaxUsersPerBatch"/> constant
+    ///     The library will attempt to split up the requests according to and <see cref="KaiHeiLaConfig.MaxUsersPerBatch"/>.
+    ///     In other words, if there are 3000 users, and the <see cref="KaiHeiLa.KaiHeiLaConfig.MaxUsersPerBatch"/> constant
     ///     is <c>1000</c>, the request will be split into 3 individual requests; thus returning 53individual asynchronous
     ///     responses, hence the need of flattening.
     /// </remarks>

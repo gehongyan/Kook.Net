@@ -1,7 +1,7 @@
 ﻿namespace KaiHeiLa;
 
 /// <summary>
-///     分组频道
+///     Represents a generic category channel.
 /// </summary>
 public interface ICategoryChannel : IGuildChannel
 {

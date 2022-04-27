@@ -1,9 +1,12 @@
 ﻿namespace KaiHeiLa;
 
+/// <summary>
+///     A generic element used in modules.
+/// </summary>
 public interface IElement
 {
     /// <summary>
-    ///     元素类型
+    ///     Gets the type of this element.
     /// </summary>
     ElementType Type { get; }
 }

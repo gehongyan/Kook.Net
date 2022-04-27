@@ -1,10 +1,28 @@
 namespace KaiHeiLa;
 
+/// <summary>
+///     Specifies the voice quality of a <see cref="IVoiceChannel"/>.
+/// </summary>
 public enum VoiceQuality
 {
+    /// <summary>
+    ///     The voice quality is unknown.
+    /// </summary>
     Unspecified = 0,
-    Fluent = 1, // 18Kbps
-    Normal = 2, // 48Kbps
-    High = 3,   // 96Kbps
-    Higher = 4  // 128KBps
+    /// <summary>
+    ///     The voice quality is 18 Kbps.
+    /// </summary>
+    Fluent = 1,
+    /// <summary>
+    ///     The voice quality is 48 Kbps.
+    /// </summary>
+    Normal = 2,
+    /// <summary>
+    ///     The voice quality is 96 Kbps.
+    /// </summary>
+    High = 3,
+    /// <summary>
+    ///     The voice quality is 128 Kbps.
+    /// </summary>
+    Higher = 4
 }
