@@ -25,7 +25,8 @@
     "resource": [
       {
         "files": [
-          "**/images/**"
+          "**/images/**",
+          "**/samples/**"
         ]
       }
     ],

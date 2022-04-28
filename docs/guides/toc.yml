@@ -6,3 +6,5 @@
       topicUid: Guides.GettingStarted.Installation
     - name: 从零开始
       topicUid: Guides.GettingStarted.FirstBot
+    - name: 术语
+      topicUid: Guides.GettingStarted.Terminology

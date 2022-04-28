@@ -31,7 +31,7 @@ public partial class KaiHeiLaBotClientExtension : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        await _kaiHeiLaSocketClient.LoginAsync(TokenType.Bot, _kaiHeiLaBotConfigurations.Token);
+        await _kaiHeiLaSocketClient.LoginAsync(TokenType.Bot, "_kaiHeiLaBotConfigurations.Token");
         await _kaiHeiLaSocketClient.StartAsync();
     }
 

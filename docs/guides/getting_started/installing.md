@@ -21,7 +21,7 @@ KaiHeiLa.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧�
 - [NuGet Gallery](https://nuget.org)
 - [GitHub Packages](https://github.com/gehongyan?tab=packages&repo_name=KaiHeiLa.Net)
 
-### 通过 Visual Studio
+### 使用 Visual Studio
 
 1. 找到 `解决方案资源管理器` 窗口，在 Bot 项目下找到 `依赖项`
 2. 右键点击 `依赖项`，选择 `管理 NuGet 程序包`
@@ -37,7 +37,7 @@ KaiHeiLa.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧�
 
 4. 选择 `KaiHeiLa.Net`，点击 `安装`
 
-### 通过 JetBrains Rider
+### 使用 JetBrains Rider
 
 1. 找到 `Explorer` 窗口，在 Bot 项目下找到 `Dependencies`
 2. 右键点击 `Dependencies`，选择 `Manage NuGet Packages`
@@ -67,7 +67,7 @@ KaiHeiLa.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧�
 3. 执行 `dotnet add package KaiHeiLa.Net`
 
     > [!NOTE]
-    > 在正式版发布前，通过 dotnet CLI 添加 KaiHeiLa.Net 需附加 `--prerelease` 选项，
+    > 在正式版发布前，使用 dotnet CLI 添加 KaiHeiLa.Net 需附加 `--prerelease` 选项，
     > 否则，dotnet CLI 将只尝试为项目添加稳定版本的 NuGet 包。
 
 ---
