@@ -10,6 +10,10 @@ public enum RoleType : ushort
     /// </summary>
     UserCreated = 0,
     /// <summary>
+    ///     Represents the role was created by system when a bot was added to the server.
+    /// </summary>
+    BotSpecified = 1,
+    /// <summary>
     ///     Represents the role represents a booster.
     /// </summary>
     Booster = 2,
