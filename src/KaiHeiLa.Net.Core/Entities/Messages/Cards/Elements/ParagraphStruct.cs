@@ -28,7 +28,7 @@ public class ParagraphStruct : IElement
     ///     Gets the number of columns in the paragraph.
     /// </summary>
     /// <returns>
-    ///     An <see cref="int"/> value that represents the number of columns in the paragraph.
+    ///     An int value that represents the number of columns in the paragraph.
     /// </returns>
     public int ColumnCount { get; internal set; }
 

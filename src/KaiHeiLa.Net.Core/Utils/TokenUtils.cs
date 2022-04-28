@@ -103,7 +103,7 @@ public static class TokenUtils
     ///     The bot token to validate.
     /// </param>
     /// <returns>
-    ///     True if the bot token was valid, false if it was not.
+    ///     <c>true</c> if the token is valid, <c>false</c> otherwise.
     /// </returns>
     internal static bool CheckBotTokenValidity(string message)
     {
@@ -134,7 +134,7 @@ public static class TokenUtils
     /// </summary>
     /// <param name="token"> The token to validate. </param>
     /// <returns>
-    ///     True if the token contains a whitespace or newline character.
+    ///     <c>true</c> if the token contains a whitespace or newline character.
     /// </returns>
     internal static bool CheckContainsIllegalCharacters(string token)
         => token.IndexOfAny(IllegalTokenCharacters) != -1;

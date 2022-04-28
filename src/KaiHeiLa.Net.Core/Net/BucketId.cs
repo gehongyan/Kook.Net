@@ -76,7 +76,7 @@ public class BucketId : IEquatable<BucketId>
     ///     Gets the string that will define this bucket as a hash based one.
     /// </summary>
     /// <returns>
-    ///     A <see cref="string"/> that defines this bucket as a hash based one.
+    ///     A string that defines this bucket as a hash based one.
     /// </returns>
     public string GetBucketHash()
         => IsHashBucket ? $"{BucketHash}:{string.Join("/", MajorParameters.Select(x => x.Value))}" : null;
@@ -85,7 +85,7 @@ public class BucketId : IEquatable<BucketId>
     ///     Gets the string that will define this bucket as an endpoint based one.
     /// </summary>
     /// <returns>
-    ///     A <see cref="string"/> that defines this bucket as an endpoint based one.
+    ///     A string that defines this bucket as an endpoint based one.
     /// </returns>
     public string GetUniqueEndpoint()
         => HttpMethod != null ? $"{HttpMethod} {Endpoint}" : Endpoint;

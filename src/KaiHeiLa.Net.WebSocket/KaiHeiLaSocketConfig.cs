@@ -62,7 +62,7 @@ public class KaiHeiLaSocketConfig : KaiHeiLaRestConfig
     ///     <para>If a guild is not received before READY, it will be unavailable.</para>
     /// </remarks>
     /// <returns>
-    ///     A <see cref="int"/> representing the maximum wait time in milliseconds between GUILD_AVAILABLE events
+    ///     An int representing the maximum wait time in milliseconds between GUILD_AVAILABLE events
     ///     before firing READY.
     /// </returns>
     /// <exception cref="System.ArgumentException">Value must be at least 0.</exception>

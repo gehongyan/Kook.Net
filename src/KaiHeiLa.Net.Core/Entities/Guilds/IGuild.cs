@@ -1,29 +1,82 @@
 ﻿namespace KaiHeiLa;
 
+/// <summary>
+///     Represents a generic guild/server.
+/// </summary>
 public interface IGuild : IEntity<ulong>
 {
     #region General
 
+    /// <summary>
+    ///     Gets the name of this guild.
+    /// </summary>
+    /// <returns>
+    ///     A string containing the name of this guild.
+    /// </returns>
     string Name { get; }
-
+    /// <summary>
+    ///     Gets the topic for the guild.
+    /// </summary>
+    /// <returns>
+    ///     The description for the guild; <see langword="null" /> if none is set.
+    /// </returns>
     string Topic { get; }
-
+    /// <summary>
+    ///     Gets the ID of the user that owns this guild.
+    /// </summary>
+    /// <returns>
+    ///     A <see langword="ulong"/> representing the identifier of the user that owns this guild.
+    /// </returns>
     ulong OwnerId { get; }
-
+    /// <summary>
+    ///     Gets the URL of this guild's icon.
+    /// </summary>
+    /// <returns>
+    ///     A URL pointing to the guild's icon; <see langword="null" /> if none is set.
+    /// </returns>
     string Icon { get; }
-
+    /// <summary>
+    ///     Gets the default notification type for this guild.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="NotifyType"/> representing the default notification type for this guild.
+    /// </returns>
     NotifyType NotifyType { get; }
-
+    /// <summary>
+    ///     Gets the default voice region for this guild.
+    /// </summary>
+    /// <returns>
+    ///     A string representing the default voice region for this guild.
+    /// </returns>
     string Region { get; }
-
+    /// <summary>
+    ///     Gets whether this guild is public.
+    /// </summary>
+    /// <returns>
+    ///     <see langword="true"/> if this guild is public; <see langword="false"/> otherwise.
+    /// </returns>
     bool IsOpenEnabled { get; }
-
+    /// <summary>
+    ///     Gets the open ID for this guild.
+    /// </summary>
+    /// <returns>
+    ///     A <see langword="uint"/> representing the open ID for this guild.
+    /// </returns>
     uint OpenId { get; }
-
+    /// <summary>
+    ///     Gets the default channel ID for this guild.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="ulong"/> representing the default channel ID for this guild.
+    /// </returns>
     ulong DefaultChannelId { get; }
-
+    /// <summary>
+    ///     Gets the welcome channel ID for this guild.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="ulong"/> representing the welcome channel ID for this guild.
+    /// </returns>
     ulong WelcomeChannelId { get; }
-    
     /// <summary>
     ///     Determines if this guild is currently connected and ready to be used.
     /// </summary>
@@ -34,10 +87,9 @@ public interface IGuild : IEntity<ulong>
     ///     This boolean is used to determine if the guild is currently connected to the WebSocket and is ready to be used/accessed.
     /// </remarks>
     /// <returns>
-    ///     <c>true</c> if this guild is currently connected and ready to be used; otherwise <see langword="false"/>.
+    ///     <see langword="true"/> if this guild is currently connected and ready to be used; otherwise <see langword="false"/>.
     /// </returns>
     bool Available { get; }
-    
     /// <summary>
     ///     Gets the built-in role containing all users in this guild.
     /// </summary>
@@ -45,7 +97,6 @@ public interface IGuild : IEntity<ulong>
     ///     A role object that represents an <c>@everyone</c> role in this guild.
     /// </returns>
     IRole EveryoneRole { get; }
-
     /// <summary>
     ///     Gets a collection of all custom emotes for this guild.
     /// </summary>
@@ -53,7 +104,6 @@ public interface IGuild : IEntity<ulong>
     ///     A read-only collection of all custom emotes for this guild.
     /// </returns>
     IReadOnlyCollection<GuildEmote> Emotes { get; }
-    
     /// <summary>
     ///     Gets a collection of all roles in this guild.
     /// </summary>
@@ -61,7 +111,6 @@ public interface IGuild : IEntity<ulong>
     ///     A read-only collection of roles found within this guild.
     /// </returns>
     IReadOnlyCollection<IRole> Roles { get; }
-    
     /// <summary>
     ///     Gets the recommendation information for this guild.
     /// </summary>
@@ -407,7 +456,7 @@ public interface IGuild : IEntity<ulong>
 
     /// <summary>
     ///     Gets a collection of users in this guild that the name or nickname contains the
-    ///     provided <see cref="string"/> at <paramref name="func"/>.
+    ///     provided string at <paramref name="func"/>.
     /// </summary>
     /// <remarks>
     ///     The <paramref name="limit"/> can not be higher than <see cref="KaiHeiLaConfig.MaxUsersPerBatch"/>.

@@ -692,7 +692,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
 
     /// <summary>
     ///     Gets a collection of users in this guild that the name or nickname contains the
-    ///     provided <see cref="string"/> at <paramref name="func"/>.
+    ///     provided string at <paramref name="func"/>.
     /// </summary>
     /// <remarks>
     ///     The <paramref name="limit"/> can not be higher than <see cref="KaiHeiLaConfig.MaxUsersPerBatch"/>.

@@ -9,7 +9,7 @@ public struct ReactionMetadata
     ///     Gets the number of reactions.
     /// </summary>
     /// <returns>
-    ///     An <see cref="int"/> representing the number of this reactions that has been added to this message.
+    ///     An int representing the number of this reactions that has been added to this message.
     /// </returns>
     public int ReactionCount { get; internal set; }
 

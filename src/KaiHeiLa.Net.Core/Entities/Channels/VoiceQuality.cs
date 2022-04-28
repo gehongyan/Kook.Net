@@ -1,7 +1,7 @@
 namespace KaiHeiLa;
 
 /// <summary>
-///     Specifies the voice quality of a <see cref="IVoiceChannel"/>.
+///     Specifies the voice quality of an <see cref="IVoiceChannel"/>.
 /// </summary>
 public enum VoiceQuality
 {

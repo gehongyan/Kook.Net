@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace KaiHeiLa;
 
+/// <summary>
+///     A helper class for formatting characters.
+/// </summary>
 public static class Format
 {
     private static readonly string[] SensitiveCharacters = {
@@ -17,12 +20,16 @@ public static class Format
         @"(((?<=\n)\n)?^>\s)"                                               // Quotes and related redundant newlines
     );
     
+    /// <summary> Returns a markdown-formatted string with bold formatting. </summary>
     public static string Bold(string text) => $"**{text}**";
     
+    /// <summary> Returns a markdown-formatted string with italics formatting. </summary>
     public static string Italics(string text) => $"*{text}*";
     
+    /// <summary> Returns a markdown-formatted string with strike-through formatting. </summary>
     public static string Strikethrough(string text) => $"~~{text}~~";
     
+    /// <summary> Returns a markdown-formatted URL. </summary>
     public static string Url(string text, string url) => $"[{text}]({url})";
 
     /// <summary> Sanitizes the string, safely escaping any Markdown sequences. </summary>
@@ -32,6 +39,11 @@ public static class Format
             (current, unsafeChar) => current.Replace(unsafeChar, $"\\{unsafeChar}"));
     }
     
+    /// <summary>
+    ///     Formats a string as a quote.
+    /// </summary>
+    /// <param name="text">The text to format.</param>
+    /// <returns>Gets the formatted quote text.</returns>
     public static string Quote(string text)
     {
         // do not modify null or whitespace text
@@ -65,10 +77,13 @@ public static class Format
         return result.ToString();
     }
     
+    /// <summary> Returns a markdown-formatted string with underline formatting. </summary>
     public static string Underline(string text) => $"(ins){text}(ins)";
     
+    /// <summary> Returns a string with spoiler formatting. </summary>
     public static string Spoiler(string text) => $"(spl){text}(spl)";
     
+    /// <summary> Returns a markdown-formatted string with code block formatting. </summary>
     public static string Code(string text, string language = null)
     {
         if (language != null || text.Contains('\n'))

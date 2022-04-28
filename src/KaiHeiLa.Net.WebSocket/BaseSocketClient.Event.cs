@@ -101,7 +101,7 @@ public abstract partial class BaseSocketClient
     ///         If caching is enabled via <see cref="KaiHeiLaSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the deleted message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the message is preserved in the 
-    ///         <see cref="ulong"/>.
+    ///         ulong.
     ///     </para>
     ///     <para>
     ///         The source channel of the removed message will be passed into the 
@@ -126,7 +126,7 @@ public abstract partial class BaseSocketClient
     ///         If caching is enabled via <see cref="KaiHeiLaSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the message is preserved in the 
-    ///         <see cref="ulong"/>.
+    ///         ulong.
     ///     </para>
     ///     <para>
     ///         The updated message will be passed into the <see cref="SocketMessage"/> parameter.
@@ -154,7 +154,7 @@ public abstract partial class BaseSocketClient
     ///         If caching is enabled via <see cref="KaiHeiLaSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the message is preserved in the 
-    ///         <see cref="ulong"/>.
+    ///         ulong.
     ///     </para>
     ///     <para>
     ///         The updated message will be passed into the <see cref="SocketMessage"/> parameter.
@@ -185,7 +185,7 @@ public abstract partial class BaseSocketClient
     ///         If caching is enabled via <see cref="KaiHeiLaSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the message is preserved in the 
-    ///         <see cref="ulong"/>.
+    ///         ulong.
     ///     </para>
     ///     <para>
     ///         The updated message will be passed into the <see cref="SocketMessage"/> parameter.
@@ -309,7 +309,7 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     <para>
     ///         This event is fired when a user is banned. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="IReadOnlyCollection{T}"/>, a <see cref="SocketMessage"/>
+    ///         <see cref="Task"/> and accept an <see cref="IReadOnlyCollection{T}"/>, a <see cref="SocketMessage"/>
     ///         and a <see cref="SocketGuild"/> as its parameter.
     ///     </para>
     ///     <para>
@@ -335,7 +335,7 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     <para>
     ///         This event is fired when a user is banned. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="IReadOnlyCollection{T}"/>, a <see cref="SocketMessage"/>
+    ///         <see cref="Task"/> and accept an <see cref="IReadOnlyCollection{T}"/>, a <see cref="SocketMessage"/>
     ///         and a <see cref="SocketGuild"/> as its parameter.
     ///     </para>
     ///     <para>

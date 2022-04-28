@@ -36,7 +36,7 @@ public class ButtonElement : IElement
     ///     Gets the value of the button.
     /// </summary>
     /// <returns>
-    ///     A <see cref="string"/> value that represents the value of the button.
+    ///     A string value that represents the value of the button.
     /// </returns>
     public string Value { get; internal set; }
 

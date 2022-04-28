@@ -28,7 +28,7 @@ public class ImageElement : IElement
     ///     Gets the source of the image.
     /// </summary>
     /// <returns>
-    ///     A <see cref="string"/> that represents the source of the image.
+    ///     A string that represents the source of the image.
     /// </returns>
     public string Source { get; internal set; }
 
@@ -36,7 +36,7 @@ public class ImageElement : IElement
     ///     Gets the alternative text of the image.
     /// </summary>
     /// <returns>
-    ///     A <see cref="string"/> that represents the alternative text of the image.
+    ///     A string that represents the alternative text of the image.
     /// </returns>
     public string Alternative { get; internal set; }
 
@@ -44,7 +44,7 @@ public class ImageElement : IElement
     ///     Gets the size of the image.
     /// </summary>
     /// <returns>
-    ///     A <see cref="ImageSize"/> that represents the size of the image;
+    ///     An <see cref="ImageSize"/> that represents the size of the image;
     ///     or <c>null</c> if the size is not specified.
     /// </returns>
     public ImageSize? Size { get; internal set; }

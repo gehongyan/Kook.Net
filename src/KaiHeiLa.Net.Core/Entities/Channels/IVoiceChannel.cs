@@ -18,7 +18,7 @@ public interface IVoiceChannel : INestedChannel, IAudioChannel, IMentionable
     ///     Gets the max number of users allowed to be connected to this channel at once.
     /// </summary>
     /// <returns>
-    ///     An <see cref="int"/> representing the maximum number of users that are allowed to be connected to this
+    ///     An int representing the maximum number of users that are allowed to be connected to this
     ///     channel at once; <c>null</c> if a limit is not set.
     /// </returns>
     int? UserLimit { get; }
@@ -27,7 +27,7 @@ public interface IVoiceChannel : INestedChannel, IAudioChannel, IMentionable
     ///     Gets the server url that clients should connect to to join this voice channel.
     /// </summary>
     /// <returns>
-    ///     A <see cref="string"/> representing the url that clients should connect to to join this voice channel.
+    ///     A string representing the url that clients should connect to to join this voice channel.
     /// </returns>
     string ServerUrl { get; }
     
@@ -35,7 +35,7 @@ public interface IVoiceChannel : INestedChannel, IAudioChannel, IMentionable
     ///     Gets whether this voice channel is locked by a password.
     /// </summary>
     /// <returns>
-    ///     A <see cref="bool"/> representing whether this voice channel is locked by a password.
+    ///     A bool representing whether this voice channel is locked by a password.
     /// </returns>
     bool HasPassword { get; }
 }

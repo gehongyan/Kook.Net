@@ -4,6 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace KaiHeiLa;
 
+/// <summary>
+///     Provides a series of helper methods for parsing mentions.
+/// </summary>
 public static class MentionUtils
 {
     internal static readonly Regex PlainTextUserRegex = new Regex(@"@[^#]+?#(?<id>\d{1,20})",
@@ -11,45 +14,90 @@ public static class MentionUtils
 
     internal static readonly Regex PlainTextRoleRegex = new Regex(@"@role:(?<id>\d{1,10}?);",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
-    
+
     internal static readonly Regex PlainTextChannelRegex = new Regex(@"#channel:(?<id>\d{1,20});",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
-    internal static readonly Regex PlainTextTagRegex = new Regex(@"(@[^#]+?#\d{1,20})|(@role:\d{1,10};)|(#channel:\d{1,20}?;)|(\[:[^:]+?:\d{1,20}\/\w{1,20}?\])",
+    internal static readonly Regex PlainTextTagRegex = new Regex(
+        @"(@[^#]+?#\d{1,20})|(@role:\d{1,10};)|(#channel:\d{1,20}?;)|(\[:[^:]+?:\d{1,20}\/\w{1,20}?\])",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
-    
+
     internal static readonly Regex KMarkdownUserRegex = new Regex(@"(\(met\))(?<id>\d{1,20}?)\1",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
     internal static readonly Regex KMarkdownRoleRegex = new Regex(@"(\(rol\))(?<id>\d{1,10}?)\1",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
-    
+
     internal static readonly Regex KMarkdownChannelRegex = new Regex(@"(\(chn\))(?<id>\d{1,20}?)\1",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
-    internal static readonly Regex KMarkdownTagRegex = new Regex(@"(\((met|rol|chn)\)\d{1,20}?\(\2\))|(\(emj\)[^\(\)]{1,20}?(emj)\[\d{1,20}\/\w{1,20}\])",
+    internal static readonly Regex KMarkdownTagRegex = new Regex(
+        @"(\((met|rol|chn)\)\d{1,20}?\(\2\))|(\(emj\)[^\(\)]{1,20}?(emj)\[\d{1,20}\/\w{1,20}\])",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
 
     private const char SanitizeChar = '\x200b';
-    
+
     internal static string KMarkdownMentionUser(string id) => $"(met){id}(met)";
+
+    /// <summary>
+    ///     Returns a KMarkdown formatted mention string based on the user ID.
+    /// </summary>
+    /// <returns>
+    ///     A user mention string formatted to KMarkdown.
+    /// </returns>
     public static string KMarkdownMentionUser(ulong id) => KMarkdownMentionUser(id.ToString());
-    
+
     internal static string KMarkdownMentionChannel(string id) => $"(chn){id}(chn)";
+
+    /// <summary>
+    ///     Returns a KMarkdown formatted mention string based on the channel ID.
+    /// </summary>
+    /// <returns>
+    ///     A channel mention string formatted to KMarkdown.
+    /// </returns>
     public static string KMarkdownMentionChannel(ulong id) => KMarkdownMentionChannel(id.ToString());
-    
+
     internal static string KMarkdownMentionRole(string id) => $"(rol){id}(rol)";
+
+    /// <summary>
+    ///     Returns a KMarkdown formatted mention string based on the role ID.
+    /// </summary>
+    /// <returns>
+    ///     A role mention string formatted to KMarkdown.
+    /// </returns>
     public static string KMarkdownMentionRole(uint id) => KMarkdownMentionRole(id.ToString());
-    
+
     internal static string PlainTextMentionUser(string username, string id) => $"@{username}#{id}";
-    public static string PlainTextMentionUser(string username, ulong id) => PlainTextMentionUser(username, id.ToString());
-    
+
+    /// <summary>
+    ///     Returns a plain text formatted mention string based on the user ID.
+    /// </summary>
+    /// <returns>
+    ///     A user mention string formatted to plain text.
+    /// </returns>
+    public static string PlainTextMentionUser(string username, ulong id) =>
+        PlainTextMentionUser(username, id.ToString());
+
     internal static string PlainTextMentionChannel(string id) => $"#channel:{id};";
+
+    /// <summary>
+    ///     Returns a plain text formatted mention string based on the channel ID.
+    /// </summary>
+    /// <returns>
+    ///     A channel mention string formatted to plain text.
+    /// </returns>
     public static string PlainTextMentionChannel(ulong id) => PlainTextMentionChannel(id.ToString());
-    
+
     internal static string PlainTextMentionRole(string id) => $"@role:{id};";
+
+    /// <summary>
+    ///     Returns a plain text formatted mention string based on the role ID.
+    /// </summary>
+    /// <returns>
+    ///     A role mention string formatted to plain text.
+    /// </returns>
     public static string PlainTextMentionRole(uint id) => PlainTextMentionRole(id.ToString());
 
 
@@ -81,15 +129,15 @@ public static class MentionUtils
             _ => throw new ArgumentOutOfRangeException(nameof(tagMode), tagMode, null)
         };
 
-        if (match.Success 
+        if (match.Success
             && ulong.TryParse(match.Groups["id"].Value, NumberStyles.None, CultureInfo.InvariantCulture, out userId))
             return true;
-        
+
         userId = 0;
         return false;
     }
-    
-    
+
+
     /// <summary>
     ///     Parses a provided channel mention string.
     /// </summary>
@@ -100,6 +148,7 @@ public static class MentionUtils
             return id;
         throw new ArgumentException(message: "Invalid mention format.", paramName: nameof(text));
     }
+
     /// <summary>
     ///     Tries to parse a provided channel mention string.
     /// </summary>
@@ -112,14 +161,14 @@ public static class MentionUtils
             _ => throw new ArgumentOutOfRangeException(nameof(tagMode), tagMode, null)
         };
 
-        if (match.Success 
+        if (match.Success
             && ulong.TryParse(match.Groups["id"].Value, NumberStyles.None, CultureInfo.InvariantCulture, out channelId))
             return true;
-        
+
         channelId = 0;
         return false;
     }
-    
+
     /// <summary>
     ///     Parses a provided role mention string.
     /// </summary>
@@ -130,6 +179,7 @@ public static class MentionUtils
             return id;
         throw new ArgumentException(message: "Invalid mention format.", paramName: nameof(text));
     }
+
     /// <summary>
     ///     Tries to parse a provided role mention string.
     /// </summary>
@@ -142,14 +192,14 @@ public static class MentionUtils
             _ => throw new ArgumentOutOfRangeException(nameof(tagMode), tagMode, null)
         };
 
-        if (match.Success 
+        if (match.Success
             && uint.TryParse(match.Groups["id"].Value, NumberStyles.None, CultureInfo.InvariantCulture, out roleId))
             return true;
-        
+
         roleId = 0;
         return false;
     }
-    
+
     internal static string Resolve(IMessage msg, int startIndex, TagHandling userHandling, TagHandling channelHandling,
         TagHandling roleHandling, TagHandling everyoneHandling, TagHandling emojiHandling)
     {
@@ -198,7 +248,7 @@ public static class MentionUtils
 
         return text.ToString();
     }
-    
+
     internal static string ResolveUserMention(ITag tag, TagHandling mode)
     {
         if (mode != TagHandling.Remove)
@@ -234,9 +284,10 @@ public static class MentionUtils
                         return KMarkdownMentionUser($"{SanitizeChar}{tag.Key}");
             }
         }
+
         return "";
     }
-    
+
     internal static string ResolveChannelMention(ITag tag, TagHandling mode)
     {
         if (mode != TagHandling.Remove)
@@ -260,95 +311,102 @@ public static class MentionUtils
                     return KMarkdownMentionChannel($"{SanitizeChar}{tag.Key}");
             }
         }
+
         return "";
     }
-        internal static string ResolveRoleMention(ITag tag, TagHandling mode)
-        {
-            if (mode != TagHandling.Remove)
-            {
-                var role = tag.Value as IRole;
-                switch (mode)
-                {
-                    case TagHandling.Name:
-                    case TagHandling.FullName:
-                        if (role != null)
-                            return $"@{role.Name}";
-                        else
-                            return "";
-                    case TagHandling.NameNoPrefix:
-                    case TagHandling.FullNameNoPrefix:
-                        if (role != null)
-                            return $"{role.Name}";
-                        else
-                            return "";
-                    case TagHandling.Sanitize:
-                        return KMarkdownMentionRole($"{SanitizeChar}{tag.Key}");
-                }
-            }
-            return "";
-        }
-        internal static string ResolveEveryoneMention(ITag tag, TagHandling mode)
-        {
-            if (mode != TagHandling.Remove)
-            {
-                switch (mode)
-                {
-                    case TagHandling.Name:
-                    case TagHandling.FullName:
-                    case TagHandling.NameNoPrefix:
-                    case TagHandling.FullNameNoPrefix:
-                        return "全体成员";
-                    case TagHandling.Sanitize:
-                        return $"@{SanitizeChar}全体成员";
-                }
-            }
-            return "";
-        }
-        internal static string ResolveHereMention(ITag tag, TagHandling mode)
-        {
-            if (mode != TagHandling.Remove)
-            {
-                switch (mode)
-                {
-                    case TagHandling.Name:
-                    case TagHandling.FullName:
-                    case TagHandling.NameNoPrefix:
-                    case TagHandling.FullNameNoPrefix:
-                        return "在线成员";
-                    case TagHandling.Sanitize:
-                        return $"@{SanitizeChar}在线成员";
-                }
-            }
-            return "";
-        }
-        internal static string ResolveEmoji(ITag tag, TagHandling mode)
-        {
-            if (mode != TagHandling.Remove)
-            {
-                Emote emoji = (Emote)tag.Value;
 
-                //Remove if its name contains any bad chars (prevents a few tag exploits)
-                for (int i = 0; i < emoji.Name.Length; i++)
-                {
-                    char c = emoji.Name[i];
-                    if (!char.IsLetterOrDigit(c) && c != '_' && c != '-')
+    internal static string ResolveRoleMention(ITag tag, TagHandling mode)
+    {
+        if (mode != TagHandling.Remove)
+        {
+            var role = tag.Value as IRole;
+            switch (mode)
+            {
+                case TagHandling.Name:
+                case TagHandling.FullName:
+                    if (role != null)
+                        return $"@{role.Name}";
+                    else
                         return "";
-                }
-
-                switch (mode)
-                {
-                    case TagHandling.Name:
-                    case TagHandling.FullName:
-                        return $":{emoji.Name}:";
-                    case TagHandling.NameNoPrefix:
-                    case TagHandling.FullNameNoPrefix:
-                        return $"{emoji.Name}";
-                    case TagHandling.Sanitize:
-                        return $"[{SanitizeChar}{emoji.Name}{SanitizeChar}:{emoji.Id}]";
-                }
+                case TagHandling.NameNoPrefix:
+                case TagHandling.FullNameNoPrefix:
+                    if (role != null)
+                        return $"{role.Name}";
+                    else
+                        return "";
+                case TagHandling.Sanitize:
+                    return KMarkdownMentionRole($"{SanitizeChar}{tag.Key}");
             }
-            return "";
         }
 
+        return "";
+    }
 
+    internal static string ResolveEveryoneMention(ITag tag, TagHandling mode)
+    {
+        if (mode != TagHandling.Remove)
+        {
+            switch (mode)
+            {
+                case TagHandling.Name:
+                case TagHandling.FullName:
+                case TagHandling.NameNoPrefix:
+                case TagHandling.FullNameNoPrefix:
+                    return "全体成员";
+                case TagHandling.Sanitize:
+                    return $"@{SanitizeChar}全体成员";
+            }
+        }
+
+        return "";
+    }
+
+    internal static string ResolveHereMention(ITag tag, TagHandling mode)
+    {
+        if (mode != TagHandling.Remove)
+        {
+            switch (mode)
+            {
+                case TagHandling.Name:
+                case TagHandling.FullName:
+                case TagHandling.NameNoPrefix:
+                case TagHandling.FullNameNoPrefix:
+                    return "在线成员";
+                case TagHandling.Sanitize:
+                    return $"@{SanitizeChar}在线成员";
+            }
+        }
+
+        return "";
+    }
+
+    internal static string ResolveEmoji(ITag tag, TagHandling mode)
+    {
+        if (mode != TagHandling.Remove)
+        {
+            Emote emoji = (Emote) tag.Value;
+
+            //Remove if its name contains any bad chars (prevents a few tag exploits)
+            for (int i = 0; i < emoji.Name.Length; i++)
+            {
+                char c = emoji.Name[i];
+                if (!char.IsLetterOrDigit(c) && c != '_' && c != '-')
+                    return "";
+            }
+
+            switch (mode)
+            {
+                case TagHandling.Name:
+                case TagHandling.FullName:
+                    return $":{emoji.Name}:";
+                case TagHandling.NameNoPrefix:
+                case TagHandling.FullNameNoPrefix:
+                    return $"{emoji.Name}";
+                case TagHandling.Sanitize:
+                    return $"[{SanitizeChar}{emoji.Name}{SanitizeChar}:{emoji.Id}]";
+            }
+        }
+
+        return "";
+    }
 }

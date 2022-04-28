@@ -20,7 +20,7 @@ public class GuildEmote : Emote
     ///     The ID of the guild this emote is attached to.
     /// </summary>
     /// <returns>
-    ///     A <see cref="ulong"/> that identifies the guild this emote is attached to.
+    ///     A ulong that identifies the guild this emote is attached to.
     /// </returns>
     public ulong GuildId { get; }
     

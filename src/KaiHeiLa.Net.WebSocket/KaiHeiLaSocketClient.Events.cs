@@ -71,7 +71,7 @@ namespace KaiHeiLa.WebSocket
         ///         If caching is enabled via <see cref="KaiHeiLaSocketConfig"/>, the
         ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
         ///         that the message cannot be retrieved, the ID of the message is preserved in the 
-        ///         <see cref="ulong"/>.
+        ///         ulong.
         ///     </para>
         ///     <para>
         ///         The source channel of the reaction addition will be passed into the 

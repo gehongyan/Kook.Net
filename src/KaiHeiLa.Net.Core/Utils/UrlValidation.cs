@@ -7,7 +7,7 @@ internal static class UrlValidation
     /// </summary>
     /// <param name="url">The URL to validate before sending to KaiHeiLa.</param>
     /// <exception cref="InvalidOperationException">A URL must include a protocol (http or https).</exception>
-    /// <returns>true if URL is valid by our standard, false if null, throws an error upon invalid.</returns>
+    /// <returns><c>true</c> if URL is valid by our standard, <c>false</c> if null, throws an error upon invalid.</returns>
     public static bool Validate(string url)
     {
         if (string.IsNullOrEmpty(url))

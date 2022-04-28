@@ -14,7 +14,7 @@ public class PlainTextElementBuilder : IElementBuilder
     ///     Gets the maximum plain text length allowed by KaiHeiLa.
     /// </summary>
     /// <returns>
-    ///     An <see cref="int"/> that represents the maximum plain text length allowed by KaiHeiLa.
+    ///     An int that represents the maximum plain text length allowed by KaiHeiLa.
     /// </returns>
     public const int MaxPlainTextLength = 2000;
 
@@ -209,7 +209,7 @@ public class ImageElementBuilder : IElementBuilder
     ///     Gets or sets the source of an <see cref="ImageElementBuilder"/>.
     /// </summary>
     /// <returns>
-    ///     A <see cref="string"/> that represents the source of the <see cref="ImageElementBuilder"/>.
+    ///     A string that represents the source of the <see cref="ImageElementBuilder"/>.
     /// </returns>
     public string Source { get; set; }
 
@@ -220,7 +220,7 @@ public class ImageElementBuilder : IElementBuilder
     ///     The length of <paramref name="value"/> is greater than <see cref="MaxAlternativeLength"/>.
     /// </exception>
     /// <returns>
-    ///     A <see cref="string"/> that represents the alternative text of the <see cref="ImageElementBuilder"/>.
+    ///     A string that represents the alternative text of the <see cref="ImageElementBuilder"/>.
     /// </returns>
     public string Alternative
     {
@@ -239,7 +239,7 @@ public class ImageElementBuilder : IElementBuilder
     ///     Gets or sets the size of the image of an <see cref="ImageElementBuilder"/>.
     /// </summary>
     /// <returns>
-    ///     A <see cref="ImageSize"/> that represents the size of the image of the <see cref="ImageElementBuilder"/>;
+    ///     An <see cref="ImageSize"/> that represents the size of the image of the <see cref="ImageElementBuilder"/>;
     ///     <c>null</c> if the size is not specified.
     /// </returns>
     public ImageSize? Size { get; set; }
@@ -313,7 +313,7 @@ public class ImageElementBuilder : IElementBuilder
     ///     Builds the <see cref="ImageElementBuilder"/> into an <see cref="ImageElement"/>.
     /// </summary>
     /// <returns>
-    ///     A <see cref="ImageElement"/> represents the built element object.
+    ///     An <see cref="ImageElement"/> represents the built element object.
     /// </returns>
     /// <exception cref="InvalidOperationException">
     ///     The source url does not include a protocol (either HTTP or HTTPS).
@@ -333,7 +333,7 @@ public class ImageElementBuilder : IElementBuilder
     ///     The content of the <see cref="ImageElement"/>.
     /// </param>
     /// <returns>
-    ///     A <see cref="ImageElementBuilder"/> object that is initialized with the specified image source.
+    ///     An <see cref="ImageElementBuilder"/> object that is initialized with the specified image source.
     /// </returns>
     public static implicit operator ImageElementBuilder(string source) => new ImageElementBuilder()
         .WithSource(source);
@@ -369,7 +369,7 @@ public class ButtonElementBuilder : IElementBuilder
     ///     Gets or sets the value of the button.
     /// </summary>
     /// <returns>
-    ///     A <see cref="string"/> that represents the value of the button.
+    ///     A string that represents the value of the button.
     /// </returns>
     /// <remarks>
     ///     If the <see cref="Click"/> is set to <see cref="ButtonClickEventType.ReturnValue"/>,
@@ -510,10 +510,10 @@ public class ButtonElementBuilder : IElementBuilder
     ///     Sets the text of an <see cref="ButtonElement"/>.
     /// </summary>
     /// <param name="text">
-    ///     A <see cref="string"/> to be set as the text of the button.
+    ///     A string to be set as the text of the button.
     /// </param>
     /// <param name="isKMarkdown">
-    ///     A <see cref="bool"/> indicating whether the text is in KMarkdown format;
+    ///     A bool indicating whether the text is in KMarkdown format;
     ///     if <c>true</c>, the text will be set as a <see cref="KMarkdownElement"/>;
     ///     if <c>false</c>, the text will be set as a <see cref="PlainTextElement"/>.
     /// </param>
@@ -587,7 +587,7 @@ public class ParagraphStructBuilder : IElementBuilder
     ///     The <paramref name="value"/> is less than <see cref="MinColumnCount"/> or greater than <see cref="MaxColumnCount"/>.
     /// </exception>
     /// <returns>
-    ///     An <see cref="int"/> that represents the number of columns of the paragraph.
+    ///     An int that represents the number of columns of the paragraph.
     /// </returns>
     public int ColumnCount
     {
@@ -641,7 +641,7 @@ public class ParagraphStructBuilder : IElementBuilder
     ///     Sets the number of columns of the paragraph.
     /// </summary>
     /// <param name="count">
-    ///     An <see cref="int"/> that represents the number of columns of the paragraph.
+    ///     An int that represents the number of columns of the paragraph.
     /// </param>
     /// <returns>
     ///     The current builder.

@@ -24,7 +24,7 @@ public class RequestOptions
     ///     and will not be unpaused in time, this request will fail immediately.
     /// </remarks>
     /// <returns>
-    ///     A <see cref="int"/> in milliseconds for when the request times out.
+    ///     An int in milliseconds for when the request times out.
     /// </returns>
     public int? Timeout { get; set; }
     /// <summary>

@@ -39,7 +39,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     Gets the ID of the channel this invite is linked to.
     /// </summary>
     /// <returns>
-    ///     An <see cref="ulong"/> representing the channel snowflake identifier that the invite points to.
+    ///     A ulong representing the channel snowflake identifier that the invite points to.
     /// </returns>
     ulong? ChannelId { get; }
     /// <summary>
@@ -61,7 +61,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     Gets the ID of the guild this invite is linked to.
     /// </summary>
     /// <returns>
-    ///     An <see cref="ulong"/> representing the guild snowflake identifier that the invite points to.
+    ///     A ulong representing the guild snowflake identifier that the invite points to.
     /// </returns>
     ulong? GuildId { get; }
     /// <summary>
@@ -92,7 +92,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     Gets the max number of uses this invite may have.
     /// </summary>
     /// <returns>
-    ///     An <see cref="int"/> representing the number of uses this invite may be accepted until it is removed
+    ///     An int representing the number of uses this invite may be accepted until it is removed
     ///     from the guild; <c>null</c> if none is set.
     /// </returns>
     int? MaxUses { get; }
@@ -100,14 +100,14 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     Gets the number of times this invite has been used.
     /// </summary>
     /// <returns>
-    ///     An <see cref="int"/> representing the number of times this invite has been used; <c>null</c> if none is set.
+    ///     An int representing the number of times this invite has been used; <c>null</c> if none is set.
     /// </returns>
     int? Uses { get; }
     /// <summary>
     ///     Gets the number of times this invite still remains.
     /// </summary>
     /// <returns>
-    ///     An <see cref="int"/> representing the number of times this invite still remains; <c>null</c> if none is set.
+    ///     An int representing the number of times this invite still remains; <c>null</c> if none is set.
     /// </returns>
     int? RemainingUses { get; }
 }

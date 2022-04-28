@@ -30,7 +30,7 @@ public class Card : ICard
     ///     Gets how many modules are in this card.
     /// </summary>
     /// <returns>
-    ///     A <see cref="int"/> value that represents how many modules are in this card.
+    ///     A <see langword="int"/> value that represents how many modules are in this card.
     /// </returns>
     public int ModuleCount => Modules.Length;
 

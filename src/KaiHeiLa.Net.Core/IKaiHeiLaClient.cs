@@ -1,5 +1,8 @@
 namespace KaiHeiLa;
 
+/// <summary>
+///     Represents a generic KaiHeiLa client.
+/// </summary>
 public interface IKaiHeiLaClient : IDisposable
 {
     #region General

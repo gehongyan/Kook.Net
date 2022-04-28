@@ -19,7 +19,7 @@ public interface IChannel : IEntity<ulong>
     ///     Gets the identifier of the user who created this channel.
     /// </summary>
     /// <returns>
-    ///     A <see cref="ulong"/> that represents the identifier of the user who created this channel.
+    ///     A ulong that represents the identifier of the user who created this channel.
     /// </returns>
     ulong CreateUserId { get; }
 

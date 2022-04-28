@@ -35,7 +35,7 @@ public class RecommendInfo : IRecommendInfo
     /// <inheritdoc />
     public int AuditStatus { get; private set; }
     /// <inheritdoc />
-    public int UpdateDayInterval { get; private set; }
+    public int DaysBeforeModify { get; private set; }
 
     internal RecommendInfo()
     {
@@ -66,6 +66,6 @@ public class RecommendInfo : IRecommendInfo
         IsOfficialPartner = model.IsOfficialPartner == 1;
         Sort = model.Sort;
         AuditStatus = model.AuditStatus;
-        UpdateDayInterval = model.UpdateDayInterval;
+        DaysBeforeModify = model.UpdateDayInterval;
     }
 }

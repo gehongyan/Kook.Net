@@ -2,13 +2,16 @@ using System.Reflection;
 
 namespace KaiHeiLa;
 
+/// <summary>
+///     Defines various behaviors of KaiHeiLa.Net.
+/// </summary>
 public class KaiHeiLaConfig
 {
     /// <summary> 
     ///     Returns the API version KaiHeiLa.Net uses. 
     /// </summary>
     /// <returns>
-    ///     An <see cref="int"/> representing the API version that KaiHeiLa.Net uses to communicate with KaiHeiLa.
+    ///     An int representing the API version that KaiHeiLa.Net uses to communicate with KaiHeiLa.
     ///     <para>A list of available API version can be seen on the official 
     ///     <see href="https://developer.kaiheila.cn/doc/reference">KaiHeiLa API documentation</see>
     ///     .</para>

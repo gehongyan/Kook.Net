@@ -26,7 +26,7 @@ public class PlainTextElement : IElement
     ///     Gets the KMarkdown content of the element.
     /// </summary>
     /// <returns>
-    ///     A <see cref="string"/> that represents the KMarkdown content of the element.
+    ///     A string that represents the KMarkdown content of the element.
     /// </returns>
     public string Content { get; internal set; }
 

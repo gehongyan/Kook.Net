@@ -9,9 +9,9 @@ public class RestGame : RestEntity<int>, IGame
     private ImmutableArray<string> _processNames;
     
     public string Name { get; private set; }
-    public GameType Type { get; private set; }
+    public ActivityType Type { get; private set; }
     public string Options { get; private set; }
-    public bool KmHookAdmin { get; private set; }
+    public bool RequireAdminPrivilege { get; private set; }
     public string Icon { get; private set; }
 
     public IReadOnlyCollection<string> ProductNames => _productNames.ToReadOnlyCollection();
@@ -34,7 +34,7 @@ public class RestGame : RestEntity<int>, IGame
         Name = model.Name;
         Type = model.Type;
         Options = model.Options;
-        KmHookAdmin = model.KmHookAdmin;
+        RequireAdminPrivilege = model.KmHookAdmin;
         Icon = model.Icon;
         _productNames = model.ProductNames.ToImmutableArray();
         _processNames = model.ProcessNames.ToImmutableArray();

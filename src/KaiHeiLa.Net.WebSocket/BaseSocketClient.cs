@@ -11,7 +11,7 @@ public abstract partial class BaseSocketClient : BaseKaiHeiLaClient
     ///     Gets the estimated round-trip latency, in milliseconds, to the gateway server.
     /// </summary>
     /// <returns>
-    ///     An <see cref="int"/> that represents the round-trip latency to the WebSocket server. Please
+    ///     An int that represents the round-trip latency to the WebSocket server. Please
     ///     note that this value does not represent a "true" latency for operations such as sending a message.
     /// </returns>
     public abstract int Latency { get; protected set; }

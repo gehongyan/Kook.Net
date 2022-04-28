@@ -19,7 +19,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     Gets the guild ID associated with this channel.
     /// </summary>
     /// <returns>
-    ///     An <see cref="ulong"/> representing the guild identifier for the guild that this channel
+    ///     An <see langword="ulong"/> representing the guild identifier for the guild that this channel
     ///     belongs to.
     /// </returns>
     ulong GuildId { get; }
@@ -28,7 +28,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     Gets the position of this channel.
     /// </summary>
     /// <returns>
-    ///     An <see cref="int"/> representing the position of this channel in the guild's channel list relative to
+    ///     An <see langword="int"/> representing the position of this channel in the guild's channel list relative to
     ///     others of the same type.
     /// </returns>
     int? Position { get; }

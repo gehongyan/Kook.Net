@@ -20,7 +20,7 @@ public struct Optional<T>
             return _value;
         }
     }
-    /// <summary> Returns true if this value has been specified. </summary>
+    /// <summary> Returns <c>true</c> if this value has been specified. </summary>
     public bool IsSpecified { get; }
 
     /// <summary> Creates a new Parameter with the provided value. </summary>
