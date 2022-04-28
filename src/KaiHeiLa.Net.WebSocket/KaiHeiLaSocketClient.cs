@@ -1356,11 +1356,11 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                     
                     _lastGuildAvailableTime = Environment.TickCount;
                     _guildDownloadTask = WaitForGuildsAsync(_connection.CancelToken, _gatewayLogger)
-                        .ContinueWith(async x =>
+                        .ContinueWith(async task =>
                         {
-                            if (x.IsFaulted)
+                            if (task.IsFaulted)
                             {
-                                _connection.Error(x.Exception);
+                                _connection.Error(task.Exception);
                                 return;
                             }
                             else if (_connection.CancelToken.IsCancellationRequested)

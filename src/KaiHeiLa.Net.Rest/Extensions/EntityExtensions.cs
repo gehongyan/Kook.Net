@@ -452,4 +452,14 @@ internal static class EntityExtensions
     }
 
     #endregion
+
+    #region User Tags
+
+    public static UserTag ToEntity(this API.UserTag model)
+    {
+        if (model is null) return null;
+        return UserTag.Create(model.Color, model.Text);
+    }
+
+    #endregion
 }

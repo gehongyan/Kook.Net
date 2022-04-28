@@ -29,14 +29,17 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     public string Avatar { get; internal set; }
     /// <inheritdoc />
     public string VIPAvatar { get; internal set; }
-
+    /// <inheritdoc />
+    public bool? IsDenoiseEnabled { get; internal set; }
+    /// <inheritdoc />
+    public UserTag UserTag { get; internal set; }
     /// <inheritdoc />
     public string IdentifyNumber => IdentifyNumberValue?.ToString("D4");
     /// <inheritdoc />
     public string KMarkdownMention => MentionUtils.KMarkdownMentionUser(Id);
     /// <inheritdoc />
     public string PlainTextMention => MentionUtils.PlainTextMentionUser(Username, Id);
-
+    
     internal RestUser(BaseKaiHeiLaClient kaiHeiLa, ulong id)
         : base(kaiHeiLa, id)
     {
@@ -66,6 +69,8 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         IsVIP = model.IsVIP;
         Avatar = model.Avatar;
         VIPAvatar = model.VIPAvatar;
+        IsDenoiseEnabled = model.IsDenoiseEnabled;
+        UserTag = model.UserTag.ToEntity();
     }
 
     internal virtual void Update(API.MentionUser model)

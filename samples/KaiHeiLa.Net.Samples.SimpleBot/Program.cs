@@ -62,8 +62,10 @@ class Program
 
     // private async Task ClientOnReady()
     // {
-    //     var asyncEnumerable = _client.GetGuild(1990044438283387).GetUsersAsync();
-    //     IEnumerable<IGuildUser> flattenAsync = await asyncEnumerable.FlattenAsync();
+    //     IUser userAsync1 = await _client.GetUserAsync(0);
+    //     IUser userAsync2 = await _client.GetUserAsync(0);
+    //     IUser userAsync3 = await _client.GetUserAsync(0);
+    //     
     // }
 
     private Task ClientOnLog(LogMessage arg)

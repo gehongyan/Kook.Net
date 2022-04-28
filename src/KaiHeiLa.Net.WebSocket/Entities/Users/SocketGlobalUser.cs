@@ -7,13 +7,24 @@ namespace KaiHeiLa.WebSocket;
 internal class SocketGlobalUser : SocketUser
 {
     public override string Username { get; internal set; }
+    /// <inheritdoc />
     public override ushort? IdentifyNumberValue { get; internal set; }
+    /// <inheritdoc />
     public override bool? IsOnline { get; internal set; }
+    /// <inheritdoc />
     public override bool? IsBot { get; internal set; }
+    /// <inheritdoc />
     public override bool? IsBanned { get; internal set; }
+    /// <inheritdoc />
     public override bool? IsVIP { get; internal set; }
+    /// <inheritdoc />
     public override string Avatar { get; internal set; }
+    /// <inheritdoc />
     public override string VIPAvatar { get; internal set; }
+    /// <inheritdoc />
+    public override bool? IsDenoiseEnabled { get; internal set; }
+    /// <inheritdoc />
+    public override UserTag UserTag { get; internal set; }
     
     internal override SocketGlobalUser GlobalUser => this;
 

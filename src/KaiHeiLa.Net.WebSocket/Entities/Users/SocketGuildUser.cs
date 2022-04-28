@@ -53,6 +53,10 @@ public class SocketGuildUser : SocketUser, IGuildUser
     public override bool? IsOnline { get => GlobalUser.IsOnline; internal set => GlobalUser.IsOnline = value; }
     /// <inheritdoc />
     public override bool? IsVIP { get => GlobalUser.IsVIP; internal set => GlobalUser.IsVIP = value; }
+    /// <inheritdoc />
+    public override bool? IsDenoiseEnabled { get => GlobalUser.IsDenoiseEnabled; internal set => GlobalUser.IsDenoiseEnabled = value; }
+    /// <inheritdoc />
+    public override UserTag UserTag { get => GlobalUser.UserTag; internal set => GlobalUser.UserTag = value; }
     
     private ImmutableArray<uint> _roleIds;
     

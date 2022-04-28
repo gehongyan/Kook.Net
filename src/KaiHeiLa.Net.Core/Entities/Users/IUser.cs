@@ -5,7 +5,7 @@ public interface IUser : IEntity<ulong>, IMentionable
     string Username { get; }
 
     string IdentifyNumber { get; }
-    
+
     ushort? IdentifyNumberValue { get; }
 
     bool? IsOnline { get; }
@@ -19,7 +19,11 @@ public interface IUser : IEntity<ulong>, IMentionable
     string Avatar { get; }
 
     string VIPAvatar { get; }
+
+    bool? IsDenoiseEnabled { get; }
     
+    UserTag UserTag { get; }
+
     /// <summary>
     ///     Creates the direct message channel of this user.
     /// </summary>

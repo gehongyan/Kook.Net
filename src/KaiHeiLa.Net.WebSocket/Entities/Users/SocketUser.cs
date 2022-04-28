@@ -19,6 +19,8 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     public abstract bool? IsVIP { get; internal set; }
     public abstract string Avatar { get; internal set; }
     public abstract string VIPAvatar { get; internal set; }
+    public abstract bool? IsDenoiseEnabled { get; internal set; }
+    public abstract UserTag UserTag { get; internal set; }
     internal abstract SocketGlobalUser GlobalUser { get; }
     
     /// <inheritdoc />
@@ -95,6 +97,16 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
         if (model.VIPAvatar != VIPAvatar)
         {
             VIPAvatar = model.VIPAvatar;
+            hasChanges = true;
+        }
+        if (model.IsDenoiseEnabled != IsDenoiseEnabled)
+        {
+            IsDenoiseEnabled = model.IsDenoiseEnabled;
+            hasChanges = true;
+        }
+        if (!model.UserTag.ToEntity().Equals(UserTag))
+        {
+            UserTag = model.UserTag.ToEntity();
             hasChanges = true;
         }
         
