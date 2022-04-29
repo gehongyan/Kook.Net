@@ -288,5 +288,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     IAttachment IMessage.Attachment => Attachment;
     /// <inheritdoc />
     IReadOnlyCollection<ICard> IMessage.Cards => Cards;
+    /// <inheritdoc />
+    IReadOnlyCollection<IEmbed> IMessage.Embeds => Embeds;
     #endregion
 }

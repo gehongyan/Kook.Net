@@ -40,7 +40,7 @@ internal static class ChannelHelper
         Guid? referenceMessageId, Direction dir, int limit, bool includeReferenceMessage, RequestOptions options)
     {
         var guildId = (channel as IGuildChannel)?.GuildId;
-        var guild = guildId != null ? (client as IKaiHeiLaClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).Result : null;
+        var guild = guildId != null ? (client as IKaiHeiLaClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).GetAwaiter().GetResult() : null;
 
         if (dir == Direction.Around) //  && limit > KaiHeiLaConfig.MaxMessagesPerBatch // Around mode returns error messages from endpoint
         {

@@ -16,6 +16,7 @@ public class InviteModule : IModule
         Code = code;
     }
 
+    /// <inheritdoc />
     public ModuleType Type => ModuleType.Invite;
 
     public string Code { get; internal set; }

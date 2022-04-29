@@ -22,7 +22,7 @@ public enum CardTheme : uint
     /// </summary>
     Danger,
     /// <summary>
-    ///     The card shows like a info message.
+    ///     The card shows like an info message.
     /// </summary>
     Info,
     /// <summary>

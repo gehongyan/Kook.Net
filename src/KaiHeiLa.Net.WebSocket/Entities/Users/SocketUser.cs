@@ -13,7 +13,6 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
 {
     public abstract string Username { get; internal set; }
     public abstract ushort? IdentifyNumberValue { get; internal set; }
-    public abstract bool? IsOnline { get; internal set; }
     public abstract bool? IsBot { get; internal set; }
     public abstract bool? IsBanned { get; internal set; }
     public abstract bool? IsVIP { get; internal set; }
@@ -22,11 +21,17 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     public abstract bool? IsDenoiseEnabled { get; internal set; }
     public abstract UserTag UserTag { get; internal set; }
     internal abstract SocketGlobalUser GlobalUser { get; }
+    internal abstract SocketPresence Presence { get; set; }
     
     /// <inheritdoc />
     public string IdentifyNumber => IdentifyNumberValue?.ToString("D4");
     public string KMarkdownMention => MentionUtils.KMarkdownMentionUser(Id);
     public string PlainTextMention => MentionUtils.PlainTextMentionUser(Username, Id);
+    
+    /// <inheritdoc />
+    public bool? IsOnline => Presence.IsOnline;
+    /// <inheritdoc />
+    public ClientType? ActiveClient => Presence.ActiveClient;
     
     protected SocketUser(KaiHeiLaSocketClient kaiHeiLa, ulong id) 
         : base(kaiHeiLa, id)
@@ -69,11 +74,6 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
                 hasChanges = true;
             }
         }
-        if (model.Online != IsOnline)
-        {
-            IsOnline = model.Online;
-            hasChanges = true;
-        }
         if (model.Bot != IsBot)
         {
             IsBot = model.Bot;
@@ -104,13 +104,24 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
             IsDenoiseEnabled = model.IsDenoiseEnabled;
             hasChanges = true;
         }
-        if (!model.UserTag.ToEntity().Equals(UserTag))
+        if (model.UserTag is not null && !model.UserTag.ToEntity().Equals(UserTag))
         {
             UserTag = model.UserTag.ToEntity();
             hasChanges = true;
         }
         
         return hasChanges;
+    }
+
+    internal virtual void UpdatePresence(bool? isOnline)
+    {
+        Presence ??= new SocketPresence();
+        Presence.Update(isOnline);
+    }
+    internal virtual void UpdatePresence(bool? isOnline, string activeClient)
+    {
+        Presence ??= new SocketPresence();
+        Presence.Update(isOnline, activeClient);
     }
     
     /// <inheritdoc />

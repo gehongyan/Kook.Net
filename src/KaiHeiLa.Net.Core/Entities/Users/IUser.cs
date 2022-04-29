@@ -1,27 +1,46 @@
 ﻿namespace KaiHeiLa;
 
-public interface IUser : IEntity<ulong>, IMentionable
+public interface IUser : IEntity<ulong>, IMentionable, IPresence
 {
+    /// <summary>
+    ///     Gets the username for this user.
+    /// </summary>
     string Username { get; }
-
+    /// <summary>
+    ///     Gets the per-username unique ID for this user.
+    /// </summary>
     string IdentifyNumber { get; }
-
+    /// <summary>
+    ///     Gets the per-username unique ID for this user.
+    /// </summary>
     ushort? IdentifyNumberValue { get; }
-
-    bool? IsOnline { get; }
-
+    /// <summary>
+    ///     Gets whether this user is a bot; <c>null</c> if unknown.
+    /// </summary>
     bool? IsBot { get; }
-
+    /// <summary>
+    ///     Gets whether this user is banned; <c>null</c> if unknown.
+    /// </summary>
     bool? IsBanned { get; }
-
+    /// <summary>
+    ///     Gets whether this user is VIP; <c>null</c> if unknown.
+    /// </summary>
     bool? IsVIP { get; }
-
+    /// <summary>
+    ///     Gets the link to this user's avatar.
+    /// </summary>
     string Avatar { get; }
-
+    /// <summary>
+    ///     Gets the link to this user's VIP avatar.
+    /// </summary>
     string VIPAvatar { get; }
-
+    /// <summary>
+    ///     Gets whether this user enabled denoise feature; <c>null</c> if unknown.
+    /// </summary>
     bool? IsDenoiseEnabled { get; }
-    
+    /// <summary>
+    ///     Get the tag this user has.
+    /// </summary>
     UserTag UserTag { get; }
 
     /// <summary>

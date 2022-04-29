@@ -1,18 +1,56 @@
 namespace KaiHeiLa;
 
-// The identifier for intimacy is the associated user's id.
+/// <summary>
+///     Represents a generic intimacy.
+/// </summary>
 public interface IIntimacy : IEntity<ulong>
 {
+    /// <summary>
+    ///     Gets the user associated with this intimacy.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="IUser" /> representing the user associated with this intimacy.
+    /// </returns>
     IUser User { get; }
 
+    /// <summary>
+    ///     Gets the social information associated with this intimacy.
+    /// </summary>
+    /// <returns>
+    ///     A <see langword="string"/> representing the social information associated with this intimacy.
+    /// </returns>
     string SocialInfo { get; }
 
+    /// <summary>
+    ///     Gets the time at which the user read the message.
+    /// </summary>
+    /// <returns>
+    ///     A time at which the user read the message.
+    /// </returns>
     DateTimeOffset LastReadAt { get; }
     
+    /// <summary>
+    ///     Gets the time at which this intimacy was modified last time.
+    /// </summary>
+    /// <returns>
+    ///     A time at which this intimacy was modified last time.
+    /// </returns>
     DateTimeOffset LastModifyAt { get; }
 
+    /// <summary>
+    ///     Gets the score associated with this intimacy.
+    /// </summary>
+    /// <returns>
+    ///     A <see langword="int"/> representing the score associated with this intimacy.
+    /// </returns>
     int Score { get; }
     
+    /// <summary>
+    ///     Gets the images associated with this intimacy.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="IReadOnlyCollection{IntimacyImage}"/> containing the images associated with this intimacy.
+    /// </returns>
     IReadOnlyCollection<IntimacyImage> Images { get; }
 
     /// <summary>

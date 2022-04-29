@@ -846,7 +846,10 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
 
                                         User model = await ApiClient.GetUserAsync(data.UserId).ConfigureAwait(false);
                                         if (user != null)
+                                        {
                                             user.Update(State, model);
+                                            user.UpdatePresence(model.Online, model.OperatingSystem);
+                                        }
                                         else
                                             user = State.GetOrAddUser(data.UserId, _ => SocketGlobalUser.Create(this, State, model));
                                         
@@ -914,7 +917,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                         {
                                             SocketGuildUser user = guild.GetUser(data.UserId) ?? guild.AddOrUpdateUser(await ApiClient
                                                 .GetGuildMemberAsync(guild.Id, data.UserId).ConfigureAwait(false));
-                                            user.IsOnline = true;
+                                            user.Presence.Update(true);
                                             users.Add(user);
                                         }
                                         else
@@ -940,7 +943,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                         {
                                             SocketGuildUser user = guild.GetUser(data.UserId) ?? guild.AddOrUpdateUser(await ApiClient
                                                 .GetGuildMemberAsync(guild.Id, data.UserId).ConfigureAwait(false));
-                                            user.IsOnline = false;
+                                            user.Presence.Update(false);
                                             users.Add(user);
                                         }
                                         else

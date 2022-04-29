@@ -10,8 +10,6 @@ internal class SocketGlobalUser : SocketUser
     /// <inheritdoc />
     public override ushort? IdentifyNumberValue { get; internal set; }
     /// <inheritdoc />
-    public override bool? IsOnline { get; internal set; }
-    /// <inheritdoc />
     public override bool? IsBot { get; internal set; }
     /// <inheritdoc />
     public override bool? IsBanned { get; internal set; }
@@ -25,7 +23,8 @@ internal class SocketGlobalUser : SocketUser
     public override bool? IsDenoiseEnabled { get; internal set; }
     /// <inheritdoc />
     public override UserTag UserTag { get; internal set; }
-    
+    /// <inheritdoc />
+    internal override SocketPresence Presence { get; set; }
     internal override SocketGlobalUser GlobalUser => this;
 
     private readonly object _lockObj = new object();
@@ -39,6 +38,7 @@ internal class SocketGlobalUser : SocketUser
     {
         var entity = new SocketGlobalUser(kaiHeiLa, model.Id);
         entity.Update(state, model);
+        entity.UpdatePresence(model.Online, model.OperatingSystem);
         return entity;
     }
     

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using KaiHeiLa.Rest;
 using Model = KaiHeiLa.API.Quote;
 
 namespace KaiHeiLa;

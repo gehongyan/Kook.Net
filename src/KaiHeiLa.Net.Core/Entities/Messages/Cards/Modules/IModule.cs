@@ -2,8 +2,6 @@
 
 public interface IModule
 {
-    /// <summary>
-    ///     模块类型
-    /// </summary>
+       /// <inheritdoc />
     ModuleType Type { get; }
 }

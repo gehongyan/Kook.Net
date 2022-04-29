@@ -4,11 +4,8 @@ using System.Diagnostics;
 namespace KaiHeiLa;
 
 /// <summary>
-///     备注模块
+///     Represents a context module that can be used in an <see cref="ICard"/>.
 /// </summary>
-/// <remarks>
-///     展示图文混合的内容
-/// </remarks>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ContextModule : IModule
 {
@@ -17,8 +14,15 @@ public class ContextModule : IModule
         Elements = elements;
     }
 
+    /// <inheritdoc />
     public ModuleType Type => ModuleType.Context;
     
+    /// <summary>
+    ///     Gets the elements in this context module.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="ImmutableArray{IElement}"/> representing the elements in this context module.
+    /// </returns>
     public ImmutableArray<IElement> Elements { get; internal set; }
     
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";

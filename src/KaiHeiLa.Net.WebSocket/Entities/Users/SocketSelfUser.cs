@@ -27,13 +27,14 @@ public class SocketSelfUser : SocketUser, ISelfUser
     /// <inheritdoc />
     public override bool? IsBanned { get => GlobalUser.IsBanned; internal set => GlobalUser.IsBanned = value; }
     /// <inheritdoc />
-    public override bool? IsOnline { get => GlobalUser.IsOnline; internal set => GlobalUser.IsOnline = value; }
-    /// <inheritdoc />
     public override bool? IsVIP { get => GlobalUser.IsVIP; internal set => GlobalUser.IsVIP = value; }
     /// <inheritdoc />
     public override bool? IsDenoiseEnabled { get => GlobalUser.IsDenoiseEnabled; internal set => GlobalUser.IsDenoiseEnabled = value; }
     /// <inheritdoc />
     public override UserTag UserTag { get => GlobalUser.UserTag; internal set => GlobalUser.UserTag = value; }
+    /// <inheritdoc />
+    internal override SocketPresence Presence { get => GlobalUser.Presence; set => GlobalUser.Presence = value;
+    }
     /// <inheritdoc />
     public string MobilePrefix { get; internal set; }
     /// <inheritdoc />
@@ -52,12 +53,14 @@ public class SocketSelfUser : SocketUser, ISelfUser
     {
         var entity = new SocketSelfUser(kaiHeiLa, kaiHeiLa.GetOrCreateSelfUser(state, model));
         entity.Update(state, model);
+        entity.UpdatePresence(model.Online, model.OperatingSystem);
         return entity;
     }
 
     internal bool Update(ClientState state, Model model)
     {
         bool hasGlobalChanges = base.Update(state, model);
+        UpdatePresence(model.Online, model.OperatingSystem);
         if (model.MobilePrefix != MobilePrefix)
         {
             MobilePrefix = model.MobilePrefix;

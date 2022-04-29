@@ -1,7 +1,7 @@
 namespace KaiHeiLa;
 
 /// <summary>
-///     Specifies the type of a emoji.
+///     Specifies the type of an emoji.
 /// </summary>
 public enum EmojiType
 {

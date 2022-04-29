@@ -138,8 +138,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         _cards = Type == MessageType.Card 
             ? MessageHelper.ParseCards(model.Content) 
             : ImmutableArray.Create<ICard>();
-        
         _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
+        
         
         Guild = guild;
     }
@@ -159,6 +159,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         _cards = Type == MessageType.Card 
             ? MessageHelper.ParseCards(model.Content) 
             : ImmutableArray.Create<ICard>();
+        
+        _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
         
         Guild = guild;
     }
@@ -180,6 +182,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             ? MessageHelper.ParseCards(model.Content) 
             : ImmutableArray.Create<ICard>();
         
+        // TODO: Investigate embed changes
+        
         Guild = guild;
     }
     internal override void Update(ClientState state, DirectMessageUpdateEvent model)
@@ -195,6 +199,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         _cards = Type == MessageType.Card 
             ? MessageHelper.ParseCards(model.Content) 
             : ImmutableArray.Create<ICard>();
+        
+        // TODO: Investigate embed changes
         
         Guild = guild;
     }
@@ -221,6 +227,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     bool? IMessage.IsPinned => IsPinned;
     IQuote IUserMessage.Quote => _quote;
     IReadOnlyCollection<ICard> IMessage.Cards => Cards;
+    IReadOnlyCollection<IEmbed> IMessage.Embeds => Embeds;
 
     #endregion
 }

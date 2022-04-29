@@ -5,7 +5,7 @@ namespace KaiHeiLa;
 /// <summary>
 ///     Represents a generic direct-message channel.
 /// </summary>
-public interface IDMChannel : IMessageChannel, IPrivateChannel, IGuidEntity
+public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
 {
     #region General
 

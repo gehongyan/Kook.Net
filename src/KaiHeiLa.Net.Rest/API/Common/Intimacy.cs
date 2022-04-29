@@ -24,7 +24,7 @@ internal class IntimacyImage
 {
     [JsonPropertyName("id")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
-    public int Id { get; set; }
+    public uint Id { get; set; }
 
     [JsonPropertyName("url")] public string Url { get; set; }
 }

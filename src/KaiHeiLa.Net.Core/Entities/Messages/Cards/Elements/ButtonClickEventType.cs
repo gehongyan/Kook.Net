@@ -1,7 +1,7 @@
 ﻿namespace KaiHeiLa;
 
 /// <summary>
-///     Specifies the event type fired when the button is clicked.
+///     Specifies the event type fired when a <see cref="ButtonElement"/> is clicked.
 /// </summary>
 public enum ButtonClickEventType
 {

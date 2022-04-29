@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using KaiHeiLa.API;
+using KaiHeiLa.WebSocket;
 using Model = KaiHeiLa.API.User;
 
 namespace KaiHeiLa.Rest;
@@ -17,8 +18,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     public string Username { get; internal set; }
     /// <inheritdoc />
     public ushort? IdentifyNumberValue { get; internal set; }
-    /// <inheritdoc />
-    public bool? IsOnline { get; internal set; }
+
     /// <inheritdoc />
     public bool? IsBot { get; internal set; }
     /// <inheritdoc />
@@ -39,6 +39,12 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     public string KMarkdownMention => MentionUtils.KMarkdownMentionUser(Id);
     /// <inheritdoc />
     public string PlainTextMention => MentionUtils.PlainTextMentionUser(Username, Id);
+    
+    internal RestPresence Presence { get; set; }
+    /// <inheritdoc />
+    public bool? IsOnline => Presence.IsOnline;
+    /// <inheritdoc />
+    public ClientType? ActiveClient => Presence.ActiveClient;
     
     internal RestUser(BaseKaiHeiLaClient kaiHeiLa, ulong id)
         : base(kaiHeiLa, id)
@@ -63,14 +69,15 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     {
         Username = model.Username;
         IdentifyNumberValue = ushort.Parse(model.IdentifyNumber, NumberStyles.None, CultureInfo.InvariantCulture);
-        IsOnline = model.Online;
         IsBot = model.Bot;
         IsBanned = model.Status == 10;
         IsVIP = model.IsVIP;
         Avatar = model.Avatar;
         VIPAvatar = model.VIPAvatar;
         IsDenoiseEnabled = model.IsDenoiseEnabled;
-        UserTag = model.UserTag.ToEntity();
+        UserTag = model.UserTag?.ToEntity();
+        
+        UpdatePresence(model.Online, model.OperatingSystem);
     }
 
     internal virtual void Update(API.MentionUser model)
@@ -87,6 +94,11 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         Update(model);
     }
     
+    internal virtual void UpdatePresence(bool? isOnline, string activeClient)
+    {
+        Presence ??= new RestPresence();
+        Presence.Update(isOnline, activeClient);
+    }
     /// <summary>
     ///     Creates a direct message channel to this user.
     /// </summary>

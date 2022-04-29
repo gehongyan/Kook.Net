@@ -16,6 +16,8 @@ public class RestGuildUser : RestUser, IGuildUser
     private ImmutableArray<uint> _roleIds;
     
     /// <inheritdoc />
+    public string DisplayName => Nickname ?? Username;
+    /// <inheritdoc />
     public string Nickname { get; private set; }
     internal IGuild Guild { get; private set; }
     /// <inheritdoc />

@@ -3,11 +3,8 @@
 namespace KaiHeiLa;
 
 /// <summary>
-///     音频模块
+///     Represents an audio module that can be used in an <see cref="ICard"/>.
 /// </summary>
-/// <remarks>
-///     展示音频
-/// </remarks>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class AudioModule : IMediaModule
 {
@@ -17,13 +14,22 @@ public class AudioModule : IMediaModule
         Title = title;
         Cover = cover;
     }
-
+    
+    /// <inheritdoc />
     public ModuleType Type => ModuleType.Audio;
 
+    /// <inheritdoc />
     public string Source { get; internal set; }
     
+    /// <inheritdoc />
     public string Title { get; internal set; }
     
+    /// <summary>
+    ///     Gets the cover of the audio associated with this module.
+    /// </summary>
+    /// <returns>
+    ///     A <see langword="string"/> representing the cover of the audio associated with this module.
+    /// </returns>
     public string Cover { get; internal set; }
     
     private string DebuggerDisplay => $"{Type}: {Title}";

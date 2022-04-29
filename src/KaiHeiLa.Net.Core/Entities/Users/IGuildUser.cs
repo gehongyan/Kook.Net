@@ -1,37 +1,87 @@
 ﻿namespace KaiHeiLa;
 
+/// <summary>
+///     Represents a generic guild user.
+/// </summary>
 public interface IGuildUser : IUser
 {
     #region General
 
     /// <summary>
-    ///     用户在当前服务器的昵称
+    ///     Gets the nickname for this user.
     /// </summary>
+    /// <returns>
+    ///     A string representing the nickname of the user; <c>null</c> if none is set.
+    /// </returns>
     string Nickname { get; }
-
     /// <summary>
-    ///     用户在当前服务器中的角色 id 组成的列表
+    ///     Gets the displayed name for this user.
     /// </summary>
+    /// <returns>
+    ///     A string representing the display name of the user; If the nickname is null, this will be the username.
+    /// </returns>
+    string DisplayName { get; }
+    /// <summary>
+    ///     Gets a collection of IDs for the roles that this user currently possesses in the guild.
+    /// </summary>
+    /// <remarks>
+    ///     This property returns a read-only collection of the identifiers of the roles that this user possesses.
+    ///     For WebSocket users, a Roles property can be found in place of this property. Due to the REST
+    ///     implementation, only a collection of identifiers can be retrieved instead of the full role objects.
+    /// </remarks>
+    /// <returns>
+    ///     A read-only collection of <see langword="uint"/>, each representing an identifier for a role that
+    ///     this user possesses.
+    /// </returns>
     IReadOnlyCollection<uint> RoleIds { get; }
-
     /// <summary>
-    ///     此服务器用户所属服务器
+    ///     Gets the guild for this user.
     /// </summary>
+    /// <returns>
+    ///     A guild object that this user belongs to.
+    /// </returns>
     IGuild Guild { get; }
-
     /// <summary>
-    ///     此服务器用户所属服务器的ID
+    ///     Gets the ID of the guild for this user.
     /// </summary>
+    /// <returns>
+    ///     An <see langword="ulong"/> representing the identifier of the guild that this user belongs to.
+    /// </returns>
     ulong GuildId { get; }
-
+    /// <summary>
+    ///     Gets whether the mobile number has been verified for this user.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the mobile number has been verified; <c>false</c> otherwise.
+    /// </returns>
     bool IsMobileVerified { get; }
-    
+    /// <summary>
+    ///     Gets when this user joined the guild.
+    /// </summary>
+    /// <returns>
+    ///     The time of which the user has joined the guild.
+    /// </returns>
     DateTimeOffset JoinedAt { get; }
-    
+    /// <summary>
+    ///     Gets when this user was activated.
+    /// </summary>
+    /// <returns>
+    ///     The time of which the user was activated.
+    /// </returns>
     DateTimeOffset ActiveAt { get; }
-    
+    /// <summary>
+    ///     Gets the color the user's displayed name is being displayed in.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="Color"/> struct representing the color the user's display name is being displayed in.
+    /// </returns>
     Color Color { get; }
-    
+    /// <summary>
+    ///     Gets whether this user owns the current guild.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if this user owns the current guild; <c>false</c> otherwise.
+    /// </returns>
     bool? IsOwner { get; }
     
     #endregion

@@ -1,13 +1,25 @@
 namespace KaiHeiLa;
 
+/// <summary>
+///     Represents the logged-in Discord user.
+/// </summary>
 public interface ISelfUser : IUser
 {
+    /// <summary>
+    ///     Gets the mobile prefix of the logged-in user.
+    /// </summary>
     string MobilePrefix { get; }
-    
+    /// <summary>
+    ///     Gets the mobile number of the logged-in user.
+    /// </summary>
     string Mobile { get; }
-    
+    /// <summary>
+    ///     // TODO: To be documented.
+    /// </summary>
     int InvitedCount { get; }
-
+    /// <summary>
+    ///     Gets whether the mobile number of the logged-in user is verified.
+    /// </summary>
     bool IsMobileVerified { get; }
 
     /// <summary>

@@ -33,7 +33,7 @@ public struct LogMessage
     ///     Gets the exception of this log entry.
     /// </summary>
     /// <returns>
-    ///     An <see cref="KaiHeiLa.LogMessage.Exception" /> object associated with an incident; otherwise <c>null</c>.
+    ///     A <see cref="KaiHeiLa.LogMessage.Exception" /> object associated with an incident; otherwise <c>null</c>.
     /// </returns>
     public Exception Exception { get; }
 

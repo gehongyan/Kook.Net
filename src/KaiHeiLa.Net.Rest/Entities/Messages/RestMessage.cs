@@ -43,6 +43,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     ///     Gets a collection of the <see cref="ICard"/>'s on the message.
     /// </summary>
     public virtual IReadOnlyCollection<ICard> Cards => ImmutableArray.Create<ICard>();
+    public virtual IReadOnlyCollection<IEmbed> Embeds => null;
     /// <inheritdoc />
     public virtual IReadOnlyCollection<uint> MentionedRoleIds => ImmutableArray.Create<uint>();
     /// <summary>
@@ -194,6 +195,8 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     IAttachment IMessage.Attachment => Attachment;
     /// <inheritdoc />
     IReadOnlyCollection<ICard> IMessage.Cards => Cards;
+    /// <inheritdoc />
+    IReadOnlyCollection<IEmbed> IMessage.Embeds => Embeds;
     /// <inheritdoc />
     IReadOnlyCollection<ulong> IMessage.MentionedUserIds => MentionedUsers.Select(x => x.Id).ToImmutableArray();
 

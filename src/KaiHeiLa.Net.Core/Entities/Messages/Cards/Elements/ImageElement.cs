@@ -3,7 +3,7 @@ using System.Diagnostics;
 namespace KaiHeiLa;
 
 /// <summary>
-///     An image element that can be used in modules.
+///     An image element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ImageElement : IElement

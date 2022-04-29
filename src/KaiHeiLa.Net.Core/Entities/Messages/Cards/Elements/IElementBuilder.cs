@@ -1,7 +1,7 @@
 namespace KaiHeiLa;
 
 /// <summary>
-///     Represents a builder class for creating an <see cref="IElement"/>.
+///     A generic builder for creating an <see cref="IElement"/>.
 /// </summary>
 public interface IElementBuilder
 {

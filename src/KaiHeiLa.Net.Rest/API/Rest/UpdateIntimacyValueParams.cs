@@ -14,5 +14,5 @@ internal class UpdateIntimacyValueParams
 
     [JsonPropertyName("img_id")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
-    public ulong ImageId { get; set; }
+    public uint ImageId { get; set; }
 }

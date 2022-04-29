@@ -48,6 +48,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     internal void Update(ClientState state, API.User recipient)
     {
         Recipient.Update(state, recipient);
+        Recipient.UpdatePresence(recipient.Online, recipient.OperatingSystem);
     }
     
     /// <inheritdoc />

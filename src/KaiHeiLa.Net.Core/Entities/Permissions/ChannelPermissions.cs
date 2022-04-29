@@ -5,11 +5,17 @@ namespace KaiHeiLa;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct ChannelPermissions
 {
+    /// <summary> Gets a blank <see cref="ChannelPermissions"/> that grants no permissions.</summary>
     public static readonly ChannelPermissions None = new ChannelPermissions();
+    /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for text channels.</summary>
     public static readonly ChannelPermissions Text = new ChannelPermissions(0b_0000_0000_0110_0111_1100_0010_1000);
+    /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for voice channels.</summary>
     public static readonly ChannelPermissions Voice = new ChannelPermissions(0b_1011_1101_0001_1000_1100_0010_1000);
+    /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for category channels.</summary>
     public static readonly ChannelPermissions Category = new ChannelPermissions(0b1011_1101_0111_1111_1100_0010_1000);
 
+    /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for a given channel type.</summary>
+    /// <exception cref="ArgumentException">Unknown channel type.</exception>
     public static ChannelPermissions All(IChannel channel)
     {
         return channel switch
@@ -21,26 +27,45 @@ public struct ChannelPermissions
         };
     }
     
+    /// <summary> Gets a packed value representing all the permissions in this <see cref="ChannelPermissions"/>.</summary>
     public ulong RawValue { get; }
     
-    public bool ManageChannels => Permissions.GetValue(RawValue, ChannelPermission.ManageChannels);
+    /// <summary> If <c>true</c>, a user may create invites. </summary>
     public bool CreateInvites => Permissions.GetValue(RawValue, ChannelPermission.CreateInvites);
+    /// <summary> If <c>true</c>, a user may view and revoke invites. </summary>
+    public bool ManageChannels => Permissions.GetValue(RawValue, ChannelPermission.ManageChannels);
+    /// <summary> If <c>true</c>, a user may adjust roles. </summary>
     public bool ManageRoles => Permissions.GetValue(RawValue, ChannelPermission.ManageRoles);
+    /// <summary> If <c>true</c>, a user may view channels. </summary>
     public bool ViewChannels => Permissions.GetValue(RawValue, ChannelPermission.ViewChannels);
+    /// <summary> If <c>true</c>, a user may send messages. </summary>
     public bool SendMessages => Permissions.GetValue(RawValue, ChannelPermission.SendMessages);
+    /// <summary> If <c>true</c>, a user may delete messages. </summary>
     public bool ManageMessages => Permissions.GetValue(RawValue, ChannelPermission.ManageMessages);
+    /// <summary> If <c>true</c>, a user may send files. </summary>
     public bool AttachFiles => Permissions.GetValue(RawValue, ChannelPermission.AttachFiles);
+    /// <summary> If <c>true</c>, a user may connect to a voice channel. </summary>
     public bool Connect => Permissions.GetValue(RawValue, ChannelPermission.Connect);
+    /// <summary> If <c>true</c>, a user may kick other users from voice channels, and move other users between voice channels. </summary>
     public bool ManageVoice => Permissions.GetValue(RawValue, ChannelPermission.ManageVoice);
+    /// <summary> If <c>true</c>, a user may mention all users. </summary>
     public bool MentionEveryone => Permissions.GetValue(RawValue, ChannelPermission.MentionEveryone);
+    /// <summary> If <c>true</c>, a user may add reactions. </summary>
     public bool AddReactions => Permissions.GetValue(RawValue, ChannelPermission.AddReactions);
+    /// <summary> If <c>true</c>, a user may connect to a voice channel only when the user is invited or moved by other users. </summary>
     public bool PassiveConnect => Permissions.GetValue(RawValue, ChannelPermission.PassiveConnect);
+    /// <summary> If <c>true</c>, a user may use voice activation. </summary>
     public bool UseVoiceActivity => Permissions.GetValue(RawValue, ChannelPermission.UseVoiceActivity);
+    /// <summary> If <c>true</c>, a user may speak in a voice channel. </summary>
     public bool Speak => Permissions.GetValue(RawValue, ChannelPermission.Speak);
+    /// <summary> If <c>true</c>, a user may deafen users. </summary>
     public bool DeafenMembers => Permissions.GetValue(RawValue, ChannelPermission.DeafenMembers);
+    /// <summary> If <c>true</c>, a user may mute users. </summary>
     public bool MuteMembers => Permissions.GetValue(RawValue, ChannelPermission.MuteMembers);
+    /// <summary> If <c>true</c>, a user may play soundtracks in a voice channel. </summary>
     public bool PlaySoundtrack => Permissions.GetValue(RawValue, ChannelPermission.PlaySoundtrack);
     
+    /// <summary> Creates a new <see cref="ChannelPermissions"/> with the provided packed value.</summary>
     public ChannelPermissions(ulong rawValue) { RawValue = rawValue; }
 
     private ChannelPermissions(ulong initialValue,
@@ -85,6 +110,7 @@ public struct ChannelPermissions
         RawValue = value;
     }
 
+    /// <summary> Creates a new <see cref="ChannelPermissions"/> with the provided permissions.</summary>
     public ChannelPermissions(
         bool? createInvites = false,
         bool? manageChannels = false,
@@ -108,6 +134,7 @@ public struct ChannelPermissions
             muteMembers, playSoundtrack)
     { }
 
+    /// <summary> Creates a new <see cref="ChannelPermissions"/> from this one, changing the provided non-null permissions.</summary>
     public ChannelPermissions Modify(
         bool? createInvites = null,
         bool? manageChannels = null,
@@ -145,11 +172,25 @@ public struct ChannelPermissions
             muteMembers,
             playSoundtrack);
 
+    /// <summary>
+    ///     Returns a value that indicates if a specific <see cref="ChannelPermission"/> is enabled
+    ///     in these permissions.
+    /// </summary>
+    /// <param name="permission">The permission value to check for.</param>
+    /// <returns><c>true</c> if the permission is enabled, <c>false</c> otherwise.</returns>
     public bool Has(ChannelPermission permission) => Permissions.GetValue(RawValue, permission);
 
+    /// <summary>
+    ///     Returns a <see cref="List{T}"/> containing all of the <see cref="ChannelPermission"/>
+    ///     flags that are enabled.
+    /// </summary>
+    /// <returns>A <see cref="List{T}"/> containing <see cref="ChannelPermission"/> flags. Empty if none are enabled.</returns>
     public List<ChannelPermission> ToList()
     {
         List<ChannelPermission> perms = new();
+        
+        // bitwise operations on raw value
+        // each of the ChannelPermissions increments by 2^i from 0 to MaxBits
         for (byte i = 0; i < Permissions.MaxBits; i++)
         {
             ulong flag = ((ulong)1 << i);

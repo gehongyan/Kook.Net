@@ -3,7 +3,7 @@ using System.Diagnostics;
 namespace KaiHeiLa;
 
 /// <summary>
-///     A plain text element that can be used in modules.
+///     A plain text element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class PlainTextElement : IElement

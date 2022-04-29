@@ -18,20 +18,10 @@ public class Card : ICard
         Modules = modules;
     }
 
-    /// <summary>
-    ///     Gets the type of this card.
-    /// </summary>
-    /// <returns>
-    ///     A <see cref="CardType"/> value that represents the type of this card.
-    /// </returns>
+    /// <inheritdoc />
     public CardType Type => CardType.Card;
 
-    /// <summary>
-    ///     Gets how many modules are in this card.
-    /// </summary>
-    /// <returns>
-    ///     A <see langword="int"/> value that represents how many modules are in this card.
-    /// </returns>
+    /// <inheritdoc />
     public int ModuleCount => Modules.Length;
 
     /// <summary>

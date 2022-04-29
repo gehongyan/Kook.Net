@@ -4,7 +4,7 @@ using KaiHeiLa.Utils;
 namespace KaiHeiLa;
 
 /// <summary>
-///     A element builder to build a <see cref="PlainTextElement"/>.
+///     An element builder to build a <see cref="PlainTextElement"/>.
 /// </summary>
 public class PlainTextElementBuilder : IElementBuilder
 {
@@ -27,14 +27,14 @@ public class PlainTextElementBuilder : IElementBuilder
     public ElementType Type => ElementType.PlainText;
     
     /// <summary>
-    ///     Gets or sets the content of an <see cref="PlainTextElement"/>.
+    ///     Gets or sets the content of a <see cref="PlainTextElement"/>.
     /// </summary>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="value"/> is greater than <see cref="MaxPlainTextLength"/>.
-    /// </exception>
     /// <returns>
     ///     The content of the <see cref="PlainTextElement"/>.
     /// </returns>
+    /// <exception cref="ArgumentException" accessor="set">
+    ///     The length of <paramref name="value"/> is greater than <see cref="MaxPlainTextLength"/>.
+    /// </exception>
     public string Content
     {
         get => _content;
@@ -54,12 +54,15 @@ public class PlainTextElementBuilder : IElementBuilder
     public bool Emoji { get; set; } = true;
 
     /// <summary>
-    ///     Sets the content of an <see cref="PlainTextElement"/>.
+    ///     Sets the content of a <see cref="PlainTextElement"/>.
     /// </summary>
     /// <param name="content">The text to be set as the content.</param>
     /// <returns>
     ///     The current builder.
     /// </returns>
+    /// <exception cref="ArgumentException" accessor="set">
+    ///     The length of <paramref name="content"/> is greater than <see cref="MaxPlainTextLength"/>.
+    /// </exception>
     public PlainTextElementBuilder WithContent(string content)
     {
         Content = content;
@@ -81,7 +84,7 @@ public class PlainTextElementBuilder : IElementBuilder
     }
 
     /// <summary>
-    ///     Builds the <see cref="PlainTextElementBuilder"/> into an <see cref="PlainTextElement"/>.
+    ///     Builds the <see cref="PlainTextElementBuilder"/> into a <see cref="PlainTextElement"/>.
     /// </summary>
     /// <returns>
     ///     A <see cref="PlainTextElement"/> represents the built element object.
@@ -99,6 +102,9 @@ public class PlainTextElementBuilder : IElementBuilder
     /// <returns>
     ///     A <see cref="PlainTextElementBuilder"/> object that is initialized with the specified content.
     /// </returns>
+    /// <exception cref="ArgumentException" accessor="set">
+    ///     The length of <paramref name="content"/> is greater than <see cref="MaxPlainTextLength"/>.
+    /// </exception>
     public static implicit operator PlainTextElementBuilder(string content) => 
         new PlainTextElementBuilder().WithContent(content);
     
@@ -107,7 +113,7 @@ public class PlainTextElementBuilder : IElementBuilder
 }
 
 /// <summary>
-///     A element builder to build a <see cref="KMarkdownElement"/>.
+///     An element builder to build a <see cref="KMarkdownElement"/>.
 /// </summary>
 public class KMarkdownElementBuilder : IElementBuilder
 {
@@ -126,7 +132,7 @@ public class KMarkdownElementBuilder : IElementBuilder
     /// </returns>
     public ElementType Type => ElementType.KMarkdown;
     /// <summary>
-    ///     Gets or sets the content of an <see cref="KMarkdownElementBuilder"/>.
+    ///     Gets or sets the content of a <see cref="KMarkdownElementBuilder"/>.
     /// </summary>
     /// <exception cref="ArgumentException" accessor="set">
     ///     The length of <paramref name="value"/> is greater than <see cref="MaxKMarkdownLength"/>.
@@ -148,12 +154,15 @@ public class KMarkdownElementBuilder : IElementBuilder
     }
 
     /// <summary>
-    ///     Sets the content of an <see cref="KMarkdownElementBuilder"/>.
+    ///     Sets the content of a <see cref="KMarkdownElementBuilder"/>.
     /// </summary>
     /// <param name="content">The text to be set as the content.</param>
     /// <returns>
     ///     The current builder.
     /// </returns>
+    /// <exception cref="ArgumentException" accessor="set">
+    ///     The length of <paramref name="content"/> is greater than <see cref="MaxKMarkdownLength"/>.
+    /// </exception>
     public KMarkdownElementBuilder WithContent(string content)
     {
         Content = content;
@@ -161,7 +170,7 @@ public class KMarkdownElementBuilder : IElementBuilder
     }
 
     /// <summary>
-    ///     Builds the <see cref="KMarkdownElementBuilder"/> into an <see cref="KMarkdownElement"/>.
+    ///     Builds the <see cref="KMarkdownElementBuilder"/> into a <see cref="KMarkdownElement"/>.
     /// </summary>
     /// <returns>
     ///     A <see cref="KMarkdownElement"/> represents the built element object.
@@ -179,6 +188,9 @@ public class KMarkdownElementBuilder : IElementBuilder
     /// <returns>
     ///     A <see cref="KMarkdownElementBuilder"/> object that is initialized with the specified content.
     /// </returns>
+    /// <exception cref="ArgumentException" accessor="set">
+    ///     The length of <paramref name="content"/> is greater than <see cref="MaxKMarkdownLength"/>.
+    /// </exception>
     public static implicit operator KMarkdownElementBuilder(string content) => 
         new KMarkdownElementBuilder().WithContent(content);
     
@@ -187,7 +199,7 @@ public class KMarkdownElementBuilder : IElementBuilder
 }
 
 /// <summary>
-///     A element builder to build an <see cref="ImageElement"/>.
+///     An element builder to build an <see cref="ImageElement"/>.
 /// </summary>
 public class ImageElementBuilder : IElementBuilder
 {
@@ -275,6 +287,9 @@ public class ImageElementBuilder : IElementBuilder
     /// <returns>
     ///     The current builder.
     /// </returns>
+    /// <exception cref="ArgumentException" accessor="set">
+    ///     The length of <paramref name="alternative"/> is greater than <see cref="MaxAlternativeLength"/>.
+    /// </exception>
     public ImageElementBuilder WithAlternative(string alternative)
     {
         Alternative = alternative;
@@ -335,6 +350,9 @@ public class ImageElementBuilder : IElementBuilder
     /// <returns>
     ///     An <see cref="ImageElementBuilder"/> object that is initialized with the specified image source.
     /// </returns>
+    /// <exception cref="ArgumentException" accessor="set">
+    ///     The length of <paramref name="source"/> is greater than <see cref="MaxAlternativeLength"/>.
+    /// </exception>
     public static implicit operator ImageElementBuilder(string source) => new ImageElementBuilder()
         .WithSource(source);
     
@@ -343,7 +361,7 @@ public class ImageElementBuilder : IElementBuilder
 }
 
 /// <summary>
-///     A element builder to build an <see cref="ButtonElement"/>.
+///     An element builder to build a <see cref="ButtonElement"/>.
 /// </summary>
 public class ButtonElementBuilder : IElementBuilder
 {
@@ -409,7 +427,7 @@ public class ButtonElementBuilder : IElementBuilder
     }
 
     /// <summary>
-    ///     Sets the theme of an <see cref="ButtonElement"/>.
+    ///     Sets the theme of a <see cref="ButtonElement"/>.
     /// </summary>
     /// <param name="theme">The theme to be set.</param>
     /// <returns>
@@ -421,7 +439,7 @@ public class ButtonElementBuilder : IElementBuilder
         return this;
     }
     /// <summary>
-    ///     Sets the value of an <see cref="ButtonElement"/>.
+    ///     Sets the value of a <see cref="ButtonElement"/>.
     /// </summary>
     /// <param name="value">The value to be set.</param>
     /// <returns>
@@ -433,7 +451,7 @@ public class ButtonElementBuilder : IElementBuilder
         return this;
     }
     /// <summary>
-    ///     Sets the type of the event to be fired when the button is clicked in an <see cref="ButtonElement"/>.
+    ///     Sets the type of the event to be fired when the button is clicked in a <see cref="ButtonElement"/>.
     /// </summary>
     /// <param name="click">
     ///     The type of the event to be fired when the button is clicked.
@@ -447,7 +465,7 @@ public class ButtonElementBuilder : IElementBuilder
         return this;
     }
     /// <summary>
-    ///     Sets the text of an <see cref="ButtonElement"/>.
+    ///     Sets the text of a <see cref="ButtonElement"/>.
     /// </summary>
     /// <param name="text">
     ///     The builder of a <see cref="PlainTextElement"/>, which will be set as the text of the button.
@@ -461,7 +479,7 @@ public class ButtonElementBuilder : IElementBuilder
         return this;
     }
     /// <summary>
-    ///     Sets the text of an <see cref="ButtonElement"/>.
+    ///     Sets the text of a <see cref="ButtonElement"/>.
     /// </summary>
     /// <param name="action">
     ///     The action to create a builder of a <see cref="PlainTextElement"/>, which will be set as the text of the button.
@@ -477,7 +495,7 @@ public class ButtonElementBuilder : IElementBuilder
         return this;
     }
     /// <summary>
-    ///     Sets the text of an <see cref="ButtonElement"/>.
+    ///     Sets the text of a <see cref="ButtonElement"/>.
     /// </summary>
     /// <param name="text">
     ///     The builder of a <see cref="KMarkdownElement"/>, which will be set as the text of the button.
@@ -491,7 +509,7 @@ public class ButtonElementBuilder : IElementBuilder
         return this;
     }
     /// <summary>
-    ///     Sets the text of an <see cref="ButtonElement"/>.
+    ///     Sets the text of a <see cref="ButtonElement"/>.
     /// </summary>
     /// <param name="action">
     ///     The action to create a builder of a <see cref="KMarkdownElement"/>, which will be set as the text of the button.
@@ -507,7 +525,7 @@ public class ButtonElementBuilder : IElementBuilder
         return this;
     }
     /// <summary>
-    ///     Sets the text of an <see cref="ButtonElement"/>.
+    ///     Sets the text of a <see cref="ButtonElement"/>.
     /// </summary>
     /// <param name="text">
     ///     A string to be set as the text of the button.
@@ -531,7 +549,7 @@ public class ButtonElementBuilder : IElementBuilder
     }
     
     /// <summary>
-    ///     Builds the <see cref="ButtonElementBuilder"/> into an <see cref="ButtonElement"/>.
+    ///     Builds the <see cref="ButtonElementBuilder"/> into a <see cref="ButtonElement"/>.
     /// </summary>
     /// <returns>
     ///     A <see cref="ButtonElement"/> represents the built element object.
@@ -544,7 +562,7 @@ public class ButtonElementBuilder : IElementBuilder
 }
 
 /// <summary>
-///     A element builder to build a <see cref="ParagraphStruct"/>.
+///     An element builder to build a <see cref="ParagraphStruct"/>.
 /// </summary>
 public class ParagraphStructBuilder : IElementBuilder
 {
@@ -731,7 +749,7 @@ public class ParagraphStructBuilder : IElementBuilder
     }
 
     /// <summary>
-    ///     Builds the <see cref="ParagraphStructBuilder"/> into an <see cref="ParagraphStruct"/>.
+    ///     Builds the <see cref="ParagraphStructBuilder"/> into a <see cref="ParagraphStruct"/>.
     /// </summary>
     /// <returns>
     ///     A <see cref="ParagraphStruct"/> represents the built element object.

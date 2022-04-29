@@ -3,7 +3,7 @@ using System.Diagnostics;
 namespace KaiHeiLa;
 
 /// <summary>
-///     A button element that can be used in a module.
+///     A button element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ButtonElement : IElement
@@ -28,7 +28,7 @@ public class ButtonElement : IElement
     ///     Gets the theme of the button.
     /// </summary>
     /// <returns>
-    ///     An <see cref="ButtonTheme"/> value that represents the theme of the button.
+    ///     A <see cref="ButtonTheme"/> value that represents the theme of the button.
     /// </returns>
     public ButtonTheme Theme { get; internal set; }
 

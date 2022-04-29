@@ -3,7 +3,7 @@ using System.Diagnostics;
 namespace KaiHeiLa;
 
 /// <summary>
-///     A KMarkdown element that can be used in modules.
+///     A KMarkdown element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class KMarkdownElement : IElement

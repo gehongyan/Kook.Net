@@ -3,11 +3,8 @@
 namespace KaiHeiLa;
 
 /// <summary>
-///     文件模块
+///     A file module that can be used in an <see cref="ICard"/>.
 /// </summary>
-/// <remarks>
-///     展示文件
-/// </remarks>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class FileModule : IMediaModule
 {
@@ -17,10 +14,13 @@ public class FileModule : IMediaModule
         Title = title;
     }
 
+    /// <inheritdoc />
     public ModuleType Type => ModuleType.File;
 
+    /// <inheritdoc />
     public string Source { get; internal set; }
     
+    /// <inheritdoc />
     public string Title { get; internal set; }
     
     private string DebuggerDisplay => $"{Type}: {Title}";

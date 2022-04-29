@@ -21,6 +21,8 @@ public class SocketGuildUser : SocketUser, IGuildUser
     /// </summary>
     public SocketGuild Guild { get; }
     /// <inheritdoc />
+    public string DisplayName => Nickname ?? Username;
+    /// <inheritdoc />
     public string Nickname { get; private set; }
     /// <inheritdoc />
     public bool IsMobileVerified { get; private set; }
@@ -50,13 +52,16 @@ public class SocketGuildUser : SocketUser, IGuildUser
     /// <inheritdoc />
     public override bool? IsBanned { get => GlobalUser.IsBanned; internal set => GlobalUser.IsBanned = value; }
     /// <inheritdoc />
-    public override bool? IsOnline { get => GlobalUser.IsOnline; internal set => GlobalUser.IsOnline = value; }
-    /// <inheritdoc />
     public override bool? IsVIP { get => GlobalUser.IsVIP; internal set => GlobalUser.IsVIP = value; }
     /// <inheritdoc />
     public override bool? IsDenoiseEnabled { get => GlobalUser.IsDenoiseEnabled; internal set => GlobalUser.IsDenoiseEnabled = value; }
     /// <inheritdoc />
     public override UserTag UserTag { get => GlobalUser.UserTag; internal set => GlobalUser.UserTag = value; }
+    
+    /// <inheritdoc />
+    public GuildPermissions GuildPermissions => new GuildPermissions(Permissions.ResolveGuild(Guild, this));
+    /// <inheritdoc />
+    internal override SocketPresence Presence { get; set; }
     
     private ImmutableArray<uint> _roleIds;
     
@@ -70,6 +75,7 @@ public class SocketGuildUser : SocketUser, IGuildUser
     {
         var entity = new SocketGuildUser(guild, guild.KaiHeiLa.GetOrCreateUser(state, model));
         entity.Update(state, model);
+        entity.UpdatePresence(model.Online, model.OperatingSystem);
         entity.UpdateRoles(Array.Empty<uint>());
         return entity;
     }
@@ -77,6 +83,7 @@ public class SocketGuildUser : SocketUser, IGuildUser
     {
         var entity = new SocketGuildUser(guild, guild.KaiHeiLa.GetOrCreateUser(state, model));
         entity.Update(state, model);
+        entity.UpdatePresence(model.Online, model.OperatingSystem);
         return entity;
     }
 
@@ -96,7 +103,17 @@ public class SocketGuildUser : SocketUser, IGuildUser
     {
         Nickname = model.Nickname;
     }
-    
+
+    internal override void UpdatePresence(bool? isOnline)
+    {
+        base.UpdatePresence(isOnline);
+        GlobalUser.UpdatePresence(isOnline);
+    }
+    internal override void UpdatePresence(bool? isOnline, string activeClient)
+    {
+        base.UpdatePresence(isOnline, activeClient);
+        GlobalUser.UpdatePresence(isOnline, activeClient);
+    }
     private void UpdateRoles(uint[] roleIds)
     {
         ImmutableArray<uint>.Builder roles = ImmutableArray.CreateBuilder<uint>(roleIds.Length + 1);
@@ -151,9 +168,6 @@ public class SocketGuildUser : SocketUser, IGuildUser
     public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null)
         => SocketUserHelper.GetConnectedChannelsAsync(this, KaiHeiLa, options);
 
-    /// <inheritdoc />
-    public GuildPermissions GuildPermissions => new GuildPermissions(Permissions.ResolveGuild(Guild, this));
-    
     /// <summary>
     ///     Returns a collection of roles that the user possesses.
     /// </summary>

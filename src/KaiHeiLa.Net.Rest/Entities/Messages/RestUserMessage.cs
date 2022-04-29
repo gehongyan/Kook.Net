@@ -19,6 +19,7 @@ public class RestUserMessage : RestMessage, IUserMessage
     private Quote _quote;
     private Attachment _attachment;
     private ImmutableArray<ICard> _cards = ImmutableArray.Create<ICard>();
+    private ImmutableArray<IEmbed>? _embeds;
     private ImmutableArray<uint> _roleMentionIds = ImmutableArray.Create<uint>();
     private ImmutableArray<ITag> _tags = ImmutableArray.Create<ITag>();
     
@@ -29,6 +30,8 @@ public class RestUserMessage : RestMessage, IUserMessage
     public override Attachment Attachment => _attachment;
     /// <inheritdoc />  
     public override IReadOnlyCollection<ICard> Cards => _cards;
+    /// <inheritdoc />  
+    public override IReadOnlyCollection<IEmbed> Embeds => _embeds;
     /// <inheritdoc />
     public override bool? MentionedEveryone => _isMentioningEveryone;
     /// <inheritdoc />
@@ -59,7 +62,7 @@ public class RestUserMessage : RestMessage, IUserMessage
     {
         base.Update(model);
         var guildId = (Channel as IGuildChannel)?.GuildId;
-        var guild = guildId != null ? (KaiHeiLa as IKaiHeiLaClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).Result : null;
+        var guild = guildId != null ? (KaiHeiLa as IKaiHeiLaClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).GetAwaiter().GetResult() : null;
         if (model.Type == MessageType.Text)
             _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.PlainText);
         else if (model.Type == MessageType.KMarkdown)
@@ -80,13 +83,15 @@ public class RestUserMessage : RestMessage, IUserMessage
         _cards = model.Type == MessageType.Card 
             ? MessageHelper.ParseCards(model.Content) 
             : ImmutableArray.Create<ICard>();
+        
+        _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
     }
     
     internal override void Update(DirectMessage model)
     {
         base.Update(model);
         var guildId = (Channel as IGuildChannel)?.GuildId;
-        var guild = guildId != null ? (KaiHeiLa as IKaiHeiLaClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).Result : null;
+        var guild = guildId != null ? (KaiHeiLa as IKaiHeiLaClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).GetAwaiter().GetResult() : null;
         if (model.Type == MessageType.Text)
             _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.PlainText);
         else if (model.Type == MessageType.KMarkdown)
@@ -104,6 +109,8 @@ public class RestUserMessage : RestMessage, IUserMessage
         _cards = model.Type == MessageType.Card 
             ? MessageHelper.ParseCards(model.Content) 
             : ImmutableArray.Create<ICard>();
+        
+        _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
     }
     
     public string Resolve(int startIndex, TagHandling userHandling = TagHandling.Name, TagHandling channelHandling = TagHandling.Name,
@@ -134,9 +141,14 @@ public class RestUserMessage : RestMessage, IUserMessage
         _quote = properties.Quote?.QuotedMessageId == Guid.Empty ? null : (Quote) properties.Quote;
     }
     
+    /// <inheritdoc />
     bool? IMessage.IsPinned => IsPinned;
+    /// <inheritdoc />
     IQuote IUserMessage.Quote => _quote;
+    /// <inheritdoc />
     IReadOnlyCollection<ICard> IMessage.Cards => Cards;
+    /// <inheritdoc />
+    IReadOnlyCollection<IEmbed> IMessage.Embeds => Embeds;
 
     #endregion
 }

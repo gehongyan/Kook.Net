@@ -105,7 +105,7 @@ public class KaiHeiLaConfig
     ///     Returns the min value for a KaiHeiLa intimacy score. 
     /// </summary>
     /// <returns>
-    ///     The minimum value of a intimacy score allowed by KaiHeiLa.
+    ///     The minimum value of an intimacy score allowed by KaiHeiLa.
     /// </returns>
     public const int MinIntimacyScore = 0;
     
@@ -113,7 +113,7 @@ public class KaiHeiLaConfig
     ///     Returns the max value for a KaiHeiLa intimacy score. 
     /// </summary>
     /// <returns>
-    ///     The maximum value of a intimacy score allowed by KaiHeiLa.
+    ///     The maximum value of an intimacy score allowed by KaiHeiLa.
     /// </returns>
     public const int MaxIntimacyScore = 2200;
 

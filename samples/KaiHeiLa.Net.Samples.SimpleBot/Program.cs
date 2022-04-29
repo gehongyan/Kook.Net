@@ -25,7 +25,7 @@ class Program
         _client.Log += ClientOnLog;
         _client.MessageReceived += ClientOnMessageReceived;
         _client.DirectMessageReceived += ClientOnDirectMessageReceived;
-        // _client.Ready += ClientOnReady;
+        _client.Ready += ClientOnReady;
         // _client.MessageButtonClicked += ClientOnMessageButtonClicked;
         // _client.MessageDeleted += async (msg, channel) =>
         // {
@@ -60,13 +60,11 @@ class Program
         // await CardDemo(msg);
     }
 
-    // private async Task ClientOnReady()
-    // {
-    //     IUser userAsync1 = await _client.GetUserAsync(0);
-    //     IUser userAsync2 = await _client.GetUserAsync(0);
-    //     IUser userAsync3 = await _client.GetUserAsync(0);
-    //     
-    // }
+    private async Task ClientOnReady()
+    {
+        IUser userAsync1 = await _client.GetUserAsync(821393881);
+        
+    }
 
     private Task ClientOnLog(LogMessage arg)
     {

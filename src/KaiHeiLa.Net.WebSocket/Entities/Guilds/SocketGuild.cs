@@ -609,7 +609,10 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     internal SocketGuildUser AddOrUpdateUser(UserModel model)
     {
         if (_members.TryGetValue(model.Id, out SocketGuildUser member))
+        {
             member.GlobalUser?.Update(KaiHeiLa.State, model);
+            member.UpdatePresence(model.Online, model.OperatingSystem);
+        }
         else
         {
             member = SocketGuildUser.Create(this, KaiHeiLa.State, model);

@@ -1,7 +1,16 @@
 ﻿namespace KaiHeiLa;
 
+/// <summary>
+///     Represents a generic message sent by a user.
+/// </summary>
 public interface IUserMessage : IMessage
 {
+    /// <summary>
+    ///     Gets the message quote.
+    /// </summary>
+    /// <returns>
+    ///     The message quote.
+    /// </returns>
     IQuote Quote { get; }
     
     /// <summary>

@@ -1,5 +1,8 @@
 namespace KaiHeiLa;
 
+/// <summary>
+///     Represents a generic invite.
+/// </summary>
 public interface IInvite : IEntity<uint>, IDeletable
 {
     /// <summary>
@@ -76,7 +79,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     Gets the time at which this invite will expire.
     /// </summary>
     /// <returns>
-    ///     An <see cref="DateTimeOffset"/> representing the time until this invite expires; <c>null</c> if this
+    ///     A <see cref="DateTimeOffset"/> representing the time until this invite expires; <c>null</c> if this
     ///     invite never expires.
     /// </returns>
     DateTimeOffset? ExpiresAt { get; }
@@ -84,7 +87,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     Gets the time span until the invite expires.
     /// </summary>
     /// <returns>
-    ///     An <see cref="TimeSpan"/> representing the time span until this invite expires; <c>null</c> if this
+    ///     A <see cref="TimeSpan"/> representing the time span until this invite expires; <c>null</c> if this
     ///     invite never expires.
     /// </returns>
     TimeSpan? MaxAge { get; }

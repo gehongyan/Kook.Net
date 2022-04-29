@@ -17,8 +17,6 @@ public class SocketUnknownUser : SocketUser
     /// <inheritdoc />
     public override ushort? IdentifyNumberValue { get; internal set; }
     /// <inheritdoc />
-    public override bool? IsOnline { get; internal set; }
-    /// <inheritdoc />
     public override bool? IsBot { get; internal set; }
     /// <inheritdoc />
     public override bool? IsBanned { get; internal set; }
@@ -32,10 +30,11 @@ public class SocketUnknownUser : SocketUser
     public override bool? IsDenoiseEnabled { get; internal set; }
     /// <inheritdoc />
     public override UserTag UserTag { get; internal set; }
-
+    /// <inheritdoc />
+    internal override SocketPresence Presence { get => new SocketPresence(null, null); set { } }
+    /// <inheritdoc />
     /// <exception cref="NotSupportedException">This field is not supported for an unknown user.</exception>
-    internal override SocketGlobalUser GlobalUser =>
-        throw new NotSupportedException();
+    internal override SocketGlobalUser GlobalUser => throw new NotSupportedException();
 
     internal SocketUnknownUser(KaiHeiLaSocketClient kaiHeiLa, ulong id)
         : base(kaiHeiLa, id)
