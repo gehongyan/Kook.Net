@@ -1369,9 +1369,32 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                             else if (_connection.CancelToken.IsCancellationRequested)
                                 return;
                             
+                            // Download guild member count
                             foreach (SocketGuild socketGuild in State.Guilds)
                                 socketGuild.MemberCount = await ApiClient.GetGuildMemberCountAsync(socketGuild.Id).ConfigureAwait(false);
                             
+                            // Download extended guild data for channels
+                            try
+                            {
+                                foreach (SocketGuild socketGuild in State.Guilds)
+                                {
+                                    ExtendedGuild model = await ApiClient.GetGuildAsync(socketGuild.Id).ConfigureAwait(false);
+                                    if (model is not null)
+                                    {
+                                        socketGuild.Update(State, model);
+                                
+                                        if (_unavailableGuildCount != 0)
+                                            _unavailableGuildCount--;
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                _connection.CriticalError(new Exception("Processing Guilds failed", ex));
+                                return;
+                            }
+                            
+                            // Download user list if enabled
                             if (BaseConfig.AlwaysDownloadUsers)
                                 _ = DownloadUsersAsync(Guilds.Where(x => x.IsAvailable && !x.HasAllMembers));
 
@@ -1381,26 +1404,6 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
 
                     _ = _connection.CompleteAsync();
                     
-                    // Download extended guild data
-                    try
-                    {
-                        foreach (SocketGuild socketGuild in State.Guilds)
-                        {
-                            ExtendedGuild model = await ApiClient.GetGuildAsync(socketGuild.Id).ConfigureAwait(false);
-                            if (model is not null)
-                            {
-                                socketGuild.Update(State, model);
-                                
-                                if (_unavailableGuildCount != 0)
-                                    _unavailableGuildCount--;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _connection.CriticalError(new Exception("Processing Guilds failed", ex));
-                        return;
-                    }
                 }
                     break;
 
