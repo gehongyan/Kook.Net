@@ -195,7 +195,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     /// </returns>
     public IReadOnlyCollection<SocketRole> Roles => _roles.ToReadOnlyCollection();
     
-    
     internal SocketGuild(KaiHeiLaSocketClient kaiHeiLa, ulong id) : base(kaiHeiLa, id)
     {
     }

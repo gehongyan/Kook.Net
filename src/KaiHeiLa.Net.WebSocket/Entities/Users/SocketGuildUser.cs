@@ -167,10 +167,28 @@ public class SocketGuildUser : SocketUser, IGuildUser
     /// <inheritdoc />
     public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null)
         => SocketUserHelper.GetConnectedChannelsAsync(this, KaiHeiLa, options);
-
+    
+    /// <summary>
+    ///     Fetches the users data from the REST API to update this object,
+    ///     especially the <see cref="Roles"/> property.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous reloading operation.
+    /// </returns>
+    public Task ReloadAsync(RequestOptions options = null)
+        => SocketUserHelper.ReloadAsync(this, KaiHeiLa, options);
+    
     /// <summary>
     ///     Returns a collection of roles that the user possesses.
     /// </summary>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         Due to the lack of events which should be raised when a role is added or removed from a user,
+    ///         this property may not be completely accurate. To ensure the most accurate results,
+    ///         it is recommended to call <see cref="ReloadAsync"/> before this property is used.
+    ///     </note>
+    /// </remarks>
     public IReadOnlyCollection<SocketRole> Roles
         => _roleIds.Select(id => Guild.GetRole(id)).Where(x => x != null).ToReadOnlyCollection(() => _roleIds.Length);
     
