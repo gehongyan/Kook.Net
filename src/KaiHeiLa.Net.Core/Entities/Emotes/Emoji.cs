@@ -15,7 +15,7 @@ public class Emoji : IEmote
     public string Name { get; }
 
     /// <inheritdoc />
-    public string Id { get; }
+    public string Id => Name;
 
     /// <summary>
     ///     Gets the Unicode representation of this emoji.
@@ -31,7 +31,7 @@ public class Emoji : IEmote
     /// <param name="unicode">The pure UTF-8 encoding of an emoji.</param>
     public Emoji(string unicode)
     {
-        Name = unicode;
+        Name = TryParseAsUnicodePoint(unicode, out string name) ? name : unicode;
     }
 
     /// <summary>
@@ -76,6 +76,19 @@ public class Emoji : IEmote
             throw new FormatException("String is not emoji name or unicode!");
 
         return emoji;
+    }
+
+    /// <summary>
+    ///     Try parsing an <see cref="Emoji"/> from its unicode point format.
+    ///     For example: <c>[#128187;]</c> -> <c>💻</c>
+    /// </summary>
+    internal bool TryParseAsUnicodePoint(string unicodePoint, out string name)
+    {
+        name = null;
+        if (!unicodePoint.StartsWith("[#") || !unicodePoint.EndsWith(";]")) return false;
+        if (!int.TryParse(unicodePoint[2..^2], out int codePoint)) return false;
+        name = char.ConvertFromUtf32(codePoint);
+        return true;
     }
 
     /// <inheritdoc />
