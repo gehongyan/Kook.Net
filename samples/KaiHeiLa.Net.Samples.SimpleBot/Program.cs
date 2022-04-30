@@ -55,9 +55,9 @@ class Program
         if (arg.Author.Id == _client.CurrentUser.Id) return;
         if (arg.Author.IsBot == true) return;
         if (arg.Content != "/test") return;
-        await arg.Channel.SendTextMessageAsync("收到了！", quote: new Quote(arg.Id));
+        // await arg.Channel.SendTextMessageAsync("收到了！", quote: new Quote(arg.Id));
         // await msg.ReloadAsync();
-        // await CardDemo(msg);
+        await CardDemo(arg);
     }
 
     private async Task ClientOnReady()
@@ -109,7 +109,7 @@ class Program
                 .WithAccessory(new ImageElementBuilder()
                     .WithSource("https://img.kaiheila.cn/assets/2021-01/7kr4FkWpLV0ku0ku.jpeg")
                     .WithSize(ImageSize.Small))
-                .WithMode(SectionAccessoryMode.Right))
+                .WithMode(SectionAccessoryMode.Unspecified))
             .AddModule(new SectionModuleBuilder()
                 .WithText(new PlainTextElementBuilder().WithContent("您是否认为\"开黑啦\"是最好的语音软件？"))
                 .WithAccessory(new ButtonElementBuilder().WithTheme(ButtonTheme.Primary).WithText("完全同意", false))
@@ -142,8 +142,8 @@ class Program
             .AddModule(new CountdownModuleBuilder().WithMode(CountdownMode.Hour).WithEndTime(DateTimeOffset.Now.AddMinutes(1)))
             .AddModule(new CountdownModuleBuilder().WithMode(CountdownMode.Second).WithEndTime(DateTimeOffset.Now.AddMinutes(2)).WithStartTime(DateTimeOffset.Now.AddMinutes(1)));
         
-        (Guid MessageId, DateTimeOffset MessageTimestamp) response = await _client.GetGuild(_guildId)
-            .GetTextChannel(_channelId)
+        (Guid MessageId, DateTimeOffset MessageTimestamp) response = await _client.GetGuild(((SocketUserMessage) message).Guild.Id)
+            .GetTextChannel(message.Channel.Id)
             .SendCardMessageAsync(cardBuilder.Build(), quote: new Quote(message.Id));
     }
 

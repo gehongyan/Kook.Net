@@ -12,8 +12,7 @@ internal class SectionAccessoryModeConverter : JsonConverter<SectionAccessoryMod
         {
             "left" => SectionAccessoryMode.Left,
             "right" => SectionAccessoryMode.Right,
-            "" => SectionAccessoryMode.Unspecified,
-            _ => throw new ArgumentOutOfRangeException(nameof(SectionAccessoryMode))
+            _ => SectionAccessoryMode.Unspecified
         };
     }
 
@@ -23,7 +22,7 @@ internal class SectionAccessoryModeConverter : JsonConverter<SectionAccessoryMod
         {
             SectionAccessoryMode.Left => "left",
             SectionAccessoryMode.Right => "right",
-            SectionAccessoryMode.Unspecified => "",
+            SectionAccessoryMode.Unspecified => null,
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
     }

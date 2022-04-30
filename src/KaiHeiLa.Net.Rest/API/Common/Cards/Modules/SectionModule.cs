@@ -7,6 +7,7 @@ internal class SectionModule : ModuleBase
 {
     [JsonPropertyName("mode")]
     [JsonConverter(typeof(SectionAccessoryModeConverter))]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public SectionAccessoryMode Mode { get; set; }
 
     [JsonPropertyName("text")]
