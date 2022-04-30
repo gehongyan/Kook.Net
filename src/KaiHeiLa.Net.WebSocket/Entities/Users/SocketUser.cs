@@ -125,8 +125,8 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     }
     
     /// <inheritdoc />
-    public async Task<IDMChannel> CreateDMChannelAsync(RequestOptions options = null)
-        => await UserHelper.CreateDMChannelAsync(this, KaiHeiLa, options).ConfigureAwait(false);
+    public async Task<SocketDMChannel> CreateDMChannelAsync(RequestOptions options = null)
+        => await SocketUserHelper.CreateDMChannelAsync(this, KaiHeiLa, options).ConfigureAwait(false);
 
     /// <summary>
     ///     Gets the intimacy information with this user.
@@ -157,6 +157,9 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     
     #region IUser
     
+    /// <inheritdoc />
+    async Task<IDMChannel> IUser.CreateDMChannelAsync(RequestOptions options)
+        => await CreateDMChannelAsync(options).ConfigureAwait(false);
     /// <inheritdoc />
     async Task<IIntimacy> IUser.GetIntimacyAsync(RequestOptions options)
         => await GetIntimacyAsync(options).ConfigureAwait(false);

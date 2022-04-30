@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using KaiHeiLa.API;
 using KaiHeiLa.API.Rest;
 
 namespace KaiHeiLa.WebSocket;
@@ -15,5 +16,11 @@ internal static class SocketUserHelper
     {
         GuildMember member = await client.ApiClient.GetGuildMemberAsync(user.Guild.Id, user.Id, options: options).ConfigureAwait(false);
         user.Update(client.State, member);
+    }
+
+    public static async Task<SocketDMChannel> CreateDMChannelAsync(SocketUser user, KaiHeiLaSocketClient client, RequestOptions options)
+    {
+        UserChat userChat = await client.ApiClient.CreateUserChatAsync(user.Id, options).ConfigureAwait(false);
+        return SocketDMChannel.Create(client,client.State, userChat.Code, userChat.Recipient);
     }
 }
