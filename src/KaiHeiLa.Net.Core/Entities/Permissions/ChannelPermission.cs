@@ -18,7 +18,7 @@ public enum ChannelPermission : uint
     /// <summary>
     ///     Allows guild members to view a channel, which includes reading messages in text channels.
     /// </summary>
-    ViewChannels         = 1 << 11,
+    ViewChannel         = 1 << 11,
     /// <summary>
     ///     Allows for sending messages in a channel
     /// </summary>

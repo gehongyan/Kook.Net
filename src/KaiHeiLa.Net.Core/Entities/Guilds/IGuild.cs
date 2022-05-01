@@ -98,6 +98,27 @@ public interface IGuild : IEntity<ulong>
     /// </returns>
     IRole EveryoneRole { get; }
     /// <summary>
+    ///     Gets the number of boost subscribers of this guild.
+    /// </summary>
+    /// <returns>
+    ///     The number of boost subscribers of this guild.
+    /// </returns>
+    int BoostNumber { get; }
+    /// <summary>
+    ///     Gets the number of boost subscribers who activates buffer of this guild.
+    /// </summary>
+    /// <returns>
+    ///     The number of boost subscribers who activates buffer of this guild.
+    /// </returns>
+    int BufferBoostNumber { get; }
+    /// <summary>
+    ///     Gets the level of guild boosting in this guild.
+    /// </summary>
+    /// <returns>
+    ///     The level of guild boosting in this guild.
+    /// </returns>
+    BoostLevel BoostLevel { get; }
+    /// <summary>
     ///     Gets a collection of all custom emotes for this guild.
     /// </summary>
     /// <returns>

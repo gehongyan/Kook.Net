@@ -41,7 +41,7 @@ public struct OverwritePermissions
     /// <summary> If Allowed, a user may adjust roles. </summary>
     public PermValue ManageRoles => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageRoles);
     /// <summary> If Allowed, a user may view channels. </summary>
-    public PermValue ViewChannels => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ViewChannels);
+    public PermValue ViewChannel => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ViewChannel);
     /// <summary> If Allowed, a user may send messages. </summary>
     public PermValue SendMessages => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.SendMessages);
     /// <summary> If Allowed, a user may delete messages. </summary>
@@ -87,7 +87,7 @@ public struct OverwritePermissions
         PermValue? createInvites = null,
         PermValue? manageChannels = null,
         PermValue? manageRoles = null,
-        PermValue? viewChannels = null,
+        PermValue? viewChannel = null,
         PermValue? sendMessages = null,
         PermValue? manageMessages = null,
         PermValue? attachFiles = null,
@@ -105,7 +105,7 @@ public struct OverwritePermissions
         Permissions.SetValue(ref allowValue, ref denyValue, createInvites, ChannelPermission.CreateInvites);
         Permissions.SetValue(ref allowValue, ref denyValue, manageChannels, ChannelPermission.ManageChannels);
         Permissions.SetValue(ref allowValue, ref denyValue, manageRoles, ChannelPermission.ManageRoles);
-        Permissions.SetValue(ref allowValue, ref denyValue, viewChannels, ChannelPermission.ViewChannels);
+        Permissions.SetValue(ref allowValue, ref denyValue, viewChannel, ChannelPermission.ViewChannel);
         Permissions.SetValue(ref allowValue, ref denyValue, sendMessages, ChannelPermission.SendMessages);
         Permissions.SetValue(ref allowValue, ref denyValue, manageMessages, ChannelPermission.ManageMessages);
         Permissions.SetValue(ref allowValue, ref denyValue, attachFiles, ChannelPermission.AttachFiles);
@@ -131,7 +131,7 @@ public struct OverwritePermissions
         PermValue createInvites = PermValue.Inherit,
         PermValue manageChannels = PermValue.Inherit,
         PermValue manageRoles = PermValue.Inherit,
-        PermValue viewChannels = PermValue.Inherit,
+        PermValue viewChannel = PermValue.Inherit,
         PermValue sendMessages = PermValue.Inherit,
         PermValue manageMessages = PermValue.Inherit,
         PermValue attachFiles = PermValue.Inherit,
@@ -145,7 +145,7 @@ public struct OverwritePermissions
         PermValue deafenMembers = PermValue.Inherit,
         PermValue muteMembers = PermValue.Inherit,
         PermValue playSoundtrack = PermValue.Inherit)
-        : this(0, 0, createInvites, manageChannels, manageRoles, viewChannels, sendMessages, manageMessages,
+        : this(0, 0, createInvites, manageChannels, manageRoles, viewChannel, sendMessages, manageMessages,
             attachFiles, connect, manageVoice, mentionEveryone, addReactions, passiveConnect, useVoiceActivity, speak,
             deafenMembers, muteMembers, playSoundtrack)
     {
@@ -159,7 +159,7 @@ public struct OverwritePermissions
         PermValue? createInvites = null,
         PermValue? manageChannels = null,
         PermValue? manageRoles = null,
-        PermValue? viewChannels = null,
+        PermValue? viewChannel = null,
         PermValue? sendMessages = null,
         PermValue? manageMessages = null,
         PermValue? attachFiles = null,
@@ -174,7 +174,7 @@ public struct OverwritePermissions
         PermValue? muteMembers = null,
         PermValue? playSoundtrack = null)
         => new OverwritePermissions(AllowValue, DenyValue, createInvites, manageChannels, manageRoles,
-            viewChannels, sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone,
+            viewChannel, sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone,
             addReactions, passiveConnect, useVoiceActivity, speak, deafenMembers, muteMembers, playSoundtrack);
 
     /// <summary>

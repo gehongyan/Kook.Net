@@ -58,11 +58,12 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
 
     public IReadOnlyCollection<SocketMessage> CachedMessages => _messages?.Messages ?? ImmutableArray.Create<SocketMessage>();
+    
     /// <inheritdoc />
     public override IReadOnlyCollection<SocketGuildUser> Users
         => Guild.Users.Where(x => Permissions.GetValue(
             Permissions.ResolveChannel(Guild, x, this, Permissions.ResolveGuild(Guild, x)),
-            ChannelPermission.ViewChannels)).ToImmutableArray();
+            ChannelPermission.ViewChannel)).ToImmutableArray();
 
     internal SocketTextChannel(KaiHeiLaSocketClient kaiHeiLa, ulong id, SocketGuild guild)
         : base(kaiHeiLa, id, guild)
@@ -137,7 +138,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     ///     Gets a collection of messages in this channel.
     /// </summary>
     /// <remarks>
-    ///     This method follows the same behavior as described in <see cref="IMessageChannel.GetMessagesAsync(ulong, Direction, int, CacheMode, RequestOptions)"/>.
+    ///     This method follows the same behavior as described in <see cref="IMessageChannel.GetMessagesAsync(Guid, Direction, int, CacheMode, RequestOptions)"/>.
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
     /// <param name="referenceMessageId">The ID of the starting message to get the messages from.</param>
@@ -165,44 +166,70 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch, RequestOptions options = null)
         => SocketChannelHelper.GetMessagesAsync(this, KaiHeiLa, _messages, referenceMessage.Id, dir, limit, CacheMode.AllowDownload, options);
+    /// <inheritdoc />
+    public IReadOnlyCollection<SocketMessage> GetCachedMessages(int limit = KaiHeiLaConfig.MaxMessagesPerBatch)
+        => SocketChannelHelper.GetCachedMessages(this, KaiHeiLa, _messages, null, Direction.Before, limit);
+    /// <inheritdoc />
+    public IReadOnlyCollection<SocketMessage> GetCachedMessages(Guid fromMessageId, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch)
+        => SocketChannelHelper.GetCachedMessages(this, KaiHeiLa, _messages, fromMessageId, dir, limit);
+    /// <inheritdoc />
+    public IReadOnlyCollection<SocketMessage> GetCachedMessages(IMessage fromMessage, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch)
+        => SocketChannelHelper.GetCachedMessages(this, KaiHeiLa, _messages, fromMessage.Id, dir, limit);
+    /// <inheritdoc cref="ITextChannel.GetPinnedMessagesAsync(RequestOptions)"/>
     public Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions options = null)
         => ChannelHelper.GetPinnedMessagesAsync(this, KaiHeiLa, options);
-    
+    /// <inheritdoc cref="IMessageChannel.SendTextMessageAsync(string,IQuote,IUser,RequestOptions)"/>
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Text, text, options, quote: quote, ephemeralUser: ephemeralUser);
+    /// <inheritdoc cref="IMessageChannel.SendImageMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     {
         CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Image, createAssetResponse.Url, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
+    /// <inheritdoc cref="IMessageChannel.SendVideoMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     {
         CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Video, createAssetResponse.Url, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
+    /// <inheritdoc cref="IMessageChannel.SendFileMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     {
         CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.File, createAssetResponse.Url, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
+    // /// <inheritdoc cref="IMessageChannel.SendAudioMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
     // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     // {
     //     CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(path, fileName, options);
     //     return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Audio, createAssetResponse.Url, options, quote: quote,
     //         ephemeralUser: ephemeralUser);
     // }
+    /// <inheritdoc cref="IMessageChannel.SendKMarkdownMessageAsync(string,IQuote,IUser,RequestOptions)"/>
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendKMarkdownMessageAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.KMarkdown, text, options, quote: quote, ephemeralUser: ephemeralUser);
-
+    /// <inheritdoc cref="IMessageChannel.SendCardMessageAsync(IEnumerable{ICard},IQuote,IUser,RequestOptions)"/>
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(IEnumerable<ICard> cards, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     {
         string json = MessageHelper.SerializeCards(cards);
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Card, json, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
+    /// <summary>
+    ///     Sends a card message to this message channel.
+    /// </summary>
+    /// <param name="card">The card to be sent.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null) => 
         SendCardMessageAsync(new[] { card }, quote, ephemeralUser, options);
 
@@ -245,7 +272,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         {
             var guildPerms = Permissions.ResolveGuild(Guild, user);
             var channelPerms = Permissions.ResolveChannel(Guild, user, this, guildPerms);
-            if (Permissions.GetValue(channelPerms, ChannelPermission.ViewChannels))
+            if (Permissions.GetValue(channelPerms, ChannelPermission.ViewChannel))
                 return user;
         }
         return null;
@@ -331,17 +358,12 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult(Category);
     
-    /// <summary>
-    ///     Gets the creator of this channel.
-    /// </summary>
+    /// <inheritdoc />
     /// <remarks>
     ///     This method will try to get the user as a member of this channel. If the user is not a member of this guild,
     ///     this method will return <c>null</c>. To get the creator under this circumstance, use
     ///     <see cref="KaiHeiLa.Rest.KaiHeiLaRestClient.GetUserAsync(ulong,RequestOptions)"/>.
     /// </remarks>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
-    /// </returns>
     Task<IUser> INestedChannel.GetCreatorAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult<IUser>(Creator);
     

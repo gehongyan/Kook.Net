@@ -7,16 +7,31 @@ public interface IMessageChannel : IChannel
     /// <summary>
     ///     Sends a plain text to this message channel.
     /// </summary>
+    /// <param name="text">The message to be sent.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Message content is too long, length must be less or equal to <see cref="KaiHeiLaConfig.MaxMessageSize"/>.
+    /// </exception>
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, IQuote quote = null,
         IUser ephemeralUser = null, RequestOptions options = null);
 
     /// <summary>
     ///     Sends an image to this message channel.
     /// </summary>
+    /// <remarks>
+    ///     This method sends an image as if you are uploading an image directly from your KaiHeiLa client.
+    /// </remarks>
+    /// <param name="path">The file path of the image.</param>
+    /// <param name="fileName">The name of the image.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -27,6 +42,14 @@ public interface IMessageChannel : IChannel
     /// <summary>
     ///     Sends a video to this message channel.
     /// </summary>
+    /// <remarks>
+    ///     This method sends an video as if you are uploading an image directly from your KaiHeiLa client.
+    /// </remarks>
+    /// <param name="path">The file path of the video.</param>
+    /// <param name="fileName">The name of the video.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -37,6 +60,14 @@ public interface IMessageChannel : IChannel
     /// <summary>
     ///     Sends a file to this message channel.
     /// </summary>
+    /// <remarks>
+    ///     This method sends a file as if you are uploading an image directly from your KaiHeiLa client.
+    /// </remarks>
+    /// <param name="path">The file path of the audio.</param>
+    /// <param name="fileName">The name of the audio.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -47,6 +78,14 @@ public interface IMessageChannel : IChannel
     // /// <summary>
     // ///     Sends an audio to this message channel.
     // /// </summary>
+    // /// <remarks>
+    // ///     This method sends an audio as if you are uploading an image directly from your KaiHeiLa client.
+    // /// </remarks>
+    // /// <param name="path">The file path of the file.</param>
+    // /// <param name="fileName">The name of the file.</param>
+    // /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    // /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    // /// <param name="options">The options to be used when sending the request.</param>
     // /// <returns>
     // ///     A task that represents an asynchronous send operation for delivering the message. The task result
     // ///     contains the identifier and timestamp of the sent message.
@@ -57,6 +96,10 @@ public interface IMessageChannel : IChannel
     /// <summary>
     ///     Sends a KMarkdown message to this message channel.
     /// </summary>
+    /// <param name="text">The message to be sent.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -67,6 +110,10 @@ public interface IMessageChannel : IChannel
     /// <summary>
     ///     Sends a card message to this message channel.
     /// </summary>
+    /// <param name="cards">The cards to be sent.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.

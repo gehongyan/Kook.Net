@@ -62,12 +62,23 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     // /// <inheritdoc />
     // public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
     
+    /// <summary>
+    ///     Gets the features of this guild.
+    /// </summary>
+    /// <returns>
+    ///     An array of objects representing the features of this guild.
+    /// </returns>
+    /// <remarks>
+    ///      <note type="important">
+    ///         What this property represents is not well investigated.
+    ///     </note>
+    /// </remarks>
     public object[] Features { get; private set; }
-
+    /// <inheritdoc />
     public int BoostNumber { get; private set; }
-    
+    /// <inheritdoc />
     public int BufferBoostNumber { get; private set; }
-
+    /// <inheritdoc />
     public BoostLevel BoostLevel { get; private set; }
     
     public int Status { get; private set; }
@@ -443,7 +454,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         var channels = await GetTextChannelsAsync(options).ConfigureAwait(false);
         var user = await GetCurrentUserAsync(options).ConfigureAwait(false);
         return channels
-            .Where(c => user.GetPermissions(c).ViewChannels)
+            .Where(c => user.GetPermissions(c).ViewChannel)
             .MinBy(c => c.Position);
     }
     

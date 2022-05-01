@@ -51,13 +51,23 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     public ulong DefaultChannelId { get; private set; }
     /// <inheritdoc />
     public ulong WelcomeChannelId { get; private set; }
-    
+    /// <summary>
+    ///     Gets the features of this guild.
+    /// </summary>
+    /// <returns>
+    ///     An array of objects representing the features of this guild.
+    /// </returns>
+    /// <remarks>
+    ///      <note type="important">
+    ///         What this property represents is not well investigated.
+    ///     </note>
+    /// </remarks>
     public object[] Features { get; private set; }
-
+    /// <inheritdoc />
     public int BoostNumber { get; private set; }
-    
+    /// <inheritdoc />
     public int BufferBoostNumber { get; private set; }
-
+    /// <inheritdoc />
     public BoostLevel BoostLevel { get; private set; }
     
     public int Status { get; private set; }
@@ -161,7 +171,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     ///     A <see cref="SocketTextChannel"/> representing the default text channel for this guild.
     /// </returns>
     public SocketTextChannel DefaultChannel => TextChannels
-        .Where(c => CurrentUser.GetPermissions(c).ViewChannels)
+        .Where(c => CurrentUser.GetPermissions(c).ViewChannel)
         .SingleOrDefault(c => c.Id == DefaultChannelId);
     // /// <inheritdoc />
     // public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
@@ -325,37 +335,13 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     #endregion
     
     #region Bans
-    /// <summary>
-    ///     Gets a collection of all users banned in this guild.
-    /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
-    ///     ban objects that this guild currently possesses, with each object containing the user banned and reason
-    ///     behind the ban.
-    /// </returns>
+    /// <inheritdoc cref="IGuild.GetBansAsync(RequestOptions)"/>
     public Task<IReadOnlyCollection<RestBan>> GetBansAsync(RequestOptions options = null)
         => GuildHelper.GetBansAsync(this, KaiHeiLa, options);
-    /// <summary>
-    ///     Gets a ban object for a banned user.
-    /// </summary>
-    /// <param name="user">The banned user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
-    ///     contains the user information and the reason for the ban; <see langword="null"/> if the ban entry cannot be found.
-    /// </returns>
+    /// <inheritdoc cref="IGuild.GetBanAsync(IUser,RequestOptions)"/>
     public Task<RestBan> GetBanAsync(IUser user, RequestOptions options = null)
         => GuildHelper.GetBanAsync(this, KaiHeiLa, user.Id, options);
-    /// <summary>
-    ///     Gets a ban object for a banned user.
-    /// </summary>
-    /// <param name="userId">The identifier for the banned user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
-    ///     contains the user information and the reason for the ban; <see langword="null"/> if the ban entry cannot be found.
-    /// </returns>
+    /// <inheritdoc cref="IGuild.GetBanAsync(ulong,RequestOptions)"/>
     public Task<RestBan> GetBanAsync(ulong userId, RequestOptions options = null)
         => GuildHelper.GetBanAsync(this, KaiHeiLa, userId, options);
 

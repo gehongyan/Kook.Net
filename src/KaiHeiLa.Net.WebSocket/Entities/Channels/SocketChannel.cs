@@ -45,7 +45,9 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel
     
     #region IChannel
 
+    /// <inheritdoc />
     string IChannel.Name => null;
+    /// <inheritdoc />
     ulong IChannel.CreateUserId => default;
 
     /// <inheritdoc />

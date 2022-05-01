@@ -36,7 +36,7 @@ public class GuildPermissions
     /// <summary> If <c>true</c>, a user may adjust roles. </summary>
     public bool ManageRoles => Permissions.GetValue(RawValue, GuildPermission.ManageRoles);
     /// <summary> If <c>true</c>, a user may view channels. </summary>
-    public bool ViewChannels => Permissions.GetValue(RawValue, GuildPermission.ViewChannels);
+    public bool ViewChannel => Permissions.GetValue(RawValue, GuildPermission.ViewChannel);
     /// <summary> If <c>true</c>, a user may send messages. </summary>
     public bool SendMessages => Permissions.GetValue(RawValue, GuildPermission.SendMessages);
     /// <summary> If <c>true</c>, a user may delete messages. </summary>
@@ -88,7 +88,7 @@ public class GuildPermissions
         bool? manageEmojis = null,
         bool? changeNickname = null,
         bool? manageRoles = null,
-        bool? viewChannels = null,
+        bool? viewChannel = null,
         bool? sendMessages = null,
         bool? manageMessages = null,
         bool? attachFiles = null,
@@ -120,7 +120,7 @@ public class GuildPermissions
         Permissions.SetValue(ref value, manageEmojis, GuildPermission.ManageEmojis);
         Permissions.SetValue(ref value, changeNickname, GuildPermission.ChangeNickname);
         Permissions.SetValue(ref value, manageRoles, GuildPermission.ManageRoles);
-        Permissions.SetValue(ref value, viewChannels, GuildPermission.ViewChannels);
+        Permissions.SetValue(ref value, viewChannel, GuildPermission.ViewChannel);
         Permissions.SetValue(ref value, sendMessages, GuildPermission.SendMessages);
         Permissions.SetValue(ref value, manageMessages, GuildPermission.ManageMessages);
         Permissions.SetValue(ref value, attachFiles, GuildPermission.AttachFiles);
@@ -154,7 +154,7 @@ public class GuildPermissions
         bool manageEmojis = false,
         bool changeNickname = false,
         bool manageRoles = false,
-        bool viewChannels = false,
+        bool viewChannel = false,
         bool sendMessages = false,
         bool manageMessages = false,
         bool attachFiles = false,
@@ -172,7 +172,7 @@ public class GuildPermissions
         bool manageNicknames = false,
         bool playSoundtrack = false)
         : this(0, administrator, manageGuild, viewAuditLog, createInvites, manageInvites, manageChannels, kickMembers,
-            banMembers, manageEmojis, changeNickname, manageRoles, viewChannels, sendMessages, manageMessages,
+            banMembers, manageEmojis, changeNickname, manageRoles, viewChannel, sendMessages, manageMessages,
             attachFiles, connect, manageVoice, mentionEveryone, addReactions, followReactions, passiveConnect,
             onlyPushToTalk, useVoiceActivity, speak, deafenMembers, muteMembers, manageNicknames, playSoundtrack)
     {
@@ -191,7 +191,7 @@ public class GuildPermissions
         bool? manageEmojis = null,
         bool? changeNickname = null,
         bool? manageRoles = null,
-        bool? viewChannels = null,
+        bool? viewChannel = null,
         bool? sendMessages = null,
         bool? manageMessages = null,
         bool? attachFiles = null,
@@ -209,7 +209,7 @@ public class GuildPermissions
         bool? manageNicknames = null,
         bool? playSoundtrack = null)
         => new GuildPermissions(RawValue, administrator, manageGuild, viewAuditLog, createInvites, manageInvites,
-            manageChannels, kickMembers, banMembers, manageEmojis, changeNickname, manageRoles, viewChannels,
+            manageChannels, kickMembers, banMembers, manageEmojis, changeNickname, manageRoles, viewChannel,
             sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone, addReactions,
             followReactions, passiveConnect, onlyPushToTalk, useVoiceActivity, speak, deafenMembers, muteMembers,
             manageNicknames, playSoundtrack);
