@@ -27,7 +27,9 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <inheritdoc />
     public ChannelType Type { get; internal set; }
 
+    /// <inheritdoc />
     public IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites => _rolePermissionOverwrites;
+    /// <inheritdoc />
     public IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites => _userPermissionOverwrites;
     /// <summary>
     ///     Gets a collection of users that are able to view the channel.
@@ -212,7 +214,9 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     
     #region IGuildChannel
     
+    /// <inheritdoc />
     IGuild IGuildChannel.Guild => Guild;
+    /// <inheritdoc />
     ulong IGuildChannel.GuildId => Guild.Id;
     
     /// <inheritdoc />

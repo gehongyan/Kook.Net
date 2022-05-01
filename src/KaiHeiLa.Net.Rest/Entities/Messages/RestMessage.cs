@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using KaiHeiLa.API;
 using Model = KaiHeiLa.API.Message;
 
 namespace KaiHeiLa.Rest;
@@ -8,6 +9,7 @@ namespace KaiHeiLa.Rest;
 /// </summary>
 public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
 {
+    private ImmutableArray<RestReaction> _reactions = ImmutableArray.Create<RestReaction>();
     private ImmutableArray<RestUser> _userMentions = ImmutableArray.Create<RestUser>();
     
     /// <inheritdoc />
@@ -92,6 +94,24 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         Timestamp = model.CreateAt;
         EditedTimestamp = model.UpdateAt;
         Content = model.Content;
+        
+        if (model.Reactions is not null)
+        {
+            var value = model.Reactions;
+            if (value.Length > 0)
+            {
+                var reactions = ImmutableArray.CreateBuilder<RestReaction>(value.Length);
+                foreach (Reaction reaction in value)
+                    reactions.Add(RestReaction.Create(reaction));
+
+                _reactions = reactions.ToImmutable();
+            }
+            else
+                _reactions = ImmutableArray.Create<RestReaction>();
+        }
+        else
+            _reactions = ImmutableArray.Create<RestReaction>();
+
         if (model.MentionInfo?.MentionUsers is not null)
         {
             var value = model.MentionInfo.MentionUsers;
@@ -114,6 +134,24 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         Timestamp = model.CreateAt;
         EditedTimestamp = model.UpdateAt;
         Content = model.Content;
+        
+        if (model.Reactions is not null)
+        {
+            var value = model.Reactions;
+            if (value.Length > 0)
+            {
+                var reactions = ImmutableArray.CreateBuilder<RestReaction>(value.Length);
+                foreach (Reaction reaction in value)
+                    reactions.Add(RestReaction.Create(reaction));
+
+                _reactions = reactions.ToImmutable();
+            }
+            else
+                _reactions = ImmutableArray.Create<RestReaction>();
+        }
+        else
+            _reactions = ImmutableArray.Create<RestReaction>();
+        
         if (model.MentionInfo?.MentionUsers is not null)
         {
             var value = model.MentionInfo.MentionUsers;
@@ -131,6 +169,9 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         }
     }
     
+    /// <inheritdoc />
+    public IReadOnlyDictionary<IEmote, ReactionMetadata> Reactions => _reactions.ToDictionary(x => x.Emote, x => new ReactionMetadata { ReactionCount = x.Count, IsMe = x.Me });
+
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
         => MessageHelper.DeleteAsync(this, KaiHeiLa, options);

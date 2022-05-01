@@ -136,6 +136,11 @@ public interface IMessage : IEntity<Guid>, IDeletable
     #region Reactions
     
     /// <summary>
+    ///     Gets all reactions included in this message.
+    /// </summary>
+    IReadOnlyDictionary<IEmote, ReactionMetadata> Reactions { get; }
+    
+    /// <summary>
     ///     Adds a reaction to this message.
     /// </summary>
     /// <param name="emote">The emoji used to react to this message.</param>

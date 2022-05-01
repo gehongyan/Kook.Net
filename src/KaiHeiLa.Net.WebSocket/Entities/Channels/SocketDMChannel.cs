@@ -9,13 +9,25 @@ using KaiHeiLa.Rest;
 
 namespace KaiHeiLa.WebSocket;
 
+/// <summary>
+///     Represents a WebSocket-based direct-message channel.
+/// </summary>
 public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel, ISocketMessageChannel
 {
     #region SocketDMChannel
 
+    /// <summary>
+    ///     Get the identifier of the DM channel.
+    /// </summary>
+    /// <remarks>
+    ///     This property is the same as <see cref="ChatCode" />.
+    /// </remarks>
     public new Guid Id { get; set; }
     
     /// <inheritdoc />
+    /// <remarks>
+    ///     This property is the same as <see cref="Id" />.
+    /// </remarks>
     public Guid ChatCode
     {
         get => Id;
@@ -27,6 +39,9 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// </summary>
     public SocketUser Recipient { get; }
     
+    /// <inheritdoc />
+    public IReadOnlyCollection<SocketMessage> CachedMessages => ImmutableArray.Create<SocketMessage>();
+
     /// <summary>
     ///     Gets a collection that is the current logged-in user and the recipient.
     /// </summary>
@@ -121,37 +136,145 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch, RequestOptions options = null)
         => ChannelHelper.GetDirectMessagesAsync(this, KaiHeiLa, referenceMessage.Id, dir, limit, true, options);
+    /// <inheritdoc />
+    public IReadOnlyCollection<SocketMessage> GetCachedMessages(int limit = KaiHeiLaConfig.MaxMessagesPerBatch)
+        => ImmutableArray.Create<SocketMessage>();
+    /// <inheritdoc />
+    public IReadOnlyCollection<SocketMessage> GetCachedMessages(Guid fromMessageId, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch)
+        => ImmutableArray.Create<SocketMessage>();
+    /// <inheritdoc />
+    public IReadOnlyCollection<SocketMessage> GetCachedMessages(IMessage fromMessage, Direction dir, int limit = KaiHeiLaConfig.MaxMessagesPerBatch)
+        => ImmutableArray.Create<SocketMessage>();
     
+    /// <summary>
+    ///     Sends a plain text to this message channel.
+    /// </summary>
+    /// <param name="text">The message to be sent.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     Message content is too long, length must be less or equal to <see cref="KaiHeiLaConfig.MaxMessageSize"/>.
+    /// </exception>
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, Quote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Text, text, options, quote: quote);
+    /// <summary>
+    ///     Sends an image to this message channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method sends an image as if you are uploading an image directly from your KaiHeiLa client.
+    /// </remarks>
+    /// <param name="path">The file path of the image.</param>
+    /// <param name="fileName">The name of the image.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)
     {
         CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
         return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Image, createAssetResponse.Url, options, quote: quote);
     }
+    /// <summary>
+    ///     Sends a video to this message channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method sends an video as if you are uploading an image directly from your KaiHeiLa client.
+    /// </remarks>
+    /// <param name="path">The file path of the video.</param>
+    /// <param name="fileName">The name of the video.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)
     {
         CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
         return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Video, createAssetResponse.Url, options, quote: quote);
     }
+    /// <summary>
+    ///     Sends a file to this message channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method sends a file as if you are uploading an image directly from your KaiHeiLa client.
+    /// </remarks>
+    /// <param name="path">The file path of the audio.</param>
+    /// <param name="fileName">The name of the audio.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)
     {
         CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
         return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.File, createAssetResponse.Url, options, quote: quote);
     }
+    // /// <summary>
+    // ///     Sends an audio to this message channel.
+    // /// </summary>
+    // /// <remarks>
+    // ///     This method sends an audio as if you are uploading an image directly from your KaiHeiLa client.
+    // /// </remarks>
+    // /// <param name="path">The file path of the file.</param>
+    // /// <param name="fileName">The name of the file.</param>
+    // /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    // /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    // /// <param name="options">The options to be used when sending the request.</param>
+    // /// <returns>
+    // ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    // ///     contains the identifier and timestamp of the sent message.
+    // /// </returns>
     // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)
     // {
     //     CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(path, fileName, options);
     //     return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Audio, createAssetResponse.Url, options, quote: quote);
     // }
+    /// <summary>
+    ///     Sends a KMarkdown message to this message channel.
+    /// </summary>
+    /// <param name="text">The message to be sent.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendKMarkdownMessageAsync(string text, Quote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.KMarkdown, text, options, quote: quote);
-
+    /// <summary>
+    ///     Sends a card message to this message channel.
+    /// </summary>
+    /// <param name="cards">The cards to be sent.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(IEnumerable<ICard> cards, Quote quote = null, RequestOptions options = null)
     {
         string json = MessageHelper.SerializeCards(cards);
         return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Card, json, options, quote: quote);
     }
+    /// <summary>
+    ///     Sends a card message to this message channel.
+    /// </summary>
+    /// <param name="card">The card to be sent.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card, Quote quote = null, RequestOptions options = null) => 
         SendCardMessageAsync(new[] { card }, quote, options);
     
@@ -208,9 +331,11 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
 
     /// <inheritdoc />
     internal override SocketUser GetUserInternal(ulong id) => GetUser(id);
+    
     #endregion
     
     #region IDMChannel
+    
     /// <inheritdoc />
     IUser IDMChannel.Recipient => Recipient;
     #endregion
@@ -223,8 +348,9 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     #region IPrivateChannel
     /// <inheritdoc />
     IReadOnlyCollection<IUser> IPrivateChannel.Recipients => ImmutableArray.Create<IUser>(Recipient);
+    
     #endregion
-
+    
     #region IMessageChannel
     
     /// <inheritdoc />
@@ -255,7 +381,6 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendCardMessageAsync(IEnumerable<ICard> cards,
         IQuote quote, RequestOptions options)
         => SendCardMessageAsync(cards, (Quote) quote, options);
-    
     
     /// <inheritdoc />
     async Task<IMessage> IMessageChannel.GetMessageAsync(Guid id, CacheMode mode, RequestOptions options)

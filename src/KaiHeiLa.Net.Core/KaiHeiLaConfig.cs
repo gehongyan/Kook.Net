@@ -59,7 +59,13 @@ public class KaiHeiLaConfig
     /// <returns>
     ///     The maximum length of a message allowed by KaiHeiLa.
     /// </returns>
-    public const int MaxMessageSize = 50000;
+    /// <remarks>
+    ///     <note type="warning">
+    ///         The accurate value of this property is not known.
+    ///         It is set to <c>int.MaxValue</c> at current so that it does not work.
+    ///     </note>
+    /// </remarks>
+    public const int MaxMessageSize = int.MaxValue;
     
     /// <summary> 
     ///     Returns the max users allowed to be in a request.

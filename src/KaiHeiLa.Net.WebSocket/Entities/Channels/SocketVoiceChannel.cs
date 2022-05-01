@@ -52,7 +52,18 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     public string ServerUrl { get; set; }
     /// <inheritdoc />
     public bool HasPassword { get; set; }
-
+    
+    // /// <summary>
+    // ///     Gets a collection of users that are able to connect to this voice channel.
+    // /// </summary>
+    // /// <returns>
+    // ///     A read-only collection of users that are able to connect to this voice channel.
+    // /// </returns>
+    // public override IReadOnlyCollection<SocketGuildUser> Users
+    //     => Guild.Users.Where(x => Permissions.GetValue(
+    //         Permissions.ResolveChannel(Guild, x, this, Permissions.ResolveGuild(Guild, x)),
+    //         ChannelPermission.ViewChannel | ChannelPermission.Connect)).ToImmutableArray();
+    
     internal SocketVoiceChannel(KaiHeiLaSocketClient kaiHeiLa, ulong id, SocketGuild guild) 
         : base(kaiHeiLa, id, guild)
     {

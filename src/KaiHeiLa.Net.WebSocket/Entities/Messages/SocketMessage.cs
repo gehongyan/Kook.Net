@@ -50,9 +50,24 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc/>
     public MessageType Type { get; private set; }
 
+    /// <summary>
+    ///     Gets the attachment included in this message.
+    /// </summary>
     public virtual Attachment Attachment { get; private set; }
 
+    /// <summary>
+    ///     Returns all cards included in this message.
+    /// </summary>
+    /// <returns>
+    ///     Collection of card objects.
+    /// </returns>
     public virtual IReadOnlyCollection<ICard> Cards => ImmutableArray.Create<ICard>();
+    /// <summary>
+    ///     Returns all embeds included in this message.
+    /// </summary>
+    /// <returns>
+    ///     Collection of embed objects.
+    /// </returns>
     public virtual IReadOnlyCollection<IEmbed> Embeds => null;
     
     /// <summary>
@@ -71,7 +86,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     public IReadOnlyCollection<SocketUser> MentionedUsers => _userMentions; 
     /// <inheritdoc />
     public virtual IReadOnlyCollection<ITag> Tags => ImmutableArray.Create<ITag>();
-    
+    /// <inheritdoc />
     public IReadOnlyDictionary<IEmote, ReactionMetadata> Reactions => _reactions.GroupBy(r => r.Emote).ToDictionary(x => x.Key, x => new ReactionMetadata { ReactionCount = x.Count(), IsMe = x.Any(y => y.UserId == KaiHeiLa.CurrentUser.Id) });
 
     internal SocketMessage(KaiHeiLaSocketClient kaiHeiLa, Guid id, ISocketMessageChannel channel, SocketUser author, MessageSource source)

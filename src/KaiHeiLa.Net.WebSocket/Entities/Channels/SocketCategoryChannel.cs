@@ -13,6 +13,22 @@ public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
 {
     #region SocketCategoryChannel
 
+    /// <inheritdoc />
+    public override IReadOnlyCollection<SocketGuildUser> Users
+        => Guild.Users.Where(x => Permissions.GetValue(
+            Permissions.ResolveChannel(Guild, x, this, Permissions.ResolveGuild(Guild, x)),
+            ChannelPermission.ViewChannel)).ToImmutableArray();
+    
+    /// <summary>
+    ///     Gets the child channels of this category.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of <see cref="SocketGuildChannel" /> whose
+    ///     <see cref="KaiHeiLa.INestedChannel.CategoryId" /> matches the identifier of this category channel.
+    /// </returns>
+    public IReadOnlyCollection<SocketGuildChannel> Channels
+        => Guild.Channels.Where(x => x is INestedChannel nestedChannel && nestedChannel.CategoryId == Id).ToImmutableArray();
+
     internal SocketCategoryChannel(KaiHeiLaSocketClient kaiHeiLa, ulong id, SocketGuild guild)
         : base(kaiHeiLa, id, guild)
     {
@@ -27,7 +43,25 @@ public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
     
     #endregion
     
+    #region Users
+    /// <inheritdoc />
+    public override SocketGuildUser GetUser(ulong id)
+    {
+        var user = Guild.GetUser(id);
+        if (user != null)
+        {
+            var guildPerms = Permissions.ResolveGuild(Guild, user);
+            var channelPerms = Permissions.ResolveChannel(Guild, user, this, guildPerms);
+            if (Permissions.GetValue(channelPerms, ChannelPermission.ViewChannel))
+                return user;
+        }
+        return null;
+    }
+
+    #endregion
+    
     private string DebuggerDisplay => $"{Name} ({Id}, Category)";
+    internal new SocketCategoryChannel Clone() => MemberwiseClone() as SocketCategoryChannel;
     
     #region IGuildChannel
 
