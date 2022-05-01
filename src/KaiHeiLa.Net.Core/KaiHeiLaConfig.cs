@@ -139,7 +139,7 @@ public class KaiHeiLaConfig
     /// <returns>
     ///     The currently set <see cref="LogSeverity"/> for logging level.
     /// </returns>
-    public LogSeverity LogLevel { get; set; } = LogSeverity.Debug;
+    public LogSeverity LogLevel { get; set; } = LogSeverity.Info;
 
     /// <summary>
     ///     Gets or sets whether the initial log entry should be printed.
