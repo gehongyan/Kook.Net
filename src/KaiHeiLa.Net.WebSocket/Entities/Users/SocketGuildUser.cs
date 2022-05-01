@@ -11,7 +11,7 @@ namespace KaiHeiLa.WebSocket;
 ///     Represents a WebSocket-based guild user.
 /// </summary>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-public class SocketGuildUser : SocketUser, IGuildUser
+public class SocketGuildUser : SocketUser, IGuildUser, IReloadable
 {
     #region SocketGuildUser
 

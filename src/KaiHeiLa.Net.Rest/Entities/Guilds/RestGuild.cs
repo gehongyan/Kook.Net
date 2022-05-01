@@ -11,7 +11,7 @@ namespace KaiHeiLa.Rest;
 ///     Represents a REST-based guild/server.
 /// </summary>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
+public class RestGuild : RestEntity<ulong>, IGuild, IReloadable
 {
     #region RestGuild
 
@@ -150,7 +150,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     #region Generals
 
     /// <inheritdoc />
-    public async Task UpdateAsync(RequestOptions options = null)
+    public async Task ReloadAsync(RequestOptions options = null)
         => Update(await KaiHeiLa.ApiClient.GetGuildAsync(Id, options).ConfigureAwait(false));
 
     /// <inheritdoc />

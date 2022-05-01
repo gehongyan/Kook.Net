@@ -2,7 +2,7 @@ using Model = KaiHeiLa.API.Channel;
 
 namespace KaiHeiLa.Rest;
 
-public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
+public class RestChannel : RestEntity<ulong>, IChannel, IReloadable
 {
     #region RestChannel
     
@@ -35,7 +35,7 @@ public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
     internal virtual void Update(Model model) { }
     
     /// <inheritdoc />
-    public virtual Task UpdateAsync(RequestOptions options = null) => Task.Delay(0);
+    public virtual Task ReloadAsync(RequestOptions options = null) => Task.Delay(0);
 
     #endregion
 

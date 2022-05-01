@@ -71,7 +71,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         => ChannelHelper.DeleteGuildChannelAsync(this, KaiHeiLa, options);
     
     /// <inheritdoc />
-    public override async Task UpdateAsync(RequestOptions options = null)
+    public override async Task ReloadAsync(RequestOptions options = null)
     {
         var model = await KaiHeiLa.ApiClient.GetGuildChannelAsync(Id, options).ConfigureAwait(false);
         Update(model);

@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -25,9 +26,16 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     private ImmutableArray<SocketRole> _roleMentions = ImmutableArray.Create<SocketRole>();
     private ImmutableArray<ITag> _tags = ImmutableArray.Create<ITag>();
 
+    /// <inheritdoc cref="IUserMessage.Quote"/>
     public Quote Quote => _quote;
+    /// <summary>
+    ///     Gets the <see cref="SocketGuild"/> that the message was sent from.
+    /// </summary>
+    /// <returns>
+    ///     The <see cref="SocketGuild"/> that the message was sent from.
+    /// </returns>
     public SocketGuild Guild { get; private set; }
-    
+    /// <inheritdoc cref="IMessage.IsPinned"/>
     public new bool? IsPinned { get; internal set; }
 
     /// <inheritdoc />
@@ -211,6 +219,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     public Task ModifyAsync(Action<MessageProperties> func, RequestOptions options = null)
         => MessageHelper.ModifyAsync(this, KaiHeiLa, func, options);
     
+    /// <param name="startIndex">The zero-based index at which to begin the resolving for the specified value.</param>
+    /// <inheritdoc cref="IUserMessage.Resolve(TagHandling,TagHandling,TagHandling,TagHandling,TagHandling)"/>
     public string Resolve(int startIndex, TagHandling userHandling = TagHandling.Name, TagHandling channelHandling = TagHandling.Name,
         TagHandling roleHandling = TagHandling.Name, TagHandling everyoneHandling = TagHandling.Ignore, TagHandling emojiHandling = TagHandling.Name)
         => MentionUtils.Resolve(this, startIndex, userHandling, channelHandling, roleHandling, everyoneHandling, emojiHandling);
@@ -224,9 +234,13 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
     #region IUserMessage
 
+    /// <inheritdoc />
     bool? IMessage.IsPinned => IsPinned;
+    /// <inheritdoc />
     IQuote IUserMessage.Quote => _quote;
+    /// <inheritdoc />
     IReadOnlyCollection<ICard> IMessage.Cards => Cards;
+    /// <inheritdoc />
     IReadOnlyCollection<IEmbed> IMessage.Embeds => Embeds;
 
     #endregion

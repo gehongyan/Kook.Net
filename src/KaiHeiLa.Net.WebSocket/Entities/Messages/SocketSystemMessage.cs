@@ -9,6 +9,7 @@ namespace KaiHeiLa.WebSocket;
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
 public class SocketSystemMessage : SocketMessage, ISystemMessage
 {
+    /// <inheritdoc />
     public SystemMessageType SystemMessageType { get; private set; }
     
     internal SocketSystemMessage(KaiHeiLaSocketClient kaiHeiLa, Guid id, ISocketMessageChannel channel, SocketUser author)

@@ -7,7 +7,7 @@ namespace KaiHeiLa.Rest;
 /// <summary>
 ///     Represents a REST-based message.
 /// </summary>
-public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
+public abstract class RestMessage : RestEntity<Guid>, IMessage, IReloadable
 {
     private ImmutableArray<RestReaction> _reactions = ImmutableArray.Create<RestReaction>();
     private ImmutableArray<RestUser> _userMentions = ImmutableArray.Create<RestUser>();
@@ -177,7 +177,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         => MessageHelper.DeleteAsync(this, KaiHeiLa, options);
     
     /// <inheritdoc />
-    public async Task UpdateAsync(RequestOptions options = null)
+    public async Task ReloadAsync(RequestOptions options = null)
     {
         var model = await KaiHeiLa.ApiClient.GetMessageAsync(Id, options).ConfigureAwait(false);
         Update(model);

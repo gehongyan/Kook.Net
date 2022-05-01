@@ -38,7 +38,7 @@ internal static class SocketMessageHelper
         return MessageSource.User;
     }
 
-    public static async Task UpdateAsync(SocketMessage msg, KaiHeiLaSocketClient client, RequestOptions options)
+    public static async Task ReloadAsync(SocketMessage msg, KaiHeiLaSocketClient client, RequestOptions options)
     {
         switch (msg.Channel)
         {

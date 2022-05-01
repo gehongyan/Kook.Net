@@ -82,7 +82,7 @@ public class RestGuildUser : RestUser, IGuildUser
         _roleIds = roles.ToImmutable();
     }
     /// <inheritdoc />
-    public override async Task UpdateAsync(RequestOptions options = null)
+    public override async Task ReloadAsync(RequestOptions options = null)
     {
         var model = await KaiHeiLa.ApiClient.GetGuildMemberAsync(GuildId, Id, options).ConfigureAwait(false);
         Update(model);

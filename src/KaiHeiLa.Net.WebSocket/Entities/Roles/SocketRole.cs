@@ -20,11 +20,17 @@ public class SocketRole : SocketEntity<uint>, IRole
     /// </returns>
     public SocketGuild Guild { get; }
     
+    /// <inheritdoc />
     public string Name { get; private set; }
+    /// <inheritdoc />
     public Color Color { get; private set; }
+    /// <inheritdoc />
     public int Position { get; private set; }
+    /// <inheritdoc />
     public bool IsHoisted { get; private set; }
+    /// <inheritdoc />
     public bool IsMentionable { get; private set; }
+    /// <inheritdoc />
     public GuildPermissions Permissions { get; private set; }
 
     /// <summary>
@@ -36,7 +42,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     public bool IsEveryone => Id == 0;
     /// <inheritdoc />
     public string KMarkdownMention => IsEveryone ? "@everyone" : MentionUtils.KMarkdownMentionRole(Id);
-
+    /// <inheritdoc />
     public string PlainTextMention => IsEveryone ? "@全体成员" : MentionUtils.PlainTextMentionRole(Id);
 
     internal SocketRole(SocketGuild guild, uint id)
