@@ -11,21 +11,32 @@ namespace KaiHeiLa.WebSocket;
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
 public abstract class SocketUser : SocketEntity<ulong>, IUser
 {
+    /// <inheritdoc />
     public abstract string Username { get; internal set; }
+    /// <inheritdoc />
     public abstract ushort? IdentifyNumberValue { get; internal set; }
+    /// <inheritdoc />
     public abstract bool? IsBot { get; internal set; }
+    /// <inheritdoc />
     public abstract bool? IsBanned { get; internal set; }
+    /// <inheritdoc />
     public abstract bool? IsVIP { get; internal set; }
+    /// <inheritdoc />
     public abstract string Avatar { get; internal set; }
+    /// <inheritdoc />
     public abstract string VIPAvatar { get; internal set; }
+    /// <inheritdoc />
     public abstract bool? IsDenoiseEnabled { get; internal set; }
+    /// <inheritdoc />
     public abstract UserTag UserTag { get; internal set; }
     internal abstract SocketGlobalUser GlobalUser { get; }
     internal abstract SocketPresence Presence { get; set; }
     
     /// <inheritdoc />
     public string IdentifyNumber => IdentifyNumberValue?.ToString("D4");
+    /// <inheritdoc />
     public string KMarkdownMention => MentionUtils.KMarkdownMentionUser(Id);
+    /// <inheritdoc />
     public string PlainTextMention => MentionUtils.PlainTextMentionUser(Username, Id);
     
     /// <inheritdoc />
@@ -124,26 +135,17 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
         Presence.Update(isOnline, activeClient);
     }
     
-    /// <inheritdoc />
+    /// <inheritdoc cref="IUser.CreateDMChannelAsync(RequestOptions)" />
     public async Task<SocketDMChannel> CreateDMChannelAsync(RequestOptions options = null)
         => await SocketUserHelper.CreateDMChannelAsync(this, KaiHeiLa, options).ConfigureAwait(false);
 
-    /// <summary>
-    ///     Gets the intimacy information with this user.
-    /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for getting the intimacy information. The task result
-    ///     contains the intimacy information associated with this user.
-    /// </returns>
+    /// <inheritdoc cref="IUser.GetIntimacyAsync(RequestOptions)" />
     public Task<RestIntimacy> GetIntimacyAsync(RequestOptions options = null)
         => UserHelper.GetIntimacyAsync(this, KaiHeiLa, options);
 
     /// <inheritdoc />
     public async Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options = null)
-    {
-        await UserHelper.UpdateIntimacyAsync(this, KaiHeiLa, func, options).ConfigureAwait(false);
-    }
+        => await UserHelper.UpdateIntimacyAsync(this, KaiHeiLa, func, options).ConfigureAwait(false);
     
     /// <summary>
     ///     Gets the full name of the user (e.g. Example#0001).

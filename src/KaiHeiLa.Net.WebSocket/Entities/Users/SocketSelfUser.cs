@@ -91,14 +91,10 @@ public class SocketSelfUser : SocketUser, ISelfUser
     
     /// <inheritdoc />
     public async Task StartPlayingAsync(IGame game, RequestOptions options = null)
-    {
-        await UserHelper.StartPlayingAsync(this, KaiHeiLa, game, options).ConfigureAwait(false);
-    }
+        => await UserHelper.StartPlayingAsync(this, KaiHeiLa, game, options).ConfigureAwait(false);
     /// <inheritdoc />
     public async Task StopPlayingAsync(RequestOptions options = null)
-    {
-        await UserHelper.StopPlayingAsync(this, KaiHeiLa, options).ConfigureAwait(false);
-    }
+        => await UserHelper.StopPlayingAsync(this, KaiHeiLa, options).ConfigureAwait(false);
 
     #endregion
 }

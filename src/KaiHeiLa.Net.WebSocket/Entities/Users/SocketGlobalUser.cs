@@ -6,6 +6,7 @@ namespace KaiHeiLa.WebSocket;
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
 internal class SocketGlobalUser : SocketUser
 {
+    /// <inheritdoc />
     public override string Username { get; internal set; }
     /// <inheritdoc />
     public override ushort? IdentifyNumberValue { get; internal set; }
@@ -25,6 +26,7 @@ internal class SocketGlobalUser : SocketUser
     public override UserTag UserTag { get; internal set; }
     /// <inheritdoc />
     internal override SocketPresence Presence { get; set; }
+    /// <inheritdoc />
     internal override SocketGlobalUser GlobalUser => this;
 
     private readonly object _lockObj = new object();
