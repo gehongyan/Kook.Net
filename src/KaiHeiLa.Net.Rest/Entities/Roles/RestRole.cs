@@ -67,6 +67,8 @@ public class RestRole : RestEntity<uint>, IRole
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
         => RoleHelper.DeleteAsync(this, KaiHeiLa, options);
+    
+    /// <inheritdoc cref="IRole.GetUsersAsync(CacheMode,RequestOptions)"/>
     public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions options = null)
     {
         void Func(SearchGuildMemberProperties p) => p.RoleId = Id;

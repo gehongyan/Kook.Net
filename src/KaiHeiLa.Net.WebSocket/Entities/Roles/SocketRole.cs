@@ -1,6 +1,8 @@
+using System.Collections.Immutable;
 using Model = KaiHeiLa.API.Role;
 
 using System.Diagnostics;
+using KaiHeiLa.API.Rest;
 using KaiHeiLa.Rest;
 
 namespace KaiHeiLa.WebSocket;
@@ -83,10 +85,38 @@ public class SocketRole : SocketEntity<uint>, IRole
     public Task DeleteAsync(RequestOptions options = null)
         => RoleHelper.DeleteAsync(this, KaiHeiLa, options);
     
-    public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions options = null)
+    /// <summary>
+    ///     Gets a collection of users with this role.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     Paged collection of users with this role.
+    /// </returns>
+    /// <remarks>
+    ///     If the guild this role belongs to does not has all members cached locally
+    ///     by checking <see cref="SocketGuild.HasAllMembers"/>, this method will request
+    ///     the data via REST and update the guild users cache, otherwise it will
+    ///     return the cached data.
+    /// </remarks>
+    public async IAsyncEnumerable<IReadOnlyCollection<SocketGuildUser>> GetUsersAsync(RequestOptions options = null)
     {
+        // From SocketGuild.Users
+        if (Guild.HasAllMembers)
+        {
+            IEnumerable<IReadOnlyCollection<SocketGuildUser>> userCollections = Guild.Users
+                .Where(u => u.Roles.Contains(this))
+                .Chunk(KaiHeiLaConfig.MaxUsersPerBatch)
+                .Select(c => c.ToImmutableArray() as IReadOnlyCollection<SocketGuildUser>);
+            foreach (IReadOnlyCollection<SocketGuildUser> users in userCollections)
+                yield return users;
+        }
+
+        // Update SocketGuild.Users by fetching from REST API
         void Func(SearchGuildMemberProperties p) => p.RoleId = Id;
-        return GuildHelper.SearchUsersAsync(Guild, KaiHeiLa, Func, KaiHeiLaConfig.MaxUsersPerBatch, options);
+        var restUserCollections = KaiHeiLa.ApiClient
+            .GetGuildMembersAsync(Guild.Id, Func, KaiHeiLaConfig.MaxUsersPerBatch, 1, options);
+        await foreach (IReadOnlyCollection<GuildMember> restUsers in restUserCollections)
+            yield return restUsers.Select(restUser => Guild.AddOrUpdateUser(restUser)).ToList();
     }
     
     /// <inheritdoc />
