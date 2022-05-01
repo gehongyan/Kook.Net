@@ -109,6 +109,7 @@ public class SocketRole : SocketEntity<uint>, IRole
                 .Select(c => c.ToImmutableArray() as IReadOnlyCollection<SocketGuildUser>);
             foreach (IReadOnlyCollection<SocketGuildUser> users in userCollections)
                 yield return users;
+            yield break;
         }
 
         // Update SocketGuild.Users by fetching from REST API

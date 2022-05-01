@@ -20,7 +20,7 @@ class Program
                                ?? throw new ArgumentNullException(nameof(_token)));
         _channelId = ulong.Parse(Environment.GetEnvironmentVariable("KaiHeiLaDebugChannel", EnvironmentVariableTarget.User) 
                                  ?? throw new ArgumentNullException(nameof(_token)));
-        _client = new(new KaiHeiLaSocketConfig() {AlwaysDownloadUsers = true, MessageCacheSize = 100});
+        _client = new(new KaiHeiLaSocketConfig() {AlwaysDownloadUsers = true, MessageCacheSize = 100, LogLevel = LogSeverity.Debug});
         
         _client.Log += ClientOnLog;
         _client.MessageReceived += ClientOnMessageReceived;
@@ -62,14 +62,14 @@ class Program
 
     private async Task ClientOnReady()
     {
-        IUser userAsync1 = await _client.GetUserAsync(821393881);
-        
+        IEnumerable<SocketGuildUser> socketGuildUsers = await _client.GetGuild(1990044438283387).Roles.ToList()[1].GetUsersAsync().FlattenAsync();
+        await Task.Delay(5000);
+        IEnumerable<SocketGuildUser> flattenAsync = await _client.GetGuild(1990044438283387).Roles.ToList()[1].GetUsersAsync().FlattenAsync();
     }
 
-    private Task ClientOnLog(LogMessage arg)
+    private async Task ClientOnLog(LogMessage arg)
     {
         Console.WriteLine(arg.ToString());
-        return Task.CompletedTask;
     }
     
     private async Task ClientOnMessageButtonClicked(string value, SocketUser user, IMessage msg, SocketTextChannel channel, SocketGuild guild)
