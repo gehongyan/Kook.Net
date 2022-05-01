@@ -337,7 +337,7 @@ internal static class ChannelHelper
         if (model == null)
             return null;
         var user = RestGuildUser.Create(client, guild, model);
-        if (!user.GetPermissions(channel).ViewChannels)
+        if (!user.GetPermissions(channel).ViewChannel)
             return null;
 
         return user;
@@ -348,7 +348,7 @@ internal static class ChannelHelper
     {
         return client.ApiClient.GetGuildMembersAsync(guild.Id, limit: limit, fromPage: fromPage, options: options)
             .Select(x => x.Select(y => RestGuildUser.Create(client, guild, y))
-                .Where(y => y.GetPermissions(channel).ViewChannels)
+                .Where(y => y.GetPermissions(channel).ViewChannel)
                 .ToImmutableArray() as IReadOnlyCollection<RestGuildUser>);
     }
 

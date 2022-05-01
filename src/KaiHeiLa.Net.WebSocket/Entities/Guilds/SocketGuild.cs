@@ -161,7 +161,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     ///     A <see cref="SocketTextChannel"/> representing the default text channel for this guild.
     /// </returns>
     public SocketTextChannel DefaultChannel => TextChannels
-        .Where(c => CurrentUser.GetPermissions(c).ViewChannels)
+        .Where(c => CurrentUser.GetPermissions(c).ViewChannel)
         .SingleOrDefault(c => c.Id == DefaultChannelId);
     // /// <inheritdoc />
     // public IReadOnlyCollection<GuildEmote> Emotes => _emotes;

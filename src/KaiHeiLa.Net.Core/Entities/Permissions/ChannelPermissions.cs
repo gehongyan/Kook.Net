@@ -37,7 +37,7 @@ public struct ChannelPermissions
     /// <summary> If <c>true</c>, a user may adjust roles. </summary>
     public bool ManageRoles => Permissions.GetValue(RawValue, ChannelPermission.ManageRoles);
     /// <summary> If <c>true</c>, a user may view channels. </summary>
-    public bool ViewChannels => Permissions.GetValue(RawValue, ChannelPermission.ViewChannels);
+    public bool ViewChannel => Permissions.GetValue(RawValue, ChannelPermission.ViewChannel);
     /// <summary> If <c>true</c>, a user may send messages. </summary>
     public bool SendMessages => Permissions.GetValue(RawValue, ChannelPermission.SendMessages);
     /// <summary> If <c>true</c>, a user may delete messages. </summary>
@@ -72,7 +72,7 @@ public struct ChannelPermissions
         bool? createInvites = null,
         bool? manageChannels = null,
         bool? manageRoles = null,
-        bool? viewChannels = null,
+        bool? viewChannel = null,
         bool? sendMessages = null,
         bool? manageMessages = null,
         bool? attachFiles = null,
@@ -92,7 +92,7 @@ public struct ChannelPermissions
         Permissions.SetValue(ref value, createInvites, ChannelPermission.CreateInvites);
         Permissions.SetValue(ref value, manageChannels, ChannelPermission.ManageChannels);
         Permissions.SetValue(ref value, manageRoles, ChannelPermission.ManageRoles);
-        Permissions.SetValue(ref value, viewChannels, ChannelPermission.ViewChannels);
+        Permissions.SetValue(ref value, viewChannel, ChannelPermission.ViewChannel);
         Permissions.SetValue(ref value, sendMessages, ChannelPermission.SendMessages);
         Permissions.SetValue(ref value, manageMessages, ChannelPermission.ManageMessages);
         Permissions.SetValue(ref value, attachFiles, ChannelPermission.AttachFiles);
@@ -115,7 +115,7 @@ public struct ChannelPermissions
         bool? createInvites = false,
         bool? manageChannels = false,
         bool? manageRoles = false,
-        bool? viewChannels = false,
+        bool? viewChannel = false,
         bool? sendMessages = false,
         bool? manageMessages = false,
         bool? attachFiles = false,
@@ -129,7 +129,7 @@ public struct ChannelPermissions
         bool? deafenMembers = false,
         bool? muteMembers = false,
         bool? playSoundtrack = false)
-        : this(0, createInvites, manageChannels, manageRoles, viewChannels, sendMessages, manageMessages, attachFiles,
+        : this(0, createInvites, manageChannels, manageRoles, viewChannel, sendMessages, manageMessages, attachFiles,
             connect, manageVoice, mentionEveryone, addReactions, passiveConnect, useVoiceActivity, speak, deafenMembers,
             muteMembers, playSoundtrack)
     { }
@@ -139,7 +139,7 @@ public struct ChannelPermissions
         bool? createInvites = null,
         bool? manageChannels = null,
         bool? manageRoles = null,
-        bool? viewChannels = null,
+        bool? viewChannel = null,
         bool? sendMessages = null,
         bool? manageMessages = null,
         bool? attachFiles = null,
@@ -157,7 +157,7 @@ public struct ChannelPermissions
             createInvites,
             manageChannels,
             manageRoles,
-            viewChannels,
+            viewChannel,
             sendMessages,
             manageMessages,
             attachFiles,

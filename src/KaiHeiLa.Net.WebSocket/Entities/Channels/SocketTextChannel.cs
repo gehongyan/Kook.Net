@@ -62,7 +62,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     public override IReadOnlyCollection<SocketGuildUser> Users
         => Guild.Users.Where(x => Permissions.GetValue(
             Permissions.ResolveChannel(Guild, x, this, Permissions.ResolveGuild(Guild, x)),
-            ChannelPermission.ViewChannels)).ToImmutableArray();
+            ChannelPermission.ViewChannel)).ToImmutableArray();
 
     internal SocketTextChannel(KaiHeiLaSocketClient kaiHeiLa, ulong id, SocketGuild guild)
         : base(kaiHeiLa, id, guild)
@@ -245,7 +245,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         {
             var guildPerms = Permissions.ResolveGuild(Guild, user);
             var channelPerms = Permissions.ResolveChannel(Guild, user, this, guildPerms);
-            if (Permissions.GetValue(channelPerms, ChannelPermission.ViewChannels))
+            if (Permissions.GetValue(channelPerms, ChannelPermission.ViewChannel))
                 return user;
         }
         return null;

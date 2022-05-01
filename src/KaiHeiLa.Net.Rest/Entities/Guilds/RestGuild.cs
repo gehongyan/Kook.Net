@@ -443,7 +443,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         var channels = await GetTextChannelsAsync(options).ConfigureAwait(false);
         var user = await GetCurrentUserAsync(options).ConfigureAwait(false);
         return channels
-            .Where(c => user.GetPermissions(c).ViewChannels)
+            .Where(c => user.GetPermissions(c).ViewChannel)
             .MinBy(c => c.Position);
     }
     

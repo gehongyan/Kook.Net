@@ -157,7 +157,7 @@ internal static class Permissions
 
             if (channel is ITextChannel)
             {
-                if (!GetValue(resolvedPermissions, ChannelPermission.ViewChannels))
+                if (!GetValue(resolvedPermissions, ChannelPermission.ViewChannel))
                 {
                     //No read permission on a text channel removes all other permissions
                     resolvedPermissions = 0;
