@@ -670,7 +670,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         return await SendAsync<UserChat>(HttpMethod.Get, () => $"user-chat/view?chat_code={chatCode:N}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
-    public async Task<UserChat> CreateUserChatAsync(CreateOrDeleteUserChatParams args, RequestOptions options = null)
+    public async Task<UserChat> CreateUserChatAsync(CreateUserChatParams args, RequestOptions options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
@@ -679,10 +679,10 @@ internal class KaiHeiLaRestApiClient : IDisposable
         return await SendJsonAsync<UserChat>(HttpMethod.Post, () => $"user-chat/create", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
-    public async Task DeleteUserChatAsync(CreateOrDeleteUserChatParams args, RequestOptions options = null)
+    public async Task DeleteUserChatAsync(DeleteUserChatParams args, RequestOptions options = null)
     {
         Preconditions.NotNull(args, nameof(args));
-        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
+        Preconditions.NotEqual(args.ChatCode, Guid.Empty, nameof(args.ChatCode));
         
         var ids = new BucketIds();
         await SendJsonAsync(HttpMethod.Post, () => $"user-chat/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
