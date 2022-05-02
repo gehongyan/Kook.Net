@@ -232,8 +232,8 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     public override SocketUser GetUser(ulong id)
         => State.GetUser(id);
     /// <inheritdoc />
-    public override SocketUser GetUser(string username, string discriminator)
-        => State.Users.FirstOrDefault(x => x.IdentifyNumber == discriminator && x.Username == username);
+    public override SocketUser GetUser(string username, string identifyNumber)
+        => State.Users.FirstOrDefault(x => x.IdentifyNumber == identifyNumber && x.Username == username);
     
     internal SocketGlobalUser GetOrCreateUser(ClientState state, KaiHeiLa.API.User model)
     {

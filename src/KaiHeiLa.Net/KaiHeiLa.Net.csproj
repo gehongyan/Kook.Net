@@ -20,6 +20,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\KaiHeiLa.Net.Commands\KaiHeiLa.Net.Commands.csproj" />
       <ProjectReference Include="..\KaiHeiLa.Net.Core\KaiHeiLa.Net.Core.csproj" />
       <ProjectReference Include="..\KaiHeiLa.Net.Rest\KaiHeiLa.Net.Rest.csproj" />
       <ProjectReference Include="..\KaiHeiLa.Net.WebSocket\KaiHeiLa.Net.WebSocket.csproj" />

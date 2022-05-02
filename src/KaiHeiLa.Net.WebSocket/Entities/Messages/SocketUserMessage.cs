@@ -95,7 +95,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         else if (model.Type == MessageType.KMarkdown)
             _tags = MessageHelper.ParseTags(gatewayEvent.Content, Channel, guild, MentionedUsers, TagMode.KMarkdown);
         if (model.Quote is not null)
-            _quote = Quote.Create(model.Quote, guild.GetUser(model.Quote.Author.Id));
+            _quote = Quote.Create(model.Quote.Id, model.Quote.QuotedMessageId, model.Quote.Type, model.Quote.Content, model.Quote.CreateAt, guild.GetUser(model.Quote.Author.Id));
 
         if (model.Attachment is not null)
             _attachment = Attachment.Create(model.Attachment);
@@ -113,7 +113,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         Content = gatewayEvent.Content;
         if (model.Quote is not null)
         {
-            _quote = Quote.Create(model.Quote, state.GetUser(model.Quote.Author.Id));
+            _quote = Quote.Create(model.Quote.Id, model.Quote.QuotedMessageId, model.Quote.Type, model.Quote.Content, model.Quote.CreateAt, state.GetUser(model.Quote.Author.Id));
         }
         
         if (model.Attachment is not null)

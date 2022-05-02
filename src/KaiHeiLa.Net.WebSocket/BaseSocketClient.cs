@@ -99,9 +99,9 @@ public abstract partial class BaseSocketClient : BaseKaiHeiLaClient
     ///     </note>
     /// </remarks>
     /// <param name="username">The name of the user.</param>
-    /// <param name="discriminator">The discriminator value of the user.</param>
+    /// <param name="identifyNumber">The identify value of the user.</param>
     /// <returns>
     ///     A generic WebSocket-based user; <c>null</c> when the user cannot be found.
     /// </returns>
-    public abstract SocketUser GetUser(string username, string discriminator);
+    public abstract SocketUser GetUser(string username, string identifyNumber);
 }

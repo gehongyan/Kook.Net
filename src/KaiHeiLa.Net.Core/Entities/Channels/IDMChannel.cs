@@ -55,6 +55,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     /// </returns>
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, IQuote quote = null,
         RequestOptions options = null);
+    
     /// <summary>
     ///     Sends an image to this message channel.
     /// </summary>
@@ -63,6 +64,15 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(string path, string fileName = null,
+        IQuote quote = null, RequestOptions options = null);
+    /// <summary>
+    ///     Sends an image to this message channel.
+    /// </summary>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(Stream stream, string fileName = null,
         IQuote quote = null, RequestOptions options = null);
 
     /// <summary>
@@ -74,6 +84,15 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     /// </returns>
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null,
         IQuote quote = null, RequestOptions options = null);
+    /// <summary>
+    ///     Sends a video to this message channel.
+    /// </summary>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(Stream stream, string fileName = null,
+        IQuote quote = null, RequestOptions options = null);
 
     /// <summary>
     ///     Sends a file to this message channel.
@@ -84,6 +103,15 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     /// </returns>
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(string path, string fileName = null,
         IQuote quote = null, RequestOptions options = null);
+    /// <summary>
+    ///     Sends a file to this message channel.
+    /// </summary>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(Stream stream, string fileName = null,
+        IQuote quote = null, RequestOptions options = null);
 
     // /// <summary>
     // ///     Sends an audio to this message channel.
@@ -93,6 +121,15 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     // ///     contains the identifier and timestamp of the sent message.
     // /// </returns>
     // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(string path, string fileName = null,
+    //     IQuote quote = null, RequestOptions options = null);
+    // /// <summary>
+    // ///     Sends an audio to this message channel.
+    // /// </summary>
+    // /// <returns>
+    // ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    // ///     contains the identifier and timestamp of the sent message.
+    // /// </returns>
+    // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(Stream stream, string fileName = null,
     //     IQuote quote = null, RequestOptions options = null);
 
     /// <summary>
@@ -128,16 +165,33 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendImageMessageAsync(path, fileName, quote, options);
     /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendImageMessageAsync(Stream stream, string fileName,
+        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        => SendImageMessageAsync(stream, fileName, quote, options);
+    /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendVideoMessageAsync(string path, string fileName,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendVideoMessageAsync(path, fileName, quote, options);
     /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendVideoMessageAsync(Stream stream, string fileName,
+        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        => SendVideoMessageAsync(stream, fileName, quote, options);
+    /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileMessageAsync(string path, string fileName,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileMessageAsync(path, fileName, quote, options);
+    /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileMessageAsync(Stream stream, string fileName,
+        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        => SendFileMessageAsync(stream, fileName, quote, options);
+    // /// <inheritdoc />
     // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendAudioMessageAsync(string path, string fileName,
     //     IQuote quote, IUser ephemeralUser, RequestOptions options)
     //     => SendAudioMessageAsync(path, fileName, quote, options);
+    // /// <inheritdoc />
+    // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendAudioMessageAsync(Stream stream, string fileName,
+    //     IQuote quote, IUser ephemeralUser, RequestOptions options)
+    //     => SendAudioMessageAsync(stream, fileName, quote, options);
     /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendKMarkdownMessageAsync(string text,
         IQuote quote, IUser ephemeralUser, RequestOptions options)

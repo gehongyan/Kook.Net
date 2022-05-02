@@ -1,7 +1,3 @@
-using System.Diagnostics;
-using KaiHeiLa.Rest;
-using Model = KaiHeiLa.API.Quote;
-
 namespace KaiHeiLa;
 
 /// <inheritdoc cref="IQuote"/>
@@ -49,6 +45,7 @@ public class Quote : IQuote
         Author = author;
     }
 
-    internal static Quote Create(Model model, IUser author)
-        => new Quote(model.Id, model.QuotedMessageId, model.Type, model.Content, model.CreateAt, author);
+    internal static Quote Create(string id, Guid quotedMessageId, MessageType type, string content,
+        DateTimeOffset createAt, IUser author)
+        => new Quote(id, quotedMessageId, type, content, createAt, author);
 }

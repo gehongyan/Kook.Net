@@ -24,11 +24,11 @@ public enum TagHandling
     /// </summary>
     NameNoPrefix,
     /// <summary> 
-    ///     Resolves to username with discriminator value. (e.g. &lt;@53905483156684800&gt; -&gt; @Voltana#8252). 
+    ///     Resolves to username with identify number value. (e.g. &lt;@53905483156684800&gt; -&gt; @Voltana#8252). 
     /// </summary>
     FullName,
     /// <summary> 
-    ///     Resolves to username with discriminator value without mention prefix. (e.g. &lt;@53905483156684800&gt; -&gt; Voltana#8252). 
+    ///     Resolves to username with identify number value without mention prefix. (e.g. &lt;@53905483156684800&gt; -&gt; Voltana#8252). 
     /// </summary>
     FullNameNoPrefix,
     /// <summary> 

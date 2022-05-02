@@ -46,7 +46,7 @@ class Program
     {
         await _client.LoginAsync(TokenType.Bot, _token);
         await _client.StartAsync();
-        await Task.Delay(-1);
+        await Task.Delay(Timeout.Infinite);
     }
 
     private async Task ClientOnMessageReceived(SocketMessage arg)

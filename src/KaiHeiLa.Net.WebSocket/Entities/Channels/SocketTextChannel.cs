@@ -188,10 +188,24 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Image, createAssetResponse.Url, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
+    /// <inheritdoc cref="IMessageChannel.SendImageMessageAsync(Stream,string,IQuote,IUser,RequestOptions)"/>
+    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(Stream stream, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    {
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options).ConfigureAwait(false);
+        return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Image, createAssetResponse.Url, options, quote: quote,
+            ephemeralUser: ephemeralUser);
+    }
     /// <inheritdoc cref="IMessageChannel.SendVideoMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     {
         CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
+        return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Video, createAssetResponse.Url, options, quote: quote,
+            ephemeralUser: ephemeralUser);
+    }
+    /// <inheritdoc cref="IMessageChannel.SendVideoMessageAsync(Stream,string,IQuote,IUser,RequestOptions)"/>
+    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(Stream stream, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    {
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options).ConfigureAwait(false);
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Video, createAssetResponse.Url, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
@@ -202,10 +216,24 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.File, createAssetResponse.Url, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
+    /// <inheritdoc cref="IMessageChannel.SendFileMessageAsync(Stream,string,IQuote,IUser,RequestOptions)"/>
+    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(Stream stream, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    {
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options).ConfigureAwait(false);
+        return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.File, createAssetResponse.Url, options, quote: quote,
+            ephemeralUser: ephemeralUser);
+    }
     // /// <inheritdoc cref="IMessageChannel.SendAudioMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
     // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     // {
-    //     CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(path, fileName, options);
+    //     CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options);
+    //     return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Audio, createAssetResponse.Url, options, quote: quote,
+    //         ephemeralUser: ephemeralUser);
+    // }
+    // /// <inheritdoc cref="IMessageChannel.SendAudioMessageAsync(Stream,string,IQuote,IUser,RequestOptions)"/>
+    // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(Stream stream, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    // {
+    //     CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options);
     //     return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Audio, createAssetResponse.Url, options, quote: quote,
     //         ephemeralUser: ephemeralUser);
     // }
@@ -310,17 +338,34 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendImageMessageAsync(path, fileName, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendImageMessageAsync(Stream stream, string fileName,
+        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        => SendImageMessageAsync(stream, fileName, (Quote) quote, ephemeralUser, options);
+    /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendVideoMessageAsync(string path, string fileName,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendVideoMessageAsync(path, fileName, (Quote) quote, ephemeralUser, options);
+    ///;
+    /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendVideoMessageAsync(Stream stream, string fileName,
+        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        => SendVideoMessageAsync(stream, fileName, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileMessageAsync(string path, string fileName,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileMessageAsync(path, fileName, (Quote) quote, ephemeralUser, options);
+    /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileMessageAsync(Stream stream, string fileName,
+        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        => SendFileMessageAsync(stream, fileName, (Quote) quote, ephemeralUser, options);
     // /// <inheritdoc />
     // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendAudioMessageAsync(string path, string fileName = null,
     //     IQuote quote, IUser ephemeralUser, RequestOptions options)
     //     => SendAudioMessageAsync(path, fileName, (Quote) quote, ephemeralUser, options);
+    // /// <inheritdoc />
+    // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendAudioMessageAsync(Stream stream, string fileName = null,
+    //     IQuote quote, IUser ephemeralUser, RequestOptions options)
+    //     => SendAudioMessageAsync(stream, fileName, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendKMarkdownMessageAsync(string text,
         IQuote quote, IUser ephemeralUser, RequestOptions options)

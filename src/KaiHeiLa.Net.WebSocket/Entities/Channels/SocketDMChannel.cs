@@ -177,6 +177,25 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Image, createAssetResponse.Url, options, quote: quote);
     }
     /// <summary>
+    ///     Sends an image to this message channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method sends an image as if you are uploading an image directly from your KaiHeiLa client.
+    /// </remarks>
+    /// <param name="stream">The stream of the image.</param>
+    /// <param name="fileName">The name of the image.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
+    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(Stream stream, string fileName = null, Quote quote = null, RequestOptions options = null)
+    {
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options).ConfigureAwait(false);
+        return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Image, createAssetResponse.Url, options, quote: quote);
+    }
+    /// <summary>
     ///     Sends a video to this message channel.
     /// </summary>
     /// <remarks>
@@ -193,6 +212,25 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)
     {
         CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
+        return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Video, createAssetResponse.Url, options, quote: quote);
+    }
+    /// <summary>
+    ///     Sends a video to this message channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method sends an video as if you are uploading an image directly from your KaiHeiLa client.
+    /// </remarks>
+    /// <param name="stream">The stream of the video.</param>
+    /// <param name="fileName">The name of the video.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
+    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(Stream stream, string fileName = null, Quote quote = null, RequestOptions options = null)
+    {
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options).ConfigureAwait(false);
         return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Video, createAssetResponse.Url, options, quote: quote);
     }
     /// <summary>
@@ -214,6 +252,25 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
         return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.File, createAssetResponse.Url, options, quote: quote);
     }
+    /// <summary>
+    ///     Sends a file to this message channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method sends a file as if you are uploading an image directly from your KaiHeiLa client.
+    /// </remarks>
+    /// <param name="stream">The stream of the audio.</param>
+    /// <param name="fileName">The name of the audio.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
+    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(Stream stream, string fileName = null, Quote quote = null, RequestOptions options = null)
+    {
+        CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options).ConfigureAwait(false);
+        return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.File, createAssetResponse.Url, options, quote: quote);
+    }
     // /// <summary>
     // ///     Sends an audio to this message channel.
     // /// </summary>
@@ -223,7 +280,6 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     // /// <param name="path">The file path of the file.</param>
     // /// <param name="fileName">The name of the file.</param>
     // /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    // /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
     // /// <param name="options">The options to be used when sending the request.</param>
     // /// <returns>
     // ///     A task that represents an asynchronous send operation for delivering the message. The task result
@@ -231,7 +287,26 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     // /// </returns>
     // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)
     // {
-    //     CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(path, fileName, options);
+    //     CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), options);
+    //     return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Audio, createAssetResponse.Url, options, quote: quote);
+    // }
+    // /// <summary>
+    // ///     Sends an audio to this message channel.
+    // /// </summary>
+    // /// <remarks>
+    // ///     This method sends an audio as if you are uploading an image directly from your KaiHeiLa client.
+    // /// </remarks>
+    // /// <param name="stream">The stream of the file.</param>
+    // /// <param name="fileName">The name of the file.</param>
+    // /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    // /// <param name="options">The options to be used when sending the request.</param>
+    // /// <returns>
+    // ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    // ///     contains the identifier and timestamp of the sent message.
+    // /// </returns>
+    // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(Stream stream, string fileName = null, Quote quote = null, RequestOptions options = null)
+    // {
+    //     CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options);
     //     return await ChannelHelper.SendDirectMessageAsync(this, KaiHeiLa, MessageType.Audio, createAssetResponse.Url, options, quote: quote);
     // }
     /// <summary>
@@ -359,17 +434,33 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         IQuote quote, RequestOptions options)
         => SendImageMessageAsync(path, fileName, (Quote) quote, options);
     /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendImageMessageAsync(Stream stream, string fileName,
+        IQuote quote, RequestOptions options)
+        => SendImageMessageAsync(stream, fileName, (Quote) quote, options);
+    /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendVideoMessageAsync(string path, string fileName,
         IQuote quote, RequestOptions options)
         => SendVideoMessageAsync(path, fileName, (Quote) quote, options);
     /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendVideoMessageAsync(Stream stream, string fileName,
+        IQuote quote, RequestOptions options)
+        => SendVideoMessageAsync(stream, fileName, (Quote) quote, options);
+    /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendFileMessageAsync(string path, string fileName,
         IQuote quote, RequestOptions options)
         => SendFileMessageAsync(path, fileName, (Quote) quote, options);
+    /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendFileMessageAsync(Stream stream, string fileName,
+        IQuote quote, RequestOptions options)
+        => SendFileMessageAsync(stream, fileName, (Quote) quote, options);
     // /// <inheritdoc />
     // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendAudioMessageAsync(string path, string fileName = null,
     //     IQuote quote, RequestOptions options)
     //     => SendAudioMessageAsync(path, fileName, (Quote) quote, options);
+    // /// <inheritdoc />
+    // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendAudioMessageAsync(Stream stream, string fileName = null,
+    //     IQuote quote, RequestOptions options)
+    //     => SendAudioMessageAsync(stream, fileName, (Quote) quote, options);
     /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendKMarkdownMessageAsync(string text,
         IQuote quote, RequestOptions options)

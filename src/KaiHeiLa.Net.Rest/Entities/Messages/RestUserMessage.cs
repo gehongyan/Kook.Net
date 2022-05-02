@@ -76,7 +76,7 @@ public class RestUserMessage : RestMessage, IUserMessage
         if (model.Quote is not null)
         {
             IUser refMsgAuthor = MessageHelper.GetAuthor(KaiHeiLa, null, model.Quote.Author);
-            _quote = Quote.Create(model.Quote, refMsgAuthor);
+            _quote = Quote.Create(model.Quote.Id, model.Quote.QuotedMessageId, model.Quote.Type, model.Quote.Content, model.Quote.CreateAt, refMsgAuthor);
         }
 
         if (model.Attachment is not null)
@@ -102,7 +102,7 @@ public class RestUserMessage : RestMessage, IUserMessage
         if (model.Quote is not null)
         {
             IUser refMsgAuthor = MessageHelper.GetAuthor(KaiHeiLa, null, model.Quote.Author);
-            _quote = Quote.Create(model.Quote, refMsgAuthor);
+            _quote = Quote.Create(model.Quote.Id, model.Quote.QuotedMessageId, model.Quote.Type, model.Quote.Content, model.Quote.CreateAt, refMsgAuthor);
         }
 
         if (model.Attachment is not null)

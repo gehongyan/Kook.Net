@@ -105,10 +105,10 @@ public static class Format
     }
     
     /// <summary>
-    ///     Formats a user's username + discriminator while maintaining bidirectional unicode
+    ///     Formats a user's username + identify number while maintaining bidirectional unicode
     /// </summary>
-    /// <param name="user">The user whos username and discriminator to format</param>
-    /// <returns>The username + discriminator</returns>
+    /// <param name="user">The user whos username and identify number to format</param>
+    /// <returns>The username + identify number</returns>
     public static string UsernameAndIdentifyNumber(IUser user)
     {
         return $"\u2066{user.Username}\u2069#{user.IdentifyNumber}";
