@@ -51,5 +51,6 @@ public class RestChannel : RestEntity<ulong>, IChannel, IReloadable
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
         => AsyncEnumerable.Empty<IReadOnlyCollection<IUser>>(); //Overridden
+    
     #endregion
 }

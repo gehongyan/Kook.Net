@@ -16,6 +16,12 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// <inheritdoc />
     public virtual IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites => _userPermissionOverwrites;
 
+    /// <summary>
+    ///     Gets the guild associated with this channel.
+    /// </summary>
+    /// <returns>
+    ///     A guild object that this channel belongs to.
+    /// </returns>
     internal IGuild Guild { get; }
     /// <inheritdoc />
     public ChannelType Type { get; private set; }

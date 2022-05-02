@@ -22,17 +22,13 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <remarks>
     ///     This property is the same as <see cref="ChatCode" />.
     /// </remarks>
-    public new Guid Id { get; set; }
+    public new Guid Id { get; }
     
     /// <inheritdoc />
     /// <remarks>
     ///     This property is the same as <see cref="Id" />.
     /// </remarks>
-    public Guid ChatCode
-    {
-        get => Id;
-        set => Id = value;
-    }
+    public Guid ChatCode => Id;
 
     /// <summary>
     ///     Gets the recipient of the channel.
@@ -355,6 +351,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     
     /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendTextMessageAsync(string text,
+        
         IQuote quote, RequestOptions options)
         => SendTextMessageAsync(text, (Quote) quote, options);
     /// <inheritdoc />
