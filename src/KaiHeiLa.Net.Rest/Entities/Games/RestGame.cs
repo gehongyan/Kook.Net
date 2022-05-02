@@ -3,18 +3,27 @@ using Model = KaiHeiLa.API.Game;
 
 namespace KaiHeiLa.Rest;
 
+/// <summary>
+///     Represents a game object.
+/// </summary>
 public class RestGame : RestEntity<int>, IGame
 {
     private ImmutableArray<string> _productNames;
     private ImmutableArray<string> _processNames;
     
+    /// <inheritdoc />
     public string Name { get; private set; }
+    /// <inheritdoc />
     public ActivityType Type { get; private set; }
+    /// <inheritdoc />
     public string Options { get; private set; }
+    /// <inheritdoc />
     public bool RequireAdminPrivilege { get; private set; }
+    /// <inheritdoc />
     public string Icon { get; private set; }
-
+    /// <inheritdoc />
     public IReadOnlyCollection<string> ProductNames => _productNames.ToReadOnlyCollection();
+    /// <inheritdoc />
     public IReadOnlyCollection<string> ProcessNames => _processNames.ToReadOnlyCollection();
     
     internal RestGame(BaseKaiHeiLaClient kaiHeiLa, int id)
@@ -40,10 +49,12 @@ public class RestGame : RestEntity<int>, IGame
         _processNames = model.ProcessNames.ToImmutableArray();
     }
 
+    /// <inheritdoc cref="IGame.ModifyAsync(Action{GameProperties},RequestOptions)" />
     public async Task<RestGame> ModifyAsync(Action<GameProperties> func, RequestOptions options = null)
     {
         return await GameHelper.ModifyAsync(this, KaiHeiLa, func, options).ConfigureAwait(false);
     }
+    /// <inheritdoc />
     public async Task DeleteAsync(RequestOptions options = null)
     {
         await GameHelper.DeleteAsync(this, KaiHeiLa, options).ConfigureAwait(false);

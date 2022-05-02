@@ -45,6 +45,9 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IReloadable
     ///     Gets a collection of the <see cref="ICard"/>'s on the message.
     /// </summary>
     public virtual IReadOnlyCollection<ICard> Cards => ImmutableArray.Create<ICard>();
+    /// <summary>
+    ///     Gets a collection of the <see cref="IEmbed"/>'s on the message.
+    /// </summary>
     public virtual IReadOnlyCollection<IEmbed> Embeds => null;
     /// <inheritdoc />
     public virtual IReadOnlyCollection<uint> MentionedRoleIds => ImmutableArray.Create<uint>();
@@ -182,7 +185,6 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IReloadable
         var model = await KaiHeiLa.ApiClient.GetMessageAsync(Id, options).ConfigureAwait(false);
         Update(model);
     }
-
     
     /// <inheritdoc />
     public Task AddReactionAsync(IEmote emote, RequestOptions options = null)
@@ -230,7 +232,6 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IReloadable
 
     #region IMessage
 
-    
     IUser IMessage.Author => Author;
     /// <inheritdoc />
     IAttachment IMessage.Attachment => Attachment;

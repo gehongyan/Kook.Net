@@ -3,16 +3,25 @@ using Model = KaiHeiLa.API.Attachment;
 
 namespace KaiHeiLa;
 
+/// <inheritdoc cref="IAttachment"/>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
 public class Attachment : IAttachment
 {
+    /// <inheritdoc />
     public AttachmentType Type { get; }
+    /// <inheritdoc />
     public string Url { get; }
+    /// <inheritdoc />
     public string Filename { get; }
+    /// <inheritdoc />
     public int? Size { get; }
+    /// <inheritdoc />
     public string FileType { get; }
+    /// <inheritdoc />
     public TimeSpan? Duration { get; }
+    /// <inheritdoc />
     public int? Width { get; }
+    /// <inheritdoc />
     public int? Height { get; }
 
     internal Attachment(AttachmentType type, string url, string filename, int? size, string fileType, TimeSpan? duration, int? width, int? height)

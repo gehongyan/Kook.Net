@@ -3,7 +3,9 @@ using Model = KaiHeiLa.API.Intimacy;
 
 namespace KaiHeiLa.Rest;
 
-// The identifier for intimacy is the associated user's id.
+/// <summary>
+///     Gets the intimacy information associated with the specified user.
+/// </summary>
 public class RestIntimacy : RestEntity<ulong>, IIntimacy
 {
     private ImmutableArray<IntimacyImage> _images;

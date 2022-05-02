@@ -4,20 +4,36 @@ using Model = KaiHeiLa.API.Quote;
 
 namespace KaiHeiLa;
 
+/// <inheritdoc cref="IQuote"/>
 public class Quote : IQuote
 {
-    public string Id { get; internal set; }
-    public Guid QuotedMessageId { get; internal set; }
-    public MessageType Type { get; internal set; }
-    public string Content { get; internal set; }
-    public DateTimeOffset CreateAt { get; internal set; }
-    public IUser Author { get; internal set; }
+    /// <inheritdoc />
+    public string Id { get; }
+    /// <inheritdoc />
+    public Guid QuotedMessageId { get; }
+    /// <inheritdoc />
+    public MessageType Type { get; }
+    /// <inheritdoc />
+    public string Content { get; }
+    /// <inheritdoc />
+    public DateTimeOffset CreateAt { get; }
+    /// <inheritdoc />
+    public IUser Author { get; }
 
     /// <summary>
-    ///     Used to delete a quote when modifying a message
+    ///     Gets an empty quote whose quoted message is null.
     /// </summary>
+    /// <remarks>
+    ///     Used to delete a quote when modifying a message.
+    /// </remarks>
     public Quote Empty => new Quote(Guid.Empty);
     
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Quote"/> class.
+    /// </summary>
+    /// <param name="quotedMessageId">
+    ///     The quoted message identifier.
+    /// </param>
     public Quote(Guid quotedMessageId)
     {
         QuotedMessageId = quotedMessageId;

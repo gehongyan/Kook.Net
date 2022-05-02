@@ -69,11 +69,15 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     public int BufferBoostNumber { get; private set; }
     /// <inheritdoc />
     public BoostLevel BoostLevel { get; private set; }
-    
+    /// <summary>
+    ///     TODO: To be documented.
+    /// </summary>
     public int Status { get; private set; }
-
+    /// <summary>
+    ///     TODO: To be documented.
+    /// </summary>
     public string AutoDeleteTime { get; private set; }
-    
+    /// <inheritdoc cref="IGuild.RecommendInfo"/>
     public RecommendInfo RecommendInfo { get; private set; }
     
     /// <summary>

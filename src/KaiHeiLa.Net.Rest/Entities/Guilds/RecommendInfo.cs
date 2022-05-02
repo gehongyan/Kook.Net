@@ -2,6 +2,9 @@ using Model = KaiHeiLa.API.RecommendInfo;
 
 namespace KaiHeiLa.Rest;
 
+/// <summary>
+///     Represents a recommendation information for a guild.
+/// </summary>
 public class RecommendInfo : IRecommendInfo
 {
     /// <inheritdoc />

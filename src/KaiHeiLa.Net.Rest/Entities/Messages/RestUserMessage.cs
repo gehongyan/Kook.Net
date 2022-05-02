@@ -23,8 +23,10 @@ public class RestUserMessage : RestMessage, IUserMessage
     private ImmutableArray<uint> _roleMentionIds = ImmutableArray.Create<uint>();
     private ImmutableArray<ITag> _tags = ImmutableArray.Create<ITag>();
     
+    /// <inheritdoc cref="IUserMessage.Quote"/>
     public Quote Quote => _quote;
     
+    /// <inheritdoc cref="IMessage.IsPinned"/>
     public new bool? IsPinned { get; internal set; }
     /// <inheritdoc />
     public override Attachment Attachment => _attachment;
@@ -113,6 +115,8 @@ public class RestUserMessage : RestMessage, IUserMessage
         _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
     }
     
+    /// <param name="startIndex">The zero-based index at which to begin the resolving for the specified value.</param>
+    /// <inheritdoc cref="IUserMessage.Resolve(TagHandling,TagHandling,TagHandling,TagHandling,TagHandling)"/>
     public string Resolve(int startIndex, TagHandling userHandling = TagHandling.Name, TagHandling channelHandling = TagHandling.Name,
         TagHandling roleHandling = TagHandling.Name, TagHandling everyoneHandling = TagHandling.Ignore, TagHandling emojiHandling = TagHandling.Name)
         => MentionUtils.Resolve(this, startIndex, userHandling, channelHandling, roleHandling, everyoneHandling, emojiHandling);

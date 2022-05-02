@@ -1,5 +1,8 @@
 namespace KaiHeiLa;
 
+/// <summary>
+///     Represents a generic game object.
+/// </summary>
 public interface IGame : IActivity, IEntity<int>, IDeletable
 {
     /// <summary>

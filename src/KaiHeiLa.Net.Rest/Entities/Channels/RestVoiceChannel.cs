@@ -26,7 +26,7 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     public bool IsPermissionSynced { get; private set; }
     /// <inheritdoc />
     public ulong CreatorId { get; private set; }
-    
+    /// <inheritdoc />
     public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
     /// <inheritdoc />
     public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);

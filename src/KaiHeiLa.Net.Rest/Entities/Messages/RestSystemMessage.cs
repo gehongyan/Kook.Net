@@ -9,6 +9,7 @@ namespace KaiHeiLa.Rest;
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
 public class RestSystemMessage : RestMessage, ISystemMessage
 {
+    /// <inheritdoc />
     public SystemMessageType SystemMessageType { get; set; }
     
     internal RestSystemMessage(BaseKaiHeiLaClient kaiHeiLa, Guid id, MessageType messageType, IMessageChannel channel, IUser author)

@@ -47,7 +47,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IReloadable
     /// </summary>
     public RestRole EveryoneRole => GetRole(0);
 
-    public IReadOnlyCollection<GuildEmote> Emotes { get; set; }
+    // /// <inheritdoc />
+    // public IReadOnlyCollection<GuildEmote> Emotes { get; set; }
 
     /// <summary>
     ///     Gets a collection of all roles in this guild.
@@ -80,14 +81,15 @@ public class RestGuild : RestEntity<ulong>, IGuild, IReloadable
     public int BufferBoostNumber { get; private set; }
     /// <inheritdoc />
     public BoostLevel BoostLevel { get; private set; }
-    
-    public int Status { get; private set; }
-
-    public string AutoDeleteTime { get; private set; }
-    
     /// <summary>
-    ///     Gets the recommendation information for this guild.
+    ///     TODO: To be documented.
     /// </summary>
+    public int Status { get; private set; }
+    /// <summary>
+    ///     TODO: To be documented.
+    /// </summary>
+    public string AutoDeleteTime { get; private set; }
+    /// <inheritdoc cref="IGuild.RecommendInfo"/>
     public RecommendInfo RecommendInfo { get; private set; }
     
     internal RestGuild(BaseKaiHeiLaClient client, ulong id)

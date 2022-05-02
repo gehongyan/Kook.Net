@@ -136,7 +136,8 @@ public interface IGuild : IEntity<ulong>
     ///     Gets the recommendation information for this guild.
     /// </summary>
     /// <returns>
-    ///     A recommendation object that represents the recommendation information for this guild.
+    ///     A recommendation object that represents the recommendation information for this guild;
+    ///     <see langword="null"/> if the guild does not have a recommendation.
     /// </returns>
     IRecommendInfo RecommendInfo { get; }
     
