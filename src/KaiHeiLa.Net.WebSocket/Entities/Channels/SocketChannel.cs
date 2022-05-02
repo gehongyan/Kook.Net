@@ -48,9 +48,6 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel
     /// <inheritdoc />
     string IChannel.Name => null;
     /// <inheritdoc />
-    ulong IChannel.CreateUserId => default;
-
-    /// <inheritdoc />
     Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IUser>(null); //Overridden
     /// <inheritdoc />

@@ -2,11 +2,12 @@ using Model = KaiHeiLa.API.Channel;
 
 namespace KaiHeiLa.Rest;
 
+/// <summary>
+///     Represents a generic REST-based channel.
+/// </summary>
 public class RestChannel : RestEntity<ulong>, IChannel, IReloadable
 {
     #region RestChannel
-    
-    public ulong CreateUserId { get; set; }
     
     internal RestChannel(BaseKaiHeiLaClient kaiHeiLa, ulong id)
         : base(kaiHeiLa, id)

@@ -11,6 +11,7 @@ namespace KaiHeiLa.Rest;
 public class RestCategoryChannel : RestGuildChannel, ICategoryChannel
 {
     #region RestCategoryChannel
+    
     internal RestCategoryChannel(BaseKaiHeiLaClient kaiHeiLa, IGuild guild, ulong id)
         : base(kaiHeiLa, guild, id, ChannelType.Category)
     {

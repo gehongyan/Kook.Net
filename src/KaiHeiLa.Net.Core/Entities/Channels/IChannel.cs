@@ -15,14 +15,6 @@ public interface IChannel : IEntity<ulong>
     /// </returns>
     string Name { get; }
 
-    /// <summary>
-    ///     Gets the identifier of the user who created this channel.
-    /// </summary>
-    /// <returns>
-    ///     A ulong that represents the identifier of the user who created this channel.
-    /// </returns>
-    ulong CreateUserId { get; }
-
     #endregion
 
     #region Users

@@ -115,41 +115,58 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     public Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions options = null)
         => ChannelHelper.GetPinnedMessagesAsync(this, KaiHeiLa, options);
     
+    /// <inheritdoc cref="IMessageChannel.SendTextMessageAsync(string,IQuote,IUser,RequestOptions)"/>
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Text, text, options, quote: quote, ephemeralUser: ephemeralUser);
+    /// <inheritdoc cref="IMessageChannel.SendImageMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     {
         CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options);
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Image, createAssetResponse.Url, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
+    /// <inheritdoc cref="IMessageChannel.SendVideoMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     {
         CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options);
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Video, createAssetResponse.Url, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
+    /// <inheritdoc cref="IMessageChannel.SendFileMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     {
         CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options);
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.File, createAssetResponse.Url, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
+    // /// <inheritdoc cref="IMessageChannel.SendAudioMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
     // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     // {
     //     CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(path, fileName, options);
     //     return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Audio, createAssetResponse.Url, options, quote: quote,
     //         ephemeralUser: ephemeralUser);
     // }
+    /// <inheritdoc cref="IMessageChannel.SendKMarkdownMessageAsync(string,IQuote,IUser,RequestOptions)"/>
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendKMarkdownMessageAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.KMarkdown, text, options, quote: quote, ephemeralUser: ephemeralUser);
-
+    /// <inheritdoc cref="IMessageChannel.SendCardMessageAsync(IEnumerable{ICard},IQuote,IUser,RequestOptions)"/>
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(IEnumerable<ICard> cards, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     {
         string json = MessageHelper.SerializeCards(cards);
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Card, json, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
+    /// <summary>
+    ///     Sends a card message to this message channel.
+    /// </summary>
+    /// <param name="card">The card to be sent.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null) => 
         SendCardMessageAsync(new[] { card }, quote, ephemeralUser, options);
 
