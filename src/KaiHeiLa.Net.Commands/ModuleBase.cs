@@ -37,7 +37,7 @@ namespace KaiHeiLa.Commands
         ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
         /// </param>
         /// <param name="options">The request options for this <see langword="async"/> request.</param>
-        protected virtual async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyPlainTextAsync(string message, bool isQuote = false,
+        protected virtual async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyTextAsync(string message, bool isQuote = false,
             bool isEphemeral = false, RequestOptions options = null)
         {
             return await Context.Channel.SendTextMessageAsync(message, isQuote ? new Quote(Context.Message.Id) : null,

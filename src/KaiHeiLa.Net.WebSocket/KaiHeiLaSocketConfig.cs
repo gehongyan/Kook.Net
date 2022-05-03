@@ -17,17 +17,29 @@ public class KaiHeiLaSocketConfig : KaiHeiLaRestConfig
     public string GatewayHost { get; set; } = null;
     
     /// <summary>
-    ///     超时毫秒
+    ///     Gets or sets the time, in milliseconds, to wait for a connection to complete before aborting.
     /// </summary>
     public int ConnectionTimeout { get; set; } = 6000;
     
     /// <summary>
-    ///     心跳间隔毫秒
+    ///     Gets the heartbeat interval of WebSocket connection in milliseconds.
     /// </summary>
     public const int HeartbeatIntervalMilliseconds = 30000;
+
+    /// <summary>
+    ///     Gets or sets the threshold of heartbeat delay in milliseconds.
+    /// </summary>
+    /// <remarks>
+    ///     If two heartbeat pongs are received in a interval greater than
+    ///     the sum of <see cref="HeartbeatIntervalMilliseconds"/> and this threshold,
+    ///     the connection will be closed immediately and be re-established.
+    ///     By default, this value is half of <see cref="HeartbeatIntervalMilliseconds"/>.
+    /// </remarks>
+    public int HeartbeatDelayThresholdMilliseconds { get; set; } = HeartbeatIntervalMilliseconds / 2;
     
     /// <summary>
-    ///     处理程序超时毫秒
+    ///     Gets or sets the timeout for event handlers, in milliseconds, after which a warning will be logged.
+    ///     Setting this property to <c>null</c>disables this check.
     /// </summary>
     public int? HandlerTimeout { get; set; } = 3000;
     
@@ -51,6 +63,13 @@ public class KaiHeiLaSocketConfig : KaiHeiLaRestConfig
     /// <summary>
     ///     Gets or sets whether or not all users should be downloaded as guilds come available.
     /// </summary>
+    /// <remarks>
+    ///     <note>
+    ///         Please note that it can be difficult to fill the cache completely on large guilds depending on the
+    ///         traffic. If you are experiencing issues, try setting this to <c>false</c> and manually call
+    ///         <see cref="KaiHeiLaSocketClient.DownloadUsersAsync(IEnumerable{IGuild})"/> on the guilds you want.
+    ///     </note>
+    /// </remarks>
     public bool AlwaysDownloadUsers { get; set; } = false;
     
     /// <summary>

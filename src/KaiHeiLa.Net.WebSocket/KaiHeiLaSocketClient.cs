@@ -46,6 +46,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     internal WebSocketProvider WebSocketProvider { get; private set; }
     internal bool AlwaysDownloadUsers { get; private set; }
     internal int? HandlerTimeout { get; private set; }
+    internal int HeartbeatDelayThreshold { get; private set; }
     internal new KaiHeiLaSocketApiClient ApiClient => base.ApiClient;
     /// <inheritdoc />
     public override IReadOnlyCollection<SocketGuild> Guilds => State.Guilds;
@@ -82,6 +83,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
         WebSocketProvider = config.WebSocketProvider;
         AlwaysDownloadUsers = config.AlwaysDownloadUsers;
         HandlerTimeout = config.HandlerTimeout;
+        HeartbeatDelayThreshold = config.HeartbeatDelayThresholdMilliseconds;
         State = new ClientState(0, 0);
         Rest = new KaiHeiLaSocketRestClient(config, ApiClient);
         _heartbeatTimes = new ConcurrentQueue<long>();
@@ -1472,6 +1474,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     private async Task RunHeartbeatAsync(CancellationToken cancelToken)
     {
         int intervalMillis = KaiHeiLaSocketConfig.HeartbeatIntervalMilliseconds;
+        int delayThreshold = HeartbeatDelayThreshold;
         try
         {
             await _gatewayLogger.DebugAsync("Heartbeat Started").ConfigureAwait(false);
@@ -1480,7 +1483,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                 int now = Environment.TickCount;
 
                 //Did server respond to our last heartbeat, or are we still receiving messages (long load?)
-                if (_heartbeatTimes.IsEmpty && (now - _lastMessageTime) > intervalMillis)
+                if (_heartbeatTimes.IsEmpty && (now - _lastMessageTime) > intervalMillis + delayThreshold)
                 {
                     if (ConnectionState == ConnectionState.Connected)
                     {
