@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Events;
 
 internal class Program
 {
@@ -26,10 +27,11 @@ internal class Program
             .UseSerilog((hostingContext, services, loggerConfiguration) =>
             {
                 loggerConfiguration
+                    .MinimumLevel.Verbose()
                     //.MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", Serilog.Events.LogEventLevel.Warning)
                     .ReadFrom.Configuration(hostingContext.Configuration)
                     .Enrich.FromLogContext()
-                    .WriteTo.Console();
+                    .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Verbose);
             });
         return hostBuilder;
     }

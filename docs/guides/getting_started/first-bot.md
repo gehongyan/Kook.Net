@@ -17,15 +17,15 @@ title: 从零开始
 4. 点击刚刚创建好的应用；
 5. 点击左侧的 `机器人`；
 
-    ![img.png](images/intro-bot-entrance.png)
+    ![img.png](images/intro/intro-bot-entrance.png)
 
 6. 确保机器人的连接模式为 `WebSocket`；
 
-    ![img.png](images/intro-bot-websocket.png)
+    ![img.png](images/intro/intro-bot-websocket.png)
 
 7. (可选) 如果要创建公共 Bot，开启 `开启公共机器人` 开关。
 
-    ![img.png](images/intro-bot-public.png)
+    ![img.png](images/intro/intro-bot-public.png)
 
 ## 将 Bot 添加到服务器
 
@@ -34,7 +34,7 @@ Bot 无法通过访问服务器的邀请链接进入频道，因此需要 Bot �
 1. 在 [开黑啦开发者中心](https://developer.kaiheila.cn/bot) 中访问要添加到服务器的 Bot 应用；
 2. 点击左侧的 `邀请链接`；
 
-    ![img.png](images/intro-bot-invite.png)
+    ![img.png](images/intro/intro-bot-invite.png)
 
 3. 在右侧的 `角色权限设置` 中勾选要在 Bot 进入服务器后直接拥有的权限；
     
@@ -46,7 +46,7 @@ Bot 无法通过访问服务器的邀请链接进入频道，因此需要 Bot �
 5. 选择要将 Bot 添加到的服务器；
 6. 点击邀请。
 
-    ![img.png](images/intro-bot-select.png)
+    ![img.png](images/intro/intro-bot-select.png)
 
    > [!NOTE]
    > 列表中仅显示您拥有 `管理服务器` 权限的服务器。
@@ -101,7 +101,7 @@ KaiHeiLa.Net 中的事件与 C# 中的任何其他事件的工作机制类似。
 
 使用 [LoginAsync] 方法登录到开黑啦服务端，登录过程采用的身份认证信息为机器人的 Token。
 
-![img.png](images/intro-bot-token.png)
+![img.png](images/intro/intro-bot-token.png)
 
 通过调用客户端的 [StartAsync] 方法，客户端启动与服务端的连接/重连机制，
 **该方法会在连接/重连机制启动后立刻返回**，因此，任何依赖于客户端状态的方法

@@ -60,7 +60,11 @@ namespace TextCommandFramework
         private ServiceProvider ConfigureServices()
         {
             return new ServiceCollection()
-                .AddSingleton<KaiHeiLaSocketClient>()
+                .AddSingleton(_ => new KaiHeiLaSocketClient(new KaiHeiLaSocketConfig()
+                {
+                    AlwaysDownloadUsers = true,
+                    LogLevel = LogSeverity.Debug
+                }))
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandlingService>()
                 .AddSingleton<HttpClient>()

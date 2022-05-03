@@ -26,14 +26,14 @@ KaiHeiLa.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧�
 1. 找到 `解决方案资源管理器` 窗口，在 Bot 项目下找到 `依赖项`
 2. 右键点击 `依赖项`，选择 `管理 NuGet 程序包`
 
-    ![img.png](images/install-vs-dependencies.png)
+    ![img.png](images/install/install-vs-dependencies.png)
 
 3. 在 `浏览` 选项卡中，搜索 `KaiHeiLa.Net`
 
     > [!NOTE]
     > 在正式版发布前，搜索 KaiHeiLa.Net 需勾选 `包括预发行版`，否则，该搜索结果无法展示在列表中。
 
-    ![img.png](images/install-vs-nuget.png)
+    ![img.png](images/install/install-vs-nuget.png)
 
 4. 选择 `KaiHeiLa.Net`，点击 `安装`
 
@@ -42,7 +42,7 @@ KaiHeiLa.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧�
 1. 找到 `Explorer` 窗口，在 Bot 项目下找到 `Dependencies`
 2. 右键点击 `Dependencies`，选择 `Manage NuGet Packages`
 
-    ![img.png](images/install-rider-dependencies.png)
+    ![img.png](images/install/install-rider-dependencies.png)
 
 3. 在 `Packages` 选项卡中，搜索 `KaiHeiLa.Net`
 
@@ -51,7 +51,7 @@ KaiHeiLa.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧�
 
 4. 右键点击 `KaiHeiLa.Net`，点击 `Install KaiHeiLa.Net ...`
 
-    ![img.png](images/install-rider-nuget.png)
+    ![img.png](images/install/install-rider-nuget.png)
 
 ### 使用 Visual Studio Code
 
