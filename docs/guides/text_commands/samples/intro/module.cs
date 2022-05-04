@@ -14,7 +14,7 @@ public class InfoModule : ModuleBase<SocketCommandContext>
 [Group("sample")]
 public class SampleModule : ModuleBase<SocketCommandContext>
 {
-    // ~sample square 20 -> 400
+    // !sample square 20 -> 400
     [Command("square")]
     [Summary("计算给定数字的平方")]
     public async Task SquareAsync(
@@ -25,21 +25,20 @@ public class SampleModule : ModuleBase<SocketCommandContext>
         await Context.Channel.SendTextMessageAsync($"{num}^2 = {Math.Pow(num, 2)}");
     }
 
-    // !sample userinfo --> foxbot#0282
-    // !sample userinfo @Khionu --> Khionu#8708
-    // !sample userinfo Khionu#8708 --> Khionu#8708
-    // !sample userinfo Khionu --> Khionu#8708
-    // !sample userinfo 96642168176807936 --> Khionu#8708
-    // !sample whois 96642168176807936 --> Khionu#8708
+    // !sample userinfo --> 戈小荷#0439
+    // !sample userinfo @戈小荷 --> 戈小荷#0439
+    // !sample userinfo 戈小荷#0439 --> 戈小荷#0439
+    // !sample userinfo 戈小荷 --> 戈小荷#0439
+    // !sample userinfo 2810246202 --> 戈小荷#0439
+    // !sample whois 2810246202 --> 戈小荷#0439
     [Command("userinfo")]
-    [Summary
-        ("Returns info about the current user, or the user parameter, if one passed.")]
+    [Summary("打印当前用户的信息，或用户参数指定的用户信息")]
     [Alias("user", "whois")]
     public async Task UserInfoAsync(
-        [Summary("The (optional) user to get info from")]
+        [Summary("要获取信息的用户")]
         SocketUser user = null)
     {
         var userInfo = user ?? Context.Client.CurrentUser;
-        await ReplyTextAsync($"{userInfo.Username}#{userInfo.Discriminator}");
+        await ReplyTextAsync($"{userInfo.Username}#{userInfo.IdentifyNumber}");
     }
 }

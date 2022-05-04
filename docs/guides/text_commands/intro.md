@@ -57,7 +57,7 @@ title: 文本命令框架入门
 
 对该方法标记 [CommandAttribute] 特性标签，并指定命令的名称。
 
-如该方法是 [模块组](#module-groups) 中的命令，名称可以留空。
+如该方法是 [模块组](#模块组) 中的命令，名称可以留空。
 
 ### 命令参数
 
@@ -108,3 +108,42 @@ title: 文本命令框架入门
 > [!TIP]
 > 模块的完整代码示例：
 > [!code-csharp[Example Module](samples/intro/module.cs)]
+
+#### 自动加载模块
+
+命令服务可以自动发现并加载程序集内继承自 [ModuleBase] 的类，调用 [CommandService.AddModulesAsync]
+可以进行自动发现与模块加载。如果要指定某个模块跳过自动加载，可对其标记特性 [DontAutoLoadAttribute]。
+
+[DontAutoLoadAttribute]: xref:KaiHeiLa.Commands.DontAutoLoadAttribute
+[CommandService.AddModulesAsync]: xref:KaiHeiLa.Commands.CommandService.AddModulesAsync*
+
+#### 手动加载模块
+
+要手动加载模块，可调用 [CommandService.AddModuleAsync]，模块的类通过泛型传递。
+如有需要，也可以向该方法传入 IServiceProvider.
+
+[CommandService.AddModuleAsync]: xref:KaiHeiLa.Commands.CommandService.AddModuleAsync*
+
+### 模块构造函数
+
+模块通过 [依赖注入](xref:Guides.TextCommands.DI) 进行构造，
+构造函数内的任何参数都应先注入服务容器中。
+
+> [!TIP]
+> 模块构造函数也可以将 `IServiceProvider` 作为参数，并从中抽取所需服务，但并不推荐。
+
+### 模块属性
+
+具有公共 `set` 访问器属性的模块在模块构造后会被服务容器中，详细信息可参考 @Guides.Commands.DI 。
+
+### 模块组
+
+模块组为一组具有相同名称前缀的命令，要声明模块组，可标记特性 @KaiHeiLa.Commands.GroupAttribute 。
+
+在模块组内，如果命令的 CommandAttribute 特性标签中不传入名称参数，则为创建以该组名称作为命令名称的命令。
+
+### 子模块
+
+子模块是模块内的模块，可用于创建嵌套组。
+
+[!code-csharp[Groups and Submodules](samples/intro/groups.cs)]

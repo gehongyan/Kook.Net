@@ -8,3 +8,7 @@
       topicUid: Guides.GettingStarted.FirstBot
     - name: 术语
       topicUid: Guides.GettingStarted.Terminology
+- name: 文本命令框架
+  items:
+    - name: 入门
+      topicUid: Guides.TextCommands.Intro
