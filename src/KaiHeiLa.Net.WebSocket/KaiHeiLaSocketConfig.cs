@@ -25,17 +25,6 @@ public class KaiHeiLaSocketConfig : KaiHeiLaRestConfig
     ///     Gets the heartbeat interval of WebSocket connection in milliseconds.
     /// </summary>
     public const int HeartbeatIntervalMilliseconds = 30000;
-
-    /// <summary>
-    ///     Gets or sets the threshold of heartbeat delay in milliseconds.
-    /// </summary>
-    /// <remarks>
-    ///     If two heartbeat pongs are received in a interval greater than
-    ///     the sum of <see cref="HeartbeatIntervalMilliseconds"/> and this threshold,
-    ///     the connection will be closed immediately and be re-established.
-    ///     By default, this value is half of <see cref="HeartbeatIntervalMilliseconds"/>.
-    /// </remarks>
-    public int HeartbeatDelayThresholdMilliseconds { get; set; } = HeartbeatIntervalMilliseconds / 2;
     
     /// <summary>
     ///     Gets or sets the timeout for event handlers, in milliseconds, after which a warning will be logged.

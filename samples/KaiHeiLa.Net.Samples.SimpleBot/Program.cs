@@ -69,6 +69,7 @@ class Program
 
     private async Task ClientOnLog(LogMessage arg)
     {
+        await Task.Delay(0);
         Console.WriteLine(arg.ToString());
     }
     

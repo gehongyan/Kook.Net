@@ -46,7 +46,6 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     internal WebSocketProvider WebSocketProvider { get; private set; }
     internal bool AlwaysDownloadUsers { get; private set; }
     internal int? HandlerTimeout { get; private set; }
-    internal int HeartbeatDelayThreshold { get; private set; }
     internal new KaiHeiLaSocketApiClient ApiClient => base.ApiClient;
     /// <inheritdoc />
     public override IReadOnlyCollection<SocketGuild> Guilds => State.Guilds;
@@ -83,7 +82,6 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
         WebSocketProvider = config.WebSocketProvider;
         AlwaysDownloadUsers = config.AlwaysDownloadUsers;
         HandlerTimeout = config.HandlerTimeout;
-        HeartbeatDelayThreshold = config.HeartbeatDelayThresholdMilliseconds;
         State = new ClientState(0, 0);
         Rest = new KaiHeiLaSocketRestClient(config, ApiClient);
         _heartbeatTimes = new ConcurrentQueue<long>();
@@ -282,7 +280,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     {
         if (sequence != null)
             _lastSeq = sequence.Value;
-        _lastMessageTime = Environment.TickCount;
+        _lastMessageTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
         try
         {
@@ -1359,7 +1357,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                         return;
                     }
                     
-                    _lastGuildAvailableTime = Environment.TickCount;
+                    _lastGuildAvailableTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                     _guildDownloadTask = WaitForGuildsAsync(_connection.CancelToken, _gatewayLogger)
                         .ContinueWith(async task =>
                         {
@@ -1414,7 +1412,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                     await _gatewayLogger.DebugAsync("Received Pong").ConfigureAwait(false);
                     if (_heartbeatTimes.TryDequeue(out long time))
                     {
-                        int latency = (int) (Environment.TickCount - time);
+                        int latency = (int) (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - time);
                         int before = Latency;
                         Latency = latency;
 
@@ -1474,18 +1472,17 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     private async Task RunHeartbeatAsync(CancellationToken cancelToken)
     {
         int intervalMillis = KaiHeiLaSocketConfig.HeartbeatIntervalMilliseconds;
-        int delayThreshold = HeartbeatDelayThreshold;
         try
         {
             await _gatewayLogger.DebugAsync("Heartbeat Started").ConfigureAwait(false);
             while (!cancelToken.IsCancellationRequested)
             {
-                int now = Environment.TickCount;
+                long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
                 //Did server respond to our last heartbeat, or are we still receiving messages (long load?)
-                if (_heartbeatTimes.IsEmpty && (now - _lastMessageTime) > intervalMillis + delayThreshold)
+                if (_heartbeatTimes.IsEmpty && (now - _lastMessageTime) > intervalMillis + 1000.0 / 64)
                 {
-                    if (ConnectionState == ConnectionState.Connected)
+                    if (ConnectionState == ConnectionState.Connected && (_guildDownloadTask?.IsCompleted ?? true))
                     {
                         _connection.Error(new GatewayReconnectException("Server missed last heartbeat"));
                         return;
@@ -1523,7 +1520,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
         try
         {
             await logger.DebugAsync("GuildDownloader Started").ConfigureAwait(false);
-            while ((_unavailableGuildCount != 0) && (Environment.TickCount - _lastGuildAvailableTime < BaseConfig.MaxWaitBetweenGuildAvailablesBeforeReady))
+            while ((_unavailableGuildCount != 0) && (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - _lastGuildAvailableTime < BaseConfig.MaxWaitBetweenGuildAvailablesBeforeReady))
                 await Task.Delay(500, cancelToken).ConfigureAwait(false);
             await logger.DebugAsync("GuildDownloader Stopped").ConfigureAwait(false);
         }
