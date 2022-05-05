@@ -103,12 +103,15 @@ internal static class Permissions
     {
         ulong resolvedPermissions = 0;
 
-        if (user.IsOwner ?? false)
+        if (user.Id == guild.OwnerId)
             resolvedPermissions = GuildPermissions.All.RawValue; //Owners always have all permissions
-        foreach (var roleId in user.RoleIds)
-            resolvedPermissions |= guild.GetRole(roleId)?.Permissions.RawValue ?? 0;
-        if (GetValue(resolvedPermissions, GuildPermission.Administrator))
-            resolvedPermissions = GuildPermissions.All.RawValue; //Administrators always have all permissions
+        else
+        {
+            foreach (var roleId in user.RoleIds)
+                resolvedPermissions |= guild.GetRole(roleId)?.Permissions.RawValue ?? 0;
+            if (GetValue(resolvedPermissions, GuildPermission.Administrator))
+                resolvedPermissions = GuildPermissions.All.RawValue; //Administrators always have all permissions
+        }
         return resolvedPermissions;
     }
 

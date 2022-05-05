@@ -117,6 +117,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IReloadable
     private void UpdateRoles(uint[] roleIds)
     {
         ImmutableArray<uint>.Builder roles = ImmutableArray.CreateBuilder<uint>(roleIds.Length + 1);
+        roles.Add(0);
         for (int i = 0; i < roleIds.Length; i++)
             roles.Add(roleIds[i]);
         _roleIds = roles.ToImmutable();
