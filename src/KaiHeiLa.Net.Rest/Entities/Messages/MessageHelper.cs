@@ -456,4 +456,10 @@ internal static class MessageHelper
             author = RestUser.Create(client, model);
         return author;
     }
+
+    public static async Task ReloadAsync(RestMessage message, BaseKaiHeiLaClient client, RequestOptions options)
+    {
+        var model = await client.ApiClient.GetMessageAsync(message.Id, options).ConfigureAwait(false);
+        message.Update(model);
+    }
 }

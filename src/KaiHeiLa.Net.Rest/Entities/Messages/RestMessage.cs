@@ -173,19 +173,19 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IReloadable
     }
     
     /// <inheritdoc />
-    public IReadOnlyDictionary<IEmote, ReactionMetadata> Reactions => _reactions.ToDictionary(x => x.Emote, x => new ReactionMetadata { ReactionCount = x.Count, IsMe = x.Me });
+    public IReadOnlyDictionary<IEmote, ReactionMetadata> Reactions 
+        => _reactions.ToDictionary(
+            x => x.Emote, 
+            x => new ReactionMetadata { ReactionCount = x.Count, IsMe = x.Me });
 
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
         => MessageHelper.DeleteAsync(this, KaiHeiLa, options);
-    
+
     /// <inheritdoc />
-    public async Task ReloadAsync(RequestOptions options = null)
-    {
-        var model = await KaiHeiLa.ApiClient.GetMessageAsync(Id, options).ConfigureAwait(false);
-        Update(model);
-    }
-    
+    public Task ReloadAsync(RequestOptions options = null) 
+        => MessageHelper.ReloadAsync(this, KaiHeiLa, options);
+
     /// <inheritdoc />
     public Task AddReactionAsync(IEmote emote, RequestOptions options = null)
     {

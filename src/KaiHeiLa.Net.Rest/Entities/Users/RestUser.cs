@@ -86,13 +86,10 @@ public class RestUser : RestEntity<ulong>, IUser, IReloadable
         IdentifyNumberValue = model.FullName.Length > 4 && ushort.TryParse(model.FullName[^4..], out ushort val) ? val : null;
         Avatar = model.Avatar;
     }
-    
+
     /// <inheritdoc />
-    public virtual async Task ReloadAsync(RequestOptions options = null)
-    {
-        var model = await KaiHeiLa.ApiClient.GetUserAsync(Id, options).ConfigureAwait(false);
-        Update(model);
-    }
+    public virtual Task ReloadAsync(RequestOptions options = null)
+        => UserHelper.ReloadAsync(this, KaiHeiLa, options);
     
     internal virtual void UpdatePresence(bool? isOnline, string activeClient)
     {

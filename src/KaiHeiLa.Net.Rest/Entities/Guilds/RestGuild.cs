@@ -152,8 +152,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IReloadable
     #region Generals
 
     /// <inheritdoc />
-    public async Task ReloadAsync(RequestOptions options = null)
-        => Update(await KaiHeiLa.ApiClient.GetGuildAsync(Id, options).ConfigureAwait(false));
+    public Task ReloadAsync(RequestOptions options = null)
+        => GuildHelper.ReloadAsync(this, KaiHeiLa, options);
 
     /// <inheritdoc />
     public Task LeaveAsync(RequestOptions options = null)

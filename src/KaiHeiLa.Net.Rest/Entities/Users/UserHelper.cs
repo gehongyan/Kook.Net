@@ -98,5 +98,11 @@ internal static class UserHelper
         };
         await client.ApiClient.UpdateIntimacyValueAsync(args, options).ConfigureAwait(false);
     }
+    
+    public static async Task ReloadAsync(RestUser user, BaseKaiHeiLaClient client, RequestOptions options)
+    {
+        var model = await client.ApiClient.GetUserAsync(user.Id, options).ConfigureAwait(false);
+        user.Update(model);
+    }
         
 }

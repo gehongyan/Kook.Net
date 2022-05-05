@@ -18,7 +18,7 @@ namespace KaiHeiLa.WebSocket;
 ///     Represents a WebSocket-based guild object.
 /// </summary>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
+public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IReloadable
 {
     #region SocketGuild
 
@@ -207,6 +207,14 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     /// <returns>
     ///     A read-only collection of roles found within this guild.
     /// </returns>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         Due to the lack of event args which should contains the reordered roles data
+    ///         when roles are reordered, this property may not be completely accurate.
+    ///         To ensure the most accurate results, it is recommended to
+    ///         call <see cref="ReloadAsync"/> before this property is used.
+    ///     </note>
+    /// </remarks>
     public IReadOnlyCollection<SocketRole> Roles => _roles.ToReadOnlyCollection();
     
     internal SocketGuild(KaiHeiLaSocketClient kaiHeiLa, ulong id) : base(kaiHeiLa, id)
@@ -318,6 +326,10 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
         IsAvailable = true;
     }
     
+    /// <inheritdoc />
+    public Task ReloadAsync(RequestOptions options = null)
+        => SocketGuildHelper.ReloadAsync(this, KaiHeiLa, options);
+    
     #endregion
     
     /// <summary>
@@ -327,6 +339,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable
     ///     A string that resolves to <see cref="KaiHeiLa.WebSocket.SocketGuild.Name"/>.
     /// </returns>
     public override string ToString() => Name;
+
     private string DebuggerDisplay => $"{Name} ({Id})";
     internal SocketGuild Clone() => MemberwiseClone() as SocketGuild;
 
