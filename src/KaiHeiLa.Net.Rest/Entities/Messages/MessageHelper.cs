@@ -403,6 +403,20 @@ internal static class MessageHelper
         codeIndex = 0;
         while (true)
         {
+            index = text.IndexOf("(met)all(met)", index, StringComparison.Ordinal);
+            if (index == -1) break;
+            if (CheckWrappedCode()) break;
+            var tagIndex = FindIndex(tags, index);
+            if (tagIndex.HasValue)
+                tags.Insert(tagIndex.Value,
+                    new Tag<IRole>(TagType.EveryoneMention, index, "(met)all(met)".Length, 0, guild?.EveryoneRole));
+            index++;
+        }
+
+        index = 0;
+        codeIndex = 0;
+        while (true)
+        {
             index = text.IndexOf("@在线成员", index, StringComparison.Ordinal);
             if (index == -1) break;
             if (CheckWrappedCode()) break;
@@ -410,6 +424,20 @@ internal static class MessageHelper
             if (tagIndex.HasValue)
                 tags.Insert(tagIndex.Value,
                     new Tag<IRole>(TagType.HereMention, index, "@在线成员".Length, 0, guild?.EveryoneRole));
+            index++;
+        }
+
+        index = 0;
+        codeIndex = 0;
+        while (true)
+        {
+            index = text.IndexOf("(met)here(met)", index, StringComparison.Ordinal);
+            if (index == -1) break;
+            if (CheckWrappedCode()) break;
+            var tagIndex = FindIndex(tags, index);
+            if (tagIndex.HasValue)
+                tags.Insert(tagIndex.Value,
+                    new Tag<IRole>(TagType.HereMention, index, "(met)here(met)".Length, 0, guild?.EveryoneRole));
             index++;
         }
 
