@@ -3,13 +3,8 @@ namespace KaiHeiLa;
 /// <summary>
 ///     Represents a generic message quote.
 /// </summary>
-public interface IQuote
+public interface IQuote : IEntity<string>
 {
-    /// <summary>
-    ///     Gets the identifier of the quote.
-    /// </summary>
-    string Id { get; }
-    
     /// <summary>
     ///     Gets the identifier of the message this quote refers to.
     /// </summary>

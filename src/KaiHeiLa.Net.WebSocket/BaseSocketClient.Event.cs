@@ -279,6 +279,12 @@ public abstract partial class BaseSocketClient
     ///         The source channel of the updated message will be passed into the 
     ///         <see cref="IDMChannel"/> parameter.
     ///     </para>
+    ///     <para>
+    ///         <note type="warning">
+    ///             Due to the lack of REST API for direct message info getting, this event may fire but
+    ///             the message entity will be null.
+    ///         </note>
+    ///     </para>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, SocketMessage, IDMChannel, Task> DirectMessageUpdated
     {

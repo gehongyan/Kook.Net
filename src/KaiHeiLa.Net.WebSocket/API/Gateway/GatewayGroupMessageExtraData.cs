@@ -37,4 +37,7 @@ internal class GatewayGroupMessageExtraData
     
     [JsonPropertyName("attachments")]
     public Attachment Attachment { get; set; }
+    
+    [JsonPropertyName("kmarkdown")]
+    public KMarkdownInfo KMarkdownInfo { get; set; }
 }

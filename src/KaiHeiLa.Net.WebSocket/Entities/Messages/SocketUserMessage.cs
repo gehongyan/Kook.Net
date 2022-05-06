@@ -90,12 +90,14 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         _roleMentions = model.MentionRoles?.Select(x => guild.GetRole(x)).ToImmutableArray()
             ?? new ImmutableArray<SocketRole>();
         Content = gatewayEvent.Content;
+        RawContent = model.KMarkdownInfo.RawContent;
         if (model.Type == MessageType.Text)
             _tags = MessageHelper.ParseTags(gatewayEvent.Content, Channel, guild, MentionedUsers, TagMode.PlainText);
         else if (model.Type == MessageType.KMarkdown)
             _tags = MessageHelper.ParseTags(gatewayEvent.Content, Channel, guild, MentionedUsers, TagMode.KMarkdown);
         if (model.Quote is not null)
-            _quote = Quote.Create(model.Quote.Id, model.Quote.QuotedMessageId, model.Quote.Type, model.Quote.Content, model.Quote.CreateAt, guild.GetUser(model.Quote.Author.Id));
+            _quote = Quote.Create(model.Quote.Id, model.Quote.QuotedMessageId, model.Quote.Type, model.Quote.Content, 
+                model.Quote.CreateAt, guild.GetUser(model.Quote.Author.Id));
 
         if (model.Attachment is not null)
             _attachment = Attachment.Create(model.Attachment);
@@ -111,15 +113,13 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     {
         base.Update(state, model, gatewayEvent);
         Content = gatewayEvent.Content;
+        RawContent = model.KMarkdownInfo.RawContent;
         if (model.Quote is not null)
-        {
-            _quote = Quote.Create(model.Quote.Id, model.Quote.QuotedMessageId, model.Quote.Type, model.Quote.Content, model.Quote.CreateAt, state.GetUser(model.Quote.Author.Id));
-        }
-        
+            _quote = Quote.Create(model.Quote.Id, model.Quote.QuotedMessageId, model.Quote.Type, model.Quote.Content,
+                model.Quote.CreateAt, state.GetUser(model.Quote.Author.Id));
+
         if (model.Attachment is not null)
-        {
             _attachment = Attachment.Create(model.Attachment);
-        }
 
         _cards = model.Type == MessageType.Card 
             ? MessageHelper.ParseCards(gatewayEvent.Content) 

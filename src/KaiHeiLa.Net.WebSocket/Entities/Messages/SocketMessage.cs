@@ -33,6 +33,13 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IReloadable
     /// <inheritdoc />
     public string Content { get; internal set; }
 
+    /// <summary>
+    ///     Gets the raw content of the message.
+    /// </summary>
+    /// <remarks>
+    ///     This property is only available for messages that were received from the gateway.
+    /// </remarks>
+    public string RawContent { get; internal set; }
     /// <inheritdoc />
     public string CleanContent => MessageHelper.SanitizeMessage(this);
 
@@ -140,6 +147,8 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IReloadable
     }
     internal static SocketMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, API.Message model)
     {
+        if (model is null)
+            return null;
         if (model.Type == MessageType.System)
             return SocketSystemMessage.Create(kaiHeiLa, state, author, channel, model);
         else
@@ -147,6 +156,8 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IReloadable
     }
     internal static SocketMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, API.DirectMessage model)
     {
+        if (model is null)
+            return null;
         if (model.Type == MessageType.System)
             return SocketSystemMessage.Create(kaiHeiLa, state, author, channel, model);
         else
