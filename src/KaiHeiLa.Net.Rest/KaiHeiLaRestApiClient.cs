@@ -697,13 +697,13 @@ internal class KaiHeiLaRestApiClient : IDisposable
     {
         // Waiting for direct-message/view endpoint
         // Try getting by fetching all messages
-        var messages = await QueryDirectMessagesAsync(chatCode, userId, messageId, Direction.Unspecified, 100, options);
+        var messages = await QueryDirectMessagesAsync(chatCode, userId, messageId, Direction.Unspecified, 50, options);
         int count = messages.Count;
         DirectMessage message = messages.SingleOrDefault(x => x.Id == messageId);
         if (message is not null) return message;
 
         // We have fetched all messages, but the message we're looking for is not there, hence null
-        if (count < 100) return null;
+        if (count < 50) return null;
 
         // Try getting by fetching the message next to the targeted one
         // Try getting by before mode
