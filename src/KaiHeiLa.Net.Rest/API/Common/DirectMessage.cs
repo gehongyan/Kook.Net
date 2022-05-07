@@ -32,7 +32,7 @@ internal class DirectMessage
     public Reaction[] Reactions { get; set; }
 
     [JsonPropertyName("author_id")]
-    [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong AuthorId { get; set; }
 
     [JsonPropertyName("image_name")]

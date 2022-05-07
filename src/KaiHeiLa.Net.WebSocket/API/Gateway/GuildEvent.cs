@@ -6,7 +6,7 @@ namespace KaiHeiLa.API.Gateway;
 internal class GuildEvent
 {
     [JsonPropertyName("id")]
-    [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong GuildId { get; set; }
     
     [JsonPropertyName("name")]

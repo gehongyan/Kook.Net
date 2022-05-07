@@ -11,7 +11,7 @@ internal class DirectMessageUpdateEvent
 
     // self user id in fact
     [JsonPropertyName("target_id")]
-    [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong UserId { get; set; }
     
     [JsonPropertyName("msg_id")] 

@@ -10,7 +10,7 @@ internal class UserVoiceEvent
     public ulong UserId { get; set; }
     
     [JsonPropertyName("channel_id")]
-    [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong ChannelId { get; set; }
     
     [JsonPropertyName("joined_at")]

@@ -6,7 +6,7 @@ namespace KaiHeiLa.API.Rest;
 internal class ModifyGuildMemberNicknameParams
 {
     [JsonPropertyName("guild_id")]
-    [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong GuildId { get; set; }
 
     [JsonPropertyName("nickname")]

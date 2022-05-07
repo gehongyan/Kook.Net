@@ -6,7 +6,7 @@ namespace KaiHeiLa.API.Rest;
 internal class ModifyChannelPermissionOverwriteParams
 {
     [JsonPropertyName("channel_id")]
-    [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong ChannelId { get; set; }
 
     [JsonPropertyName("type")]
@@ -14,7 +14,7 @@ internal class ModifyChannelPermissionOverwriteParams
     public PermissionOverwriteTargetType TargetType { get; set; }
 
     [JsonPropertyName("value")]
-    [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong TargetId { get; set; }
 
     [JsonPropertyName("allow")] 

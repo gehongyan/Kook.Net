@@ -5,10 +5,10 @@ namespace KaiHeiLa.API.Rest;
 internal class MoveUsersParams
 {
     [JsonPropertyName("target_id")]
-    [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong ChannelId { get; set; }
     
     [JsonPropertyName("user_ids")]
-    [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong[] UserIds { get; set; }
 }

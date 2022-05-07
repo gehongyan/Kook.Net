@@ -14,7 +14,7 @@ internal class MessageButtonClickEvent
     public ulong UserId { get; set; }
     
     [JsonPropertyName("target_id")]
-    [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong ChannelId { get; set; }
     
     [JsonPropertyName("user_info")]

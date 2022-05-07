@@ -10,7 +10,7 @@ internal class DirectMessageDeleteEvent
     public uint AuthorId { get; set; }
 
     [JsonPropertyName("target_id")]
-    [JsonNumberHandling(JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowReadingFromString)]
+    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong UserId { get; set; }
     
     [JsonPropertyName("msg_id")] 
