@@ -15,13 +15,6 @@ internal static class GuildHelper
         await client.ApiClient.LeaveGuildAsync(guild.Id, options).ConfigureAwait(false);
     }
 
-    public static async Task ReloadAsync(RestGuild guild, BaseKaiHeiLaClient client,
-        RequestOptions options)
-    { 
-        var model = await client.ApiClient.GetGuildAsync(guild.Id, options).ConfigureAwait(false);
-        guild.Update(model);
-    }
-
     #endregion
 
     #region Invites

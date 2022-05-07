@@ -11,7 +11,7 @@ namespace KaiHeiLa.WebSocket;
 ///     Represents a WebSocket-based guild user.
 /// </summary>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-public class SocketGuildUser : SocketUser, IGuildUser, IReloadable
+public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
 {
     #region SocketGuildUser
 
@@ -177,8 +177,8 @@ public class SocketGuildUser : SocketUser, IGuildUser, IReloadable
     /// <returns>
     ///     A task that represents the asynchronous reloading operation.
     /// </returns>
-    public Task ReloadAsync(RequestOptions options = null)
-        => SocketUserHelper.ReloadAsync(this, KaiHeiLa, options);
+    public Task UpdateAsync(RequestOptions options = null)
+        => SocketUserHelper.UpdateAsync(this, KaiHeiLa, options);
     
     /// <summary>
     ///     Returns a collection of roles that the user possesses.
@@ -187,7 +187,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IReloadable
     ///     <note type="warning">
     ///         Due to the lack of events which should be raised when a role is added or removed from a user,
     ///         this property may not be completely accurate. To ensure the most accurate results,
-    ///         it is recommended to call <see cref="ReloadAsync"/> before this property is used.
+    ///         it is recommended to call <see cref="UpdateAsync"/> before this property is used.
     ///     </note>
     /// </remarks>
     public IReadOnlyCollection<SocketRole> Roles

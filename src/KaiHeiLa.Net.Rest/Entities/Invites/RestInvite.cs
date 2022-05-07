@@ -3,7 +3,7 @@ using Model = KaiHeiLa.API.Invite;
 namespace KaiHeiLa.Rest;
 
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-public class RestInvite : RestEntity<uint>, IInvite
+public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
 {
     /// <inheritdoc />
     public string Code { get; private set; }
@@ -65,6 +65,12 @@ public class RestInvite : RestEntity<uint>, IInvite
         Uses = MaxUses - RemainingUses;
     }
     
+    /// <inheritdoc />
+    public async Task UpdateAsync(RequestOptions options = null)
+    {
+        var model = await KaiHeiLa.ApiClient.GetGuildInvitesAsync(guildId: GuildId, channelId: ChannelId, options: options).FlattenAsync().ConfigureAwait(false);
+        Update(model.SingleOrDefault(i => i.UrlCode == Code));
+    }
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
         => InviteHelper.DeleteAsync(this, KaiHeiLa, options);

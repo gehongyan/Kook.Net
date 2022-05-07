@@ -7,7 +7,7 @@ namespace KaiHeiLa.Rest;
 /// <summary>
 ///     Represents a REST-based message.
 /// </summary>
-public abstract class RestMessage : RestEntity<Guid>, IMessage, IReloadable
+public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
 {
     private ImmutableArray<RestReaction> _reactions = ImmutableArray.Create<RestReaction>();
     private ImmutableArray<RestUser> _userMentions = ImmutableArray.Create<RestUser>();
@@ -183,8 +183,25 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IReloadable
         => MessageHelper.DeleteAsync(this, KaiHeiLa, options);
 
     /// <inheritdoc />
-    public Task ReloadAsync(RequestOptions options = null) 
-        => MessageHelper.ReloadAsync(this, KaiHeiLa, options);
+    /// <exception cref="InvalidOperationException">
+    ///     This message is neither a guild channel message nor a direct message.
+    /// </exception>
+    public async Task UpdateAsync(RequestOptions options = null)
+    {
+        if (Channel is IGuildChannel)
+        {
+            var model = await KaiHeiLa.ApiClient.GetMessageAsync(Id, options).ConfigureAwait(false);
+            Update(model);
+            return;
+        }
+        if (Channel is IDMChannel dmChannel)
+        {
+            var model = await KaiHeiLa.ApiClient.GetDirectMessageAsync(Id, dmChannel.ChatCode, dmChannel.Recipient.Id, options).ConfigureAwait(false);
+            Update(model);
+            return;
+        }
+        throw new InvalidOperationException("Unable to update a message that is neither a guild channel message nor a direct message.");
+    }
 
     /// <inheritdoc />
     public Task AddReactionAsync(IEmote emote, RequestOptions options = null)

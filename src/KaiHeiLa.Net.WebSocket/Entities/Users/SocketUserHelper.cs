@@ -12,7 +12,7 @@ internal static class SocketUserHelper
         return channels.Select(x => client.GetChannel(x.Id) as IVoiceChannel).ToImmutableArray();
     }
 
-    public static async Task ReloadAsync(SocketGuildUser user, KaiHeiLaSocketClient client, RequestOptions options)
+    public static async Task UpdateAsync(SocketGuildUser user, KaiHeiLaSocketClient client, RequestOptions options)
     {
         GuildMember member = await client.ApiClient.GetGuildMemberAsync(user.Guild.Id, user.Id, options: options).ConfigureAwait(false);
         user.Update(client.State, member);

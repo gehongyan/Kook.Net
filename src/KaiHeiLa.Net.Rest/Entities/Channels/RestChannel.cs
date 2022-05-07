@@ -5,7 +5,7 @@ namespace KaiHeiLa.Rest;
 /// <summary>
 ///     Represents a generic REST-based channel.
 /// </summary>
-public class RestChannel : RestEntity<ulong>, IChannel, IReloadable
+public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
 {
     #region RestChannel
     
@@ -36,7 +36,7 @@ public class RestChannel : RestEntity<ulong>, IChannel, IReloadable
     internal virtual void Update(Model model) { }
     
     /// <inheritdoc />
-    public virtual Task ReloadAsync(RequestOptions options = null) => Task.Delay(0);
+    public virtual Task UpdateAsync(RequestOptions options = null) => Task.Delay(0);
 
     #endregion
 

@@ -62,7 +62,7 @@ internal static class ChannelHelper
         await client.ApiClient.DeleteUserChatAsync(channel.ChatCode, options).ConfigureAwait(false);
     }
 
-    public static async Task ReloadAsync(RestChannel channel, BaseKaiHeiLaClient client, RequestOptions options)
+    public static async Task UpdateAsync(RestChannel channel, BaseKaiHeiLaClient client, RequestOptions options)
     {
         var model = await client.ApiClient.GetGuildChannelAsync(channel.Id, options).ConfigureAwait(false);
         channel.Update(model);

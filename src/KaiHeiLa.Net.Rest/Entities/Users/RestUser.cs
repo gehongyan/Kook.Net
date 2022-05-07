@@ -10,7 +10,7 @@ namespace KaiHeiLa.Rest;
 ///     Represents a REST-based user.
 /// </summary>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-public class RestUser : RestEntity<ulong>, IUser, IReloadable
+public class RestUser : RestEntity<ulong>, IUser, IUpdateable
 {
     #region RestUser
     
@@ -88,9 +88,12 @@ public class RestUser : RestEntity<ulong>, IUser, IReloadable
     }
 
     /// <inheritdoc />
-    public virtual Task ReloadAsync(RequestOptions options = null)
-        => UserHelper.ReloadAsync(this, KaiHeiLa, options);
-    
+    public virtual async Task UpdateAsync(RequestOptions options = null)
+    {
+        var model = await KaiHeiLa.ApiClient.GetUserAsync(Id, options).ConfigureAwait(false);
+        Update(model);
+    }
+
     internal virtual void UpdatePresence(bool? isOnline, string activeClient)
     {
         Presence ??= new RestPresence();

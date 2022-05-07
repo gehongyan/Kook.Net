@@ -56,7 +56,7 @@ class Program
         if (arg.Author.IsBot == true) return;
         if (arg.Content != "/test") return;
         // await arg.Channel.SendTextMessageAsync("收到了！", quote: new Quote(arg.Id));
-        // await msg.ReloadAsync();
+        // await msg.UpdateAsync();
         await CardDemo(arg);
     }
 

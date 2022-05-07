@@ -37,6 +37,16 @@ public class RestSelfUser : RestUser, ISelfUser
         InvitedCount = model.InvitedCount ?? 0;
         IsMobileVerified = model.MobileVerified;
     }
+    
+    /// <inheritdoc />
+    /// <exception cref="InvalidOperationException">Unable to update this object using a different token.</exception>
+    public override async Task UpdateAsync(RequestOptions options = null)
+    {
+        var model = await KaiHeiLa.ApiClient.GetSelfUserAsync(options).ConfigureAwait(false);
+        if (model.Id != Id)
+            throw new InvalidOperationException("Unable to update this object using a different token.");
+        Update(model);
+    }
 
     #region ISelfUser
     

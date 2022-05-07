@@ -60,6 +60,17 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
         Recipient.Update(model.Recipient);
     }
 
+    /// <inheritdoc />
+    public override async Task UpdateAsync(RequestOptions options = null)
+    {
+        var model = await KaiHeiLa.ApiClient.GetUserChatAsync(Id, options).ConfigureAwait(false);
+        Update(model);
+    }
+    
+    /// <inheritdoc />
+    public Task CloseAsync(RequestOptions options = null)
+        => ChannelHelper.DeleteDMChannelAsync(this, KaiHeiLa, options);
+
     /// <summary>
     ///     Gets a user in this channel from the provided <paramref name="id"/>.
     /// </summary>
@@ -76,10 +87,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
         else
             return null;
     }
-
-    /// <inheritdoc />
-    public Task CloseAsync(RequestOptions options = null)
-        => ChannelHelper.DeleteDMChannelAsync(this, KaiHeiLa, options);
+    
     /// <summary>
     ///     Sends a plain text to this message channel.
     /// </summary>

@@ -4,7 +4,7 @@ namespace KaiHeiLa.WebSocket;
 
 public static class SocketGuildHelper
 {
-    public static async Task ReloadAsync(SocketGuild guild, KaiHeiLaSocketClient client,
+    public static async Task UpdateAsync(SocketGuild guild, KaiHeiLaSocketClient client,
         RequestOptions options)
     {
         ExtendedGuild extendedGuild = await client.ApiClient.GetGuildAsync(guild.Id, options).ConfigureAwait(false);

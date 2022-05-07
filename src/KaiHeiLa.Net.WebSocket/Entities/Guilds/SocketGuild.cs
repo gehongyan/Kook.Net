@@ -18,7 +18,7 @@ namespace KaiHeiLa.WebSocket;
 ///     Represents a WebSocket-based guild object.
 /// </summary>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IReloadable
+public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 {
     #region SocketGuild
 
@@ -212,7 +212,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IReloadable
     ///         Due to the lack of event args which should contains the reordered roles data
     ///         when roles are reordered, this property may not be completely accurate.
     ///         To ensure the most accurate results, it is recommended to
-    ///         call <see cref="ReloadAsync"/> before this property is used.
+    ///         call <see cref="UpdateAsync"/> before this property is used.
     ///     </note>
     /// </remarks>
     public IReadOnlyCollection<SocketRole> Roles => _roles.ToReadOnlyCollection();
@@ -327,8 +327,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IReloadable
     }
     
     /// <inheritdoc />
-    public Task ReloadAsync(RequestOptions options = null)
-        => SocketGuildHelper.ReloadAsync(this, KaiHeiLa, options);
+    public Task UpdateAsync(RequestOptions options = null)
+        => SocketGuildHelper.UpdateAsync(this, KaiHeiLa, options);
     
     #endregion
     

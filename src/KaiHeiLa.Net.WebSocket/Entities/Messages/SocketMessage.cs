@@ -8,7 +8,7 @@ namespace KaiHeiLa.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based message.
 /// </summary>
-public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IReloadable
+public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
 {
     #region SocketMessage
 
@@ -243,8 +243,8 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IReloadable
     }
 
     /// <inheritdoc />
-    public Task ReloadAsync(RequestOptions options = null)
-        => SocketMessageHelper.ReloadAsync(this, KaiHeiLa, options);
+    public Task UpdateAsync(RequestOptions options = null)
+        => SocketMessageHelper.UpdateAsync(this, KaiHeiLa, options);
     
     /// <inheritdoc />
     public Task AddReactionAsync(IEmote emote, RequestOptions options = null)
