@@ -181,11 +181,11 @@ internal static class GuildHelper
     }
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
     public static async Task<RestTextChannel> CreateTextChannelAsync(IGuild guild, BaseKaiHeiLaClient client, 
-        string name, RequestOptions options, Action<TextChannelProperties> func)
+        string name, RequestOptions options, Action<CreateTextChannelProperties> func)
     {
         if (name == null) throw new ArgumentNullException(paramName: nameof(name));
 
-        var props = new TextChannelProperties();
+        var props = new CreateTextChannelProperties();
         func?.Invoke(props);
         
         var args = new CreateGuildChannelParams
@@ -200,11 +200,11 @@ internal static class GuildHelper
     }
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
     public static async Task<RestVoiceChannel> CreateVoiceChannelAsync(IGuild guild, BaseKaiHeiLaClient client, 
-        string name, RequestOptions options, Action<VoiceChannelProperties> func)
+        string name, RequestOptions options, Action<CreateVoiceChannelProperties> func)
     {
         if (name == null) throw new ArgumentNullException(paramName: nameof(name));
 
-        var props = new VoiceChannelProperties();
+        var props = new CreateVoiceChannelProperties();
         func?.Invoke(props);
         
         var args = new CreateGuildChannelParams

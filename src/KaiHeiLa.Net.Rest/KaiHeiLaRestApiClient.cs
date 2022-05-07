@@ -446,7 +446,42 @@ internal class KaiHeiLaRestApiClient : IDisposable
         var ids = new BucketIds(channelId: channelId);
         return await SendAsync<Channel>(HttpMethod.Get, () => $"channel/view?target_id={channelId}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
+    
+    public async Task<Channel> ModifyGuildChannelAsync(ulong channelId, ModifyGuildChannelParams args, RequestOptions options = null)
+    {
+        Preconditions.NotEqual(channelId, 0, nameof(channelId));
+        Preconditions.NotNull(args, nameof(args));
 
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds(channelId: channelId);
+        return await SendJsonAsync<Channel>(HttpMethod.Post, () => $"channels/update", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+    
+    public async Task<Channel> ModifyGuildChannelAsync(ulong channelId, ModifyTextChannelParams args, RequestOptions options = null)
+    {
+        Preconditions.NotEqual(channelId, 0, nameof(channelId));
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.AtLeast(args.SlowModeInterval, 0, nameof(args.SlowModeInterval));
+        Preconditions.AtMost(args.SlowModeInterval, 21600, nameof(args.SlowModeInterval));
+
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds(channelId: channelId);
+        return await SendJsonAsync<Channel>(HttpMethod.Post, () => $"channels/update", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+    
+    public async Task<Channel> ModifyGuildChannelAsync(ulong channelId, ModifyVoiceChannelParams args, RequestOptions options = null)
+    {
+        Preconditions.NotEqual(channelId, 0, nameof(channelId));
+        Preconditions.NotNull(args, nameof(args));
+
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new BucketIds(channelId: channelId);
+        return await SendJsonAsync<Channel>(HttpMethod.Post, () => $"channels/update", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+    
     public async Task<Channel> CreateGuildChannelAsync(CreateGuildChannelParams args, RequestOptions options = null)
     {
         Preconditions.NotNull(args, nameof(args));

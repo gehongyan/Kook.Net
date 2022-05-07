@@ -73,6 +73,12 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     }
     
     /// <inheritdoc />
+    public async Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions options = null)
+    {
+        var model = await ChannelHelper.ModifyAsync(this, KaiHeiLa, func, options).ConfigureAwait(false);
+        Update(model);
+    }
+    /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
         => ChannelHelper.DeleteGuildChannelAsync(this, KaiHeiLa, options);
     

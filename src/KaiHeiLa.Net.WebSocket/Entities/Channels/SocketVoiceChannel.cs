@@ -88,6 +88,10 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
         CreatorId = model.CreatorId;
     }
     
+    /// <inheritdoc />
+    public Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null)
+        => ChannelHelper.ModifyAsync(this, KaiHeiLa, func, options);
+
     // /// <inheritdoc />
     // public override SocketGuildUser GetUser(ulong id)
     // {

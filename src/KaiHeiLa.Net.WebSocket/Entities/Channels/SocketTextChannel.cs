@@ -88,10 +88,9 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         CreatorId = model.CreatorId;
     }
     
-    internal void AddMessage(SocketMessage msg)
-        => _messages?.Add(msg);
-    internal SocketMessage RemoveMessage(Guid id)
-        => _messages?.Remove(id);
+    /// <inheritdoc />
+    public virtual Task ModifyAsync(Action<ModifyTextChannelProperties> func, RequestOptions options = null)
+        => ChannelHelper.ModifyAsync(this, KaiHeiLa, func, options);
     
     #endregion
 
@@ -271,6 +270,11 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <inheritdoc />
     public Task DeleteMessageAsync(IMessage message, RequestOptions options = null)
         => ChannelHelper.DeleteMessageAsync(this, message.Id, KaiHeiLa, options);
+    
+    internal void AddMessage(SocketMessage msg)
+        => _messages?.Add(msg);
+    internal SocketMessage RemoveMessage(Guid id)
+        => _messages?.Remove(id);
     
     #endregion
 

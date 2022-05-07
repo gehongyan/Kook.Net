@@ -3,7 +3,7 @@ namespace KaiHeiLa;
 /// <summary>
 ///     Properties that are used to create an <see cref="IGuildChannel" /> with the specified properties.
 /// </summary>
-public class GuildChannelProperties
+public class CreateGuildChannelProperties
 {
     /// <summary>
     ///     Gets or sets the category ID for this channel.

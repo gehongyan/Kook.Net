@@ -20,7 +20,7 @@ class Program
                                ?? throw new ArgumentNullException(nameof(_token)));
         _channelId = ulong.Parse(Environment.GetEnvironmentVariable("KaiHeiLaDebugChannel", EnvironmentVariableTarget.User) 
                                  ?? throw new ArgumentNullException(nameof(_token)));
-        _client = new(new KaiHeiLaSocketConfig() {AlwaysDownloadUsers = true, MessageCacheSize = 100, LogLevel = LogSeverity.Debug});
+        _client = new(new KaiHeiLaSocketConfig() {AlwaysDownloadUsers = true, MessageCacheSize = 100, LogLevel = LogSeverity.Verbose});
         
         _client.Log += ClientOnLog;
         _client.MessageReceived += ClientOnMessageReceived;

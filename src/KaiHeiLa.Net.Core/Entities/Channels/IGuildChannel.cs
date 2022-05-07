@@ -57,6 +57,20 @@ public interface IGuildChannel : IChannel, IDeletable
     /// </returns>
     IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites { get; }
 
+    /// <summary>
+    ///     Modifies this guild channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method modifies the current guild channel with the specified properties. To see an example of this
+    ///     method and what properties are available, please refer to <see cref="ModifyGuildChannelProperties"/>.
+    /// </remarks>
+    /// <param name="func">The delegate containing the properties to modify the channel with.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous modification operation.
+    /// </returns>
+    Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions options = null);
+
     #endregion
 
     #region Permissions

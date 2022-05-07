@@ -155,6 +155,22 @@ public class Preconditions
         /// <exception cref="ArgumentException">Value must be at least <paramref name="value"/>.</exception>
         public static void AtLeast(ulong obj, ulong value, string name, string msg = null) { if (obj < value) throw CreateAtLeastException(name, msg, value); }
         /// <exception cref="ArgumentException">Value must be at least <paramref name="value"/>.</exception>
+        public static void AtLeast(sbyte? obj, sbyte value, string name, string msg = null) { if (obj < value) throw CreateAtLeastException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at least <paramref name="value"/>.</exception>
+        public static void AtLeast(byte? obj, byte value, string name, string msg = null) { if (obj < value) throw CreateAtLeastException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at least <paramref name="value"/>.</exception>
+        public static void AtLeast(short? obj, short value, string name, string msg = null) { if (obj < value) throw CreateAtLeastException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at least <paramref name="value"/>.</exception>
+        public static void AtLeast(ushort? obj, ushort value, string name, string msg = null) { if (obj < value) throw CreateAtLeastException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at least <paramref name="value"/>.</exception>
+        public static void AtLeast(int? obj, int value, string name, string msg = null) { if (obj < value) throw CreateAtLeastException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at least <paramref name="value"/>.</exception>
+        public static void AtLeast(uint? obj, uint value, string name, string msg = null) { if (obj < value) throw CreateAtLeastException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at least <paramref name="value"/>.</exception>
+        public static void AtLeast(long? obj, long value, string name, string msg = null) { if (obj < value) throw CreateAtLeastException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at least <paramref name="value"/>.</exception>
+        public static void AtLeast(ulong? obj, ulong value, string name, string msg = null) { if (obj < value) throw CreateAtLeastException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at least <paramref name="value"/>.</exception>
         public static void AtLeast(Optional<sbyte> obj, sbyte value, string name, string msg = null) { if (obj.IsSpecified && obj.Value < value) throw CreateAtLeastException(name, msg, value); }
         /// <exception cref="ArgumentException">Value must be at least <paramref name="value"/>.</exception>
         public static void AtLeast(Optional<byte> obj, byte value, string name, string msg = null) { if (obj.IsSpecified && obj.Value < value) throw CreateAtLeastException(name, msg, value); }
@@ -190,6 +206,22 @@ public class Preconditions
         public static void GreaterThan(long obj, long value, string name, string msg = null) { if (obj <= value) throw CreateGreaterThanException(name, msg, value); }
         /// <exception cref="ArgumentException">Value must be greater than <paramref name="value"/>.</exception>
         public static void GreaterThan(ulong obj, ulong value, string name, string msg = null) { if (obj <= value) throw CreateGreaterThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be greater than <paramref name="value"/>.</exception>
+        public static void GreaterThan(sbyte? obj, sbyte value, string name, string msg = null) { if (obj <= value) throw CreateGreaterThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be greater than <paramref name="value"/>.</exception>
+        public static void GreaterThan(byte? obj, byte value, string name, string msg = null) { if (obj <= value) throw CreateGreaterThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be greater than <paramref name="value"/>.</exception>
+        public static void GreaterThan(short? obj, short value, string name, string msg = null) { if (obj <= value) throw CreateGreaterThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be greater than <paramref name="value"/>.</exception>
+        public static void GreaterThan(ushort? obj, ushort value, string name, string msg = null) { if (obj <= value) throw CreateGreaterThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be greater than <paramref name="value"/>.</exception>
+        public static void GreaterThan(int? obj, int value, string name, string msg = null) { if (obj <= value) throw CreateGreaterThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be greater than <paramref name="value"/>.</exception>
+        public static void GreaterThan(uint? obj, uint value, string name, string msg = null) { if (obj <= value) throw CreateGreaterThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be greater than <paramref name="value"/>.</exception>
+        public static void GreaterThan(long? obj, long value, string name, string msg = null) { if (obj <= value) throw CreateGreaterThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be greater than <paramref name="value"/>.</exception>
+        public static void GreaterThan(ulong? obj, ulong value, string name, string msg = null) { if (obj <= value) throw CreateGreaterThanException(name, msg, value); }
         /// <exception cref="ArgumentException">Value must be greater than <paramref name="value"/>.</exception>
         public static void GreaterThan(Optional<sbyte> obj, sbyte value, string name, string msg = null) { if (obj.IsSpecified && obj.Value <= value) throw CreateGreaterThanException(name, msg, value); }
         /// <exception cref="ArgumentException">Value must be greater than <paramref name="value"/>.</exception>
@@ -227,6 +259,22 @@ public class Preconditions
         /// <exception cref="ArgumentException">Value must be at most <paramref name="value"/>.</exception>
         public static void AtMost(ulong obj, ulong value, string name, string msg = null) { if (obj > value) throw CreateAtMostException(name, msg, value); }
         /// <exception cref="ArgumentException">Value must be at most <paramref name="value"/>.</exception>
+        public static void AtMost(sbyte? obj, sbyte value, string name, string msg = null) { if (obj > value) throw CreateAtMostException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at most <paramref name="value"/>.</exception>
+        public static void AtMost(byte? obj, byte value, string name, string msg = null) { if (obj > value) throw CreateAtMostException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at most <paramref name="value"/>.</exception>
+        public static void AtMost(short? obj, short value, string name, string msg = null) { if (obj > value) throw CreateAtMostException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at most <paramref name="value"/>.</exception>
+        public static void AtMost(ushort? obj, ushort value, string name, string msg = null) { if (obj > value) throw CreateAtMostException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at most <paramref name="value"/>.</exception>
+        public static void AtMost(int? obj, int value, string name, string msg = null) { if (obj > value) throw CreateAtMostException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at most <paramref name="value"/>.</exception>
+        public static void AtMost(uint? obj, uint value, string name, string msg = null) { if (obj > value) throw CreateAtMostException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at most <paramref name="value"/>.</exception>
+        public static void AtMost(long? obj, long value, string name, string msg = null) { if (obj > value) throw CreateAtMostException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at most <paramref name="value"/>.</exception>
+        public static void AtMost(ulong? obj, ulong value, string name, string msg = null) { if (obj > value) throw CreateAtMostException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be at most <paramref name="value"/>.</exception>
         public static void AtMost(Optional<sbyte> obj, sbyte value, string name, string msg = null) { if (obj.IsSpecified && obj.Value > value) throw CreateAtMostException(name, msg, value); }
         /// <exception cref="ArgumentException">Value must be at most <paramref name="value"/>.</exception>
         public static void AtMost(Optional<byte> obj, byte value, string name, string msg = null) { if (obj.IsSpecified && obj.Value > value) throw CreateAtMostException(name, msg, value); }
@@ -262,6 +310,22 @@ public class Preconditions
         public static void LessThan(long obj, long value, string name, string msg = null) { if (obj >= value) throw CreateLessThanException(name, msg, value); }
         /// <exception cref="ArgumentException">Value must be less than <paramref name="value"/>.</exception>
         public static void LessThan(ulong obj, ulong value, string name, string msg = null) { if (obj >= value) throw CreateLessThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be less than <paramref name="value"/>.</exception>
+        public static void LessThan(sbyte? obj, sbyte value, string name, string msg = null) { if (obj >= value) throw CreateLessThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be less than <paramref name="value"/>.</exception>
+        public static void LessThan(byte? obj, byte value, string name, string msg = null) { if (obj >= value) throw CreateLessThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be less than <paramref name="value"/>.</exception>
+        public static void LessThan(short? obj, short value, string name, string msg = null) { if (obj >= value) throw CreateLessThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be less than <paramref name="value"/>.</exception>
+        public static void LessThan(ushort? obj, ushort value, string name, string msg = null) { if (obj >= value) throw CreateLessThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be less than <paramref name="value"/>.</exception>
+        public static void LessThan(int? obj, int value, string name, string msg = null) { if (obj >= value) throw CreateLessThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be less than <paramref name="value"/>.</exception>
+        public static void LessThan(uint? obj, uint value, string name, string msg = null) { if (obj >= value) throw CreateLessThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be less than <paramref name="value"/>.</exception>
+        public static void LessThan(long? obj, long value, string name, string msg = null) { if (obj >= value) throw CreateLessThanException(name, msg, value); }
+        /// <exception cref="ArgumentException">Value must be less than <paramref name="value"/>.</exception>
+        public static void LessThan(ulong? obj, ulong value, string name, string msg = null) { if (obj >= value) throw CreateLessThanException(name, msg, value); }
         /// <exception cref="ArgumentException">Value must be less than <paramref name="value"/>.</exception>
         public static void LessThan(Optional<sbyte> obj, sbyte value, string name, string msg = null) { if (obj.IsSpecified && obj.Value >= value) throw CreateLessThanException(name, msg, value); }
         /// <exception cref="ArgumentException">Value must be less than <paramref name="value"/>.</exception>

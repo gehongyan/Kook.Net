@@ -38,4 +38,15 @@ public interface IVoiceChannel : INestedChannel, IAudioChannel, IMentionable
     ///     A bool representing whether this voice channel is locked by a password.
     /// </returns>
     bool HasPassword { get; }
+    
+    /// <summary>
+    ///     Modifies this voice channel.
+    /// </summary>
+    /// <param name="func">The properties to modify the channel with.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous modification operation.
+    /// </returns>
+    /// <seealso cref="ModifyVoiceChannelProperties"/>
+    Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null);
 }

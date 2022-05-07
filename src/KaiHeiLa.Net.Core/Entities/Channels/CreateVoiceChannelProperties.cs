@@ -3,8 +3,8 @@ namespace KaiHeiLa;
 /// <summary>
 ///     Provides properties that are used to create an <see cref="IVoiceChannel"/> with the specified properties.
 /// </summary>
-/// <seealso cref="IGuild.CreateVoiceChannelAsync(string, System.Action{VoiceChannelProperties}, RequestOptions)"/>
-public class VoiceChannelProperties : GuildChannelProperties
+/// <seealso cref="IGuild.CreateVoiceChannelAsync(string, System.Action{CreateVoiceChannelProperties}, RequestOptions)"/>
+public class CreateVoiceChannelProperties : CreateGuildChannelProperties
 {
     /// <summary>
     ///     Gets or sets the voice quality of this channel.

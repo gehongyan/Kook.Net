@@ -55,6 +55,13 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
         CreatorId = model.CreatorId;
     }
     
+    /// <inheritdoc />
+    public async Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null)
+    {
+        var model = await ChannelHelper.ModifyAsync(this, KaiHeiLa, func, options).ConfigureAwait(false);
+        Update(model);
+    }
+    
     /// <summary>
     ///     Gets the parent (category) channel of this channel.
     /// </summary>

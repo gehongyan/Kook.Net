@@ -470,7 +470,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IReloadable
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     text channel.
     /// </returns>
-    public Task<RestTextChannel> CreateTextChannelAsync(string name, Action<TextChannelProperties> func = null, RequestOptions options = null)
+    public Task<RestTextChannel> CreateTextChannelAsync(string name, Action<CreateTextChannelProperties> func = null, RequestOptions options = null)
         => GuildHelper.CreateTextChannelAsync(this, KaiHeiLa, name, options, func);
     /// <summary>
     ///     Creates a voice channel with the provided name.
@@ -482,7 +482,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IReloadable
     /// <returns>
     ///     The created voice channel.
     /// </returns>
-    public Task<RestVoiceChannel> CreateVoiceChannelAsync(string name, Action<VoiceChannelProperties> func = null, RequestOptions options = null)
+    public Task<RestVoiceChannel> CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties> func = null, RequestOptions options = null)
         => GuildHelper.CreateVoiceChannelAsync(this, KaiHeiLa, name, options, func);
     
     #endregion
@@ -680,10 +680,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IReloadable
     }
     
     /// <inheritdoc />
-    async Task<ITextChannel> IGuild.CreateTextChannelAsync(string name, Action<TextChannelProperties> func, RequestOptions options)
+    async Task<ITextChannel> IGuild.CreateTextChannelAsync(string name, Action<CreateTextChannelProperties> func, RequestOptions options)
         => await CreateTextChannelAsync(name, func, options).ConfigureAwait(false);
     /// <inheritdoc />
-    async Task<IVoiceChannel> IGuild.CreateVoiceChannelAsync(string name, Action<VoiceChannelProperties> func, RequestOptions options)
+    async Task<IVoiceChannel> IGuild.CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties> func, RequestOptions options)
         => await CreateVoiceChannelAsync(name, func, options).ConfigureAwait(false);
     /// <inheritdoc />
     async Task<(IReadOnlyCollection<Cacheable<IUser, ulong>> Muted, IReadOnlyCollection<Cacheable<IUser, ulong>> Deafened)> IGuild.GetMutedDeafenedUsersAsync(RequestOptions options)

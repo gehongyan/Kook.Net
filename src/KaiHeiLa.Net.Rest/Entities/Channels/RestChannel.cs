@@ -36,8 +36,7 @@ public class RestChannel : RestEntity<ulong>, IChannel, IReloadable
     internal virtual void Update(Model model) { }
     
     /// <inheritdoc />
-    public virtual Task ReloadAsync(RequestOptions options = null) 
-        => ChannelHelper.ReloadAsync(this, KaiHeiLa, options);
+    public virtual Task ReloadAsync(RequestOptions options = null) => Task.Delay(0);
 
     #endregion
 

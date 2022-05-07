@@ -55,6 +55,13 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         CreatorId = model.CreatorId;
     }
     
+    /// <inheritdoc />
+    public virtual async Task ModifyAsync(Action<ModifyTextChannelProperties> func, RequestOptions options = null)
+    {
+        var model = await ChannelHelper.ModifyAsync(this, KaiHeiLa, func, options).ConfigureAwait(false);
+        Update(model);
+    }
+    
     /// <summary>
     ///     Gets a user in this channel.
     /// </summary>

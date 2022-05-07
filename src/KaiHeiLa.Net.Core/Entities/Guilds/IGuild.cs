@@ -338,7 +338,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     text channel.
     /// </returns>
-    Task<ITextChannel> CreateTextChannelAsync(string name, Action<TextChannelProperties> func = null, RequestOptions options = null);
+    Task<ITextChannel> CreateTextChannelAsync(string name, Action<CreateTextChannelProperties> func = null, RequestOptions options = null);
     /// <summary>
     ///     Creates a new voice channel in this guild.
     /// </summary>
@@ -349,7 +349,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     voice channel.
     /// </returns>
-    Task<IVoiceChannel> CreateVoiceChannelAsync(string name, Action<VoiceChannelProperties> func = null, RequestOptions options = null);
+    Task<IVoiceChannel> CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties> func = null, RequestOptions options = null);
 
     #endregion
 

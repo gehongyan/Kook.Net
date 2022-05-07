@@ -23,6 +23,17 @@ public interface ITextChannel : INestedChannel, IMentionable, IMessageChannel
     /// </returns>
     int SlowModeInterval { get; }
 
+    /// <summary>
+    ///     Modifies this text channel.
+    /// </summary>
+    /// <param name="func">The delegate containing the properties to modify the channel with.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous modification operation.
+    /// </returns>
+    /// <seealso cref="ModifyTextChannelProperties"/>
+    Task ModifyAsync(Action<ModifyTextChannelProperties> func, RequestOptions options = null);
+    
     #endregion
     
     /// <summary>
