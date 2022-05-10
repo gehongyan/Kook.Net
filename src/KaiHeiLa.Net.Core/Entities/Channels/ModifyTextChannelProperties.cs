@@ -19,7 +19,8 @@ public class ModifyTextChannelProperties : ModifyGuildChannelProperties
     /// </summary>
     /// <remarks>
     ///     Setting this value to anything above zero will require each user to wait X seconds before
-    ///     sending another message; setting this value to <c>0</c> will disable slow-mode for this channel.
+    ///     sending another message; setting this value to <c>0</c> will disable slow-mode for this channel;
+    ///     if this value is set to <c>null</c>, the slow-mode interval will not be modified.
     ///     <note>
     ///         Users with <see cref="KaiHeiLa.ChannelPermission.ManageMessages"/> or 
     ///         <see cref="ChannelPermission.ManageChannels"/> will be exempt from slow-mode.
