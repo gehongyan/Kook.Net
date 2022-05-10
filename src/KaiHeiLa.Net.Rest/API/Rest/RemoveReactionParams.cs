@@ -13,6 +13,5 @@ internal class RemoveReactionParams
 
     [JsonPropertyName("user_id")]
     [JsonConverter(typeof(NullableUInt64Converter))]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong? UserId { get; set; }
 }

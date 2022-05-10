@@ -451,6 +451,8 @@ internal class KaiHeiLaRestApiClient : IDisposable
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         Preconditions.NotNull(args, nameof(args));
+        Preconditions.AtLeast(args.Position, 0, nameof(args.Position));
+        Preconditions.AtMost(args.Name?.Length, 100, nameof(args.Name));
 
         options = RequestOptions.CreateOrClone(options);
 
@@ -463,7 +465,9 @@ internal class KaiHeiLaRestApiClient : IDisposable
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         Preconditions.NotNull(args, nameof(args));
         Preconditions.AtLeast(args.SlowModeInterval, 0, nameof(args.SlowModeInterval));
-        Preconditions.AtMost(args.SlowModeInterval, 21600, nameof(args.SlowModeInterval));
+        Preconditions.AtMost(args.SlowModeInterval, 21600000, nameof(args.SlowModeInterval));
+        Preconditions.AtMost(args.Name?.Length, 100, nameof(args.Name));
+        Preconditions.AtMost(args.Topic?.Length, 500, nameof(args.Name));
 
         options = RequestOptions.CreateOrClone(options);
 
@@ -475,6 +479,9 @@ internal class KaiHeiLaRestApiClient : IDisposable
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         Preconditions.NotNull(args, nameof(args));
+        Preconditions.AtLeast(args.UserLimit, 0, nameof(args.UserLimit));
+        Preconditions.AtLeast(args.Position, 0, nameof(args.Position));
+        Preconditions.AtMost(args.Name?.Length, 100, nameof(args.Name));
 
         options = RequestOptions.CreateOrClone(options);
 
@@ -486,13 +493,8 @@ internal class KaiHeiLaRestApiClient : IDisposable
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
-        if (args.LimitAmount != null)
-        {
-            Preconditions.AtLeast(args.LimitAmount.Value, 0, nameof(args.LimitAmount));
-            Preconditions.AtMost(args.LimitAmount.Value, 99, nameof(args.LimitAmount));
-        }
-        if (args.VoiceQuality == VoiceQuality.Unspecified)
-            throw new ArgumentException(message: $"Voice quality cannot be unspecified.", paramName: nameof(args.VoiceQuality));
+        Preconditions.AtLeast(args.LimitAmount, 0, nameof(args.LimitAmount));
+        Preconditions.AtMost(args.LimitAmount, 99, nameof(args.LimitAmount));
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds(guildId: args.GuildId);

@@ -45,7 +45,7 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     /// </returns>
     public SocketGuildUser Creator => GetUser(CreatorId);
     /// <inheritdoc />
-    public VoiceQuality VoiceQuality { get; set; }
+    public VoiceQuality? VoiceQuality { get; set; }
     /// <inheritdoc />
     public int? UserLimit { get; set; }
     /// <inheritdoc />
@@ -80,7 +80,7 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     {
         base.Update(state, model);
         CategoryId = model.CategoryId;
-        VoiceQuality = model.VoiceQuality ?? VoiceQuality.Unspecified;
+        VoiceQuality = model.VoiceQuality;
         UserLimit = model.UserLimit ?? 0;
         ServerUrl = model.ServerUrl;
         IsPermissionSynced = model.PermissionSync == 1;

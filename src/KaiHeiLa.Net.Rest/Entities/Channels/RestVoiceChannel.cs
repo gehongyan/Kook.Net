@@ -13,7 +13,7 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     #region RestVoiceChannel
 
     /// <inheritdoc />
-    public VoiceQuality VoiceQuality { get; private set; }
+    public VoiceQuality? VoiceQuality { get; private set; }
     /// <inheritdoc />
     public int? UserLimit { get; private set; }
     /// <inheritdoc />
@@ -47,7 +47,7 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     {
         base.Update(model);
         CategoryId = model.CategoryId;
-        VoiceQuality = model.VoiceQuality ?? VoiceQuality.Unspecified;
+        VoiceQuality = model.VoiceQuality;
         UserLimit = model.UserLimit;
         ServerUrl = model.ServerUrl;
         IsPermissionSynced = model.PermissionSync == 1;

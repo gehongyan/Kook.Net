@@ -9,9 +9,9 @@ public class CreateGuildChannelProperties
     ///     Gets or sets the category ID for this channel.
     /// </summary>
     /// <remarks>
-    ///     Setting this value to a category's snowflake identifier will change or set this channel's parent to the
-    ///     specified channel; setting this value to <see langword="null"/> will detach this channel from its parent if one
-    ///     is set.
+    ///     Setting this value to a category's identifier will set this channel's parent to the
+    ///     specified channel; setting this value to <see langword="null"/> will leave this channel alone
+    ///     from any parents.
     /// </remarks>
     public ulong? CategoryId { get; set; }
 }

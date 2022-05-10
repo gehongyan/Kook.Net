@@ -7,9 +7,10 @@ namespace KaiHeiLa;
 public class CreateVoiceChannelProperties : CreateGuildChannelProperties
 {
     /// <summary>
-    ///     Gets or sets the voice quality of this channel.
+    ///     Gets or sets the voice quality that the clients in this voice channel are requested to use.
     /// </summary>
-    public VoiceQuality VoiceQuality { get; set; }
+    public VoiceQuality? VoiceQuality { get; set; }
+    
     /// <summary>
     ///     Gets or sets the maximum number of users that can be present in a channel, or <c>null</c> if none.
     /// </summary>

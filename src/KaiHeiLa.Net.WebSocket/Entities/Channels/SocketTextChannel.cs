@@ -83,7 +83,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         base.Update(state, model);
         CategoryId = model.CategoryId;
         Topic = model.Topic;
-        SlowModeInterval = model.SlowMode;
+        SlowModeInterval = model.SlowMode / 1000;
         IsPermissionSynced = model.PermissionSync == 1;
         CreatorId = model.CreatorId;
     }

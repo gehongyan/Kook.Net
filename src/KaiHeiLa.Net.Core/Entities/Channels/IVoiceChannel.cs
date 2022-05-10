@@ -12,7 +12,7 @@ public interface IVoiceChannel : INestedChannel, IAudioChannel, IMentionable
     ///     A <see cref="VoiceQuality"/> representing the voice quality that this voice channel defines and requests the
     ///     client(s) to use.
     /// </returns>
-    VoiceQuality VoiceQuality { get; }
+    VoiceQuality? VoiceQuality { get; }
     
     /// <summary>
     ///     Gets the max number of users allowed to be connected to this channel at once.

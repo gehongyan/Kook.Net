@@ -350,7 +350,18 @@ public interface IGuild : IEntity<ulong>
     ///     voice channel.
     /// </returns>
     Task<IVoiceChannel> CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties> func = null, RequestOptions options = null);
-
+    /// <summary>
+    ///     Creates a new channel category in this guild.
+    /// </summary>
+    /// <param name="name">The new name for the category.</param>
+    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
+    ///     category channel.
+    /// </returns>
+    Task<ICategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateGuildChannelProperties> func = null, RequestOptions options = null);
+    
     #endregion
 
     #region Invites

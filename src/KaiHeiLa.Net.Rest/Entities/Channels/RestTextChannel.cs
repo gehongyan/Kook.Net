@@ -50,7 +50,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         base.Update(model);
         CategoryId = model.CategoryId;
         Topic = model.Topic;
-        SlowModeInterval = model.SlowMode;
+        SlowModeInterval = model.SlowMode / 1000;
         IsPermissionSynced = model.PermissionSync == 1;
         CreatorId = model.CreatorId;
     }

@@ -1,9 +1,9 @@
 namespace KaiHeiLa;
 
 /// <summary>
-///     Provides properties that are used to create an <see cref="ITextChannel"/> with the specified properties.
+///     Provides properties that are used to modify an <see cref="ITextChannel"/> with the specified properties.
 /// </summary>
-/// <seealso cref="IGuild.ModifyTextChannelAsync(string, System.Action{ModifyTextChannelProperties}, RequestOptions)"/>
+/// <seealso cref="ITextChannel.ModifyAsync(System.Action{ModifyTextChannelProperties}, RequestOptions)"/>
 public class ModifyTextChannelProperties : ModifyGuildChannelProperties
 {
     /// <summary>

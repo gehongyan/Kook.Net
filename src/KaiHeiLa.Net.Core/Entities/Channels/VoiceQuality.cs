@@ -6,23 +6,43 @@ namespace KaiHeiLa;
 public enum VoiceQuality
 {
     /// <summary>
-    ///     The voice quality is unknown.
+    ///     Equivalent to approximately 18 kbps.
     /// </summary>
-    Unspecified = 0,
+    _18kbps = 1,
     /// <summary>
-    ///     The voice quality is 18 Kbps.
+    ///     Equivalent to approximately is 48 kbps.
     /// </summary>
-    Fluent = 1,
+    _48kbps = 2,
     /// <summary>
-    ///     The voice quality is 48 Kbps.
+    ///     Equivalent to approximately is 96 kbps.
     /// </summary>
-    Normal = 2,
+    _96kbps = 3,
     /// <summary>
-    ///     The voice quality is 96 Kbps.
+    ///     Equivalent to approximately 128 kbps.
     /// </summary>
-    High = 3,
+    /// <remarks>
+    ///     This quality needs the boost level to reach LV1. 
+    /// </remarks>
+    _128kbps = 4,
     /// <summary>
-    ///     The voice quality is 128 Kbps.
+    ///     Equivalent to approximately 192 kbps.
     /// </summary>
-    Higher = 4
+    /// <remarks>
+    ///     This quality needs the boost level to reach LV2. 
+    /// </remarks>
+    _192kbps = 5,
+    /// <summary>
+    ///     Equivalent to approximately 256 kbps.
+    /// </summary>
+    /// <remarks>
+    ///     This quality needs the boost level to reach LV3. 
+    /// </remarks>
+    _256kbps = 6,
+    /// <summary>
+    ///     Equivalent to approximately 320 kbps.
+    /// </summary>
+    /// <remarks>
+    ///     This quality needs the boost level to reach LV5. 
+    /// </remarks>
+    _320kbps = 7,
 }

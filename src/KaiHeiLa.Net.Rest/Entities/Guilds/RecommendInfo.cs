@@ -53,7 +53,7 @@ public class RecommendInfo : IRecommendInfo
 
     internal void Update(Model model)
     {
-        // Update   properties from model
+        // Update properties from model
         GuildId = model.GuildId;
         OpenId = model.OpenId;
         DefaultChannelId = model.DefaultChannelId;

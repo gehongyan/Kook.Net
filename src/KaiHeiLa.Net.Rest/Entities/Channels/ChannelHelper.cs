@@ -24,6 +24,8 @@ internal static class ChannelHelper
         var apiArgs = new API.Rest.ModifyGuildChannelParams
         {
             Name = args.Name,
+            Position = args.Position,
+            CategoryId = args.CategoryId,
         };
         return await client.ApiClient.ModifyGuildChannelAsync(channel.Id, apiArgs, options).ConfigureAwait(false);
     }
@@ -37,8 +39,10 @@ internal static class ChannelHelper
         var apiArgs = new API.Rest.ModifyTextChannelParams
         {
             Name = args.Name,
+            Position = args.Position,
+            CategoryId = args.CategoryId,
             Topic = args.Topic,
-            SlowModeInterval = args.SlowModeInterval,
+            SlowModeInterval = args.SlowModeInterval * 1000,
         };
         return await client.ApiClient.ModifyGuildChannelAsync(channel.Id, apiArgs, options).ConfigureAwait(false);
     }
@@ -52,6 +56,10 @@ internal static class ChannelHelper
         var apiArgs = new API.Rest.ModifyVoiceChannelParams
         {
             Name = args.Name,
+            Position = args.Position,
+            CategoryId = args.CategoryId,
+            VoiceQuality = args.VoiceQuality,
+            UserLimit = args.UserLimit
         };
         return await client.ApiClient.ModifyGuildChannelAsync(channel.Id, apiArgs, options).ConfigureAwait(false);
     }

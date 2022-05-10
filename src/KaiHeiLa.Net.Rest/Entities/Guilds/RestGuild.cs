@@ -487,6 +487,18 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public Task<RestVoiceChannel> CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties> func = null, RequestOptions options = null)
         => GuildHelper.CreateVoiceChannelAsync(this, KaiHeiLa, name, options, func);
+    /// <summary>
+    ///     Creates a category channel with the provided name.
+    /// </summary>
+    /// <param name="name">The name of the new channel.</param>
+    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="name" /> is <see langword="null"/>.</exception>
+    /// <returns>
+    ///     The created category channel.
+    /// </returns>
+    public Task<RestCategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateGuildChannelProperties> func = null, RequestOptions options = null)
+        => GuildHelper.CreateCategoryChannelAsync(this, KaiHeiLa, name, options, func);
     
     #endregion
 
@@ -688,6 +700,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     async Task<IVoiceChannel> IGuild.CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties> func, RequestOptions options)
         => await CreateVoiceChannelAsync(name, func, options).ConfigureAwait(false);
+    /// <inheritdoc />
+    async Task<ICategoryChannel> IGuild.CreateCategoryChannelAsync(string name, Action<CreateGuildChannelProperties> func, RequestOptions options)
+        => await CreateCategoryChannelAsync(name, func, options).ConfigureAwait(false);
+
     /// <inheritdoc />
     async Task<(IReadOnlyCollection<Cacheable<IUser, ulong>> Muted, IReadOnlyCollection<Cacheable<IUser, ulong>> Deafened)> IGuild.GetMutedDeafenedUsersAsync(RequestOptions options)
     {
