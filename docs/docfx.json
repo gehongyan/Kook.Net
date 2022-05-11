@@ -42,6 +42,9 @@
       "_appFooter": "KaiHeiLa.Net (c) 2022",
       "_enableSearch": true,
       "_appFaviconPath": "favicon.ico"
+    },
+    "sitemap":{
+      "baseUrl": "https://www.kaiheila.net"
     }
   }
 }
