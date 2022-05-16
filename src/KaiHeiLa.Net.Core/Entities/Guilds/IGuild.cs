@@ -67,14 +67,14 @@ public interface IGuild : IEntity<ulong>
     ///     Gets the default channel ID for this guild.
     /// </summary>
     /// <returns>
-    ///     A <see cref="ulong"/> representing the default channel ID for this guild.
+    ///     A <see langword="ulong"/> representing the default channel ID for this guild.
     /// </returns>
     ulong DefaultChannelId { get; }
     /// <summary>
     ///     Gets the welcome channel ID for this guild.
     /// </summary>
     /// <returns>
-    ///     A <see cref="ulong"/> representing the welcome channel ID for this guild.
+    ///     A <see langword="ulong"/> representing the welcome channel ID for this guild.
     /// </returns>
     ulong WelcomeChannelId { get; }
     /// <summary>
