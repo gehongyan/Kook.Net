@@ -7,9 +7,9 @@ title: 日志
 
 KaiHeiLa.Net 中提供了一个日志事件，所有的日志消息都会通过此事件传递。
 
-有关 KaiHeiLa.Net 中的事件，请参阅 [Events] 章节。
+有关 KaiHeiLa.Net 中的事件，请参阅 [事件] 章节。
 
-[Events]: xref:Guides.Concepts.Events
+[事件]: xref:Guides.Concepts.Events
 
 > [!WARNING]
 > KaiHeiLa.Net 中所有的日志实现处理程序都将在网关线程上同步执行， 
