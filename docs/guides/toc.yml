@@ -18,3 +18,5 @@
       topicUid: Guides.Concepts.Logging
     - name: 事件
       topicUid: Guides.Concepts.Events
+    - name: 管理连接
+      topicUid: Guides.Concepts.ManageConnections

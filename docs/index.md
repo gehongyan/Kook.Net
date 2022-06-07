@@ -28,7 +28,8 @@ KaiHeiLa.Net 是一个对 [开黑啦 API] 进行功能封装的类库，以 C# �
 
 ## 寻求帮助？
 
-如果您在开发中遇到无法解决的问题，请访问我们的 [开黑啦 KaiHeiLa.Net 社区](https://kaihei.co/EvxnOb) 寻求帮助。
+如果您在开发中遇到无法解决的问题，请访问我们的 [开黑啦 KaiHeiLa.Net 社区] 寻求帮助。
 
 [用户指南]: ./guides/introduction/intro.md
 [API 文档]: ./api/index.md
+[开黑啦 KaiHeiLa.Net 社区]: https://kaihei.co/EvxnOb
