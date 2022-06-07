@@ -3,7 +3,7 @@ uid: Root.Landing
 title: 首页
 ---
 
-# KaiHeiLa.NET 文档
+# KaiHeiLa.Net 文档
 
 <div class="big-logo logo-switcher"></div>
 
@@ -14,7 +14,7 @@ title: 首页
 [![License](https://img.shields.io/github/license/gehongyan/KaiHeiLa.Net)](https://github.com/gehongyan/KaiHeiLa.Net/blob/master/LICENSE)
 [![Chat on KaiHeiLa](https://www.kaiheila.cn/api/v3/badge/guild?guild_id=1591057729615250)](https://kaihei.co/EvxnOb)
 
-## 什么是 KaiHeiLa.NET？
+## 什么是 KaiHeiLa.Net？
 
 KaiHeiLa.Net 是一个对 [开黑啦 API] 进行功能封装的类库，以 C# 编写，可运行在 .NET 6 平台上。
 

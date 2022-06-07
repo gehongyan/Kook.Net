@@ -12,3 +12,9 @@
   items:
     - name: 入门
       topicUid: Guides.TextCommands.Intro
+- name: 基本概念
+  items:
+    - name: 日志
+      topicUid: Guides.Concepts.Logging
+    - name: 事件
+      topicUid: Guides.Concepts.Events
