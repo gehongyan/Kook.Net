@@ -20,3 +20,11 @@
       topicUid: Guides.Concepts.Events
     - name: 管理连接
       topicUid: Guides.Concepts.ManageConnections
+- name: 实体
+  items:
+    - name: 简介
+      topicUid: Guides.Entities.Intro
+    - name: 类型转换
+      topicUid: Guides.Entities.Casting
+    - name: 词汇表与图表
+      topicUid: Guides.Entities.Glossary
