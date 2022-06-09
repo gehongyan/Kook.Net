@@ -110,7 +110,7 @@ namespace KaiHeiLa.Net.Queue
         }
         internal void PauseGlobal(RateLimitInfo info)
         {
-            _waitUntil = DateTimeOffset.UtcNow.AddMilliseconds(info.RetryAfter.Value + (info.Lag?.TotalMilliseconds ?? 0.0));
+            _waitUntil = DateTimeOffset.UtcNow.Add(info.ResetAfter ?? TimeSpan.Zero).Add(info.Lag ?? TimeSpan.Zero);
         }
         internal async Task EnterGlobalAsync(int id, WebSocketRequest request)
         {
