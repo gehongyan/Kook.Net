@@ -155,4 +155,9 @@ public class KaiHeiLaConfig
     ///     the API version it uses on startup.
     /// </remarks>
     internal bool DisplayInitialLog { get; set; } = true;
+
+    /// <summary>
+    ///     Gets the user identity of the author who sent the system messages from KaiHeiLa official.
+    /// </summary>
+    internal const ulong SystemMessageAuthorID = 3900775823;
 }

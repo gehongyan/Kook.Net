@@ -79,14 +79,14 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     }
     internal static RestMessage Create(BaseKaiHeiLaClient kaiHeiLa, IMessageChannel channel, IUser author, Model model)
     {
-        if (model.Type != MessageType.System)
+        if (model.Author.Id != KaiHeiLaConfig.SystemMessageAuthorID)
             return RestUserMessage.Create(kaiHeiLa, channel, author, model);
         else
             return RestSystemMessage.Create(kaiHeiLa, channel, author, model);
     }
     internal static RestMessage Create(BaseKaiHeiLaClient kaiHeiLa, IMessageChannel channel, IUser author, API.DirectMessage model)
     {
-        if (model.Type != MessageType.System)
+        if (model.AuthorId != KaiHeiLaConfig.SystemMessageAuthorID)
             return RestUserMessage.Create(kaiHeiLa, channel, author, model);
         else
             return RestSystemMessage.Create(kaiHeiLa, channel, author, model);

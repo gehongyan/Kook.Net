@@ -105,7 +105,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     }
     internal static SocketMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
     {
-        if (model.Type == MessageType.System)
+        if (model.Author.Id == KaiHeiLaConfig.SystemMessageAuthorID)
             return SocketSystemMessage.Create(kaiHeiLa, state, author, channel, model, gatewayEvent);
         else
             return SocketUserMessage.Create(kaiHeiLa, state, author, channel, model, gatewayEvent);
@@ -134,7 +134,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     }
     internal static SocketMessage Create(KaiHeiLaSocketClient kaiHeiLa, ClientState state, SocketUser author, ISocketMessageChannel channel, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
     {
-        if (model.Type == MessageType.System)
+        if (model.Author.Id == KaiHeiLaConfig.SystemMessageAuthorID)
             return SocketSystemMessage.Create(kaiHeiLa, state, author, channel, model, gatewayEvent);
         else
             return SocketUserMessage.Create(kaiHeiLa, state, author, channel, model, gatewayEvent);
@@ -149,7 +149,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     {
         if (model is null)
             return null;
-        if (model.Type == MessageType.System)
+        if (model.Author.Id == KaiHeiLaConfig.SystemMessageAuthorID)
             return SocketSystemMessage.Create(kaiHeiLa, state, author, channel, model);
         else
             return SocketUserMessage.Create(kaiHeiLa, state, author, channel, model);
@@ -158,7 +158,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     {
         if (model is null)
             return null;
-        if (model.Type == MessageType.System)
+        if (model.AuthorId == KaiHeiLaConfig.SystemMessageAuthorID)
             return SocketSystemMessage.Create(kaiHeiLa, state, author, channel, model);
         else
             return SocketUserMessage.Create(kaiHeiLa, state, author, channel, model);
