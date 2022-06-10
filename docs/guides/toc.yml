@@ -8,10 +8,6 @@
       topicUid: Guides.GettingStarted.FirstBot
     - name: 术语
       topicUid: Guides.GettingStarted.Terminology
-- name: 文本命令框架
-  items:
-    - name: 入门
-      topicUid: Guides.TextCommands.Intro
 - name: 基本概念
   items:
     - name: 日志
@@ -28,3 +24,15 @@
       topicUid: Guides.Entities.Casting
     - name: 词汇表与图表
       topicUid: Guides.Entities.Glossary
+- name: 文本命令框架
+  items:
+    - name: 入门
+      topicUid: Guides.TextCommands.Intro
+    - name: 类型解析
+      topicUid: Guides.TextCommands.TypeReaders
+    - name: 命名参数
+      topicUid: Guides.TextCommands.NamedArguments
+    - name: 先决条件
+      topicUid: Guides.TextCommands.Preconditions
+    - name: 依赖注入
+      topicUid: Guides.TextCommands.DI
