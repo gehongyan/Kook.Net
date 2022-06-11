@@ -81,7 +81,7 @@ next? We can take this further by using [RuntimeResult].
 
 [CommandException]: xref:KaiHeiLa.Commands.CommandException
 [LogMessage.Exception]: xref:KaiHeiLa.LogMessage.Exception
-[CommandService.Log]: xref:Discord.KaiHeiLa.CommandService.Log
+[CommandService.Log]: xref:KaiHeiLa.Commands.CommandService.Log
 [RuntimeResult]: xref:KaiHeiLa.Commands.RuntimeResult
 [CommandExecuted]: xref:KaiHeiLa.Commands.CommandService.CommandExecuted
 [ExecuteAsync]: xref:KaiHeiLa.Commands.CommandService.ExecuteAsync*

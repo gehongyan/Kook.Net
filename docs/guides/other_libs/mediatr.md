@@ -15,8 +15,8 @@ title: MediatR
 
 | 名称                                                 | 链接                                                                                      |
 |----------------------------------------------------|-----------------------------------------------------------------------------------------|
-| `MediatR`                                          | [link](https://www.nuget.org/packages/MediatR)                                          |
-| `MediatR.Extensions.Microsoft.DependencyInjection` | [link](https://www.nuget.org/packages/MediatR.Extensions.Microsoft.DependencyInjection) |
+| `MediatR`                                          | [链接](https://www.nuget.org/packages/MediatR)                                            |
+| `MediatR.Extensions.Microsoft.DependencyInjection` | [链接](https://www.nuget.org/packages/MediatR.Extensions.Microsoft.DependencyInjection) |
 
 ## 将 MediatR 添加到依赖注入服务容器中
 
