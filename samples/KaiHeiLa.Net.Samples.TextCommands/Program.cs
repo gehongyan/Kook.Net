@@ -22,8 +22,7 @@ namespace TextCommandFramework
     {
         // There is no need to implement IDisposable like before as we are
         // using dependency injection, which handles calling Dispose for us.
-        static void Main(string[] args)
-            => new Program().MainAsync().GetAwaiter().GetResult();
+        public static Task Main(string[] args) => new Program().MainAsync();
 
         public async Task MainAsync()
         {

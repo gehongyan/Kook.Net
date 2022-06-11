@@ -4,7 +4,7 @@ using KaiHeiLa.WebSocket;
 public class Program
 {
     private KaiHeiLaSocketClient _client;
-    static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
+    public static Task Main(string[] args) => new Program().MainAsync();
 	
     public async Task MainAsync()
     {
@@ -23,7 +23,7 @@ public class Program
             return Task.CompletedTask;
         }
 		
-        await Task.Delay(-1);
+        await Task.Delay(Timeout.Infinite);
     }
 
     private async Task MessageUpdated(Cacheable<IMessage, Guid> before, SocketMessage after, ISocketMessageChannel channel)

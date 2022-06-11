@@ -12,7 +12,7 @@ public class Program
             Environment.GetEnvironmentVariable("KaiHeiLaToken"));
         await _client.StartAsync();
 		
-        await Task.Delay(-1);
+        await Task.Delay(Timeout.Infinite);
     }
     private Task Log(LogMessage msg)
     {
