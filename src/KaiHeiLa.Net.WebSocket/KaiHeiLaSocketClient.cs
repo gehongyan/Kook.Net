@@ -66,11 +66,11 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
         => State.DMChannels.OfType<SocketDMChannel>().ToImmutableArray();
     
     /// <summary>
-    ///     Initializes a new REST/WebSocket-based Discord client.
+    ///     Initializes a new REST/WebSocket-based KaiHeiLa client.
     /// </summary>
     public KaiHeiLaSocketClient() : this(new KaiHeiLaSocketConfig()) { }
     /// <summary>
-    ///     Initializes a new REST/WebSocket-based Discord client with the provided configuration.
+    ///     Initializes a new REST/WebSocket-based KaiHeiLa client with the provided configuration.
     /// </summary>
     /// <param name="config">The configuration to be used with the client.</param>
     public KaiHeiLaSocketClient(KaiHeiLaSocketConfig config) : this(config, CreateApiClient(config)) { }

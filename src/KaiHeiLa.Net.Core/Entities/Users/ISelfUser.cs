@@ -1,7 +1,7 @@
 namespace KaiHeiLa;
 
 /// <summary>
-///     Represents the logged-in Discord user.
+///     Represents the logged-in KaiHeiLa user.
 /// </summary>
 public interface ISelfUser : IUser
 {

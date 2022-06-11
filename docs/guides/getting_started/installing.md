@@ -56,7 +56,7 @@ KaiHeiLa.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧�
 ### 使用 Visual Studio Code
 
 1. 找到 Bot 项目的 `*.csproj` 文件
-2. 添加 `Discord.Net` 到 `*.csproj` 中
+2. 添加 `KaiHeiLa.Net` 到 `*.csproj` 中
 
     [!code[SampleProject.csproj](samples/project.xml)]
 

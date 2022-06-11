@@ -8,7 +8,7 @@ internal static class RoleUtils
         if (right == null)
             return 1;
         var result = left.Position.CompareTo(right.Position);
-        // As per Discord's documentation, a tie is broken by ID
+        // As per KaiHeiLa's documentation, a tie is broken by ID
         if (result != 0)
             return result;
         return left.Id.CompareTo(right.Id);

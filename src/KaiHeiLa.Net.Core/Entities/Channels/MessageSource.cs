@@ -1,7 +1,7 @@
 ﻿namespace KaiHeiLa;
 
 /// <summary>
-///     Specifies the source of the Discord message.
+///     Specifies the source of the KaiHeiLa message.
 /// </summary>
 public enum MessageSource
 {

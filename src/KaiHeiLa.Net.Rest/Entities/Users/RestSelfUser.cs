@@ -18,13 +18,13 @@ public class RestSelfUser : RestUser, ISelfUser
     /// <inheritdoc />
     public bool IsMobileVerified { get; private set; }
     
-    internal RestSelfUser(BaseKaiHeiLaClient discord, ulong id)
-        : base(discord, id)
+    internal RestSelfUser(BaseKaiHeiLaClient kaiHeiLa, ulong id)
+        : base(kaiHeiLa, id)
     {
     }
-    internal static RestSelfUser Create(BaseKaiHeiLaClient discord, Model model)
+    internal static RestSelfUser Create(BaseKaiHeiLaClient kaiHeiLa, Model model)
     {
-        var entity = new RestSelfUser(discord, model.Id);
+        var entity = new RestSelfUser(kaiHeiLa, model.Id);
         entity.Update(model);
         return entity;
     }

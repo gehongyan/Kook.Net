@@ -50,7 +50,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     ///     This method is used to obtain or create a channel used to send a direct message.
     ///     <note type="warning">
     ///          In event that the current user cannot send a message to the target user, a channel can and will
-    ///          still be created by Discord. However, attempting to send a message will yield a
+    ///          still be created by KaiHeiLa. However, attempting to send a message will yield a
     ///          <see cref="KaiHeiLa.Net.HttpException"/> with a 403 as its
     ///          <see cref="KaiHeiLa.Net.HttpException.HttpCode"/>. There are currently no official workarounds by
     ///          KaiHeiLa.

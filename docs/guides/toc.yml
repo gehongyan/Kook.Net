@@ -38,3 +38,11 @@
       topicUid: Guides.TextCommands.DI
     - name: 后处理程序
       topicUid: Guides.TextCommands.PostExecution
+- name: 与其它类库结合使用
+  items:
+    - name: Serilog
+      topicUid: Guides.OtherLibs.Serilog
+    - name: EFCore
+      topicUid: Guides.OtherLibs.EFCore
+    - name: MediatR
+      topicUid: Guides.OtherLibs.MediatR
