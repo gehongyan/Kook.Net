@@ -4,14 +4,14 @@ using KaiHeiLa.API;
 
 namespace KaiHeiLa.Net.Converters;
 
-internal class SocketFrameTypeConverter : JsonConverter<SocketFrameType>
+internal class SocketFrameTypeConverter : JsonConverter<GatewaySocketFrameType>
 {
-    public override SocketFrameType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override GatewaySocketFrameType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        return (SocketFrameType) reader.GetInt32();
+        return (GatewaySocketFrameType) reader.GetInt32();
     }
 
-    public override void Write(Utf8JsonWriter writer, SocketFrameType value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, GatewaySocketFrameType value, JsonSerializerOptions options)
     {
         writer.WriteNumberValue((int) value);
     }

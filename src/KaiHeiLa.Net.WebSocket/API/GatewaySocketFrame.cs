@@ -3,11 +3,11 @@ using KaiHeiLa.Net.Converters;
 
 namespace KaiHeiLa.API;
 
-internal class SocketFrame
+internal class GatewaySocketFrame
 {
     [JsonPropertyName("s")]
     [JsonConverter(typeof(SocketFrameTypeConverter))]
-    public SocketFrameType Type { get; set; }
+    public GatewaySocketFrameType Type { get; set; }
 
     [JsonPropertyName("sn")]
     public int? Sequence { get; set; }

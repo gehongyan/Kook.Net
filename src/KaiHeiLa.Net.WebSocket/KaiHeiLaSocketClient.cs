@@ -276,7 +276,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     
     #region ProcessMessageAsync
     
-    private async Task ProcessMessageAsync(SocketFrameType socketFrameType, int? sequence, object payload)
+    private async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType, int? sequence, object payload)
     {
         if (sequence != null)
             _lastSeq = sequence.Value;
@@ -284,9 +284,9 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
 
         try
         {
-            switch (socketFrameType)
+            switch (gatewaySocketFrameType)
             {
-                case SocketFrameType.Event:
+                case GatewaySocketFrameType.Event:
                     GatewayEvent gatewayEvent =
                         ((JsonElement) payload).Deserialize<GatewayEvent>(_serializerOptions);
 
@@ -1300,7 +1300,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
 
                     break;
 
-                case SocketFrameType.Hello:
+                case GatewaySocketFrameType.Hello:
                 {
                     // Process Hello
                     await _gatewayLogger.DebugAsync("Received Hello").ConfigureAwait(false);
@@ -1407,7 +1407,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                 }
                     break;
 
-                case SocketFrameType.Pong:
+                case GatewaySocketFrameType.Pong:
                 {
                     await _gatewayLogger.DebugAsync("Received Pong").ConfigureAwait(false);
                     if (_heartbeatTimes.TryDequeue(out long time))
@@ -1422,14 +1422,14 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                 }
                     break;
 
-                case SocketFrameType.Reconnect:
+                case GatewaySocketFrameType.Reconnect:
                 {
                     await _gatewayLogger.DebugAsync("Received Reconnect").ConfigureAwait(false);
                     _connection.Error(new GatewayReconnectException("Server requested a reconnect"));
                 }
                     break;
 
-                case SocketFrameType.ResumeAck:
+                case GatewaySocketFrameType.ResumeAck:
                 {
                     await _gatewayLogger.DebugAsync("Received ResumeAck").ConfigureAwait(false);
                     _ = _connection.CompleteAsync();
@@ -1446,14 +1446,14 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                     break;
 
                 default:
-                    await _gatewayLogger.WarningAsync($"Unknown Socket Frame Type ({socketFrameType})")
+                    await _gatewayLogger.WarningAsync($"Unknown Socket Frame Type ({gatewaySocketFrameType})")
                         .ConfigureAwait(false);
                     break;
             }
         }
         catch (Exception ex)
         {
-            await _gatewayLogger.ErrorAsync($"Error handling {socketFrameType}", ex).ConfigureAwait(false);
+            await _gatewayLogger.ErrorAsync($"Error handling {gatewaySocketFrameType}", ex).ConfigureAwait(false);
         }
     }
 

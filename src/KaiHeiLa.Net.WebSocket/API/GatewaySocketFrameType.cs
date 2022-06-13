@@ -1,6 +1,6 @@
 namespace KaiHeiLa.API;
 
-internal enum SocketFrameType
+internal enum GatewaySocketFrameType
 {
     Event,
     Hello,

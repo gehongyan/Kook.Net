@@ -12,19 +12,19 @@ namespace KaiHeiLa.API;
 
 internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
 {
-    public event Func<SocketFrameType, Task> SentGatewayMessage
+    public event Func<GatewaySocketFrameType, Task> SentGatewayMessage
     {
         add => _sentGatewayMessageEvent.Add(value);
         remove => _sentGatewayMessageEvent.Remove(value);
     }
-    private readonly AsyncEvent<Func<SocketFrameType, Task>> _sentGatewayMessageEvent = new AsyncEvent<Func<SocketFrameType, Task>>();
+    private readonly AsyncEvent<Func<GatewaySocketFrameType, Task>> _sentGatewayMessageEvent = new AsyncEvent<Func<GatewaySocketFrameType, Task>>();
 
-    public event Func<SocketFrameType, int?, object, Task> ReceivedGatewayEvent
+    public event Func<GatewaySocketFrameType, int?, object, Task> ReceivedGatewayEvent
     {
         add => _receivedGatewayEvent.Add(value);
         remove => _receivedGatewayEvent.Remove(value);
     }
-    private readonly AsyncEvent<Func<SocketFrameType, int?, object, Task>> _receivedGatewayEvent = new();
+    private readonly AsyncEvent<Func<GatewaySocketFrameType, int?, object, Task>> _receivedGatewayEvent = new();
     public event Func<Exception, Task> Disconnected
     {
         add => _disconnectedEvent.Add(value);
@@ -74,19 +74,19 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
             decompressed.Position = 0;
         }
         
-        SocketFrame socketFrame = JsonSerializer.Deserialize<SocketFrame>(decompressed, SerializerOptions);
-        if (socketFrame is not null)
+        GatewaySocketFrame gatewaySocketFrame = JsonSerializer.Deserialize<GatewaySocketFrame>(decompressed, _serializerOptions);
+        if (gatewaySocketFrame is not null)
         {
-            await _receivedGatewayEvent.InvokeAsync(socketFrame.Type, socketFrame.Sequence, socketFrame.Payload).ConfigureAwait(false);
+            await _receivedGatewayEvent.InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, gatewaySocketFrame.Payload).ConfigureAwait(false);
         }
     }
 
     private async Task OnTextMessage(string message)
     {
-        SocketFrame socketFrame = JsonSerializer.Deserialize<SocketFrame>(message, SerializerOptions);
-        if (socketFrame is not null)
+        GatewaySocketFrame gatewaySocketFrame = JsonSerializer.Deserialize<GatewaySocketFrame>(message, _serializerOptions);
+        if (gatewaySocketFrame is not null)
         {
-            await _receivedGatewayEvent.InvokeAsync(socketFrame.Type, socketFrame.Sequence, socketFrame.Payload).ConfigureAwait(false);
+            await _receivedGatewayEvent.InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, gatewaySocketFrame.Payload).ConfigureAwait(false);
         }
     }
 
@@ -185,23 +185,23 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
     public async Task SendHeartbeatAsync(int lastSeq, RequestOptions options = null)
     {
         options = RequestOptions.CreateOrClone(options);
-        await SendGatewayAsync(SocketFrameType.Ping, lastSeq, options: options).ConfigureAwait(false);
+        await SendGatewayAsync(GatewaySocketFrameType.Ping, lastSeq, options: options).ConfigureAwait(false);
     }
     
-    public Task SendGatewayAsync(SocketFrameType socketFrameType, object payload = null, int? sequence = null, RequestOptions options = null)
-        => SendGatewayInternalAsync(socketFrameType, options, payload, sequence);
-    private async Task SendGatewayInternalAsync(SocketFrameType socketFrameType, RequestOptions options, object payload = null, int? sequence = null)
+    public Task SendGatewayAsync(GatewaySocketFrameType gatewaySocketFrameType, object payload = null, int? sequence = null, RequestOptions options = null)
+        => SendGatewayInternalAsync(gatewaySocketFrameType, options, payload, sequence);
+    private async Task SendGatewayInternalAsync(GatewaySocketFrameType gatewaySocketFrameType, RequestOptions options, object payload = null, int? sequence = null)
     {
         CheckState();
 
-        payload = new SocketFrame { Type = socketFrameType, Payload = payload, Sequence = sequence };
+        payload = new GatewaySocketFrame { Type = gatewaySocketFrameType, Payload = payload, Sequence = sequence };
         byte[] bytes = Encoding.UTF8.GetBytes(SerializeJson(payload));
         
         options.IsGatewayBucket = true;
         if (options.BucketId == null)
             options.BucketId = GatewayBucket.Get(GatewayBucketType.Unbucketed).Id;
-        await RequestQueue.SendAsync(new WebSocketRequest(WebSocketClient, bytes, true, socketFrameType == SocketFrameType.Ping, options)).ConfigureAwait(false);
-        await _sentGatewayMessageEvent.InvokeAsync(socketFrameType).ConfigureAwait(false);
+        await RequestQueue.SendAsync(new WebSocketRequest(WebSocketClient, bytes, true, gatewaySocketFrameType == GatewaySocketFrameType.Ping, options)).ConfigureAwait(false);
+        await _sentGatewayMessageEvent.InvokeAsync(gatewaySocketFrameType).ConfigureAwait(false);
         
 #if DEBUG_PACKETS
         Console.WriteLine($"-> {opCode}:\n{SerializeJson(payload)}");
