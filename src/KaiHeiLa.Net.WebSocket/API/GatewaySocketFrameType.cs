@@ -1,4 +1,4 @@
-namespace KaiHeiLa.API;
+namespace KaiHeiLa.API.Gateway;
 
 internal enum GatewaySocketFrameType
 {

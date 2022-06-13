@@ -1,12 +1,12 @@
 using System.Text.Json.Serialization;
 using KaiHeiLa.Net.Converters;
 
-namespace KaiHeiLa.API;
+namespace KaiHeiLa.API.Gateway;
 
 internal class GatewaySocketFrame
 {
     [JsonPropertyName("s")]
-    [JsonConverter(typeof(SocketFrameTypeConverter))]
+    [JsonConverter(typeof(GatewaySocketFrameTypeConverter))]
     public GatewaySocketFrameType Type { get; set; }
 
     [JsonPropertyName("sn")]

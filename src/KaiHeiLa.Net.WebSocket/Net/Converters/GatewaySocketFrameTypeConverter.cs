@@ -1,10 +1,10 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using KaiHeiLa.API;
+using KaiHeiLa.API.Gateway;
 
 namespace KaiHeiLa.Net.Converters;
 
-internal class SocketFrameTypeConverter : JsonConverter<GatewaySocketFrameType>
+internal class GatewaySocketFrameTypeConverter : JsonConverter<GatewaySocketFrameType>
 {
     public override GatewaySocketFrameType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
