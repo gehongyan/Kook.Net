@@ -27,7 +27,7 @@ namespace KaiHeiLa.Net.Queue
         
         public RequestBucket(RequestQueue queue, IRequest request, BucketId id)
         {
-            _serializerOptions = new JsonSerializerOptions() {Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping};
+            _serializerOptions = new JsonSerializerOptions {Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping};
             _queue = queue;
             Id = id;
 

@@ -9,7 +9,7 @@ public class KaiHeiLaRestClient : BaseKaiHeiLaClient, IKaiHeiLaClient
     #region KaiHeiLaRestClient
 
     internal static readonly JsonSerializerOptions SerializerOptions = new()
-        { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
+        {Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping};
     
     /// <summary>
     ///     Gets the logged-in user.

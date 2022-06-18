@@ -28,7 +28,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
     public event Func<HttpMethod, string, double, Task> SentRequest { add { _sentRequestEvent.Add(value); } remove { _sentRequestEvent.Remove(value); } }
     private readonly AsyncEvent<Func<HttpMethod, string, double, Task>> _sentRequestEvent = new AsyncEvent<Func<HttpMethod, string, double, Task>>();
 
-    protected readonly JsonSerializerOptions SerializerOptions;
+    protected readonly JsonSerializerOptions _serializerOptions;
     protected readonly SemaphoreSlim _stateLock;
     private readonly RestClientProvider _restClientProvider;
 
@@ -52,7 +52,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
         _restClientProvider = restClientProvider;
         UserAgent = userAgent;
         DefaultRetryMode = defaultRetryMode;
-        SerializerOptions = serializerOptions ?? new JsonSerializerOptions {Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping};
+        _serializerOptions = serializerOptions ?? new JsonSerializerOptions {Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping};
         // SerializerOptions.Converters.Add(new EmbedConverter());
         DefaultRatelimitCallback = defaultRatelimitCallback;
         
@@ -1240,12 +1240,12 @@ internal class KaiHeiLaRestApiClient : IDisposable
     {
         return payload is null 
             ? string.Empty 
-            : JsonSerializer.Serialize(payload, SerializerOptions);
+            : JsonSerializer.Serialize(payload, _serializerOptions);
     }
     
     protected T DeserializeJson<T>(Stream jsonStream)
     {
-        return JsonSerializer.Deserialize<T>(jsonStream, SerializerOptions);
+        return JsonSerializer.Deserialize<T>(jsonStream, _serializerOptions);
     }
 
     internal class BucketIds

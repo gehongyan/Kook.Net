@@ -20,18 +20,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Net\Signaling" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="System.Collections.Immutable" Version="6.0.0" />
       <PackageReference Include="System.Linq.Async" Version="6.0.1" />
       <PackageReference Include="System.Text.Json" Version="6.0.2" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Remove="Net\Rest\IPaginationInfo.cs" />
-      <Compile Remove="Utils\UrlUtils.cs" />
     </ItemGroup>
 
 </Project>
