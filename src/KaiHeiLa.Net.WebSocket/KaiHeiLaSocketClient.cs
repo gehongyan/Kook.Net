@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Net;
-using System.Net.Sockets;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using KaiHeiLa.API;
@@ -9,9 +8,9 @@ using KaiHeiLa.API.Gateway;
 using KaiHeiLa.API.Rest;
 using KaiHeiLa.Logging;
 using KaiHeiLa.Net;
+using KaiHeiLa.Net.Udp;
 using KaiHeiLa.Net.WebSockets;
 using KaiHeiLa.Rest;
-using Reaction = KaiHeiLa.API.Gateway.Reaction;
 
 namespace KaiHeiLa.WebSocket;
 
@@ -43,6 +42,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     // From KaiHeiLaSocketConfig
     internal int MessageCacheSize { get; private set; }
     internal ClientState State { get; private set; }
+    internal UdpSocketProvider UdpSocketProvider { get; private set; }
     internal WebSocketProvider WebSocketProvider { get; private set; }
     internal bool AlwaysDownloadUsers { get; private set; }
     internal int? HandlerTimeout { get; private set; }
@@ -79,6 +79,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
         : base(config, client)
     {
         MessageCacheSize = config.MessageCacheSize;
+        UdpSocketProvider = config.UdpSocketProvider;
         WebSocketProvider = config.WebSocketProvider;
         AlwaysDownloadUsers = config.AlwaysDownloadUsers;
         HandlerTimeout = config.HandlerTimeout;

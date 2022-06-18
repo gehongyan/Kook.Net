@@ -1,3 +1,4 @@
+using KaiHeiLa.Net.Udp;
 using KaiHeiLa.Net.WebSockets;
 using KaiHeiLa.Rest;
 
@@ -48,6 +49,11 @@ public class KaiHeiLaSocketConfig : KaiHeiLaRestConfig
     ///     Gets or sets the provider used to generate new WebSocket connections.
     /// </summary>
     public WebSocketProvider WebSocketProvider { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the provider used to generate new UDP sockets.
+    /// </summary>
+    public UdpSocketProvider UdpSocketProvider { get; set; }
     
     /// <summary>
     ///     Gets or sets whether or not all users should be downloaded as guilds come available.
@@ -93,6 +99,7 @@ public class KaiHeiLaSocketConfig : KaiHeiLaRestConfig
     public KaiHeiLaSocketConfig()
     {
         WebSocketProvider = DefaultWebSocketProvider.Instance;
+        UdpSocketProvider = DefaultUdpSocketProvider.Instance;
     }
     
     internal KaiHeiLaSocketConfig Clone() => MemberwiseClone() as KaiHeiLaSocketConfig;

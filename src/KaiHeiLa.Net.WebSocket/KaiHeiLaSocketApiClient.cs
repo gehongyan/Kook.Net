@@ -135,8 +135,8 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
 
             if (!_isExplicitUrl)
             {
-                GetGatewayResponse gatewayResponse = await GetGatewayAsync().ConfigureAwait(false);
-                _gatewayUrl = $"{gatewayResponse.Url}{_resumeQueryParams}";
+                GetBotGatewayResponse botGatewayResponse = await GetBotGatewayAsync().ConfigureAwait(false);
+                _gatewayUrl = $"{botGatewayResponse.Url}{_resumeQueryParams}";
             }
             
             await WebSocketClient!.ConnectAsync(_gatewayUrl).ConfigureAwait(false);

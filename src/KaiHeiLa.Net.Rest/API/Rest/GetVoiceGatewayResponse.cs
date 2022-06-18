@@ -2,8 +2,8 @@ using System.Text.Json.Serialization;
 
 namespace KaiHeiLa.API.Rest;
 
-internal class GetGatewayResponse
+internal class GetVoiceGatewayResponse
 {
-    [JsonPropertyName("url")]
+    [JsonPropertyName("gateway_url")]
     public string Url { get; set; }
 }
