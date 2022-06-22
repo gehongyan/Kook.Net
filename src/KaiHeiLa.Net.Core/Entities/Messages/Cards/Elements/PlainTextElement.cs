@@ -31,8 +31,13 @@ public class PlainTextElement : IElement
     public string Content { get; internal set; }
 
     /// <summary>
-    ///     //TODO: To be documented.
+    ///     Gets whether the shortcuts should be translated into emojis.
     /// </summary>
+    /// <returns>
+    ///     A boolean value that indicates whether the shortcuts should be translated into emojis.
+    ///     <c>true</c> if the shortcuts should be translated into emojis;
+    ///     <c>false</c> if the text should be displayed as is.
+    /// </returns>
     public bool Emoji { get; internal set; }
 
     public override string ToString() => Content;

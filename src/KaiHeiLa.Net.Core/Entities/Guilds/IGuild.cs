@@ -53,7 +53,7 @@ public interface IGuild : IEntity<ulong>
     ///     Gets whether this guild is public.
     /// </summary>
     /// <returns>
-    ///     <see langword="true"/> if this guild is public; <see langword="false"/> otherwise.
+    ///     <c>true</c> if this guild is public; <c>false</c> otherwise.
     /// </returns>
     bool IsOpenEnabled { get; }
     /// <summary>
@@ -87,7 +87,7 @@ public interface IGuild : IEntity<ulong>
     ///     This boolean is used to determine if the guild is currently connected to the WebSocket and is ready to be used/accessed.
     /// </remarks>
     /// <returns>
-    ///     <see langword="true"/> if this guild is currently connected and ready to be used; otherwise <see langword="false"/>.
+    ///     <c>true</c> if this guild is currently connected and ready to be used; otherwise <c>false</c>.
     /// </returns>
     bool Available { get; }
     /// <summary>

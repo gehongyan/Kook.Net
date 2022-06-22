@@ -49,8 +49,13 @@ public class PlainTextElementBuilder : IElementBuilder
     }
 
     /// <summary>
-    ///     // TODO: To be documented.
+    ///     Gets whether the shortcuts should be translated into emojis.
     /// </summary>
+    /// <returns>
+    ///     A boolean value that indicates whether the shortcuts should be translated into emojis.
+    ///     <c>true</c> if the shortcuts should be translated into emojis;
+    ///     <c>false</c> if the text should be displayed as is.
+    /// </returns>
     public bool Emoji { get; set; } = true;
 
     /// <summary>
@@ -68,11 +73,14 @@ public class PlainTextElementBuilder : IElementBuilder
         Content = content;
         return this;
     }
+    
     /// <summary>
-    ///     // TODO: To be documented.
+    ///     Sets whether the shortcuts should be translated into emojis.
     /// </summary>
     /// <param name="emoji">
-    ///     // TODO: To be documented.
+    ///     A boolean value that indicates whether the shortcuts should be translated into emojis.
+    ///     <c>true</c> if the shortcuts should be translated into emojis;
+    ///     <c>false</c> if the text should be displayed as is.
     /// </param>
     /// <returns>
     ///     The current builder.

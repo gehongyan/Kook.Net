@@ -14,7 +14,7 @@ public interface ISelfUser : IUser
     /// </summary>
     string Mobile { get; }
     /// <summary>
-    ///     // TODO: To be documented.
+    ///     TODO: To be documented.
     /// </summary>
     int InvitedCount { get; }
     /// <summary>
