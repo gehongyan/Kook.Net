@@ -6,7 +6,6 @@ namespace KaiHeiLa.API.Gateway;
 internal class GuildMemberRemoveEvent
 {
     [JsonPropertyName("user_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong UserId { get; set; }
     
     [JsonPropertyName("exited_at")]

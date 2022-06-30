@@ -9,8 +9,8 @@ internal class CreateOrModifyChannelPermissionOverwriteResponse
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public uint? RoleId { get; set; }
     [JsonPropertyName("user_id")] 
-    [JsonConverter(typeof(NullableUInt64Converter))]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [JsonNumberHandling(JsonNumberHandling.Strict)]
     public ulong? UserId { get; set; }
     
     [JsonIgnore(Condition = JsonIgnoreCondition.Always)]

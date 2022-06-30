@@ -201,7 +201,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
-    public async Task ModifyPermissionOverwriteAsync(IGuildUser user, Action<OverwritePermissions> func, RequestOptions options = null)
+    public async Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null)
     {
         var perms = await ChannelHelper.ModifyPermissionOverwriteAsync(this, KaiHeiLa, user, func, options).ConfigureAwait(false);
         
@@ -225,7 +225,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
-    public async Task ModifyPermissionOverwriteAsync(IRole role, Action<OverwritePermissions> func, RequestOptions options = null)
+    public async Task ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null)
     {
         var perms = await ChannelHelper.ModifyPermissionOverwriteAsync(this, KaiHeiLa, role, func, options).ConfigureAwait(false);
         
@@ -283,10 +283,10 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     async Task IGuildChannel.RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions options)
         => await RemovePermissionOverwriteAsync(user, options).ConfigureAwait(false);
     /// <inheritdoc />
-    async Task IGuildChannel.ModifyPermissionOverwriteAsync(IRole role, Action<OverwritePermissions> func, RequestOptions options)
+    async Task IGuildChannel.ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options)
         => await ModifyPermissionOverwriteAsync(role, func, options).ConfigureAwait(false);
     /// <inheritdoc />
-    async Task IGuildChannel.ModifyPermissionOverwriteAsync(IGuildUser user, Action<OverwritePermissions> func, RequestOptions options)
+    async Task IGuildChannel.ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options)
         => await ModifyPermissionOverwriteAsync(user, func, options).ConfigureAwait(false);
 
     /// <inheritdoc />

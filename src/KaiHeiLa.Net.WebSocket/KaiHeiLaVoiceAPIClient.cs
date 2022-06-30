@@ -12,6 +12,7 @@ using System.IO.Compression;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -126,8 +127,11 @@ namespace KaiHeiLa.Audio
                 await _disconnectedEvent.InvokeAsync(ex).ConfigureAwait(false);
             };
 
-            _serializerOptions = serializerOptions ?? new JsonSerializerOptions 
-                {Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping};
+            _serializerOptions = serializerOptions ?? new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                NumberHandling = JsonNumberHandling.AllowReadingFromString
+            };
         }
         private void Dispose(bool disposing)
         {

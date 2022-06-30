@@ -15,14 +15,12 @@ internal class Message
     public string Content { get; set; }
     
     [JsonPropertyName("mention")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong[] Mention { get; set; }
 
     [JsonPropertyName("mention_all")]
     public bool MentionAll { get; set; }
 
     [JsonPropertyName("mention_roles")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public uint[] MentionRoles { get; set; }
 
     [JsonPropertyName("mention_here")]

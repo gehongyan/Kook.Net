@@ -6,14 +6,12 @@ namespace KaiHeiLa.API.Gateway;
 internal class MessageUpdateEvent
 {
     [JsonPropertyName("channel_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong ChannelId { get; set; }
     
     [JsonPropertyName("content")]
     public string Content { get; set; }
     
     [JsonPropertyName("mention")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong[] Mention { get; set; }
     
     [JsonPropertyName("mention_all")]

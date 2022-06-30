@@ -1,6 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 
 namespace KaiHeiLa;
 
@@ -55,7 +56,11 @@ public class NotImplementedEmbed : IEmbed
     public T Resolve<T>(JsonSerializerOptions options = null)
         where T : IEmbed
     {
-        options ??= new JsonSerializerOptions {Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping};
+        options ??= new JsonSerializerOptions
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString
+        };
         T embed = JsonNode.Deserialize<T>(options);
         return embed;
     }

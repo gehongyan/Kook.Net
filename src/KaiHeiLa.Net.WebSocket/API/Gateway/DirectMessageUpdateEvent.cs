@@ -6,12 +6,10 @@ namespace KaiHeiLa.API.Gateway;
 internal class DirectMessageUpdateEvent
 {
     [JsonPropertyName("author_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public uint AuthorId { get; set; }
 
     // self user id in fact
     [JsonPropertyName("target_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong UserId { get; set; }
     
     [JsonPropertyName("msg_id")] 

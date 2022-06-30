@@ -12,11 +12,9 @@ internal class GatewayEvent
     public MessageType Type { get; set; }
 
     [JsonPropertyName("target_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong TargetId { get; set; }
 
     [JsonPropertyName("author_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public uint AuthorId { get; set; }
 
     [JsonPropertyName("content")] public string Content { get; set; }

@@ -7,7 +7,6 @@ internal class ModifyTextChannelParams : ModifyGuildChannelParams
 {
     [JsonPropertyName("topic")]
     public string Topic { get; set; }
-    [JsonPropertyName("slow_mode")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]   
+    [JsonPropertyName("slow_mode")]   
     public int? SlowModeInterval { get; set; }
 }

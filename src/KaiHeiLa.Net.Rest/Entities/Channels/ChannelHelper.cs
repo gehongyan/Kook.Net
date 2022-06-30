@@ -358,11 +358,11 @@ internal static class ChannelHelper
 
     public static async Task<UserPermissionOverwrite> ModifyPermissionOverwriteAsync(IGuildChannel channel,
         BaseKaiHeiLaClient client,
-        IGuildUser user, Action<OverwritePermissions> func, RequestOptions options)
+        IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options)
     {
         var perms = channel.UserPermissionOverwrites.SingleOrDefault(x => x.Target.Id == user.Id)?.Permissions;
         if (!perms.HasValue) return null;
-        func(perms.Value);
+        perms = func(perms.Value);
         var args = new ModifyChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.User, user.Id,
             perms.Value.AllowValue, perms.Value.DenyValue);
         var resp = await client.ApiClient.ModifyChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
@@ -371,11 +371,11 @@ internal static class ChannelHelper
 
     public static async Task<RolePermissionOverwrite> ModifyPermissionOverwriteAsync(IGuildChannel channel,
         BaseKaiHeiLaClient client,
-        IRole role, Action<OverwritePermissions> func, RequestOptions options)
+        IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options)
     {
         var perms = channel.RolePermissionOverwrites.SingleOrDefault(x => x.Target == role.Id)?.Permissions;
         if (!perms.HasValue) return null;
-        func(perms.Value);
+        perms = func(perms.Value);
         var args = new ModifyChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.Role, role.Id,
             perms.Value.AllowValue, perms.Value.DenyValue);
         var resp = await client.ApiClient.ModifyChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);

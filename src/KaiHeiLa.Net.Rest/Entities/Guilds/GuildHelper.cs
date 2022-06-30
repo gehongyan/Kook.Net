@@ -223,6 +223,7 @@ internal static class GuildHelper
 
         var args = new CreateGuildChannelParams()
         {
+            GuildId = guild.Id,
             Name = name,
             Type = ChannelType.Category
         };

@@ -6,17 +6,14 @@ namespace KaiHeiLa.API;
 internal class Channel
 {
     [JsonPropertyName("id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong Id { get; set; }
 
     [JsonPropertyName("name")] public string Name { get; set; }
 
     [JsonPropertyName("user_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong CreatorId { get; set; }
 
     [JsonPropertyName("guild_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong GuildId { get; set; }
 
     // [JsonPropertyName("is_category")] 

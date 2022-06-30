@@ -6,11 +6,9 @@ namespace KaiHeiLa.API.Gateway;
 internal class DirectMessageDeleteEvent
 {
     [JsonPropertyName("author_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public uint AuthorId { get; set; }
 
     [JsonPropertyName("target_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong UserId { get; set; }
     
     [JsonPropertyName("msg_id")] 

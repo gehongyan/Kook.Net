@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using KaiHeiLa.Audio.Streams;
 
 namespace KaiHeiLa.Audio
@@ -85,7 +86,11 @@ namespace KaiHeiLa.Audio
             _streams = new ConcurrentDictionary<ulong, StreamPair>();
             _sentFrames = new ConcurrentDictionary<uint, VoiceSocketFrameType>();
 
-            _serializerOptions = new JsonSerializerOptions {Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping};
+            _serializerOptions = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                NumberHandling = JsonNumberHandling.AllowReadingFromString
+            };
             // _serializerOptions.Error += (s, e) =>
             // {
             //     _audioLogger.WarningAsync(e.ErrorContext.Error).GetAwaiter().GetResult();

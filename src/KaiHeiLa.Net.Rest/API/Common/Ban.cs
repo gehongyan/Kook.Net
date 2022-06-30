@@ -6,7 +6,6 @@ namespace KaiHeiLa.API;
 internal class Ban
 {
     [JsonPropertyName("user_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong UserId { get; set; }
 
     [JsonPropertyName("created_time")]

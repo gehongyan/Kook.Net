@@ -6,11 +6,9 @@ namespace KaiHeiLa.API.Gateway;
 internal class UserVoiceEvent
 {
     [JsonPropertyName("user_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong UserId { get; set; }
     
     [JsonPropertyName("channel_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong ChannelId { get; set; }
     
     [JsonPropertyName("joined_at")]

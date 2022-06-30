@@ -6,7 +6,6 @@ namespace KaiHeiLa.API.Rest;
 internal class CreateGuildChannelParams
 {
     [JsonPropertyName("guild_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong GuildId { get; set; }
 
     [JsonPropertyName("parent_id")]

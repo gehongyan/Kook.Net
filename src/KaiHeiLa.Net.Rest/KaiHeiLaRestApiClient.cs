@@ -13,6 +13,7 @@ using KaiHeiLa.Net;
 using KaiHeiLa.Net.Queue;
 using KaiHeiLa.Net.Rest;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Web;
 using KaiHeiLa.API.Rest;
 using KaiHeiLa.Net.Converters;
@@ -52,7 +53,11 @@ internal class KaiHeiLaRestApiClient : IDisposable
         _restClientProvider = restClientProvider;
         UserAgent = userAgent;
         DefaultRetryMode = defaultRetryMode;
-        _serializerOptions = serializerOptions ?? new JsonSerializerOptions {Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping};
+        _serializerOptions = serializerOptions ?? new JsonSerializerOptions
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString
+        };
         // SerializerOptions.Converters.Add(new EmbedConverter());
         DefaultRatelimitCallback = defaultRatelimitCallback;
         

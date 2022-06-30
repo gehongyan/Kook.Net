@@ -6,14 +6,12 @@ namespace KaiHeiLa.API.Gateway;
 internal class GuildEvent
 {
     [JsonPropertyName("id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong GuildId { get; set; }
     
     [JsonPropertyName("name")]
     public string Name { get; set; }
     
     [JsonPropertyName("user_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong UserId { get; set; }
     
     [JsonPropertyName("icon")]
@@ -29,15 +27,12 @@ internal class GuildEvent
     public int EnableOpen { get; set; }
     
     [JsonPropertyName("open_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public uint OpenId { get; set; }
     
     [JsonPropertyName("default_channel_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong DefaultChannelId { get; set; }
 
     [JsonPropertyName("welcome_channel_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong WelcomeChannelId { get; set; }
 
     [JsonPropertyName("banner")] 

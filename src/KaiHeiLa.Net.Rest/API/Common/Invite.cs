@@ -12,7 +12,6 @@ internal class Invite
     public ulong? ChannelId { get; set; }
 
     [JsonPropertyName("guild_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong GuildId { get; set; }
 
     [JsonPropertyName("guild_name")] public string GuildName { get; set; }

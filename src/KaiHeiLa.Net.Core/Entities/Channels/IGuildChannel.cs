@@ -144,7 +144,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     A task representing the asynchronous permission operation for adding the specified permissions to the
     ///     channel.
     /// </returns>
-    Task ModifyPermissionOverwriteAsync(IRole role, Action<OverwritePermissions> func, RequestOptions options = null);
+    Task ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null);
 
     /// <summary>
     ///     Updates the permission overwrite for the given user.
@@ -155,7 +155,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <returns>
     ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
     /// </returns>
-    Task ModifyPermissionOverwriteAsync(IGuildUser user, Action<OverwritePermissions> func, RequestOptions options = null);
+    Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null);
     
     #endregion
 

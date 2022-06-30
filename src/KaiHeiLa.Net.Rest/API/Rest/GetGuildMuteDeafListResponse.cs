@@ -18,6 +18,5 @@ internal class MuteOrDeafDetail
     public MuteOrDeafType Type { get; set; }
 
     [JsonPropertyName("user_ids")] 
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong[] UserIds { get; set; }
 }

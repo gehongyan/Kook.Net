@@ -10,14 +10,12 @@ internal class GatewayGroupMessageExtraData
     public MessageType Type { get; set; }
     
     [JsonPropertyName("guild_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong GuildId { get; set; }
 
     [JsonPropertyName("channel_name")]
     public string ChannelName { get; set; }
 
     [JsonPropertyName("mention")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong[] Mention { get; set; }
 
     [JsonPropertyName("mention_all")]

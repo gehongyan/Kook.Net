@@ -6,15 +6,12 @@ namespace KaiHeiLa.API;
 internal class RecommendInfo
 {
     [JsonPropertyName("guild_id")] 
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong GuildId { get; set; }
     
     [JsonPropertyName("open_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public uint OpenId { get; set; }
     
     [JsonPropertyName("default_channel_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong DefaultChannelId { get; set; }
     
     [JsonPropertyName("name")]

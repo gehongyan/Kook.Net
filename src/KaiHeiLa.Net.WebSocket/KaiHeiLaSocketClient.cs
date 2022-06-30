@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Net;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using KaiHeiLa.API;
 using KaiHeiLa.API.Gateway;
 using KaiHeiLa.API.Rest;
@@ -94,7 +95,11 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
         _connection.Connected += () => TimedInvokeAsync(_connectedEvent, nameof(Connected));
         _connection.Disconnected += (ex, recon) => TimedInvokeAsync(_disconnectedEvent, nameof(Disconnected), ex);
 
-        _serializerOptions = new JsonSerializerOptions {Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping};
+        _serializerOptions = new JsonSerializerOptions
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString
+        };
 
         ApiClient.SentGatewayMessage += async socketFrameType =>
             await _gatewayLogger.DebugAsync($"Sent {socketFrameType}").ConfigureAwait(false);

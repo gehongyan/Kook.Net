@@ -8,7 +8,6 @@ internal class CreateMessageParams
     [JsonPropertyName("type")] public MessageType Type { get; set; }
 
     [JsonPropertyName("target_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong ChannelId { get; set; }
 
     [JsonPropertyName("content")] public string Content { get; set; }

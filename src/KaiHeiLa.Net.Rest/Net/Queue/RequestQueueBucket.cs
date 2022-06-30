@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using KaiHeiLa.API;
 using KaiHeiLa.Rest;
 #if DEBUG_LIMITS
@@ -27,7 +28,11 @@ namespace KaiHeiLa.Net.Queue
         
         public RequestBucket(RequestQueue queue, IRequest request, BucketId id)
         {
-            _serializerOptions = new JsonSerializerOptions {Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping};
+            _serializerOptions = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                NumberHandling = JsonNumberHandling.AllowReadingFromString
+            };
             _queue = queue;
             Id = id;
 

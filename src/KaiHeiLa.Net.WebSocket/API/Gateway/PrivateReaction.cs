@@ -12,7 +12,6 @@ internal class PrivateReaction
     [JsonPropertyName("msg_id")] public Guid MessageId { get; set; }
 
     [JsonPropertyName("user_id")]
-    [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public ulong UserId { get; set; }
 
     [JsonPropertyName("emoji")] public Emoji Emoji { get; set; }
