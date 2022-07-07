@@ -298,6 +298,11 @@ public abstract partial class BaseSocketClient
     #region Users
 
     /// <summary> Fired when a user joins a guild. </summary>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         It is reported that this event will not be fired if a guild contains more than 2000 members.
+    ///     </note>
+    /// </remarks>
     public event Func<SocketGuildUser, DateTimeOffset, Task> UserJoined
     {
         add => _userJoinedEvent.Add(value);
