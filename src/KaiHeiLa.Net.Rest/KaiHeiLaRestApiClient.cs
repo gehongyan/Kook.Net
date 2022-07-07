@@ -906,7 +906,7 @@ internal class KaiHeiLaRestApiClient : IDisposable
     public async Task GoOfflineAsync(RequestOptions options = null)
     {
         var ids = new BucketIds();
-        await SendAsync(HttpMethod.Get, () => $"user/offline", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+        await SendAsync(HttpMethod.Post, () => $"user/offline", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     #endregion
