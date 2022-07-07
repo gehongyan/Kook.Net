@@ -13,6 +13,13 @@ public interface IGame : IActivity, IEntity<int>, IDeletable
     /// </returns>
     string Name { get; }
     /// <summary>
+    ///     Gets the type of the game.
+    /// </summary>
+    /// <returns>
+    ///     The type of the game.
+    /// </returns>
+    GameType GameType { get; }
+    /// <summary>
     ///     Gets the additional information about the game.
     /// </summary>
     /// <returns>

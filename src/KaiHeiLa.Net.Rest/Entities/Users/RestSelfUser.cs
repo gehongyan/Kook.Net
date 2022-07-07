@@ -56,9 +56,14 @@ public class RestSelfUser : RestUser, ISelfUser
         await UserHelper.StartPlayingAsync(this, KaiHeiLa, game, options).ConfigureAwait(false);
     }
     /// <inheritdoc />
-    public async Task StopPlayingAsync(RequestOptions options = null)
+    public async Task StartPlayingAsync(Music music, RequestOptions options = null)
     {
-        await UserHelper.StopPlayingAsync(this, KaiHeiLa, options).ConfigureAwait(false);
+        await UserHelper.StartPlayingAsync(this, KaiHeiLa, music, options).ConfigureAwait(false);
+    }
+    /// <inheritdoc />
+    public async Task StopPlayingAsync(ActivityType type, RequestOptions options = null)
+    {
+        await UserHelper.StopPlayingAsync(this, KaiHeiLa, type, options).ConfigureAwait(false);
     }
 
     #endregion

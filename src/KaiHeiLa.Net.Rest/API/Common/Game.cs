@@ -11,7 +11,7 @@ internal class Game
     public string Name { get; set; }
     
     [JsonPropertyName("type")]
-    public ActivityType Type { get; set; }
+    public GameType Type { get; set; }
     
     [JsonPropertyName("options")]
     public string Options { get; set; }

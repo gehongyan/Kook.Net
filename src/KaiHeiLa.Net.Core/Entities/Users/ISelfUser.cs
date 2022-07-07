@@ -33,11 +33,22 @@ public interface ISelfUser : IUser
     Task StartPlayingAsync(IGame game, RequestOptions options = null);
 
     /// <summary>
-    ///     Stops a new game activity. After this operation, the game activity on the currently connected user's profile will disappear.
+    ///     Starts a new music activity. After this operation, a music activity will be displayed on the currently connected user's profile.
     /// </summary>
+    /// <param name="music">The music being listened to be showed.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
-    ///     A task that represents the asynchronous operation for stopping a game activity.
+    ///     A task that represents the asynchronous operation for starting a music activity.
     /// </returns>
-    Task StopPlayingAsync(RequestOptions options = null);
+    Task StartPlayingAsync(Music music, RequestOptions options = null);
+
+    /// <summary>
+    ///     Stops an activity. After this operation, the activity on the currently connected user's profile will disappear.
+    /// </summary>
+    /// <param name="type">The type of the activity to stop</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous operation for stopping an activity.
+    /// </returns>
+    Task StopPlayingAsync(ActivityType type, RequestOptions options = null);
 }

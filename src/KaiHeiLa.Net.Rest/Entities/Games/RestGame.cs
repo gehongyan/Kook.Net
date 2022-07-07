@@ -14,7 +14,7 @@ public class RestGame : RestEntity<int>, IGame
     /// <inheritdoc />
     public string Name { get; private set; }
     /// <inheritdoc />
-    public ActivityType Type { get; private set; }
+    public GameType GameType { get; private set; }
     /// <inheritdoc />
     public string Options { get; private set; }
     /// <inheritdoc />
@@ -41,7 +41,7 @@ public class RestGame : RestEntity<int>, IGame
     internal void Update(Model model)
     {
         Name = model.Name;
-        Type = model.Type;
+        GameType = model.Type;
         Options = model.Options;
         RequireAdminPrivilege = model.KmHookAdmin;
         Icon = model.Icon;

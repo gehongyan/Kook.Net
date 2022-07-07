@@ -1219,19 +1219,30 @@ internal class KaiHeiLaRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"game/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
     
-    public async Task BeginGameActivityAsync(BeginGameActivityParams args, RequestOptions options = null)
+    public async Task BeginActivityAsync(BeginActivityParams args, RequestOptions options = null)
     {
         Preconditions.NotNull(args, nameof(args));
-        Preconditions.GreaterThan(args.Id, 0, nameof(args.Id));
+        switch (args.ActivityType)
+        {
+            case ActivityType.Game:
+                Preconditions.GreaterThan(args.Id, 0, nameof(args.Id));
+                break;
+            case ActivityType.Music:
+                if (args.MusicProvider is MusicProvider.Unspecified)
+                    throw new ArgumentException(message: $"Value may not be equal to {MusicProvider.Unspecified}", paramName: nameof(args.MusicProvider));
+                Preconditions.NotNullOrWhitespace(args.Signer, nameof(args.Signer));
+                Preconditions.NotNullOrWhitespace(args.MusicName, nameof(args.MusicName));
+                break;
+        }
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds();
         await SendJsonAsync(HttpMethod.Post, () => $"game/activity", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
     
-    public async Task EndGameActivityAsync(EndGameActivityParams args = null, RequestOptions options = null)
+    public async Task EndActivityAsync(EndGameActivityParams args, RequestOptions options = null)
     {
-        args ??= new EndGameActivityParams();
+        Preconditions.NotNull(args, nameof(args));
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds();

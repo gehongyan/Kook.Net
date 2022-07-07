@@ -70,13 +70,18 @@ internal static class UserHelper
     }
     
     public static async Task StartPlayingAsync(ISelfUser user, BaseKaiHeiLaClient client, IGame game, RequestOptions options)
-    { 
-        await client.ApiClient.BeginGameActivityAsync(game.Id, options).ConfigureAwait(false);
+    {
+        await client.ApiClient.BeginActivityAsync(new BeginActivityParams(ActivityType.Game) {Id = game.Id}, options).ConfigureAwait(false);
     }
     
-    public static async Task StopPlayingAsync(ISelfUser user, BaseKaiHeiLaClient client, RequestOptions options)
+    public static async Task StartPlayingAsync(ISelfUser user, BaseKaiHeiLaClient client, Music music, RequestOptions options)
+    {
+        await client.ApiClient.BeginActivityAsync(new BeginActivityParams(ActivityType.Music) {MusicProvider = music.Provider, MusicName = music.Name, Signer = music.Singer}, options).ConfigureAwait(false);
+    }
+    
+    public static async Task StopPlayingAsync(ISelfUser user, BaseKaiHeiLaClient client, ActivityType type, RequestOptions options)
     { 
-        await client.ApiClient.EndGameActivityAsync(options: options).ConfigureAwait(false);
+        await client.ApiClient.EndActivityAsync(new EndGameActivityParams(type), options: options).ConfigureAwait(false);
     }
     
     public static async Task<RestIntimacy> GetIntimacyAsync(IUser user, BaseKaiHeiLaClient client, RequestOptions options)
