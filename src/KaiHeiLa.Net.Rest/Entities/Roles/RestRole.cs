@@ -11,7 +11,16 @@ public class RestRole : RestEntity<uint>, IRole
 {
     #region RestRole
 
+    /// <summary>
+    ///     Gets the guild that owns this role.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="IGuild"/> representing the parent guild of this role.
+    /// </returns>
     internal IGuild Guild { get; }
+    
+    /// <inheritdoc />
+    public RoleType? Type { get; set; }
     /// <inheritdoc />
     public Color Color { get; private set; }
     /// <inheritdoc />
@@ -51,6 +60,7 @@ public class RestRole : RestEntity<uint>, IRole
     internal void Update(Model model)
     {
         Name = model.Name;
+        Type = model.Type;
         IsHoisted = model.Hoist == 1;
         IsMentionable = model.Mentionable == 1;
         Position = model.Position;

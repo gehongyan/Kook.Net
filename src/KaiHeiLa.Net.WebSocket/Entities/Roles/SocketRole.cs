@@ -23,6 +23,8 @@ public class SocketRole : SocketEntity<uint>, IRole
     public SocketGuild Guild { get; }
     
     /// <inheritdoc />
+    public RoleType? Type { get; set; }
+    /// <inheritdoc />
     public string Name { get; private set; }
     /// <inheritdoc />
     public Color Color { get; private set; }
@@ -61,6 +63,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     internal void Update(ClientState state, Model model)
     {
         Name = model.Name;
+        Type = model.Type;
         Color = new Color(model.Color);
         Position = model.Position;
         IsHoisted = model.Hoist switch

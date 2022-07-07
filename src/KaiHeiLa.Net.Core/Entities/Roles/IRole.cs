@@ -22,6 +22,13 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     /// </returns>
     string Name { get; }
     /// <summary>
+    ///     Gets the type of this role.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="RoleType" /> representing the type of this role.
+    /// </returns>
+    RoleType? Type { get; }
+    /// <summary>
     ///     Gets the color given to users of this role.
     /// </summary>
     /// <returns>
