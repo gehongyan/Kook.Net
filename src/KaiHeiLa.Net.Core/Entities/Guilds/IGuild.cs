@@ -360,7 +360,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     category channel.
     /// </returns>
-    Task<ICategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateGuildChannelProperties> func = null, RequestOptions options = null);
+    Task<ICategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties> func = null, RequestOptions options = null);
     
     #endregion
 

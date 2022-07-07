@@ -25,4 +25,8 @@ internal class CreateGuildChannelParams
     [JsonPropertyName("voice_quality")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public VoiceQuality? VoiceQuality { get; set; }
+    
+    [JsonPropertyName("is_category")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? IsCategory { get; set; }
 }

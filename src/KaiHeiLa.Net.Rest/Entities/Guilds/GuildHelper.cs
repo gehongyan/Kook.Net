@@ -214,18 +214,18 @@ internal static class GuildHelper
     }
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
     public static async Task<RestCategoryChannel> CreateCategoryChannelAsync(IGuild guild, BaseKaiHeiLaClient client,
-        string name, RequestOptions options, Action<CreateGuildChannelProperties> func = null)
+        string name, RequestOptions options, Action<CreateCategoryChannelProperties> func = null)
     {
         if (name == null) throw new ArgumentNullException(paramName: nameof(name));
 
-        var props = new CreateGuildChannelProperties();
+        var props = new CreateCategoryChannelProperties();
         func?.Invoke(props);
 
         var args = new CreateGuildChannelParams()
         {
             GuildId = guild.Id,
             Name = name,
-            Type = ChannelType.Category
+            IsCategory = 1
         };
 
         var model = await client.ApiClient.CreateGuildChannelAsync(args, options).ConfigureAwait(false);

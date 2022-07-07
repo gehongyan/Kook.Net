@@ -15,4 +15,14 @@ public class CreateVoiceChannelProperties : CreateGuildChannelProperties
     ///     Gets or sets the maximum number of users that can be present in a channel, or <c>null</c> if none.
     /// </summary>
     public int? UserLimit { get; set; }
+    
+    /// <summary>
+    ///     Gets or sets the category ID for this channel.
+    /// </summary>
+    /// <remarks>
+    ///     Setting this value to a category's identifier will set this channel's parent to the
+    ///     specified channel; setting this value to <see langword="null"/> will leave this channel alone
+    ///     from any parents.
+    /// </remarks>
+    public ulong? CategoryId { get; set; }
 }

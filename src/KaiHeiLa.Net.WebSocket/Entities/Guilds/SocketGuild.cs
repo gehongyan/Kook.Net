@@ -456,7 +456,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     category channel.
     /// </returns>
-    public Task<RestCategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateGuildChannelProperties> func = null, RequestOptions options = null)
+    public Task<RestCategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties> func = null, RequestOptions options = null)
         => GuildHelper.CreateCategoryChannelAsync(this, KaiHeiLa, name, options, func);
 
     internal SocketGuildChannel AddOrUpdateChannel(ClientState state, ChannelModel model)
@@ -863,7 +863,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     async Task<IVoiceChannel> IGuild.CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties> func, RequestOptions options)
         => await CreateVoiceChannelAsync(name, func, options).ConfigureAwait(false);
     /// <inheritdoc />
-    async Task<ICategoryChannel> IGuild.CreateCategoryChannelAsync(string name, Action<CreateGuildChannelProperties> func, RequestOptions options)
+    async Task<ICategoryChannel> IGuild.CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties> func, RequestOptions options)
         => await CreateCategoryChannelAsync(name, func, options).ConfigureAwait(false);
     
     /// <inheritdoc />
