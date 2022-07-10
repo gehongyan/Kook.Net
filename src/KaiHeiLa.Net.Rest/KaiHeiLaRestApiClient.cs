@@ -550,7 +550,8 @@ internal class KaiHeiLaRestApiClient : IDisposable
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
-        Preconditions.NotEqual(args.TargetId, 0, nameof(args.TargetId));
+        if (args.TargetType != PermissionOverwriteTargetType.Role)
+            Preconditions.NotEqual(args.TargetId, 0, nameof(args.TargetId));
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds(channelId: args.ChannelId);
