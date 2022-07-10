@@ -25,6 +25,7 @@ namespace TextCommandFramework.Services
             // Hook MessageReceived so we can process each message to see
             // if it qualifies as a command.
             _kaiHeiLa.MessageReceived += MessageReceivedAsync;
+            _kaiHeiLa.DirectMessageReceived += MessageReceivedAsync;
         }
 
         public async Task InitializeAsync()
@@ -44,11 +45,11 @@ namespace TextCommandFramework.Services
             // This value holds the offset where the prefix ends
             var argPos = 0;
             // Perform prefix check. You may want to replace this with
-            // if (!message.HasCharPrefix('!', ref argPos))
-                // return;
-            // for a more traditional command format like !help.
-            if (!message.HasMentionPrefix(_kaiHeiLa.CurrentUser, ref argPos))
+            if (!message.HasCharPrefix('!', ref argPos))
                 return;
+            // for a more traditional command format like !help.
+            // if (!message.HasMentionPrefix(_kaiHeiLa.CurrentUser, ref argPos))
+            //     return;
 
             var context = new SocketCommandContext(_kaiHeiLa, message);
             // Perform the execution of the command. In this method,

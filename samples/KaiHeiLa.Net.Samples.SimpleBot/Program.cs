@@ -55,7 +55,7 @@ class Program
         if (arg.Author.Id == _client.CurrentUser.Id) return;
         if (arg.Author.IsBot == true) return;
         if (arg.Content != "/test") return;
-        // await arg.Channel.SendTextMessageAsync("收到了！", quote: new Quote(arg.Id));
+        await arg.Channel.SendTextMessageAsync("收到了！", quote: new Quote(arg.Id));
         // await msg.UpdateAsync();
         await CardDemo(arg);
     }
@@ -63,13 +63,9 @@ class Program
     private async Task ClientOnReady()
     {
         await Task.Delay(TimeSpan.FromSeconds(5));
-        SocketGuildUser socketGuildUser = _client.GetGuild(7557797319758285).GetUser(2716240726);
-        await _client.GetGuild(7557797319758285).GetChannel(6603421238329172)
-            .AddPermissionOverwriteAsync(socketGuildUser);
-        await _client.GetGuild(7557797319758285).UpdateAsync();
-        await _client.GetGuild(7557797319758285).GetChannel(6603421238329172)
-            .ModifyPermissionOverwriteAsync(socketGuildUser,
-                permissions => permissions.Modify(viewChannel: PermValue.Allow));
+        SocketGuild guild = _client.GetGuild(7557797319758285);
+        await guild.GetChannel(7962091836551843).ModifyPermissionOverwriteAsync(guild.GetUser(2716240726),
+            permissions => permissions.Modify(viewChannel: PermValue.Allow, sendMessages: PermValue.Deny, attachFiles: PermValue.Allow));
     }
 
     private async Task ClientOnLog(LogMessage arg)

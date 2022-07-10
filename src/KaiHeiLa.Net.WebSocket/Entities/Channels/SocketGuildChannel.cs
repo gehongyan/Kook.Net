@@ -75,6 +75,10 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     }
 
     /// <inheritdoc />
+    public override Task UpdateAsync(RequestOptions options = null)
+        => SocketChannelHelper.UpdateAsync(this, options);
+    
+    /// <inheritdoc />
     public Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions options = null)
         => ChannelHelper.ModifyAsync(this, KaiHeiLa, func, options);
     /// <inheritdoc />

@@ -81,5 +81,17 @@ internal static class SocketChannelHelper
             SocketTextChannel textChannel => textChannel.RemoveMessage(id),
             _ => throw new NotSupportedException($"Unexpected {nameof(ISocketMessageChannel)} type."),
         };
-    } 
+    }
+    
+    public static async Task UpdateAsync(SocketGuildChannel channel, RequestOptions options = null)
+    {
+        var model = await channel.KaiHeiLa.ApiClient.GetGuildChannelAsync(channel.Id, options).ConfigureAwait(false);
+        channel.Update(channel.KaiHeiLa.State, model);
+    }
+    
+    public static async Task UpdateAsync(SocketDMChannel channel, RequestOptions options = null)
+    {
+        var model = await channel.KaiHeiLa.ApiClient.GetUserChatAsync(channel.Id, options).ConfigureAwait(false);
+        channel.Update(channel.KaiHeiLa.State, model);
+    }
 }

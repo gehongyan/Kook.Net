@@ -2,6 +2,7 @@ using KaiHeiLa;
 using KaiHeiLa.Commands;
 using System.IO;
 using System.Threading.Tasks;
+using KaiHeiLa.WebSocket;
 using TextCommandFramework.Services;
 
 namespace TextCommandFramework.Modules
@@ -65,5 +66,16 @@ namespace TextCommandFramework.Modules
         [RequireContext(ContextType.Guild, ErrorMessage = "Sorry, this command must be ran from within a server, not a DM!")]
         public Task GuildOnlyCommand()
             => ReplyTextAsync("Nothing to see here!");
+
+        [Command("per")]
+        public async Task ModifyCategoryPermissions()
+        {
+            SocketUser contextUser = Context.User;
+            await ((IGuildChannel) Context.Channel).AddPermissionOverwriteAsync((IGuildUser) Context.User);
+            await ((SocketChannel) Context.Channel).UpdateAsync();
+            await Context.Guild.GetChannel(Context.Channel.Id).ModifyPermissionOverwriteAsync((IGuildUser) Context.User,
+                permissions => permissions.Modify(viewChannel: PermValue.Allow, sendMessages: PermValue.Deny, attachFiles: PermValue.Allow));
+        }
+
     }
 }

@@ -7,7 +7,7 @@ namespace KaiHeiLa.WebSocket;
 ///     Represents a WebSocket-based channel.
 /// </summary>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-public abstract class SocketChannel : SocketEntity<ulong>, IChannel
+public abstract class SocketChannel : SocketEntity<ulong>, IChannel, IUpdateable
 {
     #region SocketChannel
     
@@ -22,6 +22,9 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel
     }
     
     internal abstract void Update(ClientState state, Model model);
+    
+    /// <inheritdoc />
+    public virtual Task UpdateAsync(RequestOptions options = null) => Task.Delay(0);
     
     #endregion
 
