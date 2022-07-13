@@ -5,9 +5,9 @@
         <Nullable>disable</Nullable>
         <RootNamespace>KaiHeiLa</RootNamespace>
         <LangVersion>default</LangVersion>
-        <Version>0.0.30-alpha</Version>
+        <Version>0.0.31-alpha</Version>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <PackageVersion>0.0.30-alpha</PackageVersion>
+        <PackageVersion>0.0.31-alpha</PackageVersion>
         <Authors>gehongyan</Authors>
         <Description>KaiHeiLa.Net is an unofficial C# .NET implementation for KaiHeiLa API.</Description>
         <PackageProjectUrl>https://github.com/gehongyan/KaiHeiLa.Net</PackageProjectUrl>
