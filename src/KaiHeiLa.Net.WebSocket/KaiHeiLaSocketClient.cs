@@ -317,7 +317,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                         case MessageType.KMarkdown:
                         case MessageType.Card:
                         {
-                            await _gatewayLogger.DebugAsync("Received Message (Text)").ConfigureAwait(false);
+                            await _gatewayLogger.DebugAsync($"Received Message ({gatewayEvent.Type}, {gatewayEvent.ChannelType})").ConfigureAwait(false);
                             if (gatewayEvent.ChannelType == "GROUP")
                             {
                                 GatewayGroupMessageExtraData extraData = eventExtraData as GatewayGroupMessageExtraData;
