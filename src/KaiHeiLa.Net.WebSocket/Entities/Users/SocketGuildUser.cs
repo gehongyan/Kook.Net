@@ -76,7 +76,6 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         var entity = new SocketGuildUser(guild, guild.KaiHeiLa.GetOrCreateUser(state, model));
         entity.Update(state, model);
         entity.UpdatePresence(model.Online, model.OperatingSystem);
-        entity.UpdateRoles(Array.Empty<uint>());
         return entity;
     }
     internal static SocketGuildUser Create(SocketGuild guild, ClientState state, MemberModel model)

@@ -60,7 +60,6 @@ public class RestGuildUser : RestUser, IGuildUser
     {
         var entity = new RestGuildUser(kaiHeiLa, guild, model.Id);
         entity.Update(model);
-        entity.UpdateRoles(Array.Empty<uint>());
         return entity;
     }
     internal void Update(MemberModel model)
