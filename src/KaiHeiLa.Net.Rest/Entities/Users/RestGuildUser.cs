@@ -63,6 +63,12 @@ public class RestGuildUser : RestUser, IGuildUser
         entity.UpdateRoles(Array.Empty<uint>());
         return entity;
     }
+    internal static RestGuildUser Create(BaseKaiHeiLaClient kaiHeiLa, IGuild guild, MemberModel model)
+    {
+        var entity = new RestGuildUser(kaiHeiLa, guild, model.Id);
+        entity.Update(model);
+        return entity;
+    }
     internal void Update(MemberModel model)
     {
         base.Update(model);

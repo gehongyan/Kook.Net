@@ -28,7 +28,7 @@ internal class GatewayGroupMessageExtraData
     public bool MentionHere { get; set; }
 
     [JsonPropertyName("author")]
-    public User Author { get; set; }
+    public Rest.GuildMember Author { get; set; }
 
     [JsonPropertyName("quote")]
     public Quote Quote { get; set; }
