@@ -72,6 +72,7 @@ namespace KaiHeiLa.Net.Rest
             _cancelToken = cancelToken;
         }
 
+        // TODO: Add i18n support
         public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancelToken, bool headerOnly, string reason = null)
         {
             string uri = Path.Combine(_baseUrl, endpoint);
