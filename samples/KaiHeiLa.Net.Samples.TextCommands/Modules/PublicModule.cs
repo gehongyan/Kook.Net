@@ -2,6 +2,7 @@ using KaiHeiLa;
 using KaiHeiLa.Commands;
 using System.IO;
 using System.Threading.Tasks;
+using KaiHeiLa.Rest;
 using KaiHeiLa.WebSocket;
 using TextCommandFramework.Services;
 
@@ -75,6 +76,13 @@ namespace TextCommandFramework.Modules
             await ((SocketChannel) Context.Channel).UpdateAsync();
             await Context.Guild.GetChannel(Context.Channel.Id).ModifyPermissionOverwriteAsync((IGuildUser) Context.User,
                 permissions => permissions.Modify(viewChannel: PermValue.Allow, sendMessages: PermValue.Deny, attachFiles: PermValue.Allow));
+        }
+
+        [Command("create")]
+        public async Task CreateChannel()
+        {
+            RestGuildUser guildUserAsync = await Context.Client.Rest.GetGuildUserAsync(7557797319758285, 1253960922);
+            IReadOnlyCollection<uint> readOnlyCollection = guildUserAsync.RoleIds;
         }
 
     }
