@@ -891,14 +891,14 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                             var before = user.Clone();
                                             user.Update(State, data);
                                             
-                                            var cacheableBefore = new Cacheable<SocketGuildUser, ulong>(before, user.Id, true, () => null);
+                                            var cacheableBefore = new Cacheable<SocketGuildUser, ulong>(before, user.Id, true, () => Task.FromResult<SocketGuildUser>(null));
                                             await TimedInvokeAsync(_guildMemberUpdatedEvent, nameof(GuildMemberUpdated), cacheableBefore, user).ConfigureAwait(false);
                                         }
                                         else
                                         {
                                             GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.UserId).ConfigureAwait(false);
                                             user = guild.AddOrUpdateUser(model);
-                                            var cacheableBefore = new Cacheable<SocketGuildUser, ulong>(null, user.Id, false, () => null);
+                                            var cacheableBefore = new Cacheable<SocketGuildUser, ulong>(null, user.Id, false, () => Task.FromResult<SocketGuildUser>(null));
                                             await TimedInvokeAsync(_guildMemberUpdatedEvent, nameof(GuildMemberUpdated), cacheableBefore, user).ConfigureAwait(false);
                                         }
                                     }
