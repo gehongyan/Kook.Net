@@ -221,7 +221,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     /// </returns>
     public async ValueTask<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(RequestOptions options = null)
         => (await ClientHelper.GetDMChannelsAsync(this, options).ConfigureAwait(false)).ToImmutableArray();
-    
+
     /// <summary>
     ///     Gets a user from the cache or does a rest request if unavailable.
     /// </summary>
@@ -232,7 +232,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     ///     the identifier; <c>null</c> if the user is not found.
     /// </returns>
     public async ValueTask<IUser> GetUserAsync(ulong id, RequestOptions options = null)
-        => await ClientHelper.GetUserAsync(this, id, options).ConfigureAwait(false);
+        => await ((IKaiHeiLaClient) this).GetUserAsync(id, CacheMode.AllowDownload, options).ConfigureAwait(false);
     
     /// <inheritdoc />
     public override SocketUser GetUser(ulong id)
@@ -1749,6 +1749,17 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     /// <inheritdoc />
     Task<IGuild> IKaiHeiLaClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IGuild>(GetGuild(id));
+    
+    /// <inheritdoc />
+    async Task<IUser> IKaiHeiLaClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    {
+        var user = GetUser(id);
+        if (user is not null || mode == CacheMode.CacheOnly)
+            return user;
+
+        return await Rest.GetUserAsync(id, options).ConfigureAwait(false);
+    }
+
     /// <inheritdoc />
     async Task<IChannel> IKaiHeiLaClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
         => mode == CacheMode.AllowDownload ? await GetChannelAsync(id, options).ConfigureAwait(false) : GetChannel(id);

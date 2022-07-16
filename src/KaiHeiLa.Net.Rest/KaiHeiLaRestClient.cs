@@ -142,6 +142,15 @@ public class KaiHeiLaRestClient : BaseKaiHeiLaClient, IKaiHeiLaClient
     }
     
     /// <inheritdoc />
+    async Task<IUser> IKaiHeiLaClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetUserAsync(id, options).ConfigureAwait(false);
+        else
+            return null;
+    }
+    
+    /// <inheritdoc />
     async Task<IChannel> IKaiHeiLaClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
     {
         if (mode == CacheMode.AllowDownload)
