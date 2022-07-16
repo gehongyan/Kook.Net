@@ -6,8 +6,9 @@ private static async Task LogAsync(LogMessage message)
         LogSeverity.Error => LogEventLevel.Error,
         LogSeverity.Warning => LogEventLevel.Warning,
         LogSeverity.Info => LogEventLevel.Information,
-        LogSeverity.Verbose => LogEventLevel.Verbose,
-        LogSeverity.Debug => LogEventLevel.Debug,
+        // Serilog 中，LogEventLevel.Verbose 相比 LogEventLevel.Debug 会输出更多的信息
+        LogSeverity.Verbose => LogEventLevel.Debug,
+        LogSeverity.Debug => LogEventLevel.Verbose,
         _ => LogEventLevel.Information
     };
     Log.Write(severity, message.Exception, "[{Source}] {Message}", message.Source, message.Message);
