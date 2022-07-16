@@ -65,7 +65,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     /// <summary>
     ///     Gets a user in this channel.
     /// </summary>
-    /// <param name="id">The snowflake identifier of the user.</param>
+    /// <param name="id">The identifier of the user.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <exception cref="InvalidOperationException">
     /// Resolving permissions requires the parent guild to be downloaded.

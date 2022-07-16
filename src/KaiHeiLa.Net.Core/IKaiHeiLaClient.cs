@@ -54,7 +54,7 @@ public interface IKaiHeiLaClient : IDisposable
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
-    ///     with the snowflake identifier; <c>null</c> when the channel cannot be found.
+    ///     with the identifier; <c>null</c> when the channel cannot be found.
     /// </returns>
     Task<IChannel> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
     /// <summary>

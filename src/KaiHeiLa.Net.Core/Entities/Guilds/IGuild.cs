@@ -187,7 +187,7 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets a ban object for a banned user.
     /// </summary>
-    /// <param name="userId">The snowflake identifier for the banned user.</param>
+    /// <param name="userId">The identifier for the banned user.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
@@ -230,7 +230,7 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Unbans the user if they are currently banned.
     /// </summary>
-    /// <param name="userId">The snowflake identifier of the user to be unbanned.</param>
+    /// <param name="userId">The identifier of the user to be unbanned.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous removal operation for the ban.
@@ -275,7 +275,7 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets a text channel in this guild.
     /// </summary>
-    /// <param name="id">The snowflake identifier for the text channel.</param>
+    /// <param name="id">The identifier for the text channel.</param>
     /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
@@ -296,7 +296,7 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets a voice channel in this guild.
     /// </summary>
-    /// <param name="id">The snowflake identifier for the voice channel.</param>
+    /// <param name="id">The identifier for the voice channel.</param>
     /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
@@ -520,7 +520,7 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets a specific emote from this guild.
     /// </summary>
-    /// <param name="id">The snowflake identifier for the guild emote.</param>
+    /// <param name="id">The identifier for the guild emote.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the emote found with the

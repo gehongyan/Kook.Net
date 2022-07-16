@@ -74,7 +74,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// <summary>
     ///     Gets a user in this channel from the provided <paramref name="id"/>.
     /// </summary>
-    /// <param name="id">The snowflake identifier of the user.</param>
+    /// <param name="id">The identifier of the user.</param>
     /// <returns>
     ///     A <see cref="RestUser"/> object that is a recipient of this channel; otherwise <c>null</c>.
     /// </returns>

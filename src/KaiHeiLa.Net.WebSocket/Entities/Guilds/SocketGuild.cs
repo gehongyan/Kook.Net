@@ -405,7 +405,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <summary>
     ///     Gets a voice channel in this guild.
     /// </summary>
-    /// <param name="id">The snowflake identifier for the voice channel.</param>
+    /// <param name="id">The identifier for the voice channel.</param>
     /// <returns>
     ///     A voice channel associated with the specified <paramref name="id" />; <see langword="null"/> if none is found.
     /// </returns>

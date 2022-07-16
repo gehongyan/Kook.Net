@@ -225,11 +225,11 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     /// <summary>
     ///     Gets a user from the cache or does a rest request if unavailable.
     /// </summary>
-    /// <param name="id">The snowflake identifier of the user (e.g. `168693960628371456`).</param>
+    /// <param name="id">The identifier of the user (e.g. `168693960628371456`).</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the user associated with
-    ///     the snowflake identifier; <c>null</c> if the user is not found.
+    ///     the identifier; <c>null</c> if the user is not found.
     /// </returns>
     public async ValueTask<IUser> GetUserAsync(ulong id, RequestOptions options = null)
         => await ClientHelper.GetUserAsync(this, id, options).ConfigureAwait(false);

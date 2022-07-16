@@ -42,7 +42,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     Gets the ID of the channel this invite is linked to.
     /// </summary>
     /// <returns>
-    ///     A ulong representing the channel snowflake identifier that the invite points to.
+    ///     A ulong representing the channel identifier that the invite points to.
     /// </returns>
     ulong? ChannelId { get; }
     /// <summary>
@@ -64,7 +64,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     Gets the ID of the guild this invite is linked to.
     /// </summary>
     /// <returns>
-    ///     A ulong representing the guild snowflake identifier that the invite points to.
+    ///     A ulong representing the guild identifier that the invite points to.
     /// </returns>
     ulong? GuildId { get; }
     /// <summary>

@@ -381,7 +381,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets a text channel in this guild.
     /// </summary>
-    /// <param name="id">The snowflake identifier for the text channel.</param>
+    /// <param name="id">The identifier for the text channel.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the text channel
@@ -408,7 +408,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets a voice channel in this guild.
     /// </summary>
-    /// <param name="id">The snowflake identifier for the voice channel.</param>
+    /// <param name="id">The identifier for the voice channel.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the voice channel associated
