@@ -10,27 +10,27 @@ public enum InviteMaxAge
     /// </summary>
     NeverExpires = 0,
     /// <summary>
-    ///     The invite will expire after half an hour.
+    ///     The invite will expire after half an hour (1800 seconds).
     /// </summary>
     HalfAnHour = 1800,
     /// <summary>
-    ///     The invite will expire after one hour.
+    ///     The invite will expire after one hour (3600 seconds).
     /// </summary>
     OneHour = 3600,
     /// <summary>
-    ///     The invite will expire after 6 hours.
+    ///     The invite will expire after 6 hours (21600 seconds).
     /// </summary>
     SixHours = 21600,
     /// <summary>
-    ///     The invite will expire after half a day.
+    ///     The invite will expire after half a day (43200 seconds).
     /// </summary>
     HalfADay = 43200,
     /// <summary>
-    ///     The invite will expire after one day.
+    ///     The invite will expire after one day (86400 seconds).
     /// </summary>
     OneDay = 86400,
     /// <summary>
-    ///     The invite will expire after one week.
+    ///     The invite will expire after one week (604800 seconds).
     /// </summary>
     OneWeek = 604800
 }
