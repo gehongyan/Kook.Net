@@ -35,6 +35,7 @@ public static class Format
     /// <summary> Sanitizes the string, safely escaping any Markdown sequences. </summary>
     public static string Sanitize(string text)
     {
+        if (text is null) return null;
         return SensitiveCharacters.Aggregate(text,
             (current, unsafeChar) => current.Replace(unsafeChar, $"\\{unsafeChar}"));
     }
