@@ -423,7 +423,7 @@ internal static class MessageHelper
             var tagIndex = FindIndex(tags, index);
             if (tagIndex.HasValue)
                 tags.Insert(tagIndex.Value,
-                    new Tag<IRole>(TagType.HereMention, index, "@在线成员".Length, 0, guild?.EveryoneRole));
+                    new Tag<IRole>(TagType.HereMention, index, "@在线成员".Length, 0, null));
             index++;
         }
 

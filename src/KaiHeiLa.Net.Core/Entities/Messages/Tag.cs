@@ -20,6 +20,11 @@ public class Tag<T> : ITag
     /// <summary>
     ///     Gets the value of the tag.
     /// </summary>
+    /// <remarks>
+    ///     When <see cref="Type"/> is <see cref="TagType.HereMention"/>,
+    ///     this property returns the same entity as <see cref="IGuild.EveryoneRole"/> for convenience.
+    ///     because there is no actual entities representing a group of online users.
+    /// </remarks>
     public T Value { get; }
 
     internal Tag(TagType type, int index, int length, dynamic key, T value)
@@ -31,8 +36,8 @@ public class Tag<T> : ITag
         Value = value;
     }
 
-    private string DebuggerDisplay => $"{Value?.ToString() ?? "null"} ({Type})";
-    public override string ToString() => $"{Value?.ToString() ?? "null"} ({Type})";
+    private string DebuggerDisplay => $"{(Type is TagType.HereMention ? "@在线成员" : Value?.ToString()) ?? "null"} ({Type})";
+    public override string ToString() => $"{(Type is TagType.HereMention ? "@在线成员" : Value?.ToString()) ?? "null"} ({Type})";
 
     /// <inheritdoc />
     object ITag.Value => Value;
