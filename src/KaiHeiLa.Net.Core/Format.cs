@@ -10,15 +10,6 @@ public static class Format
 {
     private static readonly string[] SensitiveCharacters = {
         "\\", "*", "~", "`", ":", "-", "]", ")", ">" };
-
-    private static readonly Regex MarkdownEscapeRegex = new Regex(
-
-        @"((?<!\\)([*]{1,3}|~{2}|`(``\w*\n)?|\((spl|ins)\)))" +       // Unescaped asterisks, tildes, backticks, (spl) and (ins)
-        @"(\\(?=[\*~`\(\)\[\]\\]))" +                                       // All escaping backslashes
-        @"((?<=((?<!\\)\[).*?[^\\])\]\(https?://.*?\))" +                   // Tales of links
-        @"((?<!\\)(?=.*?[^\\]\]\(https?://.*?\))\[)" +                      // Open bracket of links
-        @"(((?<=\n)\n)?^>\s)"                                               // Quotes and related redundant newlines
-    );
     
     /// <summary> Returns a markdown-formatted string with bold formatting. </summary>
     public static string Bold(string text) => $"**{text}**";
@@ -101,7 +92,7 @@ public static class Format
     public static string StripMarkDown(string text)
     {
         //Remove KaiHeiLa supported markdown
-        var newText = MarkdownEscapeRegex.Replace(text, ""); // @"(\*|\(ins\)|\(spl\)|`|~|>|\\)"
+        var newText = Regex.Replace(text, @"(\*|\(ins\)|\(spl\)|`|~|>|\\)", "");
         return newText;
     }
     
