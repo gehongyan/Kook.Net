@@ -6,10 +6,10 @@ namespace KaiHeiLa;
 public class Emote : IEmote
 {
     
-    internal static readonly Regex PlainTextEmojiRegex = new Regex(@"\[:(?<name>[^:]+?):(?<id>\d{1,20}\/\w{1,20})\]",
+    internal static readonly Regex PlainTextEmojiRegex = new Regex(@"\[:(?<name>[^:]{1,32}?):(?<id>\d{1,20}\/\w{1,20})\]",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
     
-    internal static readonly Regex KMarkdownEmojiRegex = new Regex(@"(\(emj\))(?<name>[^\(\)]{1,20}?)\1\[(?<id>\d{1,20}\/\w{1,20})\]",
+    internal static readonly Regex KMarkdownEmojiRegex = new Regex(@"(\(emj\))(?<name>[^\(\)]{1,32}?)\1\[(?<id>\d{1,20}\/\w{1,20})\]",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
     
     public string Id { get; }

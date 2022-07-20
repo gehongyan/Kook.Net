@@ -81,6 +81,7 @@ namespace TextCommandFramework.Modules
         [Command("create")]
         public async Task CreateChannel()
         {
+            IReadOnlyCollection<SocketRole> onlyCollection = ((SocketGuildUser)Context.User).Roles;
             RestGuildUser guildUserAsync = await Context.Client.Rest.GetGuildUserAsync(7557797319758285, 1253960922);
             IReadOnlyCollection<uint> readOnlyCollection = guildUserAsync.RoleIds;
         }

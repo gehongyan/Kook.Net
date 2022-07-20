@@ -19,7 +19,7 @@ public static class MentionUtils
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
     internal static readonly Regex PlainTextTagRegex = new Regex(
-        @"(@[^#]+?#\d{1,20})|(@role:\d{1,10};)|(#channel:\d{1,20}?;)|(\[:[^:]+?:\d{1,20}\/\w{1,20}?\])",
+        @"(@[^#]+?#\d{1,20})|(@role:\d{1,10};)|(#channel:\d{1,20}?;)|(\[:[^:]{1,32}?:\d{1,20}\/\w{1,20}?\])",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
 
@@ -33,7 +33,7 @@ public static class MentionUtils
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
     internal static readonly Regex KMarkdownTagRegex = new Regex(
-        @"(\((met|rol|chn)\)\d{1,20}?\(\2\))|(\(emj\)[^\(\)]{1,20}?(emj)\[\d{1,20}\/\w{1,20}\])",
+        @"(\((met|rol|chn)\)\d{1,20}?\(\2\))|(\(emj\)[^\(\)]{1,32}?\(emj\)\[\d{1,20}\/\w{1,20}\])",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
 

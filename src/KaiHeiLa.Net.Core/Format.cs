@@ -108,7 +108,7 @@ public static class Format
     /// <summary>
     ///     Formats a user's username + identify number while maintaining bidirectional unicode
     /// </summary>
-    /// <param name="user">The user whos username and identify number to format</param>
+    /// <param name="user">The user whose username and identify number to format</param>
     /// <returns>The username + identify number</returns>
     public static string UsernameAndIdentifyNumber(IUser user)
     {

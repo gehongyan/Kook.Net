@@ -63,9 +63,8 @@ class Program
     private async Task ClientOnReady()
     {
         await Task.Delay(TimeSpan.FromSeconds(5));
-        SocketGuild guild = _client.GetGuild(7557797319758285);
-        await guild.GetChannel(7962091836551843).ModifyPermissionOverwriteAsync(guild.GetUser(2716240726),
-            permissions => permissions.Modify(viewChannel: PermValue.Allow, sendMessages: PermValue.Deny, attachFiles: PermValue.Allow));
+        IUser result = await _client.GetUserAsync(2810246202);
+        IUser userAsync = await _client.GetUserAsync(1896684851);
     }
 
     private async Task ClientOnLog(LogMessage arg)
