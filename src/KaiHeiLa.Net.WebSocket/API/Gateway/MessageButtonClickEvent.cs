@@ -19,5 +19,5 @@ internal class MessageButtonClickEvent
     public User User { get; set; }
 
     [JsonPropertyName("guild_id")]
-    public ulong GuildId { get; set; }
+    public ulong? GuildId { get; set; }
 }

@@ -1269,24 +1269,31 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                     var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.MessageButtonClickEvent>(_serializerOptions);
                                     SocketTextChannel channel = GetChannel(data.ChannelId) as SocketTextChannel;
                                     SocketGuild guild = GetGuild(data.GuildId);
-                                    if (guild != null)
-                                    {
-                                        if (channel == null)
-                                        {
-                                            await UnknownChannelAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
-                                            return;
+                                    if (data.GuildId.HasValue) {
+                                        SocketTextChannel channel = GetChannel(data.ChannelId) as SocketTextChannel;
+                                        SocketGuild guild = GetGuild(data.GuildId.GetValueOrDefault());
+                                        if (guild != null) {
+                                            if (channel == null) {
+                                                await UnknownChannelAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                return;
+                                            }
+                                            SocketUser user = channel.GetUser(data.UserId)
+                                                              ?? SocketUnknownUser.Create(this, State, data.UserId) as SocketUser;
+                                            IMessage msg = await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false);
+                                            await TimedInvokeAsync(_messageButtonClickedEvent, nameof(MessageButtonClicked), data.Value, user, msg, channel, guild).ConfigureAwait(false);
                                         }
-                                        SocketUser user = channel.GetUser(data.UserId) 
-                                                          ?? SocketUnknownUser.Create(this, State, data.UserId) as SocketUser;
-                                        IMessage msg = await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false);
-                                        await TimedInvokeAsync(_messageButtonClickedEvent, nameof(MessageButtonClicked), data.Value, user, msg, channel, guild).ConfigureAwait(false);
                                     }
                                     else
                                     {
+                                        SocketUser user = GetUser(data.UserId);
+                                        if (user != null) {
+                                            var channel = await user.CreateDMChannelAsync();
+                                            var message = await channel.GetMessageAsync(data.MessageId);
+                                            await TimedInvokeAsync(_dmMessageButtonClickedEvent, nameof(DMMessageButtonClicked), data.Value, user, message, channel).ConfigureAwait(false);
+                                            return;
+                                        }
                                         await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
-                                        return;
                                     }
-                                }
                                     break;
 
                                 #endregion
