@@ -153,6 +153,13 @@ namespace KaiHeiLa.WebSocket
         }
         internal readonly AsyncEvent<Func<string, SocketUser, IMessage, SocketTextChannel, SocketGuild, Task>> _messageButtonClickedEvent = new AsyncEvent<Func<string, SocketUser, IMessage, SocketTextChannel, SocketGuild, Task>>();
 
+        /// <summary> Fired when a button is clicked in a direct card message. </summary>
+        public event Func<string, SocketUser, IMessage, SocketDMChannel, Task> DirectMessageButtonClicked {
+            add => _directMessageButtonClickedEvent.Add(value);
+            remove => _directMessageButtonClickedEvent.Remove(value);
+        }
+        internal readonly AsyncEvent<Func<string, SocketUser, IMessage, SocketDMChannel, Task>> _directMessageButtonClickedEvent = new AsyncEvent<Func<string, SocketUser, IMessage, SocketDMChannel, Task>>();
+        
         #endregion
     }
 }
