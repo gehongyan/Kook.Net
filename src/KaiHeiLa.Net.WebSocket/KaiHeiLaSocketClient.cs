@@ -1263,14 +1263,18 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                 #region Interactions
 
                                 // Card 消息中的 Button 点击事件
-                                case ("PERSON", "message_btn_click"): {
+                                case ("PERSON", "message_btn_click"):
+                                {
                                     await _gatewayLogger.DebugAsync("Received Event (message_btn_click)").ConfigureAwait(false);
-                                    var data = ((JsonElement)extraData.Body).Deserialize<API.Gateway.MessageButtonClickEvent>(_serializerOptions);
-                                    if (data.GuildId.HasValue) {
+                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.MessageButtonClickEvent>(_serializerOptions);
+                                    if (data.GuildId.HasValue)
+                                    {
                                         SocketTextChannel channel = GetChannel(data.ChannelId) as SocketTextChannel;
-                                        SocketGuild guild = GetGuild(data.GuildId.GetValueOrDefault());
-                                        if (guild != null) {
-                                            if (channel == null) {
+                                        SocketGuild guild = GetGuild(data.GuildId.Value);
+                                        if (guild != null)
+                                        {
+                                            if (channel == null)
+                                            {
                                                 await UnknownChannelAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
@@ -1279,18 +1283,28 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                             IMessage msg = await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false);
                                             await TimedInvokeAsync(_messageButtonClickedEvent, nameof(MessageButtonClicked), data.Value, user, msg, channel, guild).ConfigureAwait(false);
                                         }
-                                    } else {
-                                        SocketUser user = GetUser(data.UserId);
-                                        if (user != null) {
-                                            var channel = await user.CreateDMChannelAsync();
-                                            var message = await channel.GetMessageAsync(data.MessageId);
-                                            await TimedInvokeAsync(_dmMessageButtonClickedEvent, nameof(DMMessageButtonClicked), data.Value, user, message, channel).ConfigureAwait(false);
+                                        else
+                                        {
+                                            await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                             return;
                                         }
-                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                     }
-                                    break;
+                                    else
+                                    {
+                                        SocketUser user = GetUser(data.UserId)
+                                                          ?? SocketUnknownUser.Create(this, State, data.UserId);
+                                        SocketDMChannel channel = await user.CreateDMChannelAsync().ConfigureAwait(false);
+                                        if (channel == null)
+                                        {
+                                            await UnknownChannelAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                            return;
+                                        }
+                                        IMessage message = await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false);
+                                        await TimedInvokeAsync(_directMessageButtonClickedEvent, nameof(DirectMessageButtonClicked), data.Value, user, message, channel).ConfigureAwait(false);
+                                    }
                                 }
+                                    break;
+
                                 #endregion
                                 
                                 default:
