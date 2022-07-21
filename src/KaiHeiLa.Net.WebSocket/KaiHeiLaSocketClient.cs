@@ -1263,12 +1263,9 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                 #region Interactions
 
                                 // Card 消息中的 Button 点击事件
-                                case ("PERSON", "message_btn_click"):
-                                {
+                                case ("PERSON", "message_btn_click"): {
                                     await _gatewayLogger.DebugAsync("Received Event (message_btn_click)").ConfigureAwait(false);
-                                    var data = ((JsonElement) extraData.Body).Deserialize<API.Gateway.MessageButtonClickEvent>(_serializerOptions);
-                                    SocketTextChannel channel = GetChannel(data.ChannelId) as SocketTextChannel;
-                                    SocketGuild guild = GetGuild(data.GuildId);
+                                    var data = ((JsonElement)extraData.Body).Deserialize<API.Gateway.MessageButtonClickEvent>(_serializerOptions);
                                     if (data.GuildId.HasValue) {
                                         SocketTextChannel channel = GetChannel(data.ChannelId) as SocketTextChannel;
                                         SocketGuild guild = GetGuild(data.GuildId.GetValueOrDefault());
@@ -1282,9 +1279,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                             IMessage msg = await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false);
                                             await TimedInvokeAsync(_messageButtonClickedEvent, nameof(MessageButtonClicked), data.Value, user, msg, channel, guild).ConfigureAwait(false);
                                         }
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         SocketUser user = GetUser(data.UserId);
                                         if (user != null) {
                                             var channel = await user.CreateDMChannelAsync();
@@ -1295,7 +1290,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                                         await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                     }
                                     break;
-
+                                }
                                 #endregion
                                 
                                 default:
