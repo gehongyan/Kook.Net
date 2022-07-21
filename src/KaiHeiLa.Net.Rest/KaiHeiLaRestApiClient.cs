@@ -759,7 +759,10 @@ internal class KaiHeiLaRestApiClient : IDisposable
         if (messageAfter is not null)
             return (await QueryDirectMessagesAsync(chatCode, userId, messageAfter.Id, Direction.Before, 1, options)).SingleOrDefault(x => x.Id == messageId);
         
-        return null;
+        // Try getting by fetching the message without reference
+        var messagesWithoutReference = await QueryDirectMessagesAsync(chatCode, userId, null, Direction.Unspecified, 50, options);
+        message = messagesWithoutReference.SingleOrDefault(x => x.Id == messageId);
+        return message;
     }
     
     public async Task<IReadOnlyCollection<DirectMessage>> QueryDirectMessagesAsync(Guid? chatCode = null,
