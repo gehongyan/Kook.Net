@@ -214,7 +214,7 @@ internal static class MessageHelper
     {
         var properties = new MessageProperties();
         func(properties);
-        if (!(string.IsNullOrEmpty(properties.Content) ^ (properties.Cards is not null && properties.Cards.Any())))
+        if (string.IsNullOrEmpty(properties.Content) ^ (properties.Cards is not null && properties.Cards.Any()))
             throw new InvalidOperationException("Only one of arguments can be set between Content and Cards");
 
         string content = string.Empty;
