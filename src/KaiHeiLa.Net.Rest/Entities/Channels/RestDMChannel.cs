@@ -314,13 +314,13 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
 
     /// <inheritdoc />
     public Task DeleteMessageAsync(Guid messageId, RequestOptions options = null)
-        => ChannelHelper.DeleteMessageAsync(this, messageId, KaiHeiLa, options);
+        => ChannelHelper.DeleteDirectMessageAsync(this, messageId, KaiHeiLa, options);
     /// <inheritdoc />
     public Task DeleteMessageAsync(IMessage message, RequestOptions options = null)
-        => ChannelHelper.DeleteMessageAsync(this, message.Id, KaiHeiLa, options);
+        => ChannelHelper.DeleteDirectMessageAsync(this, message.Id, KaiHeiLa, options);
     /// <inheritdoc />
     public Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions options = null)
-        => ChannelHelper.ModifyMessageAsync(this, messageId, func, KaiHeiLa, options);
+        => ChannelHelper.ModifyDirectMessageAsync(this, messageId, func, KaiHeiLa, options);
 
     #endregion
 
