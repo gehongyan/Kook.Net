@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
@@ -56,7 +55,7 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         WebSocketClient.Closed += async ex =>
         {
 #if DEBUG_PACKETS
-                Console.WriteLine(ex);
+            Console.WriteLine(ex);
 #endif
 
             await DisconnectAsync().ConfigureAwait(false);
@@ -78,6 +77,9 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         GatewaySocketFrame gatewaySocketFrame = JsonSerializer.Deserialize<GatewaySocketFrame>(decompressed, _serializerOptions);
         if (gatewaySocketFrame is not null)
         {
+#if DEBUG_PACKETS
+            Console.WriteLine($"<- [{gatewaySocketFrame.Type}] : {gatewaySocketFrame.Sequence} \n{JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
+#endif
             await _receivedGatewayEvent.InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, gatewaySocketFrame.Payload).ConfigureAwait(false);
         }
     }
@@ -87,6 +89,9 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         GatewaySocketFrame gatewaySocketFrame = JsonSerializer.Deserialize<GatewaySocketFrame>(message, _serializerOptions);
         if (gatewaySocketFrame is not null)
         {
+#if DEBUG_PACKETS
+            Console.WriteLine($"<- [{gatewaySocketFrame.Type}] : {gatewaySocketFrame.Sequence} \n{JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
+#endif
             await _receivedGatewayEvent.InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, gatewaySocketFrame.Payload).ConfigureAwait(false);
         }
     }
@@ -138,6 +143,10 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
                 GetBotGatewayResponse botGatewayResponse = await GetBotGatewayAsync().ConfigureAwait(false);
                 _gatewayUrl = $"{botGatewayResponse.Url}{_resumeQueryParams}";
             }
+            
+#if DEBUG_PACKETS
+            Console.WriteLine("Connecting to gateway: " + _gatewayUrl);
+#endif
             
             await WebSocketClient!.ConnectAsync(_gatewayUrl).ConfigureAwait(false);
             ConnectionState = ConnectionState.Connected;
@@ -205,7 +214,7 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         await _sentGatewayMessageEvent.InvokeAsync(gatewaySocketFrameType).ConfigureAwait(false);
         
 #if DEBUG_PACKETS
-        Console.WriteLine($"-> {opCode}:\n{SerializeJson(payload)}");
+        Console.WriteLine($"-> [{gatewaySocketFrameType}] : {sequence} \n{JsonSerializer.Serialize(payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
 #endif
     }
 }
