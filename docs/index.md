@@ -12,13 +12,16 @@ title: 首页
 [![Nuget Version](https://img.shields.io/nuget/v/KaiHeiLa.Net)](https://www.nuget.org/packages/KaiHeiLa.Net)
 [![Nuget](https://img.shields.io/nuget/dt/KaiHeiLa.Net.Core?color=%230099ff)](https://www.nuget.org/packages/KaiHeiLa.Net)
 [![License](https://img.shields.io/github/license/gehongyan/KaiHeiLa.Net)](https://github.com/gehongyan/KaiHeiLa.Net/blob/master/LICENSE)
-[![Chat on KaiHeiLa](https://www.kaiheila.cn/api/v3/badge/guild?guild_id=1591057729615250)](https://kaihei.co/EvxnOb)
+[![Chat on KaiHeiLa](https://www.kookapp.cn/api/v3/badge/guild?guild_id=1591057729615250)](https://kook.top/EvxnOb)
 
 ## 什么是 KaiHeiLa.Net？
 
-KaiHeiLa.Net 是一个对 [开黑啦 API] 进行功能封装的类库，以 C# 编写，可运行在 .NET 6 平台上。
+KaiHeiLa.Net 是一个对 [KOOK（原开黑啦）API] 进行功能封装的类库，以 C# 编写，可运行在 .NET 6 平台上。
 
-[开黑啦 API]: https://developer.kaiheila.cn/doc
+> [!NOTE]
+> 请注意，KaiHeiLa.Net 计划更名为 Kook.Net，请在开发过程中留意潜在的避免命名空间冲突。
+
+[KOOK（原开黑啦）API]: https://https://developer.kookapp.cn/doc
 
 ## 我应该从哪里开始？
 
@@ -32,4 +35,4 @@ KaiHeiLa.Net 是一个对 [开黑啦 API] 进行功能封装的类库，以 C# �
 
 [用户指南]: ./guides/introduction/intro.md
 [API 文档]: ./api/index.md
-[开黑啦 KaiHeiLa.Net 社区]: https://kaihei.co/EvxnOb
+[开黑啦 KaiHeiLa.Net 社区]: https://kook.top/EvxnOb

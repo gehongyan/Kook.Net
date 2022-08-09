@@ -13,7 +13,7 @@ public class KaiHeiLaConfig
     /// <returns>
     ///     An int representing the API version that KaiHeiLa.Net uses to communicate with KaiHeiLa.
     ///     <para>A list of available API version can be seen on the official 
-    ///     <see href="https://developer.kaiheila.cn/doc/reference">KaiHeiLa API documentation</see>
+    ///     <see href="https://developer.kookapp.cn/doc/reference">KaiHeiLa API documentation</see>
     ///     .</para>
     /// </returns>
     public const int APIVersion = 3;
@@ -43,7 +43,7 @@ public class KaiHeiLaConfig
     /// <returns>
     ///     The KaiHeiLa API URL using <see cref="APIVersion"/>.
     /// </returns>
-    public static readonly string APIUrl = $"https://www.kaiheila.cn/api/v{APIVersion}/";
+    public static readonly string APIUrl = $"https://www.kookapp.cn/api/v{APIVersion}/";
 
     /// <summary> 
     ///     Returns the default timeout for requests. 
