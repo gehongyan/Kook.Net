@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace KaiHeiLa;
 
 /// <summary> An extension class for squashing <see cref="IAsyncEnumerable{T}"/>. </summary>
