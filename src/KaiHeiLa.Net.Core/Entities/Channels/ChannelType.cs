@@ -23,5 +23,10 @@ public enum ChannelType
     /// <summary>
     ///     Specifies that the channel is a guild voice channel.
     /// </summary>
-    Voice = 2
+    Voice = 2,
+    
+    /// <summary>
+    ///     Specifies that the channel is a direct message channel.
+    /// </summary>
+    DM = 3
 }
