@@ -14,9 +14,15 @@ namespace KaiHeiLa.Commands
         void SetContext(ICommandContext context);
 
         /// <summary>
-        ///     Executed before a command is run in this module base.
+        ///     Executed asynchronously before a command is run in this module base.
         /// </summary>
         /// <param name="command">The command thats about to run.</param>
+        Task BeforeExecuteAsync(CommandInfo command);
+        
+        /// <summary>
+        ///     Executed before a command is run in this module base.
+        /// </summary>
+        /// <param name="command">The command that's about to run.</param>
         void BeforeExecute(CommandInfo command);
 
         /// <summary>
@@ -24,6 +30,12 @@ namespace KaiHeiLa.Commands
         /// </summary>
         /// <param name="command">The command that ran.</param>
         void AfterExecute(CommandInfo command);
+
+        /// <summary>
+        ///     Executed asynchronously after a command is run in this module base.
+        /// </summary>
+        /// <param name="command">The command that's about to run.</param>
+        Task AfterExecuteAsync(CommandInfo command);
 
         /// <summary>
         ///     Executed when this module is building.
