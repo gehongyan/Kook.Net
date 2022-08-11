@@ -46,7 +46,7 @@ public abstract partial class BaseSocketClient
     /// <summary> Fired when a channel is updated. </summary>
     /// <remarks>
     ///     <para>
-    ///         This event is fired when a generic channel has been destroyed. The event handler must return a
+    ///         This event is fired when a generic channel has been updated. The event handler must return a
     ///         <see cref="Task"/> and accept 2 <see cref="SocketChannel"/> as its parameters.
     ///     </para>
     ///     <para>
