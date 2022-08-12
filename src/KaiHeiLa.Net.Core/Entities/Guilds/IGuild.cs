@@ -105,6 +105,17 @@ public interface IGuild : IEntity<ulong>
     /// </returns>
     int BoostNumber { get; }
     /// <summary>
+    ///     Gets the max bitrate for voice channels in this guild.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="int"/> representing the maximum bitrate value allowed by Discord in this guild.
+    /// </returns>
+    int MaxBitrate { get; }
+    /// <summary>
+    ///     Gets the upload limit in bytes for this guild. This number is dependent on the guild's boost status.
+    /// </summary>
+    ulong MaxUploadLimit { get; }
+    /// <summary>
     ///     Gets the number of boost subscribers who activates buffer of this guild.
     /// </summary>
     /// <returns>

@@ -106,7 +106,10 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     public bool IsConnected { get; internal set; }
     /// <summary> Indicates whether the client has all the members downloaded to the local guild cache. </summary>
     public bool HasAllMembers => MemberCount <= DownloadedMemberCount;
-    
+    /// <inheritdoc/>
+    public int MaxBitrate => GuildHelper.GetMaxBitrate(this);
+    /// <inheritdoc/>
+    public ulong MaxUploadLimit => GuildHelper.GetUploadLimit(this);
     /// <summary>
     ///     Gets the current logged-in user.
     /// </summary>

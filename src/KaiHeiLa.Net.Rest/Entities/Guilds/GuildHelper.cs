@@ -15,6 +15,36 @@ internal static class GuildHelper
         await client.ApiClient.LeaveGuildAsync(guild.Id, options).ConfigureAwait(false);
     }
 
+    public static int GetMaxBitrate(IGuild guild)
+    {
+        var tierFactor = guild.BoostLevel switch
+        {
+            BoostLevel.Level1 => 128,
+            BoostLevel.Level2 => 192,
+            BoostLevel.Level3 or BoostLevel.Level4 => 256,
+            BoostLevel.Level5 or BoostLevel.Level6 => 320,
+            _ => 96
+        };
+        
+        return tierFactor * 1000;
+    }
+    public static ulong GetUploadLimit(IGuild guild)
+    {
+        var tierFactor = guild.BoostLevel switch
+        {
+            BoostLevel.Level1 => 20,
+            BoostLevel.Level2 => 50,
+            BoostLevel.Level3 => 100,
+            BoostLevel.Level4 => 150,
+            BoostLevel.Level5 => 200,
+            BoostLevel.Level6 => 300,
+            _ => 5
+        };
+
+        var mebibyte = Math.Pow(2, 20);
+        return (ulong) (tierFactor * mebibyte);
+    }
+    
     #endregion
 
     #region Invites

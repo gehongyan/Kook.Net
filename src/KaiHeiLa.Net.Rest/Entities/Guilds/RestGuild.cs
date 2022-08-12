@@ -41,7 +41,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     public ulong WelcomeChannelId { get; private set; }
 
     internal bool Available { get; private set; }
-    
+    /// <inheritdoc/>
+    public int MaxBitrate => GuildHelper.GetMaxBitrate(this);
+    /// <inheritdoc/>
+    public ulong MaxUploadLimit => GuildHelper.GetUploadLimit(this);
     /// <summary>
     ///     Gets the built-in role containing all users in this guild.
     /// </summary>
