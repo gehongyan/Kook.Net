@@ -16,7 +16,7 @@ public static class TokenUtils
     ///     This value was determined by comparing against the examples in the KaiHeiLa
     ///     documentation, and pre-existing tokens.
     /// </remarks>
-    internal const int MinBotTokenLength = 35;
+    internal const int MinBotTokenLength = 33;
 
     internal const char Base64Padding = '=';
 
@@ -114,7 +114,7 @@ public static class TokenUtils
         var segments = message.Split('/');
 
         // ensure that there are three parts
-        if (segments.Length != 3)
+        if (segments.Length < 3)
             return false;
         // return true if the user id could be determined
         return DecodeBase64UserId(segments[1]).HasValue;
