@@ -8,18 +8,20 @@ namespace KaiHeiLa;
 /// </summary>
 public static class Format
 {
-    private static readonly string[] SensitiveCharacters = {
-        "\\", "*", "~", "`", ":", "-", "]", ")", ">" };
-    
+    private static readonly string[] SensitiveCharacters =
+    {
+        "\\", "*", "~", "`", ":", "-", "]", ")", ">"
+    };
+
     /// <summary> Returns a markdown-formatted string with bold formatting. </summary>
     public static string Bold(string text) => $"**{text}**";
-    
+
     /// <summary> Returns a markdown-formatted string with italics formatting. </summary>
     public static string Italics(string text) => $"*{text}*";
-    
+
     /// <summary> Returns a markdown-formatted string with strike-through formatting. </summary>
     public static string Strikethrough(string text) => $"~~{text}~~";
-    
+
     /// <summary> Returns a markdown-formatted URL. </summary>
     public static string Url(string text, string url) => $"[{text}]({url})";
 
@@ -30,7 +32,7 @@ public static class Format
         return SensitiveCharacters.Aggregate(text,
             (current, unsafeChar) => current.Replace(unsafeChar, $"\\{unsafeChar}"));
     }
-    
+
     /// <summary>
     ///     Formats a string as a quote.
     /// </summary>
@@ -62,19 +64,19 @@ public static class Format
                 var str = text.Substring(startIndex, newLineIndex - startIndex);
                 result.Append($"> {str}\n");
             }
+
             startIndex = newLineIndex + 1;
-        }
-        while (newLineIndex != -1 && startIndex != text.Length);
+        } while (newLineIndex != -1 && startIndex != text.Length);
 
         return result.ToString();
     }
-    
+
     /// <summary> Returns a markdown-formatted string with underline formatting. </summary>
     public static string Underline(string text) => $"(ins){text}(ins)";
-    
+
     /// <summary> Returns a string with spoiler formatting. </summary>
     public static string Spoiler(string text) => $"(spl){text}(spl)";
-    
+
     /// <summary> Returns a markdown-formatted string with code block formatting. </summary>
     public static string Code(string text, string language = null)
     {
@@ -83,7 +85,21 @@ public static class Format
         else
             return $"`{text}`";
     }
-    
+
+    /// <summary>
+    ///     Formats a string as a block quote.
+    /// </summary>
+    /// <param name="text">The text to format.</param>
+    /// <returns>Gets the formatted block quote text.</returns>
+    public static string BlockQuote(string text)
+    {
+        // do not modify null or whitespace
+        if (string.IsNullOrWhiteSpace(text))
+            return text;
+
+        return $">>> {text}";
+    }
+
     /// <summary>
     /// Remove KaiHeiLa supported markdown from text.
     /// </summary>
@@ -95,7 +111,7 @@ public static class Format
         var newText = Regex.Replace(text, @"(\*|\(ins\)|\(spl\)|`|~|>|\\)", "");
         return newText;
     }
-    
+
     /// <summary>
     ///     Formats a user's username + identify number while maintaining bidirectional unicode
     /// </summary>
