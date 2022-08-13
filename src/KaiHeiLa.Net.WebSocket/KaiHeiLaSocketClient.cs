@@ -149,6 +149,13 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
             await _gatewayLogger.DebugAsync("Connecting ApiClient").ConfigureAwait(false);
             await ApiClient.ConnectAsync().ConfigureAwait(false);
         }
+        catch (HttpException ex)
+        {
+            if (ex.HttpCode == HttpStatusCode.Unauthorized)
+                _connection.CriticalError(ex);
+            else
+                _connection.Error(ex);
+        }
         catch
         {
         }

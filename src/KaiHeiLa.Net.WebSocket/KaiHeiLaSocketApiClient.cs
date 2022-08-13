@@ -1,4 +1,7 @@
 using System.Text;
+#if DEBUG_PACKETS
+using System.Text.Encodings.Web;
+#endif
 using System.Text.Json;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using KaiHeiLa.API.Gateway;
@@ -143,15 +146,15 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
                 GetBotGatewayResponse botGatewayResponse = await GetBotGatewayAsync().ConfigureAwait(false);
                 _gatewayUrl = $"{botGatewayResponse.Url}{_resumeQueryParams}";
             }
-            
+
 #if DEBUG_PACKETS
             Console.WriteLine("Connecting to gateway: " + _gatewayUrl);
 #endif
-            
+
             await WebSocketClient!.ConnectAsync(_gatewayUrl).ConfigureAwait(false);
             ConnectionState = ConnectionState.Connected;
         }
-        catch
+        catch (Exception e)
         {
             if (!_isExplicitUrl)
                 _gatewayUrl = null;
