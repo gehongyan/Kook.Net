@@ -17,6 +17,14 @@ public static class TokenUtils
     ///     documentation, and pre-existing tokens.
     /// </remarks>
     internal const int MinBotTokenLength = 33;
+    /// <summary>
+    ///     The standard length of a Bot token.
+    /// </summary>
+    /// <remarks>
+    ///     This value was determined by comparing against the examples in the KaiHeiLa
+    ///     documentation, and pre-existing tokens.
+    /// </remarks>
+    internal const int StandardBotTokenLength = 35;
 
     internal const char Base64Padding = '=';
 
@@ -161,11 +169,12 @@ public static class TokenUtils
                 // no validation is performed on Bearer tokens
                 break;
             case TokenType.Bot:
-                // bot tokens are assumed to be at least 45 characters in length
+                // bot tokens are assumed to be at least 33 characters in length
                 // this value was determined by referencing examples in the KaiHeiLa documentation, and by comparing with
                 // pre-existing tokens
-                if (token.Length < MinBotTokenLength)
+                if (token.Length < MinBotTokenLength || token.TrimEnd('=').Length > StandardBotTokenLength)
                     throw new ArgumentException(message: $"A Bot token must be at least {MinBotTokenLength} characters in length. " +
+                                                         $"After the ending equal characters are trimmed, any Bot token should not be longer than {StandardBotTokenLength}. " +
                                                          "Ensure that the Bot Token provided is not an OAuth client secret.", paramName: nameof(token));
                 // check the validity of the bot token by decoding the ulong userid from the jwt
                 if (!CheckBotTokenValidity(token))
