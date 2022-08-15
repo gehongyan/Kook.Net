@@ -735,25 +735,6 @@ public class ParagraphStructBuilder : IElementBuilder
     /// <summary>
     ///     Adds a field to the paragraph.
     /// </summary>
-    /// <param name="action">
-    ///     The action to create a builder of a <see cref="PlainTextElement"/>, which will be added to the paragraph.
-    /// </param>
-    /// <exception cref="ArgumentException">
-    ///     The addition operation will result in a field count greater than <see cref="MaxFieldCount"/>.
-    /// </exception>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
-    public ParagraphStructBuilder AddField(Action<PlainTextElementBuilder> action)
-    {
-        PlainTextElementBuilder field = new();
-        action(field);
-        AddField(field);
-        return this;
-    }
-    /// <summary>
-    ///     Adds a field to the paragraph.
-    /// </summary>
     /// <param name="field">
     ///     A <see cref="KMarkdownElementBuilder"/> that represents the field to add.
     /// </param>
