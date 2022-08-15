@@ -14,7 +14,7 @@ public struct ChannelPermissions
     /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for category channels.</summary>
     public static readonly ChannelPermissions Category = new ChannelPermissions(0b1011_1101_0111_1111_1100_0010_1000);
     /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for direct message channels.</summary>
-    public static readonly ChannelPermissions DM = new(0b0000_0000_0100_0101_1000_0000_0000);
+    public static readonly ChannelPermissions DM = new ChannelPermissions(0b0000_0000_0100_0101_1000_0000_0000);
 
     /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for a given channel type.</summary>
     /// <exception cref="ArgumentException">Unknown channel type.</exception>
