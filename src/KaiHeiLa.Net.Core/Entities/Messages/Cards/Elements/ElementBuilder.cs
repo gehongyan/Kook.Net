@@ -444,7 +444,7 @@ public class ButtonElementBuilder : IElementBuilder
     /// <returns>
     ///     An <see cref="IElementBuilder"/> that represents the text of the button.
     /// </returns>
-    /// <exception cref="InvalidOperationException" accessor="set">
+    /// <exception cref="ArgumentException" accessor="set">
     ///     The <paramref name="value"/> is neither a <see cref="PlainTextElementBuilder"/> nor a <see cref="KMarkdownElementBuilder"/>.
     /// </exception>
     /// <remarks>
@@ -462,8 +462,9 @@ public class ButtonElementBuilder : IElementBuilder
             {
                 PlainTextElementBuilder plainText => plainText.Content,
                 KMarkdownElementBuilder kMarkdown => kMarkdown.Content,
-                _ => throw new InvalidOperationException(
-                    $"The text of a button must be a {nameof(PlainTextElementBuilder)} or a {nameof(KMarkdownElementBuilder)}.")
+                _ => throw new ArgumentException(
+                    $"The text of a button must be a {nameof(PlainTextElementBuilder)} or a {nameof(KMarkdownElementBuilder)}.",
+                    nameof(value))
             };
             if (string.IsNullOrEmpty(text))
                 throw new ArgumentException("The content cannot be null or empty.", nameof(value));
@@ -530,22 +531,6 @@ public class ButtonElementBuilder : IElementBuilder
     /// <summary>
     ///     Sets the text of a <see cref="ButtonElement"/>.
     /// </summary>
-    /// <param name="action">
-    ///     The action to create a builder of a <see cref="PlainTextElement"/>, which will be set as the text of the button.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
-    public ButtonElementBuilder WithText(Action<PlainTextElementBuilder> action)
-    {
-        PlainTextElementBuilder text = new();
-        action(text);
-        Text = text;
-        return this;
-    }
-    /// <summary>
-    ///     Sets the text of a <see cref="ButtonElement"/>.
-    /// </summary>
     /// <param name="text">
     ///     The builder of a <see cref="KMarkdownElement"/>, which will be set as the text of the button.
     /// </param>
@@ -561,14 +546,17 @@ public class ButtonElementBuilder : IElementBuilder
     ///     Sets the text of a <see cref="ButtonElement"/>.
     /// </summary>
     /// <param name="action">
-    ///     The action to create a builder of a <see cref="KMarkdownElement"/>, which will be set as the text of the button.
+    ///     The action to create a builder of an <see cref="IElementBuilder"/>,
+    ///     which will be set as the text of the button.
+    ///     The action must return a <see cref="PlainTextElementBuilder"/> or a <see cref="KMarkdownElementBuilder"/>.
     /// </param>
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public ButtonElementBuilder WithText(Action<KMarkdownElementBuilder> action)
+    public ButtonElementBuilder WithText<T>(Action<T> action)
+        where T : IElementBuilder, new()
     {
-        KMarkdownElementBuilder text = new();
+        T text = new();
         action(text);
         Text = text;
         return this;
@@ -606,7 +594,7 @@ public class ButtonElementBuilder : IElementBuilder
     public ButtonElement Build()
     {
         if (Click == ButtonClickEventType.Link && !UrlValidation.Validate(Value))
-            throw new InvalidOperationException("The value of a button with a link event type cannot be null or empty.");
+            throw new ArgumentException("The value of a button with a link event type cannot be null or empty.", nameof(Value));
         return new ButtonElement(Theme, Value, Click, Text?.Build());
     }
 
@@ -684,7 +672,7 @@ public class ParagraphStructBuilder : IElementBuilder
     /// <exception cref="ArgumentException" accessor="set">
     ///     The <paramref name="value"/> contains more than <see cref="MaxFieldCount"/> elements.
     /// </exception>
-    /// <exception cref="InvalidOperationException" accessor="set">
+    /// <exception cref="ArgumentException" accessor="set">
     ///     The <paramref name="value"/> contains an element that is neither a <see cref="PlainTextElementBuilder"/> nor a <see cref="KMarkdownElementBuilder"/>.
     /// </exception>
     /// <returns>
@@ -701,8 +689,10 @@ public class ParagraphStructBuilder : IElementBuilder
             if (value.Count > MaxFieldCount) throw new ArgumentException(
                     message: $"Field count must be less than or equal to {MaxFieldCount}.",
                     paramName: nameof(Fields));
-            if (value.Any(field => field is not PlainTextElementBuilder && field is not KMarkdownElementBuilder)) throw new InvalidOperationException(
-                    message: "The elements of fields in a paragraph must be PlainTextElementBuilder or KMarkdownElementBuilder.");
+            if (value.Any(field => field is not PlainTextElementBuilder && field is not KMarkdownElementBuilder)) 
+                throw new ArgumentException(
+                    message: "The elements of fields in a paragraph must be PlainTextElementBuilder or KMarkdownElementBuilder.",
+                    paramName: nameof(Fields));
                 
             _fields = value;
         }
@@ -793,11 +783,25 @@ public class ParagraphStructBuilder : IElementBuilder
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public ParagraphStructBuilder AddField(Action<KMarkdownElementBuilder> action)
+    public ParagraphStructBuilder AddField<T>(Action<T> action)
+        where T : IElementBuilder, new()
     {
-        KMarkdownElementBuilder field = new();
+        T field = new();
         action(field);
-        AddField(field);
+        switch (field)
+        {
+            case PlainTextElementBuilder plainText:
+                AddField(plainText);
+                break;
+            case KMarkdownElementBuilder kMarkdown:
+                AddField(kMarkdown);
+                break;
+            default:
+                throw new ArgumentException(
+                    message: "The elements of fields in a paragraph must be PlainTextElementBuilder or KMarkdownElementBuilder.",
+                    paramName: nameof(field));
+                
+        }
         return this;
     }
 

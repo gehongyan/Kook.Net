@@ -320,7 +320,7 @@ public class SectionModuleBuilder : IModuleBuilder
         return new SectionModule(Mode, Text?.Build(), Accessory?.Build());
     }
 
-    /// <inheritdoc />   /// <inheritdoc />
+    /// <inheritdoc /> 
     IModule IModuleBuilder.Build() => Build();
 }
 
