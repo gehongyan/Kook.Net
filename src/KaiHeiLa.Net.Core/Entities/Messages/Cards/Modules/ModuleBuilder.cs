@@ -149,7 +149,7 @@ public class SectionModuleBuilder : IModuleBuilder
         {
             if (value.Type != ElementType.Image && value.Type != ElementType.Button)
                 throw new ArgumentException(
-                    message: "Section text must be a Image element or a Button element..",
+                    message: $"Section text must be an {nameof(ImageElementBuilder)} or a {nameof(ButtonElement)}.",
                     paramName: nameof(value));
             _accessory = value;
         }
@@ -223,6 +223,24 @@ public class SectionModuleBuilder : IModuleBuilder
     }
 
     /// <summary>
+    ///     Sets the text of the section.
+    /// </summary>
+    /// <param name="action">
+    ///     The action to set the text of the section.
+    /// </param>
+    /// <returns>
+    ///     The current builder.
+    /// </returns>
+    public SectionModuleBuilder WithText<T>(Action<T> action)
+        where T : ImageElementBuilder, new()
+    {
+        T text = new();
+        action(text);
+        Text = text;
+        return this;
+    }
+
+    /// <summary>
     ///     Sets the accessory of the section.
     /// </summary>
     /// <param name="accessory">
@@ -249,6 +267,24 @@ public class SectionModuleBuilder : IModuleBuilder
     public SectionModuleBuilder WithAccessory(ButtonElementBuilder accessory)
     {
         Accessory = accessory;
+        return this;
+    }
+
+    /// <summary>
+    ///     Sets the accessory of the section.
+    /// </summary>
+    /// <param name="action">
+    ///     The action to set the accessory of the section.
+    /// </param>
+    /// <returns>
+    ///     The current builder.
+    /// </returns>
+    public SectionModuleBuilder WithAccessory<T>(Action<T> action)
+        where T : ImageElementBuilder, new()
+    {
+        T text = new();
+        action(text);
+        Text = text;
         return this;
     }
 
@@ -505,7 +541,6 @@ public class ActionGroupModuleBuilder : IModuleBuilder
         Elements = new List<ButtonElementBuilder>();
     }
 
-
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Container;
 
@@ -661,26 +696,6 @@ public class ContextModuleBuilder : IModuleBuilder
     }
 
     /// <summary>
-    ///     Adds a PlainText element to the context module.
-    /// </summary>
-    /// <param name="action">
-    ///     The action to add a PlainText element to the context module.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
-    /// <exception cref="ArgumentException">
-    ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
-    /// </exception>
-    public ContextModuleBuilder AddElement(Action<PlainTextElementBuilder> action)
-    {
-        PlainTextElementBuilder field = new();
-        action(field);
-        AddElement(field);
-        return this;
-    }
-
-    /// <summary>
     ///     Adds a KMarkdown element to the context module.
     /// </summary>
     /// <param name="field">
@@ -699,26 +714,6 @@ public class ContextModuleBuilder : IModuleBuilder
                 message: $"Element count must be less than or equal to {MaxElementCount}.",
                 paramName: nameof(field));
         Elements.Add(field);
-        return this;
-    }
-
-    /// <summary>
-    ///     Adds a KMarkdown element to the context module.
-    /// </summary>
-    /// <param name="action">
-    ///     The action to add a KMarkdown element to the context module.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
-    /// <exception cref="ArgumentException">
-    ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
-    /// </exception>
-    public ContextModuleBuilder AddElement(Action<KMarkdownElementBuilder> action)
-    {
-        KMarkdownElementBuilder field = new();
-        action(field);
-        AddElement(field);
         return this;
     }
 
@@ -745,10 +740,10 @@ public class ContextModuleBuilder : IModuleBuilder
     }
 
     /// <summary>
-    ///     Adds a image element to the context module.
+    ///     Adds an element to the context module.
     /// </summary>
     /// <param name="action">
-    ///     The action to add a image element to the context module.
+    ///     The action to add an element to the context module.
     /// </param>
     /// <returns>
     ///     The current builder.
@@ -756,11 +751,27 @@ public class ContextModuleBuilder : IModuleBuilder
     /// <exception cref="ArgumentException">
     ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
     /// </exception>
-    public ContextModuleBuilder AddElement(Action<ImageElementBuilder> action)
+    public ContextModuleBuilder AddElement<T>(Action<T> action)
+        where T : IElementBuilder, new()
     {
-        ImageElementBuilder field = new();
+        T field = new();
         action(field);
-        AddElement(field);
+        switch (field)
+        {
+            case PlainTextElementBuilder plainText:
+                AddElement(plainText);
+                break;
+            case KMarkdownElementBuilder kMarkdown:
+                AddElement(kMarkdown);
+                break;
+            case ImageElementBuilder image:
+                AddElement(image);
+                break;
+            default:
+                throw new ArgumentException(
+                    message: "Elements of contexts must be of type PlainText, KMarkdown or Image.",
+                    paramName: nameof(action));
+        }
         return this;
     }
 

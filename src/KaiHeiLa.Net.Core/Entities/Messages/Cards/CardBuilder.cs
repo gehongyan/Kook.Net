@@ -116,6 +116,24 @@ public class CardBuilder : ICardBuilder
     }
 
     /// <summary>
+    ///     Adds a module to the card.
+    /// </summary>
+    /// <param name="action">
+    ///     The action to adds a module to the card.
+    /// </param>
+    /// <returns>
+    ///     The current builder.
+    /// </returns>
+    public CardBuilder AddModule<T>(Action<T> action)
+        where T : IModuleBuilder, new()
+    {
+        T module = new();
+        action(module);
+        AddModule(module);
+        return this;
+    }
+
+    /// <summary>
     ///     Builds the <see cref="CardBuilder"/> into a <see cref="Card"/>.
     /// </summary>
     /// <returns>

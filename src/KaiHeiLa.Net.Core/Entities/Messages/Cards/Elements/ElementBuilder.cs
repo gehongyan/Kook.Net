@@ -33,6 +33,9 @@ public class PlainTextElementBuilder : IElementBuilder
     ///     The content of the <see cref="PlainTextElement"/>.
     /// </returns>
     /// <exception cref="ArgumentException" accessor="set">
+    ///     The <paramref name="value"/> cannot be null.
+    /// </exception>
+    /// <exception cref="ArgumentException" accessor="set">
     ///     The length of <paramref name="value"/> is greater than <see cref="MaxPlainTextLength"/>.
     /// </exception>
     public string Content
@@ -40,7 +43,9 @@ public class PlainTextElementBuilder : IElementBuilder
         get => _content;
         set
         {
-            if (value?.Length > MaxPlainTextLength)
+            if (value is null)
+                throw new ArgumentException("The content cannot be null.", nameof(value));
+            if (value.Length > MaxPlainTextLength)
                 throw new ArgumentException(
                     message: $"Plain text length must be less than or equal to {MaxPlainTextLength}.",
                     paramName: nameof(Content));
@@ -65,6 +70,9 @@ public class PlainTextElementBuilder : IElementBuilder
     /// <returns>
     ///     The current builder.
     /// </returns>
+    /// <exception cref="ArgumentException" accessor="set">
+    ///     The <paramref name="content"/> cannot be null.
+    /// </exception>
     /// <exception cref="ArgumentException" accessor="set">
     ///     The length of <paramref name="content"/> is greater than <see cref="MaxPlainTextLength"/>.
     /// </exception>
@@ -111,6 +119,9 @@ public class PlainTextElementBuilder : IElementBuilder
     ///     A <see cref="PlainTextElementBuilder"/> object that is initialized with the specified content.
     /// </returns>
     /// <exception cref="ArgumentException" accessor="set">
+    ///     The <paramref name="content"/> cannot be null.
+    /// </exception>
+    /// <exception cref="ArgumentException" accessor="set">
     ///     The length of <paramref name="content"/> is greater than <see cref="MaxPlainTextLength"/>.
     /// </exception>
     public static implicit operator PlainTextElementBuilder(string content) => 
@@ -143,6 +154,9 @@ public class KMarkdownElementBuilder : IElementBuilder
     ///     Gets or sets the content of a <see cref="KMarkdownElementBuilder"/>.
     /// </summary>
     /// <exception cref="ArgumentException" accessor="set">
+    ///     The <paramref name="value"/> cannot be null.
+    /// </exception>
+    /// <exception cref="ArgumentException" accessor="set">
     ///     The length of <paramref name="value"/> is greater than <see cref="MaxKMarkdownLength"/>.
     /// </exception>
     /// <returns>
@@ -153,7 +167,9 @@ public class KMarkdownElementBuilder : IElementBuilder
         get => _content;
         set
         {
-            if (value?.Length > MaxKMarkdownLength)
+            if (value is null)
+                throw new ArgumentException("The content cannot be null.", nameof(value));
+            if (value.Length > MaxKMarkdownLength)
                 throw new ArgumentException(
                     message: $"KMarkdown length must be less than or equal to {MaxKMarkdownLength}.",
                     paramName: nameof(Content));
@@ -168,6 +184,9 @@ public class KMarkdownElementBuilder : IElementBuilder
     /// <returns>
     ///     The current builder.
     /// </returns>
+    /// <exception cref="ArgumentException" accessor="set">
+    ///     The <paramref name="content"/> cannot be null.
+    /// </exception>
     /// <exception cref="ArgumentException" accessor="set">
     ///     The length of <paramref name="content"/> is greater than <see cref="MaxKMarkdownLength"/>.
     /// </exception>
@@ -196,6 +215,9 @@ public class KMarkdownElementBuilder : IElementBuilder
     /// <returns>
     ///     A <see cref="KMarkdownElementBuilder"/> object that is initialized with the specified content.
     /// </returns>
+    /// <exception cref="ArgumentException" accessor="set">
+    ///     The <paramref name="content"/> cannot be null.
+    /// </exception>
     /// <exception cref="ArgumentException" accessor="set">
     ///     The length of <paramref name="content"/> is greater than <see cref="MaxKMarkdownLength"/>.
     /// </exception>
@@ -376,6 +398,11 @@ public class ButtonElementBuilder : IElementBuilder
     private IElementBuilder _text;
 
     /// <summary>
+    ///     Gets the maximum button text length allowed by KaiHeiLa.
+    /// </summary>
+    public const int MaxButtonTextLength = 40;
+    
+    /// <summary>
     ///     Gets the type of the element that this builder builds.
     /// </summary>
     /// <returns>
@@ -423,13 +450,27 @@ public class ButtonElementBuilder : IElementBuilder
     /// <remarks>
     ///     This property only takes a <see cref="PlainTextElementBuilder"/> or a <see cref="KMarkdownElementBuilder"/>.
     /// </remarks>
+    /// <exception cref="ArgumentException" accessor="set">
+    ///     The length of <paramref name="value"/> is greater than <see cref="MaxButtonTextLength"/>.
+    /// </exception>
     public IElementBuilder Text
     {
         get => _text;
         set
         {
-            if (value is not PlainTextElementBuilder && value is not KMarkdownElementBuilder)
-                throw new InvalidOperationException("The text of a button must be a PlainTextElementBuilder or a KMarkdownElementBuilder.");
+            string text = value switch
+            {
+                PlainTextElementBuilder plainText => plainText.Content,
+                KMarkdownElementBuilder kMarkdown => kMarkdown.Content,
+                _ => throw new InvalidOperationException(
+                    $"The text of a button must be a {nameof(PlainTextElementBuilder)} or a {nameof(KMarkdownElementBuilder)}.")
+            };
+            if (string.IsNullOrEmpty(text))
+                throw new ArgumentException("The content cannot be null or empty.", nameof(value));
+            if (text.Length > MaxButtonTextLength)
+                throw new ArgumentException(
+                    message: $"The length of button text must be less than or equal to {MaxButtonTextLength}.",
+                    paramName: nameof(value));
             _text = value;
         }
     }
@@ -562,9 +603,13 @@ public class ButtonElementBuilder : IElementBuilder
     /// <returns>
     ///     A <see cref="ButtonElement"/> represents the built element object.
     /// </returns>
-    public ButtonElement Build() 
-        => new ButtonElement(Theme, Value, Click, Text?.Build());
-    
+    public ButtonElement Build()
+    {
+        if (Click == ButtonClickEventType.Link && !UrlValidation.Validate(Value))
+            throw new InvalidOperationException("The value of a button with a link event type cannot be null or empty.");
+        return new ButtonElement(Theme, Value, Click, Text?.Build());
+    }
+
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
 }
