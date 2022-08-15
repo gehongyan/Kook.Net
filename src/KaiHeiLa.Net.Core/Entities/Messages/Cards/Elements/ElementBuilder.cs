@@ -553,11 +553,11 @@ public class ButtonElementBuilder : IElementBuilder
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public ButtonElementBuilder WithText<T>(Action<T> action)
+    public ButtonElementBuilder WithText<T>(Action<T> action = null)
         where T : IElementBuilder, new()
     {
         T text = new();
-        action(text);
+        action?.Invoke(text);
         Text = text;
         return this;
     }
@@ -764,11 +764,11 @@ public class ParagraphStructBuilder : IElementBuilder
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public ParagraphStructBuilder AddField<T>(Action<T> action)
+    public ParagraphStructBuilder AddField<T>(Action<T> action = null)
         where T : IElementBuilder, new()
     {
         T field = new();
-        action(field);
+        action?.Invoke(field);
         switch (field)
         {
             case PlainTextElementBuilder plainText:

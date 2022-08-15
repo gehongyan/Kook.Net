@@ -124,11 +124,11 @@ public class CardBuilder : ICardBuilder
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public CardBuilder AddModule<T>(Action<T> action)
+    public CardBuilder AddModule<T>(Action<T> action = null)
         where T : IModuleBuilder, new()
     {
         T module = new();
-        action(module);
+        action?.Invoke(module);
         AddModule(module);
         return this;
     }

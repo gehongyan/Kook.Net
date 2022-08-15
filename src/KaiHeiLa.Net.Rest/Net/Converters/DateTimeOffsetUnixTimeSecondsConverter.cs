@@ -12,7 +12,7 @@ internal class DateTimeOffsetUnixTimeSecondsConverter : JsonConverter<DateTimeOf
 
     public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
     {
-        if (value == DateTimeOffset.MinValue || value == DateTimeOffset.FromUnixTimeSeconds(0))
+        if (value == DateTimeOffset.MinValue || value == DateTimeOffset.UnixEpoch)
             writer.WriteNullValue();
         else
             writer.WriteNumberValue(value.ToUnixTimeSeconds());

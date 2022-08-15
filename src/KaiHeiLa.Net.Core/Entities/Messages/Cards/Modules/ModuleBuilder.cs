@@ -22,7 +22,7 @@ public class HeaderModuleBuilder : IModuleBuilder
     ///     Gets or sets the text of the header.
     /// </summary>
     /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="text"/> is greater than <see cref="MaxTitleContentLength"/>.",
+    ///     The length of <paramref name="value"/> is greater than <see cref="MaxTitleContentLength"/>.",
     /// </exception>
     /// <returns>
     ///     A <see cref="PlainTextElementBuilder"/> representing the text of the header.
@@ -32,6 +32,10 @@ public class HeaderModuleBuilder : IModuleBuilder
         get => _text;
         set
         {
+            if (value?.Content is null)
+                throw new ArgumentException(
+                    message: $"Header content cannot be null.",
+                    paramName: nameof(Text));
             if (value.Content.Length > MaxTitleContentLength)
                 throw new ArgumentException(
                     message: $"Header content length must be less than or equal to {MaxTitleContentLength}.",
@@ -86,7 +90,20 @@ public class HeaderModuleBuilder : IModuleBuilder
     /// </returns>
     public HeaderModule Build() => new(Text?.Build());
 
-    /// <inheritdoc />   /// <inheritdoc />
+    /// <summary>
+    ///     Initialized a new instance of the <see cref="HeaderModuleBuilder"/> class
+    ///     with the specified <paramref name="text"/>.
+    /// </summary>
+    /// <param name="text">
+    ///     The text to be set for the header.
+    /// </param>
+    /// <returns>
+    ///     An <see cref="HeaderModuleBuilder"/> object that is initialized with the specified <paramref name="text"/>.
+    /// </returns>
+    public static implicit operator HeaderModuleBuilder(string text) 
+        => new HeaderModuleBuilder().WithText(b => b.WithContent(text));
+    
+    /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
 }
 
@@ -231,11 +248,11 @@ public class SectionModuleBuilder : IModuleBuilder
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public SectionModuleBuilder WithText<T>(Action<T> action)
-        where T : ImageElementBuilder, new()
+    public SectionModuleBuilder WithText<T>(Action<T> action = null)
+        where T : IElementBuilder, new()
     {
         T text = new();
-        action(text);
+        action?.Invoke(text);
         Text = text;
         return this;
     }
@@ -279,12 +296,12 @@ public class SectionModuleBuilder : IModuleBuilder
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public SectionModuleBuilder WithAccessory<T>(Action<T> action)
-        where T : ImageElementBuilder, new()
+    public SectionModuleBuilder WithAccessory<T>(Action<T> action = null)
+        where T : IElementBuilder, new()
     {
-        T text = new();
-        action(text);
-        Text = text;
+        T accessory = new();
+        action?.Invoke(accessory);
+        Accessory = accessory;
         return this;
     }
 
@@ -542,7 +559,7 @@ public class ActionGroupModuleBuilder : IModuleBuilder
     }
 
     /// <inheritdoc />
-    public ModuleType Type => ModuleType.Container;
+    public ModuleType Type => ModuleType.ActionGroup;
 
     /// <summary>
     ///     Gets or sets the button elements of the action group module.
@@ -642,7 +659,7 @@ public class ContextModuleBuilder : IModuleBuilder
     }
 
     /// <inheritdoc />
-    public ModuleType Type => ModuleType.Container;
+    public ModuleType Type => ModuleType.Context;
 
     /// <summary>
     ///     Gets or sets the elements of the context module.
@@ -751,11 +768,11 @@ public class ContextModuleBuilder : IModuleBuilder
     /// <exception cref="ArgumentException">
     ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
     /// </exception>
-    public ContextModuleBuilder AddElement<T>(Action<T> action)
+    public ContextModuleBuilder AddElement<T>(Action<T> action = null)
         where T : IElementBuilder, new()
     {
         T field = new();
-        action(field);
+        action?.Invoke(field);
         switch (field)
         {
             case PlainTextElementBuilder plainText:
@@ -871,10 +888,13 @@ public class FileModuleBuilder : IModuleBuilder
     /// <exception cref="InvalidOperationException">
     ///     <see cref="Source"/> does not include a protocol (neither HTTP nor HTTPS)
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     <see cref="Source"/> cannot be null or empty
+    /// </exception>
     public FileModule Build()
     {
-        if (!string.IsNullOrEmpty(Source))
-            UrlValidation.Validate(Source);
+        if (!UrlValidation.Validate(Source))
+            throw new ArgumentException("The link to a file cannot be null or empty.", nameof(Source));
         return new FileModule(Source, Title);
     }
 
@@ -945,10 +965,13 @@ public class VideoModuleBuilder : IModuleBuilder
     /// <exception cref="InvalidOperationException">
     ///     <see cref="Source"/> does not include a protocol (neither HTTP nor HTTPS)
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     <see cref="Source"/> cannot be null or empty
+    /// </exception>
     public VideoModule Build()
     {
-        if (!string.IsNullOrEmpty(Source))
-            UrlValidation.Validate(Source);
+        if (!UrlValidation.Validate(Source))
+            throw new ArgumentException("The link to a file cannot be null or empty.", nameof(Source));
         return new(Source, Title);
     }
 
@@ -1045,12 +1068,18 @@ public class AudioModuleBuilder : IModuleBuilder
     /// <exception cref="InvalidOperationException">
     ///     <see cref="Cover"/> does not include a protocol (neither HTTP nor HTTPS)
     /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     <see cref="Source"/> cannot be null or empty
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     <see cref="Cover"/> cannot be null or empty
+    /// </exception>
     public AudioModule Build()
     {
-        if (!string.IsNullOrEmpty(Source))
-            UrlValidation.Validate(Source);
-        if (!string.IsNullOrEmpty(Cover))
-            UrlValidation.Validate(Cover);
+        if (!UrlValidation.Validate(Source))
+            throw new ArgumentException("The link to a file cannot be null or empty.", nameof(Source));
+        if (!UrlValidation.Validate(Cover))
+            throw new ArgumentException("The link to a file cannot be null or empty.", nameof(Cover));
         return new(Source, Title, Cover);
     }
 
@@ -1143,10 +1172,10 @@ public class CountdownModuleBuilder : IModuleBuilder
     ///     <see cref="EndTime"/> is before the current time.
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     <see cref="StartTime"/> is before the current time.
+    ///     <see cref="StartTime"/> is before the Unix epoch.
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     <see cref="EndTime"/> is before <see cref="StartTime"/>
+    ///     <see cref="EndTime"/> is equal or before <see cref="StartTime"/>
     /// </exception>
     public CountdownModule Build()
     {
@@ -1155,13 +1184,13 @@ public class CountdownModuleBuilder : IModuleBuilder
                 "Only when the countdown is displayed as second mode can the start time be set.");
         if (EndTime < DateTimeOffset.Now)
             throw new ArgumentOutOfRangeException(
-                message: $"{nameof(EndTime)} must be later than current timestamp.",
+                message: $"{nameof(EndTime)} must be equal or later than Unix epoch.",
                 paramName: nameof(EndTime));
-        if (StartTime is not null && StartTime < DateTimeOffset.Now)
+        if (StartTime is not null && StartTime < DateTimeOffset.FromUnixTimeSeconds(0))
             throw new ArgumentOutOfRangeException(
-                message: $"{nameof(StartTime)} must be later than current timestamp.",
+                message: $"{nameof(StartTime)} must be equal or later than current timestamp.",
                 paramName: nameof(StartTime));
-        if (StartTime is not null && StartTime >= EndTime)
+        if (StartTime >= EndTime)
             throw new ArgumentOutOfRangeException(
                 message: $"{nameof(StartTime)} must be later than {nameof(EndTime)}.",
                 paramName: nameof(StartTime));
@@ -1212,7 +1241,6 @@ public class InviteModuleBuilder : IModuleBuilder
     /// </returns>
     public InviteModule Build() => new(Code);
 
-    
     /// <summary>
     ///     Initialized a new instance of the <see cref="InviteModuleBuilder"/> class
     ///     with the specified <paramref name="code"/>.
