@@ -39,7 +39,8 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
     private readonly bool _isExplicitUrl;
     private CancellationTokenSource _connectCancelToken;
     private string _gatewayUrl;
-    private string _resumeQueryParams;
+    private Guid? _sessionId;
+    private int _lastSeq;
     public ConnectionState ConnectionState { get; private set; }
     internal IWebSocketClient WebSocketClient { get; }
     
@@ -64,7 +65,6 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
             await DisconnectAsync().ConfigureAwait(false);
             await _disconnectedEvent.InvokeAsync(ex).ConfigureAwait(false);
         };
-        _resumeQueryParams = null;
     }
 
     private async Task OnBinaryMessage(byte[] data, int index, int count)
@@ -114,11 +114,13 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         base.Dispose(disposing);
     }
 
-    public async Task ConnectAsync()
+    public async Task ConnectAsync(Guid? sessionId, int lastSeq)
     {
         await _stateLock.WaitAsync().ConfigureAwait(false);
-       try
+        try
         {
+            _sessionId = sessionId;
+            _lastSeq = lastSeq;
             await ConnectInternalAsync().ConfigureAwait(false);
         }
         finally { _stateLock.Release(); }
@@ -144,7 +146,7 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
             if (!_isExplicitUrl)
             {
                 GetBotGatewayResponse botGatewayResponse = await GetBotGatewayAsync().ConfigureAwait(false);
-                _gatewayUrl = $"{botGatewayResponse.Url}{_resumeQueryParams}";
+                _gatewayUrl = $"{botGatewayResponse.Url}{(_sessionId is null ? string.Empty : $"&resume=1&sn={_lastSeq}&session_id={_sessionId}")}";
             }
 
 #if DEBUG_PACKETS

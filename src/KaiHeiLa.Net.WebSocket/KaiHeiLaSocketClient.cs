@@ -26,8 +26,9 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     private readonly Logger _gatewayLogger;
     private readonly SemaphoreSlim _stateLock;
 
-    private Guid _sessionId;
-    private int _lastSeq = 0;
+    private Guid? _sessionId;
+    private int _lastSeq;
+    private int _retryCount = 0;
     private Task _heartbeatTask, _guildDownloadTask;
     private int _unavailableGuildCount;
     private long _lastGuildAvailableTime, _lastMessageTime;
@@ -146,8 +147,18 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
     {
         try
         {
+            if (_retryCount >= 2)
+            {
+                _sessionId = null;
+                await _gatewayLogger.DebugAsync("Resuming session failed").ConfigureAwait(false);
+            }
             await _gatewayLogger.DebugAsync("Connecting ApiClient").ConfigureAwait(false);
-            await ApiClient.ConnectAsync().ConfigureAwait(false);
+            if (_sessionId != null)
+            {
+                _retryCount++;
+                await _gatewayLogger.DebugAsync("Resuming session").ConfigureAwait(false);
+            }
+            await ApiClient.ConnectAsync(_sessionId, _lastSeq).ConfigureAwait(false);
         }
         catch (HttpException ex)
         {
@@ -1337,7 +1348,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                     {
                         GatewayHelloPayload gatewayHelloPayload =
                             ((JsonElement) payload).Deserialize<GatewayHelloPayload>(_serializerOptions);
-                        _sessionId = gatewayHelloPayload?.SessionId ?? Guid.Empty;
+                        _sessionId = gatewayHelloPayload?.SessionId;
                         _heartbeatTask = RunHeartbeatAsync(_connection.CancelToken);
                     }
                     catch (Exception ex)
@@ -1454,7 +1465,14 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
                 case GatewaySocketFrameType.Reconnect:
                 {
                     await _gatewayLogger.DebugAsync("Received Reconnect").ConfigureAwait(false);
-                    _connection.Error(new GatewayReconnectException("Server requested a reconnect"));
+                    GatewayReconnectPayload gatewayReconnectPayload =
+                        ((JsonElement) payload).Deserialize<GatewayReconnectPayload>(_serializerOptions);
+                    if (gatewayReconnectPayload?.Code is KaiHeiLaErrorCode.MissingResumeArgument 
+                        or KaiHeiLaErrorCode.SessionExpired 
+                        or KaiHeiLaErrorCode.InvalidSequenceNumber)
+                        _sessionId = null;
+                    _connection.Error(new GatewayReconnectException($"Server requested a reconnect, resuming session failed" +
+                        $"{(string.IsNullOrWhiteSpace(gatewayReconnectPayload?.Message) ? string.Empty : $": {gatewayReconnectPayload.Message}")}"));
                 }
                     break;
 
