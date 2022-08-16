@@ -23,7 +23,8 @@ public class KaiHeiLaRestClient : BaseKaiHeiLaClient, IKaiHeiLaClient
     internal KaiHeiLaRestClient(KaiHeiLaRestConfig config, API.KaiHeiLaRestApiClient api) : base(config, api) { }
     
     private static API.KaiHeiLaRestApiClient CreateApiClient(KaiHeiLaRestConfig config)
-        => new API.KaiHeiLaRestApiClient(config.RestClientProvider, KaiHeiLaRestConfig.UserAgent, serializerOptions: SerializerOptions);
+        => new API.KaiHeiLaRestApiClient(config.RestClientProvider, KaiHeiLaRestConfig.UserAgent, acceptLanguage: config.AcceptLanguage,
+            defaultRetryMode: config.DefaultRetryMode, serializerOptions: SerializerOptions);
 
     internal override void Dispose(bool disposing)
     {

@@ -20,7 +20,7 @@ class Program
                                ?? throw new ArgumentNullException(nameof(_token)));
         _channelId = ulong.Parse(Environment.GetEnvironmentVariable("KaiHeiLaDebugChannel", EnvironmentVariableTarget.User) 
                                  ?? throw new ArgumentNullException(nameof(_token)));
-        _client = new(new KaiHeiLaSocketConfig() {AlwaysDownloadUsers = true, MessageCacheSize = 100, LogLevel = LogSeverity.Verbose});
+        _client = new(new KaiHeiLaSocketConfig() {AlwaysDownloadUsers = true, MessageCacheSize = 100, LogLevel = LogSeverity.Verbose, AcceptLanguage = "en-US"});
         
         _client.Log += ClientOnLog;
         _client.MessageReceived += ClientOnMessageReceived;
@@ -62,11 +62,12 @@ class Program
 
     private async Task ClientOnReady()
     {
-        await Task.Delay(TimeSpan.FromSeconds(5));
-        IUser result = await _client.GetUserAsync(2810246202);
-        IUser userAsync = await _client.GetUserAsync(1896684851);
+        await _client.Rest.AddReactionAsync(Guid.Parse("9062d5a9-9290-434c-b295-5b5835121cb1"), Emote.Parse("(emj)loading(emj)[1990044438283387/WiGtuv3F1d05k05k]", TagMode.KMarkdown));
+        // await Task.Delay(TimeSpan.FromSeconds(5));
+        // IUser result = await _client.GetUserAsync(2810246202);
+        // IUser userAsync = await _client.GetUserAsync(1896684851);
     }
-
+    
     private async Task ClientOnLog(LogMessage arg)
     {
         await Task.Delay(0);

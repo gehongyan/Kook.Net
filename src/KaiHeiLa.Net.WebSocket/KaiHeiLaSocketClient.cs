@@ -123,7 +123,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
 
     private static KaiHeiLaSocketApiClient CreateApiClient(KaiHeiLaSocketConfig config)
         => new KaiHeiLaSocketApiClient(config.RestClientProvider, config.WebSocketProvider, KaiHeiLaRestConfig.UserAgent, 
-            config.GatewayHost, defaultRatelimitCallback: config.DefaultRatelimitCallback);
+            config.AcceptLanguage, config.GatewayHost, defaultRatelimitCallback: config.DefaultRatelimitCallback);
 
     internal override void Dispose(bool disposing)
     {

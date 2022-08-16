@@ -38,6 +38,13 @@ public class KaiHeiLaConfig
     /// </returns>
     public static string UserAgent { get; } = $"KaiHeiLaBot (https://github.com/gehongyan/KaiHeiLa.Net, v{Version})";
     /// <summary>
+    ///     Gets the accept language that KaiHeiLa.Net uses in its clients.
+    /// </summary>
+    /// <returns>
+    ///     The accept language used in each KaiHeiLa.Net request.
+    /// </returns>
+    public string AcceptLanguage { get; set; } = "zh-CN";
+    /// <summary>
     ///     Returns the base KaiHeiLa API URL.
     /// </summary>
     /// <returns>

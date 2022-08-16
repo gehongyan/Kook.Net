@@ -52,7 +52,6 @@ namespace TextCommandFramework
         private Task LogAsync(LogMessage log)
         {
             Console.WriteLine(log.ToString());
-
             return Task.CompletedTask;
         }
 
@@ -62,7 +61,8 @@ namespace TextCommandFramework
                 .AddSingleton(_ => new KaiHeiLaSocketClient(new KaiHeiLaSocketConfig()
                 {
                     AlwaysDownloadUsers = true,
-                    LogLevel = LogSeverity.Debug
+                    LogLevel = LogSeverity.Debug,
+                    AcceptLanguage = "en-US"
                 }))
                 .AddSingleton<CommandService>()
                 .AddSingleton<CommandHandlingService>()

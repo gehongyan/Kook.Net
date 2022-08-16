@@ -43,10 +43,10 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
     public ConnectionState ConnectionState { get; private set; }
     internal IWebSocketClient WebSocketClient { get; }
     
-    public KaiHeiLaSocketApiClient(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider, string userAgent,
+    public KaiHeiLaSocketApiClient(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider, string userAgent, string acceptLanguage,
             string url = null, RetryMode defaultRetryMode = RetryMode.AlwaysRetry, JsonSerializerOptions serializerOptions = null,
             Func<IRateLimitInfo, Task> defaultRatelimitCallback = null)
-        : base(restClientProvider, userAgent, defaultRetryMode, serializerOptions, defaultRatelimitCallback)
+        : base(restClientProvider, userAgent, acceptLanguage, defaultRetryMode, serializerOptions, defaultRatelimitCallback)
     {
         _gatewayUrl = url;
         if (url != null)

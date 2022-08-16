@@ -47,8 +47,8 @@ internal class KaiHeiLaRestApiClient : IDisposable
     internal ulong? CurrentUserId { get; set; }
     internal Func<IRateLimitInfo, Task> DefaultRatelimitCallback { get; set; }
     
-    public KaiHeiLaRestApiClient(RestClientProvider restClientProvider, string userAgent, RetryMode defaultRetryMode = RetryMode.AlwaysRetry,
-        JsonSerializerOptions serializerOptions = null, Func<IRateLimitInfo, Task> defaultRatelimitCallback = null)
+    public KaiHeiLaRestApiClient(RestClientProvider restClientProvider, string userAgent, string acceptLanguage = null,
+        RetryMode defaultRetryMode = RetryMode.AlwaysRetry, JsonSerializerOptions serializerOptions = null, Func<IRateLimitInfo, Task> defaultRatelimitCallback = null)
     {
         _restClientProvider = restClientProvider;
         UserAgent = userAgent;
@@ -63,16 +63,17 @@ internal class KaiHeiLaRestApiClient : IDisposable
         
         RequestQueue = new RequestQueue();
         _stateLock = new SemaphoreSlim(1, 1);
-        SetBaseUrl(KaiHeiLaConfig.APIUrl);
+        SetBaseUrl(KaiHeiLaConfig.APIUrl, acceptLanguage);
     }
 
-    internal void SetBaseUrl(string baseUrl)
+    internal void SetBaseUrl(string baseUrl, string acceptLanguage)
     {
         RestClient?.Dispose();
         RestClient = _restClientProvider(baseUrl);
         RestClient.SetHeader("accept", "*/*");
         RestClient.SetHeader("user-agent", UserAgent);
         RestClient.SetHeader("authorization", GetPrefixedToken(AuthTokenType, AuthToken));
+        RestClient.SetHeader("accept-language", acceptLanguage);
     }
     internal static string GetPrefixedToken(TokenType tokenType, string token)
     {

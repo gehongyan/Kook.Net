@@ -3,7 +3,25 @@ using KaiHeiLa.Net.WebSockets;
 using KaiHeiLa.Rest;
 
 namespace KaiHeiLa.WebSocket;
-
+/// <summary>
+///     Represents a configuration class for <see cref="KaiHeiLaSocketClient"/>.
+/// </summary>
+/// <remarks>
+///     This configuration, based on <see cref="KaiHeiLaRestConfig"/>, helps determine several key configurations the
+///     socket client depend on. For instance, message cache and connection timeout.
+/// </remarks>
+/// <example>
+///     The following config enables the message cache and configures the client to always download user upon guild
+///     availability.
+///     <code language="cs">
+///     var config = new KaiHeiLaSocketConfig
+///     {
+///         AlwaysDownloadUsers = true,
+///         MessageCacheSize = 100
+///     };
+///     var client = new KaiHeiLaSocketClient(config);
+///     </code>
+/// </example>
 public class KaiHeiLaSocketConfig : KaiHeiLaRestConfig
 {
     /// <summary>
