@@ -81,7 +81,7 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         if (gatewaySocketFrame is not null)
         {
 #if DEBUG_PACKETS
-            Console.WriteLine($"<- [{gatewaySocketFrame.Type}] : {gatewaySocketFrame.Sequence} \n{JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
+            Console.WriteLine($"<- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence} \n{JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
 #endif
             await _receivedGatewayEvent.InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, gatewaySocketFrame.Payload).ConfigureAwait(false);
         }
@@ -93,7 +93,7 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         if (gatewaySocketFrame is not null)
         {
 #if DEBUG_PACKETS
-            Console.WriteLine($"<- [{gatewaySocketFrame.Type}] : {gatewaySocketFrame.Sequence} \n{JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
+            Console.WriteLine($"<- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence} \n{JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
 #endif
             await _receivedGatewayEvent.InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, gatewaySocketFrame.Payload).ConfigureAwait(false);
         }
@@ -156,7 +156,7 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
             await WebSocketClient!.ConnectAsync(_gatewayUrl).ConfigureAwait(false);
             ConnectionState = ConnectionState.Connected;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             if (!_isExplicitUrl)
                 _gatewayUrl = null;
@@ -200,7 +200,13 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
     public async Task SendHeartbeatAsync(int lastSeq, RequestOptions options = null)
     {
         options = RequestOptions.CreateOrClone(options);
-        await SendGatewayAsync(GatewaySocketFrameType.Ping, lastSeq, options: options).ConfigureAwait(false);
+        await SendGatewayAsync(GatewaySocketFrameType.Ping, sequence: lastSeq, options: options).ConfigureAwait(false);
+    }
+    
+    public async Task SendResumeAsync(int lastSeq, RequestOptions options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+        await SendGatewayAsync(GatewaySocketFrameType.Resume, sequence: lastSeq, options: options).ConfigureAwait(false);
     }
     
     public Task SendGatewayAsync(GatewaySocketFrameType gatewaySocketFrameType, object payload = null, int? sequence = null, RequestOptions options = null)
@@ -219,7 +225,7 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
         await _sentGatewayMessageEvent.InvokeAsync(gatewaySocketFrameType).ConfigureAwait(false);
         
 #if DEBUG_PACKETS
-        Console.WriteLine($"-> [{gatewaySocketFrameType}] : {sequence} \n{JsonSerializer.Serialize(payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
+        Console.WriteLine($"-> [{gatewaySocketFrameType}] : #{sequence} \n{JsonSerializer.Serialize(payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
 #endif
     }
 }

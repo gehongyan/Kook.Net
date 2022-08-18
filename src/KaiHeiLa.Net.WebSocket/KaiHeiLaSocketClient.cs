@@ -150,6 +150,7 @@ public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
             if (_retryCount >= 2)
             {
                 _sessionId = null;
+                _retryCount = 0;
                 await _gatewayLogger.DebugAsync("Resuming session failed").ConfigureAwait(false);
             }
             await _gatewayLogger.DebugAsync("Connecting ApiClient").ConfigureAwait(false);

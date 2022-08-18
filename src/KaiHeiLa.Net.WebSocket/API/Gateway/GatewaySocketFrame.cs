@@ -13,5 +13,6 @@ internal class GatewaySocketFrame
     public int? Sequence { get; set; }
 
     [JsonPropertyName("d")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public object Payload { get; set; }
 }
