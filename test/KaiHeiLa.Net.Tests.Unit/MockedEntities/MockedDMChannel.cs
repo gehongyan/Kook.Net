@@ -33,6 +33,11 @@ namespace KaiHeiLa
             throw new NotImplementedException();
         }
 
+        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(Uri uri, IQuote quote = null, RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null, IQuote quote = null, RequestOptions options = null)
         {
             throw new NotImplementedException();
@@ -43,12 +48,22 @@ namespace KaiHeiLa
             throw new NotImplementedException();
         }
 
+        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(Uri uri, IQuote quote = null, RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(string path, string fileName = null, IQuote quote = null, RequestOptions options = null)
         {
             throw new NotImplementedException();
         }
 
         public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(Stream stream, string fileName = null, IQuote quote = null, RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(Uri uri, IQuote quote = null, RequestOptions options = null)
         {
             throw new NotImplementedException();
         }

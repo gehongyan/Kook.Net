@@ -54,6 +54,20 @@ namespace KaiHeiLa
             return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendImageMessageAsync(stream, fileName, quote, options).ConfigureAwait(false);
         }
         /// <summary>
+        ///     Sends an image via DM.
+        /// </summary>
+        /// <param name="user">The user to send the DM to.</param>
+        /// <param name="uri">The URI of the image.</param>
+        /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+        /// <param name="options">The options to be used when sending the request.</param>
+        public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(this IUser user,
+            Uri uri, 
+            IQuote quote = null,
+            RequestOptions options = null)
+        {
+            return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendImageMessageAsync(uri, quote, options).ConfigureAwait(false);
+        }
+        /// <summary>
         ///     Sends a video via DM.
         /// </summary>
         /// <param name="user">The user to send the DM to.</param>
@@ -84,6 +98,20 @@ namespace KaiHeiLa
             RequestOptions options = null)
         {
             return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendVideoMessageAsync(stream, fileName, quote, options).ConfigureAwait(false);
+        }
+        /// <summary>
+        ///     Sends a video via DM.
+        /// </summary>
+        /// <param name="user">The user to send the DM to.</param>
+        /// <param name="uri">The URI of the video.</param>
+        /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+        /// <param name="options">The options to be used when sending the request.</param>
+        public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(this IUser user,
+            Uri uri, 
+            IQuote quote = null,
+            RequestOptions options = null)
+        {
+            return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendVideoMessageAsync(uri, quote, options).ConfigureAwait(false);
         }
         // /// <summary>
         // ///     Sends an audio via DM.
@@ -117,6 +145,20 @@ namespace KaiHeiLa
         // {
         //     return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendAudioMessageAsync(stream, fileName, quote, options).ConfigureAwait(false);
         // }
+        // /// <summary>
+        // ///     Sends an audio via DM.
+        // /// </summary>
+        // /// <param name="user">The user to send the DM to.</param>
+        // /// <param name="uri">The URI of the audio.</param>
+        // /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+        // /// <param name="options">The options to be used when sending the request.</param>
+        // public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(this IUser user,
+        //     Uri uri, 
+        //     IQuote quote = null,
+        //     RequestOptions options = null)
+        // {
+        //     return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendAudioMessageAsync(uri, quote, options).ConfigureAwait(false);
+        // }
         /// <summary>
         ///     Sends a file via DM.
         /// </summary>
@@ -148,6 +190,20 @@ namespace KaiHeiLa
             RequestOptions options = null)
         {
             return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendFileMessageAsync(stream, fileName, quote, options).ConfigureAwait(false);
+        }
+        /// <summary>
+        ///     Sends a file via DM.
+        /// </summary>
+        /// <param name="user">The user to send the DM to.</param>
+        /// <param name="uri">The URI of the file.</param>
+        /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+        /// <param name="options">The options to be used when sending the request.</param>
+        public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(this IUser user,
+            Uri uri, 
+            IQuote quote = null,
+            RequestOptions options = null)
+        {
+            return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendFileMessageAsync(uri, quote, options).ConfigureAwait(false);
         }
         /// <summary>
         ///     Sends a KMarkdown message via DM.

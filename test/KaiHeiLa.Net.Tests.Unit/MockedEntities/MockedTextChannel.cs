@@ -146,6 +146,11 @@ namespace KaiHeiLa
             throw new NotImplementedException();
         }
 
+        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(Uri uri, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null, IQuote quote = null, IUser ephemeralUser = null,
             RequestOptions options = null)
         {
@@ -158,6 +163,11 @@ namespace KaiHeiLa
             throw new NotImplementedException();
         }
 
+        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(Uri uri, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(string path, string fileName = null, IQuote quote = null, IUser ephemeralUser = null,
             RequestOptions options = null)
         {
@@ -166,6 +176,11 @@ namespace KaiHeiLa
 
         public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(Stream stream, string fileName = null, IQuote quote = null, IUser ephemeralUser = null,
             RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(Uri uri, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         {
             throw new NotImplementedException();
         }

@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using KaiHeiLa.API;
 using KaiHeiLa.API.Rest;
 using KaiHeiLa.Net.Converters;
+using KaiHeiLa.Utils;
 
 namespace KaiHeiLa.Rest;
 
@@ -139,6 +140,14 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Image, createAssetResponse.Url, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
+    /// <inheritdoc cref="IMessageChannel.SendImageMessageAsync(Uri,IQuote,IUser,RequestOptions)"/>
+    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(Uri uri, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    {
+        if (!UrlValidation.ValidateKaiHeiLaAssetUrl(uri.OriginalString))
+            throw new ArgumentException("The uri cannot be blank.", nameof(uri));
+        return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Image, uri.OriginalString, options, quote: quote,
+            ephemeralUser: ephemeralUser);
+    }
     /// <inheritdoc cref="IMessageChannel.SendVideoMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
     public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     {
@@ -151,6 +160,14 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     {
         CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options);
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Video, createAssetResponse.Url, options, quote: quote,
+            ephemeralUser: ephemeralUser);
+    }
+    /// <inheritdoc cref="IMessageChannel.SendVideoMessageAsync(Uri,IQuote,IUser,RequestOptions)"/>
+    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(Uri uri, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    {
+        if (!UrlValidation.ValidateKaiHeiLaAssetUrl(uri.OriginalString))
+            throw new ArgumentException("The uri cannot be blank.", nameof(uri));
+        return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Video, uri.OriginalString, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
     /// <inheritdoc cref="IMessageChannel.SendFileMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
@@ -167,6 +184,14 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.File, createAssetResponse.Url, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
+    /// <inheritdoc cref="IMessageChannel.SendFileMessageAsync(Uri,IQuote,IUser,RequestOptions)"/>
+    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(Uri uri, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    {
+        if (!UrlValidation.ValidateKaiHeiLaAssetUrl(uri.OriginalString))
+            throw new ArgumentException("The uri cannot be blank.", nameof(uri));
+        return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.File, uri.OriginalString, options, quote: quote,
+            ephemeralUser: ephemeralUser);
+    }
     // /// <inheritdoc cref="IMessageChannel.SendAudioMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
     // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
     // {
@@ -179,6 +204,14 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     // {
     //     CreateAssetResponse createAssetResponse = await KaiHeiLa.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options);
     //     return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Audio, createAssetResponse.Url, options, quote: quote,
+    //         ephemeralUser: ephemeralUser);
+    // }
+    // /// <inheritdoc cref="IMessageChannel.SendAudioMessageAsync(Uri,IQuote,IUser,RequestOptions)"/>
+    // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(Uri uri, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    // {
+    //     if (!UrlValidation.ValidateKaiHeiLaAssetUrl(uri.OriginalString))
+    //         throw new ArgumentException("The uri cannot be blank.", nameof(uri));
+    //     return await ChannelHelper.SendMessageAsync(this, KaiHeiLa, MessageType.Audio, uri.OriginalString, options, quote: quote,
     //         ephemeralUser: ephemeralUser);
     // }
     /// <inheritdoc cref="IMessageChannel.SendKMarkdownMessageAsync(string,IQuote,IUser,RequestOptions)"/>
@@ -291,6 +324,10 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendImageMessageAsync(stream, fileName, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendImageMessageAsync(Uri uri,
+        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        => SendImageMessageAsync(uri, (Quote) quote, ephemeralUser, options);
+    /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendVideoMessageAsync(string path, string fileName,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendVideoMessageAsync(path, fileName, (Quote) quote, ephemeralUser, options);
@@ -299,6 +336,10 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendVideoMessageAsync(stream, fileName, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendVideoMessageAsync(Uri uri,
+        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        => SendVideoMessageAsync(uri, (Quote) quote, ephemeralUser, options);
+    /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileMessageAsync(string path, string fileName,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileMessageAsync(path, fileName, (Quote) quote, ephemeralUser, options);
@@ -306,14 +347,22 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileMessageAsync(Stream stream, string fileName,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileMessageAsync(stream, fileName, (Quote) quote, ephemeralUser, options);
+    /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileMessageAsync(Uri uri,
+        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        => SendFileMessageAsync(uri, (Quote) quote, ephemeralUser, options);
     // /// <inheritdoc />
-    // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendAudioMessageAsync(string path, string fileName = null,
+    // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendAudioMessageAsync(string path, string fileName,
     //     IQuote quote, IUser ephemeralUser, RequestOptions options)
     //     => SendAudioMessageAsync(path, fileName, (Quote) quote, ephemeralUser, options);
     // /// <inheritdoc />
-    // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendAudioMessageAsync(Stream stream, string fileName = null,
+    // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendAudioMessageAsync(Stream stream, string fileName,
     //     IQuote quote, IUser ephemeralUser, RequestOptions options)
     //     => SendAudioMessageAsync(stream, fileName, (Quote) quote, ephemeralUser, options);
+    // /// <inheritdoc />
+    // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendAudioMessageAsync(Uri uri,
+    //     IQuote quote, IUser ephemeralUser, RequestOptions options)
+    //     => uri fileName, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendKMarkdownMessageAsync(string text,
         IQuote quote, IUser ephemeralUser, RequestOptions options)

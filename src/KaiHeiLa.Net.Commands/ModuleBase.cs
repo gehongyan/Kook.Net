@@ -88,6 +88,25 @@ namespace KaiHeiLa.Commands
             return await Context.Channel.SendImageMessageAsync(stream, fileName, isQuote ? new Quote(Context.Message.Id) : null,
                 isEphemeral ? Context.User : null, options).ConfigureAwait(false);
         }
+        /// <summary>
+        ///     Sends an image to the source channel.
+        /// </summary>
+        /// <param name="uri">
+        ///     The URI of the image file.
+        /// </param>
+        /// <param name="isQuote">
+        ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
+        /// </param>
+        /// <param name="isEphemeral">
+        ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
+        /// </param>
+        /// <param name="options">The request options for this <see langword="async"/> request.</param>
+        protected virtual async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyImageAsync(Uri uri, bool isQuote = false,
+            bool isEphemeral = false, RequestOptions options = null)
+        {
+            return await Context.Channel.SendImageMessageAsync(uri, isQuote ? new Quote(Context.Message.Id) : null,
+                isEphemeral ? Context.User : null, options).ConfigureAwait(false);
+        }
 
         /// <summary>
         ///     Sends a video to the source channel.
@@ -131,6 +150,25 @@ namespace KaiHeiLa.Commands
             bool isEphemeral = false, RequestOptions options = null)
         {
             return await Context.Channel.SendVideoMessageAsync(stream, fileName, isQuote ? new Quote(Context.Message.Id) : null,
+                isEphemeral ? Context.User : null, options).ConfigureAwait(false);
+        }
+        /// <summary>
+        ///     Sends a video to the source channel.
+        /// </summary>
+        /// <param name="uri">
+        ///     The URI of the video file.
+        /// </param>
+        /// <param name="isQuote">
+        ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
+        /// </param>
+        /// <param name="isEphemeral">
+        ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
+        /// </param>
+        /// <param name="options">The request options for this <see langword="async"/> request.</param>
+        protected virtual async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyVideoAsync(Uri uri, bool isQuote = false,
+            bool isEphemeral = false, RequestOptions options = null)
+        {
+            return await Context.Channel.SendVideoMessageAsync(uri, isQuote ? new Quote(Context.Message.Id) : null,
                 isEphemeral ? Context.User : null, options).ConfigureAwait(false);
         }
 
@@ -178,6 +216,25 @@ namespace KaiHeiLa.Commands
         //     return await Context.Channel.SendAudioMessageAsync(stream, fileName, isQuote ? new Quote(Context.Message.Id) : null,
         //         isEphemeral ? Context.User : null, options).ConfigureAwait(false);
         // }
+        // /// <summary>
+        // ///     Sends an audio to the source channel.
+        // /// </summary>
+        // /// <param name="uri">
+        // ///     The URI of the file.
+        // /// </param>
+        // /// <param name="isQuote">
+        // ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
+        // /// </param>
+        // /// <param name="isEphemeral">
+        // ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
+        // /// </param>
+        // /// <param name="options">The request options for this <see langword="async"/> request.</param>
+        // protected virtual async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyAudioAsync(Uri uri, bool isQuote = false,
+        //     bool isEphemeral = false, RequestOptions options = null)
+        // {
+        //     return await Context.Channel.SendAudioMessageAsync(uri, isQuote ? new Quote(Context.Message.Id) : null,
+        //         isEphemeral ? Context.User : null, options).ConfigureAwait(false);
+        // }
 
         /// <summary>
         ///     Sends a file to the source channel.
@@ -221,6 +278,25 @@ namespace KaiHeiLa.Commands
             bool isEphemeral = false, RequestOptions options = null)
         {
             return await Context.Channel.SendFileMessageAsync(stream, fileName, isQuote ? new Quote(Context.Message.Id) : null,
+                isEphemeral ? Context.User : null, options).ConfigureAwait(false);
+        }
+        /// <summary>
+        ///     Sends a file to the source channel.
+        /// </summary>
+        /// <param name="uri">
+        ///     The URI of the file.
+        /// </param>
+        /// <param name="isQuote">
+        ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
+        /// </param>
+        /// <param name="isEphemeral">
+        ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
+        /// </param>
+        /// <param name="options">The request options for this <see langword="async"/> request.</param>
+        protected virtual async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyFileAsync(Uri uri, bool isQuote = false,
+            bool isEphemeral = false, RequestOptions options = null)
+        {
+            return await Context.Channel.SendFileMessageAsync(uri, isQuote ? new Quote(Context.Message.Id) : null,
                 isEphemeral ? Context.User : null, options).ConfigureAwait(false);
         }
         
