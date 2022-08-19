@@ -63,16 +63,20 @@ internal class KaiHeiLaRestApiClient : IDisposable
         
         RequestQueue = new RequestQueue();
         _stateLock = new SemaphoreSlim(1, 1);
-        SetBaseUrl(KaiHeiLaConfig.APIUrl, acceptLanguage);
+        SetBaseUrl(KaiHeiLaConfig.APIUrl);
+        SetAcceptLanguage(acceptLanguage);
     }
 
-    internal void SetBaseUrl(string baseUrl, string acceptLanguage)
+    internal void SetBaseUrl(string baseUrl)
     {
         RestClient?.Dispose();
         RestClient = _restClientProvider(baseUrl);
         RestClient.SetHeader("accept", "*/*");
         RestClient.SetHeader("user-agent", UserAgent);
         RestClient.SetHeader("authorization", GetPrefixedToken(AuthTokenType, AuthToken));
+    }
+    internal void SetAcceptLanguage(string acceptLanguage)
+    {
         RestClient.SetHeader("accept-language", acceptLanguage);
     }
     internal static string GetPrefixedToken(TokenType tokenType, string token)
