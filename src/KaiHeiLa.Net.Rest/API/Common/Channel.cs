@@ -32,7 +32,7 @@ internal class Channel
     [JsonPropertyName("permission_users")] 
     public UserPermissionOverwrite[] UserPermissionOverwrites { get; set; }
 
-    [JsonPropertyName("permission_sync")] public int PermissionSync { get; set; }
+    [JsonPropertyName("permission_sync")] public int? PermissionSync { get; set; }
     
     // Text
     [JsonPropertyName("topic")] public string Topic { get; set; }
