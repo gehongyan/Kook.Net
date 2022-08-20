@@ -108,7 +108,7 @@ public interface IGuild : IEntity<ulong>
     ///     Gets the max bitrate for voice channels in this guild.
     /// </summary>
     /// <returns>
-    ///     A <see cref="int"/> representing the maximum bitrate value allowed by Discord in this guild.
+    ///     A <see cref="int"/> representing the maximum bitrate value allowed by KaiHeiLa in this guild.
     /// </returns>
     int MaxBitrate { get; }
     /// <summary>

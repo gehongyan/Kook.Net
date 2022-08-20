@@ -1,9 +1,9 @@
+using System.IO.Compression;
 using System.Text;
 #if DEBUG_PACKETS
 using System.Text.Encodings.Web;
 #endif
 using System.Text.Json;
-using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 using KaiHeiLa.API.Gateway;
 using KaiHeiLa.API.Rest;
 using KaiHeiLa.Net.Queue;
@@ -69,14 +69,14 @@ internal class KaiHeiLaSocketApiClient : KaiHeiLaRestApiClient
 
     private async Task OnBinaryMessage(byte[] data, int index, int count)
     {
-        await using var decompressed = new MemoryStream();
-        using (var compressedStream = new MemoryStream(data))
-        await using (var compressed = new InflaterInputStream(compressedStream))
-        {
-            await compressed.CopyToAsync(decompressed);
-            decompressed.Position = 0;
-        }
-        
+        await using MemoryStream decompressed = new();
+        using MemoryStream compressed = data[0] == 0x78 
+            ? new MemoryStream(data, index + 2, count - 2) 
+            : new MemoryStream(data, index, count);
+        await using DeflateStream decompressor = new(compressed, CompressionMode.Decompress);
+        await decompressor.CopyToAsync(decompressed);
+        decompressed.Position = 0;
+
         GatewaySocketFrame gatewaySocketFrame = JsonSerializer.Deserialize<GatewaySocketFrame>(decompressed, _serializerOptions);
         if (gatewaySocketFrame is not null)
         {

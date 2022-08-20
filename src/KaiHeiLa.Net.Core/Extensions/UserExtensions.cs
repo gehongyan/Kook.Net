@@ -4,7 +4,7 @@ using System.IO;
 
 namespace KaiHeiLa
 {
-    /// <summary> An extension class for various Discord user objects. </summary>
+    /// <summary> An extension class for various KaiHeiLa user objects. </summary>
     public static class UserExtensions
     {
         /// <summary>
