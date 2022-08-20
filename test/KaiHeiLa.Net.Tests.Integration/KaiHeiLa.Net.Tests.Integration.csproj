@@ -24,10 +24,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\KaiHeiLa.Net.Commands\KaiHeiLa.Net.Commands.csproj" />
-      <ProjectReference Include="..\..\src\KaiHeiLa.Net.Core\KaiHeiLa.Net.Core.csproj" />
-      <ProjectReference Include="..\..\src\KaiHeiLa.Net.Rest\KaiHeiLa.Net.Rest.csproj" />
-      <ProjectReference Include="..\..\src\KaiHeiLa.Net.WebSocket\KaiHeiLa.Net.WebSocket.csproj" />
+        <ProjectReference Include="..\..\src\KaiHeiLa.Net.Commands\KaiHeiLa.Net.Commands.csproj" />
+        <ProjectReference Include="..\..\src\KaiHeiLa.Net.Core\KaiHeiLa.Net.Core.csproj" />
+        <ProjectReference Include="..\..\src\KaiHeiLa.Net.Rest\KaiHeiLa.Net.Rest.csproj" />
+        <ProjectReference Include="..\..\src\KaiHeiLa.Net.WebSocket\KaiHeiLa.Net.WebSocket.csproj" />
     </ItemGroup>
-
 </Project>

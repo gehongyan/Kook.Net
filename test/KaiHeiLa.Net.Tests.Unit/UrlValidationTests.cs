@@ -53,9 +53,8 @@ public class UrlValidationTests
     [InlineData(" ")]
     [InlineData("kaiheila.net")]
     [InlineData("steam://run/123456/")]
-    [InlineData("img.kaiheila.cn/assets/2021-01/7kr4FkWpLV0ku0ku.jpeg")]
-    [InlineData("https://img.kaiheila.cn/assets/2021-01/7kr4FkWpLV0ku0ku")]
     [InlineData("https://img.kookapp.cn/attachments/2022-08/19/")]
+    [InlineData("img.kaiheila.cn/assets/2021-01/7kr4FkWpLV0ku0ku.jpeg")]
     [InlineData("https://img.kaiheila.cn/assets/2021-01/7kr4FkWpLV0ku0ku")]
     [InlineData("https://kaiheila.net/guides/getting_started/images/install/install-vs-dependencies.png")]
     public void UrlValidation_InvalidAssetUrl(string url)

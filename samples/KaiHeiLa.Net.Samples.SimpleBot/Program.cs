@@ -51,6 +51,7 @@ class Program
 
     private async Task ClientOnMessageReceived(SocketMessage arg)
     {
+        Console.WriteLine($"{arg.Author.Username} in {arg.Channel.Name}: {arg.Content}");
         string argCleanContent = arg.CleanContent;
         if (arg.Author.Id == _client.CurrentUser.Id) return;
         if (arg.Author.IsBot == true) return;
@@ -62,7 +63,7 @@ class Program
 
     private async Task ClientOnReady()
     {
-        await _client.Rest.AddReactionAsync(Guid.Parse("9062d5a9-9290-434c-b295-5b5835121cb1"), Emote.Parse("(emj)loading(emj)[1990044438283387/WiGtuv3F1d05k05k]", TagMode.KMarkdown));
+        // await _client.Rest.AddReactionAsync(Guid.Parse("9062d5a9-9290-434c-b295-5b5835121cb1"), Emote.Parse("(emj)loading(emj)[1990044438283387/WiGtuv3F1d05k05k]", TagMode.KMarkdown));
         // await Task.Delay(TimeSpan.FromSeconds(5));
         // IUser result = await _client.GetUserAsync(2810246202);
         // IUser userAsync = await _client.GetUserAsync(1896684851);

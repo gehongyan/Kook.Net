@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaiHeiLa.Net.Samples.TextCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaiHeiLa.Net.Samples.AudioBot", "..\samples\KaiHeiLa.Net.Samples.AudioBot\KaiHeiLa.Net.Samples.AudioBot.csproj", "{29DF9D09-4F74-4271-92E4-1BDBF28AEE4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaiHeiLa.Net.Tests.Integration", "..\test\KaiHeiLa.Net.Tests.Integration\KaiHeiLa.Net.Tests.Integration.csproj", "{E1A2F066-6FE5-452E-946C-6D818E83C881}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{29DF9D09-4F74-4271-92E4-1BDBF28AEE4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29DF9D09-4F74-4271-92E4-1BDBF28AEE4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29DF9D09-4F74-4271-92E4-1BDBF28AEE4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1A2F066-6FE5-452E-946C-6D818E83C881}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1A2F066-6FE5-452E-946C-6D818E83C881}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1A2F066-6FE5-452E-946C-6D818E83C881}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1A2F066-6FE5-452E-946C-6D818E83C881}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{57F76D67-0E55-4609-A61C-3A4C3073CA0E} = {58B166AB-82DD-472F-AC70-9318DA4F881E}
@@ -91,5 +97,6 @@ Global
 		{10ED905D-0060-40BF-8A79-46D52714DB30} = {B51E68C1-B6FC-49A3-B04D-57BB0C19B192}
 		{42BEF15F-724B-46A7-93F2-341D8D0B2759} = {8DE556F9-829D-48D3-A41C-FA57207CAE72}
 		{29DF9D09-4F74-4271-92E4-1BDBF28AEE4C} = {8DE556F9-829D-48D3-A41C-FA57207CAE72}
+		{E1A2F066-6FE5-452E-946C-6D818E83C881} = {1E3AD043-5861-4B7F-8CE6-0EE9B4D6CB91}
 	EndGlobalSection
 EndGlobal
