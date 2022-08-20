@@ -240,6 +240,7 @@ internal static class MessageHelper
         JsonSerializerOptions serializerOptions = new()
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString,
             Converters =
             {
                 new CardConverter(),
@@ -267,6 +268,7 @@ internal static class MessageHelper
         JsonSerializerOptions serializerOptions = new()
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString,
             Converters =
             {
                 new CardConverter(),

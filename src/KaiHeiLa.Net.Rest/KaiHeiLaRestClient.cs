@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace KaiHeiLa.Rest;
 
@@ -9,7 +10,10 @@ public class KaiHeiLaRestClient : BaseKaiHeiLaClient, IKaiHeiLaClient
     #region KaiHeiLaRestClient
 
     internal static readonly JsonSerializerOptions SerializerOptions = new()
-        {Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping};
+    {
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        NumberHandling = JsonNumberHandling.AllowReadingFromString
+    };
     
     /// <summary>
     ///     Gets the logged-in user.
