@@ -49,7 +49,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     internal override void Update(Model model)
     {
         base.Update(model);
-        CategoryId = model.CategoryId;
+        CategoryId = model.CategoryId != 0 ? model.CategoryId : null;
         Topic = model.Topic;
         SlowModeInterval = model.SlowMode / 1000;
         IsPermissionSynced = model.PermissionSync == 1;

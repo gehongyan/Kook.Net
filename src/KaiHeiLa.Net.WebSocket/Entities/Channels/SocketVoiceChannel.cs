@@ -79,7 +79,7 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     internal override void Update(ClientState state, Model model)
     {
         base.Update(state, model);
-        CategoryId = model.CategoryId;
+        CategoryId = model.CategoryId != 0 ? model.CategoryId : null;
         VoiceQuality = model.VoiceQuality;
         UserLimit = model.UserLimit ?? 0;
         ServerUrl = model.ServerUrl;

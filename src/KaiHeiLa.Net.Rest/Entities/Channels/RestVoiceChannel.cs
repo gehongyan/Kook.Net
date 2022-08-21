@@ -46,7 +46,7 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     internal override void Update(Model model)
     {
         base.Update(model);
-        CategoryId = model.CategoryId;
+        CategoryId = model.CategoryId != 0 ? model.CategoryId : null;
         VoiceQuality = model.VoiceQuality;
         UserLimit = model.UserLimit;
         ServerUrl = model.ServerUrl;

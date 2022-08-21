@@ -82,7 +82,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     internal override void Update(ClientState state, Model model)
     {
         base.Update(state, model);
-        CategoryId = model.CategoryId;
+        CategoryId = model.CategoryId != 0 ? model.CategoryId : null;
         Topic = model.Topic;
         SlowModeInterval = model.SlowMode / 1000;
         IsPermissionSynced = model.PermissionSync == 1;
