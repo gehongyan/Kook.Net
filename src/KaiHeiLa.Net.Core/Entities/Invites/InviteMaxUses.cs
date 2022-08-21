@@ -12,25 +12,25 @@ public enum InviteMaxUses
     /// <summary>
     ///     This <see cref="IInvite"/> can be used only once.
     /// </summary>
-    One = 1,
+    _1 = 1,
     /// <summary>
     ///     This <see cref="IInvite"/> can be used for 5 times.
     /// </summary>
-    Five = 5,
+    _5 = 5,
     /// <summary>
     ///     This <see cref="IInvite"/> can be used for 10 times.
     /// </summary>
-    Ten = 10,
+    _10 = 10,
     /// <summary>
     ///     This <see cref="IInvite"/> can be used for 25 times.
     /// </summary>
-    TwentyFive = 25,
+    _25 = 25,
     /// <summary>
     ///     This <see cref="IInvite"/> can be used for 50 times.
     /// </summary>
-    Fifty = 50,
+    _50 = 50,
     /// <summary>
     ///     This <see cref="IInvite"/> can be used for 100 times.
     /// </summary>
-    OneHundred = 100
+    _100 = 100
 }

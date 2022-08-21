@@ -114,7 +114,7 @@ namespace KaiHeiLa
             throw new NotImplementedException();
         }
 
-        public Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge.OneWeek, InviteMaxUses maxUses = InviteMaxUses.Unlimited,
+        public Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited,
             RequestOptions options = null)
         {
             throw new NotImplementedException();

@@ -42,7 +42,7 @@ internal static class ChannelHelper
             Position = args.Position,
             CategoryId = args.CategoryId,
             Topic = args.Topic,
-            SlowModeInterval = args.SlowModeInterval * 1000,
+            SlowModeInterval = (int?)args.SlowModeInterval * 1000,
         };
         return await client.ApiClient.ModifyGuildChannelAsync(channel.Id, apiArgs, options).ConfigureAwait(false);
     }

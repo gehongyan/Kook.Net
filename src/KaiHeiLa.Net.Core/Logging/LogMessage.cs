@@ -62,7 +62,7 @@ public struct LogMessage
 
         int maxLength = 1 + 
                         (prependTimestamp ? 8 : 0) + 1 +
-                        (padSource.HasValue ? padSource.Value : sourceName?.Length ?? 0) + 1 + 
+                        (padSource ?? (sourceName?.Length ?? 0)) + 1 + 
                         (message?.Length ?? 0) +
                         (exMessage?.Length ?? 0) + 3;
 

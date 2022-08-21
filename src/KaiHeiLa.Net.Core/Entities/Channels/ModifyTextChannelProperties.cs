@@ -27,5 +27,5 @@ public class ModifyTextChannelProperties : ModifyGuildChannelProperties
     ///     </note>
     /// </remarks>
     /// <exception cref="ArgumentOutOfRangeException">Thrown if the value does not fall within [0, 21600].</exception>
-    public int? SlowModeInterval { get; set; }
+    public SlowModeInterval? SlowModeInterval { get; set; }
 }
