@@ -18,14 +18,13 @@ public class ModifyTextChannelProperties : ModifyGuildChannelProperties
     ///     Gets or sets the slow-mode ratelimit in seconds for this channel.
     /// </summary>
     /// <remarks>
-    ///     Setting this value to anything above zero will require each user to wait X seconds before
-    ///     sending another message; setting this value to <c>0</c> will disable slow-mode for this channel;
+    ///     Setting this value will require each user to wait before sending another message; setting this value to
+    ///     <see cref="KaiHeiLa.SlowModeInterval.None"/> will disable slow-mode for this channel;
     ///     if this value is set to <c>null</c>, the slow-mode interval will not be modified.
     ///     <note>
     ///         Users with <see cref="KaiHeiLa.ChannelPermission.ManageMessages"/> or 
     ///         <see cref="ChannelPermission.ManageChannels"/> will be exempt from slow-mode.
     ///     </note>
     /// </remarks>
-    /// <exception cref="ArgumentOutOfRangeException">Thrown if the value does not fall within [0, 21600].</exception>
     public SlowModeInterval? SlowModeInterval { get; set; }
 }

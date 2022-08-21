@@ -474,8 +474,6 @@ internal class KaiHeiLaRestApiClient : IDisposable
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         Preconditions.NotNull(args, nameof(args));
-        Preconditions.AtLeast(args.SlowModeInterval, 0, nameof(args.SlowModeInterval));
-        Preconditions.AtMost(args.SlowModeInterval, 21600000, nameof(args.SlowModeInterval));
         Preconditions.AtMost(args.Name?.Length, 100, nameof(args.Name));
         Preconditions.AtMost(args.Topic?.Length, 500, nameof(args.Name));
 
