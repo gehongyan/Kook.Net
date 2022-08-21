@@ -1,4 +1,4 @@
-name: KaiHeiLa.Net Deploy
+name: KaiHeiLa.Net Dev
 
 on:
   push:
