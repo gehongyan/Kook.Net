@@ -6,6 +6,7 @@ using Xunit;
 
 namespace KaiHeiLa;
 
+[Trait("Category", "Unit")]
 public class GuildHelperTests
 {
     [Theory]

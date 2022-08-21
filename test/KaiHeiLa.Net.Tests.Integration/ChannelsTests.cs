@@ -10,7 +10,8 @@ namespace KaiHeiLa
     /// <summary>
     ///     Tests that channels can be created and modified.
     /// </summary>
-    [CollectionDefinition("ChannelsTests", DisableParallelization = true)]
+    [CollectionDefinition(nameof(ChannelsTests), DisableParallelization = true)]
+    [Trait("Category", "Integration")]
     public class ChannelsTests : IClassFixture<RestGuildFixture>
     {
         private readonly IGuild _guild;

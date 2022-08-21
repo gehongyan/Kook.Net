@@ -27,6 +27,6 @@ jobs:
       run: dotnet build src --no-restore
 
     - name: Test
-      run: dotnet test src --no-build --verbosity normal
+      run: dotnet test src --no-build --verbosity normal --filter Category!=Integration
       env:
         KAIHEILA_NET_TEST_TOKEN: ${{ secrets.KAIHEILA_NET_TEST_TOKEN }}

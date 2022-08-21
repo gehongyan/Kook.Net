@@ -4,6 +4,7 @@ using Xunit;
 
 namespace KaiHeiLa;
 
+[Trait("Category", "Unit")]
 public class ElementBuilderTests
 {
     private const string Name = "KaiHeiLa.Net";

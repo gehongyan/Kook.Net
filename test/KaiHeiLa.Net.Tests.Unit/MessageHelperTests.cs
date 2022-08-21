@@ -6,6 +6,7 @@ namespace KaiHeiLa;
 /// <summary>
 ///     Tests for <see cref="MessageHelper"/> parsing.
 /// </summary>
+[Trait("Category", "Unit")]
 public class MessageHelperTests
 {
     /// <summary>

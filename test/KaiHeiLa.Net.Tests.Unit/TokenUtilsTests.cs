@@ -8,6 +8,7 @@ namespace KaiHeiLa;
 /// <summary>
 ///     Tests for the <see cref="KaiHeiLa.TokenUtils"/> methods.
 /// </summary>
+[Trait("Category", "Unit")]
 public class TokenUtilsTests
 {
     /// <summary>

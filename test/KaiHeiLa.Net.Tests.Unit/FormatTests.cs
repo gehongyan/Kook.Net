@@ -5,6 +5,7 @@ using Xunit;
 
 namespace KaiHeiLa;
 
+[Trait("Category", "Unit")]
 public class FormatTests
 {
     [Theory]

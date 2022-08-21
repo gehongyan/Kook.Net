@@ -5,6 +5,7 @@ using Xunit;
 
 namespace KaiHeiLa;
 
+[Trait("Category", "Unit")]
 public class ModuleBuilderTests
 {
     private const string Name = "KaiHeiLa.Net";

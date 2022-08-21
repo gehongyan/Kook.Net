@@ -8,6 +8,7 @@ namespace KaiHeiLa;
 /// <summary>
 ///     Tests the behavior of the <see cref="KaiHeiLa.GuildPermissions"/> type and related functions.
 /// </summary>
+[Trait("Category", "Unit")]
 public class GuildPermissionsTests
 {
     /// <summary>

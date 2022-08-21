@@ -7,6 +7,7 @@ namespace KaiHeiLa;
 /// <summary>
 ///     Tests the behavior of the <see cref="KaiHeiLa.ChannelPermissions"/> type and related functions.
 /// </summary>
+[Trait("Category", "Unit")]
 public class ChannelPermissionsTests
 {
     /// <summary>

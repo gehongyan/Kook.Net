@@ -11,22 +11,24 @@ using Xunit;
 namespace KaiHeiLa;
 
 [CollectionDefinition(nameof(KaiHeiLaRestApiClientTests), DisableParallelization = true)]
+[Trait("Category", "Integration")]
 public class KaiHeiLaRestApiClientTests : IClassFixture<RestGuildFixture>, IAsyncDisposable
 {
     private readonly KaiHeiLaRestApiClient _apiClient;
-    private readonly IGuild _guild;
-    private readonly ITextChannel _channel;
+    // private readonly IGuild _guild;
+    // private readonly ITextChannel _channel;
 
     public KaiHeiLaRestApiClientTests(RestGuildFixture guildFixture)
     {
-        _guild = guildFixture.Guild;
+        // _guild = guildFixture.Guild;
         _apiClient = guildFixture.Client.ApiClient;
-        _channel = _guild.CreateTextChannelAsync("TEST TEXT CHANNEL").GetAwaiter().GetResult();
+        // _channel = _guild.CreateTextChannelAsync("TEST TEXT CHANNEL").GetAwaiter().GetResult();
     }
 
-    public async ValueTask DisposeAsync()
+    public ValueTask DisposeAsync()
     {
-        await _channel.DeleteAsync();
+        return ValueTask.CompletedTask;
+        // await _channel.DeleteAsync();
     }
 
     [Fact]

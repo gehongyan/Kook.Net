@@ -8,6 +8,7 @@ namespace KaiHeiLa;
 /// <summary>
 ///     Tests the methods provided in <see cref="MentionUtils"/>.
 /// </summary>
+[Trait("Category", "Unit")]
 public class MentionUtilsTests
 {
     /// <summary>

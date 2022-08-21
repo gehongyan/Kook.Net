@@ -9,6 +9,7 @@ namespace KaiHeiLa;
 /// <summary>
 ///     Tests the <see cref="KaiHeiLa.CardBuilder"/> class.
 /// </summary>
+[Trait("Category", "Unit")]
 public class CardBuilderTests
 {
     private const string Name = "KaiHeiLa.Net";

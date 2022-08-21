@@ -6,6 +6,7 @@ namespace KaiHeiLa;
 /// <summary>
 ///     Tests for the <see cref="KaiHeiLa.Color"/> type.
 /// </summary>
+[Trait("Category", "Unit")]
 public class ColorTests
 {
     [Fact]
