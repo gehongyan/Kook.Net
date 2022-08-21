@@ -14,7 +14,7 @@ namespace KaiHeiLa
 
         public KaiHeiLaRestClientFixture()
         {
-            var token = Environment.GetEnvironmentVariable("KAIHEILA_NET_TEST_TOKEN", EnvironmentVariableTarget.User);
+            var token = Environment.GetEnvironmentVariable("KAIHEILA_NET_TEST_TOKEN");
             if (string.IsNullOrWhiteSpace(token))
                 throw new Exception("The KAIHEILA_NET_TEST_TOKEN environment variable was not provided.");
             Client = new KaiHeiLaRestClient(new KaiHeiLaRestConfig()
