@@ -34,7 +34,9 @@ public class KaiHeiLaRestApiClientTests : IClassFixture<RestGuildFixture>, IAsyn
     {
         ulong fileSize = (ulong) (30 * Math.Pow(2, 20));
         using MemoryStream stream = new(new byte[fileSize]);
-        await _apiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = "test.file"});
+        CreateAssetResponse response =
+            await _apiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = "test.file"});
+        response.Url.Should().NotBeNullOrWhiteSpace();
     }
 
     [Fact]
@@ -49,6 +51,6 @@ public class KaiHeiLaRestApiClientTests : IClassFixture<RestGuildFixture>, IAsyn
         };
 
         await upload.Should().ThrowExactlyAsync<HttpException>()
-                 .Where(e => e.KaiHeiLaCode == KaiHeiLaErrorCode.RequestEntityTooLarge);
+            .Where(e => e.KaiHeiLaCode == KaiHeiLaErrorCode.RequestEntityTooLarge);
     }
 }
