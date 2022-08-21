@@ -23,6 +23,7 @@ internal class CreateGuildChannelParams
     public int? LimitAmount { get; set; }
 
     [JsonPropertyName("voice_quality")]
+    [JsonConverter(typeof(NullableVoiceQualityConverter))]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public VoiceQuality? VoiceQuality { get; set; }
     

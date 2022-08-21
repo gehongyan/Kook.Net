@@ -44,6 +44,7 @@ internal class Channel
     public int? UserLimit { get; set; }
 
     [JsonPropertyName("voice_quality")]
+    [JsonConverter(typeof(NullableVoiceQualityConverter))]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public VoiceQuality? VoiceQuality { get; set; }
 
