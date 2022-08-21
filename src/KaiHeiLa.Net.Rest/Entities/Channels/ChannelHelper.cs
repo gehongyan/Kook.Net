@@ -23,6 +23,7 @@ internal static class ChannelHelper
         func(args);
         var apiArgs = new API.Rest.ModifyGuildChannelParams
         {
+            ChannelId = channel.Id,
             Name = args.Name,
             Position = args.Position,
             CategoryId = args.CategoryId,
@@ -38,6 +39,7 @@ internal static class ChannelHelper
         func(args);
         var apiArgs = new API.Rest.ModifyTextChannelParams
         {
+            ChannelId = channel.Id,
             Name = args.Name,
             Position = args.Position,
             CategoryId = args.CategoryId,
@@ -55,6 +57,7 @@ internal static class ChannelHelper
         func(args);
         var apiArgs = new API.Rest.ModifyVoiceChannelParams
         {
+            ChannelId = channel.Id,
             Name = args.Name,
             Position = args.Position,
             CategoryId = args.CategoryId,

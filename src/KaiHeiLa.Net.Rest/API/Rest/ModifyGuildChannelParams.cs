@@ -5,6 +5,9 @@ namespace KaiHeiLa.API.Rest;
 
 internal class ModifyGuildChannelParams
 {
+    [JsonPropertyName("channel_id")]
+    public ulong ChannelId { get; set; }
+    
     [JsonPropertyName("name")] 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string Name { get; set; }
