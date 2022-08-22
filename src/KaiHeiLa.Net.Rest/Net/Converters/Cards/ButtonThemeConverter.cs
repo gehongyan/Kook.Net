@@ -11,9 +11,11 @@ internal class ButtonThemeConverter : JsonConverter<ButtonTheme>
         return theme switch
         {
             "primary" => ButtonTheme.Primary,
+            "success" => ButtonTheme.Success,
             "warning" => ButtonTheme.Warning,
             "info" => ButtonTheme.Info,
             "danger" => ButtonTheme.Danger,
+            "secondary" => ButtonTheme.Secondary,
             _ => throw new ArgumentOutOfRangeException(nameof(ButtonTheme))
         };
     }
@@ -23,9 +25,11 @@ internal class ButtonThemeConverter : JsonConverter<ButtonTheme>
         writer.WriteStringValue(value switch
         {
             ButtonTheme.Primary => "primary",
+            ButtonTheme.Success => "success",
             ButtonTheme.Warning => "warning",
             ButtonTheme.Info => "info",
             ButtonTheme.Danger => "danger",
+            ButtonTheme.Secondary => "secondary",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
     }
