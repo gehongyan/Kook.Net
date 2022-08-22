@@ -136,6 +136,9 @@ public class PlainTextElementBuilder : IElementBuilder
     public static bool operator !=(PlainTextElementBuilder left, PlainTextElementBuilder right)
         => !(left == right);
 
+    public override bool Equals(object obj)
+        => obj is PlainTextElementBuilder builder && Equals(builder);
+
     /// <summary>Determines whether the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>.</summary>
     /// <param name="plainTextElementBuilder">The <see cref="PlainTextElementBuilder"/> to compare with the current <see cref="PlainTextElementBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
@@ -254,6 +257,9 @@ public class KMarkdownElementBuilder : IElementBuilder
 
     public static bool operator !=(KMarkdownElementBuilder left, KMarkdownElementBuilder right)
         => !(left == right);
+
+    public override bool Equals(object obj)
+        => obj is KMarkdownElementBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>.</summary>
     /// <param name="kMarkdownElementBuilder">The <see cref="KMarkdownElementBuilder"/> to compare with the current <see cref="KMarkdownElementBuilder"/>.</param>
@@ -437,6 +443,9 @@ public class ImageElementBuilder : IElementBuilder
 
     public static bool operator !=(ImageElementBuilder left, ImageElementBuilder right)
         => !(left == right);
+
+    public override bool Equals(object obj)
+        => obj is ImageElementBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="ImageElementBuilder"/> is equal to the current <see cref="ImageElementBuilder"/>.</summary>
     /// <param name="imageElementBuilder">The <see cref="ImageElementBuilder"/> to compare with the current <see cref="ImageElementBuilder"/>.</param>
@@ -674,6 +683,9 @@ public class ButtonElementBuilder : IElementBuilder
     public static bool operator !=(ButtonElementBuilder left, ButtonElementBuilder right)
         => !(left == right);
 
+    public override bool Equals(object obj)
+        => obj is ButtonElementBuilder builder && Equals(builder);
+
     /// <summary>Determines whether the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>.</summary>
     /// <param name="buttonElementBuilder">The <see cref="ButtonElementBuilder"/> to compare with the current <see cref="ButtonElementBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>.</returns>
@@ -894,6 +906,9 @@ public class ParagraphStructBuilder : IElementBuilder
 
     public static bool operator !=(ParagraphStructBuilder left, ParagraphStructBuilder right)
         => !(left == right);
+
+    public override bool Equals(object obj)
+        => obj is ParagraphStructBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="ParagraphStructBuilder"/> is equal to the current <see cref="ParagraphStructBuilder"/>.</summary>
     /// <param name="paragraphStructBuilder">The <see cref="ParagraphStructBuilder"/> to compare with the current <see cref="ParagraphStructBuilder"/>.</param>

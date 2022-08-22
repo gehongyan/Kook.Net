@@ -48,7 +48,7 @@ namespace KaiHeiLa.Audio
         private string _url, _sessionId, _token;
         private ulong _userId;
         private uint _ssrc;
-        private bool _isSpeaking;
+        // private bool _isSpeaking;
 
         public SocketGuild Guild { get; }
         public KaiHeiLaVoiceAPIClient ApiClient { get; private set; }

@@ -150,7 +150,10 @@ public class CardBuilder : ICardBuilder
 
     public static bool operator !=(CardBuilder left, CardBuilder right)
         => !(left == right);
-    
+
+    public override bool Equals(object obj)
+        => obj is CardBuilder builder && Equals(builder);
+
     /// <summary>Determines whether the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>.</summary>
     /// <param name="cardBuilder">The <see cref="CardBuilder"/> to compare with the current <see cref="CardBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.</returns>

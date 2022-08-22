@@ -112,6 +112,9 @@ public class HeaderModuleBuilder : IModuleBuilder
     public static bool operator !=(HeaderModuleBuilder left, HeaderModuleBuilder right)
         => !(left == right);
 
+    public override bool Equals(object obj)
+        => obj is HeaderModuleBuilder builder && Equals(builder);
+
     /// <summary>Determines whether the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>.</summary>
     /// <param name="headerModuleBuilder">The <see cref="HeaderModuleBuilder"/> to compare with the current <see cref="HeaderModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>; otherwise, <c>false</c>.</returns>
@@ -367,6 +370,9 @@ public class SectionModuleBuilder : IModuleBuilder
     public static bool operator !=(SectionModuleBuilder left, SectionModuleBuilder right)
         => !(left == right);
 
+    public override bool Equals(object obj)
+        => obj is SectionModuleBuilder builder && Equals(builder);
+
     /// <summary>Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.</summary>
     /// <param name="sectionModuleBuilder">The <see cref="SectionModuleBuilder"/> to compare with the current <see cref="SectionModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>.</returns>
@@ -489,6 +495,9 @@ public class ImageGroupModuleBuilder : IModuleBuilder
 
     public static bool operator !=(ImageGroupModuleBuilder left, ImageGroupModuleBuilder right)
         => !(left == right);
+
+    public override bool Equals(object obj)
+        => obj is ImageGroupModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>.</summary>
     /// <param name="imageGroupModuleBuilder">The <see cref="ImageGroupModuleBuilder"/> to compare with the current <see cref="ImageGroupModuleBuilder"/>.</param>
@@ -617,6 +626,9 @@ public class ContainerModuleBuilder : IModuleBuilder
     public static bool operator !=(ContainerModuleBuilder left, ContainerModuleBuilder right)
         => !(left == right);
 
+    public override bool Equals(object obj)
+        => obj is ContainerModuleBuilder builder && Equals(builder);
+
     /// <summary>Determines whether the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>.</summary>
     /// <param name="containerModuleBuilder">The <see cref="ContainerModuleBuilder"/> to compare with the current <see cref="ContainerModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>; otherwise, <c>false</c>.</returns>
@@ -740,6 +752,9 @@ public class ActionGroupModuleBuilder : IModuleBuilder
 
     public static bool operator !=(ActionGroupModuleBuilder left, ActionGroupModuleBuilder right)
         => !(left == right);
+
+    public override bool Equals(object obj)
+        => obj is ActionGroupModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="ActionGroupModuleBuilder"/> is equal to the current <see cref="ActionGroupModuleBuilder"/>.</summary>
     /// <param name="actionGroupModuleBuilder">The <see cref="ActionGroupModuleBuilder"/> to compare with the current <see cref="ActionGroupModuleBuilder"/>.</param>
@@ -935,6 +950,9 @@ public class ContextModuleBuilder : IModuleBuilder
     public static bool operator !=(ContextModuleBuilder left, ContextModuleBuilder right)
         => !(left == right);
 
+    public override bool Equals(object obj)
+        => obj is ContextModuleBuilder builder && Equals(builder);
+
     /// <summary>Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.</summary>
     /// <param name="contextModuleBuilder">The <see cref="ContextModuleBuilder"/> to compare with the current <see cref="ContextModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>.</returns>
@@ -981,6 +999,9 @@ public class DividerModuleBuilder : IModuleBuilder
 
     public static bool operator !=(DividerModuleBuilder left, DividerModuleBuilder right)
         => !(left == right);
+
+    public override bool Equals(object obj)
+        => obj is DividerModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="DividerModuleBuilder"/> is equal to the current <see cref="DividerModuleBuilder"/>.</summary>
     /// <param name="dividerModuleBuilder">The <see cref="DividerModuleBuilder"/> to compare with the current <see cref="DividerModuleBuilder"/>.</param>
@@ -1078,6 +1099,9 @@ public class FileModuleBuilder : IModuleBuilder
 
     public static bool operator !=(FileModuleBuilder left, FileModuleBuilder right)
         => !(left == right);
+
+    public override bool Equals(object obj)
+        => obj is FileModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>.</summary>
     /// <param name="fileModuleBuilder">The <see cref="FileModuleBuilder"/> to compare with the current <see cref="FileModuleBuilder"/>.</param>
@@ -1177,6 +1201,9 @@ public class VideoModuleBuilder : IModuleBuilder
 
     public static bool operator !=(VideoModuleBuilder left, VideoModuleBuilder right)
         => !(left == right);
+
+    public override bool Equals(object obj)
+        => obj is VideoModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>.</summary>
     /// <param name="videoModuleBuilder">The <see cref="VideoModuleBuilder"/> to compare with the current <see cref="VideoModuleBuilder"/>.</param>
@@ -1307,6 +1334,9 @@ public class AudioModuleBuilder : IModuleBuilder
 
     public static bool operator !=(AudioModuleBuilder left, AudioModuleBuilder right)
         => !(left == right);
+
+    public override bool Equals(object obj)
+        => obj is AudioModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>.</summary>
     /// <param name="audioModuleBuilder">The <see cref="AudioModuleBuilder"/> to compare with the current <see cref="AudioModuleBuilder"/>.</param>
@@ -1445,6 +1475,9 @@ public class CountdownModuleBuilder : IModuleBuilder
     public static bool operator !=(CountdownModuleBuilder left, CountdownModuleBuilder right)
         => !(left == right);
 
+    public override bool Equals(object obj)
+        => obj is CountdownModuleBuilder builder && Equals(builder);
+
     /// <summary>Determines whether the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>.</summary>
     /// <param name="countdownModuleBuilder">The <see cref="CountdownModuleBuilder"/> to compare with the current <see cref="CountdownModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>.</returns>
@@ -1524,6 +1557,9 @@ public class InviteModuleBuilder : IModuleBuilder
 
     public static bool operator !=(InviteModuleBuilder left, InviteModuleBuilder right)
         => !(left == right);
+
+    public override bool Equals(object obj)
+        => obj is InviteModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>.</summary>
     /// <param name="inviteModuleBuilder">The <see cref="InviteModuleBuilder"/> to compare with the current <see cref="InviteModuleBuilder"/>.</param>
