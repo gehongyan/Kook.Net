@@ -69,14 +69,14 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A <see langword="ulong"/> representing the default channel ID for this guild.
     /// </returns>
-    ulong DefaultChannelId { get; }
+    ulong? DefaultChannelId { get; }
     /// <summary>
     ///     Gets the welcome channel ID for this guild.
     /// </summary>
     /// <returns>
     ///     A <see langword="ulong"/> representing the welcome channel ID for this guild.
     /// </returns>
-    ulong WelcomeChannelId { get; }
+    ulong? WelcomeChannelId { get; }
     /// <summary>
     ///     Determines if this guild is currently connected and ready to be used.
     /// </summary>
@@ -338,6 +338,16 @@ public interface IGuild : IEntity<ulong>
     ///     <see langword="null" /> if none is found.
     /// </returns>
     Task<ITextChannel> GetDefaultChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Gets the welcome text channel for this guild.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the welcome text channel for this guild;
+    ///     <see langword="null" /> if none is found.
+    /// </returns>
+    Task<ITextChannel> GetWelcomeChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
     
     /// <summary>
     ///     Creates a new text channel in this guild.

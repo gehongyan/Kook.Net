@@ -48,9 +48,9 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc />
     public uint OpenId { get; private set; }
     /// <inheritdoc />
-    public ulong DefaultChannelId { get; private set; }
+    public ulong? DefaultChannelId { get; private set; }
     /// <inheritdoc />
-    public ulong WelcomeChannelId { get; private set; }
+    public ulong? WelcomeChannelId { get; private set; }
     /// <summary>
     ///     Gets the features of this guild.
     /// </summary>
@@ -180,6 +180,18 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     public SocketTextChannel DefaultChannel => TextChannels
         .Where(c => CurrentUser.GetPermissions(c).ViewChannel)
         .SingleOrDefault(c => c.Id == DefaultChannelId);
+    /// <summary>
+    ///     Gets the welcome text channel for this guild.
+    /// </summary>
+    /// <remarks>
+    ///     This property retrieves default text channel for this guild.
+    /// </remarks>
+    /// <returns>
+    ///     A <see cref="SocketTextChannel"/> representing the default text channel for this guild.
+    /// </returns>
+    public SocketTextChannel WelcomeChannel => TextChannels
+        .Where(c => CurrentUser.GetPermissions(c).ViewChannel)
+        .SingleOrDefault(c => c.Id == WelcomeChannelId);
     // /// <inheritdoc />
     // public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
     /// <summary>
@@ -280,8 +292,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         Region = model.Region;
         IsOpenEnabled = model.EnableOpen;
         OpenId = model.OpenId;
-        DefaultChannelId = model.DefaultChannelId;
-        WelcomeChannelId = model.WelcomeChannelId;
+        DefaultChannelId = model.DefaultChannelId != 0 ? model.DefaultChannelId : null;
+        WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
 
         IsAvailable = true;
 
@@ -319,8 +331,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         Region = model.Region;
         IsOpenEnabled = model.EnableOpen == 1;
         OpenId = model.OpenId;
-        DefaultChannelId = model.DefaultChannelId;
-        WelcomeChannelId = model.WelcomeChannelId;
+        DefaultChannelId = model.DefaultChannelId != 0 ? model.DefaultChannelId : null;
+        WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
         BoostNumber = model.BoostNumber;
         BufferBoostNumber = model.BufferBoostNumber;
         BoostLevel = model.BoostLevel;
@@ -842,6 +854,9 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc />
     Task<ITextChannel> IGuild.GetDefaultChannelAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult<ITextChannel>(DefaultChannel);
+    /// <inheritdoc />
+    Task<ITextChannel> IGuild.GetWelcomeChannelAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<ITextChannel>(WelcomeChannel);
     /// <inheritdoc />
     Task<IReadOnlyCollection<ITextChannel>> IGuild.GetTextChannelsAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult<IReadOnlyCollection<ITextChannel>>(TextChannels);

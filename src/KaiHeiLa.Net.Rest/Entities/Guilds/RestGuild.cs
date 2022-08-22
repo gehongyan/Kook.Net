@@ -36,9 +36,9 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     public uint OpenId { get; private set; }
     /// <inheritdoc />
-    public ulong DefaultChannelId { get; private set; }
+    public ulong? DefaultChannelId { get; private set; }
     /// <inheritdoc />
-    public ulong WelcomeChannelId { get; private set; }
+    public ulong? WelcomeChannelId { get; private set; }
 
     internal bool Available { get; private set; }
     /// <inheritdoc/>
@@ -128,8 +128,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         Region = model.Region;
         IsOpenEnabled = model.EnableOpen;
         OpenId = model.OpenId;
-        DefaultChannelId = model.DefaultChannelId;
-        WelcomeChannelId = model.WelcomeChannelId;
+        DefaultChannelId = model.DefaultChannelId != 0 ? model.DefaultChannelId : null;
+        WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
 
         Available = true;
 
@@ -459,11 +459,40 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public async Task<RestTextChannel> GetDefaultChannelAsync(RequestOptions options = null)
     {
-        var channels = await GetTextChannelsAsync(options).ConfigureAwait(false);
-        var user = await GetCurrentUserAsync(options).ConfigureAwait(false);
-        return channels
-            .Where(c => user.GetPermissions(c).ViewChannel)
-            .MinBy(c => c.Position);
+        ulong? welcomeChannelId = DefaultChannelId;
+        if (welcomeChannelId.HasValue)
+        {
+            RestGuildChannel channel = await GuildHelper.GetChannelAsync(this, KaiHeiLa, welcomeChannelId.Value, options).ConfigureAwait(false);
+            return channel as RestTextChannel;
+        }
+        return null;
+    }
+    // Get first channel
+    // public async Task<RestTextChannel> GetDefaultChannelAsync(RequestOptions options = null)
+    // {
+    //     var channels = await GetTextChannelsAsync(options).ConfigureAwait(false);
+    //     var user = await GetCurrentUserAsync(options).ConfigureAwait(false);
+    //     return channels
+    //         .Where(c => user.GetPermissions(c).ViewChannel)
+    //         .MinBy(c => c.Position);
+    // }
+    /// <summary>
+    ///     Gets the welcome text channel in this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the welcome text channel of this guild;
+    ///     <see langword="null" /> if none is found.
+    /// </returns>
+    public async Task<RestTextChannel> GetWelcomeChannelAsync(RequestOptions options = null)
+    {
+        ulong? welcomeChannelId = WelcomeChannelId;
+        if (welcomeChannelId.HasValue)
+        {
+            RestGuildChannel channel = await GuildHelper.GetChannelAsync(this, KaiHeiLa, welcomeChannelId.Value, options).ConfigureAwait(false);
+            return channel as RestTextChannel;
+        }
+        return null;
     }
     
     /// <summary>
@@ -652,6 +681,14 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     {
         if (mode == CacheMode.AllowDownload)
             return await GetDefaultChannelAsync(options).ConfigureAwait(false);
+        else
+            return null;
+    }
+    /// <inheritdoc />
+    async Task<ITextChannel> IGuild.GetWelcomeChannelAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetWelcomeChannelAsync(options).ConfigureAwait(false);
         else
             return null;
     }
