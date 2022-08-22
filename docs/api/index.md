@@ -9,7 +9,7 @@ uid: API.Docs
 # 常见实体
 
 * @Kook.WebSocket
-* @Kook.WebSocket.KaiHeiLaSocketClient
+* @Kook.WebSocket.KookSocketClient
 * @Kook.WebSocket.SocketGuild
 * @Kook.WebSocket.SocketGuildChannel
 * @Kook.WebSocket.SocketRole
