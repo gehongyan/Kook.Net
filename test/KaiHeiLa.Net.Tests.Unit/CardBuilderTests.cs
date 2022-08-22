@@ -16,6 +16,7 @@ public class CardBuilderTests
     private const string Icon = "https://kaiheila.net/logo.png";
     private const string Url = "https://kaiheila.net/";
 
+    [Fact]
     public void Constructor()
     {
         var builder = new CardBuilder()

@@ -28,7 +28,7 @@ public class PlainTextElement : IElement
     /// <returns>
     ///     A string that represents the KMarkdown content of the element.
     /// </returns>
-    public string Content { get; internal set; }
+    public string Content { get; }
 
     /// <summary>
     ///     Gets whether the shortcuts should be translated into emojis.
@@ -38,8 +38,31 @@ public class PlainTextElement : IElement
     ///     <c>true</c> if the shortcuts should be translated into emojis;
     ///     <c>false</c> if the text should be displayed as is.
     /// </returns>
-    public bool Emoji { get; internal set; }
+    public bool Emoji { get; }
 
     public override string ToString() => Content;
     private string DebuggerDisplay => $"{Type}: {Content}";
+
+    public static bool operator ==(PlainTextElement left, PlainTextElement right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(PlainTextElement left, PlainTextElement right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="PlainTextElement"/> is equal to the current <see cref="PlainTextElement"/>.</summary>
+    /// <remarks>If the object passes is an <see cref="PlainTextElement"/>, <see cref="Equals(PlainTextElement)"/> will be called to compare the 2 instances.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="PlainTextElement"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="PlainTextElement"/> is equal to the current <see cref="PlainTextElement"/>; otherwise, <c>false</c>.</returns>
+    public override bool Equals(object obj)
+        => obj is PlainTextElement plainTextElement && Equals(plainTextElement);
+
+    /// <summary>Determines whether the specified <see cref="PlainTextElement"/> is equal to the current <see cref="PlainTextElement"/>.</summary>
+    /// <param name="plainTextElement">The <see cref="PlainTextElement"/> to compare with the current <see cref="PlainTextElement"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="PlainTextElement"/> is equal to the current <see cref="PlainTextElement"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(PlainTextElement plainTextElement)
+        => GetHashCode() == plainTextElement?.GetHashCode();
+
+    /// <inheritdoc />
+    public override int GetHashCode()
+        => (Type, Content, Emoji).GetHashCode();
 }

@@ -144,4 +144,34 @@ public class CardBuilder : ICardBuilder
 
     /// <inheritdoc />
     ICard ICardBuilder.Build() => Build();
+    
+    public static bool operator ==(CardBuilder left, CardBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(CardBuilder left, CardBuilder right)
+        => !(left == right);
+    
+    /// <summary>Determines whether the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>.</summary>
+    /// <param name="cardBuilder">The <see cref="CardBuilder"/> to compare with the current <see cref="CardBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(CardBuilder cardBuilder)
+    {
+        if (cardBuilder is null)
+            return false;
+
+        if (Modules.Count != cardBuilder.Modules.Count)
+            return false;
+
+        for (int i = 0; i < Modules.Count; i++)
+            if (Modules[i] != cardBuilder.Modules[i])
+                return false;
+
+        return Type == cardBuilder.Type
+               && Theme == cardBuilder.Theme
+               && Color == cardBuilder.Color
+               && Size == cardBuilder.Size;
+    }
+    
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }

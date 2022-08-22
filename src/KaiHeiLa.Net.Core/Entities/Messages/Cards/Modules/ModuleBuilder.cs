@@ -105,6 +105,27 @@ public class HeaderModuleBuilder : IModuleBuilder
     
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
+
+    public static bool operator ==(HeaderModuleBuilder left, HeaderModuleBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(HeaderModuleBuilder left, HeaderModuleBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>.</summary>
+    /// <param name="headerModuleBuilder">The <see cref="HeaderModuleBuilder"/> to compare with the current <see cref="HeaderModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(HeaderModuleBuilder headerModuleBuilder)
+    {
+        if (headerModuleBuilder is null)
+            return false;
+
+        return Type == headerModuleBuilder.Type
+               && Text == headerModuleBuilder.Text;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -339,6 +360,29 @@ public class SectionModuleBuilder : IModuleBuilder
 
     /// <inheritdoc /> 
     IModule IModuleBuilder.Build() => Build();
+
+    public static bool operator ==(SectionModuleBuilder left, SectionModuleBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(SectionModuleBuilder left, SectionModuleBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.</summary>
+    /// <param name="sectionModuleBuilder">The <see cref="SectionModuleBuilder"/> to compare with the current <see cref="SectionModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(SectionModuleBuilder sectionModuleBuilder)
+    {
+        if (sectionModuleBuilder is null)
+            return false;
+
+        return Type == sectionModuleBuilder.Type
+               && Mode == sectionModuleBuilder.Mode
+               && Text == sectionModuleBuilder.Text
+               && Accessory == sectionModuleBuilder.Accessory;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -439,6 +483,33 @@ public class ImageGroupModuleBuilder : IModuleBuilder
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
+
+    public static bool operator ==(ImageGroupModuleBuilder left, ImageGroupModuleBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ImageGroupModuleBuilder left, ImageGroupModuleBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>.</summary>
+    /// <param name="imageGroupModuleBuilder">The <see cref="ImageGroupModuleBuilder"/> to compare with the current <see cref="ImageGroupModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(ImageGroupModuleBuilder imageGroupModuleBuilder)
+    {
+        if (imageGroupModuleBuilder is null)
+            return false;
+
+        if (Elements.Count != imageGroupModuleBuilder.Elements.Count)
+            return false;
+
+        for (int i = 0; i < Elements.Count; i++)
+            if (Elements[i] != imageGroupModuleBuilder.Elements[i])
+                return false;
+
+        return Type == imageGroupModuleBuilder.Type;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -539,6 +610,33 @@ public class ContainerModuleBuilder : IModuleBuilder
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
+
+    public static bool operator ==(ContainerModuleBuilder left, ContainerModuleBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ContainerModuleBuilder left, ContainerModuleBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>.</summary>
+    /// <param name="containerModuleBuilder">The <see cref="ContainerModuleBuilder"/> to compare with the current <see cref="ContainerModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(ContainerModuleBuilder containerModuleBuilder)
+    {
+        if (containerModuleBuilder is null)
+            return false;
+
+        if (Elements.Count != containerModuleBuilder.Elements.Count)
+            return false;
+
+        for (int i = 0; i < Elements.Count; i++)
+            if (Elements[i] != containerModuleBuilder.Elements[i])
+                return false;
+
+        return Type == containerModuleBuilder.Type;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -636,6 +734,33 @@ public class ActionGroupModuleBuilder : IModuleBuilder
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
+
+    public static bool operator ==(ActionGroupModuleBuilder left, ActionGroupModuleBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ActionGroupModuleBuilder left, ActionGroupModuleBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="ActionGroupModuleBuilder"/> is equal to the current <see cref="ActionGroupModuleBuilder"/>.</summary>
+    /// <param name="actionGroupModuleBuilder">The <see cref="ActionGroupModuleBuilder"/> to compare with the current <see cref="ActionGroupModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="ActionGroupModuleBuilder"/> is equal to the current <see cref="ActionGroupModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(ActionGroupModuleBuilder actionGroupModuleBuilder)
+    {
+        if (actionGroupModuleBuilder is null)
+            return false;
+
+        if (Elements.Count != actionGroupModuleBuilder.Elements.Count)
+            return false;
+
+        for (int i = 0; i < Elements.Count; i++)
+            if (Elements[i] != actionGroupModuleBuilder.Elements[i])
+                return false;
+
+        return Type == actionGroupModuleBuilder.Type;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -803,6 +928,33 @@ public class ContextModuleBuilder : IModuleBuilder
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
+
+    public static bool operator ==(ContextModuleBuilder left, ContextModuleBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ContextModuleBuilder left, ContextModuleBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.</summary>
+    /// <param name="contextModuleBuilder">The <see cref="ContextModuleBuilder"/> to compare with the current <see cref="ContextModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(ContextModuleBuilder contextModuleBuilder)
+    {
+        if (contextModuleBuilder is null)
+            return false;
+
+        if (Elements.Count != contextModuleBuilder.Elements.Count)
+            return false;
+
+        for (int i = 0; i < Elements.Count; i++)
+            if (Elements[i] != contextModuleBuilder.Elements[i])
+                return false;
+
+        return Type == contextModuleBuilder.Type;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -823,6 +975,26 @@ public class DividerModuleBuilder : IModuleBuilder
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
+
+    public static bool operator ==(DividerModuleBuilder left, DividerModuleBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(DividerModuleBuilder left, DividerModuleBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="DividerModuleBuilder"/> is equal to the current <see cref="DividerModuleBuilder"/>.</summary>
+    /// <param name="dividerModuleBuilder">The <see cref="DividerModuleBuilder"/> to compare with the current <see cref="DividerModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="DividerModuleBuilder"/> is equal to the current <see cref="DividerModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(DividerModuleBuilder dividerModuleBuilder)
+    {
+        if (dividerModuleBuilder is null)
+            return false;
+        
+        return Type == dividerModuleBuilder.Type;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -900,6 +1072,28 @@ public class FileModuleBuilder : IModuleBuilder
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
+
+    public static bool operator ==(FileModuleBuilder left, FileModuleBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(FileModuleBuilder left, FileModuleBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>.</summary>
+    /// <param name="fileModuleBuilder">The <see cref="FileModuleBuilder"/> to compare with the current <see cref="FileModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(FileModuleBuilder fileModuleBuilder)
+    {
+        if (fileModuleBuilder is null)
+            return false;
+        
+        return Type == fileModuleBuilder.Type
+            && Source == fileModuleBuilder.Source
+            && Title == fileModuleBuilder.Title;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -977,6 +1171,28 @@ public class VideoModuleBuilder : IModuleBuilder
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
+
+    public static bool operator ==(VideoModuleBuilder left, VideoModuleBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(VideoModuleBuilder left, VideoModuleBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>.</summary>
+    /// <param name="videoModuleBuilder">The <see cref="VideoModuleBuilder"/> to compare with the current <see cref="VideoModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(VideoModuleBuilder videoModuleBuilder)
+    {
+        if (videoModuleBuilder is null)
+            return false;
+        
+        return Type == videoModuleBuilder.Type
+               && Source == videoModuleBuilder.Source
+               && Title == videoModuleBuilder.Title;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -1085,6 +1301,29 @@ public class AudioModuleBuilder : IModuleBuilder
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
+
+    public static bool operator ==(AudioModuleBuilder left, AudioModuleBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(AudioModuleBuilder left, AudioModuleBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>.</summary>
+    /// <param name="audioModuleBuilder">The <see cref="AudioModuleBuilder"/> to compare with the current <see cref="AudioModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(AudioModuleBuilder audioModuleBuilder)
+    {
+        if (audioModuleBuilder is null)
+            return false;
+        
+        return Type == audioModuleBuilder.Type
+               && Source == audioModuleBuilder.Source
+               && Title == audioModuleBuilder.Title
+                && Cover == audioModuleBuilder.Cover;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -1199,6 +1438,29 @@ public class CountdownModuleBuilder : IModuleBuilder
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
+
+    public static bool operator ==(CountdownModuleBuilder left, CountdownModuleBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(CountdownModuleBuilder left, CountdownModuleBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>.</summary>
+    /// <param name="countdownModuleBuilder">The <see cref="CountdownModuleBuilder"/> to compare with the current <see cref="CountdownModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(CountdownModuleBuilder countdownModuleBuilder)
+    {
+        if (countdownModuleBuilder is null)
+            return false;
+        
+        return Type == countdownModuleBuilder.Type
+            && EndTime == countdownModuleBuilder.EndTime
+            && StartTime == countdownModuleBuilder.StartTime
+            && Mode == countdownModuleBuilder.Mode;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -1256,4 +1518,25 @@ public class InviteModuleBuilder : IModuleBuilder
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
+
+    public static bool operator ==(InviteModuleBuilder left, InviteModuleBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(InviteModuleBuilder left, InviteModuleBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>.</summary>
+    /// <param name="inviteModuleBuilder">The <see cref="InviteModuleBuilder"/> to compare with the current <see cref="InviteModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(InviteModuleBuilder inviteModuleBuilder)
+    {
+        if (inviteModuleBuilder is null)
+            return false;
+        
+        return Type == inviteModuleBuilder.Type
+            && Code == inviteModuleBuilder.Code;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }

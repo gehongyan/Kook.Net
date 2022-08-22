@@ -30,7 +30,7 @@ public class ImageElement : IElement
     /// <returns>
     ///     A string that represents the source of the image.
     /// </returns>
-    public string Source { get; internal set; }
+    public string Source { get; }
 
     /// <summary>
     ///     Gets the alternative text of the image.
@@ -38,7 +38,7 @@ public class ImageElement : IElement
     /// <returns>
     ///     A string that represents the alternative text of the image.
     /// </returns>
-    public string Alternative { get; internal set; }
+    public string Alternative { get; }
 
     /// <summary>
     ///     Gets the size of the image.
@@ -47,7 +47,7 @@ public class ImageElement : IElement
     ///     An <see cref="ImageSize"/> that represents the size of the image;
     ///     or <c>null</c> if the size is not specified.
     /// </returns>
-    public ImageSize? Size { get; internal set; }
+    public ImageSize? Size { get; }
 
     /// <summary>
     ///     Gets a value indicating whether the image should be rendered as a circle.
@@ -56,7 +56,30 @@ public class ImageElement : IElement
     ///     <c>true</c> if the image should be rendered as a circle; otherwise, <c>false</c>;
     ///     or <c>null</c> if whether the image should be rendered as a circle is not specified.
     /// </returns>
-    public bool? Circle { get; internal set; }
+    public bool? Circle { get; }
 
     private string DebuggerDisplay => $"{Type}: {Source}";
+
+    public static bool operator ==(ImageElement left, ImageElement right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ImageElement left, ImageElement right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="ImageElement"/> is equal to the current <see cref="ImageElement"/>.</summary>
+    /// <remarks>If the object passes is an <see cref="ImageElement"/>, <see cref="Equals(ImageElement)"/> will be called to compare the 2 instances.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="ImageElement"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="ImageElement"/> is equal to the current <see cref="ImageElement"/>; otherwise, <c>false</c>.</returns>
+    public override bool Equals(object obj)
+        => obj is ImageElement imageElement && Equals(imageElement);
+
+    /// <summary>Determines whether the specified <see cref="ImageElement"/> is equal to the current <see cref="ImageElement"/>.</summary>
+    /// <param name="imageElement">The <see cref="ImageElement"/> to compare with the current <see cref="ImageElement"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="ImageElement"/> is equal to the current <see cref="ImageElement"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(ImageElement imageElement)
+        => GetHashCode() == imageElement?.GetHashCode();
+
+    /// <inheritdoc />
+    public override int GetHashCode()
+        => (Type, Source, Alternative, Size, Circle).GetHashCode();
 }

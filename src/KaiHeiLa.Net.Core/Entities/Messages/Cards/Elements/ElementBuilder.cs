@@ -129,6 +129,28 @@ public class PlainTextElementBuilder : IElementBuilder
     
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
+
+    public static bool operator ==(PlainTextElementBuilder left, PlainTextElementBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(PlainTextElementBuilder left, PlainTextElementBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>.</summary>
+    /// <param name="plainTextElementBuilder">The <see cref="PlainTextElementBuilder"/> to compare with the current <see cref="PlainTextElementBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(PlainTextElementBuilder plainTextElementBuilder)
+    {
+        if (plainTextElementBuilder is null)
+            return false;
+        
+        return Type == plainTextElementBuilder.Type
+            && Content == plainTextElementBuilder.Content
+            && Emoji == plainTextElementBuilder.Emoji;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -226,6 +248,27 @@ public class KMarkdownElementBuilder : IElementBuilder
     
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
+
+    public static bool operator ==(KMarkdownElementBuilder left, KMarkdownElementBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(KMarkdownElementBuilder left, KMarkdownElementBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>.</summary>
+    /// <param name="kMarkdownElementBuilder">The <see cref="KMarkdownElementBuilder"/> to compare with the current <see cref="KMarkdownElementBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(KMarkdownElementBuilder kMarkdownElementBuilder)
+    {
+        if (kMarkdownElementBuilder is null)
+            return false;
+        
+        return Type == kMarkdownElementBuilder.Type
+               && Content == kMarkdownElementBuilder.Content;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -388,6 +431,30 @@ public class ImageElementBuilder : IElementBuilder
     
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
+
+    public static bool operator ==(ImageElementBuilder left, ImageElementBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ImageElementBuilder left, ImageElementBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="ImageElementBuilder"/> is equal to the current <see cref="ImageElementBuilder"/>.</summary>
+    /// <param name="imageElementBuilder">The <see cref="ImageElementBuilder"/> to compare with the current <see cref="ImageElementBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="ImageElementBuilder"/> is equal to the current <see cref="ImageElementBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(ImageElementBuilder imageElementBuilder)
+    {
+        if (imageElementBuilder is null)
+            return false;
+        
+        return Type == imageElementBuilder.Type
+            && Source == imageElementBuilder.Source
+            && Alternative == imageElementBuilder.Alternative
+            && Size == imageElementBuilder.Size
+            && Circle == imageElementBuilder.Circle;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -600,6 +667,30 @@ public class ButtonElementBuilder : IElementBuilder
 
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
+
+    public static bool operator ==(ButtonElementBuilder left, ButtonElementBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ButtonElementBuilder left, ButtonElementBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>.</summary>
+    /// <param name="buttonElementBuilder">The <see cref="ButtonElementBuilder"/> to compare with the current <see cref="ButtonElementBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(ButtonElementBuilder buttonElementBuilder)
+    {
+        if (buttonElementBuilder is null)
+            return false;
+        
+        return Type == buttonElementBuilder.Type
+            && Theme == buttonElementBuilder.Theme
+            && Value == buttonElementBuilder.Value
+            && Click == buttonElementBuilder.Click
+            && Text == buttonElementBuilder.Text;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
 
 /// <summary>
@@ -797,4 +888,32 @@ public class ParagraphStructBuilder : IElementBuilder
     
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
+
+    public static bool operator ==(ParagraphStructBuilder left, ParagraphStructBuilder right)
+        => left?.Equals(right) ?? right is null;
+
+    public static bool operator !=(ParagraphStructBuilder left, ParagraphStructBuilder right)
+        => !(left == right);
+
+    /// <summary>Determines whether the specified <see cref="ParagraphStructBuilder"/> is equal to the current <see cref="ParagraphStructBuilder"/>.</summary>
+    /// <param name="paragraphStructBuilder">The <see cref="ParagraphStructBuilder"/> to compare with the current <see cref="ParagraphStructBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="ParagraphStructBuilder"/> is equal to the current <see cref="ParagraphStructBuilder"/>; otherwise, <c>false</c>.</returns>
+    public bool Equals(ParagraphStructBuilder paragraphStructBuilder)
+    {
+        if (paragraphStructBuilder is null)
+            return false;
+
+        if (Fields.Count != paragraphStructBuilder.Fields.Count)
+            return false;
+
+        for (int i = 0; i < Fields.Count; i++)
+            if (Fields[i] != paragraphStructBuilder.Fields[i])
+                return false;
+
+        return Type == paragraphStructBuilder.Type
+               && ColumnCount == paragraphStructBuilder.ColumnCount;
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => base.GetHashCode();
 }
