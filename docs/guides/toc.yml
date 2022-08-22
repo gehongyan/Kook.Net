@@ -2,7 +2,7 @@
   topicUid: Guides.Introduction
 - name: 初次使用
   items:
-    - name: 安装 KaiHeiLa.Net
+    - name: 安装 Kook.Net
       topicUid: Guides.GettingStarted.Installation
     - name: 从零开始
       topicUid: Guides.GettingStarted.FirstBot

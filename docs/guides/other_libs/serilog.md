@@ -7,7 +7,7 @@ title: Serilog
 
 ## 先决条件
 
-- 如 [使用 KaiHeiLa.Net 构建你的第一个 Bot](xref:Guides.GettingStarted.FirstBot) 中所描述的带有日志处理方法的 Bot 客户端程序。
+- 如 [使用 Kook.Net 构建你的第一个 Bot](xref:Guides.GettingStarted.FirstBot) 中所描述的带有日志处理方法的 Bot 客户端程序。
 
 ## 安装 Serilog 类库
 
@@ -26,7 +26,7 @@ Serilog 需在异步函数入口点的顶部进行配置：
 
 ## 修改日志方法
 
-要想让 Serilog 能够正确地记录开黑啦的日志，需要将 KaiHeiLa.Net 的 `LogSeverity`
+要想让 Serilog 能够正确地记录 KOOK 的日志，需要将 Kook.Net 的 `LogSeverity`
 映射到 Serilog 的 `LogEventLevel`，映射的示例如下：
 
 [!code-csharp[MappingLogLevel](samples/serilog/mapping.cs)]
@@ -50,9 +50,9 @@ Now that you have set up Serilog, you can use it everywhere in your application 
 > [Serilog 文档](https://github.com/serilog/serilog/wiki/Configuration-Basics#minimum-level)。
 
 > [!NOTE]
-> KaiHeiLa.Net 与 Serilog 对日志级别的定义不完全一致，要简化最低输出日志级别控制，有两种可选策略：
+> Kook.Net 与 Serilog 对日志级别的定义不完全一致，要简化最低输出日志级别控制，有两种可选策略：
 > 
-> * 将 Serilog 的 `MinimumLevel` 配置为 `Verbose`，转而在 KaiHeiLa.Net 的 `KaiHeiLaConfig` 中配置 `LogLevel`
-> * 在 KaiHeiLa.Net 的 `KaiHeiLaConfig` 中配置 `LogLevel` 为 `Debug`，转而在 Serilog 中配置 `MinimumLevel`
+> * 将 Serilog 的 `MinimumLevel` 配置为 `Verbose`，转而在 Kook.Net 的 `KookConfig` 中配置 `LogLevel`
+> * 在 Kook.Net 的 `KookConfig` 中配置 `LogLevel` 为 `Debug`，转而在 Serilog 中配置 `MinimumLevel`
 > 
 > 同时配置两侧的最低日志级别可能会导致预期之外的最低日志级别控制结果。

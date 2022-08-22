@@ -46,7 +46,7 @@ public async Task Act(int requiredArg, NamableArguments namedArgs)
 > 特性标注的可选参数容器类，且**必须**位于参数列表的末位。
 > 被该特性标注的类会在解析参数是自动应用 [RemainderAttribute] 特性的效果。
 
-[RemainderAttribute]: xref:KaiHeiLa.Commands.RemainderAttributes
+[RemainderAttribute]: xref:Kook.Commands.RemainderAttributes
 
 ## 复杂类型
 
@@ -68,5 +68,5 @@ public IEnumerable<int> Numbers { get; set; }
 
 可选参数容器类中的属性也可以使用 [OverrideTypeReader]。
 
-[OverrideTypeReader]: xref:KaiHeiLa.Commands.OverrideTypeReaderAttribute
-[NamedArgumentTypeAttribute]: xref:KaiHeiLa.Commands.NamedArgumentTypeAttribute
+[OverrideTypeReader]: xref:Kook.Commands.OverrideTypeReaderAttribute
+[NamedArgumentTypeAttribute]: xref:Kook.Commands.NamedArgumentTypeAttribute

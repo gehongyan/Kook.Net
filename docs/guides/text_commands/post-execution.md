@@ -5,7 +5,7 @@ title: 后处理程序
 
 # 文本命令执行的后处理程序
 
-在开发命令时，您可能想要在执行命令后执行一些操作，KaiHeiLa.Net
+在开发命令时，您可能想要在执行命令后执行一些操作，Kook.Net
 提供了一些命令执行后处理工作流来实现这个目的。
 
 [文本命令框架入门] 中展示了下面的示例来执行并处理命令及其内的数据：
@@ -79,11 +79,11 @@ next? We can take this further by using [RuntimeResult].
 
 [!code[Logger Sample](samples/post-execution/command-exception-log.cs)]
 
-[CommandException]: xref:KaiHeiLa.Commands.CommandException
-[LogMessage.Exception]: xref:KaiHeiLa.LogMessage.Exception
-[CommandService.Log]: xref:KaiHeiLa.Commands.CommandService.Log
-[RuntimeResult]: xref:KaiHeiLa.Commands.RuntimeResult
-[CommandExecuted]: xref:KaiHeiLa.Commands.CommandService.CommandExecuted
-[ExecuteAsync]: xref:KaiHeiLa.Commands.CommandService.ExecuteAsync*
-[ExecuteResult]: xref:KaiHeiLa.Commands.ExecuteResult
+[CommandException]: xref:Kook.Commands.CommandException
+[LogMessage.Exception]: xref:Kook.LogMessage.Exception
+[CommandService.Log]: xref:Kook.Commands.CommandService.Log
+[RuntimeResult]: xref:Kook.Commands.RuntimeResult
+[CommandExecuted]: xref:Kook.Commands.CommandService.CommandExecuted
+[ExecuteAsync]: xref:Kook.Commands.CommandService.ExecuteAsync*
+[ExecuteResult]: xref:Kook.Commands.ExecuteResult
 [文本命令框架入门]: xref:Guides.TextCommands.Intro

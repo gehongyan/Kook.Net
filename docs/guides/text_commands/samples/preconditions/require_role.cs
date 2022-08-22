@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using KaiHeiLa.Commands;
-using KaiHeiLa.WebSocket;
+using Kook.Commands;
+using Kook.WebSocket;
 
 // 继承自 PreconditionAttribute
 public class RequireRoleAttribute : PreconditionAttribute

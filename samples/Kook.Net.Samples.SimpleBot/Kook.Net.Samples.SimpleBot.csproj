@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <IsPackable>false</IsPackable>
+        <LangVersion>latestmajor</LangVersion>
+        <RootNamespace>Kook.Net.Samples.SimpleBot</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Kook.Net.Core\Kook.Net.Core.csproj" />
+      <ProjectReference Include="..\..\src\Kook.Net.Rest\Kook.Net.Rest.csproj" />
+      <ProjectReference Include="..\..\src\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj" />
+    </ItemGroup>
+
+</Project>

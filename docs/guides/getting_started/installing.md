@@ -1,16 +1,16 @@
 ---
 uid: Guides.GettingStarted.Installation
-title: 安装 KaiHeiLa.Net
+title: 安装 Kook.Net
 ---
 
-# 安装 KaiHeiLa.Net
+# 安装 Kook.Net
 
-KaiHeiLa.Net 通过 NuGet 分发，推荐通过 NuGet 包管理工具安装，
+Kook.Net 通过 NuGet 分发，推荐通过 NuGet 包管理工具安装，
 如有需要，也可从源代码进行编译。
 
 ## 支持的平台
 
-KaiHeiLa.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧的平台。
+Kook.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧的平台。
 
 [.NET 6.0]: https://docs.microsoft.com/en-us/dotnet/core/whats-new/dotnet-6
 
@@ -19,7 +19,7 @@ KaiHeiLa.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧�
 支持的 NuGet 源有：
 
 - [NuGet Gallery](https://nuget.org)
-- [GitHub Packages](https://github.com/gehongyan?tab=packages&repo_name=KaiHeiLa.Net)
+- [GitHub Packages](https://github.com/gehongyan?tab=packages&repo_name=Kook.Net)
 
 ### 使用 Visual Studio
 
@@ -28,14 +28,14 @@ KaiHeiLa.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧�
 
     ![img.png](images/install/install-vs-dependencies.png)
 
-3. 在 `浏览` 选项卡中，搜索 `KaiHeiLa.Net`
+3. 在 `浏览` 选项卡中，搜索 `Kook.Net`
 
     > [!NOTE]
-    > 在正式版发布前，搜索 KaiHeiLa.Net 需勾选 `包括预发行版`，否则，该搜索结果无法展示在列表中。
+    > 在正式版发布前，搜索 Kook.Net 需勾选 `包括预发行版`，否则，该搜索结果无法展示在列表中。
 
     ![img.png](images/install/install-vs-nuget.png)
 
-4. 选择 `KaiHeiLa.Net`，点击 `安装`
+4. 选择 `Kook.Net`，点击 `安装`
 
 ### 使用 JetBrains Rider
 
@@ -44,19 +44,19 @@ KaiHeiLa.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧�
 
     ![img.png](images/install/install-rider-dependencies.png)
 
-3. 在 `Packages` 选项卡中，搜索 `KaiHeiLa.Net`
+3. 在 `Packages` 选项卡中，搜索 `Kook.Net`
 
     > [!NOTE]
-    > 在正式版发布前，搜索 KaiHeiLa.Net 需勾选 `Prerelease` ，否则，该搜索结果无法展示在列表中。
+    > 在正式版发布前，搜索 Kook.Net 需勾选 `Prerelease` ，否则，该搜索结果无法展示在列表中。
 
-4. 右键点击 `KaiHeiLa.Net`，点击 `Install KaiHeiLa.Net ...`
+4. 右键点击 `Kook.Net`，点击 `Install Kook.Net ...`
 
     ![img.png](images/install/install-rider-nuget.png)
 
 ### 使用 Visual Studio Code
 
 1. 找到 Bot 项目的 `*.csproj` 文件
-2. 添加 `KaiHeiLa.Net` 到 `*.csproj` 中
+2. 添加 `Kook.Net` 到 `*.csproj` 中
 
     [!code[SampleProject.csproj](samples/project.xml)]
 
@@ -64,17 +64,17 @@ KaiHeiLa.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧�
 
 1. 启动终端
 2. 导航至 Bot 项目中 `*.csproj` 文件的所在目录
-3. 执行 `dotnet add package KaiHeiLa.Net`
+3. 执行 `dotnet add package Kook.Net`
 
     > [!NOTE]
-    > 在正式版发布前，使用 dotnet CLI 添加 KaiHeiLa.Net 需附加 `--prerelease` 选项，
+    > 在正式版发布前，使用 dotnet CLI 添加 Kook.Net 需附加 `--prerelease` 选项，
     > 否则，dotnet CLI 将只尝试为项目添加稳定版本的 NuGet 包。
 
 ---
 
 ## 从源代码编译
 
-要从源代码编译 KaiHeiLa.Net，请参考：
+要从源代码编译 Kook.Net，请参考：
 
 ### 使用 Visual Studio
 

@@ -1,8 +1,8 @@
-private KaiHeiLaSocketClient _client;
+private KookSocketClient _client;
 
 public async Task MainAsync()
 {
-    _client = new KaiHeiLaSocketClient();
+    _client = new KookSocketClient();
 
     _client.Log += Log;
 

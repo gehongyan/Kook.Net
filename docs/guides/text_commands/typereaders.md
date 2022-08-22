@@ -24,8 +24,8 @@ title: 类型解析
 
 ## 自定义类型解析
 
-要自定义类型解析，可以创建一个类，引入 @KaiHeiLa 和 @KaiHeiLa.Commands
-命名空间，继承 @KaiHeiLa.Commands.TypeReader，并重写 [ReadAsync] 方法，
+要自定义类型解析，可以创建一个类，引入 @Kook 和 @Kook.Commands
+命名空间，继承 @Kook.Commands.TypeReader，并重写 [ReadAsync] 方法，
 该方法内为将输入的字符串解析为指定类型的逻辑。
 
 如果类型解析成功，请将解析结果传入 [TypeReaderResult.FromSuccess] 返回；
@@ -35,10 +35,10 @@ title: 类型解析
 > Visual Studio、JetBrains Rider 等集成开发环境中的 IntelliSense 
 > 智能提示可以帮助您添加抽象类的实现中缺失的成员。
 
-[TypeReaderResult]: xref:KaiHeiLa.Commands.TypeReaderResult
-[TypeReaderResult.FromSuccess]: xref:KaiHeiLa.Commands.TypeReaderResult.FromSuccess*
-[TypeReaderResult.FromError]: xref:KaiHeiLa.Commands.TypeReaderResult.FromError*
-[ReadAsync]: xref:KaiHeiLa.Commands.TypeReader.ReadAsync*
+[TypeReaderResult]: xref:Kook.Commands.TypeReaderResult
+[TypeReaderResult.FromSuccess]: xref:Kook.Commands.TypeReaderResult.FromSuccess*
+[TypeReaderResult.FromError]: xref:Kook.Commands.TypeReaderResult.FromError*
+[ReadAsync]: xref:Kook.Commands.TypeReader.ReadAsync*
 
 ### 示例
 
@@ -53,7 +53,7 @@ title: 类型解析
 > [!IMPORTANT]
 > 自定义类型解析注册需要在模块发现前进行，否则自定义类型接解析无法正常工作。
 
-[CommandService.AddTypeReader]: xref:KaiHeiLa.Commands.CommandService.AddTypeReader*
+[CommandService.AddTypeReader]: xref:Kook.Commands.CommandService.AddTypeReader*
 
 ### 示例
 

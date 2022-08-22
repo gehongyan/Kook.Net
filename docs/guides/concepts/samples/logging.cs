@@ -1,9 +1,9 @@
-using KaiHeiLa;
-using KaiHeiLa.WebSocket;
+using Kook;
+using Kook.WebSocket;
 
 public class LoggingService
 {
-    public LoggingService(KaiHeiLaSocketClient client, CommandService command)
+    public LoggingService(KookSocketClient client, CommandService command)
     {
         client.Log += LogAsync;
         command.Log += LogAsync;

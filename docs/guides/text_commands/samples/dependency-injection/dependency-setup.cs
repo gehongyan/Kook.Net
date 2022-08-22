@@ -1,19 +1,19 @@
 using System.Reflection;
-using KaiHeiLa.Commands;
-using KaiHeiLa.WebSocket;
+using Kook.Commands;
+using Kook.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
 public class Initialize
 {
     private readonly CommandService _commands;
-    private readonly KaiHeiLaSocketClient _client;
+    private readonly KookSocketClient _client;
 
-    // 如果服务容器内存在 CommandService and KaiHeiLaSocketClient 的实例
+    // 如果服务容器内存在 CommandService and KookSocketClient 的实例
     // 则从容器内获取这两个实例，否则需要创建新的实例
-    public Initialize(CommandService commands = null, KaiHeiLaSocketClient client = null)
+    public Initialize(CommandService commands = null, KookSocketClient client = null)
     {
         _commands = commands ?? new CommandService();
-        _client = client ?? new KaiHeiLaSocketClient();
+        _client = client ?? new KookSocketClient();
     }
 
     public IServiceProvider BuildServiceProvider() => new ServiceCollection()
@@ -29,11 +29,11 @@ public class Initialize
 }
 public class CommandHandler
 {
-    private readonly KaiHeiLaSocketClient _client;
+    private readonly KookSocketClient _client;
     private readonly CommandService _commands;
     private readonly IServiceProvider _services;
 
-    public CommandHandler(IServiceProvider services, CommandService commands, KaiHeiLaSocketClient client)
+    public CommandHandler(IServiceProvider services, CommandService commands, KookSocketClient client)
     {
         _commands = commands;
         _services = services;

@@ -5,7 +5,7 @@ title: 文本命令框架入门
 
 # 文本命令框架
 
-[KaiHeiLa.Commands](xref:KaiHeiLa.Commands) 命名空间提供了一组基于特性标签的文本命令服务。
+[Kook.Commands](xref:Kook.Commands) 命名空间提供了一组基于特性标签的文本命令服务。
 
 ## 入门
 
@@ -20,8 +20,8 @@ title: 文本命令框架入门
 
 [!code-csharp[Command Handler](samples/intro/command_handler.cs)]
 
-[CommandService]: xref:KaiHeiLa.Commands.CommandService
-[CommandServiceConfig]: xref:KaiHeiLa.Commands.CommandServiceConfig
+[CommandService]: xref:Kook.Commands.CommandService
+[CommandServiceConfig]: xref:Kook.Commands.CommandServiceConfig
 
 ## 使用特性
 
@@ -46,12 +46,12 @@ title: 文本命令框架入门
 > [ModuleBase] 是一个抽象类，可根据需要进行派生或重写。
 > 模块可以继承自 ModuleBase 的任何派生类。
 
-[ModuleBase]: xref:KaiHeiLa.Commands.ModuleBase`1
+[ModuleBase]: xref:Kook.Commands.ModuleBase`1
 
 ### 添加/创建命令
 
 > [!WARNING]
-> 尽量避免模型内代码运行耗时过长，这可能会导致网关线程的阻塞，进而中断 Bot 与开黑啦服务端的连接。
+> 尽量避免模型内代码运行耗时过长，这可能会导致网关线程的阻塞，进而中断 Bot 与 KOOK 服务端的连接。
 
 创建命令的处理程序，方法的返回类型必须是 `Task` 或 `Task<RuntimeResult>`，按需标记 `async` 关键字。
 
@@ -82,19 +82,19 @@ title: 文本命令框架入门
 如果某个参数可以包含空格地持续读取到命令末尾，可以为该参数标记 [RemainderAttribute]，
 用户在调用时便不必将实参包装在双引号中。
 
-[RemainderAttribute]: xref:KaiHeiLa.Commands.RemainderAttribute
+[RemainderAttribute]: xref:Kook.Commands.RemainderAttribute
 
 ### 命令重载
 
 命令处理函数支持重载，命令解析过程将自动地选择类型匹配的方法。
 
 如果两个命令处理函数间在调用时会存在不明确的引用，
-可为应优先尝试进行类型匹配的重载标记 @KaiHeiLa.Commands.PriorityAttribute 。
+可为应优先尝试进行类型匹配的重载标记 @Kook.Commands.PriorityAttribute 。
 
 ### 命令上下文
 
 每个命令都可以通过 [ModuleBase] 上的 [Context] 属性访问执行上下文。
-`ICommandContext` 支持访问消息、频道、服务器、用户、以及调用命令的底层开黑啦客户端。
+`ICommandContext` 支持访问消息、频道、服务器、用户、以及调用命令的底层 KOOK 客户端。
 
 使用 [ModuleBase] 的派生类可以指定不同类型的上下文。
 例如，[SocketCommandContext] 中的上下文中的属性为是 Socket 实体，不再需要进行强制类型转换。
@@ -114,15 +114,15 @@ title: 文本命令框架入门
 命令服务可以自动发现并加载程序集内继承自 [ModuleBase] 的类，调用 [CommandService.AddModulesAsync]
 可以进行自动发现与模块加载。如果要指定某个模块跳过自动加载，可对其标记特性 [DontAutoLoadAttribute]。
 
-[DontAutoLoadAttribute]: xref:KaiHeiLa.Commands.DontAutoLoadAttribute
-[CommandService.AddModulesAsync]: xref:KaiHeiLa.Commands.CommandService.AddModulesAsync*
+[DontAutoLoadAttribute]: xref:Kook.Commands.DontAutoLoadAttribute
+[CommandService.AddModulesAsync]: xref:Kook.Commands.CommandService.AddModulesAsync*
 
 #### 手动加载模块
 
 要手动加载模块，可调用 [CommandService.AddModuleAsync]，模块的类通过泛型传递。
 如有需要，也可以向该方法传入 IServiceProvider.
 
-[CommandService.AddModuleAsync]: xref:KaiHeiLa.Commands.CommandService.AddModuleAsync*
+[CommandService.AddModuleAsync]: xref:Kook.Commands.CommandService.AddModuleAsync*
 
 ### 模块构造函数
 
@@ -138,7 +138,7 @@ title: 文本命令框架入门
 
 ### 模块组
 
-模块组为一组具有相同名称前缀的命令，要声明模块组，可标记特性 @KaiHeiLa.Commands.GroupAttribute 。
+模块组为一组具有相同名称前缀的命令，要声明模块组，可标记特性 @Kook.Commands.GroupAttribute 。
 
 在模块组内，如果命令的 CommandAttribute 特性标签中不传入名称参数，则为创建以该组名称作为命令名称的命令。
 

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <!--
-        目标框架与 KaiHeiLa.Net 版本可能会随着未来的开发而发生变化
+        目标框架与 Kook.Net 版本可能会随着未来的开发而发生变化
     -->
 
     <PropertyGroup>
@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="KaiHeiLa.Net" Version="0.0.18-alpha" />
+        <PackageReference Include="Kook.Net" Version="0.0.18-alpha" />
     </ItemGroup>
 
 </Project>

@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <RootNamespace>Kook</RootNamespace>
+        <LangVersion>default</LangVersion>
+        <Version>0.0.39.1-alpha</Version>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PackageVersion>0.0.39.1-alpha</PackageVersion>
+        <Authors>gehongyan</Authors>
+        <Description>Kook.Net is an unofficial C# .NET implementation for Kook API.</Description>
+        <PackageProjectUrl>https://github.com/gehongyan/Kook.Net</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/gehongyan/Kook.Net.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageReleaseNotes>Simply implementation of messages receiving and sending</PackageReleaseNotes>
+        <Company>gehongyan</Company>
+        <AssemblyVersion>0.0.39.1</AssemblyVersion>
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Kook.Net.Commands\Kook.Net.Commands.csproj" />
+      <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj" />
+      <ProjectReference Include="..\Kook.Net.Rest\Kook.Net.Rest.csproj" />
+      <ProjectReference Include="..\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,16 +1,16 @@
 ---
 uid: Guides.Introduction
-title: KaiHeiLa.Net 简介
+title: Kook.Net 简介
 ---
 
 # 简介
 
-## 要准备使用 KaiHeiLa.Net？
+## 要准备使用 Kook.Net？
 
 欢迎！在开始使用本类库前，请先确认您应了解如何开发 .NET 应用程序，
 并对 C# 语言有一定的了解，包括 [异步编程]、[多态]、[接口] 等关键内容。
 
-如果想与使用本类库的开发者交流、获取帮助、反馈问题，请访问我们的 [开黑啦 KaiHeiLa.Net 社区](https://kaihei.co/EvxnOb)。
+如果想与使用本类库的开发者交流、获取帮助、反馈问题，请访问我们的 [KOOK Kook.Net 社区](https://kaihei.co/EvxnOb)。
 
 > [!NOTE]
 > 请注意，本文档中的代码片段仅为示例，请不要盲目地直接复制使用。

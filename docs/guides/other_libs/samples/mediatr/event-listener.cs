@@ -1,6 +1,6 @@
-// KaiHeiLaEventListener.cs
+// KookEventListener.cs
 
-using KaiHeiLa.WebSocket;
+using Kook.WebSocket;
 using MediatR;
 using MediatRSample.Notifications;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace MediatRSample;
 
-public class KaiHeiLaEventListener
+public class KookEventListener
 {
     private readonly CancellationToken _cancellationToken;
 
-    private readonly KaiHeiLaSocketClient _client;
+    private readonly KookSocketClient _client;
     private readonly IServiceScopeFactory _serviceScope;
 
-    public KaiHeiLaEventListener(KaiHeiLaSocketClient client, IServiceScopeFactory serviceScope)
+    public KookEventListener(KookSocketClient client, IServiceScopeFactory serviceScope)
     {
         _client = client;
         _serviceScope = serviceScope;

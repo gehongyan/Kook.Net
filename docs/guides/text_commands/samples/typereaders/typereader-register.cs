@@ -1,10 +1,10 @@
 public class CommandHandler
 {
     private readonly CommandService _commands;
-    private readonly KaiHeiLaSocketClient _client;
+    private readonly KookSocketClient _client;
     private readonly IServiceProvider _services;
 
-    public CommandHandler(CommandService commands, KaiHeiLaSocketClient client, IServiceProvider services)
+    public CommandHandler(CommandService commands, KookSocketClient client, IServiceProvider services)
     {
         _commands = commands;
         _client = client;

@@ -15,17 +15,17 @@ title: 先决条件
 
 有关这两种先决条件的详细信息，请参阅各自的 API 文档。
 
-[PreconditionAttribute]: xref:KaiHeiLa.Commands.PreconditionAttribute
-[ParameterPreconditionAttribute]: xref:KaiHeiLa.Commands.ParameterPreconditionAttribute
+[PreconditionAttribute]: xref:Kook.Commands.PreconditionAttribute
+[ParameterPreconditionAttribute]: xref:Kook.Commands.ParameterPreconditionAttribute
 
 ## 内置的先决条件
 
-@KaiHeiLa.Commands 提供了几个内置的先决条件。
+@Kook.Commands 提供了几个内置的先决条件。
 
-* @KaiHeiLa.Commands.RequireContextAttribute
-* @KaiHeiLa.Commands.RequireUserAttribute
-* @KaiHeiLa.Commands.RequireBotPermissionAttribute
-* @KaiHeiLa.Commands.RequireUserPermissionAttribute
+* @Kook.Commands.RequireContextAttribute
+* @Kook.Commands.RequireUserAttribute
+* @Kook.Commands.RequireBotPermissionAttribute
+* @Kook.Commands.RequireUserPermissionAttribute
 
 ## 用法
 
@@ -47,7 +47,7 @@ title: 先决条件
 
 [!code-csharp[OR Precondition](samples/preconditions/group_precondition.cs)]
 
-[Group]: xref:KaiHeiLa.Commands.PreconditionAttribute.Group
+[Group]: xref:Kook.Commands.PreconditionAttribute.Group
 
 ## 自定义先决条件
 
@@ -68,6 +68,6 @@ title: 先决条件
 
 [!code-csharp[Custom Precondition](samples/preconditions/require_role.cs)]
 
-[CheckPermissionsAsync]: xref:KaiHeiLa.Commands.PreconditionAttribute.CheckPermissionsAsync*
-[PreconditionResult.FromSuccess]: xref:KaiHeiLa.Commands.PreconditionResult.FromSuccess*
-[PreconditionResult.FromError]: xref:KaiHeiLa.Commands.PreconditionResult.FromError*
+[CheckPermissionsAsync]: xref:Kook.Commands.PreconditionAttribute.CheckPermissionsAsync*
+[PreconditionResult.FromSuccess]: xref:Kook.Commands.PreconditionResult.FromSuccess*
+[PreconditionResult.FromError]: xref:Kook.Commands.PreconditionResult.FromError*

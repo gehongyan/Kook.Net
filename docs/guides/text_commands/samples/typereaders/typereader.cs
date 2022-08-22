@@ -1,7 +1,7 @@
 // 本类库已对多数基本类型的类型解析进行了实现
 // 本示例仅用来展示如何创建一个简单的自定义类型解析
-using KaiHeiLa;
-using KaiHeiLa.Commands;
+using Kook;
+using Kook.Commands;
 
 public class BooleanTypeReader : TypeReader
 {

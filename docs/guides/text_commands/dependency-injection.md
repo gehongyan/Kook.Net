@@ -12,7 +12,7 @@ title: 依赖注入
 1. 创建 [ServiceCollection] 实例
 2. 将要使用的模块添加到依赖注入的 ServiceCollection 中
 3. 将 ServiceCollection 构建为 [ServiceProvider]
-4. 将 ServiceProvider 作为参数传入 @KaiHeiLa.Commands.CommandService.AddModulesAsync* / @KaiHeiLa.Commands.CommandService.AddModuleAsync* , @KaiHeiLa.Commands.CommandService.ExecuteAsync* .
+4. 将 ServiceProvider 作为参数传入 @Kook.Commands.CommandService.AddModulesAsync* / @Kook.Commands.CommandService.AddModuleAsync* , @Kook.Commands.CommandService.ExecuteAsync* .
 
 [ServiceCollection]: https://docs.microsoft.com/dotnet/api/microsoft.extensions.dependencyinjection.servicecollection
 [ServiceProvider]: https://docs.microsoft.com/dotnet/api/microsoft.extensions.dependencyinjection.serviceprovider
@@ -41,4 +41,4 @@ title: 依赖注入
 [!code-csharp[Injection Modules](samples/dependency-injection/dependency-module.cs)]
 [!code-csharp[Disallow Dependency Injection](samples/dependency-injection/dependency-module-noinject.cs)]
 
-[DontInjectAttribute]: xref:KaiHeiLa.Commands.DontInjectAttribute
+[DontInjectAttribute]: xref:Kook.Commands.DontInjectAttribute

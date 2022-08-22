@@ -1,4 +1,4 @@
-name: KaiHeiLa.Net Deploy
+name: Kook.Net Deploy
 
 on:
   push:
@@ -55,7 +55,7 @@ jobs:
       name: Add CNAME
       env:
         FILE_NAME: "docs/_site/CNAME"
-        FILE_DATA: "kaiheila.net"
+        FILE_DATA: "kooknet.dev"
 
     - name: Publish Doc
       uses: cpina/github-action-push-to-another-repository@main
@@ -65,6 +65,6 @@ jobs:
         source-directory: docs/_site/
         destination-github-username: gehongyan
         destination-repository-username: gehongyan
-        destination-repository-name: KaiHeiLa.Net.Doc
+        destination-repository-name: Kook.Net.Doc
         target-directory: docs
         user-email: gehongyan1996@126.com

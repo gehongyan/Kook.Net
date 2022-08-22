@@ -1,4 +1,4 @@
 // Program.cs
 
-var listener = services.GetRequiredService<KaiHeiLaEventListener>();
+var listener = services.GetRequiredService<KookEventListener>();
 await listener.StartAsync();

@@ -1,10 +1,10 @@
-using KaiHeiLa;
+using Kook;
 using Serilog;
 using Serilog.Events;
 
 public class Program
 {
-    private KaiHeiLaSocketClient _client;
+    private KookSocketClient _client;
     public static Task Main(string[] args) => new Program().MainAsync();
 
     public async Task MainAsync()
@@ -15,7 +15,7 @@ public class Program
             .WriteTo.Console()
             .CreateLogger();
 
-        _client = new KaiHeiLaSocketClient();
+        _client = new KookSocketClient();
 
         _client.Log += LogAsync;
 

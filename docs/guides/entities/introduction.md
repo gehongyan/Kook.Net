@@ -3,19 +3,19 @@ uid: Guides.Entities.Intro
 title: 实体简介
 ---
 
-# KaiHeiLa.Net 中的实体
+# Kook.Net 中的实体
 
-KaiHeiLa.Net 提供了一系列多用途的实体类，来表示来自开黑啦 API 或网关的数据。
+Kook.Net 提供了一系列多用途的实体类，来表示来自 KOOK API 或网关的数据。
 
 > [!TIP]
 > 在使用 `Get***` 系列方法来获取包含详细信息的实例实体时，需要为方法指定正确的 ID，
-> 因此，建议您启用开黑啦的开发者模式，以便于获取实体的 ID，开发者模式可在
+> 因此，建议您启用 KOOK 的开发者模式，以便于获取实体的 ID，开发者模式可在
 > “用户设置 - 高级设置 - 开发者模式” 处启用。
 
 ## 实体的变体与继承
 
-由于同一对象可能会在开黑啦 API 或网关不同的接口或事件中出现，
-在不同的数据上下文中包含不同的字段，因此，KaiHeiLa.Net 中的部分实体拥有多种变体，
+由于同一对象可能会在 KOOK API 或网关不同的接口或事件中出现，
+在不同的数据上下文中包含不同的字段，因此，Kook.Net 中的部分实体拥有多种变体，
 例如：`IUser` 和 `IGuildUser` 分别表示通用的用户实体和服务器内的用户实体。
 
 尽管部分实体包含的信息很简略，但所有的实体模型都有一个包含尽可能详细的信息的实体变体与之对应。
@@ -28,7 +28,7 @@ REST 实体通过 HTTP API 获取，其在被使用后会被销毁释放。每�
 
 - [有关 REST 的更多信息](https://restfulapi.net/)
 
-Socket 实体中的大多数都是通过 `KaiHeiLaSocketClient` 的网关连接中的各种事件创建的，
+Socket 实体中的大多数都是通过 `KookSocketClient` 的网关连接中的各种事件创建的，
 仅当客户端初始化或事件包含的数据过于简略时，客户端才会进一步通过 API 获取的 REST 实体补全信息。
 这些 Socket 实体都会进入到客户端的全局缓存中，以在业务逻辑中使用。
 
@@ -50,8 +50,8 @@ Socket 实体中的大多数都是通过 `KaiHeiLaSocketClient` 的网关连接�
 ## 访问 Socket 实体
 
 实体最基本的形式形如 `SocketGuild`、`SocketUser`、`SocketChannel` 等，
-这些实体可以从 `KaiHeiLaSocketClient` 的全局缓存中获取，
-也可以在 `KaiHeiLaSocketClient` 上通过相应的 `Get***` 方法获取。
+这些实体可以从 `KookSocketClient` 的全局缓存中获取，
+也可以在 `KookSocketClient` 上通过相应的 `Get***` 方法获取。
 
 在这些实体上进一步调用 `Get***` 方法可以获得包含更多信息的实体变体，例如：
 `SocketGuild.GetUser` 可以获得 `SocketGuildUser` 实体，
@@ -67,10 +67,10 @@ Socket 实体中的大多数都是通过 `KaiHeiLaSocketClient` 的网关连接�
 REST 实体的工作方式几乎与 Socket 实体相同，只是在每一次获取时都会发起一次
 API 请求，因此较少使用。
 
-访问 REST 实体需要通过 `KaiHeiLaRestClient` 的 `Rest` 属性进行，
-或是创建一个新的 [KaiHeiLaRestClient] 实例，可以独立于网关线程。
+访问 REST 实体需要通过 `KookRestClient` 的 `Rest` 属性进行，
+或是创建一个新的 [KookRestClient] 实例，可以独立于网关线程。
 
-[KaiHeiLaRestClient]: xref:KaiHeiLa.Rest.KaiHeiLaRestClient
+[KookRestClient]: xref:Kook.Rest.KookRestClient
 
 ### 示例
 

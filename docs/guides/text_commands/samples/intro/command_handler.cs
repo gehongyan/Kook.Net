@@ -1,10 +1,10 @@
 public class CommandHandler
 {
-    private readonly KaiHeiLaSocketClient _client;
+    private readonly KookSocketClient _client;
     private readonly CommandService _commands;
 
-    // 从构造函数中获取 KaiHeiLaSocketClient 与 CommandService 的示例
-    public CommandHandler(KaiHeiLaSocketClient client, CommandService commands)
+    // 从构造函数中获取 KookSocketClient 与 CommandService 的示例
+    public CommandHandler(KookSocketClient client, CommandService commands)
     {
         _commands = commands;
         _client = client;

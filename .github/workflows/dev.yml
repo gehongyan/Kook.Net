@@ -1,4 +1,4 @@
-name: KaiHeiLa.Net Dev
+name: Kook.Net Dev
 
 on:
   push:
@@ -29,4 +29,4 @@ jobs:
     - name: Test
       run: dotnet test src --no-build --verbosity normal --filter Category!=Integration
       env:
-        KAIHEILA_NET_TEST_TOKEN: ${{ secrets.KAIHEILA_NET_TEST_TOKEN }}
+        KOOK_NET_TEST_TOKEN: ${{ secrets.KOOK_NET_TEST_TOKEN }}

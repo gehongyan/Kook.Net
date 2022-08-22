@@ -1,6 +1,6 @@
 // MessageReceivedNotification.cs
 
-using KaiHeiLa.WebSocket;
+using Kook.WebSocket;
 using MediatR;
 
 namespace MediatRSample.Notifications;

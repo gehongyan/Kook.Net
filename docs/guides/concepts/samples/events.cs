@@ -1,19 +1,19 @@
-using KaiHeiLa;
-using KaiHeiLa.WebSocket;
+using Kook;
+using Kook.WebSocket;
 
 public class Program
 {
-    private KaiHeiLaSocketClient _client;
+    private KookSocketClient _client;
     public static Task Main(string[] args) => new Program().MainAsync();
 	
     public async Task MainAsync()
     {
         // 如需使用事件中的 Cacheable<IMessage, Guid> 实体，
         // 您可能需要在客户端配置中启用消息缓存。
-        var _config = new KaiHeiLaSocketConfig { MessageCacheSize = 100 };
-        _client = new KaiHeiLaSocketClient(_config);
+        var _config = new KookSocketConfig { MessageCacheSize = 100 };
+        _client = new KookSocketClient(_config);
 
-        await _client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("KaiHeiLaToken"));
+        await _client.LoginAsync(TokenType.Bot, Environment.GetEnvironmentVariable("KookToken"));
         await _client.StartAsync();
 
         _client.MessageUpdated += MessageUpdated;

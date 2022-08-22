@@ -37,14 +37,14 @@
     ],
     "postProcessors": ["ExtractSearchIndex"],
     "globalMetadata": {
-      "_appTitle": "KaiHeiLa.Net 文档",
-      "_appName": "KaiHeiLa.Net 文档",
-      "_appFooter": "KaiHeiLa.Net (c) 2022",
+      "_appTitle": "Kook.Net 文档",
+      "_appName": "Kook.Net 文档",
+      "_appFooter": "Kook.Net (c) 2022",
       "_enableSearch": true,
       "_appFaviconPath": "favicon.ico"
     },
     "sitemap":{
-      "baseUrl": "https://www.kaiheila.net"
+      "baseUrl": "https://www.kooknet.dev"
     }
   }
 }
