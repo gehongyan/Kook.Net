@@ -7,7 +7,8 @@ internal class ModifyGuildRoleParams
     [JsonPropertyName("guild_id")]
     public ulong GuildId { get; set; }
 
-    [JsonPropertyName("role_id")] public uint Id { get; set; }
+    [JsonPropertyName("role_id")] 
+    public uint RoleId { get; set; }
 
     [JsonPropertyName("name")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

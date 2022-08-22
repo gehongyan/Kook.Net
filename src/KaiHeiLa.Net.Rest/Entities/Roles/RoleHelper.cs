@@ -25,6 +25,7 @@ internal static class RoleHelper
         var apiArgs = new API.Rest.ModifyGuildRoleParams
         {
             GuildId = role.Guild.Id,
+            RoleId = role.Id,
             Name = args.Name,
             Color = args.Color?.RawValue,
             Hoist = args.Hoist switch
