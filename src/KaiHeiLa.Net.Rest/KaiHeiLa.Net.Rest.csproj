@@ -15,7 +15,7 @@
         <RepositoryType>git</RepositoryType>
         <PackageReleaseNotes>Under development</PackageReleaseNotes>
         <Company>gehongyan</Company>
-        <AssemblyVersion>0.0.39.1.1</AssemblyVersion>
+        <AssemblyVersion>0.0.39.1</AssemblyVersion>
         <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
