@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Kook.Rest;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -154,6 +157,60 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
             await category.DeleteAsync();
             await text.DeleteAsync();
             await voice.DeleteAsync();
+        }
+    }
+
+    [Fact]
+    public async Task MiscAsync()
+    {
+        ITextChannel channel = await _guild.CreateTextChannelAsync("TEXT");
+        try
+        {
+            IGuildUser selfUser = await _guild.GetCurrentUserAsync();
+            IRole role = await _guild.CreateRoleAsync("TEST ROLE");
+            Assert.NotNull(channel);
+            Assert.NotNull(selfUser);
+            Assert.NotNull(role);
+            
+            // check that the creator is myself
+            Assert.Equal(selfUser.Id, channel.CreatorId);
+            IUser creator = await channel.GetCreatorAsync();
+            Assert.Equal(selfUser.Id, creator.Id);
+            
+            // check permission overwrites
+            await channel.AddPermissionOverwriteAsync(selfUser);
+            Assert.Single(channel.UserPermissionOverwrites);
+            await channel.ModifyPermissionOverwriteAsync(selfUser, permissions => permissions
+                .Modify(viewChannel: PermValue.Allow, sendMessages: PermValue.Deny, attachFiles: PermValue.Inherit));
+            UserPermissionOverwrite userPermissionOverwrite = channel.UserPermissionOverwrites.First();
+            Assert.Equal(selfUser.Id, userPermissionOverwrite.Target.Id);
+            Assert.Equal(PermValue.Allow, userPermissionOverwrite.Permissions.ViewChannel);
+            Assert.Equal(PermValue.Deny, userPermissionOverwrite.Permissions.SendMessages);
+            Assert.Equal(PermValue.Inherit, userPermissionOverwrite.Permissions.AttachFiles);
+            await channel.RemovePermissionOverwriteAsync(selfUser);
+            Assert.Empty(channel.UserPermissionOverwrites);
+            await channel.AddPermissionOverwriteAsync(role);
+            Assert.Single(channel.RolePermissionOverwrites.Where(overwrite => overwrite.Target > 0));
+            await channel.ModifyPermissionOverwriteAsync(role, permissions => permissions
+                .Modify(viewChannel: PermValue.Allow, sendMessages: PermValue.Deny, attachFiles: PermValue.Inherit));
+            RolePermissionOverwrite rolePermissionOverwrite = channel.RolePermissionOverwrites.First(overwrite => overwrite.Target > 0);
+            Assert.Equal(role.Id, rolePermissionOverwrite.Target);
+            Assert.Equal(PermValue.Allow, rolePermissionOverwrite.Permissions.ViewChannel);
+            Assert.Equal(PermValue.Deny, rolePermissionOverwrite.Permissions.SendMessages);
+            Assert.Equal(PermValue.Inherit, rolePermissionOverwrite.Permissions.AttachFiles);
+            await channel.RemovePermissionOverwriteAsync(role);
+            Assert.Empty(channel.RolePermissionOverwrites.Where(overwrite => overwrite.Target > 0));
+            
+            // check invites
+            IInvite invite = await channel.CreateInviteAsync(InviteMaxAge._86400, InviteMaxUses._50);
+            Assert.NotNull(invite);
+            Assert.Equal(TimeSpan.FromSeconds(86400), invite.MaxAge);
+            Assert.Equal(50, invite.MaxUses);
+            invite.Code.Should().NotBeNullOrWhiteSpace();
+        }
+        finally
+        {
+            await channel.DeleteAsync();
         }
     }
 }
