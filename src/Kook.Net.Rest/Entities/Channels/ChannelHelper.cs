@@ -346,7 +346,7 @@ internal static class ChannelHelper
     public static async Task RemovePermissionOverwriteAsync(IGuildChannel channel, BaseKookClient client,
         IUser user, RequestOptions options)
     {
-        var args = new CreateOrRemoveChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.Role,
+        var args = new CreateOrRemoveChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.User,
             user.Id);
         await client.ApiClient.RemoveChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
     }
