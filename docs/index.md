@@ -18,7 +18,7 @@ title: 首页
 
 Kook.Net 是一个对 [KOOK（原开黑啦）API] 进行功能封装的类库，以 C# 编写，可运行在 .NET 6 平台上。
 
-[KOOK（原开黑啦）API]: https://https://developer.kookapp.cn/doc
+[KOOK（原开黑啦）API]: https://developer.kookapp.cn/doc
 
 ## 我应该从哪里开始？
 
