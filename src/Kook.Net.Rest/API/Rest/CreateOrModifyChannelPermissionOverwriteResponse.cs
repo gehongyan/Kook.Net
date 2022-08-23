@@ -32,6 +32,9 @@ internal class CreateOrModifyChannelPermissionOverwriteResponse
         _ => 0
     };
 
+    [JsonPropertyName("allow")] 
     public ulong Allow { get; set; }
-    [JsonPropertyName("deny")] public ulong Deny { get; set; }
+    
+    [JsonPropertyName("deny")] 
+    public ulong Deny { get; set; }
 }
