@@ -130,27 +130,67 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     public Task KickAsync(RequestOptions options = null)
         => UserHelper.KickAsync(this, Kook, options);
     /// <inheritdoc />
+    /// <note type="warning">
+    ///     Due to the lack of events which should be raised when a role is added to a user,
+    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
+    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
+    /// </note>
     public Task AddRoleAsync(uint roleId, RequestOptions options = null)
         => AddRolesAsync(new[] { roleId }, options);
     /// <inheritdoc />
+    /// <note type="warning">
+    ///     Due to the lack of events which should be raised when a role is added to a user,
+    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
+    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
+    /// </note>
     public Task AddRoleAsync(IRole role, RequestOptions options = null)
         => AddRoleAsync(role.Id, options);
     /// <inheritdoc />
+    /// <note type="warning">
+    ///     Due to the lack of events which should be raised when a role is added to a user,
+    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
+    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
+    /// </note>
     public Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null)
         => UserHelper.AddRolesAsync(this, Kook, roleIds, options);
     /// <inheritdoc />
+    /// <note type="warning">
+    ///     Due to the lack of events which should be raised when a role is added to a user,
+    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
+    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
+    /// </note>
     public Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null)
         => AddRolesAsync(roles.Select(x => x.Id), options);
     /// <inheritdoc />
+    /// <note type="warning">
+    ///     Due to the lack of events which should be raised when a role is removed from a user,
+    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
+    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
+    /// </note>
     public Task RemoveRoleAsync(uint roleId, RequestOptions options = null)
         => RemoveRolesAsync(new[] { roleId }, options);
     /// <inheritdoc />
+    /// <note type="warning">
+    ///     Due to the lack of events which should be raised when a role is removed from a user,
+    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
+    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
+    /// </note>
     public Task RemoveRoleAsync(IRole role, RequestOptions options = null)
         => RemoveRoleAsync(role.Id, options);
     /// <inheritdoc />
+    /// <note type="warning">
+    ///     Due to the lack of events which should be raised when a role is removed from a user,
+    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
+    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
+    /// </note>
     public Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null)
         => UserHelper.RemoveRolesAsync(this, Kook, roleIds, options);
     /// <inheritdoc />
+    /// <note type="warning">
+    ///     Due to the lack of events which should be raised when a role is removed from a user,
+    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
+    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
+    /// </note>
     public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null)
         => RemoveRolesAsync(roles.Select(x => x.Id));
     /// <inheritdoc />
