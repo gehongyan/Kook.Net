@@ -1,10 +1,10 @@
-name: KaiHeiLa.Net Deploy
+name: KaiHeiLa.Net Archive Deploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [ kaiheila-net-archive ]
   pull_request:
-    branches: [ master ]
+    branches: [ kaiheila-net-archive ]
 
 jobs:
   deploy:
@@ -26,9 +26,6 @@ jobs:
     - name: Build
       run: dotnet build src --no-restore
 
-    - name: Test
-      run: dotnet test src --no-build --verbosity normal --filter Category!=Integration
-
     # Packages
 
     - name: Generate Packages
@@ -37,34 +34,9 @@ jobs:
     - name: Push Packages to NuGet
       run: dotnet nuget push ./packages/*.nupkg -k ${NUGET_TOKEN} -s https://api.nuget.org/v3/index.json --skip-duplicate
       env:
-        NUGET_TOKEN: ${{secrets.NUGET_API_KEY}}
+        NUGET_TOKEN: ${{secrets.ARCHIVE_NUGET_API_KEY}}
 
     - name: Push Packages to Github
       run: dotnet nuget push ./packages/*.nupkg -k ${GITHUB_TOKEN} -s https://nuget.pkg.github.com/gehongyan/index.json --skip-duplicate
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-    # DocFX
-    
-    - uses: nikeee/docfx-action@v1.0.0
-      name: Build Doc
-      with:
-        args: ./docs/docfx.json
-
-    - uses: finnp/create-file-action@master
-      name: Add CNAME
-      env:
-        FILE_NAME: "docs/_site/CNAME"
-        FILE_DATA: "kaiheila.net"
-
-    - name: Publish Doc
-      uses: cpina/github-action-push-to-another-repository@main
-      env:
-        API_TOKEN_GITHUB: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-      with:
-        source-directory: docs/_site/
-        destination-github-username: gehongyan
-        destination-repository-username: gehongyan
-        destination-repository-name: KaiHeiLa.Net.Doc
-        target-directory: docs
-        user-email: gehongyan1996@126.com

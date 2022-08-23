@@ -15,6 +15,7 @@ using KaiHeiLa.Rest;
 
 namespace KaiHeiLa.WebSocket;
 
+[Obsolete("NuGet package KaiHeiLa.Net has been renamed to Kook.Net, please uninstall KaiHeiLa.Net and install Kook.Net instead.")]
 public partial class KaiHeiLaSocketClient : BaseSocketClient, IKaiHeiLaClient
 {
     #region KaiHeiLaSocketClient

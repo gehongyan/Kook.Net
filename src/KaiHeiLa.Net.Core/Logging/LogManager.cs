@@ -103,5 +103,6 @@ internal class LogManager
     public async Task WriteInitialLog()
     {
         await ClientLogger.InfoAsync($"KaiHeiLa.Net v{KaiHeiLaConfig.Version} (API v{KaiHeiLaConfig.APIVersion})").ConfigureAwait(false);
+        await ClientLogger.WarningAsync($"NuGet package KaiHeiLa.Net has been renamed to Kook.Net, please uninstall KaiHeiLa.Net and install Kook.Net instead.").ConfigureAwait(false);
     }
 }
