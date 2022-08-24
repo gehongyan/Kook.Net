@@ -8,13 +8,13 @@ public struct ChannelPermissions
     /// <summary> Gets a blank <see cref="ChannelPermissions"/> that grants no permissions.</summary>
     public static readonly ChannelPermissions None = new ChannelPermissions();
     /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for text channels.</summary>
-    public static readonly ChannelPermissions Text = new ChannelPermissions(0b_0000_0000_0110_0111_1100_0010_1000);
+    public static readonly ChannelPermissions Text = new ChannelPermissions(0b0_0000_0000_0110_0111_1100_0010_1000);
     /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for voice channels.</summary>
-    public static readonly ChannelPermissions Voice = new ChannelPermissions(0b_1011_1101_0001_1000_1100_0010_1000);
+    public static readonly ChannelPermissions Voice = new ChannelPermissions(0b1_1011_1101_0001_1000_1100_0010_1000);
     /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for category channels.</summary>
-    public static readonly ChannelPermissions Category = new ChannelPermissions(0b1011_1101_0111_1111_1100_0010_1000);
+    public static readonly ChannelPermissions Category = new ChannelPermissions(0b1_1011_1101_0111_1111_1100_0010_1000);
     /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for direct message channels.</summary>
-    public static readonly ChannelPermissions DM = new ChannelPermissions(0b0000_0000_0100_0101_1000_0000_0000);
+    public static readonly ChannelPermissions DM = new ChannelPermissions(0b0_0000_0000_0100_0101_1000_0000_0000);
 
     /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for a given channel type.</summary>
     /// <exception cref="ArgumentException">Unknown channel type.</exception>
@@ -67,6 +67,8 @@ public struct ChannelPermissions
     public bool MuteMembers => Permissions.GetValue(RawValue, ChannelPermission.MuteMembers);
     /// <summary> If <c>true</c>, a user may play soundtracks in a voice channel. </summary>
     public bool PlaySoundtrack => Permissions.GetValue(RawValue, ChannelPermission.PlaySoundtrack);
+    /// <summary> If <c>true</c>, a user may share screen in a voice channel. </summary>
+    public bool ShareScreen => Permissions.GetValue(RawValue, ChannelPermission.ShareScreen);
     
     /// <summary> Creates a new <see cref="ChannelPermissions"/> with the provided packed value.</summary>
     public ChannelPermissions(ulong rawValue) { RawValue = rawValue; }
@@ -88,7 +90,8 @@ public struct ChannelPermissions
         bool? speak = null,
         bool? deafenMembers = null,
         bool? muteMembers = null,
-        bool? playSoundtrack = null)
+        bool? playSoundtrack = null,
+        bool? shareScreen = null)
     {
         ulong value = initialValue;
 
@@ -109,6 +112,7 @@ public struct ChannelPermissions
         Permissions.SetValue(ref value, deafenMembers, ChannelPermission.DeafenMembers);
         Permissions.SetValue(ref value, muteMembers, ChannelPermission.MuteMembers);
         Permissions.SetValue(ref value, playSoundtrack, ChannelPermission.PlaySoundtrack);
+        Permissions.SetValue(ref value, shareScreen, ChannelPermission.ShareScreen);
         
         RawValue = value;
     }
@@ -131,10 +135,11 @@ public struct ChannelPermissions
         bool? speak = false,
         bool? deafenMembers = false,
         bool? muteMembers = false,
-        bool? playSoundtrack = false)
+        bool? playSoundtrack = false,
+        bool? shareScreen = false)
         : this(0, createInvites, manageChannels, manageRoles, viewChannel, sendMessages, manageMessages, attachFiles,
             connect, manageVoice, mentionEveryone, addReactions, passiveConnect, useVoiceActivity, speak, deafenMembers,
-            muteMembers, playSoundtrack)
+            muteMembers, playSoundtrack, shareScreen)
     { }
 
     /// <summary> Creates a new <see cref="ChannelPermissions"/> from this one, changing the provided non-null permissions.</summary>
@@ -155,7 +160,8 @@ public struct ChannelPermissions
         bool? speak = null,
         bool? deafenMembers = null,
         bool? muteMembers = null,
-        bool? playSoundtrack = null)
+        bool? playSoundtrack = null,
+        bool? shareScreen = null)
         => new ChannelPermissions(RawValue,
             createInvites,
             manageChannels,
@@ -173,7 +179,8 @@ public struct ChannelPermissions
             speak,
             deafenMembers,
             muteMembers,
-            playSoundtrack);
+            playSoundtrack,
+            shareScreen);
 
     /// <summary>
     ///     Returns a value that indicates if a specific <see cref="ChannelPermission"/> is enabled

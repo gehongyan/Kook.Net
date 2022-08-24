@@ -8,7 +8,7 @@ public class GuildPermissions
     /// <summary> Gets a blank <see cref="GuildPermissions"/> that grants no permissions. </summary>
     public static readonly GuildPermissions None = new GuildPermissions();
     /// <summary> Gets a <see cref="GuildPermissions"/> that grants all guild permissions. </summary>
-    public static readonly GuildPermissions All = new GuildPermissions(0b1_11111_1111111_1111111_1111111111111_111111);
+    public static readonly GuildPermissions All = new GuildPermissions(0b1_1111_1111_1111_1111_1111_1111_1111);
 
     /// <summary> Gets a packed value representing all the permissions in this <see cref="GuildPermissions"/>. </summary>
     public ulong RawValue { get; }
@@ -69,6 +69,8 @@ public class GuildPermissions
     public bool ManageNicknames => Permissions.GetValue(RawValue, GuildPermission.ManageNicknames);
     /// <summary> If <c>true</c>, a user may play soundtracks in a voice channel. </summary>
     public bool PlaySoundtrack => Permissions.GetValue(RawValue, GuildPermission.PlaySoundtrack);
+    /// <summary> If <c>true</c>, a user may share screen in a voice channel. </summary>
+    public bool ShareScreen => Permissions.GetValue(RawValue, GuildPermission.ShareScreen);
     
     /// <summary> Creates a new <see cref="GuildPermissions"/> with the provided packed value. </summary>
     public GuildPermissions(ulong rawValue) { RawValue = rawValue; }
@@ -104,7 +106,8 @@ public class GuildPermissions
         bool? deafenMembers = null,
         bool? muteMembers = null,
         bool? manageNicknames = null,
-        bool? playSoundtrack = null
+        bool? playSoundtrack = null,
+        bool? shareScreen = null
     )
     {
         ulong value = initialValue;
@@ -137,6 +140,7 @@ public class GuildPermissions
         Permissions.SetValue(ref value, muteMembers, GuildPermission.MuteMembers);
         Permissions.SetValue(ref value, manageNicknames, GuildPermission.ManageNicknames);
         Permissions.SetValue(ref value, playSoundtrack, GuildPermission.PlaySoundtrack);
+        Permissions.SetValue(ref value, shareScreen, GuildPermission.ShareScreen);
 
         RawValue = value;
     }
@@ -170,11 +174,12 @@ public class GuildPermissions
         bool deafenMembers = false,
         bool muteMembers = false,
         bool manageNicknames = false,
-        bool playSoundtrack = false)
+        bool playSoundtrack = false,
+        bool shareScreen = false)
         : this(0, administrator, manageGuild, viewAuditLog, createInvites, manageInvites, manageChannels, kickMembers,
-            banMembers, manageEmojis, changeNickname, manageRoles, viewChannel, sendMessages, manageMessages,
-            attachFiles, connect, manageVoice, mentionEveryone, addReactions, followReactions, passiveConnect,
-            onlyPushToTalk, useVoiceActivity, speak, deafenMembers, muteMembers, manageNicknames, playSoundtrack)
+            banMembers, manageEmojis, changeNickname, manageRoles, viewChannel, sendMessages, manageMessages, attachFiles, 
+            connect, manageVoice, mentionEveryone, addReactions, followReactions, passiveConnect, onlyPushToTalk, 
+            useVoiceActivity, speak, deafenMembers, muteMembers, manageNicknames, playSoundtrack, shareScreen)
     {
     }
 
@@ -207,12 +212,13 @@ public class GuildPermissions
         bool? deafenMembers = null,
         bool? muteMembers = null,
         bool? manageNicknames = null,
-        bool? playSoundtrack = null)
+        bool? playSoundtrack = null,
+        bool? shareScreen = null)
         => new GuildPermissions(RawValue, administrator, manageGuild, viewAuditLog, createInvites, manageInvites,
             manageChannels, kickMembers, banMembers, manageEmojis, changeNickname, manageRoles, viewChannel,
             sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone, addReactions,
             followReactions, passiveConnect, onlyPushToTalk, useVoiceActivity, speak, deafenMembers, muteMembers,
-            manageNicknames, playSoundtrack);
+            manageNicknames, playSoundtrack, shareScreen);
 
     /// <summary>
     ///     Returns a value that indicates if a specific <see cref="GuildPermission"/> is enabled

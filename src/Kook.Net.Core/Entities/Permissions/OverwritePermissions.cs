@@ -68,6 +68,8 @@ public struct OverwritePermissions
     public PermValue MuteMembers => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.MuteMembers);
     /// <summary> If Allowed, a user may play soundtracks in a voice channel. </summary>
     public PermValue PlaySoundtrack => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.PlaySoundtrack);
+    /// <summary> If Allowed, a user may share screen in a voice channel. </summary>
+    public PermValue ShareScreen => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ShareScreen);
 
     /// <summary> Creates a new OverwritePermissions with the provided allow and deny packed values. </summary>
     public OverwritePermissions(ulong allowValue, ulong denyValue)
@@ -100,7 +102,8 @@ public struct OverwritePermissions
         PermValue? speak = null,
         PermValue? deafenMembers = null,
         PermValue? muteMembers = null,
-        PermValue? playSoundtrack = null)
+        PermValue? playSoundtrack = null,
+        PermValue? shareScreen = null)
     {
         Permissions.SetValue(ref allowValue, ref denyValue, createInvites, ChannelPermission.CreateInvites);
         Permissions.SetValue(ref allowValue, ref denyValue, manageChannels, ChannelPermission.ManageChannels);
@@ -119,6 +122,7 @@ public struct OverwritePermissions
         Permissions.SetValue(ref allowValue, ref denyValue, deafenMembers, ChannelPermission.DeafenMembers);
         Permissions.SetValue(ref allowValue, ref denyValue, muteMembers, ChannelPermission.MuteMembers);
         Permissions.SetValue(ref allowValue, ref denyValue, playSoundtrack, ChannelPermission.PlaySoundtrack);
+        Permissions.SetValue(ref allowValue, ref denyValue, shareScreen, ChannelPermission.ShareScreen);
 
         AllowValue = allowValue;
         DenyValue = denyValue;
@@ -144,10 +148,11 @@ public struct OverwritePermissions
         PermValue speak = PermValue.Inherit,
         PermValue deafenMembers = PermValue.Inherit,
         PermValue muteMembers = PermValue.Inherit,
-        PermValue playSoundtrack = PermValue.Inherit)
+        PermValue playSoundtrack = PermValue.Inherit,
+        PermValue shareScreen = PermValue.Inherit)
         : this(0, 0, createInvites, manageChannels, manageRoles, viewChannel, sendMessages, manageMessages,
             attachFiles, connect, manageVoice, mentionEveryone, addReactions, passiveConnect, useVoiceActivity, speak,
-            deafenMembers, muteMembers, playSoundtrack)
+            deafenMembers, muteMembers, playSoundtrack, shareScreen)
     {
     }
 
@@ -172,10 +177,11 @@ public struct OverwritePermissions
         PermValue? speak = null,
         PermValue? deafenMembers = null,
         PermValue? muteMembers = null,
-        PermValue? playSoundtrack = null)
-        => new OverwritePermissions(AllowValue, DenyValue, createInvites, manageChannels, manageRoles,
-            viewChannel, sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone,
-            addReactions, passiveConnect, useVoiceActivity, speak, deafenMembers, muteMembers, playSoundtrack);
+        PermValue? playSoundtrack = null,
+        PermValue? shareScreen = null)
+        => new OverwritePermissions(AllowValue, DenyValue, createInvites, manageChannels, manageRoles, viewChannel, 
+            sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone, addReactions, 
+            passiveConnect, useVoiceActivity, speak, deafenMembers, muteMembers, playSoundtrack, shareScreen);
 
     /// <summary>
     ///     Creates a <see cref="List{T}"/> of all the <see cref="ChannelPermission"/> values that are allowed.

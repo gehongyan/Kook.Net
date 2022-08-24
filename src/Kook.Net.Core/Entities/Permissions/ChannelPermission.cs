@@ -74,5 +74,9 @@ public enum ChannelPermission : uint
     /// <summary>
     ///     Allows for playing soundtracks in a voice channel.
     /// </summary>
-    PlaySoundtrack       = 1 << 27
+    PlaySoundtrack       = 1 << 27,
+    /// <summary>
+    ///     Allows for screen share.
+    /// </summary>
+    ShareScreen          = 1 << 28
 }
