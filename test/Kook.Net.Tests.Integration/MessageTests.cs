@@ -44,7 +44,6 @@ public class MessageTests : IClassFixture<RestChannelFixture>
         try
         {
             Assert.NotNull(_selfUser);
-            Assert.NotNull(messageId);
             Assert.NotEqual(Guid.Empty, messageId);
             Assert.NotNull(message);
             Assert.Equal(DateTimeOffset.Now.LocalDateTime, messageTimestamp.LocalDateTime, TimeSpan.FromSeconds(5));
@@ -110,7 +109,6 @@ CODE BLOCK
         {
             IGuildUser selfUser = await _guild.GetCurrentUserAsync();
             Assert.NotNull(selfUser);
-            Assert.NotNull(messageId);
             Assert.NotEqual(Guid.Empty, messageId);
             Assert.NotNull(message);
             Assert.Equal(DateTimeOffset.Now.LocalDateTime, messageTimestamp.LocalDateTime, TimeSpan.FromSeconds(5));
