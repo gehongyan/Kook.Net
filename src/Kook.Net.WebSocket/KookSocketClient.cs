@@ -150,6 +150,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             if (_retryCount >= 2)
             {
                 _sessionId = null;
+                _lastSeq = 0;
                 _retryCount = 0;
                 await _gatewayLogger.DebugAsync("Resuming session failed").ConfigureAwait(false);
             }
@@ -1471,7 +1472,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                     if (gatewayReconnectPayload?.Code is KookErrorCode.MissingResumeArgument 
                         or KookErrorCode.SessionExpired 
                         or KookErrorCode.InvalidSequenceNumber)
+                    {
                         _sessionId = null;
+                        _lastSeq = 0;
+                    }
                     _connection.Error(new GatewayReconnectException($"Server requested a reconnect, resuming session failed" +
                         $"{(string.IsNullOrWhiteSpace(gatewayReconnectPayload?.Message) ? string.Empty : $": {gatewayReconnectPayload.Message}")}"));
                 }
