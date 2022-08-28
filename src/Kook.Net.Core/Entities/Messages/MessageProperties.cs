@@ -17,7 +17,7 @@ public class MessageProperties
     /// <summary>
     ///     Gets or sets the cards of the message.
     /// </summary>
-    public List<Card> Cards { get; set; }
+    public IEnumerable<ICard> Cards { get; set; }
 
     /// <summary>
     ///     Gets or sets the quote of the message.
