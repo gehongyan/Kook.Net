@@ -14,6 +14,6 @@ internal class MultipartRestRequest : RestRequest
 
     public override async Task<RestResponse> SendAsync()
     {
-        return await Client.SendAsync(Method, Endpoint, MultipartParams, Options.CancelToken, Options.HeaderOnly, Options.AuditLogReason, Options.RequestHeaders).ConfigureAwait(false);
+        return await Client.SendAsync(Method, Endpoint, MultipartParams, Options.CancelToken, Options.AuditLogReason, Options.RequestHeaders).ConfigureAwait(false);
     }
 }

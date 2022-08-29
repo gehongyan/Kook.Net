@@ -38,7 +38,6 @@ public class RequestOptions
     ///     Gets or sets the retry behavior when the request fails.
     /// </summary>
     public RetryMode? RetryMode { get; set; }
-    public bool HeaderOnly { get; internal set; }
     /// <summary>
     ///     Gets or sets the reason for this action in the guild's audit log.
     /// </summary>

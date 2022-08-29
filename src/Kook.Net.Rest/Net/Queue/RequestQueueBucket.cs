@@ -140,14 +140,14 @@ namespace Kook.Net.Queue
                         if (response.MediaTypeHeader.MediaType == "application/json")
                         {
                             API.Rest.RestResponseBase responseBase = await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream, _serializerOptions);
-                            if (responseBase.Code > (KookErrorCode)0 )
+                            if (responseBase?.Code > (KookErrorCode)0 )
                             {
                                 throw new HttpException(
                                     response.StatusCode,
                                     request,
-                                    responseBase?.Code,
-                                    responseBase?.Message,
-                                    responseBase?.Data is not null
+                                    responseBase.Code,
+                                    responseBase.Message,
+                                    responseBase.Data is not null
                                         ? new KookJsonError[]
                                         {
                                             new KookJsonError("root",
@@ -158,7 +158,7 @@ namespace Kook.Net.Queue
                                         : null
                                 );
                             }
-                            return new MemoryStream(Encoding.UTF8.GetBytes(responseBase.Data.ToString() ?? string.Empty));
+                            return new MemoryStream(Encoding.UTF8.GetBytes(responseBase?.Data.ToString() ?? string.Empty));
                         }
                         else if (response.MediaTypeHeader.MediaType == "image/svg+xml")
                         {

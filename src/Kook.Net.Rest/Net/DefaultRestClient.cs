@@ -72,7 +72,7 @@ namespace Kook.Net.Rest
             _cancelToken = cancelToken;
         }
 
-        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancelToken, bool headerOnly, string reason = null,
+        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancelToken, string reason = null,
             IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
         {
             string uri = Path.Combine(_baseUrl, endpoint);
@@ -82,10 +82,10 @@ namespace Kook.Net.Rest
                 if (requestHeaders != null)
                     foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
                         restRequest.Headers.Add(header.Key, header.Value);
-                return await SendInternalAsync(restRequest, cancelToken, headerOnly).ConfigureAwait(false);
+                return await SendInternalAsync(restRequest, cancelToken).ConfigureAwait(false);
             }
         }
-        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json, CancellationToken cancelToken, bool headerOnly, string reason = null,
+        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json, CancellationToken cancelToken, string reason = null,
             IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
         {
             string uri = Path.Combine(_baseUrl, endpoint);
@@ -96,12 +96,12 @@ namespace Kook.Net.Rest
                     foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
                         restRequest.Headers.Add(header.Key, header.Value);
                 restRequest.Content = new StringContent(json, Encoding.UTF8, "application/json");
-                return await SendInternalAsync(restRequest, cancelToken, headerOnly).ConfigureAwait(false);
+                return await SendInternalAsync(restRequest, cancelToken).ConfigureAwait(false);
             }
         }
 
         /// <exception cref="InvalidOperationException">Unsupported param type.</exception>
-        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartParams, CancellationToken cancelToken, bool headerOnly, string reason = null,
+        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartParams, CancellationToken cancelToken, string reason = null,
             IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
         {
             string uri = Path.Combine(_baseUrl, endpoint);
@@ -153,13 +153,13 @@ namespace Kook.Net.Rest
                     }
                 }
                 restRequest.Content = content;
-                var result = await SendInternalAsync(restRequest, cancelToken, headerOnly).ConfigureAwait(false);
+                var result = await SendInternalAsync(restRequest, cancelToken).ConfigureAwait(false);
                 memoryStream?.Dispose();
                 return result;
             }
         }
 
-        private async Task<RestResponse> SendInternalAsync(HttpRequestMessage request, CancellationToken cancelToken, bool headerOnly)
+        private async Task<RestResponse> SendInternalAsync(HttpRequestMessage request, CancellationToken cancelToken)
         {
             using (var cancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancelToken, cancelToken))
             {
@@ -167,7 +167,7 @@ namespace Kook.Net.Rest
                 HttpResponseMessage response = await _client.SendAsync(request, cancelToken).ConfigureAwait(false);
 
                 var headers = response.Headers.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault(), StringComparer.OrdinalIgnoreCase);
-                var stream = !headerOnly ? await response.Content.ReadAsStreamAsync().ConfigureAwait(false) : null;
+                var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
                 return new RestResponse(response.StatusCode, headers, stream, response.Content.Headers.ContentType);
             }

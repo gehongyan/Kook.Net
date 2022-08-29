@@ -176,7 +176,6 @@ internal class KookRestApiClient : IDisposable
         BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null)
     {
         options ??= new RequestOptions();
-        options.HeaderOnly = true;
         options.BucketId = bucketId;
 
         var request = new RestRequest(RestClient, method, endpoint, options);
@@ -190,7 +189,6 @@ internal class KookRestApiClient : IDisposable
         BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null)
     {
         options ??= new RequestOptions();
-        options.HeaderOnly = true;
         options.BucketId = bucketId;
 
         string json = payload != null ? SerializeJson(payload) : null;
@@ -205,7 +203,6 @@ internal class KookRestApiClient : IDisposable
         BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null)
     {
         options ??= new RequestOptions();
-        options.HeaderOnly = true;
         options.BucketId = bucketId;
 
         var request = new MultipartRestRequest(RestClient, method, endpoint, multipartArgs, options);

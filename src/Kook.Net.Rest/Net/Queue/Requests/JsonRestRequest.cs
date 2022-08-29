@@ -14,7 +14,7 @@ namespace Kook.Net.Queue
 
         public override async Task<RestResponse> SendAsync()
         {
-            return await Client.SendAsync(Method, Endpoint, Json, Options.CancelToken, Options.HeaderOnly, Options.AuditLogReason, Options.RequestHeaders).ConfigureAwait(false);
+            return await Client.SendAsync(Method, Endpoint, Json, Options.CancelToken, Options.AuditLogReason, Options.RequestHeaders).ConfigureAwait(false);
         }
     }
 }
