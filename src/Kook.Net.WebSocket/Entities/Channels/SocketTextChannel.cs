@@ -40,6 +40,9 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <inheritdoc />
     public bool IsPermissionSynced { get; private set; }
     /// <inheritdoc />
+    public virtual Task SyncPermissionsAsync(RequestOptions options = null)
+        => ChannelHelper.SyncPermissionsAsync(this, Kook, options);
+    /// <inheritdoc />
     public ulong CreatorId { get; private set; }
     /// <summary>
     ///     Gets the creator of this channel.

@@ -23,13 +23,12 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     /// </returns>
     public ICategoryChannel Category
         => CategoryId.HasValue ? Guild.GetChannel(CategoryId.Value) as ICategoryChannel : null;
-    /// <inheritdoc />
-    public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
-    /// <inheritdoc />
-    public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
 
     /// <inheritdoc />
     public bool IsPermissionSynced { get; private set; }
+    /// <inheritdoc />
+    public virtual Task SyncPermissionsAsync(RequestOptions options = null)
+        => ChannelHelper.SyncPermissionsAsync(this, Kook, options);
     /// <inheritdoc />
     public ulong CreatorId { get; private set; }
     /// <summary>
@@ -44,6 +43,10 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
     /// </returns>
     public SocketGuildUser Creator => GetUser(CreatorId);
+    /// <inheritdoc />
+    public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
+    /// <inheritdoc />
+    public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
     /// <inheritdoc />
     public VoiceQuality? VoiceQuality { get; set; }
     /// <inheritdoc />

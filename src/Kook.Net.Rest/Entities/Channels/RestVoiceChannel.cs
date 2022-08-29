@@ -72,6 +72,9 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     /// </returns>
     public Task<ICategoryChannel> GetCategoryAsync(RequestOptions options = null)
         => ChannelHelper.GetCategoryAsync(this, Kook, options);
+    /// <inheritdoc />
+    public Task SyncPermissionsAsync(RequestOptions options = null)
+        => ChannelHelper.SyncPermissionsAsync(this, Kook, options);
 
     /// <summary>
     ///     Gets the owner of this guild.
