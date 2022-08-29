@@ -72,34 +72,45 @@ namespace Kook.Net.Rest
             _cancelToken = cancelToken;
         }
 
-        // TODO: Add i18n support
-        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancelToken, bool headerOnly, string reason = null)
+        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancelToken, bool headerOnly, string reason = null,
+            IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
         {
             string uri = Path.Combine(_baseUrl, endpoint);
             using (var restRequest = new HttpRequestMessage(method, uri))
             {
                 if (reason != null) restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
+                if (requestHeaders != null)
+                    foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
+                        restRequest.Headers.Add(header.Key, header.Value);
                 return await SendInternalAsync(restRequest, cancelToken, headerOnly).ConfigureAwait(false);
             }
         }
-        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json, CancellationToken cancelToken, bool headerOnly, string reason = null)
+        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json, CancellationToken cancelToken, bool headerOnly, string reason = null,
+            IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
         {
             string uri = Path.Combine(_baseUrl, endpoint);
             using (var restRequest = new HttpRequestMessage(method, uri))
             {
                 if (reason != null) restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
+                if (requestHeaders != null)
+                    foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
+                        restRequest.Headers.Add(header.Key, header.Value);
                 restRequest.Content = new StringContent(json, Encoding.UTF8, "application/json");
                 return await SendInternalAsync(restRequest, cancelToken, headerOnly).ConfigureAwait(false);
             }
         }
 
         /// <exception cref="InvalidOperationException">Unsupported param type.</exception>
-        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartParams, CancellationToken cancelToken, bool headerOnly, string reason = null)
+        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartParams, CancellationToken cancelToken, bool headerOnly, string reason = null,
+            IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
         {
             string uri = Path.Combine(_baseUrl, endpoint);
             using (var restRequest = new HttpRequestMessage(method, uri))
             {
                 if (reason != null) restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
+                if (requestHeaders != null)
+                    foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
+                        restRequest.Headers.Add(header.Key, header.Value);
                 var content = new MultipartFormDataContent("Upload----" + DateTime.Now.ToString(CultureInfo.InvariantCulture));
                 MemoryStream memoryStream = null;
                 if (multipartParams != null)

@@ -19,7 +19,7 @@ public class RequestOptions
     ///     Gets or sets the maximum time to wait for this request to complete.
     /// </summary>
     /// <remarks>
-    ///     Gets or set the max time, in milliseconds, to wait for this request to complete. If 
+    ///     Gets or set the max time, in milliseconds, to wait for this request to complete. If
     ///     <c>null</c>, a request will not time out. If a rate limit has been triggered for this request's bucket
     ///     and will not be unpaused in time, this request will fail immediately.
     /// </remarks>
@@ -56,6 +56,8 @@ public class RequestOptions
     internal BucketId BucketId { get; set; }
     internal bool IsClientBucket { get; set; }
     internal bool IsGatewayBucket { get; set; }
+    
+    internal IDictionary<string, IEnumerable<string>> RequestHeaders { get; }
         
     internal static RequestOptions CreateOrClone(RequestOptions options)
     {            
@@ -83,6 +85,7 @@ public class RequestOptions
     public RequestOptions()
     {
         Timeout = KookConfig.DefaultRequestTimeout;
+        RequestHeaders = new Dictionary<string, IEnumerable<string>>();
     }
         
     public RequestOptions Clone() => MemberwiseClone() as RequestOptions;

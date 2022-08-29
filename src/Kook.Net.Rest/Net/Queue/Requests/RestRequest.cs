@@ -22,13 +22,13 @@ namespace Kook.Net.Queue
             Method = method;
             Endpoint = endpoint;
             Options = options;
-            TimeoutAt = options.Timeout.HasValue ? DateTimeOffset.UtcNow.AddMilliseconds(options.Timeout.Value) : (DateTimeOffset?)null;
+            TimeoutAt = options.Timeout.HasValue ? DateTimeOffset.UtcNow.AddMilliseconds(options.Timeout.Value) : null;
             Promise = new TaskCompletionSource<Stream>();
         }
 
         public virtual async Task<RestResponse> SendAsync()
         {
-            return await Client.SendAsync(Method, Endpoint, Options.CancelToken).ConfigureAwait(false);
+            return await Client.SendAsync(Method, Endpoint, Options.CancelToken, Options.HeaderOnly, Options.AuditLogReason, Options.RequestHeaders).ConfigureAwait(false);
         }
     }
 }
