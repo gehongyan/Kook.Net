@@ -177,7 +177,16 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     /// </returns>
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendKMarkdownMessageAsync(string text, IQuote quote = null,
         RequestOptions options = null);
-        
+
+    /// <summary>
+    ///     Sends a card message to this message channel.
+    /// </summary>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card,
+        IQuote quote = null, RequestOptions options = null);
     /// <summary>
     ///     Sends a card message to this message channel.
     /// </summary>
@@ -252,6 +261,10 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendCardMessageAsync(IEnumerable<ICard> cards,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendCardMessageAsync(cards, quote, options);
+    /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendCardMessageAsync(ICard card,
+        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        => SendCardMessageAsync(card, quote, options);
 
     #endregion
 }

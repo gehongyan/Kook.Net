@@ -423,6 +423,10 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendKMarkdownMessageAsync(text, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendCardMessageAsync(ICard card,
+        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        => SendCardMessageAsync(card, (Quote) quote, ephemeralUser, options);
+    /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendCardMessageAsync(IEnumerable<ICard> cards,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendCardMessageAsync(cards, (Quote) quote, ephemeralUser, options);

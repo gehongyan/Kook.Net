@@ -567,6 +567,10 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         IQuote quote, RequestOptions options)
         => SendKMarkdownMessageAsync(text, (Quote) quote, options);
     /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendCardMessageAsync(ICard card,
+        IQuote quote, RequestOptions options)
+        => SendCardMessageAsync(card, (Quote) quote, options);
+    /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IDMChannel.SendCardMessageAsync(IEnumerable<ICard> cards,
         IQuote quote, RequestOptions options)
         => SendCardMessageAsync(cards, (Quote) quote, options);

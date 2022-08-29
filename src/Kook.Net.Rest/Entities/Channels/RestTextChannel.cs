@@ -224,17 +224,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         return await ChannelHelper.SendMessageAsync(this, Kook, MessageType.Card, json, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
-    /// <summary>
-    ///     Sends a card message to this message channel.
-    /// </summary>
-    /// <param name="card">The card to be sent.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
+    /// <inheritdoc cref="IMessageChannel.SendCardMessageAsync(ICard,IQuote,IUser,RequestOptions)"/>
     public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null) => 
         SendCardMessageAsync(new[] { card }, quote, ephemeralUser, options);
 
@@ -367,6 +357,10 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendKMarkdownMessageAsync(string text,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendKMarkdownMessageAsync(text, (Quote) quote, ephemeralUser, options);
+    /// <inheritdoc />
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendCardMessageAsync(ICard card,
+        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        => SendCardMessageAsync(card, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
     Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendCardMessageAsync(IEnumerable<ICard> cards,
         IQuote quote, IUser ephemeralUser, RequestOptions options)

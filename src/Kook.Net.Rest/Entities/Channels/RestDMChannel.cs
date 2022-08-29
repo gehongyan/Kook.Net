@@ -369,7 +369,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card, Quote quote = null, RequestOptions options = null) => 
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card, IQuote quote = null, RequestOptions options = null) => 
         SendCardMessageAsync(new[] { card }, quote, options);
 
     /// <inheritdoc />

@@ -242,6 +242,19 @@ public interface IMessageChannel : IChannel
     /// <summary>
     ///     Sends a card message to this message channel.
     /// </summary>
+    /// <param name="card">The card to be sent.</param>
+    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents an asynchronous send operation for delivering the message. The task result
+    ///     contains the identifier and timestamp of the sent message.
+    /// </returns>
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card,
+        IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null);
+    /// <summary>
+    ///     Sends a card message to this message channel.
+    /// </summary>
     /// <param name="cards">The cards to be sent.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>

@@ -191,6 +191,11 @@ namespace Kook
             throw new NotImplementedException();
         }
 
+        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(IEnumerable<ICard> cards, IQuote quote = null, IUser ephemeralUser = null,
             RequestOptions options = null)
         {
