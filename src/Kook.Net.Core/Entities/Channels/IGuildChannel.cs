@@ -42,6 +42,14 @@ public interface IGuildChannel : IChannel, IDeletable
     ChannelType Type { get; }
     
     /// <summary>
+    ///     Gets the identifier of the user who created this channel.
+    /// </summary>
+    /// <returns>
+    ///     A <see langword="ulong"/> representing the identifier of the user who created this channel.
+    /// </returns>
+    ulong CreatorId { get; }
+    
+    /// <summary>
     ///     Gets a collection of permission overwrites for roles for this channel.
     /// </summary>
     /// <returns>
@@ -70,6 +78,16 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
     Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions options = null);
+
+    /// <summary>
+    ///     Gets the creator of this channel.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
+    /// </returns>
+    Task<IUser> GetCreatorAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
 
     #endregion
 

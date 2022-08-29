@@ -25,8 +25,6 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     /// <inheritdoc />
     public bool IsPermissionSynced { get; private set; }
     /// <inheritdoc />
-    public ulong CreatorId { get; private set; }
-    /// <inheritdoc />
     public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
     /// <inheritdoc />
     public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
@@ -52,7 +50,6 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
         ServerUrl = model.ServerUrl;
         IsPermissionSynced = model.PermissionSync == 1;
         HasPassword = model.HasPassword;
-        CreatorId = model.CreatorId;
     }
     
     /// <inheritdoc />
@@ -75,16 +72,6 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     /// <inheritdoc />
     public Task SyncPermissionsAsync(RequestOptions options = null)
         => ChannelHelper.SyncPermissionsAsync(this, Kook, options);
-
-    /// <summary>
-    ///     Gets the owner of this guild.
-    /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the owner of this guild.
-    /// </returns>
-    public Task<RestUser> GetCreatorAsync(RequestOptions options = null)
-        => ClientHelper.GetUserAsync(Kook, CreatorId, options);
 
     #endregion
 
@@ -124,14 +111,6 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
         if (CategoryId.HasValue && mode == CacheMode.AllowDownload)
             return (await Guild.GetChannelAsync(CategoryId.Value, mode, options).ConfigureAwait(false)) as ICategoryChannel;
         return null;
-    }
-    /// <inheritdoc />
-    async Task<IUser> INestedChannel.GetCreatorAsync(CacheMode mode, RequestOptions options)
-    {
-        if (mode == CacheMode.AllowDownload)
-            return await GetCreatorAsync(options).ConfigureAwait(false);
-        else
-            return null;
     }
     
     #endregion

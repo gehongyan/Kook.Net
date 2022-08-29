@@ -31,6 +31,8 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     public int? Position { get; private set; }
     /// <inheritdoc />
     public ulong GuildId => Guild.Id;
+    /// <inheritdoc />
+    public ulong CreatorId { get; private set; }
     
     internal RestGuildChannel(BaseKookClient kook, IGuild guild, ulong id, ChannelType type)
         : base(kook, id)
@@ -53,6 +55,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         Type = model.Type;
         Name = model.Name;
         Position = model.Position;
+        CreatorId = model.CreatorId;
         
         if (model.UserPermissionOverwrites is not null)
         {
@@ -78,6 +81,22 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         var model = await ChannelHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
         Update(model);
     }
+
+    /// <summary>
+    ///     Gets the creator of this channel.
+    /// </summary>
+    /// <remarks>
+    ///     This method will try to get the user as a global user. To get the creator as a guild member,
+    ///     you will need to get the user through
+    ///     <see cref="IGuild.GetUserAsync(ulong,CacheMode,RequestOptions)"/>."/>
+    /// </remarks>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
+    /// </returns>
+    public Task<RestUser> GetCreatorAsync(RequestOptions options = null)
+        => ClientHelper.GetUserAsync(Kook, CreatorId, options);
+    
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
         => ChannelHelper.DeleteGuildChannelAsync(this, Kook, options);
@@ -295,6 +314,15 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// <inheritdoc />
     Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IGuildUser>(null); //Overridden in Text/Voice
+    /// <inheritdoc />
+    async Task<IUser> IGuildChannel.GetCreatorAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetCreatorAsync(options).ConfigureAwait(false);
+        else
+            return null;
+    }
+    
     #endregion
     
     #region IChannel

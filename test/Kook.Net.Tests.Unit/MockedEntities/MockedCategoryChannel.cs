@@ -18,11 +18,18 @@ namespace Kook
 
         public ChannelType Type => throw new NotImplementedException();
 
+        public ulong CreatorId => throw new NotImplementedException();
+
         public IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites => throw new NotImplementedException();
 
         public IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites => throw new NotImplementedException();
 
         public Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IUser> GetCreatorAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
         {
             throw new NotImplementedException();
         }

@@ -30,20 +30,6 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     public virtual Task SyncPermissionsAsync(RequestOptions options = null)
         => ChannelHelper.SyncPermissionsAsync(this, Kook, options);
     /// <inheritdoc />
-    public ulong CreatorId { get; private set; }
-    /// <summary>
-    ///     Gets the creator of this channel.
-    /// </summary>
-    /// <remarks>
-    ///     This method will try to get the user as a member of this channel. If the user is not a member of this guild,
-    ///     this method will return <c>null</c>. To get the creator under this circumstance, use
-    ///     <see cref="Kook.Rest.KookRestClient.GetUserAsync(ulong,RequestOptions)"/>.
-    /// </remarks>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
-    /// </returns>
-    public SocketGuildUser Creator => GetUser(CreatorId);
-    /// <inheritdoc />
     public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
     /// <inheritdoc />
     public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
@@ -88,7 +74,6 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
         ServerUrl = model.ServerUrl;
         IsPermissionSynced = model.PermissionSync == 1;
         HasPassword = model.HasPassword;
-        CreatorId = model.CreatorId;
     }
     
     /// <inheritdoc />
@@ -139,20 +124,6 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     /// <inheritdoc />
     Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult(Category);
-    
-    /// <summary>
-    ///     Gets the creator of this channel.
-    /// </summary>
-    /// <remarks>
-    ///     This method will try to get the user as a member of this channel. If the user is not a member of this guild,
-    ///     this method will return <c>null</c>. To get the creator under this circumstance, use
-    ///     <see cref="Kook.Rest.KookRestClient.GetUserAsync(ulong,RequestOptions)"/>.
-    /// </remarks>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
-    /// </returns>
-    Task<IUser> INestedChannel.GetCreatorAsync(CacheMode mode, RequestOptions options)
-        => Task.FromResult<IUser>(Creator);
 
     #endregion
 }
