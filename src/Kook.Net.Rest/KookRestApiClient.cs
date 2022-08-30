@@ -317,13 +317,9 @@ internal class KookRestApiClient : IDisposable
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
 
-        try
-        {
-            var ids = new BucketIds(guildId: guildId);
-            return await SendAsync<ExtendedGuild>(HttpMethod.Get, 
-                () => $"guild/view?guild_id={guildId}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
-        }
-        catch (HttpException ex) when (ex.HttpCode == HttpStatusCode.NotFound) { return null; }
+        var ids = new BucketIds(guildId: guildId);
+        return await SendAsync<ExtendedGuild>(HttpMethod.Get, 
+            () => $"guild/view?guild_id={guildId}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
     
     public async ValueTask<int> GetGuildMemberCountAsync(ulong guildId, RequestOptions options = null)
