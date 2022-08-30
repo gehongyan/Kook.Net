@@ -74,7 +74,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         CategoryId = model.CategoryId != 0 ? model.CategoryId : null;
         Topic = model.Topic;
         SlowModeInterval = model.SlowMode / 1000;
-        IsPermissionSynced = model.PermissionSync == 1;
+        IsPermissionSynced = model.PermissionSync;
     }
     
     /// <inheritdoc />

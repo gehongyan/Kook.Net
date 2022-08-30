@@ -4,6 +4,7 @@ using Kook.Net;
 using Kook.Rest;
 using FluentAssertions;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Xunit;

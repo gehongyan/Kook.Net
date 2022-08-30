@@ -12,7 +12,7 @@ internal class Guild
     [JsonPropertyName("topic")] public string Topic { get; set; }
 
     [JsonPropertyName("master_id")]
-    public uint OwnerId { get; set; }
+    public ulong OwnerId { get; set; }
 
     [JsonPropertyName("icon")] public string Icon { get; set; }
 
@@ -20,10 +20,13 @@ internal class Guild
     public NotifyType NotifyType { get; set; }
 
     [JsonPropertyName("region")] public string Region { get; set; }
-    [JsonPropertyName("enable_open")] public bool EnableOpen { get; set; }
+
+    [JsonPropertyName("enable_open")] 
+    [JsonConverter(typeof(NumberBooleanConverter))]
+    public bool EnableOpen { get; set; }
 
     [JsonPropertyName("open_id")]
-    public uint OpenId { get; set; }
+    public uint? OpenId { get; set; }
 
     [JsonPropertyName("default_channel_id")]
     public ulong DefaultChannelId { get; set; }

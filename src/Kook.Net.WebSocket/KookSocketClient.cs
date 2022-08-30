@@ -1378,10 +1378,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                     // Download guild data
                     try
                     {
-                        var guilds = (await ApiClient.GetGuildsAsync().FlattenAsync().ConfigureAwait(false)).ToList();
+                        var guilds = await ApiClient.ListGuildsAsync().ConfigureAwait(false);
                         var state = new ClientState(guilds.Count, 0);
                         int unavailableGuilds = 0;
-                        foreach (Guild guild in guilds)
+                        foreach (RichGuild guild in guilds)
                         {
                             var model = guild;
                             var socketGuild = AddGuild(model, state);
@@ -1397,7 +1397,31 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                     {
                         _connection.CriticalError(new Exception("Processing Guilds failed", ex));
                         return;
-                    }
+                    }    
+                    
+                    // // Download guild data
+                    // try
+                    // {
+                    //     var guilds = (await ApiClient.GetGuildsAsync().FlattenAsync().ConfigureAwait(false)).ToList();
+                    //     var state = new ClientState(guilds.Count, 0);
+                    //     int unavailableGuilds = 0;
+                    //     foreach (Guild guild in guilds)
+                    //     {
+                    //         var model = guild;
+                    //         var socketGuild = AddGuild(model, state);
+                    //         if (!socketGuild.IsAvailable)
+                    //             unavailableGuilds++;
+                    //         else
+                    //             await GuildAvailableAsync(socketGuild).ConfigureAwait(false);
+                    //     }
+                    //     _unavailableGuildCount = unavailableGuilds;
+                    //     State = state;
+                    // }
+                    // catch (Exception ex)
+                    // {
+                    //     _connection.CriticalError(new Exception("Processing Guilds failed", ex));
+                    //     return;
+                    // }
                     
                     _lastGuildAvailableTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                     _guildDownloadTask = WaitForGuildsAsync(_connection.CancelToken, _gatewayLogger)
@@ -1415,26 +1439,26 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                             foreach (SocketGuild socketGuild in State.Guilds)
                                 socketGuild.MemberCount = await ApiClient.GetGuildMemberCountAsync(socketGuild.Id).ConfigureAwait(false);
                             
-                            // Download extended guild data for channels
-                            try
-                            {
-                                foreach (SocketGuild socketGuild in State.Guilds)
-                                {
-                                    ExtendedGuild model = await ApiClient.GetGuildAsync(socketGuild.Id).ConfigureAwait(false);
-                                    if (model is not null)
-                                    {
-                                        socketGuild.Update(State, model);
-                                
-                                        if (_unavailableGuildCount != 0)
-                                            _unavailableGuildCount--;
-                                    }
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                _connection.CriticalError(new Exception("Processing Guilds failed", ex));
-                                return;
-                            }
+                            // // Download extended guild data for channels
+                            // try
+                            // {
+                            //     foreach (SocketGuild socketGuild in State.Guilds)
+                            //     {
+                            //         ExtendedGuild model = await ApiClient.GetGuildAsync(socketGuild.Id).ConfigureAwait(false);
+                            //         if (model is not null)
+                            //         {
+                            //             socketGuild.Update(State, model);
+                            //     
+                            //             if (_unavailableGuildCount != 0)
+                            //                 _unavailableGuildCount--;
+                            //         }
+                            //     }
+                            // }
+                            // catch (Exception ex)
+                            // {
+                            //     _connection.CriticalError(new Exception("Processing Guilds failed", ex));
+                            //     return;
+                            // }
                             
                             // Download user list if enabled
                             if (BaseConfig.AlwaysDownloadUsers)
@@ -1587,6 +1611,12 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     }
     
     internal SocketGuild AddGuild(API.Guild model, ClientState state)
+    {
+        var guild = SocketGuild.Create(this, state, model);
+        state.AddGuild(guild);
+        return guild;
+    }
+    internal SocketGuild AddGuild(API.Rest.RichGuild model, ClientState state)
     {
         var guild = SocketGuild.Create(this, state, model);
         state.AddGuild(guild);

@@ -9,12 +9,12 @@ internal static class EntityExtensions
 {
     #region Emotes
 
-    public static GuildEmote ToEntity(this API.Emoji model, BaseKookClient client, ulong guildId)
+    public static GuildEmote ToEntity(this API.Emoji model, ulong guildId)
         => new GuildEmote(model.Id,
             model.Name,
             model.Type == EmojiType.Animated,
             guildId,
-            RestUser.Create(client, model.UploadedBy));
+            model.UploadedBy?.Id);
 
     #endregion
     

@@ -9,11 +9,11 @@ namespace Kook;
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
 public class GuildEmote : Emote
 {
-    internal GuildEmote(string id, string name, bool? animated, ulong guildId, IUser creator) 
+    internal GuildEmote(string id, string name, bool? animated, ulong guildId, ulong? creatorId) 
         : base(id, name, animated)
     {
         GuildId = guildId;
-        Creator = creator;
+        CreatorId = creatorId;
     }
 
     /// <summary>
@@ -28,9 +28,10 @@ public class GuildEmote : Emote
     ///     Gets the user who created this emote.
     /// </summary>
     /// <returns>
-    ///     An <see cref="IUser"/> representing the user who created this emote.
+    ///     An <see cref="ulong"/> representing the user who created this emote; 
+    ///     <c>null</c> if unknown.
     /// </returns>
-    public IUser Creator { get; }
+    public ulong? CreatorId { get; }
     
     private string DebuggerDisplay => $"{Name} ({Id}{(Animated == true ? ", Animated" : "")})";
     /// <summary>

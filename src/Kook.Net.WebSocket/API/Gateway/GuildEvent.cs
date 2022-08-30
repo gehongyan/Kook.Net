@@ -1,5 +1,6 @@
 using System.Security.Principal;
 using System.Text.Json.Serialization;
+using Kook.Net.Converters;
 
 namespace Kook.API.Gateway;
 
@@ -24,10 +25,11 @@ internal class GuildEvent
     public string Region { get; set; }
     
     [JsonPropertyName("enable_open")] 
-    public int EnableOpen { get; set; }
+    [JsonConverter(typeof(NumberBooleanConverter))]
+    public bool EnableOpen { get; set; }
     
     [JsonPropertyName("open_id")]
-    public uint OpenId { get; set; }
+    public uint? OpenId { get; set; }
     
     [JsonPropertyName("default_channel_id")]
     public ulong DefaultChannelId { get; set; }

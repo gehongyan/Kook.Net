@@ -299,12 +299,12 @@ internal static class GuildHelper
     public static async Task<IReadOnlyCollection<GuildEmote>> GetEmotesAsync(IGuild guild, BaseKookClient client, RequestOptions options)
     {
         var models = await client.ApiClient.GetGuildEmotesAsync(guild.Id, options: options).FlattenAsync().ConfigureAwait(false);
-        return models.Select(x => x.ToEntity(client, guild.Id)).ToImmutableArray();
+        return models.Select(x => x.ToEntity(guild.Id)).ToImmutableArray();
     }
     public static async Task<GuildEmote> GetEmoteAsync(IGuild guild, BaseKookClient client, string id, RequestOptions options)
     {
         var emote = await client.ApiClient.GetGuildEmotesAsync(guild.Id, options: options).FlattenAsync().ConfigureAwait(false);
-        return emote.FirstOrDefault(x => x.Id == id)?.ToEntity(client, guild.Id);
+        return emote.FirstOrDefault(x => x.Id == id)?.ToEntity(guild.Id);
     }
     public static async Task<GuildEmote> CreateEmoteAsync(IGuild guild, BaseKookClient client, string name, Image image, RequestOptions options)
     {
@@ -316,7 +316,7 @@ internal static class GuildHelper
         };
 
         var emote = await client.ApiClient.CreateGuildEmoteAsync(args, options).ConfigureAwait(false);
-        return emote.ToEntity(client, guild.Id);
+        return emote.ToEntity(guild.Id);
     }
     /// <exception cref="ArgumentNullException"><paramref name="func"/> is <c>null</c>.</exception>
     public static async Task ModifyEmoteNameAsync(IGuild guild, BaseKookClient client, IEmote emote, Action<string> func,

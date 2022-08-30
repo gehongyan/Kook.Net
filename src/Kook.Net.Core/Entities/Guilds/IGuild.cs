@@ -60,9 +60,10 @@ public interface IGuild : IEntity<ulong>
     ///     Gets the open ID for this guild.
     /// </summary>
     /// <returns>
-    ///     A <see langword="uint"/> representing the open ID for this guild.
+    ///     A <see langword="uint"/> representing the open ID for this guild;
+    ///     this property should be <c>null</c> if <see cref="IsOpenEnabled"/> is <c>false</c>.
     /// </returns>
-    uint OpenId { get; }
+    uint? OpenId { get; }
     /// <summary>
     ///     Gets the default channel ID for this guild.
     /// </summary>
@@ -135,6 +136,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A read-only collection of all custom emotes for this guild.
     /// </returns>
+    /// <seealso cref="GetEmotesAsync"/>
     IReadOnlyCollection<GuildEmote> Emotes { get; }
     /// <summary>
     ///     Gets a collection of all roles in this guild.

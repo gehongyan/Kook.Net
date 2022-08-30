@@ -48,7 +48,7 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
         VoiceQuality = model.VoiceQuality;
         UserLimit = model.UserLimit;
         ServerUrl = model.ServerUrl;
-        IsPermissionSynced = model.PermissionSync == 1;
+        IsPermissionSynced = model.PermissionSync;
         HasPassword = model.HasPassword;
     }
     

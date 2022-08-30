@@ -302,6 +302,15 @@ internal class KookRestApiClient : IDisposable
 
     #region Guilds
 
+    public async Task<IReadOnlyCollection<RichGuild>> ListGuildsAsync(RequestOptions options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+        
+        var ids = new BucketIds();
+        return await SendAsync<IReadOnlyCollection<RichGuild>>(HttpMethod.Get, 
+            () => $"guild/index", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+
     public IAsyncEnumerable<IReadOnlyCollection<Guild>> GetGuildsAsync(int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions options = null)
     {
         options = RequestOptions.CreateOrClone(options);

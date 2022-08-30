@@ -8,6 +8,7 @@ using Model = Kook.API.Guild;
 using ChannelModel = Kook.API.Channel;
 using MemberModel = Kook.API.Rest.GuildMember;
 using ExtendedModel = Kook.API.Rest.ExtendedGuild;
+using RichModel = Kook.API.Rest.RichGuild;
 using RecommendInfo = Kook.Rest.RecommendInfo;
 using RoleModel = Kook.API.Role;
 using UserModel = Kook.API.User;
@@ -25,7 +26,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     private ConcurrentDictionary<ulong, SocketGuildChannel> _channels;
     private ConcurrentDictionary<ulong, SocketGuildUser> _members;
     private ConcurrentDictionary<uint, SocketRole> _roles;
-    // private ImmutableArray<GuildEmote> _emotes;
+    private ImmutableArray<GuildEmote> _emotes;
     
     /// <inheritdoc />
     public string Name { get; private set; }
@@ -46,7 +47,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc />
     public bool IsOpenEnabled { get; private set; }
     /// <inheritdoc />
-    public uint OpenId { get; private set; }
+    public uint? OpenId { get; private set; }
     /// <inheritdoc />
     public ulong? DefaultChannelId { get; private set; }
     /// <inheritdoc />
@@ -192,8 +193,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     public SocketTextChannel WelcomeChannel => TextChannels
         .Where(c => CurrentUser.GetPermissions(c).ViewChannel)
         .SingleOrDefault(c => c.Id == WelcomeChannelId);
-    // /// <inheritdoc />
-    // public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
+    /// <inheritdoc />
+    public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
     /// <summary>
     ///     Gets a collection of users in this guild.
     /// </summary>
@@ -234,8 +235,15 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     
     internal SocketGuild(KookSocketClient kook, ulong id) : base(kook, id)
     {
+        _emotes = ImmutableArray.Create<GuildEmote>();
     }
     internal static SocketGuild Create(KookSocketClient client, ClientState state, Model model)
+    {
+        var entity = new SocketGuild(client, model.Id);
+        entity.Update(state, model);
+        return entity;
+    }
+    internal static SocketGuild Create(KookSocketClient client, ClientState state, RichModel model)
     {
         var entity = new SocketGuild(client, model.Id);
         entity.Update(state, model);
@@ -269,6 +277,21 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         _members = members;
         MemberCount = members.Count;
     }
+    internal void Update(ClientState state, RichModel model)
+    {
+        Update(state, model as ExtendedModel);
+        OwnerId = model.OwnerId;    // override
+        
+        if (model.Emojis != null)
+        {
+            var emojis = ImmutableArray.CreateBuilder<GuildEmote>(model.Emojis.Length);
+            for (int i = 0; i < model.Emojis.Length; i++)
+                emojis.Add(model.Emojis[i].ToEntity(model.Id));
+            _emotes = emojis.ToImmutable();
+        }
+        else
+            _emotes = ImmutableArray.Create<GuildEmote>();
+    }
     internal void Update(ClientState state, ExtendedModel model)
     {
         Update(state, model as Model);
@@ -281,7 +304,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         AutoDeleteTime = model.AutoDeleteTime;
         RecommendInfo = model.RecommendInfo?.ToEntity();
     }
-    
     internal void Update(ClientState state, Model model)
     {
         Name = model.Name;
@@ -291,17 +313,16 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         NotifyType = model.NotifyType;
         Region = model.Region;
         IsOpenEnabled = model.EnableOpen;
-        OpenId = model.OpenId;
+        OpenId = model.OpenId != 0 ? model.OpenId : null;;
         DefaultChannelId = model.DefaultChannelId != 0 ? model.DefaultChannelId : null;
         WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
 
         IsAvailable = true;
 
         var roles = new ConcurrentDictionary<uint, SocketRole>(ConcurrentHashSet.DefaultConcurrencyLevel,
-            (int) ((model.Roles ?? Array.Empty<RoleModel>()).Length * 1.05));
-        if (model.Roles != null)
+            (int) ((model.Roles?.Length ?? 0) * 1.05));
         {
-            for (int i = 0; i < (model.Roles ?? Array.Empty<RoleModel>()).Length; i++)
+            for (int i = 0; i < (model.Roles?.Length ?? 0); i++)
             {
                 var role = SocketRole.Create(this, state, model.Roles![i]);
                 roles.TryAdd(role.Id, role);
@@ -309,14 +330,22 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         }
         _roles = roles;
 
+        int channelCount = model.Channels?.Length ?? 0;
+        channelCount += (model.Channels ?? Array.Empty<ChannelModel>()).Sum(x => x.Channels?.Length ?? 0);
         var channels = new ConcurrentDictionary<ulong, SocketGuildChannel>(ConcurrentHashSet.DefaultConcurrencyLevel,
-            (int) ((model.Channels ?? Array.Empty<Channel>()).Length * 1.05));
+            (int) (channelCount * 1.05));
         {
-            for (int i = 0; i < (model.Channels ?? Array.Empty<Channel>()).Length; i++)
+            for (int i = 0; i < (model.Channels?.Length ?? 0); i++)
             {
                 var channel = SocketGuildChannel.Create(this, state, model.Channels![i]);
                 state.AddChannel(channel);
                 channels.TryAdd(channel.Id, channel);
+                for (int j = 0; j < (model.Channels[i].Channels?.Length ?? 0); j++)
+                {
+                    var nestedChannel = SocketGuildChannel.Create(this, state, model.Channels![i].Channels![j]);
+                    state.AddChannel(nestedChannel);
+                    channels.TryAdd(nestedChannel.Id, nestedChannel);
+                }
             }
         }
         _channels = channels;
@@ -329,8 +358,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         Icon = model.Icon;
         NotifyType = model.NotifyType;
         Region = model.Region;
-        IsOpenEnabled = model.EnableOpen == 1;
-        OpenId = model.OpenId;
+        IsOpenEnabled = model.EnableOpen;
+        OpenId = model.OpenId != 0 ? model.OpenId : null;
         DefaultChannelId = model.DefaultChannelId != 0 ? model.DefaultChannelId : null;
         WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
         BoostNumber = model.BoostNumber;
@@ -823,10 +852,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc />
     IReadOnlyCollection<IRole> IGuild.Roles => Roles;
     /// <inheritdoc />
-    /// <remarks>
-    ///     Not implemented.
-    /// </remarks>
-    IReadOnlyCollection<GuildEmote> IGuild.Emotes => null;
+    IReadOnlyCollection<GuildEmote> IGuild.Emotes => _emotes;
     /// <inheritdoc />
     IRole IGuild.GetRole(uint id) => GetRole(id);
     /// <inheritdoc />

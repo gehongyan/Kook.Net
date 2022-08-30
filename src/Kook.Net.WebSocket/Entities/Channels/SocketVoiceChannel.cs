@@ -72,7 +72,7 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
         VoiceQuality = model.VoiceQuality;
         UserLimit = model.UserLimit ?? 0;
         ServerUrl = model.ServerUrl;
-        IsPermissionSynced = model.PermissionSync == 1;
+        IsPermissionSynced = model.PermissionSync;
         HasPassword = model.HasPassword;
     }
     

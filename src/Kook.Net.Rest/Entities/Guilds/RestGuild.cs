@@ -34,7 +34,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     public bool IsOpenEnabled { get; private set; }
     /// <inheritdoc />
-    public uint OpenId { get; private set; }
+    public uint? OpenId { get; private set; }
     /// <inheritdoc />
     public ulong? DefaultChannelId { get; private set; }
     /// <inheritdoc />
@@ -127,7 +127,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         NotifyType = model.NotifyType;
         Region = model.Region;
         IsOpenEnabled = model.EnableOpen;
-        OpenId = model.OpenId;
+        OpenId = model.OpenId != 0 ? model.OpenId : null;;
         DefaultChannelId = model.DefaultChannelId != 0 ? model.DefaultChannelId : null;
         WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
 
@@ -586,9 +586,6 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     IReadOnlyCollection<IRole> IGuild.Roles => Roles;
 
     /// <inheritdoc />
-    /// <remarks>
-    ///     Not implemented.
-    /// </remarks>
     IReadOnlyCollection<GuildEmote> IGuild.Emotes => null;
 
     /// <inheritdoc />
