@@ -31,7 +31,7 @@ public interface IChannel : IEntity<ulong>
     ///     This method will attempt to fetch all users that is able to view this channel or is currently in this channel.
     ///     The library will attempt to split up the requests according to and <see cref="KookConfig.MaxUsersPerBatch"/>.
     ///     In other words, if there are 3000 users, and the <see cref="Kook.KookConfig.MaxUsersPerBatch"/> constant
-    ///     is <c>1000</c>, the request will be split into 3 individual requests; thus returning 53individual asynchronous
+    ///     is <c>50</c>, the request will be split into 60 individual requests; thus returning 60 individual asynchronous
     ///     responses, hence the need of flattening.
     /// </remarks>
     /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>

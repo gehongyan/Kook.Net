@@ -1,6 +1,9 @@
 using Kook.Net.Converters;
 using System;
 using System.Collections.Generic;
+#if DEBUG_REST
+using System.Diagnostics;
+#endif
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -163,12 +166,22 @@ namespace Kook.Net.Rest
         {
             using (var cancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancelToken, cancelToken))
             {
+#if DEBUG_REST
+                Debug.WriteLine($"[REST] {request.Method} {request.RequestUri} {request.Content?.Headers.ContentType?.MediaType}");
+                if (request.Content?.Headers.ContentType?.MediaType == "application/json")
+                    Debug.WriteLine($"[REST] {await request.Content.ReadAsStringAsync().ConfigureAwait(false)}");
+#endif
                 cancelToken = cancelTokenSource.Token;
                 HttpResponseMessage response = await _client.SendAsync(request, cancelToken).ConfigureAwait(false);
 
                 var headers = response.Headers.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault(), StringComparer.OrdinalIgnoreCase);
                 var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
+#if DEBUG_REST
+                Debug.WriteLine($"[REST] {response.StatusCode} {response.ReasonPhrase}");
+                if (response.Content?.Headers.ContentType?.MediaType == "application/json")
+                    Debug.WriteLine($"[REST] {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
+#endif
                 return new RestResponse(response.StatusCode, headers, stream, response.Content.Headers.ContentType);
             }
         }

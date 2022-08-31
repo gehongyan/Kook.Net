@@ -193,7 +193,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     public SocketTextChannel WelcomeChannel => TextChannels
         .Where(c => CurrentUser.GetPermissions(c).ViewChannel)
         .SingleOrDefault(c => c.Id == WelcomeChannelId);
-    /// <inheritdoc />
+    /// <inheritdoc cref="IGuild.Emotes"/>
     public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
     /// <summary>
     ///     Gets a collection of users in this guild.

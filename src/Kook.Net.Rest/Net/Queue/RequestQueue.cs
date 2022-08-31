@@ -1,5 +1,7 @@
 using System.Collections.Concurrent;
-using Kook.Rest;
+#if DEBUG_LIMITS
+using System.Diagnostics;
+#endif
 #pragma warning disable CS8073
 
 namespace Kook.Net.Queue

@@ -63,9 +63,6 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </summary>
     public IReadOnlyCollection<RestChannel> Channels => _channels.ToReadOnlyCollection();
     
-    // /// <inheritdoc />
-    // public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
-    
     /// <summary>
     ///     Gets the features of this guild.
     /// </summary>

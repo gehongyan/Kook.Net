@@ -1,6 +1,7 @@
 using System.IO.Compression;
 using System.Text;
 #if DEBUG_PACKETS
+using System.Diagnostics;
 using System.Text.Encodings.Web;
 #endif
 using System.Text.Json;
@@ -59,7 +60,7 @@ internal class KookSocketApiClient : KookRestApiClient
         WebSocketClient.Closed += async ex =>
         {
 #if DEBUG_PACKETS
-            Console.WriteLine(ex);
+            Debug.WriteLine(ex);
 #endif
 
             await DisconnectAsync().ConfigureAwait(false);
@@ -81,7 +82,7 @@ internal class KookSocketApiClient : KookRestApiClient
         if (gatewaySocketFrame is not null)
         {
 #if DEBUG_PACKETS
-            Console.WriteLine($"<- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence} \n{JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
+            Debug.WriteLine($"<- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence} \n{JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
 #endif
             await _receivedGatewayEvent.InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, gatewaySocketFrame.Payload).ConfigureAwait(false);
         }
@@ -93,7 +94,7 @@ internal class KookSocketApiClient : KookRestApiClient
         if (gatewaySocketFrame is not null)
         {
 #if DEBUG_PACKETS
-            Console.WriteLine($"<- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence} \n{JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
+            Debug.WriteLine($"<- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence} \n{JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
 #endif
             await _receivedGatewayEvent.InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, gatewaySocketFrame.Payload).ConfigureAwait(false);
         }
@@ -150,7 +151,7 @@ internal class KookSocketApiClient : KookRestApiClient
             }
 
 #if DEBUG_PACKETS
-            Console.WriteLine("Connecting to gateway: " + _gatewayUrl);
+            Debug.WriteLine("Connecting to gateway: " + _gatewayUrl);
 #endif
 
             await WebSocketClient!.ConnectAsync(_gatewayUrl).ConfigureAwait(false);
@@ -225,7 +226,7 @@ internal class KookSocketApiClient : KookRestApiClient
         await _sentGatewayMessageEvent.InvokeAsync(gatewaySocketFrameType).ConfigureAwait(false);
         
 #if DEBUG_PACKETS
-        Console.WriteLine($"-> [{gatewaySocketFrameType}] : #{sequence} \n{JsonSerializer.Serialize(payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
+        Debug.WriteLine($"-> [{gatewaySocketFrameType}] : #{sequence} \n{JsonSerializer.Serialize(payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
 #endif
     }
 }
