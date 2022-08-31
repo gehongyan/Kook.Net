@@ -58,7 +58,8 @@ class Program
         if (arg.Content != "/test") return;
         await arg.Channel.SendTextMessageAsync("收到了！", quote: new Quote(arg.Id));
         // await msg.UpdateAsync();
-        await CardDemo(arg);
+        // await CardDemo(arg);
+        await ModifyMessageDemo(arg);
     }
 
     private Task ClientOnReady()
@@ -151,11 +152,11 @@ class Program
             .SendCardMessageAsync(cardBuilder.Build(), quote: new Quote(message.Id));
     }
 
-    private async Task ModifyMessageDemo()
+    private static async Task ModifyMessageDemo(SocketMessage message)
     {
         await Task.Delay(TimeSpan.FromSeconds(1));
-        
-        SocketTextChannel channel = _client.GetGuild(_guildId).GetTextChannel(_channelId);
+
+        SocketTextChannel channel = message.Channel as SocketTextChannel;
         (Guid MessageId, DateTimeOffset MessageTimestamp) response = await channel
             .SendKMarkdownMessageAsync("BeforeModification");
         await Task.Delay(TimeSpan.FromSeconds(1));
@@ -172,9 +173,12 @@ class Program
         await Task.Delay(TimeSpan.FromSeconds(1));
         
         msg = await channel.GetMessageAsync(response.MessageId) as IUserMessage;
-        await msg!.ModifyAsync(properties => properties.Cards.Add(new CardBuilder()
-            .AddModule(new DividerModuleBuilder())
-            .AddModule(new HeaderModuleBuilder().WithText("ModificationHeader")).Build()));
+        await msg!.ModifyAsync(properties =>
+        {
+            properties.Cards = properties.Cards.Append(new CardBuilder()
+                .AddModule(new DividerModuleBuilder())
+                .AddModule(new HeaderModuleBuilder().WithText("ModificationHeader")).Build());
+        });
     }
 
 }

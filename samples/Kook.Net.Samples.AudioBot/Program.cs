@@ -154,9 +154,12 @@ class Program
         await Task.Delay(TimeSpan.FromSeconds(1));
         
         msg = await channel.GetMessageAsync(response.MessageId) as IUserMessage;
-        await msg!.ModifyAsync(properties => properties.Cards.Add(new CardBuilder()
-            .AddModule(new DividerModuleBuilder())
-            .AddModule(new HeaderModuleBuilder().WithText("ModificationHeader")).Build()));
+        await msg!.ModifyAsync(properties =>
+        {
+            properties.Cards = properties.Cards.Append(new CardBuilder()
+                .AddModule(new DividerModuleBuilder())
+                .AddModule(new HeaderModuleBuilder().WithText("ModificationHeader")).Build());
+        });
     }
 
 }

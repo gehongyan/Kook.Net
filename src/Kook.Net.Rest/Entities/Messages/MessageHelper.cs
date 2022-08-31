@@ -167,7 +167,7 @@ internal static class MessageHelper
         {
             MessageProperties args = new MessageProperties()
             {
-                Cards = msg.Cards.Select(c => c as Card).ToList(),
+                Cards = msg.Cards,
                 Quote = msg.Quote as Quote
             };
             func(args);

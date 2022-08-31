@@ -136,12 +136,12 @@ public class RestUserMessage : RestMessage, IUserMessage
         MessageProperties properties = new()
         {
             Content = Content,
-            Cards = Cards.Select(c => (Card) c).ToList(),
+            Cards = Cards,
             Quote = Quote
         };
         func(properties);
         Content = properties.Content;
-        _cards = properties.Cards?.Select(c => (ICard) c).ToImmutableArray() ?? ImmutableArray<ICard>.Empty;
+        _cards = properties.Cards?.ToImmutableArray() ?? ImmutableArray<ICard>.Empty;
         _quote = properties.Quote?.QuotedMessageId == Guid.Empty ? null : (Quote) properties.Quote;
     }
     
