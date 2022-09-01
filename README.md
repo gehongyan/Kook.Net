@@ -11,7 +11,7 @@
 
 ---
 
-**Kook.Net** is an unofficial C# .NET implementation for [KOOK (KaiHeiLa as before) API](https://developer.kookapp.cn/doc/intro).
+**Kook.Net** is an unofficial C# .NET implementation for [KOOK (KaiHeiLa formerly) API](https://developer.kookapp.cn/doc/intro).
 
 ---
 

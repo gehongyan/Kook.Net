@@ -26,7 +26,7 @@ class Program
         _client.GuildMemberOnline += ClientOnGuildMemberOnline;
         // _client.MessageReceived += ClientOnMessageReceived;
         // _client.DirectMessageReceived += ClientOnDirectMessageReceived;
-        // _client.Ready += ClientOnReady;
+        _client.Ready += ClientOnReady;
         // _client.MessageButtonClicked += ClientOnMessageButtonClicked;
         // _client.MessageDeleted += async (msg, channel) =>
         // {
@@ -68,7 +68,12 @@ class Program
     //     await ModifyMessageDemo(arg);
     // }
     //
-    // private Task ClientOnReady()
+    private async Task ClientOnReady()
+    {
+        (Guid messageId, DateTimeOffset messageTimestamp) = await _client.GetGuild(7557797319758285).GetTextChannel(7888175654136995)
+            .SendFileMessageAsync(new Uri("https://img.kookapp.cn/attachments/2022-08/31/630f780a58562.xlsx"));
+        IMessage message = await _client.GetGuild(7557797319758285).GetTextChannel(7888175654136995).GetMessageAsync(messageId);
+    }
     // {
     //     // await _client.Rest.AddReactionAsync(Guid.Parse("9062d5a9-9290-434c-b295-5b5835121cb1"), Emote.Parse("(emj)loading(emj)[1990044438283387/WiGtuv3F1d05k05k]", TagMode.KMarkdown));
     //     // await Task.Delay(TimeSpan.FromSeconds(5));

@@ -52,7 +52,7 @@ internal static class UrlValidation
         if (string.IsNullOrEmpty(url))
             return false;
         if (!Regex.IsMatch(url, 
-                @"^https?:\/\/(img\.(kaiheila|kookapp)\.cn|kaiheila\.oss-cn-beijing\.aliyuncs\.com)\/(assets|attachments)\/\d{4}-\d{2}(\/\d{2})?\/\w{16}\.\w+$", 
+                @"^https?:\/\/(img\.(kaiheila|kookapp)\.cn|kaiheila\.oss-cn-beijing\.aliyuncs\.com)\/(assets|attachments)\/\d{4}-\d{2}(\/\d{2})?\/\w{8,16}\.\w+$", 
                 RegexOptions.Compiled | RegexOptions.IgnoreCase))
             throw new InvalidOperationException($"The url {url} must be a valid Kook asset URL");
         return true;
