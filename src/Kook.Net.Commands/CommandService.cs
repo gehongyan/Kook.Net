@@ -43,8 +43,8 @@ namespace Kook.Commands
         ///     This event is fired when a command has been executed, successfully or not. When a command fails to
         ///     execute during parsing or precondition stage, the CommandInfo may not be returned.
         /// </remarks>
-        public event Func<Optional<CommandInfo>, ICommandContext, IResult, Task> CommandExecuted { add { _commandExecutedEvent.Add(value); } remove { _commandExecutedEvent.Remove(value); } }
-        internal readonly AsyncEvent<Func<Optional<CommandInfo>, ICommandContext, IResult, Task>> _commandExecutedEvent = new AsyncEvent<Func<Optional<CommandInfo>, ICommandContext, IResult, Task>>();
+        public event Func<CommandInfo, ICommandContext, IResult, Task> CommandExecuted { add { _commandExecutedEvent.Add(value); } remove { _commandExecutedEvent.Remove(value); } }
+        internal readonly AsyncEvent<Func<CommandInfo, ICommandContext, IResult, Task>> _commandExecutedEvent = new AsyncEvent<Func<CommandInfo, ICommandContext, IResult, Task>>();
 
         private readonly SemaphoreSlim _moduleLock;
         private readonly ConcurrentDictionary<Type, ModuleInfo> _typedModuleDefs;
@@ -557,7 +557,7 @@ namespace Kook.Commands
 
             if (validationResult is SearchResult result)
             {
-                await _commandExecutedEvent.InvokeAsync(Optional.Create<CommandInfo>(), context, result).ConfigureAwait(false);
+                await _commandExecutedEvent.InvokeAsync(null, context, result).ConfigureAwait(false);
                 return result;
             }
 

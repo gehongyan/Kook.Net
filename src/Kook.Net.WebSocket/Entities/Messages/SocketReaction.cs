@@ -32,8 +32,7 @@ public class SocketReaction : IReaction
     /// <returns>
     ///     A user object where possible; a value is not always returned.
     /// </returns>
-    /// <seealso cref="Optional{T}"/>
-    public Optional<IUser> User { get; }
+    public IUser User { get; }
     /// <summary>
     ///     Gets the ID of the message that has been reacted to.
     /// </summary>
@@ -47,8 +46,7 @@ public class SocketReaction : IReaction
     /// <returns>
     ///     A WebSocket-based message where possible; a value is not always returned.
     /// </returns>
-    /// <seealso cref="Optional{T}"/>
-    public Optional<SocketUserMessage> Message { get; }
+    public SocketUserMessage Message { get; }
     /// <summary>
     ///     Gets the channel where the reaction takes place in.
     /// </summary>
@@ -59,7 +57,7 @@ public class SocketReaction : IReaction
     /// <inheritdoc />
     public IEmote Emote { get; }
     
-    internal SocketReaction(ISocketMessageChannel channel, Guid messageId, Optional<SocketUserMessage> message, ulong userId, Optional<IUser> user, IEmote emoji)
+    internal SocketReaction(ISocketMessageChannel channel, Guid messageId, SocketUserMessage message, ulong userId, IUser user, IEmote emoji)
     {
         Channel = channel;
         MessageId = messageId;
@@ -68,7 +66,7 @@ public class SocketReaction : IReaction
         User = user;
         Emote = emoji;
     }
-    internal static SocketReaction Create(API.Gateway.Reaction model, ISocketMessageChannel channel, Optional<SocketUserMessage> message, Optional<IUser> user)
+    internal static SocketReaction Create(API.Gateway.Reaction model, ISocketMessageChannel channel, SocketUserMessage message, IUser user)
     {
         IEmote emote;
         if (model.Emoji.Id.Length >= 33)
@@ -77,7 +75,7 @@ public class SocketReaction : IReaction
             emote = new Emoji(model.Emoji.Name);
         return new SocketReaction(channel, model.MessageId, message, model.UserId, user, emote);
     }
-    internal static SocketReaction Create(API.Gateway.PrivateReaction model, IDMChannel channel, Optional<SocketUserMessage> message, Optional<IUser> user)
+    internal static SocketReaction Create(API.Gateway.PrivateReaction model, IDMChannel channel, SocketUserMessage message, IUser user)
     {
         IEmote emote;
         if (model.Emoji.Id.Length >= 33)

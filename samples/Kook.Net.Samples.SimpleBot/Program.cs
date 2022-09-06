@@ -14,14 +14,15 @@ class Program
 
     public Program()
     {
-        _token = Environment.GetEnvironmentVariable("KookDebugToken", EnvironmentVariableTarget.User) 
+        _token = Environment.GetEnvironmentVariable("KookDebugToken", EnvironmentVariableTarget.User)
                  ?? throw new ArgumentNullException(nameof(_token));
-        _guildId = ulong.Parse(Environment.GetEnvironmentVariable("KookDebugGuild", EnvironmentVariableTarget.User) 
+        _guildId = ulong.Parse(Environment.GetEnvironmentVariable("KookDebugGuild", EnvironmentVariableTarget.User)
                                ?? throw new ArgumentNullException(nameof(_token)));
-        _channelId = ulong.Parse(Environment.GetEnvironmentVariable("KookDebugChannel", EnvironmentVariableTarget.User) 
+        _channelId = ulong.Parse(Environment.GetEnvironmentVariable("KookDebugChannel", EnvironmentVariableTarget.User)
                                  ?? throw new ArgumentNullException(nameof(_token)));
-        _client = new(new KookSocketConfig() {AlwaysDownloadUsers = true, MessageCacheSize = 100, LogLevel = LogSeverity.Debug});
-        
+        _client = new(new KookSocketConfig()
+            {AlwaysDownloadUsers = false, MessageCacheSize = 100, LogLevel = LogSeverity.Debug});
+
         _client.Log += ClientOnLog;
         _client.GuildMemberOnline += ClientOnGuildMemberOnline;
         // _client.MessageReceived += ClientOnMessageReceived;
@@ -70,10 +71,15 @@ class Program
     //
     private async Task ClientOnReady()
     {
-        (Guid messageId, DateTimeOffset messageTimestamp) = await _client.GetGuild(7557797319758285).GetTextChannel(7888175654136995)
-            .SendFileMessageAsync(new Uri("https://img.kookapp.cn/attachments/2022-08/31/630f780a58562.xlsx"));
-        IMessage message = await _client.GetGuild(7557797319758285).GetTextChannel(7888175654136995).GetMessageAsync(messageId);
+        // (Guid messageId, DateTimeOffset messageTimestamp) = await _client.GetGuild(7557797319758285).GetTextChannel(7888175654136995)
+        // .SendFileMessageAsync(new Uri("https://img.kookapp.cn/attachments/2022-08/31/630f780a58562.xlsx"));
+        // (Guid messageId, DateTimeOffset messageTimestamp) = await _client.GetGuild(7557797319758285)
+        //     .GetTextChannel(7888175654136995)
+        //     .SendVideoMessageAsync("D:\\1.mp4");
+        // IMessage message = await _client.GetGuild(7557797319758285).GetTextChannel(7888175654136995)
+        //     .GetMessageAsync(messageId);
     }
+
     // {
     //     // await _client.Rest.AddReactionAsync(Guid.Parse("9062d5a9-9290-434c-b295-5b5835121cb1"), Emote.Parse("(emj)loading(emj)[1990044438283387/WiGtuv3F1d05k05k]", TagMode.KMarkdown));
     //     // await Task.Delay(TimeSpan.FromSeconds(5));
@@ -191,5 +197,4 @@ class Program
     //             .AddModule(new HeaderModuleBuilder().WithText("ModificationHeader")).Build());
     //     });
     // }
-
 }

@@ -13,7 +13,7 @@ public class CreateTextChannelProperties : CreateGuildChannelProperties
     ///     Setting this value to any string other than <c>null</c> or <see cref="string.Empty"/> will set the
     ///     channel topic or description to the desired value.
     /// </remarks>
-    public Optional<string> Topic { get; set; }
+    public string Topic { get; set; }
     
     /// <summary>
     ///     Gets or sets the category ID for this channel.

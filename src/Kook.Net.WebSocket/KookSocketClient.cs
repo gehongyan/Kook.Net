@@ -403,16 +403,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     
                                     var cachedMsg = channel?.GetCachedMessage(data.MessageId) as SocketUserMessage;
                                     bool isMsgCached = cachedMsg is not null;
-                                    var optionalMsg = !isMsgCached
-                                        ? Optional.Create<SocketUserMessage>()
-                                        : Optional.Create(cachedMsg);
                                     
                                     IUser user = channel is not null
                                         ? await channel.GetUserAsync(data.UserId, CacheMode.CacheOnly).ConfigureAwait(false)
                                         : GetUser(data.UserId);
-                                    var optionalUser = user is null
-                                        ? Optional.Create<IUser>()
-                                        : Optional.Create(user);
                                     
                                     var cacheableChannel = new Cacheable<IMessageChannel, ulong>(channel, data.ChannelId, channel != null, async () => await GetChannelAsync(data.ChannelId).ConfigureAwait(false) as IMessageChannel);
                                     var cacheableMsg = new Cacheable<IUserMessage, Guid>(cachedMsg, data.MessageId, isMsgCached, async () =>
@@ -420,7 +414,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                         var channelObj = await cacheableChannel.GetOrDownloadAsync().ConfigureAwait(false);
                                         return await channelObj.GetMessageAsync(data.MessageId).ConfigureAwait(false) as IUserMessage;
                                     });
-                                    var reaction = SocketReaction.Create(data, channel, optionalMsg, optionalUser);
+                                    var reaction = SocketReaction.Create(data, channel, cachedMsg, user);
                                     
                                     cachedMsg?.AddReaction(reaction);
                                     
@@ -438,16 +432,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     
                                     var cachedMsg = channel?.GetCachedMessage(data.MessageId) as SocketUserMessage;
                                     bool isMsgCached = cachedMsg is not null;
-                                    var optionalMsg = !isMsgCached
-                                        ? Optional.Create<SocketUserMessage>()
-                                        : Optional.Create(cachedMsg);
                                     
                                     IUser user = channel is not null
                                         ? await channel.GetUserAsync(data.UserId, CacheMode.CacheOnly).ConfigureAwait(false)
                                         : GetUser(data.UserId);
-                                    var optionalUser = user is null
-                                        ? Optional.Create<IUser>()
-                                        : Optional.Create(user);
                                     
                                     var cacheableChannel = new Cacheable<IMessageChannel, ulong>(channel, data.ChannelId, channel != null, async () => await GetChannelAsync(data.ChannelId).ConfigureAwait(false) as IMessageChannel);
                                     var cacheableMsg = new Cacheable<IUserMessage, Guid>(cachedMsg, data.MessageId, isMsgCached, async () =>
@@ -455,7 +443,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                         var channelObj = await cacheableChannel.GetOrDownloadAsync().ConfigureAwait(false);
                                         return await channelObj.GetMessageAsync(data.MessageId).ConfigureAwait(false) as IUserMessage;
                                     });
-                                    var reaction = SocketReaction.Create(data, channel, optionalMsg, optionalUser);
+                                    var reaction = SocketReaction.Create(data, channel, cachedMsg, user);
                                     
                                     cachedMsg?.RemoveReaction(reaction);
                                     
@@ -772,16 +760,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     
                                     var cachedMsg = channel?.GetCachedMessage(data.MessageId) as SocketUserMessage;
                                     bool isMsgCached = cachedMsg is not null;
-                                    var optionalMsg = !isMsgCached
-                                        ? Optional.Create<SocketUserMessage>()
-                                        : Optional.Create(cachedMsg);
                                     
                                     IUser user = channel is not null
                                         ? await channel.GetUserAsync(data.UserId, CacheMode.CacheOnly).ConfigureAwait(false)
                                         : GetUser(data.UserId);
-                                    var optionalUser = user is null
-                                        ? Optional.Create<IUser>()
-                                        : Optional.Create(user);
                                     
                                     var cacheableChannel = new Cacheable<IDMChannel, Guid>((IDMChannel) channel, data.ChatCode, channel != null, async () => await GetDMChannelAsync(data.ChatCode).ConfigureAwait(false));
                                     var cacheableMsg = new Cacheable<IUserMessage, Guid>(cachedMsg, data.MessageId, isMsgCached, async () =>
@@ -789,7 +771,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                         var channelObj = await cacheableChannel.GetOrDownloadAsync().ConfigureAwait(false);
                                         return await channelObj.GetMessageAsync(data.MessageId).ConfigureAwait(false) as IUserMessage;
                                     });
-                                    var reaction = SocketReaction.Create(data, (IDMChannel) channel, optionalMsg, optionalUser);
+                                    var reaction = SocketReaction.Create(data, (IDMChannel) channel, cachedMsg, user);
                                     
                                     cachedMsg?.AddReaction(reaction);
 
@@ -807,16 +789,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     
                                     var cachedMsg = channel?.GetCachedMessage(data.MessageId) as SocketUserMessage;
                                     bool isMsgCached = cachedMsg is not null;
-                                    var optionalMsg = !isMsgCached
-                                        ? Optional.Create<SocketUserMessage>()
-                                        : Optional.Create(cachedMsg);
                                     
                                     IUser user = channel is not null
                                         ? await channel.GetUserAsync(data.UserId, CacheMode.CacheOnly).ConfigureAwait(false)
                                         : GetUser(data.UserId);
-                                    var optionalUser = user is null
-                                        ? Optional.Create<IUser>()
-                                        : Optional.Create(user);
                                     
                                     var cacheableChannel = new Cacheable<IDMChannel, Guid>((IDMChannel) channel, data.ChatCode, channel != null, async () => await GetDMChannelAsync(data.ChatCode).ConfigureAwait(false));
                                     var cacheableMsg = new Cacheable<IUserMessage, Guid>(cachedMsg, data.MessageId, isMsgCached, async () =>
@@ -824,7 +800,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                         var channelObj = await cacheableChannel.GetOrDownloadAsync().ConfigureAwait(false);
                                         return await channelObj.GetMessageAsync(data.MessageId).ConfigureAwait(false) as IUserMessage;
                                     });
-                                    var reaction = SocketReaction.Create(data, (IDMChannel) channel, optionalMsg, optionalUser);
+                                    var reaction = SocketReaction.Create(data, (IDMChannel) channel, cachedMsg, user);
                                     
                                     cachedMsg?.RemoveReaction(reaction);
                                     

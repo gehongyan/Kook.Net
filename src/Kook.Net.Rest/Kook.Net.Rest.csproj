@@ -19,6 +19,10 @@
         <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DefineConstants>TRACE;DEBUG_REST</DefineConstants>
+    </PropertyGroup>
+
     <ItemGroup>
       <PackageReference Include="System.Linq.Async" Version="6.0.1" />
       <PackageReference Include="System.Text.Json" Version="6.0.2" />

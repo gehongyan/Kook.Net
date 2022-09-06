@@ -10,7 +10,7 @@ public partial class KookBotClientExtension
         if (!reaction.Emote.Equals(Emoji.Parse(":computer:"))) return;
         
         SocketRole socketRole = _kookSocketClient.GetGuild(1591057729615250).GetRole(3001653);
-        SocketGuildUser socketGuildUser = (SocketGuildUser) reaction.User.GetValueOrDefault();
+        SocketGuildUser socketGuildUser = (SocketGuildUser) reaction.User;
         
         await socketGuildUser.AddRoleAsync(socketRole);
 
@@ -37,7 +37,7 @@ public partial class KookBotClientExtension
         if (!reaction.Emote.Equals(Emoji.Parse(":computer:"))) return;
         
         SocketRole socketRole = _kookSocketClient.GetGuild(1591057729615250).GetRole(3001653);
-        SocketGuildUser socketGuildUser = (SocketGuildUser) reaction.User.GetValueOrDefault();
+        SocketGuildUser socketGuildUser = (SocketGuildUser) reaction.User;
         
         await socketGuildUser.RemoveRoleAsync(socketRole);
 

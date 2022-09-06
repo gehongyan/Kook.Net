@@ -45,7 +45,6 @@ public class KookRestApiClientTests : IClassFixture<RestGuildFixture>, IAsyncDis
     [Fact]
     public async Task CreateAsset_WithOverSize_ThrowsException()
     {
-
         Func<Task> upload = async () =>
         {
             ulong fileSize = (ulong) (30 * Math.Pow(2, 20)) + 1;
