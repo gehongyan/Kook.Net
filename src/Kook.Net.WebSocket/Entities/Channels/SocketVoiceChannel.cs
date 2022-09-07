@@ -25,7 +25,7 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
         => CategoryId.HasValue ? Guild.GetChannel(CategoryId.Value) as ICategoryChannel : null;
 
     /// <inheritdoc />
-    public bool IsPermissionSynced { get; private set; }
+    public bool? IsPermissionSynced { get; private set; }
     /// <inheritdoc />
     public virtual Task SyncPermissionsAsync(RequestOptions options = null)
         => ChannelHelper.SyncPermissionsAsync(this, Kook, options);
@@ -41,17 +41,30 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     public string ServerUrl { get; set; }
     /// <inheritdoc />
     public bool HasPassword { get; set; }
-    
-    // /// <summary>
-    // ///     Gets a collection of users that are able to connect to this voice channel.
-    // /// </summary>
-    // /// <returns>
-    // ///     A read-only collection of users that are able to connect to this voice channel.
-    // /// </returns>
-    // public override IReadOnlyCollection<SocketGuildUser> Users
-    //     => Guild.Users.Where(x => Permissions.GetValue(
-    //         Permissions.ResolveChannel(Guild, x, this, Permissions.ResolveGuild(Guild, x)),
-    //         ChannelPermission.ViewChannel | ChannelPermission.Connect)).ToImmutableArray();
+    /// <inheritdoc />
+    /// <seealso cref="SocketVoiceChannel.ConnectedUsers"/>
+    public override IReadOnlyCollection<SocketGuildUser> Users
+        => Guild.Users.Where(x => Permissions.GetValue(
+            Permissions.ResolveChannel(Guild, x, this, Permissions.ResolveGuild(Guild, x)),
+            ChannelPermission.ViewChannel)).ToImmutableArray();
+    /// <summary>
+    ///     Gets a collection of users that are currently connected to this voice channel.
+    /// </summary>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         This property may not always return all the members that are connected to this voice channel,
+    ///         because uses may connected this voice channel before the bot has connected to the gateway.
+    ///         To ensure accuracy, you may need to enable <see cref="KookSocketConfig.AlwaysDownloadVoiceStates"/>
+    ///         to fetch the full voice states upon startup, or use <see cref="SocketGuild.DownloadVoiceStatesAsync"/>
+    ///         on the guild this voice channel belongs to to manually download the users voice states,
+    ///         or use <see cref="GetConnectedUsersAsync"/> to fetch the connected users from the API.
+    ///     </note>
+    /// </remarks>
+    /// <returns>
+    ///     A read-only collection of users that are currently connected to this voice channel.
+    /// </returns>
+    public IReadOnlyCollection<SocketGuildUser> ConnectedUsers
+        => Guild.Users.Where(x => x.VoiceChannel?.Id == Id).ToImmutableArray();
     
     internal SocketVoiceChannel(KookSocketClient kook, ulong id, SocketGuild guild) 
         : base(kook, id, guild)
@@ -77,17 +90,25 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     }
     
     /// <inheritdoc />
+    public override SocketGuildUser GetUser(ulong id)
+    {
+        var user = Guild.GetUser(id);
+        if (user?.VoiceChannel?.Id == Id)
+            return user;
+        return null;
+    }
+
+    /// <inheritdoc />
     public Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null)
         => ChannelHelper.ModifyAsync(this, Kook, func, options);
 
-    // /// <inheritdoc />
-    // public override SocketGuildUser GetUser(ulong id)
-    // {
-    //     var user = Guild.GetUser(id);
-    //     if (user?.VoiceChannel?.Id == Id)
-    //         return user;
-    //     return null;
-    // }
+    public async Task<IReadOnlyCollection<SocketGuildUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
+    {
+        if (mode is CacheMode.AllowDownload)
+            return await SocketChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false);
+        else
+            return ConnectedUsers;
+    }
     
     #endregion
     
@@ -104,6 +125,14 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
         => await ChannelHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
 
     #endregion
+
+    #region IVoiceChannel
+    
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IUser>> IVoiceChannel.GetConnectedUsersAsync(CacheMode mode, RequestOptions options)
+        => await GetConnectedUsersAsync(mode, options).ConfigureAwait(false);
+
+    #endregion
     
     private string DebuggerDisplay => $"{Name} ({Id}, Voice)";
     internal new SocketVoiceChannel Clone() => MemberwiseClone() as SocketVoiceChannel;
@@ -114,9 +143,14 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IGuildUser>(GetUser(id));
     /// <inheritdoc />
+    /// <seealso cref="IVoiceChannel.GetConnectedUsersAsync"/>
     IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
-        => ImmutableArray.Create<IReadOnlyCollection<IGuildUser>>(Users).ToAsyncEnumerable();
-    
+    {
+        return mode == CacheMode.AllowDownload
+            ? ChannelHelper.GetUsersAsync(this, Guild, Kook, KookConfig.MaxUsersPerBatch, 1, options)
+            : ImmutableArray.Create<IReadOnlyCollection<IGuildUser>>(Users).ToAsyncEnumerable();
+    }
+
     #endregion
     
     #region INestedChannel

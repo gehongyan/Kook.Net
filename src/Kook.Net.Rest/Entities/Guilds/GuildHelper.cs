@@ -131,7 +131,7 @@ internal static class GuildHelper
         RequestOptions options)
     {
         var models = await client.ApiClient.GetGuildMutedDeafenedUsersAsync(guild.Id, options).ConfigureAwait(false);
-        return (models.Mute.UserIds, models.Deaf.UserIds);
+        return (models.Muted.UserIds, models.Deafened.UserIds);
     }
     
     public static async Task MuteUserAsync(IGuildUser user, BaseKookClient client, RequestOptions options)

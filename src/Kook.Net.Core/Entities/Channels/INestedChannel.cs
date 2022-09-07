@@ -22,7 +22,7 @@ public interface INestedChannel : IGuildChannel
     /// <returns>
     ///     A <see langword="bool"/> indicating whether the permissions of this channel is synchronized with its parent channel.
     /// </returns>
-    bool IsPermissionSynced { get; }
+    bool? IsPermissionSynced { get; }
     
     /// <summary>
     ///     Gets the parent (category) channel of this channel.

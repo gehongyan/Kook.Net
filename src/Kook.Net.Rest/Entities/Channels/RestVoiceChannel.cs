@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Model = Kook.API.Channel;
 
 using System.Diagnostics;
@@ -23,7 +24,7 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     /// <inheritdoc />
     public bool HasPassword { get; private set; }
     /// <inheritdoc />
-    public bool IsPermissionSynced { get; private set; }
+    public bool? IsPermissionSynced { get; private set; }
     /// <inheritdoc />
     public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
     /// <inheritdoc />
@@ -58,6 +59,9 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
         var model = await ChannelHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
         Update(model);
     }
+
+    public async Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(RequestOptions options)
+        => await ChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false);
     
     /// <summary>
     ///     Gets the parent (category) channel of this channel.
@@ -99,7 +103,9 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
         => Task.FromResult<IGuildUser>(null);
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
-        => AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
+    {
+        return AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
+    }
     
     #endregion
     
@@ -115,4 +121,15 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     
     #endregion
     
+    #region IVoiceChannel
+
+    async Task<IReadOnlyCollection<IUser>> IVoiceChannel.GetConnectedUsersAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode is CacheMode.AllowDownload)
+            return await ChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false);
+        else
+            return ImmutableArray.Create<IUser>();
+    }
+
+    #endregion
 }

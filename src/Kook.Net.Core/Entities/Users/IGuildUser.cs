@@ -3,7 +3,7 @@
 /// <summary>
 ///     Represents a generic guild user.
 /// </summary>
-public interface IGuildUser : IUser
+public interface IGuildUser : IUser, IVoiceState
 {
     #region General
 
@@ -253,8 +253,11 @@ public interface IGuildUser : IUser
     /// <summary>
     ///     Gets a collection of voice channels a user
     /// </summary>
-    /// <param name="options"></param>
-    /// <returns></returns>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of
+    ///     voice channels the user is connected to.
+    /// </returns>
     Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null);
     
     #endregion

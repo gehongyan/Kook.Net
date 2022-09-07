@@ -26,7 +26,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     /// <inheritdoc />
     public ulong? CategoryId { get; private set; }
     /// <inheritdoc />
-    public bool IsPermissionSynced { get; private set; }
+    public bool? IsPermissionSynced { get; private set; }
     /// <inheritdoc />
     public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
     /// <inheritdoc />

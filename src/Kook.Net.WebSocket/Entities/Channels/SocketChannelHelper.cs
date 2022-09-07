@@ -83,15 +83,22 @@ internal static class SocketChannelHelper
         };
     }
     
-    public static async Task UpdateAsync(SocketGuildChannel channel, RequestOptions options = null)
+    public static async Task UpdateAsync(SocketGuildChannel channel, RequestOptions options)
     {
         var model = await channel.Kook.ApiClient.GetGuildChannelAsync(channel.Id, options).ConfigureAwait(false);
         channel.Update(channel.Kook.State, model);
     }
     
-    public static async Task UpdateAsync(SocketDMChannel channel, RequestOptions options = null)
+    public static async Task UpdateAsync(SocketDMChannel channel, RequestOptions options)
     {
         var model = await channel.Kook.ApiClient.GetUserChatAsync(channel.Id, options).ConfigureAwait(false);
         channel.Update(channel.Kook.State, model);
+    }
+
+    public static async Task<IReadOnlyCollection<SocketGuildUser>> GetConnectedUsersAsync(SocketVoiceChannel channel,
+        SocketGuild guild, KookSocketClient kook, RequestOptions options)
+    {
+        var users = await channel.Kook.ApiClient.GetConnectedUsersAsync(channel.Id, options).ConfigureAwait(false);
+        return users.Select(x => SocketGuildUser.Create(guild, kook.State, x)).ToImmutableArray();
     }
 }

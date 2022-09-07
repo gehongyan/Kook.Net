@@ -21,7 +21,7 @@ class Program
         _channelId = ulong.Parse(Environment.GetEnvironmentVariable("KookDebugChannel", EnvironmentVariableTarget.User)
                                  ?? throw new ArgumentNullException(nameof(_token)));
         _client = new(new KookSocketConfig()
-            {AlwaysDownloadUsers = false, MessageCacheSize = 100, LogLevel = LogSeverity.Debug});
+            {AlwaysDownloadUsers = true, AlwaysDownloadVoiceStates = true, MessageCacheSize = 100, LogLevel = LogSeverity.Debug});
 
         _client.Log += ClientOnLog;
         _client.GuildMemberOnline += ClientOnGuildMemberOnline;
@@ -71,6 +71,12 @@ class Program
     //
     private async Task ClientOnReady()
     {
+        await Task.Delay(TimeSpan.FromSeconds(5));
+        KookSocketClient kookSocketClient = _client;
+        SocketGuildUser socketGuildUser = kookSocketClient.GetGuild(7557797319758285).GetUser(821393881);
+        List<SocketGuildUser> socketGuildUsers = kookSocketClient.GetGuild(7557797319758285).Users.Where(x => x.IsDeafened == true).ToList();
+        IReadOnlyCollection<SocketGuildUser> readOnlyCollection = kookSocketClient.GetGuild(7557797319758285).GetVoiceChannel(9816956151862920).ConnectedUsers;
+        IReadOnlyCollection<SocketGuildUser> connectedUsers = await kookSocketClient.GetGuild(7557797319758285).GetVoiceChannel(9816956151862920).GetConnectedUsersAsync();
         // (Guid messageId, DateTimeOffset messageTimestamp) = await _client.GetGuild(7557797319758285).GetTextChannel(7888175654136995)
         // .SendFileMessageAsync(new Uri("https://img.kookapp.cn/attachments/2022-08/31/630f780a58562.xlsx"));
         // (Guid messageId, DateTimeOffset messageTimestamp) = await _client.GetGuild(7557797319758285)

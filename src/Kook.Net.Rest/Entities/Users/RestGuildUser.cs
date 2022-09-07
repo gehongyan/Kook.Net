@@ -198,4 +198,15 @@ public class RestGuildUser : RestUser, IGuildUser
         }
     }
     #endregion
+    
+    #region IVoiceState
+    
+    /// <inheritdoc />
+    bool? IVoiceState.IsMuted => null;
+    /// <inheritdoc />
+    bool? IVoiceState.IsDeafened => null;
+    /// <inheritdoc />
+    IVoiceChannel IVoiceState.VoiceChannel => null;
+    
+    #endregion
 }

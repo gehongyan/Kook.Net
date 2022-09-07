@@ -410,7 +410,7 @@ internal class KookRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds(guildId: guildId);
-        return await SendAsync<GetGuildMuteDeafListResponse>(HttpMethod.Post, () => $"guild-mute/list?guild_id={guildId}&return_type=detail", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+        return await SendAsync<GetGuildMuteDeafListResponse>(HttpMethod.Get, () => $"guild-mute/list?guild_id={guildId}&return_type=detail", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task CreateGuildMuteDeafAsync(CreateOrRemoveGuildMuteDeafParams args, RequestOptions options = null)
@@ -529,6 +529,15 @@ internal class KookRestApiClient : IDisposable
         
         var ids = new BucketIds(channelId: args.ChannelId);
         await SendJsonAsync(HttpMethod.Post, () => $"channel/move-user", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+
+    public async Task<IReadOnlyCollection<User>> GetConnectedUsersAsync(ulong channelId, RequestOptions options = null)
+    {
+        Preconditions.NotEqual(channelId, 0, nameof(channelId));
+        options = RequestOptions.CreateOrClone(options);
+        
+        var ids = new BucketIds(channelId: channelId);
+        return await SendAsync<IReadOnlyCollection<User>>(HttpMethod.Get, () => $"channel/user-list?channel_id={channelId}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     #endregion

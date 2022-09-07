@@ -6,10 +6,10 @@ namespace Kook.API.Rest;
 internal class GetGuildMuteDeafListResponse
 {
     [JsonPropertyName("mic")]
-    public MuteOrDeafDetail Mute { get; set; }
+    public MuteOrDeafDetail Muted { get; set; }
     
     [JsonPropertyName("headset")]
-    public MuteOrDeafDetail Deaf { get; set; }
+    public MuteOrDeafDetail Deafened { get; set; }
 }
 
 internal class MuteOrDeafDetail

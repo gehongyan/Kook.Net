@@ -35,8 +35,8 @@ internal class Channel
     [JsonPropertyName("channels")] public Channel[] Channels { get; set; }
     
     [JsonPropertyName("permission_sync")] 
-    [JsonConverter(typeof(NumberBooleanConverter))]
-    public bool PermissionSync { get; set; }
+    [JsonConverter(typeof(NullableNumberBooleanConverter))]
+    public bool? PermissionSync { get; set; }
     
     // Text
     [JsonPropertyName("topic")] public string Topic { get; set; }

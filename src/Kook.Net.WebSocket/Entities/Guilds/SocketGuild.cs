@@ -1,7 +1,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using Kook.API;
 using Kook.API.Gateway;
 using Kook.Rest;
 using Model = Kook.API.Guild;
@@ -26,6 +25,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     private ConcurrentDictionary<ulong, SocketGuildChannel> _channels;
     private ConcurrentDictionary<ulong, SocketGuildUser> _members;
     private ConcurrentDictionary<uint, SocketRole> _roles;
+    private ConcurrentDictionary<ulong, SocketVoiceState> _voiceStates;
     private ImmutableArray<GuildEmote> _emotes;
     
     /// <inheritdoc />
@@ -351,6 +351,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         _channels = channels;
 
         _members ??= new ConcurrentDictionary<ulong, SocketGuildUser>();
+        _voiceStates ??= new ConcurrentDictionary<ulong, SocketVoiceState>();
     }
     internal void Update(ClientState state, GuildEvent model)
     {
@@ -623,48 +624,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         return null;
     }
 
-    /// <summary>
-    ///     Gets the users who are muted or deafened in this guild.
-    /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains
-    ///     the collection of muted or deafened users in this guild.
-    /// </returns>
-    public async Task<(IReadOnlyCollection<Cacheable<SocketUser, ulong>> Muted, IReadOnlyCollection<Cacheable<SocketUser, ulong>> Deafened)> 
-        GetMutedDeafenedUsersAsync(RequestOptions options = null)
-    {
-        Cacheable<SocketUser, ulong> ParseUser(ulong id)
-        {
-            Cacheable<SocketUser, ulong> cacheable;
-            SocketUser user = Users.SingleOrDefault(x => x.Id == id);
-            if (user is not null)
-            {
-                cacheable = new Cacheable<SocketUser, ulong>(user, id, true, () => Task.FromResult(user));
-            }
-            else
-            {
-                user = SocketUnknownUser.Create(Kook, Kook.State, id);
-
-                async Task<SocketUser> DownloadFunc()
-                {
-                    var model = await Kook.ApiClient.GetUserAsync(id, options)
-                        .ConfigureAwait(false);
-                    var guildUser = SocketGlobalUser.Create(Kook, Kook.State, model);
-                    return guildUser;
-                }
-
-                cacheable = new Cacheable<SocketUser, ulong>(user, id, false, DownloadFunc);
-            }
-            return cacheable;
-        }
-
-        var users = await GuildHelper.GetGuildMutedDeafenedUsersAsync(this, Kook, options);
-        var mutedUsers = users.Muted.Select(ParseUser).ToImmutableArray();
-        var deafenedUsers = users.Deafened.Select(ParseUser).ToImmutableArray();
-        return (mutedUsers, deafenedUsers);
-    }
-
     internal SocketGuildUser AddOrUpdateUser(UserModel model)
     {
         if (_members.TryGetValue(model.Id, out SocketGuildUser member))
@@ -746,10 +705,14 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
             return ImmutableArray.Create(Users).ToAsyncEnumerable<IReadOnlyCollection<IGuildUser>>();
         return GuildHelper.GetUsersAsync(this, Kook, KookConfig.MaxUsersPerBatch, 1, options);
     }
-    
+
     public async Task DownloadUsersAsync()
     {
         await Kook.DownloadUsersAsync(new[] { this }).ConfigureAwait(false);
+    }
+    public async Task DownloadVoiceStatesAsync(RequestOptions options = null)
+    {
+        await Kook.DownloadVoiceStatesAsync(new[] { this }).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -764,7 +727,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
-    ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/> at <paramref name="func"/>.
+    ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/>
+    ///     at <paramref name="func"/>.
     /// </returns>
     public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func, 
         int limit = KookConfig.MaxUsersPerBatch, RequestOptions options = null)
@@ -815,6 +779,42 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
     #endregion
     
+    #region Voice States
+
+    internal SocketVoiceState AddOrUpdateVoiceState(ulong userId, ulong? voiceChannelId)
+    {
+        var voiceChannel = voiceChannelId.HasValue
+            ? GetChannel(voiceChannelId.Value) as SocketVoiceChannel
+            : null;
+        var socketState = GetVoiceState(userId) ?? SocketVoiceState.Default;
+        socketState.Update(voiceChannel);
+        _voiceStates[userId] = socketState;
+        return socketState; 
+    }
+
+    internal SocketVoiceState AddOrUpdateVoiceState(ulong userId, bool? isMuted = null, bool? isDeafened = null)
+    {
+        var socketState = GetVoiceState(userId) ?? SocketVoiceState.Default;
+        socketState.Update(isMuted, isDeafened);
+        _voiceStates[userId] = socketState;
+        return socketState;
+    }
+
+    internal SocketVoiceState? GetVoiceState(ulong id)
+    {
+        if (_voiceStates.TryGetValue(id, out SocketVoiceState voiceState))
+            return voiceState;
+        return null;
+    }
+    internal SocketVoiceState? RemoveVoiceState(ulong id)
+    {
+        if (_voiceStates.TryRemove(id, out SocketVoiceState voiceState))
+            return voiceState;
+        return null;
+    }
+
+    #endregion
+
     #region IGuild
     
     /// <inheritdoc />
@@ -909,19 +909,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc />
     async Task<ICategoryChannel> IGuild.CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties> func, RequestOptions options)
         => await CreateCategoryChannelAsync(name, func, options).ConfigureAwait(false);
-    
-    /// <inheritdoc />
-    async Task<(IReadOnlyCollection<Cacheable<IUser, ulong>> Muted, IReadOnlyCollection<Cacheable<IUser, ulong>> Deafened)> IGuild.GetMutedDeafenedUsersAsync(RequestOptions options)
-    {
-        var users = await GetMutedDeafenedUsersAsync(options).ConfigureAwait(false);
-        var muted = users.Muted.Select(x =>
-                new Cacheable<IUser, ulong>(x.Value, x.Id, x.HasValue, async () => await x.DownloadAsync()))
-            .ToImmutableArray();
-        var deafened = users.Deafened.Select(x =>
-                new Cacheable<IUser, ulong>(x.Value, x.Id, x.HasValue, async () => await x.DownloadAsync()))
-            .ToImmutableArray();
-        return (muted, deafened);
-    }
 
     /// <inheritdoc />
     public async Task<Stream> GetBadgeAsync(BadgeStyle style = BadgeStyle.GuildName, RequestOptions options = null)

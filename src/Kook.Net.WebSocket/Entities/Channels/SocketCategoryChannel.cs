@@ -18,7 +18,7 @@ public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
         => Guild.Users.Where(x => Permissions.GetValue(
             Permissions.ResolveChannel(Guild, x, this, Permissions.ResolveGuild(Guild, x)),
             ChannelPermission.ViewChannel)).ToImmutableArray();
-    
+
     /// <summary>
     ///     Gets the child channels of this category.
     /// </summary>

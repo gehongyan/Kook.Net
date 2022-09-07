@@ -94,7 +94,7 @@ namespace Kook
 
         public ulong? CategoryId => throw new NotImplementedException();
 
-        public bool IsPermissionSynced => throw new NotImplementedException();
+        public bool? IsPermissionSynced => throw new NotImplementedException();
 
         public ulong CreatorId => throw new NotImplementedException();
 
@@ -142,6 +142,11 @@ namespace Kook
         public bool HasPassword => throw new NotImplementedException();
 
         public Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
         {
             throw new NotImplementedException();
         }

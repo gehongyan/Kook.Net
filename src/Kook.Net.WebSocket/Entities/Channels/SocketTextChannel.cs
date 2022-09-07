@@ -38,7 +38,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     public ICategoryChannel Category
         => CategoryId.HasValue ? Guild.GetChannel(CategoryId.Value) as ICategoryChannel : null;
     /// <inheritdoc />
-    public bool IsPermissionSynced { get; private set; }
+    public bool? IsPermissionSynced { get; private set; }
     /// <inheritdoc />
     public virtual Task SyncPermissionsAsync(RequestOptions options = null)
         => ChannelHelper.SyncPermissionsAsync(this, Kook, options);

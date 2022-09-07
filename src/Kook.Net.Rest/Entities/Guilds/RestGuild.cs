@@ -317,26 +317,6 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         => GuildHelper.GetUserAsync(this, Kook, OwnerId, options);
 
     /// <summary>
-    ///     Gets the users who are muted or deafened in this guild.
-    /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains
-    ///     the collection of muted or deafened users in this guild.
-    /// </returns>
-    public async Task<(IReadOnlyCollection<Cacheable<RestUser, ulong>> Muted, IReadOnlyCollection<Cacheable<RestUser, ulong>> Deafened)> 
-        GetMutedDeafenedUsersAsync(RequestOptions options = null)
-    {
-        Cacheable<RestUser, ulong> ParseUser(ulong id) => new(null, id, false,
-            async () => await ClientHelper.GetUserAsync(Kook, id, options).ConfigureAwait(false));
-
-        var users = await GuildHelper.GetGuildMutedDeafenedUsersAsync(this, Kook, options);
-        var mutedUsers = users.Muted.Select(ParseUser).ToImmutableArray();
-        var deafenedUsers = users.Deafened.Select(ParseUser).ToImmutableArray();
-        return (mutedUsers, deafenedUsers);
-    }
-    
-    /// <summary>
     ///     Gets a collection of users in this guild that the name or nickname contains the
     ///     provided <see langword="string"/> at <paramref name="func"/>.
     /// </summary>
@@ -737,19 +717,6 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     async Task<ICategoryChannel> IGuild.CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties> func, RequestOptions options)
         => await CreateCategoryChannelAsync(name, func, options).ConfigureAwait(false);
-
-    /// <inheritdoc />
-    async Task<(IReadOnlyCollection<Cacheable<IUser, ulong>> Muted, IReadOnlyCollection<Cacheable<IUser, ulong>> Deafened)> IGuild.GetMutedDeafenedUsersAsync(RequestOptions options)
-    {
-        var users = await GetMutedDeafenedUsersAsync(options).ConfigureAwait(false);
-        var muted = users.Muted.Select(x =>
-                new Cacheable<IUser, ulong>(x.Value, x.Id, x.HasValue, async () => await x.DownloadAsync()))
-            .ToImmutableArray();
-        var deafened = users.Deafened.Select(x =>
-                new Cacheable<IUser, ulong>(x.Value, x.Id, x.HasValue, async () => await x.DownloadAsync()))
-            .ToImmutableArray();
-        return (muted, deafened);
-    }
 
     /// <inheritdoc />
     public async Task<Stream> GetBadgeAsync(BadgeStyle style = BadgeStyle.GuildName, RequestOptions options = null)

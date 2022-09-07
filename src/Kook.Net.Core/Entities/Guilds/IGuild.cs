@@ -595,17 +595,6 @@ public interface IGuild : IEntity<ulong>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>A task that represents the asynchronous operation for moving a user.</returns>
     Task MoveUsersAsync(IEnumerable<IGuildUser> users, IVoiceChannel targetChannel, RequestOptions options = null);
-    
-    /// <summary>
-    ///     Gets the users who are muted or deafened in this guild.
-    /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains
-    ///     the collection of muted or deafened users in this guild.
-    /// </returns>
-    Task<(IReadOnlyCollection<Cacheable<IUser, ulong>> Muted, IReadOnlyCollection<Cacheable<IUser, ulong>> Deafened)>
-        GetMutedDeafenedUsersAsync(RequestOptions options = null);
 
     #endregion
 

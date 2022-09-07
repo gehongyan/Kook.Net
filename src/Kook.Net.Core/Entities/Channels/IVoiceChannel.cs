@@ -49,4 +49,15 @@ public interface IVoiceChannel : INestedChannel, IAudioChannel, IMentionable
     /// </returns>
     /// <seealso cref="ModifyVoiceChannelProperties"/>
     Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null);
+
+    /// <summary>
+    ///     Gets the users connected to this voice channel.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of
+    ///     <see cref="IGuildUser"/>s that are connected to this voice channel.
+    /// </returns>
+    Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
 }

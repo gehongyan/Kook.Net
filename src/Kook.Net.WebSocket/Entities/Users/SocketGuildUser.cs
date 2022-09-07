@@ -14,7 +14,9 @@ namespace Kook.WebSocket;
 public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
 {
     #region SocketGuildUser
-
+    
+    private ImmutableArray<uint> _roleIds;
+    
     internal override SocketGlobalUser GlobalUser { get; }
     /// <summary>
     ///     Gets the guild the user is in.
@@ -63,7 +65,42 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// <inheritdoc />
     internal override SocketPresence Presence { get; set; }
     
-    private ImmutableArray<uint> _roleIds;
+    /// <inheritdoc />
+    public bool? IsDeafened => VoiceState?.IsDeafened ?? false;
+    /// <inheritdoc />
+    public bool? IsMuted => VoiceState?.IsMuted ?? false;
+    /// <summary>
+    ///     Returns a collection of roles that the user possesses.
+    /// </summary>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         Due to the lack of events which should be raised when a role is added or removed from a user,
+    ///         this property may not be completely accurate. To ensure the most accurate results,
+    ///         it is recommended to call <see cref="UpdateAsync"/> before this property is used.
+    ///     </note>
+    /// </remarks>
+    public IReadOnlyCollection<SocketRole> Roles
+        => _roleIds.Select(id => Guild.GetRole(id)).Where(x => x != null).ToReadOnlyCollection(() => _roleIds.Length);
+    
+    /// <summary>
+    ///     Returns the voice channel the user is in, or <c>null</c> if none or unknown.
+    ///     <note type="warning">
+    ///         If a user connects to a voice channel before the bot has connected to the gateway,
+    ///         this property will be <c>null</c> until <see cref="SocketGuild.DownloadVoiceStatesAsync"/>
+    ///         or <see cref="KookSocketClient.DownloadVoiceStatesAsync"/> is called.
+    ///         To ensure whether the user is in a voice channel or not, use those methods above,
+    ///         or <see cref="GetConnectedVoiceChannelsAsync"/>.
+    ///     </note>
+    /// </summary>
+    public SocketVoiceChannel VoiceChannel => VoiceState?.VoiceChannel;
+    /// <summary>
+    ///     Gets the voice status of the user if any.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="SocketVoiceState" /> representing the user's voice status; <c>null</c> if the user is neither
+    ///     connected to a voice channel nor is muted or deafened by the guild.
+    /// </returns>
+    public SocketVoiceState? VoiceState => Guild.GetVoiceState(Id);
     
     internal SocketGuildUser(SocketGuild guild, SocketGlobalUser globalUser)
         : base(guild.Kook, globalUser.Id)
@@ -205,10 +242,15 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// <inheritdoc />
     public Task UndeafenAsync(RequestOptions options = null) 
         => GuildHelper.UndeafenUserAsync(this, Kook, options);
-    /// <inheritdoc />
-    public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null)
-        => SocketUserHelper.GetConnectedChannelsAsync(this, Kook, options);
-    
+    /// <inheritdoc cref="IGuildUser.GetConnectedVoiceChannelsAsync"/>
+    public async Task<IReadOnlyCollection<SocketVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null)
+    {
+        IReadOnlyCollection<SocketVoiceChannel> channels =
+            await SocketUserHelper.GetConnectedChannelsAsync(this, Kook, options).ConfigureAwait(false);
+        foreach (SocketVoiceChannel channel in channels)
+            channel.Guild.AddOrUpdateVoiceState(Id, channel.Id);
+        return channels;
+    }
     /// <summary>
     ///     Fetches the users data from the REST API to update this object,
     ///     especially the <see cref="Roles"/> property.
@@ -219,34 +261,31 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// </returns>
     public Task UpdateAsync(RequestOptions options = null)
         => SocketUserHelper.UpdateAsync(this, Kook, options);
-    
-    /// <summary>
-    ///     Returns a collection of roles that the user possesses.
-    /// </summary>
-    /// <remarks>
-    ///     <note type="warning">
-    ///         Due to the lack of events which should be raised when a role is added or removed from a user,
-    ///         this property may not be completely accurate. To ensure the most accurate results,
-    ///         it is recommended to call <see cref="UpdateAsync"/> before this property is used.
-    ///     </note>
-    /// </remarks>
-    public IReadOnlyCollection<SocketRole> Roles
-        => _roleIds.Select(id => Guild.GetRole(id)).Where(x => x != null).ToReadOnlyCollection(() => _roleIds.Length);
-    
+
     /// <inheritdoc />
     public ChannelPermissions GetPermissions(IGuildChannel channel)
         => new ChannelPermissions(Permissions.ResolveChannel(Guild, this, channel, GuildPermissions.RawValue));
-    
+
     #endregion
 
     #region IGuildUser
-    
+
     /// <inheritdoc />
     IGuild IGuildUser.Guild => Guild;
     /// <inheritdoc />
     ulong IGuildUser.GuildId => Guild.Id;
     /// <inheritdoc />
     IReadOnlyCollection<uint> IGuildUser.RoleIds => _roleIds;
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IVoiceChannel>> IGuildUser.GetConnectedVoiceChannelsAsync(RequestOptions options)
+        => await GetConnectedVoiceChannelsAsync(options).ConfigureAwait(false);
+
+    #endregion
+
+    #region IVoiceState
+    
+    /// <inheritdoc />
+    IVoiceChannel IVoiceState.VoiceChannel => VoiceChannel;
 
     #endregion
     

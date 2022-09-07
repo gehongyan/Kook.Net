@@ -95,7 +95,7 @@ namespace Kook
 
         public ulong? CategoryId => throw new NotImplementedException();
 
-        public bool IsPermissionSynced => throw new NotImplementedException();
+        public bool? IsPermissionSynced => throw new NotImplementedException();
 
         public ulong CreatorId => throw new NotImplementedException();
 

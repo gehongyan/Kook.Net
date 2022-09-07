@@ -482,5 +482,12 @@ internal static class ChannelHelper
                 .ToImmutableArray() as IReadOnlyCollection<RestGuildUser>);
     }
 
+    public static async Task<IReadOnlyCollection<RestGuildUser>> GetConnectedUsersAsync(IVoiceChannel channel,
+        IGuild guild, BaseKookClient client, RequestOptions options)
+    {
+        var model = await client.ApiClient.GetConnectedUsersAsync(channel.Id, options: options);
+        return model?.Select(x => RestGuildUser.Create(client, guild, x)).ToImmutableArray();
+    }
+
     #endregion
 }

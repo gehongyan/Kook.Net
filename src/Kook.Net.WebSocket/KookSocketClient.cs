@@ -47,6 +47,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     internal UdpSocketProvider UdpSocketProvider { get; private set; }
     internal WebSocketProvider WebSocketProvider { get; private set; }
     internal bool AlwaysDownloadUsers { get; private set; }
+    internal bool AlwaysDownloadVoiceStates { get; private set; }
     internal int? HandlerTimeout { get; private set; }
     internal new KookSocketApiClient ApiClient => base.ApiClient;
     /// <inheritdoc />
@@ -84,6 +85,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         UdpSocketProvider = config.UdpSocketProvider;
         WebSocketProvider = config.WebSocketProvider;
         AlwaysDownloadUsers = config.AlwaysDownloadUsers;
+        AlwaysDownloadVoiceStates = config.AlwaysDownloadVoiceStates;
         HandlerTimeout = config.HandlerTimeout;
         State = new ClientState(0, 0);
         Rest = new KookSocketRestClient(config, ApiClient);
@@ -117,6 +119,11 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             if (_guildDownloadTask?.IsCompleted == true && ConnectionState == ConnectionState.Connected && AlwaysDownloadUsers && !g.HasAllMembers)
             {
                 var _ = g.DownloadUsersAsync();
+            }
+
+            if (_guildDownloadTask?.IsCompleted == true && ConnectionState == ConnectionState.Connected && AlwaysDownloadVoiceStates)
+            {
+                var _ = g.DownloadVoiceStatesAsync();
             }
             return Task.Delay(0);
         };
@@ -285,9 +292,6 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     {
         if (ConnectionState == ConnectionState.Connected)
         {
-            // EnsureGatewayIntent(GatewayIntents.GuildMembers);
-    
-            //Race condition leads to guilds being requested twice, probably okay
             await ProcessUserDownloadsAsync(guilds.Select(x => GetGuild(x.Id)).Where(x => x != null)).ConfigureAwait(false);
         }
     }
@@ -299,6 +303,37 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             socketGuild.Update(State, guildMembers.ToImmutableArray());
         }
     }
+    
+    public async Task DownloadVoiceStatesAsync(IEnumerable<IGuild> guilds)
+    {
+        if (ConnectionState == ConnectionState.Connected)
+        {
+            await ProcessVoiceStateDownloadsAsync(guilds.Select(x => GetGuild(x.Id)).Where(x => x != null)).ConfigureAwait(false);
+        }
+    }
+    private async Task ProcessVoiceStateDownloadsAsync(IEnumerable<SocketGuild> guilds)
+    {
+        foreach (SocketGuild socketGuild in guilds)
+        {
+            foreach (SocketVoiceChannel channel in socketGuild.VoiceChannels)
+            {
+                IReadOnlyCollection<User> users = await ApiClient.GetConnectedUsersAsync(channel.Id).ConfigureAwait(false);
+                foreach (User user in users)
+                    socketGuild.AddOrUpdateVoiceState(user.Id, channel.Id);
+            }
+            
+            GetGuildMuteDeafListResponse model = await ApiClient.GetGuildMutedDeafenedUsersAsync(socketGuild.Id).ConfigureAwait(false);
+            foreach (ulong id in model.Muted.UserIds)
+                socketGuild.AddOrUpdateVoiceState(id, isMuted: true);
+            foreach (ulong id in socketGuild.Users.Select(x => x.Id).Except(model.Deafened.UserIds))
+                socketGuild.AddOrUpdateVoiceState(id, isMuted: false);
+            foreach (ulong id in model.Deafened.UserIds)
+                socketGuild.AddOrUpdateVoiceState(id, isDeafened: true);
+            foreach (ulong id in socketGuild.Users.Select(x => x.Id).Except(model.Muted.UserIds))
+                socketGuild.AddOrUpdateVoiceState(id, isDeafened: false);
+        }
+    }
+    
     
     #region ProcessMessageAsync
     
@@ -1147,6 +1182,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                         
                                         var user = guild.GetUser(data.UserId) 
                                                     ?? SocketUnknownUser.Create(this, State, data.UserId) as SocketUser;
+                                        guild.AddOrUpdateVoiceState(user.Id, channel.Id);
                                         
                                         await TimedInvokeAsync(_userConnectedEvent, nameof(UserConnected), user, channel, guild, data.At).ConfigureAwait(false);
                                     }
@@ -1176,6 +1212,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                         
                                         var user = guild.GetUser(data.UserId) 
                                                    ?? SocketUnknownUser.Create(this, State, data.UserId) as SocketUser;
+                                        guild.AddOrUpdateVoiceState(user.Id, voiceChannelId: null);
                                         
                                         await TimedInvokeAsync(_userDisconnectedEvent, nameof(UserDisconnected), user, channel, guild, data.At).ConfigureAwait(false);
                                     }
@@ -1415,30 +1452,11 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                             foreach (SocketGuild socketGuild in State.Guilds)
                                 socketGuild.MemberCount = await ApiClient.GetGuildMemberCountAsync(socketGuild.Id).ConfigureAwait(false);
                             
-                            // // Download extended guild data for channels
-                            // try
-                            // {
-                            //     foreach (SocketGuild socketGuild in State.Guilds)
-                            //     {
-                            //         ExtendedGuild model = await ApiClient.GetGuildAsync(socketGuild.Id).ConfigureAwait(false);
-                            //         if (model is not null)
-                            //         {
-                            //             socketGuild.Update(State, model);
-                            //     
-                            //             if (_unavailableGuildCount != 0)
-                            //                 _unavailableGuildCount--;
-                            //         }
-                            //     }
-                            // }
-                            // catch (Exception ex)
-                            // {
-                            //     _connection.CriticalError(new Exception("Processing Guilds failed", ex));
-                            //     return;
-                            // }
-                            
                             // Download user list if enabled
                             if (BaseConfig.AlwaysDownloadUsers)
                                 _ = DownloadUsersAsync(Guilds.Where(x => x.IsAvailable && !x.HasAllMembers));
+                            if (BaseConfig.AlwaysDownloadVoiceStates)
+                                _ = DownloadVoiceStatesAsync(Guilds.Where(x => x.IsAvailable));
 
                             await TimedInvokeAsync(_readyEvent, nameof(Ready)).ConfigureAwait(false);
                             await _gatewayLogger.InfoAsync("Ready").ConfigureAwait(false);
