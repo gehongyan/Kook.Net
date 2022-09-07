@@ -161,13 +161,13 @@ public abstract class BaseKookClient : IKookClient
     Task<IReadOnlyCollection<IGuild>> IKookClient.GetGuildsAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult<IReadOnlyCollection<IGuild>>(ImmutableArray.Create<IGuild>());
     /// <inheritdoc />
-    public Task<IChannel> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
+    Task<IChannel> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IChannel>(null);
     /// <inheritdoc />
-    public Task<IDMChannel> GetDMChannelAsync(Guid chatCode, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
+    Task<IDMChannel> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions options)
         => Task.FromResult<IDMChannel>(null);
     /// <inheritdoc />
-    public Task<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
+    Task<IReadOnlyCollection<IDMChannel>> IKookClient.GetDMChannelsAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult<IReadOnlyCollection<IDMChannel>>(ImmutableArray.Create<IDMChannel>());
     /// <inheritdoc />
     Task<IUser> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)

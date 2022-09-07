@@ -72,7 +72,7 @@ public class KookConfig
     ///         It is set to <c>int.MaxValue</c> at current so that it does not work.
     ///     </note>
     /// </remarks>
-    public const int MaxMessageSize = int.MaxValue;
+    public const int MaxMessageSize = 20000;
     
     /// <summary> 
     ///     Returns the max users allowed to be in a request.
