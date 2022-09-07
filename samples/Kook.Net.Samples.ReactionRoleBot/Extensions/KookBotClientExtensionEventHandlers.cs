@@ -65,8 +65,8 @@ public partial class KookBotClientExtension
             .WithSize(CardSize.Large)
             .AddModule(new HeaderModuleBuilder().WithText("互动角色"))
             .AddModule(new SectionModuleBuilder().WithText("点击下方回应以获取/移除角色\n:computer: 开发者", true));
-        (Guid messageId, DateTimeOffset messageTimestamp) = await _kookSocketClient.GetGuild(1591057729615250).GetTextChannel(5770952608991958)
+        var response = await _kookSocketClient.GetGuild(1591057729615250).GetTextChannel(5770952608991958)
             .SendCardAsync(builder.Build()).ConfigureAwait(false);
-        await _kookSocketClient.Rest.AddReactionAsync(messageId, Emoji.Parse(":computer:"));
+        await _kookSocketClient.Rest.AddReactionAsync(response.Id, Emoji.Parse(":computer:"));
     }
 }

@@ -41,7 +41,7 @@ namespace Kook.Commands
         ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
         /// </param>
         /// <param name="options">The request options for this <see langword="async"/> request.</param>
-        protected virtual async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyFileAsync(string path, string fileName = null, 
+        protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(string path, string fileName = null, 
             AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false, RequestOptions options = null)
         {
             return await Context.Channel.SendFileAsync(path, fileName, type, isQuote ? new Quote(Context.Message.Id) : null,
@@ -65,7 +65,7 @@ namespace Kook.Commands
         ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
         /// </param>
         /// <param name="options">The request options for this <see langword="async"/> request.</param>
-        protected virtual async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyFileAsync(Stream stream, string fileName = null,
+        protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(Stream stream, string fileName = null,
             AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false, RequestOptions options = null)
         {
             return await Context.Channel.SendFileAsync(stream, fileName, type, isQuote ? new Quote(Context.Message.Id) : null,
@@ -82,7 +82,7 @@ namespace Kook.Commands
         ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
         /// </param>
         /// <param name="options">The request options for this <see langword="async"/> request.</param>
-        protected virtual async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyFileAsync(FileAttachment attachment, bool isQuote = true,
+        protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(FileAttachment attachment, bool isQuote = true,
             bool isEphemeral = false, RequestOptions options = null)
         {
             return await Context.Channel.SendFileAsync(attachment, isQuote ? new Quote(Context.Message.Id) : null,
@@ -102,7 +102,7 @@ namespace Kook.Commands
         ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
         /// </param>
         /// <param name="options">The request options for this <see langword="async"/> request.</param>
-        protected virtual async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyTextAsync(string message, bool isQuote = true,
+        protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(string message, bool isQuote = true,
             bool isEphemeral = false, RequestOptions options = null)
         {
             return await Context.Channel.SendTextAsync(message, isQuote ? new Quote(Context.Message.Id) : null,
@@ -122,7 +122,7 @@ namespace Kook.Commands
         ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
         /// </param>
         /// <param name="options">The request options for this <see langword="async"/> request.</param>
-        protected virtual async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyCardsAsync(IEnumerable<ICard> cards, bool isQuote = true,
+        protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(IEnumerable<ICard> cards, bool isQuote = true,
             bool isEphemeral = false, RequestOptions options = null)
         {
             return await Context.Channel.SendCardsAsync(cards, isQuote ? new Quote(Context.Message.Id) : null,
@@ -142,7 +142,7 @@ namespace Kook.Commands
         ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
         /// </param>
         /// <param name="options">The request options for this <see langword="async"/> request.</param>
-        protected virtual async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyCardAsync(ICard card,
+        protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyCardAsync(ICard card,
             bool isQuote = true,
             bool isEphemeral = false, RequestOptions options = null)
         {

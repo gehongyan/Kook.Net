@@ -168,22 +168,22 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         => ChannelHelper.GetPinnedMessagesAsync(this, Kook, options);
 
     /// <inheritdoc cref="IMessageChannel.SendFileAsync(string,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(string path, string fileName = null, AttachmentType type = AttachmentType.File, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null, AttachmentType type = AttachmentType.File, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendFileAsync(this, Kook, path, fileName, type, options, quote, ephemeralUser);
     /// <inheritdoc cref="IMessageChannel.SendFileAsync(Stream,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(Stream stream, string fileName = null, AttachmentType type = AttachmentType.File, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName = null, AttachmentType type = AttachmentType.File, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendFileAsync(this, Kook, stream, fileName, type, options, quote, ephemeralUser);
     /// <inheritdoc cref="IMessageChannel.SendFileAsync(FileAttachment,IQuote,IUser,RequestOptions)"/>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(FileAttachment attachment, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendFileAsync(this, Kook, attachment, options, quote, ephemeralUser);
     /// <inheritdoc cref="IMessageChannel.SendTextAsync(string,IQuote,IUser,RequestOptions)"/>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendMessageAsync(this, Kook, MessageType.KMarkdown, text, options, quote: quote, ephemeralUser: ephemeralUser);
     /// <inheritdoc cref="IMessageChannel.SendCardsAsync(IEnumerable{ICard},IQuote,IUser,RequestOptions)"/>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardsAsync(IEnumerable<ICard> cards, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendCardsAsync(this, Kook, cards, options, quote: quote);
     /// <inheritdoc cref="IMessageChannel.SendCardAsync(ICard,IQuote,IUser,RequestOptions)"/>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardAsync(ICard card, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+    public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendCardAsync(this, Kook, card, options, quote: quote);
 
     /// <inheritdoc />
@@ -261,27 +261,27 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     #region IMessageChannel
 
     /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileAsync(string path, string fileName,
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(string path, string fileName,
         AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileAsync(path, fileName, type, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileAsync(Stream stream, string fileName,
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(Stream stream, string fileName,
         AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileAsync(stream, fileName, type, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileAsync(FileAttachment attachment,
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(FileAttachment attachment,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileAsync(attachment, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendTextAsync(string text,
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendTextAsync(string text,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendTextAsync(text, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendCardAsync(ICard card,
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardAsync(ICard card,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendCardAsync(card, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendCardsAsync(IEnumerable<ICard> cards,
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardsAsync(IEnumerable<ICard> cards,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendCardsAsync(cards, (Quote) quote, ephemeralUser, options);
     

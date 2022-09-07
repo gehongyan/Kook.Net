@@ -193,7 +193,7 @@ internal static class ChannelHelper
         return builder.ToImmutable();
     }
 
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendMessageAsync(IMessageChannel channel,
+    public static async Task<Cacheable<IUserMessage, Guid>> SendMessageAsync(IMessageChannel channel,
         BaseKookClient client, MessageType messageType, string content, RequestOptions options, IQuote quote = null,
         IUser ephemeralUser = null)
     {
@@ -203,10 +203,11 @@ internal static class ChannelHelper
             EphemeralUserId = ephemeralUser?.Id
         };
         CreateMessageResponse model = await client.ApiClient.CreateMessageAsync(args, options).ConfigureAwait(false);
-        return (model.MessageId, model.MessageTimestamp);
+        return new Cacheable<IUserMessage,Guid>(null, model.MessageId, false, 
+            async () => await channel.GetMessageAsync(model.MessageId) as IUserMessage);
     }
 
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardsAsync(IMessageChannel channel,
+    public static async Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IMessageChannel channel,
         BaseKookClient client, IEnumerable<ICard> cards, RequestOptions options, IQuote quote = null,
         IUser ephemeralUser = null)
     {
@@ -214,25 +215,25 @@ internal static class ChannelHelper
         return await SendMessageAsync(channel, client, MessageType.Card, json, options, quote: quote,
             ephemeralUser: ephemeralUser);
     }
-    public static Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardAsync(IMessageChannel channel,
+    public static Task<Cacheable<IUserMessage, Guid>> SendCardAsync(IMessageChannel channel,
         BaseKookClient client, ICard card, RequestOptions options, IQuote quote = null,
         IUser ephemeralUser = null)
         => SendCardsAsync(channel, client, new[] {card}, options, quote: quote, ephemeralUser: ephemeralUser);
 
-    public static Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(IMessageChannel channel,
+    public static Task<Cacheable<IUserMessage, Guid>> SendFileAsync(IMessageChannel channel,
         BaseKookClient client, string path, string fileName, AttachmentType type, RequestOptions options, 
         IQuote quote = null, IUser ephemeralUser = null)
         => SendFileAsync(channel, client, new FileAttachment(path, fileName, type), options, quote: quote,
             ephemeralUser: ephemeralUser);
 
-    public static Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(IMessageChannel channel,
+    public static Task<Cacheable<IUserMessage, Guid>> SendFileAsync(IMessageChannel channel,
         BaseKookClient client, Stream stream, string fileName, AttachmentType type, RequestOptions options, 
         IQuote quote = null, IUser ephemeralUser = null)
         => SendFileAsync(channel, client, new FileAttachment(stream, fileName, type), options, quote: quote,
             ephemeralUser: ephemeralUser);
 
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(IMessageChannel channel,
-        BaseKookClient client, FileAttachment attachment, RequestOptions options, 
+    public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(IMessageChannel channel,
+        BaseKookClient client, FileAttachment attachment, RequestOptions options,
         IQuote quote = null, IUser ephemeralUser = null)
     {
         switch (attachment.Mode)
@@ -366,39 +367,39 @@ internal static class ChannelHelper
         );
     }
 
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectMessageAsync(IDMChannel channel,
+    public static async Task<Cacheable<IUserMessage, Guid>> SendDirectMessageAsync(IDMChannel channel,
         BaseKookClient client, MessageType messageType, string content, RequestOptions options, IQuote quote = null)
     {
         CreateDirectMessageParams args = new(messageType, channel.Recipient.Id, content)
         {
             QuotedMessageId = quote?.QuotedMessageId,
         };
-        CreateDirectMessageResponse model =
-            await client.ApiClient.CreateDirectMessageAsync(args, options).ConfigureAwait(false);
-        return (model.MessageId, model.MessageTimestamp);
+        CreateDirectMessageResponse model = await client.ApiClient.CreateDirectMessageAsync(args, options).ConfigureAwait(false);
+        return new Cacheable<IUserMessage,Guid>(null, model.MessageId, false, 
+            async () => await channel.GetMessageAsync(model.MessageId) as IUserMessage);
     }
 
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectCardsAsync(IDMChannel channel,
+    public static async Task<Cacheable<IUserMessage, Guid>> SendDirectCardsAsync(IDMChannel channel,
         BaseKookClient client, IEnumerable<ICard> cards, RequestOptions options, IQuote quote = null)
     {
         string json = MessageHelper.SerializeCards(cards);
         return await SendDirectMessageAsync(channel, client, MessageType.Card, json, options, quote: quote);
     }
-    public static Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectCardAsync(IDMChannel channel,
+    public static Task<Cacheable<IUserMessage, Guid>> SendDirectCardAsync(IDMChannel channel,
         BaseKookClient client, ICard card, RequestOptions options, IQuote quote = null)
         => SendDirectCardsAsync(channel, client, new[] {card}, options, quote: quote);
 
-    public static Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectFileAsync(IDMChannel channel,
+    public static Task<Cacheable<IUserMessage, Guid>> SendDirectFileAsync(IDMChannel channel,
         BaseKookClient client, string path, string fileName, AttachmentType type, RequestOptions options, 
         IQuote quote = null)
         => SendDirectFileAsync(channel, client, new FileAttachment(path, fileName, type), options, quote: quote);
 
-    public static Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectFileAsync(IDMChannel channel,
+    public static Task<Cacheable<IUserMessage, Guid>> SendDirectFileAsync(IDMChannel channel,
         BaseKookClient client, Stream stream, string fileName, AttachmentType type, RequestOptions options, 
         IQuote quote = null)
         => SendDirectFileAsync(channel, client, new FileAttachment(stream, fileName, type), options, quote: quote);
 
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectFileAsync(IDMChannel channel,
+    public static async Task<Cacheable<IUserMessage, Guid>> SendDirectFileAsync(IDMChannel channel,
         BaseKookClient client, FileAttachment attachment, RequestOptions options, IQuote quote = null)
     {
         switch (attachment.Mode)

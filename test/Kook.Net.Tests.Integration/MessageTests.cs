@@ -81,13 +81,14 @@ INLINE CODE
 csharp
 CODE BLOCK
 ";
-        (Guid messageId, DateTimeOffset messageTimestamp) = await _channel.SendTextAsync(kMarkdownSourceContent);
-        IMessage message = await _channel.GetMessageAsync(messageId);
+        Cacheable<IUserMessage, Guid> cacheable = await _channel.SendTextAsync(kMarkdownSourceContent);
+        IUserMessage message = await cacheable.GetOrDownloadAsync();
         try
         {
             IGuildUser selfUser = await _guild.GetCurrentUserAsync();
             Assert.NotNull(selfUser);
-            Assert.NotEqual(Guid.Empty, messageId);
+            Assert.NotEqual(Guid.Empty, cacheable.Id);
+            Assert.False(cacheable.HasValue);
             Assert.NotNull(message);
             Assert.Equal(MessageType.KMarkdown, message.Type);
             Assert.Equal(kMarkdownParsedContent, message.Content);

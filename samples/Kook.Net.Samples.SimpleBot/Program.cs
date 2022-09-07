@@ -79,7 +79,8 @@ class Program
         // IReadOnlyCollection<SocketGuildUser> connectedUsers = await kookSocketClient.GetGuild(7557797319758285).GetVoiceChannel(9816956151862920).GetConnectedUsersAsync();
         // Stream stream = await new HttpClient().GetStreamAsync("https://img.kaiheila.cn/attachments/2021-01/21/600975671b9ab.mp3");
         // await _client.GetUser(2810246202).SendFileAsync(new FileAttachment(stream, "Filename", AttachmentType.Audio));
-        await (await _client.GetUserAsync(2810246202)).SendTextAsync(Enumerable.Repeat("0123456789", 10000).Aggregate((x, y) => x + y));
+        Cacheable<IUserMessage,Guid> message = await (await _client.GetUserAsync(2810246202)).SendTextAsync("1234567");
+        IUserMessage msg = await message.GetOrDownloadAsync();
         // (Guid messageId, DateTimeOffset messageTimestamp) = await _client.GetGuild(7557797319758285).GetTextChannel(7888175654136995)
             // .SendFileAsync(new FileAttachment(stream, "Filename", AttachmentType.Audio));
         // (Guid messageId, DateTimeOffset messageTimestamp) = await _client.GetGuild(7557797319758285)

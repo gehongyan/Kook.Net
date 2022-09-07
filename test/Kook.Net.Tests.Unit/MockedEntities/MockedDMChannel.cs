@@ -18,35 +18,35 @@ namespace Kook
             throw new NotImplementedException();
         }
 
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(string path, string fileName = null, AttachmentType type = AttachmentType.File, IQuote quote = null,
+        public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null, AttachmentType type = AttachmentType.File, IQuote quote = null,
             RequestOptions options = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(Stream stream, string fileName = null, AttachmentType type = AttachmentType.File,
+        public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName = null, AttachmentType type = AttachmentType.File,
             IQuote quote = null, RequestOptions options = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(FileAttachment attachment, IQuote quote = null, RequestOptions options = null)
+        public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment, IQuote quote = null, RequestOptions options = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextAsync(string text, IQuote quote = null, RequestOptions options = null)
+        public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote quote = null, RequestOptions options = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardAsync(ICard card, IQuote quote = null,
+        public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, IQuote quote = null,
             RequestOptions options = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardsAsync(IEnumerable<ICard> cards, IQuote quote = null, RequestOptions options = null)
+        public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards, IQuote quote = null, RequestOptions options = null)
         {
             throw new NotImplementedException();
         }

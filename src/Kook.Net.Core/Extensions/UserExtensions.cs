@@ -16,7 +16,7 @@ namespace Kook
         /// <param name="type">The type of the file.</param>
         /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
         /// <param name="options">The options to be used when sending the request.</param>
-        public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(this IUser user,
+        public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(this IUser user,
             string path, string fileName = null, AttachmentType type = AttachmentType.File, IQuote quote = null,
             RequestOptions options = null)
         {
@@ -31,7 +31,7 @@ namespace Kook
         /// <param name="type">The type of the file.</param>
         /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
         /// <param name="options">The options to be used when sending the request.</param>
-        public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(this IUser user,
+        public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(this IUser user,
             Stream stream, string fileName = null, AttachmentType type = AttachmentType.File, IQuote quote = null,
             RequestOptions options = null)
         {
@@ -45,7 +45,7 @@ namespace Kook
         /// <param name="attachment">The attachment containing the file.</param>
         /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
         /// <param name="options">The options to be used when sending the request.</param>
-        public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(this IUser user,
+        public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(this IUser user,
             FileAttachment attachment, IQuote quote = null, RequestOptions options = null)
         {
             return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendFileAsync(attachment, quote, options).ConfigureAwait(false);
@@ -57,7 +57,7 @@ namespace Kook
         /// <param name="content">The KMarkdown content to be sent.</param>
         /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
         /// <param name="options">The options to be used when sending the request.</param>
-        public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextAsync(this IUser user,
+        public static async Task<Cacheable<IUserMessage, Guid>> SendTextAsync(this IUser user,
             string content,
             IQuote quote = null,
             RequestOptions options = null)
@@ -71,7 +71,7 @@ namespace Kook
         /// <param name="cards">The cards to be sent.</param>
         /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
         /// <param name="options">The request options for this <see langword="async"/> request.</param>
-        public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardsAsync(this IUser user, 
+        public static async Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(this IUser user, 
             IEnumerable<ICard> cards, IQuote quote = null, RequestOptions options = null)
         {
             return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendCardsAsync(cards, quote, options).ConfigureAwait(false);
@@ -84,7 +84,7 @@ namespace Kook
         /// <param name="card">The card to be sent.</param>
         /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
         /// <param name="options">The request options for this <see langword="async"/> request.</param>
-        public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardAsync(this IUser user,
+        public static async Task<Cacheable<IUserMessage, Guid>> SendCardAsync(this IUser user,
             ICard card, IQuote quote = null, RequestOptions options = null)
         {
             return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendCardAsync(card, quote, options).ConfigureAwait(false);

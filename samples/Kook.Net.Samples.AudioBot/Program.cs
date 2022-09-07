@@ -128,7 +128,7 @@ class Program
             .AddModule(new CountdownModuleBuilder().WithMode(CountdownMode.Hour).WithEndTime(DateTimeOffset.Now.AddMinutes(1)))
             .AddModule(new CountdownModuleBuilder().WithMode(CountdownMode.Second).WithEndTime(DateTimeOffset.Now.AddMinutes(2)).WithStartTime(DateTimeOffset.Now.AddMinutes(1)));
         
-        (Guid MessageId, DateTimeOffset MessageTimestamp) response = await _client.GetGuild(((SocketUserMessage) message).Guild.Id)
+        var response = await _client.GetGuild(((SocketUserMessage) message).Guild.Id)
             .GetTextChannel(message.Channel.Id)
             .SendCardAsync(cardBuilder.Build(), quote: new Quote(message.Id));
     }
@@ -138,11 +138,11 @@ class Program
         await Task.Delay(TimeSpan.FromSeconds(1));
         
         SocketTextChannel channel = _client.GetGuild(_guildId).GetTextChannel(_channelId);
-        (Guid MessageId, DateTimeOffset MessageTimestamp) response = await channel
+        var response = await channel
             .SendTextAsync("BeforeModification");
         await Task.Delay(TimeSpan.FromSeconds(1));
         
-        IUserMessage msg = await channel.GetMessageAsync(response.MessageId) as IUserMessage;
+        IUserMessage msg = await channel.GetMessageAsync(response.Id) as IUserMessage;
         await msg!.ModifyAsync(properties => properties.Content += "\n==========\nModified");
         await Task.Delay(TimeSpan.FromSeconds(1));
         
@@ -153,7 +153,7 @@ class Program
             .AddModule(new HeaderModuleBuilder().WithText("Test")).Build());
         await Task.Delay(TimeSpan.FromSeconds(1));
         
-        msg = await channel.GetMessageAsync(response.MessageId) as IUserMessage;
+        msg = await channel.GetMessageAsync(response.Id) as IUserMessage;
         await msg!.ModifyAsync(properties =>
         {
             properties.Cards = properties.Cards.Append(new CardBuilder()

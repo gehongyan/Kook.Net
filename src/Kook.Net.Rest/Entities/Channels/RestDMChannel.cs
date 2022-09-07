@@ -98,7 +98,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextAsync(string text, IQuote quote = null, RequestOptions options = null)
+    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, options, quote: quote);
     
     /// <summary>
@@ -116,7 +116,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(string path, string fileName = null, 
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null, 
         AttachmentType type = AttachmentType.File, IQuote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectFileAsync(this, Kook, path, fileName, type, options, quote: quote);
     /// <summary>
@@ -134,7 +134,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(Stream stream, string fileName = null, 
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName = null, 
         AttachmentType type = AttachmentType.File, IQuote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectFileAsync(this, Kook, stream, fileName, type, options, quote: quote);
     /// <summary>
@@ -150,7 +150,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(FileAttachment attachment, 
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment, 
         IQuote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectFileAsync(this, Kook, attachment, options, quote: quote);
 
@@ -164,7 +164,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardsAsync(IEnumerable<ICard> cards, IQuote quote = null, RequestOptions options = null)
+    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards, IQuote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectCardsAsync(this, Kook, cards, options, quote: quote);
 
     /// <summary>
@@ -177,7 +177,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardAsync(ICard card, IQuote quote = null, RequestOptions options = null) 
+    public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, IQuote quote = null, RequestOptions options = null) 
         => ChannelHelper.SendDirectCardAsync(this, Kook, card, options, quote: quote);
 
     /// <inheritdoc />

@@ -87,7 +87,7 @@ public static class MessageExtensions
     /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
     /// <param name="options">The options to be used when sending the request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyFileAsync(this IUserMessage message, 
+    public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message, 
         string path, string fileName = null, AttachmentType type = AttachmentType.File, bool isQuote = false, bool isEphemeral = false, 
         RequestOptions options = null)
     {
@@ -104,7 +104,7 @@ public static class MessageExtensions
     /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
     /// <param name="options">The options to be used when sending the request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyFileAsync(this IUserMessage message, 
+    public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message, 
         Stream stream, string fileName = null, AttachmentType type = AttachmentType.File, bool isQuote = false, bool isEphemeral = false, 
         RequestOptions options = null)
     {
@@ -119,7 +119,7 @@ public static class MessageExtensions
     /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
     /// <param name="options">The options to be used when sending the request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyFileAsync(this IUserMessage message, 
+    public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message, 
         FileAttachment attachment, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
     {
         return await message.Channel.SendFileAsync(attachment, isQuote ? new Quote(message.Id) : null,
@@ -133,7 +133,7 @@ public static class MessageExtensions
     /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
     /// <param name="options">The request options for this <see langword="async"/> request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyTextAsync(this IUserMessage message, 
+    public static async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(this IUserMessage message, 
         string content, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
     {
         return await message.Channel.SendTextAsync(content, isQuote ? new Quote(message.Id) : null,
@@ -147,7 +147,7 @@ public static class MessageExtensions
     /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
     /// <param name="options">The request options for this <see langword="async"/> request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyCardsAsync(this IUserMessage message, 
+    public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(this IUserMessage message, 
         IEnumerable<ICard> cards, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
     {
         return await message.Channel.SendCardsAsync(cards, isQuote ? new Quote(message.Id) : null,
@@ -162,7 +162,7 @@ public static class MessageExtensions
     /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
     /// <param name="options">The request options for this <see langword="async"/> request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyCardAsync(
+    public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardAsync(
         this IUserMessage message,
         ICard card, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
     {

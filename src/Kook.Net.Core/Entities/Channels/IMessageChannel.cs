@@ -20,7 +20,7 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(string path, string fileName = null, 
+    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null, 
         AttachmentType type = AttachmentType.File, IQuote quote = null, IUser ephemeralUser = null, 
         RequestOptions options = null);
 
@@ -40,7 +40,7 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(Stream stream, string fileName, 
+    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName, 
         AttachmentType type = AttachmentType.File, IQuote quote = null, IUser ephemeralUser = null, 
         RequestOptions options = null);
     /// <summary>
@@ -57,7 +57,7 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(FileAttachment attachment,
+    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
         IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null);
     /// <summary>
     ///     Sends a text message to this message channel.
@@ -70,7 +70,7 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextAsync(string text, IQuote quote = null,
+    Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote quote = null,
         IUser ephemeralUser = null, RequestOptions options = null);
     /// <summary>
     ///     Sends a card message to this message channel.
@@ -83,7 +83,7 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardAsync(ICard card,
+    Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
         IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null);
     /// <summary>
     ///     Sends a card message to this message channel.
@@ -96,7 +96,7 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardsAsync(IEnumerable<ICard> cards,
+    Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
         IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null);
     
     /// <summary>
