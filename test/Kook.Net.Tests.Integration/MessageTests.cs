@@ -89,7 +89,6 @@ CODE BLOCK
             Assert.NotNull(selfUser);
             Assert.NotEqual(Guid.Empty, messageId);
             Assert.NotNull(message);
-            Assert.Equal(DateTimeOffset.Now.LocalDateTime, messageTimestamp.LocalDateTime, TimeSpan.FromSeconds(5));
             Assert.Equal(MessageType.KMarkdown, message.Type);
             Assert.Equal(kMarkdownParsedContent, message.Content);
             Assert.Equal(kMarkDownCleanContent, message.CleanContent);

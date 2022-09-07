@@ -538,17 +538,27 @@ public class ModuleBuilderTests
     [InlineData(" ")]
     [InlineData("kaiheila.net")]
     [InlineData("steam://run/123456/")]
-    public void AudioModuleBuilder_InvalidUrl(string source)
+    public void AudioModuleBuilder_InvalidSource(string source)
     {
         var builder = new AudioModuleBuilder().WithSource(Url).WithCover(Icon);
         Assert.Equal(Url, builder.Source);
         Assert.Equal(Url, builder.Build().Source);
-        Assert.Equal(Icon, builder.Cover);
-        Assert.Equal(Icon, builder.Build().Cover);
         
         builder = new AudioModuleBuilder().WithSource(source).WithCover(Icon);
         Assert.Equal(source, builder.Source);
         Assert.ThrowsAny<Exception>(() => builder.Build());
+    }
+
+    [Theory]
+    [InlineData(" ")]
+    [InlineData("kaiheila.net")]
+    [InlineData("steam://run/123456/")]
+    public void AudioModuleBuilder_InvalidCover(string source)
+    {
+        var builder = new AudioModuleBuilder().WithSource(Url).WithCover(Icon);
+        Assert.Equal(Icon, builder.Cover);
+        Assert.Equal(Icon, builder.Build().Cover);
+        
         builder = new AudioModuleBuilder().WithSource(Url).WithCover(source);
         Assert.Equal(source, builder.Cover);
         Assert.ThrowsAny<Exception>(() => builder.Build());
