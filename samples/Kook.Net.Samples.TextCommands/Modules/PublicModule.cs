@@ -26,7 +26,7 @@ namespace TextCommandFramework.Modules
             var stream = await PictureService.GetCatPictureAsync();
             // Streams must be seeked to their beginning before being uploaded!
             stream.Seek(0, SeekOrigin.Begin);
-            await ReplyImageAsync(stream, "cat.png", true);
+            await ReplyFileAsync(stream, "cat.png", AttachmentType.Image);
         }
 
         // Get info on a user, or the user who invoked the command if one is not specified

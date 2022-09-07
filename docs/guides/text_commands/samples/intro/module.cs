@@ -22,7 +22,7 @@ public class SampleModule : ModuleBase<SocketCommandContext>
         int num)
     {
         // 也可通过命令上下文访问频道属性
-        await Context.Channel.SendTextMessageAsync($"{num}^2 = {Math.Pow(num, 2)}");
+        await Context.Channel.SendTextAsync($"{num}^2 = {Math.Pow(num, 2)}");
     }
 
     // !sample userinfo --> 戈小荷#0439

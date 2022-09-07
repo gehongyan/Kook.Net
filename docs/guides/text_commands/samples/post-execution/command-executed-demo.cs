@@ -13,7 +13,7 @@ public async Task OnCommandExecutedAsync(Optional<CommandInfo> command, ICommand
     // 可以告知命令调用者异常信息
     if (!string.IsNullOrEmpty(result?.ErrorReason))
     {
-        await context.Channel.SendKMarkdownMessageAsync(result.ErrorReason);
+        await context.Channel.SendTextAsync(result.ErrorReason);
     }
 
     // 或者可以将结果记入日志系统

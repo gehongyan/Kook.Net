@@ -166,120 +166,25 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <inheritdoc cref="ITextChannel.GetPinnedMessagesAsync(RequestOptions)"/>
     public Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions options = null)
         => ChannelHelper.GetPinnedMessagesAsync(this, Kook, options);
-    /// <inheritdoc cref="IMessageChannel.SendTextMessageAsync(string,IQuote,IUser,RequestOptions)"/>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-        => ChannelHelper.SendMessageAsync(this, Kook, MessageType.Text, text, options, quote: quote, ephemeralUser: ephemeralUser);
-    /// <inheritdoc cref="IMessageChannel.SendImageMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-    {
-        CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
-        return await ChannelHelper.SendMessageAsync(this, Kook, MessageType.Image, createAssetResponse.Url, options, quote: quote,
-            ephemeralUser: ephemeralUser);
-    }
-    /// <inheritdoc cref="IMessageChannel.SendImageMessageAsync(Stream,string,IQuote,IUser,RequestOptions)"/>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(Stream stream, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-    {
-        CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options).ConfigureAwait(false);
-        return await ChannelHelper.SendMessageAsync(this, Kook, MessageType.Image, createAssetResponse.Url, options, quote: quote,
-            ephemeralUser: ephemeralUser);
-    }
-    /// <inheritdoc cref="IMessageChannel.SendImageMessageAsync(Uri,IQuote,IUser,RequestOptions)"/>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(Uri uri, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-    {
-        if (!UrlValidation.ValidateKookAssetUrl(uri.OriginalString))
-            throw new ArgumentException("The uri cannot be blank.", nameof(uri));
-        return await ChannelHelper.SendMessageAsync(this, Kook, MessageType.Image, uri.OriginalString, options, quote: quote,
-            ephemeralUser: ephemeralUser);
-    }
-    /// <inheritdoc cref="IMessageChannel.SendVideoMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-    {
-        CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
-        return await ChannelHelper.SendMessageAsync(this, Kook, MessageType.Video, createAssetResponse.Url, options, quote: quote,
-            ephemeralUser: ephemeralUser);
-    }
-    /// <inheritdoc cref="IMessageChannel.SendVideoMessageAsync(Stream,string,IQuote,IUser,RequestOptions)"/>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(Stream stream, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-    {
-        CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options).ConfigureAwait(false);
-        return await ChannelHelper.SendMessageAsync(this, Kook, MessageType.Video, createAssetResponse.Url, options, quote: quote,
-            ephemeralUser: ephemeralUser);
-    }
-    /// <inheritdoc cref="IMessageChannel.SendVideoMessageAsync(Uri,IQuote,IUser,RequestOptions)"/>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(Uri uri, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-    {
-        if (!UrlValidation.ValidateKookAssetUrl(uri.OriginalString))
-            throw new ArgumentException("The uri cannot be blank.", nameof(uri));
-        return await ChannelHelper.SendMessageAsync(this, Kook, MessageType.Video, uri.OriginalString, options, quote: quote,
-            ephemeralUser: ephemeralUser);
-    }
-    /// <inheritdoc cref="IMessageChannel.SendFileMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-    {
-        CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
-        return await ChannelHelper.SendMessageAsync(this, Kook, MessageType.File, createAssetResponse.Url, options, quote: quote,
-            ephemeralUser: ephemeralUser);
-    }
-    /// <inheritdoc cref="IMessageChannel.SendFileMessageAsync(Stream,string,IQuote,IUser,RequestOptions)"/>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(Stream stream, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-    {
-        CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options).ConfigureAwait(false);
-        return await ChannelHelper.SendMessageAsync(this, Kook, MessageType.File, createAssetResponse.Url, options, quote: quote,
-            ephemeralUser: ephemeralUser);
-    }
-    /// <inheritdoc cref="IMessageChannel.SendFileMessageAsync(Uri,IQuote,IUser,RequestOptions)"/>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(Uri uri, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-    {
-        if (!UrlValidation.ValidateKookAssetUrl(uri.OriginalString))
-            throw new ArgumentException("The uri cannot be blank.", nameof(uri));
-        return await ChannelHelper.SendMessageAsync(this, Kook, MessageType.File, uri.OriginalString, options, quote: quote,
-            ephemeralUser: ephemeralUser);
-    }
-    // /// <inheritdoc cref="IMessageChannel.SendAudioMessageAsync(string,string,IQuote,IUser,RequestOptions)"/>
-    // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(string path, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-    // {
-    //     CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options);
-    //     return await ChannelHelper.SendMessageAsync(this, Kook, MessageType.Audio, createAssetResponse.Url, options, quote: quote,
-    //         ephemeralUser: ephemeralUser);
-    // }
-    // /// <inheritdoc cref="IMessageChannel.SendAudioMessageAsync(Stream,string,IQuote,IUser,RequestOptions)"/>
-    // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(Stream stream, string fileName = null, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-    // {
-    //     CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options);
-    //     return await ChannelHelper.SendMessageAsync(this, Kook, MessageType.Audio, createAssetResponse.Url, options, quote: quote,
-    //         ephemeralUser: ephemeralUser);
-    // }
-    // /// <inheritdoc cref="IMessageChannel.SendAudioMessageAsync(Uri,IQuote,IUser,RequestOptions)"/>
-    // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(Uri uri, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-    // {
-    //     if (!UrlValidation.ValidateKookAssetUrl(uri.OriginalString))
-    //         throw new ArgumentException("The uri cannot be blank.", nameof(uri));
-    //     return await ChannelHelper.SendMessageAsync(this, Kook, MessageType.Audio, uri.OriginalString, options, quote: quote,
-    //         ephemeralUser: ephemeralUser);
-    // }
-    /// <inheritdoc cref="IMessageChannel.SendKMarkdownMessageAsync(string,IQuote,IUser,RequestOptions)"/>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendKMarkdownMessageAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+
+    /// <inheritdoc cref="IMessageChannel.SendFileAsync(string,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(string path, string fileName = null, AttachmentType type = AttachmentType.File, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        => ChannelHelper.SendFileAsync(this, Kook, path, fileName, type, options, quote, ephemeralUser);
+    /// <inheritdoc cref="IMessageChannel.SendFileAsync(Stream,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(Stream stream, string fileName = null, AttachmentType type = AttachmentType.File, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        => ChannelHelper.SendFileAsync(this, Kook, stream, fileName, type, options, quote, ephemeralUser);
+    /// <inheritdoc cref="IMessageChannel.SendFileAsync(FileAttachment,IQuote,IUser,RequestOptions)"/>
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(FileAttachment attachment, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        => ChannelHelper.SendFileAsync(this, Kook, attachment, options, quote, ephemeralUser);
+    /// <inheritdoc cref="IMessageChannel.SendTextAsync(string,IQuote,IUser,RequestOptions)"/>
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextAsync(string text, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         => ChannelHelper.SendMessageAsync(this, Kook, MessageType.KMarkdown, text, options, quote: quote, ephemeralUser: ephemeralUser);
-    /// <inheritdoc cref="IMessageChannel.SendCardMessageAsync(IEnumerable{ICard},IQuote,IUser,RequestOptions)"/>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(IEnumerable<ICard> cards, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-    {
-        string json = MessageHelper.SerializeCards(cards);
-        return await ChannelHelper.SendMessageAsync(this, Kook, MessageType.Card, json, options, quote: quote,
-            ephemeralUser: ephemeralUser);
-    }
-    /// <summary>
-    ///     Sends a card message to this message channel.
-    /// </summary>
-    /// <param name="card">The card to be sent.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null) => 
-        SendCardMessageAsync(new[] { card }, quote, ephemeralUser, options);
+    /// <inheritdoc cref="IMessageChannel.SendCardsAsync(IEnumerable{ICard},IQuote,IUser,RequestOptions)"/>
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardsAsync(IEnumerable<ICard> cards, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        => ChannelHelper.SendCardsAsync(this, Kook, cards, options, quote: quote);
+    /// <inheritdoc cref="IMessageChannel.SendCardAsync(ICard,IQuote,IUser,RequestOptions)"/>
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardAsync(ICard card, Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        => ChannelHelper.SendCardAsync(this, Kook, card, options, quote: quote);
 
     /// <inheritdoc />
     public async Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions options = null)
@@ -356,69 +261,29 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     #region IMessageChannel
 
     /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendTextMessageAsync(string text,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendTextMessageAsync(text, (Quote) quote, ephemeralUser, options);
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileAsync(string path, string fileName,
+        AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
+        => SendFileAsync(path, fileName, type, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendImageMessageAsync(string path, string fileName,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendImageMessageAsync(path, fileName, (Quote) quote, ephemeralUser, options);
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileAsync(Stream stream, string fileName,
+        AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
+        => SendFileAsync(stream, fileName, type, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendImageMessageAsync(Stream stream, string fileName,
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileAsync(FileAttachment attachment,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendImageMessageAsync(stream, fileName, (Quote) quote, ephemeralUser, options);
+        => SendFileAsync(attachment, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendImageMessageAsync(Uri uri,
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendTextAsync(string text,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendImageMessageAsync(uri, (Quote) quote, ephemeralUser, options);
+        => SendTextAsync(text, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendVideoMessageAsync(string path, string fileName,
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendCardAsync(ICard card,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendVideoMessageAsync(path, fileName, (Quote) quote, ephemeralUser, options);
+        => SendCardAsync(card, (Quote) quote, ephemeralUser, options);
     /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendVideoMessageAsync(Stream stream, string fileName,
+    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendCardsAsync(IEnumerable<ICard> cards,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendVideoMessageAsync(stream, fileName, (Quote) quote, ephemeralUser, options);
-    /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendVideoMessageAsync(Uri uri,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendVideoMessageAsync(uri, (Quote) quote, ephemeralUser, options);
-    /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileMessageAsync(string path, string fileName,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendFileMessageAsync(path, fileName, (Quote) quote, ephemeralUser, options);
-    /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileMessageAsync(Stream stream, string fileName,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendFileMessageAsync(stream, fileName, (Quote) quote, ephemeralUser, options);
-    /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendFileMessageAsync(Uri uri,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendFileMessageAsync(uri, (Quote) quote, ephemeralUser, options);
-    // /// <inheritdoc />
-    // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendAudioMessageAsync(string path, string fileName,
-    //     IQuote quote, IUser ephemeralUser, RequestOptions options)
-    //     => SendAudioMessageAsync(path, fileName, (Quote) quote, ephemeralUser, options);
-    // /// <inheritdoc />
-    // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendAudioMessageAsync(Stream stream, string fileName,
-    //     IQuote quote, IUser ephemeralUser, RequestOptions options)
-    //     => SendAudioMessageAsync(stream, fileName, (Quote) quote, ephemeralUser, options);
-    // /// <inheritdoc />
-    // Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendAudioMessageAsync(Uri uri,
-    //     IQuote quote, IUser ephemeralUser, RequestOptions options)
-    //     => SendAudioMessageAsyncuri, , (Quote) quote, ephemeralUser, options);
-    /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendKMarkdownMessageAsync(string text,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendKMarkdownMessageAsync(text, (Quote) quote, ephemeralUser, options);
-    /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendCardMessageAsync(ICard card,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendCardMessageAsync(card, (Quote) quote, ephemeralUser, options);
-    /// <inheritdoc />
-    Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> IMessageChannel.SendCardMessageAsync(IEnumerable<ICard> cards,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendCardMessageAsync(cards, (Quote) quote, ephemeralUser, options);
+        => SendCardsAsync(cards, (Quote) quote, ephemeralUser, options);
     
     /// <inheritdoc />
     async Task<IMessage> IMessageChannel.GetMessageAsync(Guid id, CacheMode mode, RequestOptions options)

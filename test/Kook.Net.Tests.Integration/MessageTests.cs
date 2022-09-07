@@ -35,31 +35,9 @@ public class MessageTests : IClassFixture<RestChannelFixture>
         _output.WriteLine(message.ToString());
         return Task.CompletedTask;
     }
-    
-    [Fact]
-    public async Task SendTextMessageAsync()
-    {
-        (Guid messageId, DateTimeOffset messageTimestamp) = await _channel.SendTextMessageAsync("TEST PLAINTEXT MESSAGE");
-        IMessage message = await _channel.GetMessageAsync(messageId);
-        try
-        {
-            Assert.NotNull(_selfUser);
-            Assert.NotEqual(Guid.Empty, messageId);
-            Assert.NotNull(message);
-            Assert.Equal(DateTimeOffset.Now.LocalDateTime, messageTimestamp.LocalDateTime, TimeSpan.FromSeconds(5));
-            Assert.Equal(MessageType.Text, message.Type);
-            Assert.Equal("TEST PLAINTEXT MESSAGE", message.Content);
-            Assert.Equal(_selfUser.Id, message.Author.Id);
-            Assert.Equal(MessageSource.Bot, message.Source);
-        }
-        finally
-        {
-            await message.DeleteAsync();
-        }
-    }
 
     [Fact]
-    public async Task SendKMarkdownMessageAsync()
+    public async Task SendTextAsync()
     {
         string kMarkdownSourceContent = @$"*TEST* **KMARKDOWN** ~~MESSAGE~~
 > NOTHING
@@ -103,7 +81,7 @@ INLINE CODE
 csharp
 CODE BLOCK
 ";
-        (Guid messageId, DateTimeOffset messageTimestamp) = await _channel.SendKMarkdownMessageAsync(kMarkdownSourceContent);
+        (Guid messageId, DateTimeOffset messageTimestamp) = await _channel.SendTextAsync(kMarkdownSourceContent);
         IMessage message = await _channel.GetMessageAsync(messageId);
         try
         {

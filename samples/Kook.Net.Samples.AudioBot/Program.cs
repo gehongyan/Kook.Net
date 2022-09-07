@@ -40,7 +40,7 @@ class Program
         if (arg.Author.Id == _client.CurrentUser.Id) return;
         if (arg.Author.IsBot == true) return;
         if (arg.Content != "/test") return;
-        // await arg.Channel.SendTextMessageAsync("收到了！", quote: new Quote(arg.Id));
+        // await arg.Channel.SendTextAsync("收到了！", quote: new Quote(arg.Id));
         // await msg.UpdateAsync();
         await CardDemo(arg);
     }
@@ -73,7 +73,7 @@ class Program
         // SocketGuild socketGuild = _client.GetGuild(1990044438283387);
         // IEnumerable<RestGame> games = await _client.Rest.GetGamesAsync().FlattenAsync().ConfigureAwait(false);
         await _client.GetGuild(1990044438283387).GetTextChannel(6286033651700207)
-            .SendImageMessageAsync("E:\\OneDrive\\Pictures\\86840227_p0_新年.png");
+            .SendFileAsync("E:\\OneDrive\\Pictures\\86840227_p0_新年.png", type: AttachmentType.Image);
     }
 
     private async Task CardDemo(SocketMessage message)
@@ -130,7 +130,7 @@ class Program
         
         (Guid MessageId, DateTimeOffset MessageTimestamp) response = await _client.GetGuild(((SocketUserMessage) message).Guild.Id)
             .GetTextChannel(message.Channel.Id)
-            .SendCardMessageAsync(cardBuilder.Build(), quote: new Quote(message.Id));
+            .SendCardAsync(cardBuilder.Build(), quote: new Quote(message.Id));
     }
 
     private async Task ModifyMessageDemo()
@@ -139,7 +139,7 @@ class Program
         
         SocketTextChannel channel = _client.GetGuild(_guildId).GetTextChannel(_channelId);
         (Guid MessageId, DateTimeOffset MessageTimestamp) response = await channel
-            .SendKMarkdownMessageAsync("BeforeModification");
+            .SendTextAsync("BeforeModification");
         await Task.Delay(TimeSpan.FromSeconds(1));
         
         IUserMessage msg = await channel.GetMessageAsync(response.MessageId) as IUserMessage;
@@ -149,7 +149,7 @@ class Program
         await msg.DeleteAsync();
         await Task.Delay(TimeSpan.FromSeconds(1));
 
-        response = await channel.SendCardMessageAsync(new CardBuilder()
+        response = await channel.SendCardAsync(new CardBuilder()
             .AddModule(new HeaderModuleBuilder().WithText("Test")).Build());
         await Task.Delay(TimeSpan.FromSeconds(1));
         

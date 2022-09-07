@@ -71,7 +71,7 @@ namespace TextCommandFramework.Services
                 return;
 
             // the command failed, let's notify the user that something happened.
-            await context.Channel.SendTextMessageAsync($"error: {result}");
+            await context.Channel.SendTextAsync($"error: {result}");
         }
     }
 }

@@ -134,74 +134,36 @@ namespace Kook
 
         public string KMarkdownMention => throw new NotImplementedException();
 
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(string path, string fileName = null, AttachmentType type = AttachmentType.File, IQuote quote = null,
+            IUser ephemeralUser = null, RequestOptions options = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(string path, string fileName = null, IQuote quote = null, IUser ephemeralUser = null,
+        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(Stream stream, string fileName, AttachmentType type = AttachmentType.File, IQuote quote = null,
+            IUser ephemeralUser = null, RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(FileAttachment attachment, IQuote quote = null, IUser ephemeralUser = null,
             RequestOptions options = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(Stream stream, string fileName = null, IQuote quote = null, IUser ephemeralUser = null,
+        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextAsync(string text, IQuote quote = null, IUser ephemeralUser = null,
             RequestOptions options = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(Uri uri, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardAsync(ICard card, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
         {
             throw new NotImplementedException();
         }
 
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null, IQuote quote = null, IUser ephemeralUser = null,
-            RequestOptions options = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(Stream stream, string fileName = null, IQuote quote = null, IUser ephemeralUser = null,
-            RequestOptions options = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(Uri uri, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(string path, string fileName = null, IQuote quote = null, IUser ephemeralUser = null,
-            RequestOptions options = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(Stream stream, string fileName = null, IQuote quote = null, IUser ephemeralUser = null,
-            RequestOptions options = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(Uri uri, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendKMarkdownMessageAsync(string text, IQuote quote = null, IUser ephemeralUser = null,
-            RequestOptions options = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(IEnumerable<ICard> cards, IQuote quote = null, IUser ephemeralUser = null,
+        public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardsAsync(IEnumerable<ICard> cards, IQuote quote = null, IUser ephemeralUser = null,
             RequestOptions options = null)
         {
             throw new NotImplementedException();

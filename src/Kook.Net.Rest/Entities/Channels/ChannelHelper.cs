@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using Kook.API;
 using Kook.API.Rest;
+using Kook.Utils;
 using Model = Kook.API.Channel;
 
 namespace Kook.Rest;
@@ -192,8 +193,7 @@ internal static class ChannelHelper
         return builder.ToImmutable();
     }
 
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendMessageAsync(
-        IMessageChannel channel,
+    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendMessageAsync(IMessageChannel channel,
         BaseKookClient client, MessageType messageType, string content, RequestOptions options, IQuote quote = null,
         IUser ephemeralUser = null)
     {
@@ -206,6 +206,71 @@ internal static class ChannelHelper
         return (model.MessageId, model.MessageTimestamp);
     }
 
+    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardsAsync(IMessageChannel channel,
+        BaseKookClient client, IEnumerable<ICard> cards, RequestOptions options, IQuote quote = null,
+        IUser ephemeralUser = null)
+    {
+        string json = MessageHelper.SerializeCards(cards);
+        return await SendMessageAsync(channel, client, MessageType.Card, json, options, quote: quote,
+            ephemeralUser: ephemeralUser);
+    }
+    public static Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardAsync(IMessageChannel channel,
+        BaseKookClient client, ICard card, RequestOptions options, IQuote quote = null,
+        IUser ephemeralUser = null)
+        => SendCardsAsync(channel, client, new[] {card}, options, quote: quote, ephemeralUser: ephemeralUser);
+
+    public static Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(IMessageChannel channel,
+        BaseKookClient client, string path, string fileName, AttachmentType type, RequestOptions options, 
+        IQuote quote = null, IUser ephemeralUser = null)
+        => SendFileAsync(channel, client, new FileAttachment(path, fileName, type), options, quote: quote,
+            ephemeralUser: ephemeralUser);
+
+    public static Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(IMessageChannel channel,
+        BaseKookClient client, Stream stream, string fileName, AttachmentType type, RequestOptions options, 
+        IQuote quote = null, IUser ephemeralUser = null)
+        => SendFileAsync(channel, client, new FileAttachment(stream, fileName, type), options, quote: quote,
+            ephemeralUser: ephemeralUser);
+
+    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(IMessageChannel channel,
+        BaseKookClient client, FileAttachment attachment, RequestOptions options, 
+        IQuote quote = null, IUser ephemeralUser = null)
+    {
+        switch (attachment.Mode)
+        {
+            case CreateAttachmentMode.FilePath:
+            case CreateAttachmentMode.Stream:
+                CreateAssetResponse assetResponse = await client.ApiClient
+                    .CreateAssetAsync(new CreateAssetParams {File = attachment.Stream, FileName = attachment.FileName}, options);
+                attachment.Uri = new Uri(assetResponse.Url);
+                break;
+            case CreateAttachmentMode.AssetUri:
+                if (!UrlValidation.ValidateKookAssetUrl(attachment.Uri.OriginalString))
+                    throw new ArgumentException("The uri cannot be blank.", nameof(attachment.Uri));
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(attachment.Mode), attachment.Mode, "Unknown attachment mode");
+        }
+
+        return attachment.Type switch
+        {
+            AttachmentType.File => await SendMessageAsync(channel, client, MessageType.File,
+                attachment.Uri.OriginalString, options, quote: quote, ephemeralUser: ephemeralUser),
+            AttachmentType.Image => await SendMessageAsync(channel, client, MessageType.Image,
+                attachment.Uri.OriginalString, options, quote: quote, ephemeralUser: ephemeralUser),
+            AttachmentType.Video => await SendMessageAsync(channel, client, MessageType.Video,
+                attachment.Uri.OriginalString, options, quote: quote, ephemeralUser: ephemeralUser),
+            AttachmentType.Audio => await SendCardAsync(channel, client,
+                new CardBuilder().WithSize(CardSize.Large)
+                    .WithTheme(CardTheme.None)
+                    .AddModule<AudioModuleBuilder>(x => x
+                        .WithSource(attachment.Uri.OriginalString)
+                        .WithTitle(attachment.FileName))
+                    .Build(), options, quote: quote, ephemeralUser: ephemeralUser),
+            _ => throw new ArgumentOutOfRangeException(nameof(attachment.Type), attachment.Type,
+                "Unknown attachment type")
+        };
+    }
+    
     public static Task DeleteMessageAsync(IMessageChannel channel, Guid messageId, BaseKookClient client,
         RequestOptions options)
         => MessageHelper.DeleteAsync(messageId, client, options);
@@ -301,8 +366,7 @@ internal static class ChannelHelper
         );
     }
 
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectMessageAsync(
-        IDMChannel channel,
+    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectMessageAsync(IDMChannel channel,
         BaseKookClient client, MessageType messageType, string content, RequestOptions options, IQuote quote = null)
     {
         CreateDirectMessageParams args = new(messageType, channel.Recipient.Id, content)
@@ -314,6 +378,65 @@ internal static class ChannelHelper
         return (model.MessageId, model.MessageTimestamp);
     }
 
+    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectCardsAsync(IDMChannel channel,
+        BaseKookClient client, IEnumerable<ICard> cards, RequestOptions options, IQuote quote = null)
+    {
+        string json = MessageHelper.SerializeCards(cards);
+        return await SendDirectMessageAsync(channel, client, MessageType.Card, json, options, quote: quote);
+    }
+    public static Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectCardAsync(IDMChannel channel,
+        BaseKookClient client, ICard card, RequestOptions options, IQuote quote = null)
+        => SendDirectCardsAsync(channel, client, new[] {card}, options, quote: quote);
+
+    public static Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectFileAsync(IDMChannel channel,
+        BaseKookClient client, string path, string fileName, AttachmentType type, RequestOptions options, 
+        IQuote quote = null)
+        => SendDirectFileAsync(channel, client, new FileAttachment(path, fileName, type), options, quote: quote);
+
+    public static Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectFileAsync(IDMChannel channel,
+        BaseKookClient client, Stream stream, string fileName, AttachmentType type, RequestOptions options, 
+        IQuote quote = null)
+        => SendDirectFileAsync(channel, client, new FileAttachment(stream, fileName, type), options, quote: quote);
+
+    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendDirectFileAsync(IDMChannel channel,
+        BaseKookClient client, FileAttachment attachment, RequestOptions options, IQuote quote = null)
+    {
+        switch (attachment.Mode)
+        {
+            case CreateAttachmentMode.FilePath:
+            case CreateAttachmentMode.Stream:
+                CreateAssetResponse assetResponse = await client.ApiClient
+                    .CreateAssetAsync(new CreateAssetParams {File = attachment.Stream, FileName = attachment.FileName}, options);
+                attachment.Uri = new Uri(assetResponse.Url);
+                break;
+            case CreateAttachmentMode.AssetUri:
+                if (!UrlValidation.ValidateKookAssetUrl(attachment.Uri.OriginalString))
+                    throw new ArgumentException("The uri cannot be blank.", nameof(attachment.Uri));
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(attachment.Mode), attachment.Mode, "Unknown attachment mode");
+        }
+
+        return attachment.Type switch
+        {
+            AttachmentType.File => await SendDirectMessageAsync(channel, client, MessageType.File,
+                attachment.Uri.OriginalString, options, quote: quote),
+            AttachmentType.Image => await SendDirectMessageAsync(channel, client, MessageType.Image,
+                attachment.Uri.OriginalString, options, quote: quote),
+            AttachmentType.Video => await SendDirectMessageAsync(channel, client, MessageType.Video,
+                attachment.Uri.OriginalString, options, quote: quote),
+            AttachmentType.Audio => await SendDirectCardAsync(channel, client,
+                new CardBuilder().WithSize(CardSize.Large)
+                    .WithTheme(CardTheme.None)
+                    .AddModule<AudioModuleBuilder>(x => x
+                        .WithSource(attachment.Uri.OriginalString)
+                        .WithTitle(attachment.FileName))
+                    .Build(), options, quote: quote),
+            _ => throw new ArgumentOutOfRangeException(nameof(attachment.Type), attachment.Type,
+                "Unknown attachment type")
+        };
+    }
+    
     public static async Task ModifyDirectMessageAsync(IDMChannel channel, Guid messageId,
         Action<MessageProperties> func,
         BaseKookClient client, RequestOptions options)

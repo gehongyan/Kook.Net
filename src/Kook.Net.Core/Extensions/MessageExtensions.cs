@@ -78,164 +78,20 @@ public static class MessageExtensions
     }
 
     /// <summary>
-    ///     Sends an inline reply of plain text that references a message.
-    /// </summary>
-    /// <param name="message">The message that is being replied on.</param>
-    /// <param name="text">The message to be sent.</param>
-    /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
-    /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyTextAsync(this IUserMessage message, 
-        string text, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
-    {
-        return await message.Channel.SendTextMessageAsync(text, isQuote ? new Quote(message.Id) : null,
-            isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    }
-    /// <summary>
-    ///     Sends an inline reply of image that references a message.
-    /// </summary>
-    /// <param name="message">The message that is being replied on.</param>
-    /// <param name="path">The file path of the image file.</param>
-    /// <param name="fileName">The name of the image file.</param>
-    /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
-    /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyImageAsync(this IUserMessage message, 
-        string path, string fileName = null, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
-    {
-        return await message.Channel.SendImageMessageAsync(path, fileName, isQuote ? new Quote(message.Id) : null,
-            isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    }
-    /// <summary>
-    ///     Sends an inline reply of image that references a message.
-    /// </summary>
-    /// <param name="message">The message that is being replied on.</param>
-    /// <param name="stream">Stream of the image file to be sent.</param>
-    /// <param name="fileName">The name of the image file.</param>
-    /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
-    /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyImageAsync(this IUserMessage message, 
-        Stream stream, string fileName = null, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
-    {
-        return await message.Channel.SendImageMessageAsync(stream, fileName, isQuote ? new Quote(message.Id) : null,
-            isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    }
-    /// <summary>
-    ///     Sends an inline reply of image that references a message.
-    /// </summary>
-    /// <param name="message">The message that is being replied on.</param>
-    /// <param name="uri">URI of the image file to be sent.</param>
-    /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
-    /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyImageAsync(this IUserMessage message, 
-        Uri uri, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
-    {
-        return await message.Channel.SendImageMessageAsync(uri, isQuote ? new Quote(message.Id) : null,
-            isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    }
-    /// <summary>
-    ///     Sends an inline reply of video that references a message.
-    /// </summary>
-    /// <param name="message">The message that is being replied on.</param>
-    /// <param name="path">The file path of the video file.</param>
-    /// <param name="fileName">The name of the video file.</param>
-    /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
-    /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyVideoAsync(this IUserMessage message, 
-        string path, string fileName = null, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
-    {
-        return await message.Channel.SendVideoMessageAsync(path, fileName, isQuote ? new Quote(message.Id) : null,
-            isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    }
-    /// <summary>
-    ///     Sends an inline reply of video that references a message.
-    /// </summary>
-    /// <param name="message">The message that is being replied on.</param>
-    /// <param name="stream">Stream of the video file to be sent.</param>
-    /// <param name="fileName">The name of the video file.</param>
-    /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
-    /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyVideoAsync(this IUserMessage message, 
-        Stream stream, string fileName = null, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
-    {
-        return await message.Channel.SendVideoMessageAsync(stream, fileName, isQuote ? new Quote(message.Id) : null,
-            isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    }
-    /// <summary>
-    ///     Sends an inline reply of video that references a message.
-    /// </summary>
-    /// <param name="message">The message that is being replied on.</param>
-    /// <param name="uri"> URI of the video file to be sent.</param>
-    /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
-    /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyVideoAsync(this IUserMessage message, 
-        Uri uri, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
-    {
-        return await message.Channel.SendVideoMessageAsync(uri, isQuote ? new Quote(message.Id) : null,
-            isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    }
-    // /// <summary>
-    // ///     Sends an inline reply of audio that references a message.
-    // /// </summary>
-    // /// <param name="message">The message that is being replied on.</param>
-    // /// <param name="path">The file path of the audio file.</param>
-    // /// <param name="fileName">The name of the audio file.</param>
-    // /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
-    // /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
-    // /// <param name="options">The options to be used when sending the request.</param>
-    // public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyAudioAsync(this IUserMessage message, 
-    //     string path, string fileName = null, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
-    // {
-    //     return await message.Channel.SendAudioMessageAsync(path, fileName, isQuote ? new Quote(message.Id) : null,
-    //         isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    // }
-    // /// <summary>
-    // ///     Sends an inline reply of audio that references a message.
-    // /// </summary>
-    // /// <param name="message">The message that is being replied on.</param>
-    // /// <param name="stream">Stream of the audio file to be sent.</param>
-    // /// <param name="fileName">The name of the audio file.</param>
-    // /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
-    // /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
-    // /// <param name="options">The options to be used when sending the request.</param>
-    // public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyAudioAsync(this IUserMessage message, 
-    //     Stream stream, string fileName = null, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
-    // {
-    //     return await message.Channel.SendAudioMessageAsync(stream, fileName, isQuote ? new Quote(message.Id) : null,
-    //         isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    // }
-    // /// <summary>
-    // ///     Sends an inline reply of audio that references a message.
-    // /// </summary>
-    // /// <param name="message">The message that is being replied on.</param>
-    // /// <param name="uri"> URI of the audio file to be sent.</param>
-    // /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
-    // /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
-    // /// <param name="options">The options to be used when sending the request.</param>
-    // public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyAudioAsync(this IUserMessage message, 
-    //     Uri uri, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
-    // {
-    //     return await message.Channel.SendAudioMessageAsync(uri, isQuote ? new Quote(message.Id) : null,
-    //         isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    // }
-    /// <summary>
     ///     Sends an inline reply of file that references a message.
     /// </summary>
     /// <param name="message">The message that is being replied on.</param>
     /// <param name="path">The file path of the file.</param>
     /// <param name="fileName">The name of the file.</param>
+    /// <param name="type">The type of the file.</param>
     /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
     /// <param name="options">The options to be used when sending the request.</param>
     public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyFileAsync(this IUserMessage message, 
-        string path, string fileName = null, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
+        string path, string fileName = null, AttachmentType type = AttachmentType.File, bool isQuote = false, bool isEphemeral = false, 
+        RequestOptions options = null)
     {
-        return await message.Channel.SendFileMessageAsync(path, fileName, isQuote ? new Quote(message.Id) : null,
+        return await message.Channel.SendFileAsync(path, fileName, type, isQuote ? new Quote(message.Id) : null,
             isEphemeral ? message.Author : null, options).ConfigureAwait(false);
     }
     /// <summary>
@@ -244,41 +100,43 @@ public static class MessageExtensions
     /// <param name="message">The message that is being replied on.</param>
     /// <param name="stream">Stream of the file to be sent.</param>
     /// <param name="fileName">The name of the file.</param>
+    /// <param name="type">The type of the file.</param>
     /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
     /// <param name="options">The options to be used when sending the request.</param>
     public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyFileAsync(this IUserMessage message, 
-        Stream stream, string fileName = null, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
+        Stream stream, string fileName = null, AttachmentType type = AttachmentType.File, bool isQuote = false, bool isEphemeral = false, 
+        RequestOptions options = null)
     {
-        return await message.Channel.SendFileMessageAsync(stream, fileName, isQuote ? new Quote(message.Id) : null,
+        return await message.Channel.SendFileAsync(stream, fileName, type, isQuote ? new Quote(message.Id) : null,
             isEphemeral ? message.Author : null, options).ConfigureAwait(false);
     }
     /// <summary>
     ///     Sends an inline reply of file that references a message.
     /// </summary>
     /// <param name="message">The message that is being replied on.</param>
-    /// <param name="uri">URI of the file to be sent.</param>
+    /// <param name="attachment">The attachment containing the file.</param>
     /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
     /// <param name="options">The options to be used when sending the request.</param>
     public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyFileAsync(this IUserMessage message, 
-        Uri uri, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
+        FileAttachment attachment, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
     {
-        return await message.Channel.SendFileMessageAsync(uri, isQuote ? new Quote(message.Id) : null,
+        return await message.Channel.SendFileAsync(attachment, isQuote ? new Quote(message.Id) : null,
             isEphemeral ? message.Author : null, options).ConfigureAwait(false);
     }
     /// <summary>
-    ///     Sends an inline reply of KMarkdown that references a message.
+    ///     Sends an inline reply of text that references a message.
     /// </summary>
     /// <param name="message">The message that is being replied on.</param>
     /// <param name="content">Contents of the message.</param>
     /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
     /// <param name="options">The request options for this <see langword="async"/> request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyKMarkdownAsync(this IUserMessage message, 
+    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyTextAsync(this IUserMessage message, 
         string content, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
     {
-        return await message.Channel.SendKMarkdownMessageAsync(content, isQuote ? new Quote(message.Id) : null,
+        return await message.Channel.SendTextAsync(content, isQuote ? new Quote(message.Id) : null,
             isEphemeral ? message.Author : null, options).ConfigureAwait(false);
     }
     /// <summary>
@@ -292,9 +150,10 @@ public static class MessageExtensions
     public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyCardsAsync(this IUserMessage message, 
         IEnumerable<ICard> cards, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
     {
-        return await message.Channel.SendCardMessageAsync(cards, isQuote ? new Quote(message.Id) : null,
+        return await message.Channel.SendCardsAsync(cards, isQuote ? new Quote(message.Id) : null,
             isEphemeral ? message.Author : null, options).ConfigureAwait(false);
     }
+
     /// <summary>
     ///     Sends a card message to the source channel.
     /// </summary>
@@ -303,10 +162,11 @@ public static class MessageExtensions
     /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
     /// <param name="options">The request options for this <see langword="async"/> request.</param>
-    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyCardsAsync(this IUserMessage message, 
+    public static async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> ReplyCardAsync(
+        this IUserMessage message,
         ICard card, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
     {
-        return await message.Channel.SendCardMessageAsync(new[] { card }, isQuote ? new Quote(message.Id) : null,
+        return await message.Channel.SendCardAsync(card, isQuote ? new Quote(message.Id) : null,
             isEphemeral ? message.Author : null, options).ConfigureAwait(false);
     }
         

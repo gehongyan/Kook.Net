@@ -63,7 +63,7 @@ class Program
     //     if (arg.Author.Id == _client.CurrentUser.Id) return;
     //     if (arg.Author.IsBot == true) return;
     //     if (arg.Content != "/test") return;
-    //     await arg.Channel.SendTextMessageAsync("收到了！", quote: new Quote(arg.Id));
+    //     await arg.Channel.SendTextAsync("收到了！", quote: new Quote(arg.Id));
     //     // await msg.UpdateAsync();
     //     // await CardDemo(arg);
     //     await ModifyMessageDemo(arg);
@@ -71,19 +71,21 @@ class Program
     //
     private async Task ClientOnReady()
     {
-        await Task.Delay(TimeSpan.FromSeconds(5));
-        KookSocketClient kookSocketClient = _client;
-        SocketGuildUser socketGuildUser = kookSocketClient.GetGuild(7557797319758285).GetUser(821393881);
-        List<SocketGuildUser> socketGuildUsers = kookSocketClient.GetGuild(7557797319758285).Users.Where(x => x.IsDeafened == true).ToList();
-        IReadOnlyCollection<SocketGuildUser> readOnlyCollection = kookSocketClient.GetGuild(7557797319758285).GetVoiceChannel(9816956151862920).ConnectedUsers;
-        IReadOnlyCollection<SocketGuildUser> connectedUsers = await kookSocketClient.GetGuild(7557797319758285).GetVoiceChannel(9816956151862920).GetConnectedUsersAsync();
+        // await Task.Delay(TimeSpan.FromSeconds(5));
+        // KookSocketClient kookSocketClient = _client;
+        // SocketGuildUser socketGuildUser = kookSocketClient.GetGuild(7557797319758285).GetUser(821393881);
+        // List<SocketGuildUser> socketGuildUsers = kookSocketClient.GetGuild(7557797319758285).Users.Where(x => x.IsDeafened == true).ToList();
+        // IReadOnlyCollection<SocketGuildUser> readOnlyCollection = kookSocketClient.GetGuild(7557797319758285).GetVoiceChannel(9816956151862920).ConnectedUsers;
+        // IReadOnlyCollection<SocketGuildUser> connectedUsers = await kookSocketClient.GetGuild(7557797319758285).GetVoiceChannel(9816956151862920).GetConnectedUsersAsync();
+        Stream stream = await new HttpClient().GetStreamAsync("https://img.kaiheila.cn/attachments/2021-01/21/600975671b9ab.mp3");
+        await _client.GetUser(2810246202).SendFileAsync(new FileAttachment(stream, "Filename", AttachmentType.Audio));
         // (Guid messageId, DateTimeOffset messageTimestamp) = await _client.GetGuild(7557797319758285).GetTextChannel(7888175654136995)
-        // .SendFileMessageAsync(new Uri("https://img.kookapp.cn/attachments/2022-08/31/630f780a58562.xlsx"));
+            // .SendFileAsync(new FileAttachment(stream, "Filename", AttachmentType.Audio));
         // (Guid messageId, DateTimeOffset messageTimestamp) = await _client.GetGuild(7557797319758285)
         //     .GetTextChannel(7888175654136995)
         //     .SendVideoMessageAsync("D:\\1.mp4");
         // IMessage message = await _client.GetGuild(7557797319758285).GetTextChannel(7888175654136995)
-        //     .GetMessageAsync(messageId);
+            // .GetMessageAsync(messageId);
     }
 
     // {
@@ -172,7 +174,7 @@ class Program
     //     
     //     (Guid MessageId, DateTimeOffset MessageTimestamp) response = await _client.GetGuild(((SocketUserMessage) message).Guild.Id)
     //         .GetTextChannel(message.Channel.Id)
-    //         .SendCardMessageAsync(cardBuilder.Build(), quote: new Quote(message.Id));
+    //         .SendCardAsync(cardBuilder.Build(), quote: new Quote(message.Id));
     // }
     //
     // private static async Task ModifyMessageDemo(SocketMessage message)
@@ -181,7 +183,7 @@ class Program
     //
     //     SocketTextChannel channel = message.Channel as SocketTextChannel;
     //     (Guid MessageId, DateTimeOffset MessageTimestamp) response = await channel
-    //         .SendKMarkdownMessageAsync("BeforeModification");
+    //         .SendTextAsync("BeforeModification");
     //     await Task.Delay(TimeSpan.FromSeconds(1));
     //     
     //     IUserMessage msg = await channel.GetMessageAsync(response.MessageId) as IUserMessage;
@@ -191,7 +193,7 @@ class Program
     //     await msg.DeleteAsync();
     //     await Task.Delay(TimeSpan.FromSeconds(1));
     //
-    //     response = await channel.SendCardMessageAsync(new CardBuilder()
+    //     response = await channel.SendCardAsync(new CardBuilder()
     //         .AddModule(new HeaderModuleBuilder().WithText("Test")).Build());
     //     await Task.Delay(TimeSpan.FromSeconds(1));
     //     

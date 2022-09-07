@@ -5,11 +5,11 @@ if (result.Error != null)
     switch (result.Error)
     {
         case CommandError.BadArgCount:
-            await context.Channel.SendKMarkdownMessageAsync(
+            await context.Channel.SendTextAsync(
                 "Parameter count does not match any command's.");
             break;
         default:
-            await context.Channel.SendKMarkdownMessageAsync(
+            await context.Channel.SendTextAsync(
                 $"An error has occurred {result.ErrorReason}");
             break;
     }

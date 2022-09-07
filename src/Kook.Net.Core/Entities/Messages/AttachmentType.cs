@@ -16,5 +16,9 @@ public enum AttachmentType
     /// <summary>
     ///     The attachment is a video.
     /// </summary>
-    Video
+    Video,
+    /// <summary>
+    ///     The attachment is an audio.
+    /// </summary>
+    Audio
 }

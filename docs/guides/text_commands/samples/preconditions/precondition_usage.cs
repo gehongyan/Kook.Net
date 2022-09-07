@@ -1,3 +1,3 @@
 [RequireOwner]
 [Command("echo")]
-public Task EchoAsync(string input) => ReplyKMarkdownAsync(input);
+public Task EchoAsync(string input) => ReplyTextAsync(input);

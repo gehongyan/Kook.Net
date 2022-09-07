@@ -22,7 +22,7 @@ public class AdminModule : ModuleBase<SocketCommandContext>
             var banInfo = bans.Select(ban => $"> {ban.User.Username}#{ban.User.IdentifyNumber} " +
                                              $"({ban.CreatedAt:yyyy'/'M'/'d HH':'mm}, {ban.Reason})")
                 .Aggregate((a, b) => $"{a}\n{b}");
-            await ReplyKMarkdownAsync($"{bans.Count} 条封禁：\n{banInfo}");
+            await ReplyTextAsync($"{bans.Count} 条封禁：\n{banInfo}");
         }
     }
     // !admin kick @戈小荷

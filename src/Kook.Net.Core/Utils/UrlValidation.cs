@@ -45,8 +45,8 @@ internal static class UrlValidation
     ///     </list>
     /// </remarks>
     /// <param name="url">The URL to validate before sending to Kook.</param>
-    /// <exception cref="InvalidOperationException">The URL provided is not an asset on the Kook OSS server.</exception>
-    /// <returns><c>true</c> if URL represents a valid asset on the Kook OSS server, <c>false</c> if null, throws an error upon invalid.</returns>
+    /// <exception cref="InvalidOperationException">The URL provided is not an asset on the Kook OSS.</exception>
+    /// <returns><c>true</c> if URL represents a valid asset on the Kook OSS, <c>false</c> if null, throws an error upon invalid.</returns>
     public static bool ValidateKookAssetUrl(string url)
     {
         if (string.IsNullOrEmpty(url))

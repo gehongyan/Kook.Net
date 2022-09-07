@@ -16,7 +16,7 @@ public class DatabaseModule : ModuleBase<SocketCommandContext>
     [Command("read")]
     public async Task ReadFromDbAsync()
     {
-        await ReplyKMarkdownAsync(_database.GetData());
+        await ReplyTextAsync(_database.GetData());
     }
 }
 
@@ -28,6 +28,6 @@ public class DatabaseModule : ModuleBase<SocketCommandContext>
     [Command("read")]
     public async Task ReadFromDbAsync()
     {
-        await ReplyKMarkdownAsync(DbService.GetData());
+        await ReplyTextAsync(DbService.GetData());
     }
 }

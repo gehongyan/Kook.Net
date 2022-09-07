@@ -25,7 +25,7 @@ public partial class KookBotClientExtension
             .AddModule(new ContextModuleBuilder().AddElement(new KMarkdownElementBuilder()
                     .WithContent($"{_kookSocketClient.CurrentUser.Username} | {time}")));
         
-        await dmChannel.SendCardMessageAsync(builder.Build());
+        await dmChannel.SendCardAsync(builder.Build());
         
         _logger.Information("{User}#{IdentifyNumber} is granted {RoleName}", 
             socketGuildUser.Username, socketGuildUser.IdentifyNumber, socketRole.Name);
@@ -52,7 +52,7 @@ public partial class KookBotClientExtension
             .AddModule(new ContextModuleBuilder().AddElement(new KMarkdownElementBuilder()
                 .WithContent($"{_kookSocketClient.CurrentUser.Username} | {time}")));
         
-        await dmChannel.SendCardMessageAsync(builder.Build());
+        await dmChannel.SendCardAsync(builder.Build());
         
         _logger.Information("{User}#{IdentifyNumber} is revoked {RoleName}", 
             socketGuildUser.Username, socketGuildUser.IdentifyNumber, socketRole.Name);
@@ -66,7 +66,7 @@ public partial class KookBotClientExtension
             .AddModule(new HeaderModuleBuilder().WithText("互动角色"))
             .AddModule(new SectionModuleBuilder().WithText("点击下方回应以获取/移除角色\n:computer: 开发者", true));
         (Guid messageId, DateTimeOffset messageTimestamp) = await _kookSocketClient.GetGuild(1591057729615250).GetTextChannel(5770952608991958)
-            .SendCardMessageAsync(builder.Build()).ConfigureAwait(false);
+            .SendCardAsync(builder.Build()).ConfigureAwait(false);
         await _kookSocketClient.Rest.AddReactionAsync(messageId, Emoji.Parse(":computer:"));
     }
 }

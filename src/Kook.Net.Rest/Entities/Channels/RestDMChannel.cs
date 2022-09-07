@@ -88,9 +88,8 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
         else
             return null;
     }
-    
     /// <summary>
-    ///     Sends a plain text to this message channel.
+    ///     Sends a text message to this message channel.
     /// </summary>
     /// <param name="text">The message to be sent.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
@@ -99,125 +98,9 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    /// <exception cref="ArgumentOutOfRangeException">
-    ///     Message content is too long, length must be less or equal to <see cref="KookConfig.MaxMessageSize"/>.
-    /// </exception>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextMessageAsync(string text, IQuote quote = null, RequestOptions options = null)
-        => ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.Text, text, options, quote: quote);
-    /// <summary>
-    ///     Sends an image to this message channel.
-    /// </summary>
-    /// <remarks>
-    ///     This method sends an image as if you are uploading an image directly from your Kook client.
-    /// </remarks>
-    /// <param name="path">The file path of the image.</param>
-    /// <param name="fileName">The name of the image.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(string path, string fileName = null, IQuote quote = null, RequestOptions options = null)
-    {
-        CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
-        return await ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.Image, createAssetResponse.Url, options, quote: quote);
-    }
-    /// <summary>
-    ///     Sends an image to this message channel.
-    /// </summary>
-    /// <remarks>
-    ///     This method sends an image as if you are uploading an image directly from your Kook client.
-    /// </remarks>
-    /// <param name="stream">The stream of the image.</param>
-    /// <param name="fileName">The name of the image.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(Stream stream, string fileName = null, IQuote quote = null, RequestOptions options = null)
-    {
-        CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options).ConfigureAwait(false);
-        return await ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.Image, createAssetResponse.Url, options, quote: quote);
-    }
-    /// <summary>
-    ///     Sends an image to this message channel.
-    /// </summary>
-    /// <remarks>
-    ///     This method sends an image as if you are uploading an image directly from your Kook client.
-    /// </remarks>
-    /// <param name="uri">The URI of the image.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendImageMessageAsync(Uri uri, IQuote quote = null, RequestOptions options = null)
-    {
-        if (!UrlValidation.ValidateKookAssetUrl(uri.OriginalString))
-            throw new ArgumentException("The uri cannot be blank.", nameof(uri));
-        return await ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.Image, uri.OriginalString, options, quote: quote);
-    }
-    /// <summary>
-    ///     Sends a video to this message channel.
-    /// </summary>
-    /// <remarks>
-    ///     This method sends an video as if you are uploading a video directly from your Kook client.
-    /// </remarks>
-    /// <param name="path">The file path of the video.</param>
-    /// <param name="fileName">The name of the video.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(string path, string fileName = null, IQuote quote = null, RequestOptions options = null)
-    {
-        CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
-        return await ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.Video, createAssetResponse.Url, options, quote: quote);
-    }
-    /// <summary>
-    ///     Sends a video to this message channel.
-    /// </summary>
-    /// <remarks>
-    ///     This method sends an video as if you are uploading a video directly from your Kook client.
-    /// </remarks>
-    /// <param name="stream">The stream of the video.</param>
-    /// <param name="fileName">The name of the video.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(Stream stream, string fileName = null, IQuote quote = null, RequestOptions options = null)
-    {
-        CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options).ConfigureAwait(false);
-        return await ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.Video, createAssetResponse.Url, options, quote: quote);
-    }
-    /// <summary>
-    ///     Sends a video to this message channel.
-    /// </summary>
-    /// <remarks>
-    ///     This method sends an video as if you are uploading a video directly from your Kook client.
-    /// </remarks>
-    /// <param name="uri">The URI of the video.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendVideoMessageAsync(Uri uri, IQuote quote = null, RequestOptions options = null)
-    {
-        if (!UrlValidation.ValidateKookAssetUrl(uri.OriginalString))
-            throw new ArgumentException("The uri cannot be blank.", nameof(uri));
-        return await ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.Video, uri.OriginalString, options, quote: quote);
-    }
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendTextAsync(string text, IQuote quote = null, RequestOptions options = null)
+        => ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, options, quote: quote);
+    
     /// <summary>
     ///     Sends a file to this message channel.
     /// </summary>
@@ -226,17 +109,16 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// </remarks>
     /// <param name="path">The file path of the file.</param>
     /// <param name="fileName">The name of the file.</param>
+    /// <param name="type">The type of the file.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(string path, string fileName = null, IQuote quote = null, RequestOptions options = null)
-    {
-        CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options).ConfigureAwait(false);
-        return await ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.File, createAssetResponse.Url, options, quote: quote);
-    }
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(string path, string fileName = null, 
+        AttachmentType type = AttachmentType.File, IQuote quote = null, RequestOptions options = null)
+        => ChannelHelper.SendDirectFileAsync(this, Kook, path, fileName, type, options, quote: quote);
     /// <summary>
     ///     Sends a file to this message channel.
     /// </summary>
@@ -245,105 +127,33 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// </remarks>
     /// <param name="stream">The stream of the file.</param>
     /// <param name="fileName">The name of the file.</param>
+    /// <param name="type">The type of the file.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(Stream stream, string fileName = null, IQuote quote = null, RequestOptions options = null)
-    {
-        CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options).ConfigureAwait(false);
-        return await ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.File, createAssetResponse.Url, options, quote: quote);
-    }
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(Stream stream, string fileName = null, 
+        AttachmentType type = AttachmentType.File, IQuote quote = null, RequestOptions options = null)
+        => ChannelHelper.SendDirectFileAsync(this, Kook, stream, fileName, type, options, quote: quote);
     /// <summary>
     ///     Sends a file to this message channel.
     /// </summary>
     /// <remarks>
     ///     This method sends a file as if you are uploading a file directly from your Kook client.
     /// </remarks>
-    /// <param name="uri">The URI of the file.</param>
+    /// <param name="attachment">The attachment containing the file.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileMessageAsync(Uri uri, IQuote quote = null, RequestOptions options = null)
-    {
-        if (!UrlValidation.ValidateKookAssetUrl(uri.OriginalString))
-            throw new ArgumentException("The uri cannot be blank.", nameof(uri));
-        return await ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.File, uri.OriginalString, options, quote: quote);
-    }
-    // /// <summary>
-    // ///     Sends an audio to this message channel.
-    // /// </summary>
-    // /// <remarks>
-    // ///     This method sends an audio as if you are uploading an audio directly from your Kook client.
-    // /// </remarks>
-    // /// <param name="path">The file path of the audio.</param>
-    // /// <param name="fileName">The name of the audio.</param>
-    // /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    // /// <param name="options">The options to be used when sending the request.</param>
-    // /// <returns>
-    // ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    // ///     contains the identifier and timestamp of the sent message.
-    // /// </returns>
-    // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(string path, string fileName = null, Quote quote = null, RequestOptions options = null)
-    // {
-    //     CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = File.OpenRead(path), FileName = fileName}, options);
-    //     return await ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.Audio, createAssetResponse.Url, options, quote: quote);
-    // }
-    // /// <summary>
-    // ///     Sends an audio to this message channel.
-    // /// </summary>
-    // /// <remarks>
-    // ///     This method sends an audio as if you are uploading an audio directly from your Kook client.
-    // /// </remarks>
-    // /// <param name="stream">The stream of the audio.</param>
-    // /// <param name="fileName">The name of the audio.</param>
-    // /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    // /// <param name="options">The options to be used when sending the request.</param>
-    // /// <returns>
-    // ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    // ///     contains the identifier and timestamp of the sent message.
-    // /// </returns>
-    // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsync(Stream stream, string fileName = null, Quote quote = null, RequestOptions options = null)
-    // {
-    //     CreateAssetResponse createAssetResponse = await Kook.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options);
-    //     return await ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.Audio, createAssetResponse.Url, options, quote: quote);
-    // }
-    // /// <summary>
-    // ///     Sends an audio to this message channel.
-    // /// </summary>
-    // /// <remarks>
-    // ///     This method sends an audio as if you are uploading an audio directly from your Kook client.
-    // /// </remarks>
-    // /// <param name="uri">The URI of the audio.</param>
-    // /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    // /// <param name="options">The options to be used when sending the request.</param>
-    // /// <returns>
-    // ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    // ///     contains the identifier and timestamp of the sent message.
-    // /// </returns>
-    // public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendAudioMessageAsyic(Uri url, Quote quote = null, RequestOptions options = null)
-    // {
-    //     if (!UrlValidation.ValidateKookAssetUrl(uri.OriginalString))
-    //         throw new ArgumentException("The uri cannot be blank.", nameof(uri));
-    //     return await ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.Audiouri.OriginalStringUrl, options, quote: quote);
-    // }
-    /// <summary>
-    ///     Sends a KMarkdown message to this message channel.
-    /// </summary>
-    /// <param name="text">The message to be sent.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendKMarkdownMessageAsync(string text, IQuote quote = null, RequestOptions options = null)
-        => ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, options, quote: quote);
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendFileAsync(FileAttachment attachment, 
+        IQuote quote = null, RequestOptions options = null)
+        => ChannelHelper.SendDirectFileAsync(this, Kook, attachment, options, quote: quote);
+
     /// <summary>
     ///     Sends a card message to this message channel.
     /// </summary>
@@ -354,11 +164,9 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public async Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(IEnumerable<ICard> cards, IQuote quote = null, RequestOptions options = null)
-    {
-        string json = MessageHelper.SerializeCards(cards);
-        return await ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.Card, json, options, quote: quote);
-    }
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardsAsync(IEnumerable<ICard> cards, IQuote quote = null, RequestOptions options = null)
+        => ChannelHelper.SendDirectCardsAsync(this, Kook, cards, options, quote: quote);
+
     /// <summary>
     ///     Sends a card message to this message channel.
     /// </summary>
@@ -369,8 +177,8 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardMessageAsync(ICard card, IQuote quote = null, RequestOptions options = null) => 
-        SendCardMessageAsync(new[] { card }, quote, options);
+    public Task<(Guid MessageId, DateTimeOffset MessageTimestamp)> SendCardAsync(ICard card, IQuote quote = null, RequestOptions options = null) 
+        => ChannelHelper.SendDirectCardAsync(this, Kook, card, options, quote: quote);
 
     /// <inheritdoc />
     public Task<RestMessage> GetMessageAsync(Guid id, RequestOptions options = null)

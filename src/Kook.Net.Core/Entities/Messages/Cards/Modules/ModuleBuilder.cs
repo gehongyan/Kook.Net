@@ -1321,8 +1321,7 @@ public class AudioModuleBuilder : IModuleBuilder
     {
         if (!UrlValidation.Validate(Source))
             throw new ArgumentException("The link to a file cannot be null or empty.", nameof(Source));
-        if (!UrlValidation.Validate(Cover))
-            throw new ArgumentException("The link to a file cannot be null or empty.", nameof(Cover));
+        UrlValidation.Validate(Cover);
         return new(Source, Title, Cover);
     }
 
