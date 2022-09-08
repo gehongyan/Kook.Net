@@ -30,7 +30,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     public string CleanContent => MessageHelper.SanitizeMessage(this);
     
-    public virtual Attachment Attachment { get; private set; }
+    public virtual IReadOnlyCollection<Attachment> Attachments { get; private set; }
     
     /// <inheritdoc />
     public DateTimeOffset Timestamp { get; private set; }
@@ -256,7 +256,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
 
     IUser IMessage.Author => Author;
     /// <inheritdoc />
-    IAttachment IMessage.Attachment => Attachment;
+    IReadOnlyCollection<IAttachment> IMessage.Attachments => Attachments;
     /// <inheritdoc />
     IReadOnlyCollection<ICard> IMessage.Cards => Cards;
     /// <inheritdoc />

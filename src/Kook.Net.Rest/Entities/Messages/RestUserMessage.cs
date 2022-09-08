@@ -17,7 +17,7 @@ public class RestUserMessage : RestMessage, IUserMessage
     private bool? _isMentioningEveryone;
     private bool? _isMentioningHere;
     private Quote _quote;
-    private Attachment _attachment;
+    private ImmutableArray<Attachment> _attachments = ImmutableArray.Create<Attachment>();
     private ImmutableArray<ICard> _cards = ImmutableArray.Create<ICard>();
     private ImmutableArray<IEmbed> _embeds;
     private ImmutableArray<RestPokeAction> _pokes;
@@ -32,7 +32,7 @@ public class RestUserMessage : RestMessage, IUserMessage
     /// <inheritdoc cref="IMessage.IsPinned"/>
     public new bool? IsPinned { get; internal set; }
     /// <inheritdoc />
-    public override Attachment Attachment => _attachment;
+    public override IReadOnlyCollection<Attachment> Attachments => _attachments;
     /// <inheritdoc />  
     public override IReadOnlyCollection<ICard> Cards => _cards;
     /// <inheritdoc />  
@@ -80,7 +80,7 @@ public class RestUserMessage : RestMessage, IUserMessage
         var guild = guildId != null ? (Kook as IKookClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).GetAwaiter().GetResult() : null;
         if (model.Type == MessageType.Text)
             _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.PlainText);
-        else if (model.Type == MessageType.KMarkdown)
+        else if (Type == MessageType.KMarkdown)
             _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.KMarkdown);
         _isMentioningEveryone = model.MentionedAll;
         _isMentioningHere = model.MentionedHere;
@@ -128,12 +128,13 @@ public class RestUserMessage : RestMessage, IUserMessage
         }
 
         if (model.Attachment is not null)
-            _attachment = Attachment.Create(model.Attachment);
-        
-        _cards = model.Type == MessageType.Card 
-            ? MessageHelper.ParseCards(model.Content) 
-            : ImmutableArray.Create<ICard>();
-        
+            _attachments = _attachments.Add(Attachment.Create(model.Attachment));
+
+        if (Type == MessageType.Card)
+        {
+            _cards = MessageHelper.ParseCards(model.Content);
+            _attachments = _attachments.AddRange(MessageHelper.ParseAttachments(_cards.OfType<Card>()));
+        }
         _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
 
         _pokes = Type == MessageType.Poke && model.MentionInfo?.Pokes is not null
@@ -147,9 +148,9 @@ public class RestUserMessage : RestMessage, IUserMessage
         base.Update(model);
         var guildId = (Channel as IGuildChannel)?.GuildId;
         var guild = guildId != null ? (Kook as IKookClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).GetAwaiter().GetResult() : null;
-        if (model.Type == MessageType.Text)
+        if (Type == MessageType.Text)
             _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.PlainText);
-        else if (model.Type == MessageType.KMarkdown)
+        else if (Type == MessageType.KMarkdown)
             _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.KMarkdown);
         
         if (model.Quote is not null)
@@ -159,12 +160,13 @@ public class RestUserMessage : RestMessage, IUserMessage
         }
 
         if (model.Attachment is not null)
-            _attachment = Attachment.Create(model.Attachment);
-        
-        _cards = model.Type == MessageType.Card 
-            ? MessageHelper.ParseCards(model.Content) 
-            : ImmutableArray.Create<ICard>();
-        
+            _attachments = _attachments.Add(Attachment.Create(model.Attachment));
+
+        if (Type == MessageType.Card)
+        {
+            _cards = MessageHelper.ParseCards(model.Content);
+            _attachments = _attachments.AddRange(MessageHelper.ParseAttachments(_cards.OfType<Card>()));
+        }
         _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
         
         if (Type == MessageType.Poke && model.MentionInfo?.Pokes is not null)
@@ -192,8 +194,8 @@ public class RestUserMessage : RestMessage, IUserMessage
         TagHandling roleHandling = TagHandling.Name, TagHandling everyoneHandling = TagHandling.Ignore, TagHandling emojiHandling = TagHandling.Name)
         => MentionUtils.Resolve(this, 0, userHandling, channelHandling, roleHandling, everyoneHandling, emojiHandling);
 
-    private string DebuggerDisplay => $"{Author}: {Content} ({Id}{(Attachment is not null ? ", Attachment" : "")})";
-    
+    private string DebuggerDisplay => $"{Author}: {Content} ({Id}{(Attachments is not null && Attachments.Any() ? $", {Attachments.Count} Attachment{(Attachments.Count == 1 ? string.Empty : "s")}" : string.Empty)})";
+
     #region IUserMessage
     
     /// <inheritdoc />

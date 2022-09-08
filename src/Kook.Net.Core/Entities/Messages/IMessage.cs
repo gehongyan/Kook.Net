@@ -113,7 +113,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     /// <returns>
     ///     The attachment included in this message;
     /// </returns>
-    IAttachment Attachment { get; }
+    IReadOnlyCollection<IAttachment> Attachments { get; }
     
     /// <summary>
     ///     Gets all cards included in this message.

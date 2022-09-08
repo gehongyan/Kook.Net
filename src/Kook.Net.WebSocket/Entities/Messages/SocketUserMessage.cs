@@ -20,7 +20,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     private bool? _isMentioningEveryone;
     private bool? _isMentioningHere;
     private Quote _quote;
-    private Attachment _attachment;
+    private ImmutableArray<Attachment> _attachments = ImmutableArray.Create<Attachment>();
     private ImmutableArray<ICard> _cards = ImmutableArray.Create<ICard>();
     private ImmutableArray<IEmbed>? _embeds;
     private ImmutableArray<SocketPokeAction> _pokes;
@@ -41,7 +41,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     public new bool? IsPinned { get; internal set; }
 
     /// <inheritdoc />
-    public override Attachment Attachment => _attachment;
+    public override IReadOnlyCollection<Attachment> Attachments => _attachments;
     /// <inheritdoc />  
     public override IReadOnlyCollection<ICard> Cards => _cards;
     /// <inheritdoc />  
@@ -108,11 +108,13 @@ public class SocketUserMessage : SocketMessage, IUserMessage
                 model.Quote.CreateAt, guild.GetUser(model.Quote.Author.Id));
 
         if (model.Attachment is not null)
-            _attachment = Attachment.Create(model.Attachment);
+            _attachments = _attachments.Add(Attachment.Create(model.Attachment));
 
-        _cards = Type == MessageType.Card 
-            ? MessageHelper.ParseCards(gatewayEvent.Content) 
-            : ImmutableArray.Create<ICard>();
+        if (Type == MessageType.Card)
+        {
+            _cards = MessageHelper.ParseCards(gatewayEvent.Content);
+            _attachments = _attachments.AddRange(MessageHelper.ParseAttachments(_cards.OfType<Card>()));
+        }
         _pokes = Type == MessageType.Poke && model.KMarkdownInfo?.Pokes is not null
             ? model.KMarkdownInfo.Pokes.Select(x => SocketPokeAction.Create(Kook, Author, MentionedUsers, x)).ToImmutableArray()
             : ImmutableArray<SocketPokeAction>.Empty;
@@ -130,11 +132,13 @@ public class SocketUserMessage : SocketMessage, IUserMessage
                 model.Quote.CreateAt, state.GetUser(model.Quote.Author.Id));
 
         if (model.Attachment is not null)
-            _attachment = Attachment.Create(model.Attachment);
+            _attachments = _attachments.Add(Attachment.Create(model.Attachment));
 
-        _cards = Type == MessageType.Card 
-            ? MessageHelper.ParseCards(gatewayEvent.Content) 
-            : ImmutableArray.Create<ICard>();
+        if (Type == MessageType.Card)
+        {
+            _cards = MessageHelper.ParseCards(gatewayEvent.Content);
+            _attachments = _attachments.AddRange(MessageHelper.ParseAttachments(_cards.OfType<Card>()));
+        }
         if (Type == MessageType.Poke && model.KMarkdownInfo?.Pokes is not null)
         {
             SocketUser recipient = (Channel as SocketDMChannel)?.Recipient;
@@ -166,11 +170,13 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown);
         
         if (model.Attachment is not null)
-            _attachment = Attachment.Create(model.Attachment);
-        
-        _cards = Type == MessageType.Card 
-            ? MessageHelper.ParseCards(model.Content) 
-            : ImmutableArray.Create<ICard>();
+            _attachments = _attachments.Add(Attachment.Create(model.Attachment));
+
+        if (Type == MessageType.Card)
+        {
+            _cards = MessageHelper.ParseCards(model.Content);
+            _attachments = _attachments.AddRange(MessageHelper.ParseAttachments(_cards.OfType<Card>()));
+        }
         _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
         _pokes = Type == MessageType.Poke && model.MentionInfo?.Pokes is not null
             ? model.MentionInfo.Pokes.Select(x => SocketPokeAction.Create(Kook, Author,
@@ -190,12 +196,13 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown);
         
         if (model.Attachment is not null)
-            _attachment = Attachment.Create(model.Attachment);
-        
-        _cards = Type == MessageType.Card 
-            ? MessageHelper.ParseCards(model.Content) 
-            : ImmutableArray.Create<ICard>();
-        
+            _attachments = _attachments.Add(Attachment.Create(model.Attachment));
+
+        if (Type == MessageType.Card)
+        {
+            _cards = MessageHelper.ParseCards(model.Content);
+            _attachments = _attachments.AddRange(MessageHelper.ParseAttachments(_cards.OfType<Card>()));
+        }
         _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
         if (Type == MessageType.Poke && model.MentionInfo?.Pokes is not null)
         {
@@ -266,7 +273,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         TagHandling roleHandling = TagHandling.Name, TagHandling everyoneHandling = TagHandling.Ignore, TagHandling emojiHandling = TagHandling.Name)
         => MentionUtils.Resolve(this, 0, userHandling, channelHandling, roleHandling, everyoneHandling, emojiHandling);
     
-    private string DebuggerDisplay => $"{Author}: {Content} ({Id}{(Attachment is not null ? ", Attachment" : "")})";
+    private string DebuggerDisplay => $"{Author}: {Content} ({Id}{(Attachments is not null && Attachments.Any() ? $", {Attachments.Count} Attachment{(Attachments.Count == 1 ? string.Empty : "s")}" : string.Empty)})";
     internal new SocketUserMessage Clone() => MemberwiseClone() as SocketUserMessage;
 
     #region IUserMessage

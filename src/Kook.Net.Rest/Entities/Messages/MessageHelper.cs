@@ -279,6 +279,47 @@ internal static class MessageHelper
         };
         return JsonSerializer.Serialize(cardBases, serializerOptions);
     }
+    
+    public static IReadOnlyCollection<Attachment> ParseAttachments(IEnumerable<Card> cards)
+    {
+        List<Attachment> attachments = new();
+        IEnumerable<IModule> modules = cards.SelectMany(x => x.Modules);
+        foreach (IModule module in modules)
+        {
+            switch (module)
+            {
+                case FileModule fileModule:
+                    attachments.Add(new Attachment(AttachmentType.File, fileModule.Source, fileModule.Title, 
+                        null, null, null, null, null));
+                    break;
+                case AudioModule audioModule:
+                    attachments.Add(new Attachment(AttachmentType.Audio, audioModule.Source, audioModule.Title, 
+                        null, null, null, null, null));
+                    break;
+                case VideoModule videoModule:
+                    attachments.Add(new Attachment(AttachmentType.Video, videoModule.Source, videoModule.Title, 
+                        null, null, null, null, null));
+                    break;
+                case ContainerModule containerModule:
+                    attachments.AddRange(containerModule.Elements.Select(x => 
+                        new Attachment(AttachmentType.Image, x.Source, x.Alternative, 
+                        null, null, null, null, null)));
+                    break;
+                case ImageGroupModule imageGroupModule:
+                    attachments.AddRange(imageGroupModule.Elements.Select(x => 
+                        new Attachment(AttachmentType.Image, x.Source, x.Alternative, 
+                        null, null, null, null, null)));
+                    break;
+                case ContextModule contextModule:
+                    attachments.AddRange(contextModule.Elements
+                        .OfType<ImageElement>()
+                        .Select(x => new Attachment(AttachmentType.Image, x.Source, x.Alternative, 
+                            null, null, null, null, null)));
+                    break;
+            }
+        }
+        return attachments;
+    }
 
     public static string SanitizeMessage(IMessage message)
     {

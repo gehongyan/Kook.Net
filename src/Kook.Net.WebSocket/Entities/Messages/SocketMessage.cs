@@ -60,7 +60,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// <summary>
     ///     Gets the attachment included in this message.
     /// </summary>
-    public virtual Attachment Attachment { get; private set; }
+    public virtual IReadOnlyCollection<Attachment> Attachments { get; private set; }
 
     /// <summary>
     ///     Returns all cards included in this message.
@@ -319,7 +319,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     IReadOnlyCollection<ulong> IMessage.MentionedUserIds => MentionedUsers.Select(x => x.Id).ToImmutableArray();
     /// <inheritdoc />
-    IAttachment IMessage.Attachment => Attachment;
+    IReadOnlyCollection<IAttachment> IMessage.Attachments => Attachments;
     /// <inheritdoc />
     IReadOnlyCollection<ICard> IMessage.Cards => Cards;
     /// <inheritdoc />
