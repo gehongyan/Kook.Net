@@ -20,11 +20,11 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     /// <inheritdoc />
     public abstract bool? IsBanned { get; internal set; }
     /// <inheritdoc />
-    public abstract bool? IsVIP { get; internal set; }
+    public abstract bool? HasBuff { get; internal set; }
     /// <inheritdoc />
     public abstract string Avatar { get; internal set; }
     /// <inheritdoc />
-    public abstract string VIPAvatar { get; internal set; }
+    public abstract string BuffAvatar { get; internal set; }
     /// <inheritdoc />
     public abstract bool? IsDenoiseEnabled { get; internal set; }
     /// <inheritdoc />
@@ -95,9 +95,9 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
             IsBanned = model.Status == 10;
             hasChanges = true;
         }
-        if (model.IsVIP != IsVIP)
+        if (model.HasBuff != HasBuff)
         {
-            IsVIP = model.IsVIP;
+            HasBuff = model.HasBuff;
             hasChanges = true;
         }
         if (model.Avatar != Avatar)
@@ -105,9 +105,9 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
             Avatar = model.Avatar;
             hasChanges = true;
         }
-        if (model.VIPAvatar != VIPAvatar)
+        if (model.BuffAvatar != BuffAvatar)
         {
-            VIPAvatar = model.VIPAvatar;
+            BuffAvatar = model.BuffAvatar;
             hasChanges = true;
         }
         if (model.IsDenoiseEnabled != IsDenoiseEnabled)

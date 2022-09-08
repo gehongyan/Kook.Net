@@ -23,17 +23,17 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// </summary>
     bool? IsBanned { get; }
     /// <summary>
-    ///     Gets whether this user is VIP; <c>null</c> if unknown.
+    ///     Gets whether this user has subscribed to BUFF; <c>null</c> if unknown.
     /// </summary>
-    bool? IsVIP { get; }
+    bool? HasBuff { get; }
     /// <summary>
     ///     Gets the link to this user's avatar.
     /// </summary>
     string Avatar { get; }
     /// <summary>
-    ///     Gets the link to this user's VIP avatar.
+    ///     Gets the link to this user's BUFF avatar.
     /// </summary>
-    string VIPAvatar { get; }
+    string BuffAvatar { get; }
     /// <summary>
     ///     Gets whether this user enabled denoise feature; <c>null</c> if unknown.
     /// </summary>

@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Kook.API;
 
-internal class MentionUser
+internal class MentionedUser
 {
     [JsonPropertyName("id")] public ulong Id { get; set; }
     [JsonPropertyName("username")] public string Username { get; set; }

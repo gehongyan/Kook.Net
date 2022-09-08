@@ -31,6 +31,10 @@ public enum MessageType
     /// </summary>
     Card = 10,
     /// <summary>
+    ///     道具消息
+    /// </summary>
+    Poke = 12,
+    /// <summary>
     ///     系统消息
     /// </summary>
     System = 255

@@ -79,15 +79,20 @@ class Program
         // IReadOnlyCollection<SocketGuildUser> connectedUsers = await kookSocketClient.GetGuild(7557797319758285).GetVoiceChannel(9816956151862920).GetConnectedUsersAsync();
         // Stream stream = await new HttpClient().GetStreamAsync("https://img.kaiheila.cn/attachments/2021-01/21/600975671b9ab.mp3");
         // await _client.GetUser(2810246202).SendFileAsync(new FileAttachment(stream, "Filename", AttachmentType.Audio));
-        Cacheable<IUserMessage,Guid> message = await (await _client.GetUserAsync(2810246202)).SendTextAsync("1234567");
-        IUserMessage msg = await message.GetOrDownloadAsync();
+        // Cacheable<IUserMessage,Guid> message = await (await _client.GetUserAsync(2810246202)).SendTextAsync("1234567");
+        // IUserMessage msg = await message.GetOrDownloadAsync();
         // (Guid messageId, DateTimeOffset messageTimestamp) = await _client.GetGuild(7557797319758285).GetTextChannel(7888175654136995)
             // .SendFileAsync(new FileAttachment(stream, "Filename", AttachmentType.Audio));
         // (Guid messageId, DateTimeOffset messageTimestamp) = await _client.GetGuild(7557797319758285)
         //     .GetTextChannel(7888175654136995)
         //     .SendVideoMessageAsync("D:\\1.mp4");
         // IMessage message = await _client.GetGuild(7557797319758285).GetTextChannel(7888175654136995)
-            // .GetMessageAsync(messageId);
+        //     .GetMessageAsync(Guid.Parse("dad3df69-af9e-4bb9-8b8c-c2ca2239685e"));
+        // SocketDMChannel socketDMChannel = await _client.GetUser(2810246202).CreateDMChannelAsync();
+        // IMessage messageAsync = await socketDMChannel.GetMessageAsync(Guid.Parse("0f2b0e9f-82ea-4c30-b91d-7956b10fbd29"));
+        IMessage listAsync = await _client.GetGuild(7557797319758285).GetTextChannel(7888175654136995).GetMessageAsync(Guid.Parse("617573e1-edb5-43c7-93d1-3c6430078c6b"));
+        // IDMChannel socketDMChannel = await (await _client.GetUserAsync(2810246202)).CreateDMChannelAsync();
+        // List<IReadOnlyCollection<IMessage>> async = await socketDMChannel.GetMessagesAsync().ToListAsync();
     }
 
     // {

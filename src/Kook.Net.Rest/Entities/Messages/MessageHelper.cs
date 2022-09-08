@@ -464,7 +464,7 @@ internal static class MessageHelper
     {
         if (msg.Author.Bot ?? false)
             return MessageSource.Bot;
-        if (msg.Type == MessageType.System)
+        if (msg.Author.Id == KookConfig.SystemMessageAuthorID)
             return MessageSource.System;
         return MessageSource.User;
     }
@@ -472,7 +472,7 @@ internal static class MessageHelper
     {
         if (author.IsBot ?? false)
             return MessageSource.Bot;
-        if (msg.Type == MessageType.System)
+        if (msg.AuthorId == KookConfig.SystemMessageAuthorID)
             return MessageSource.System;
         return MessageSource.User;
     }

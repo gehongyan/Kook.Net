@@ -5,34 +5,27 @@ using System.Text.Json.Serialization;
 
 namespace Kook;
 
-/// <summary>
-///     Represents a unimplemented embed.
-/// </summary>
-public struct NotImplementedEmbed : IEmbed
+public struct NotImplementedPokeResource : IPokeResource
 {
-    internal NotImplementedEmbed(string rawType, JsonNode jsonNode)
+    internal NotImplementedPokeResource(string rawType, JsonNode jsonNode)
     {
         RawType = rawType;
-        Url = null;
         JsonNode = jsonNode;
     }
-
+    
     /// <inheritdoc />
-    public EmbedType Type => EmbedType.NotImplemented;
-
+    public PokeResourceType Type => PokeResourceType.NotImplemented;
+    
     /// <summary>
-    ///     Gets the type of the embed.
+    ///     Gets the type of the poke resource.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the type of the embed.
+    ///     A <see langword="string"/> representing the type of the poke resource.
     /// </returns>
     /// <remarks>
     ///     This value originally came from the <c>type</c> field of the <see cref="JsonNode"/>.
     /// </remarks>
     public string RawType { get; internal set; }
-    
-    /// <inheritdoc />
-    public string Url { get; internal set; }
     
     /// <summary>
     ///     Gets the raw JSON of the embed.
@@ -41,7 +34,7 @@ public struct NotImplementedEmbed : IEmbed
     ///     A JsonNode representing the raw JSON of the embed.
     /// </returns>
     public JsonNode JsonNode { get; internal set; }
-
+    
     /// <summary>
     ///     Resolves the embed to a concrete type via JSON deserialization.
     /// </summary>
@@ -55,15 +48,15 @@ public struct NotImplementedEmbed : IEmbed
     ///     A <typeparamref name="T"/> representing the resolved embed.
     /// </returns>
     public T Resolve<T>(JsonSerializerOptions options = null)
-        where T : IEmbed
+        where T : IPokeResource
     {
         options ??= new JsonSerializerOptions
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
-        T embed = JsonNode.Deserialize<T>(options);
-        return embed;
+        T pokeResource = JsonNode.Deserialize<T>(options);
+        return pokeResource;
     }
     
     /// <summary>
@@ -78,10 +71,10 @@ public struct NotImplementedEmbed : IEmbed
     /// <returns>
     ///     A <typeparamref name="T"/> representing the resolved embed.
     /// </returns>
-    public T Resolve<T>(Func<NotImplementedEmbed, T> resolvingFunc)
-        where T : IEmbed
+    public T Resolve<T>(Func<NotImplementedPokeResource, T> resolvingFunc)
+        where T : IPokeResource
     {
-        T embed = resolvingFunc(this);
-        return embed;
+        T pokeResource = resolvingFunc(this);
+        return pokeResource;
     }
 }

@@ -24,11 +24,11 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     /// <inheritdoc />
     public bool? IsBanned { get; internal set; }
     /// <inheritdoc />
-    public bool? IsVIP { get; internal set; }
+    public bool? HasBuff { get; internal set; }
     /// <inheritdoc />
     public string Avatar { get; internal set; }
     /// <inheritdoc />
-    public string VIPAvatar { get; internal set; }
+    public string BuffAvatar { get; internal set; }
     /// <inheritdoc />
     public bool? IsDenoiseEnabled { get; internal set; }
     /// <inheritdoc />
@@ -42,9 +42,9 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     
     internal RestPresence Presence { get; set; }
     /// <inheritdoc />
-    public bool? IsOnline => Presence.IsOnline;
+    public bool? IsOnline => Presence?.IsOnline;
     /// <inheritdoc />
-    public ClientType? ActiveClient => Presence.ActiveClient;
+    public ClientType? ActiveClient => Presence?.ActiveClient;
     
     internal RestUser(BaseKookClient kook, ulong id)
         : base(kook, id)
@@ -57,9 +57,9 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         return entity;
     }
 
-    internal static RestUser Create(BaseKookClient kook, API.MentionUser model)
+    internal static RestUser Create(BaseKookClient kook, API.MentionedUser model)
         => Create(kook, null, model);
-    internal static RestUser Create(BaseKookClient kook, IGuild guild, API.MentionUser model)
+    internal static RestUser Create(BaseKookClient kook, IGuild guild, API.MentionedUser model)
     {
         RestUser entity = new RestUser(kook, model.Id);
         entity.Update(model);
@@ -71,16 +71,16 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         IdentifyNumberValue = ushort.Parse(model.IdentifyNumber, NumberStyles.None, CultureInfo.InvariantCulture);
         IsBot = model.Bot;
         IsBanned = model.Status == 10;
-        IsVIP = model.IsVIP;
+        HasBuff = model.HasBuff;
         Avatar = model.Avatar;
-        VIPAvatar = model.VIPAvatar;
+        BuffAvatar = model.BuffAvatar;
         IsDenoiseEnabled = model.IsDenoiseEnabled;
         UserTag = model.UserTag?.ToEntity();
         
         UpdatePresence(model.Online, model.OperatingSystem);
     }
 
-    internal virtual void Update(API.MentionUser model)
+    internal virtual void Update(API.MentionedUser model)
     {
         Username = model.Username;
         IdentifyNumberValue = model.FullName.Length > 4 && ushort.TryParse(model.FullName[^4..], out ushort val) ? val : null;

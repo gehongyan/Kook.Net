@@ -15,11 +15,11 @@ internal class SocketGlobalUser : SocketUser
     /// <inheritdoc />
     public override bool? IsBanned { get; internal set; }
     /// <inheritdoc />
-    public override bool? IsVIP { get; internal set; }
+    public override bool? HasBuff { get; internal set; }
     /// <inheritdoc />
     public override string Avatar { get; internal set; }
     /// <inheritdoc />
-    public override string VIPAvatar { get; internal set; }
+    public override string BuffAvatar { get; internal set; }
     /// <inheritdoc />
     public override bool? IsDenoiseEnabled { get; internal set; }
     /// <inheritdoc />

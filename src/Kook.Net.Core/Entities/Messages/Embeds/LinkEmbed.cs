@@ -3,7 +3,7 @@ namespace Kook;
 /// <summary>
 ///     Represents a link embed.
 /// </summary>
-public class LinkEmbed : IEmbed
+public struct LinkEmbed : IEmbed
 {
     internal LinkEmbed(string url, string title, string description, string siteName, Color color, string image)
     {

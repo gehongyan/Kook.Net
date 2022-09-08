@@ -19,8 +19,11 @@ public class RestUserMessage : RestMessage, IUserMessage
     private Quote _quote;
     private Attachment _attachment;
     private ImmutableArray<ICard> _cards = ImmutableArray.Create<ICard>();
-    private ImmutableArray<IEmbed>? _embeds;
+    private ImmutableArray<IEmbed> _embeds;
+    private ImmutableArray<RestPokeAction> _pokes;
     private ImmutableArray<uint> _roleMentionIds = ImmutableArray.Create<uint>();
+    private ImmutableArray<RestRole> _roleMentions = ImmutableArray.Create<RestRole>();
+    private ImmutableArray<RestGuildChannel> _channelMentions = ImmutableArray.Create<RestGuildChannel>();
     private ImmutableArray<ITag> _tags = ImmutableArray.Create<ITag>();
     
     /// <inheritdoc cref="IUserMessage.Quote"/>
@@ -35,11 +38,21 @@ public class RestUserMessage : RestMessage, IUserMessage
     /// <inheritdoc />  
     public override IReadOnlyCollection<IEmbed> Embeds => _embeds;
     /// <inheritdoc />
+    public override IReadOnlyCollection<RestPokeAction> Pokes => _pokes;
+    /// <inheritdoc />
     public override bool? MentionedEveryone => _isMentioningEveryone;
     /// <inheritdoc />
     public override bool? MentionedHere => _isMentioningHere;
     /// <inheritdoc />
     public override IReadOnlyCollection<uint> MentionedRoleIds => _roleMentionIds;
+    /// <summary>
+    ///     Gets a collection of the mentioned roles in the message.
+    /// </summary>
+    public IReadOnlyCollection<RestRole> MentionedRoles => _roleMentions;
+    /// <summary>
+    ///     Gets a collection of the mentioned channels in the message.
+    /// </summary>
+    public IReadOnlyCollection<RestGuildChannel> MentionedChannels => _channelMentions;
     /// <inheritdoc />
     public override IReadOnlyCollection<ITag> Tags => _tags;
     
@@ -69,9 +82,44 @@ public class RestUserMessage : RestMessage, IUserMessage
             _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.PlainText);
         else if (model.Type == MessageType.KMarkdown)
             _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.KMarkdown);
-        _isMentioningEveryone = model.MentionAll;
-        _isMentioningHere = model.MentionHere;
-        _roleMentionIds = model.MentionRoles.ToImmutableArray();
+        _isMentioningEveryone = model.MentionedAll;
+        _isMentioningHere = model.MentionedHere;
+        _roleMentionIds = model.MentionedRoles.ToImmutableArray();
+        
+        if (Channel is IGuildChannel guildChannel)
+        {
+            if (model.MentionInfo?.MentionedRoles is not null)
+            {
+                var value = model.MentionInfo.MentionedRoles;
+                if (value.Length > 0)
+                {
+                    var newMentions = ImmutableArray.CreateBuilder<RestRole>(value.Length);
+                    for (int i = 0; i < value.Length; i++)
+                    {
+                        var val = value[i];
+                        if (val != null)
+                            newMentions.Add(RestRole.Create(Kook, guildChannel.Guild, val));
+                    }
+                    _roleMentions = newMentions.ToImmutable();
+                }
+            }
+
+            if (model.MentionInfo?.MentionedChannels is not null)
+            {
+                var value = model.MentionInfo.MentionedChannels;
+                if (value.Length > 0)
+                {
+                    var newMentions = ImmutableArray.CreateBuilder<RestGuildChannel>(value.Length);
+                    for (int i = 0; i < value.Length; i++)
+                    {
+                        var val = value[i];
+                        if (val != null)
+                            newMentions.Add(RestGuildChannel.Create(Kook, guildChannel.Guild, val));
+                    }
+                    _channelMentions = newMentions.ToImmutable();
+                }
+            }
+        }
         
         if (model.Quote is not null)
         {
@@ -87,6 +135,11 @@ public class RestUserMessage : RestMessage, IUserMessage
             : ImmutableArray.Create<ICard>();
         
         _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
+
+        _pokes = Type == MessageType.Poke && model.MentionInfo?.Pokes is not null
+            ? model.MentionInfo.Pokes.Select(x => RestPokeAction.Create(Kook, Author,
+                model.MentionInfo.MentionedUsers.Select(y => RestUser.Create(Kook, y)), x)).ToImmutableArray()
+            : ImmutableArray<RestPokeAction>.Empty;
     }
     
     internal override void Update(DirectMessage model)
@@ -113,6 +166,20 @@ public class RestUserMessage : RestMessage, IUserMessage
             : ImmutableArray.Create<ICard>();
         
         _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
+        
+        if (Type == MessageType.Poke && model.MentionInfo?.Pokes is not null)
+        {
+            IUser recipient = (Channel as IDMChannel)?.Recipient;
+            IUser target = recipient is null
+                ? null
+                : recipient.Id == Author.Id
+                    ? Kook.CurrentUser
+                    : recipient;
+            _pokes = model.MentionInfo.Pokes.Select(x => RestPokeAction.Create(Kook, Author, 
+                new [] {target}, x)).ToImmutableArray();
+        }
+        else
+            _pokes = ImmutableArray<RestPokeAction>.Empty;
     }
     
     /// <param name="startIndex">The zero-based index at which to begin the resolving for the specified value.</param>

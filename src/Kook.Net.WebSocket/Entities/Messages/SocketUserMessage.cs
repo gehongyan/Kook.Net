@@ -23,7 +23,9 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     private Attachment _attachment;
     private ImmutableArray<ICard> _cards = ImmutableArray.Create<ICard>();
     private ImmutableArray<IEmbed>? _embeds;
+    private ImmutableArray<SocketPokeAction> _pokes;
     private ImmutableArray<SocketRole> _roleMentions = ImmutableArray.Create<SocketRole>();
+    private ImmutableArray<SocketGuildChannel> _channelMentions = ImmutableArray.Create<SocketGuildChannel>();
     private ImmutableArray<ITag> _tags = ImmutableArray.Create<ITag>();
 
     /// <inheritdoc cref="IUserMessage.Quote"/>
@@ -45,7 +47,13 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     /// <inheritdoc />  
     public override IReadOnlyCollection<IEmbed> Embeds => _embeds;
     /// <inheritdoc />
+    public override IReadOnlyCollection<SocketPokeAction> Pokes => _pokes;
+    /// <inheritdoc />
     public override IReadOnlyCollection<SocketRole> MentionedRoles => _roleMentions;
+    /// <summary>
+    ///     Gets a collection of the mentioned channels in the message.
+    /// </summary>
+    public IReadOnlyCollection<SocketGuildChannel> MentionedChannels => _channelMentions;
     /// <inheritdoc />
     public override bool? MentionedEveryone => _isMentioningEveryone;
     /// <inheritdoc />
@@ -85,15 +93,15 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     {
         base.Update(state, model, gatewayEvent);
         SocketGuild guild = (Channel as SocketGuildChannel)?.Guild;
-        _isMentioningEveryone = model.MentionAll;
-        _isMentioningHere = model.MentionHere;
-        _roleMentions = model.MentionRoles?.Select(x => guild.GetRole(x)).ToImmutableArray()
-            ?? new ImmutableArray<SocketRole>();
+        _isMentioningEveryone = model.MentionedAll;
+        _isMentioningHere = model.MentionedHere;
+        _roleMentions = model.MentionedRoles?.Select(x => guild.GetRole(x)).ToImmutableArray() ?? new ImmutableArray<SocketRole>();
+        _channelMentions = model.MentionedChannels?.Select(x => guild.GetChannel(x)).ToImmutableArray() ?? new ImmutableArray<SocketGuildChannel>();
         Content = gatewayEvent.Content;
         RawContent = model.KMarkdownInfo?.RawContent;
-        if (model.Type == MessageType.Text)
+        if (Type == MessageType.Text)
             _tags = MessageHelper.ParseTags(gatewayEvent.Content, Channel, guild, MentionedUsers, TagMode.PlainText);
-        else if (model.Type == MessageType.KMarkdown)
+        else if (Type == MessageType.KMarkdown)
             _tags = MessageHelper.ParseTags(gatewayEvent.Content, Channel, guild, MentionedUsers, TagMode.KMarkdown);
         if (model.Quote is not null)
             _quote = Quote.Create(model.Quote.Id, model.Quote.QuotedMessageId, model.Quote.Type, model.Quote.Content, 
@@ -102,10 +110,13 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         if (model.Attachment is not null)
             _attachment = Attachment.Create(model.Attachment);
 
-        _cards = model.Type == MessageType.Card 
+        _cards = Type == MessageType.Card 
             ? MessageHelper.ParseCards(gatewayEvent.Content) 
             : ImmutableArray.Create<ICard>();
-        
+        _pokes = Type == MessageType.Poke && model.KMarkdownInfo?.Pokes is not null
+            ? model.KMarkdownInfo.Pokes.Select(x => SocketPokeAction.Create(Kook, Author, MentionedUsers, x)).ToImmutableArray()
+            : ImmutableArray<SocketPokeAction>.Empty;
+
         Guild = guild;
     }
     
@@ -121,19 +132,33 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         if (model.Attachment is not null)
             _attachment = Attachment.Create(model.Attachment);
 
-        _cards = model.Type == MessageType.Card 
+        _cards = Type == MessageType.Card 
             ? MessageHelper.ParseCards(gatewayEvent.Content) 
             : ImmutableArray.Create<ICard>();
+        if (Type == MessageType.Poke && model.KMarkdownInfo?.Pokes is not null)
+        {
+            SocketUser recipient = (Channel as SocketDMChannel)?.Recipient;
+            SocketUser target = recipient is null
+                ? null
+                : recipient.Id == Author.Id
+                    ? Kook.CurrentUser
+                    : recipient;
+            _pokes = model.KMarkdownInfo.Pokes.Select(x => SocketPokeAction.Create(Kook, Author, 
+                new []{target}, x)).ToImmutableArray();
+        }
+        else
+            _pokes = ImmutableArray<SocketPokeAction>.Empty;
     }
 
+    
     internal override void Update(ClientState state, API.Message model)
     {
         base.Update(state, model);
         SocketGuild guild = (Channel as SocketGuildChannel)?.Guild;
-        _isMentioningEveryone = model.MentionAll;
-        _isMentioningHere = model.MentionHere;
-        _roleMentions = model.MentionRoles?.Select(x => Guild.GetRole(x)).ToImmutableArray()
-                        ?? new ImmutableArray<SocketRole>();
+        _isMentioningEveryone = model.MentionedAll;
+        _isMentioningHere = model.MentionedHere;
+        _roleMentions = model.MentionedRoles?.Select(x => guild.GetRole(x)).ToImmutableArray() ?? new ImmutableArray<SocketRole>();
+        _channelMentions = model.MentionInfo?.MentionedChannels?.Select(x => guild.GetChannel(x.Id)).ToImmutableArray() ?? new ImmutableArray<SocketGuildChannel>();
         Content = model.Content;
         if (Type == MessageType.Text)
             _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText);
@@ -147,9 +172,12 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             ? MessageHelper.ParseCards(model.Content) 
             : ImmutableArray.Create<ICard>();
         _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
-        
-        
-        Guild = guild;
+        _pokes = Type == MessageType.Poke && model.MentionInfo?.Pokes is not null
+            ? model.MentionInfo.Pokes.Select(x => SocketPokeAction.Create(Kook, Author,
+                model.MentionedUsers.Select(state.GetUser), x)).ToImmutableArray()
+            : ImmutableArray<SocketPokeAction>.Empty;
+
+        Guild = guild;  
     }
     internal override void Update(ClientState state, API.DirectMessage model)
     {
@@ -169,7 +197,20 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             : ImmutableArray.Create<ICard>();
         
         _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
-        
+        if (Type == MessageType.Poke && model.MentionInfo?.Pokes is not null)
+        {
+            SocketUser recipient = (Channel as SocketDMChannel)?.Recipient;
+            SocketUser target = recipient is null
+                ? null
+                : recipient.Id == Author.Id
+                    ? Kook.CurrentUser
+                    : recipient;
+            _pokes = model.MentionInfo.Pokes.Select(x => SocketPokeAction.Create(Kook, Author, 
+                new []{target}, x)).ToImmutableArray();
+        }
+        else
+            _pokes = ImmutableArray<SocketPokeAction>.Empty;
+
         Guild = guild;
     }
     internal override void Update(ClientState state, MessageUpdateEvent model)
@@ -190,8 +231,6 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             ? MessageHelper.ParseCards(model.Content) 
             : ImmutableArray.Create<ICard>();
         
-        // TODO: Investigate embed changes
-        
         Guild = guild;
     }
     internal override void Update(ClientState state, DirectMessageUpdateEvent model)
@@ -207,9 +246,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         _cards = Type == MessageType.Card 
             ? MessageHelper.ParseCards(model.Content) 
             : ImmutableArray.Create<ICard>();
-        
-        // TODO: Investigate embed changes
-        
+
         Guild = guild;
     }
     

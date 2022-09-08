@@ -1,6 +1,7 @@
 using Model = Kook.API.Channel;
 
 using System.Collections.Immutable;
+using Kook.API;
 
 namespace Kook.Rest;
 
@@ -50,6 +51,12 @@ public class RestGuildChannel : RestChannel, IGuildChannel
             _ => new RestGuildChannel(kook, guild, model.Id, model.Type),
         };
     }
+    internal static RestGuildChannel Create(BaseKookClient kook, IGuild guild, MentionedChannel model)
+    {
+        var entity = new RestGuildChannel(kook, guild, model.Id, ChannelType.Unspecified);
+        entity.Update(model);
+        return entity;
+    }
     internal override void Update(Model model)
     {
         Type = model.Type;
@@ -74,7 +81,10 @@ public class RestGuildChannel : RestChannel, IGuildChannel
             _rolePermissionOverwrites = newOverwrites.ToImmutable();
         }
     }
-    
+    internal void Update(MentionedChannel model)
+    {
+        Name = model.Name;
+    }
     /// <inheritdoc />
     public async Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions options = null)
     {

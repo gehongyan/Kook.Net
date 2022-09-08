@@ -75,7 +75,14 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// <returns>
     ///     Collection of embed objects.
     /// </returns>
-    public virtual IReadOnlyCollection<IEmbed> Embeds => null;
+    public virtual IReadOnlyCollection<IEmbed> Embeds => ImmutableArray.Create<IEmbed>();
+    /// <summary>
+    ///     Gets a collection of the <see cref="IPokeAction"/>'s on the message.
+    /// </summary>
+    /// <returns>
+    ///     Collection of poke action objects.
+    /// </returns>
+    public virtual IReadOnlyCollection<IPokeAction> Pokes => ImmutableArray.Create<IPokeAction>();
     
     /// <summary>
     ///     Returns the roles mentioned in this message.
@@ -112,13 +119,13 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     }
     internal virtual void Update(ClientState state, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
     {
-        Type = model.Type;
+        Type = gatewayEvent.Type;
         Timestamp = gatewayEvent.MessageTimestamp;
         Content = gatewayEvent.Content;
         
-        if (model.Mention is not null)
+        if (model.MentionedUsers is not null)
         {
-            var ids = model.Mention;
+            var ids = model.MentionedUsers;
             if (ids.Length > 0)
             {
                 var newMentions = ImmutableArray.CreateBuilder<SocketUser>(ids.Length);
@@ -141,7 +148,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     }
     internal virtual void Update(ClientState state, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
     {
-        Type = model.Type;
+        Type = gatewayEvent.Type;
         Timestamp = gatewayEvent.MessageTimestamp;
         Content = gatewayEvent.Content;
     }
@@ -170,9 +177,9 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         EditedTimestamp = model.UpdateAt;
         Content = model.Content;
         
-        if (model.Mention is not null)
+        if (model.MentionedUsers is not null)
         {
-            var ids = model.Mention;
+            var ids = model.MentionedUsers;
             if (ids.Length > 0)
             {
                 var newMentions = ImmutableArray.CreateBuilder<SocketUser>(ids.Length);
@@ -317,5 +324,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     IReadOnlyCollection<ICard> IMessage.Cards => Cards;
     /// <inheritdoc />
     IReadOnlyCollection<IEmbed> IMessage.Embeds => Embeds;
+    /// <inheritdoc />
+    IReadOnlyCollection<IPokeAction> IMessage.Pokes => Pokes;
     #endregion
 }

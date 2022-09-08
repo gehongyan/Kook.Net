@@ -131,6 +131,14 @@ public interface IMessage : IEntity<Guid>, IDeletable
     /// </returns>
     IReadOnlyCollection<IEmbed> Embeds { get; }
     
+    /// <summary>
+    ///     Gets all poke actions included in this message.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of poke actions objects.
+    /// </returns>
+    IReadOnlyCollection<IPokeAction> Pokes { get; }
+    
     #endregion
 
     #region Reactions

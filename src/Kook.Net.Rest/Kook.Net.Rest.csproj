@@ -20,7 +20,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DefineConstants>TRACE;DEBUG_REST</DefineConstants>
+      <DefineConstants>TRACE_REST</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>

@@ -15,16 +15,16 @@ internal class Message
     public string Content { get; set; }
     
     [JsonPropertyName("mention")]
-    public ulong[] Mention { get; set; }
+    public ulong[] MentionedUsers { get; set; }
 
     [JsonPropertyName("mention_all")]
-    public bool MentionAll { get; set; }
+    public bool MentionedAll { get; set; }
 
     [JsonPropertyName("mention_roles")]
-    public uint[] MentionRoles { get; set; }
+    public uint[] MentionedRoles { get; set; }
 
     [JsonPropertyName("mention_here")]
-    public bool MentionHere { get; set; }
+    public bool MentionedHere { get; set; }
 
     [JsonPropertyName("embeds")]
     public EmbedBase[] Embeds { get; set; }

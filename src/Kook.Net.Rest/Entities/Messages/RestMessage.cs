@@ -48,7 +48,11 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// <summary>
     ///     Gets a collection of the <see cref="IEmbed"/>'s on the message.
     /// </summary>
-    public virtual IReadOnlyCollection<IEmbed> Embeds => null;
+    public virtual IReadOnlyCollection<IEmbed> Embeds => ImmutableArray.Create<IEmbed>();
+    /// <summary>
+    ///     Gets a collection of the <see cref="IPokeAction"/>'s on the message.
+    /// </summary>
+    public virtual IReadOnlyCollection<IPokeAction> Pokes => ImmutableArray.Create<IPokeAction>();
     /// <inheritdoc />
     public virtual IReadOnlyCollection<uint> MentionedRoleIds => ImmutableArray.Create<uint>();
     /// <summary>
@@ -115,9 +119,9 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         else
             _reactions = ImmutableArray.Create<RestReaction>();
 
-        if (model.MentionInfo?.MentionUsers is not null)
+        if (model.MentionInfo?.MentionedUsers is not null)
         {
-            var value = model.MentionInfo.MentionUsers;
+            var value = model.MentionInfo.MentionedUsers;
             if (value.Length > 0)
             {
                 var newMentions = ImmutableArray.CreateBuilder<RestUser>(value.Length);
@@ -130,6 +134,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
                 _userMentions = newMentions.ToImmutable();
             }
         }
+
     }
     
     internal virtual void Update(API.DirectMessage model)
@@ -155,9 +160,9 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         else
             _reactions = ImmutableArray.Create<RestReaction>();
         
-        if (model.MentionInfo?.MentionUsers is not null)
+        if (model.MentionInfo?.MentionedUsers is not null)
         {
-            var value = model.MentionInfo.MentionUsers;
+            var value = model.MentionInfo.MentionedUsers;
             if (value.Length > 0)
             {
                 var newMentions = ImmutableArray.CreateBuilder<RestUser>(value.Length);
@@ -256,6 +261,8 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     IReadOnlyCollection<ICard> IMessage.Cards => Cards;
     /// <inheritdoc />
     IReadOnlyCollection<IEmbed> IMessage.Embeds => Embeds;
+    /// <inheritdoc />
+    IReadOnlyCollection<IPokeAction> IMessage.Pokes => Pokes;
     /// <inheritdoc />
     IReadOnlyCollection<ulong> IMessage.MentionedUserIds => MentionedUsers.Select(x => x.Id).ToImmutableArray();
 

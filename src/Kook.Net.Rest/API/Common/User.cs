@@ -14,8 +14,8 @@ internal class User
     [JsonPropertyName("bot")] public bool? Bot { get; set; }
     [JsonPropertyName("status")] public int? Status { get; set; }   
     [JsonPropertyName("avatar")] public string Avatar { get; set; }
-    [JsonPropertyName("vip_avatar")] public string VIPAvatar { get; set; }
-    [JsonPropertyName("is_vip")] public bool? IsVIP { get; set; }
+    [JsonPropertyName("vip_avatar")] public string BuffAvatar { get; set; }
+    [JsonPropertyName("is_vip")] public bool? HasBuff { get; set; }
     [JsonPropertyName("is_ai_reduce_noise")] public bool? IsDenoiseEnabled { get; set; }
     [JsonPropertyName("tag_info")] public UserTag UserTag { get; set; }
     

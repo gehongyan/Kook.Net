@@ -50,11 +50,11 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// <inheritdoc />
     public override string Avatar { get => GlobalUser.Avatar; internal set => GlobalUser.Avatar = value; }
     /// <inheritdoc />
-    public override string VIPAvatar { get => GlobalUser.VIPAvatar; internal set => GlobalUser.VIPAvatar = value; }
+    public override string BuffAvatar { get => GlobalUser.BuffAvatar; internal set => GlobalUser.BuffAvatar = value; }
     /// <inheritdoc />
     public override bool? IsBanned { get => GlobalUser.IsBanned; internal set => GlobalUser.IsBanned = value; }
     /// <inheritdoc />
-    public override bool? IsVIP { get => GlobalUser.IsVIP; internal set => GlobalUser.IsVIP = value; }
+    public override bool? HasBuff { get => GlobalUser.HasBuff; internal set => GlobalUser.HasBuff = value; }
     /// <inheritdoc />
     public override bool? IsDenoiseEnabled { get => GlobalUser.IsDenoiseEnabled; internal set => GlobalUser.IsDenoiseEnabled = value; }
     /// <inheritdoc />

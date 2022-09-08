@@ -370,6 +370,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                         case MessageType.File:
                         case MessageType.Audio:
                         case MessageType.KMarkdown:
+                        case MessageType.Poke:
                         case MessageType.Card:
                         {
                             await _gatewayLogger.DebugAsync($"Received Message ({gatewayEvent.Type}, {gatewayEvent.ChannelType})").ConfigureAwait(false);
@@ -384,7 +385,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                 if (guild != null)
                                     author = guild.GetUser(extraData.Author.Id);
                                 else
-                                    author = (channel as SocketChannel).GetUser(extraData.Author.Id);
+                                    author = (channel as SocketChannel)?.GetUser(extraData.Author.Id);
                                 if (author == null)
                                 {
                                     if (guild != null)

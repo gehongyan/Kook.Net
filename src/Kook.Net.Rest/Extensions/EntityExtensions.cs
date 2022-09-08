@@ -408,25 +408,46 @@ internal static class EntityExtensions
     }
     public static NotImplementedEmbed ToNotImplementedEntity(this API.NotImplementedEmbed model)
     {
-        if (model is null) return null;
         return new NotImplementedEmbed(model.RawType, model.RawJsonNode);
     }
     public static LinkEmbed ToEntity(this API.LinkEmbed model)
     {
-        if (model is null) return null;
         return new LinkEmbed(model.Url, model.Title, model.Description, model.SiteName, model.Color, model.Image);
     }
     public static ImageEmbed ToEntity(this API.ImageEmbed model)
     {
-        if (model is null) return null;
         return new ImageEmbed(model.Url, model.OriginUrl);
     }
     public static BilibiliVideoEmbed ToEntity(this API.BilibiliVideoEmbed model)
     {
-        if (model is null) return null;
         return new BilibiliVideoEmbed(model.Url, model.OriginUrl, model.BvNumber, model.IframePath,
             TimeSpan.FromSeconds(model.Duration), model.Title, model.Cover);
     }
+
+    #endregion
+
+    #region Pokes
+
+    public static IPokeResource ToEntity(this API.PokeResourceBase model)
+    {
+        if (model is null) return null;
+        return model.Type switch
+        {
+            PokeResourceType.ImageAnimation => (model as API.ImageAnimationPokeResource).ToEntity(),
+            _ => (model as API.NotImplementedPokeResource).ToNotImplementedEntity()
+        };
+    }
+    public static NotImplementedPokeResource ToNotImplementedEntity(this API.NotImplementedPokeResource model)
+    {
+        return new NotImplementedPokeResource(model.RawType, model.RawJsonNode);
+    }
+    public static ImageAnimationPokeResource ToEntity(this API.ImageAnimationPokeResource model) =>
+        new(new Dictionary<string, string>()
+        {
+            ["webp"] = model.WebP,
+            ["pag"] = model.PAG,
+            ["gif"] = model.GIF
+        }, TimeSpan.FromMilliseconds(model.Duration), model.Width, model.Height, model.Percent / 100D);
 
     #endregion
     
