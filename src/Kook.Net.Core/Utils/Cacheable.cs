@@ -42,7 +42,7 @@ public struct Cacheable<TEntity, TId>
     ///     Downloads this entity to cache.
     /// </summary>
     /// <exception cref="Kook.Net.HttpException">Thrown when used from a user account.</exception>
-    /// <exception cref="NullReferenceException">Thrown when the message is deleted.</exception>
+    /// <exception cref="NullReferenceException">Thrown when the entity is deleted.</exception>
     /// <returns>
     ///     A task that represents the asynchronous download operation. The task result contains the downloaded
     ///     entity.
@@ -56,10 +56,10 @@ public struct Cacheable<TEntity, TId>
     ///     Returns the cached entity if it exists; otherwise downloads it.
     /// </summary>
     /// <exception cref="Kook.Net.HttpException">Thrown when used from a user account.</exception>
-    /// <exception cref="NullReferenceException">Thrown when the message is deleted and is not in cache.</exception>
+    /// <exception cref="NullReferenceException">Thrown when the entity is deleted and is not in cache.</exception>
     /// <returns>
-    ///     A task that represents the asynchronous operation that attempts to get the message via cache or to
-    ///     download the message. The task result contains the downloaded entity.
+    ///     A task that represents the asynchronous operation that attempts to get the entity via cache or to
+    ///     download the entity. The task result contains the downloaded entity.
     /// </returns>
     public async Task<TEntity> GetOrDownloadAsync() => HasValue ? Value : await DownloadAsync().ConfigureAwait(false);
 }
@@ -98,7 +98,7 @@ public struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationship, TId>
     ///     Downloads this entity.
     /// </summary>
     /// <exception cref="Kook.Net.HttpException">Thrown when used from a user account.</exception>
-    /// <exception cref="NullReferenceException">Thrown when the message is deleted.</exception>
+    /// <exception cref="NullReferenceException">Thrown when the entity is deleted.</exception>
     /// <returns>
     ///     A task that represents the asynchronous download operation. The task result contains the downloaded
     ///     entity.
@@ -112,10 +112,10 @@ public struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationship, TId>
     ///     Returns the cached entity if it exists; otherwise downloads it.
     /// </summary>
     /// <exception cref="Kook.Net.HttpException">Thrown when used from a user account.</exception>
-    /// <exception cref="NullReferenceException">Thrown when the message is deleted and is not in cache.</exception>
+    /// <exception cref="NullReferenceException">Thrown when the entity is deleted and is not in cache.</exception>
     /// <returns>
-    ///     A task that represents the asynchronous operation that attempts to get the message via cache or to
-    ///     download the message. The task result contains the downloaded entity.
+    ///     A task that represents the asynchronous operation that attempts to get the entity via cache or to
+    ///     download the entity. The task result contains the downloaded entity.
     /// </returns>
     public async Task<TRelationship> GetOrDownloadAsync() => HasValue ? Value : await DownloadAsync().ConfigureAwait(false);
 }
