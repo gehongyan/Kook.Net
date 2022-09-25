@@ -17,7 +17,7 @@
 
 ## Documentation
 
-- [Simplified Chinese](https://kaiheila.net)
+- [Simplified Chinese](https://kooknet.dev)
 
 ---
 
