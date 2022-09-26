@@ -41,4 +41,5 @@ public class GuildEmote : Emote
     ///     A string representing the raw presentation of the emote.
     /// </returns>
     public override string ToString() => $"(emj){Name}(emj)[{Id}]";
+    internal GuildEmote Clone() => MemberwiseClone() as GuildEmote;
 }

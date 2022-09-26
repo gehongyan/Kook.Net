@@ -450,6 +450,32 @@ public abstract partial class BaseSocketClient
 
     #endregion
 
+    #region Emotes
+
+    /// <summary> Fired when a emote is created. </summary>
+    public event Func<GuildEmote, Task> EmoteCreated
+    {
+        add => _emoteCreatedEvent.Add(value);
+        remove => _emoteCreatedEvent.Remove(value);
+    }
+    internal readonly AsyncEvent<Func<GuildEmote, Task>> _emoteCreatedEvent = new AsyncEvent<Func<GuildEmote, Task>>();
+    /// <summary> Fired when a emote is deleted. </summary>
+    public event Func<GuildEmote, Task> EmoteDeleted
+    {
+        add => _emoteDeletedEvent.Add(value);
+        remove => _emoteDeletedEvent.Remove(value);
+    }
+    internal readonly AsyncEvent<Func<GuildEmote, Task>> _emoteDeletedEvent = new AsyncEvent<Func<GuildEmote, Task>>();
+    /// <summary> Fired when a emote is updated. </summary>
+    public event Func<GuildEmote, GuildEmote, Task> EmoteUpdated
+    {
+        add => _emoteUpdatedEvent.Add(value);
+        remove => _emoteUpdatedEvent.Remove(value);
+    }
+    internal readonly AsyncEvent<Func<GuildEmote, GuildEmote, Task>> _emoteUpdatedEvent = new AsyncEvent<Func<GuildEmote, GuildEmote, Task>>();
+
+    #endregion
+
     #region Guilds
     
     /// <summary> Fired when the connected account joins a guild. </summary>

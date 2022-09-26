@@ -26,7 +26,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     private ConcurrentDictionary<ulong, SocketGuildUser> _members;
     private ConcurrentDictionary<uint, SocketRole> _roles;
     private ConcurrentDictionary<ulong, SocketVoiceState> _voiceStates;
-    private ImmutableArray<GuildEmote> _emotes;
+    private ConcurrentDictionary<string, GuildEmote> _emotes;
     
     /// <inheritdoc />
     public string Name { get; private set; }
@@ -194,7 +194,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         .Where(c => CurrentUser.GetPermissions(c).ViewChannel)
         .SingleOrDefault(c => c.Id == WelcomeChannelId);
     /// <inheritdoc cref="IGuild.Emotes"/>
-    public IReadOnlyCollection<GuildEmote> Emotes => _emotes;
+    public IReadOnlyCollection<GuildEmote> Emotes => _emotes.Select(x => x.Value).Where(x => x != null).ToReadOnlyCollection(_emotes);
     /// <summary>
     ///     Gets a collection of users in this guild.
     /// </summary>
@@ -233,10 +233,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </remarks>
     public IReadOnlyCollection<SocketRole> Roles => _roles.ToReadOnlyCollection();
     
-    internal SocketGuild(KookSocketClient kook, ulong id) : base(kook, id)
-    {
-        _emotes = ImmutableArray.Create<GuildEmote>();
-    }
+    internal SocketGuild(KookSocketClient kook, ulong id) : base(kook, id) { }
     internal static SocketGuild Create(KookSocketClient client, ClientState state, Model model)
     {
         var entity = new SocketGuild(client, model.Id);
@@ -284,13 +281,10 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         
         if (model.Emojis != null)
         {
-            var emojis = ImmutableArray.CreateBuilder<GuildEmote>(model.Emojis.Length);
-            for (int i = 0; i < model.Emojis.Length; i++)
-                emojis.Add(model.Emojis[i].ToEntity(model.Id));
-            _emotes = emojis.ToImmutable();
+            _emotes.Clear();
+            foreach (API.Emoji emoji in model.Emojis)
+                _emotes.TryAdd(emoji.Id, emoji.ToEntity(model.Id));
         }
-        else
-            _emotes = ImmutableArray.Create<GuildEmote>();
     }
     internal void Update(ClientState state, ExtendedModel model)
     {
@@ -352,6 +346,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
         _members ??= new ConcurrentDictionary<ulong, SocketGuildUser>();
         _voiceStates ??= new ConcurrentDictionary<ulong, SocketVoiceState>();
+        _emotes ??= new ConcurrentDictionary<string, GuildEmote>();
     }
     internal void Update(ClientState state, GuildEvent model)
     {
@@ -456,14 +451,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </returns>
     public SocketVoiceChannel GetVoiceChannel(ulong id)
         => GetChannel(id) as SocketVoiceChannel;
-    
-    internal SocketGuildChannel AddChannel(ClientState state, ChannelModel model)
-    {
-        var channel = SocketGuildChannel.Create(this, state, model);
-        _channels.TryAdd(model.Id, channel);
-        state.AddChannel(channel);
-        return channel;
-    }
 
     /// <summary>
     ///     Creates a new text channel in this guild.
@@ -503,6 +490,14 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </returns>
     public Task<RestCategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties> func = null, RequestOptions options = null)
         => GuildHelper.CreateCategoryChannelAsync(this, Kook, name, options, func);
+
+    internal SocketGuildChannel AddChannel(ClientState state, ChannelModel model)
+    {
+        var channel = SocketGuildChannel.Create(this, state, model);
+        _channels.TryAdd(model.Id, channel);
+        state.AddChannel(channel);
+        return channel;
+    }
 
     internal SocketGuildChannel AddOrUpdateChannel(ClientState state, ChannelModel model)
     {
@@ -746,6 +741,41 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     
     #region Emotes
 
+    /// <summary>
+    ///     Gets a guild emoji in this guild.
+    /// </summary>
+    /// <param name="id">The identifier for the guild emoji.</param>
+    /// <returns>
+    ///     A guild emoji associated with the specified <paramref name="id" />; <see langword="null"/> if none is found.
+    /// </returns>
+    public GuildEmote GetEmote(string id)
+    {
+        if (_emotes.TryGetValue(id, out GuildEmote emote))
+            return emote;
+        return null;
+    }
+
+    internal GuildEmote AddEmote(GuildEmojiEvent model)
+    {
+        var emote = model.ToEntity(Id);
+        _emotes.TryAdd(model.Id, emote);
+        return emote;
+    }
+
+    internal GuildEmote AddOrUpdateEmote(GuildEmojiEvent model)
+    {
+        var emote = model.ToEntity(Id);
+        _emotes[model.Id] = emote;
+        return emote;
+    }
+
+    internal GuildEmote RemoveEmote(string id)
+    {
+        if (_emotes.TryRemove(id, out GuildEmote emote))
+            return emote;
+        return null;
+    }
+
     /// <inheritdoc />
     public Task<IReadOnlyCollection<GuildEmote>> GetEmotesAsync(RequestOptions options = null)
         => GuildHelper.GetEmotesAsync(this, Kook, options);
@@ -852,7 +882,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc />
     IReadOnlyCollection<IRole> IGuild.Roles => Roles;
     /// <inheritdoc />
-    IReadOnlyCollection<GuildEmote> IGuild.Emotes => _emotes;
+    IReadOnlyCollection<GuildEmote> IGuild.Emotes => Emotes;
     /// <inheritdoc />
     IRole IGuild.GetRole(uint id) => GetRole(id);
     /// <inheritdoc />

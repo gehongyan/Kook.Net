@@ -1071,6 +1071,72 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                 #endregion
 
+                                #region Guild Emojis
+
+                                // 服务器表情新增
+                                case ("GROUP", "added_emoji"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (added_emoji)").ConfigureAwait(false);
+                                    
+                                    var data = ((JsonElement) extraData.Body).Deserialize<GuildEmojiEvent>(_serializerOptions);
+                                    var guild = State.GetGuild(gatewayEvent.TargetId);
+                                    if (guild != null)
+                                    {
+                                        var emote = guild.AddEmote(data);
+                                        await TimedInvokeAsync(_emoteCreatedEvent, nameof(EmoteCreated), emote).ConfigureAwait(false);
+                                    }
+                                    else
+                                    {
+                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                                    break;
+                                
+                                // 服务器表情更新
+                                case ("GROUP", "updated_emoji"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (updated_emoji)").ConfigureAwait(false);
+                                    
+                                    var data = ((JsonElement) extraData.Body).Deserialize<GuildEmojiEvent>(_serializerOptions);
+                                    var guild = State.GetGuild(gatewayEvent.TargetId);
+                                    if (guild != null)
+                                    {
+                                        var emote = guild.GetEmote(data?.Id);
+                                        var before = emote.Clone();
+                                        var after = guild.AddOrUpdateEmote(data);
+                                        await TimedInvokeAsync(_emoteUpdatedEvent, nameof(EmoteUpdated), before, after).ConfigureAwait(false);
+                                    }
+                                    else
+                                    {
+                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                                    break;
+                                
+                                // 服务器表情删除
+                                case ("GROUP", "deleted_emoji"):
+                                {
+                                    await _gatewayLogger.DebugAsync("Received Event (deleted_emoji)").ConfigureAwait(false);
+                                    
+                                    var data = ((JsonElement) extraData.Body).Deserialize<GuildEmojiEvent>(_serializerOptions);
+                                    var guild = State.GetGuild(gatewayEvent.TargetId);
+                                    if (guild != null)
+                                    {
+                                        var emote = guild.RemoveEmote(data?.Id);
+                                        await TimedInvokeAsync(_emoteDeletedEvent, nameof(EmoteDeleted), emote).ConfigureAwait(false);
+                                    }
+                                    else
+                                    {
+                                        await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                        return;
+                                    }
+                                }
+                                    break;
+
+                                #endregion
+
                                 #region Guilds
 
                                 // 服务器信息更新
