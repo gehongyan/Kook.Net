@@ -532,26 +532,26 @@ public abstract partial class BaseSocketClient
     #region Emotes
 
     /// <summary> Fired when a emote is created. </summary>
-    public event Func<GuildEmote, Task> EmoteCreated
+    public event Func<GuildEmote, SocketGuild, Task> EmoteCreated
     {
         add => _emoteCreatedEvent.Add(value);
         remove => _emoteCreatedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<GuildEmote, Task>> _emoteCreatedEvent = new AsyncEvent<Func<GuildEmote, Task>>();
+    internal readonly AsyncEvent<Func<GuildEmote, SocketGuild, Task>> _emoteCreatedEvent = new AsyncEvent<Func<GuildEmote, SocketGuild, Task>>();
     /// <summary> Fired when a emote is deleted. </summary>
-    public event Func<GuildEmote, Task> EmoteDeleted
+    public event Func<GuildEmote, SocketGuild, Task> EmoteDeleted
     {
         add => _emoteDeletedEvent.Add(value);
         remove => _emoteDeletedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<GuildEmote, Task>> _emoteDeletedEvent = new AsyncEvent<Func<GuildEmote, Task>>();
+    internal readonly AsyncEvent<Func<GuildEmote, SocketGuild, Task>> _emoteDeletedEvent = new AsyncEvent<Func<GuildEmote, SocketGuild, Task>>();
     /// <summary> Fired when a emote is updated. </summary>
-    public event Func<GuildEmote, GuildEmote, Task> EmoteUpdated
+    public event Func<GuildEmote, GuildEmote, SocketGuild, Task> EmoteUpdated
     {
         add => _emoteUpdatedEvent.Add(value);
         remove => _emoteUpdatedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<GuildEmote, GuildEmote, Task>> _emoteUpdatedEvent = new AsyncEvent<Func<GuildEmote, GuildEmote, Task>>();
+    internal readonly AsyncEvent<Func<GuildEmote, GuildEmote, SocketGuild, Task>> _emoteUpdatedEvent = new AsyncEvent<Func<GuildEmote, GuildEmote, SocketGuild, Task>>();
 
     #endregion
 

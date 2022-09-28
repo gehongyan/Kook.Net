@@ -1083,7 +1083,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     if (guild != null)
                                     {
                                         var emote = guild.AddEmote(data);
-                                        await TimedInvokeAsync(_emoteCreatedEvent, nameof(EmoteCreated), emote).ConfigureAwait(false);
+                                        await TimedInvokeAsync(_emoteCreatedEvent, nameof(EmoteCreated), emote, guild).ConfigureAwait(false);
                                     }
                                     else
                                     {
@@ -1105,7 +1105,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                         var emote = guild.GetEmote(data?.Id);
                                         var before = emote.Clone();
                                         var after = guild.AddOrUpdateEmote(data);
-                                        await TimedInvokeAsync(_emoteUpdatedEvent, nameof(EmoteUpdated), before, after).ConfigureAwait(false);
+                                        await TimedInvokeAsync(_emoteUpdatedEvent, nameof(EmoteUpdated), before, after, guild).ConfigureAwait(false);
                                     }
                                     else
                                     {
@@ -1125,7 +1125,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     if (guild != null)
                                     {
                                         var emote = guild.RemoveEmote(data?.Id);
-                                        await TimedInvokeAsync(_emoteDeletedEvent, nameof(EmoteDeleted), emote).ConfigureAwait(false);
+                                        await TimedInvokeAsync(_emoteDeletedEvent, nameof(EmoteDeleted), emote, guild).ConfigureAwait(false);
                                     }
                                     else
                                     {

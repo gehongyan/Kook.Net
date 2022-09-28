@@ -28,6 +28,9 @@ class Program
         // _client.MessageReceived += ClientOnMessageReceived;
         // _client.DirectMessageReceived += ClientOnDirectMessageReceived;
         _client.Ready += ClientOnReady;
+        _client.EmoteCreated += (emote, guild) => Task.CompletedTask;
+        _client.EmoteDeleted += (emote, guild) => Task.CompletedTask;
+        _client.EmoteUpdated += (before, after, guild) => Task.CompletedTask;
         // _client.MessageButtonClicked += ClientOnMessageButtonClicked;
         // _client.MessageDeleted += async (msg, channel) =>
         // {
