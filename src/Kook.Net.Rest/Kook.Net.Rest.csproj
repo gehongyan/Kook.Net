@@ -5,9 +5,9 @@
         <Nullable>disable</Nullable>
         <RootNamespace>Kook.Rest</RootNamespace>
         <LangVersion>default</LangVersion>
-        <Version>0.0.41-alpha</Version>
+        <Version>0.0.42-alpha</Version>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <PackageVersion>0.0.41-alpha</PackageVersion>
+        <PackageVersion>0.0.42-alpha</PackageVersion>
         <Authors>gehongyan</Authors>
         <Description>Kook.Net is an unofficial C# .NET implementation for Kook API.</Description>
         <PackageProjectUrl>https://github.com/gehongyan/Kook.Net</PackageProjectUrl>
@@ -15,12 +15,12 @@
         <RepositoryType>git</RepositoryType>
         <PackageReleaseNotes>Under development</PackageReleaseNotes>
         <Company>gehongyan</Company>
-        <AssemblyVersion>0.0.41.0</AssemblyVersion>
+        <AssemblyVersion>0.0.42.0</AssemblyVersion>
         <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DefineConstants>TRACE_REST</DefineConstants>
+      <DefineConstants>TRACE_REST;DEBUG_REST</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
