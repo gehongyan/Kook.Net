@@ -12,6 +12,7 @@ title: 首页
 [![Nuget Version](https://img.shields.io/nuget/v/Kook.Net)](https://www.nuget.org/packages/Kook.Net)
 [![Nuget](https://img.shields.io/nuget/dt/Kook.Net.Core?color=%230099ff)](https://www.nuget.org/packages/Kook.Net)
 [![License](https://img.shields.io/github/license/gehongyan/Kook.Net)](https://github.com/gehongyan/Kook.Net/blob/master/LICENSE)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net?ref=badge_shield)
 [![Chat on KOOK](https://www.kookapp.cn/api/v3/badge/guild?guild_id=1591057729615250)](https://kook.top/EvxnOb)
 
 ## 什么是 Kook.Net？
