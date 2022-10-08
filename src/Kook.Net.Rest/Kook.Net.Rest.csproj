@@ -13,7 +13,7 @@
         <PackageProjectUrl>https://github.com/gehongyan/Kook.Net</PackageProjectUrl>
         <RepositoryUrl>https://github.com/gehongyan/Kook.Net</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageReleaseNotes>Under development</PackageReleaseNotes>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Company>gehongyan</Company>
         <AssemblyVersion>0.0.42.0</AssemblyVersion>
         <TargetFramework>net6.0</TargetFramework>

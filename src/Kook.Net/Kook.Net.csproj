@@ -13,7 +13,7 @@
         <PackageProjectUrl>https://github.com/gehongyan/Kook.Net</PackageProjectUrl>
         <RepositoryUrl>https://github.com/gehongyan/Kook.Net.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageReleaseNotes>Simply implementation of messages receiving and sending</PackageReleaseNotes>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Company>gehongyan</Company>
         <AssemblyVersion>0.0.42.0</AssemblyVersion>
         <TargetFramework>net6.0</TargetFramework>
