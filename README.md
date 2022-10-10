@@ -55,4 +55,5 @@ Kook.Net was developed with reference to **[Discord.Net](https://github.com/disc
 [Discord.Net contributors](https://github.com/discord-net/Discord.Net/graphs/contributors) holds the copyright 
 for portion of the code in this repository according to [this license](https://github.com/discord-net/Discord.Net/blob/dev/LICENSE).
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/0a4863062e15415b8ebd0f46bc1bbded)](https://app.codacy.com/gh/gehongyan/Kook.Net?utm_source=github.com&utm_medium=referral&utm_content=gehongyan/Kook.Net&utm_campaign=Badge_Grade_Settings)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net?ref=badge_large)
