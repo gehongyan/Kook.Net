@@ -6,7 +6,7 @@ namespace Kook;
 ///     A divider module that can be used in an <see cref="ICard"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class DividerModule : IModule
+public class DividerModule : IModule, IEquatable<DividerModule>
 {
     internal DividerModule()
     {

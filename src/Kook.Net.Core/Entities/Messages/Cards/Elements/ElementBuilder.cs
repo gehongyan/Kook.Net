@@ -6,7 +6,7 @@ namespace Kook;
 /// <summary>
 ///     An element builder to build a <see cref="PlainTextElement"/>.
 /// </summary>
-public class PlainTextElementBuilder : IElementBuilder
+public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElementBuilder>
 {
     private string _content;
 
@@ -159,7 +159,7 @@ public class PlainTextElementBuilder : IElementBuilder
 /// <summary>
 ///     An element builder to build a <see cref="KMarkdownElement"/>.
 /// </summary>
-public class KMarkdownElementBuilder : IElementBuilder
+public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElementBuilder>
 {
     private string _content;
 
@@ -280,7 +280,7 @@ public class KMarkdownElementBuilder : IElementBuilder
 /// <summary>
 ///     An element builder to build an <see cref="ImageElement"/>.
 /// </summary>
-public class ImageElementBuilder : IElementBuilder
+public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuilder>
 {
     private string _alternative;
 
@@ -469,7 +469,7 @@ public class ImageElementBuilder : IElementBuilder
 /// <summary>
 ///     An element builder to build a <see cref="ButtonElement"/>.
 /// </summary>
-public class ButtonElementBuilder : IElementBuilder
+public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBuilder>
 {
     private IElementBuilder _text;
 
@@ -708,7 +708,7 @@ public class ButtonElementBuilder : IElementBuilder
 /// <summary>
 ///     An element builder to build a <see cref="ParagraphStruct"/>.
 /// </summary>
-public class ParagraphStructBuilder : IElementBuilder
+public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStructBuilder>
 {
     private int _columnCount;
     private List<IElementBuilder> _fields;

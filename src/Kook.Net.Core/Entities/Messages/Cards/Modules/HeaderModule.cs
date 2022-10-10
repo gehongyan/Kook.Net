@@ -6,7 +6,7 @@ namespace Kook;
 ///     Represents a header module in an <see cref="ICard"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class HeaderModule : IModule
+public class HeaderModule : IModule, IEquatable<HeaderModule>
 {
     internal HeaderModule(PlainTextElement text)
     {

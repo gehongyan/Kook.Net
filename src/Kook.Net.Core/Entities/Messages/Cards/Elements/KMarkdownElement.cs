@@ -6,7 +6,7 @@ namespace Kook;
 ///     A KMarkdown element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class KMarkdownElement : IElement
+public class KMarkdownElement : IElement, IEquatable<KMarkdownElement>
 {
     internal KMarkdownElement(string content)
     {

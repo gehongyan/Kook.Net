@@ -6,7 +6,7 @@ namespace Kook;
 ///     A plain text element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class PlainTextElement : IElement
+public class PlainTextElement : IElement, IEquatable<PlainTextElement>
 {
     internal PlainTextElement(string content, bool emoji)
     {

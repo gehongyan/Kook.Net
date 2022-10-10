@@ -6,7 +6,7 @@ namespace Kook;
 ///     Represents a video module in an <see cref="ICard"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class VideoModule : IMediaModule
+public class VideoModule : IMediaModule, IEquatable<VideoModule>
 {
     internal VideoModule(string source, string title)
     {

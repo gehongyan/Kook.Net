@@ -8,7 +8,7 @@ namespace Kook;
 ///     Represents a card object seen in an <see cref="IUserMessage"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class Card : ICard
+public class Card : ICard, IEquatable<Card>
 {
     internal Card(CardTheme theme, CardSize size, Color? color, ImmutableArray<IModule> modules)
     {

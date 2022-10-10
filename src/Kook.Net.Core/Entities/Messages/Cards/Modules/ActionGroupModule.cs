@@ -7,7 +7,7 @@ namespace Kook;
 ///     Represents an action group module that can be used in an <see cref="ICard"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class ActionGroupModule : IModule
+public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>
 {
     internal ActionGroupModule(ImmutableArray<ButtonElement> elements)
     {

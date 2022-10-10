@@ -7,7 +7,7 @@ namespace Kook;
 /// Represents an image group module that can be used in an <see cref="ICard"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class ImageGroupModule : IModule
+public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>
 {
     internal ImageGroupModule(ImmutableArray<ImageElement> elements)
     {

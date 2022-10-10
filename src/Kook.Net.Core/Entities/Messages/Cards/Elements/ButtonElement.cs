@@ -6,7 +6,7 @@ namespace Kook;
 ///     A button element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class ButtonElement : IElement
+public class ButtonElement : IElement, IEquatable<ButtonElement>
 {
     internal ButtonElement(ButtonTheme theme, string value, ButtonClickEventType click, IElement text)
     {

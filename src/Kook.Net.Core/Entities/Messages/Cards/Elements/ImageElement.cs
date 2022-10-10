@@ -6,7 +6,7 @@ namespace Kook;
 ///     An image element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class ImageElement : IElement
+public class ImageElement : IElement, IEquatable<ImageElement>
 {
     internal ImageElement(string source, string alternative = null, ImageSize? size = null, bool? circle = null)
     {

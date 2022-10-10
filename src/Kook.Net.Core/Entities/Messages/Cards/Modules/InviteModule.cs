@@ -3,13 +3,10 @@
 namespace Kook;
 
 /// <summary>
-///     邀请模块
+///     An invite module that can be used in an <see cref="ICard"/>.
 /// </summary>
-/// <remarks>
-///     提供服务器邀请/语音频道邀请
-/// </remarks>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class InviteModule : IModule
+public class InviteModule : IModule, IEquatable<InviteModule>
 {
     internal InviteModule(string code)
     {

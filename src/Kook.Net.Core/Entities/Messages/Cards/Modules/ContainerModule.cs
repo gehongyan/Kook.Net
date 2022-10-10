@@ -7,7 +7,7 @@ namespace Kook;
 ///     Represents a container module that can be used in an <see cref="ICard"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class ContainerModule : IModule
+public class ContainerModule : IModule, IEquatable<ContainerModule>
 {
     internal ContainerModule(ImmutableArray<ImageElement> elements)
     {

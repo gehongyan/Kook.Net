@@ -6,7 +6,7 @@ namespace Kook;
 /// <summary>
 ///     Represents a header module builder for creating a <see cref="HeaderModule"/>.
 /// </summary>
-public class HeaderModuleBuilder : IModuleBuilder
+public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilder>
 {
     private PlainTextElementBuilder _text;
 
@@ -134,7 +134,7 @@ public class HeaderModuleBuilder : IModuleBuilder
 /// <summary>
 ///     Represents a section module builder for creating a <see cref="SectionModule"/>.
 /// </summary>
-public class SectionModuleBuilder : IModuleBuilder
+public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuilder>
 {
     private IElementBuilder _text;
     private IElementBuilder _accessory;
@@ -394,7 +394,7 @@ public class SectionModuleBuilder : IModuleBuilder
 /// <summary>
 ///     Representing an image group module builder for create an <see cref="ImageGroupModule"/>.
 /// </summary>
-public class ImageGroupModuleBuilder : IModuleBuilder
+public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModuleBuilder>
 {
     private List<ImageElementBuilder> _elements;
 
@@ -524,7 +524,7 @@ public class ImageGroupModuleBuilder : IModuleBuilder
 /// <summary>
 ///     Represents a container module builder for creating a <see cref="ContainerModule"/>.
 /// </summary>
-public class ContainerModuleBuilder : IModuleBuilder
+public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModuleBuilder>
 {
     private List<ImageElementBuilder> _elements;
 
@@ -654,7 +654,7 @@ public class ContainerModuleBuilder : IModuleBuilder
 /// <summary>
 ///     Represents a action group module builder for creating an <see cref="ActionGroupModule"/>.
 /// </summary>
-public class ActionGroupModuleBuilder : IModuleBuilder
+public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupModuleBuilder>
 {
     private List<ButtonElementBuilder> _elements;
 
@@ -781,7 +781,7 @@ public class ActionGroupModuleBuilder : IModuleBuilder
 /// <summary>
 ///     Represents a context module builder for creating a <see cref="ContextModule"/>.
 /// </summary>
-public class ContextModuleBuilder : IModuleBuilder
+public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuilder>
 {
     private List<IElementBuilder> _elements;
 
@@ -978,7 +978,7 @@ public class ContextModuleBuilder : IModuleBuilder
 /// <summary>
 ///     Represents a divider module builder for creating a <see cref="DividerModule"/>.
 /// </summary>
-public class DividerModuleBuilder : IModuleBuilder
+public class DividerModuleBuilder : IModuleBuilder, IEquatable<DividerModuleBuilder>
 {
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Divider;
@@ -1021,7 +1021,7 @@ public class DividerModuleBuilder : IModuleBuilder
 /// <summary>
 ///     Represents a file module builder for creating a <see cref="FileModule"/>.
 /// </summary>
-public class FileModuleBuilder : IModuleBuilder
+public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>
 {
     /// <inheritdoc />
     public ModuleType Type => ModuleType.File;
@@ -1123,7 +1123,7 @@ public class FileModuleBuilder : IModuleBuilder
 /// <summary>
 ///     Represents a video module builder for creating a <see cref="VideoModule"/>.
 /// </summary>
-public class VideoModuleBuilder : IModuleBuilder
+public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
 {
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Video;
@@ -1225,7 +1225,7 @@ public class VideoModuleBuilder : IModuleBuilder
 /// <summary>
 ///     Represents a audio module builder for creating an <see cref="AudioModule"/>.
 /// </summary>
-public class AudioModuleBuilder : IModuleBuilder
+public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
 {
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Audio;
@@ -1358,7 +1358,7 @@ public class AudioModuleBuilder : IModuleBuilder
 /// <summary>
 ///     Represents a countdown module builder for creating a <see cref="CountdownModule"/>.
 /// </summary>
-public class CountdownModuleBuilder : IModuleBuilder
+public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModuleBuilder>
 {
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Countdown;
@@ -1498,7 +1498,7 @@ public class CountdownModuleBuilder : IModuleBuilder
 /// <summary>
 ///     Represents a invite module builder for creating an <see cref="InviteModule"/>.
 /// </summary>
-public class InviteModuleBuilder : IModuleBuilder
+public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilder>
 {
 
     /// <inheritdoc />

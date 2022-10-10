@@ -6,7 +6,7 @@ namespace Kook;
 ///     Represents an audio module that can be used in an <see cref="ICard"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class AudioModule : IMediaModule
+public class AudioModule : IMediaModule, IEquatable<AudioModule>
 {
     internal AudioModule(string source, string title, string cover)
     {

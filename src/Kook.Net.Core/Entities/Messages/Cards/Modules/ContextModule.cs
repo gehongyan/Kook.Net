@@ -7,7 +7,7 @@ namespace Kook;
 ///     Represents a context module that can be used in an <see cref="ICard"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class ContextModule : IModule
+public class ContextModule : IModule, IEquatable<ContextModule>
 {
     internal ContextModule(ImmutableArray<IElement> elements)
     {

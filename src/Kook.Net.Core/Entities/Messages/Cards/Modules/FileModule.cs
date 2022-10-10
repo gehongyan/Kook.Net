@@ -6,7 +6,7 @@ namespace Kook;
 ///     A file module that can be used in an <see cref="ICard"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class FileModule : IMediaModule
+public class FileModule : IMediaModule, IEquatable<FileModule>
 {
     internal FileModule(string source, string title)
     {

@@ -8,7 +8,7 @@ namespace Kook;
 ///     A paragraph struct that can be used in modules.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class ParagraphStruct : IElement
+public class ParagraphStruct : IElement, IEquatable<ParagraphStruct>
 {
     internal ParagraphStruct(int columnCount, ImmutableArray<IElement> fields)
     {

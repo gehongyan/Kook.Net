@@ -6,7 +6,7 @@ namespace Kook;
 ///     Represents a countdown module that can be used in an <see cref="ICard"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class CountdownModule : IModule
+public class CountdownModule : IModule, IEquatable<CountdownModule>
 {
     internal CountdownModule(CountdownMode mode, DateTimeOffset endTime, DateTimeOffset? startTime = null)
     {

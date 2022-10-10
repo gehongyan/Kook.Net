@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     Represents a builder class for creating a <see cref="Card"/>.
 /// </summary>
-public class CardBuilder : ICardBuilder
+public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="CardBuilder"/> class.

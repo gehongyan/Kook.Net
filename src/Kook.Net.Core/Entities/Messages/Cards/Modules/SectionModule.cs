@@ -6,7 +6,7 @@ namespace Kook;
 ///     Represents a section module in card.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class SectionModule : IModule
+public class SectionModule : IModule, IEquatable<SectionModule>
 {
     internal SectionModule(SectionAccessoryMode mode, IElement text, IElement accessory = null)
     {
