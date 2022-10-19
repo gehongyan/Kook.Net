@@ -26,9 +26,9 @@ public class KookConfig
     ///     the version fails to be fetched.
     /// </returns>
     public static string Version { get; } =
-        typeof(KookConfig).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ??
-        typeof(KookConfig).GetTypeInfo().Assembly.GetName().Version.ToString(3) ??
-        "Unknown";
+        typeof(KookConfig).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion 
+        ?? typeof(KookConfig).GetTypeInfo().Assembly.GetName().Version?.ToString(3) 
+        ?? "Unknown";
 
     /// <summary>
     ///     Gets the user agent that Kook.Net uses in its clients.
