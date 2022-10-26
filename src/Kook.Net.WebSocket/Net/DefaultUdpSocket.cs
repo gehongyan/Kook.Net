@@ -87,7 +87,11 @@ namespace Kook.Net.Udp
         }
         public async Task StopInternalAsync(bool isDisposing = false)
         {
-            try { _stopCancelTokenSource.Cancel(false); } catch { }
+            try { _stopCancelTokenSource.Cancel(false); }
+            catch
+            {
+                // ignored
+            }
 
             if (!isDisposing)
                 await (_task ?? Task.Delay(0)).ConfigureAwait(false);
@@ -95,7 +99,11 @@ namespace Kook.Net.Udp
             if (_udp != null)
             {
                 try { _udp.Dispose(); }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
+
                 _udp = null;
             }
         }

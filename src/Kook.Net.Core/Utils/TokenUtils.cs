@@ -131,8 +131,7 @@ public static class TokenUtils
     /// <summary>
     ///     The set of all characters that are not allowed inside of a token.
     /// </summary>
-    internal static char[] IllegalTokenCharacters = new char[]
-    {
+    internal static readonly char[] IllegalTokenCharacters = {
         ' ', '\t', '\r', '\n'
     };
 

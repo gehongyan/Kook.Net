@@ -660,13 +660,11 @@ namespace Kook.Commands
                 if (parseResult.Error == CommandError.MultipleMatches)
                 {
                     IReadOnlyList<TypeReaderValue> argList, paramList;
-                    switch (multiMatchHandling)
+                    if (multiMatchHandling == MultiMatchHandling.Best)
                     {
-                        case MultiMatchHandling.Best:
-                            argList = parseResult.ArgValues.Select(x => x.Values.OrderByDescending(y => y.Score).First()).ToImmutableArray();
-                            paramList = parseResult.ParamValues.Select(x => x.Values.OrderByDescending(y => y.Score).First()).ToImmutableArray();
-                            parseResult = ParseResult.FromSuccess(argList, paramList);
-                            break;
+                        argList = parseResult.ArgValues.Select(x => x.Values.OrderByDescending(y => y.Score).First()).ToImmutableArray();
+                        paramList = parseResult.ParamValues.Select(x => x.Values.OrderByDescending(y => y.Score).First()).ToImmutableArray();
+                        parseResult = ParseResult.FromSuccess(argList, paramList);
                     }
                 }
 

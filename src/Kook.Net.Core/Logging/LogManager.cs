@@ -53,7 +53,10 @@ internal class LogManager
             if (severity <= Level)
                 await _messageEvent.InvokeAsync(new LogMessage(severity, source, message.ToString(), ex)).ConfigureAwait(false);
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
     }
 
 

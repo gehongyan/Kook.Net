@@ -151,7 +151,10 @@ internal class KookRestApiClient : IDisposable
         LoginState = LoginState.LoggingOut;
 
         try { _loginCancelToken?.Cancel(false); }
-        catch { }
+        catch
+        {
+            // ignored
+        }
 
         await DisconnectInternalAsync(null).ConfigureAwait(false);
         await RequestQueue.ClearAsync().ConfigureAwait(false);

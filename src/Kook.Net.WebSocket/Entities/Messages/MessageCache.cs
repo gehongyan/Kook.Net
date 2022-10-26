@@ -65,7 +65,7 @@ internal class MessageCache
             var before = GetMany(referenceMessageId, Direction.Before, around);
             var after = GetMany(referenceMessageId, Direction.After, around).Reverse();
 
-            return after.Concat(new SocketMessage[] { msg }).Concat(before).ToImmutableArray();
+            return after.Concat(new[] { msg }).Concat(before).ToImmutableArray();
         }
 
         if (dir == Direction.Before)

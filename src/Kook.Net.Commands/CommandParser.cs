@@ -36,11 +36,11 @@ namespace Kook.Commands
                 return c == '\"';
             }
 
-            char GetMatch(IReadOnlyDictionary<char, char> dict, char ch)
+            static char GetMatch(IReadOnlyDictionary<char, char> dict, char ch)
             {
                 // get the corresponding value for the key, if it exists
                 // and if the dictionary is populated
-                if (dict.Count != 0 && dict.TryGetValue(c, out var value))
+                if (dict.Count != 0 && dict.TryGetValue(ch, out var value))
                     return value;
                 // or get the default pair of the default double quote
                 return '\"';

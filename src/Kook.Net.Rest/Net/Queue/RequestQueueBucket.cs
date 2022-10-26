@@ -112,7 +112,10 @@ namespace Kook.Net.Queue
                                     {
                                         responseBase = await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream, _serializerOptions);
                                     }
-                                    catch { }
+                                    catch
+                                    {
+                                        // ignored
+                                    }
                                 }
 
                                 throw new HttpException(

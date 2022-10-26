@@ -275,7 +275,10 @@ namespace Kook.Audio
 
             try
             { _connectCancelToken?.Cancel(false); }
-            catch { }
+            catch
+            {
+                // ignored
+            }
 
             //Wait for tasks to complete
             await _udp.StopAsync().ConfigureAwait(false);

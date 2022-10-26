@@ -105,7 +105,7 @@ public sealed class TypeReaderTests
 
         var m = result.BestMatch as ArgumentType;
         Assert.NotNull(m);
-        Assert.Equal(expected: new int[] { 1, 2, 3, 4, 5, 6, 7 }, actual: m.ManyInts);
+        Assert.Equal(expected: new[] { 1, 2, 3, 4, 5, 6, 7 }, actual: m.ManyInts);
     }
 }
 

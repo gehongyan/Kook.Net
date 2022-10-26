@@ -106,7 +106,10 @@ namespace Kook.Net.WebSockets
             _isDisconnecting = true;
 
             try { _disconnectTokenSource.Cancel(false); }
-            catch { }
+            catch
+            {
+                // ignored
+            }
 
             if (_client != null)
             {
@@ -114,10 +117,16 @@ namespace Kook.Net.WebSockets
                 {
                     var status = (WebSocketCloseStatus)closeCode;
                     try { await _client.CloseOutputAsync(status, "", new CancellationToken()); }
-                    catch { }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
                 try { _client.Dispose(); }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
 
                 _client = null;
             }
@@ -251,7 +260,10 @@ namespace Kook.Net.WebSockets
             {
                 var _ = OnClosed(new Exception("Connection timed out.", ex));
             }
-            catch (OperationCanceledException) { }
+            catch (OperationCanceledException)
+            {
+                // ignored
+            }
             catch (Exception ex)
             {
                 //This cannot be awaited otherwise we'll deadlock when KookApiClient waits for this task to complete.

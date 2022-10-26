@@ -16,7 +16,7 @@ internal class CardConverter : JsonConverter<CardBase>
                 return JsonSerializer.Deserialize<API.Card>(jsonNode.ToJsonString(), options);
             default:
                 throw new ArgumentOutOfRangeException(nameof(CardType));
-        };
+        }
     }
 
     public override void Write(Utf8JsonWriter writer, CardBase value, JsonSerializerOptions options)

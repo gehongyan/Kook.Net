@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace Kook.Net.Queue
 {
-    internal class RequestQueue : IDisposable
+    internal class RequestQueue : IDisposable, IAsyncDisposable
     {
         public event Func<BucketId, RateLimitInfo?, string, Task> RateLimitTriggered;
 
@@ -19,7 +19,7 @@ namespace Kook.Net.Queue
         private CancellationToken _requestCancelToken; //Parent token + Clear token
         private DateTimeOffset _waitUntil;
 
-        private Task _cleanupTask;
+        private readonly Task _cleanupTask;
 
         public RequestQueue()
         {
@@ -55,14 +55,9 @@ namespace Kook.Net.Queue
                 _clearToken?.Cancel();
                 _clearToken?.Dispose();
                 _clearToken = new CancellationTokenSource();
-                if (_parentToken != null)
-                {
-                    _requestCancelTokenSource?.Dispose();
-                    _requestCancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_clearToken.Token, _parentToken);
-                    _requestCancelToken = _requestCancelTokenSource.Token;
-                }
-                else
-                    _requestCancelToken = _clearToken.Token;
+                _requestCancelTokenSource?.Dispose();
+                _requestCancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_clearToken.Token, _parentToken);
+                _requestCancelToken = _requestCancelTokenSource.Token;
             }
             finally { _tokenLock.Release(); }
         }
@@ -151,7 +146,7 @@ namespace Kook.Net.Queue
             {
                 var bucket = BucketId.Create(kookHash, id);
                 var hashReqQueue = (RequestBucket)_buckets.GetOrAdd(bucket, _buckets[id]);
-                _buckets.AddOrUpdate(id, bucket, (oldBucket, oldObj) => bucket);
+                _buckets.AddOrUpdate(id, bucket, (_, _) => bucket);
                 return (hashReqQueue, bucket);
             }
             return (null, null);
@@ -170,26 +165,51 @@ namespace Kook.Net.Queue
                 while (!_cancelTokenSource.IsCancellationRequested)
                 {
                     var now = DateTimeOffset.UtcNow;
-                    foreach (var bucket in _buckets.Where(x => x.Value is RequestBucket).Select(x => (RequestBucket)x.Value))
+                    foreach (var bucket in _buckets.Where(x => x.Value is RequestBucket).Select(x => (RequestBucket) x.Value))
                     {
                         if ((now - bucket.LastAttemptAt).TotalMinutes > 1.0)
                         {
                             if (bucket.Id.IsHashBucket)
-                                foreach (var redirectBucket in _buckets.Where(x => x.Value == bucket.Id).Select(x => (BucketId)x.Value))
+                                foreach (var redirectBucket in _buckets.Where(x => x.Value == bucket.Id).Select(x => (BucketId) x.Value))
                                     _buckets.TryRemove(redirectBucket, out _); //remove redirections if hash bucket
                             _buckets.TryRemove(bucket.Id, out _);
                         }
                     }
+
                     await Task.Delay(60000, _cancelTokenSource.Token).ConfigureAwait(false); //Runs each minute
                 }
             }
-            catch (OperationCanceledException) { }
-            catch (ObjectDisposedException) { }
+            catch (OperationCanceledException)
+            {
+                // ignored
+            }
+            catch (ObjectDisposedException)
+            {
+                // ignored
+            }
         }
 
         public void Dispose()
         {
-            _cancelTokenSource?.Dispose();
+            if (!(_cancelTokenSource is null))
+            {
+                _cancelTokenSource.Cancel();
+                _cancelTokenSource.Dispose();
+                _cleanupTask.GetAwaiter().GetResult();
+            }
+            _tokenLock?.Dispose();
+            _clearToken?.Dispose();
+            _requestCancelTokenSource?.Dispose();
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            if (!(_cancelTokenSource is null))
+            {
+                _cancelTokenSource.Cancel();
+                _cancelTokenSource.Dispose();
+                await _cleanupTask.ConfigureAwait(false);
+            }
             _tokenLock?.Dispose();
             _clearToken?.Dispose();
             _requestCancelTokenSource?.Dispose();
