@@ -96,9 +96,9 @@ public class RestGuildUser : RestUser, IGuildUser
     }
     
     /// <inheritdoc />
-    public async Task ModifyNicknameAsync(Action<string> func, RequestOptions options = null)
+    public async Task ModifyNicknameAsync(string name, RequestOptions options = null)
     {
-        var nickname = await UserHelper.ModifyNicknameAsync(this, Kook, func, options);
+        var nickname = await UserHelper.ModifyNicknameAsync(this, Kook, name, options);
         Nickname = nickname;
     }
     /// <inheritdoc />
