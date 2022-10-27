@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Represents a generic guild user.
@@ -126,12 +126,12 @@ public interface IGuildUser : IUser, IVoiceState
     /// <remarks>
     ///     This method modifies the nickname of current guild user.
     /// </remarks>
-    /// <param name="func">The delegate containing the nickname to modify the user with.</param>
+    /// <param name="name">The nickname to modify the user with.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
-    Task ModifyNicknameAsync(Action<string> func, RequestOptions options = null);
+    Task ModifyNicknameAsync(string name, RequestOptions options = null);
     
     #endregion
 

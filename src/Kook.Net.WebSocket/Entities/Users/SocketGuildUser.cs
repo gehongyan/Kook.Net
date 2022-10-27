@@ -161,8 +161,8 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     }
     
     /// <inheritdoc />
-    public Task ModifyNicknameAsync(Action<string> func, RequestOptions options = null)
-        => UserHelper.ModifyNicknameAsync(this, Kook, func, options);
+    public Task ModifyNicknameAsync(string name, RequestOptions options = null)
+        => UserHelper.ModifyNicknameAsync(this, Kook, name, options);
     /// <inheritdoc />
     public Task KickAsync(RequestOptions options = null)
         => UserHelper.KickAsync(this, Kook, options);
