@@ -5,9 +5,9 @@
         <Nullable>disable</Nullable>
         <RootNamespace>Kook.WebSocket</RootNamespace>
         <LangVersion>default</LangVersion>
-        <Version>0.0.42-alpha</Version>
+        <Version>0.0.43-alpha</Version>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <PackageVersion>0.0.42-alpha</PackageVersion>
+        <PackageVersion>0.0.43-alpha</PackageVersion>
         <Authors>gehongyan</Authors>
         <Description>Kook.Net is an unofficial C# .NET implementation for Kook API.</Description>
         <PackageProjectUrl>https://github.com/gehongyan/Kook.Net</PackageProjectUrl>
@@ -15,7 +15,7 @@
         <RepositoryType>git</RepositoryType>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <Company>gehongyan</Company>
-        <AssemblyVersion>0.0.42.0</AssemblyVersion>
+        <AssemblyVersion>0.0.43.0</AssemblyVersion>
         <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
