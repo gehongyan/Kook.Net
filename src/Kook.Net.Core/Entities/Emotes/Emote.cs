@@ -1,8 +1,10 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace Kook;
 
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Emote : IEmote
 {
     
@@ -86,12 +88,14 @@ public class Emote : IEmote
         return false;
     }
     
-    private string DebuggerDisplay => $"{Name} ({Id})";
     /// <summary>
-    ///     Returns the raw representation of the emote.
+    ///     Gets a string representation of the emote in KMarkdown format.
     /// </summary>
-    /// <returns>
-    ///     A string representing the raw presentation of the emote (e.g. <c>[:thonkang:282745590985523200]</c>).
-    /// </returns>
-    public override string ToString() => $"[:{Name}:{Id}]";
+    public string ToKMarkdownString() => $"(emj){Name}(emj)[{Id}]";
+    /// <summary>
+    ///     Gets a string representation of the emote in plain text format.
+    /// </summary>
+    public string ToPlainTextString() => $"[:{Name}:{Id}]";
+    
+    private string DebuggerDisplay => $"{Name} ({Id})";
 }

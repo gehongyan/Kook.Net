@@ -46,3 +46,9 @@
       topicUid: Guides.OtherLibs.EFCore
     - name: MediatR
       topicUid: Guides.OtherLibs.MediatR
+- name: 表情符号
+  items:
+    - name: 概述
+      topicUid: Guides.Emoji
+    - name: 表情符号列表
+      topicUid: Guides.Emoji.EmojiList

@@ -38,6 +38,12 @@ namespace TextCommandFramework.Modules
             await ReplyTextAsync(user.ToString());
         }
 
+        [Command("say")]
+        public async Task Emoji(string text)
+        {
+            await Context.Message.AddReactionAsync(new Emoji("\uD83D\uDC4C"));
+        }
+
         // Ban a user
         [Command("ban")]
         [RequireContext(ContextType.Guild)]

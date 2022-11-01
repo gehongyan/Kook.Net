@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -30,4 +32,19 @@ public class EmoteTests
         Assert.Throws<ArgumentException>(() => Emote.Parse("invalid", TagMode.PlainText));
         Assert.Throws<ArgumentException>(() => Emote.Parse("invalid", TagMode.KMarkdown));
     }
+
+    // [Fact]
+    // public void ExportAllEmotes()
+    // {
+    //     var emotes = Emoji.NamesAndUnicodes;
+    //     var sb = new StringBuilder();
+    //     foreach (KeyValuePair<string,string> keyValuePair in emotes)
+    //     {
+    //         string unicode = Convert.ToHexString(Encoding.Unicode.GetBytes(keyValuePair.Value)).Chunk(2).Select(x => $"{x[0]}{x[1]}")
+    //             .Chunk(2).Select(x => x.Reverse().ToList()).Select(x => $"{x[0]}{x[1]}")
+    //             .Select(x => $"\\u{x.ToLowerInvariant()}").Aggregate((x, y) => $"{x}{y}");
+    //         sb.AppendLine($"|{keyValuePair.Value}|{unicode}|{keyValuePair.Key}|");
+    //     }
+    //     File.WriteAllText("emotes.txt", sb.ToString());
+    // }
 }
