@@ -1,5 +1,5 @@
-using System;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -33,12 +33,15 @@ public class GuildUserTests : IClassFixture<RestGuildFixture>
     public async Task ModifyNicknameAsync()
     {
         IGuildUser currentUser = await _guild.GetCurrentUserAsync();
-        string nickname = currentUser.Nickname;
+
         await currentUser.ModifyNicknameAsync("UPDATED NICKNAME");
-        Assert.Equal("UPDATED NICKNAME", currentUser.Nickname);
-        await currentUser.ModifyNicknameAsync(nickname);
-        Assert.Equal(nickname, currentUser.Nickname);
+        currentUser.Nickname.Should().Be("UPDATED NICKNAME");
+        (await _guild.GetCurrentUserAsync()).Nickname.Should().Be("UPDATED NICKNAME");
+
         await currentUser.ModifyNicknameAsync(null);
-        Assert.Equal(currentUser.Username, currentUser.DisplayName);
+        currentUser.Nickname.Should().BeNullOrEmpty();
+        (await _guild.GetCurrentUserAsync()).Nickname.Should().BeNullOrEmpty();
+        currentUser.DisplayName.Should().Be(currentUser.Username);
+        (await _guild.GetCurrentUserAsync()).DisplayName.Should().Be(currentUser.Username);
     }
 }

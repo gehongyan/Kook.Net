@@ -127,7 +127,9 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     internal void Update(ClientState state, MemberModel model)
     {
         base.Update(state, model);
-        Nickname = model.Nickname;
+        // The KOOK API returns the user's nickname as the same as their username
+        // if they don't have their nickname set.
+        Nickname = model.Nickname == Username ? null : model.Nickname;
         IsMobileVerified = model.MobileVerified;
         JoinedAt = model.JoinedAt;
         ActiveAt = model.ActiveAt;

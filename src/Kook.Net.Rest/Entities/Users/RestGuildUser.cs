@@ -72,7 +72,9 @@ public class RestGuildUser : RestUser, IGuildUser
     internal void Update(MemberModel model)
     {
         base.Update(model);
-        Nickname = model.Nickname;
+        // The KOOK API returns the user's nickname as the same as their username
+        // if they don't have their nickname set.
+        Nickname = model.Nickname == Username ? null : model.Nickname;
         IsMobileVerified = model.MobileVerified;
         JoinedAt = model.JoinedAt;
         ActiveAt = model.ActiveAt;
@@ -99,6 +101,9 @@ public class RestGuildUser : RestUser, IGuildUser
     public async Task ModifyNicknameAsync(string name, RequestOptions options = null)
     {
         var nickname = await UserHelper.ModifyNicknameAsync(this, Kook, name, options);
+        // The KOOK API will clear the nickname if the nickname is set to the same as the username at present.
+        if(nickname == Username)
+            nickname = null;
         Nickname = nickname;
     }
     /// <inheritdoc />
