@@ -27,7 +27,7 @@ jobs:
       run: dotnet build src --no-restore
 
     - name: Test
-      run: dotnet test src --no-build --verbosity normal
+      run: dotnet test src --no-build --verbosity normal --filter Category!=Integration --blame-hang-timeout 15min
 
     # Packages
 
