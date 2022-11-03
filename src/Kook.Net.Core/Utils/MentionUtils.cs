@@ -203,7 +203,11 @@ public static class MentionUtils
     internal static string Resolve(IMessage msg, int startIndex, TagHandling userHandling, TagHandling channelHandling,
         TagHandling roleHandling, TagHandling everyoneHandling, TagHandling emojiHandling)
     {
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
         var text = new StringBuilder(msg.Content[startIndex..]);
+#else 
+        var text = new StringBuilder(msg.Content.Substring(startIndex));
+#endif
         var tags = msg.Tags;
         int indexOffset = -startIndex;
 

@@ -77,12 +77,12 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// </returns>
     public virtual IReadOnlyCollection<IEmbed> Embeds => ImmutableArray.Create<IEmbed>();
     /// <summary>
-    ///     Gets a collection of the <see cref="IPokeAction"/>'s on the message.
+    ///     Gets a collection of the <see cref="SocketPokeAction"/>'s on the message.
     /// </summary>
     /// <returns>
     ///     Collection of poke action objects.
     /// </returns>
-    public virtual IReadOnlyCollection<IPokeAction> Pokes => ImmutableArray.Create<IPokeAction>();
+    public virtual IReadOnlyCollection<SocketPokeAction> Pokes => ImmutableArray.Create<SocketPokeAction>();
     
     /// <summary>
     ///     Returns the roles mentioned in this message.

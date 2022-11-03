@@ -1,14 +1,12 @@
 # Kook.Net
 
-<p style="text-align: center">
-<img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/gehongyan/Kook.Net/Kook.Net%20Deploy?label=build">
-<img alt="GitHub Top Language" src="https://img.shields.io/github/languages/top/gehongyan/Kook.Net">
-<a href="https://www.nuget.org/packages/Kook.Net"><img alt="Nuget Version" src="https://img.shields.io/nuget/v/Kook.Net"></a>
-<a href="https://www.nuget.org/packages/Kook.Net"><img alt="Nuget" src="https://img.shields.io/nuget/dt/Kook.Net.Core?color=%230099ff"></a>
-<a href="https://github.com/gehongyan/Kook.Net/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/gehongyan/Kook.Net"></a>
-<a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net?ref=badge_shield"><img alt="FOSSA Status" src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net.svg?type=shield"/></a>
-<a href="https://kook.top/EvxnOb"><img alt="Chat on Kook" src="https://www.kookapp.cn/api/v3/badge/guild?guild_id=1591057729615250"></a>
-</p>
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/gehongyan/Kook.Net/Kook.Net%20Deploy?label=build)
+![GitHub Top Language](https://img.shields.io/github/languages/top/gehongyan/Kook.Net)
+[![Nuget Version](https://img.shields.io/nuget/v/Kook.Net)](https://www.nuget.org/packages/Kook.Net)
+[![Nuget](https://img.shields.io/nuget/dt/Kook.Net.Core?color=%230099ff)](https://www.nuget.org/packages/Kook.Net)
+[![License](https://img.shields.io/github/license/gehongyan/Kook.Net)](https://github.com/gehongyan/Kook.Net/blob/master/LICENSE)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net?ref=badge_shield)
+[![Chat on Kook](https://www.kookapp.cn/api/v3/badge/guild?guild_id=1591057729615250)](https://kook.top/EvxnOb)
 
 ---
 
@@ -22,9 +20,13 @@
 
 ---
 
-## Requirements
+## Targets
 
-- [.NET 6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
+- [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
+- [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
+- [.NET Standard 2.1](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-1)
+- [.NET Standard 2.0](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-0)
+- [.NET Framework 4.6.1](https://dotnet.microsoft.com/download/dotnet-framework/net461)
 
 ---
 
@@ -50,9 +52,9 @@
 
 This package is open-source and is licensed under the [MIT license](LICENSE).
 
-Kook.Net was developed with reference to **[Discord.Net](https://github.com/discord-net/Discord.Net)**. 
+Kook.Net was developed with reference to **[Discord.Net](https://github.com/discord-net/Discord.Net)**.
 
-[Discord.Net contributors](https://github.com/discord-net/Discord.Net/graphs/contributors) holds the copyright 
+[Discord.Net contributors](https://github.com/discord-net/Discord.Net/graphs/contributors) holds the copyright
 for portion of the code in this repository according to [this license](https://github.com/discord-net/Discord.Net/blob/dev/LICENSE).
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net?ref=badge_large)

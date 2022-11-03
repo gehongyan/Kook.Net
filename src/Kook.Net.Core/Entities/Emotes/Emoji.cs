@@ -86,7 +86,11 @@ public class Emoji : IEmote
     {
         name = null;
         if (!unicodePoint.StartsWith("[#") || !unicodePoint.EndsWith(";]")) return false;
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
         if (!int.TryParse(unicodePoint[2..^2], out int codePoint)) return false;
+#else
+        if (!int.TryParse(unicodePoint.Substring(2, unicodePoint.Length - 4), out int codePoint)) return false;
+#endif
         name = char.ConvertFromUtf32(codePoint);
         return true;
     }

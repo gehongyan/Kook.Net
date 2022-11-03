@@ -108,7 +108,13 @@ public class SocketRole : SocketEntity<uint>, IRole
         {
             IEnumerable<IReadOnlyCollection<SocketGuildUser>> userCollections = Guild.Users
                 .Where(u => u.Roles.Contains(this))
+#if NET6_0_OR_GREATER
                 .Chunk(KookConfig.MaxUsersPerBatch)
+#else
+                .Select((x, i) => new { Index = i, Value = x })
+                .GroupBy(x => x.Index / KookConfig.MaxUsersPerBatch)
+                .Select(x => x.Select(v => v.Value))
+#endif
                 .Select(c => c.ToImmutableArray() as IReadOnlyCollection<SocketGuildUser>);
             foreach (IReadOnlyCollection<SocketGuildUser> users in userCollections)
                 yield return users;

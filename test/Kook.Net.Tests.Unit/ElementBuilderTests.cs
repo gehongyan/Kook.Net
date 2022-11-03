@@ -194,7 +194,7 @@ public class ElementBuilderTests
     [Fact]
     public void ImageElementBuilder_WithSize()
     {
-        foreach (ImageSize size in Enum.GetValues<ImageSize>())
+        foreach (ImageSize size in (ImageSize[])Enum.GetValues(typeof(ImageSize)))
         {
             var builder = new ImageElementBuilder().WithSize(size);
             Assert.Equal(size, builder.Size);
@@ -282,7 +282,7 @@ public class ElementBuilderTests
     [Fact]
     public void ButtonElementBuilder_ButtonTheme()
     {
-        foreach (ButtonTheme theme in Enum.GetValues<ButtonTheme>())
+        foreach (ButtonTheme theme in (ButtonTheme[])Enum.GetValues(typeof(ButtonTheme)))
         {
             var builder = new ButtonElementBuilder().WithTheme(theme);
             Assert.Equal(theme, builder.Theme);

@@ -16,20 +16,19 @@ namespace Kook;
 public class KookRestApiClientTests : IClassFixture<RestGuildFixture>, IAsyncDisposable
 {
     private readonly KookRestApiClient _apiClient;
-    // private readonly IGuild _guild;
-    // private readonly ITextChannel _channel;
 
     public KookRestApiClientTests(RestGuildFixture guildFixture)
     {
-        // _guild = guildFixture.Guild;
         _apiClient = guildFixture.Client.ApiClient;
-        // _channel = _guild.CreateTextChannelAsync("TEST TEXT CHANNEL").GetAwaiter().GetResult();
     }
 
     public ValueTask DisposeAsync()
     {
+#if NET5_0_OR_GREATER
         return ValueTask.CompletedTask;
-        // await _channel.DeleteAsync();
+#else
+        return new ValueTask(Task.CompletedTask);
+#endif
     }
 
     [Fact]

@@ -66,7 +66,7 @@ public class CardBuilderTests
     [Fact]
     public void WithTheme()
     {
-        foreach (CardTheme theme in Enum.GetValues<CardTheme>())
+        foreach (CardTheme theme in (CardTheme[])Enum.GetValues(typeof(CardTheme)))
         {
             var builder = new CardBuilder().WithTheme(theme);
             Assert.Equal(theme, builder.Theme);
@@ -91,7 +91,7 @@ public class CardBuilderTests
     [Fact]
     public void WithSize()
     {
-        foreach (CardSize size in Enum.GetValues<CardSize>())
+        foreach (CardSize size in (CardSize[])Enum.GetValues(typeof(CardSize)))
         {
             var builder = new CardBuilder().WithSize(size);
             Assert.Equal(size, builder.Size);

@@ -103,33 +103,4 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
         IQuote quote = null, RequestOptions options = null);
 
     #endregion
-        
-    #region IMessageChannel 
-
-    /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(string path, string fileName, 
-        AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendFileAsync(path, fileName, type, quote, options);
-    /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(Stream stream, string fileName,
-        AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendFileAsync(stream, fileName, type, quote, options);
-    /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(FileAttachment attachment, 
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendFileAsync(attachment, quote, options);
-    /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendTextAsync(string text,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendTextAsync(text, quote, options);
-    /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardsAsync(IEnumerable<ICard> cards,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendCardsAsync(cards, quote, options);
-    /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardAsync(ICard card,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendCardAsync(card, quote, options);
-
-    #endregion
 }

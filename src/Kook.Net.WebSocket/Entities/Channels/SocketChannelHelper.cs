@@ -21,7 +21,13 @@ internal static class SocketChannelHelper
                 return result;
 
             //Download remaining messages
-            Guid? minId = cachedMessages.Count > 0 ? cachedMessages.MinBy(x => x.Timestamp)?.Id : referenceMessageId;
+            Guid? minId = cachedMessages.Count > 0
+#if NET6_0_OR_GREATER
+                ? cachedMessages.MinBy(x => x.Timestamp)?.Id
+#else
+                ? cachedMessages.OrderBy(x => x.Timestamp).FirstOrDefault()?.Id
+#endif
+                : referenceMessageId;
             var downloadedMessages = ChannelHelper.GetMessagesAsync(channel, kook, minId, dir, limit, true, options);
             if (cachedMessages.Count != 0)
                 return result.Concat(downloadedMessages);
@@ -35,7 +41,13 @@ internal static class SocketChannelHelper
                 return result;
 
             //Download remaining messages
-            Guid? maxId = cachedMessages.Count > 0 ? cachedMessages.MaxBy(x => x.Timestamp)?.Id : referenceMessageId;
+            Guid? maxId = cachedMessages.Count > 0 
+#if NET6_0_OR_GREATER
+                ? cachedMessages.MaxBy(x => x.Timestamp)?.Id
+#else
+                ? cachedMessages.OrderByDescending(x => x.Timestamp).FirstOrDefault()?.Id
+#endif
+                : referenceMessageId;
             var downloadedMessages = ChannelHelper.GetMessagesAsync(channel, kook, maxId, dir, limit, true, options);
             if (cachedMessages.Count != 0)
                 return result.Concat(downloadedMessages);

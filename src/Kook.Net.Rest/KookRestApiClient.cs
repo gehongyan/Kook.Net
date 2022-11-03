@@ -679,7 +679,13 @@ internal class KookRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds();
-        return await SendAsync<IReadOnlyCollection<ReactionUserResponse>>(HttpMethod.Get, () => $"message/reaction-list?msg_id={messageId}&emoji={HttpUtility.UrlEncode(emojiId)}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+        return await SendAsync<IReadOnlyCollection<ReactionUserResponse>>(HttpMethod.Get, 
+#if NET461
+            () => $"message/reaction-list?msg_id={messageId}&emoji={WebUtility.UrlEncode(emojiId)}", 
+#else
+            () => $"message/reaction-list?msg_id={messageId}&emoji={HttpUtility.UrlEncode(emojiId)}", 
+#endif
+            ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task AddReactionAsync(AddReactionParams args, RequestOptions options = null)
@@ -869,7 +875,13 @@ internal class KookRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds();
-        return await SendAsync<IReadOnlyCollection<ReactionUserResponse>>(HttpMethod.Get, () => $"direct-message/reaction-list?msg_id={messageId}&emoji={HttpUtility.UrlEncode(emojiId)}", ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+        return await SendAsync<IReadOnlyCollection<ReactionUserResponse>>(HttpMethod.Get,
+#if NET461
+            () => $"direct-message/reaction-list?msg_id={messageId}&emoji={WebUtility.UrlEncode(emojiId)}",
+#else
+            () => $"direct-message/reaction-list?msg_id={messageId}&emoji={HttpUtility.UrlEncode(emojiId)}",
+#endif
+            ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
     public async Task AddDirectMessageReactionAsync(AddReactionParams args, RequestOptions options = null)

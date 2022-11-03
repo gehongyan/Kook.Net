@@ -83,7 +83,12 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     internal virtual void Update(API.MentionedUser model)
     {
         Username = model.Username;
-        IdentifyNumberValue = model.FullName.Length > 4 && ushort.TryParse(model.FullName[^4..], out ushort val) ? val : null;
+        IdentifyNumberValue = model.FullName.Length > 4
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+                              && ushort.TryParse(model.FullName[^4..], out ushort val) ? val : null;
+#else
+                              && ushort.TryParse(model.FullName.Substring(model.FullName.Length - 4), out ushort val) ? val : null;
+#endif
         Avatar = model.Avatar;
     }
 

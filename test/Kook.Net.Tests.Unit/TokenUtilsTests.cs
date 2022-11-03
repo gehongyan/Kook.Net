@@ -25,7 +25,7 @@ public class TokenUtilsTests
     public void NullOrWhitespaceToken(string token)
     {
         // an ArgumentNullException should be thrown, regardless of the TokenType
-        foreach (TokenType tokenType in Enum.GetValues<TokenType>())
+        foreach (TokenType tokenType in (TokenType[])Enum.GetValues(typeof(TokenType)))
             Assert.Throws<ArgumentNullException>(() => TokenUtils.ValidateToken(tokenType, token));
     }
     

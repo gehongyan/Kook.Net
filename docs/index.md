@@ -17,7 +17,13 @@ title: 首页
 
 ## 什么是 Kook.Net？
 
-Kook.Net 是一个对 [KOOK（原开黑啦）API] 进行功能封装的类库，以 C# 编写，可运行在 .NET 6 平台上。
+Kook.Net 是一个对 [KOOK（原开黑啦）API] 进行功能封装的类库，以 C# 编写，编译所采用的目标框架包括
+
+- [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
+- [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
+- [.NET Standard 2.1](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-1)
+- [.NET Standard 2.0](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-0)
+- [.NET Framework 4.6.1](https://dotnet.microsoft.com/download/dotnet-framework/net461)
 
 [KOOK（原开黑啦）API]: https://developer.kookapp.cn/doc
 

@@ -160,9 +160,18 @@ internal static class ChannelHelper
                 if (lastPage.Count != KookConfig.MaxMessagesPerBatch)
                     return false;
                 if (dir == Direction.Before)
+#if NET6_0_OR_GREATER
                     info.Position = lastPage.MinBy(x => x.Timestamp)?.Id;
+#else
+                    info.Position = lastPage.OrderBy(x => x.Timestamp).FirstOrDefault()?.Id;
+#endif
                 else
+
+#if NET6_0_OR_GREATER
                     info.Position = lastPage.MaxBy(x => x.Timestamp)?.Id;
+#else
+                    info.Position = lastPage.OrderByDescending(x => x.Timestamp).FirstOrDefault()?.Id;
+#endif
                 return true;
             },
             start: referenceMessageId,
@@ -357,9 +366,18 @@ internal static class ChannelHelper
                 if (lastPage.Count != KookConfig.MaxMessagesPerBatch)
                     return false;
                 if (dir == Direction.Before)
+#if NET6_0_OR_GREATER
                     info.Position = lastPage.MinBy(x => x.Timestamp)?.Id;
+#else
+                    info.Position = lastPage.OrderBy(x => x.Timestamp).FirstOrDefault()?.Id;
+#endif
                 else
+
+#if NET6_0_OR_GREATER
                     info.Position = lastPage.MaxBy(x => x.Timestamp)?.Id;
+#else
+                    info.Position = lastPage.OrderByDescending(x => x.Timestamp).FirstOrDefault()?.Id;
+#endif
                 return true;
             },
             start: referenceMessageId,

@@ -50,9 +50,9 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// </summary>
     public virtual IReadOnlyCollection<IEmbed> Embeds => ImmutableArray.Create<IEmbed>();
     /// <summary>
-    ///     Gets a collection of the <see cref="IPokeAction"/>'s on the message.
+    ///     Gets a collection of the <see cref="RestPokeAction"/>'s on the message.
     /// </summary>
-    public virtual IReadOnlyCollection<IPokeAction> Pokes => ImmutableArray.Create<IPokeAction>();
+    public virtual IReadOnlyCollection<RestPokeAction> Pokes => ImmutableArray.Create<RestPokeAction>();
     /// <inheritdoc />
     public virtual IReadOnlyCollection<uint> MentionedRoleIds => ImmutableArray.Create<uint>();
     /// <summary>

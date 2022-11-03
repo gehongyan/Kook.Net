@@ -63,6 +63,38 @@ namespace Kook
             throw new NotImplementedException();
         }
 
+        public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null, AttachmentType type = AttachmentType.File, IQuote quote = null, IUser ephemeralUser = null,
+            RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName, AttachmentType type = AttachmentType.File, IQuote quote = null, IUser ephemeralUser = null,
+            RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IMessage> GetMessageAsync(Guid id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
         {
             throw new NotImplementedException();
