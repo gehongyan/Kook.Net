@@ -2,8 +2,8 @@
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <VersionPrefix>0.0.43.1</VersionPrefix>
-        <VersionSuffix>alpha</VersionSuffix>
+        <VersionPrefix>0.1.0</VersionPrefix>
+        <VersionSuffix>rc</VersionSuffix>
         <LangVersion>latest</LangVersion>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <Authors>gehongyan</Authors>
