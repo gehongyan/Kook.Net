@@ -35,12 +35,12 @@ jobs:
       run: dotnet pack src --configuration Release --output packages
       
     - name: Push Packages to NuGet
-      run: dotnet nuget push ./packages/*.nupkg -k ${NUGET_TOKEN} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      run: dotnet nuget push .\packages\*.nupkg -k ${NUGET_TOKEN} -s https://api.nuget.org/v3/index.json --skip-duplicate
       env:
         NUGET_TOKEN: ${{secrets.NUGET_API_KEY}}
 
     - name: Push Packages to Github
-      run: dotnet nuget push ./packages/*.nupkg -k ${GITHUB_TOKEN} -s https://nuget.pkg.github.com/gehongyan/index.json --skip-duplicate
+      run: dotnet nuget push .\packages\*.nupkg -k ${GITHUB_TOKEN} -s https://nuget.pkg.github.com/gehongyan/index.json --skip-duplicate
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -49,12 +49,12 @@ jobs:
     - uses: nikeee/docfx-action@v1.0.0
       name: Build Doc
       with:
-        args: ./docs/docfx.json
+        args: .\docs\docfx.json
 
     - uses: finnp/create-file-action@master
       name: Add CNAME
       env:
-        FILE_NAME: "docs/_site/CNAME"
+        FILE_NAME: "docs\_site\CNAME"
         FILE_DATA: "kooknet.dev"
 
     - name: Publish Doc
@@ -62,7 +62,7 @@ jobs:
       env:
         API_TOKEN_GITHUB: ${{ secrets.ACTIONS_DEPLOY_KEY }}
       with:
-        source-directory: docs/_site/
+        source-directory: docs\_site\
         destination-github-username: gehongyan
         destination-repository-username: gehongyan
         destination-repository-name: Kook.Net.Doc
