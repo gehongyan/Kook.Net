@@ -7,7 +7,8 @@ on:
     branches: [ master ]
 
 jobs:
-  deploy:
+
+  package:
     
     # Build Solution
     
@@ -44,8 +45,26 @@ jobs:
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
-    # DocFX
-    
+
+  doc:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Restore Dependencies
+      run: dotnet restore src
+
+    - name: Build
+      run: dotnet build src --no-restore
+
+      # DocFX
+
     - uses: nikeee/docfx-action@v1.0.0
       name: Build Doc
       with:
