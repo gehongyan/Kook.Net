@@ -65,15 +65,16 @@ jobs:
 
       # DocFX
 
+
     - uses: nikeee/docfx-action@v1.0.0
       name: Build Doc
       with:
-        args: .\docs\docfx.json
+        args: ./docs/docfx.json
 
     - uses: finnp/create-file-action@master
       name: Add CNAME
       env:
-        FILE_NAME: "docs\\_site\\CNAME"
+        FILE_NAME: "docs/_site/CNAME"
         FILE_DATA: "kooknet.dev"
 
     - name: Publish Doc
@@ -81,7 +82,7 @@ jobs:
       env:
         API_TOKEN_GITHUB: ${{ secrets.ACTIONS_DEPLOY_KEY }}
       with:
-        source-directory: docs\_site\
+        source-directory: docs/_site/
         destination-github-username: gehongyan
         destination-repository-username: gehongyan
         destination-repository-name: Kook.Net.Doc
