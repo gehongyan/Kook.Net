@@ -35,12 +35,12 @@ jobs:
       run: dotnet pack src --configuration Release --output packages
       
     - name: Push Packages to NuGet
-      run: dotnet nuget push .\packages\*.nupkg -k ${NUGET_TOKEN} -s https://api.nuget.org/v3/index.json --skip-duplicate
+      run: dotnet nuget push .\packages\*.nupkg -k $env:NUGET_TOKEN -s https://api.nuget.org/v3/index.json --skip-duplicate
       env:
         NUGET_TOKEN: ${{secrets.NUGET_API_KEY}}
 
     - name: Push Packages to Github
-      run: dotnet nuget push .\packages\*.nupkg -k ${GITHUB_TOKEN} -s https://nuget.pkg.github.com/gehongyan/index.json --skip-duplicate
+      run: dotnet nuget push .\packages\*.nupkg -k $env:GITHUB_TOKEN -s https://nuget.pkg.github.com/gehongyan/index.json --skip-duplicate
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
@@ -54,7 +54,7 @@ jobs:
     - uses: finnp/create-file-action@master
       name: Add CNAME
       env:
-        FILE_NAME: "docs\_site\CNAME"
+        FILE_NAME: "docs\\_site\\CNAME"
         FILE_DATA: "kooknet.dev"
 
     - name: Publish Doc
