@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../../Kook.Net.targets" />
+    <Import Project="../Kook.Net.targets" />
 
     <PropertyGroup>
         <RootNamespace>Kook.WebSocket</RootNamespace>
