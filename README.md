@@ -38,13 +38,15 @@
 - [Kook.Net.Core](https://www.nuget.org/packages/Kook.Net.Core/)
 - [Kook.Net.Rest](https://www.nuget.org/packages/Kook.Net.Rest/)
 - [Kook.Net.WebSocket](https://www.nuget.org/packages/Kook.Net.WebSocket/)
+- [Kook.Net.Commands](https://www.nuget.org/packages/Kook.Net.Commands/)
 
 ### Github Packages
 
-- [Kook.Net](https://github.com/gehongyan/Kook.Net/packages/1386169)
-- [Kook.Net.Core](https://github.com/gehongyan/Kook.Net/packages/1249886)
-- [Kook.Net.Rest](https://github.com/gehongyan/Kook.Net/packages/1249887)
-- [Kook.Net.WebSocket](https://github.com/gehongyan/Kook.Net/packages/1249888)
+- [Kook.Net](https://github.com/gehongyan/Kook.Net/packages/1607285)
+- [Kook.Net.Core](https://github.com/gehongyan/Kook.Net/packages/1607287)
+- [Kook.Net.Rest](https://github.com/gehongyan/Kook.Net/packages/1607288)
+- [Kook.Net.WebSocket](https://github.com/gehongyan/Kook.Net/packages/1607289)
+- [Kook.Net.Commands](https://github.com/gehongyan/Kook.Net/packages/1607286)
 
 ---
 
