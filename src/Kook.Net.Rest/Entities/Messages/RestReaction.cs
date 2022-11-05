@@ -24,10 +24,10 @@ public class RestReaction : IReaction
     internal static RestReaction Create(Model model)
     {
         IEmote emote;
-        if (model.Emoji.Id != model.Emoji.Name)
-            emote = new Emote(model.Emoji.Id, model.Emoji.Name);
+        if (Emoji.TryParse(model.Emoji.Id, out Emoji emoji))
+            emote = emoji;
         else
-            emote = new Emoji(model.Emoji.Name);
+            emote = new Emote(model.Emoji.Id, model.Emoji.Name);
         return new RestReaction(emote, model.Count, model.IsMe);
     }
 }

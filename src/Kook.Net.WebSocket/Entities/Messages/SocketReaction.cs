@@ -69,19 +69,19 @@ public class SocketReaction : IReaction
     internal static SocketReaction Create(API.Gateway.Reaction model, ISocketMessageChannel channel, SocketUserMessage message, IUser user)
     {
         IEmote emote;
-        if (model.Emoji.Id.Length >= 33)
-            emote = new Emote(model.Emoji.Id, model.Emoji.Name);
+        if (Emoji.TryParse(model.Emoji.Id, out Emoji emoji))
+            emote = emoji;
         else
-            emote = new Emoji(model.Emoji.Name);
+            emote = new Emote(model.Emoji.Id, model.Emoji.Name);
         return new SocketReaction(channel, model.MessageId, message, model.UserId, user, emote);
     }
     internal static SocketReaction Create(API.Gateway.PrivateReaction model, IDMChannel channel, SocketUserMessage message, IUser user)
     {
         IEmote emote;
-        if (model.Emoji.Id.Length >= 33)
-            emote = new Emote(model.Emoji.Id, model.Emoji.Name);
+        if (Emoji.TryParse(model.Emoji.Id, out Emoji emoji))
+            emote = emoji;
         else
-            emote = new Emoji(model.Emoji.Name);
+            emote = new Emote(model.Emoji.Id, model.Emoji.Name);
         return new SocketReaction(channel as ISocketMessageChannel, model.MessageId, message, model.UserId, user, emote);
     }
 }

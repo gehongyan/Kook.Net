@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Kook.Rest;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -108,4 +109,38 @@ CODE BLOCK
         }
     }
 
+    [Fact]
+    public async Task ReactionsAsync()
+    {
+        IGuildUser currentUser = await _guild.GetCurrentUserAsync();
+        Cacheable<IUserMessage, Guid> cacheable = await _channel.SendTextAsync("TEST MESSAGE");
+        RestMessage message = await cacheable.GetOrDownloadAsync() as RestMessage;
+        try
+        {
+            Assert.NotNull(message);
+            Assert.NotNull(currentUser);
+
+            Assert.Empty(message.Reactions);
+
+            Emoji emoji = Emoji.Parse(":+1:");
+            await message.AddReactionAsync(emoji);
+            await message.UpdateAsync();
+            Assert.Single(message.Reactions);
+            Assert.Equal(emoji, message.Reactions.First().Key);
+            IReadOnlyCollection<IUser> reactionUsers = await message.GetReactionUsersAsync(emoji);
+            Assert.Single(reactionUsers);
+            Assert.Equal(currentUser.Id, reactionUsers.First().Id);
+
+            await message.RemoveReactionAsync(emoji, currentUser);
+            await message.UpdateAsync();
+            Assert.Empty(message.Reactions);
+            reactionUsers = await message.GetReactionUsersAsync(emoji);
+            Assert.Empty(reactionUsers);
+        }
+        finally
+        {
+            await message.DeleteAsync();
+        }
+    }
+    
 }

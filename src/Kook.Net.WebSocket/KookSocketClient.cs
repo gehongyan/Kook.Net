@@ -450,6 +450,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                         var channelObj = await cacheableChannel.GetOrDownloadAsync().ConfigureAwait(false);
                                         return await channelObj.GetMessageAsync(data.MessageId).ConfigureAwait(false) as IUserMessage;
                                     });
+                                    
                                     var reaction = SocketReaction.Create(data, channel, cachedMsg, user);
                                     
                                     cachedMsg?.AddReaction(reaction);

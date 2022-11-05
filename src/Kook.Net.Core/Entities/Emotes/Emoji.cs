@@ -17,6 +17,8 @@ public class Emoji : IEmote
     /// <inheritdoc />
     public string Id => Name;
 
+    // TODO: HTML codepoints
+
     /// <summary>
     ///     Gets the Unicode representation of this emoji.
     /// </summary>

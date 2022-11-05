@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
@@ -8,14 +10,14 @@ namespace Kook;
 /// <summary>
 ///     Tests users in guilds
 /// </summary>
-[CollectionDefinition(nameof(GuildUserTests), DisableParallelization = true)]
+[CollectionDefinition(nameof(GuildTests), DisableParallelization = true)]
 [Trait("Category", "Integration")]
-public class GuildUserTests : IClassFixture<RestGuildFixture>
+public class GuildTests : IClassFixture<RestGuildFixture>
 {
     private readonly IGuild _guild;
     private readonly ITestOutputHelper _output;
 
-    public GuildUserTests(RestGuildFixture guildFixture, ITestOutputHelper output)
+    public GuildTests(RestGuildFixture guildFixture, ITestOutputHelper output)
     {
         _guild = guildFixture.Guild;
         _output = output;
@@ -23,10 +25,32 @@ public class GuildUserTests : IClassFixture<RestGuildFixture>
         // capture all console output
         guildFixture.Client.Log += LogAsync;
     }
+
     private Task LogAsync(LogMessage message)
     {
         _output.WriteLine(message.ToString());
         return Task.CompletedTask;
+    }
+
+    [Fact]
+    public async Task GetUsersAsync()
+    {
+        IGuildUser currentUser = await _guild.GetCurrentUserAsync();
+
+        IReadOnlyCollection<IGuildUser> users = await _guild.GetUsersAsync();
+        users.Should().ContainSingle(x => x.Id == currentUser.Id);
+        IGuildUser self = users.Single(x => x.Id == currentUser.Id);
+        self.Should().BeEquivalentTo(currentUser, config => config
+            // Due to lack of fields from guild user list
+            .Excluding(x => x.ActiveClient)
+            .Excluding(x => x.HasBuff)
+            .Excluding(x => x.UserTag)
+            .Excluding(x => x.IsDenoiseEnabled)
+            .Excluding(x => x.IsOwner)
+            // Due to different domain names
+            .Excluding(x => x.Avatar)
+            .Excluding(x => x.BuffAvatar)
+        );
     }
 
     [Fact]
