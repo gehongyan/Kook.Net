@@ -2,18 +2,17 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Kook.Audio
+namespace Kook.Audio;
+
+public abstract class AudioInStream : AudioStream
 {
-    public abstract class AudioInStream : AudioStream
-    {
-        public abstract int AvailableFrames { get; }
+    public abstract int AvailableFrames { get; }
 
-        public override bool CanRead => true;
-        public override bool CanWrite => true;        
+    public override bool CanRead => true;
+    public override bool CanWrite => true;        
 
-        public abstract Task<RTPFrame> ReadFrameAsync(CancellationToken cancelToken);
-        public abstract bool TryReadFrame(CancellationToken cancelToken, out RTPFrame frame);
+    public abstract Task<RTPFrame> ReadFrameAsync(CancellationToken cancelToken);
+    public abstract bool TryReadFrame(CancellationToken cancelToken, out RTPFrame frame);
 
-        public override Task FlushAsync(CancellationToken cancelToken) { throw new NotSupportedException(); }
-    }
+    public override Task FlushAsync(CancellationToken cancelToken) { throw new NotSupportedException(); }
 }

@@ -437,7 +437,18 @@ internal class KookRestApiClient : IDisposable
         var ids = new BucketIds(guildId: args.GuildId);
         await SendJsonAsync(HttpMethod.Post, () => $"guild-mute/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
-    
+
+    public IAsyncEnumerable<IReadOnlyCollection<BoostSubscription>> GetGuildBoostSubscriptionsAsync(ulong guildId,
+        int limit = KookConfig.MaxUsersPerBatch, int fromPage = 1, RequestOptions options = null)
+    {
+        Preconditions.NotEqual(guildId, 0, nameof(guildId));
+        options = RequestOptions.CreateOrClone(options);
+        
+        var ids = new BucketIds(guildId: guildId);
+        return SendPagedAsync<BoostSubscription>(HttpMethod.Get, (pageSize, page) => $"guild-boost/history?guild_id={guildId}&page_size={pageSize}&page={page}",
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(pageSize: 50), options: options);
+    }
+
     #endregion
 
     #region Channels

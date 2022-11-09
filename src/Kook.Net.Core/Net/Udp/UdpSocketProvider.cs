@@ -1,4 +1,3 @@
-﻿namespace Kook.Net.Udp
-{
-    public delegate IUdpSocket UdpSocketProvider();
-}
+﻿namespace Kook.Net.Udp;
+
+public delegate IUdpSocket UdpSocketProvider();

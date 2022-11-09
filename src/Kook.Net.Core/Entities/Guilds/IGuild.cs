@@ -1,4 +1,6 @@
-﻿namespace Kook;
+﻿using System.Collections.Immutable;
+
+namespace Kook;
 
 /// <summary>
 ///     Represents a generic guild/server.
@@ -172,6 +174,16 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous leave operation.
     /// </returns>
     Task LeaveAsync(RequestOptions options = null);
+
+    /// <summary>
+    ///     Gets all subscriptions for this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous retrieval operation. The task result contains
+    ///     a collection of <see cref="BoostSubscriptionMetadata"/>, each representing the subscriptions information.
+    /// </returns>
+    Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetBoostSubscriptionsAsync(RequestOptions options = null);
 
     #endregion
 

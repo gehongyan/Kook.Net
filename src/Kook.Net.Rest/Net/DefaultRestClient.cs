@@ -17,187 +17,186 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Kook.Net.Rest
+namespace Kook.Net.Rest;
+
+internal sealed class DefaultRestClient : IRestClient, IDisposable
 {
-    internal sealed class DefaultRestClient : IRestClient, IDisposable
+    private const int HR_SECURECHANNELFAILED = -2146233079;
+
+    private readonly HttpClient _client;
+    private readonly string _baseUrl;
+    private readonly JsonSerializerOptions _serializerOptions;
+    private CancellationToken _cancelToken;
+    private bool _isDisposed;
+
+    public DefaultRestClient(string baseUrl, bool useProxy = false)
     {
-        private const int HR_SECURECHANNELFAILED = -2146233079;
-
-        private readonly HttpClient _client;
-        private readonly string _baseUrl;
-        private readonly JsonSerializerOptions _serializerOptions;
-        private CancellationToken _cancelToken;
-        private bool _isDisposed;
-
-        public DefaultRestClient(string baseUrl, bool useProxy = false)
-        {
-            _baseUrl = baseUrl;
+        _baseUrl = baseUrl;
 
 #pragma warning disable IDISP014
-            _client = new HttpClient(new HttpClientHandler
-            {
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-                UseCookies = false,
-                UseProxy = useProxy,
-            });
+        _client = new HttpClient(new HttpClientHandler
+        {
+            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+            UseCookies = false,
+            UseProxy = useProxy,
+        });
 #pragma warning restore IDISP014
-            SetHeader("accept-encoding", "gzip, deflate");
+        SetHeader("accept-encoding", "gzip, deflate");
 
-            _cancelToken = CancellationToken.None;
-            _serializerOptions = new JsonSerializerOptions
-            {
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                NumberHandling = JsonNumberHandling.AllowReadingFromString
-            };
-        }
-        private void Dispose(bool disposing)
+        _cancelToken = CancellationToken.None;
+        _serializerOptions = new JsonSerializerOptions
         {
-            if (!_isDisposed)
-            {
-                if (disposing)
-                    _client.Dispose();
-                _isDisposed = true;
-            }
-        }
-        public void Dispose()
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString
+        };
+    }
+    private void Dispose(bool disposing)
+    {
+        if (!_isDisposed)
         {
-            Dispose(true);
+            if (disposing)
+                _client.Dispose();
+            _isDisposed = true;
         }
+    }
+    public void Dispose()
+    {
+        Dispose(true);
+    }
 
-        public void SetHeader(string key, string value)
-        {
-            _client.DefaultRequestHeaders.Remove(key);
-            if (value != null)
-                _client.DefaultRequestHeaders.Add(key, value);
-        }
-        public void SetCancelToken(CancellationToken cancelToken)
-        {
-            _cancelToken = cancelToken;
-        }
+    public void SetHeader(string key, string value)
+    {
+        _client.DefaultRequestHeaders.Remove(key);
+        if (value != null)
+            _client.DefaultRequestHeaders.Add(key, value);
+    }
+    public void SetCancelToken(CancellationToken cancelToken)
+    {
+        _cancelToken = cancelToken;
+    }
 
-        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancelToken, string reason = null,
-            IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
+    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancelToken, string reason = null,
+        IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
+    {
+        string uri = Path.Combine(_baseUrl, endpoint);
+        using (var restRequest = new HttpRequestMessage(method, uri))
         {
-            string uri = Path.Combine(_baseUrl, endpoint);
-            using (var restRequest = new HttpRequestMessage(method, uri))
-            {
-                if (reason != null) restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
-                if (requestHeaders != null)
-                    foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
-                        restRequest.Headers.Add(header.Key, header.Value);
-                return await SendInternalAsync(restRequest, cancelToken).ConfigureAwait(false);
-            }
+            if (reason != null) restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
+            if (requestHeaders != null)
+                foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
+                    restRequest.Headers.Add(header.Key, header.Value);
+            return await SendInternalAsync(restRequest, cancelToken).ConfigureAwait(false);
         }
-        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json, CancellationToken cancelToken, string reason = null,
-            IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
+    }
+    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json, CancellationToken cancelToken, string reason = null,
+        IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
+    {
+        string uri = Path.Combine(_baseUrl, endpoint);
+        using (var restRequest = new HttpRequestMessage(method, uri))
         {
-            string uri = Path.Combine(_baseUrl, endpoint);
-            using (var restRequest = new HttpRequestMessage(method, uri))
-            {
-                if (reason != null) restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
-                if (requestHeaders != null)
-                    foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
-                        restRequest.Headers.Add(header.Key, header.Value);
-                restRequest.Content = new StringContent(json, Encoding.UTF8, "application/json");
-                return await SendInternalAsync(restRequest, cancelToken).ConfigureAwait(false);
-            }
+            if (reason != null) restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
+            if (requestHeaders != null)
+                foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
+                    restRequest.Headers.Add(header.Key, header.Value);
+            restRequest.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return await SendInternalAsync(restRequest, cancelToken).ConfigureAwait(false);
         }
+    }
 
-        /// <exception cref="InvalidOperationException">Unsupported param type.</exception>
-        public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartParams, CancellationToken cancelToken, string reason = null,
-            IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
+    /// <exception cref="InvalidOperationException">Unsupported param type.</exception>
+    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartParams, CancellationToken cancelToken, string reason = null,
+        IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
+    {
+        string uri = Path.Combine(_baseUrl, endpoint);
+        using (var restRequest = new HttpRequestMessage(method, uri))
         {
-            string uri = Path.Combine(_baseUrl, endpoint);
-            using (var restRequest = new HttpRequestMessage(method, uri))
+            if (reason != null) restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
+            if (requestHeaders != null)
+                foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
+                    restRequest.Headers.Add(header.Key, header.Value);
+            var content = new MultipartFormDataContent("Upload----" + DateTime.Now.ToString(CultureInfo.InvariantCulture));
+            MemoryStream memoryStream = null;
+            if (multipartParams != null)
             {
-                if (reason != null) restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
-                if (requestHeaders != null)
-                    foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
-                        restRequest.Headers.Add(header.Key, header.Value);
-                var content = new MultipartFormDataContent("Upload----" + DateTime.Now.ToString(CultureInfo.InvariantCulture));
-                MemoryStream memoryStream = null;
-                if (multipartParams != null)
+                foreach (var p in multipartParams)
                 {
-                    foreach (var p in multipartParams)
+                    switch (p.Value)
                     {
-                        switch (p.Value)
-                        {
 #pragma warning disable IDISP004
-                            case string stringValue: { content.Add(new StringContent(stringValue, Encoding.UTF8, "text/plain"), p.Key); continue; }
-                            case byte[] byteArrayValue: { content.Add(new ByteArrayContent(byteArrayValue), p.Key); continue; }
-                            case Stream streamValue: { content.Add(new StreamContent(streamValue), p.Key); continue; }
-                            case MultipartFile fileValue:
+                        case string stringValue: { content.Add(new StringContent(stringValue, Encoding.UTF8, "text/plain"), p.Key); continue; }
+                        case byte[] byteArrayValue: { content.Add(new ByteArrayContent(byteArrayValue), p.Key); continue; }
+                        case Stream streamValue: { content.Add(new StreamContent(streamValue), p.Key); continue; }
+                        case MultipartFile fileValue:
+                        {
+                            var stream = fileValue.Stream;
+                            if (!stream.CanSeek)
                             {
-                                var stream = fileValue.Stream;
-                                if (!stream.CanSeek)
-                                {
-                                    memoryStream = new MemoryStream();
-                                    await stream.CopyToAsync(memoryStream).ConfigureAwait(false);
-                                    memoryStream.Position = 0;
+                                memoryStream = new MemoryStream();
+                                await stream.CopyToAsync(memoryStream).ConfigureAwait(false);
+                                memoryStream.Position = 0;
 #pragma warning disable IDISP001
-                                    stream = memoryStream;
+                                stream = memoryStream;
 #pragma warning restore IDISP001
-                                }
+                            }
 
-                                var streamContent = new StreamContent(stream);
-                                var extension = fileValue.Filename.Split('.').Last();
+                            var streamContent = new StreamContent(stream);
+                            var extension = fileValue.Filename.Split('.').Last();
 
-                                if(fileValue.ContentType != null)
-                                    streamContent.Headers.ContentType = new MediaTypeHeaderValue(fileValue.ContentType);
+                            if(fileValue.ContentType != null)
+                                streamContent.Headers.ContentType = new MediaTypeHeaderValue(fileValue.ContentType);
 
-                                content.Add(streamContent, p.Key, fileValue.Filename);
+                            content.Add(streamContent, p.Key, fileValue.Filename);
 #pragma warning restore IDISP004
                                     
-                                continue;
-                            }
-                            default:
-                                throw new InvalidOperationException($"Unsupported param type \"{p.Value.GetType().Name}\".");
+                            continue;
                         }
+                        default:
+                            throw new InvalidOperationException($"Unsupported param type \"{p.Value.GetType().Name}\".");
                     }
                 }
-                restRequest.Content = content;
-                var result = await SendInternalAsync(restRequest, cancelToken).ConfigureAwait(false);
-                memoryStream?.Dispose();
-                return result;
             }
+            restRequest.Content = content;
+            var result = await SendInternalAsync(restRequest, cancelToken).ConfigureAwait(false);
+            memoryStream?.Dispose();
+            return result;
         }
+    }
 
-        private async Task<RestResponse> SendInternalAsync(HttpRequestMessage request, CancellationToken cancelToken)
+    private async Task<RestResponse> SendInternalAsync(HttpRequestMessage request, CancellationToken cancelToken)
+    {
+        using (var cancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancelToken, cancelToken))
         {
-            using (var cancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancelToken, cancelToken))
-            {
 #if DEBUG_REST
                 Debug.WriteLine($"[REST] {request.Method} {request.RequestUri} {request.Content?.Headers.ContentType?.MediaType}");
                 if (request.Content?.Headers.ContentType?.MediaType == "application/json")
                     Debug.WriteLine($"[REST] {await request.Content.ReadAsStringAsync().ConfigureAwait(false)}");
 #endif
-                cancelToken = cancelTokenSource.Token;
-                HttpResponseMessage response = await _client.SendAsync(request, cancelToken).ConfigureAwait(false);
+            cancelToken = cancelTokenSource.Token;
+            HttpResponseMessage response = await _client.SendAsync(request, cancelToken).ConfigureAwait(false);
 
-                var headers = response.Headers.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault(), StringComparer.OrdinalIgnoreCase);
-                var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            var headers = response.Headers.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault(), StringComparer.OrdinalIgnoreCase);
+            var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
 #if DEBUG_REST
                 Debug.WriteLine($"[REST] {response.StatusCode} {response.ReasonPhrase}");
                 if (response.Content?.Headers.ContentType?.MediaType == "application/json")
                     Debug.WriteLine($"[REST] {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
 #endif
-                return new RestResponse(response.StatusCode, headers, stream, response.Content.Headers.ContentType);
-            }
+            return new RestResponse(response.StatusCode, headers, stream, response.Content.Headers.ContentType);
         }
-
-        // private static readonly HttpMethod Patch = new HttpMethod("PATCH");
-        // private HttpMethod GetMethod(string method)
-        // {
-        //     return method switch
-        //     {
-        //         "DELETE" => HttpMethod.Delete,
-        //         "GET" => HttpMethod.Get,
-        //         "PATCH" => Patch,
-        //         "POST" => HttpMethod.Post,
-        //         "PUT" => HttpMethod.Put,
-        //         _ => throw new ArgumentOutOfRangeException(nameof(method), $"Unknown HttpMethod: {method}"),
-        //     };
-        // }
     }
+
+    // private static readonly HttpMethod Patch = new HttpMethod("PATCH");
+    // private HttpMethod GetMethod(string method)
+    // {
+    //     return method switch
+    //     {
+    //         "DELETE" => HttpMethod.Delete,
+    //         "GET" => HttpMethod.Get,
+    //         "PATCH" => Patch,
+    //         "POST" => HttpMethod.Post,
+    //         "PUT" => HttpMethod.Put,
+    //         _ => throw new ArgumentOutOfRangeException(nameof(method), $"Unknown HttpMethod: {method}"),
+    //     };
+    // }
 }

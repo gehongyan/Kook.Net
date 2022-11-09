@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Collections.Immutable;
 using Kook;
 using Kook.Rest;
 using Kook.WebSocket;
@@ -74,7 +75,7 @@ class Program
     //
     private async Task ClientOnReady()
     {
-        // await Task.Delay(TimeSpan.FromSeconds(5));
+        await Task.Delay(TimeSpan.FromSeconds(5));
         // KookSocketClient kookSocketClient = _client;
         // SocketGuildUser socketGuildUser = kookSocketClient.GetGuild(7557797319758285).GetUser(821393881);
         // List<SocketGuildUser> socketGuildUsers = kookSocketClient.GetGuild(7557797319758285).Users.Where(x => x.IsDeafened == true).ToList();

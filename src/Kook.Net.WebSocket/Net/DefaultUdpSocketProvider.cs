@@ -1,19 +1,18 @@
 using System;
 
-namespace Kook.Net.Udp
+namespace Kook.Net.Udp;
+
+public static class DefaultUdpSocketProvider
 {
-    public static class DefaultUdpSocketProvider
+    public static readonly UdpSocketProvider Instance = () => 
     {
-        public static readonly UdpSocketProvider Instance = () => 
+        try
         {
-            try
-            {
-                return new DefaultUdpSocket();
-            }
-            catch (PlatformNotSupportedException ex)
-            {
-                throw new PlatformNotSupportedException("The default UdpSocketProvider is not supported on this platform.", ex);
-            }
-        };
-    }
+            return new DefaultUdpSocket();
+        }
+        catch (PlatformNotSupportedException ex)
+        {
+            throw new PlatformNotSupportedException("The default UdpSocketProvider is not supported on this platform.", ex);
+        }
+    };
 }

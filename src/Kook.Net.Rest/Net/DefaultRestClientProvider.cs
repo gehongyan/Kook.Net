@@ -1,25 +1,24 @@
 using System;
 
-namespace Kook.Net.Rest
-{
-    public static class DefaultRestClientProvider
-    {
-        public static readonly RestClientProvider Instance = Create();
+namespace Kook.Net.Rest;
 
-        /// <exception cref="PlatformNotSupportedException">The default RestClientProvider is not supported on this platform.</exception>
-        public static RestClientProvider Create(bool useProxy = false)
+public static class DefaultRestClientProvider
+{
+    public static readonly RestClientProvider Instance = Create();
+
+    /// <exception cref="PlatformNotSupportedException">The default RestClientProvider is not supported on this platform.</exception>
+    public static RestClientProvider Create(bool useProxy = false)
+    {
+        return url =>
         {
-            return url =>
+            try
             {
-                try
-                {
-                    return new DefaultRestClient(url, useProxy);
-                }
-                catch (PlatformNotSupportedException ex)
-                {
-                    throw new PlatformNotSupportedException("The default RestClientProvider is not supported on this platform.", ex);
-                }
-            };
-        }
+                return new DefaultRestClient(url, useProxy);
+            }
+            catch (PlatformNotSupportedException ex)
+            {
+                throw new PlatformNotSupportedException("The default RestClientProvider is not supported on this platform.", ex);
+            }
+        };
     }
 }

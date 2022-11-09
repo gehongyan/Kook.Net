@@ -1,9 +1,8 @@
-namespace Kook.Audio
+namespace Kook.Audio;
+
+internal enum OpusSignal : int
 {
-    internal enum OpusSignal : int
-    {
-        Auto = -1000,
-        Voice = 3001,
-        Music = 3002,
-    }
+    Auto = -1000,
+    Voice = 3001,
+    Music = 3002,
 }

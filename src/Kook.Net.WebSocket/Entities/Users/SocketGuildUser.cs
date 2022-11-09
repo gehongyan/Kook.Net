@@ -166,6 +166,9 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     public Task ModifyNicknameAsync(string name, RequestOptions options = null)
         => UserHelper.ModifyNicknameAsync(this, Kook, name, options);
     /// <inheritdoc />
+    public Task<IReadOnlyCollection<BoostSubscriptionMetadata>> GetBoostSubscriptionsAsync(RequestOptions options = null)
+        => UserHelper.GetBoostSubscriptionsAsync(this, Kook, options);
+    /// <inheritdoc />
     public Task KickAsync(RequestOptions options = null)
         => UserHelper.KickAsync(this, Kook, options);
     /// <inheritdoc />

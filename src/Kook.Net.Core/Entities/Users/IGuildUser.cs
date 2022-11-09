@@ -83,7 +83,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     <c>true</c> if this user owns the current guild; <c>false</c> otherwise.
     /// </returns>
     bool? IsOwner { get; }
-    
+
     #endregion
 
     #region Permissions
@@ -138,7 +138,17 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
     Task ModifyNicknameAsync(string name, RequestOptions options = null);
-    
+
+    /// <summary>
+    ///     Gets all subscriptions of this user for this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous retrieval operation. The task result contains
+    ///     a collection of <see cref="BoostSubscriptionMetadata"/>, each representing the subscriptions information.
+    /// </returns>
+    Task<IReadOnlyCollection<BoostSubscriptionMetadata>> GetBoostSubscriptionsAsync(RequestOptions options = null);
+
     #endregion
 
     #region Roles
@@ -217,7 +227,7 @@ public interface IGuildUser : IUser, IVoiceState
     Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null);
     
     #endregion
-    
+
     #region Voice
     
     /// <summary>

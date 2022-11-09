@@ -388,6 +388,9 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc />
     public Task LeaveAsync(RequestOptions options = null)
         => GuildHelper.LeaveAsync(this, Kook, options);
+    /// <inheritdoc />
+    public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetBoostSubscriptionsAsync(RequestOptions options = null)
+        => SocketGuildHelper.GetBoostSubscriptionsAsync(this, Kook, options);
 
     #endregion
     

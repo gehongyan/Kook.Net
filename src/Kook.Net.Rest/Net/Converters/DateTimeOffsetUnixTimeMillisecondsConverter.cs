@@ -12,7 +12,11 @@ internal class DateTimeOffsetUnixTimeMillisecondsConverter : JsonConverter<DateT
 
     public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
     {
-        if (value == DateTimeOffset.MinValue || value == DateTimeOffset.FromUnixTimeMilliseconds(0))
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+        if (value == DateTimeOffset.MinValue || value == DateTimeOffset.UnixEpoch)
+#else
+        if (value == DateTimeOffset.MinValue || value == new DateTimeOffset(621355968000000000L, TimeSpan.Zero))
+#endif
             writer.WriteNullValue();
         else
             writer.WriteNumberValue(value.ToUnixTimeMilliseconds());

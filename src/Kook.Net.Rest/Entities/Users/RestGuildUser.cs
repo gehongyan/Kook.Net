@@ -107,6 +107,9 @@ public class RestGuildUser : RestUser, IGuildUser
         Nickname = nickname;
     }
     /// <inheritdoc />
+    public Task<IReadOnlyCollection<BoostSubscriptionMetadata>> GetBoostSubscriptionsAsync(RequestOptions options = null)
+        => UserHelper.GetBoostSubscriptionsAsync(this, Kook, options);
+    /// <inheritdoc />
     public Task KickAsync(RequestOptions options = null)
         => UserHelper.KickAsync(this, Kook, options);
     /// <inheritdoc />

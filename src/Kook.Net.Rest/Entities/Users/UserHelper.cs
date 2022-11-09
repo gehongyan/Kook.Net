@@ -19,6 +19,17 @@ internal static class UserHelper
         return nickname;
     }
 
+    public static async Task<IReadOnlyCollection<BoostSubscriptionMetadata>> GetBoostSubscriptionsAsync(IGuildUser guildUser,
+        BaseKookClient client, RequestOptions options)
+    {
+        IEnumerable<BoostSubscription> subscriptions = await client.ApiClient
+            .GetGuildBoostSubscriptionsAsync(guildUser.GuildId, options: options).FlattenAsync();
+        return subscriptions.Where(x => x.UserId == guildUser.Id)
+            .GroupBy(x => (x.StartTime, x.EndTime))
+            .Select(x => new BoostSubscriptionMetadata(x.Key.StartTime, x.Key.EndTime, x.Count()))
+            .ToImmutableArray();
+    }
+
     public static async Task KickAsync(IGuildUser user, BaseKookClient client, RequestOptions options)
     {
         KickOutGuildMemberParams args = new()
@@ -99,5 +110,4 @@ internal static class UserHelper
         };
         await client.ApiClient.UpdateIntimacyValueAsync(args, options).ConfigureAwait(false);
     }
-
 }
