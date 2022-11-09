@@ -22,11 +22,15 @@
 
 ## Targets
 
+- [.NET 7.0](https://dotnet.microsoft.com/download/dotnet/7.0)
 - [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
-- [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
+- [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0) <sup>*</sup>
 - [.NET Standard 2.1](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-1)
 - [.NET Standard 2.0](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-0)
-- [.NET Framework 4.6.1](https://dotnet.microsoft.com/download/dotnet-framework/net461)
+- [.NET Framework 4.6.2](https://dotnet.microsoft.com/download/dotnet-framework/net462)
+
+> <sup>*</sup> .NET 5.0 has reached end of life, please move to .NET 6.0 or later. 
+> Support for .NET 5.0 will be dropped in stable releases.
 
 ---
 

@@ -6,6 +6,7 @@ namespace Kook;
 [Trait("Category", "Unit")]
 public class EmojiTests
 {
+#pragma warning disable xUnit1025
     [Theory]
     [InlineData("👍")]
     [InlineData("\ud83d\udc4d")]
@@ -16,6 +17,7 @@ public class EmojiTests
         Assert.NotNull(emoji);
         Assert.Equal(emoji.Name, emoji.Id);
     }
+#pragma warning restore xUnit1025
 
     [Theory]
     [InlineData("invalid")]

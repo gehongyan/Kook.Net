@@ -19,7 +19,7 @@
       <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
         <Reference Include="System.Net.Http" />
     </ItemGroup>
 </Project>

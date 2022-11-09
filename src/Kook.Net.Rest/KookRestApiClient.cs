@@ -680,7 +680,7 @@ internal class KookRestApiClient : IDisposable
         
         var ids = new BucketIds();
         return await SendAsync<IReadOnlyCollection<ReactionUserResponse>>(HttpMethod.Get, 
-#if NET461
+#if NET462
             () => $"message/reaction-list?msg_id={messageId}&emoji={WebUtility.UrlEncode(emojiId)}", 
 #else
             () => $"message/reaction-list?msg_id={messageId}&emoji={HttpUtility.UrlEncode(emojiId)}", 
@@ -876,7 +876,7 @@ internal class KookRestApiClient : IDisposable
         
         var ids = new BucketIds();
         return await SendAsync<IReadOnlyCollection<ReactionUserResponse>>(HttpMethod.Get,
-#if NET461
+#if NET462
             () => $"direct-message/reaction-list?msg_id={messageId}&emoji={WebUtility.UrlEncode(emojiId)}",
 #else
             () => $"direct-message/reaction-list?msg_id={messageId}&emoji={HttpUtility.UrlEncode(emojiId)}",
