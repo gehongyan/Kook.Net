@@ -35,6 +35,10 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// </summary>
     string BuffAvatar { get; }
     /// <summary>
+    ///     Gets the link to this user's banner.
+    /// </summary>
+    string Banner { get; }
+    /// <summary>
     ///     Gets whether this user enabled denoise feature; <c>null</c> if unknown.
     /// </summary>
     bool? IsDenoiseEnabled { get; }

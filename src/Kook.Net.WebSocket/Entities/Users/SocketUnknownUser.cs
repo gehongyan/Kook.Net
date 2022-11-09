@@ -27,6 +27,8 @@ public class SocketUnknownUser : SocketUser
     /// <inheritdoc />
     public override string BuffAvatar { get; internal set; }
     /// <inheritdoc />
+    public override string Banner { get; internal set; }
+    /// <inheritdoc />
     public override bool? IsDenoiseEnabled { get; internal set; }
     /// <inheritdoc />
     public override UserTag UserTag { get; internal set; }

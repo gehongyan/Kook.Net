@@ -26,6 +26,8 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     /// <inheritdoc />
     public abstract string BuffAvatar { get; internal set; }
     /// <inheritdoc />
+    public abstract string Banner { get; internal set; }
+    /// <inheritdoc />
     public abstract bool? IsDenoiseEnabled { get; internal set; }
     /// <inheritdoc />
     public abstract UserTag UserTag { get; internal set; }
@@ -108,6 +110,11 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
         if (model.BuffAvatar != BuffAvatar)
         {
             BuffAvatar = model.BuffAvatar;
+            hasChanges = true;
+        }
+        if (model.Banner != Banner)
+        {
+            Banner = model.Banner;
             hasChanges = true;
         }
         if (model.IsDenoiseEnabled != IsDenoiseEnabled)

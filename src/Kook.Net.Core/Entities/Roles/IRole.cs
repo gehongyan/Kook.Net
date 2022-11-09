@@ -63,7 +63,6 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     ///     A <see cref="GuildPermissions"/> struct that this role possesses.
     /// </returns>
     GuildPermissions Permissions { get; }
-    // TODO: RoleTags
 
     /// <summary>
     ///     Modifies this role.

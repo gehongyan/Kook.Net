@@ -18,6 +18,5 @@ internal class User
     [JsonPropertyName("is_vip")] public bool? HasBuff { get; set; }
     [JsonPropertyName("is_ai_reduce_noise")] public bool? IsDenoiseEnabled { get; set; }
     [JsonPropertyName("tag_info")] public UserTag UserTag { get; set; }
-    // TODO: Banner
-
+    [JsonPropertyName("banner")] public string Banner { get; set; }
 }

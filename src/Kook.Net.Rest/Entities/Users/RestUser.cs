@@ -30,6 +30,8 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     /// <inheritdoc />
     public string BuffAvatar { get; internal set; }
     /// <inheritdoc />
+    public string Banner { get; internal set; }
+    /// <inheritdoc />
     public bool? IsDenoiseEnabled { get; internal set; }
     /// <inheritdoc />
     public UserTag UserTag { get; internal set; }
@@ -73,6 +75,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         IsBanned = model.Status == 10;
         HasBuff = model.HasBuff;
         Avatar = model.Avatar;
+        Banner = model.Banner;
         BuffAvatar = model.BuffAvatar;
         IsDenoiseEnabled = model.IsDenoiseEnabled;
         UserTag = model.UserTag?.ToEntity();

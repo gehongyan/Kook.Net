@@ -52,6 +52,8 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// <inheritdoc />
     public override string BuffAvatar { get => GlobalUser.BuffAvatar; internal set => GlobalUser.BuffAvatar = value; }
     /// <inheritdoc />
+    public override string Banner { get => GlobalUser.Banner; internal set => GlobalUser.Banner = value; }
+    /// <inheritdoc />
     public override bool? IsBanned { get => GlobalUser.IsBanned; internal set => GlobalUser.IsBanned = value; }
     /// <inheritdoc />
     public override bool? HasBuff { get => GlobalUser.HasBuff; internal set => GlobalUser.HasBuff = value; }
