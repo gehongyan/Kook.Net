@@ -119,14 +119,16 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
         GuildAvailable += g =>
         {
-            if (_guildDownloadTask?.IsCompleted == true && ConnectionState == ConnectionState.Connected && AlwaysDownloadUsers && !g.HasAllMembers)
+            if (_guildDownloadTask?.IsCompleted == true 
+                && ConnectionState == ConnectionState.Connected 
+                && AlwaysDownloadUsers && !g.HasAllMembers)
             {
-                var _ = g.DownloadUsersAsync();
-            }
-
-            if (_guildDownloadTask?.IsCompleted == true && ConnectionState == ConnectionState.Connected && AlwaysDownloadVoiceStates)
-            {
-                var _ = g.DownloadVoiceStatesAsync();
+                if (AlwaysDownloadUsers && !g.HasAllMembers)
+                    _ = g.DownloadUsersAsync();
+                if (AlwaysDownloadVoiceStates)
+                    _ = g.DownloadVoiceStatesAsync();
+                if (AlwaysDownloadBoostSubscriptions)
+                    _ = g.DownloadBoostSubscriptionsAsync();
             }
             return Task.Delay(0);
         };
