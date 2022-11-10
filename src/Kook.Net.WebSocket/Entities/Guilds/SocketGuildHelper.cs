@@ -10,7 +10,9 @@ public static class SocketGuildHelper
         RequestOptions options)
     {
         ExtendedGuild extendedGuild = await client.ApiClient.GetGuildAsync(guild.Id, options).ConfigureAwait(false);
-        if (client.AlwaysDownloadBoostSubscriptions && guild.BufferBoostSubscriptionCount != extendedGuild.BufferBoostSubscriptionCount)
+        if (client.AlwaysDownloadBoostSubscriptions &&
+            (guild.BoostSubscriptionCount != extendedGuild.BoostSubscriptionCount
+             || guild.BufferBoostSubscriptionCount != extendedGuild.BufferBoostSubscriptionCount))
             await guild.DownloadBoostSubscriptionsAsync();
         guild.Update(client.State, extendedGuild);
     }

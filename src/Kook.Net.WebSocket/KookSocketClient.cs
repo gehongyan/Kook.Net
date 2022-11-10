@@ -1192,7 +1192,9 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     {
                                         var before = guild.Clone();
                                         guild.Update(State, data);
-                                        if (AlwaysDownloadBoostSubscriptions && before.BoostSubscriptionCount != guild.BoostSubscriptionCount)
+                                        if (AlwaysDownloadBoostSubscriptions && 
+                                            (before.BoostSubscriptionCount != guild.BoostSubscriptionCount
+                                            || before.BufferBoostSubscriptionCount != guild.BufferBoostSubscriptionCount))
                                             await guild.DownloadBoostSubscriptionsAsync().ConfigureAwait(false);
                                         await TimedInvokeAsync(_guildUpdatedEvent, nameof(GuildUpdated), before, guild).ConfigureAwait(false);
                                     }
