@@ -8,6 +8,7 @@ using ChannelModel = Kook.API.Channel;
 using MemberModel = Kook.API.Rest.GuildMember;
 using ExtendedModel = Kook.API.Rest.ExtendedGuild;
 using RichModel = Kook.API.Rest.RichGuild;
+using BoostSubscription = Kook.API.Rest.BoostSubscription;
 using RecommendInfo = Kook.Rest.RecommendInfo;
 using RoleModel = Kook.API.Role;
 using UserModel = Kook.API.User;
@@ -27,7 +28,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     private ConcurrentDictionary<uint, SocketRole> _roles;
     private ConcurrentDictionary<ulong, SocketVoiceState> _voiceStates;
     private ConcurrentDictionary<string, GuildEmote> _emotes;
-    
+    private Dictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>> _boostSubscriptions;
+
     /// <inheritdoc />
     public string Name { get; private set; }
 
@@ -65,9 +67,9 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </remarks>
     public object[] Features { get; private set; }
     /// <inheritdoc />
-    public int BoostNumber { get; private set; }
+    public int BoostSubscriptionCount { get; private set; }
     /// <inheritdoc />
-    public int BufferBoostNumber { get; private set; }
+    public int BufferBoostSubscriptionCount { get; private set; }
     /// <inheritdoc />
     public BoostLevel BoostLevel { get; private set; }
     /// <summary>
@@ -196,6 +198,30 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc cref="IGuild.Emotes"/>
     public IReadOnlyCollection<GuildEmote> Emotes => _emotes.Select(x => x.Value).Where(x => x != null).ToReadOnlyCollection(_emotes);
     /// <summary>
+    ///     Gets a dictionary of all boost subscriptions for this guild.
+    /// </summary>
+    /// <returns>
+    ///     A read-only dictionary containing all boost subscription metadata for this guild grouped by users;
+    ///     or <see langword="null"/> if the boost subscription data has never been cached.
+    /// </returns>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         <para>
+    ///             Only when <see cref="KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> is set to <see langword="true"/>
+    ///             will this property be populated upon startup. Due to the lack of event support for boost subscriptions,
+    ///             this property will never be updated. The changes of <see cref="SocketGuild.BoostSubscriptionCount"/> will trigger the update
+    ///             of this property, but KOOK gateway will not publish this event resulting from the changes of total boost subscription
+    ///             count. To fetch the latest boost subscription data, use <see cref="DownloadBoostSubscriptionsAsync"/> or
+    ///             <see cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/> upon a <see cref="KookSocketClient"/> to
+    ///             manually download the latest boost subscription data, or <see cref="GetBoostSubscriptionsAsync"/>.
+    ///         </para>
+    ///     </note>
+    /// </remarks>
+    /// <seealso cref="DownloadBoostSubscriptionsAsync"/>
+    /// <seealso cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/>
+    /// <seealso cref="KookSocketClient.AlwaysDownloadBoostSubscriptions"/>
+    public ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>> BoostSubscriptions => _boostSubscriptions?.ToImmutableDictionary();
+    /// <summary>
     ///     Gets a collection of users in this guild.
     /// </summary>
     /// <remarks>
@@ -216,6 +242,9 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <returns>
     ///     A collection of guild users found within this guild.
     /// </returns>
+    /// <seealso cref="DownloadUsersAsync"/>
+    /// <seealso cref="KookSocketClient.AlwaysDownloadUsers"/>
+    /// <seealso cref="KookSocketClient.DownloadUsersAsync"/>
     public IReadOnlyCollection<SocketGuildUser> Users => _members.ToReadOnlyCollection();
     /// <summary>
     ///     Gets a collection of all roles in this guild.
@@ -274,6 +303,14 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         _members = members;
         MemberCount = members.Count;
     }
+    internal void Update(ClientState state, IReadOnlyCollection<BoostSubscription> models)
+    {
+        _boostSubscriptions = models.GroupBy(x => x.UserId)
+            .ToDictionary(x => RestUser.Create(Kook, x.First().User) as IUser,
+                x => x.GroupBy(y => (y.StartTime, y.EndTime))
+                    .Select(y => new BoostSubscriptionMetadata(y.Key.StartTime, y.Key.EndTime, y.Count()))
+                    .ToImmutableArray() as IReadOnlyCollection<BoostSubscriptionMetadata>);
+    }
     internal void Update(ClientState state, RichModel model)
     {
         Update(state, model as ExtendedModel);
@@ -291,8 +328,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         Update(state, model as Model);
 
         Features = model.Features;
-        BoostNumber = model.BoostNumber;
-        BufferBoostNumber = model.BufferBoostNumber;
+        BoostSubscriptionCount = model.BoostSubscriptionCount;
+        BufferBoostSubscriptionCount = model.BufferBoostSubscriptionCount;
         BoostLevel = model.BoostLevel;
         Status = model.Status;
         AutoDeleteTime = model.AutoDeleteTime;
@@ -358,8 +395,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         OpenId = model.OpenId != 0 ? model.OpenId : null;
         DefaultChannelId = model.DefaultChannelId != 0 ? model.DefaultChannelId : null;
         WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
-        BoostNumber = model.BoostNumber;
-        BufferBoostNumber = model.BufferBoostNumber;
+        BoostSubscriptionCount = model.BoostSubscriptionCount;
+        BufferBoostSubscriptionCount = model.BufferBoostSubscriptionCount;
         BoostLevel = model.BoostLevel;
         Status = model.Status;
 
@@ -704,13 +741,20 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         return GuildHelper.GetUsersAsync(this, Kook, KookConfig.MaxUsersPerBatch, 1, options);
     }
 
-    public async Task DownloadUsersAsync()
+    /// <inheritdoc />
+    public async Task DownloadUsersAsync(RequestOptions options = null)
     {
-        await Kook.DownloadUsersAsync(new[] { this }).ConfigureAwait(false);
+        await Kook.DownloadUsersAsync(new[] { this }, options).ConfigureAwait(false);
     }
+    /// <inheritdoc />
     public async Task DownloadVoiceStatesAsync(RequestOptions options = null)
     {
-        await Kook.DownloadVoiceStatesAsync(new[] { this }).ConfigureAwait(false);
+        await Kook.DownloadVoiceStatesAsync(new[] { this }, options).ConfigureAwait(false);
+    }
+    /// <inheritdoc />
+    public async Task DownloadBoostSubscriptionsAsync(RequestOptions options = null)
+    {
+        await Kook.DownloadBoostSubscriptionsAsync(new[] { this }, options).ConfigureAwait(false);
     }
 
     /// <summary>

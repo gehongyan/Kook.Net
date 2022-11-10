@@ -106,7 +106,14 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     The number of boost subscribers of this guild.
     /// </returns>
-    int BoostNumber { get; }
+    int BoostSubscriptionCount { get; }
+    /// <summary>
+    ///     Gets the number of boost subscribers who activates buffer of this guild.
+    /// </summary>
+    /// <returns>
+    ///     The number of boost subscribers who activates buffer of this guild.
+    /// </returns>
+    int BufferBoostSubscriptionCount { get; }
     /// <summary>
     ///     Gets the max bitrate for voice channels in this guild.
     /// </summary>
@@ -118,13 +125,6 @@ public interface IGuild : IEntity<ulong>
     ///     Gets the upload limit in bytes for this guild. This number is dependent on the guild's boost status.
     /// </summary>
     ulong MaxUploadLimit { get; }
-    /// <summary>
-    ///     Gets the number of boost subscribers who activates buffer of this guild.
-    /// </summary>
-    /// <returns>
-    ///     The number of boost subscribers who activates buffer of this guild.
-    /// </returns>
-    int BufferBoostNumber { get; }
     /// <summary>
     ///     Gets the level of guild boosting in this guild.
     /// </summary>
@@ -517,10 +517,33 @@ public interface IGuild : IEntity<ulong>
     /// <remarks>
     ///     This method downloads all users found within this guild through the Gateway and caches them.
     /// </remarks>
+    /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous download operation.
     /// </returns>
-    Task DownloadUsersAsync();
+    Task DownloadUsersAsync(RequestOptions options = null);
+    /// <summary>
+    ///     Downloads all voice states for this guild.
+    /// </summary>
+    /// <remarks>
+    ///     This method downloads all voice states for this guild through the Gateway and caches them.
+    /// </remarks>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous download operation.
+    /// </returns>
+    Task DownloadVoiceStatesAsync(RequestOptions options = null);
+    /// <summary>
+    ///     Downloads all boost subscriptions for this guild.
+    /// </summary>
+    /// <remarks>
+    ///     This method downloads all boost subscriptions for this guild through the Gateway and caches them.
+    /// </remarks>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous download operation.
+    /// </returns>
+    Task DownloadBoostSubscriptionsAsync(RequestOptions options = null);
 
     /// <summary>
     ///     Gets a collection of users in this guild that the name or nickname contains the

@@ -8,10 +8,10 @@ internal class ExtendedGuild : Guild
     public object[] Features { get; set; }
 
     [JsonPropertyName("boost_num")]
-    public int BoostNumber { get; set; }
+    public int BoostSubscriptionCount { get; set; }
     
     [JsonPropertyName("buffer_boost_num")]
-    public int BufferBoostNumber { get; set; }
+    public int BufferBoostSubscriptionCount { get; set; }
 
     [JsonPropertyName("level")]
     public BoostLevel BoostLevel { get; set; }

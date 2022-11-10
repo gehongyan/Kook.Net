@@ -76,9 +76,9 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </remarks>
     public object[] Features { get; private set; }
     /// <inheritdoc />
-    public int BoostNumber { get; private set; }
+    public int BoostSubscriptionCount { get; private set; }
     /// <inheritdoc />
-    public int BufferBoostNumber { get; private set; }
+    public int BufferBoostSubscriptionCount { get; private set; }
     /// <inheritdoc />
     public BoostLevel BoostLevel { get; private set; }
     /// <summary>
@@ -108,8 +108,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         Update(model as Model);
 
         Features = model.Features;
-        BoostNumber = model.BoostNumber;
-        BufferBoostNumber = model.BufferBoostNumber;
+        BoostSubscriptionCount = model.BoostSubscriptionCount;
+        BufferBoostSubscriptionCount = model.BufferBoostSubscriptionCount;
         BoostLevel = model.BoostLevel;
         Status = model.Status;
         AutoDeleteTime = model.AutoDeleteTime;
@@ -124,7 +124,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         NotifyType = model.NotifyType;
         Region = model.Region;
         IsOpenEnabled = model.EnableOpen;
-        OpenId = model.OpenId != 0 ? model.OpenId : null;;
+        OpenId = model.OpenId != 0 ? model.OpenId : null;
         DefaultChannelId = model.DefaultChannelId != 0 ? model.DefaultChannelId : null;
         WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
 
@@ -607,7 +607,15 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
     /// <inheritdoc />
     /// <exception cref="NotSupportedException">Downloading users is not supported for a REST-based guild.</exception>
-    Task IGuild.DownloadUsersAsync() =>
+    Task IGuild.DownloadUsersAsync(RequestOptions options) =>
+        throw new NotSupportedException();
+    /// <inheritdoc />
+    /// <exception cref="NotSupportedException">Downloading voice states is not supported for a REST-based guild.</exception>
+    Task IGuild.DownloadVoiceStatesAsync(RequestOptions options) =>
+        throw new NotSupportedException();
+    /// <inheritdoc />
+    /// <exception cref="NotSupportedException">Downloading boost subscriptions is not supported for a REST-based guild.</exception>
+    Task IGuild.DownloadBoostSubscriptionsAsync(RequestOptions options) =>
         throw new NotSupportedException();
 
     /// <inheritdoc />

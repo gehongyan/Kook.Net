@@ -26,6 +26,7 @@ Kook.Net 是一个对 [KOOK（原开黑啦）API] 进行功能封装的类库，
 - [.NET Standard 2.0](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-0)
 - [.NET Framework 4.6.2](https://dotnet.microsoft.com/download/dotnet-framework/net462)
 
+> [!WARNING]
 > <sup>*</sup> .NET 5.0 已过期，请迁移至 .NET 6.0 或更新的版本。针对 .NET 5.0 的支持将在正式版中移除。
 
 [KOOK（原开黑啦）API]: https://developer.kookapp.cn/doc

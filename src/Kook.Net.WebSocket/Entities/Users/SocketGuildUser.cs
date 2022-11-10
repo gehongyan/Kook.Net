@@ -71,6 +71,36 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     public bool? IsDeafened => VoiceState?.IsDeafened ?? false;
     /// <inheritdoc />
     public bool? IsMuted => VoiceState?.IsMuted ?? false;
+
+    /// <summary>
+    ///     Gets a collection of all boost subscriptions of this user for this guild.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of boost subscription metadata of this user for this guild;
+    ///     or <see langword="null"/> if the boost subscription data has never been cached.
+    /// </returns>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         <para>
+    ///             Only when <see cref="KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> is set to <see langword="true"/>
+    ///             will this property be populated upon startup. Due to the lack of event support for boost subscriptions,
+    ///             this property may be not up-to-date. The changes of <see cref="SocketGuild.BoostSubscriptionCount"/> will trigger the update
+    ///             of this property, but KOOK gateway will not publish this event resulting from the changes of total boost subscription
+    ///             count. To fetch the latest boost subscription data, use <see cref="SocketGuild.DownloadBoostSubscriptionsAsync"/> upon <see cref="SocketGuild"/>
+    ///             or <see cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/>
+    ///             upon a <see cref="KookSocketClient"/> to manually download the latest boost subscription data,
+    ///             or <see cref="GetBoostSubscriptionsAsync"/>.
+    ///         </para>
+    ///     </note>
+    /// </remarks>
+    /// <seealso cref="SocketGuild.DownloadBoostSubscriptionsAsync"/>
+    /// <seealso cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/>
+    /// <seealso cref="KookSocketClient.AlwaysDownloadBoostSubscriptions"/>
+    public IReadOnlyCollection<BoostSubscriptionMetadata> BoostSubscriptions =>
+        Guild.BoostSubscriptions?
+            .Where(x => x.Key.Id == Id)
+            .SelectMany(x => x.Value)
+            .ToImmutableArray();
     /// <summary>
     ///     Returns a collection of roles that the user possesses.
     /// </summary>

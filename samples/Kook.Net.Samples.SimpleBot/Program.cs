@@ -22,7 +22,13 @@ class Program
         _channelId = ulong.Parse(Environment.GetEnvironmentVariable("KookDebugChannel", EnvironmentVariableTarget.User)
                                  ?? throw new ArgumentNullException(nameof(_token)));
         _client = new(new KookSocketConfig()
-            {AlwaysDownloadUsers = true, AlwaysDownloadVoiceStates = true, MessageCacheSize = 100, LogLevel = LogSeverity.Debug});
+        {
+            AlwaysDownloadUsers = true,
+            AlwaysDownloadVoiceStates = true,
+            AlwaysDownloadBoostSubscriptions = true,
+            MessageCacheSize = 100,
+            LogLevel = LogSeverity.Debug
+        });
 
         _client.Log += ClientOnLog;
         _client.GuildMemberOnline += ClientOnGuildMemberOnline;

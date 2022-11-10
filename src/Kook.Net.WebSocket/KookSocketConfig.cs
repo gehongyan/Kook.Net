@@ -73,9 +73,11 @@ public class KookSocketConfig : KookRestConfig
     /// </summary>
     /// <remarks>
     ///     <note>
+    ///         Setting this property to <c>true</c> will cause the client to download all users
+    ///         for all guilds upon startup.
     ///         Please note that it can be difficult to fill the cache completely on large guilds depending on the
     ///         traffic. If you are experiencing issues, try setting this to <c>false</c> and manually call
-    ///         <see cref="KookSocketClient.DownloadUsersAsync(IEnumerable{IGuild})"/> on the guilds you want.
+    ///         <see cref="KookSocketClient.DownloadUsersAsync(IEnumerable{IGuild},RequestOptions)"/> on the guilds you want.
     ///     </note>
     /// </remarks>
     public bool AlwaysDownloadUsers { get; set; } = false;
@@ -85,12 +87,29 @@ public class KookSocketConfig : KookRestConfig
     /// </summary>
     /// <remarks>
     ///     <note>
+    ///         Setting this property to <c>true</c> will cause the client to download all voice states
+    ///         for all guilds upon startup.
     ///         Please note that it can be difficult to fill the cache completely on large guilds depending on the
     ///         traffic. If you are experiencing issues, try setting this to <c>false</c> and manually call
-    ///         <see cref="KookSocketClient.DownloadVoiceStatesAsync(IEnumerable{IGuild})"/> on the guilds you want.
+    ///         <see cref="KookSocketClient.DownloadVoiceStatesAsync(IEnumerable{IGuild},RequestOptions)"/> on the guilds you want.
     ///     </note>
     /// </remarks>
     public bool AlwaysDownloadVoiceStates { get; set; } = false;
+
+    /// <summary>
+    ///     Gets or sets whether or not all boost subscriptions should be downloaded as guilds come available.
+    /// </summary>
+    /// <remarks>
+    ///     <note>
+    ///         Setting this property to <c>true</c> will cause the client to download all boost subscriptions
+    ///         for all guilds upon startup and when <see cref="BaseSocketClient.GuildUpdated"/> is triggered with
+    ///         changes occurring to <see cref="SocketGuild.BoostSubscriptionCount"/>.
+    ///         Please note that it can be difficult to fill the cache completely on large guilds depending on the
+    ///         traffic. If you are experiencing issues, try setting this to <c>false</c> and manually call
+    ///         <see cref="KookSocketClient.DownloadBoostSubscriptionsAsync(IEnumerable{IGuild},RequestOptions)"/> on the guilds you want.
+    ///     </note>
+    /// </remarks>
+    public bool AlwaysDownloadBoostSubscriptions { get; set; } = false;
 
     /// <summary>
     ///     Gets or sets the maximum wait time in milliseconds between GUILD_AVAILABLE events before firing READY.

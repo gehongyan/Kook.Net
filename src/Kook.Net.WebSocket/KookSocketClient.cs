@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -48,6 +49,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     internal WebSocketProvider WebSocketProvider { get; private set; }
     internal bool AlwaysDownloadUsers { get; private set; }
     internal bool AlwaysDownloadVoiceStates { get; private set; }
+    internal bool AlwaysDownloadBoostSubscriptions { get; private set; }
     internal int? HandlerTimeout { get; private set; }
     internal new KookSocketApiClient ApiClient => base.ApiClient;
     /// <inheritdoc />
@@ -86,6 +88,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         WebSocketProvider = config.WebSocketProvider;
         AlwaysDownloadUsers = config.AlwaysDownloadUsers;
         AlwaysDownloadVoiceStates = config.AlwaysDownloadVoiceStates;
+        AlwaysDownloadBoostSubscriptions = config.AlwaysDownloadBoostSubscriptions;
         HandlerTimeout = config.HandlerTimeout;
         State = new ClientState(0, 0);
         Rest = new KookSocketRestClient(config, ApiClient);
@@ -287,39 +290,53 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     }
     internal void RemoveUser(ulong id)
         => State.RemoveUser(id);
-    
-    public async Task DownloadUsersAsync(IEnumerable<IGuild> guilds)
+
+    /// <summary>
+    ///     Downloads all users for the specified guilds.
+    /// </summary>
+    /// <param name="guilds">
+    ///     The guilds to download the users for. If <c>null</c>, all available guilds will be downloaded.
+    /// </param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    public async Task DownloadUsersAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null)
     {
         if (ConnectionState == ConnectionState.Connected)
         {
-            await ProcessUserDownloadsAsync(guilds.Select(x => GetGuild(x.Id)).Where(x => x != null)).ConfigureAwait(false);
+            await ProcessUserDownloadsAsync((guilds ?? Guilds.Where(x => x.IsAvailable)).Select(x => GetGuild(x.Id)).Where(x => x != null), options).ConfigureAwait(false);
         }
     }
-    private async Task ProcessUserDownloadsAsync(IEnumerable<SocketGuild> guilds)
+    private async Task ProcessUserDownloadsAsync(IEnumerable<IGuild> guilds, RequestOptions options)
     {
         foreach (SocketGuild socketGuild in guilds)
         {
-            var guildMembers = await ApiClient.GetGuildMembersAsync(socketGuild.Id).FlattenAsync().ConfigureAwait(false);
+            var guildMembers = await ApiClient.GetGuildMembersAsync(socketGuild.Id, options: options).FlattenAsync().ConfigureAwait(false);
             socketGuild.Update(State, guildMembers.ToImmutableArray());
         }
     }
-    
-    public async Task DownloadVoiceStatesAsync(IEnumerable<IGuild> guilds)
+
+    /// <summary>
+    ///     Downloads all voice states for the specified guilds.
+    /// </summary>
+    /// <param name="guilds">
+    ///     The guilds to download the voice states for. If <c>null</c>, all available guilds will be downloaded.
+    /// </param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    public async Task DownloadVoiceStatesAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null)
     {
         if (ConnectionState == ConnectionState.Connected)
         {
-            await ProcessVoiceStateDownloadsAsync(guilds.Select(x => GetGuild(x.Id)).Where(x => x != null)).ConfigureAwait(false);
+            await ProcessVoiceStateDownloadsAsync((guilds ?? Guilds.Where(x => x.IsAvailable)).Select(x => GetGuild(x.Id)).Where(x => x != null), options).ConfigureAwait(false);
         }
     }
-    private async Task ProcessVoiceStateDownloadsAsync(IEnumerable<SocketGuild> guilds)
+    private async Task ProcessVoiceStateDownloadsAsync(IEnumerable<IGuild> guilds, RequestOptions options)
     {
-        foreach (SocketGuild socketGuild in guilds)
+        foreach (SocketGuild socketGuild in guilds.OfType<SocketGuild>())
         {
-            foreach (SocketVoiceChannel channel in socketGuild.VoiceChannels)
+            foreach (ulong channelId in socketGuild.VoiceChannels.Select(x => x.Id))
             {
-                IReadOnlyCollection<User> users = await ApiClient.GetConnectedUsersAsync(channel.Id).ConfigureAwait(false);
+                IReadOnlyCollection<User> users = await ApiClient.GetConnectedUsersAsync(channelId, options: options).ConfigureAwait(false);
                 foreach (User user in users)
-                    socketGuild.AddOrUpdateVoiceState(user.Id, channel.Id);
+                    socketGuild.AddOrUpdateVoiceState(user.Id, channelId);
             }
             
             GetGuildMuteDeafListResponse model = await ApiClient.GetGuildMutedDeafenedUsersAsync(socketGuild.Id).ConfigureAwait(false);
@@ -333,8 +350,30 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                 socketGuild.AddOrUpdateVoiceState(id, isDeafened: false);
         }
     }
-    
-    
+
+    /// <summary>
+    ///     Downloads all boost subscriptions for the specified guilds.
+    /// </summary>
+    /// <param name="guilds">
+    ///     The guilds to download the boost subscriptions for. If <c>null</c>, all available guilds will be downloaded.
+    /// </param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    public async Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null)
+    {
+        if (ConnectionState == ConnectionState.Connected)
+        {
+            await ProcessBoostSubscriptionsDownloadsAsync((guilds ?? Guilds.Where(x => x.IsAvailable)).Select(x => GetGuild(x.Id)).Where(x => x != null), options).ConfigureAwait(false);
+        }
+    }
+    private async Task ProcessBoostSubscriptionsDownloadsAsync(IEnumerable<IGuild> guilds, RequestOptions options)
+    {
+        foreach (SocketGuild socketGuild in guilds.OfType<SocketGuild>())
+        {
+            var subscriptions = await ApiClient.GetGuildBoostSubscriptionsAsync(socketGuild.Id, options: options).FlattenAsync().ConfigureAwait(false);
+            socketGuild.Update(State, subscriptions.ToImmutableArray());
+        }
+    }
+
     #region ProcessMessageAsync
     
     private async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType, int? sequence, object payload)
@@ -1151,6 +1190,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     {
                                         var before = guild.Clone();
                                         guild.Update(State, data);
+                                        if (BaseConfig.AlwaysDownloadBoostSubscriptions && before.BoostSubscriptionCount != guild.BoostSubscriptionCount)
+                                            await guild.DownloadBoostSubscriptionsAsync().ConfigureAwait(false);
                                         await TimedInvokeAsync(_guildUpdatedEvent, nameof(GuildUpdated), before, guild).ConfigureAwait(false);
                                     }
                                     else
@@ -1525,6 +1566,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                 _ = DownloadUsersAsync(Guilds.Where(x => x.IsAvailable && !x.HasAllMembers));
                             if (BaseConfig.AlwaysDownloadVoiceStates)
                                 _ = DownloadVoiceStatesAsync(Guilds.Where(x => x.IsAvailable));
+                            if (BaseConfig.AlwaysDownloadBoostSubscriptions)
+                                _ = DownloadBoostSubscriptionsAsync(Guilds.Where(x => x.IsAvailable));
 
                             await TimedInvokeAsync(_readyEvent, nameof(Ready)).ConfigureAwait(false);
                             await _gatewayLogger.InfoAsync("Ready").ConfigureAwait(false);
