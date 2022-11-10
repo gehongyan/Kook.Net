@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <VersionPrefix>0.0.45</VersionPrefix>
+        <VersionPrefix>0.0.46</VersionPrefix>
         <VersionSuffix>alpha</VersionSuffix>
         <LangVersion>latest</LangVersion>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
