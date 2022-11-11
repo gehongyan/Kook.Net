@@ -217,10 +217,42 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///         </para>
     ///     </note>
     /// </remarks>
+    /// <seealso cref="ValidBoostSubscriptions"/>
     /// <seealso cref="DownloadBoostSubscriptionsAsync"/>
     /// <seealso cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/>
     /// <seealso cref="KookSocketClient.AlwaysDownloadBoostSubscriptions"/>
     public ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>> BoostSubscriptions => _boostSubscriptions?.ToImmutableDictionary();
+    /// <summary>
+    ///     Gets a dictionary of all boost subscriptions which have not expired for this guild.
+    /// </summary>
+    /// <returns>
+    ///     A read-only dictionary containing all boost subscription metadata which have not expired for this guild grouped by users;
+    ///     or <see langword="null"/> if the boost subscription data has never been cached.
+    /// </returns>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         <para>
+    ///             Only when <see cref="KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> is set to <see langword="true"/>
+    ///             will this property be populated upon startup. Due to the lack of event support for boost subscriptions,
+    ///             this property will never be updated. The changes of <see cref="SocketGuild.BoostSubscriptionCount"/> will trigger the update
+    ///             of this property, but KOOK gateway will not publish this event resulting from the changes of total boost subscription
+    ///             count. To fetch the latest boost subscription data, use <see cref="DownloadBoostSubscriptionsAsync"/> or
+    ///             <see cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/> upon a <see cref="KookSocketClient"/> to
+    ///             manually download the latest boost subscription data, or <see cref="GetBoostSubscriptionsAsync"/>.
+    ///         </para>
+    ///     </note>
+    /// </remarks>
+    /// <seealso cref="BoostSubscriptions"/>
+    /// <seealso cref="DownloadBoostSubscriptionsAsync"/>
+    /// <seealso cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/>
+    /// <seealso cref="KookSocketClient.AlwaysDownloadBoostSubscriptions"/>
+    public ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>> ValidBoostSubscriptions =>
+        _boostSubscriptions?.Select(x =>
+                new KeyValuePair<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>(x.Key, x.Value
+                    .Where(y => y.IsValid)
+                    .ToImmutableArray() as IReadOnlyCollection<BoostSubscriptionMetadata>))
+            .Where(x => x.Value.Any())
+            .ToImmutableDictionary();
     /// <summary>
     ///     Gets a collection of users in this guild.
     /// </summary>
