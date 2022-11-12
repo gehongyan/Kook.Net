@@ -24,13 +24,9 @@
 
 - [.NET 7.0](https://dotnet.microsoft.com/download/dotnet/7.0)
 - [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
-- [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0) <sup>*</sup>
 - [.NET Standard 2.1](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-1)
 - [.NET Standard 2.0](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-0)
 - [.NET Framework 4.6.2](https://dotnet.microsoft.com/download/dotnet-framework/net462)
-
-> <sup>*</sup> .NET 5.0 has reached end of life, please move to .NET 6.0 or later. 
-> Support for .NET 5.0 will be dropped in stable releases.
 
 ---
 
@@ -64,3 +60,16 @@ Kook.Net was developed with reference to **[Discord.Net](https://github.com/disc
 for portion of the code in this repository according to [this license](https://github.com/discord-net/Discord.Net/blob/dev/LICENSE).
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net?ref=badge_large)
+
+---
+
+## Acknowledgements
+
+<img src="./assets/Discord.Net_Logo.svg" alt="drawing" height="50"/>
+
+Special thanks to [Discord.Net](https://github.com/discord-net/Discord.Net) for such a great project.
+
+<img src="./assets/JetBrains_Logo.svg" height="50"/>
+
+Special thanks to [JetBrains](https://www.jetbrains.com) for providing free licenses for their awesome tools -
+[Rider](https://www.jetbrains.com/rider/) and [ReSharper](https://www.jetbrains.com/resharper/).

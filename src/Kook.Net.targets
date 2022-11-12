@@ -2,8 +2,8 @@
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <VersionPrefix>0.0.46.2</VersionPrefix>
-        <VersionSuffix>alpha</VersionSuffix>
+        <VersionPrefix>0.1.0</VersionPrefix>
+        <VersionSuffix>rc</VersionSuffix>
         <LangVersion>latest</LangVersion>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <Authors>gehongyan</Authors>
@@ -13,8 +13,8 @@
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/gehongyan/Kook.Net.git</RepositoryUrl>
         <Company>gehongyan</Company>
-        <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net7.0;net6.0;net5.0;net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-        <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">net7.0;net6.0;net5.0;netstandard2.0;netstandard2.1</TargetFrameworks>
+        <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net7.0;net6.0;net462;netstandard2.0;netstandard2.1</TargetFrameworks>
+        <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">net7.0;net6.0;netstandard2.0;netstandard2.1</TargetFrameworks>
         <NoWarn>NETSDK1138</NoWarn>
         <PackageVersion>$(Version)</PackageVersion>
     </PropertyGroup>
