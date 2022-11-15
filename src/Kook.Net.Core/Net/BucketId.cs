@@ -27,7 +27,7 @@ public class BucketId : IEquatable<BucketId>
     /// <summary>
     ///     Gets if this bucket is a hash type.
     /// </summary>
-    public bool IsHashBucket { get => BucketHash != null; }
+    public bool IsHashBucket => BucketHash != null;
 
     private BucketId(HttpMethod httpMethod, string endpoint, IEnumerable<KeyValuePair<string, string>> majorParameters, string bucketHash)
     {

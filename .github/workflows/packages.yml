@@ -1,0 +1,56 @@
+name: Kook.Net Packages
+
+on:
+  workflow_call:
+    inputs:
+      dotnet-version:
+        description: '.NET version'
+        required: true
+        type: string
+    secrets:
+      NUGET_API_KEY:
+        description: 'NuGet API Key'
+        required: true
+      GITHUB_PACKAGES_KEY:
+        description: 'GitHub API Key'
+        required: true
+
+jobs:
+  push_packages:
+    name: Push Packages
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+
+      - name: Cache Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Kook.Net.targets') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+
+      - name: Generate Packages
+        run: dotnet pack src --configuration Release --output packages
+
+      - name: Push Packages to NuGet
+        run: dotnet nuget push .\packages\*.nupkg -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json --skip-duplicate
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+
+      - name: Push Packages to Github
+        run: dotnet nuget push .\packages\*.nupkg -k $env:GITHUB_PACKAGES_KEY -s https://nuget.pkg.github.com/gehongyan/index.json --skip-duplicate
+        env:
+          GITHUB_PACKAGES_KEY: ${{ secrets.GITHUB_PACKAGES_KEY }}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Packages
+          path: ./packages/

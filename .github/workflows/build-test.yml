@@ -1,0 +1,43 @@
+name: Kook.Net Test
+
+on:
+  workflow_call:
+    inputs:
+      target:
+        description: 'Targeting OS'
+        required: true
+        type: string
+      dotnet-version:
+        description: '.NET version'
+        required: true
+        type: string
+
+jobs:
+  build_and_test:
+    name: Build and Test
+    runs-on: ${{ inputs.target }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+
+      - name: Cache Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Kook.Net.targets') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+
+      - name: Restore Dependencies
+        run: dotnet restore src
+
+      - name: Build
+        run: dotnet build src --no-restore
+
+      - name: Test
+        run: dotnet test src --no-build --verbosity normal --filter Category!=Integration --blame-hang-timeout 15min

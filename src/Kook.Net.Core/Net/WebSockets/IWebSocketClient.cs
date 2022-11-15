@@ -1,5 +1,8 @@
 ﻿namespace Kook.Net.WebSockets;
 
+/// <summary>
+///     Represents a generic WebSocket client.
+/// </summary>
 public interface IWebSocketClient : IDisposable
 {
     event Func<byte[], int, int, Task> BinaryMessage;

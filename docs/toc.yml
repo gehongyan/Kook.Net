@@ -4,3 +4,6 @@
 - name: API 文档
   href: api/
   topicUid: API.Docs
+- name: 变更日志
+  href: changelog/
+  topicUid: Changelog

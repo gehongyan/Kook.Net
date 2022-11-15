@@ -86,7 +86,7 @@ Kook.Net 广泛采用 .NET 的 [异步编程模型]，绝大多数操作都是�
 
 [!code-csharp[Simple Logging](samples/simple-logging.cs)]
 
-[API 文档]: xref:KaiHeila.Rest.BaseKaiHeilaClient.Log
+[API 文档]: xref:Kook.Rest.BaseKookClient.Log
 
 ### 创建 KOOK Bot 客户端程序
 

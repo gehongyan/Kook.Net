@@ -31,7 +31,7 @@ Kook.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧的平
 3. 在 `浏览` 选项卡中，搜索 `Kook.Net`
 
     > [!NOTE]
-    > 在正式版发布前，搜索 Kook.Net 需勾选 `包括预发行版`，否则，该搜索结果无法展示在列表中。
+    > 如要安装预览版 Kook.Net，请勾选 `包括预发行版`，否则，预览版搜索结果无法展示在列表中。
 
     ![img.png](images/install/install-vs-nuget.png)
 
@@ -47,7 +47,7 @@ Kook.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧的平
 3. 在 `Packages` 选项卡中，搜索 `Kook.Net`
 
     > [!NOTE]
-    > 在正式版发布前，搜索 Kook.Net 需勾选 `Prerelease` ，否则，该搜索结果无法展示在列表中。
+    > 如要安装预览版 Kook.Net，请勾选 `Prerelease` ，否则，预览版搜索结果无法展示在列表中。
 
 4. 右键点击 `Kook.Net`，点击 `Install Kook.Net ...`
 
@@ -67,10 +67,8 @@ Kook.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧的平
 3. 执行 `dotnet add package Kook.Net`
 
     > [!NOTE]
-    > 在正式版发布前，使用 dotnet CLI 添加 Kook.Net 需附加 `--prerelease` 选项，
+    > 如要安装预览版 Kook.Net，使用 dotnet CLI 添加 Kook.Net 时需附加 `--prerelease` 选项，
     > 否则，dotnet CLI 将只尝试为项目添加稳定版本的 NuGet 包。
-
----
 
 ## 从源代码编译
 
@@ -91,7 +89,5 @@ Kook.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧的平
 ### 使用 Command Line
 
 * [.NET 6 SDK]
-
----
 
 [.NET 6 SDK]: https://dotnet.microsoft.com/download

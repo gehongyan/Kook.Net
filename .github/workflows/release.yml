@@ -1,0 +1,25 @@
+name: Kook.Net on Release
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  build_and_test:
+    name: Build and Test
+    strategy:
+      matrix:
+        target: [ windows-latest, ubuntu-latest, macOS-latest ]
+    uses: ./.github/workflows/build-test.yml
+    with:
+      target: ${{ matrix.target }}
+      dotnet-version: 7.0.x
+
+  call_doc:
+    name: Generate Documentation
+    needs: build_and_test
+    uses: ./.github/workflows/doc.yml
+    with:
+      dotnet-version: 7.0.x
+    secrets:
+      DOC_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}

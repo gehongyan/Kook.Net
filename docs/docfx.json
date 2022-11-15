@@ -4,7 +4,13 @@
       "src": [
         {
           "src": "../src",
-          "files": ["**.csproj"]
+          "exclude": [
+            "**/bin/**",
+            "**/obj/**"
+          ],
+          "files": [
+            "**.csproj"
+          ]
         }
       ],
       "dest": "api"
@@ -13,20 +19,41 @@
   "build": {
     "content": [
       {
-        "files": ["api/**.yml", "api/index.md"]
+        "files": [
+          "api/**.yml",
+          "api/index.md"
+        ]
       },
       {
-        "files": ["toc.yml", "index.md"]
+        "files": [
+          "toc.yml",
+          "index.md"
+        ]
       },
       {
-        "files": ["guides/**.md", "guides/**/toc.yml"]
+        "files": [
+          "guides/**.md",
+          "guides/**/toc.yml"
+        ]
+      },
+      {
+        "files": [
+          "changelog/**.md",
+          "changelog/**/toc.yml"
+        ]
       }
     ],
     "resource": [
       {
         "files": [
           "**/images/**",
-          "**/samples/**"
+          "**/samples/**",
+          "langwordMapping.md"
+        ],
+        "exclude": [
+          "_site/**",
+          "**/obj/**",
+          "**.meta"
         ]
       }
     ],
@@ -35,15 +62,23 @@
       "default",
       "templates/singulinkfx"
     ],
-    "postProcessors": ["ExtractSearchIndex"],
+    "xrefService": [
+      "https://xref.docs.microsoft.com/query?uid={uid}"
+    ],
+    "postProcessors": [
+      "ExtractSearchIndex"
+    ],
     "globalMetadata": {
       "_appTitle": "Kook.Net 文档",
       "_appName": "Kook.Net 文档",
       "_appFooter": "Kook.Net (c) 2022",
       "_enableSearch": true,
-      "_appFaviconPath": "favicon.ico"
+      "_appFaviconPath": "favicon.ico",
+      "_gitContribute": {
+        "branch": "master"
+      }
     },
-    "sitemap":{
+    "sitemap": {
       "baseUrl": "https://www.kooknet.dev"
     }
   }
