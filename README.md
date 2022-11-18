@@ -69,8 +69,10 @@ for portion of the code in this repository according to [this license](https://g
 
 Special thanks to [Discord.Net](https://github.com/discord-net/Discord.Net) for such a great project.
 
-<img src="./assets/Rider_Icon.svg" height="50"/>
-<img src="./assets/ReSharper_Icon.png" height="50"/>
+<p>
+  <img src="./assets/Rider_Icon.svg" height="50"/>
+  <img src="./assets/ReSharper_Icon.png" height="50"/>
+</p>
 
 Special thanks to [JetBrains](https://www.jetbrains.com) for providing free licenses for their awesome tools -
 [Rider](https://www.jetbrains.com/rider/) and [ReSharper](https://www.jetbrains.com/resharper/).
