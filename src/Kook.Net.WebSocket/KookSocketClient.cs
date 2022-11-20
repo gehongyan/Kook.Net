@@ -1637,7 +1637,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         }
         catch (Exception ex)
         {
-            await _gatewayLogger.ErrorAsync($"Error handling {gatewaySocketFrameType}", ex).ConfigureAwait(false);
+            await _gatewayLogger.ErrorAsync($"Error handling {gatewaySocketFrameType}. Payload: {payload}", ex).ConfigureAwait(false);
         }
     }
 
