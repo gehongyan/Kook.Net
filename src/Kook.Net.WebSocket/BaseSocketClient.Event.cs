@@ -414,6 +414,11 @@ public abstract partial class BaseSocketClient
     ///         The guild where the banning action takes place is passed in the event handler parameter as
     ///         <see cref="SocketGuild"/>.
     ///     </para>
+    ///     <para>
+    ///         The banning actions are usually taken with kicking, and the kicking action takes place
+    ///         before the banning action according to the KOOK gateway events. Therefore, the banned users
+    ///         parameter is usually a collection of <see cref="SocketUnknownUser"/>.
+    ///     </para>
     /// </remarks>
     public event Func<IReadOnlyCollection<SocketUser>, SocketUser, SocketGuild, Task> UserBanned
     {
@@ -441,12 +446,16 @@ public abstract partial class BaseSocketClient
     ///         <see cref="SocketGuild"/>.
     ///     </para>
     /// </remarks>
-    public event Func<SocketUser, SocketGuild, Task> UserUnbanned
+    ///     <para>
+    ///         The unbanning actions are usually taken to users that are not in the guild. Therefore, the unbanned users
+    ///         parameter is usually a collection of <see cref="SocketUnknownUser"/>.
+    ///     </para>
+    public event Func<IReadOnlyCollection<SocketUser>, SocketUser, SocketGuild, Task> UserUnbanned
     {
         add => _userUnbannedEvent.Add(value);
         remove => _userUnbannedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketUser, SocketGuild, Task>> _userUnbannedEvent = new AsyncEvent<Func<SocketUser, SocketGuild, Task>>();
+    internal readonly AsyncEvent<Func<IReadOnlyCollection<SocketUser>, SocketUser, SocketGuild, Task>> _userUnbannedEvent = new AsyncEvent<Func<IReadOnlyCollection<SocketUser>, SocketUser, SocketGuild, Task>>();
     /// <summary> Fired when a user is updated. </summary>
     public event Func<SocketUser, SocketUser, Task> UserUpdated
     {

@@ -439,13 +439,17 @@ internal class KookRestApiClient : IDisposable
     }
 
     public IAsyncEnumerable<IReadOnlyCollection<BoostSubscription>> GetGuildBoostSubscriptionsAsync(ulong guildId,
+        DateTimeOffset? since = null, DateTimeOffset? until = null,
         int limit = KookConfig.MaxUsersPerBatch, int fromPage = 1, RequestOptions options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
+        string query = $"guild_id={guildId}";
+        if (since.HasValue) query += $"&start_time={since.Value.ToUnixTimeMilliseconds()}";
+        if (until.HasValue) query += $"&end_time={until.Value.ToUnixTimeMilliseconds()}";
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds(guildId: guildId);
-        return SendPagedAsync<BoostSubscription>(HttpMethod.Get, (pageSize, page) => $"guild-boost/history?guild_id={guildId}&page_size={pageSize}&page={page}",
+        return SendPagedAsync<BoostSubscription>(HttpMethod.Get, (pageSize, page) => $"guild-boost/history?{query}&page_size={pageSize}&page={page}",
             ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(pageSize: 50), options: options);
     }
 

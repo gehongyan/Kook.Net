@@ -185,6 +185,17 @@ public interface IGuild : IEntity<ulong>
     /// </returns>
     Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetBoostSubscriptionsAsync(RequestOptions options = null);
 
+    /// <summary>
+    ///     Gets subscriptions which are not expired for this guild.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous retrieval operation. The task result contains
+    ///     a collection of <see cref="BoostSubscriptionMetadata"/> which are not expired,
+    ///     each representing the subscriptions information.
+    /// </returns>
+    Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetActiveBoostSubscriptionsAsync(RequestOptions options = null);
+
     #endregion
 
     #region Guild Bans
