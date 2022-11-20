@@ -33,7 +33,7 @@ public static class SocketGuildHelper
         SocketGuild guild, BaseSocketClient client, RequestOptions options)
     {
         IEnumerable<BoostSubscription> subscriptions = await client.ApiClient
-            .GetGuildBoostSubscriptionsAsync(guild.Id, since: DateTimeOffset.Now, options: options).FlattenAsync();
+            .GetGuildBoostSubscriptionsAsync(guild.Id, since: DateTimeOffset.Now.Add(-KookConfig.BoostPackDuration), options: options).FlattenAsync();
         return subscriptions.GroupBy(x => x.UserId)
             .ToImmutableDictionary(x => guild.GetUser(x.Key) ?? client.GetUser(x.Key) ?? RestUser.Create(client, x.First().User) as IUser,
                 x => x.GroupBy(y => (y.StartTime, y.EndTime))

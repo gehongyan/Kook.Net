@@ -443,8 +443,8 @@ internal class KookRestApiClient : IDisposable
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         string query = $"guild_id={guildId}";
-        if (since.HasValue) query += $"&start_time={since.Value.ToUnixTimeMilliseconds()}";
-        if (until.HasValue) query += $"&end_time={until.Value.ToUnixTimeMilliseconds()}";
+        if (since.HasValue) query += $"&start_time={since.Value.ToUnixTimeSeconds()}";
+        if (until.HasValue) query += $"&end_time={until.Value.ToUnixTimeSeconds()}";
         options = RequestOptions.CreateOrClone(options);
         
         var ids = new BucketIds(guildId: guildId);
