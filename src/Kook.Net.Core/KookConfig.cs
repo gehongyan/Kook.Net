@@ -131,6 +131,11 @@ public class KookConfig
     public const int MaxIntimacyScore = 2200;
 
     /// <summary>
+    ///     Returns the duration of a Kook boost pack.
+    /// </summary>
+    public static readonly TimeSpan BoostPackDuration = TimeSpan.FromDays(30);
+
+    /// <summary>
     ///     Gets or sets how a request should act in the case of an error, by default.
     /// </summary>
     /// <returns>
