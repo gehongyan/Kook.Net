@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <VersionPrefix>0.1.0</VersionPrefix>
+        <VersionPrefix>0.1.1</VersionPrefix>
 <!--        <VersionSuffix>rc</VersionSuffix>-->
         <LangVersion>latest</LangVersion>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
