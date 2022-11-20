@@ -120,8 +120,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         GuildAvailable += g =>
         {
             if (_guildDownloadTask?.IsCompleted == true 
-                && ConnectionState == ConnectionState.Connected 
-                && AlwaysDownloadUsers && !g.HasAllMembers)
+                && ConnectionState == ConnectionState.Connected)
             {
                 if (AlwaysDownloadUsers && !g.HasAllMembers)
                     _ = g.DownloadUsersAsync();
