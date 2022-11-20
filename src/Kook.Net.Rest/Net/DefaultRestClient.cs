@@ -25,9 +25,14 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 
     private readonly HttpClient _client;
     private readonly string _baseUrl;
-    private readonly JsonSerializerOptions _serializerOptions;
     private CancellationToken _cancelToken;
     private bool _isDisposed;
+
+#if DEBUG_REST
+    private readonly JsonSerializerOptions _serializerOptions;
+    private int _requestId;
+    private readonly SemaphoreSlim _requestIdLock = new SemaphoreSlim(1, 1);
+#endif
 
     public DefaultRestClient(string baseUrl, bool useProxy = false)
     {
@@ -44,11 +49,14 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         SetHeader("accept-encoding", "gzip, deflate");
 
         _cancelToken = CancellationToken.None;
+
+#if DEBUG_REST
         _serializerOptions = new JsonSerializerOptions
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
+#endif
     }
     private void Dispose(bool disposing)
     {
@@ -164,12 +172,18 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 
     private async Task<RestResponse> SendInternalAsync(HttpRequestMessage request, CancellationToken cancelToken)
     {
+#if DEBUG_REST
+        await _requestIdLock.WaitAsync(1, cancelToken);
+        _requestId++;
+        int requestId = _requestId;
+        _requestIdLock.Release();
+#endif
         using (var cancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancelToken, cancelToken))
         {
 #if DEBUG_REST
-                Debug.WriteLine($"[REST] {request.Method} {request.RequestUri} {request.Content?.Headers.ContentType?.MediaType}");
-                if (request.Content?.Headers.ContentType?.MediaType == "application/json")
-                    Debug.WriteLine($"[REST] {await request.Content.ReadAsStringAsync().ConfigureAwait(false)}");
+            Debug.WriteLine($"[REST] [{requestId}] {request.Method} {request.RequestUri} {request.Content?.Headers.ContentType?.MediaType}");
+            if (request.Content?.Headers.ContentType?.MediaType == "application/json")
+                Debug.WriteLine($"[REST] {await request.Content.ReadAsStringAsync().ConfigureAwait(false)}");
 #endif
             cancelToken = cancelTokenSource.Token;
             HttpResponseMessage response = await _client.SendAsync(request, cancelToken).ConfigureAwait(false);
@@ -178,11 +192,11 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
             var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
 #if DEBUG_REST
-                Debug.WriteLine($"[REST] {response.StatusCode} {response.ReasonPhrase}");
+                Debug.WriteLine($"[REST] [{requestId}] {response.StatusCode} {response.ReasonPhrase}");
                 if (response.Content?.Headers.ContentType?.MediaType == "application/json")
-                    Debug.WriteLine($"[REST] {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
+                    Debug.WriteLine($"[REST] [{requestId}] {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
 #endif
-            return new RestResponse(response.StatusCode, headers, stream, response.Content.Headers.ContentType);
+            return new RestResponse(response.StatusCode, headers, stream, response.Content?.Headers.ContentType);
         }
     }
 

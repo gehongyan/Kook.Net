@@ -6,11 +6,11 @@ namespace Kook.Rest;
 public abstract class BaseKookClient : IKookClient
 {
     #region BaseKookClient
-    public event Func<LogMessage, Task> Log { add { _logEvent.Add(value); } remove { _logEvent.Remove(value); } }
+    public event Func<LogMessage, Task> Log { add => _logEvent.Add(value); remove => _logEvent.Remove(value); }
     internal readonly AsyncEvent<Func<LogMessage, Task>> _logEvent = new AsyncEvent<Func<LogMessage, Task>>();
-    public event Func<Task> LoggedIn { add { _loggedInEvent.Add(value); } remove { _loggedInEvent.Remove(value); } }
+    public event Func<Task> LoggedIn { add => _loggedInEvent.Add(value); remove => _loggedInEvent.Remove(value); }
     private readonly AsyncEvent<Func<Task>> _loggedInEvent = new AsyncEvent<Func<Task>>();
-    public event Func<Task> LoggedOut { add { _loggedOutEvent.Add(value); } remove { _loggedOutEvent.Remove(value); } }
+    public event Func<Task> LoggedOut { add => _loggedOutEvent.Add(value); remove => _loggedOutEvent.Remove(value); }
     private readonly AsyncEvent<Func<Task>> _loggedOutEvent = new AsyncEvent<Func<Task>>();
     
     internal readonly Logger _restLogger;

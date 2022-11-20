@@ -460,6 +460,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc />
     public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetBoostSubscriptionsAsync(RequestOptions options = null)
         => SocketGuildHelper.GetBoostSubscriptionsAsync(this, Kook, options);
+    public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetActiveBoostSubscriptionsAsync(RequestOptions options = null)
+        => SocketGuildHelper.GetActiveBoostSubscriptionsAsync(this, Kook, options);
 
     #endregion
     

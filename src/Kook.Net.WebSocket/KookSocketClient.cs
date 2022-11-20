@@ -1260,10 +1260,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     {
                                         SocketUser operatorUser = guild.GetUser(data.OperatorUserId) 
                                                                   ?? (SocketUser) SocketUnknownUser.Create(this, State, data.OperatorUserId);
-                                        var bannedUsers = data.UserIds.Select(id => guild.GetUser(id) 
+                                        var unbannedUsers = data.UserIds.Select(id => guild.GetUser(id) 
                                                 ?? (SocketUser) SocketUnknownUser.Create(this, State, id))
                                             .ToReadOnlyCollection(() => data.UserIds.Length);
-                                        await TimedInvokeAsync(_userBannedEvent, nameof(UserBanned), bannedUsers, operatorUser, guild).ConfigureAwait(false);
+                                        await TimedInvokeAsync(_userUnbannedEvent, nameof(UserUnbanned), unbannedUsers, operatorUser, guild).ConfigureAwait(false);
                                     }
                                     else
                                     {

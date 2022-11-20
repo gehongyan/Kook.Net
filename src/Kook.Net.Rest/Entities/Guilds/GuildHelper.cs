@@ -27,6 +27,18 @@ internal static class GuildHelper
                     .ToImmutableArray() as IReadOnlyCollection<BoostSubscriptionMetadata>);
     }
 
+    public static async Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetActiveBoostSubscriptionsAsync(
+        IGuild guild, BaseKookClient client, RequestOptions options)
+    {
+        IEnumerable<BoostSubscription> subscriptions = await client.ApiClient
+            .GetGuildBoostSubscriptionsAsync(guild.Id, since: DateTimeOffset.Now, options: options).FlattenAsync();
+        return subscriptions.GroupBy(x => x.UserId)
+            .ToImmutableDictionary(x => RestUser.Create(client, x.First().User) as IUser,
+                x => x.GroupBy(y => (y.StartTime, y.EndTime))
+                    .Select(y => new BoostSubscriptionMetadata(y.Key.StartTime, y.Key.EndTime, y.Count()))
+                    .ToImmutableArray() as IReadOnlyCollection<BoostSubscriptionMetadata>);
+    }
+
     public static int GetMaxBitrate(IGuild guild)
     {
         var tierFactor = guild.BoostLevel switch
