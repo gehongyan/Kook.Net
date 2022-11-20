@@ -26,7 +26,7 @@ internal class KookRestApiClient : IDisposable
     
     private static readonly ConcurrentDictionary<string, Func<BucketIds, BucketId>> _bucketIdGenerators = new ConcurrentDictionary<string, Func<BucketIds, BucketId>>();
 
-    public event Func<HttpMethod, string, double, Task> SentRequest { add { _sentRequestEvent.Add(value); } remove { _sentRequestEvent.Remove(value); } }
+    public event Func<HttpMethod, string, double, Task> SentRequest { add => _sentRequestEvent.Add(value); remove => _sentRequestEvent.Remove(value); }
     private readonly AsyncEvent<Func<HttpMethod, string, double, Task>> _sentRequestEvent = new AsyncEvent<Func<HttpMethod, string, double, Task>>();
 
     protected readonly JsonSerializerOptions _serializerOptions;
@@ -58,7 +58,6 @@ internal class KookRestApiClient : IDisposable
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
-        // SerializerOptions.Converters.Add(new EmbedConverter());
         DefaultRatelimitCallback = defaultRatelimitCallback;
         
         RequestQueue = new RequestQueue();
@@ -226,7 +225,7 @@ internal class KookRestApiClient : IDisposable
         
         var request = new RestRequest(RestClient, method, endpoint, options);
         Stream response = await SendInternalAsync(method, endpoint, request).ConfigureAwait(false);
-        return bypassDeserialization ? response as TResponse : DeserializeJson<TResponse>(response);
+        return bypassDeserialization ? response as TResponse : await DeserializeJsonAsync<TResponse>(response).ConfigureAwait(false);
     }
 
     internal async Task<TResponse> SendJsonAsync<TResponse>(HttpMethod method, Expression<Func<string>> endpointExpr, object payload, BucketIds ids,
@@ -242,7 +241,7 @@ internal class KookRestApiClient : IDisposable
         
         var request = new JsonRestRequest(RestClient, method, endpoint, json, options);
         Stream response = await SendInternalAsync(method, endpoint, request).ConfigureAwait(false);
-        return bypassDeserialization ? response as TResponse : DeserializeJson<TResponse>(response);
+        return bypassDeserialization ? response as TResponse : await DeserializeJsonAsync<TResponse>(response).ConfigureAwait(false);
     }
 
     internal Task<TResponse> SendMultipartAsync<TResponse>(HttpMethod method, Expression<Func<string>> endpointExpr, IReadOnlyDictionary<string, object> multipartArgs, BucketIds ids,
@@ -256,7 +255,7 @@ internal class KookRestApiClient : IDisposable
 
         var request = new MultipartRestRequest(RestClient, method, endpoint, multipartArgs, options);
         Stream response = await SendInternalAsync(method, endpoint, request).ConfigureAwait(false);
-        return bypassDeserialization ? response as TResponse : DeserializeJson<TResponse>(response);
+        return bypassDeserialization ? response as TResponse : await DeserializeJsonAsync<TResponse>(response).ConfigureAwait(false);
     }
     
     private async Task<Stream> SendInternalAsync(HttpMethod method, string endpoint, RestRequest request)
@@ -1328,9 +1327,22 @@ internal class KookRestApiClient : IDisposable
             : JsonSerializer.Serialize(payload, _serializerOptions);
     }
     
-    protected T DeserializeJson<T>(Stream jsonStream)
+    protected async Task<T> DeserializeJsonAsync<T>(Stream jsonStream)
     {
-        return JsonSerializer.Deserialize<T>(jsonStream, _serializerOptions);
+        try
+        {
+            return await JsonSerializer.DeserializeAsync<T>(jsonStream, _serializerOptions).ConfigureAwait(false);
+        }
+        catch (JsonException ex)
+        {
+            if (jsonStream is MemoryStream memoryStream)
+            {
+                string json = Encoding.UTF8.GetString(memoryStream.ToArray());
+                throw new JsonException($"Failed to deserialize JSON to type {typeof(T).FullName}\nJSON: {json}", ex);
+            }
+
+            throw;
+        }
     }
 
     internal class BucketIds
