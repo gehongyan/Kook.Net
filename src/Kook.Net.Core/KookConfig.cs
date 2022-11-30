@@ -169,7 +169,7 @@ public class KookConfig
     internal bool DisplayInitialLog { get; set; } = true;
 
     /// <summary>
-    ///     Gets the user identity of the author who sent the system messages from Kook official.
+    ///     Gets the user identifier of the author who sends system messages from Kook official.
     /// </summary>
     internal const ulong SystemMessageAuthorID = 3900775823;
 }
