@@ -508,7 +508,7 @@ internal class KookRestApiClient : IDisposable
         Preconditions.NotNull(args, nameof(args));
         Preconditions.AtLeast(args.UserLimit, 0, nameof(args.UserLimit));
         Preconditions.AtLeast(args.Position, 0, nameof(args.Position));
-        Preconditions.AtMost(args.Name?.Length, 100, nameof(args.Name));
+        Preconditions.AtMost(args.Name?.Length, 99, nameof(args.Name));
 
         options = RequestOptions.CreateOrClone(options);
 
