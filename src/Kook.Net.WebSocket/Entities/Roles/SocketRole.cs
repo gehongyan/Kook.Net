@@ -104,7 +104,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     public async IAsyncEnumerable<IReadOnlyCollection<SocketGuildUser>> GetUsersAsync(RequestOptions options = null)
     {
         // From SocketGuild.Users
-        if (Guild.HasAllMembers)
+        if (Guild.HasAllMembers is true)
         {
             IEnumerable<IReadOnlyCollection<SocketGuildUser>> userCollections = Guild.Users
                 .Where(u => u.Roles.Contains(this))

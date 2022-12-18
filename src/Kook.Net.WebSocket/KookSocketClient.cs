@@ -122,7 +122,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             if (_guildDownloadTask?.IsCompleted == true 
                 && ConnectionState == ConnectionState.Connected)
             {
-                if (AlwaysDownloadUsers && !g.HasAllMembers)
+                if (AlwaysDownloadUsers && g.HasAllMembers is not true)
                     _ = g.DownloadUsersAsync();
                 if (AlwaysDownloadVoiceStates)
                     _ = g.DownloadVoiceStatesAsync();
@@ -1559,14 +1559,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                             }
                             else if (_connection.CancelToken.IsCancellationRequested)
                                 return;
-                            
-                            // Download guild member count
-                            foreach (SocketGuild socketGuild in State.Guilds)
-                                socketGuild.MemberCount = await ApiClient.GetGuildMemberCountAsync(socketGuild.Id).ConfigureAwait(false);
-                            
+
                             // Download user list if enabled
                             if (BaseConfig.AlwaysDownloadUsers)
-                                _ = DownloadUsersAsync(Guilds.Where(x => x.IsAvailable && !x.HasAllMembers));
+                                _ = DownloadUsersAsync(Guilds.Where(x => x.IsAvailable && x.HasAllMembers is not true));
                             if (BaseConfig.AlwaysDownloadVoiceStates)
                                 _ = DownloadVoiceStatesAsync(Guilds.Where(x => x.IsAvailable));
                             if (BaseConfig.AlwaysDownloadBoostSubscriptions)

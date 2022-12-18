@@ -99,8 +99,13 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///         between that and this property.
     ///     </para>
     ///     </note>
+    ///     <note type="warning">
+    ///         Only when <see cref="KookSocketConfig.AlwaysDownloadUsers"/> is set to <see langword="true"/>
+    ///         will this property be populated upon startup. Otherwise, this property will be <see langword="null"/>,
+    ///         and will be populated when <see cref="DownloadUsersAsync"/> is called.
+    ///     </note>
     /// </remarks>
-    public int MemberCount { get; internal set; }
+    public int? MemberCount { get; internal set; }
     /// <summary> Gets the number of members downloaded to the local guild cache. </summary>
     public int DownloadedMemberCount { get; private set; }
     
@@ -108,7 +113,13 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <summary> Indicates whether the client is connected to this guild. </summary>
     public bool IsConnected { get; internal set; }
     /// <summary> Indicates whether the client has all the members downloaded to the local guild cache. </summary>
-    public bool HasAllMembers => MemberCount <= DownloadedMemberCount;
+    /// <remarks>
+    ///     <note type="warning">
+    ///         If <see cref="MemberCount"/> is <see langword="null"/>, this property will always return <see langword="null"/>,
+    ///         which means that the client is unable to determine whether all the members are downloaded or not.
+    ///     </note>
+    /// </remarks>
+    public bool? HasAllMembers => MemberCount is null ? null : MemberCount <= DownloadedMemberCount;
     /// <inheritdoc/>
     public int MaxBitrate => GuildHelper.GetMaxBitrate(this);
     /// <inheritdoc/>
@@ -181,7 +192,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     A <see cref="SocketTextChannel"/> representing the default text channel for this guild.
     /// </returns>
     public SocketTextChannel DefaultChannel => TextChannels
-        .Where(c => CurrentUser.GetPermissions(c).ViewChannel)
+        .Where(c => CurrentUser?.GetPermissions(c).ViewChannel is true)
         .SingleOrDefault(c => c.Id == DefaultChannelId);
     /// <summary>
     ///     Gets the welcome text channel for this guild.
@@ -193,7 +204,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     A <see cref="SocketTextChannel"/> representing the default text channel for this guild.
     /// </returns>
     public SocketTextChannel WelcomeChannel => TextChannels
-        .Where(c => CurrentUser.GetPermissions(c).ViewChannel)
+        .Where(c => CurrentUser?.GetPermissions(c).ViewChannel is true)
         .SingleOrDefault(c => c.Id == WelcomeChannelId);
     /// <inheritdoc cref="IGuild.Emotes"/>
     public IReadOnlyCollection<GuildEmote> Emotes => _emotes.Select(x => x.Value).Where(x => x != null).ToReadOnlyCollection(_emotes);
@@ -376,7 +387,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         NotifyType = model.NotifyType;
         Region = model.Region;
         IsOpenEnabled = model.EnableOpen;
-        OpenId = model.OpenId != 0 ? model.OpenId : null;;
+        OpenId = model.OpenId != 0 ? model.OpenId : null;
         DefaultChannelId = model.DefaultChannelId != 0 ? model.DefaultChannelId : null;
         WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
 
@@ -770,7 +781,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions options = null)
     {
-        if (HasAllMembers)
+        if (HasAllMembers is true)
             return ImmutableArray.Create(Users).ToAsyncEnumerable<IReadOnlyCollection<IGuildUser>>();
         return GuildHelper.GetUsersAsync(this, Kook, KookConfig.MaxUsersPerBatch, 1, options);
     }
@@ -936,7 +947,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IGuildUser>> IGuild.GetUsersAsync(CacheMode mode, RequestOptions options)
     {
-        if (mode == CacheMode.AllowDownload && !HasAllMembers)
+        if (mode == CacheMode.AllowDownload && HasAllMembers is not true)
             return (await GetUsersAsync(options).FlattenAsync().ConfigureAwait(false)).ToImmutableArray();
         else
             return Users;
