@@ -154,9 +154,9 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
         finally
         {
             // clean up
-            await category.DeleteAsync();
             await text.DeleteAsync();
             await voice.DeleteAsync();
+            await category.DeleteAsync();
         }
     }
 
