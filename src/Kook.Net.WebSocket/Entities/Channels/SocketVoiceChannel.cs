@@ -27,9 +27,6 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     /// <inheritdoc />
     public bool? IsPermissionSynced { get; private set; }
     /// <inheritdoc />
-    public virtual Task SyncPermissionsAsync(RequestOptions options = null)
-        => ChannelHelper.SyncPermissionsAsync(this, Kook, options);
-    /// <inheritdoc />
     public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
     /// <inheritdoc />
     public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);

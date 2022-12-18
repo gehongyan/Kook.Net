@@ -35,15 +35,6 @@ public interface INestedChannel : IGuildChannel
     /// </returns>
     Task<ICategoryChannel> GetCategoryAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
 
-    /// <summary>
-    ///     Syncs the permissions of this nested channel with its parent's.
-    /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for syncing channel permissions with its parent's.
-    /// </returns>
-    Task SyncPermissionsAsync(RequestOptions options = null);
-    
     #endregion
 
     #region Invites

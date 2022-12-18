@@ -604,16 +604,6 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"channel-role/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
 
-    public async Task SyncChannelPermissionsAsync(SyncChannelPermissionsParams args, RequestOptions options = null)
-    {
-        Preconditions.NotNull(args, nameof(args));
-        Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
-        options = RequestOptions.CreateOrClone(options);
-        
-        var ids = new BucketIds(channelId: args.ChannelId);
-        await SendJsonAsync(HttpMethod.Post, () => $"channel-role/sync", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
-    }
-    
     #endregion
 
     #region Messages

@@ -134,10 +134,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     /// </returns>
     public Task<ICategoryChannel> GetCategoryAsync(RequestOptions options = null)
         => ChannelHelper.GetCategoryAsync(this, Kook, options);
-    /// <inheritdoc />
-    public Task SyncPermissionsAsync(RequestOptions options = null)
-        => ChannelHelper.SyncPermissionsAsync(this, Kook, options);
-    
+
     #endregion
 
     #region Invites

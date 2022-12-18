@@ -29,6 +29,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\src\Kook.Net.Commands\Kook.Net.Commands.csproj" />
         <ProjectReference Include="..\..\src\Kook.Net.Core\Kook.Net.Core.csproj" />
+        <ProjectReference Include="..\..\src\Kook.Net.Experimental\Kook.Net.Experimental.csproj" />
         <ProjectReference Include="..\..\src\Kook.Net.Rest\Kook.Net.Rest.csproj" />
         <ProjectReference Include="..\..\src\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj" />
     </ItemGroup>
