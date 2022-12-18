@@ -1,6 +1,6 @@
 # Kook.Net
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/gehongyan/Kook.Net/Kook.Net%20Deploy?label=build)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/gehongyan/Kook.Net/push-or-pr.yml?branch=master)
 ![GitHub Top Language](https://img.shields.io/github/languages/top/gehongyan/Kook.Net)
 [![Nuget Version](https://img.shields.io/nuget/v/Kook.Net)](https://www.nuget.org/packages/Kook.Net)
 [![Nuget](https://img.shields.io/nuget/dt/Kook.Net.Core?color=%230099ff)](https://www.nuget.org/packages/Kook.Net)
