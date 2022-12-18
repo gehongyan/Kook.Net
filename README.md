@@ -32,21 +32,27 @@
 
 ## Installation
 
-### Nuget
+### Main Packages
 
-- [Kook.Net](https://www.nuget.org/packages/Kook.Net/)
-- [Kook.Net.Core](https://www.nuget.org/packages/Kook.Net.Core/)
-- [Kook.Net.Rest](https://www.nuget.org/packages/Kook.Net.Rest/)
-- [Kook.Net.WebSocket](https://www.nuget.org/packages/Kook.Net.WebSocket/)
-- [Kook.Net.Commands](https://www.nuget.org/packages/Kook.Net.Commands/)
+Installing main packages will provide all implementations of official APIs.
 
-### Github Packages
+- Kook.Net: [NuGet](https://www.nuget.org/packages/Kook.Net/), [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net)
 
-- [Kook.Net](https://github.com/gehongyan/Kook.Net/packages/1607285)
-- [Kook.Net.Core](https://github.com/gehongyan/Kook.Net/packages/1607287)
-- [Kook.Net.Rest](https://github.com/gehongyan/Kook.Net/packages/1607288)
-- [Kook.Net.WebSocket](https://github.com/gehongyan/Kook.Net/packages/1607289)
-- [Kook.Net.Commands](https://github.com/gehongyan/Kook.Net/packages/1607286)
+### Individual Packages
+
+Individual components of the main package can be installed separately.
+
+- Kook.Net.Core: [NuGet](https://www.nuget.org/packages/Kook.Net.Core/), [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Core)
+- Kook.Net.Rest: [NuGet](https://www.nuget.org/packages/Kook.Net.Rest/), [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Rest)
+- Kook.Net.WebSocket: [NuGet](https://www.nuget.org/packages/Kook.Net.WebSocket/), [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.WebSocket)
+- Kook.Net.Commands: [NuGet](https://www.nuget.org/packages/Kook.Net.Commands/), [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Commands)
+
+### Experimental Packages
+
+Experimental packages provide implementations of non-official released APIs, which are unlisted on official documentation,
+not guaranteed to be stable, and may be changed or removed in the future.
+
+- Kook.Net.Experimental: [NuGet](https://www.nuget.org/packages/Kook.Net.Experimental/), [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Experimental)
 
 ---
 

@@ -10,9 +10,13 @@ Kook.Net 通过 NuGet 分发，推荐通过 NuGet 包管理工具安装，
 
 ## 支持的平台
 
-Kook.Net 目前仅支持 [.NET 6.0]，版本稳定后将会扩展到较旧的平台。
+Kook.Net 目前支持的目标框架包括
 
-[.NET 6.0]: https://docs.microsoft.com/en-us/dotnet/core/whats-new/dotnet-6
+- [.NET 7.0](https://dotnet.microsoft.com/download/dotnet/7.0)
+- [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
+- [.NET Standard 2.1](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-1)
+- [.NET Standard 2.0](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-0)
+- [.NET Framework 4.6.2](https://dotnet.microsoft.com/download/dotnet-framework/net462)
 
 ## 通过 NuGet 包管理器安装
 
