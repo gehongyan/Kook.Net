@@ -15,10 +15,15 @@ public class RestGuildFixture : KookRestClientFixture
 
     public RestGuildFixture() : base()
     {
-        RestGuild guild = Client.GetGuildsAsync().GetAwaiter().GetResult()
-            .FirstOrDefault(x => x.Name == "KOOK NET INTEGRATION TEST");
+        const string guildName = "KOOK NET INTEGRATION TEST";
+        List<RestGuild> guilds = Client.GetGuildsAsync().GetAwaiter().GetResult()
+            .Where(x => x.OwnerId == Client.CurrentUser.Id)
+            .Where(x => x.Name == guildName)
+            .ToList();
+        Guild = guilds.Any()
+            ? guilds.First()
+            : Client.CreateGuildAsync(guildName).GetAwaiter().GetResult();
 
-        Guild = guild ?? throw new Exception("No guild found to use for integration tests.");
         RemoveAllChannels();
         RemoveAllRoles();
     }
@@ -29,10 +34,10 @@ public class RestGuildFixture : KookRestClientFixture
     private void RemoveAllChannels()
     {
         IReadOnlyCollection<RestGuildChannel> channels = Guild.GetChannelsAsync().GetAwaiter().GetResult();
-        foreach (RestGuildChannel channel in channels)
-        {
+        foreach (RestGuildChannel channel in channels.Where(x => x is INestedChannel))
             channel.DeleteAsync().GetAwaiter().GetResult();
-        }
+        foreach (RestGuildChannel channel in channels.Where(x => x is ICategoryChannel))
+            channel.DeleteAsync().GetAwaiter().GetResult();
     }
 
     private void RemoveAllRoles()

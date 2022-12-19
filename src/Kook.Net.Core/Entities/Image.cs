@@ -15,6 +15,10 @@ public struct Image : IDisposable
     /// </summary>
     public Stream Stream { get; }
     /// <summary>
+    ///     Gets the file extension of the image if possible.
+    /// </summary>
+    internal string FileExtension { get; }
+    /// <summary>
     ///     Create the image with a <see cref="System.IO.Stream"/>.
     /// </summary>
     /// <param name="stream">
@@ -25,6 +29,14 @@ public struct Image : IDisposable
     {
         _isDisposed = false;
         Stream = stream;
+        if (stream is FileStream fileStream)
+            FileExtension = Path.GetExtension(fileStream.Name).Replace(".", "");
+    }
+    internal Image(Stream stream, string fileExtension)
+    {
+        _isDisposed = false;
+        Stream = stream;
+        FileExtension = fileExtension;
     }
 
     /// <summary>
@@ -58,6 +70,7 @@ public struct Image : IDisposable
     public Image(string path)
     {
         _isDisposed = false;
+        FileExtension = Path.GetExtension(path).Replace(".", "");
         Stream = File.OpenRead(path);
     }
 
