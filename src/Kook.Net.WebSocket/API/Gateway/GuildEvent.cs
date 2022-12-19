@@ -24,7 +24,7 @@ internal class GuildEvent
     [JsonPropertyName("region")] 
     public string Region { get; set; }
     
-    [JsonPropertyName("enable_open")] 
+    [JsonPropertyName("enable_open")]
     [JsonConverter(typeof(NumberBooleanConverter))]
     public bool EnableOpen { get; set; }
     

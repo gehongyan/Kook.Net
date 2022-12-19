@@ -24,6 +24,15 @@ internal static class KookRestApiClientExperimentalExtensions
         var ids = new KookRestApiClient.BucketIds(guildId: args.GuildId);
         await client.SendJsonAsync(HttpMethod.Post, () => $"guild/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
+    public static async Task<RichGuild> ModifyGuildAsync(this KookRestApiClient client, ulong guildId, ModifyGuildParams args, RequestOptions options = null)
+    {
+        Preconditions.NotEqual(guildId, 0, nameof(guildId));
+        Preconditions.NotNull(args, nameof(args));
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new KookRestApiClient.BucketIds(guildId: guildId);
+        return await client.SendJsonAsync<RichGuild>(HttpMethod.Post, () => $"guild/update", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
     public static async Task SyncChannelPermissionsAsync(this KookRestApiClient client, SyncChannelPermissionsParams args, RequestOptions options = null)
     {
         Preconditions.NotNull(args, nameof(args));
