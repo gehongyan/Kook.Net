@@ -29,6 +29,7 @@ internal class GuildEvent
     public bool EnableOpen { get; set; }
     
     [JsonPropertyName("open_id")]
+    [JsonConverter(typeof(NullableUInt32Converter))]
     public uint? OpenId { get; set; }
     
     [JsonPropertyName("default_channel_id")]
