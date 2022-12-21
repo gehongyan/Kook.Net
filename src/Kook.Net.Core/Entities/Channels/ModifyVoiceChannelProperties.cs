@@ -25,4 +25,9 @@ public class ModifyVoiceChannelProperties : ModifyGuildChannelProperties
     ///     <c>null</c> if not set.
     /// </summary>
     public int? UserLimit { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the password of the channel, or empty string to clear the password; <c>null</c> if not set.
+    /// </summary>
+    public string Password { get; set; }
 }

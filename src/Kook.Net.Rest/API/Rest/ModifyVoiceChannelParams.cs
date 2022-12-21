@@ -12,4 +12,8 @@ internal class ModifyVoiceChannelParams : ModifyGuildChannelParams
 
     [JsonPropertyName("limit_amount")] 
     public int? UserLimit { get; set; }
+
+    [JsonPropertyName("password")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Password { get; set; }
 }
