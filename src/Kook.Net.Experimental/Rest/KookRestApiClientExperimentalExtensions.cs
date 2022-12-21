@@ -61,4 +61,19 @@ internal static class KookRestApiClientExperimentalExtensions
 
     #endregion
 
+    #region Voice
+
+    public static async Task DisconnectUserAsync(this KookRestApiClient client, DisconnectUserParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new KookRestApiClient.BucketIds(channelId: args.ChannelId);
+        await client.SendJsonAsync(HttpMethod.Post, () => $"channel/kickout", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+    }
+
+    #endregion
+
 }
