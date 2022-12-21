@@ -281,7 +281,7 @@ internal class KookRestApiClient : IDisposable
     ///         <c>$"endpoint?params=args&amp;page_size={pageSize}&amp;page={page}"</c>
     ///     </example>
     /// </param>
-    private async IAsyncEnumerable<IReadOnlyCollection<T>> SendPagedAsync<T>(HttpMethod method, 
+    internal async IAsyncEnumerable<IReadOnlyCollection<T>> SendPagedAsync<T>(HttpMethod method, 
         Expression<Func<int, int, string>> endpointExpr,
         BucketIds ids, ClientBucketType clientBucket = ClientBucketType.Unbucketed, PageMeta pageMeta = null, RequestOptions options = null)
         where T : class

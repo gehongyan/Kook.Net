@@ -6,6 +6,8 @@ namespace Kook.Rest.Extensions;
 
 internal static class KookRestApiClientExperimentalExtensions
 {
+    #region Guilds
+
     public static async Task<RichGuild> CreateGuildAsync(this KookRestApiClient client, CreateGuildParams args, RequestOptions options = null)
     {
         Preconditions.NotNull(args, nameof(args));
@@ -42,5 +44,21 @@ internal static class KookRestApiClientExperimentalExtensions
         var ids = new KookRestApiClient.BucketIds(channelId: args.ChannelId);
         await client.SendJsonAsync(HttpMethod.Post, () => $"channel-role/sync", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
     }
+
+    #endregion
+
+    #region Voice Regions
+
+    public static IAsyncEnumerable<IReadOnlyCollection<VoiceRegion>> GetVoiceRegionsAsync(this KookRestApiClient client,
+        int limit = KookConfig.MaxUsersPerBatch, int fromPage = 1, RequestOptions options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+        var ids = new KookRestApiClient.BucketIds();
+        PageMeta pageMeta = new(fromPage, limit);
+        return client.SendPagedAsync<VoiceRegion>(HttpMethod.Get,(pageSize, page) => $"guild/regions&page_size={pageSize}&page={page}",
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: pageMeta, options: options);
+    }
+
+    #endregion
 
 }

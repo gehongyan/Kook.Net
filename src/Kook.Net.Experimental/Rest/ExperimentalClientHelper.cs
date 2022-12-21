@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Kook.API.Rest;
 using Kook.Rest.Extensions;
 
@@ -20,5 +21,14 @@ internal static class ExperimentalClientHelper
         var model = await client.ApiClient.CreateGuildAsync(args, options).ConfigureAwait(false);
         return RestGuild.Create(client, model);
     }
-    
+    public static async Task<IReadOnlyCollection<RestVoiceRegion>> GetVoiceRegionsAsync(BaseKookClient client, RequestOptions options)
+    {
+        var models = await client.ApiClient.GetVoiceRegionsAsync(options: options).FlattenAsync().ConfigureAwait(false);
+        return models.Select(x => RestVoiceRegion.Create(client, x)).ToImmutableArray();
+    }
+    public static async Task<RestVoiceRegion> GetVoiceRegionAsync(BaseKookClient client, string id, RequestOptions options)
+    {
+        var models = await client.ApiClient.GetVoiceRegionsAsync(options: options).FlattenAsync().ConfigureAwait(false);
+        return models.Select(x => RestVoiceRegion.Create(client, x)).FirstOrDefault(x => x.Id == id);
+    }
 }
