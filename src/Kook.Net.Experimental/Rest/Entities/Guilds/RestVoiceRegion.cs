@@ -6,6 +6,12 @@ namespace Kook.Rest;
 /// <summary>
 ///     Represents a REST-based voice region.
 /// </summary>
+/// <remarks>
+///     <note type="warning">
+///         This entity is still in experimental state, which means that it is not for official API implementation
+///         usage, may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
+///     </note>
+/// </remarks>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestVoiceRegion : RestEntity<string>, IVoiceRegion
 {

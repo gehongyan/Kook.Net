@@ -40,18 +40,4 @@ internal static class ExperimentalClientHelper
     }
 
     #endregion
-
-    #region Voice
-
-    public static async Task DisconnectUserAsync(BaseKookClient client, IGuildUser user, IVoiceChannel channel, RequestOptions options)
-    {
-        var args = new DisconnectUserParams
-        {
-            UserId = user.Id,
-            ChannelId = channel.Id
-        };
-        await client.ApiClient.DisconnectUserAsync(args, options).ConfigureAwait(false);
-    }
-
-    #endregion
 }

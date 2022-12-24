@@ -10,6 +10,12 @@ public static class SocketGuildExperimentalExtensions
     /// <param name="guild">The guild to delete.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>A task that represents the asynchronous deletion operation.</returns>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         This method is still in experimental state, which means that it is not for official API implementation
+    ///         usage, may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
+    ///     </note>
+    /// </remarks>
     public static Task DeleteAsync(this SocketGuild guild, RequestOptions options = null)
         => ExperimentalGuildHelper.DeleteAsync(guild, guild.Kook, options);
     /// <summary>
@@ -21,6 +27,12 @@ public static class SocketGuildExperimentalExtensions
     /// <returns>
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         This method is still in experimental state, which means that it is not for official API implementation
+    ///         usage, may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
+    ///     </note>
+    /// </remarks>
     /// <exception cref="ArgumentNullException"><paramref name="func"/> is <see langword="null"/>.</exception>
     public static Task ModifyAsync(this SocketGuild guild, Action<GuildProperties> func, RequestOptions options = null)
         => ExperimentalGuildHelper.ModifyAsync(guild, guild.Kook, func, options);

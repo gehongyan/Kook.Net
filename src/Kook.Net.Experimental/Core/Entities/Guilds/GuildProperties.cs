@@ -3,6 +3,12 @@ namespace Kook;
 /// <summary>
 ///     Provides properties that are used to modify an <see cref="IGuild" /> with the specified changes.
 /// </summary>
+/// <remarks>
+///     <note type="warning">
+///         This entity is still in experimental state, which means that it is not for official API implementation
+///         usage, may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
+///     </note>
+/// </remarks>
 public class GuildProperties
 {
     /// <summary>

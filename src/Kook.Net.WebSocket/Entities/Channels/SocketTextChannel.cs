@@ -78,6 +78,9 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     public virtual Task ModifyAsync(Action<ModifyTextChannelProperties> func, RequestOptions options = null)
         => ChannelHelper.ModifyAsync(this, Kook, func, options);
     
+    private string DebuggerDisplay => $"{Name} ({Id}, Text)";
+    internal new SocketTextChannel Clone() => MemberwiseClone() as SocketTextChannel;
+
     #endregion
 
     #region Messages
@@ -214,9 +217,6 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         => await ChannelHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
 
     #endregion
-    
-    private string DebuggerDisplay => $"{Name} ({Id}, Text)";
-    internal new SocketTextChannel Clone() => MemberwiseClone() as SocketTextChannel;
 
     #region Users
     /// <inheritdoc />

@@ -1,5 +1,14 @@
 namespace Kook;
 
+/// <summary>
+///     Represents a region of which the user connects to when using voice.
+/// </summary>
+/// <remarks>
+///     <note type="warning">
+///         This entity is still in experimental state, which means that it is not for official API implementation
+///         usage, may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
+///     </note>
+/// </remarks>
 public interface IVoiceRegion
 {
     /// <summary>
