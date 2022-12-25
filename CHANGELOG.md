@@ -2,6 +2,12 @@
 
 ---
 
+## v0.2.1 [2022-12-25]
+
+### Fixed
+
+- Fixed incorrect JSON converter resulting in startup failure (7955aefdfd61fcc28420e30640628890c15ba781)
+
 ## v0.2.0 [2022-12-25]
 
 ### Update Path
