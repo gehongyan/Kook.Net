@@ -449,7 +449,7 @@ internal class KookRestApiClient : IDisposable
         
         var ids = new BucketIds(guildId: guildId);
         return SendPagedAsync<BoostSubscription>(HttpMethod.Get, (pageSize, page) => $"guild-boost/history?{query}&page_size={pageSize}&page={page}",
-            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(pageSize: 50), options: options);
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);
     }
 
     #endregion
