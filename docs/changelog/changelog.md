@@ -5,7 +5,15 @@ title: 变更日志
 
 # 变更日志
 
+## v0.2.2 [2022-12-30]
+
+### 修复
+
+- 修复了 `SocketTextChannel.SendCard(s)Async` 设置 `ephemeralUser` 参数不生效的问题 (7511f113146f85c9f6157534ba2ce1444080b795)
+
 ## v0.2.1 [2022-12-25]
+
+### 修复
 
 - 修复了导致启动失败的 JSON 转换器错误 (7955aefdfd61fcc28420e30640628890c15ba781)
 

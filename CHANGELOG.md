@@ -2,11 +2,18 @@
 
 ---
 
+## v0.2.2 [2022-12-30]
+
+### Fixed
+
+- Fixed an issue that `SocketTextChannel.SendCard(s)Async` does not assign `ephemeralUser` parameter well.
+  (7511f113146f85c9f6157534ba2ce1444080b795)
+
 ## v0.2.1 [2022-12-25]
 
 ### Fixed
 
-- Fixed incorrect JSON converter resulting in startup failure (7955aefdfd61fcc28420e30640628890c15ba781)
+- Fixed incorrect JSON converter resulting in startup failure. (7955aefdfd61fcc28420e30640628890c15ba781)
 
 ## v0.2.0 [2022-12-25]
 
