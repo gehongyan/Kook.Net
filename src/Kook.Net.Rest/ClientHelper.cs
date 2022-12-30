@@ -19,9 +19,16 @@ internal static class ClientHelper
         var guilds = ImmutableArray.CreateBuilder<RestGuild>();
         foreach (var model in models)
         {
-            var guildModel = await client.ApiClient.GetGuildAsync(model.Id).ConfigureAwait(false);
-            if (guildModel != null)
-                guilds.Add(RestGuild.Create(client, guildModel));
+            if (client.TokenType is TokenType.Bot)
+            {
+                var guildModel = await client.ApiClient.GetGuildAsync(model.Id).ConfigureAwait(false);
+                if (guildModel != null)
+                    guilds.Add(RestGuild.Create(client, guildModel));
+            }
+            else
+            {
+                guilds.Add(RestGuild.Create(client, model));
+            }
         }
         return guilds.ToImmutable();
     }
