@@ -60,4 +60,17 @@ public static class KookRestClientExperimentalExtensions
     public static Task<RestGuild> CreateGuildAsync(this KookRestClient client,
         string name, IVoiceRegion region = null, Stream icon = null, int? templateId = null, RequestOptions options = null)
         => ExperimentalClientHelper.CreateGuildAsync(client, name, region, icon, templateId, options);
+
+    /// <summary>
+    ///     Gets a collection of guilds where the current user has the
+    ///     <see cref="GuildPermission.Administrator"/> permission.
+    /// </summary>
+    /// <param name="client">The KOOK rest client instance.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
+    ///     of guilds where the current user has the <see cref="GuildPermission.Administrator"/> permission.
+    /// </returns>
+    public static Task<IReadOnlyCollection<RestGuild>> GetAdminGuildsAsync(this KookRestClient client, RequestOptions options = null)
+        => ExperimentalClientHelper.GetAdminGuildsAsync(client, options);
 }

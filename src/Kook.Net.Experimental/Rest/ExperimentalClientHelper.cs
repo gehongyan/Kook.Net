@@ -24,6 +24,15 @@ internal static class ExperimentalClientHelper
         return RestGuild.Create(client, model);
     }
 
+    public static async Task<IReadOnlyCollection<RestGuild>> GetAdminGuildsAsync(BaseKookClient client, RequestOptions options)
+    {
+        var guilds = ImmutableArray.CreateBuilder<RestGuild>();
+        var models = await client.ApiClient.GetAdminGuildsAsync(options: options).FlattenAsync().ConfigureAwait(false);
+        foreach (var model in models)
+            guilds.Add(RestGuild.Create(client, model));
+        return guilds.ToImmutable();
+    }
+
     #endregion
 
     #region Voice Region

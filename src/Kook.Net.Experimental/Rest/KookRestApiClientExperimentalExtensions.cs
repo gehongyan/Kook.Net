@@ -8,6 +8,19 @@ internal static class KookRestApiClientExperimentalExtensions
 {
     #region Guilds
 
+    public static IAsyncEnumerable<IReadOnlyCollection<Guild>> GetAdminGuildsAsync(this KookRestApiClient client,
+        int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions options = null)
+    {
+        if (client.AuthTokenType is not TokenType.Bearer)
+            throw new InvalidOperationException("Retrieving guilds where the current user has Administrator permission requires a Bearer token.");
+        options = RequestOptions.CreateOrClone(options);
+
+        var ids = new KookRestApiClient.BucketIds();
+        return client.SendPagedAsync<Guild>(HttpMethod.Get,
+            (pageSize, page) => $"guild/list?page_size={pageSize}&page={page}&type=admin",
+            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);
+    }
+
     public static async Task<RichGuild> CreateGuildAsync(this KookRestApiClient client, CreateGuildParams args, RequestOptions options = null)
     {
         Preconditions.NotNull(args, nameof(args));

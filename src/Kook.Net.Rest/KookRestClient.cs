@@ -58,9 +58,11 @@ public class KookRestClient : BaseKookClient, IKookClient
     #endregion
 
     #region Guilds
-    
+
+    /// <inheritdoc cref="IKookClient.GetGuildAsync" />
     public Task<RestGuild> GetGuildAsync(ulong id, RequestOptions options = null)
         => ClientHelper.GetGuildAsync(this, id, options);
+    /// <inheritdoc cref="IKookClient.GetGuildsAsync" />
     public Task<IReadOnlyCollection<RestGuild>> GetGuildsAsync(RequestOptions options = null)
         => ClientHelper.GetGuildsAsync(this, options);
     
