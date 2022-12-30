@@ -15,20 +15,18 @@ internal static class ClientHelper
     }
     public static async Task<IReadOnlyCollection<RestGuild>> GetGuildsAsync(BaseKookClient client, RequestOptions options)
     {
-        var models = await client.ApiClient.GetGuildsAsync(options: options).FlattenAsync().ConfigureAwait(false);
         var guilds = ImmutableArray.CreateBuilder<RestGuild>();
-        foreach (var model in models)
+        if (client.TokenType is TokenType.Bot)
         {
-            if (client.TokenType is TokenType.Bot)
-            {
-                var guildModel = await client.ApiClient.GetGuildAsync(model.Id).ConfigureAwait(false);
-                if (guildModel != null)
-                    guilds.Add(RestGuild.Create(client, guildModel));
-            }
-            else
-            {
+            var models = await client.ApiClient.ListGuildsAsync(options: options).ConfigureAwait(false);
+            foreach (var model in models)
                 guilds.Add(RestGuild.Create(client, model));
-            }
+        }
+        else
+        {
+            var models = await client.ApiClient.GetGuildsAsync(options: options).FlattenAsync().ConfigureAwait(false);
+            foreach (var model in models)
+                guilds.Add(RestGuild.Create(client, model));
         }
         return guilds.ToImmutable();
     }
