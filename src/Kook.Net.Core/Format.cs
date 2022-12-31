@@ -22,6 +22,15 @@ public static class Format
     /// <summary> Returns a markdown-formatted string with strike-through formatting. </summary>
     public static string Strikethrough(string text) => $"~~{text}~~";
 
+    /// <summary> Returns a markdown-formatted string colored with the specified <see cref="TextColor"/>. </summary>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         Colored text is only supported in cards.
+    ///     </note>
+    /// </remarks>
+    public static string Colorize(string text, TextColor color) =>
+        $"(font){text}(font)[{color.ToString().ToLowerInvariant()}]";
+
     /// <summary> Returns a markdown-formatted URL. </summary>
     public static string Url(string text, string url) => $"[{text}]({url})";
 
@@ -107,8 +116,15 @@ public static class Format
     /// <returns>Gets the unformatted text.</returns>
     public static string StripMarkDown(string text)
     {
-        //Remove Kook supported markdown
+        // // Remove color
+        // var newText = Regex.Replace(text, 
+        //     @"(?<!\\)(?:\\.)*\(font\)(?<text>.+?)(?<!\\)(?:\\.)*\(font\)\[\w+\]",
+        //     @"${text}",
+        //     RegexOptions.Compiled | RegexOptions.RightToLeft);
+
+        // Remove Kook supported markdown
         var newText = Regex.Replace(text, @"(\*|\(ins\)|\(spl\)|`|~|>|\\)", "");
+
         return newText;
     }
 

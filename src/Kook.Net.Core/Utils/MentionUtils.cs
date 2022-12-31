@@ -282,10 +282,7 @@ public static class MentionUtils
                     else
                         return "";
                 case TagHandling.Sanitize:
-                    if (guildUser != null && guildUser.Nickname == null)
-                        return KMarkdownMentionUser($"{SanitizeChar}{tag.Key}");
-                    else
-                        return KMarkdownMentionUser($"{SanitizeChar}{tag.Key}");
+                    return KMarkdownMentionUser($"{SanitizeChar}{tag.Key}");
             }
         }
 
