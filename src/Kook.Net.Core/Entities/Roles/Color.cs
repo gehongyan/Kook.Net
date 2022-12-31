@@ -63,17 +63,17 @@ public struct Color
     /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/992D22">992D22</see>.</returns>
     public static readonly Color DarkRed = new(0x992D22);
     /// <summary> Gets the light grey color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/979C9F">979C9F</see>.</returns>
-    public static readonly Color LightGrey = new(0x979C9F);
-    /// <summary> Gets the lighter grey color value. </summary>
     /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/95A5A6">95A5A6</see>.</returns>
-    public static readonly Color LighterGrey = new(0x95A5A6);
+    public static readonly Color LightGrey = new(0x95A5A6);
+    /// <summary> Gets the grey color value. </summary>
+    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/666D71">666D71</see>.</returns>
+    public static readonly Color Grey = new(0x666D71);
     /// <summary> Gets the dark grey color value. </summary>
     /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/607D8B">607D8B</see>.</returns>
     public static readonly Color DarkGrey = new(0x607D8B);
     /// <summary> Gets the darker grey color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/546E7A">546E7A</see>.</returns>
-    public static readonly Color DarkerGrey = new(0x546E7A);
+    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/3A4B53">3A4B53</see>.</returns>
+    public static readonly Color DarkerGrey = new(0x3A4B53);
 
     /// <summary> Gets the encoded value for this color. </summary>
     /// <remarks>
