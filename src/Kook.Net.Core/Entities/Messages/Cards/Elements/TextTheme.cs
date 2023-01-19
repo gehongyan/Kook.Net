@@ -1,9 +1,9 @@
 namespace Kook;
 
 /// <summary>
-///     Represents text colors used in <see cref="Format.Colorize"/>.
+///     Represents text themes used in <see cref="Format.Colorize"/>.
 /// </summary>
-public enum TextColor : ushort
+public enum TextTheme : ushort
 {
     Primary,
     Success,

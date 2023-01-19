@@ -22,14 +22,14 @@ public static class Format
     /// <summary> Returns a markdown-formatted string with strike-through formatting. </summary>
     public static string Strikethrough(string text) => $"~~{text}~~";
 
-    /// <summary> Returns a markdown-formatted string colored with the specified <see cref="TextColor"/>. </summary>
+    /// <summary> Returns a markdown-formatted string colored with the specified <see cref="TextTheme"/>. </summary>
     /// <remarks>
     ///     <note type="warning">
     ///         Colored text is only supported in cards.
     ///     </note>
     /// </remarks>
-    public static string Colorize(string text, TextColor color) =>
-        $"(font){text}(font)[{color.ToString().ToLowerInvariant()}]";
+    public static string Colorize(string text, TextTheme theme) =>
+        $"(font){text}(font)[{theme.ToString().ToLowerInvariant()}]";
 
     /// <summary> Returns a markdown-formatted URL. </summary>
     public static string Url(string text, string url) => $"[{text}]({url})";
