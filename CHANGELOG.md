@@ -2,6 +2,19 @@
 
 ---
 
+## v0.2.3 [2023-01-19]
+
+### Added
+
+- Added `KookRestClient.GetAdminGuildsAsync` for Bearer token. (58a0966d930e16e37f9796d4bd947d2a24aaade2)
+- Added `Format.Colorize` for KMarkdown text colorization. (acca2ae40b0977ebea237b8cd02195f8758df115)
+
+### Fixed
+
+- Fixed `GetGuildsAsync` downloads data too slowly on massive guilds. (83ba3cadc106c7496c1eb45114ba552cf6ced24e)
+- Fixed `GetGuildsAsync` does not work on Bearer token. (e7641676ad8efc87e035fd256b57a46606f9e86f)
+- Fixed potion of values are incorrect in `Color`. (e46cbc088a6d2c48deaee0fd1826ca389d656476)
+
 ## v0.2.2 [2022-12-30]
 
 ### Fixed

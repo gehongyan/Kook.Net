@@ -5,17 +5,30 @@ title: 变更日志
 
 # 变更日志
 
+## v0.2.3 [2023-01-19]
+
+### 新增
+
+- 为 Bearer 类型认证新增支持 `KookRestClient.GetAdminGuildsAsync`
+- 新增 `Format.Colorize` 用于 KMarkdown 文本颜色格式化
+
+### 修复
+
+- 修复 `GetGuildsAsync` 在服务器数量较大时下载数据过慢的问题
+- 修复 `GetGuildsAsync` 在 Bearer 类型认证下构造对象失败的问题
+- 修复 `Color` 部分值不正确的问题
+
 ## v0.2.2 [2022-12-30]
 
 ### 修复
 
-- 修复了 `SocketTextChannel.SendCard(s)Async` 设置 `ephemeralUser` 参数不生效的问题 (7511f113146f85c9f6157534ba2ce1444080b795)
+- 修复了 `SocketTextChannel.SendCard(s)Async` 设置 `ephemeralUser` 参数不生效的问题
 
 ## v0.2.1 [2022-12-25]
 
 ### 修复
 
-- 修复了导致启动失败的 JSON 转换器错误 (7955aefdfd61fcc28420e30640628890c15ba781)
+- 修复了导致启动失败的 JSON 转换器错误
 
 ## v0.2.0 [2022-12-25]
 
