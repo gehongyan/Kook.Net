@@ -34,7 +34,8 @@ public class PublicModule : ModuleBase<SocketCommandContext>
     public async Task UserInfoAsync(IUser user = null)
     {
         user ??= Context.User;
-
+        // TODO: Test
+        var aa = Context.Guild.Name;
         await ReplyTextAsync(user.ToString());
     }
 

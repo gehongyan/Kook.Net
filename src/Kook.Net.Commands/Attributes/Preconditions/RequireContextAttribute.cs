@@ -37,7 +37,7 @@ public class RequireContextAttribute : PreconditionAttribute
     /// <example>
     /// <code language="cs">
     ///     [Command("secret")]
-    ///     [RequireContext(ContextType.DM | ContextType.Group)]
+    ///     [RequireContext(ContextType.DM)]
     ///     public Task PrivateOnlyAsync()
     ///     {
     ///         return ReplyAsync("shh, this command is a secret");

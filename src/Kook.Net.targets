@@ -13,10 +13,13 @@
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/gehongyan/Kook.Net.git</RepositoryUrl>
         <Company>gehongyan</Company>
-        <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net7.0;net6.0;net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-        <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">net7.0;net6.0;netstandard2.0;netstandard2.1</TargetFrameworks>
         <NoWarn>NETSDK1138</NoWarn>
         <PackageVersion>$(Version)</PackageVersion>
+    </PropertyGroup>
+    <PropertyGroup>
+        <TargetFrameworks Condition=" '$(MSBuildProjectName)' == 'Kook.Net.Analyzers' ">netstandard2.0;netstandard2.1</TargetFrameworks>
+        <TargetFrameworks Condition=" '$(MSBuildProjectName)' != 'Kook.Net.Analyzers' And '$(OS)' == 'Windows_NT' ">net7.0;net6.0;net462;netstandard2.0;netstandard2.1</TargetFrameworks>
+        <TargetFrameworks Condition=" '$(MSBuildProjectName)' != 'Kook.Net.Analyzers' And '$(OS)' != 'Windows_NT' ">net7.0;net6.0;netstandard2.0;netstandard2.1</TargetFrameworks>
     </PropertyGroup>
     <PropertyGroup>
         <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
