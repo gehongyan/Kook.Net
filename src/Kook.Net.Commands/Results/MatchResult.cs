@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Kook.Commands;
 
@@ -30,7 +30,7 @@ public class MatchResult : IResult
     }
 
     public static MatchResult FromSuccess(CommandMatch match, IResult pipeline)
-        => new MatchResult(match,pipeline,null, null);
+        => new MatchResult(match, pipeline, null, null);
     public static MatchResult FromError(CommandError error, string reason)
         => new MatchResult(null, null, error, reason);
     public static MatchResult FromError(Exception ex)

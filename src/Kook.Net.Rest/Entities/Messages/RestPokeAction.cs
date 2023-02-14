@@ -6,7 +6,7 @@ public class RestPokeAction : IPokeAction
 {
     /// <inheritdoc cref="IPokeAction.Operator" />
     public IUser Operator { get; }
-    
+
     /// <inheritdoc cref="IPokeAction.Targets" />
     public IReadOnlyCollection<IUser> Targets { get; }
 

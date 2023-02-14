@@ -13,8 +13,8 @@ public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>
     {
         Elements = elements;
     }
-    
-       /// <inheritdoc />
+
+    /// <inheritdoc />
     public ModuleType Type => ModuleType.ImageGroup;
 
     /// <summary>
@@ -24,9 +24,9 @@ public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>
     ///     An <see cref="ImmutableArray{ImageElement}"/> representing the images in this image group module.
     /// </returns>
     public ImmutableArray<ImageElement> Elements { get; }
-    
+
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";
-    
+
     public static bool operator ==(ImageGroupModule left, ImageGroupModule right)
         => left?.Equals(right) ?? right is null;
 
@@ -51,7 +51,7 @@ public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>
     {
         unchecked
         {
-            int hash = (int) 2166136261;
+            int hash = (int)2166136261;
             hash = (hash * 16777619) ^ Type.GetHashCode();
             foreach (ImageElement element in Elements)
                 hash = (hash * 16777619) ^ element.GetHashCode();

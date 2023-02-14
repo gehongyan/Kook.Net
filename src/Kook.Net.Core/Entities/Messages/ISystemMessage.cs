@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Represents a generic message sent by the system.

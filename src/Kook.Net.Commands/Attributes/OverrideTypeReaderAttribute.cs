@@ -43,7 +43,7 @@ public sealed class OverrideTypeReaderAttribute : Attribute
     {
         if (!TypeReaderTypeInfo.IsAssignableFrom(overridenTypeReader.GetTypeInfo()))
             throw new ArgumentException($"{nameof(overridenTypeReader)} must inherit from {nameof(TypeReader)}.");
-            
+
         TypeReader = overridenTypeReader;
     }
 }

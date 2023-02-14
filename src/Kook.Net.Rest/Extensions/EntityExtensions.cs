@@ -1,7 +1,7 @@
+using Kook.API;
 using System.Collections.Immutable;
 using System.Reflection;
 using System.Text.Json;
-using Kook.API;
 
 namespace Kook.Rest;
 
@@ -17,12 +17,13 @@ internal static class EntityExtensions
             model.UploadedBy?.Id);
 
     #endregion
-    
+
     #region Elements
 
     public static IElement ToEntity(this API.ElementBase model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return model.Type switch
         {
             ElementType.PlainText => (model as API.PlainTextElement).ToEntity(),
@@ -35,33 +36,39 @@ internal static class EntityExtensions
     }
     public static PlainTextElement ToEntity(this API.PlainTextElement model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new PlainTextElement(model.Content, model.Emoji);
     }
     public static KMarkdownElement ToEntity(this API.KMarkdownElement model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new KMarkdownElement(model.Content);
     }
     public static ImageElement ToEntity(this API.ImageElement model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new ImageElement(model.Source, model.Alternative, model.Size, model.Circle);
     }
     public static ButtonElement ToEntity(this API.ButtonElement model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new ButtonElement(model.Theme, model.Value, model.Click, model.Text.ToEntity());
     }
     public static ParagraphStruct ToEntity(this API.ParagraphStruct model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new ParagraphStruct(model.ColumnCount, model.Fields.Select(e => e.ToEntity()).ToImmutableArray());
     }
 
     public static API.ElementBase ToModel(this IElement entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return entity.Type switch
         {
             ElementType.PlainText => (entity as PlainTextElement).ToModel(),
@@ -74,7 +81,8 @@ internal static class EntityExtensions
     }
     public static API.PlainTextElement ToModel(this PlainTextElement entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.PlainTextElement
         {
             Content = entity.Content,
@@ -84,7 +92,8 @@ internal static class EntityExtensions
     }
     public static API.KMarkdownElement ToModel(this KMarkdownElement entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.KMarkdownElement()
         {
             Content = entity.Content,
@@ -93,7 +102,8 @@ internal static class EntityExtensions
     }
     public static API.ImageElement ToModel(this ImageElement entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.ImageElement()
         {
             Alternative = entity.Alternative,
@@ -105,7 +115,8 @@ internal static class EntityExtensions
     }
     public static API.ButtonElement ToModel(this ButtonElement entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.ButtonElement()
         {
             Click = entity.Click,
@@ -117,7 +128,8 @@ internal static class EntityExtensions
     }
     public static API.ParagraphStruct ToModel(this ParagraphStruct entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.ParagraphStruct()
         {
             ColumnCount = entity.ColumnCount,
@@ -132,8 +144,10 @@ internal static class EntityExtensions
 
     public static IModule ToEntity(this API.ModuleBase model)
     {
-        if (model is null) return null;
-        if (model is null) return null;
+        if (model is null)
+            return null;
+        if (model is null)
+            return null;
         return model.Type switch
         {
             ModuleType.Header => (model as API.HeaderModule).ToEntity(),
@@ -154,69 +168,82 @@ internal static class EntityExtensions
 
     public static HeaderModule ToEntity(this API.HeaderModule model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new HeaderModule(model.Text.ToEntity());
     }
     public static SectionModule ToEntity(this API.SectionModule model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new SectionModule(model.Mode, model.Text.ToEntity(), model.Accessory.ToEntity());
     }
     public static ImageGroupModule ToEntity(this API.ImageGroupModule model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new ImageGroupModule(model.Elements.Select(e => e.ToEntity()).ToImmutableArray());
     }
     public static ContainerModule ToEntity(this API.ContainerModule model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new ContainerModule(model.Elements.Select(e => e.ToEntity()).ToImmutableArray());
     }
     public static ActionGroupModule ToEntity(this API.ActionGroupModule model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new ActionGroupModule(model.Elements.Select(e => e.ToEntity()).ToImmutableArray());
     }
     public static ContextModule ToEntity(this API.ContextModule model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new ContextModule(model.Elements.Select(e => e.ToEntity()).ToImmutableArray());
     }
     public static DividerModule ToEntity(this API.DividerModule model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new DividerModule();
     }
     public static FileModule ToEntity(this API.FileModule model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new FileModule(model.Source, model.Title);
     }
     public static AudioModule ToEntity(this API.AudioModule model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new AudioModule(model.Source, model.Title, model.Cover);
     }
     public static VideoModule ToEntity(this API.VideoModule model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new VideoModule(model.Source, model.Title);
     }
     public static CountdownModule ToEntity(this API.CountdownModule model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new CountdownModule(model.Mode, model.EndTime, model.StartTime);
     }
     public static InviteModule ToEntity(this API.InviteModule model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new InviteModule(model.Code);
     }
 
 
     public static API.ModuleBase ToModel(this IModule entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return entity.Type switch
         {
             ModuleType.Header => (entity as HeaderModule).ToModel(),
@@ -236,7 +263,8 @@ internal static class EntityExtensions
     }
     public static API.HeaderModule ToModel(this HeaderModule entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.HeaderModule()
         {
             Text = entity.Text.ToModel(),
@@ -245,7 +273,8 @@ internal static class EntityExtensions
     }
     public static API.SectionModule ToModel(this SectionModule entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.SectionModule()
         {
             Accessory = entity.Accessory.ToModel(),
@@ -256,7 +285,8 @@ internal static class EntityExtensions
     }
     public static API.ImageGroupModule ToModel(this ImageGroupModule entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.ImageGroupModule()
         {
             Elements = entity.Elements.Select(e => e.ToModel()).ToArray(),
@@ -265,7 +295,8 @@ internal static class EntityExtensions
     }
     public static API.ContainerModule ToModel(this ContainerModule entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.ContainerModule()
         {
             Elements = entity.Elements.Select(e => e.ToModel()).ToArray(),
@@ -274,7 +305,8 @@ internal static class EntityExtensions
     }
     public static API.ActionGroupModule ToModel(this ActionGroupModule entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.ActionGroupModule()
         {
             Elements = entity.Elements.Select(e => e.ToModel()).ToArray(),
@@ -283,7 +315,8 @@ internal static class EntityExtensions
     }
     public static API.ContextModule ToModel(this ContextModule entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.ContextModule()
         {
             Elements = entity.Elements.Select(e => e.ToModel()).ToArray(),
@@ -292,7 +325,8 @@ internal static class EntityExtensions
     }
     public static API.DividerModule ToModel(this DividerModule entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.DividerModule()
         {
             Type = entity.Type
@@ -300,7 +334,8 @@ internal static class EntityExtensions
     }
     public static API.FileModule ToModel(this FileModule entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.FileModule()
         {
             Source = entity.Source,
@@ -310,7 +345,8 @@ internal static class EntityExtensions
     }
     public static API.AudioModule ToModel(this AudioModule entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.AudioModule()
         {
             Cover = entity.Cover,
@@ -321,7 +357,8 @@ internal static class EntityExtensions
     }
     public static API.VideoModule ToModel(this VideoModule entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.VideoModule()
         {
             Source = entity.Source,
@@ -331,7 +368,8 @@ internal static class EntityExtensions
     }
     public static API.CountdownModule ToModel(this CountdownModule entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.CountdownModule()
         {
             Mode = entity.Mode,
@@ -342,36 +380,40 @@ internal static class EntityExtensions
     }
     public static API.InviteModule ToModel(this InviteModule entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.InviteModule()
         {
             Code = entity.Code,
             Type = entity.Type
         };
     }
-    
+
     #endregion
 
     #region Cards
 
     public static ICard ToEntity(this API.CardBase model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return model.Type switch
         {
-             CardType.Card => (model as API.Card).ToEntity(),
+            CardType.Card => (model as API.Card).ToEntity(),
             _ => throw new ArgumentOutOfRangeException(nameof(API.CardBase))
         };
     }
     public static Card ToEntity(this API.Card model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return new Card(model.Theme, model.Size, model.Color, model.Modules.Select(m => m.ToEntity()).ToImmutableArray());
     }
-    
+
     public static API.CardBase ToModel(this ICard entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return entity.Type switch
         {
             CardType.Card => (entity as Card).ToModel(),
@@ -380,7 +422,8 @@ internal static class EntityExtensions
     }
     public static API.Card ToModel(this Card entity)
     {
-        if (entity is null) return null;
+        if (entity is null)
+            return null;
         return new API.Card()
         {
             Theme = entity.Theme,
@@ -394,10 +437,11 @@ internal static class EntityExtensions
     #endregion
 
     #region Embeds
-    
+
     public static IEmbed ToEntity(this API.EmbedBase model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return model.Type switch
         {
             EmbedType.Link => (model as API.LinkEmbed).ToEntity(),
@@ -430,7 +474,8 @@ internal static class EntityExtensions
 
     public static IPokeResource ToEntity(this API.PokeResourceBase model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return model.Type switch
         {
             PokeResourceType.ImageAnimation => (model as API.ImageAnimationPokeResource).ToEntity(),
@@ -450,7 +495,7 @@ internal static class EntityExtensions
         }, TimeSpan.FromMilliseconds(model.Duration), model.Width, model.Height, model.Percent / 100D);
 
     #endregion
-    
+
     #region Overwrites
 
     public static UserPermissionOverwrite ToEntity(this API.UserPermissionOverwrite model)
@@ -465,10 +510,11 @@ internal static class EntityExtensions
     #endregion
 
     #region Recommendation Infos
-    
+
     public static RecommendInfo ToEntity(this API.RecommendInfo model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return RecommendInfo.Create(model);
     }
 
@@ -478,7 +524,8 @@ internal static class EntityExtensions
 
     public static UserTag ToEntity(this API.UserTag model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
         return UserTag.Create(model.Color, model.Text);
     }
 

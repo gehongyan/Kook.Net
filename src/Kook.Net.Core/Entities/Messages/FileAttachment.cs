@@ -10,7 +10,7 @@ public struct FileAttachment : IDisposable
     ///     Gets how this attachment will be operated.
     /// </summary>
     public CreateAttachmentMode Mode { get; private set; }
-    
+
     /// <summary>
     ///     Gets the type of this attachment.
     /// </summary>

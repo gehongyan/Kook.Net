@@ -1,5 +1,5 @@
-using System.Collections.Immutable;
 using Kook.Rest;
+using System.Collections.Immutable;
 
 namespace Kook.WebSocket;
 
@@ -41,7 +41,7 @@ internal static class SocketChannelHelper
                 return result;
 
             //Download remaining messages
-            Guid? maxId = cachedMessages.Count > 0 
+            Guid? maxId = cachedMessages.Count > 0
 #if NET6_0_OR_GREATER
                 ? cachedMessages.MaxBy(x => x.Timestamp)?.Id
 #else
@@ -63,7 +63,7 @@ internal static class SocketChannelHelper
             return ChannelHelper.GetMessagesAsync(channel, kook, referenceMessageId, dir, limit, true, options);
         }
     }
-    
+
     public static IReadOnlyCollection<SocketMessage> GetCachedMessages(ISocketMessageChannel channel, KookSocketClient kook, MessageCache messages,
         Guid? referenceMessageId, Direction dir, int limit)
     {
@@ -78,11 +78,16 @@ internal static class SocketChannelHelper
     {
         switch (channel)
         {
-            case SocketDMChannel dmChannel: dmChannel.AddMessage(msg); break;
-            case SocketTextChannel textChannel: textChannel.AddMessage(msg); break;
-            default: throw new NotSupportedException($"Unexpected {nameof(ISocketMessageChannel)} type.");
+            case SocketDMChannel dmChannel:
+                dmChannel.AddMessage(msg);
+                break;
+            case SocketTextChannel textChannel:
+                textChannel.AddMessage(msg);
+                break;
+            default:
+                throw new NotSupportedException($"Unexpected {nameof(ISocketMessageChannel)} type.");
         }
-    }   
+    }
     /// <exception cref="NotSupportedException">Unexpected <see cref="ISocketMessageChannel"/> type.</exception>
     public static SocketMessage RemoveMessage(ISocketMessageChannel channel, KookSocketClient kook,
         Guid id)
@@ -94,13 +99,13 @@ internal static class SocketChannelHelper
             _ => throw new NotSupportedException($"Unexpected {nameof(ISocketMessageChannel)} type."),
         };
     }
-    
+
     public static async Task UpdateAsync(SocketGuildChannel channel, RequestOptions options)
     {
         var model = await channel.Kook.ApiClient.GetGuildChannelAsync(channel.Id, options).ConfigureAwait(false);
         channel.Update(channel.Kook.State, model);
     }
-    
+
     public static async Task UpdateAsync(SocketDMChannel channel, RequestOptions options)
     {
         var model = await channel.Kook.ApiClient.GetUserChatAsync(channel.Id, options).ConfigureAwait(false);

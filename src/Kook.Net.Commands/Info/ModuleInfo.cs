@@ -1,8 +1,8 @@
+using Kook.Commands.Builders;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using Kook.Commands.Builders;
+using System.Linq;
 
 namespace Kook.Commands;
 

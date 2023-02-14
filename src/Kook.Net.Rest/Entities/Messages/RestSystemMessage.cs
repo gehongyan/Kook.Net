@@ -11,7 +11,7 @@ public class RestSystemMessage : RestMessage, ISystemMessage
 {
     /// <inheritdoc />
     public SystemMessageType SystemMessageType { get; set; }
-    
+
     internal RestSystemMessage(BaseKookClient kook, Guid id, MessageType messageType, IMessageChannel channel, IUser author)
         : base(kook, id, messageType, channel, author, MessageSource.System)
     {
@@ -33,6 +33,6 @@ public class RestSystemMessage : RestMessage, ISystemMessage
         base.Update(model);
         // TODO: SystemMessageType
     }
-    
+
     private string DebuggerDisplay => $"{Author}: {Content} ({Id}, {Type})";
 }

@@ -55,11 +55,11 @@ public class RequestOptions
     internal BucketId BucketId { get; set; }
     internal bool IsClientBucket { get; set; }
     internal bool IsGatewayBucket { get; set; }
-    
+
     internal IDictionary<string, IEnumerable<string>> RequestHeaders { get; }
-        
+
     internal static RequestOptions CreateOrClone(RequestOptions options)
-    {            
+    {
         if (options == null)
             return new RequestOptions();
         else
@@ -86,6 +86,6 @@ public class RequestOptions
         Timeout = KookConfig.DefaultRequestTimeout;
         RequestHeaders = new Dictionary<string, IEnumerable<string>>();
     }
-        
+
     public RequestOptions Clone() => MemberwiseClone() as RequestOptions;
 }

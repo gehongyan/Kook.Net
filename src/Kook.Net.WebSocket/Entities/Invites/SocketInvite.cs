@@ -1,5 +1,5 @@
-using System.Diagnostics;
 using Kook.Rest;
+using System.Diagnostics;
 using Model = Kook.API.Invite;
 
 namespace Kook.WebSocket;
@@ -50,7 +50,7 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     ///     Gets the user that created this invite if available.
     /// </summary>
     public SocketGuildUser Inviter { get; private set; }
-    
+
     /// <inheritdoc />
     public string Code { get; private set; }
     /// <inheritdoc />
@@ -74,7 +74,7 @@ public class SocketInvite : SocketEntity<uint>, IInvite
         Code = model.UrlCode;
         Url = model.Url;
         GuildId = model.GuildId;
-        ChannelId = model.ChannelId ;
+        ChannelId = model.ChannelId;
         ExpiresAt = model.ExpiresAt;
         MaxAge = model.Duration;
         MaxUses = model.UsingTimes == -1 ? null : model.UsingTimes;

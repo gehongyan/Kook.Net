@@ -17,7 +17,7 @@ public class RestSelfUser : RestUser, ISelfUser
     public int InvitedCount { get; private set; }
     /// <inheritdoc />
     public bool IsMobileVerified { get; private set; }
-    
+
     internal RestSelfUser(BaseKookClient kook, ulong id)
         : base(kook, id)
     {
@@ -31,13 +31,13 @@ public class RestSelfUser : RestUser, ISelfUser
     internal void Update(Model model)
     {
         base.Update(model);
-        
+
         MobilePrefix = model.MobilePrefix;
         Mobile = model.Mobile;
         InvitedCount = model.InvitedCount ?? 0;
         IsMobileVerified = model.MobileVerified;
     }
-    
+
     /// <inheritdoc />
     /// <exception cref="InvalidOperationException">Unable to update this object using a different token.</exception>
     public override async Task UpdateAsync(RequestOptions options = null)
@@ -49,7 +49,7 @@ public class RestSelfUser : RestUser, ISelfUser
     }
 
     #region ISelfUser
-    
+
     /// <inheritdoc />
     public async Task StartPlayingAsync(IGame game, RequestOptions options = null)
     {

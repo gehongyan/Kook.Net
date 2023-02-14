@@ -6,6 +6,6 @@ internal class DeleteGameParams
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }
-    
-    public static implicit operator DeleteGameParams(int id) => new() {Id = id};
+
+    public static implicit operator DeleteGameParams(int id) => new() { Id = id };
 }

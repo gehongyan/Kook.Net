@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 public enum MessageType
 {

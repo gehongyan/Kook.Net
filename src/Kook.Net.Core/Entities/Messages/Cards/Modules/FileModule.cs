@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 namespace Kook;
 
@@ -19,12 +19,12 @@ public class FileModule : IMediaModule, IEquatable<FileModule>
 
     /// <inheritdoc />
     public string Source { get; }
-    
+
     /// <inheritdoc />
     public string Title { get; }
-    
+
     private string DebuggerDisplay => $"{Type}: {Title}";
-    
+
     public static bool operator ==(FileModule left, FileModule right)
         => left?.Equals(right) ?? right is null;
 

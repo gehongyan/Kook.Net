@@ -6,7 +6,7 @@ namespace Kook;
 public struct PokeLabel : IEntity<uint>
 {
     public uint Id { get; internal set; }
-    
+
     public string Name { get; internal set; }
 
     internal PokeLabel(uint id, string name)

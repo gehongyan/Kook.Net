@@ -48,7 +48,7 @@ public class SocketUnknownUser : SocketUser
         var entity = new SocketUnknownUser(kook, id);
         return entity;
     }
-    
+
     private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ?? false ? ", Bot" : "")}, Unknown)";
     internal new SocketUnknownUser Clone() => MemberwiseClone() as SocketUnknownUser;
 }

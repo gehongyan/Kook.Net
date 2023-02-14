@@ -1,3 +1,5 @@
+using Kook.Commands.Builders;
+using Kook.Logging;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -6,8 +8,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Kook.Commands.Builders;
-using Kook.Logging;
 
 namespace Kook.Commands;
 
@@ -648,7 +648,7 @@ public class CommandService : IDisposable
             var bestCandidate = preconditionResults
                 .OrderByDescending(x => x.Key.Command.Priority)
                 .FirstOrDefault(x => !x.Value.IsSuccess);
-            return MatchResult.FromSuccess(bestCandidate.Key,bestCandidate.Value);
+            return MatchResult.FromSuccess(bestCandidate.Key, bestCandidate.Value);
         }
 
         var parseResults = new Dictionary<CommandMatch, ParseResult>();
@@ -678,7 +678,7 @@ public class CommandService : IDisposable
             .Where(x => x.Value.IsSuccess)
             .ToArray();
 
-        if(successfulParses.Length == 0)
+        if (successfulParses.Length == 0)
         {
             var bestMatch = parseResults
                 .FirstOrDefault(x => !x.Value.IsSuccess);

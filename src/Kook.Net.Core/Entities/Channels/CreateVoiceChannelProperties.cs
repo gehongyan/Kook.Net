@@ -10,12 +10,12 @@ public class CreateVoiceChannelProperties : CreateGuildChannelProperties
     ///     Gets or sets the voice quality that the clients in this voice channel are requested to use.
     /// </summary>
     public VoiceQuality? VoiceQuality { get; set; }
-    
+
     /// <summary>
     ///     Gets or sets the maximum number of users that can be present in a channel, or <c>null</c> if none.
     /// </summary>
     public int? UserLimit { get; set; }
-    
+
     /// <summary>
     ///     Gets or sets the category ID for this channel.
     /// </summary>

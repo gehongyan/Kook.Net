@@ -35,7 +35,7 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
 
     internal IChannel Channel { get; }
     internal IGuild Guild { get; }
-    
+
     internal RestInvite(BaseKookClient kook, IGuild guild, IChannel channel, uint id)
         : base(kook, id)
     {
@@ -53,7 +53,7 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
         Code = model.UrlCode;
         Url = model.Url;
         GuildId = model.GuildId;
-        ChannelId = model.ChannelId ;
+        ChannelId = model.ChannelId;
         GuildName = model.GuildName;
         ChannelName = model.ChannelName;
         ChannelType = model.ChannelType == ChannelType.Category ? ChannelType.Unspecified : model.ChannelType;
@@ -64,7 +64,7 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
         RemainingUses = model.RemainingTimes == -1 ? null : model.RemainingTimes;
         Uses = MaxUses - RemainingUses;
     }
-    
+
     /// <inheritdoc />
     public async Task UpdateAsync(RequestOptions options = null)
     {
@@ -74,7 +74,7 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
         => InviteHelper.DeleteAsync(this, Kook, options);
-    
+
     /// <summary>
     ///     Gets the URL of the invite.
     /// </summary>
@@ -83,7 +83,7 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
     /// </returns>
     public override string ToString() => Url;
     private string DebuggerDisplay => $"{Url} ({GuildName} / {ChannelName ?? "Channel not specified"})";
-    
+
     /// <inheritdoc />
     IGuild IInvite.Guild
     {

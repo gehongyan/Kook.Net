@@ -12,9 +12,9 @@ public struct BilibiliVideoEmbed : IEmbed
         Title = title;
         Cover = cover;
     }
-    
+
     public EmbedType Type => EmbedType.Link;
-    
+
     public string Url { get; internal set; }
 
     public string OriginUrl { get; internal set; }

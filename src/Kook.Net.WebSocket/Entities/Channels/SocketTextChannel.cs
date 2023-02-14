@@ -1,15 +1,14 @@
-using System.Collections.Immutable;
-using Model = Kook.API.Channel;
-
-using System.Diagnostics;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Kook.API;
 using Kook.API.Rest;
 using Kook.Net.Converters;
 using Kook.Rest;
 using Kook.Utils;
+using System.Collections.Immutable;
+using System.Diagnostics;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Model = Kook.API.Channel;
 
 namespace Kook.WebSocket;
 
@@ -22,7 +21,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     #region SocketTextChannel
 
     private readonly MessageCache _messages;
-    
+
     /// <inheritdoc />
     public string Topic { get; set; }
     /// <inheritdoc />
@@ -45,7 +44,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
 
     public IReadOnlyCollection<SocketMessage> CachedMessages => _messages?.Messages ?? ImmutableArray.Create<SocketMessage>();
-    
+
     /// <inheritdoc />
     public override IReadOnlyCollection<SocketGuildUser> Users
         => Guild.Users.Where(x => Permissions.GetValue(
@@ -73,18 +72,18 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         SlowModeInterval = model.SlowMode / 1000;
         IsPermissionSynced = model.PermissionSync;
     }
-    
+
     /// <inheritdoc />
     public virtual Task ModifyAsync(Action<ModifyTextChannelProperties> func, RequestOptions options = null)
         => ChannelHelper.ModifyAsync(this, Kook, func, options);
-    
+
     private string DebuggerDisplay => $"{Name} ({Id}, Text)";
     internal new SocketTextChannel Clone() => MemberwiseClone() as SocketTextChannel;
 
     #endregion
 
     #region Messages
-    
+
     /// <inheritdoc />
     public SocketMessage GetCachedMessage(Guid id)
         => _messages?.Get(id);
@@ -189,19 +188,19 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <inheritdoc />
     public async Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions options = null)
         => await ChannelHelper.ModifyMessageAsync(this, messageId, func, Kook, options).ConfigureAwait(false);
-    
+
     /// <inheritdoc />
     public Task DeleteMessageAsync(Guid messageId, RequestOptions options = null)
         => ChannelHelper.DeleteMessageAsync(this, messageId, Kook, options);
     /// <inheritdoc />
     public Task DeleteMessageAsync(IMessage message, RequestOptions options = null)
         => ChannelHelper.DeleteMessageAsync(this, message.Id, Kook, options);
-    
+
     internal void AddMessage(SocketMessage msg)
         => _messages?.Add(msg);
     internal SocketMessage RemoveMessage(Guid id)
         => _messages?.Remove(id);
-    
+
     #endregion
 
     #region Invites
@@ -233,9 +232,9 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         return null;
     }
     #endregion
-    
+
     #region IGuildChannel
-    
+
     /// <inheritdoc />
     async Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
     {
@@ -260,28 +259,28 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(string path, string fileName,
         AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendFileAsync(path, fileName, type, (Quote) quote, ephemeralUser, options);
+        => SendFileAsync(path, fileName, type, (Quote)quote, ephemeralUser, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(Stream stream, string fileName,
         AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendFileAsync(stream, fileName, type, (Quote) quote, ephemeralUser, options);
+        => SendFileAsync(stream, fileName, type, (Quote)quote, ephemeralUser, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(FileAttachment attachment,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendFileAsync(attachment, (Quote) quote, ephemeralUser, options);
+        => SendFileAsync(attachment, (Quote)quote, ephemeralUser, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendTextAsync(string text,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendTextAsync(text, (Quote) quote, ephemeralUser, options);
+        => SendTextAsync(text, (Quote)quote, ephemeralUser, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardAsync(ICard card,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendCardAsync(card, (Quote) quote, ephemeralUser, options);
+        => SendCardAsync(card, (Quote)quote, ephemeralUser, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardsAsync(IEnumerable<ICard> cards,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendCardsAsync(cards, (Quote) quote, ephemeralUser, options);
-    
+        => SendCardsAsync(cards, (Quote)quote, ephemeralUser, options);
+
     /// <inheritdoc />
     async Task<IMessage> IMessageChannel.GetMessageAsync(Guid id, CacheMode mode, RequestOptions options)
     {
@@ -303,12 +302,12 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     async Task<IReadOnlyCollection<IMessage>> ITextChannel.GetPinnedMessagesAsync(RequestOptions options)
         => await GetPinnedMessagesAsync(options).ConfigureAwait(false);
     #endregion
-    
+
     #region  INestedChannel
-    
+
     /// <inheritdoc />
     Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult(Category);
-    
+
     #endregion
 }

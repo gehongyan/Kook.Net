@@ -6,7 +6,7 @@ namespace Kook;
 public interface IGuildChannel : IChannel, IDeletable
 {
     #region General
-    
+
     /// <summary>
     ///     Gets the guild associated with this channel.
     /// </summary>
@@ -14,7 +14,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     A guild object that this channel belongs to.
     /// </returns>
     IGuild Guild { get; }
-    
+
     /// <summary>
     ///     Gets the guild ID associated with this channel.
     /// </summary>
@@ -40,7 +40,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     A <see cref="ChannelType"/> representing the type of this channel.
     /// </returns>
     ChannelType Type { get; }
-    
+
     /// <summary>
     ///     Gets the identifier of the user who created this channel.
     /// </summary>
@@ -48,7 +48,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     A <see langword="ulong"/> representing the identifier of the user who created this channel.
     /// </returns>
     ulong CreatorId { get; }
-    
+
     /// <summary>
     ///     Gets a collection of permission overwrites for roles for this channel.
     /// </summary>
@@ -56,7 +56,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     A collection of overwrites for roles associated with this channel.
     /// </returns>
     IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites { get; }
-    
+
     /// <summary>
     ///     Gets a collection of permission overwrites for users for this channel.
     /// </summary>
@@ -110,7 +110,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     An overwrite object for the targeted user; <c>null</c> if none is set.
     /// </returns>
     OverwritePermissions? GetPermissionOverwrite(IUser user);
-    
+
     /// <summary>
     ///     Removes the permission overwrite for the given role, if one exists.
     /// </summary>
@@ -174,7 +174,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
     /// </returns>
     Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null);
-    
+
     #endregion
 
     #region Users
@@ -192,7 +192,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     Paged collection of users.
     /// </returns>
     new IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
-    
+
     /// <summary>
     ///     Gets a user in this channel.
     /// </summary>

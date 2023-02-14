@@ -1,4 +1,4 @@
-﻿namespace Kook.Rest;
+namespace Kook.Rest;
 
 public interface IRestAudioChannel : IAudioChannel
 {

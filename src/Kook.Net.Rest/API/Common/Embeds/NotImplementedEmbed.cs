@@ -12,6 +12,6 @@ internal class NotImplementedEmbed : EmbedBase
     }
 
     public string RawType { get; set; }
-    
+
     public JsonNode RawJsonNode { get; set; }
 }

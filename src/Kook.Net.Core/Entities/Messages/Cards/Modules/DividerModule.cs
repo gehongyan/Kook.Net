@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 namespace Kook;
 
@@ -10,14 +10,14 @@ public class DividerModule : IModule, IEquatable<DividerModule>
 {
     internal DividerModule()
     {
-        
+
     }
-    
+
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Divider;
-    
+
     private string DebuggerDisplay => $"{Type}";
-    
+
     public static bool operator ==(DividerModule left, DividerModule right)
         => left?.Equals(right) ?? right is null;
 

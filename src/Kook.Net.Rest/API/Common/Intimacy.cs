@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using Kook.Net.Converters;
+using System.Text.Json.Serialization;
 
 namespace Kook.API;
 
@@ -11,7 +11,7 @@ internal class Intimacy
     [JsonPropertyName("last_read")]
     [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset LastReadAt { get; set; }
-    
+
     [JsonPropertyName("last_modify")]
     [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset LastModifyAt { get; set; }

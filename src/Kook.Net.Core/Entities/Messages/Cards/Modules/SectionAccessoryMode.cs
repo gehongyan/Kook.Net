@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Specifies the accessory position relative to the text element. 

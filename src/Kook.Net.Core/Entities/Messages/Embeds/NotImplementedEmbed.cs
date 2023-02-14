@@ -30,10 +30,10 @@ public struct NotImplementedEmbed : IEmbed
     ///     This value originally came from the <c>type</c> field of the <see cref="JsonNode"/>.
     /// </remarks>
     public string RawType { get; internal set; }
-    
+
     /// <inheritdoc />
     public string Url { get; internal set; }
-    
+
     /// <summary>
     ///     Gets the raw JSON of the embed.
     /// </summary>
@@ -65,7 +65,7 @@ public struct NotImplementedEmbed : IEmbed
         T embed = JsonNode.Deserialize<T>(options);
         return embed;
     }
-    
+
     /// <summary>
     ///     Resolves the embed to a concrete type via delegate.
     /// </summary>

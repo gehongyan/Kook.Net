@@ -1,7 +1,6 @@
 using System.Collections.Immutable;
-using Model = Kook.API.Channel;
-
 using System.Diagnostics;
+using Model = Kook.API.Channel;
 
 namespace Kook.Rest;
 
@@ -34,7 +33,7 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
         : base(kook, guild, id, ChannelType.Voice)
     {
     }
-    
+
     internal new static RestVoiceChannel Create(BaseKookClient kook, IGuild guild, Model model)
     {
         var entity = new RestVoiceChannel(kook, guild, model.Id);
@@ -52,7 +51,7 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
         IsPermissionSynced = model.PermissionSync;
         HasPassword = model.HasPassword;
     }
-    
+
     /// <inheritdoc />
     public async Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null)
     {
@@ -62,7 +61,7 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
 
     public async Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(RequestOptions options)
         => await ChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false);
-    
+
     /// <summary>
     ///     Gets the parent (category) channel of this channel.
     /// </summary>
@@ -77,7 +76,7 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     #endregion
 
     #region Invites
-    
+
     /// <inheritdoc />
     public async Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null)
         => await ChannelHelper.GetInvitesAsync(this, Kook, options).ConfigureAwait(false);
@@ -89,12 +88,12 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
         => await ChannelHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
 
     #endregion
-    
+
     private string DebuggerDisplay => $"{Name} ({Id}, Voice)";
-    
-    
+
+
     #region IGuildChannel
-    
+
     /// <inheritdoc />
     Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IGuildUser>(null);
@@ -103,11 +102,11 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     {
         return AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
     }
-    
+
     #endregion
-    
+
     #region INestedChannel
-    
+
     /// <inheritdoc />
     async Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
     {
@@ -115,9 +114,9 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
             return (await Guild.GetChannelAsync(CategoryId.Value, mode, options).ConfigureAwait(false)) as ICategoryChannel;
         return null;
     }
-    
+
     #endregion
-    
+
     #region IVoiceChannel
 
     async Task<IReadOnlyCollection<IUser>> IVoiceChannel.GetConnectedUsersAsync(CacheMode mode, RequestOptions options)

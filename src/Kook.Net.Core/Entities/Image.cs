@@ -77,7 +77,8 @@ public struct Image : IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (_isDisposed) return;
+        if (_isDisposed)
+            return;
         Stream?.Dispose();
         _isDisposed = true;
     }

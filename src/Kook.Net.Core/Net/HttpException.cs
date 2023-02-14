@@ -53,7 +53,7 @@ public class HttpException : Exception
     }
 
     private static string CreateMessage(HttpStatusCode httpCode, int? kookCode = null, string reason = null)
-    {   
+    {
         string msg;
         if (kookCode != null && kookCode != 0)
         {

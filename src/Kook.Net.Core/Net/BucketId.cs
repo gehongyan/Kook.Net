@@ -94,7 +94,7 @@ public class BucketId : IEquatable<BucketId>
         => Equals(obj as BucketId);
 
     public override int GetHashCode()
-        =>  IsHashBucket ? (BucketHash, string.Join("/", MajorParameters.Select(x => x.Value))).GetHashCode() : (HttpMethod, Endpoint).GetHashCode();
+        => IsHashBucket ? (BucketHash, string.Join("/", MajorParameters.Select(x => x.Value))).GetHashCode() : (HttpMethod, Endpoint).GetHashCode();
 
     public override string ToString()
         => GetBucketHash() ?? GetUniqueEndpoint();
@@ -108,5 +108,5 @@ public class BucketId : IEquatable<BucketId>
         if (GetType() != other.GetType())
             return false;
         return ToString() == other.ToString();
-    }        
+    }
 }

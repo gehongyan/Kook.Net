@@ -39,9 +39,9 @@ public struct RateLimitInfo : IRateLimitInfo
         Endpoint = endpoint;
 
         IsGlobal = headers.ContainsKey("X-Rate-Limit-Global");
-        Limit = headers.TryGetValue("X-Rate-Limit-Limit", out string temp) && 
+        Limit = headers.TryGetValue("X-Rate-Limit-Limit", out string temp) &&
                 int.TryParse(temp, NumberStyles.None, CultureInfo.InvariantCulture, out var limit) ? limit : (int?)null;
-        Remaining = headers.TryGetValue("X-Rate-Limit-Remaining", out temp) && 
+        Remaining = headers.TryGetValue("X-Rate-Limit-Remaining", out temp) &&
                     int.TryParse(temp, NumberStyles.None, CultureInfo.InvariantCulture, out var remaining) ? remaining : (int?)null;
         // RetryAfter = headers.TryGetValue("Retry-After", out temp) &&
         //              int.TryParse(temp, NumberStyles.None, CultureInfo.InvariantCulture, out var retryAfter) ? retryAfter : (int?)null;

@@ -23,7 +23,7 @@ public class Quote : IQuote
     ///     Used to delete a quote when modifying a message.
     /// </remarks>
     public Quote Empty => new Quote(Guid.Empty);
-    
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="Quote"/> class.
     /// </summary>
@@ -34,7 +34,7 @@ public class Quote : IQuote
     {
         QuotedMessageId = quotedMessageId;
     }
-    
+
     internal Quote(string id, Guid quotedMessageId, MessageType type, string content, DateTimeOffset createAt, IUser author)
     {
         Id = id;

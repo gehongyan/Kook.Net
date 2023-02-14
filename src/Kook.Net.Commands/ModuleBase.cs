@@ -1,6 +1,6 @@
+using Kook.Commands.Builders;
 using System;
 using System.Threading.Tasks;
-using Kook.Commands.Builders;
 
 namespace Kook.Commands;
 
@@ -41,7 +41,7 @@ public abstract class ModuleBase<T> : IModuleBase
     ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
     /// </param>
     /// <param name="options">The request options for this <see langword="async"/> request.</param>
-    protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(string path, string fileName = null, 
+    protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(string path, string fileName = null,
         AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false, RequestOptions options = null)
     {
         return await Context.Channel.SendFileAsync(path, fileName, type, isQuote ? new Quote(Context.Message.Id) : null,
@@ -88,7 +88,7 @@ public abstract class ModuleBase<T> : IModuleBase
         return await Context.Channel.SendFileAsync(attachment, isQuote ? new Quote(Context.Message.Id) : null,
             isEphemeral ? Context.User : null, options).ConfigureAwait(false);
     }
-        
+
     /// <summary>
     ///     Sends a text message to the source channel.
     /// </summary>
@@ -108,7 +108,7 @@ public abstract class ModuleBase<T> : IModuleBase
         return await Context.Channel.SendTextAsync(message, isQuote ? new Quote(Context.Message.Id) : null,
             isEphemeral ? Context.User : null, options).ConfigureAwait(false);
     }
-        
+
     /// <summary>
     ///     Sends a card message to the source channel.
     /// </summary>

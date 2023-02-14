@@ -4,7 +4,7 @@ namespace Kook.Rest;
 
 internal static class GameHelper
 {
-    public static async Task DeleteAsync(IGame game, BaseKookClient client, 
+    public static async Task DeleteAsync(IGame game, BaseKookClient client,
         RequestOptions options)
     {
         await client.ApiClient.DeleteGameAsync(game.Id, options).ConfigureAwait(false);

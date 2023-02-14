@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Represents a generic channel.
@@ -18,7 +18,7 @@ public interface IChannel : IEntity<ulong>
     #endregion
 
     #region Users
-    
+
     /// <summary>
     ///     Gets a collection of users that are able to view the channel or are currently in this channel.
     /// </summary>
@@ -40,7 +40,7 @@ public interface IChannel : IEntity<ulong>
     ///     Paged collection of users.
     /// </returns>
     IAsyncEnumerable<IReadOnlyCollection<IUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
-    
+
     /// <summary>
     ///     Gets a user in this channel.
     /// </summary>

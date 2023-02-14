@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -220,27 +220,33 @@ public static class MentionUtils
             switch (tag.Type)
             {
                 case TagType.UserMention:
-                    if (userHandling == TagHandling.Ignore) continue;
+                    if (userHandling == TagHandling.Ignore)
+                        continue;
                     newText = ResolveUserMention(tag, userHandling);
                     break;
                 case TagType.ChannelMention:
-                    if (channelHandling == TagHandling.Ignore) continue;
+                    if (channelHandling == TagHandling.Ignore)
+                        continue;
                     newText = ResolveChannelMention(tag, channelHandling);
                     break;
                 case TagType.RoleMention:
-                    if (roleHandling == TagHandling.Ignore) continue;
+                    if (roleHandling == TagHandling.Ignore)
+                        continue;
                     newText = ResolveRoleMention(tag, roleHandling);
                     break;
                 case TagType.EveryoneMention:
-                    if (everyoneHandling == TagHandling.Ignore) continue;
+                    if (everyoneHandling == TagHandling.Ignore)
+                        continue;
                     newText = ResolveEveryoneMention(tag, everyoneHandling);
                     break;
                 case TagType.HereMention:
-                    if (everyoneHandling == TagHandling.Ignore) continue;
+                    if (everyoneHandling == TagHandling.Ignore)
+                        continue;
                     newText = ResolveHereMention(tag, everyoneHandling);
                     break;
                 case TagType.Emoji:
-                    if (emojiHandling == TagHandling.Ignore) continue;
+                    if (emojiHandling == TagHandling.Ignore)
+                        continue;
                     newText = ResolveEmoji(tag, emojiHandling);
                     break;
             }
@@ -385,7 +391,7 @@ public static class MentionUtils
     {
         if (mode != TagHandling.Remove)
         {
-            Emote emoji = (Emote) tag.Value;
+            Emote emoji = (Emote)tag.Value;
 
             //Remove if its name contains any bad chars (prevents a few tag exploits)
             for (int i = 0; i < emoji.Name.Length; i++)

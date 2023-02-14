@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Specifies the type of an <see cref="IElement"/>.

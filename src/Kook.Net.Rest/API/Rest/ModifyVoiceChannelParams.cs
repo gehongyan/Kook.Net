@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using Kook.Net.Converters;
+using System.Text.Json.Serialization;
 
 namespace Kook.API.Rest;
 
@@ -10,7 +10,7 @@ internal class ModifyVoiceChannelParams : ModifyGuildChannelParams
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public VoiceQuality? VoiceQuality { get; set; }
 
-    [JsonPropertyName("limit_amount")] 
+    [JsonPropertyName("limit_amount")]
     public int? UserLimit { get; set; }
 
     [JsonPropertyName("password")]

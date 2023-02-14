@@ -1,7 +1,7 @@
-using System.Collections.Immutable;
 using Kook.API;
 using Kook.API.Gateway;
 using Kook.Rest;
+using System.Collections.Immutable;
 
 namespace Kook.WebSocket;
 
@@ -83,7 +83,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     ///     Collection of poke action objects.
     /// </returns>
     public virtual IReadOnlyCollection<SocketPokeAction> Pokes => ImmutableArray.Create<SocketPokeAction>();
-    
+
     /// <summary>
     ///     Returns the roles mentioned in this message.
     /// </summary>
@@ -97,7 +97,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// <returns>
     ///     Collection of WebSocket-based users.
     /// </returns>
-    public IReadOnlyCollection<SocketUser> MentionedUsers => _userMentions; 
+    public IReadOnlyCollection<SocketUser> MentionedUsers => _userMentions;
     /// <inheritdoc />
     public virtual IReadOnlyCollection<ITag> Tags => ImmutableArray.Create<ITag>();
     /// <inheritdoc />
@@ -122,7 +122,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         Type = gatewayEvent.Type;
         Timestamp = gatewayEvent.MessageTimestamp;
         Content = gatewayEvent.Content;
-        
+
         if (model.MentionedUsers is not null)
         {
             var ids = model.MentionedUsers;
@@ -176,7 +176,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         Timestamp = model.CreateAt;
         EditedTimestamp = model.UpdateAt;
         Content = model.Content;
-        
+
         if (model.MentionedUsers is not null)
         {
             var ids = model.MentionedUsers;
@@ -204,7 +204,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     {
         EditedTimestamp = model.UpdatedAt;
         Content = model.Content;
-        
+
         if (model.Mention is not null)
         {
             var ids = model.Mention;
@@ -229,8 +229,8 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
         => MessageHelper.DeleteAsync(this, Kook, options);
-    
-    
+
+
     internal void AddReaction(SocketReaction reaction)
     {
         _reactions.Add(reaction);
@@ -252,7 +252,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     public Task UpdateAsync(RequestOptions options = null)
         => SocketMessageHelper.UpdateAsync(this, Kook, options);
-    
+
     /// <inheritdoc />
     public Task AddReactionAsync(IEmote emote, RequestOptions options = null)
     {
@@ -307,7 +307,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// </returns>
     public override string ToString() => Content;
     internal SocketMessage Clone() => MemberwiseClone() as SocketMessage;
-    
+
     #region IMessage
 
     /// <inheritdoc />

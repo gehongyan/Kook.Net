@@ -29,10 +29,10 @@ public class ColorTests
     [Fact]
     public void Color_FromRgb_Byte()
     {
-        Assert.Equal(0xFF0000u, new Color((byte) 255, (byte) 0, (byte) 0).RawValue);
-        Assert.Equal(0x00FF00u, new Color((byte) 0, (byte) 255, (byte) 0).RawValue);
-        Assert.Equal(0x0000FFu, new Color((byte) 0, (byte) 0, (byte) 255).RawValue);
-        Assert.Equal(0xFFFFFFu, new Color((byte) 255, (byte) 255, (byte) 255).RawValue);
+        Assert.Equal(0xFF0000u, new Color((byte)255, (byte)0, (byte)0).RawValue);
+        Assert.Equal(0x00FF00u, new Color((byte)0, (byte)255, (byte)0).RawValue);
+        Assert.Equal(0x0000FFu, new Color((byte)0, (byte)0, (byte)255).RawValue);
+        Assert.Equal(0xFFFFFFu, new Color((byte)255, (byte)255, (byte)255).RawValue);
     }
 
     [Fact]

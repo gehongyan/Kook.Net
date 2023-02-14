@@ -41,11 +41,11 @@ public interface IKookClient : IDisposable
     ///     A task that represents the asynchronous stop operation.
     /// </returns>
     Task StopAsync();
-    
+
     #endregion
 
     #region Channels
-    
+
     /// <summary>
     ///     Gets a generic channel.
     /// </summary>
@@ -87,9 +87,9 @@ public interface IKookClient : IDisposable
     Task<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
 
     #endregion
-    
+
     #region Guilds
-    
+
     /// <summary>
     ///     Gets a guild.
     /// </summary>
@@ -111,11 +111,11 @@ public interface IKookClient : IDisposable
     ///     of guilds that the current user is in.
     /// </returns>
     Task<IReadOnlyCollection<IGuild>> GetGuildsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
-    
+
     #endregion
-    
+
     #region Users
-    
+
     /// <summary>
     ///     Gets a user.
     /// </summary>
@@ -127,7 +127,7 @@ public interface IKookClient : IDisposable
     ///     the identifier; <c>null</c> if the user is not found.
     /// </returns>
     Task<IUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
-    
+
     #endregion
 
 }

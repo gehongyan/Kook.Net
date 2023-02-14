@@ -56,7 +56,7 @@ public class SocketReaction : IReaction
     public ISocketMessageChannel Channel { get; }
     /// <inheritdoc />
     public IEmote Emote { get; }
-    
+
     internal SocketReaction(ISocketMessageChannel channel, Guid messageId, SocketUserMessage message, ulong userId, IUser user, IEmote emoji)
     {
         Channel = channel;

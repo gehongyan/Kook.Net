@@ -14,7 +14,7 @@ internal static class UrlValidation
     {
         if (string.IsNullOrEmpty(url))
             return false;
-        if (!(url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) 
+        if (!(url.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
               || url.StartsWith("https://", StringComparison.OrdinalIgnoreCase)))
             throw new InvalidOperationException($"The url {url} must include a protocol (either HTTP or HTTPS)");
         return true;
@@ -51,8 +51,8 @@ internal static class UrlValidation
     {
         if (string.IsNullOrEmpty(url))
             return false;
-        if (!Regex.IsMatch(url, 
-                @"^https?:\/\/(img\.(kaiheila|kookapp)\.cn|kaiheila\.oss-cn-beijing\.aliyuncs\.com)\/(assets|attachments)\/\d{4}-\d{2}(\/\d{2})?\/\w{8,16}\.\w+$", 
+        if (!Regex.IsMatch(url,
+                @"^https?:\/\/(img\.(kaiheila|kookapp)\.cn|kaiheila\.oss-cn-beijing\.aliyuncs\.com)\/(assets|attachments)\/\d{4}-\d{2}(\/\d{2})?\/\w{8,16}\.\w+$",
                 RegexOptions.Compiled | RegexOptions.IgnoreCase))
             throw new InvalidOperationException($"The url {url} must be a valid Kook asset URL");
         return true;

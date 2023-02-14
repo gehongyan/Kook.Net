@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using Kook.Net.Converters;
+using System.Text.Json.Serialization;
 
 namespace Kook.API.Rest;
 
@@ -27,7 +27,7 @@ internal class GuildMember : User
     [JsonPropertyName("desc")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string Description { get; set; }
-    
+
     [JsonPropertyName("abbr")]
     public string Abbreviation { get; set; }
 }

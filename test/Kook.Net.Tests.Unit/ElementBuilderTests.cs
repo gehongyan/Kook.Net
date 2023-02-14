@@ -10,7 +10,7 @@ public class ElementBuilderTests
     private const string Name = "Kook.Net";
     private const string Icon = "https://kaiheila.net/logo.png";
     private const string Url = "https://kaiheila.net/";
-    
+
     [Fact]
     public void PlainTextElementBuilder_Constructor()
     {
@@ -50,7 +50,7 @@ public class ElementBuilderTests
             Assert.Equal(content, builder.Build().Content);
         }
     }
-    
+
     [Fact]
     public void PlainTextElementBuilder_InvalidContent()
     {
@@ -62,7 +62,7 @@ public class ElementBuilderTests
         foreach (string content in GetInvalidContent())
             Assert.Throws<ArgumentException>(() => new PlainTextElementBuilder().WithContent(content));
     }
-    
+
     [Theory]
     [InlineData("")]
     [InlineData(" ")]
@@ -73,7 +73,7 @@ public class ElementBuilderTests
         Assert.Equal(content, builder.Content);
         Assert.Equal(content, builder.Build().Content);
     }
-    
+
     [Fact]
     public void KMarkdownElementBuilder_Constructor()
     {
@@ -108,7 +108,7 @@ public class ElementBuilderTests
             Assert.Equal(content, builder.Build().Content);
         }
     }
-    
+
     [Fact]
     public void KMarkdownElementBuilder_InvalidContent()
     {
@@ -120,7 +120,7 @@ public class ElementBuilderTests
         foreach (string content in GetInvalidContent())
             Assert.Throws<ArgumentException>(() => new KMarkdownElementBuilder().WithContent(content));
     }
-    
+
     [Theory]
     [InlineData("")]
     [InlineData(" ")]
@@ -131,7 +131,7 @@ public class ElementBuilderTests
         Assert.Equal(content, builder.Content);
         Assert.Equal(content, builder.Build().Content);
     }
-    
+
     [Fact]
     public void ImageElementBuilder_Constructor()
     {
@@ -147,7 +147,8 @@ public class ElementBuilderTests
         Assert.Equal(Name, builder.Alternative);
         Assert.Equal(Name, builder.Build().Alternative);
         Assert.Equal(ImageSize.Small, builder.Size);
-        Assert.Equal(ImageSize.Small, builder.Build().Size);;
+        Assert.Equal(ImageSize.Small, builder.Build().Size);
+        ;
         Assert.Equal(true, builder.Circle);
         Assert.Equal(true, builder.Build().Circle);
         builder = new ImageElementBuilder
@@ -164,7 +165,8 @@ public class ElementBuilderTests
         Assert.Equal(Name, builder.Alternative);
         Assert.Equal(Name, builder.Build().Alternative);
         Assert.Equal(ImageSize.Large, builder.Size);
-        Assert.Equal(ImageSize.Large, builder.Build().Size);;
+        Assert.Equal(ImageSize.Large, builder.Build().Size);
+        ;
         Assert.Equal(false, builder.Circle);
         Assert.Equal(false, builder.Build().Circle);
     }
@@ -201,7 +203,7 @@ public class ElementBuilderTests
             Assert.Equal(size, builder.Build().Size);
         }
     }
-    
+
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -224,7 +226,7 @@ public class ElementBuilderTests
         Assert.Equal(source, builder.Source);
         Assert.Throws<InvalidOperationException>(() => builder.Build());
     }
-    
+
     [Theory]
     [InlineData(Icon)]
     public void ImageElementBuilder_ImplicitConversion(string source)
@@ -233,7 +235,7 @@ public class ElementBuilderTests
         Assert.Equal(source, builder.Source);
         Assert.Equal(source, builder.Build().Source);
     }
-    
+
     [Fact]
     public void ButtonElementBuilder_Constructor()
     {
@@ -245,8 +247,8 @@ public class ElementBuilderTests
         Assert.Equal(ElementType.Button, builder.Build().Type);
         Assert.Equal(ButtonTheme.Primary, builder.Theme);
         Assert.Equal(ButtonTheme.Primary, builder.Build().Theme);
-        Assert.Equal(Name, ((KMarkdownElementBuilder) builder.Text).Content);
-        Assert.Equal(Name, ((KMarkdownElement) builder.Build().Text).Content);
+        Assert.Equal(Name, ((KMarkdownElementBuilder)builder.Text).Content);
+        Assert.Equal(Name, ((KMarkdownElement)builder.Build().Text).Content);
         Assert.Equal(ButtonClickEventType.None, builder.Click);
         Assert.Equal(ButtonClickEventType.None, builder.Build().Click);
         builder = new ButtonElementBuilder
@@ -260,8 +262,8 @@ public class ElementBuilderTests
         Assert.Equal(ElementType.Button, builder.Build().Type);
         Assert.Equal(ButtonTheme.Success, builder.Theme);
         Assert.Equal(ButtonTheme.Success, builder.Build().Theme);
-        Assert.Equal("text", ((PlainTextElementBuilder) builder.Text).Content);
-        Assert.Equal("text", ((PlainTextElement) builder.Build().Text).Content);
+        Assert.Equal("text", ((PlainTextElementBuilder)builder.Text).Content);
+        Assert.Equal("text", ((PlainTextElement)builder.Build().Text).Content);
         Assert.Equal(ButtonClickEventType.ReturnValue, builder.Click);
         Assert.Equal(ButtonClickEventType.ReturnValue, builder.Build().Click);
         Assert.Equal("value", builder.Value);
@@ -275,8 +277,8 @@ public class ElementBuilderTests
             .WithText<PlainTextElementBuilder>(b => b.WithContent("text"));
         Assert.IsType<PlainTextElementBuilder>(builder.Text);
         Assert.IsType<PlainTextElement>(builder.Build().Text);
-        Assert.Equal("text", ((PlainTextElementBuilder) builder.Text).Content);
-        Assert.Equal("text", ((PlainTextElement) builder.Build().Text).Content);
+        Assert.Equal("text", ((PlainTextElementBuilder)builder.Text).Content);
+        Assert.Equal("text", ((PlainTextElement)builder.Build().Text).Content);
     }
 
     [Fact]
@@ -298,8 +300,8 @@ public class ElementBuilderTests
     public void ButtonElementBuilder_ValidText(string text)
     {
         var builder = new ButtonElementBuilder().WithText(text);
-        Assert.Equal(text, ((PlainTextElementBuilder) builder.Text).Content);
-        Assert.Equal(text, ((PlainTextElement) builder.Build().Text).Content);
+        Assert.Equal(text, ((PlainTextElementBuilder)builder.Text).Content);
+        Assert.Equal(text, ((PlainTextElement)builder.Build().Text).Content);
     }
 
     [Theory]
@@ -346,8 +348,8 @@ public class ElementBuilderTests
         Assert.Equal(ElementType.Paragraph, builder.Build().Type);
         Assert.Equal(1, builder.ColumnCount);
         Assert.Equal(1, builder.Build().ColumnCount);
-        Assert.Equal("text", ((KMarkdownElementBuilder) builder.Fields[0]).Content);
-        Assert.Equal("text", ((KMarkdownElement) builder.Build().Fields[0]).Content);
+        Assert.Equal("text", ((KMarkdownElementBuilder)builder.Fields[0]).Content);
+        Assert.Equal("text", ((KMarkdownElement)builder.Build().Fields[0]).Content);
         builder = new ParagraphStructBuilder
         {
             ColumnCount = 3,
@@ -361,8 +363,8 @@ public class ElementBuilderTests
         Assert.Equal(ElementType.Paragraph, builder.Build().Type);
         Assert.Equal(3, builder.ColumnCount);
         Assert.Equal(3, builder.Build().ColumnCount);
-        Assert.Equal("PlainText", ((PlainTextElementBuilder) builder.Fields[1]).Content);
-        Assert.Equal("PlainText", ((PlainTextElement) builder.Build().Fields[1]).Content);
+        Assert.Equal("PlainText", ((PlainTextElementBuilder)builder.Fields[1]).Content);
+        Assert.Equal("PlainText", ((PlainTextElement)builder.Build().Fields[1]).Content);
     }
 
     [Fact]
@@ -370,12 +372,12 @@ public class ElementBuilderTests
     {
         var builder = new ParagraphStructBuilder();
         builder.AddField<KMarkdownElementBuilder>(b => b.WithContent("text"));
-        Assert.Equal("text", ((KMarkdownElementBuilder) builder.Fields[0]).Content);
-        Assert.Equal("text", ((KMarkdownElement) builder.Build().Fields[0]).Content);
+        Assert.Equal("text", ((KMarkdownElementBuilder)builder.Fields[0]).Content);
+        Assert.Equal("text", ((KMarkdownElement)builder.Build().Fields[0]).Content);
         builder = new ParagraphStructBuilder();
         builder.AddField<PlainTextElementBuilder>(b => b.WithContent("text"));
-        Assert.Equal("text", ((PlainTextElementBuilder) builder.Fields[0]).Content);
-        Assert.Equal("text", ((PlainTextElement) builder.Build().Fields[0]).Content);
+        Assert.Equal("text", ((PlainTextElementBuilder)builder.Fields[0]).Content);
+        Assert.Equal("text", ((PlainTextElement)builder.Build().Fields[0]).Content);
     }
 
     [Fact]

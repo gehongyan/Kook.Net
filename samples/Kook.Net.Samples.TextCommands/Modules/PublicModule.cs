@@ -1,9 +1,9 @@
 using Kook;
 using Kook.Commands;
-using System.IO;
-using System.Threading.Tasks;
 using Kook.Rest;
 using Kook.WebSocket;
+using System.IO;
+using System.Threading.Tasks;
 using TextCommandFramework.Services;
 
 namespace TextCommandFramework.Modules;
@@ -78,9 +78,9 @@ public class PublicModule : ModuleBase<SocketCommandContext>
     public async Task ModifyCategoryPermissions()
     {
         SocketUser contextUser = Context.User;
-        await ((IGuildChannel) Context.Channel).AddPermissionOverwriteAsync((IGuildUser) Context.User);
-        await ((SocketChannel) Context.Channel).UpdateAsync();
-        await Context.Guild.GetChannel(Context.Channel.Id).ModifyPermissionOverwriteAsync((IGuildUser) Context.User,
+        await ((IGuildChannel)Context.Channel).AddPermissionOverwriteAsync((IGuildUser)Context.User);
+        await ((SocketChannel)Context.Channel).UpdateAsync();
+        await Context.Guild.GetChannel(Context.Channel.Id).ModifyPermissionOverwriteAsync((IGuildUser)Context.User,
             permissions => permissions.Modify(viewChannel: PermValue.Allow, sendMessages: PermValue.Deny, attachFiles: PermValue.Allow));
     }
 

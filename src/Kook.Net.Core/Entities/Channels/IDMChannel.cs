@@ -24,7 +24,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     ///     A <see cref="Guid"/> that represents the chat code of the direct-message channel.
     /// </returns>
     Guid ChatCode { get; }
-        
+
     /// <summary>
     ///     Gets the recipient of all messages in this channel.
     /// </summary>
@@ -32,7 +32,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     ///     A user object that represents the other user in this channel.
     /// </returns>
     IUser Recipient { get; }
-        
+
     /// <summary>
     ///     Closes this private channel, removing it from your channel list.
     /// </summary>
@@ -43,7 +43,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     Task CloseAsync(RequestOptions options = null);
 
     #endregion
-        
+
     #region Send Messages
 
     /// <summary>

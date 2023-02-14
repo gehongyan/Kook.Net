@@ -1,10 +1,9 @@
+using Kook.Commands.Builders;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-
-using Kook.Commands.Builders;
 
 namespace Kook.Commands;
 
@@ -80,11 +79,11 @@ internal static class ModuleClassBuilder
         {
             if (!IsValidModuleDefinition(typeInfo))
                 continue;
-                
+
             if (builtTypes.Contains(typeInfo))
                 continue;
-                
-            builder.AddModule((module) => 
+
+            builder.AddModule((module) =>
             {
                 BuildModule(module, typeInfo, service, services);
                 BuildSubTypes(module, typeInfo.DeclaredNestedTypes, builtTypes, service, services);
@@ -139,7 +138,7 @@ internal static class ModuleClassBuilder
 
         foreach (var method in validCommands)
         {
-            builder.AddCommand((command) => 
+            builder.AddCommand((command) =>
             {
                 BuildCommand(command, typeInfo, method, service, services);
             });
@@ -149,7 +148,7 @@ internal static class ModuleClassBuilder
     private static void BuildCommand(CommandBuilder builder, TypeInfo typeInfo, MethodInfo method, CommandService service, IServiceProvider serviceprovider)
     {
         var attributes = method.GetCustomAttributes();
-            
+
         foreach (var attribute in attributes)
         {
             switch (attribute)
@@ -191,7 +190,7 @@ internal static class ModuleClassBuilder
         int pos = 0, count = parameters.Length;
         foreach (var paramInfo in parameters)
         {
-            builder.AddParameter((parameter) => 
+            builder.AddParameter((parameter) =>
             {
                 BuildParameter(parameter, paramInfo, pos++, count, service, serviceprovider);
             });

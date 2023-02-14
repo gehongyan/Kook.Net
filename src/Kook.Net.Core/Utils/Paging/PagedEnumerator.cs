@@ -72,7 +72,7 @@ internal class PagedAsyncEnumerable<T> : IAsyncEnumerable<IReadOnlyCollection<T>
 
             return true;
         }
-            
+
         public ValueTask DisposeAsync()
         {
             Current = null;

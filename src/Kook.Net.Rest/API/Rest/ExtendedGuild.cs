@@ -9,7 +9,7 @@ internal class ExtendedGuild : Guild
 
     [JsonPropertyName("boost_num")]
     public int BoostSubscriptionCount { get; set; }
-    
+
     [JsonPropertyName("buffer_boost_num")]
     public int BufferBoostSubscriptionCount { get; set; }
 

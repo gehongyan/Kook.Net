@@ -12,11 +12,11 @@ internal class NullableVoiceQualityConverter : JsonConverter<VoiceQuality?>
             case JsonTokenType.String:
                 string str = reader.GetString();
                 return int.TryParse(str, out int result)
-                    ? (VoiceQuality?) result
+                    ? (VoiceQuality?)result
                     : null;
             case JsonTokenType.Number:
                 return reader.TryGetInt32(out int value)
-                    ? (VoiceQuality?) value
+                    ? (VoiceQuality?)value
                     : null;
             case JsonTokenType.Null:
                 return null;
@@ -27,7 +27,9 @@ internal class NullableVoiceQualityConverter : JsonConverter<VoiceQuality?>
 
     public override void Write(Utf8JsonWriter writer, VoiceQuality? value, JsonSerializerOptions options)
     {
-        if (value is null) writer.WriteNullValue();
-        else writer.WriteNumberValue((int) value);
+        if (value is null)
+            writer.WriteNullValue();
+        else
+            writer.WriteNumberValue((int)value);
     }
 }

@@ -1,6 +1,6 @@
-using System.Collections.Immutable;
 using Kook.API.Rest;
 using Kook.Rest;
+using System.Collections.Immutable;
 
 namespace Kook.WebSocket;
 

@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Represents a generic channel in a guild that can send and receive messages.
@@ -14,7 +14,7 @@ public interface ITextChannel : INestedChannel, IMentionable, IMessageChannel
     ///     A string representing the topic set in the channel; <c>null</c> if none is set.
     /// </returns>
     string Topic { get; }
-    
+
     /// <summary>
     ///     Gets the current slow-mode delay for this channel.
     /// </summary>
@@ -33,9 +33,9 @@ public interface ITextChannel : INestedChannel, IMentionable, IMessageChannel
     /// </returns>
     /// <seealso cref="ModifyTextChannelProperties"/>
     Task ModifyAsync(Action<ModifyTextChannelProperties> func, RequestOptions options = null);
-    
+
     #endregion
-    
+
     /// <summary>
     ///     Gets a collection of pinned messages in this channel.
     /// </summary>

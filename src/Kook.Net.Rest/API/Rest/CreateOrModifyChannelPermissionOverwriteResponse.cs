@@ -1,14 +1,14 @@
-using System.Text.Json.Serialization;
 using Kook.Net.Converters;
+using System.Text.Json.Serialization;
 
 namespace Kook.API.Rest;
 
 internal class CreateOrModifyChannelPermissionOverwriteResponse
 {
-    [JsonPropertyName("role_id")] 
+    [JsonPropertyName("role_id")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public uint? RoleId { get; set; }
-    [JsonPropertyName("user")] 
+    [JsonPropertyName("user")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public User User { get; set; }
 
@@ -17,8 +17,10 @@ internal class CreateOrModifyChannelPermissionOverwriteResponse
     {
         get
         {
-            if (RoleId is not null) return PermissionOverwriteTargetType.Role;
-            if (User is not null) return PermissionOverwriteTargetType.User;
+            if (RoleId is not null)
+                return PermissionOverwriteTargetType.Role;
+            if (User is not null)
+                return PermissionOverwriteTargetType.User;
             return PermissionOverwriteTargetType.Unspecified;
         }
     }
@@ -31,9 +33,9 @@ internal class CreateOrModifyChannelPermissionOverwriteResponse
         _ => 0
     };
 
-    [JsonPropertyName("allow")] 
+    [JsonPropertyName("allow")]
     public ulong Allow { get; set; }
-    
-    [JsonPropertyName("deny")] 
+
+    [JsonPropertyName("deny")]
     public ulong Deny { get; set; }
 }

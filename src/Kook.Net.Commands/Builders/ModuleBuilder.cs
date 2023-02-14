@@ -20,7 +20,9 @@ public class ModuleBuilder
     public string Name { get; set; }
     public string Summary { get; set; }
     public string Remarks { get; set; }
-    public string Group { get => _group;
+    public string Group
+    {
+        get => _group;
         set
         {
             _aliases.Remove(_group);

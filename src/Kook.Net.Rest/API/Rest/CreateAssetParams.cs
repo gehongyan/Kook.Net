@@ -6,7 +6,7 @@ internal class CreateAssetParams
 {
     public Stream File { get; set; }
     public string FileName { get; set; }
-    
+
     public IReadOnlyDictionary<string, object> ToDictionary()
     {
         var d = new Dictionary<string, object>

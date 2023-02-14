@@ -1,13 +1,12 @@
-using Model = Kook.API.Channel;
-
-using System.Diagnostics;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Kook.API;
 using Kook.API.Rest;
 using Kook.Net.Converters;
 using Kook.Utils;
+using System.Diagnostics;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Model = Kook.API.Channel;
 
 namespace Kook.Rest;
 
@@ -18,7 +17,7 @@ namespace Kook.Rest;
 public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChannel
 {
     #region RestTextChannel
-    
+
     /// <inheritdoc />
     public string Topic { get; private set; }
     /// <inheritdoc />
@@ -31,12 +30,12 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
     /// <inheritdoc />
     public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
-    
+
     internal RestTextChannel(BaseKookClient kook, IGuild guild, ulong id)
         : base(kook, guild, id, ChannelType.Text)
     {
     }
-    
+
     internal new static RestTextChannel Create(BaseKookClient kook, IGuild guild, Model model)
     {
         var entity = new RestTextChannel(kook, guild, model.Id);
@@ -52,14 +51,14 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         SlowModeInterval = model.SlowMode / 1000;
         IsPermissionSynced = model.PermissionSync;
     }
-    
+
     /// <inheritdoc />
     public virtual async Task ModifyAsync(Action<ModifyTextChannelProperties> func, RequestOptions options = null)
     {
         var model = await ChannelHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
         Update(model);
     }
-    
+
     /// <summary>
     ///     Gets a user in this channel.
     /// </summary>
@@ -150,11 +149,11 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         => await ChannelHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
 
     #endregion
-    
+
     private string DebuggerDisplay => $"{Name} ({Id}, Text)";
 
     #region IChannel
-    
+
     /// <inheritdoc />
     async Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
     {
@@ -163,7 +162,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         else
             return null;
     }
-    
+
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
     {
@@ -174,9 +173,9 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     }
 
     #endregion
-    
+
     #region IGuildChannel
-    
+
     /// <inheritdoc />
     async Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
     {
@@ -192,35 +191,35 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
             ? GetUsersAsync(options)
             : AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
     }
-    
+
     #endregion
-    
+
     #region IMessageChannel
 
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(string path, string fileName,
         AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendFileAsync(path, fileName, type, (Quote) quote, ephemeralUser, options);
+        => SendFileAsync(path, fileName, type, (Quote)quote, ephemeralUser, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(Stream stream, string fileName,
         AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendFileAsync(stream, fileName, type, (Quote) quote, ephemeralUser, options);
+        => SendFileAsync(stream, fileName, type, (Quote)quote, ephemeralUser, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(FileAttachment attachment,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendFileAsync(attachment, (Quote) quote, ephemeralUser, options);
+        => SendFileAsync(attachment, (Quote)quote, ephemeralUser, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendTextAsync(string text,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendTextAsync(text, (Quote) quote, ephemeralUser, options);
+        => SendTextAsync(text, (Quote)quote, ephemeralUser, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardAsync(ICard card,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendCardAsync(card, (Quote) quote, ephemeralUser, options);
+        => SendCardAsync(card, (Quote)quote, ephemeralUser, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardsAsync(IEnumerable<ICard> cards,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
-        => SendCardsAsync(cards, (Quote) quote, ephemeralUser, options);
+        => SendCardsAsync(cards, (Quote)quote, ephemeralUser, options);
 
     /// <inheritdoc />
     async Task<IMessage> IMessageChannel.GetMessageAsync(Guid id, CacheMode mode, RequestOptions options)
@@ -258,22 +257,22 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IMessage>> ITextChannel.GetPinnedMessagesAsync(RequestOptions options)
         => await GetPinnedMessagesAsync(options).ConfigureAwait(false);
-    
+
     /// <inheritdoc />
     public Task DeleteMessageAsync(Guid messageId, RequestOptions options = null)
         => ChannelHelper.DeleteMessageAsync(this, messageId, Kook, options);
     /// <inheritdoc />
     public Task DeleteMessageAsync(IMessage message, RequestOptions options = null)
         => ChannelHelper.DeleteMessageAsync(this, message.Id, Kook, options);
-    
+
     /// <inheritdoc />
     public async Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions options = null)
         => await ChannelHelper.ModifyMessageAsync(this, messageId, func, Kook, options).ConfigureAwait(false);
 
     #endregion
-    
+
     #region INestedChannel
-    
+
     /// <inheritdoc />
     async Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
     {
@@ -281,6 +280,6 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
             return (await Guild.GetChannelAsync(CategoryId.Value, mode, options).ConfigureAwait(false)) as ICategoryChannel;
         return null;
     }
-    
+
     #endregion
 }

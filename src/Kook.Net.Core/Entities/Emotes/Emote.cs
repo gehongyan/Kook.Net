@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -7,40 +7,42 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Emote : IEmote
 {
-    
+
     internal static readonly Regex PlainTextEmojiRegex = new Regex(@"\[:(?<name>[^:]{1,32}?):(?<id>\d{1,20}\/\w{1,20})\]",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
-    
+
     internal static readonly Regex KMarkdownEmojiRegex = new Regex(@"(\(emj\))(?<name>[^\(\)]{1,32}?)\1\[(?<id>\d{1,20}\/\w{1,20})\]",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
-    
+
     public string Id { get; }
-    
+
     public string Name { get; }
-    
+
     public bool? Animated { get; }
-    
+
     internal Emote(string id, string name, bool? animated = null)
     {
         Id = id;
         Name = name;
         Animated = animated;
     }
-    
+
     public override bool Equals(object other)
     {
-        if (other == null) return false;
-        if (other == this) return true;
+        if (other == null)
+            return false;
+        if (other == this)
+            return true;
 
-        if (other is not Emote otherEmote) 
+        if (other is not Emote otherEmote)
             return false;
 
         return Id == otherEmote.Id;
     }
-    
+
     public override int GetHashCode()
         => Id.GetHashCode();
-    
+
     /// <summary> Parses an <see cref="Emote"/> from its raw format. </summary>
     /// <param name="text">
     ///     The raw encoding of an emote; for example,
@@ -56,7 +58,7 @@ public class Emote : IEmote
             return result;
         throw new ArgumentException(message: "Invalid emote format.", paramName: nameof(text));
     }
-    
+
     /// <summary> Tries to parse an <see cref="Emote"/> from its raw format. </summary>
     /// <param name="text">
     ///     The raw encoding of an emote; for example,
@@ -87,7 +89,7 @@ public class Emote : IEmote
 
         return false;
     }
-    
+
     /// <summary>
     ///     Gets a string representation of the emote in KMarkdown format.
     /// </summary>
@@ -96,6 +98,6 @@ public class Emote : IEmote
     ///     Gets a string representation of the emote in plain text format.
     /// </summary>
     public string ToPlainTextString() => $"[:{Name}:{Id}]";
-    
+
     private string DebuggerDisplay => $"{Name} ({Id})";
 }

@@ -13,10 +13,10 @@ public class ContainerModule : IModule, IEquatable<ContainerModule>
     {
         Elements = elements;
     }
-    
+
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Container;
-    
+
     /// <summary>
     ///     Gets the elements in this container module.
     /// </summary>
@@ -24,9 +24,9 @@ public class ContainerModule : IModule, IEquatable<ContainerModule>
     ///     An <see cref="ImmutableArray{ImageElement}"/> representing the elements in this container module.
     /// </returns>
     public ImmutableArray<ImageElement> Elements { get; }
-    
+
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";
-    
+
     public static bool operator ==(ContainerModule left, ContainerModule right)
         => left?.Equals(right) ?? right is null;
 
@@ -51,7 +51,7 @@ public class ContainerModule : IModule, IEquatable<ContainerModule>
     {
         unchecked
         {
-            int hash = (int) 2166136261;
+            int hash = (int)2166136261;
             hash = (hash * 16777619) ^ Type.GetHashCode();
             foreach (ImageElement element in Elements)
                 hash = (hash * 16777619) ^ element.GetHashCode();

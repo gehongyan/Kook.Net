@@ -1,5 +1,5 @@
-using System.Collections.Immutable;
 using Kook.Utils;
+using System.Collections.Immutable;
 
 namespace Kook;
 
@@ -100,9 +100,9 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     /// <returns>
     ///     An <see cref="HeaderModuleBuilder"/> object that is initialized with the specified <paramref name="text"/>.
     /// </returns>
-    public static implicit operator HeaderModuleBuilder(string text) 
+    public static implicit operator HeaderModuleBuilder(string text)
         => new HeaderModuleBuilder().WithText(b => b.WithContent(text));
-    
+
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
 
@@ -150,7 +150,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     ///     how the <see cref="Accessory"/> is positioned relative to the <see cref="Text"/>.
     /// </returns>
     public SectionAccessoryMode Mode { get; set; }
-    
+
     /// <summary>
     ///     Gets or sets the text of the section.
     /// </summary>
@@ -195,7 +195,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
             _accessory = value;
         }
     }
-    
+
     /// <summary>
     ///     Sets the text of the section.
     /// </summary>
@@ -1010,7 +1010,7 @@ public class DividerModuleBuilder : IModuleBuilder, IEquatable<DividerModuleBuil
     {
         if (dividerModuleBuilder is null)
             return false;
-        
+
         return Type == dividerModuleBuilder.Type;
     }
 
@@ -1033,7 +1033,7 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>
     ///     The source URL of the file.
     /// </returns>
     public string Source { get; set; }
-    
+
     /// <summary>
     ///     Gets or sets the title of the file.
     /// </summary>
@@ -1110,7 +1110,7 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>
     {
         if (fileModuleBuilder is null)
             return false;
-        
+
         return Type == fileModuleBuilder.Type
             && Source == fileModuleBuilder.Source
             && Title == fileModuleBuilder.Title;
@@ -1135,7 +1135,7 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     ///     The source URL of the video.
     /// </returns>
     public string Source { get; set; }
-    
+
     /// <summary>
     ///     Gets or sets the title of the video.
     /// </summary>
@@ -1212,7 +1212,7 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     {
         if (videoModuleBuilder is null)
             return false;
-        
+
         return Type == videoModuleBuilder.Type
                && Source == videoModuleBuilder.Source
                && Title == videoModuleBuilder.Title;
@@ -1237,7 +1237,7 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     ///     The source URL of the video.
     /// </returns>
     public string Source { get; set; }
-    
+
     /// <summary>
     ///     Gets or sets the cover URL of the video.
     /// </summary>
@@ -1245,7 +1245,7 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     ///     The cover URL of the video.
     /// </returns>
     public string Cover { get; set; }
-    
+
     /// <summary>
     ///     Gets or sets the title of the video.
     /// </summary>
@@ -1344,7 +1344,7 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     {
         if (audioModuleBuilder is null)
             return false;
-        
+
         return Type == audioModuleBuilder.Type
                && Source == audioModuleBuilder.Source
                && Title == audioModuleBuilder.Title
@@ -1484,7 +1484,7 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     {
         if (countdownModuleBuilder is null)
             return false;
-        
+
         return Type == countdownModuleBuilder.Type
             && EndTime == countdownModuleBuilder.EndTime
             && StartTime == countdownModuleBuilder.StartTime
@@ -1567,7 +1567,7 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
     {
         if (inviteModuleBuilder is null)
             return false;
-        
+
         return Type == inviteModuleBuilder.Type
             && Code == inviteModuleBuilder.Code;
     }

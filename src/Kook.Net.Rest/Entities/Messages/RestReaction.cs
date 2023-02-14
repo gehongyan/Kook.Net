@@ -14,7 +14,7 @@ public class RestReaction : IReaction
     ///     Gets whether the reactions is added by the user.
     /// </summary>
     public bool Me { get; }
-    
+
     internal RestReaction(IEmote emote, int count, bool me)
     {
         Emote = emote;

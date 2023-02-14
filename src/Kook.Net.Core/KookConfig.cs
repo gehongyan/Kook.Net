@@ -17,7 +17,7 @@ public class KookConfig
     ///     .</para>
     /// </returns>
     public const int APIVersion = 3;
-    
+
     /// <summary>
     ///     Gets the Kook.Net version, including the build number.
     /// </summary>
@@ -26,8 +26,8 @@ public class KookConfig
     ///     the version fails to be fetched.
     /// </returns>
     public static string Version { get; } =
-        typeof(KookConfig).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion 
-        ?? typeof(KookConfig).GetTypeInfo().Assembly.GetName().Version?.ToString(3) 
+        typeof(KookConfig).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+        ?? typeof(KookConfig).GetTypeInfo().Assembly.GetName().Version?.ToString(3)
         ?? "Unknown";
 
     /// <summary>
@@ -59,7 +59,7 @@ public class KookConfig
     ///     The amount of time it takes in milliseconds before a request is timed out.
     /// </returns>
     public const int DefaultRequestTimeout = 6000;
-    
+
     /// <summary> 
     ///     Returns the max length for a Kook message. 
     /// </summary>
@@ -73,7 +73,7 @@ public class KookConfig
     ///     </note>
     /// </remarks>
     public const int MaxMessageSize = 20000;
-    
+
     /// <summary> 
     ///     Returns the max users allowed to be in a request.
     /// </summary>
@@ -81,7 +81,7 @@ public class KookConfig
     ///     The maximum number of users that can be gotten per-batch.
     /// </returns>
     public const int MaxUsersPerBatch = 50;
-    
+
     /// <summary> 
     ///     Returns the max messages allowed to be in a request. 
     /// </summary>
@@ -89,7 +89,7 @@ public class KookConfig
     ///     The maximum number of messages that can be gotten per-batch.
     /// </returns>
     public const int MaxMessagesPerBatch = 100;
-    
+
     /// <summary> 
     ///     Returns the max items allowed to be in a request by default. 
     /// </summary>
@@ -97,7 +97,7 @@ public class KookConfig
     ///     The maximum number of items that can be gotten per-batch by default.
     /// </returns>
     public const int MaxItemsPerBatchByDefault = 100;
-    
+
     /// <summary> 
     ///     Returns the min length for a Kook guild nickname. 
     /// </summary>
@@ -105,7 +105,7 @@ public class KookConfig
     ///     The minimum length of a nickname allowed by Kook.
     /// </returns>
     public const int MinNicknameSize = 2;
-    
+
     /// <summary> 
     ///     Returns the max length for a Kook guild nickname. 
     /// </summary>
@@ -121,7 +121,7 @@ public class KookConfig
     ///     The minimum value of an intimacy score allowed by Kook.
     /// </returns>
     public const int MinIntimacyScore = 0;
-    
+
     /// <summary> 
     ///     Returns the max value for a Kook intimacy score. 
     /// </summary>

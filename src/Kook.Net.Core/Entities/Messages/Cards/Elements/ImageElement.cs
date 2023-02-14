@@ -23,7 +23,7 @@ public class ImageElement : IElement, IEquatable<ImageElement>
     ///     An <see cref="ElementType"/> value that represents the theme of the button.
     /// </returns>
     public ElementType Type => ElementType.Image;
-    
+
     /// <summary>
     ///     Gets the source of the image.
     /// </summary>

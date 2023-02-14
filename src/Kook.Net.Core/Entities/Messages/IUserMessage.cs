@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Represents a generic message sent by a user.
@@ -12,7 +12,7 @@ public interface IUserMessage : IMessage
     ///     The message quote.
     /// </returns>
     IQuote Quote { get; }
-    
+
     /// <summary>
     ///     Modifies this message.
     /// </summary>
@@ -41,5 +41,5 @@ public interface IUserMessage : IMessage
         TagHandling roleHandling = TagHandling.Name,
         TagHandling everyoneHandling = TagHandling.Ignore,
         TagHandling emojiHandling = TagHandling.Name);
-    
+
 }

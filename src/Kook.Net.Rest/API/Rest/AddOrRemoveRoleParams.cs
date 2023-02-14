@@ -10,6 +10,6 @@ internal class AddOrRemoveRoleParams
     [JsonPropertyName("user_id")]
     public ulong UserId { get; set; }
 
-    [JsonPropertyName("role_id")] 
+    [JsonPropertyName("role_id")]
     public uint RoleId { get; set; }
 }

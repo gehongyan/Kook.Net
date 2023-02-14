@@ -1,9 +1,9 @@
+using Kook.API;
+using Kook.Net.Converters;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using Kook.API;
-using Kook.Net.Converters;
 using Model = Kook.API.Message;
 
 namespace Kook.Rest;
@@ -25,10 +25,10 @@ public class RestUserMessage : RestMessage, IUserMessage
     private ImmutableArray<RestRole> _roleMentions = ImmutableArray.Create<RestRole>();
     private ImmutableArray<RestGuildChannel> _channelMentions = ImmutableArray.Create<RestGuildChannel>();
     private ImmutableArray<ITag> _tags = ImmutableArray.Create<ITag>();
-    
+
     /// <inheritdoc cref="IUserMessage.Quote"/>
     public Quote Quote => _quote;
-    
+
     /// <inheritdoc cref="IMessage.IsPinned"/>
     public new bool? IsPinned { get; internal set; }
     /// <inheritdoc />
@@ -55,7 +55,7 @@ public class RestUserMessage : RestMessage, IUserMessage
     public IReadOnlyCollection<RestGuildChannel> MentionedChannels => _channelMentions;
     /// <inheritdoc />
     public override IReadOnlyCollection<ITag> Tags => _tags;
-    
+
     internal RestUserMessage(BaseKookClient kook, Guid id, MessageType messageType, IMessageChannel channel, IUser author, MessageSource source)
         : base(kook, id, messageType, channel, author, source)
     {
@@ -85,7 +85,7 @@ public class RestUserMessage : RestMessage, IUserMessage
         _isMentioningEveryone = model.MentionedAll;
         _isMentioningHere = model.MentionedHere;
         _roleMentionIds = model.MentionedRoles.ToImmutableArray();
-        
+
         if (Channel is IGuildChannel guildChannel)
         {
             if (model.MentionInfo?.MentionedRoles is not null)
@@ -120,7 +120,7 @@ public class RestUserMessage : RestMessage, IUserMessage
                 }
             }
         }
-        
+
         if (model.Quote is not null)
         {
             IUser refMsgAuthor = MessageHelper.GetAuthor(Kook, null, model.Quote.Author);
@@ -142,7 +142,7 @@ public class RestUserMessage : RestMessage, IUserMessage
                 model.MentionInfo.MentionedUsers.Select(y => RestUser.Create(Kook, y)), x)).ToImmutableArray()
             : ImmutableArray<RestPokeAction>.Empty;
     }
-    
+
     internal override void Update(DirectMessage model)
     {
         base.Update(model);
@@ -152,7 +152,7 @@ public class RestUserMessage : RestMessage, IUserMessage
             _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.PlainText);
         else if (Type == MessageType.KMarkdown)
             _tags = MessageHelper.ParseTags(model.Content, null, guild, MentionedUsers, TagMode.KMarkdown);
-        
+
         if (model.Quote is not null)
         {
             IUser refMsgAuthor = MessageHelper.GetAuthor(Kook, null, model.Quote.Author);
@@ -168,7 +168,7 @@ public class RestUserMessage : RestMessage, IUserMessage
             _attachments = _attachments.AddRange(MessageHelper.ParseAttachments(_cards.OfType<Card>()));
         }
         _embeds = model.Embeds.Select(x => x.ToEntity()).ToImmutableArray();
-        
+
         if (Type == MessageType.Poke && model.MentionInfo?.Pokes is not null)
         {
             IUser recipient = (Channel as IDMChannel)?.Recipient;
@@ -177,13 +177,13 @@ public class RestUserMessage : RestMessage, IUserMessage
                 : recipient.Id == Author.Id
                     ? Kook.CurrentUser
                     : recipient;
-            _pokes = model.MentionInfo.Pokes.Select(x => RestPokeAction.Create(Kook, Author, 
-                new [] {target}, x)).ToImmutableArray();
+            _pokes = model.MentionInfo.Pokes.Select(x => RestPokeAction.Create(Kook, Author,
+                new[] { target }, x)).ToImmutableArray();
         }
         else
             _pokes = ImmutableArray<RestPokeAction>.Empty;
     }
-    
+
     /// <param name="startIndex">The zero-based index at which to begin the resolving for the specified value.</param>
     /// <inheritdoc cref="IUserMessage.Resolve(TagHandling,TagHandling,TagHandling,TagHandling,TagHandling)"/>
     public string Resolve(int startIndex, TagHandling userHandling = TagHandling.Name, TagHandling channelHandling = TagHandling.Name,
@@ -197,7 +197,7 @@ public class RestUserMessage : RestMessage, IUserMessage
     private string DebuggerDisplay => $"{Author}: {Content} ({Id}{(Attachments is not null && Attachments.Any() ? $", {Attachments.Count} Attachment{(Attachments.Count == 1 ? string.Empty : "s")}" : string.Empty)})";
 
     #region IUserMessage
-    
+
     /// <inheritdoc />
     public async Task ModifyAsync(Action<MessageProperties> func, RequestOptions options = null)
     {
@@ -211,9 +211,9 @@ public class RestUserMessage : RestMessage, IUserMessage
         func(properties);
         Content = properties.Content;
         _cards = properties.Cards?.ToImmutableArray() ?? ImmutableArray<ICard>.Empty;
-        _quote = properties.Quote?.QuotedMessageId == Guid.Empty ? null : (Quote) properties.Quote;
+        _quote = properties.Quote?.QuotedMessageId == Guid.Empty ? null : (Quote)properties.Quote;
     }
-    
+
     /// <inheritdoc />
     bool? IMessage.IsPinned => IsPinned;
     /// <inheritdoc />

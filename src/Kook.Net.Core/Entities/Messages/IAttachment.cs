@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Represents a message attachment found in a <see cref="IUserMessage"/>.
@@ -37,7 +37,7 @@ public interface IAttachment
     ///     <c>null</c> if the file size is unknown or not applicable.
     /// </returns>
     int? Size { get; }
-    
+
     /// <summary>
     ///     Gets the file type of the attachment.
     /// </summary>
@@ -46,7 +46,7 @@ public interface IAttachment
     ///     <c>null</c> if the file type is unknown or not applicable.
     /// </returns>
     string FileType { get; }
-    
+
     /// <summary>
     ///     Gets the duration of the attachment.
     /// </summary>
@@ -55,7 +55,7 @@ public interface IAttachment
     ///     <c>null</c> if the duration is unknown or not applicable.
     /// </remarks>
     TimeSpan? Duration { get; }
-    
+
     /// <summary>
     ///     Gets the width of the attachment.
     /// </summary>
@@ -64,7 +64,7 @@ public interface IAttachment
     ///     <c>null</c> if the width is unknown or not applicable.
     /// </returns>
     int? Width { get; }
-    
+
     /// <summary>
     ///     Gets the height of the attachment.
     /// </summary>

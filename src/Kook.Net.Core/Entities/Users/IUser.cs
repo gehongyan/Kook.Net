@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 public interface IUser : IEntity<ulong>, IMentionable, IPresence
 {
@@ -66,7 +66,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     ///     contains the DM channel associated with this user.
     /// </returns>
     Task<IDMChannel> CreateDMChannelAsync(RequestOptions options = null);
-    
+
     /// <summary>
     ///     Gets the intimacy information with this user.
     /// </summary>
@@ -76,7 +76,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     ///     contains the intimacy information associated with this user.
     /// </returns>
     Task<IIntimacy> GetIntimacyAsync(RequestOptions options = null);
-    
+
     /// <summary>
     ///     Updates the intimacy information with this user.
     /// </summary>

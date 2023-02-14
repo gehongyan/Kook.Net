@@ -1,6 +1,5 @@
-using Model = Kook.API.Channel;
-
 using System.Diagnostics;
+using Model = Kook.API.Channel;
 
 namespace Kook.Rest;
 
@@ -11,7 +10,7 @@ namespace Kook.Rest;
 public class RestCategoryChannel : RestGuildChannel, ICategoryChannel
 {
     #region RestCategoryChannel
-    
+
     internal RestCategoryChannel(BaseKookClient kook, IGuild guild, ulong id)
         : base(kook, guild, id, ChannelType.Category)
     {
@@ -22,13 +21,13 @@ public class RestCategoryChannel : RestGuildChannel, ICategoryChannel
         entity.Update(model);
         return entity;
     }
-    
+
     #endregion
-    
+
     private string DebuggerDisplay => $"{Name} ({Id}, Category)";
-    
+
     #region IChannel
-    
+
     /// <inheritdoc />
     /// <exception cref="NotSupportedException">This method is not supported with category channels.</exception>
     IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
@@ -37,6 +36,6 @@ public class RestCategoryChannel : RestGuildChannel, ICategoryChannel
     /// <exception cref="NotSupportedException">This method is not supported with category channels.</exception>
     Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => throw new NotSupportedException();
-    
+
     #endregion
 }

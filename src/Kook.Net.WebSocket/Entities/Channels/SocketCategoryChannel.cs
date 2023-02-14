@@ -1,6 +1,6 @@
+using Kook.Rest;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using Kook.Rest;
 using Model = Kook.API.Channel;
 
 namespace Kook.WebSocket;
@@ -40,9 +40,9 @@ public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
         entity.Update(state, model);
         return entity;
     }
-    
+
     #endregion
-    
+
     #region Users
     /// <inheritdoc />
     public override SocketGuildUser GetUser(ulong id)
@@ -59,10 +59,10 @@ public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
     }
 
     #endregion
-    
+
     private string DebuggerDisplay => $"{Name} ({Id}, Category)";
     internal new SocketCategoryChannel Clone() => MemberwiseClone() as SocketCategoryChannel;
-    
+
     #region IGuildChannel
 
     /// <inheritdoc />
@@ -82,9 +82,9 @@ public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
 
         return await ChannelHelper.GetUserAsync(this, Guild, Kook, id, options).ConfigureAwait(false);
     }
-    
+
     #endregion
-    
+
     #region IChannel
 
     /// <inheritdoc />
@@ -103,7 +103,7 @@ public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
 
         return await ChannelHelper.GetUserAsync(this, Guild, Kook, id, options).ConfigureAwait(false);
     }
-    
+
     #endregion
-    
+
 }

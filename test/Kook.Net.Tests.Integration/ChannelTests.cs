@@ -1,10 +1,10 @@
+using FluentAssertions;
+using Kook.Rest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Kook.Rest;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -164,7 +164,7 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
     public async Task MiscAsync()
     {
         ICategoryChannel category = await _guild.CreateCategoryChannelAsync("CATEGORY");
-        RestTextChannel channel = await _guild.CreateTextChannelAsync("TEXT", 
+        RestTextChannel channel = await _guild.CreateTextChannelAsync("TEXT",
             p => p.CategoryId = category.Id) as RestTextChannel;
         try
         {
@@ -174,15 +174,15 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
             Assert.NotNull(channel);
             Assert.NotNull(selfUser);
             Assert.NotNull(role);
-            
+
             // set the category
             await channel.ModifyAsync(x => x.CategoryId = category.Id);
-            
+
             // check that the creator is myself
             Assert.Equal(selfUser.Id, channel.CreatorId);
             IUser creator = await channel.GetCreatorAsync();
             Assert.Equal(selfUser.Id, creator.Id);
-            
+
             // check permission overwrites
             await channel.AddPermissionOverwriteAsync(selfUser);
             Assert.Single(channel.UserPermissionOverwrites);
@@ -195,7 +195,7 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
             Assert.Equal(PermValue.Inherit, userPermissionOverwrite.Permissions.AttachFiles);
             await channel.RemovePermissionOverwriteAsync(selfUser);
             Assert.Empty(channel.UserPermissionOverwrites);
-            
+
             await channel.AddPermissionOverwriteAsync(role);
             Assert.Single(channel.RolePermissionOverwrites.Where(overwrite => overwrite.Target > 0));
             await channel.ModifyPermissionOverwriteAsync(role, permissions => permissions
@@ -207,7 +207,7 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
             Assert.Equal(PermValue.Inherit, rolePermissionOverwrite.Permissions.AttachFiles);
             await channel.RemovePermissionOverwriteAsync(role);
             Assert.Empty(channel.RolePermissionOverwrites.Where(overwrite => overwrite.Target > 0));
-            
+
             // check permission sync
             Assert.True(channel.IsPermissionSynced);
             await channel.AddPermissionOverwriteAsync(role);
@@ -216,7 +216,7 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
             await channel.SyncPermissionsAsync();
             await channel.UpdateAsync();
             Assert.True(channel.IsPermissionSynced);
-            
+
             // check invites
             IInvite invite = await channel.CreateInviteAsync(InviteMaxAge._86400, InviteMaxUses._50);
             Assert.NotNull(invite);

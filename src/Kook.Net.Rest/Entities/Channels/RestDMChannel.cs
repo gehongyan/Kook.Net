@@ -1,7 +1,7 @@
-using System.Collections.Immutable;
-using System.Diagnostics;
 using Kook.API.Rest;
 using Kook.Utils;
+using System.Collections.Immutable;
+using System.Diagnostics;
 using Model = Kook.API.UserChat;
 
 namespace Kook.Rest;
@@ -32,17 +32,17 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     Gets the current logged-in user.
     /// </summary>
     public RestUser CurrentUser { get; }
-    
+
     /// <summary>
     ///     Gets the recipient of the channel.
     /// </summary>
     public RestUser Recipient { get; }
-    
+
     /// <summary>
     ///     Gets a collection that is the current logged-in user and the recipient.
     /// </summary>
     public IReadOnlyCollection<RestUser> Users => ImmutableArray.Create(CurrentUser, Recipient);
-    
+
     internal RestDMChannel(BaseKookClient kook, Guid chatCode, ulong recipientId)
         : base(kook, default)
     {
@@ -67,7 +67,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
         var model = await Kook.ApiClient.GetUserChatAsync(Id, options).ConfigureAwait(false);
         Update(model);
     }
-    
+
     /// <inheritdoc />
     public Task CloseAsync(RequestOptions options = null)
         => ChannelHelper.DeleteDMChannelAsync(this, Kook, options);
@@ -100,7 +100,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, options, quote: quote);
-    
+
     /// <summary>
     ///     Sends a file to this message channel.
     /// </summary>
@@ -116,7 +116,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null, 
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null,
         AttachmentType type = AttachmentType.File, IQuote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectFileAsync(this, Kook, path, fileName, type, options, quote: quote);
     /// <summary>
@@ -134,7 +134,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName = null, 
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName = null,
         AttachmentType type = AttachmentType.File, IQuote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectFileAsync(this, Kook, stream, fileName, type, options, quote: quote);
     /// <summary>
@@ -150,7 +150,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment, 
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
         IQuote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectFileAsync(this, Kook, attachment, options, quote: quote);
 
@@ -177,7 +177,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, IQuote quote = null, RequestOptions options = null) 
+    public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, IQuote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectCardAsync(this, Kook, card, options, quote: quote);
 
     /// <inheritdoc />
@@ -192,7 +192,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// <inheritdoc />
     public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
         => ChannelHelper.GetDirectMessagesAsync(this, Kook, referenceMessage.Id, dir, limit, true, options);
-    
+
     #endregion
 
     #region Messages
@@ -213,7 +213,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// <inheritdoc />
     IUser IDMChannel.Recipient => Recipient;
     #endregion
-    
+
     #region IRestPrivateChannel
     /// <inheritdoc />
     IReadOnlyCollection<RestUser> IRestPrivateChannel.Recipients => ImmutableArray.Create(Recipient);
@@ -259,7 +259,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
             return AsyncEnumerable.Empty<IReadOnlyCollection<IMessage>>();
     }
     /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(string path, string fileName, 
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(string path, string fileName,
         AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileAsync(path, fileName, type, quote, options);
     /// <inheritdoc />
@@ -267,7 +267,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
         AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileAsync(stream, fileName, type, quote, options);
     /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(FileAttachment attachment, 
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(FileAttachment attachment,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileAsync(attachment, quote, options);
     /// <inheritdoc />
@@ -282,9 +282,9 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardAsync(ICard card,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendCardAsync(card, quote, options);
-    
+
     #endregion
-    
+
     /// <summary>
     ///     Gets a string that represents the Username#IdentifyNumber of the recipient.
     /// </summary>
@@ -295,11 +295,11 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     private string DebuggerDisplay => $"@{Recipient} ({Id}, DM)";
 
     #region IChannel
-    
+
     /// <inheritdoc />
     Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IUser>(GetUser(id));
-    
+
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
         => ImmutableArray.Create<IReadOnlyCollection<IUser>>(Users).ToAsyncEnumerable();

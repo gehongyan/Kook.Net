@@ -11,6 +11,6 @@ internal class NotImplementedPokeResource : PokeResourceBase
     }
 
     public string RawType { get; set; }
-    
+
     public JsonNode RawJsonNode { get; set; }
 }

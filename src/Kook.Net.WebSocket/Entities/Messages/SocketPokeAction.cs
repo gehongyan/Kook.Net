@@ -6,7 +6,7 @@ public class SocketPokeAction : IPokeAction
 {
     /// <inheritdoc cref="IPokeAction.Operator" />
     public SocketUser Operator { get; }
-    
+
     /// <inheritdoc cref="IPokeAction.Targets" />
     public IReadOnlyCollection<SocketUser> Targets { get; }
 

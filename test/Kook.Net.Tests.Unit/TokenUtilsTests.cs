@@ -28,7 +28,7 @@ public class TokenUtilsTests
         foreach (TokenType tokenType in (TokenType[])Enum.GetValues(typeof(TokenType)))
             Assert.Throws<ArgumentNullException>(() => TokenUtils.ValidateToken(tokenType, token));
     }
-    
+
     /// <summary>
     ///     Tests the behavior of <see cref="TokenUtils.ValidateToken(TokenType, string)"/>
     ///     to see that valid Bot tokens do not throw Exceptions.
@@ -47,7 +47,7 @@ public class TokenUtilsTests
     {
         TokenUtils.ValidateToken(TokenType.Bot, token);
     }
-    
+
     /// <summary>
     ///     Tests the usage of <see cref="TokenUtils.ValidateToken(TokenType, string)"/> with
     ///     a Bot token that is invalid.
@@ -78,7 +78,7 @@ public class TokenUtilsTests
     {
         Assert.Throws<ArgumentException>(() => TokenUtils.ValidateToken(TokenType.Bot, token));
     }
-    
+
     /// <summary>
     ///     Tests the behavior of <see cref="TokenUtils.ValidateToken(TokenType, string)"/>
     ///     to see that an <see cref="ArgumentException"/> is thrown when an invalid
@@ -115,7 +115,7 @@ public class TokenUtilsTests
     {
         Assert.Equal(expected, TokenUtils.CheckBotTokenValidity(token));
     }
-    
+
     [Theory]
     // cannot pass a ulong? as a param in InlineData, so have to have a separate param
     // indicating if a value is null

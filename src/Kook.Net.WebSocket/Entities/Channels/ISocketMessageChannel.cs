@@ -34,7 +34,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///     enabled.
     /// </returns>
     SocketMessage GetCachedMessage(Guid id);
-        
+
     /// <summary>
     ///     Gets the last N cached messages from this message channel.
     /// </summary>

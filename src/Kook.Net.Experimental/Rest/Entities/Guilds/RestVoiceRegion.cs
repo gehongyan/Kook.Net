@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Model = Kook.API.VoiceRegion;
 
 namespace Kook.Rest;

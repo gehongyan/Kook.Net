@@ -4,7 +4,7 @@ namespace Kook.Rest;
 
 internal static class InviteHelper
 {
-    public static async Task DeleteAsync(IInvite invite, BaseKookClient client, 
+    public static async Task DeleteAsync(IInvite invite, BaseKookClient client,
         RequestOptions options)
     {
         DeleteGuildInviteParams args = new()

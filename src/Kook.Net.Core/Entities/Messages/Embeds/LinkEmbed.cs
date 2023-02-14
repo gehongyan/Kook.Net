@@ -14,10 +14,10 @@ public struct LinkEmbed : IEmbed
         Color = color;
         Image = image;
     }
-    
+
     /// <inheritdoc />
     public EmbedType Type => EmbedType.Link;
-    
+
     /// <inheritdoc />
     public string Url { get; internal set; }
 

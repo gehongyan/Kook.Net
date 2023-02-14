@@ -18,7 +18,7 @@ public enum KookErrorCode
     #endregion
 
     RequestEntityTooLarge = 40014,
-        
+
     #region Reconnect
 
     MissingResumeArgument = 40106,
@@ -26,6 +26,6 @@ public enum KookErrorCode
     InvalidSequenceNumber = 40108,
 
     #endregion
-        
+
     MissingPermissions = 40300
 }

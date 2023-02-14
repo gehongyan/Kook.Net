@@ -87,7 +87,8 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
     }
     public async Task StopInternalAsync(bool isDisposing = false)
     {
-        try { _stopCancelTokenSource.Cancel(false); }
+        try
+        { _stopCancelTokenSource.Cancel(false); }
         catch
         {
             // ignored
@@ -98,7 +99,8 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
 
         if (_udp != null)
         {
-            try { _udp.Dispose(); }
+            try
+            { _udp.Dispose(); }
             catch
             {
                 // ignored

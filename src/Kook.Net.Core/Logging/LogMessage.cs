@@ -52,7 +52,7 @@ public struct LogMessage
         Message = message;
         Exception = exception;
     }
-        
+
     public override string ToString() => ToString();
     public string ToString(StringBuilder builder = null, bool fullException = true, bool prependTimestamp = true, DateTimeKind timestampKind = DateTimeKind.Local, int? padSource = 11)
     {
@@ -60,9 +60,9 @@ public struct LogMessage
         string message = Message;
         string exMessage = fullException ? Exception?.ToString() : Exception?.Message;
 
-        int maxLength = 1 + 
+        int maxLength = 1 +
                         (prependTimestamp ? 8 : 0) + 1 +
-                        (padSource ?? (sourceName?.Length ?? 0)) + 1 + 
+                        (padSource ?? (sourceName?.Length ?? 0)) + 1 +
                         (message?.Length ?? 0) +
                         (exMessage?.Length ?? 0) + 3;
 

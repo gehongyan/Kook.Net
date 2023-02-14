@@ -18,7 +18,7 @@ public interface IModuleBase
     /// </summary>
     /// <param name="command">The command thats about to run.</param>
     Task BeforeExecuteAsync(CommandInfo command);
-        
+
     /// <summary>
     ///     Executed before a command is run in this module base.
     /// </summary>

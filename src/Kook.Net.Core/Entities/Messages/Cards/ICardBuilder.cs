@@ -9,7 +9,7 @@ public interface ICardBuilder
     ///     Gets the type of the <see cref="ICard"/> this builder creates.
     /// </summary>
     CardType Type { get; }
-    
+
     /// <summary>
     ///     Builds the <see cref="ICardBuilder"/> into an <see cref="ICard"/>.
     /// </summary>

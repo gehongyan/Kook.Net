@@ -66,10 +66,10 @@ public class Poke : IPoke
             ["big"] = model.Quality.Big,
         });
         IPokeResource pokeResource = model.Resource.ToEntity();
-        return new Poke(model.Id, model.Name, model.Description, cooldown, model.Categories, label,icon,
+        return new Poke(model.Id, model.Name, model.Description, cooldown, model.Categories, label, icon,
             quality, pokeResource, model.MessageScenarios);
     }
-    
+
     /// <summary>
     ///     Returns the name of the poke.
     /// </summary>

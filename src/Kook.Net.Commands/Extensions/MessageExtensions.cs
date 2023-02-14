@@ -47,14 +47,18 @@ public static class MessageExtensions
         if (msg.Type == MessageType.Text)
         {
             var text = msg.Content;
-            if (string.IsNullOrEmpty(text) || text.Length <= 6 || text[0] != '@') return false;
+            if (string.IsNullOrEmpty(text) || text.Length <= 6 || text[0] != '@')
+                return false;
 
             int endPos = text.IndexOf('#');
-            if (endPos == -1) return false;
+            if (endPos == -1)
+                return false;
             endPos += 4;
-            if (text.Length < endPos + 2 || text[endPos + 1] != ' ') return false;
+            if (text.Length < endPos + 2 || text[endPos + 1] != ' ')
+                return false;
 
-            if (!MentionUtils.TryParseUser(text.Substring(0, endPos + 1), out ulong userId, TagMode.PlainText)) return false;
+            if (!MentionUtils.TryParseUser(text.Substring(0, endPos + 1), out ulong userId, TagMode.PlainText))
+                return false;
             if (userId == user.Id)
             {
                 argPos = endPos + 2;
@@ -65,24 +69,28 @@ public static class MessageExtensions
         {
             var text = msg.Content;
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-            if (string.IsNullOrEmpty(text) || text.Length <= 10 || text[..5] != "(met)") return false;
+            if (string.IsNullOrEmpty(text) || text.Length <= 10 || text[..5] != "(met)")
+                return false;
 #else
                 if (string.IsNullOrEmpty(text) || text.Length <= 10 || text.Substring(0, 5) != "(met)") return false;
 #endif
 
             int endPos = text.IndexOf("(met)", 5, StringComparison.Ordinal);
-            if (endPos == -1) return false;
+            if (endPos == -1)
+                return false;
             endPos += 4;
-            if (text.Length < endPos + 2 || text[endPos + 1] != ' ') return false;
+            if (text.Length < endPos + 2 || text[endPos + 1] != ' ')
+                return false;
 
-            if (!MentionUtils.TryParseUser(text.Substring(0, endPos + 1), out ulong userId, TagMode.KMarkdown)) return false;
+            if (!MentionUtils.TryParseUser(text.Substring(0, endPos + 1), out ulong userId, TagMode.KMarkdown))
+                return false;
             if (userId == user.Id)
             {
                 argPos = endPos + 2;
                 return true;
             }
         }
-            
+
         return false;
     }
 }

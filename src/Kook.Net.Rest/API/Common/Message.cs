@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using Kook.Net.Converters;
+using System.Text.Json.Serialization;
 
 namespace Kook.API;
 
@@ -7,13 +7,13 @@ internal class Message
 {
     [JsonPropertyName("id")]
     public Guid Id { get; set; }
-    
+
     [JsonPropertyName("type")]
     public MessageType Type { get; set; }
-    
+
     [JsonPropertyName("content")]
     public string Content { get; set; }
-    
+
     [JsonPropertyName("mention")]
     public ulong[] MentionedUsers { get; set; }
 
@@ -35,14 +35,14 @@ internal class Message
     [JsonPropertyName("create_at")]
     [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset CreateAt { get; set; }
-    
+
     [JsonPropertyName("updated_at")]
     [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset UpdateAt { get; set; }
 
     [JsonPropertyName("reactions")]
     public Reaction[] Reactions { get; set; }
-    
+
     [JsonPropertyName("author")]
     public User Author { get; set; }
 

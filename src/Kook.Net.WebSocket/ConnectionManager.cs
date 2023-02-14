@@ -156,7 +156,8 @@ internal class ConnectionManager : IDisposable
     }
     private async Task DisconnectAsync(Exception ex, bool isReconnecting)
     {
-        if (State == ConnectionState.Disconnected) return;
+        if (State == ConnectionState.Disconnected)
+            return;
         State = ConnectionState.Disconnecting;
         await _logger.InfoAsync("Disconnecting").ConfigureAwait(false);
 

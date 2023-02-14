@@ -55,7 +55,7 @@ public class ButtonElement : IElement, IEquatable<ButtonElement>
     ///     An <see cref="IElement"/> value that represents the text element of the button.
     /// </returns>
     public IElement Text { get; }
-    
+
     private string DebuggerDisplay => $"{Type}: {Text} ({Click}, {Value}, {Theme})";
 
     public static bool operator ==(ButtonElement left, ButtonElement right)
@@ -82,7 +82,7 @@ public class ButtonElement : IElement, IEquatable<ButtonElement>
     {
         unchecked
         {
-            int hash = (int) 2166136261;
+            int hash = (int)2166136261;
             hash = (hash * 16777619) ^ (Type, Theme, Value, Click).GetHashCode();
             hash = (hash * 16777619) ^ Text.GetHashCode();
             return hash;

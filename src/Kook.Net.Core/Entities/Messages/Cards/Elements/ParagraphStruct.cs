@@ -15,7 +15,7 @@ public class ParagraphStruct : IElement, IEquatable<ParagraphStruct>
         ColumnCount = columnCount;
         Fields = fields;
     }
-    
+
     /// <summary>
     ///     Gets the type of the element.
     /// </summary>
@@ -65,7 +65,7 @@ public class ParagraphStruct : IElement, IEquatable<ParagraphStruct>
     {
         unchecked
         {
-            int hash = (int) 2166136261;
+            int hash = (int)2166136261;
             hash = (hash * 16777619) ^ (Type, ColumnCount).GetHashCode();
             foreach (IElement element in Fields)
                 hash = (hash * 16777619) ^ element.GetHashCode();

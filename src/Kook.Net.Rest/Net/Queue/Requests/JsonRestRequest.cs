@@ -1,4 +1,4 @@
-﻿using Kook.Net.Rest;
+using Kook.Net.Rest;
 
 namespace Kook.Net.Queue;
 

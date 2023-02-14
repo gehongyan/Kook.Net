@@ -1,7 +1,7 @@
-using System.Collections.Immutable;
-using System.Runtime.CompilerServices;
 using Kook.API;
 using Kook.API.Rest;
+using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
 
 namespace Kook.Rest;
 
@@ -49,7 +49,7 @@ internal static class GuildHelper
             BoostLevel.Level5 or BoostLevel.Level6 => 320,
             _ => 96
         };
-        
+
         return tierFactor * 1000;
     }
     public static ulong GetUploadLimit(IGuild guild)
@@ -66,9 +66,9 @@ internal static class GuildHelper
         };
 
         var mebibyte = Math.Pow(2, 20);
-        return (ulong) (tierFactor * mebibyte);
+        return (ulong)(tierFactor * mebibyte);
     }
-    
+
     #endregion
 
     #region Invites
@@ -81,7 +81,7 @@ internal static class GuildHelper
             ? guild.GetChannelAsync(x.ChannelId.Value, CacheMode.CacheOnly).GetAwaiter().GetResult()
             : null, x)).ToImmutableArray();
     }
-    
+
     /// <exception cref="ArgumentException">
     /// <paramref name="guild.Id"/> may not be equal to zero.
     /// <paramref name="maxAge"/> and <paramref name="maxUses"/> must be greater than zero.
@@ -93,8 +93,8 @@ internal static class GuildHelper
         var args = new CreateGuildInviteParams()
         {
             GuildId = guild.Id,
-            MaxAge = (InviteMaxAge) (maxAge ?? 0),
-            MaxUses = (InviteMaxUses) (maxUses ?? -1),
+            MaxAge = (InviteMaxAge)(maxAge ?? 0),
+            MaxUses = (InviteMaxUses)(maxUses ?? -1),
         };
         var model = await client.ApiClient.CreateGuildInviteAsync(args, options).ConfigureAwait(false);
         var invites = await client.ApiClient.GetGuildInvitesAsync(guild.Id, options: options).FlattenAsync().ConfigureAwait(false);
@@ -103,22 +103,23 @@ internal static class GuildHelper
             ? guild.GetChannelAsync(invite.ChannelId.Value, CacheMode.CacheOnly).GetAwaiter().GetResult()
             : null, invite);
     }
-    
+
     public static Task<RestInvite> CreateInviteAsync(IGuild channel, BaseKookClient client,
         InviteMaxAge maxAge, InviteMaxUses maxUses, RequestOptions options)
     {
-        return CreateInviteAsync(channel, client, (int?) maxAge, (int?) maxUses, options);
+        return CreateInviteAsync(channel, client, (int?)maxAge, (int?)maxUses, options);
     }
 
     #endregion
-    
+
     #region Roles
-    
+
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
     public static async Task<RestRole> CreateRoleAsync(IGuild guild, BaseKookClient client,
         string name, RequestOptions options)
     {
-        if (name == null) throw new ArgumentNullException(paramName: nameof(name));
+        if (name == null)
+            throw new ArgumentNullException(paramName: nameof(name));
 
         var createGuildRoleParams = new CreateGuildRoleParams
         {
@@ -130,9 +131,9 @@ internal static class GuildHelper
 
         return RestRole.Create(client, guild, model);
     }
-    
+
     #endregion
-    
+
     #region Users
 
     public static IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> GetUsersAsync(IGuild guild, BaseKookClient client, int limit, int fromPage, RequestOptions options)
@@ -141,7 +142,7 @@ internal static class GuildHelper
             .Select(x => x
                 .Select(y => RestGuildUser.Create(client, guild, y)).ToImmutableArray() as IReadOnlyCollection<RestGuildUser>);
     }
-    
+
     public static async Task<RestGuildUser> GetUserAsync(IGuild guild, BaseKookClient client,
         ulong id, RequestOptions options)
     {
@@ -150,14 +151,14 @@ internal static class GuildHelper
             return RestGuildUser.Create(client, guild, model);
         return null;
     }
-    
-    public static async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> GetGuildMutedDeafenedUsersAsync(IGuild guild, BaseKookClient client, 
+
+    public static async Task<(IReadOnlyCollection<ulong> Muted, IReadOnlyCollection<ulong> Deafened)> GetGuildMutedDeafenedUsersAsync(IGuild guild, BaseKookClient client,
         RequestOptions options)
     {
         var models = await client.ApiClient.GetGuildMutedDeafenedUsersAsync(guild.Id, options).ConfigureAwait(false);
         return (models.Muted.UserIds, models.Deafened.UserIds);
     }
-    
+
     public static async Task MuteUserAsync(IGuildUser user, BaseKookClient client, RequestOptions options)
     {
         CreateOrRemoveGuildMuteDeafParams args = new()
@@ -168,7 +169,7 @@ internal static class GuildHelper
         };
         await client.ApiClient.CreateGuildMuteDeafAsync(args, options).ConfigureAwait(false);
     }
-    
+
     public static async Task DeafenUserAsync(IGuildUser user, BaseKookClient client, RequestOptions options)
     {
         CreateOrRemoveGuildMuteDeafParams args = new()
@@ -179,7 +180,7 @@ internal static class GuildHelper
         };
         await client.ApiClient.CreateGuildMuteDeafAsync(args, options).ConfigureAwait(false);
     }
-    
+
     public static async Task UnmuteUserAsync(IGuildUser user, BaseKookClient client, RequestOptions options)
     {
         CreateOrRemoveGuildMuteDeafParams args = new()
@@ -190,7 +191,7 @@ internal static class GuildHelper
         };
         await client.ApiClient.RemoveGuildMuteDeafAsync(args, options).ConfigureAwait(false);
     }
-    
+
     public static async Task UndeafenUserAsync(IGuildUser user, BaseKookClient client, RequestOptions options)
     {
         CreateOrRemoveGuildMuteDeafParams args = new()
@@ -201,13 +202,13 @@ internal static class GuildHelper
         };
         await client.ApiClient.RemoveGuildMuteDeafAsync(args, options).ConfigureAwait(false);
     }
-    
+
     public static IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> SearchUsersAsync(IGuild guild, BaseKookClient client, Action<SearchGuildMemberProperties> func, int limit, RequestOptions options)
     {
         var models = client.ApiClient.GetGuildMembersAsync(guild.Id, func, limit, 1, options);
         return models.Select(x => x.Select(y => RestGuildUser.Create(client, guild, y)).ToImmutableArray() as IReadOnlyCollection<RestGuildUser>);
     }
-    
+
     #endregion
 
     #region Channels
@@ -227,14 +228,15 @@ internal static class GuildHelper
         return models.Select(x => RestGuildChannel.Create(client, guild, x)).ToImmutableArray();
     }
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
-    public static async Task<RestTextChannel> CreateTextChannelAsync(IGuild guild, BaseKookClient client, 
+    public static async Task<RestTextChannel> CreateTextChannelAsync(IGuild guild, BaseKookClient client,
         string name, RequestOptions options, Action<CreateTextChannelProperties> func)
     {
-        if (name == null) throw new ArgumentNullException(paramName: nameof(name));
+        if (name == null)
+            throw new ArgumentNullException(paramName: nameof(name));
 
         var props = new CreateTextChannelProperties();
         func?.Invoke(props);
-        
+
         var args = new CreateGuildChannelParams
         {
             Name = name,
@@ -246,14 +248,15 @@ internal static class GuildHelper
         return RestTextChannel.Create(client, guild, model);
     }
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
-    public static async Task<RestVoiceChannel> CreateVoiceChannelAsync(IGuild guild, BaseKookClient client, 
+    public static async Task<RestVoiceChannel> CreateVoiceChannelAsync(IGuild guild, BaseKookClient client,
         string name, RequestOptions options, Action<CreateVoiceChannelProperties> func)
     {
-        if (name == null) throw new ArgumentNullException(paramName: nameof(name));
+        if (name == null)
+            throw new ArgumentNullException(paramName: nameof(name));
 
         var props = new CreateVoiceChannelProperties();
         func?.Invoke(props);
-        
+
         var args = new CreateGuildChannelParams
         {
             Name = name,
@@ -270,7 +273,8 @@ internal static class GuildHelper
     public static async Task<RestCategoryChannel> CreateCategoryChannelAsync(IGuild guild, BaseKookClient client,
         string name, RequestOptions options, Action<CreateCategoryChannelProperties> func = null)
     {
-        if (name == null) throw new ArgumentNullException(paramName: nameof(name));
+        if (name == null)
+            throw new ArgumentNullException(paramName: nameof(name));
 
         var props = new CreateCategoryChannelProperties();
         func?.Invoke(props);
@@ -319,7 +323,7 @@ internal static class GuildHelper
     #endregion
 
     #region Emotes
-    
+
     public static async Task<IReadOnlyCollection<GuildEmote>> GetEmotesAsync(IGuild guild, BaseKookClient client, RequestOptions options)
     {
         var models = await client.ApiClient.GetGuildEmotesAsync(guild.Id, options: options).FlattenAsync().ConfigureAwait(false);
@@ -346,7 +350,8 @@ internal static class GuildHelper
     public static async Task ModifyEmoteNameAsync(IGuild guild, BaseKookClient client, IEmote emote, Action<string> func,
         RequestOptions options)
     {
-        if (func == null) throw new ArgumentNullException(paramName: nameof(func));
+        if (func == null)
+            throw new ArgumentNullException(paramName: nameof(func));
 
         string name = emote.Name;
         func(name);
@@ -354,13 +359,13 @@ internal static class GuildHelper
         var args = new ModifyGuildEmoteParams { Name = name, Id = emote.Id };
         await client.ApiClient.ModifyGuildEmoteAsync(args, options).ConfigureAwait(false);
     }
-    public static async Task DeleteEmoteAsync(IGuild guild, BaseKookClient client, string id, RequestOptions options) 
+    public static async Task DeleteEmoteAsync(IGuild guild, BaseKookClient client, string id, RequestOptions options)
         => await client.ApiClient.DeleteGuildEmoteAsync(id, options).ConfigureAwait(false);
 
     #endregion
 
     #region Badges
-    
+
     public static async Task<Stream> GetBadgeAsync(IGuild guild, BaseKookClient client, BadgeStyle style, RequestOptions options)
     {
         return await client.ApiClient.GetGuildBadgeAsync(guild.Id, style, options).ConfigureAwait(false);

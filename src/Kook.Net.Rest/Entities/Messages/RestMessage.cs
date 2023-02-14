@@ -1,5 +1,5 @@
-using System.Collections.Immutable;
 using Kook.API;
+using System.Collections.Immutable;
 using Model = Kook.API.Message;
 
 namespace Kook.Rest;
@@ -11,7 +11,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
 {
     private ImmutableArray<RestReaction> _reactions = ImmutableArray.Create<RestReaction>();
     private ImmutableArray<RestUser> _userMentions = ImmutableArray.Create<RestUser>();
-    
+
     /// <inheritdoc />
     public MessageType Type { get; }
 
@@ -29,9 +29,9 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
 
     /// <inheritdoc />
     public string CleanContent => MessageHelper.SanitizeMessage(this);
-    
+
     public virtual IReadOnlyCollection<Attachment> Attachments { get; private set; }
-    
+
     /// <inheritdoc />
     public DateTimeOffset Timestamp { get; private set; }
     /// <inheritdoc />
@@ -40,7 +40,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     public virtual bool? MentionedEveryone => false;
     /// <inheritdoc />
     public virtual bool? MentionedHere => false;
-    
+
     /// <summary>
     ///     Gets a collection of the <see cref="ICard"/>'s on the message.
     /// </summary>
@@ -63,7 +63,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     public virtual IReadOnlyCollection<ITag> Tags => ImmutableArray.Create<ITag>();
     /// <inheritdoc />
     public virtual bool? IsPinned => null;
-    
+
     /// <summary>
     ///     Gets the <see cref="Content"/> of the message.
     /// </summary>
@@ -72,7 +72,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// </returns>
     public override string ToString() => Content;
 
-    internal RestMessage(BaseKookClient kook, Guid id, MessageType messageType, 
+    internal RestMessage(BaseKookClient kook, Guid id, MessageType messageType,
         IMessageChannel channel, IUser author, MessageSource source)
         : base(kook, id)
     {
@@ -101,7 +101,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         Timestamp = model.CreateAt;
         EditedTimestamp = model.UpdateAt;
         Content = model.Content;
-        
+
         if (model.Reactions is not null)
         {
             var value = model.Reactions;
@@ -136,13 +136,13 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         }
 
     }
-    
+
     internal virtual void Update(API.DirectMessage model)
     {
         Timestamp = model.CreateAt;
         EditedTimestamp = model.UpdateAt;
         Content = model.Content;
-        
+
         if (model.Reactions is not null)
         {
             var value = model.Reactions;
@@ -159,7 +159,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         }
         else
             _reactions = ImmutableArray.Create<RestReaction>();
-        
+
         if (model.MentionInfo?.MentionedUsers is not null)
         {
             var value = model.MentionInfo.MentionedUsers;
@@ -176,11 +176,11 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
             }
         }
     }
-    
+
     /// <inheritdoc />
-    public IReadOnlyDictionary<IEmote, ReactionMetadata> Reactions 
+    public IReadOnlyDictionary<IEmote, ReactionMetadata> Reactions
         => _reactions.ToDictionary(
-            x => x.Emote, 
+            x => x.Emote,
             x => new ReactionMetadata { ReactionCount = x.Count, IsMe = x.Me });
 
     /// <inheritdoc />

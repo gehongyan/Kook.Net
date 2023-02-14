@@ -12,7 +12,7 @@ internal class User
     [JsonPropertyName("online")] public bool Online { get; set; }
     [JsonPropertyName("os")] public string OperatingSystem { get; set; }
     [JsonPropertyName("bot")] public bool? Bot { get; set; }
-    [JsonPropertyName("status")] public int? Status { get; set; }   
+    [JsonPropertyName("status")] public int? Status { get; set; }
     [JsonPropertyName("avatar")] public string Avatar { get; set; }
     [JsonPropertyName("vip_avatar")] public string BuffAvatar { get; set; }
     [JsonPropertyName("is_vip")] public bool? HasBuff { get; set; }

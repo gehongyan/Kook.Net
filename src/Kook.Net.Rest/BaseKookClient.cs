@@ -1,5 +1,5 @@
-using System.Collections.Immutable;
 using Kook.Logging;
+using System.Collections.Immutable;
 
 namespace Kook.Rest;
 
@@ -12,13 +12,13 @@ public abstract class BaseKookClient : IKookClient
     private readonly AsyncEvent<Func<Task>> _loggedInEvent = new AsyncEvent<Func<Task>>();
     public event Func<Task> LoggedOut { add => _loggedOutEvent.Add(value); remove => _loggedOutEvent.Remove(value); }
     private readonly AsyncEvent<Func<Task>> _loggedOutEvent = new AsyncEvent<Func<Task>>();
-    
+
     internal readonly Logger _restLogger;
     private readonly SemaphoreSlim _stateLock;
     private bool _isFirstLogin, _isDisposed;
-    
+
     internal API.KookRestApiClient ApiClient { get; }
-    
+
     internal LogManager LogManager { get; }
     /// <summary>
     ///     Gets the login state of the client.
@@ -30,17 +30,17 @@ public abstract class BaseKookClient : IKookClient
     public ISelfUser CurrentUser { get; protected set; }
     /// <inheritdoc />
     public TokenType TokenType => ApiClient.AuthTokenType;
-    
+
     internal BaseKookClient(KookRestConfig config, API.KookRestApiClient client)
     {
         ApiClient = client;
         LogManager = new LogManager(config.LogLevel);
         LogManager.Message += async msg => await _logEvent.InvokeAsync(msg).ConfigureAwait(false);
-        
+
         _stateLock = new SemaphoreSlim(1, 1);
         _restLogger = LogManager.CreateLogger("Rest");
         _isFirstLogin = config.DisplayInitialLog;
-        
+
         ApiClient.RequestQueue.RateLimitTriggered += async (id, info, endpoint) =>
         {
             if (info == null)
@@ -50,7 +50,7 @@ public abstract class BaseKookClient : IKookClient
         };
         ApiClient.SentRequest += async (method, endpoint, millis) => await _restLogger.VerboseAsync($"{method} {endpoint}: {millis} ms").ConfigureAwait(false);
     }
-    
+
     internal virtual void Dispose(bool disposing)
     {
         if (!_isDisposed)
@@ -72,7 +72,7 @@ public abstract class BaseKookClient : IKookClient
         }
         finally { _stateLock.Release(); }
     }
-    
+
     internal virtual async Task LoginInternalAsync(TokenType tokenType, string token, bool validateToken)
     {
         if (_isFirstLogin)
@@ -116,7 +116,7 @@ public abstract class BaseKookClient : IKookClient
     }
     internal virtual Task OnLoginAsync(TokenType tokenType, string token)
         => Task.Delay(0);
-    
+
     public async Task LogoutAsync()
     {
         await _stateLock.WaitAsync().ConfigureAwait(false);
@@ -129,8 +129,9 @@ public abstract class BaseKookClient : IKookClient
     internal virtual async Task LogoutInternalAsync()
     {
         await ApiClient.GoOfflineAsync();
-        
-        if (LoginState == LoginState.LoggedOut) return;
+
+        if (LoginState == LoginState.LoggedOut)
+            return;
         LoginState = LoginState.LoggingOut;
 
         await ApiClient.LogoutAsync().ConfigureAwait(false);
@@ -143,14 +144,14 @@ public abstract class BaseKookClient : IKookClient
     }
     internal virtual Task OnLogoutAsync()
         => Task.Delay(0);
-    
+
     #endregion
 
     #region IKookClient
-    
+
     /// <inheritdoc />
     ConnectionState IKookClient.ConnectionState => ConnectionState.Disconnected;
-    
+
     /// <inheritdoc />
     ISelfUser IKookClient.CurrentUser => CurrentUser;
 
@@ -172,13 +173,13 @@ public abstract class BaseKookClient : IKookClient
     /// <inheritdoc />
     Task<IUser> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IUser>(null);
-    
+
     /// <inheritdoc />
     Task IKookClient.StartAsync()
         => Task.Delay(0);
     /// <inheritdoc />
     Task IKookClient.StopAsync()
         => Task.Delay(0);
-    
+
     #endregion
 }

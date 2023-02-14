@@ -23,10 +23,10 @@ public class HeaderModule : IModule, IEquatable<HeaderModule>
     ///     A <see cref="PlainTextElement"/> representing the text of the header.
     /// </returns>
     public PlainTextElement Text { get; }
-    
+
     public override string ToString() => Text.ToString();
     private string DebuggerDisplay => $"{Type}: {Text}";
-    
+
     public static bool operator ==(HeaderModule left, HeaderModule right)
         => left?.Equals(right) ?? right is null;
 
@@ -51,7 +51,7 @@ public class HeaderModule : IModule, IEquatable<HeaderModule>
     {
         unchecked
         {
-            int hash = (int) 2166136261;
+            int hash = (int)2166136261;
             hash = (hash * 16777619) ^ Type.GetHashCode();
             hash = (hash * 16777619) ^ Text.GetHashCode();
             return hash;

@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using Kook.Net.Converters;
+using System.Text.Json.Serialization;
 
 namespace Kook.API;
 
@@ -29,19 +29,19 @@ internal class Channel
     [JsonPropertyName("permission_overwrites")]
     public RolePermissionOverwrite[] RolePermissionOverwrites { get; set; }
 
-    [JsonPropertyName("permission_users")] 
+    [JsonPropertyName("permission_users")]
     public UserPermissionOverwrite[] UserPermissionOverwrites { get; set; }
-    
+
     [JsonPropertyName("channels")] public Channel[] Channels { get; set; }
-    
-    [JsonPropertyName("permission_sync")] 
+
+    [JsonPropertyName("permission_sync")]
     [JsonConverter(typeof(NullableNumberBooleanConverter))]
     public bool? PermissionSync { get; set; }
-    
+
     // Text
     [JsonPropertyName("topic")] public string Topic { get; set; }
     [JsonPropertyName("slow_mode")] public int SlowMode { get; set; }
-    
+
     // Voice
     [JsonPropertyName("limit_amount")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

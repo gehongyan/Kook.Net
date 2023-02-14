@@ -16,17 +16,17 @@ public struct ImageAnimationPokeResource : IPokeResource
 
     /// <inheritdoc />
     public PokeResourceType Type => PokeResourceType.ImageAnimation;
-    
+
     /// <summary>
     ///     Gets the resources of the image animation.
     /// </summary>
     public IReadOnlyDictionary<string, string> Resources { get; internal set; }
-    
+
     /// <summary>
     ///     Gets how long this animation animation should last filling the full screen.
     /// </summary>
     public TimeSpan Duration { get; internal set; }
-    
+
     /// <summary>
     ///     Gets the width of the image animation.
     /// </summary>
@@ -36,7 +36,7 @@ public struct ImageAnimationPokeResource : IPokeResource
     ///     Gets the height of the image animation.
     /// </summary>
     public int Height { get; internal set; }
-    
+
     /// <summary>
     ///     // TODO: To be documented.
     /// </summary>

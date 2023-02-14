@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using Kook.Net.Converters;
+using System.Text.Json.Serialization;
 
 namespace Kook.API.Rest;
 
@@ -24,7 +24,7 @@ internal class CreateMessageParams
     [JsonConverter(typeof(NullableUInt64Converter))]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ulong? EphemeralUserId { get; set; }
-    
+
     public CreateMessageParams(MessageType messageType, ulong channelId, string content)
     {
         Type = messageType;

@@ -1,11 +1,11 @@
+using Kook.API;
+using Kook.Rest;
 using System.Net;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Kook.API;
-using Kook.Rest;
 #if DEBUG_LIMITS
 using System.Diagnostics;
 #endif
@@ -26,7 +26,7 @@ namespace Kook.Net.Queue
         public BucketId Id { get; private set; }
         public int WindowCount { get; private set; }
         public DateTimeOffset LastAttemptAt { get; private set; }
-        
+
         public RequestBucket(RequestQueue queue, IRequest request, BucketId id)
         {
             _serializerOptions = new JsonSerializerOptions
@@ -144,7 +144,7 @@ namespace Kook.Net.Queue
                         if (response.MediaTypeHeader.MediaType == "application/json")
                         {
                             API.Rest.RestResponseBase responseBase = await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream, _serializerOptions);
-                            if (responseBase?.Code > (KookErrorCode)0 )
+                            if (responseBase?.Code > (KookErrorCode)0)
                             {
                                 throw new HttpException(
                                     response.StatusCode,
@@ -411,35 +411,36 @@ namespace Kook.Net.Queue
                     Debug.WriteLine($"[{id}] X-Rate-Limit-Remaining: " + info.Remaining.Value);
                     _semaphore = info.Remaining.Value;
                 }*/
-//                 if (info.RetryAfter.HasValue)
-//                 {
-//                     //RetryAfter is more accurate than Reset, where available
-//                     resetTick = DateTimeOffset.UtcNow.AddSeconds(info.RetryAfter.Value);
-// #if DEBUG_LIMITS
-//                     Debug.WriteLine($"[{id}] Retry-After: {info.RetryAfter.Value} ({info.RetryAfter.Value} ms)");
-// #endif
-//                 }
-                /*else*/ if (info.ResetAfter.HasValue)  // && (request.Options.UseSystemClock.HasValue && !request.Options.UseSystemClock.Value)
+                //                 if (info.RetryAfter.HasValue)
+                //                 {
+                //                     //RetryAfter is more accurate than Reset, where available
+                //                     resetTick = DateTimeOffset.UtcNow.AddSeconds(info.RetryAfter.Value);
+                // #if DEBUG_LIMITS
+                //                     Debug.WriteLine($"[{id}] Retry-After: {info.RetryAfter.Value} ({info.RetryAfter.Value} ms)");
+                // #endif
+                //                 }
+                /*else*/
+                if (info.ResetAfter.HasValue)  // && (request.Options.UseSystemClock.HasValue && !request.Options.UseSystemClock.Value)
                 {
                     resetTick = DateTimeOffset.UtcNow.Add(info.ResetAfter.Value);
 #if DEBUG_LIMITS
                     Debug.WriteLine($"[{id}] Reset-After: {info.ResetAfter.Value} ({info.ResetAfter?.TotalMilliseconds} ms)");
 #endif
                 }
-//                 else if (info.Reset.HasValue)
-//                 {
-//                     resetTick = info.Reset.Value.AddSeconds(info.Lag?.TotalSeconds ?? 1.0);
-//
-//                     /* millisecond precision makes this unnecessary, retaining in case of regression
-//                     if (request.Options.IsReactionBucket)
-//                         resetTick = DateTimeOffset.Now.AddMilliseconds(250);
-// 					*/
-//
-//                     int diff = (int)(resetTick.Value - DateTimeOffset.UtcNow).TotalMilliseconds;
-// #if DEBUG_LIMITS
-//                     Debug.WriteLine($"[{id}] X-Rate-Limit-Reset: {info.Reset.Value.ToUnixTimeSeconds()} ({diff} ms, {info.Lag?.TotalMilliseconds} ms lag)");
-// #endif
-//                 }
+                //                 else if (info.Reset.HasValue)
+                //                 {
+                //                     resetTick = info.Reset.Value.AddSeconds(info.Lag?.TotalSeconds ?? 1.0);
+                //
+                //                     /* millisecond precision makes this unnecessary, retaining in case of regression
+                //                     if (request.Options.IsReactionBucket)
+                //                         resetTick = DateTimeOffset.Now.AddMilliseconds(250);
+                // 					*/
+                //
+                //                     int diff = (int)(resetTick.Value - DateTimeOffset.UtcNow).TotalMilliseconds;
+                // #if DEBUG_LIMITS
+                //                     Debug.WriteLine($"[{id}] X-Rate-Limit-Reset: {info.Reset.Value.ToUnixTimeSeconds()} ({diff} ms, {info.Lag?.TotalMilliseconds} ms lag)");
+                // #endif
+                //                 }
                 else if (request.Options.IsClientBucket && Id != null)
                 {
                     resetTick = DateTimeOffset.UtcNow.AddSeconds(ClientBucket.Get(Id).WindowSeconds);

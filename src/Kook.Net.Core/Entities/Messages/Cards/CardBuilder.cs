@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 
 namespace Kook;
 
@@ -22,7 +22,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     ///     A <see cref="CardType"/> value that represents the type of the card.
     /// </returns>
     public CardType Type => CardType.Card;
-    
+
     /// <summary>
     ///     Gets or sets the theme of the card.
     /// </summary>
@@ -46,7 +46,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     ///     A <see cref="CardSize"/> value that represents the size of the card.
     /// </returns>
     public CardSize Size { get; set; }
-    
+
     /// <summary>
     ///     Gets or sets the modules in the card.
     /// </summary>
@@ -69,7 +69,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
         Theme = theme;
         return this;
     }
-    
+
     /// <summary>
     ///     Sets the color displayed along the left side of the card.
     /// </summary>
@@ -84,7 +84,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
         Color = color;
         return this;
     }
-    
+
     /// <summary>
     ///     Sets the size of the card.
     /// </summary>
@@ -99,7 +99,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
         Size = size;
         return this;
     }
-    
+
     /// <summary>
     ///     Adds a module to the card.
     /// </summary>
@@ -144,7 +144,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
 
     /// <inheritdoc />
     ICard ICardBuilder.Build() => Build();
-    
+
     public static bool operator ==(CardBuilder left, CardBuilder right)
         => left?.Equals(right) ?? right is null;
 
@@ -174,7 +174,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
                && Color == cardBuilder.Color
                && Size == cardBuilder.Size;
     }
-    
+
     /// <inheritdoc />
     public override int GetHashCode() => base.GetHashCode();
 }

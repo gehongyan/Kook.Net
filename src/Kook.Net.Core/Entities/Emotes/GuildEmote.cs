@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace Kook;
@@ -9,7 +9,7 @@ namespace Kook;
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
 public class GuildEmote : Emote
 {
-    internal GuildEmote(string id, string name, bool? animated, ulong guildId, ulong? creatorId) 
+    internal GuildEmote(string id, string name, bool? animated, ulong guildId, ulong? creatorId)
         : base(id, name, animated)
     {
         GuildId = guildId;
@@ -23,7 +23,7 @@ public class GuildEmote : Emote
     ///     A ulong that identifies the guild this emote is attached to.
     /// </returns>
     public ulong GuildId { get; }
-    
+
     /// <summary>
     ///     Gets the user who created this emote.
     /// </summary>
@@ -32,7 +32,7 @@ public class GuildEmote : Emote
     ///     <c>null</c> if unknown.
     /// </returns>
     public ulong? CreatorId { get; }
-    
+
     private string DebuggerDisplay => $"{Name} ({Id}{(Animated == true ? ", Animated" : "")})";
     /// <summary>
     ///     Gets the raw representation of the emote.

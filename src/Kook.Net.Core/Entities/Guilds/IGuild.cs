@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 
 namespace Kook;
 
@@ -155,7 +155,7 @@ public interface IGuild : IEntity<ulong>
     ///     <see langword="null"/> if the guild does not have a recommendation.
     /// </returns>
     IRecommendInfo RecommendInfo { get; }
-    
+
     #endregion
 
     #region Guilds
@@ -274,9 +274,9 @@ public interface IGuild : IEntity<ulong>
     Task RemoveBanAsync(ulong userId, RequestOptions options = null);
 
     #endregion
-    
+
     #region Channels
-    
+
     /// <summary>
     ///     Gets a collection of all channels in this guild.
     /// </summary>
@@ -352,7 +352,7 @@ public interface IGuild : IEntity<ulong>
     /// </returns>
     Task<IReadOnlyCollection<ICategoryChannel>> GetCategoryChannelsAsync(CacheMode mode = CacheMode.AllowDownload,
         RequestOptions options = null);
-    
+
     /// <summary>
     ///     Gets the default text channel for this guild.
     /// </summary>
@@ -373,7 +373,7 @@ public interface IGuild : IEntity<ulong>
     ///     <see langword="null" /> if none is found.
     /// </returns>
     Task<ITextChannel> GetWelcomeChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
-    
+
     /// <summary>
     ///     Creates a new text channel in this guild.
     /// </summary>
@@ -407,7 +407,7 @@ public interface IGuild : IEntity<ulong>
     ///     category channel.
     /// </returns>
     Task<ICategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties> func = null, RequestOptions options = null);
-    
+
     #endregion
 
     #region Invites
@@ -421,7 +421,7 @@ public interface IGuild : IEntity<ulong>
     ///     invite, each representing information for an invite found within this guild.
     /// </returns>
     Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null);
-    
+
     /// <summary>
     ///     Creates a new invite to this channel.
     /// </summary>
@@ -433,7 +433,7 @@ public interface IGuild : IEntity<ulong>
     ///     metadata object containing information for the created invite.
     /// </returns>
     Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited, RequestOptions options = null);
-    
+
     /// <summary>
     ///     Creates a new invite to this channel.
     /// </summary>
@@ -467,11 +467,11 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created role.
     /// </returns>
     Task<IRole> CreateRoleAsync(string name, RequestOptions options = null);
-    
+
     #endregion
 
     #region Users
-    
+
     /// <summary>
     ///     Gets a collection of all users in this guild.
     /// </summary>
@@ -572,7 +572,7 @@ public interface IGuild : IEntity<ulong>
     ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/> at <paramref name="func"/>.
     /// </returns>
     IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func, int limit = KookConfig.MaxUsersPerBatch, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
-    
+
     #endregion
 
     #region Emotes

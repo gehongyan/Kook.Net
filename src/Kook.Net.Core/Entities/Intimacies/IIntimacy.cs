@@ -28,7 +28,7 @@ public interface IIntimacy : IEntity<ulong>
     ///     A time at which the user read the message.
     /// </returns>
     DateTimeOffset LastReadAt { get; }
-    
+
     /// <summary>
     ///     Gets the time at which this intimacy was modified last time.
     /// </summary>
@@ -44,7 +44,7 @@ public interface IIntimacy : IEntity<ulong>
     ///     A <see langword="int"/> representing the score associated with this intimacy.
     /// </returns>
     int Score { get; }
-    
+
     /// <summary>
     ///     Gets the images associated with this intimacy.
     /// </summary>

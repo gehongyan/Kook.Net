@@ -18,7 +18,7 @@ public class GuildPermissionsTests
     public void DefaultConstructor()
     {
         var p = new GuildPermissions();
-        Assert.Equal((ulong) 0, p.RawValue);
+        Assert.Equal((ulong)0, p.RawValue);
         Assert.Equal(GuildPermissions.None.RawValue, p.RawValue);
     }
 
@@ -58,7 +58,7 @@ public class GuildPermissionsTests
             // ensure flag set to true
             Assert.True(p.Has(flag));
             // ensure only this flag is set
-            Assert.Equal((ulong) flag, p.RawValue);
+            Assert.Equal((ulong)flag, p.RawValue);
         }
 
         AssertFlag(() => new GuildPermissions(administrator: true), GuildPermission.Administrator);
@@ -159,6 +159,6 @@ public class GuildPermissionsTests
         AssertUtil(GuildPermission.MuteMembers, x => x.MuteMembers, (p, enable) => p.Modify(muteMembers: enable));
         AssertUtil(GuildPermission.ManageNicknames, x => x.ManageNicknames, (p, enable) => p.Modify(manageNicknames: enable));
         AssertUtil(GuildPermission.PlaySoundtrack, x => x.PlaySoundtrack, (p, enable) => p.Modify(playSoundtrack: enable));
-            
+
     }
 }

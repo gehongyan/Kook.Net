@@ -14,7 +14,7 @@ public class CreateTextChannelProperties : CreateGuildChannelProperties
     ///     channel topic or description to the desired value.
     /// </remarks>
     public string Topic { get; set; }
-    
+
     /// <summary>
     ///     Gets or sets the category ID for this channel.
     /// </summary>

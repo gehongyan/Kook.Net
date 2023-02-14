@@ -9,12 +9,12 @@ public enum CreateAttachmentMode
     ///     The <see cref="FileAttachment"/> will be created via a local file path.
     /// </summary>
     FilePath,
-    
+
     /// <summary>
     ///     The <see cref="FileAttachment"/> will be created via a <see cref="Stream"/>.
     /// </summary>
     Stream,
-    
+
     /// <summary>
     ///     The <see cref="FileAttachment"/> will be created via a <see cref="System.Uri"/>
     ///     pointing to a file on KOOK asset OSS.

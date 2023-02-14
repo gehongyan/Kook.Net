@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using Kook.Net.Converters;
+using System.Text.Json.Serialization;
 
 namespace Kook.API.Gateway;
 
@@ -8,7 +8,7 @@ internal class GatewayGroupMessageExtraData
     [JsonPropertyName("type")]
     [JsonConverter(typeof(MessageTypeConverter))]
     public MessageType Type { get; set; }
-    
+
     [JsonPropertyName("guild_id")]
     public ulong GuildId { get; set; }
 
@@ -35,10 +35,10 @@ internal class GatewayGroupMessageExtraData
 
     [JsonPropertyName("quote")]
     public Quote Quote { get; set; }
-    
+
     [JsonPropertyName("attachments")]
     public Attachment Attachment { get; set; }
-    
+
     [JsonPropertyName("kmarkdown")]
     public KMarkdownInfo KMarkdownInfo { get; set; }
 }

@@ -1,5 +1,5 @@
-using System;
 using Kook.Utils;
+using System;
 using Xunit;
 
 namespace Kook;
@@ -14,7 +14,7 @@ public class UrlValidationTests
     {
         Assert.True(UrlValidation.Validate(url));
     }
-    
+
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -22,7 +22,7 @@ public class UrlValidationTests
     {
         Assert.False(UrlValidation.Validate(url));
     }
-    
+
     [Theory]
     [InlineData(" ")]
     [InlineData("kaiheila.net")]
@@ -31,7 +31,7 @@ public class UrlValidationTests
     {
         Assert.Throws<InvalidOperationException>(() => UrlValidation.Validate(url));
     }
-    
+
     [Theory]
     [InlineData("http://img.kaiheila.cn/assets/2021-01/7kr4FkWpLV0ku0ku.jpeg")]
     [InlineData("https://img.kookapp.cn/assets/2021-01/7kr4FkWpLV0ku0ku.jpeg")]
@@ -41,7 +41,7 @@ public class UrlValidationTests
     {
         Assert.True(UrlValidation.ValidateKookAssetUrl(url));
     }
-    
+
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -49,7 +49,7 @@ public class UrlValidationTests
     {
         Assert.False(UrlValidation.ValidateKookAssetUrl(url));
     }
-    
+
     [Theory]
     [InlineData(" ")]
     [InlineData("kaiheila.net")]

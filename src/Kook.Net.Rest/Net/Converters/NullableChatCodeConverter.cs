@@ -14,8 +14,11 @@ internal class NullableChatCodeConverter : JsonConverter<Guid?>
 
     public override void Write(Utf8JsonWriter writer, Guid? value, JsonSerializerOptions options)
     {
-        if (value is null) writer.WriteNullValue();
-        else if (value == Guid.Empty) writer.WriteStringValue(string.Empty);
-        else writer.WriteStringValue(value.Value.ToString("N"));
+        if (value is null)
+            writer.WriteNullValue();
+        else if (value == Guid.Empty)
+            writer.WriteStringValue(string.Empty);
+        else
+            writer.WriteStringValue(value.Value.ToString("N"));
     }
 }

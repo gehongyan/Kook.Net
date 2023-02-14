@@ -1,4 +1,4 @@
-﻿namespace Kook.Audio;
+namespace Kook.Audio;
 
 internal enum OpusApplication : int
 {

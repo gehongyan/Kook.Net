@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using Kook.Net.Converters;
+using System.Text.Json.Serialization;
 
 namespace Kook.API.Rest;
 
@@ -11,7 +11,7 @@ internal class CreateOrRemoveChannelPermissionOverwriteParams
     [JsonPropertyName("type")]
     [JsonConverter(typeof(PermissionOverwriteTargetTypeConverter))]
     public PermissionOverwriteTargetType TargetType { get; set; }
-    
+
     [JsonPropertyName("value")]
     public ulong TargetId { get; set; }
 

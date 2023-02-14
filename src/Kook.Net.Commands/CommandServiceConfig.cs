@@ -17,7 +17,7 @@ public class CommandServiceConfig
     ///     Gets or sets the <see cref="char"/> that separates an argument with another.
     /// </summary>
     public char SeparatorChar { get; set; } = ' ';
-        
+
     /// <summary>
     ///     Gets or sets whether commands should be case-sensitive.
     /// </summary>

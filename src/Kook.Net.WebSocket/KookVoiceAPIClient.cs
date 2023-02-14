@@ -54,14 +54,14 @@ internal class KookVoiceAPIClient : IDisposable
         remove => _receivedEvent.Remove(value);
     }
     private readonly AsyncEvent<Func<uint, bool, object, Task>> _receivedEvent = new AsyncEvent<Func<uint, bool, object, Task>>();
-    public event Func<byte[], Task> ReceivedPacket 
-    { 
+    public event Func<byte[], Task> ReceivedPacket
+    {
         add => _receivedPacketEvent.Add(value);
         remove => _receivedPacketEvent.Remove(value);
     }
     private readonly AsyncEvent<Func<byte[], Task>> _receivedPacketEvent = new AsyncEvent<Func<byte[], Task>>();
-    public event Func<Exception, Task> Disconnected 
-    { 
+    public event Func<Exception, Task> Disconnected
+    {
         add => _disconnectedEvent.Add(value);
         remove => _disconnectedEvent.Remove(value);
     }
@@ -81,7 +81,7 @@ internal class KookVoiceAPIClient : IDisposable
 
     public ushort UdpPort => _udp.Port;
 
-    internal KookVoiceAPIClient(ulong guildId, WebSocketProvider webSocketProvider, 
+    internal KookVoiceAPIClient(ulong guildId, WebSocketProvider webSocketProvider,
         UdpSocketProvider udpSocketProvider, JsonSerializerOptions serializerOptions = null)
     {
         GuildId = guildId;
@@ -196,7 +196,7 @@ internal class KookVoiceAPIClient : IDisposable
             PeerId = string.Empty,
             RTPParameters = new RTPParameters
             {
-                Codecs = new []
+                Codecs = new[]
                 {
                     new Codec()
                     {
@@ -210,7 +210,7 @@ internal class KookVoiceAPIClient : IDisposable
                         PayloadType = 100
                     }
                 },
-                Encodings = new []
+                Encodings = new[]
                 {
                     new API.Voice.Encoding
                     {
@@ -323,14 +323,14 @@ internal class KookVoiceAPIClient : IDisposable
 
     #region Helpers
     private static double ToMilliseconds(Stopwatch stopwatch) => Math.Round((double)stopwatch.ElapsedTicks / (double)Stopwatch.Frequency * 1000.0, 2);
-        
+
     private string SerializeJson(object payload)
     {
-        return payload is null 
-            ? string.Empty 
+        return payload is null
+            ? string.Empty
             : JsonSerializer.Serialize(payload, _serializerOptions);
     }
-    
+
     private T DeserializeJson<T>(Stream jsonStream)
     {
         return JsonSerializer.Deserialize<T>(jsonStream, _serializerOptions);

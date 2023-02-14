@@ -6,12 +6,14 @@ public partial class KookBotClientExtension
 {
     private async Task ProcessReactionRoleAdd(Cacheable<IUserMessage, Guid> message, Cacheable<IMessageChannel, ulong> channel, SocketReaction reaction)
     {
-        if (channel.Id != 5770952608991958) return;
-        if (!reaction.Emote.Equals(Emoji.Parse(":computer:"))) return;
-        
+        if (channel.Id != 5770952608991958)
+            return;
+        if (!reaction.Emote.Equals(Emoji.Parse(":computer:")))
+            return;
+
         SocketRole socketRole = _kookSocketClient.GetGuild(1591057729615250).GetRole(3001653);
-        SocketGuildUser socketGuildUser = (SocketGuildUser) reaction.User;
-        
+        SocketGuildUser socketGuildUser = (SocketGuildUser)reaction.User;
+
         await socketGuildUser.AddRoleAsync(socketRole);
 
         SocketDMChannel dmChannel = await socketGuildUser.CreateDMChannelAsync();
@@ -24,21 +26,23 @@ public partial class KookBotClientExtension
                 .WithText($"已在服务器 `{socketGuildUser.Guild.Name}` 内为您授予角色 `{socketRole.Name}`", true))
             .AddModule(new ContextModuleBuilder().AddElement(new KMarkdownElementBuilder()
                     .WithContent($"{_kookSocketClient.CurrentUser.Username} | {time}")));
-        
+
         await dmChannel.SendCardAsync(builder.Build());
-        
-        _logger.Information("{User}#{IdentifyNumber} is granted {RoleName}", 
+
+        _logger.Information("{User}#{IdentifyNumber} is granted {RoleName}",
             socketGuildUser.Username, socketGuildUser.IdentifyNumber, socketRole.Name);
     }
 
     private async Task ProcessReactionRoleRemove(Cacheable<IUserMessage, Guid> message, Cacheable<IMessageChannel, ulong> channel, SocketReaction reaction)
     {
-        if (channel.Id != 5770952608991958) return;
-        if (!reaction.Emote.Equals(Emoji.Parse(":computer:"))) return;
-        
+        if (channel.Id != 5770952608991958)
+            return;
+        if (!reaction.Emote.Equals(Emoji.Parse(":computer:")))
+            return;
+
         SocketRole socketRole = _kookSocketClient.GetGuild(1591057729615250).GetRole(3001653);
-        SocketGuildUser socketGuildUser = (SocketGuildUser) reaction.User;
-        
+        SocketGuildUser socketGuildUser = (SocketGuildUser)reaction.User;
+
         await socketGuildUser.RemoveRoleAsync(socketRole);
 
         SocketDMChannel dmChannel = await socketGuildUser.CreateDMChannelAsync();
@@ -51,10 +55,10 @@ public partial class KookBotClientExtension
                 .WithText($"已在服务器 `{socketGuildUser.Guild.Name}` 内为您撤销角色 `{socketRole.Name}`", true))
             .AddModule(new ContextModuleBuilder().AddElement(new KMarkdownElementBuilder()
                 .WithContent($"{_kookSocketClient.CurrentUser.Username} | {time}")));
-        
+
         await dmChannel.SendCardAsync(builder.Build());
-        
-        _logger.Information("{User}#{IdentifyNumber} is revoked {RoleName}", 
+
+        _logger.Information("{User}#{IdentifyNumber} is revoked {RoleName}",
             socketGuildUser.Username, socketGuildUser.IdentifyNumber, socketRole.Name);
     }
 

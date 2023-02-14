@@ -10,26 +10,26 @@ namespace Kook.WebSocket;
 public abstract class SocketChannel : SocketEntity<ulong>, IChannel, IUpdateable
 {
     #region SocketChannel
-    
+
     /// <summary>
     ///     Gets a collection of users from the WebSocket cache.
     /// </summary>
     public IReadOnlyCollection<SocketUser> Users => GetUsersInternal();
-    
-    internal SocketChannel(KookSocketClient kook, ulong id) 
+
+    internal SocketChannel(KookSocketClient kook, ulong id)
         : base(kook, id)
     {
     }
-    
+
     internal abstract void Update(ClientState state, Model model);
-    
+
     /// <inheritdoc />
     public virtual Task UpdateAsync(RequestOptions options = null) => Task.Delay(0);
-    
+
     #endregion
 
     #region User
-    
+
     /// <summary>
     ///     Gets a generic user from this channel.
     /// </summary>
@@ -42,10 +42,10 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel, IUpdateable
     internal abstract IReadOnlyCollection<SocketUser> GetUsersInternal();
 
     #endregion
-    
+
     private string DebuggerDisplay => $"Unknown ({Id}, Channel)";
     internal SocketChannel Clone() => MemberwiseClone() as SocketChannel;
-    
+
     #region IChannel
 
     /// <inheritdoc />

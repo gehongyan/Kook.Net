@@ -96,7 +96,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     permissions this user has in the guild.
     /// </returns>
     GuildPermissions GuildPermissions { get; }
-    
+
     /// <summary>
     ///     Gets the level permissions granted to this user to a given channel.
     /// </summary>
@@ -152,7 +152,7 @@ public interface IGuildUser : IUser, IVoiceState
     #endregion
 
     #region Roles
-    
+
     /// <summary>
     ///     Adds the specified role to this user in the guild.
     /// </summary>
@@ -225,11 +225,11 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A task that represents the asynchronous role removal operation.
     /// </returns>
     Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null);
-    
+
     #endregion
 
     #region Voice
-    
+
     /// <summary>
     ///     Mute this user in this guild.
     /// </summary>
@@ -238,7 +238,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A task that represents the asynchronous muting operation.
     /// </returns>
     Task MuteAsync(RequestOptions options = null);
-    
+
     /// <summary>
     ///     Deafen this user in this guild.
     /// </summary>
@@ -247,7 +247,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A task that represents the asynchronous deafening operation.
     /// </returns>
     Task DeafenAsync(RequestOptions options = null);
-    
+
     /// <summary>
     ///     Unmute this user in this guild.
     /// </summary>
@@ -256,7 +256,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A task that represents the asynchronous unmuting operation.
     /// </returns>
     Task UnmuteAsync(RequestOptions options = null);
-    
+
     /// <summary>
     ///     Undeafen this user in this guild.
     /// </summary>
@@ -265,7 +265,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A task that represents the asynchronous undeafening operation.
     /// </returns>
     Task UndeafenAsync(RequestOptions options = null);
-    
+
     /// <summary>
     ///     Gets a collection of voice channels a user
     /// </summary>
@@ -275,6 +275,6 @@ public interface IGuildUser : IUser, IVoiceState
     ///     voice channels the user is connected to.
     /// </returns>
     Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null);
-    
+
     #endregion
 }

@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Represents a generic permission overwrite.
@@ -12,7 +12,7 @@ public interface IPermissionOverwrite<TTarget>
     ///     Gets the target of this overwrite.
     /// </summary>
     TTarget Target { get; }
-    
+
     /// <summary>
     ///     Gets the overwritten permission.
     /// </summary>

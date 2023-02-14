@@ -1,9 +1,8 @@
-using System.Collections.Immutable;
-using Model = Kook.API.Role;
-
-using System.Diagnostics;
 using Kook.API.Rest;
 using Kook.Rest;
+using System.Collections.Immutable;
+using System.Diagnostics;
+using Model = Kook.API.Role;
 
 namespace Kook.WebSocket;
 /// <summary>
@@ -21,7 +20,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     ///     A <see cref="SocketGuild"/> representing the parent guild of this role.
     /// </returns>
     public SocketGuild Guild { get; }
-    
+
     /// <inheritdoc />
     public RoleType? Type { get; set; }
     /// <inheritdoc />
@@ -68,26 +67,26 @@ public class SocketRole : SocketEntity<uint>, IRole
         Position = model.Position;
         IsHoisted = model.Hoist switch
         {
-            0 => false, 
-            1 => true, 
+            0 => false,
+            1 => true,
             _ => throw new ArgumentOutOfRangeException(nameof(model.Hoist))
         };
         IsMentionable = model.Mentionable switch
         {
-            0 => false, 
-            1 => true, 
+            0 => false,
+            1 => true,
             _ => throw new ArgumentOutOfRangeException(nameof(model.Mentionable))
         };
         Permissions = new GuildPermissions(model.Permissions);
     }
-    
+
     /// <inheritdoc />
     public Task ModifyAsync(Action<RoleProperties> func, RequestOptions options = null)
         => RoleHelper.ModifyAsync(this, Kook, func, options);
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
         => RoleHelper.DeleteAsync(this, Kook, options);
-    
+
     /// <summary>
     ///     Gets a collection of users with this role.
     /// </summary>
@@ -128,12 +127,12 @@ public class SocketRole : SocketEntity<uint>, IRole
         await foreach (IReadOnlyCollection<GuildMember> restUsers in restUserCollections)
             yield return restUsers.Select(restUser => Guild.AddOrUpdateUser(restUser)).ToList();
     }
-    
+
     /// <inheritdoc />
     public int CompareTo(IRole role) => RoleUtils.Compare(this, role);
-    
+
     #endregion
-    
+
     /// <summary>
     ///     Gets the name of the role.
     /// </summary>
@@ -143,12 +142,12 @@ public class SocketRole : SocketEntity<uint>, IRole
     public override string ToString() => Name;
     private string DebuggerDisplay => $"{Name} ({Id})";
     internal SocketRole Clone() => MemberwiseClone() as SocketRole;
-    
+
     #region IRole
-    
+
     /// <inheritdoc />
     IGuild IRole.Guild => Guild;
-    
+
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IRole.GetUsersAsync(CacheMode mode, RequestOptions options)
     {
@@ -157,6 +156,6 @@ public class SocketRole : SocketEntity<uint>, IRole
         else
             return AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
     }
-    
+
     #endregion
 }

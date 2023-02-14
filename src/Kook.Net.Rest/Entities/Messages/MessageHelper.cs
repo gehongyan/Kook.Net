@@ -1,11 +1,11 @@
+using Kook.API;
+using Kook.API.Rest;
+using Kook.Net.Converters;
 using System.Collections.Immutable;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-using Kook.API;
-using Kook.API.Rest;
-using Kook.Net.Converters;
 
 namespace Kook.Rest;
 using Model = Kook.API.Message;
@@ -22,7 +22,7 @@ internal static class MessageHelper
     /// Regex used to check if some text is formatted as a code block.
     /// </summary>
     private static readonly Regex BlockCodeRegex = new Regex(@"[^\\]?(```).+?[^\\](```)", RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
-    
+
     private static Regex PlainTextUserRegex => MentionUtils.PlainTextUserRegex;
     private static Regex PlainTextRoleRegex => MentionUtils.PlainTextRoleRegex;
     private static Regex PlainTextChannelRegex => MentionUtils.PlainTextChannelRegex;
@@ -33,7 +33,7 @@ internal static class MessageHelper
     private static Regex KMarkdownChannelRegex => MentionUtils.KMarkdownChannelRegex;
     private static Regex KMarkdownEmojiRegex => Emote.KMarkdownEmojiRegex;
     private static Regex KMarkdownTagRegex => MentionUtils.KMarkdownTagRegex;
-    
+
     public static Task DeleteAsync(IMessage msg, BaseKookClient client, RequestOptions options)
         => DeleteAsync(msg.Id, client, options);
     public static async Task DeleteAsync(Guid msgId, BaseKookClient client,
@@ -49,7 +49,7 @@ internal static class MessageHelper
     {
         await client.ApiClient.DeleteDirectMessageAsync(msgId, options).ConfigureAwait(false);
     }
-    
+
     public static async Task AddReactionAsync(Guid messageId, IEmote emote, BaseKookClient client,
         RequestOptions options)
     {
@@ -67,7 +67,7 @@ internal static class MessageHelper
             EmojiId = emote.Id,
             MessageId = msg.Id
         };
-        
+
         await client.ApiClient.AddReactionAsync(args, options).ConfigureAwait(false);
     }
 
@@ -88,7 +88,7 @@ internal static class MessageHelper
             EmojiId = emote.Id,
             MessageId = msg.Id
         };
-        
+
         await client.ApiClient.AddDirectMessageReactionAsync(args, options).ConfigureAwait(false);
     }
 
@@ -104,7 +104,7 @@ internal static class MessageHelper
     }
     public static async Task RemoveReactionAsync(IMessage msg, ulong userId, IEmote emote, BaseKookClient client, RequestOptions options)
     {
-        
+
         RemoveReactionParams args = new()
         {
             EmojiId = emote.Id,
@@ -126,7 +126,7 @@ internal static class MessageHelper
     }
     public static async Task RemoveDirectMessageReactionAsync(IMessage msg, ulong userId, IEmote emote, BaseKookClient client, RequestOptions options)
     {
-        
+
         RemoveReactionParams args = new()
         {
             EmojiId = emote.Id,
@@ -146,7 +146,7 @@ internal static class MessageHelper
         var models = await client.ApiClient.GetDirectMessageReactionUsersAsync(msg.Id, emote.Id, options).ConfigureAwait(false);
         return models.Select(x => RestUser.Create(client, x)).ToImmutableArray();
     }
-    
+
     public static async Task ModifyAsync(IUserMessage msg, BaseKookClient client, Action<MessageProperties> func,
         RequestOptions options)
     {
@@ -178,7 +178,7 @@ internal static class MessageHelper
             await ModifyAsync(msg.Id, client, json, options, args.Quote, args.EphemeralUser);
             return;
         }
-        
+
         throw new NotSupportedException("Only the modification of KMarkdown and CardMessage are supported.");
     }
 
@@ -195,7 +195,7 @@ internal static class MessageHelper
             content = properties.Content;
         if (properties.Cards is not null && properties.Cards.Any())
             content = SerializeCards(properties.Cards);
-        
+
         await ModifyAsync(msgId, client, content, options, quote, ephemeralUser);
     }
     public static async Task ModifyAsync(Guid msgId, BaseKookClient client, string content,
@@ -222,7 +222,7 @@ internal static class MessageHelper
             content = properties.Content;
         if (properties.Cards is not null && properties.Cards.Any())
             content = SerializeCards(properties.Cards);
-        
+
         await ModifyDirectAsync(msgId, client, content, options, quote);
     }
     public static async Task ModifyDirectAsync(Guid msgId, BaseKookClient client, string content,
@@ -249,21 +249,21 @@ internal static class MessageHelper
             }
         };
         CardBase[] cardBases = JsonSerializer.Deserialize<CardBase[]>(json, serializerOptions);
-            
+
         var cards = ImmutableArray.CreateBuilder<ICard>(cardBases.Length);
         foreach (CardBase cardBase in cardBases)
             cards.Add(cardBase.ToEntity());
 
         return cards.ToImmutable();
     }
-    
+
     public static string SerializeCards(IEnumerable<ICard> cards)
     {
         const int maxModuleCount = 50;
         IEnumerable<ICard> enumerable = cards as ICard[] ?? cards.ToArray();
-        Preconditions.AtMost(enumerable.Sum(c => c.ModuleCount), maxModuleCount, nameof(cards), 
+        Preconditions.AtMost(enumerable.Sum(c => c.ModuleCount), maxModuleCount, nameof(cards),
             $"A max of {maxModuleCount} modules are allowed.");
-        
+
         CardBase[] cardBases = enumerable.Select(c => c.ToModel()).ToArray();
         JsonSerializerOptions serializerOptions = new()
         {
@@ -279,7 +279,7 @@ internal static class MessageHelper
         };
         return JsonSerializer.Serialize(cardBases, serializerOptions);
     }
-    
+
     public static IReadOnlyCollection<Attachment> ParseAttachments(IEnumerable<Card> cards)
     {
         List<Attachment> attachments = new();
@@ -289,31 +289,31 @@ internal static class MessageHelper
             switch (module)
             {
                 case FileModule fileModule:
-                    attachments.Add(new Attachment(AttachmentType.File, fileModule.Source, fileModule.Title, 
+                    attachments.Add(new Attachment(AttachmentType.File, fileModule.Source, fileModule.Title,
                         null, null, null, null, null));
                     break;
                 case AudioModule audioModule:
-                    attachments.Add(new Attachment(AttachmentType.Audio, audioModule.Source, audioModule.Title, 
+                    attachments.Add(new Attachment(AttachmentType.Audio, audioModule.Source, audioModule.Title,
                         null, null, null, null, null));
                     break;
                 case VideoModule videoModule:
-                    attachments.Add(new Attachment(AttachmentType.Video, videoModule.Source, videoModule.Title, 
+                    attachments.Add(new Attachment(AttachmentType.Video, videoModule.Source, videoModule.Title,
                         null, null, null, null, null));
                     break;
                 case ContainerModule containerModule:
-                    attachments.AddRange(containerModule.Elements.Select(x => 
-                        new Attachment(AttachmentType.Image, x.Source, x.Alternative, 
+                    attachments.AddRange(containerModule.Elements.Select(x =>
+                        new Attachment(AttachmentType.Image, x.Source, x.Alternative,
                         null, null, null, null, null)));
                     break;
                 case ImageGroupModule imageGroupModule:
-                    attachments.AddRange(imageGroupModule.Elements.Select(x => 
-                        new Attachment(AttachmentType.Image, x.Source, x.Alternative, 
+                    attachments.AddRange(imageGroupModule.Elements.Select(x =>
+                        new Attachment(AttachmentType.Image, x.Source, x.Alternative,
                         null, null, null, null, null)));
                     break;
                 case ContextModule contextModule:
                     attachments.AddRange(contextModule.Elements
                         .OfType<ImageElement>()
-                        .Select(x => new Attachment(AttachmentType.Image, x.Source, x.Alternative, 
+                        .Select(x => new Attachment(AttachmentType.Image, x.Source, x.Alternative,
                             null, null, null, null, null)));
                     break;
             }
@@ -342,11 +342,11 @@ internal static class MessageHelper
             // util to check if the index of a tag is within the bounds of the codeblock
             bool EnclosedInBlock(Match m)
                 => m.Groups[1].Index < index && index < m.Groups[2].Index;
-            
+
             // PlainText mode
             if (tagMode == TagMode.PlainText)
                 return false;
-            
+
             // loop through all code blocks that are before the start of the tag
             while (codeIndex < index)
             {
@@ -394,7 +394,8 @@ internal static class MessageHelper
 #endif
         {
             index = match.Index;
-            if (CheckWrappedCode()) break;
+            if (CheckWrappedCode())
+                break;
             string content = match.Groups[0].Value;
             if (MentionUtils.TryParseUser(content, out ulong id, tagMode))
             {
@@ -437,8 +438,10 @@ internal static class MessageHelper
         while (true)
         {
             index = text.IndexOf("@全体成员", index, StringComparison.Ordinal);
-            if (index == -1) break;
-            if (CheckWrappedCode()) break;
+            if (index == -1)
+                break;
+            if (CheckWrappedCode())
+                break;
             var tagIndex = FindIndex(tags, index);
             if (tagIndex.HasValue)
                 tags.Insert(tagIndex.Value,
@@ -451,8 +454,10 @@ internal static class MessageHelper
         while (true)
         {
             index = text.IndexOf("(met)all(met)", index, StringComparison.Ordinal);
-            if (index == -1) break;
-            if (CheckWrappedCode()) break;
+            if (index == -1)
+                break;
+            if (CheckWrappedCode())
+                break;
             var tagIndex = FindIndex(tags, index);
             if (tagIndex.HasValue)
                 tags.Insert(tagIndex.Value,
@@ -465,8 +470,10 @@ internal static class MessageHelper
         while (true)
         {
             index = text.IndexOf("@在线成员", index, StringComparison.Ordinal);
-            if (index == -1) break;
-            if (CheckWrappedCode()) break;
+            if (index == -1)
+                break;
+            if (CheckWrappedCode())
+                break;
             var tagIndex = FindIndex(tags, index);
             if (tagIndex.HasValue)
                 tags.Insert(tagIndex.Value,
@@ -479,8 +486,10 @@ internal static class MessageHelper
         while (true)
         {
             index = text.IndexOf("(met)here(met)", index, StringComparison.Ordinal);
-            if (index == -1) break;
-            if (CheckWrappedCode()) break;
+            if (index == -1)
+                break;
+            if (CheckWrappedCode())
+                break;
             var tagIndex = FindIndex(tags, index);
             if (tagIndex.HasValue)
                 tags.Insert(tagIndex.Value,
@@ -504,7 +513,7 @@ internal static class MessageHelper
             return null; //Overlaps tag before this
         return i;
     }
-    
+
     public static MessageSource GetSource(Model msg)
     {
         if (msg.Author.Bot ?? false)

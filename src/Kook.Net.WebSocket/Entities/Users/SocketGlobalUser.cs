@@ -33,8 +33,8 @@ internal class SocketGlobalUser : SocketUser
 
     private readonly object _lockObj = new object();
     private ushort _references;
-    
-    public SocketGlobalUser(KookSocketClient kook, ulong id) 
+
+    public SocketGlobalUser(KookSocketClient kook, ulong id)
         : base(kook, id)
     {
     }
@@ -45,7 +45,7 @@ internal class SocketGlobalUser : SocketUser
         entity.UpdatePresence(model.Online, model.OperatingSystem);
         return entity;
     }
-    
+
     internal void AddRef()
     {
         checked
@@ -62,7 +62,7 @@ internal class SocketGlobalUser : SocketUser
                 kook.RemoveUser(Id);
         }
     }
-    
+
     private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ?? false ? ", Bot" : "")}, Global)";
     internal new SocketGlobalUser Clone() => MemberwiseClone() as SocketGlobalUser;
 }

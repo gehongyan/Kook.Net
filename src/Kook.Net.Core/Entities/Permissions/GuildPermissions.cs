@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 namespace Kook;
 
@@ -71,13 +71,13 @@ public class GuildPermissions
     public bool PlaySoundtrack => Permissions.GetValue(RawValue, GuildPermission.PlaySoundtrack);
     /// <summary> If <c>true</c>, a user may share screen in a voice channel. </summary>
     public bool ShareScreen => Permissions.GetValue(RawValue, GuildPermission.ShareScreen);
-    
+
     /// <summary> Creates a new <see cref="GuildPermissions"/> with the provided packed value. </summary>
     public GuildPermissions(ulong rawValue) { RawValue = rawValue; }
 
     /// <summary> Creates a new <see cref="GuildPermissions"/> with the provided packed value after converting to ulong. </summary>
     public GuildPermissions(string rawValue) { RawValue = ulong.Parse(rawValue); }
-    
+
     private GuildPermissions(ulong initialValue,
         bool? administrator = null,
         bool? manageGuild = null,
@@ -177,8 +177,8 @@ public class GuildPermissions
         bool playSoundtrack = false,
         bool shareScreen = false)
         : this(0, administrator, manageGuild, viewAuditLog, createInvites, manageInvites, manageChannels, kickMembers,
-            banMembers, manageEmojis, changeNickname, manageRoles, viewChannel, sendMessages, manageMessages, attachFiles, 
-            connect, manageVoice, mentionEveryone, addReactions, followReactions, passiveConnect, onlyPushToTalk, 
+            banMembers, manageEmojis, changeNickname, manageRoles, viewChannel, sendMessages, manageMessages, attachFiles,
+            connect, manageVoice, mentionEveryone, addReactions, followReactions, passiveConnect, onlyPushToTalk,
             useVoiceActivity, speak, deafenMembers, muteMembers, manageNicknames, playSoundtrack, shareScreen)
     {
     }
@@ -241,9 +241,9 @@ public class GuildPermissions
         // each of the GuildPermissions increments by 2^i from 0 to MaxBits
         for (byte i = 0; i < Permissions.MaxBits; i++)
         {
-            ulong flag = ((ulong) 1 << i);
+            ulong flag = ((ulong)1 << i);
             if ((RawValue & flag) != 0)
-                perms.Add((GuildPermission) flag);
+                perms.Add((GuildPermission)flag);
         }
 
         return perms;

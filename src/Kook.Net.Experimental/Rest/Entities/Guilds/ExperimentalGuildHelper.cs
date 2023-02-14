@@ -1,5 +1,5 @@
-using RichModel = Kook.API.Rest.RichGuild;
 using Kook.Rest.Extensions;
+using RichModel = Kook.API.Rest.RichGuild;
 
 namespace Kook.Rest;
 
@@ -9,7 +9,8 @@ internal static class ExperimentalGuildHelper
     public static async Task<RichModel> ModifyAsync(IGuild guild, BaseKookClient client,
         Action<GuildProperties> func, RequestOptions options)
     {
-        if (func == null) throw new ArgumentNullException(nameof(func));
+        if (func == null)
+            throw new ArgumentNullException(nameof(func));
 
         var args = new GuildProperties();
         func(args);

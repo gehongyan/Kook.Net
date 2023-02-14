@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 namespace Kook;
 
@@ -179,8 +179,8 @@ public struct OverwritePermissions
         PermValue? muteMembers = null,
         PermValue? playSoundtrack = null,
         PermValue? shareScreen = null)
-        => new OverwritePermissions(AllowValue, DenyValue, createInvites, manageChannels, manageRoles, viewChannel, 
-            sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone, addReactions, 
+        => new OverwritePermissions(AllowValue, DenyValue, createInvites, manageChannels, manageRoles, viewChannel,
+            sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone, addReactions,
             passiveConnect, useVoiceActivity, speak, deafenMembers, muteMembers, playSoundtrack, shareScreen);
 
     /// <summary>
@@ -193,9 +193,9 @@ public struct OverwritePermissions
         for (byte i = 0; i < Permissions.MaxBits; i++)
         {
             // first operand must be long or ulong to shift >31 bits
-            ulong flag = ((ulong) 1 << i);
+            ulong flag = ((ulong)1 << i);
             if ((AllowValue & flag) != 0)
-                perms.Add((ChannelPermission) flag);
+                perms.Add((ChannelPermission)flag);
         }
 
         return perms;
@@ -210,9 +210,9 @@ public struct OverwritePermissions
         List<ChannelPermission> perms = new();
         for (byte i = 0; i < Permissions.MaxBits; i++)
         {
-            ulong flag = ((ulong) 1 << i);
+            ulong flag = ((ulong)1 << i);
             if ((DenyValue & flag) != 0)
-                perms.Add((ChannelPermission) flag);
+                perms.Add((ChannelPermission)flag);
         }
 
         return perms;

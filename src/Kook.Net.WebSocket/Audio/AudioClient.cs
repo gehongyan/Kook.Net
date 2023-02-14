@@ -1,18 +1,18 @@
 using Kook.API.Voice;
+using Kook.Audio.Streams;
 using Kook.Logging;
 using Kook.Net.Converters;
 using Kook.WebSocket;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Kook.Audio.Streams;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Kook.Audio;
 
@@ -81,7 +81,7 @@ internal partial class AudioClient : IAudioClient
         _connection.Disconnected += (ex, recon) => _disconnectedEvent.InvokeAsync(ex);
         _heartbeatTimes = new ConcurrentQueue<long>();
         _keepaliveTimes = new ConcurrentQueue<KeyValuePair<ulong, int>>();
-        _ssrcGenerator = new Random((int) DateTimeOffset.UtcNow.Ticks);
+        _ssrcGenerator = new Random((int)DateTimeOffset.UtcNow.Ticks);
         _ssrcMap = new ConcurrentDictionary<uint, ulong>();
         _streams = new ConcurrentDictionary<ulong, StreamPair>();
         _sentFrames = new ConcurrentDictionary<uint, VoiceSocketFrameType>();
@@ -148,7 +148,8 @@ internal partial class AudioClient : IAudioClient
             await keepaliveTask.ConfigureAwait(false);
         _keepaliveTask = null;
 
-        while (_heartbeatTimes.TryDequeue(out _)) { }
+        while (_heartbeatTimes.TryDequeue(out _))
+        { }
         _lastMessageTime = 0;
 
         await ClearInputStreamsAsync().ConfigureAwait(false);
@@ -230,42 +231,42 @@ internal partial class AudioClient : IAudioClient
         _lastMessageTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         if (!_sentFrames.TryRemove(id, out VoiceSocketFrameType type) || !okay)
             await _audioLogger.ErrorAsync($"Error handling event with id {id}").ConfigureAwait(false);
-            
+
         try
         {
             switch (type)
             {
                 case VoiceSocketFrameType.GetRouterRtpCapabilities:
-                {
-                    await _audioLogger.DebugAsync($"Received Response of {type}").ConfigureAwait(false);
-                    await ApiClient.SendJoinRequestAsync();
-                }
+                    {
+                        await _audioLogger.DebugAsync($"Received Response of {type}").ConfigureAwait(false);
+                        await ApiClient.SendJoinRequestAsync();
+                    }
                     break;
                 case VoiceSocketFrameType.Join:
-                {
-                    await _audioLogger.DebugAsync($"Received Response of {type}").ConfigureAwait(false);
-                    await ApiClient.SendCreatePlainTransportRequestAsync().ConfigureAwait(false);
-                }
+                    {
+                        await _audioLogger.DebugAsync($"Received Response of {type}").ConfigureAwait(false);
+                        await ApiClient.SendCreatePlainTransportRequestAsync().ConfigureAwait(false);
+                    }
                     break;
                 case VoiceSocketFrameType.CreatePlainTransport:
-                {
-                    await _audioLogger.DebugAsync($"Received Response of {type}").ConfigureAwait(false);
-                    var data = ((JsonElement) payload).Deserialize<CreatePlainTransportResponse>(_serializerOptions);
-                    ApiClient.SetUdpEndpoint(data.Ip, data.Port);
-                    _ssrc = (uint) _ssrcGenerator.Next(1, ushort.MaxValue);
-                    await ApiClient.SendProduceRequestAsync(data.Id, _ssrc).ConfigureAwait(false);
-                }
+                    {
+                        await _audioLogger.DebugAsync($"Received Response of {type}").ConfigureAwait(false);
+                        var data = ((JsonElement)payload).Deserialize<CreatePlainTransportResponse>(_serializerOptions);
+                        ApiClient.SetUdpEndpoint(data.Ip, data.Port);
+                        _ssrc = (uint)_ssrcGenerator.Next(1, ushort.MaxValue);
+                        await ApiClient.SendProduceRequestAsync(data.Id, _ssrc).ConfigureAwait(false);
+                    }
                     break;
                 case VoiceSocketFrameType.Produce:
-                {
-                    await _audioLogger.DebugAsync($"Received Response of {type}").ConfigureAwait(false);
-                    // _heartbeatTask = RunHeartbeatAsync(_connection.CancelToken);
-                    _keepaliveTask = RunKeepaliveAsync(5000, _connection.CancelToken);
+                    {
+                        await _audioLogger.DebugAsync($"Received Response of {type}").ConfigureAwait(false);
+                        // _heartbeatTask = RunHeartbeatAsync(_connection.CancelToken);
+                        _keepaliveTask = RunKeepaliveAsync(5000, _connection.CancelToken);
 
-                    var _ = _connection.CompleteAsync();
-                }
+                        var _ = _connection.CompleteAsync();
+                    }
                     break;
-                    
+
                 // case VoiceOpCode.Ready:
                 //     {
                 //         await _audioLogger.DebugAsync("Received Ready").ConfigureAwait(false);

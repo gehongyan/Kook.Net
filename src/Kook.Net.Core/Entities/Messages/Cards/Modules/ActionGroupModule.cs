@@ -13,10 +13,10 @@ public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>
     {
         Elements = elements;
     }
-    
+
     /// <inheritdoc />
     public ModuleType Type => ModuleType.ActionGroup;
-    
+
     /// <summary>
     ///     Gets the elements of this module.
     /// </summary>
@@ -24,9 +24,9 @@ public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>
     ///     An <see cref="ImmutableArray{ButtonElement}"/> containing the elements of this module.
     /// </returns>
     public ImmutableArray<ButtonElement> Elements { get; }
-    
+
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";
-    
+
     public static bool operator ==(ActionGroupModule left, ActionGroupModule right)
         => left?.Equals(right) ?? right is null;
 
@@ -51,7 +51,7 @@ public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>
     {
         unchecked
         {
-            int hash = (int) 2166136261;
+            int hash = (int)2166136261;
             hash = (hash * 16777619) ^ Type.GetHashCode();
             foreach (ButtonElement buttonElement in Elements)
                 hash = (hash * 16777619) ^ buttonElement.GetHashCode();

@@ -12,7 +12,7 @@ public interface IElementBuilder
     ///     An <see cref="ElementType"/> that specifies the type of the element to be created.
     /// </returns>
     ElementType Type { get; }
-    
+
     /// <summary>
     ///     Builds the <see cref="IElementBuilder"/> into an <see cref="IElement"/>.
     /// </summary>

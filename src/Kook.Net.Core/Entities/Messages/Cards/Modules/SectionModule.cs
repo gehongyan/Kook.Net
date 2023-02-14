@@ -43,9 +43,9 @@ public class SectionModule : IModule, IEquatable<SectionModule>
     ///     An <see cref="IElement"/> representing the accessory of the section.
     /// </returns>
     public IElement Accessory { get; }
-    
+
     private string DebuggerDisplay => $"{Type}: {Text}{(Accessory is null ? string.Empty : $"{Mode} Accessory")}";
-    
+
     public static bool operator ==(SectionModule left, SectionModule right)
         => left?.Equals(right) ?? right is null;
 
@@ -70,7 +70,7 @@ public class SectionModule : IModule, IEquatable<SectionModule>
     {
         unchecked
         {
-            int hash = (int) 2166136261;
+            int hash = (int)2166136261;
             hash = (hash * 16777619) ^ (Type, Mode).GetHashCode();
             hash = (hash * 16777619) ^ Text.GetHashCode();
             hash = (hash * 16777619) ^ Accessory.GetHashCode();

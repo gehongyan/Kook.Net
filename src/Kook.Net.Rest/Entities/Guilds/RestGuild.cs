@@ -1,9 +1,9 @@
+using Kook.API;
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using Kook.API;
-using Model = Kook.API.Guild;
 using ExtendedModel = Kook.API.Rest.ExtendedGuild;
+using Model = Kook.API.Guild;
 
 namespace Kook.Rest;
 
@@ -18,7 +18,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     private ImmutableDictionary<uint, RestRole> _roles;
     private ImmutableDictionary<ulong, RestChannel> _channels;
     // private ImmutableArray<GuildEmote> _emotes;
-    
+
     /// <inheritdoc />
     public string Name { get; private set; }
     /// <inheritdoc />
@@ -57,12 +57,12 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     Gets a collection of all roles in this guild.
     /// </summary>
     public IReadOnlyCollection<RestRole> Roles => _roles.ToReadOnlyCollection();
-    
+
     /// <summary>
     ///     Gets a collection of all channels in this guild.
     /// </summary>
     public IReadOnlyCollection<RestChannel> Channels => _channels.ToReadOnlyCollection();
-    
+
     /// <summary>
     ///     Gets the features of this guild.
     /// </summary>
@@ -91,7 +91,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     public string AutoDeleteTime { get; private set; }
     /// <inheritdoc cref="IGuild.RecommendInfo"/>
     public RecommendInfo RecommendInfo { get; private set; }
-    
+
     internal RestGuild(BaseKookClient client, ulong id)
         : base(client, id)
     {
@@ -137,7 +137,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
                 roles[model.Roles[i].Id] = RestRole.Create(Kook, this, model.Roles[i]);
         }
         _roles = roles.ToImmutable();
-        
+
         var channels = ImmutableDictionary.CreateBuilder<ulong, RestChannel>();
         if (model.Channels != null)
         {
@@ -146,7 +146,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         }
         _channels = channels.ToImmutable();
     }
-    
+
     #endregion
 
     #region Generals
@@ -166,11 +166,11 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetActiveBoostSubscriptionsAsync(RequestOptions options = null)
         => GuildHelper.GetActiveBoostSubscriptionsAsync(this, Kook, options);
-    
+
     #endregion
-    
+
     #region Bans
-    
+
     /// <summary>
     ///     Gets a collection of all users banned in this guild.
     /// </summary>
@@ -218,7 +218,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     public Task RemoveBanAsync(ulong userId, RequestOptions options = null)
         => GuildHelper.RemoveBanAsync(this, Kook, userId, options);
-    
+
     #endregion
 
     // #region Invites
@@ -235,7 +235,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     //     => GuildHelper.GetInvitesAsync(this, Kook, options);
     //
     // #endregion
-    
+
     #region Roles
 
     /// <summary>
@@ -251,7 +251,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
             return value;
         return null;
     }
-    
+
     /// <summary>
     ///     Creates a new role with the provided name.
     /// </summary>
@@ -271,7 +271,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     #endregion
 
     #region Users
-    
+
     /// <summary>
     ///     Gets a collection of all users in this guild.
     /// </summary>
@@ -338,11 +338,11 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func, int limit = KookConfig.MaxUsersPerBatch, RequestOptions options = null)
         => GuildHelper.SearchUsersAsync(this, Kook, func, limit, options);
-    
+
     #endregion
-    
+
     #region Channels
-    
+
     /// <summary>
     ///     Gets a collection of all channels in this guild.
     /// </summary>
@@ -431,7 +431,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         var channels = await GuildHelper.GetChannelsAsync(this, Kook, options).ConfigureAwait(false);
         return channels.OfType<RestCategoryChannel>().ToImmutableArray();
     }
-    
+
     /// <summary>
     ///     Gets the default text channel in this guild.
     /// </summary>
@@ -477,7 +477,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         }
         return null;
     }
-    
+
     /// <summary>
     ///     Creates a new text channel in this guild.
     /// </summary>
@@ -514,19 +514,19 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public Task<RestCategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties> func = null, RequestOptions options = null)
         => GuildHelper.CreateCategoryChannelAsync(this, Kook, name, options, func);
-    
+
     #endregion
 
     #region Voices
-    
+
     /// <inheritdoc />
     public async Task MoveUsersAsync(IEnumerable<IGuildUser> users, IVoiceChannel targetChannel, RequestOptions options)
         => await ClientHelper.MoveUsersAsync(Kook, users, targetChannel, options).ConfigureAwait(false);
 
     #endregion
-    
+
     #region Emotes
-    
+
     /// <inheritdoc />
     public Task<IReadOnlyCollection<GuildEmote>> GetEmotesAsync(RequestOptions options = null)
         => GuildHelper.GetEmotesAsync(this, Kook, options);
@@ -543,11 +543,11 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     public Task DeleteEmoteAsync(GuildEmote emote, RequestOptions options = null)
         => GuildHelper.DeleteEmoteAsync(this, Kook, emote.Id, options);
-    
+
     #endregion
 
     #region Invites
-    
+
     /// <inheritdoc />
     public async Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null)
         => await GuildHelper.GetInvitesAsync(this, Kook, options).ConfigureAwait(false);
@@ -559,12 +559,12 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         => await GuildHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
 
     #endregion
-    
+
     #region IGuild
-    
+
     /// <inheritdoc />
     bool IGuild.Available => Available;
-    
+
     /// <inheritdoc />
     IReadOnlyCollection<IRole> IGuild.Roles => Roles;
 
@@ -573,13 +573,13 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
     /// <inheritdoc />
     IRecommendInfo IGuild.RecommendInfo => RecommendInfo;
-    
+
     /// <inheritdoc />
     IRole IGuild.EveryoneRole => EveryoneRole;
 
     /// <inheritdoc />
     IRole IGuild.GetRole(uint id) => GetRole(id);
-    
+
     /// <inheritdoc />
     async Task<IRole> IGuild.CreateRoleAsync(string name, RequestOptions options)
         => await CreateRoleAsync(name, options).ConfigureAwait(false);
@@ -637,7 +637,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
-    
+
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IBan>> IGuild.GetBansAsync(RequestOptions options)
         => await GetBansAsync(options).ConfigureAwait(false);
@@ -647,7 +647,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc/>
     async Task<IBan> IGuild.GetBanAsync(ulong userId, RequestOptions options)
         => await GetBanAsync(userId, options).ConfigureAwait(false);
-    
+
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IGuildChannel>> IGuild.GetChannelsAsync(CacheMode mode, RequestOptions options)
     {
@@ -721,7 +721,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
-    
+
     /// <inheritdoc />
     async Task<ITextChannel> IGuild.CreateTextChannelAsync(string name, Action<CreateTextChannelProperties> func, RequestOptions options)
         => await CreateTextChannelAsync(name, func, options).ConfigureAwait(false);

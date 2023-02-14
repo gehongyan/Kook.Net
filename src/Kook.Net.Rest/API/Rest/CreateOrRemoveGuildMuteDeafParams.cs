@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using Kook.Net.Converters;
+using System.Text.Json.Serialization;
 
 namespace Kook.API.Rest;
 
@@ -7,7 +7,7 @@ internal class CreateOrRemoveGuildMuteDeafParams
 {
     [JsonPropertyName("guild_id")]
     public ulong GuildId { get; set; }
-    
+
     [JsonPropertyName("target_id")]
     public ulong UserId { get; set; }
 

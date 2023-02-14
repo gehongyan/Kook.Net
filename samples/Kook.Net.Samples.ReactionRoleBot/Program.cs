@@ -1,4 +1,4 @@
-﻿using Kook;
+using Kook;
 using Kook.Net.Samples.ReactionRoleBot.Configurations;
 using Kook.Net.Samples.ReactionRoleBot.Extensions;
 using Kook.WebSocket;
@@ -18,7 +18,7 @@ internal class Program
 
         await host.RunAsync();
     }
-    
+
     private static IHostBuilder CreateHostBuilder(string[] args)
     {
         IHostBuilder hostBuilder = Host.CreateDefaultBuilder(args)

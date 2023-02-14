@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Drawing;
 
@@ -55,7 +55,7 @@ public class Card : ICard, IEquatable<Card>
     ///     An array of the modules of the card.
     /// </returns>
     public ImmutableArray<IModule> Modules { get; }
-    
+
     private string DebuggerDisplay => $"{Type} ({Modules.Length} Modules)";
 
     public static bool operator ==(Card left, Card right)
@@ -63,7 +63,7 @@ public class Card : ICard, IEquatable<Card>
 
     public static bool operator !=(Card left, Card right)
         => !(left == right);
-    
+
     /// <summary>Determines whether the specified object is equal to the current <see cref="Card"/>.</summary>
     /// <remarks>If the object passes is an <see cref="Card"/>, <see cref="Equals(Card)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="Card"/>.</param>
@@ -76,17 +76,17 @@ public class Card : ICard, IEquatable<Card>
     /// <returns><c>true</c> if the specified <see cref="Card"/> is equal to the current <see cref="Card"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(Card card)
         => GetHashCode() == card?.GetHashCode();
-    
+
     /// <inheritdoc />
     public override int GetHashCode()
     {
         unchecked
         {
-            int hash = (int) 2166136261;
+            int hash = (int)2166136261;
             hash = (hash * 16777619) ^ (Type, Theme, Color, Size).GetHashCode();
             foreach (IModule module in Modules)
                 hash = (hash * 16777619) ^ module.GetHashCode();
             return hash;
         }
     }
-}   
+}

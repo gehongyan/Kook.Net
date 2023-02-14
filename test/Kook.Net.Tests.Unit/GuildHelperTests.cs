@@ -1,5 +1,5 @@
-﻿using Kook.Rest;
 using FluentAssertions;
+using Kook.Rest;
 using Moq;
 using System;
 using Xunit;
@@ -26,7 +26,7 @@ public class GuildHelperTests
 
         actual.Should().Be(expected);
     }
-    
+
     [Theory]
     [InlineData(BoostLevel.None, 5)]
     [InlineData(BoostLevel.Level1, 20)]

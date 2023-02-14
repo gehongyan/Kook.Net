@@ -19,7 +19,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     A string containing the full invite URL (e.g. <c>https://kaihei.co/wEAF5t</c>).
     /// </returns>
     string Url { get; }
-    
+
     /// <summary>
     ///     Gets the user that created this invite.
     /// </summary>
@@ -74,7 +74,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     A string containing the name of the guild that the invite points to.
     /// </returns>
     string GuildName { get; }
-    
+
     /// <summary>
     ///     Gets the time at which this invite will expire.
     /// </summary>

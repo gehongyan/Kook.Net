@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 internal static class TaskCompletionSourceExtensions
 {

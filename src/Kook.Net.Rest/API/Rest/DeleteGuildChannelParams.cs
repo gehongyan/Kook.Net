@@ -7,5 +7,5 @@ internal class DeleteGuildChannelParams
     [JsonPropertyName("channel_id")]
     public ulong ChannelId { get; set; }
 
-    public static implicit operator DeleteGuildChannelParams(ulong channelId) => new() {ChannelId = channelId};
+    public static implicit operator DeleteGuildChannelParams(ulong channelId) => new() { ChannelId = channelId };
 }

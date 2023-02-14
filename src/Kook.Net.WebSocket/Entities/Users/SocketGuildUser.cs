@@ -1,9 +1,9 @@
-using System.Collections.Immutable;
-using System.Diagnostics;
 using Kook.API.Gateway;
 using Kook.Rest;
-using UserModel = Kook.API.User;
+using System.Collections.Immutable;
+using System.Diagnostics;
 using MemberModel = Kook.API.Rest.GuildMember;
+using UserModel = Kook.API.User;
 
 namespace Kook.WebSocket;
 
@@ -14,9 +14,9 @@ namespace Kook.WebSocket;
 public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
 {
     #region SocketGuildUser
-    
+
     private ImmutableArray<uint> _roleIds;
-    
+
     internal override SocketGlobalUser GlobalUser { get; }
     /// <summary>
     ///     Gets the guild the user is in.
@@ -28,7 +28,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     public string Nickname { get; private set; }
     /// <inheritdoc />
     public bool IsMobileVerified { get; private set; }
-    
+
     /// <inheritdoc />
     public DateTimeOffset JoinedAt { get; private set; }
     /// <inheritdoc />
@@ -37,10 +37,10 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     public Color Color { get; private set; }
     /// <inheritdoc />
     public bool? IsOwner { get; private set; }
-    
+
     /// <inheritdoc />
     public new string PlainTextMention => MentionUtils.PlainTextMentionUser(Nickname ?? Username, Id);
-    
+
     /// <inheritdoc />
     public override bool? IsBot { get => GlobalUser.IsBot; internal set => GlobalUser.IsBot = value; }
     /// <inheritdoc />
@@ -61,12 +61,12 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     public override bool? IsDenoiseEnabled { get => GlobalUser.IsDenoiseEnabled; internal set => GlobalUser.IsDenoiseEnabled = value; }
     /// <inheritdoc />
     public override UserTag UserTag { get => GlobalUser.UserTag; internal set => GlobalUser.UserTag = value; }
-    
+
     /// <inheritdoc />
     public GuildPermissions GuildPermissions => new GuildPermissions(Permissions.ResolveGuild(Guild, this));
     /// <inheritdoc />
     internal override SocketPresence Presence { get; set; }
-    
+
     /// <inheritdoc />
     public bool? IsDeafened => VoiceState?.IsDeafened ?? false;
     /// <inheritdoc />
@@ -113,7 +113,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// </remarks>
     public IReadOnlyCollection<SocketRole> Roles
         => _roleIds.Select(id => Guild.GetRole(id)).Where(x => x != null).ToReadOnlyCollection(() => _roleIds.Length);
-    
+
     /// <summary>
     ///     Returns the voice channel the user is in, or <c>null</c> if none or unknown.
     ///     <note type="warning">
@@ -133,7 +133,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     connected to a voice channel nor is muted or deafened by the guild.
     /// </returns>
     public SocketVoiceState? VoiceState => Guild.GetVoiceState(Id);
-    
+
     internal SocketGuildUser(SocketGuild guild, SocketGlobalUser globalUser)
         : base(guild.Kook, globalUser.Id)
     {
@@ -193,7 +193,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
             roles.Add(roleIds[i]);
         _roleIds = roles.ToImmutable();
     }
-    
+
     /// <inheritdoc />
     public Task ModifyNicknameAsync(string name, RequestOptions options = null)
         => UserHelper.ModifyNicknameAsync(this, Kook, name, options);
@@ -268,16 +268,16 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null)
         => RemoveRolesAsync(roles.Select(x => x.Id));
     /// <inheritdoc />
-    public Task MuteAsync(RequestOptions options = null) 
+    public Task MuteAsync(RequestOptions options = null)
         => GuildHelper.MuteUserAsync(this, Kook, options);
     /// <inheritdoc />
-    public Task DeafenAsync(RequestOptions options = null) 
+    public Task DeafenAsync(RequestOptions options = null)
         => GuildHelper.DeafenUserAsync(this, Kook, options);
     /// <inheritdoc />
-    public Task UnmuteAsync(RequestOptions options = null) 
+    public Task UnmuteAsync(RequestOptions options = null)
         => GuildHelper.UnmuteUserAsync(this, Kook, options);
     /// <inheritdoc />
-    public Task UndeafenAsync(RequestOptions options = null) 
+    public Task UndeafenAsync(RequestOptions options = null)
         => GuildHelper.UndeafenUserAsync(this, Kook, options);
     /// <inheritdoc cref="IGuildUser.GetConnectedVoiceChannelsAsync"/>
     public async Task<IReadOnlyCollection<SocketVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null)
@@ -320,12 +320,12 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     #endregion
 
     #region IVoiceState
-    
+
     /// <inheritdoc />
     IVoiceChannel IVoiceState.VoiceChannel => VoiceChannel;
 
     #endregion
-    
+
     private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ?? false ? ", Bot" : "")}, Guild)";
     internal new SocketGuildUser Clone() => MemberwiseClone() as SocketGuildUser;
 }

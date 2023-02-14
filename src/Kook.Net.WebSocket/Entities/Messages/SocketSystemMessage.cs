@@ -1,5 +1,5 @@
-using System.Diagnostics;
 using Kook.API.Gateway;
+using System.Diagnostics;
 
 namespace Kook.WebSocket;
 
@@ -11,7 +11,7 @@ public class SocketSystemMessage : SocketMessage, ISystemMessage
 {
     /// <inheritdoc />
     public SystemMessageType SystemMessageType { get; private set; }
-    
+
     internal SocketSystemMessage(KookSocketClient kook, Guid id, ISocketMessageChannel channel, SocketUser author)
         : base(kook, id, channel, author, MessageSource.System)
     {
@@ -60,7 +60,7 @@ public class SocketSystemMessage : SocketMessage, ISystemMessage
         base.Update(state, model);
         // TODO: SystemMessageType
     }
-        
+
     private string DebuggerDisplay => $"{Author}: {Content} ({Id}, {Type})";
     internal new SocketSystemMessage Clone() => MemberwiseClone() as SocketSystemMessage;
 }

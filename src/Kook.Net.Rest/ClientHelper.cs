@@ -1,5 +1,5 @@
-using System.Collections.Immutable;
 using Kook.API.Rest;
+using System.Collections.Immutable;
 
 namespace Kook.Rest;
 
@@ -38,7 +38,7 @@ internal static class ClientHelper
             return RestChannel.Create(client, model);
         return null;
     }
-    
+
     public static async Task<RestDMChannel> GetDMChannelAsync(BaseKookClient client,
         Guid chatCode, RequestOptions options)
     {
@@ -47,7 +47,7 @@ internal static class ClientHelper
             return RestDMChannel.Create(client, model);
         return null;
     }
-    
+
     public static async Task<IReadOnlyCollection<RestDMChannel>> GetDMChannelsAsync(BaseKookClient client, RequestOptions options)
     {
         var model = await client.ApiClient.GetUserChatsAsync(options: options).FlattenAsync().ConfigureAwait(false);
@@ -55,7 +55,7 @@ internal static class ClientHelper
             return model.Select(x => RestDMChannel.Create(client, x)).ToImmutableArray();
         return null;
     }
-    
+
     public static async Task<RestUser> GetUserAsync(BaseKookClient client,
         ulong id, RequestOptions options)
     {
@@ -64,7 +64,7 @@ internal static class ClientHelper
             return RestUser.Create(client, model);
         return null;
     }
-    
+
     public static async Task<RestGuildUser> GetGuildMemberAsync(BaseKookClient client,
         ulong guildId, ulong id, RequestOptions options)
     {
@@ -87,10 +87,10 @@ internal static class ClientHelper
             UserIds = userIds.Select(x => x.Id).ToArray()
         };
         await client.ApiClient.MoveUsersAsync(args, options).ConfigureAwait(false);
-    } 
+    }
     public static async Task<string> CreateAssetAsync(BaseKookClient client, Stream stream, string fileName, RequestOptions options)
     {
-        var model = await client.ApiClient.CreateAssetAsync(new CreateAssetParams {File = stream, FileName = fileName}, options);
+        var model = await client.ApiClient.CreateAssetAsync(new CreateAssetParams { File = stream, FileName = fileName }, options);
         if (model != null)
             return model.Url;
         return null;
@@ -113,12 +113,12 @@ internal static class ClientHelper
         var model = await client.ApiClient.CreateGameAsync(args, options).ConfigureAwait(false);
         return RestGame.Create(client, model);
     }
-    
+
     public static async Task DeleteGameAsync(BaseKookClient client, int id, RequestOptions options)
     {
         await client.ApiClient.DeleteGameAsync(id, options).ConfigureAwait(false);
     }
-    
+
     public static async Task AddRoleAsync(BaseKookClient client, ulong guildId, ulong userId, uint roleId, RequestOptions options = null)
     {
         AddOrRemoveRoleParams args = new()

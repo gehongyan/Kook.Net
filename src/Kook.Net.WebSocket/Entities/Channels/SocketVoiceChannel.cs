@@ -1,6 +1,6 @@
+using Kook.Rest;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using Kook.Rest;
 using Model = Kook.API.Channel;
 
 namespace Kook.WebSocket;
@@ -62,8 +62,8 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     /// </returns>
     public IReadOnlyCollection<SocketGuildUser> ConnectedUsers
         => Guild.Users.Where(x => x.VoiceChannel?.Id == Id).ToImmutableArray();
-    
-    internal SocketVoiceChannel(KookSocketClient kook, ulong id, SocketGuild guild) 
+
+    internal SocketVoiceChannel(KookSocketClient kook, ulong id, SocketGuild guild)
         : base(kook, id, guild)
     {
         Type = ChannelType.Voice;
@@ -85,7 +85,7 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
         IsPermissionSynced = model.PermissionSync;
         HasPassword = model.HasPassword;
     }
-    
+
     /// <inheritdoc />
     public override SocketGuildUser GetUser(ulong id)
     {
@@ -106,9 +106,9 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
         else
             return ConnectedUsers;
     }
-    
+
     #endregion
-    
+
     #region Invites
 
     /// <inheritdoc />
@@ -124,18 +124,18 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     #endregion
 
     #region IVoiceChannel
-    
+
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IUser>> IVoiceChannel.GetConnectedUsersAsync(CacheMode mode, RequestOptions options)
         => await GetConnectedUsersAsync(mode, options).ConfigureAwait(false);
 
     #endregion
-    
+
     private string DebuggerDisplay => $"{Name} ({Id}, Voice)";
     internal new SocketVoiceChannel Clone() => MemberwiseClone() as SocketVoiceChannel;
-    
+
     #region IGuildChannel
-    
+
     /// <inheritdoc />
     Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IGuildUser>(GetUser(id));
@@ -149,9 +149,9 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     }
 
     #endregion
-    
+
     #region INestedChannel
-    
+
     /// <inheritdoc />
     Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult(Category);

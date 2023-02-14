@@ -89,7 +89,8 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         string uri = Path.Combine(_baseUrl, endpoint);
         using (var restRequest = new HttpRequestMessage(method, uri))
         {
-            if (reason != null) restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
+            if (reason != null)
+                restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
             if (requestHeaders != null)
                 foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
                     restRequest.Headers.Add(header.Key, header.Value);
@@ -102,7 +103,8 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         string uri = Path.Combine(_baseUrl, endpoint);
         using (var restRequest = new HttpRequestMessage(method, uri))
         {
-            if (reason != null) restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
+            if (reason != null)
+                restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
             if (requestHeaders != null)
                 foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
                     restRequest.Headers.Add(header.Key, header.Value);
@@ -118,7 +120,8 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         string uri = Path.Combine(_baseUrl, endpoint);
         using (var restRequest = new HttpRequestMessage(method, uri))
         {
-            if (reason != null) restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
+            if (reason != null)
+                restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
             if (requestHeaders != null)
                 foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
                     restRequest.Headers.Add(header.Key, header.Value);
@@ -131,33 +134,36 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
                     switch (p.Value)
                     {
 #pragma warning disable IDISP004
-                        case string stringValue: { content.Add(new StringContent(stringValue, Encoding.UTF8, "text/plain"), p.Key); continue; }
-                        case byte[] byteArrayValue: { content.Add(new ByteArrayContent(byteArrayValue), p.Key); continue; }
-                        case Stream streamValue: { content.Add(new StreamContent(streamValue), p.Key); continue; }
+                        case string stringValue:
+                            { content.Add(new StringContent(stringValue, Encoding.UTF8, "text/plain"), p.Key); continue; }
+                        case byte[] byteArrayValue:
+                            { content.Add(new ByteArrayContent(byteArrayValue), p.Key); continue; }
+                        case Stream streamValue:
+                            { content.Add(new StreamContent(streamValue), p.Key); continue; }
                         case MultipartFile fileValue:
-                        {
-                            var stream = fileValue.Stream;
-                            if (!stream.CanSeek)
                             {
-                                memoryStream = new MemoryStream();
-                                await stream.CopyToAsync(memoryStream).ConfigureAwait(false);
-                                memoryStream.Position = 0;
+                                var stream = fileValue.Stream;
+                                if (!stream.CanSeek)
+                                {
+                                    memoryStream = new MemoryStream();
+                                    await stream.CopyToAsync(memoryStream).ConfigureAwait(false);
+                                    memoryStream.Position = 0;
 #pragma warning disable IDISP001
-                                stream = memoryStream;
+                                    stream = memoryStream;
 #pragma warning restore IDISP001
-                            }
+                                }
 
-                            var streamContent = new StreamContent(stream);
-                            var extension = fileValue.Filename.Split('.').Last();
+                                var streamContent = new StreamContent(stream);
+                                var extension = fileValue.Filename.Split('.').Last();
 
-                            if(fileValue.ContentType != null)
-                                streamContent.Headers.ContentType = new MediaTypeHeaderValue(fileValue.ContentType);
+                                if (fileValue.ContentType != null)
+                                    streamContent.Headers.ContentType = new MediaTypeHeaderValue(fileValue.ContentType);
 
-                            content.Add(streamContent, p.Key, fileValue.Filename);
+                                content.Add(streamContent, p.Key, fileValue.Filename);
 #pragma warning restore IDISP004
-                                    
-                            continue;
-                        }
+
+                                continue;
+                            }
                         default:
                             throw new InvalidOperationException($"Unsupported param type \"{p.Value.GetType().Name}\".");
                     }

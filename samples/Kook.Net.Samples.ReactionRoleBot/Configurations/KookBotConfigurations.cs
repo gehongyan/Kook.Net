@@ -1,4 +1,4 @@
-﻿using Kook.Net.Samples.ReactionRoleBot.Enums;
+using Kook.Net.Samples.ReactionRoleBot.Enums;
 
 namespace Kook.Net.Samples.ReactionRoleBot.Configurations;
 
@@ -18,7 +18,7 @@ public class KookBotConfigurations
     ///     角色ID列表
     /// </summary>
     public KookRoles Roles { get; init; }
-    
+
     /// <summary>
     ///     KOOK Bot运行环境
     /// </summary>

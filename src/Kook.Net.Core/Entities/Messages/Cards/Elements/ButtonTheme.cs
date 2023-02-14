@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Specifies the theme of a <see cref="ButtonElement"/>.

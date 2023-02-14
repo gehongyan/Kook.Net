@@ -8,7 +8,7 @@ internal class EndGameActivityParams
     {
         ActivityType = activityType;
     }
-    
+
     [JsonInclude]
     [JsonPropertyName("data_type")]
     public ActivityType ActivityType { get; private set; }

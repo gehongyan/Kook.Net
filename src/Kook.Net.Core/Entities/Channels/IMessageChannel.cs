@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 public interface IMessageChannel : IChannel
 {
@@ -20,8 +20,8 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null, 
-        AttachmentType type = AttachmentType.File, IQuote quote = null, IUser ephemeralUser = null, 
+    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null,
+        AttachmentType type = AttachmentType.File, IQuote quote = null, IUser ephemeralUser = null,
         RequestOptions options = null);
 
     /// <summary>
@@ -40,8 +40,8 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName, 
-        AttachmentType type = AttachmentType.File, IQuote quote = null, IUser ephemeralUser = null, 
+    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName,
+        AttachmentType type = AttachmentType.File, IQuote quote = null, IUser ephemeralUser = null,
         RequestOptions options = null);
     /// <summary>
     ///     Sends a file to this message channel.
@@ -98,7 +98,7 @@ public interface IMessageChannel : IChannel
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
         IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null);
-    
+
     /// <summary>
     ///     Gets a message from this message channel.
     /// </summary>
@@ -112,9 +112,9 @@ public interface IMessageChannel : IChannel
     Task<IMessage> GetMessageAsync(Guid id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
 
     #endregion
-    
+
     #region Get Messages
-    
+
     /// <summary>
     ///     Gets the last N messages from this message channel.
     /// </summary>
@@ -142,7 +142,7 @@ public interface IMessageChannel : IChannel
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch, 
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch,
         CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
     /// <summary>
     ///     Gets a collection of messages in this channel.
@@ -174,7 +174,7 @@ public interface IMessageChannel : IChannel
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch, 
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch,
         CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
     /// <summary>
     ///     Gets a collection of messages in this channel.
@@ -206,11 +206,11 @@ public interface IMessageChannel : IChannel
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch, 
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch,
         CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
 
     #endregion
-    
+
     #region Delete Messages
 
     /// <summary>
@@ -231,7 +231,7 @@ public interface IMessageChannel : IChannel
     Task DeleteMessageAsync(IMessage message, RequestOptions options = null);
 
     #endregion
-    
+
     #region Modify Messages
 
     /// <summary>

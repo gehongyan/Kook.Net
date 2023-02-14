@@ -10,7 +10,7 @@ namespace Kook.Rest;
 public class RestBan : IBan
 {
     #region RestBan
-    
+
     /// <summary>
     ///     Gets the banned user.
     /// </summary>
@@ -24,7 +24,7 @@ public class RestBan : IBan
 
     /// <inheritdoc />
     public string Reason { get; }
-    
+
     internal RestBan(RestUser user, string reason, DateTimeOffset createdAt)
     {
         User = user;
@@ -35,7 +35,7 @@ public class RestBan : IBan
     {
         return new RestBan(RestUser.Create(client, model.User), model.Reason, model.CreatedAt);
     }
-    
+
     /// <summary>
     ///     Gets the name of the banned user.
     /// </summary>
@@ -44,9 +44,9 @@ public class RestBan : IBan
     /// </returns>
     public override string ToString() => User.ToString();
     private string DebuggerDisplay => $"{User}: {Reason}";
-    
+
     #endregion
-    
+
     #region IBan
     /// <inheritdoc />
     IUser IBan.User => User;

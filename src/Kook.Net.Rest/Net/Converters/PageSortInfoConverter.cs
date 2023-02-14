@@ -1,6 +1,6 @@
+using Kook.API.Rest;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Kook.API.Rest;
 
 namespace Kook.Net.Converters;
 
@@ -8,7 +8,7 @@ internal class PageSortInfoConverter : JsonConverter<PageSortInfo>
 {
     public override PageSortInfo Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        PageSortInfo pageSortInfo = new() {SortKey = null, SortMode = API.Rest.SortMode.Unspecified};
+        PageSortInfo pageSortInfo = new() { SortKey = null, SortMode = API.Rest.SortMode.Unspecified };
         while (reader.Read())
         {
             switch (reader.TokenType)

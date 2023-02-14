@@ -1,8 +1,8 @@
-﻿using System;
+using Kook.Rest;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Kook.Rest;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -15,7 +15,7 @@ namespace Kook;
 [Trait("Category", "Integration")]
 public class MessageTests : IClassFixture<RestChannelFixture>
 {
-    
+
     private readonly IGuild _guild;
     private readonly ITextChannel _channel;
     private readonly IGuildUser _selfUser;
@@ -142,5 +142,5 @@ CODE BLOCK
             await message.DeleteAsync();
         }
     }
-    
+
 }

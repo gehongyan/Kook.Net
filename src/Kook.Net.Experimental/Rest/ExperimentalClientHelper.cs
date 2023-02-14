@@ -1,6 +1,6 @@
-using System.Collections.Immutable;
 using Kook.API.Rest;
 using Kook.Rest.Extensions;
+using System.Collections.Immutable;
 
 namespace Kook.Rest;
 

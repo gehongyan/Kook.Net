@@ -1,4 +1,4 @@
-﻿namespace Kook.Net.WebSockets;
+namespace Kook.Net.WebSockets;
 
 /// <summary>
 ///     Represents a generic WebSocket client.

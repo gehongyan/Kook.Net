@@ -10,7 +10,7 @@ public class RestGame : RestEntity<int>, IGame
 {
     private ImmutableArray<string> _productNames;
     private ImmutableArray<string> _processNames;
-    
+
     /// <inheritdoc />
     public string Name { get; private set; }
     /// <inheritdoc />
@@ -25,12 +25,12 @@ public class RestGame : RestEntity<int>, IGame
     public IReadOnlyCollection<string> ProductNames => _productNames.ToReadOnlyCollection();
     /// <inheritdoc />
     public IReadOnlyCollection<string> ProcessNames => _processNames.ToReadOnlyCollection();
-    
+
     internal RestGame(BaseKookClient kook, int id)
         : base(kook, id)
     {
     }
-    
+
     internal static RestGame Create(BaseKookClient kook, Model model)
     {
         var entity = new RestGame(kook, model.Id);
@@ -59,8 +59,8 @@ public class RestGame : RestEntity<int>, IGame
     {
         await GameHelper.DeleteAsync(this, Kook, options).ConfigureAwait(false);
     }
-    
+
     /// <inheritdoc />
-    async Task<IGame> IGame.ModifyAsync(Action<GameProperties> func, RequestOptions options) 
+    async Task<IGame> IGame.ModifyAsync(Action<GameProperties> func, RequestOptions options)
         => await ModifyAsync(func, options);
 }

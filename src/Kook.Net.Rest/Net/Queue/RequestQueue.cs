@@ -165,12 +165,12 @@ namespace Kook.Net.Queue
                 while (!_cancelTokenSource.IsCancellationRequested)
                 {
                     var now = DateTimeOffset.UtcNow;
-                    foreach (var bucket in _buckets.Where(x => x.Value is RequestBucket).Select(x => (RequestBucket) x.Value))
+                    foreach (var bucket in _buckets.Where(x => x.Value is RequestBucket).Select(x => (RequestBucket)x.Value))
                     {
                         if ((now - bucket.LastAttemptAt).TotalMinutes > 1.0)
                         {
                             if (bucket.Id.IsHashBucket)
-                                foreach (var redirectBucket in _buckets.Where(x => x.Value == bucket.Id).Select(x => (BucketId) x.Value))
+                                foreach (var redirectBucket in _buckets.Where(x => x.Value == bucket.Id).Select(x => (BucketId)x.Value))
                                     _buckets.TryRemove(redirectBucket, out _); //remove redirections if hash bucket
                             _buckets.TryRemove(bucket.Id, out _);
                         }

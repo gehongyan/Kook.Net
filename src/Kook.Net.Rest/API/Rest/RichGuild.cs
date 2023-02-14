@@ -6,7 +6,7 @@ internal class RichGuild : ExtendedGuild
 {
     [JsonPropertyName("user_id")]
     public new ulong OwnerId { get; set; }
-    
-    [JsonPropertyName("emojis")] 
+
+    [JsonPropertyName("emojis")]
     public Emoji[] Emojis { get; set; }
 }

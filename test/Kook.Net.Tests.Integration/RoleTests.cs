@@ -1,8 +1,8 @@
+using Kook.Rest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Kook.Rest;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -17,7 +17,7 @@ public class RoleTests : IClassFixture<RestGuildFixture>
 {
     private readonly IGuild _guild;
     private readonly ITestOutputHelper _output;
-    
+
     public RoleTests(RestGuildFixture guildFixture, ITestOutputHelper output)
     {
         _guild = guildFixture.Guild;
@@ -31,7 +31,7 @@ public class RoleTests : IClassFixture<RestGuildFixture>
         _output.WriteLine(message.ToString());
         return Task.CompletedTask;
     }
-    
+
     [Fact]
     public async Task ModifyRoleAsync()
     {
@@ -88,5 +88,5 @@ public class RoleTests : IClassFixture<RestGuildFixture>
             await role.DeleteAsync();
         }
     }
-    
+
 }

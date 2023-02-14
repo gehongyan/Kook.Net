@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using Kook.Net.Converters;
+using System.Text.Json.Serialization;
 
 namespace Kook.API.Rest;
 
@@ -27,13 +27,13 @@ internal class PageMeta
 
     [JsonPropertyName("page")]
     public int Page { get; set; }
-    
+
     [JsonPropertyName("page_total")]
     public int PageTotal { get; set; }
-    
+
     [JsonPropertyName("page_size")]
     public int PageSize { get; set; }
-    
+
     [JsonPropertyName("total")]
     public int Total { get; set; }
 

@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Specifies the size of the image in <see cref="ImageElement"/>.

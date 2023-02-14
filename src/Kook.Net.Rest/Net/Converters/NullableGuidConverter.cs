@@ -14,8 +14,11 @@ internal class NullableGuidConverter : JsonConverter<Guid?>
 
     public override void Write(Utf8JsonWriter writer, Guid? value, JsonSerializerOptions options)
     {
-        if (value is null) writer.WriteNullValue();
-        else if (value == Guid.Empty) writer.WriteStringValue(string.Empty);
-        else writer.WriteStringValue(value.ToString());
+        if (value is null)
+            writer.WriteNullValue();
+        else if (value == Guid.Empty)
+            writer.WriteStringValue(string.Empty);
+        else
+            writer.WriteStringValue(value.ToString());
     }
 }

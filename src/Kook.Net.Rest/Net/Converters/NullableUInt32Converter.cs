@@ -11,7 +11,7 @@ internal class NullableUInt32Converter : JsonConverter<uint?>
         {
             case JsonTokenType.String:
                 string value = reader.GetString();
-                return !string.IsNullOrWhiteSpace(value) && uint.TryParse(value, out uint result) 
+                return !string.IsNullOrWhiteSpace(value) && uint.TryParse(value, out uint result)
                     ? result
                     : null;
             case JsonTokenType.Number:
@@ -23,7 +23,9 @@ internal class NullableUInt32Converter : JsonConverter<uint?>
 
     public override void Write(Utf8JsonWriter writer, uint? value, JsonSerializerOptions options)
     {
-        if (value is null) writer.WriteNullValue();
-        else writer.WriteStringValue(value.ToString());
+        if (value is null)
+            writer.WriteNullValue();
+        else
+            writer.WriteStringValue(value.ToString());
     }
 }

@@ -1,12 +1,12 @@
-using System.Collections.Immutable;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Kook.API;
 using Kook.API.Rest;
 using Kook.Net.Converters;
 using Kook.Rest;
 using Kook.Utils;
+using System.Collections.Immutable;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Kook.WebSocket;
 
@@ -24,7 +24,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     This property is the same as <see cref="ChatCode" />.
     /// </remarks>
     public new Guid Id { get; }
-    
+
     /// <inheritdoc />
     /// <remarks>
     ///     This property is the same as <see cref="Id" />.
@@ -35,7 +35,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     Gets the recipient of the channel.
     /// </summary>
     public SocketUser Recipient { get; }
-    
+
     /// <inheritdoc />
     public IReadOnlyCollection<SocketMessage> CachedMessages => ImmutableArray.Create<SocketMessage>();
 
@@ -70,18 +70,18 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <inheritdoc />
     public override Task UpdateAsync(RequestOptions options = null)
         => SocketChannelHelper.UpdateAsync(this, options);
-    
+
     /// <inheritdoc />
     public Task CloseAsync(RequestOptions options = null)
         => ChannelHelper.DeleteDMChannelAsync(this, Kook, options);
-    
+
     #endregion
 
     #region Messages
     /// <inheritdoc />
     public SocketMessage GetCachedMessage(Guid id)
         => null;
-    
+
     /// <summary>
     ///     Gets the message associated with the given <paramref name="id"/>.
     /// </summary>
@@ -94,7 +94,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     {
         return await ChannelHelper.GetDirectMessageAsync(this, Kook, id, options).ConfigureAwait(false);
     }
-    
+
     /// <summary>
     ///     Gets the last N messages from this message channel.
     /// </summary>
@@ -236,18 +236,18 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, IQuote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectCardAsync(this, Kook, card, options, quote: quote);
-    
+
     /// <inheritdoc />
     public async Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions options = null)
         => await ChannelHelper.ModifyDirectMessageAsync(this, messageId, func, Kook, options).ConfigureAwait(false);
-    
+
     /// <inheritdoc />
     public Task DeleteMessageAsync(Guid messageId, RequestOptions options = null)
         => ChannelHelper.DeleteDirectMessageAsync(this, messageId, Kook, options);
     /// <inheritdoc />
     public Task DeleteMessageAsync(IMessage message, RequestOptions options = null)
         => ChannelHelper.DeleteDirectMessageAsync(this, message.Id, Kook, options);
-    
+
     internal void AddMessage(SocketMessage msg)
     {
     }
@@ -255,7 +255,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         => null;
 
     #endregion
-    
+
     #region Users
 
     /// <summary>
@@ -284,17 +284,17 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     {
         throw new NotSupportedException("Update a DMChannel via Channel is not supported");
     }
-    
+
     /// <inheritdoc />
     internal override IReadOnlyCollection<SocketUser> GetUsersInternal() => Users;
 
     /// <inheritdoc />
     internal override SocketUser GetUserInternal(ulong id) => GetUser(id);
-    
+
     #endregion
-    
+
     #region IDMChannel
-    
+
     /// <inheritdoc />
     IUser IDMChannel.Recipient => Recipient;
     #endregion
@@ -307,36 +307,36 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     #region IPrivateChannel
     /// <inheritdoc />
     IReadOnlyCollection<IUser> IPrivateChannel.Recipients => ImmutableArray.Create<IUser>(Recipient);
-    
+
     #endregion
-    
+
     #region IMessageChannel
-    
+
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendFileAsync(string path, string fileName,
         AttachmentType type, IQuote quote, RequestOptions options)
-        => SendFileAsync(path, fileName, type, (Quote) quote, options);
+        => SendFileAsync(path, fileName, type, (Quote)quote, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendFileAsync(Stream stream, string fileName,
         AttachmentType type, IQuote quote, RequestOptions options)
-        => SendFileAsync(stream, fileName, type, (Quote) quote, options);
+        => SendFileAsync(stream, fileName, type, (Quote)quote, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendFileAsync(FileAttachment attachment,
         IQuote quote, RequestOptions options)
-        => SendFileAsync(attachment, (Quote) quote, options);
+        => SendFileAsync(attachment, (Quote)quote, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendTextAsync(string text,
         IQuote quote, RequestOptions options)
-        => SendTextAsync(text, (Quote) quote, options);
+        => SendTextAsync(text, (Quote)quote, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendCardAsync(ICard card,
         IQuote quote, RequestOptions options)
-        => SendCardAsync(card, (Quote) quote, options);
+        => SendCardAsync(card, (Quote)quote, options);
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendCardsAsync(IEnumerable<ICard> cards,
         IQuote quote, RequestOptions options)
-        => SendCardsAsync(cards, (Quote) quote, options);
-    
+        => SendCardsAsync(cards, (Quote)quote, options);
+
     /// <inheritdoc />
     async Task<IMessage> IMessageChannel.GetMessageAsync(Guid id, CacheMode mode, RequestOptions options)
     {
@@ -354,9 +354,9 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit, CacheMode mode, RequestOptions options)
         => mode == CacheMode.CacheOnly ? null : GetMessagesAsync(referenceMessage.Id, dir, limit, options);
-    
+
     /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(string path, string fileName, 
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(string path, string fileName,
         AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileAsync(path, fileName, type, quote, options);
     /// <inheritdoc />
@@ -364,7 +364,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileAsync(stream, fileName, type, quote, options);
     /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(FileAttachment attachment, 
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(FileAttachment attachment,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileAsync(attachment, quote, options);
     /// <inheritdoc />
@@ -380,9 +380,9 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendCardAsync(card, quote, options);
     #endregion
-    
+
     #region IChannel
-    
+
     /// <inheritdoc />
     string IChannel.Name => $"@{Recipient}";
 
@@ -392,9 +392,9 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
         => ImmutableArray.Create<IReadOnlyCollection<IUser>>(Users).ToAsyncEnumerable();
-    
+
     #endregion
-    
+
     /// <summary>
     ///     Returns the recipient user.
     /// </summary>

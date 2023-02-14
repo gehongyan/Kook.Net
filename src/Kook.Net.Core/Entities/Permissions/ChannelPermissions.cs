@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 namespace Kook;
 
@@ -29,10 +29,10 @@ public struct ChannelPermissions
             _ => throw new ArgumentException("Unknown channel type.", nameof(channel)),
         };
     }
-    
+
     /// <summary> Gets a packed value representing all the permissions in this <see cref="ChannelPermissions"/>.</summary>
     public ulong RawValue { get; }
-    
+
     /// <summary> If <c>true</c>, a user may create invites. </summary>
     public bool CreateInvites => Permissions.GetValue(RawValue, ChannelPermission.CreateInvites);
     /// <summary> If <c>true</c>, a user may view and revoke invites. </summary>
@@ -69,7 +69,7 @@ public struct ChannelPermissions
     public bool PlaySoundtrack => Permissions.GetValue(RawValue, ChannelPermission.PlaySoundtrack);
     /// <summary> If <c>true</c>, a user may share screen in a voice channel. </summary>
     public bool ShareScreen => Permissions.GetValue(RawValue, ChannelPermission.ShareScreen);
-    
+
     /// <summary> Creates a new <see cref="ChannelPermissions"/> with the provided packed value.</summary>
     public ChannelPermissions(ulong rawValue) { RawValue = rawValue; }
 
@@ -113,7 +113,7 @@ public struct ChannelPermissions
         Permissions.SetValue(ref value, muteMembers, ChannelPermission.MuteMembers);
         Permissions.SetValue(ref value, playSoundtrack, ChannelPermission.PlaySoundtrack);
         Permissions.SetValue(ref value, shareScreen, ChannelPermission.ShareScreen);
-        
+
         RawValue = value;
     }
 
@@ -198,7 +198,7 @@ public struct ChannelPermissions
     public List<ChannelPermission> ToList()
     {
         List<ChannelPermission> perms = new();
-        
+
         // bitwise operations on raw value
         // each of the ChannelPermissions increments by 2^i from 0 to MaxBits
         for (byte i = 0; i < Permissions.MaxBits; i++)

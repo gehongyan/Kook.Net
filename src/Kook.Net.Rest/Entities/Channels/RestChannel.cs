@@ -8,7 +8,7 @@ namespace Kook.Rest;
 public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
 {
     #region RestChannel
-    
+
     internal RestChannel(BaseKookClient kook, ulong id)
         : base(kook, id)
     {
@@ -34,7 +34,7 @@ public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
         };
     }
     internal virtual void Update(Model model) { }
-    
+
     /// <inheritdoc />
     public virtual Task UpdateAsync(RequestOptions options = null) => Task.Delay(0);
 
@@ -51,6 +51,6 @@ public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
         => AsyncEnumerable.Empty<IReadOnlyCollection<IUser>>(); //Overridden
-    
+
     #endregion
 }

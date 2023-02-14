@@ -1,7 +1,7 @@
-using System.Diagnostics;
-using System.Globalization;
 using Kook.API;
 using Kook.WebSocket;
+using System.Diagnostics;
+using System.Globalization;
 using Model = Kook.API.User;
 
 namespace Kook.Rest;
@@ -13,7 +13,7 @@ namespace Kook.Rest;
 public class RestUser : RestEntity<ulong>, IUser, IUpdateable
 {
     #region RestUser
-    
+
     /// <inheritdoc />
     public string Username { get; internal set; }
     /// <inheritdoc />
@@ -41,13 +41,13 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     public string KMarkdownMention => MentionUtils.KMarkdownMentionUser(Id);
     /// <inheritdoc />
     public string PlainTextMention => MentionUtils.PlainTextMentionUser(Username, Id);
-    
+
     internal RestPresence Presence { get; set; }
     /// <inheritdoc />
     public bool? IsOnline => Presence?.IsOnline;
     /// <inheritdoc />
     public ClientType? ActiveClient => Presence?.ActiveClient;
-    
+
     internal RestUser(BaseKookClient kook, ulong id)
         : base(kook, id)
     {
@@ -79,7 +79,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         BuffAvatar = model.BuffAvatar;
         IsDenoiseEnabled = model.IsDenoiseEnabled;
         UserTag = model.UserTag?.ToEntity();
-        
+
         UpdatePresence(model.Online, model.OperatingSystem);
     }
 
@@ -134,7 +134,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         await UserHelper.UpdateIntimacyAsync(this, Kook, func, options).ConfigureAwait(false);
     }
     #endregion
-    
+
     /// <summary>
     ///     Gets the Username#IdentifyNumber of the user.
     /// </summary>
@@ -144,16 +144,16 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     public override string ToString() => Format.UsernameAndIdentifyNumber(this);
 
     private string DebuggerDisplay => $"{Format.UsernameAndIdentifyNumber(this)} ({Id}{(IsBot ?? false ? ", Bot" : "")})";
-    
-    
+
+
     #region IUser
-    
+
     /// <inheritdoc />
     async Task<IDMChannel> IUser.CreateDMChannelAsync(RequestOptions options)
         => await CreateDMChannelAsync(options).ConfigureAwait(false);
     /// <inheritdoc />
     async Task<IIntimacy> IUser.GetIntimacyAsync(RequestOptions options)
         => await GetIntimacyAsync(options).ConfigureAwait(false);
-    
+
     #endregion
 }

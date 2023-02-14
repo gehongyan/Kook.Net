@@ -26,17 +26,17 @@ public abstract partial class BaseSocketClient
     }
     internal readonly AsyncEvent<Func<SocketChannel, Task>> _channelCreatedEvent = new AsyncEvent<Func<SocketChannel, Task>>();
     /// <summary> Fired when a channel is destroyed. </summary>
-        /// <remarks>
-        ///     <para>
-        ///         This event is fired when a generic channel has been destroyed. The event handler must return a
-        ///         <see cref="Task"/> and accept a <see cref="SocketChannel"/> as its parameter.
-        ///     </para>
-        ///     <para>
-        ///         The destroyed channel is passed into the event handler parameter. The given channel type may
-        ///         include, but not limited to, Private Channels (DM, Group), Guild Channels (Text, Voice, Category);
-        ///         see the derived classes of <see cref="SocketChannel"/> for more details.
-        ///     </para>
-        /// </remarks>
+    /// <remarks>
+    ///     <para>
+    ///         This event is fired when a generic channel has been destroyed. The event handler must return a
+    ///         <see cref="Task"/> and accept a <see cref="SocketChannel"/> as its parameter.
+    ///     </para>
+    ///     <para>
+    ///         The destroyed channel is passed into the event handler parameter. The given channel type may
+    ///         include, but not limited to, Private Channels (DM, Group), Guild Channels (Text, Voice, Category);
+    ///         see the derived classes of <see cref="SocketChannel"/> for more details.
+    ///     </para>
+    /// </remarks>
     public event Func<SocketChannel, Task> ChannelDestroyed
     {
         add => _channelDestroyedEvent.Add(value);
@@ -142,7 +142,7 @@ public abstract partial class BaseSocketClient
     internal readonly AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IDMChannel, Guid>, SocketReaction, Task>> _directReactionRemovedEvent = new AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IDMChannel, Guid>, SocketReaction, Task>>();
 
     #endregion
-    
+
     #region Messages
 
     /// <summary> Fired when a message is received. </summary>
@@ -193,7 +193,7 @@ public abstract partial class BaseSocketClient
         remove => _messageDeletedEvent.Remove(value);
     }
     internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IMessageChannel, ulong>, Task>> _messageDeletedEvent = new AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IMessageChannel, ulong>, Task>>();
-    
+
     /// <summary> Fired when a message is updated. </summary>
     /// <remarks>
     ///     <para>
@@ -252,7 +252,7 @@ public abstract partial class BaseSocketClient
         remove => _messagePinnedEvent.Remove(value);
     }
     internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, SocketGuildUser, Task>> _messagePinnedEvent = new AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, SocketGuildUser, Task>>();
-    
+
     /// <summary> Fired when a message is unpinned. </summary>
     /// <remarks>
     ///     <para>
@@ -284,7 +284,7 @@ public abstract partial class BaseSocketClient
     }
     internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, SocketGuildUser, Task>> _messageUnpinnedEvent = new AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, SocketGuildUser, Task>>();
 
-    
+
     #endregion
 
     #region Direct Messages
@@ -337,7 +337,7 @@ public abstract partial class BaseSocketClient
         remove => _directMessageDeletedEvent.Remove(value);
     }
     internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Task>> _directMessageDeletedEvent = new AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Task>>();
-    
+
     /// <summary> Fired when a message is updated. </summary>
     /// <remarks>
     ///     <para>
@@ -373,7 +373,7 @@ public abstract partial class BaseSocketClient
     internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, IDMChannel, Task>> _directMessageUpdatedEvent = new AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, IDMChannel, Task>>();
 
     #endregion
-    
+
     #region Users
 
     /// <summary> Fired when a user joins a guild. </summary>
@@ -394,7 +394,7 @@ public abstract partial class BaseSocketClient
         add => _userLeftEvent.Add(value);
         remove => _userLeftEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketGuild, SocketUser,DateTimeOffset, Task>> _userLeftEvent = new AsyncEvent<Func<SocketGuild, SocketUser, DateTimeOffset, Task>>();
+    internal readonly AsyncEvent<Func<SocketGuild, SocketUser, DateTimeOffset, Task>> _userLeftEvent = new AsyncEvent<Func<SocketGuild, SocketUser, DateTimeOffset, Task>>();
     /// <summary> Fired when a user is banned from a guild. </summary>
     /// <remarks>
     ///     <para>
@@ -491,7 +491,7 @@ public abstract partial class BaseSocketClient
         remove => _guildMemberOfflineEvent.Remove(value);
     }
     internal readonly AsyncEvent<Func<IReadOnlyCollection<SocketGuildUser>, DateTimeOffset, Task>> _guildMemberOfflineEvent = new AsyncEvent<Func<IReadOnlyCollection<SocketGuildUser>, DateTimeOffset, Task>>();
-    
+
     #endregion
 
     #region Voices
@@ -565,7 +565,7 @@ public abstract partial class BaseSocketClient
     #endregion
 
     #region Guilds
-    
+
     /// <summary> Fired when the connected account joins a guild. </summary>
     public event Func<SocketGuild, Task> JoinedGuild
     {
@@ -615,7 +615,8 @@ public abstract partial class BaseSocketClient
     internal readonly AsyncEvent<Func<string, SocketUser, IMessage, SocketTextChannel, SocketGuild, Task>> _messageButtonClickedEvent = new AsyncEvent<Func<string, SocketUser, IMessage, SocketTextChannel, SocketGuild, Task>>();
 
     /// <summary> Fired when a button is clicked in a direct card message. </summary>
-    public event Func<string, SocketUser, IMessage, SocketDMChannel, Task> DirectMessageButtonClicked {
+    public event Func<string, SocketUser, IMessage, SocketDMChannel, Task> DirectMessageButtonClicked
+    {
         add => _directMessageButtonClickedEvent.Add(value);
         remove => _directMessageButtonClickedEvent.Remove(value);
     }

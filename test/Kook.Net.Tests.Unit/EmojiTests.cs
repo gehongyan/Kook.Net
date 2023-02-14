@@ -28,7 +28,7 @@ public class EmojiTests
         Assert.False(Emoji.TryParse(input, out _));
         Assert.Throws<FormatException>(() => Emoji.Parse(input));
     }
-    
+
     [Theory]
     [InlineData("[:test:1990044438283387/aIVQrtPv4z10b10b]", "test", "1990044438283387/aIVQrtPv4z10b10b", TagMode.PlainText)]
     [InlineData("(emj)test(emj)[1990044438283387/aIVQrtPv4z10b10b]", "test", "1990044438283387/aIVQrtPv4z10b10b", TagMode.KMarkdown)]

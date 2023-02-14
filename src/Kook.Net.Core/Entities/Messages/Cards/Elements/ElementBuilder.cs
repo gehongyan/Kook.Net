@@ -1,5 +1,5 @@
-using System.Collections.Immutable;
 using Kook.Utils;
+using System.Collections.Immutable;
 
 namespace Kook;
 
@@ -25,7 +25,7 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     ///     An <see cref="ElementType"/> that represents the type of element that this builder builds.
     /// </returns>
     public ElementType Type => ElementType.PlainText;
-    
+
     /// <summary>
     ///     Gets or sets the content of a <see cref="PlainTextElement"/>.
     /// </summary>
@@ -81,7 +81,7 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
         Content = content;
         return this;
     }
-    
+
     /// <summary>
     ///     Sets whether the shortcuts should be translated into emojis.
     /// </summary>
@@ -105,7 +105,7 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <returns>
     ///     A <see cref="PlainTextElement"/> represents the built element object.
     /// </returns>
-    public PlainTextElement Build() 
+    public PlainTextElement Build()
         => new PlainTextElement(Content, Emoji);
 
     /// <summary>
@@ -124,9 +124,9 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <exception cref="ArgumentException" accessor="set">
     ///     The length of <paramref name="content"/> is greater than <see cref="MaxPlainTextLength"/>.
     /// </exception>
-    public static implicit operator PlainTextElementBuilder(string content) => 
+    public static implicit operator PlainTextElementBuilder(string content) =>
         new PlainTextElementBuilder().WithContent(content);
-    
+
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
 
@@ -146,7 +146,7 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     {
         if (plainTextElementBuilder is null)
             return false;
-        
+
         return Type == plainTextElementBuilder.Type
             && Content == plainTextElementBuilder.Content
             && Emoji == plainTextElementBuilder.Emoji;
@@ -227,7 +227,7 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     /// <returns>
     ///     A <see cref="KMarkdownElement"/> represents the built element object.
     /// </returns>
-    public KMarkdownElement Build() 
+    public KMarkdownElement Build()
         => new KMarkdownElement(Content);
 
     /// <summary>
@@ -246,9 +246,9 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     /// <exception cref="ArgumentException" accessor="set">
     ///     The length of <paramref name="content"/> is greater than <see cref="MaxKMarkdownLength"/>.
     /// </exception>
-    public static implicit operator KMarkdownElementBuilder(string content) => 
+    public static implicit operator KMarkdownElementBuilder(string content) =>
         new KMarkdownElementBuilder().WithContent(content);
-    
+
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
 
@@ -268,7 +268,7 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     {
         if (kMarkdownElementBuilder is null)
             return false;
-        
+
         return Type == kMarkdownElementBuilder.Type
                && Content == kMarkdownElementBuilder.Content;
     }
@@ -288,7 +288,7 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     ///     Gets the maximum image alternative text length allowed by Kook.
     /// </summary>
     public const int MaxAlternativeLength = 20;
-    
+
     /// <summary>
     ///     Gets the type of the element that this builder builds.
     /// </summary>
@@ -342,7 +342,7 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     ///     or <c>null</c> if whether the image should be rendered as a circle is not specified.
     /// </returns>
     public bool? Circle { get; set; }
-    
+
     /// <summary>
     ///     Sets the source of an <see cref="ImageElementBuilder"/>.
     /// </summary>
@@ -402,7 +402,7 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
         Circle = circle;
         return this;
     }
-    
+
     /// <summary>
     ///     Builds the <see cref="ImageElementBuilder"/> into an <see cref="ImageElement"/>.
     /// </summary>
@@ -418,7 +418,7 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
             UrlValidation.Validate(Source);
         return new ImageElement(Source, Alternative, Size, Circle);
     }
-    
+
     /// <summary>
     ///     Initialized a new instance of the <see cref="ImageElementBuilder"/> class
     ///     with the specified content.
@@ -434,7 +434,7 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     /// </exception>
     public static implicit operator ImageElementBuilder(string source) => new ImageElementBuilder()
         .WithSource(source);
-    
+
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
 
@@ -454,7 +454,7 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     {
         if (imageElementBuilder is null)
             return false;
-        
+
         return Type == imageElementBuilder.Type
             && Source == imageElementBuilder.Source
             && Alternative == imageElementBuilder.Alternative
@@ -477,7 +477,7 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     ///     Gets the maximum button text length allowed by Kook.
     /// </summary>
     public const int MaxButtonTextLength = 40;
-    
+
     /// <summary>
     ///     Gets the type of the element that this builder builds.
     /// </summary>
@@ -485,7 +485,7 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     ///     An <see cref="ElementType"/> that represents the type of element that this builder builds.
     /// </returns>
     public ElementType Type => ElementType.Button;
-    
+
     /// <summary>
     ///     Gets or sets the theme of the button.
     /// </summary>
@@ -493,7 +493,7 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     ///     A <see cref="ButtonTheme"/> that represents the theme of the button.
     /// </returns>
     public ButtonTheme Theme { get; set; }
-    
+
     /// <summary>
     ///     Gets or sets the value of the button.
     /// </summary>
@@ -505,7 +505,7 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     ///     the value of the property will be returned when the button is clicked.
     /// </remarks>
     public string Value { get; set; }
-    
+
     /// <summary>
     ///     Gets or sets the type of the click event.
     /// </summary>
@@ -660,7 +660,7 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
         };
         return this;
     }
-    
+
     /// <summary>
     ///     Builds the <see cref="ButtonElementBuilder"/> into a <see cref="ButtonElement"/>.
     /// </summary>
@@ -693,7 +693,7 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     {
         if (buttonElementBuilder is null)
             return false;
-        
+
         return Type == buttonElementBuilder.Type
             && Theme == buttonElementBuilder.Theme
             && Value == buttonElementBuilder.Value
@@ -733,7 +733,7 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     {
         Fields = new List<IElementBuilder>();
     }
-    
+
     /// <summary>
     ///     Gets the type of the element that this builder builds.
     /// </summary>
@@ -741,7 +741,7 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     ///     An <see cref="ElementType"/> that represents the type of element that this builder builds.
     /// </returns>
     public ElementType Type => ElementType.Paragraph;
-    
+
     /// <summary>
     ///     Gets or sets the number of columns of the paragraph.
     /// </summary>
@@ -786,17 +786,19 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
         get => _fields;
         set
         {
-            if (value == null) throw new ArgumentNullException(
+            if (value == null)
+                throw new ArgumentNullException(
                     paramName: nameof(Fields),
                     message: "Cannot set an paragraph struct builder's fields collection to null.");
-            if (value.Count > MaxFieldCount) throw new ArgumentException(
+            if (value.Count > MaxFieldCount)
+                throw new ArgumentException(
                     message: $"Field count must be less than or equal to {MaxFieldCount}.",
                     paramName: nameof(Fields));
-            if (value.Any(field => field is not PlainTextElementBuilder && field is not KMarkdownElementBuilder)) 
+            if (value.Any(field => field is not PlainTextElementBuilder && field is not KMarkdownElementBuilder))
                 throw new ArgumentException(
                     message: "The elements of fields in a paragraph must be PlainTextElementBuilder or KMarkdownElementBuilder.",
                     paramName: nameof(Fields));
-                
+
             _fields = value;
         }
     }
@@ -829,7 +831,8 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     /// </returns>
     public ParagraphStructBuilder AddField(PlainTextElementBuilder field)
     {
-        if (Fields.Count >= MaxFieldCount) throw new ArgumentException(
+        if (Fields.Count >= MaxFieldCount)
+            throw new ArgumentException(
             message: $"Field count must be less than or equal to {MaxFieldCount}.",
             paramName: nameof(field));
         Fields.Add(field);
@@ -849,7 +852,8 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     /// </returns>
     public ParagraphStructBuilder AddField(KMarkdownElementBuilder field)
     {
-        if (Fields.Count >= MaxFieldCount) throw new ArgumentException(
+        if (Fields.Count >= MaxFieldCount)
+            throw new ArgumentException(
             message: $"Field count must be less than or equal to {MaxFieldCount}.",
             paramName: nameof(field));
         Fields.Add(field);
@@ -884,7 +888,7 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
                 throw new ArgumentException(
                     message: "The elements of fields in a paragraph must be PlainTextElementBuilder or KMarkdownElementBuilder.",
                     paramName: nameof(field));
-                
+
         }
         return this;
     }
@@ -895,9 +899,9 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     /// <returns>
     ///     A <see cref="ParagraphStruct"/> represents the built element object.
     /// </returns>
-    public ParagraphStruct Build() => 
+    public ParagraphStruct Build() =>
         new(ColumnCount, Fields.Select(f => f.Build()).ToImmutableArray());
-    
+
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
 

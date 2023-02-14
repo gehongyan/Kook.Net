@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
-using UserModel = Kook.API.User;
 using MemberModel = Kook.API.Rest.GuildMember;
+using UserModel = Kook.API.User;
 
 namespace Kook.Rest;
 
@@ -14,7 +14,7 @@ public class RestGuildUser : RestUser, IGuildUser
     #region RestGuildUser
 
     private ImmutableArray<uint> _roleIds;
-    
+
     /// <inheritdoc />
     public string DisplayName => Nickname ?? Username;
     /// <inheritdoc />
@@ -24,7 +24,7 @@ public class RestGuildUser : RestUser, IGuildUser
     public ulong GuildId => Guild.Id;
     /// <inheritdoc />
     public bool IsMobileVerified { get; private set; }
-    
+
     /// <inheritdoc />
     public DateTimeOffset JoinedAt { get; private set; }
     /// <inheritdoc />
@@ -33,7 +33,7 @@ public class RestGuildUser : RestUser, IGuildUser
     public Color Color { get; private set; }
     /// <inheritdoc />
     public bool? IsOwner { get; set; }
-    
+
     /// <inheritdoc />
     /// <exception cref="InvalidOperationException" accessor="get">Resolving permissions requires the parent guild to be downloaded.</exception>
     public GuildPermissions GuildPermissions
@@ -47,10 +47,10 @@ public class RestGuildUser : RestUser, IGuildUser
     }
     /// <inheritdoc />
     public IReadOnlyCollection<uint> RoleIds => _roleIds;
-    
+
     /// <inheritdoc />
     public new string PlainTextMention => MentionUtils.PlainTextMentionUser(Nickname ?? Username, Id);
-    
+
     internal RestGuildUser(BaseKookClient kook, IGuild guild, ulong id)
         : base(kook, id)
     {
@@ -96,13 +96,13 @@ public class RestGuildUser : RestUser, IGuildUser
         var model = await Kook.ApiClient.GetGuildMemberAsync(GuildId, Id, options).ConfigureAwait(false);
         Update(model);
     }
-    
+
     /// <inheritdoc />
     public async Task ModifyNicknameAsync(string name, RequestOptions options = null)
     {
         var nickname = await UserHelper.ModifyNicknameAsync(this, Kook, name, options);
         // The KOOK API will clear the nickname if the nickname is set to the same as the username at present.
-        if(nickname == Username)
+        if (nickname == Username)
             nickname = null;
         Nickname = nickname;
     }
@@ -169,21 +169,21 @@ public class RestGuildUser : RestUser, IGuildUser
     public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null)
         => RemoveRolesAsync(roles.Select(x => x.Id));
     /// <inheritdoc />
-    public Task MuteAsync(RequestOptions options = null) 
+    public Task MuteAsync(RequestOptions options = null)
         => GuildHelper.MuteUserAsync(this, Kook, options);
     /// <inheritdoc />
-    public Task DeafenAsync(RequestOptions options = null) 
+    public Task DeafenAsync(RequestOptions options = null)
         => GuildHelper.DeafenUserAsync(this, Kook, options);
     /// <inheritdoc />
-    public Task UnmuteAsync(RequestOptions options = null) 
+    public Task UnmuteAsync(RequestOptions options = null)
         => GuildHelper.UnmuteUserAsync(this, Kook, options);
     /// <inheritdoc />
-    public Task UndeafenAsync(RequestOptions options = null) 
+    public Task UndeafenAsync(RequestOptions options = null)
         => GuildHelper.UndeafenUserAsync(this, Kook, options);
     /// <inheritdoc />
     public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null)
         => UserHelper.GetConnectedChannelAsync(this, Kook, options);
-    
+
     /// <inheritdoc />
     /// <exception cref="InvalidOperationException">Resolving permissions requires the parent guild to be downloaded.</exception>
     public ChannelPermissions GetPermissions(IGuildChannel channel)
@@ -191,9 +191,9 @@ public class RestGuildUser : RestUser, IGuildUser
         var guildPerms = GuildPermissions;
         return new ChannelPermissions(Permissions.ResolveChannel(Guild, this, channel, guildPerms.RawValue));
     }
-    
+
     #endregion
-    
+
     #region IGuildUser
     /// <inheritdoc />
     IGuild IGuildUser.Guild
@@ -206,15 +206,15 @@ public class RestGuildUser : RestUser, IGuildUser
         }
     }
     #endregion
-    
+
     #region IVoiceState
-    
+
     /// <inheritdoc />
     bool? IVoiceState.IsMuted => null;
     /// <inheritdoc />
     bool? IVoiceState.IsDeafened => null;
     /// <inheritdoc />
     IVoiceChannel IVoiceState.VoiceChannel => null;
-    
+
     #endregion
 }

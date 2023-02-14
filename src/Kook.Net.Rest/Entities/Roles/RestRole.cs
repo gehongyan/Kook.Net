@@ -18,7 +18,7 @@ public class RestRole : RestEntity<uint>, IRole
     ///     An <see cref="IGuild"/> representing the parent guild of this role.
     /// </returns>
     internal IGuild Guild { get; }
-    
+
     /// <inheritdoc />
     public RoleType? Type { get; set; }
     /// <inheritdoc />
@@ -33,7 +33,7 @@ public class RestRole : RestEntity<uint>, IRole
     public GuildPermissions Permissions { get; private set; }
     /// <inheritdoc />
     public int Position { get; private set; }
-    
+
     /// <summary>
     ///     Returns a value that determines if the role is an @everyone role.
     /// </summary>
@@ -67,7 +67,7 @@ public class RestRole : RestEntity<uint>, IRole
         Color = new Color(model.Color);
         Permissions = new GuildPermissions(model.Permissions);
     }
-    
+
     /// <inheritdoc />
     public async Task ModifyAsync(Action<RoleProperties> func, RequestOptions options = null)
     {
@@ -77,19 +77,19 @@ public class RestRole : RestEntity<uint>, IRole
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
         => RoleHelper.DeleteAsync(this, Kook, options);
-    
+
     /// <inheritdoc cref="IRole.GetUsersAsync(CacheMode,RequestOptions)"/>
     public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions options = null)
     {
         void Func(SearchGuildMemberProperties p) => p.RoleId = Id;
         return GuildHelper.SearchUsersAsync(Guild, Kook, Func, KookConfig.MaxUsersPerBatch, options);
     }
-    
+
     /// <inheritdoc />
     public int CompareTo(IRole role) => RoleUtils.Compare(this, role);
-    
+
     #endregion
-    
+
     #region IRole
     /// <inheritdoc />
     IGuild IRole.Guild
@@ -101,7 +101,7 @@ public class RestRole : RestEntity<uint>, IRole
             throw new InvalidOperationException("Unable to return this entity's parent unless it was fetched through that object.");
         }
     }
-    
+
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IRole.GetUsersAsync(CacheMode mode, RequestOptions options)
     {
@@ -110,9 +110,9 @@ public class RestRole : RestEntity<uint>, IRole
         else
             return AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
     }
-    
+
     #endregion
-    
+
     /// <summary>
     ///     Gets the name of the role.
     /// </summary>

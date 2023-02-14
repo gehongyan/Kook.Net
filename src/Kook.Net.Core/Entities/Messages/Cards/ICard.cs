@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Represents a generic card.
@@ -12,7 +12,7 @@ public interface ICard
     ///     A <see cref="CardType"/> value that represents the type of the card.
     /// </returns>
     CardType Type { get; }
-    
+
     /// <summary>
     ///     Gets the number of the modules in this card.
     /// </summary>

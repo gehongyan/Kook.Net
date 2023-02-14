@@ -41,15 +41,17 @@ internal class MessageCache
             return result;
         return null;
     }
-    
+
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="limit"/> is less than 0.</exception>
     public IReadOnlyCollection<SocketMessage> GetMany(Guid? referenceMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch)
     {
-        if (limit < 0) throw new ArgumentOutOfRangeException(nameof(limit));
-        if (limit == 0) return ImmutableArray<SocketMessage>.Empty;
+        if (limit < 0)
+            throw new ArgumentOutOfRangeException(nameof(limit));
+        if (limit == 0)
+            return ImmutableArray<SocketMessage>.Empty;
 
         SocketMessage referenceMessage = _messages.SingleOrDefault(x => x.Key == referenceMessageId).Value;
-        
+
         IEnumerable<Guid> cachedMessageIds;
         if (referenceMessageId == null || dir == Direction.Unspecified)
             cachedMessageIds = _orderedMessages.Select(x => x.MsgId);

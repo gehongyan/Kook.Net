@@ -33,7 +33,7 @@ public class RestIntimacy : RestEntity<ulong>, IIntimacy
     {
         User = user;
     }
-    
+
     internal static RestIntimacy Create(BaseKookClient kook, IUser user, Model model)
     {
         var entity = new RestIntimacy(kook, user, user.Id);
@@ -50,5 +50,5 @@ public class RestIntimacy : RestEntity<ulong>, IIntimacy
         Score = model.Score;
         _images = model.Images.Select(i => new IntimacyImage(i.Id, i.Url)).ToImmutableArray();
     }
-    
+
 }

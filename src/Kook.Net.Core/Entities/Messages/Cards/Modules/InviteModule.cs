@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 namespace Kook;
 
@@ -17,9 +17,9 @@ public class InviteModule : IModule, IEquatable<InviteModule>
     public ModuleType Type => ModuleType.Invite;
 
     public string Code { get; }
-    
+
     private string DebuggerDisplay => $"{Type}: {Code}";
-    
+
     public static bool operator ==(InviteModule left, InviteModule right)
         => left?.Equals(right) ?? right is null;
 

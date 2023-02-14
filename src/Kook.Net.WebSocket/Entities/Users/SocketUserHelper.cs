@@ -1,6 +1,6 @@
-using System.Collections.Immutable;
 using Kook.API;
 using Kook.API.Rest;
+using System.Collections.Immutable;
 
 namespace Kook.WebSocket;
 
@@ -21,6 +21,6 @@ internal static class SocketUserHelper
     public static async Task<SocketDMChannel> CreateDMChannelAsync(SocketUser user, KookSocketClient client, RequestOptions options)
     {
         UserChat userChat = await client.ApiClient.CreateUserChatAsync(user.Id, options).ConfigureAwait(false);
-        return SocketDMChannel.Create(client,client.State, userChat.Code, userChat.Recipient);
+        return SocketDMChannel.Create(client, client.State, userChat.Code, userChat.Recipient);
     }
 }

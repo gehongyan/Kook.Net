@@ -68,7 +68,7 @@ internal static class KookRestApiClientExperimentalExtensions
         options = RequestOptions.CreateOrClone(options);
         var ids = new KookRestApiClient.BucketIds();
         PageMeta pageMeta = new(fromPage, limit);
-        return client.SendPagedAsync<VoiceRegion>(HttpMethod.Get,(pageSize, page) => $"guild/regions&page_size={pageSize}&page={page}",
+        return client.SendPagedAsync<VoiceRegion>(HttpMethod.Get, (pageSize, page) => $"guild/regions&page_size={pageSize}&page={page}",
             ids, clientBucket: ClientBucketType.SendEdit, pageMeta: pageMeta, options: options);
     }
 

@@ -18,7 +18,7 @@ public static class ChannelExtensions
             _ => null
         };
     }
-    
+
     /// <summary>
     ///     Gets a URL that jumps to the channel.
     /// </summary>

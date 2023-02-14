@@ -1,15 +1,15 @@
+using Kook.API.Gateway;
+using Kook.Rest;
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using Kook.API.Gateway;
-using Kook.Rest;
-using Model = Kook.API.Guild;
-using ChannelModel = Kook.API.Channel;
-using MemberModel = Kook.API.Rest.GuildMember;
-using ExtendedModel = Kook.API.Rest.ExtendedGuild;
-using RichModel = Kook.API.Rest.RichGuild;
 using BoostSubscription = Kook.API.Rest.BoostSubscription;
+using ChannelModel = Kook.API.Channel;
+using ExtendedModel = Kook.API.Rest.ExtendedGuild;
+using MemberModel = Kook.API.Rest.GuildMember;
+using Model = Kook.API.Guild;
 using RecommendInfo = Kook.Rest.RecommendInfo;
+using RichModel = Kook.API.Rest.RichGuild;
 using RoleModel = Kook.API.Role;
 using UserModel = Kook.API.User;
 
@@ -82,7 +82,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     public string AutoDeleteTime { get; private set; }
     /// <inheritdoc cref="IGuild.RecommendInfo"/>
     public RecommendInfo RecommendInfo { get; private set; }
-    
+
     /// <summary>
     ///     Gets the number of members.
     /// </summary>
@@ -108,7 +108,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     public int? MemberCount { get; internal set; }
     /// <summary> Gets the number of members downloaded to the local guild cache. </summary>
     public int DownloadedMemberCount { get; private set; }
-    
+
     internal bool IsAvailable { get; private set; }
     /// <summary> Indicates whether the client is connected to this guild. </summary>
     public bool IsConnected { get; internal set; }
@@ -135,7 +135,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     A role object that represents an <c>@everyone</c> role in this guild.
     /// </returns>
     public SocketRole EveryoneRole => GetRole(0);
-    
+
     /// <summary>
     ///     Gets a collection of all text channels in this guild.
     /// </summary>
@@ -166,7 +166,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </returns>
     public IReadOnlyCollection<SocketCategoryChannel> CategoryChannels
         => Channels.OfType<SocketCategoryChannel>().ToImmutableArray();
-    
+
     /// <summary>
     ///     Gets a collection of all channels in this guild.
     /// </summary>
@@ -304,7 +304,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     </note>
     /// </remarks>
     public IReadOnlyCollection<SocketRole> Roles => _roles.ToReadOnlyCollection();
-    
+
     internal SocketGuild(KookSocketClient kook, ulong id) : base(kook, id) { }
     internal static SocketGuild Create(KookSocketClient client, ClientState state, Model model)
     {
@@ -322,7 +322,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     internal void Update(ClientState state, IReadOnlyCollection<ChannelModel> models)
     {
         var channels = new ConcurrentDictionary<ulong, SocketGuildChannel>(ConcurrentHashSet.DefaultConcurrencyLevel,
-            (int) (models.Count * 1.05));
+            (int)(models.Count * 1.05));
         foreach (ChannelModel model in models)
         {
             var channel = SocketGuildChannel.Create(this, state, model);
@@ -341,7 +341,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
             if (members.TryAdd(member.Id, member))
                 member.GlobalUser.AddRef();
         }
-        
+
         DownloadedMemberCount = members.Count;
         _members = members;
         MemberCount = members.Count;
@@ -358,7 +358,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     {
         Update(state, model as ExtendedModel);
         OwnerId = model.OwnerId;    // override
-        
+
         if (model.Emojis != null)
         {
             _emotes.Clear();
@@ -394,7 +394,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         IsAvailable = true;
 
         var roles = new ConcurrentDictionary<uint, SocketRole>(ConcurrentHashSet.DefaultConcurrencyLevel,
-            (int) ((model.Roles?.Length ?? 0) * 1.05));
+            (int)((model.Roles?.Length ?? 0) * 1.05));
         {
             for (int i = 0; i < (model.Roles?.Length ?? 0); i++)
             {
@@ -407,7 +407,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         int channelCount = model.Channels?.Length ?? 0;
         channelCount += (model.Channels ?? Array.Empty<ChannelModel>()).Sum(x => x.Channels?.Length ?? 0);
         var channels = new ConcurrentDictionary<ulong, SocketGuildChannel>(ConcurrentHashSet.DefaultConcurrencyLevel,
-            (int) (channelCount * 1.05));
+            (int)(channelCount * 1.05));
         {
             for (int i = 0; i < (model.Channels?.Length ?? 0); i++)
             {
@@ -445,13 +445,13 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
         IsAvailable = true;
     }
-    
+
     /// <inheritdoc />
     public Task UpdateAsync(RequestOptions options = null)
         => SocketGuildHelper.UpdateAsync(this, Kook, options);
-    
+
     #endregion
-    
+
     /// <summary>
     ///     Gets the name of the guild.
     /// </summary>
@@ -475,7 +475,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         => SocketGuildHelper.GetActiveBoostSubscriptionsAsync(this, Kook, options);
 
     #endregion
-    
+
     #region Bans
     /// <inheritdoc cref="IGuild.GetBansAsync(RequestOptions)"/>
     public Task<IReadOnlyCollection<RestBan>> GetBansAsync(RequestOptions options = null)
@@ -627,7 +627,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     //     => GuildHelper.GetInvitesAsync(this, Kook, options);
     //
     // #endregion
-    
+
     #region Roles
 
     /// <summary>
@@ -656,7 +656,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </returns>
     public Task<RestRole> CreateRoleAsync(string name, RequestOptions options = null)
         => GuildHelper.CreateRoleAsync(this, Kook, name, options);
-    
+
     internal SocketRole AddRole(RoleModel model)
     {
         var role = SocketRole.Create(this, Kook.State, model);
@@ -678,9 +678,9 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
         return role;
     }
-    
+
     #endregion
-    
+
     #region Users
 
     /// <summary>
@@ -758,7 +758,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         var membersToKeep = Users.Where(x => !predicate.Invoke(x) || x?.Id == Kook.CurrentUser.Id);
 
         foreach (var member in membersToPurge)
-            if(_members.TryRemove(member.Id, out _))
+            if (_members.TryRemove(member.Id, out _))
                 member.GlobalUser.RemoveRef(Kook);
 
         foreach (var member in membersToKeep)
@@ -817,20 +817,20 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/>
     ///     at <paramref name="func"/>.
     /// </returns>
-    public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func, 
+    public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func,
         int limit = KookConfig.MaxUsersPerBatch, RequestOptions options = null)
         => GuildHelper.SearchUsersAsync(this, Kook, func, limit, options);
-    
+
     #endregion
 
     #region Voices
-    
+
     /// <inheritdoc />
     public async Task MoveUsersAsync(IEnumerable<IGuildUser> users, IVoiceChannel targetChannel, RequestOptions options)
         => await ClientHelper.MoveUsersAsync(Kook, users, targetChannel, options).ConfigureAwait(false);
 
     #endregion
-    
+
     #region Emotes
 
     /// <summary>
@@ -875,7 +875,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     public Task<GuildEmote> GetEmoteAsync(string id, RequestOptions options = null)
         => GuildHelper.GetEmoteAsync(this, Kook, id, options);
     /// <inheritdoc />
-    public Task<GuildEmote> CreateEmoteAsync(string name, Image image , RequestOptions options = null)
+    public Task<GuildEmote> CreateEmoteAsync(string name, Image image, RequestOptions options = null)
         => GuildHelper.CreateEmoteAsync(this, Kook, name, image, options);
     /// <inheritdoc />
     /// <exception cref="ArgumentNullException"><paramref name="func"/> is <see langword="null"/>.</exception>
@@ -886,9 +886,9 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         => GuildHelper.DeleteEmoteAsync(this, Kook, emote.Id, options);
 
     #endregion
-    
+
     #region Invites
-    
+
     /// <inheritdoc />
     public async Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null)
         => await GuildHelper.GetInvitesAsync(this, Kook, options).ConfigureAwait(false);
@@ -900,7 +900,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         => await GuildHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
 
     #endregion
-    
+
     #region Voice States
 
     internal SocketVoiceState AddOrUpdateVoiceState(ulong userId, ulong? voiceChannelId)
@@ -911,7 +911,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         var socketState = GetVoiceState(userId) ?? SocketVoiceState.Default;
         socketState.Update(voiceChannel);
         _voiceStates[userId] = socketState;
-        return socketState; 
+        return socketState;
     }
 
     internal SocketVoiceState AddOrUpdateVoiceState(ulong userId, bool? isMuted = null, bool? isDeafened = null)
@@ -938,12 +938,12 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     #endregion
 
     #region IGuild
-    
+
     /// <inheritdoc />
     bool IGuild.Available => true;
-    
+
     public void Dispose() { }
-    
+
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IGuildUser>> IGuild.GetUsersAsync(CacheMode mode, RequestOptions options)
     {
@@ -982,7 +982,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc />
     async Task<IRole> IGuild.CreateRoleAsync(string name, RequestOptions options)
         => await CreateRoleAsync(name, options).ConfigureAwait(false);
-    
+
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IBan>> IGuild.GetBansAsync(RequestOptions options)
         => await GetBansAsync(options).ConfigureAwait(false);
@@ -992,7 +992,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc/>
     async Task<IBan> IGuild.GetBanAsync(ulong userId, RequestOptions options)
         => await GetBanAsync(userId, options).ConfigureAwait(false);
-    
+
     /// <inheritdoc />
     Task<IReadOnlyCollection<IGuildChannel>> IGuild.GetChannelsAsync(CacheMode mode, RequestOptions options)
         => Task.FromResult<IReadOnlyCollection<IGuildChannel>>(Channels);
@@ -1021,7 +1021,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     Task<IReadOnlyCollection<ICategoryChannel>> IGuild.GetCategoryChannelsAsync(CacheMode mode,
         RequestOptions options)
         => Task.FromResult<IReadOnlyCollection<ICategoryChannel>>(CategoryChannels);
-    
+
     /// <inheritdoc />
     async Task<ITextChannel> IGuild.CreateTextChannelAsync(string name, Action<CreateTextChannelProperties> func, RequestOptions options)
         => await CreateTextChannelAsync(name, func, options).ConfigureAwait(false);

@@ -43,7 +43,7 @@ public class RecommendInfo : IRecommendInfo
     internal RecommendInfo()
     {
     }
-    
+
     internal static RecommendInfo Create(Model model)
     {
         var entity = new RecommendInfo();

@@ -1,4 +1,4 @@
-﻿namespace Kook.API;
+namespace Kook.API;
 
 internal interface IModule
 {

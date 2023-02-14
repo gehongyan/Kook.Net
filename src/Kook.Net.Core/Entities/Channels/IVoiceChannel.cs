@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Represents a generic voice channel in a guild.
@@ -13,7 +13,7 @@ public interface IVoiceChannel : INestedChannel, IAudioChannel, IMentionable
     ///     client(s) to use.
     /// </returns>
     VoiceQuality? VoiceQuality { get; }
-    
+
     /// <summary>
     ///     Gets the max number of users allowed to be connected to this channel at once.
     /// </summary>
@@ -30,7 +30,7 @@ public interface IVoiceChannel : INestedChannel, IAudioChannel, IMentionable
     ///     A string representing the url that clients should connect to to join this voice channel.
     /// </returns>
     string ServerUrl { get; }
-    
+
     /// <summary>
     ///     Gets whether this voice channel is locked by a password.
     /// </summary>
@@ -38,7 +38,7 @@ public interface IVoiceChannel : INestedChannel, IAudioChannel, IMentionable
     ///     A bool representing whether this voice channel is locked by a password.
     /// </returns>
     bool HasPassword { get; }
-    
+
     /// <summary>
     ///     Modifies this voice channel.
     /// </summary>

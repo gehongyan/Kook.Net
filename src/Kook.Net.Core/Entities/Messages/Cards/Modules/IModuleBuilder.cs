@@ -12,7 +12,7 @@ public interface IModuleBuilder
     ///     A <see cref="ModuleType"/> representing the module type of the <see cref="IModule"/> this builder creates.
     /// </returns>
     ModuleType Type { get; }
-    
+
     /// <summary>
     ///     Builds the <see cref="IModuleBuilder"/> into an <see cref="IModule"/>.
     /// </summary>

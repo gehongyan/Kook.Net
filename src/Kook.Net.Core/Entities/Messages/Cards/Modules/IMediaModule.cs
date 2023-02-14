@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     A generic media module that can be used in an <see cref="ICard"/>.

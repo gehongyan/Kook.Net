@@ -1,6 +1,6 @@
 using System;
-using System.Threading.Tasks;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Kook;
 
@@ -71,7 +71,7 @@ public static class UserExtensions
     /// <param name="cards">The cards to be sent.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="options">The request options for this <see langword="async"/> request.</param>
-    public static async Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(this IUser user, 
+    public static async Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(this IUser user,
         IEnumerable<ICard> cards, IQuote quote = null, RequestOptions options = null)
     {
         return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendCardsAsync(cards, quote, options).ConfigureAwait(false);

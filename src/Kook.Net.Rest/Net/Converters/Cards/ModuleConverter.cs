@@ -1,7 +1,7 @@
+using Kook.API;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
-using Kook.API;
 
 namespace Kook.Net.Converters;
 
@@ -31,7 +31,7 @@ internal class ModuleConverter : JsonConverter<ModuleBase>
 
     public override void Write(Utf8JsonWriter writer, ModuleBase value, JsonSerializerOptions options)
     {
-        
+
         switch (value.Type)
         {
             case ModuleType.Header:

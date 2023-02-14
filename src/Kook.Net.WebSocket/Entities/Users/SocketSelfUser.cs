@@ -1,8 +1,7 @@
-using Model = Kook.API.Rest.SelfUser;
-
+using Kook.Rest;
 using System.Diagnostics;
 using System.Globalization;
-using Kook.Rest;
+using Model = Kook.API.Rest.SelfUser;
 
 namespace Kook.WebSocket;
 
@@ -13,7 +12,7 @@ namespace Kook.WebSocket;
 public class SocketSelfUser : SocketUser, ISelfUser
 {
     internal override SocketGlobalUser GlobalUser { get; }
-    
+
     /// <inheritdoc />
     public override bool? IsBot { get => GlobalUser.IsBot; internal set => GlobalUser.IsBot = value; }
     /// <inheritdoc />
@@ -35,7 +34,9 @@ public class SocketSelfUser : SocketUser, ISelfUser
     /// <inheritdoc />
     public override UserTag UserTag { get => GlobalUser.UserTag; internal set => GlobalUser.UserTag = value; }
     /// <inheritdoc />
-    internal override SocketPresence Presence { get => GlobalUser.Presence; set => GlobalUser.Presence = value;
+    internal override SocketPresence Presence
+    {
+        get => GlobalUser.Presence; set => GlobalUser.Presence = value;
     }
     /// <inheritdoc />
     public string MobilePrefix { get; internal set; }
@@ -85,12 +86,12 @@ public class SocketSelfUser : SocketUser, ISelfUser
         }
         return hasGlobalChanges;
     }
-    
+
     private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ?? false ? ", Bot" : "")}, Self)";
     internal new SocketSelfUser Clone() => MemberwiseClone() as SocketSelfUser;
 
     #region ISelfUser
-    
+
     /// <inheritdoc />
     public async Task StartPlayingAsync(IGame game, RequestOptions options = null)
         => await UserHelper.StartPlayingAsync(this, Kook, game, options).ConfigureAwait(false);

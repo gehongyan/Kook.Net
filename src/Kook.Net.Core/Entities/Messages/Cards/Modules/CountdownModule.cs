@@ -14,10 +14,10 @@ public class CountdownModule : IModule, IEquatable<CountdownModule>
         EndTime = endTime;
         StartTime = startTime;
     }
-    
+
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Countdown;
-    
+
     /// <summary>
     ///     Gets the end time of the countdown.
     /// </summary>
@@ -41,9 +41,9 @@ public class CountdownModule : IModule, IEquatable<CountdownModule>
     ///     A <see cref="CountdownMode"/> value that represents the mode of the countdown.
     /// </returns>
     public CountdownMode Mode { get; }
-    
-    private string DebuggerDisplay => $"{Type}: To {EndTime:yyyy'/'M'/'d HH:mm:ss z} ({Mode} Mode{(StartTime is null? string.Empty: $", From {EndTime:yyyy'/'M'/'d HH:mm:ss z}")})";
-    
+
+    private string DebuggerDisplay => $"{Type}: To {EndTime:yyyy'/'M'/'d HH:mm:ss z} ({Mode} Mode{(StartTime is null ? string.Empty : $", From {EndTime:yyyy'/'M'/'d HH:mm:ss z}")})";
+
     public static bool operator ==(CountdownModule left, CountdownModule right)
         => left?.Equals(right) ?? right is null;
 

@@ -1,7 +1,7 @@
-using System.Collections.Immutable;
 using Kook.API;
 using Kook.API.Rest;
 using Kook.Utils;
+using System.Collections.Immutable;
 using Model = Kook.API.Channel;
 
 namespace Kook.Rest;
@@ -213,7 +213,7 @@ internal static class ChannelHelper
             EphemeralUserId = ephemeralUser?.Id
         };
         CreateMessageResponse model = await client.ApiClient.CreateMessageAsync(args, options).ConfigureAwait(false);
-        return new Cacheable<IUserMessage,Guid>(null, model.MessageId, false, 
+        return new Cacheable<IUserMessage, Guid>(null, model.MessageId, false,
             async () => await channel.GetMessageAsync(model.MessageId) as IUserMessage);
     }
 
@@ -228,16 +228,16 @@ internal static class ChannelHelper
     public static Task<Cacheable<IUserMessage, Guid>> SendCardAsync(IMessageChannel channel,
         BaseKookClient client, ICard card, RequestOptions options, IQuote quote = null,
         IUser ephemeralUser = null)
-        => SendCardsAsync(channel, client, new[] {card}, options, quote: quote, ephemeralUser: ephemeralUser);
+        => SendCardsAsync(channel, client, new[] { card }, options, quote: quote, ephemeralUser: ephemeralUser);
 
     public static Task<Cacheable<IUserMessage, Guid>> SendFileAsync(IMessageChannel channel,
-        BaseKookClient client, string path, string fileName, AttachmentType type, RequestOptions options, 
+        BaseKookClient client, string path, string fileName, AttachmentType type, RequestOptions options,
         IQuote quote = null, IUser ephemeralUser = null)
         => SendFileAsync(channel, client, new FileAttachment(path, fileName, type), options, quote: quote,
             ephemeralUser: ephemeralUser);
 
     public static Task<Cacheable<IUserMessage, Guid>> SendFileAsync(IMessageChannel channel,
-        BaseKookClient client, Stream stream, string fileName, AttachmentType type, RequestOptions options, 
+        BaseKookClient client, Stream stream, string fileName, AttachmentType type, RequestOptions options,
         IQuote quote = null, IUser ephemeralUser = null)
         => SendFileAsync(channel, client, new FileAttachment(stream, fileName, type), options, quote: quote,
             ephemeralUser: ephemeralUser);
@@ -251,7 +251,7 @@ internal static class ChannelHelper
             case CreateAttachmentMode.FilePath:
             case CreateAttachmentMode.Stream:
                 CreateAssetResponse assetResponse = await client.ApiClient
-                    .CreateAssetAsync(new CreateAssetParams {File = attachment.Stream, FileName = attachment.FileName}, options);
+                    .CreateAssetAsync(new CreateAssetParams { File = attachment.Stream, FileName = attachment.FileName }, options);
                 attachment.Uri = new Uri(assetResponse.Url);
                 break;
             case CreateAttachmentMode.AssetUri:
@@ -281,7 +281,7 @@ internal static class ChannelHelper
                 "Unknown attachment type")
         };
     }
-    
+
     public static Task DeleteMessageAsync(IMessageChannel channel, Guid messageId, BaseKookClient client,
         RequestOptions options)
         => MessageHelper.DeleteAsync(messageId, client, options);
@@ -394,7 +394,7 @@ internal static class ChannelHelper
             QuotedMessageId = quote?.QuotedMessageId,
         };
         CreateDirectMessageResponse model = await client.ApiClient.CreateDirectMessageAsync(args, options).ConfigureAwait(false);
-        return new Cacheable<IUserMessage,Guid>(null, model.MessageId, false, 
+        return new Cacheable<IUserMessage, Guid>(null, model.MessageId, false,
             async () => await channel.GetMessageAsync(model.MessageId) as IUserMessage);
     }
 
@@ -406,15 +406,15 @@ internal static class ChannelHelper
     }
     public static Task<Cacheable<IUserMessage, Guid>> SendDirectCardAsync(IDMChannel channel,
         BaseKookClient client, ICard card, RequestOptions options, IQuote quote = null)
-        => SendDirectCardsAsync(channel, client, new[] {card}, options, quote: quote);
+        => SendDirectCardsAsync(channel, client, new[] { card }, options, quote: quote);
 
     public static Task<Cacheable<IUserMessage, Guid>> SendDirectFileAsync(IDMChannel channel,
-        BaseKookClient client, string path, string fileName, AttachmentType type, RequestOptions options, 
+        BaseKookClient client, string path, string fileName, AttachmentType type, RequestOptions options,
         IQuote quote = null)
         => SendDirectFileAsync(channel, client, new FileAttachment(path, fileName, type), options, quote: quote);
 
     public static Task<Cacheable<IUserMessage, Guid>> SendDirectFileAsync(IDMChannel channel,
-        BaseKookClient client, Stream stream, string fileName, AttachmentType type, RequestOptions options, 
+        BaseKookClient client, Stream stream, string fileName, AttachmentType type, RequestOptions options,
         IQuote quote = null)
         => SendDirectFileAsync(channel, client, new FileAttachment(stream, fileName, type), options, quote: quote);
 
@@ -426,7 +426,7 @@ internal static class ChannelHelper
             case CreateAttachmentMode.FilePath:
             case CreateAttachmentMode.Stream:
                 CreateAssetResponse assetResponse = await client.ApiClient
-                    .CreateAssetAsync(new CreateAssetParams {File = attachment.Stream, FileName = attachment.FileName}, options);
+                    .CreateAssetAsync(new CreateAssetParams { File = attachment.Stream, FileName = attachment.FileName }, options);
                 attachment.Uri = new Uri(assetResponse.Url);
                 break;
             case CreateAttachmentMode.AssetUri:
@@ -456,7 +456,7 @@ internal static class ChannelHelper
                 "Unknown attachment type")
         };
     }
-    
+
     public static async Task ModifyDirectMessageAsync(IDMChannel channel, Guid messageId,
         Action<MessageProperties> func,
         BaseKookClient client, RequestOptions options)
@@ -507,7 +507,8 @@ internal static class ChannelHelper
         IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options)
     {
         var perms = channel.UserPermissionOverwrites.SingleOrDefault(x => x.Target.Id == user.Id)?.Permissions;
-        if (!perms.HasValue) return null;
+        if (!perms.HasValue)
+            return null;
         perms = func(perms.Value);
         var args = new ModifyChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.User, user.Id,
             perms.Value.AllowValue, perms.Value.DenyValue);
@@ -520,7 +521,8 @@ internal static class ChannelHelper
         IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options)
     {
         var perms = channel.RolePermissionOverwrites.SingleOrDefault(x => x.Target == role.Id)?.Permissions;
-        if (!perms.HasValue) return null;
+        if (!perms.HasValue)
+            return null;
         perms = func(perms.Value);
         var args = new ModifyChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.Role, role.Id,
             perms.Value.AllowValue, perms.Value.DenyValue);
@@ -553,8 +555,8 @@ internal static class ChannelHelper
         {
             GuildId = channel.GuildId,
             ChannelId = channel.Id,
-            MaxAge = (InviteMaxAge) (maxAge ?? 0),
-            MaxUses = (InviteMaxUses) (maxUses ?? -1),
+            MaxAge = (InviteMaxAge)(maxAge ?? 0),
+            MaxUses = (InviteMaxUses)(maxUses ?? -1),
         };
         var model = await client.ApiClient.CreateGuildInviteAsync(args, options).ConfigureAwait(false);
         var invites = await client.ApiClient.GetGuildInvitesAsync(channel.GuildId, channel.Id, options: options)
@@ -565,7 +567,7 @@ internal static class ChannelHelper
     public static Task<RestInvite> CreateInviteAsync(IGuildChannel channel, BaseKookClient client,
         InviteMaxAge maxAge, InviteMaxUses maxUses, RequestOptions options)
     {
-        return CreateInviteAsync(channel, client, (int?) maxAge, (int?) maxUses, options);
+        return CreateInviteAsync(channel, client, (int?)maxAge, (int?)maxUses, options);
     }
 
     #endregion

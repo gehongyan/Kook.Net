@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary> Specifies the permission value. </summary>
 public enum PermValue

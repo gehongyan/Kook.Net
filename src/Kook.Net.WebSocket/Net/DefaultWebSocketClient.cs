@@ -105,7 +105,8 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
     {
         _isDisconnecting = true;
 
-        try { _disconnectTokenSource.Cancel(false); }
+        try
+        { _disconnectTokenSource.Cancel(false); }
         catch
         {
             // ignored
@@ -116,13 +117,15 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
             if (!isDisposing)
             {
                 var status = (WebSocketCloseStatus)closeCode;
-                try { await _client.CloseOutputAsync(status, "", new CancellationToken()); }
+                try
+                { await _client.CloseOutputAsync(status, "", new CancellationToken()); }
                 catch
                 {
                     // ignored
                 }
             }
-            try { _client.Dispose(); }
+            try
+            { _client.Dispose(); }
             catch
             {
                 // ignored
@@ -180,7 +183,8 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
         }
         try
         {
-            if (_client == null) return;
+            if (_client == null)
+                return;
 
             int frameCount = (int)Math.Ceiling((double)count / SendChunkSize);
 
@@ -227,7 +231,8 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
                         stream.Write(buffer.Array, 0, socketResult.Count);
                         do
                         {
-                            if (cancelToken.IsCancellationRequested) return;
+                            if (cancelToken.IsCancellationRequested)
+                                return;
                             socketResult = await _client.ReceiveAsync(buffer, cancelToken).ConfigureAwait(false);
                             stream.Write(buffer.Array, 0, socketResult.Count);
                         }

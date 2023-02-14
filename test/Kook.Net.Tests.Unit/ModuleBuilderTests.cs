@@ -94,10 +94,10 @@ public class ModuleBuilderTests
             .WithAccessory(new ImageElementBuilder().WithSource(Icon));
         Assert.Equal(ModuleType.Section, builder.Type);
         Assert.Equal(ModuleType.Section, builder.Build().Type);
-        Assert.Equal("text", ((PlainTextElementBuilder) builder.Text).Content);
-        Assert.Equal("text", ((PlainTextElement) builder.Build().Text).Content);
-        Assert.Equal(Icon, ((ImageElementBuilder) builder.Accessory).Source);
-        Assert.Equal(Icon, ((ImageElement) builder.Build().Accessory).Source);
+        Assert.Equal("text", ((PlainTextElementBuilder)builder.Text).Content);
+        Assert.Equal("text", ((PlainTextElement)builder.Build().Text).Content);
+        Assert.Equal(Icon, ((ImageElementBuilder)builder.Accessory).Source);
+        Assert.Equal(Icon, ((ImageElement)builder.Build().Accessory).Source);
         builder = new SectionModuleBuilder
         {
             Mode = SectionAccessoryMode.Right,
@@ -106,10 +106,10 @@ public class ModuleBuilderTests
         };
         Assert.Equal(ModuleType.Section, builder.Type);
         Assert.Equal(ModuleType.Section, builder.Build().Type);
-        Assert.Equal("content", ((KMarkdownElementBuilder) builder.Text).Content);
-        Assert.Equal("content", ((KMarkdownElement) builder.Build().Text).Content);
-        Assert.Equal("button", ((KMarkdownElementBuilder) ((ButtonElementBuilder) builder.Accessory).Text).Content);
-        Assert.Equal("button", ((KMarkdownElement) ((ButtonElement) builder.Build().Accessory).Text).Content);
+        Assert.Equal("content", ((KMarkdownElementBuilder)builder.Text).Content);
+        Assert.Equal("content", ((KMarkdownElement)builder.Build().Text).Content);
+        Assert.Equal("button", ((KMarkdownElementBuilder)((ButtonElementBuilder)builder.Accessory).Text).Content);
+        Assert.Equal("button", ((KMarkdownElement)((ButtonElement)builder.Build().Accessory).Text).Content);
     }
 
     [Fact]
@@ -119,8 +119,8 @@ public class ModuleBuilderTests
             .WithText<PlainTextElementBuilder>(b => b.WithContent("text"));
         Assert.IsType<PlainTextElementBuilder>(builder.Text);
         Assert.IsType<PlainTextElement>(builder.Build().Text);
-        Assert.Equal("text", ((PlainTextElementBuilder) builder.Text).Content);
-        Assert.Equal("text", ((PlainTextElement) builder.Build().Text).Content);
+        Assert.Equal("text", ((PlainTextElementBuilder)builder.Text).Content);
+        Assert.Equal("text", ((PlainTextElement)builder.Build().Text).Content);
     }
 
     [Fact]
@@ -130,10 +130,10 @@ public class ModuleBuilderTests
             .WithAccessory<ImageElementBuilder>(b => b.WithSource(Icon));
         Assert.IsType<ImageElementBuilder>(builder.Accessory);
         Assert.IsType<ImageElement>(builder.Build().Accessory);
-        Assert.Equal(Icon, ((ImageElementBuilder) builder.Accessory).Source);
-        Assert.Equal(Icon, ((ImageElement) builder.Build().Accessory).Source);
+        Assert.Equal(Icon, ((ImageElementBuilder)builder.Accessory).Source);
+        Assert.Equal(Icon, ((ImageElement)builder.Build().Accessory).Source);
     }
-    
+
     [Fact]
     public void SectionModuleBuilder_InvalidText()
     {
@@ -174,7 +174,7 @@ public class ModuleBuilderTests
             .WithAccessory<ButtonElementBuilder>(b => b.WithText("button"));
         Assert.Throws<InvalidOperationException>(() => builder.Build());
     }
-    
+
     [Fact]
     public void ImageGroupBuilder_Constructor()
     {
@@ -234,7 +234,7 @@ public class ModuleBuilderTests
             Elements = Enumerable.Repeat(new ImageElementBuilder().WithSource(Icon), 10).ToList()
         });
     }
-    
+
     [Fact]
     public void ContainerBuilder_Constructor()
     {
@@ -294,7 +294,7 @@ public class ModuleBuilderTests
             Elements = Enumerable.Repeat(new ImageElementBuilder().WithSource(Icon), 10).ToList()
         });
     }
-    
+
     [Fact]
     public void ActionGroupBuilder_Constructor()
     {
@@ -416,7 +416,7 @@ public class ModuleBuilderTests
             Elements = Enumerable.Repeat(new ButtonElementBuilder().WithText(Name) as IElementBuilder, 11).ToList()
         });
     }
-        
+
     [Fact]
     public void DividerModuleBuilder_Constructor()
     {
@@ -543,7 +543,7 @@ public class ModuleBuilderTests
         var builder = new AudioModuleBuilder().WithSource(Url).WithCover(Icon);
         Assert.Equal(Url, builder.Source);
         Assert.Equal(Url, builder.Build().Source);
-        
+
         builder = new AudioModuleBuilder().WithSource(source).WithCover(Icon);
         Assert.Equal(source, builder.Source);
         Assert.ThrowsAny<Exception>(() => builder.Build());
@@ -558,7 +558,7 @@ public class ModuleBuilderTests
         var builder = new AudioModuleBuilder().WithSource(Url).WithCover(Icon);
         Assert.Equal(Icon, builder.Cover);
         Assert.Equal(Icon, builder.Build().Cover);
-        
+
         builder = new AudioModuleBuilder().WithSource(Url).WithCover(source);
         Assert.Equal(source, builder.Cover);
         Assert.ThrowsAny<Exception>(() => builder.Build());
@@ -643,7 +643,7 @@ public class ModuleBuilderTests
             Assert.ThrowsAny<Exception>(() => builder.Build());
         }
     }
-    
+
     [Fact]
     public void InviteModuleBuilder_Constructor()
     {

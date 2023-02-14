@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Represents a type of guild channel that can be nested within a category.
@@ -15,7 +15,7 @@ public interface INestedChannel : IGuildChannel
     ///     <c>null</c> if none is set.
     /// </returns>
     ulong? CategoryId { get; }
-    
+
     /// <summary>
     ///     Specifies whether the permissions of this channel is synchronized with its parent channel.
     /// </summary>
@@ -23,7 +23,7 @@ public interface INestedChannel : IGuildChannel
     ///     A <see langword="bool"/> indicating whether the permissions of this channel is synchronized with its parent channel.
     /// </returns>
     bool? IsPermissionSynced { get; }
-    
+
     /// <summary>
     ///     Gets the parent (category) channel of this channel.
     /// </summary>
@@ -60,7 +60,7 @@ public interface INestedChannel : IGuildChannel
     ///     metadata object containing information for the created invite.
     /// </returns>
     Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited, RequestOptions options = null);
-    
+
     /// <summary>
     ///     Creates a new invite to this channel.
     /// </summary>
@@ -72,6 +72,6 @@ public interface INestedChannel : IGuildChannel
     ///     metadata object containing information for the created invite.
     /// </returns>
     Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null, RequestOptions options = null);
-    
+
     #endregion
 }

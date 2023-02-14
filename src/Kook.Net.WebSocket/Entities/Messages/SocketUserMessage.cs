@@ -1,13 +1,13 @@
+using Kook.API;
+using Kook.API.Gateway;
+using Kook.Net.Converters;
+using Kook.Rest;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Kook.API;
-using Kook.API.Gateway;
-using Kook.Net.Converters;
-using Kook.Rest;
 
 namespace Kook.WebSocket;
 
@@ -60,7 +60,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     public override bool? MentionedHere => _isMentioningHere;
     /// <inheritdoc />
     public override IReadOnlyCollection<ITag> Tags => _tags;
-    
+
     internal SocketUserMessage(KookSocketClient kook, Guid id, ISocketMessageChannel channel, SocketUser author, MessageSource source)
         : base(kook, id, channel, author, source)
     {
@@ -104,7 +104,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         else if (Type == MessageType.KMarkdown)
             _tags = MessageHelper.ParseTags(gatewayEvent.Content, Channel, guild, MentionedUsers, TagMode.KMarkdown);
         if (model.Quote is not null)
-            _quote = Quote.Create(model.Quote.Id, model.Quote.QuotedMessageId, model.Quote.Type, model.Quote.Content, 
+            _quote = Quote.Create(model.Quote.Id, model.Quote.QuotedMessageId, model.Quote.Type, model.Quote.Content,
                 model.Quote.CreateAt, guild.GetUser(model.Quote.Author.Id));
 
         if (model.Attachment is not null)
@@ -121,7 +121,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
         Guild = guild;
     }
-    
+
     internal override void Update(ClientState state, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
     {
         base.Update(state, model, gatewayEvent);
@@ -147,14 +147,14 @@ public class SocketUserMessage : SocketMessage, IUserMessage
                 : recipient.Id == Author.Id
                     ? Kook.CurrentUser
                     : recipient;
-            _pokes = model.KMarkdownInfo.Pokes.Select(x => SocketPokeAction.Create(Kook, Author, 
-                new []{target}, x)).ToImmutableArray();
+            _pokes = model.KMarkdownInfo.Pokes.Select(x => SocketPokeAction.Create(Kook, Author,
+                new[] { target }, x)).ToImmutableArray();
         }
         else
             _pokes = ImmutableArray<SocketPokeAction>.Empty;
     }
 
-    
+
     internal override void Update(ClientState state, API.Message model)
     {
         base.Update(state, model);
@@ -168,7 +168,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText);
         else if (Type == MessageType.KMarkdown)
             _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown);
-        
+
         if (model.Attachment is not null)
             _attachments = _attachments.Add(Attachment.Create(model.Attachment));
 
@@ -183,7 +183,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
                 model.MentionedUsers.Select(state.GetUser), x)).ToImmutableArray()
             : ImmutableArray<SocketPokeAction>.Empty;
 
-        Guild = guild;  
+        Guild = guild;
     }
     internal override void Update(ClientState state, API.DirectMessage model)
     {
@@ -194,7 +194,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText);
         else if (Type == MessageType.KMarkdown)
             _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown);
-        
+
         if (model.Attachment is not null)
             _attachments = _attachments.Add(Attachment.Create(model.Attachment));
 
@@ -212,8 +212,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
                 : recipient.Id == Author.Id
                     ? Kook.CurrentUser
                     : recipient;
-            _pokes = model.MentionInfo.Pokes.Select(x => SocketPokeAction.Create(Kook, Author, 
-                new []{target}, x)).ToImmutableArray();
+            _pokes = model.MentionInfo.Pokes.Select(x => SocketPokeAction.Create(Kook, Author,
+                new[] { target }, x)).ToImmutableArray();
         }
         else
             _pokes = ImmutableArray<SocketPokeAction>.Empty;
@@ -233,11 +233,11 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText);
         else if (Type == MessageType.KMarkdown)
             _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown);
-        
-        _cards = Type == MessageType.Card 
-            ? MessageHelper.ParseCards(model.Content) 
+
+        _cards = Type == MessageType.Card
+            ? MessageHelper.ParseCards(model.Content)
             : ImmutableArray.Create<ICard>();
-        
+
         Guild = guild;
     }
     internal override void Update(ClientState state, DirectMessageUpdateEvent model)
@@ -249,20 +249,20 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText);
         else if (Type == MessageType.KMarkdown)
             _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown);
-        
-        _cards = Type == MessageType.Card 
-            ? MessageHelper.ParseCards(model.Content) 
+
+        _cards = Type == MessageType.Card
+            ? MessageHelper.ParseCards(model.Content)
             : ImmutableArray.Create<ICard>();
 
         Guild = guild;
     }
-    
+
     /// <inheritdoc />
     /// <exception cref="InvalidOperationException">Only the author of a message may modify the message.</exception>
     /// <exception cref="ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="KookConfig.MaxMessageSize"/>.</exception>
     public Task ModifyAsync(Action<MessageProperties> func, RequestOptions options = null)
         => MessageHelper.ModifyAsync(this, Kook, func, options);
-    
+
     /// <param name="startIndex">The zero-based index at which to begin the resolving for the specified value.</param>
     /// <inheritdoc cref="IUserMessage.Resolve(TagHandling,TagHandling,TagHandling,TagHandling,TagHandling)"/>
     public string Resolve(int startIndex, TagHandling userHandling = TagHandling.Name, TagHandling channelHandling = TagHandling.Name,
@@ -272,7 +272,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     public string Resolve(TagHandling userHandling = TagHandling.Name, TagHandling channelHandling = TagHandling.Name,
         TagHandling roleHandling = TagHandling.Name, TagHandling everyoneHandling = TagHandling.Ignore, TagHandling emojiHandling = TagHandling.Name)
         => MentionUtils.Resolve(this, 0, userHandling, channelHandling, roleHandling, everyoneHandling, emojiHandling);
-    
+
     private string DebuggerDisplay => $"{Author}: {Content} ({Id}{(Attachments is not null && Attachments.Any() ? $", {Attachments.Count} Attachment{(Attachments.Count == 1 ? string.Empty : "s")}" : string.Empty)})";
     internal new SocketUserMessage Clone() => MemberwiseClone() as SocketUserMessage;
 

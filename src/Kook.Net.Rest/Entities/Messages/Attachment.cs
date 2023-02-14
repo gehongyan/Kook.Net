@@ -35,7 +35,7 @@ public class Attachment : IAttachment
         Width = width;
         Height = height;
     }
-    
+
     internal static Attachment Create(Model model)
     {
         AttachmentType type = model.Type switch
@@ -50,7 +50,7 @@ public class Attachment : IAttachment
             : null;
         return new Attachment(type, model.Url, model.Name, model.Size, model.FileType, duration, model.Width, model.Height);
     }
-    
+
     /// <summary>
     ///     Returns the filename of this attachment.
     /// </summary>

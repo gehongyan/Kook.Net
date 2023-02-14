@@ -5,5 +5,5 @@ namespace Kook;
 /// </summary>
 public interface IActivity
 {
-    
+
 }

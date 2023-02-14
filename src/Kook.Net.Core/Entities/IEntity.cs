@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 public interface IEntity<TId>
     where TId : IEquatable<TId>
@@ -6,5 +6,5 @@ public interface IEntity<TId>
     /// <summary>
     ///     Gets the unique identifier for this object.
     /// </summary>
-    TId Id { get; } 
+    TId Id { get; }
 }

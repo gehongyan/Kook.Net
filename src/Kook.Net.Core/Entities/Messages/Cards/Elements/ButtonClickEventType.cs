@@ -1,4 +1,4 @@
-﻿namespace Kook;
+namespace Kook;
 
 /// <summary>
 ///     Specifies the event type fired when a <see cref="ButtonElement"/> is clicked.

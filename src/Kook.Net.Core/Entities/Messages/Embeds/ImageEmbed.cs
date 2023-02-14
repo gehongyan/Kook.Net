@@ -10,10 +10,10 @@ public struct ImageEmbed : IEmbed
         Url = url;
         OriginUrl = originUrl;
     }
-    
+
     /// <inheritdoc />
     public EmbedType Type => EmbedType.Link;
-    
+
     /// <inheritdoc />
     public string Url { get; internal set; }
 

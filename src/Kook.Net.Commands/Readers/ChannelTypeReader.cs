@@ -31,7 +31,7 @@ public class ChannelTypeReader<T> : TypeReader
                 MessageType.Text => TagMode.PlainText,
                 MessageType.KMarkdown => TagMode.KMarkdown,
                 _ => throw new ArgumentOutOfRangeException(nameof(context.Message.Type))
-                    
+
             };
             //By Mention (1.0)
             if (MentionUtils.TryParseChannel(input, out ulong id, tagMode))

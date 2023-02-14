@@ -32,7 +32,7 @@ namespace Kook.Commands;
 public class RequireUserAttribute : PreconditionAttribute
 {
     private readonly ulong _userId;
-        
+
     public RequireUserAttribute(ulong userId)
     {
         _userId = userId;
@@ -42,7 +42,7 @@ public class RequireUserAttribute : PreconditionAttribute
     {
         _userId = user.Id;
     }
-        
+
     /// <inheritdoc />
     public override string ErrorMessage { get; set; }
 

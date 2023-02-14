@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using Kook.Net.Converters;
+using System.Text.Json.Serialization;
 
 namespace Kook.API.Rest;
 
@@ -9,5 +9,5 @@ internal class DeleteUserChatParams
     [JsonConverter(typeof(ChatCodeConverter))]
     public Guid ChatCode { get; set; }
 
-    public static implicit operator DeleteUserChatParams(Guid chatCode) => new() {ChatCode = chatCode};
+    public static implicit operator DeleteUserChatParams(Guid chatCode) => new() { ChatCode = chatCode };
 }

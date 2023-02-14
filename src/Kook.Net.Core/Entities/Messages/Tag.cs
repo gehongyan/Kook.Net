@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 namespace Kook;
 
@@ -16,7 +16,7 @@ public class Tag<T> : ITag
     public int Length { get; }
     /// <inheritdoc />
     public dynamic Key { get; }
-    
+
     /// <summary>
     ///     Gets the value of the tag.
     /// </summary>

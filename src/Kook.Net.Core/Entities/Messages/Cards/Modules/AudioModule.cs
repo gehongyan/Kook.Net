@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 namespace Kook;
 
@@ -14,16 +14,16 @@ public class AudioModule : IMediaModule, IEquatable<AudioModule>
         Title = title;
         Cover = cover;
     }
-    
+
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Audio;
 
     /// <inheritdoc />
     public string Source { get; }
-    
+
     /// <inheritdoc />
     public string Title { get; }
-    
+
     /// <summary>
     ///     Gets the cover of the audio associated with this module.
     /// </summary>
@@ -31,9 +31,9 @@ public class AudioModule : IMediaModule, IEquatable<AudioModule>
     ///     A <see langword="string"/> representing the cover of the audio associated with this module.
     /// </returns>
     public string Cover { get; }
-    
+
     private string DebuggerDisplay => $"{Type}: {Title}";
-    
+
     public static bool operator ==(AudioModule left, AudioModule right)
         => left?.Equals(right) ?? right is null;
 

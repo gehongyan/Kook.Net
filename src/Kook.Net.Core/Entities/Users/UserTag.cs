@@ -50,18 +50,23 @@ public class UserTag : IEquatable<UserTag>
     /// <inheritdoc />
     public bool Equals(UserTag other)
     {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+            return false;
+        if (ReferenceEquals(this, other))
+            return true;
         return Text == other.Text;
     }
 
     /// <inheritdoc />
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != this.GetType()) return false;
-        return Equals((UserTag) obj);
+        if (ReferenceEquals(null, obj))
+            return false;
+        if (ReferenceEquals(this, obj))
+            return true;
+        if (obj.GetType() != this.GetType())
+            return false;
+        return Equals((UserTag)obj);
     }
 
     /// <inheritdoc />
@@ -69,7 +74,7 @@ public class UserTag : IEquatable<UserTag>
     {
         return (Text != null ? Text.GetHashCode() : 0);
     }
-    
+
     #endregion
-    
+
 }

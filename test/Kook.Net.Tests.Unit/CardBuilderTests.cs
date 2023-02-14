@@ -24,7 +24,7 @@ public class CardBuilderTests
             .WithSize(CardSize.Small)
             .WithColor(Color.Blue)
             .AddModule<SectionModuleBuilder>(b =>
-                b.WithText<KMarkdownElementBuilder>(t => 
+                b.WithText<KMarkdownElementBuilder>(t =>
                     t.WithContent("text")));
         Assert.Equal(CardTheme.Info, builder.Theme);
         Assert.Equal(CardTheme.Info, builder.Build().Theme);
@@ -32,8 +32,8 @@ public class CardBuilderTests
         Assert.Equal(CardSize.Small, builder.Build().Size);
         Assert.Equal(Color.Blue, builder.Color);
         Assert.Equal(Color.Blue, builder.Build().Color);
-        Assert.Equal("text", ((KMarkdownElementBuilder) ((SectionModuleBuilder) builder.Modules[0]).Text).Content);
-        Assert.Equal("text", ((KMarkdownElement) ((SectionModule) builder.Build().Modules[0]).Text).Content);
+        Assert.Equal("text", ((KMarkdownElementBuilder)((SectionModuleBuilder)builder.Modules[0]).Text).Content);
+        Assert.Equal("text", ((KMarkdownElement)((SectionModule)builder.Build().Modules[0]).Text).Content);
         builder = new CardBuilder
         {
             Theme = CardTheme.Danger,
@@ -56,10 +56,10 @@ public class CardBuilderTests
         Assert.Equal(CardSize.Large, builder.Build().Size);
         Assert.Equal(Color.Red, builder.Color);
         Assert.Equal(Color.Red, builder.Build().Color);
-        Assert.Equal("content", ((PlainTextElementBuilder) ((SectionModuleBuilder) builder.Modules[0]).Text).Content);
-        Assert.Equal("content", ((PlainTextElement) ((SectionModule) builder.Build().Modules[0]).Text).Content);
+        Assert.Equal("content", ((PlainTextElementBuilder)((SectionModuleBuilder)builder.Modules[0]).Text).Content);
+        Assert.Equal("content", ((PlainTextElement)((SectionModule)builder.Build().Modules[0]).Text).Content);
     }
-    
+
     /// <summary>
     ///     Tests the behavior of <see cref="CardBuilder.WithTheme(CardTheme)"/>.
     /// </summary>

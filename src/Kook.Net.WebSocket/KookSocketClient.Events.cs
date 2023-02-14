@@ -1,6 +1,6 @@
+using Kook.API;
 using System;
 using System.Threading.Tasks;
-using Kook.API;
 
 namespace Kook.WebSocket;
 

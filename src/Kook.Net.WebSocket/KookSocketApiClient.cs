@@ -36,7 +36,7 @@ internal class KookSocketApiClient : KookRestApiClient
     }
 
     private readonly AsyncEvent<Func<Exception, Task>> _disconnectedEvent = new AsyncEvent<Func<Exception, Task>>();
-    
+
     private readonly bool _isExplicitUrl;
     private CancellationTokenSource _connectCancelToken;
     private string _gatewayUrl;
@@ -44,7 +44,7 @@ internal class KookSocketApiClient : KookRestApiClient
     private int _lastSeq;
     public ConnectionState ConnectionState { get; private set; }
     internal IWebSocketClient WebSocketClient { get; }
-    
+
     public KookSocketApiClient(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider, string userAgent, string acceptLanguage,
             string url = null, RetryMode defaultRetryMode = RetryMode.AlwaysRetry, JsonSerializerOptions serializerOptions = null,
             Func<IRateLimitInfo, Task> defaultRatelimitCallback = null)
@@ -53,7 +53,7 @@ internal class KookSocketApiClient : KookRestApiClient
         _gatewayUrl = url;
         if (url != null)
             _isExplicitUrl = true;
-        
+
         WebSocketClient = webSocketProvider();
         WebSocketClient.TextMessage += OnTextMessage;
         WebSocketClient.BinaryMessage += OnBinaryMessage;
@@ -75,8 +75,8 @@ internal class KookSocketApiClient : KookRestApiClient
 #else
         using MemoryStream decompressed = new();
 #endif
-        using MemoryStream compressed = data[0] == 0x78 
-            ? new MemoryStream(data, index + 2, count - 2) 
+        using MemoryStream compressed = data[0] == 0x78
+            ? new MemoryStream(data, index + 2, count - 2)
             : new MemoryStream(data, index, count);
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
         await using DeflateStream decompressor = new(compressed, CompressionMode.Decompress);
@@ -141,7 +141,7 @@ internal class KookSocketApiClient : KookRestApiClient
             throw new InvalidOperationException("The client must be logged in before connecting.");
         if (WebSocketClient == null)
             throw new NotSupportedException("This client is not configured with WebSocket support.");
-        
+
         RequestQueue.ClearGatewayBuckets();
 
         ConnectionState = ConnectionState.Connecting;
@@ -173,7 +173,7 @@ internal class KookSocketApiClient : KookRestApiClient
             throw;
         }
     }
-    
+
     public async Task DisconnectAsync(Exception ex = null)
     {
         await _stateLock.WaitAsync().ConfigureAwait(false);
@@ -189,10 +189,12 @@ internal class KookSocketApiClient : KookRestApiClient
         if (WebSocketClient == null)
             throw new NotSupportedException("This client is not configured with WebSocket support.");
 
-        if (ConnectionState == ConnectionState.Disconnected) return;
+        if (ConnectionState == ConnectionState.Disconnected)
+            return;
         ConnectionState = ConnectionState.Disconnecting;
-        
-        try { _connectCancelToken?.Cancel(false); }
+
+        try
+        { _connectCancelToken?.Cancel(false); }
         catch
         {
             // ignored
@@ -205,19 +207,19 @@ internal class KookSocketApiClient : KookRestApiClient
 
         ConnectionState = ConnectionState.Disconnected;
     }
-    
+
     public async Task SendHeartbeatAsync(int lastSeq, RequestOptions options = null)
     {
         options = RequestOptions.CreateOrClone(options);
         await SendGatewayAsync(GatewaySocketFrameType.Ping, sequence: lastSeq, options: options).ConfigureAwait(false);
     }
-    
+
     public async Task SendResumeAsync(int lastSeq, RequestOptions options = null)
     {
         options = RequestOptions.CreateOrClone(options);
         await SendGatewayAsync(GatewaySocketFrameType.Resume, sequence: lastSeq, options: options).ConfigureAwait(false);
     }
-    
+
     public Task SendGatewayAsync(GatewaySocketFrameType gatewaySocketFrameType, object payload = null, int? sequence = null, RequestOptions options = null)
         => SendGatewayInternalAsync(gatewaySocketFrameType, options, payload, sequence);
     private async Task SendGatewayInternalAsync(GatewaySocketFrameType gatewaySocketFrameType, RequestOptions options, object payload = null, int? sequence = null)
@@ -226,13 +228,13 @@ internal class KookSocketApiClient : KookRestApiClient
 
         payload = new GatewaySocketFrame { Type = gatewaySocketFrameType, Payload = payload, Sequence = sequence };
         byte[] bytes = Encoding.UTF8.GetBytes(SerializeJson(payload));
-        
+
         options.IsGatewayBucket = true;
         if (options.BucketId == null)
             options.BucketId = GatewayBucket.Get(GatewayBucketType.Unbucketed).Id;
         await RequestQueue.SendAsync(new WebSocketRequest(WebSocketClient, bytes, true, gatewaySocketFrameType == GatewaySocketFrameType.Ping, options)).ConfigureAwait(false);
         await _sentGatewayMessageEvent.InvokeAsync(gatewaySocketFrameType).ConfigureAwait(false);
-        
+
 #if DEBUG_PACKETS
         Debug.WriteLine($"-> [{gatewaySocketFrameType}] : #{sequence} \n{JsonSerializer.Serialize(payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
 #endif

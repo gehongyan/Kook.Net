@@ -1,5 +1,5 @@
-using System.Text.Json.Serialization;
 using Kook.Net.Converters;
+using System.Text.Json.Serialization;
 
 namespace Kook.API;
 
@@ -20,15 +20,15 @@ internal class Invite
     [JsonPropertyName("url_code")] public string UrlCode { get; set; }
     [JsonPropertyName("url")] public string Url { get; set; }
     [JsonPropertyName("user")] public User Inviter { get; set; }
-    
-    [JsonPropertyName("expire_time")] 
+
+    [JsonPropertyName("expire_time")]
     [JsonConverter(typeof(NullableDateTimeOffsetConverter))]
     public DateTimeOffset? ExpiresAt { get; set; }
 
     [JsonPropertyName("remaining_times")]
     public int RemainingTimes { get; set; }
 
-    [JsonPropertyName("using_times")] 
+    [JsonPropertyName("using_times")]
     public int UsingTimes { get; set; }
 
     [JsonPropertyName("duration")]

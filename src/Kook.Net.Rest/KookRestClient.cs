@@ -14,18 +14,18 @@ public class KookRestClient : BaseKookClient, IKookClient
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
         NumberHandling = JsonNumberHandling.AllowReadingFromString
     };
-    
+
     /// <summary>
     ///     Gets the logged-in user.
     /// </summary>
     public new RestSelfUser CurrentUser { get => base.CurrentUser as RestSelfUser; internal set => base.CurrentUser = value; }
 
     public KookRestClient() : this(new KookRestConfig()) { }
-    
+
     public KookRestClient(KookRestConfig config) : base(config, CreateApiClient(config)) { }
-    
+
     internal KookRestClient(KookRestConfig config, API.KookRestApiClient api) : base(config, api) { }
-    
+
     private static API.KookRestApiClient CreateApiClient(KookRestConfig config)
         => new API.KookRestApiClient(config.RestClientProvider, KookRestConfig.UserAgent, acceptLanguage: config.AcceptLanguage,
             defaultRetryMode: config.DefaultRetryMode, serializerOptions: SerializerOptions);
@@ -37,7 +37,7 @@ public class KookRestClient : BaseKookClient, IKookClient
 
         base.Dispose(disposing);
     }
-    
+
     /// <inheritdoc />
     internal override async Task OnLoginAsync(TokenType tokenType, string token)
     {
@@ -65,7 +65,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <inheritdoc cref="IKookClient.GetGuildsAsync" />
     public Task<IReadOnlyCollection<RestGuild>> GetGuildsAsync(RequestOptions options = null)
         => ClientHelper.GetGuildsAsync(this, options);
-    
+
     #endregion
 
     #region Channels
@@ -76,7 +76,7 @@ public class KookRestClient : BaseKookClient, IKookClient
         => ClientHelper.GetDMChannelAsync(this, chatCode, options);
     public Task<IReadOnlyCollection<RestDMChannel>> GetDMChannelsAsync(RequestOptions options = null)
         => ClientHelper.GetDMChannelsAsync(this, options);
-    
+
     #endregion
 
     #region Roles
@@ -87,7 +87,7 @@ public class KookRestClient : BaseKookClient, IKookClient
         => ClientHelper.RemoveRoleAsync(this, guildId, userId, roleId);
 
     #endregion
-    
+
     #region Users
 
     public Task<RestUser> GetUserAsync(ulong id, RequestOptions options = null)
@@ -110,9 +110,9 @@ public class KookRestClient : BaseKookClient, IKookClient
         => MessageHelper.RemoveDirectMessageReactionAsync(messageId, userId, emote, this, options);
 
     #endregion
-    
+
     #region Assets
-    
+
     public Task<string> CreateAssetAsync(string path, string fileName, RequestOptions options = null)
         => ClientHelper.CreateAssetAsync(this, File.OpenRead(path), fileName, options);
     public Task<string> CreateAssetAsync(Stream stream, string fileName, RequestOptions options = null)
@@ -121,7 +121,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     #endregion
 
     #region Games
-    
+
     public IAsyncEnumerable<IReadOnlyCollection<RestGame>> GetGamesAsync(RequestOptions options = null)
         => ClientHelper.GetGamesAsync(this, options);
     public Task<RestGame> CreateGameAsync(string name, string processName, string iconUrl, RequestOptions options = null)
@@ -147,7 +147,7 @@ public class KookRestClient : BaseKookClient, IKookClient
         else
             return ImmutableArray.Create<IGuild>();
     }
-    
+
     /// <inheritdoc />
     async Task<IUser> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
     {
@@ -156,7 +156,7 @@ public class KookRestClient : BaseKookClient, IKookClient
         else
             return null;
     }
-    
+
     /// <inheritdoc />
     async Task<IChannel> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
     {

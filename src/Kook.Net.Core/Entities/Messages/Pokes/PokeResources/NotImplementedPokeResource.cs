@@ -12,10 +12,10 @@ public struct NotImplementedPokeResource : IPokeResource
         RawType = rawType;
         JsonNode = jsonNode;
     }
-    
+
     /// <inheritdoc />
     public PokeResourceType Type => PokeResourceType.NotImplemented;
-    
+
     /// <summary>
     ///     Gets the type of the poke resource.
     /// </summary>
@@ -26,7 +26,7 @@ public struct NotImplementedPokeResource : IPokeResource
     ///     This value originally came from the <c>type</c> field of the <see cref="JsonNode"/>.
     /// </remarks>
     public string RawType { get; internal set; }
-    
+
     /// <summary>
     ///     Gets the raw JSON of the embed.
     /// </summary>
@@ -34,7 +34,7 @@ public struct NotImplementedPokeResource : IPokeResource
     ///     A JsonNode representing the raw JSON of the embed.
     /// </returns>
     public JsonNode JsonNode { get; internal set; }
-    
+
     /// <summary>
     ///     Resolves the embed to a concrete type via JSON deserialization.
     /// </summary>
@@ -58,7 +58,7 @@ public struct NotImplementedPokeResource : IPokeResource
         T pokeResource = JsonNode.Deserialize<T>(options);
         return pokeResource;
     }
-    
+
     /// <summary>
     ///     Resolves the embed to a concrete type via delegate.
     /// </summary>
