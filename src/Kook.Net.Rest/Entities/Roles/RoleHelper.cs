@@ -27,7 +27,7 @@ internal static class RoleHelper
             GuildId = role.Guild.Id,
             RoleId = role.Id,
             Name = args.Name,
-            Color = args.Color?.RawValue,
+            Color = args.Color,
             Hoist = args.Hoist switch
             {
                 true => 1,

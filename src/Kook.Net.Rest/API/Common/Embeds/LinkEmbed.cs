@@ -15,7 +15,7 @@ internal class LinkEmbed : EmbedBase
     public string SiteName { get; set; }
 
     [JsonPropertyName("theme_color")]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(HexColorConverter))]
     public Color Color { get; set; }
 
     [JsonPropertyName("image")]

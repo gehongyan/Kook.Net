@@ -1,3 +1,4 @@
+using Kook.Net.Converters;
 using System.Text.Json.Serialization;
 
 namespace Kook.API.Rest;
@@ -15,8 +16,9 @@ internal class ModifyGuildRoleParams
     public string Name { get; set; }
 
     [JsonPropertyName("color")]
+    [JsonConverter(typeof(RawValueColorConverter))]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public uint? Color { get; set; }
+    public Color? Color { get; set; }
 
     [JsonPropertyName("hoist")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

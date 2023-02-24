@@ -78,7 +78,7 @@ public class RestGuildUser : RestUser, IGuildUser
         IsMobileVerified = model.MobileVerified;
         JoinedAt = model.JoinedAt;
         ActiveAt = model.ActiveAt;
-        Color = new Color(model.Color);
+        Color = model.Color;
         IsOwner = model.IsOwner;
         UpdateRoles(model.Roles);
     }

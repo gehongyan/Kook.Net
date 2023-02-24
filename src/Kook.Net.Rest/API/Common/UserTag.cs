@@ -6,7 +6,7 @@ namespace Kook.API;
 internal class UserTag
 {
     [JsonPropertyName("color")]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(HexColorConverter))]
     public Color Color { get; set; }
 
     [JsonPropertyName("text")]

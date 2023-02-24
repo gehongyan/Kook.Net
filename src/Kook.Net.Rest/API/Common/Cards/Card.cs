@@ -10,7 +10,8 @@ internal class Card : CardBase
     public CardTheme Theme { get; set; }
 
     [JsonPropertyName("color")]
-    [JsonConverter(typeof(NullableColorConverter))]
+    [JsonConverter(typeof(HexColorConverter))]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public Color? Color { get; set; }
 
     [JsonPropertyName("size")]

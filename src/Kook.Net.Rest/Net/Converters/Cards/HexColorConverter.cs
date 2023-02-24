@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Kook.Net.Converters;
 
-internal class ColorConverter : JsonConverter<Color>
+internal class HexColorConverter : JsonConverter<Color>
 {
     public override Color Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

@@ -6,7 +6,7 @@ namespace Kook.API;
 internal class PokeQualityResource
 {
     [JsonPropertyName("color")]
-    [JsonConverter(typeof(ColorConverter))]
+    [JsonConverter(typeof(HexColorConverter))]
     public Color Color { get; set; }
     [JsonPropertyName("small")]
     public string Small { get; set; }

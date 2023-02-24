@@ -63,7 +63,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     {
         Name = model.Name;
         Type = model.Type;
-        Color = new Color(model.Color);
+        Color = model.Color;
         Position = model.Position;
         IsHoisted = model.Hoist switch
         {

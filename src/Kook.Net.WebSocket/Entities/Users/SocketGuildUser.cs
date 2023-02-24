@@ -165,7 +165,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         IsMobileVerified = model.MobileVerified;
         JoinedAt = model.JoinedAt;
         ActiveAt = model.ActiveAt;
-        Color = new Color(model.Color);
+        Color = model.Color;
         IsOwner = model.IsOwner;
         UpdateRoles(model.Roles);
     }
