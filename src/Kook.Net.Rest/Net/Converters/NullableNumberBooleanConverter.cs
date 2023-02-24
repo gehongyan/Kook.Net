@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Kook.Net.Converters;
 
-public class NullableNumberBooleanConverter : JsonConverter<bool?>
+internal class NullableNumberBooleanConverter : JsonConverter<bool?>
 {
     public override bool? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

@@ -15,6 +15,13 @@ internal class Role
     [JsonConverter(typeof(RawValueColorConverter))]
     public Color Color { get; set; }
 
+    [JsonPropertyName("color_type")]
+    public ColorType ColorType { get; set; }
+
+    [JsonPropertyName("color_map")]
+    [JsonConverter(typeof(NullableGradientColorConverter))]
+    public GradientColor? GradientColor { get; set; }
+
     [JsonPropertyName("position")]
     public int Position { get; set; }
 

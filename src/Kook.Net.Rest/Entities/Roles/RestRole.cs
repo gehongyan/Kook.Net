@@ -24,6 +24,10 @@ public class RestRole : RestEntity<uint>, IRole
     /// <inheritdoc />
     public Color Color { get; private set; }
     /// <inheritdoc />
+    public ColorType ColorType { get; private set; }
+    /// <inheritdoc />
+    public GradientColor? GradientColor { get; private set; }
+    /// <inheritdoc />
     public bool IsHoisted { get; private set; }
     /// <inheritdoc />
     public bool IsMentionable { get; private set; }
@@ -61,10 +65,12 @@ public class RestRole : RestEntity<uint>, IRole
     {
         Name = model.Name;
         Type = model.Type;
+        Color = model.Color;
+        ColorType = model.ColorType;
+        GradientColor = model.GradientColor;
         IsHoisted = model.Hoist == 1;
         IsMentionable = model.Mentionable == 1;
         Position = model.Position;
-        Color = model.Color;
         Permissions = new GuildPermissions(model.Permissions);
     }
 

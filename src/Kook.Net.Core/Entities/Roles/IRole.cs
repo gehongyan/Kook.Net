@@ -36,6 +36,21 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     /// </returns>
     Color Color { get; }
     /// <summary>
+    ///     Gets the type of the color given to users of this role.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="ColorType"/> struct representing the color type of this role.
+    /// </returns>
+    ColorType ColorType { get; }
+    /// <summary>
+    ///     Gets the gradient color given to users of this role.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="GradientColor"/> struct representing the gradient color of this role;
+    ///     <c>null</c> if the role does not have a gradient color.
+    /// </returns>
+    GradientColor? GradientColor { get; }
+    /// <summary>
     ///     Gets this role's position relative to other roles in the same guild.
     /// </summary>
     /// <returns>

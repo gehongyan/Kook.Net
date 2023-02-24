@@ -28,6 +28,10 @@ public class SocketRole : SocketEntity<uint>, IRole
     /// <inheritdoc />
     public Color Color { get; private set; }
     /// <inheritdoc />
+    public ColorType ColorType { get; private set; }
+    /// <inheritdoc />
+    public GradientColor? GradientColor { get; private set; }
+    /// <inheritdoc />
     public int Position { get; private set; }
     /// <inheritdoc />
     public bool IsHoisted { get; private set; }
@@ -64,6 +68,8 @@ public class SocketRole : SocketEntity<uint>, IRole
         Name = model.Name;
         Type = model.Type;
         Color = model.Color;
+        ColorType = model.ColorType;
+        GradientColor = model.GradientColor;
         Position = model.Position;
         IsHoisted = model.Hoist switch
         {
