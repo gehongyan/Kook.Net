@@ -75,6 +75,16 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A <see cref="Color"/> struct representing the color the user's display name is being displayed in.
     /// </returns>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         At present, the color of a role may be a solid color or a gradient. See <see cref="IRole.ColorType"/>,
+    ///         which is guaranteed due to the fact that the guild's user list API endpoint returns the color type
+    ///         and the gradient color information if exists. However, the value of this property is fetched
+    ///         from the guild's user list API endpoint, which does not return the color type and the gradient
+    ///         color information. Hence, the value of this property may be incorrect if the color of a role is
+    ///         a gradient.
+    ///     </note>
+    /// </remarks>
     Color Color { get; }
     /// <summary>
     ///     Gets whether this user owns the current guild.
