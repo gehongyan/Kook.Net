@@ -19,7 +19,6 @@ internal class ElementConverter : JsonConverter<ElementBase>
             "paragraph" => JsonSerializer.Deserialize<API.ParagraphStruct>(jsonNode.ToJsonString(), options),
             _ => throw new ArgumentOutOfRangeException(nameof(ElementType))
         };
-        ;
     }
 
     public override void Write(Utf8JsonWriter writer, ElementBase value, JsonSerializerOptions options)

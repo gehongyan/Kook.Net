@@ -27,9 +27,21 @@ public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>
 
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>;
+    /// </returns>
     public static bool operator ==(ImageGroupModule left, ImageGroupModule right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ImageGroupModule"/> is not equal to the current <see cref="ImageGroupModule"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="ImageGroupModule"/> is not equal to the current <see cref="ImageGroupModule"/>;
+    /// </returns>
     public static bool operator !=(ImageGroupModule left, ImageGroupModule right)
         => !(left == right);
 

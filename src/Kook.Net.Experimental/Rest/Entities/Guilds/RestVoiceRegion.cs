@@ -36,6 +36,7 @@ public class RestVoiceRegion : RestEntity<string>, IVoiceRegion
         Crowding = model.Crowding / 100M;
     }
 
+    /// <inheritdoc />
     public override string ToString() => Name;
     private string DebuggerDisplay => $"{Name} ({Id}, {Crowding:F2}%)";
 }

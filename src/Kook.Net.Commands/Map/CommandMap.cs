@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Kook.Commands;
 
 internal class CommandMap

@@ -1,4 +1,3 @@
-using Kook.API;
 using Kook.API.Gateway;
 using Kook.Rest;
 using System.Collections.Immutable;

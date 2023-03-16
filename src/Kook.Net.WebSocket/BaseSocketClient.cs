@@ -3,6 +3,9 @@ using Kook.Rest;
 
 namespace Kook.WebSocket;
 
+/// <summary>
+///     Represents an abstract base class for WebSocket-based clients.
+/// </summary>
 public abstract partial class BaseSocketClient : BaseKookClient
 {
     protected readonly KookSocketConfig BaseConfig;

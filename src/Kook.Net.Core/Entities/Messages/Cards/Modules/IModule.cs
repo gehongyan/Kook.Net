@@ -1,5 +1,8 @@
 namespace Kook;
 
+/// <summary>
+///     Represents a generic module that can be used in an <see cref="ICard"/>.
+/// </summary>
 public interface IModule
 {
     /// <summary>

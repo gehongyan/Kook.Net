@@ -14,11 +14,11 @@ public struct PokeIcon
     /// </summary>
     public string ResourceExpired { get; internal set; }
 
-    public PokeIcon(string resource, string resourceExpired)
+    internal PokeIcon(string resource, string resourceExpired)
     {
         Resource = resource;
         ResourceExpired = resourceExpired;
     }
 
-    public static PokeIcon Create(string resource, string resourceExpired) => new(resource, resourceExpired);
+    internal static PokeIcon Create(string resource, string resourceExpired) => new(resource, resourceExpired);
 }

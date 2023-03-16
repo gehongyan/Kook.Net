@@ -6,7 +6,7 @@ namespace Kook;
 /// <remarks>
 ///     This enum is used to specify the direction for retrieving messages.
 ///     <note type="important">
-///         At the time of writing, <see cref="Around"/> is not yet implemented into 
+///         At the time of writing, <see cref="Around"/> is not yet implemented into
 ///         <see cref="IMessageChannel.GetMessagesAsync(int, CacheMode, RequestOptions)"/>.
 ///         Attempting to use the method with <see cref="Around"/> will throw
 ///         a <see cref="System.NotImplementedException"/>.
@@ -14,6 +14,9 @@ namespace Kook;
 /// </remarks>
 public enum Direction
 {
+    /// <summary>
+    ///     How the message(s) should be retrieved is unspecified.
+    /// </summary>
     Unspecified,
     /// <summary>
     ///     The message(s) should be retrieved before a message.

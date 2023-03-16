@@ -1,5 +1,4 @@
 using Kook.Net.Converters;
-using System.Security.Principal;
 using System.Text.Json.Serialization;
 
 namespace Kook.API.Gateway;

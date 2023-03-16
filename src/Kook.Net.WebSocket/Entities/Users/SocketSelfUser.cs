@@ -1,6 +1,5 @@
 using Kook.Rest;
 using System.Diagnostics;
-using System.Globalization;
 using Model = Kook.API.Rest.SelfUser;
 
 namespace Kook.WebSocket;

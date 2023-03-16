@@ -1,8 +1,8 @@
-using Kook.API;
-using Kook.API.Rest;
-
 namespace Kook.Rest;
 
+/// <summary>
+///     Provides extension methods of experimental functionalities for <see cref="RestGuild"/>s.
+/// </summary>
 public static class RestGuildExperimentalExtensions
 {
     /// <summary>

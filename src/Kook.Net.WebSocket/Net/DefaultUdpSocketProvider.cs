@@ -1,5 +1,3 @@
-using System;
-
 namespace Kook.Net.Udp;
 
 public static class DefaultUdpSocketProvider

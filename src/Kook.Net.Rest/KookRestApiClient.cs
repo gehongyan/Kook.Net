@@ -1,16 +1,12 @@
-using Kook.API;
 using Kook.API.Rest;
 using Kook.Net;
-using Kook.Net.Converters;
 using Kook.Net.Queue;
 using Kook.Net.Rest;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
-using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -696,7 +692,7 @@ internal class KookRestApiClient : IDisposable
         var ids = new BucketIds();
         return await SendAsync<IReadOnlyCollection<ReactionUserResponse>>(HttpMethod.Get,
 #if NET462
-            () => $"message/reaction-list?msg_id={messageId}&emoji={WebUtility.UrlEncode(emojiId)}", 
+            () => $"message/reaction-list?msg_id={messageId}&emoji={WebUtility.UrlEncode(emojiId)}",
 #else
             () => $"message/reaction-list?msg_id={messageId}&emoji={HttpUtility.UrlEncode(emojiId)}",
 #endif
@@ -754,7 +750,6 @@ internal class KookRestApiClient : IDisposable
         return SendPagedAsync<UserChat>(HttpMethod.Get,
             (pageSize, page) => $"user-chat/list?page_size={pageSize}&page={page}",
             ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);
-        ;
     }
 
     public async Task<UserChat> GetUserChatAsync(Guid chatCode, RequestOptions options = null)

@@ -24,6 +24,7 @@ public class HeaderModule : IModule, IEquatable<HeaderModule>
     /// </returns>
     public PlainTextElement Text { get; }
 
+    /// <inheritdoc />
     public override string ToString() => Text.ToString();
     private string DebuggerDisplay => $"{Type}: {Text}";
 

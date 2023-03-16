@@ -1,13 +1,6 @@
-using Kook.API;
-using Kook.API.Rest;
-using Kook.Net.Converters;
 using Kook.Rest;
-using Kook.Utils;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Model = Kook.API.Channel;
 
 namespace Kook.WebSocket;

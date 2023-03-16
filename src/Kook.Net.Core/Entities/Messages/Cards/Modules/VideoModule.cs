@@ -25,9 +25,21 @@ public class VideoModule : IMediaModule, IEquatable<VideoModule>
 
     private string DebuggerDisplay => $"{Type}: {Title}";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="VideoModule"/> is equal to the current <see cref="VideoModule"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="VideoModule"/> is equal to the current <see cref="VideoModule"/>; otherwise, <c>false</c>.
+    /// </returns>
     public static bool operator ==(VideoModule left, VideoModule right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="VideoModule"/> is not equal to the current <see cref="VideoModule"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="VideoModule"/> is not equal to the current <see cref="VideoModule"/>; otherwise, <c>false</c>.
+    /// </returns>
     public static bool operator !=(VideoModule left, VideoModule right)
         => !(left == right);
 

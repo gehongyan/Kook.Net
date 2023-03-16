@@ -99,6 +99,15 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     public Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null)
         => ChannelHelper.ModifyAsync(this, Kook, func, options);
 
+    /// <summary>
+    ///     Gets a collection of users that are currently connected to this voice channel.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of users
+    ///     that are currently connected to this voice channel.
+    /// </returns>
     public async Task<IReadOnlyCollection<SocketGuildUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
     {
         if (mode is CacheMode.AllowDownload)

@@ -1,6 +1,5 @@
 using Kook.Rest;
 using System;
-using Xunit;
 
 namespace Kook;
 

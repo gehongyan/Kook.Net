@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
-
 namespace Kook;
 
 /// <summary> An extension class for various Kook user objects. </summary>

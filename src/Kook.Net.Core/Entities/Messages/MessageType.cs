@@ -1,41 +1,44 @@
 namespace Kook;
 
+/// <summary>
+///     Represents the type of a message.
+/// </summary>
 public enum MessageType
 {
     /// <summary>
-    ///     文字消息
+    ///     Represents that the type of the message contains plain text.
     /// </summary>
     Text = 1,
     /// <summary>
-    ///     图片消息
+    ///     Represents that the type of the message contains an image.
     /// </summary>
     Image = 2,
     /// <summary>
-    ///     视频消息
+    ///     Represents that the type of the message contains a video.
     /// </summary>
     Video = 3,
     /// <summary>
-    ///     文件消息
+    ///     Represents that the type of the message contains a file.
     /// </summary>
     File = 4,
     /// <summary>
-    ///     音频消息
+    ///     Represents that the type of the message contains a voice message.
     /// </summary>
     Audio = 8,
     /// <summary>
-    ///     KMarkdown消息
+    ///     Represents that the type of the message contains a KMarkdown message.
     /// </summary>
     KMarkdown = 9,
     /// <summary>
-    ///     卡片消息
+    ///     Represents that the type of the message contains cards.
     /// </summary>
     Card = 10,
     /// <summary>
-    ///     道具消息
+    ///     Represents that the type of the message contains a poke action.
     /// </summary>
     Poke = 12,
     /// <summary>
-    ///     系统消息
+    ///     Represents that the type of the message originates from KOOK system.
     /// </summary>
     System = 255
 }

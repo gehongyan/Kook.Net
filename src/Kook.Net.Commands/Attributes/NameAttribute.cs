@@ -1,5 +1,3 @@
-using System;
-
 namespace Kook.Commands;
 
 // Override public name of command/module

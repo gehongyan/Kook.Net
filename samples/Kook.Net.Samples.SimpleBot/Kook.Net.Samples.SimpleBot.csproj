@@ -8,6 +8,7 @@
         <IsPackable>false</IsPackable>
         <LangVersion>latestmajor</LangVersion>
         <RootNamespace>Kook.Net.Samples.SimpleBot</RootNamespace>
+      <NoWarn>NU1803</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>

@@ -1,6 +1,4 @@
 using Kook.Commands.Builders;
-using System;
-using System.Threading.Tasks;
 
 namespace Kook.Commands;
 

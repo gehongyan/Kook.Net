@@ -1,4 +1,3 @@
-using Kook.API;
 using Kook.WebSocket;
 using System.Diagnostics;
 using System.Globalization;

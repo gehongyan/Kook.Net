@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 
 namespace Kook.Commands;
@@ -76,7 +75,7 @@ public struct ExecuteResult : IResult
     ///     Gets a string that indicates the execution result.
     /// </summary>
     /// <returns>
-    ///     <c>Success</c> if <see cref="IsSuccess"/> is <c>true</c>; otherwise "<see cref="Error"/>: 
+    ///     <c>Success</c> if <see cref="IsSuccess"/> is <c>true</c>; otherwise "<see cref="Error"/>:
     ///     <see cref="ErrorReason"/>".
     /// </returns>
     public override string ToString() => IsSuccess ? "Success" : $"{Error}: {ErrorReason}";

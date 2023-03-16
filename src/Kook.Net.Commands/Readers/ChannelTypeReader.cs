@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Kook.Commands;
 
@@ -10,7 +6,7 @@ namespace Kook.Commands;
 ///     A <see cref="TypeReader"/> for parsing objects implementing <see cref="IChannel"/>.
 /// </summary>
 /// <remarks>
-///     This <see cref="TypeReader"/> is shipped with Kook.Net and is used by default to parse any 
+///     This <see cref="TypeReader"/> is shipped with Kook.Net and is used by default to parse any
 ///     <see cref="IChannel"/> implemented object within a command. The TypeReader will attempt to first parse the
 ///     input by mention, then the identifier, then by name; the highest candidate will be chosen as the
 ///     final output; otherwise, an erroneous <see cref="TypeReaderResult"/> is returned.

@@ -1,7 +1,3 @@
-using Kook.API;
-using System;
-using System.Threading.Tasks;
-
 namespace Kook.WebSocket;
 
 public partial class KookSocketClient

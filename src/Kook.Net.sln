@@ -32,6 +32,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Experimental", "Experimenta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kook.Net.Experimental", "Kook.Net.Experimental\Kook.Net.Experimental.csproj", "{95881FD6-BAF5-43A6-9D75-9F9181FC9D21}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{55F21D65-BA1A-4A4B-B370-FD2CA0204EB2}"
+	ProjectSection(SolutionItems) = preProject
+		Kook.Net.targets = Kook.Net.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

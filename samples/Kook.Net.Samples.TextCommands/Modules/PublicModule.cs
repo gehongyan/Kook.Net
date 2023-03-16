@@ -2,8 +2,6 @@ using Kook;
 using Kook.Commands;
 using Kook.Rest;
 using Kook.WebSocket;
-using System.IO;
-using System.Threading.Tasks;
 using TextCommandFramework.Services;
 
 namespace TextCommandFramework.Modules;

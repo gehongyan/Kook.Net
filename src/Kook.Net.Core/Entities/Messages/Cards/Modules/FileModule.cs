@@ -25,9 +25,21 @@ public class FileModule : IMediaModule, IEquatable<FileModule>
 
     private string DebuggerDisplay => $"{Type}: {Title}";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="FileModule"/> is equal to the current <see cref="FileModule"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="FileModule"/> is equal to the current <see cref="FileModule"/>; otherwise, <c>false</c>.
+    /// </returns>
     public static bool operator ==(FileModule left, FileModule right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="FileModule"/> is not equal to the current <see cref="FileModule"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="FileModule"/> is not equal to the current <see cref="FileModule"/>; otherwise, <c>false</c>.
+    /// </returns>
     public static bool operator !=(FileModule left, FileModule right)
         => !(left == right);
 

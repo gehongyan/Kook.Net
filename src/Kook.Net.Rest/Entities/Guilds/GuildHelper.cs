@@ -1,7 +1,6 @@
 using Kook.API;
 using Kook.API.Rest;
 using System.Collections.Immutable;
-using System.Runtime.CompilerServices;
 
 namespace Kook.Rest;
 

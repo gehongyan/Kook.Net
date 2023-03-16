@@ -5,7 +5,7 @@ namespace Kook;
 /// </summary>
 public struct ImageAnimationPokeResource : IPokeResource
 {
-    public ImageAnimationPokeResource(IReadOnlyDictionary<string, string> resources, TimeSpan duration, int width, int height, double percent)
+    internal ImageAnimationPokeResource(IReadOnlyDictionary<string, string> resources, TimeSpan duration, int width, int height, double percent)
     {
         Resources = resources;
         Duration = duration;

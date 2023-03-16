@@ -1,13 +1,9 @@
 using Kook.Commands.Builders;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
-using System.Threading.Tasks;
 
 namespace Kook.Commands;
 
@@ -21,8 +17,11 @@ namespace Kook.Commands;
 [DebuggerDisplay("{Name,nq}")]
 public class CommandInfo
 {
-    private static readonly System.Reflection.MethodInfo _convertParamsMethod = typeof(CommandInfo).GetTypeInfo().GetDeclaredMethod(nameof(ConvertParamsList));
-    private static readonly ConcurrentDictionary<Type, Func<IEnumerable<object>, object>> _arrayConverters = new ConcurrentDictionary<Type, Func<IEnumerable<object>, object>>();
+    private static readonly System.Reflection.MethodInfo _convertParamsMethod =
+        typeof(CommandInfo).GetTypeInfo().GetDeclaredMethod(nameof(ConvertParamsList));
+
+    private static readonly ConcurrentDictionary<Type, Func<IEnumerable<object>, object>> _arrayConverters =
+        new ConcurrentDictionary<Type, Func<IEnumerable<object>, object>>();
 
     private readonly CommandService _commandService;
     private readonly Func<ICommandContext, object[], IServiceProvider, CommandInfo, Task> _action;
@@ -31,10 +30,12 @@ public class CommandInfo
     ///     Gets the module that the command belongs in.
     /// </summary>
     public ModuleInfo Module { get; }
+
     /// <summary>
     ///     Gets the name of the command. If none is set, the first alias is used.
     /// </summary>
     public string Name { get; }
+
     /// <summary>
     ///     Gets the summary of the command.
     /// </summary>
@@ -43,6 +44,7 @@ public class CommandInfo
     ///     useful in help commands and various implementation that fetches details of the command for the user.
     /// </remarks>
     public string Summary { get; }
+
     /// <summary>
     ///     Gets the remarks of the command.
     /// </summary>
@@ -51,19 +53,23 @@ public class CommandInfo
     ///     useful in help commands and various implementation that fetches details of the command for the user.
     /// </remarks>
     public string Remarks { get; }
+
     /// <summary>
     ///     Gets the priority of the command. This is used when there are multiple overloads of the command.
     /// </summary>
     public int Priority { get; }
+
     /// <summary>
     ///     Indicates whether the command accepts a <see langword="params"/> <see cref="Type"/>[] for its
     ///     parameter.
     /// </summary>
     public bool HasVarArgs { get; }
+
     /// <summary>
     ///     Indicates whether extra arguments should be ignored for this command.
     /// </summary>
     public bool IgnoreExtraArgs { get; }
+
     /// <summary>
     ///     Gets the <see cref="RunMode" /> that is being used for the command.
     /// </summary>
@@ -73,14 +79,17 @@ public class CommandInfo
     ///     Gets a list of aliases defined by the <see cref="AliasAttribute" /> of the command.
     /// </summary>
     public IReadOnlyList<string> Aliases { get; }
+
     /// <summary>
     ///     Gets a list of information about the parameters of the command.
     /// </summary>
     public IReadOnlyList<ParameterInfo> Parameters { get; }
+
     /// <summary>
     ///     Gets a list of preconditions defined by the <see cref="PreconditionAttribute" /> of the command.
     /// </summary>
     public IReadOnlyList<PreconditionAttribute> Preconditions { get; }
+
     /// <summary>
     ///     Gets a list of attributes of the command.
     /// </summary>
@@ -121,6 +130,12 @@ public class CommandInfo
         _commandService = service;
     }
 
+    /// <summary>
+    ///     Checks the preconditions of the command.
+    /// </summary>
+    /// <param name="context"> The context of the command. </param>
+    /// <param name="services"> The services to be used for precondition checking. </param>
+    /// <returns> A <see cref="PreconditionResult" /> that indicates whether the precondition check was successful. </returns>
     public async Task<PreconditionResult> CheckPreconditionsAsync(ICommandContext context, IServiceProvider services = null)
     {
         services ??= EmptyServiceProvider.Instance;
@@ -148,6 +163,7 @@ public class CommandInfo
                         return PreconditionGroupResult.FromError($"{type} precondition group {preconditionGroup.Key} failed.", results);
                 }
             }
+
             return PreconditionGroupResult.FromSuccess();
         }
 
@@ -162,7 +178,17 @@ public class CommandInfo
         return PreconditionResult.FromSuccess();
     }
 
-    public async Task<ParseResult> ParseAsync(ICommandContext context, int startIndex, SearchResult searchResult, PreconditionResult preconditionResult = null, IServiceProvider services = null)
+    /// <summary>
+    ///     Parses the arguments of the command.
+    /// </summary>
+    /// <param name="context"> The context of the command. </param>
+    /// <param name="startIndex"> The index to start parsing from. </param>
+    /// <param name="searchResult"> The search result of the command. </param>
+    /// <param name="preconditionResult"> The result of the precondition check. </param>
+    /// <param name="services"> The services to be used for parsing. </param>
+    /// <returns> A <see cref="ParseResult" /> that indicates whether the parsing was successful. </returns>
+    public async Task<ParseResult> ParseAsync(ICommandContext context, int startIndex, SearchResult searchResult,
+        PreconditionResult preconditionResult = null, IServiceProvider services = null)
     {
         services ??= EmptyServiceProvider.Instance;
 
@@ -173,9 +199,18 @@ public class CommandInfo
 
         string input = searchResult.Text.Substring(startIndex);
 
-        return await CommandParser.ParseArgsAsync(this, context, _commandService._ignoreExtraArgs, services, input, 0, _commandService._quotationMarkAliasMap).ConfigureAwait(false);
+        return await CommandParser
+            .ParseArgsAsync(this, context, _commandService._ignoreExtraArgs, services, input, 0, _commandService._quotationMarkAliasMap)
+            .ConfigureAwait(false);
     }
 
+    /// <summary>
+    ///     Executes the command.
+    /// </summary>
+    /// <param name="context"> The context of the command. </param>
+    /// <param name="parseResult"> The result of the parsing. </param>
+    /// <param name="services"> The services to be used for execution. </param>
+    /// <returns> An <see cref="IResult"/> that indicates whether the execution was successful. </returns>
     public Task<IResult> ExecuteAsync(ICommandContext context, ParseResult parseResult, IServiceProvider services)
     {
         if (!parseResult.IsSuccess)
@@ -199,7 +234,17 @@ public class CommandInfo
 
         return ExecuteAsync(context, argList, paramList, services);
     }
-    public async Task<IResult> ExecuteAsync(ICommandContext context, IEnumerable<object> argList, IEnumerable<object> paramList, IServiceProvider services)
+
+    /// <summary>
+    ///     Executes the command.
+    /// </summary>
+    /// <param name="context"> The context of the command. </param>
+    /// <param name="argList"> The arguments of the command. </param>
+    /// <param name="paramList"> The parameters of the command. </param>
+    /// <param name="services"> The services to be used for execution. </param>
+    /// <returns> An <see cref="IResult"/> that indicates whether the execution was successful. </returns>
+    public async Task<IResult> ExecuteAsync(ICommandContext context, IEnumerable<object> argList, IEnumerable<object> paramList,
+        IServiceProvider services)
     {
         services ??= EmptyServiceProvider.Instance;
 
@@ -230,6 +275,7 @@ public class CommandInfo
                     });
                     break;
             }
+
             return ExecuteResult.FromSuccess();
         }
         catch (Exception ex)
@@ -309,6 +355,7 @@ public class CommandInfo
                 throw new InvalidOperationException("Command was invoked with too many parameters.");
             array[i++] = arg;
         }
+
         if (i < argCount)
             throw new InvalidOperationException("Command was invoked with too few parameters.");
 

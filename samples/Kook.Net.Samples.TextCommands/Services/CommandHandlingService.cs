@@ -2,9 +2,7 @@ using Kook;
 using Kook.Commands;
 using Kook.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace TextCommandFramework.Services;
 

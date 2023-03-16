@@ -1,6 +1,3 @@
-using Kook.API;
-using Kook.Rest;
-
 namespace Kook.WebSocket;
 
 public abstract partial class BaseSocketClient
@@ -66,24 +63,24 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     <para>
     ///         This event is fired when a reaction is added to a user message in a channel. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, an 
+    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, an
     ///         <see cref="ISocketMessageChannel"/>, and a <see cref="SocketReaction"/> as its parameter.
     ///     </para>
     ///     <para>
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the 
+    ///         that the message cannot be retrieved, the ID of the message is preserved in the
     ///         ulong.
     ///     </para>
     ///     <para>
-    ///         The source channel of the reaction addition will be passed into the 
+    ///         The source channel of the reaction addition will be passed into the
     ///         <see cref="ISocketMessageChannel"/> parameter.
     ///     </para>
     ///     <para>
     ///         The reaction that was added will be passed into the <see cref="SocketReaction"/> parameter.
     ///     </para>
     ///     <note>
-    ///         When fetching the reaction from this event, a user may not be provided under 
+    ///         When fetching the reaction from this event, a user may not be provided under
     ///         <see cref="SocketReaction.User"/>. Please see the documentation of the property for more
     ///         information.
     ///     </note>
@@ -105,24 +102,24 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     <para>
     ///         This event is fired when a reaction is added to a user message in a private channel. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, an 
+    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, an
     ///         <see cref="ISocketMessageChannel"/>, and a <see cref="SocketReaction"/> as its parameter.
     ///     </para>
     ///     <para>
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the 
+    ///         that the message cannot be retrieved, the ID of the message is preserved in the
     ///         <see cref="Guid"/>.
     ///     </para>
     ///     <para>
-    ///         The source channel of the reaction addition will be passed into the 
+    ///         The source channel of the reaction addition will be passed into the
     ///         <see cref="IDMChannel"/> parameter.
     ///     </para>
     ///     <para>
     ///         The reaction that was added will be passed into the <see cref="SocketReaction"/> parameter.
     ///     </para>
     ///     <note>
-    ///         When fetching the reaction from this event, a user may not be provided under 
+    ///         When fetching the reaction from this event, a user may not be provided under
     ///         <see cref="SocketReaction.User"/>. Please see the documentation of the property for more
     ///         information.
     ///     </note>
@@ -168,7 +165,7 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     <para>
     ///         This event is fired when a message is deleted. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/> and 
+    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/> and
     ///         <see cref="ISocketMessageChannel"/> as its parameters.
     ///     </para>
     ///     <para>
@@ -179,11 +176,11 @@ public abstract partial class BaseSocketClient
     ///         </note>
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the deleted message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the 
+    ///         that the message cannot be retrieved, the ID of the message is preserved in the
     ///         <see cref="Guid"/>.
     ///     </para>
     ///     <para>
-    ///         The source channel of the removed message will be passed into the 
+    ///         The source channel of the removed message will be passed into the
     ///         <see cref="ISocketMessageChannel"/> parameter.
     ///     </para>
     /// </remarks>
@@ -204,14 +201,14 @@ public abstract partial class BaseSocketClient
     ///     <para>
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the 
+    ///         that the message cannot be retrieved, the ID of the message is preserved in the
     ///         <see cref="Guid"/>.
     ///     </para>
     ///     <para>
     ///         The updated message will be passed into the <see cref="SocketMessage"/> parameter.
     ///     </para>
     ///     <para>
-    ///         The source channel of the updated message will be passed into the 
+    ///         The source channel of the updated message will be passed into the
     ///         <see cref="ISocketMessageChannel"/> parameter.
     ///     </para>
     /// </remarks>
@@ -232,14 +229,14 @@ public abstract partial class BaseSocketClient
     ///     <para>
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the 
+    ///         that the message cannot be retrieved, the ID of the message is preserved in the
     ///         <see cref="Guid"/>.
     ///     </para>
     ///     <para>
     ///         The updated message will be passed into the <see cref="SocketMessage"/> parameter.
     ///     </para>
     ///     <para>
-    ///         The source channel of the updated message will be passed into the 
+    ///         The source channel of the updated message will be passed into the
     ///         <see cref="ISocketMessageChannel"/> parameter.
     ///     </para>
     ///     <para>
@@ -263,14 +260,14 @@ public abstract partial class BaseSocketClient
     ///     <para>
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the 
+    ///         that the message cannot be retrieved, the ID of the message is preserved in the
     ///         <see cref="Guid"/>.
     ///     </para>
     ///     <para>
     ///         The updated message will be passed into the <see cref="SocketMessage"/> parameter.
     ///     </para>
     ///     <para>
-    ///         The source channel of the updated message will be passed into the 
+    ///         The source channel of the updated message will be passed into the
     ///         <see cref="ISocketMessageChannel"/> parameter.
     ///     </para>
     ///     <para>
@@ -312,7 +309,7 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     <para>
     ///         This event is fired when a message is deleted. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/> and 
+    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/> and
     ///         <see cref="IDMChannel"/> as its parameters.
     ///     </para>
     ///     <para>
@@ -323,11 +320,11 @@ public abstract partial class BaseSocketClient
     ///         </note>
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the deleted message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the 
+    ///         that the message cannot be retrieved, the ID of the message is preserved in the
     ///         <see cref="Guid"/>.
     ///     </para>
     ///     <para>
-    ///         The source channel of the removed message will be passed into the 
+    ///         The source channel of the removed message will be passed into the
     ///         <see cref="IDMChannel"/> parameter.
     ///     </para>
     /// </remarks>
@@ -348,14 +345,14 @@ public abstract partial class BaseSocketClient
     ///     <para>
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the 
+    ///         that the message cannot be retrieved, the ID of the message is preserved in the
     ///         <see cref="Guid"/>.
     ///     </para>
     ///     <para>
     ///         The updated message will be passed into the <see cref="SocketMessage"/> parameter.
     ///     </para>
     ///     <para>
-    ///         The source channel of the updated message will be passed into the 
+    ///         The source channel of the updated message will be passed into the
     ///         <see cref="IDMChannel"/> parameter.
     ///     </para>
     ///     <para>

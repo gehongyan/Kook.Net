@@ -9,7 +9,6 @@ using Kook.Rest;
 using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Net;
-using System.Runtime.CompilerServices;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;

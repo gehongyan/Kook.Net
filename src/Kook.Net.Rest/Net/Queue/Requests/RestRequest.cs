@@ -1,7 +1,4 @@
 using Kook.Net.Rest;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Kook.Net.Queue;
 

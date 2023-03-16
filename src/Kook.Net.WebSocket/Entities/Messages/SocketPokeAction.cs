@@ -2,6 +2,9 @@ using Kook.Rest;
 
 namespace Kook.WebSocket;
 
+/// <summary>
+///     Represents a single WebSocket-based poke action.
+/// </summary>
 public class SocketPokeAction : IPokeAction
 {
     /// <inheritdoc cref="IPokeAction.Operator" />

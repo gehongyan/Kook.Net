@@ -46,9 +46,21 @@ public class SectionModule : IModule, IEquatable<SectionModule>
 
     private string DebuggerDisplay => $"{Type}: {Text}{(Accessory is null ? string.Empty : $"{Mode} Accessory")}";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="SectionModule"/> is equal to the current <see cref="SectionModule"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="SectionModule"/> is equal to the current <see cref="SectionModule"/>; otherwise, <c>false</c>.
+    /// </returns>
     public static bool operator ==(SectionModule left, SectionModule right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="SectionModule"/> is not equal to the current <see cref="SectionModule"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="SectionModule"/> is not equal to the current <see cref="SectionModule"/>; otherwise, <c>false</c>.
+    /// </returns>
     public static bool operator !=(SectionModule left, SectionModule right)
         => !(left == right);
 

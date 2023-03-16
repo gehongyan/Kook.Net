@@ -2,6 +2,9 @@ using Kook.Utils;
 
 namespace Kook;
 
+/// <summary>
+///     Represents a file attachment.
+/// </summary>
 public struct FileAttachment : IDisposable
 {
     private bool _isDisposed;
@@ -50,6 +53,7 @@ public struct FileAttachment : IDisposable
         }
         catch
         {
+            // ignored
         }
 
         Uri = null;

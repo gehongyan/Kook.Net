@@ -1,20 +1,11 @@
-using Kook.API;
 using Kook.API.Voice;
-using Kook.Net.Converters;
 using Kook.Net.Udp;
 using Kook.Net.WebSockets;
-using System;
-using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using System.IO.Compression;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Kook.Audio;
 

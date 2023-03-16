@@ -1,8 +1,6 @@
-using System;
-
 namespace Kook;
 
-public class Preconditions
+public static class Preconditions
 {
     #region Objects
     /// <exception cref="ArgumentNullException"><paramref name="obj"/> must not be <see langword="null"/>.</exception>

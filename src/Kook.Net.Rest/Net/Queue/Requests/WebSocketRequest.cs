@@ -1,8 +1,4 @@
 using Kook.Net.WebSockets;
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Kook.Net.Queue;
 

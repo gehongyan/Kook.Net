@@ -1,5 +1,3 @@
-using Kook.Utils;
-
 namespace Kook;
 
 /// <summary>

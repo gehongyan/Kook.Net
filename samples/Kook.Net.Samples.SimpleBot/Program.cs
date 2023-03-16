@@ -1,9 +1,7 @@
 // See https://aka.ms/new-console-template for more information
 
 using Kook;
-using Kook.Rest;
 using Kook.WebSocket;
-using System.Collections.Immutable;
 
 class Program
 {

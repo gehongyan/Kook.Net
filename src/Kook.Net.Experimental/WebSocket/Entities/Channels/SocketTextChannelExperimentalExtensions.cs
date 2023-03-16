@@ -2,6 +2,9 @@ using Kook.Rest;
 
 namespace Kook.WebSocket;
 
+/// <summary>
+///     Provides extension methods of experimental functionalities for <see cref="SocketTextChannel"/>s.
+/// </summary>
 public static class SocketTextChannelExperimentalExtensions
 {
     /// <summary>

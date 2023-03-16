@@ -1,5 +1,8 @@
 namespace Kook;
 
+/// <summary>
+///     Represents a channel that can send and receive messages.
+/// </summary>
 public interface IMessageChannel : IChannel
 {
     #region Send Messages
@@ -120,7 +123,7 @@ public interface IMessageChannel : IChannel
     /// </summary>
     /// <remarks>
     ///     <note type="important">
-    ///         The returned collection is an asynchronous enumerable object; one must call 
+    ///         The returned collection is an asynchronous enumerable object; one must call
     ///         <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/> to access the individual messages as a
     ///         collection.
     ///     </note>
@@ -129,7 +132,7 @@ public interface IMessageChannel : IChannel
     ///         rate limit, causing your bot to freeze!
     ///     </note>
     ///     This method will attempt to fetch the number of messages specified under <paramref name="limit"/>. The
-    ///     library will attempt to split up the requests according to your <paramref name="limit"/> and 
+    ///     library will attempt to split up the requests according to your <paramref name="limit"/> and
     ///     <see cref="KookConfig.MaxMessagesPerBatch"/>. In other words, should the user request 500 messages,
     ///     and the <see cref="Kook.KookConfig.MaxMessagesPerBatch"/> constant is <c>100</c>, the request will
     ///     be split into 5 individual requests; thus returning 5 individual asynchronous responses, hence the need
@@ -149,7 +152,7 @@ public interface IMessageChannel : IChannel
     /// </summary>
     /// <remarks>
     ///     <note type="important">
-    ///         The returned collection is an asynchronous enumerable object; one must call 
+    ///         The returned collection is an asynchronous enumerable object; one must call
     ///         <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/> to access the individual messages as a
     ///         collection.
     ///     </note>
@@ -159,7 +162,7 @@ public interface IMessageChannel : IChannel
     ///     </note>
     ///     This method will attempt to fetch the number of messages specified under <paramref name="limit"/> around
     ///     the message <paramref name="referenceMessageId"/> depending on the <paramref name="dir"/>. The library will
-    ///     attempt to split up the requests according to your <paramref name="limit"/> and 
+    ///     attempt to split up the requests according to your <paramref name="limit"/> and
     ///     <see cref="KookConfig.MaxMessagesPerBatch"/>. In other words, should the user request 500 messages,
     ///     and the <see cref="Kook.KookConfig.MaxMessagesPerBatch"/> constant is <c>100</c>, the request will
     ///     be split into 5 individual requests; thus returning 5 individual asynchronous responses, hence the need
@@ -181,7 +184,7 @@ public interface IMessageChannel : IChannel
     /// </summary>
     /// <remarks>
     ///     <note type="important">
-    ///         The returned collection is an asynchronous enumerable object; one must call 
+    ///         The returned collection is an asynchronous enumerable object; one must call
     ///         <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/> to access the individual messages as a
     ///         collection.
     ///     </note>
@@ -191,7 +194,7 @@ public interface IMessageChannel : IChannel
     ///     </note>
     ///     This method will attempt to fetch the number of messages specified under <paramref name="limit"/> around
     ///     the message <paramref name="referenceMessage"/> depending on the <paramref name="dir"/>. The library will
-    ///     attempt to split up the requests according to your <paramref name="limit"/> and 
+    ///     attempt to split up the requests according to your <paramref name="limit"/> and
     ///     <see cref="KookConfig.MaxMessagesPerBatch"/>. In other words, should the user request 500 messages,
     ///     and the <see cref="Kook.KookConfig.MaxMessagesPerBatch"/> constant is <c>100</c>, the request will
     ///     be split into 5 individual requests; thus returning 5 individual asynchronous responses, hence the need

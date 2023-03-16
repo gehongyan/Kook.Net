@@ -2,6 +2,9 @@ using Model = Kook.API.Reaction;
 
 namespace Kook.Rest;
 
+/// <summary>
+///     Represents a single REST-based reaction.
+/// </summary>
 public class RestReaction : IReaction
 {
     /// <inheritdoc />

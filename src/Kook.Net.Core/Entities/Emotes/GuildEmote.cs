@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Globalization;
 
 namespace Kook;
 
@@ -28,7 +27,7 @@ public class GuildEmote : Emote
     ///     Gets the user who created this emote.
     /// </summary>
     /// <returns>
-    ///     An <see cref="ulong"/> representing the user who created this emote; 
+    ///     An <see cref="ulong"/> representing the user who created this emote;
     ///     <c>null</c> if unknown.
     /// </returns>
     public ulong? CreatorId { get; }

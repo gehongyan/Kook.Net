@@ -1,7 +1,3 @@
-using System;
-using System.Globalization;
-using System.Threading.Tasks;
-
 namespace Kook.Commands;
 
 /// <summary>

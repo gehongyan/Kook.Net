@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace Kook.Net.Rest;
 
 internal struct MultipartFile

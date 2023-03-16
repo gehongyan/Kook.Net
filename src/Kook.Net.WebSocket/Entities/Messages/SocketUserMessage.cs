@@ -1,13 +1,7 @@
-using Kook.API;
 using Kook.API.Gateway;
-using Kook.Net.Converters;
 using Kook.Rest;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Kook.WebSocket;
 
@@ -42,9 +36,9 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
     /// <inheritdoc />
     public override IReadOnlyCollection<Attachment> Attachments => _attachments;
-    /// <inheritdoc />  
+    /// <inheritdoc />
     public override IReadOnlyCollection<ICard> Cards => _cards;
-    /// <inheritdoc />  
+    /// <inheritdoc />
     public override IReadOnlyCollection<IEmbed> Embeds => _embeds;
     /// <inheritdoc />
     public override IReadOnlyCollection<SocketPokeAction> Pokes => _pokes;

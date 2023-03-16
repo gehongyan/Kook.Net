@@ -1,6 +1,3 @@
-using System;
-using System.Threading.Tasks;
-
 namespace Kook.Commands;
 
 /// <summary>
@@ -33,11 +30,19 @@ public class RequireUserAttribute : PreconditionAttribute
 {
     private readonly ulong _userId;
 
+    /// <summary>
+    ///     Initializes a new <see cref="RequireUserAttribute" /> attribute with the specified user identifier.
+    /// </summary>
+    /// <param name="userId"> The identifier of the user. </param>
     public RequireUserAttribute(ulong userId)
     {
         _userId = userId;
     }
 
+    /// <summary>
+    ///     Initializes a new <see cref="RequireUserAttribute" /> attribute with the specified user.
+    /// </summary>
+    /// <param name="user"> An <see cref="IUser"/> representing the user. </param>
     public RequireUserAttribute(IUser user)
     {
         _userId = user.Id;

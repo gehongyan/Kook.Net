@@ -5,6 +5,9 @@ using System.Text.Json.Serialization;
 
 namespace Kook;
 
+/// <summary>
+///     Represents a poke resource that is not implemented to be resolved yet.
+/// </summary>
 public struct NotImplementedPokeResource : IPokeResource
 {
     internal NotImplementedPokeResource(string rawType, JsonNode jsonNode)

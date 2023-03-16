@@ -2,6 +2,9 @@ using System.Collections.Immutable;
 
 namespace Kook.Rest;
 
+/// <summary>
+///     Represents a single REST-based poke action.
+/// </summary>
 public class RestPokeAction : IPokeAction
 {
     /// <inheritdoc cref="IPokeAction.Operator" />

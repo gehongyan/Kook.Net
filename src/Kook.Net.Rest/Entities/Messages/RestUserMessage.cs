@@ -1,9 +1,6 @@
 using Kook.API;
-using Kook.Net.Converters;
 using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Text.Encodings.Web;
-using System.Text.Json;
 using Model = Kook.API.Message;
 
 namespace Kook.Rest;
@@ -33,9 +30,9 @@ public class RestUserMessage : RestMessage, IUserMessage
     public new bool? IsPinned { get; internal set; }
     /// <inheritdoc />
     public override IReadOnlyCollection<Attachment> Attachments => _attachments;
-    /// <inheritdoc />  
+    /// <inheritdoc />
     public override IReadOnlyCollection<ICard> Cards => _cards;
-    /// <inheritdoc />  
+    /// <inheritdoc />
     public override IReadOnlyCollection<IEmbed> Embeds => _embeds;
     /// <inheritdoc />
     public override IReadOnlyCollection<RestPokeAction> Pokes => _pokes;

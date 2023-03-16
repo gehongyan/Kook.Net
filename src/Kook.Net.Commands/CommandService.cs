@@ -1,13 +1,8 @@
 using Kook.Commands.Builders;
 using Kook.Logging;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Kook.Commands;
 
@@ -30,10 +25,12 @@ namespace Kook.Commands;
 public class CommandService : IDisposable
 {
     #region CommandService
+
     /// <summary>
     ///     Occurs when a command-related information is received.
     /// </summary>
     public event Func<LogMessage, Task> Log { add { _logEvent.Add(value); } remove { _logEvent.Remove(value); } }
+
     internal readonly AsyncEvent<Func<LogMessage, Task>> _logEvent = new AsyncEvent<Func<LogMessage, Task>>();
 
     /// <summary>
@@ -43,8 +40,14 @@ public class CommandService : IDisposable
     ///     This event is fired when a command has been executed, successfully or not. When a command fails to
     ///     execute during parsing or precondition stage, the CommandInfo may not be returned.
     /// </remarks>
-    public event Func<CommandInfo, ICommandContext, IResult, Task> CommandExecuted { add { _commandExecutedEvent.Add(value); } remove { _commandExecutedEvent.Remove(value); } }
-    internal readonly AsyncEvent<Func<CommandInfo, ICommandContext, IResult, Task>> _commandExecutedEvent = new AsyncEvent<Func<CommandInfo, ICommandContext, IResult, Task>>();
+    public event Func<CommandInfo, ICommandContext, IResult, Task> CommandExecuted
+    {
+        add { _commandExecutedEvent.Add(value); }
+        remove { _commandExecutedEvent.Remove(value); }
+    }
+
+    internal readonly AsyncEvent<Func<CommandInfo, ICommandContext, IResult, Task>> _commandExecutedEvent =
+        new AsyncEvent<Func<CommandInfo, ICommandContext, IResult, Task>>();
 
     private readonly SemaphoreSlim _moduleLock;
     private readonly ConcurrentDictionary<Type, ModuleInfo> _typedModuleDefs;
@@ -76,7 +79,8 @@ public class CommandService : IDisposable
     /// <summary>
     ///     Represents all <see cref="TypeReader" /> loaded within <see cref="CommandService"/>.
     /// </summary>
-    public ILookup<Type, TypeReader> TypeReaders => _typeReaders.SelectMany(x => x.Value.Select(y => new { y.Key, y.Value })).ToLookup(x => x.Key, x => x.Value);
+    public ILookup<Type, TypeReader> TypeReaders =>
+        _typeReaders.SelectMany(x => x.Value.Select(y => new { y.Key, y.Value })).ToLookup(x => x.Key, x => x.Value);
 
     /// <summary>
     ///     Initializes a new <see cref="CommandService"/> class.
@@ -123,7 +127,11 @@ public class CommandService : IDisposable
         _defaultTypeReaders[typeof(TimeSpan?)] = NullableTypeReader.Create(typeof(TimeSpan), tsreader);
 
         _defaultTypeReaders[typeof(string)] =
-            new PrimitiveTypeReader<string>((string x, out string y) => { y = x; return true; }, 0);
+            new PrimitiveTypeReader<string>((string x, out string y) =>
+            {
+                y = x;
+                return true;
+            }, 0);
 
         var entityTypeReaders = ImmutableList.CreateBuilder<(Type, Type)>();
         entityTypeReaders.Add((typeof(IMessage), typeof(MessageTypeReader<>)));
@@ -132,9 +140,17 @@ public class CommandService : IDisposable
         entityTypeReaders.Add((typeof(IUser), typeof(UserTypeReader<>)));
         _entityTypeReaders = entityTypeReaders.ToImmutable();
     }
+
     #endregion
 
     #region Modules
+
+    /// <summary>
+    ///     Creates a new module builder.
+    /// </summary>
+    /// <param name="primaryAlias"> The primary alias for the module. </param>
+    /// <param name="buildFunc"> The action delegate to build the module. </param>
+    /// <returns> A task that represents the asynchronous operation for creating the module. </returns>
     public async Task<ModuleInfo> CreateModuleAsync(string primaryAlias, Action<ModuleBuilder> buildFunc)
     {
         await _moduleLock.WaitAsync().ConfigureAwait(false);
@@ -213,6 +229,7 @@ public class CommandService : IDisposable
             _moduleLock.Release();
         }
     }
+
     /// <summary>
     ///     Add command modules from an <see cref="Assembly"/>.
     /// </summary>
@@ -245,6 +262,7 @@ public class CommandService : IDisposable
             _moduleLock.Release();
         }
     }
+
     private ModuleInfo LoadModuleInternal(ModuleInfo module)
     {
         _moduleDefs.Add(module);
@@ -257,6 +275,7 @@ public class CommandService : IDisposable
 
         return module;
     }
+
     /// <summary>
     ///     Removes the command module.
     /// </summary>
@@ -277,6 +296,7 @@ public class CommandService : IDisposable
             _moduleLock.Release();
         }
     }
+
     /// <summary>
     ///     Removes the command module.
     /// </summary>
@@ -286,6 +306,7 @@ public class CommandService : IDisposable
     ///     indicates whether the module is successfully removed.
     /// </returns>
     public Task<bool> RemoveModuleAsync<T>() => RemoveModuleAsync(typeof(T));
+
     /// <summary>
     ///     Removes the command module.
     /// </summary>
@@ -309,6 +330,7 @@ public class CommandService : IDisposable
             _moduleLock.Release();
         }
     }
+
     private bool RemoveModuleInternal(ModuleInfo module)
     {
         if (!_moduleDefs.Remove(module))
@@ -324,9 +346,11 @@ public class CommandService : IDisposable
 
         return true;
     }
+
     #endregion
 
     #region Type Readers
+
     /// <summary>
     ///     Adds a custom <see cref="TypeReader" /> to this <see cref="CommandService" /> for the supplied object
     ///     type.
@@ -339,6 +363,7 @@ public class CommandService : IDisposable
     /// <param name="reader">An instance of the <see cref="TypeReader" /> to be added.</param>
     public void AddTypeReader<T>(TypeReader reader)
         => AddTypeReader(typeof(T), reader);
+
     /// <summary>
     ///     Adds a custom <see cref="TypeReader" /> to this <see cref="CommandService" /> for the supplied object
     ///     type.
@@ -352,10 +377,11 @@ public class CommandService : IDisposable
     public void AddTypeReader(Type type, TypeReader reader)
     {
         if (_defaultTypeReaders.ContainsKey(type))
-            _ = _cmdLogger.WarningAsync($"The default TypeReader for {type.FullName} was replaced by {reader.GetType().FullName}." +
-                                        "To suppress this message, use AddTypeReader<T>(reader, true).");
+            _ = _cmdLogger.WarningAsync($"The default TypeReader for {type.FullName} was replaced by {reader.GetType().FullName}."
+                + "To suppress this message, use AddTypeReader<T>(reader, true).");
         AddTypeReader(type, reader, true);
     }
+
     /// <summary>
     ///     Adds a custom <see cref="TypeReader" /> to this <see cref="CommandService" /> for the supplied object
     ///     type.
@@ -370,6 +396,7 @@ public class CommandService : IDisposable
     /// </param>
     public void AddTypeReader<T>(TypeReader reader, bool replaceDefault)
         => AddTypeReader(typeof(T), reader, replaceDefault);
+
     /// <summary>
     ///     Adds a custom <see cref="TypeReader" /> to this <see cref="CommandService" /> for the supplied object
     ///     type.
@@ -448,18 +475,21 @@ public class CommandService : IDisposable
             return true;
         return _entityTypeReaders.Any(x => type == x.EntityType || typeInfo.ImplementedInterfaces.Contains(x.EntityType));
     }
+
     internal void AddNullableTypeReader(Type valueType, TypeReader valueTypeReader)
     {
         var readers = _typeReaders.GetOrAdd(typeof(Nullable<>).MakeGenericType(valueType), x => new ConcurrentDictionary<Type, TypeReader>());
         var nullableReader = NullableTypeReader.Create(valueType, valueTypeReader);
         readers[nullableReader.GetType()] = nullableReader;
     }
+
     internal IDictionary<Type, TypeReader> GetTypeReaders(Type type)
     {
         if (_typeReaders.TryGetValue(type, out var definedTypeReaders))
             return definedTypeReaders;
         return null;
     }
+
     internal TypeReader GetDefaultTypeReader(Type type)
     {
         if (_defaultTypeReaders.TryGetValue(type, out var reader))
@@ -473,6 +503,7 @@ public class CommandService : IDisposable
             _defaultTypeReaders[type] = reader;
             return reader;
         }
+
         var underlyingType = Nullable.GetUnderlyingType(type);
         if (underlyingType != null && underlyingType.IsEnum)
         {
@@ -491,11 +522,14 @@ public class CommandService : IDisposable
                 return reader;
             }
         }
+
         return null;
     }
+
     #endregion
 
     #region Execution
+
     /// <summary>
     ///     Searches for the command.
     /// </summary>
@@ -504,6 +538,7 @@ public class CommandService : IDisposable
     /// <returns>The result containing the matching commands.</returns>
     public SearchResult Search(ICommandContext context, int argPos)
         => Search(context.Message.Content.Substring(argPos));
+
     /// <summary>
     ///     Searches for the command.
     /// </summary>
@@ -512,6 +547,12 @@ public class CommandService : IDisposable
     /// <returns>The result containing the matching commands.</returns>
     public SearchResult Search(ICommandContext context, string input)
         => Search(input);
+
+    /// <summary>
+    ///     Searches for the command.
+    /// </summary>
+    /// <param name="input"> The command string. </param>
+    /// <returns> The result containing the matching commands. </returns>
     public SearchResult Search(string input)
     {
         string searchInput = _caseSensitive ? input : input.ToLowerInvariant();
@@ -534,8 +575,10 @@ public class CommandService : IDisposable
     ///     A task that represents the asynchronous execution operation. The task result contains the result of the
     ///     command execution.
     /// </returns>
-    public Task<IResult> ExecuteAsync(ICommandContext context, int argPos, IServiceProvider services, MultiMatchHandling multiMatchHandling = MultiMatchHandling.Exception)
+    public Task<IResult> ExecuteAsync(ICommandContext context, int argPos, IServiceProvider services,
+        MultiMatchHandling multiMatchHandling = MultiMatchHandling.Exception)
         => ExecuteAsync(context, context.Message.Content.Substring(argPos), services, multiMatchHandling);
+
     /// <summary>
     ///     Executes the command.
     /// </summary>
@@ -547,7 +590,8 @@ public class CommandService : IDisposable
     ///     A task that represents the asynchronous execution operation. The task result contains the result of the
     ///     command execution.
     /// </returns>
-    public async Task<IResult> ExecuteAsync(ICommandContext context, string input, IServiceProvider services, MultiMatchHandling multiMatchHandling = MultiMatchHandling.Exception)
+    public async Task<IResult> ExecuteAsync(ICommandContext context, string input, IServiceProvider services,
+        MultiMatchHandling multiMatchHandling = MultiMatchHandling.Exception)
     {
         services ??= EmptyServiceProvider.Instance;
 
@@ -584,7 +628,9 @@ public class CommandService : IDisposable
 
             var executeResult = await matchResult.Match.Value.ExecuteAsync(context, parseResult, services);
 
-            if (!executeResult.IsSuccess && !(executeResult is RuntimeResult || executeResult is ExecuteResult)) // succesful results raise the event in CommandInfo#ExecuteInternalAsync (have to raise it there b/c deffered execution)
+            if (!executeResult.IsSuccess
+                && !(executeResult is RuntimeResult
+                    || executeResult is ExecuteResult)) // succesful results raise the event in CommandInfo#ExecuteInternalAsync (have to raise it there b/c deffered execution)
                 await _commandExecutedEvent.InvokeAsync(matchResult.Match.Value.Command, context, executeResult);
             return executeResult;
         }
@@ -625,7 +671,8 @@ public class CommandService : IDisposable
     /// <param name="multiMatchHandling">The handling mode when multiple command matches are found.</param>
     /// <returns>A task that represents the asynchronous validation operation. The task result contains the result of the
     ///     command validation as a <see cref="MatchResult"/> or a <see cref="SearchResult"/> if no matches were found.</returns>
-    public async Task<IResult> ValidateAndGetBestMatch(SearchResult matches, ICommandContext context, IServiceProvider provider, MultiMatchHandling multiMatchHandling = MultiMatchHandling.Exception)
+    public async Task<IResult> ValidateAndGetBestMatch(SearchResult matches, ICommandContext context, IServiceProvider provider,
+        MultiMatchHandling multiMatchHandling = MultiMatchHandling.Exception)
     {
         if (!matches.IsSuccess)
             return matches;
@@ -690,9 +737,12 @@ public class CommandService : IDisposable
 
         return MatchResult.FromSuccess(chosenOverload.Key, chosenOverload.Value);
     }
+
     #endregion
 
     #region Dispose
+
+    /// <inheritdoc cref="IDisposable.Dispose" />
     protected virtual void Dispose(bool disposing)
     {
         if (!_isDisposed)
@@ -706,9 +756,11 @@ public class CommandService : IDisposable
         }
     }
 
+    /// <inheritdoc />
     void IDisposable.Dispose()
     {
         Dispose(true);
     }
+
     #endregion
 }

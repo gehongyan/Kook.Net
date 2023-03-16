@@ -26,7 +26,6 @@ internal class ModuleConverter : JsonConverter<ModuleBase>
             "invite" => JsonSerializer.Deserialize<API.InviteModule>(jsonNode.ToJsonString(), options),
             _ => throw new ArgumentOutOfRangeException(nameof(CardType))
         };
-        ;
     }
 
     public override void Write(Utf8JsonWriter writer, ModuleBase value, JsonSerializerOptions options)

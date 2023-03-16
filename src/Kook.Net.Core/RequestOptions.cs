@@ -1,7 +1,4 @@
 using Kook.Net;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Kook;
 

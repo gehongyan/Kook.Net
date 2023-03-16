@@ -1,5 +1,8 @@
 namespace Kook.WebSocket;
 
+/// <summary>
+///     Represents a WebSocket-based reaction.
+/// </summary>
 public class SocketReaction : IReaction
 {
     /// <summary>

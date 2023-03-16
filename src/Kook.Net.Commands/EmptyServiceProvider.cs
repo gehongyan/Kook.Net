@@ -1,5 +1,3 @@
-using System;
-
 namespace Kook.Commands;
 
 internal class EmptyServiceProvider : IServiceProvider

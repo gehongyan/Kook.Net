@@ -44,9 +44,21 @@ public class CountdownModule : IModule, IEquatable<CountdownModule>
 
     private string DebuggerDisplay => $"{Type}: To {EndTime:yyyy'/'M'/'d HH:mm:ss z} ({Mode} Mode{(StartTime is null ? string.Empty : $", From {EndTime:yyyy'/'M'/'d HH:mm:ss z}")})";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="CountdownModule"/> is equal to the current <see cref="CountdownModule"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="CountdownModule"/> is equal to the current <see cref="CountdownModule"/>; otherwise, <c>false</c>.
+    /// </returns>
     public static bool operator ==(CountdownModule left, CountdownModule right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="CountdownModule"/> is not equal to the current <see cref="CountdownModule"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="CountdownModule"/> is not equal to the current <see cref="CountdownModule"/>; otherwise, <c>false</c>.
+    /// </returns>
     public static bool operator !=(CountdownModule left, CountdownModule right)
         => !(left == right);
 

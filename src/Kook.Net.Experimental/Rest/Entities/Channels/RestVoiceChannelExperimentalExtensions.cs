@@ -1,5 +1,8 @@
 namespace Kook.Rest;
 
+/// <summary>
+///     Provides extension methods of experimental functionalities for <see cref="RestVoiceChannel"/>s.
+/// </summary>
 public static class RestVoiceChannelExperimentalExtensions
 {
     /// <summary>

@@ -1,7 +1,4 @@
-using Kook.API;
-using Kook.Rest;
 using System.Net;
-using System.Net.Mime;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;

@@ -16,13 +16,28 @@ public class InviteModule : IModule, IEquatable<InviteModule>
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Invite;
 
+    /// <summary>
+    ///     Gets the invite code.
+    /// </summary>
     public string Code { get; }
 
     private string DebuggerDisplay => $"{Type}: {Code}";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="InviteModule"/> is equal to the current <see cref="InviteModule"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="InviteModule"/> is equal to the current <see cref="InviteModule"/>;
+    /// </returns>
     public static bool operator ==(InviteModule left, InviteModule right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="InviteModule"/> is not equal to the current <see cref="InviteModule"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="InviteModule"/> is not equal to the current <see cref="InviteModule"/>;
+    /// </returns>
     public static bool operator !=(InviteModule left, InviteModule right)
         => !(left == right);
 

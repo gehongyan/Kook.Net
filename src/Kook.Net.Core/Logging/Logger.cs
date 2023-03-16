@@ -1,6 +1,3 @@
-using System;
-using System.Threading.Tasks;
-
 namespace Kook.Logging;
 
 internal class Logger

@@ -1,7 +1,7 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a single poke action.
+///     Represents a single generic poke action.
 /// </summary>
 public interface IPokeAction
 {

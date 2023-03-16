@@ -1,5 +1,3 @@
-using Kook.Rest;
-
 namespace Kook.WebSocket;
 
 /// <summary>

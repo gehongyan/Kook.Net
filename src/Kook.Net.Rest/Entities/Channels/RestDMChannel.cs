@@ -1,5 +1,3 @@
-using Kook.API.Rest;
-using Kook.Utils;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using Model = Kook.API.UserChat;
