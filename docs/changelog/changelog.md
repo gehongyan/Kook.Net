@@ -5,6 +5,12 @@ title: 变更日志
 
 # 变更日志
 
+## v0.2.5 [2023-03-16]
+
+### 新增
+
+- 为方法 `Kook.GetGamesAsync` 新增可选参数 `Nullable<GameCreationSource>`
+
 ## v0.2.4 [2023-03-09]
 
 ### 新增

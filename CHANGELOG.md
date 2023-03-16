@@ -2,6 +2,13 @@
 
 ---
 
+## v0.2.5 [2023-03-16]
+
+### Added
+
+- Added an optional `Nullable<GameCreationSource>` parameter for `Kook.GetGamesAsync`.
+(22b799ac87867590045c87771b0344acd3e80339)
+
 ## v0.2.4 [2023-03-09]
 
 ### Added
