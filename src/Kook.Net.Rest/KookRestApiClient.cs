@@ -1241,13 +1241,19 @@ internal class KookRestApiClient : IDisposable
 
     #region Games
 
-    public IAsyncEnumerable<IReadOnlyCollection<Game>> GetGamesAsync(int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<Game>> GetGamesAsync(GameCreationSource? source, int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions options = null)
     {
         options = RequestOptions.CreateOrClone(options);
 
         var ids = new BucketIds();
+        var creationSource = source switch
+        {
+            GameCreationSource.SelfUser => 1,
+            GameCreationSource.System => 2,
+            _ => 0
+        };
         return SendPagedAsync<Game>(HttpMethod.Get,
-            (pageSize, page) => $"game?page_size={pageSize}&page={page}",
+            (pageSize, page) => $"game?type={creationSource}&page_size={pageSize}&page={page}",
             ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);
     }
 

@@ -122,8 +122,8 @@ public class KookRestClient : BaseKookClient, IKookClient
 
     #region Games
 
-    public IAsyncEnumerable<IReadOnlyCollection<RestGame>> GetGamesAsync(RequestOptions options = null)
-        => ClientHelper.GetGamesAsync(this, options);
+    public IAsyncEnumerable<IReadOnlyCollection<RestGame>> GetGamesAsync(GameCreationSource? source = null, RequestOptions options = null)
+        => ClientHelper.GetGamesAsync(this, source, options);
     public Task<RestGame> CreateGameAsync(string name, string processName, string iconUrl, RequestOptions options = null)
         => ClientHelper.CreateGameAsync(this, name, processName, iconUrl, options);
 

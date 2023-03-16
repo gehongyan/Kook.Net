@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics;
 using Model = Kook.API.Game;
 
 namespace Kook.Rest;
@@ -6,6 +7,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     Represents a game object.
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestGame : RestEntity<int>, IGame
 {
     private ImmutableArray<string> _productNames;
@@ -63,4 +65,6 @@ public class RestGame : RestEntity<int>, IGame
     /// <inheritdoc />
     async Task<IGame> IGame.ModifyAsync(Action<GameProperties> func, RequestOptions options)
         => await ModifyAsync(func, options);
+
+    private string DebuggerDisplay => $"{Name} ({Id}, {GameType.ToString()})";
 }

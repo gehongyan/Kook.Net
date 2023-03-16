@@ -96,9 +96,9 @@ internal static class ClientHelper
         return null;
     }
 
-    public static IAsyncEnumerable<IReadOnlyCollection<RestGame>> GetGamesAsync(BaseKookClient client, RequestOptions options)
+    public static IAsyncEnumerable<IReadOnlyCollection<RestGame>> GetGamesAsync(BaseKookClient client, GameCreationSource? source, RequestOptions options)
     {
-        return client.ApiClient.GetGamesAsync(options: options)
+        return client.ApiClient.GetGamesAsync(source, options: options)
             .Select(x => x.Select(y => RestGame.Create(client, y)).ToImmutableArray() as IReadOnlyCollection<RestGame>);
     }
 

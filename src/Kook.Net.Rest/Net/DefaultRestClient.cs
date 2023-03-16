@@ -1,5 +1,8 @@
 #if DEBUG_REST
 using System.Diagnostics;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 #endif
 using System.Globalization;
 using System.Net;
