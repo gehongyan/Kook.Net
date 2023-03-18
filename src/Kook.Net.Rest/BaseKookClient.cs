@@ -173,6 +173,9 @@ public abstract class BaseKookClient : IKookClient
     /// <inheritdoc />
     Task<IUser> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IUser>(null);
+    /// <inheritdoc />
+    Task<IUser> IKookClient.GetUserAsync(string username, string identifyNumber, RequestOptions options)
+        => Task.FromResult<IUser>(null);
 
     /// <inheritdoc />
     Task IKookClient.StartAsync()

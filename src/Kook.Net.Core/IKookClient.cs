@@ -127,6 +127,17 @@ public interface IKookClient : IDisposable
     ///     the identifier; <c>null</c> if the user is not found.
     /// </returns>
     Task<IUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    /// <summary>
+    ///     Gets a user.
+    /// </summary>
+    /// <param name="username">The name of the user (e.g. `Still`).</param>
+    /// <param name="identifyNumber">The identify value of the user (e.g. `2876`).</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the user associated with
+    ///     the name and the identifyNumber; <c>null</c> if the user is not found.
+    /// </returns>
+    Task<IUser> GetUserAsync(string username, string identifyNumber, RequestOptions options = null);
 
     #endregion
 

@@ -217,7 +217,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     /// <inheritdoc />
     public override SocketChannel GetChannel(ulong id)
         => State.GetChannel(id);
-    public SocketDMChannel GetDMChannel(Guid chatCode)
+    /// <inheritdoc />
+    public override SocketDMChannel GetDMChannel(Guid chatCode)
         => State.GetDMChannel(chatCode);
     /// <summary>
     ///     Gets a generic channel from the cache or does a rest request if unavailable.
@@ -299,7 +300,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     The guilds to download the users for. If <c>null</c>, all available guilds will be downloaded.
     /// </param>
     /// <param name="options">The options to be used when sending the request.</param>
-    public async Task DownloadUsersAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null)
+    public override async Task DownloadUsersAsync(IEnumerable<IGuild> guilds, RequestOptions options)
     {
         if (ConnectionState == ConnectionState.Connected)
         {
@@ -1562,12 +1563,12 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     return;
 
                                 // Download user list if enabled
-                                if (BaseConfig.AlwaysDownloadUsers)
-                                    _ = DownloadUsersAsync(Guilds.Where(x => x.IsAvailable && x.HasAllMembers is not true));
-                                if (BaseConfig.AlwaysDownloadVoiceStates)
-                                    _ = DownloadVoiceStatesAsync(Guilds.Where(x => x.IsAvailable));
-                                if (BaseConfig.AlwaysDownloadBoostSubscriptions)
-                                    _ = DownloadBoostSubscriptionsAsync(Guilds.Where(x => x.IsAvailable));
+                                if (_baseConfig.AlwaysDownloadUsers)
+                                    _ = DownloadUsersAsync(Guilds.Where(x => x.IsAvailable && x.HasAllMembers is not true), RequestOptions.Default);
+                                if (_baseConfig.AlwaysDownloadVoiceStates)
+                                    _ = DownloadVoiceStatesAsync(Guilds.Where(x => x.IsAvailable), RequestOptions.Default);
+                                if (_baseConfig.AlwaysDownloadBoostSubscriptions)
+                                    _ = DownloadBoostSubscriptionsAsync(Guilds.Where(x => x.IsAvailable), RequestOptions.Default);
 
                                 await TimedInvokeAsync(_readyEvent, nameof(Ready)).ConfigureAwait(false);
                                 await _gatewayLogger.InfoAsync("Ready").ConfigureAwait(false);
@@ -1701,7 +1702,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         try
         {
             await logger.DebugAsync("GuildDownloader Started").ConfigureAwait(false);
-            while ((_unavailableGuildCount != 0) && (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - _lastGuildAvailableTime < BaseConfig.MaxWaitBetweenGuildAvailablesBeforeReady))
+            while ((_unavailableGuildCount != 0) && (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - _lastGuildAvailableTime < _baseConfig.MaxWaitBetweenGuildAvailablesBeforeReady))
                 await Task.Delay(500, cancelToken).ConfigureAwait(false);
             await logger.DebugAsync("GuildDownloader Stopped").ConfigureAwait(false);
         }
