@@ -9,14 +9,17 @@ public class BucketId : IEquatable<BucketId>
     ///     Gets the http method used to make the request if available.
     /// </summary>
     public HttpMethod HttpMethod { get; }
+
     /// <summary>
     ///     Gets the endpoint that is going to be requested if available.
     /// </summary>
     public string Endpoint { get; }
+
     /// <summary>
     ///     Gets the major parameters of the route.
     /// </summary>
     public IOrderedEnumerable<KeyValuePair<string, string>> MajorParameters { get; }
+
     /// <summary>
     ///     Gets the hash of this bucket.
     /// </summary>
@@ -24,6 +27,7 @@ public class BucketId : IEquatable<BucketId>
     ///     The hash is provided by Kook to group ratelimits.
     /// </remarks>
     public string BucketHash { get; }
+
     /// <summary>
     ///     Gets if this bucket is a hash type.
     /// </summary>
@@ -105,12 +109,12 @@ public class BucketId : IEquatable<BucketId>
     /// <inheritdoc />
     public bool Equals(BucketId other)
     {
-        if (other is null)
-            return false;
-        if (ReferenceEquals(this, other))
-            return true;
-        if (GetType() != other.GetType())
-            return false;
+        if (other is null) return false;
+
+        if (ReferenceEquals(this, other)) return true;
+
+        if (GetType() != other.GetType()) return false;
+
         return ToString() == other.ToString();
     }
 }

@@ -59,7 +59,8 @@ public interface INestedChannel : IGuildChannel
     ///     A task that represents the asynchronous invite creation operation. The task result contains an invite
     ///     metadata object containing information for the created invite.
     /// </returns>
-    Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited, RequestOptions options = null);
+    Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited,
+        RequestOptions options = null);
 
     /// <summary>
     ///     Creates a new invite to this channel.

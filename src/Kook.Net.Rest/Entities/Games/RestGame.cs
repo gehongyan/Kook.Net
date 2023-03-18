@@ -15,16 +15,22 @@ public class RestGame : RestEntity<int>, IGame
 
     /// <inheritdoc />
     public string Name { get; private set; }
+
     /// <inheritdoc />
     public GameType GameType { get; private set; }
+
     /// <inheritdoc />
     public string Options { get; private set; }
+
     /// <inheritdoc />
     public bool RequireAdminPrivilege { get; private set; }
+
     /// <inheritdoc />
     public string Icon { get; private set; }
+
     /// <inheritdoc />
     public IReadOnlyCollection<string> ProductNames => _productNames.ToReadOnlyCollection();
+
     /// <inheritdoc />
     public IReadOnlyCollection<string> ProcessNames => _processNames.ToReadOnlyCollection();
 
@@ -35,7 +41,7 @@ public class RestGame : RestEntity<int>, IGame
 
     internal static RestGame Create(BaseKookClient kook, Model model)
     {
-        var entity = new RestGame(kook, model.Id);
+        RestGame entity = new(kook, model.Id);
         entity.Update(model);
         return entity;
     }
@@ -52,15 +58,11 @@ public class RestGame : RestEntity<int>, IGame
     }
 
     /// <inheritdoc cref="IGame.ModifyAsync(Action{GameProperties},RequestOptions)" />
-    public async Task<RestGame> ModifyAsync(Action<GameProperties> func, RequestOptions options = null)
-    {
-        return await GameHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
-    }
+    public async Task<RestGame> ModifyAsync(Action<GameProperties> func, RequestOptions options = null) =>
+        await GameHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
+
     /// <inheritdoc />
-    public async Task DeleteAsync(RequestOptions options = null)
-    {
-        await GameHelper.DeleteAsync(this, Kook, options).ConfigureAwait(false);
-    }
+    public async Task DeleteAsync(RequestOptions options = null) => await GameHelper.DeleteAsync(this, Kook, options).ConfigureAwait(false);
 
     /// <inheritdoc />
     async Task<IGame> IGame.ModifyAsync(Action<GameProperties> func, RequestOptions options)

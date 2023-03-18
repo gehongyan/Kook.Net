@@ -9,53 +9,51 @@ internal static class ModuleClassBuilder
 
     public static async Task<IReadOnlyList<TypeInfo>> SearchAsync(Assembly assembly, CommandService service)
     {
-        bool IsLoadableModule(TypeInfo info)
-        {
-            return info.DeclaredMethods.Any(x => x.GetCustomAttribute<CommandAttribute>() != null) &&
-                   info.GetCustomAttribute<DontAutoLoadAttribute>() == null;
-        }
+        bool IsLoadableModule(TypeInfo info) =>
+            info.DeclaredMethods.Any(x => x.GetCustomAttribute<CommandAttribute>() != null)
+            && info.GetCustomAttribute<DontAutoLoadAttribute>() == null;
 
-        var result = new List<TypeInfo>();
+        List<TypeInfo> result = new();
 
-        foreach (var typeInfo in assembly.DefinedTypes)
+        foreach (TypeInfo typeInfo in assembly.DefinedTypes)
         {
             if (typeInfo.IsPublic || typeInfo.IsNestedPublic)
             {
-                if (IsValidModuleDefinition(typeInfo) &&
-                    !typeInfo.IsDefined(typeof(DontAutoLoadAttribute)))
-                {
-                    result.Add(typeInfo);
-                }
+                if (IsValidModuleDefinition(typeInfo) && !typeInfo.IsDefined(typeof(DontAutoLoadAttribute))) result.Add(typeInfo);
             }
             else if (IsLoadableModule(typeInfo))
-            {
-                await service._cmdLogger.WarningAsync($"Class {typeInfo.FullName} is not public and cannot be loaded. To suppress this message, mark the class with {nameof(DontAutoLoadAttribute)}.").ConfigureAwait(false);
-            }
+                await service._cmdLogger
+                    .WarningAsync(
+                        $"Class {typeInfo.FullName} is not public and cannot be loaded. To suppress this message, mark the class with {nameof(DontAutoLoadAttribute)}.")
+                    .ConfigureAwait(false);
         }
 
         return result;
     }
 
 
-    public static Task<Dictionary<Type, ModuleInfo>> BuildAsync(CommandService service, IServiceProvider services, params TypeInfo[] validTypes) => BuildAsync(validTypes, service, services);
-    public static async Task<Dictionary<Type, ModuleInfo>> BuildAsync(IEnumerable<TypeInfo> validTypes, CommandService service, IServiceProvider services)
+    public static Task<Dictionary<Type, ModuleInfo>> BuildAsync(CommandService service, IServiceProvider services, params TypeInfo[] validTypes) =>
+        BuildAsync(validTypes, service, services);
+
+    public static async Task<Dictionary<Type, ModuleInfo>> BuildAsync(IEnumerable<TypeInfo> validTypes, CommandService service,
+        IServiceProvider services)
     {
         /*if (!validTypes.Any())
             throw new InvalidOperationException("Could not find any valid modules from the given selection");*/
 
-        var topLevelGroups = validTypes.Where(x => x.DeclaringType == null || !IsValidModuleDefinition(x.DeclaringType.GetTypeInfo()));
+        IEnumerable<TypeInfo> topLevelGroups =
+            validTypes.Where(x => x.DeclaringType == null || !IsValidModuleDefinition(x.DeclaringType.GetTypeInfo()));
 
-        var builtTypes = new List<TypeInfo>();
+        List<TypeInfo> builtTypes = new();
 
-        var result = new Dictionary<Type, ModuleInfo>();
+        Dictionary<Type, ModuleInfo> result = new();
 
-        foreach (var typeInfo in topLevelGroups)
+        foreach (TypeInfo typeInfo in topLevelGroups)
         {
             // TODO: This shouldn't be the case; may be safe to remove?
-            if (result.ContainsKey(typeInfo.AsType()))
-                continue;
+            if (result.ContainsKey(typeInfo.AsType())) continue;
 
-            var module = new ModuleBuilder(service, null);
+            ModuleBuilder module = new(service, null);
 
             BuildModule(module, typeInfo, service, services);
             BuildSubTypes(module, typeInfo.DeclaredNestedTypes, builtTypes, service, services);
@@ -69,15 +67,14 @@ internal static class ModuleClassBuilder
         return result;
     }
 
-    private static void BuildSubTypes(ModuleBuilder builder, IEnumerable<TypeInfo> subTypes, List<TypeInfo> builtTypes, CommandService service, IServiceProvider services)
+    private static void BuildSubTypes(ModuleBuilder builder, IEnumerable<TypeInfo> subTypes, List<TypeInfo> builtTypes, CommandService service,
+        IServiceProvider services)
     {
-        foreach (var typeInfo in subTypes)
+        foreach (TypeInfo typeInfo in subTypes)
         {
-            if (!IsValidModuleDefinition(typeInfo))
-                continue;
+            if (!IsValidModuleDefinition(typeInfo)) continue;
 
-            if (builtTypes.Contains(typeInfo))
-                continue;
+            if (builtTypes.Contains(typeInfo)) continue;
 
             builder.AddModule((module) =>
             {
@@ -91,10 +88,10 @@ internal static class ModuleClassBuilder
 
     private static void BuildModule(ModuleBuilder builder, TypeInfo typeInfo, CommandService service, IServiceProvider services)
     {
-        var attributes = typeInfo.GetCustomAttributes();
+        IEnumerable<Attribute> attributes = typeInfo.GetCustomAttributes();
         builder.TypeInfo = typeInfo;
 
-        foreach (var attribute in attributes)
+        foreach (Attribute attribute in attributes)
         {
             switch (attribute)
             {
@@ -124,28 +121,23 @@ internal static class ModuleClassBuilder
         }
 
         //Check for unspecified info
-        if (builder.Aliases.Count == 0)
-            builder.AddAliases("");
-        if (builder.Name == null)
-            builder.Name = typeInfo.Name;
+        if (builder.Aliases.Count == 0) builder.AddAliases("");
+
+        if (builder.Name == null) builder.Name = typeInfo.Name;
 
         // Get all methods (including from inherited members), that are valid commands
-        var validCommands = typeInfo.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Where(IsValidCommandDefinition);
+        IEnumerable<MethodInfo> validCommands = typeInfo.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+            .Where(IsValidCommandDefinition);
 
-        foreach (var method in validCommands)
-        {
-            builder.AddCommand((command) =>
-            {
-                BuildCommand(command, typeInfo, method, service, services);
-            });
-        }
+        foreach (MethodInfo method in validCommands) builder.AddCommand((command) => { BuildCommand(command, typeInfo, method, service, services); });
     }
 
-    private static void BuildCommand(CommandBuilder builder, TypeInfo typeInfo, MethodInfo method, CommandService service, IServiceProvider serviceprovider)
+    private static void BuildCommand(CommandBuilder builder, TypeInfo typeInfo, MethodInfo method, CommandService service,
+        IServiceProvider serviceprovider)
     {
-        var attributes = method.GetCustomAttributes();
+        IEnumerable<Attribute> attributes = method.GetCustomAttributes();
 
-        foreach (var attribute in attributes)
+        foreach (Attribute attribute in attributes)
         {
             switch (attribute)
             {
@@ -179,24 +171,18 @@ internal static class ModuleClassBuilder
             }
         }
 
-        if (builder.Name == null)
-            builder.Name = method.Name;
+        if (builder.Name == null) builder.Name = method.Name;
 
-        var parameters = method.GetParameters();
+        System.Reflection.ParameterInfo[] parameters = method.GetParameters();
         int pos = 0, count = parameters.Length;
-        foreach (var paramInfo in parameters)
-        {
-            builder.AddParameter((parameter) =>
-            {
-                BuildParameter(parameter, paramInfo, pos++, count, service, serviceprovider);
-            });
-        }
+        foreach (System.Reflection.ParameterInfo paramInfo in parameters)
+            builder.AddParameter((parameter) => { BuildParameter(parameter, paramInfo, pos++, count, service, serviceprovider); });
 
-        var createInstance = ReflectionUtils.CreateBuilder<IModuleBase>(typeInfo, service);
+        Func<IServiceProvider, IModuleBase> createInstance = ReflectionUtils.CreateBuilder<IModuleBase>(typeInfo, service);
 
         async Task<IResult> ExecuteCallback(ICommandContext context, object[] args, IServiceProvider services, CommandInfo cmd)
         {
-            var instance = createInstance(services);
+            IModuleBase instance = createInstance(services);
             instance.SetContext(context);
 
             try
@@ -204,11 +190,9 @@ internal static class ModuleClassBuilder
                 await instance.BeforeExecuteAsync(cmd).ConfigureAwait(false);
                 instance.BeforeExecute(cmd);
 
-                var task = method.Invoke(instance, args) as Task ?? Task.Delay(0);
+                Task task = method.Invoke(instance, args) as Task ?? Task.Delay(0);
                 if (task is Task<RuntimeResult> resultTask)
-                {
                     return await resultTask.ConfigureAwait(false);
-                }
                 else
                 {
                     await task.ConfigureAwait(false);
@@ -226,17 +210,18 @@ internal static class ModuleClassBuilder
         builder.Callback = ExecuteCallback;
     }
 
-    private static void BuildParameter(ParameterBuilder builder, System.Reflection.ParameterInfo paramInfo, int position, int count, CommandService service, IServiceProvider services)
+    private static void BuildParameter(ParameterBuilder builder, System.Reflection.ParameterInfo paramInfo, int position, int count,
+        CommandService service, IServiceProvider services)
     {
-        var attributes = paramInfo.GetCustomAttributes();
-        var paramType = paramInfo.ParameterType;
+        IEnumerable<Attribute> attributes = paramInfo.GetCustomAttributes();
+        Type paramType = paramInfo.ParameterType;
 
         builder.Name = paramInfo.Name;
 
         builder.IsOptional = paramInfo.IsOptional;
         builder.DefaultValue = paramInfo.HasDefaultValue ? paramInfo.DefaultValue : null;
 
-        foreach (var attribute in attributes)
+        foreach (Attribute attribute in attributes)
         {
             switch (attribute)
             {
@@ -258,7 +243,8 @@ internal static class ModuleClassBuilder
                     break;
                 case RemainderAttribute _:
                     if (position != count - 1)
-                        throw new InvalidOperationException($"Remainder parameters must be the last parameter in a command. Parameter: {paramInfo.Name} in {paramInfo.Member.DeclaringType.Name}.{paramInfo.Member.Name}");
+                        throw new InvalidOperationException(
+                            $"Remainder parameters must be the last parameter in a command. Parameter: {paramInfo.Name} in {paramInfo.Member.DeclaringType.Name}.{paramInfo.Member.Name}");
 
                     builder.IsRemainder = true;
                     break;
@@ -271,21 +257,17 @@ internal static class ModuleClassBuilder
         builder.ParameterType = paramType;
 
         if (builder.TypeReader == null)
-        {
             builder.TypeReader = service.GetDefaultTypeReader(paramType)
-                                 ?? service.GetTypeReaders(paramType)?.FirstOrDefault().Value;
-        }
+                ?? service.GetTypeReaders(paramType)?.FirstOrDefault().Value;
     }
 
     internal static TypeReader GetTypeReader(CommandService service, Type paramType, Type typeReaderType, IServiceProvider services)
     {
-        var readers = service.GetTypeReaders(paramType);
+        IDictionary<Type, TypeReader> readers = service.GetTypeReaders(paramType);
         TypeReader reader = null;
         if (readers != null)
-        {
             if (readers.TryGetValue(typeReaderType, out reader))
                 return reader;
-        }
 
         //We don't have a cached type reader, create one
         reader = ReflectionUtils.CreateObject<TypeReader>(typeReaderType.GetTypeInfo(), service, services);
@@ -294,18 +276,12 @@ internal static class ModuleClassBuilder
         return reader;
     }
 
-    private static bool IsValidModuleDefinition(TypeInfo typeInfo)
-    {
-        return ModuleTypeInfo.IsAssignableFrom(typeInfo) &&
-               !typeInfo.IsAbstract &&
-               !typeInfo.ContainsGenericParameters;
-    }
+    private static bool IsValidModuleDefinition(TypeInfo typeInfo) =>
+        ModuleTypeInfo.IsAssignableFrom(typeInfo) && !typeInfo.IsAbstract && !typeInfo.ContainsGenericParameters;
 
-    private static bool IsValidCommandDefinition(MethodInfo methodInfo)
-    {
-        return methodInfo.IsDefined(typeof(CommandAttribute)) &&
-               (methodInfo.ReturnType == typeof(Task) || methodInfo.ReturnType == typeof(Task<RuntimeResult>)) &&
-               !methodInfo.IsStatic &&
-               !methodInfo.IsGenericMethod;
-    }
+    private static bool IsValidCommandDefinition(MethodInfo methodInfo) =>
+        methodInfo.IsDefined(typeof(CommandAttribute))
+        && (methodInfo.ReturnType == typeof(Task) || methodInfo.ReturnType == typeof(Task<RuntimeResult>))
+        && !methodInfo.IsStatic
+        && !methodInfo.IsGenericMethod;
 }

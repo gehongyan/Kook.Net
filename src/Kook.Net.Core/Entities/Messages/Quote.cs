@@ -5,14 +5,19 @@ public class Quote : IQuote
 {
     /// <inheritdoc />
     public string Id { get; }
+
     /// <inheritdoc />
     public Guid QuotedMessageId { get; }
+
     /// <inheritdoc />
     public MessageType Type { get; }
+
     /// <inheritdoc />
     public string Content { get; }
+
     /// <inheritdoc />
     public DateTimeOffset CreateAt { get; }
+
     /// <inheritdoc />
     public IUser Author { get; }
 
@@ -22,7 +27,7 @@ public class Quote : IQuote
     /// <remarks>
     ///     Used to delete a quote when modifying a message.
     /// </remarks>
-    public Quote Empty => new Quote(Guid.Empty);
+    public Quote Empty => new(Guid.Empty);
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Quote"/> class.
@@ -30,10 +35,7 @@ public class Quote : IQuote
     /// <param name="quotedMessageId">
     ///     The quoted message identifier.
     /// </param>
-    public Quote(Guid quotedMessageId)
-    {
-        QuotedMessageId = quotedMessageId;
-    }
+    public Quote(Guid quotedMessageId) => QuotedMessageId = quotedMessageId;
 
     internal Quote(string id, Guid quotedMessageId, MessageType type, string content, DateTimeOffset createAt, IUser author)
     {
@@ -45,7 +47,6 @@ public class Quote : IQuote
         Author = author;
     }
 
-    internal static Quote Create(string id, Guid quotedMessageId, MessageType type, string content,
-        DateTimeOffset createAt, IUser author)
-        => new Quote(id, quotedMessageId, type, content, createAt, author);
+    internal static Quote Create(string id, Guid quotedMessageId, MessageType type, string content, DateTimeOffset createAt, IUser author) =>
+        new(id, quotedMessageId, type, content, createAt, author);
 }

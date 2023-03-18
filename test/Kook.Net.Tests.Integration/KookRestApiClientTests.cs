@@ -15,10 +15,7 @@ public class KookRestApiClientTests : IClassFixture<RestGuildFixture>, IAsyncDis
 {
     private readonly KookRestApiClient _apiClient;
 
-    public KookRestApiClientTests(RestGuildFixture guildFixture)
-    {
-        _apiClient = guildFixture.Client.ApiClient;
-    }
+    public KookRestApiClientTests(RestGuildFixture guildFixture) => _apiClient = guildFixture.Client.ApiClient;
 
     public ValueTask DisposeAsync()
     {

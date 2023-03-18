@@ -105,6 +105,7 @@ public struct FileAttachment : IDisposable
         FileName = fileName ?? Path.GetFileName(path);
         Uri = null;
     }
+
     /// <summary>
     ///     Create the file attachment from a URI.
     /// </summary>

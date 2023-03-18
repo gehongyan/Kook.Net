@@ -5,10 +5,7 @@ namespace Kook.API.Rest;
 
 internal class BeginActivityParams
 {
-    public BeginActivityParams(ActivityType activityType)
-    {
-        ActivityType = activityType;
-    }
+    public BeginActivityParams(ActivityType activityType) => ActivityType = activityType;
 
     [JsonInclude]
     [JsonPropertyName("data_type")]

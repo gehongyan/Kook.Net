@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Kook.Net.Rest;
 #if DEBUG_LIMITS
 using System.Diagnostics;
 #endif
@@ -28,8 +29,7 @@ namespace Kook.Net.Queue
         {
             _serializerOptions = new JsonSerializerOptions
             {
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                NumberHandling = JsonNumberHandling.AllowReadingFromString
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, NumberHandling = JsonNumberHandling.AllowReadingFromString
             };
             _queue = queue;
             Id = id;
@@ -42,12 +42,14 @@ namespace Kook.Net.Queue
                 WindowCount = GatewayBucket.Get(request.Options.BucketId).WindowCount;
             else
                 WindowCount = 1; //Only allow one request until we get a header back
+
             _semaphore = WindowCount;
             _resetTick = null;
             LastAttemptAt = DateTimeOffset.UtcNow;
         }
 
-        static int nextId = 0;
+        private static int nextId = 0;
+
         public async Task<Stream> SendAsync(RestRequest request)
         {
             int id = Interlocked.Increment(ref nextId);
@@ -59,22 +61,20 @@ namespace Kook.Net.Queue
             {
                 await _queue.EnterGlobalAsync(id, request).ConfigureAwait(false);
                 await EnterAsync(id, request).ConfigureAwait(false);
-                if (_redirectBucket != null)
-                    return await _redirectBucket.SendAsync(request);
+                if (_redirectBucket != null) return await _redirectBucket.SendAsync(request);
 
 #if DEBUG_LIMITS
                 Debug.WriteLine($"[{id}] Sending...");
 #endif
-                RateLimitInfo info = default(RateLimitInfo);
+                RateLimitInfo info = default;
                 try
                 {
-                    var response = await request.SendAsync().ConfigureAwait(false);
+                    RestResponse response = await request.SendAsync().ConfigureAwait(false);
                     info = new RateLimitInfo(response.Headers, request.Endpoint);
 
                     request.Options.ExecuteRatelimitCallback(info);
 
                     if (response.StatusCode < (HttpStatusCode)200 || response.StatusCode >= (HttpStatusCode)300)
-                    {
                         switch (response.StatusCode)
                         {
                             case (HttpStatusCode)429:
@@ -92,8 +92,9 @@ namespace Kook.Net.Queue
 #endif
                                     UpdateRateLimit(id, request, info, true);
                                 }
+
                                 await _queue.RaiseRateLimitTriggered(Id, info, $"{request.Method} {request.Endpoint}").ConfigureAwait(false);
-                                continue; //Retry
+                                continue;                   //Retry
                             case HttpStatusCode.BadGateway: //502
 #if DEBUG_LIMITS
                                 Debug.WriteLine($"[{id}] (!) 502");
@@ -105,16 +106,15 @@ namespace Kook.Net.Queue
                             default:
                                 API.Rest.RestResponseBase responseBase = null;
                                 if (response.Stream != null)
-                                {
                                     try
                                     {
-                                        responseBase = await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream, _serializerOptions);
+                                        responseBase = await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream,
+                                            _serializerOptions);
                                     }
                                     catch
                                     {
                                         // ignored
                                     }
-                                }
 
                                 throw new HttpException(
                                     response.StatusCode,
@@ -124,15 +124,13 @@ namespace Kook.Net.Queue
                                     responseBase?.Data is not null
                                         ? new KookJsonError[]
                                         {
-                                            new KookJsonError("root",
-                                                new KookError[]
-                                                    {new KookError(((int) responseBase.Code).ToString(), responseBase.Message)}
+                                            new("root",
+                                                new KookError[] { new(((int)responseBase.Code).ToString(), responseBase.Message) }
                                             )
                                         }
                                         : null
                                 );
                         }
-                    }
                     else
                     {
 #if DEBUG_LIMITS
@@ -140,9 +138,9 @@ namespace Kook.Net.Queue
 #endif
                         if (response.MediaTypeHeader.MediaType == "application/json")
                         {
-                            API.Rest.RestResponseBase responseBase = await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream, _serializerOptions);
+                            API.Rest.RestResponseBase responseBase =
+                                await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream, _serializerOptions);
                             if (responseBase?.Code > (KookErrorCode)0)
-                            {
                                 throw new HttpException(
                                     response.StatusCode,
                                     request,
@@ -151,20 +149,16 @@ namespace Kook.Net.Queue
                                     responseBase.Data is not null
                                         ? new KookJsonError[]
                                         {
-                                            new KookJsonError("root",
-                                                new KookError[]
-                                                    {new KookError(((int) responseBase.Code).ToString(), responseBase.Message)}
+                                            new("root",
+                                                new KookError[] { new(((int)responseBase.Code).ToString(), responseBase.Message) }
                                             )
                                         }
                                         : null
                                 );
-                            }
+
                             return new MemoryStream(Encoding.UTF8.GetBytes(responseBase?.Data.ToString() ?? string.Empty));
                         }
-                        else if (response.MediaTypeHeader.MediaType == "image/svg+xml")
-                        {
-                            return response.Stream;
-                        }
+                        else if (response.MediaTypeHeader.MediaType == "image/svg+xml") return response.Stream;
                     }
                 }
                 //catch (HttpException) { throw; } //Pass through
@@ -173,8 +167,7 @@ namespace Kook.Net.Queue
 #if DEBUG_LIMITS
                     Debug.WriteLine($"[{id}] Timeout");
 #endif
-                    if ((request.Options.RetryMode & RetryMode.RetryTimeouts) == 0)
-                        throw;
+                    if ((request.Options.RetryMode & RetryMode.RetryTimeouts) == 0) throw;
 
                     await Task.Delay(500).ConfigureAwait(false);
                     continue; //Retry
@@ -199,6 +192,7 @@ namespace Kook.Net.Queue
                 }
             }
         }
+
         public async Task SendAsync(WebSocketRequest request)
         {
             int id = Interlocked.Increment(ref nextId);
@@ -224,8 +218,7 @@ namespace Kook.Net.Queue
 #if DEBUG_LIMITS
                     Debug.WriteLine($"[{id}] Timeout");
 #endif
-                    if ((request.Options.RetryMode & RetryMode.RetryTimeouts) == 0)
-                        throw;
+                    if ((request.Options.RetryMode & RetryMode.RetryTimeouts) == 0) throw;
 
                     await Task.Delay(500).ConfigureAwait(false);
                     continue; //Retry
@@ -268,8 +261,7 @@ namespace Kook.Net.Queue
 
             while (true)
             {
-                if (_redirectBucket != null)
-                    break;
+                if (_redirectBucket != null) break;
 
                 if (DateTimeOffset.UtcNow > request.TimeoutAt || request.Options.CancelToken.IsCancellationRequested)
                 {
@@ -304,11 +296,13 @@ namespace Kook.Net.Queue
                                     ignoreRatelimit = true;
                                     break;
                                 }
+
                                 await _queue.RaiseRateLimitTriggered(Id, null, Id.Endpoint).ConfigureAwait(false);
                                 break;
                             default:
                                 throw new InvalidOperationException("Unknown request type");
                         }
+
                         if (ignoreRatelimit)
                         {
 #if DEBUG_LIMITS
@@ -322,25 +316,23 @@ namespace Kook.Net.Queue
 
                     if (resetAt.HasValue && resetAt > DateTimeOffset.UtcNow)
                     {
-                        if (resetAt > timeoutAt)
-                            ThrowRetryLimit(request);
+                        if (resetAt > timeoutAt) ThrowRetryLimit(request);
 
                         int millis = (int)Math.Ceiling((resetAt.Value - DateTimeOffset.UtcNow).TotalMilliseconds);
 #if DEBUG_LIMITS
                         Debug.WriteLine($"[{id}] Sleeping {millis} ms (Pre-emptive)");
 #endif
-                        if (millis > 0)
-                            await Task.Delay(millis, request.Options.CancelToken).ConfigureAwait(false);
+                        if (millis > 0) await Task.Delay(millis, request.Options.CancelToken).ConfigureAwait(false);
                     }
                     else
                     {
-                        if ((timeoutAt.Value - DateTimeOffset.UtcNow).TotalMilliseconds < MinimumSleepTimeMs)
-                            ThrowRetryLimit(request);
+                        if ((timeoutAt.Value - DateTimeOffset.UtcNow).TotalMilliseconds < MinimumSleepTimeMs) ThrowRetryLimit(request);
 #if DEBUG_LIMITS
                         Debug.WriteLine($"[{id}] Sleeping {MinimumSleepTimeMs}* ms (Pre-emptive)");
 #endif
                         await Task.Delay(MinimumSleepTimeMs, request.Options.CancelToken).ConfigureAwait(false);
                     }
+
                     continue;
                 }
 #if DEBUG_LIMITS
@@ -353,18 +345,19 @@ namespace Kook.Net.Queue
 
         private void UpdateRateLimit(int id, IRequest request, RateLimitInfo info, bool is429, bool redirected = false)
         {
-            if (WindowCount == 0)
-                return;
+            if (WindowCount == 0) return;
 
             lock (_lock)
             {
                 if (redirected)
                 {
-                    Interlocked.Decrement(ref _semaphore); //we might still hit a real ratelimit if all tickets were already taken, can't do much about it since we didn't know they were the same
+                    Interlocked.Decrement(
+                        ref _semaphore); //we might still hit a real ratelimit if all tickets were already taken, can't do much about it since we didn't know they were the same
 #if DEBUG_LIMITS
                     Debug.WriteLine($"[{id}] Decrease Semaphore");
 #endif
                 }
+
                 bool hasQueuedReset = _resetTick != null;
 
                 if (info.Bucket != null && !redirected)
@@ -381,8 +374,9 @@ namespace Kook.Net.Queue
                         }
                         else
                         {
-                            _redirectBucket = hashBucket.Item1; //this request should be part of another bucket, this bucket will be disabled, redirect everything
-                            _redirectBucket.UpdateRateLimit(id, request, info, is429, redirected: true); //update the hash bucket ratelimit
+                            _redirectBucket =
+                                hashBucket.Item1; //this request should be part of another bucket, this bucket will be disabled, redirect everything
+                            _redirectBucket.UpdateRateLimit(id, request, info, is429, true); //update the hash bucket ratelimit
 #if DEBUG_LIMITS
                             Debug.WriteLine($"[{id}] Redirected to {_redirectBucket.Id}");
 #endif
@@ -417,7 +411,7 @@ namespace Kook.Net.Queue
                 // #endif
                 //                 }
                 /*else*/
-                if (info.ResetAfter.HasValue)  // && (request.Options.UseSystemClock.HasValue && !request.Options.UseSystemClock.Value)
+                if (info.ResetAfter.HasValue) // && (request.Options.UseSystemClock.HasValue && !request.Options.UseSystemClock.Value)
                 {
                     resetTick = DateTimeOffset.UtcNow.Add(info.ResetAfter.Value);
 #if DEBUG_LIMITS
@@ -458,8 +452,9 @@ namespace Kook.Net.Queue
 #if DEBUG_LIMITS
                     Debug.WriteLine($"[{id}] Reset in {(int)Math.Ceiling((resetTick - DateTimeOffset.UtcNow).Value.TotalMilliseconds)} ms");
 #endif
-                        var _ = QueueReset(id, (int)Math.Ceiling((_resetTick.Value - DateTimeOffset.UtcNow).TotalMilliseconds), request);
+                        Task _ = QueueReset(id, (int)Math.Ceiling((_resetTick.Value - DateTimeOffset.UtcNow).TotalMilliseconds), request);
                     }
+
                     return;
                 }
 
@@ -482,17 +477,18 @@ namespace Kook.Net.Queue
 
                     if (!hasQueuedReset)
                     {
-                        var _ = QueueReset(id, (int)Math.Ceiling((_resetTick.Value - DateTimeOffset.UtcNow).TotalMilliseconds), request);
+                        Task _ = QueueReset(id, (int)Math.Ceiling((_resetTick.Value - DateTimeOffset.UtcNow).TotalMilliseconds), request);
                     }
                 }
             }
         }
+
         private async Task QueueReset(int id, int millis, IRequest request)
         {
             while (true)
             {
-                if (millis > 0)
-                    await Task.Delay(millis).ConfigureAwait(false);
+                if (millis > 0) await Task.Delay(millis).ConfigureAwait(false);
+
                 lock (_lock)
                 {
                     millis = (int)Math.Ceiling((_resetTick.Value - DateTimeOffset.UtcNow).TotalMilliseconds);
@@ -511,8 +507,7 @@ namespace Kook.Net.Queue
 
         private void ThrowRetryLimit(IRequest request)
         {
-            if ((request.Options.RetryMode & RetryMode.RetryRatelimit) == 0)
-                throw new RateLimitedException(request);
+            if ((request.Options.RetryMode & RetryMode.RetryRatelimit) == 0) throw new RateLimitedException(request);
         }
     }
 }

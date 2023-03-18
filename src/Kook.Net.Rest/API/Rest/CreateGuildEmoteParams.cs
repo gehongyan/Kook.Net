@@ -10,18 +10,13 @@ internal class CreateGuildEmoteParams
 
     public IReadOnlyDictionary<string, object> ToDictionary()
     {
-        var d = new Dictionary<string, object>
-        {
-            ["guild_id"] = GuildId
-        };
+        Dictionary<string, object> d = new() { ["guild_id"] = GuildId };
 
-        if (Name is not null)
-            d["name"] = $"{Name}";
+        if (Name is not null) d["name"] = $"{Name}";
 
         string contentType = "image/png";
 
-        if (File is FileStream fileStream)
-            contentType = $"image/{Path.GetExtension(fileStream.Name)}";
+        if (File is FileStream fileStream) contentType = $"image/{Path.GetExtension(fileStream.Name)}";
 
         d["emoji"] = new MultipartFile(File, Name ?? "image", contentType.Replace(".", ""));
 

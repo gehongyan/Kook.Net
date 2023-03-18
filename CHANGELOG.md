@@ -7,14 +7,14 @@
 ### Added
 
 - Added an optional `Nullable<GameCreationSource>` parameter for `Kook.GetGamesAsync`.
-(22b799ac87867590045c87771b0344acd3e80339)
+  (22b799ac87867590045c87771b0344acd3e80339)
 
 ## v0.2.4 [2023-03-09]
 
 ### Added
 
 - Added support for parsing color type `ColorType` and gradient color information `GradientColor` for role `IRole`.
-(9414b94fb60dc6b45f14dc524acc75005071e37f)
+  (9414b94fb60dc6b45f14dc524acc75005071e37f)
 
 ## v0.2.3 [2023-01-19]
 

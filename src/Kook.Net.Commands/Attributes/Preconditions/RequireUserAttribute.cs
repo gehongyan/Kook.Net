@@ -34,28 +34,20 @@ public class RequireUserAttribute : PreconditionAttribute
     ///     Initializes a new <see cref="RequireUserAttribute" /> attribute with the specified user identifier.
     /// </summary>
     /// <param name="userId"> The identifier of the user. </param>
-    public RequireUserAttribute(ulong userId)
-    {
-        _userId = userId;
-    }
+    public RequireUserAttribute(ulong userId) => _userId = userId;
 
     /// <summary>
     ///     Initializes a new <see cref="RequireUserAttribute" /> attribute with the specified user.
     /// </summary>
     /// <param name="user"> An <see cref="IUser"/> representing the user. </param>
-    public RequireUserAttribute(IUser user)
-    {
-        _userId = user.Id;
-    }
+    public RequireUserAttribute(IUser user) => _userId = user.Id;
 
     /// <inheritdoc />
     public override string ErrorMessage { get; set; }
 
     /// <inheritdoc />
-    public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
-    {
-        return Task.FromResult(context.User.Id != _userId
+    public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) =>
+        Task.FromResult(context.User.Id != _userId
             ? PreconditionResult.FromError(ErrorMessage ?? $"Command can only be run by the specified user with identifier {_userId}.")
             : PreconditionResult.FromSuccess());
-    }
 }

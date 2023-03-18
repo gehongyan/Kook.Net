@@ -15,14 +15,17 @@ public class GuildProperties
     ///     Gets or sets the identifier of the guild to modify.
     /// </summary>
     public ulong GuildId { get; set; }
+
     /// <summary>
     ///     Gets or sets the region for the guild's voice connections.
     /// </summary>
     public IVoiceRegion Region { get; set; }
+
     /// <summary>
     ///     Gets or sets the ID of the region for the guild's voice connections.
     /// </summary>
     public string RegionId { get; set; }
+
     /// <summary>
     ///     Gets or sets the ID of the default channel.
     /// </summary>
@@ -31,6 +34,7 @@ public class GuildProperties
     ///     <c>null</c> if nothing changes. <c>0</c> if set to none.
     /// </returns>
     public ulong? DefaultChannelId { get; set; }
+
     /// <summary>
     ///     Gets or sets the default channel.
     /// </summary>
@@ -39,6 +43,7 @@ public class GuildProperties
     ///     To clear the manually assigned default channel, set <see cref="DefaultChannelId"/> to <c>0</c> instead.
     /// </returns>
     public ITextChannel DefaultChannel { get; set; }
+
     /// <summary>
     ///     Gets or sets the ID of welcome channel.
     /// </summary>
@@ -47,6 +52,7 @@ public class GuildProperties
     ///     <c>null</c> if nothing changes. <c>0</c> if set to none.
     /// </returns>
     public ulong? WelcomeChannelId { get; set; }
+
     /// <summary>
     ///     Gets or sets the welcome channel.
     /// </summary>
@@ -55,10 +61,12 @@ public class GuildProperties
     ///     To clear the welcome channel, set <see cref="WelcomeChannelId"/> to <c>0</c> instead.
     /// </returns>
     public ITextChannel WelcomeChannel { get; set; }
+
     /// <summary>
     ///     Gets or sets whether the guild is open.
     /// </summary>
     public bool? EnableOpen { get; set; }
+
     /// <summary>
     ///     Gets the ID of the channel assigned to the widget of this guild.
     /// </summary>
@@ -68,6 +76,7 @@ public class GuildProperties
     ///     set to none.
     /// </returns>
     public ulong? WidgetChannelId { get; set; }
+
     /// <summary>
     ///     Gets the channel assigned to the widget of this guild.
     /// </summary>

@@ -4,7 +4,6 @@ namespace Kook.API.Gateway;
 
 internal class PinnedMessageEvent
 {
-
     [JsonPropertyName("channel_id")]
     public ulong ChannelId { get; set; }
 

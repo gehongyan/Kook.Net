@@ -12,5 +12,6 @@ public class GatewayReconnectException : Exception
     /// <param name="message">The reason why the gateway has been requested to reconnect.</param>
     public GatewayReconnectException(string message)
         : base(message)
-    { }
+    {
+    }
 }

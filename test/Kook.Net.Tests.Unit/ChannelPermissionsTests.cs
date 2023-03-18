@@ -16,7 +16,7 @@ public class ChannelPermissionsTests
     [Fact]
     public void DefaultConstructor()
     {
-        var permission = new ChannelPermissions();
+        ChannelPermissions permission = new();
         Assert.Equal((ulong)0, permission.RawValue);
         Assert.Equal(ChannelPermissions.None.RawValue, permission.RawValue);
     }
@@ -37,11 +37,13 @@ public class ChannelPermissionsTests
             yield return ChannelPermissions.DM.RawValue;
             yield return ChannelPermissions.Text.RawValue;
             yield return ChannelPermissions.Voice.RawValue;
-        };
+        }
 
-        foreach (var rawValue in GetTestValues())
+        ;
+
+        foreach (ulong rawValue in GetTestValues())
         {
-            var p = new ChannelPermissions(rawValue);
+            ChannelPermissions p = new(rawValue);
             Assert.Equal(rawValue, p.RawValue);
         }
     }
@@ -56,14 +58,14 @@ public class ChannelPermissionsTests
         // util method for asserting that the constructor sets the given flag
         void AssertFlag(Func<ChannelPermissions> cstr, ChannelPermission flag)
         {
-            var p = cstr();
+            ChannelPermissions p = cstr();
             // ensure that this flag is set to true
             Assert.True(p.Has(flag));
             // ensure that only this flag is set
             Assert.Equal((ulong)flag, p.RawValue);
         }
 
-        AssertFlag(() => new ChannelPermissions(createInvites: true), ChannelPermission.CreateInvites);
+        AssertFlag(() => new ChannelPermissions(true), ChannelPermission.CreateInvites);
         AssertFlag(() => new ChannelPermissions(manageChannels: true), ChannelPermission.ManageChannels);
         AssertFlag(() => new ChannelPermissions(manageRoles: true), ChannelPermission.ManageRoles);
         AssertFlag(() => new ChannelPermissions(viewChannel: true), ChannelPermission.ViewChannel);
@@ -96,7 +98,7 @@ public class ChannelPermissionsTests
             Func<ChannelPermissions, bool> has,
             Func<ChannelPermissions, bool, ChannelPermissions> modify)
         {
-            var perm = new ChannelPermissions();
+            ChannelPermissions perm = new();
             // ensure permission initially false
             // use both the function and Has to ensure that the GetPermission
             // function is working
@@ -109,7 +111,7 @@ public class ChannelPermissionsTests
             Assert.True(perm.Has(permission));
 
             // check ToList behavior
-            var list = perm.ToList();
+            List<ChannelPermission> list = perm.ToList();
             Assert.Contains(permission, list);
             Assert.Single(list);
 
@@ -122,7 +124,7 @@ public class ChannelPermissionsTests
             Assert.Equal(ChannelPermissions.None.RawValue, perm.RawValue);
         }
 
-        AssertUtil(ChannelPermission.CreateInvites, x => x.CreateInvites, (p, enable) => p.Modify(createInvites: enable));
+        AssertUtil(ChannelPermission.CreateInvites, x => x.CreateInvites, (p, enable) => p.Modify(enable));
         AssertUtil(ChannelPermission.ManageChannels, x => x.ManageChannels, (p, enable) => p.Modify(manageChannels: enable));
         AssertUtil(ChannelPermission.ManageRoles, x => x.ManageRoles, (p, enable) => p.Modify(manageRoles: enable));
         AssertUtil(ChannelPermission.ViewChannel, x => x.ViewChannel, (p, enable) => p.Modify(viewChannel: enable));
@@ -145,60 +147,43 @@ public class ChannelPermissionsTests
     ///     Tests that <see cref="ChannelPermissions.All(IChannel)"/> for a null channel will throw an <see cref="ArgumentException"/>.
     /// </summary>
     [Fact]
-    public void ChannelTypeResolution_Null()
-    {
-        Assert.Throws<ArgumentException>(() =>
-        {
-            ChannelPermissions.All(null);
-        });
-    }
+    public void ChannelTypeResolution_Null() =>
+        Assert.Throws<ArgumentException>(() => { ChannelPermissions.All(null); });
 
     /// <summary>
     ///     Tests that <see cref="ChannelPermissions.All(IChannel)"/> for an <see cref="ITextChannel"/> will return a value
     ///     equivalent to <see cref="ChannelPermissions.Text"/>.
     /// </summary>
     [Fact]
-    public void ChannelTypeResolution_Text()
-    {
+    public void ChannelTypeResolution_Text() =>
         Assert.Equal(ChannelPermissions.Text.RawValue, ChannelPermissions.All(new MockedTextChannel()).RawValue);
-    }
 
     /// <summary>
     ///     Tests that <see cref="ChannelPermissions.All(IChannel)"/> for an <see cref="IVoiceChannel"/> will return a value
     ///     equivalent to <see cref="ChannelPermissions.Voice"/>.
     /// </summary>
     [Fact]
-    public void ChannelTypeResolution_Voice()
-    {
+    public void ChannelTypeResolution_Voice() =>
         Assert.Equal(ChannelPermissions.Voice.RawValue, ChannelPermissions.All(new MockedVoiceChannel()).RawValue);
-    }
 
     /// <summary>
     ///     Tests that <see cref="ChannelPermissions.All(IChannel)"/> for an <see cref="ICategoryChannel"/> will return a value
     ///     equivalent to <see cref="ChannelPermissions.Category"/>.
     /// </summary>
     [Fact]
-    public void ChannelTypeResolution_Category()
-    {
+    public void ChannelTypeResolution_Category() =>
         Assert.Equal(ChannelPermissions.Category.RawValue, ChannelPermissions.All(new MockedCategoryChannel()).RawValue);
-    }
 
     /// <summary>
     ///     Tests that <see cref="ChannelPermissions.All(IChannel)"/> for an <see cref="IDMChannel"/> will return a value
     ///     equivalent to <see cref="ChannelPermissions.DM"/>.
     /// </summary>
     [Fact]
-    public void ChannelTypeResolution_DM()
-    {
-        Assert.Equal(ChannelPermissions.DM.RawValue, ChannelPermissions.All(new MockedDMChannel()).RawValue);
-    }
+    public void ChannelTypeResolution_DM() => Assert.Equal(ChannelPermissions.DM.RawValue, ChannelPermissions.All(new MockedDMChannel()).RawValue);
 
     /// <summary>
     ///     Tests that <see cref="ChannelPermissions.All(IChannel)"/> for an invalid channel will throw an <see cref="ArgumentException"/>.
     /// </summary>
     [Fact]
-    public void ChannelTypeResolution_Invalid()
-    {
-        Assert.Throws<ArgumentException>(() => ChannelPermissions.All(new MockedInvalidChannel()));
-    }
+    public void ChannelTypeResolution_Invalid() => Assert.Throws<ArgumentException>(() => ChannelPermissions.All(new MockedInvalidChannel()));
 }

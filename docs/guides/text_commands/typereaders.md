@@ -32,12 +32,15 @@ title: 类型解析
 如果类型解析失败，请将错误信息传入 [TypeReaderResult.FromError] 返回。
 
 > [!NOTE]
-> Visual Studio、JetBrains Rider 等集成开发环境中的 IntelliSense 
+> Visual Studio、JetBrains Rider 等集成开发环境中的 IntelliSense
 > 智能提示可以帮助您添加抽象类的实现中缺失的成员。
 
 [TypeReaderResult]: xref:Kook.Commands.TypeReaderResult
+
 [TypeReaderResult.FromSuccess]: xref:Kook.Commands.TypeReaderResult.FromSuccess*
+
 [TypeReaderResult.FromError]: xref:Kook.Commands.TypeReaderResult.FromError*
+
 [ReadAsync]: xref:Kook.Commands.TypeReader.ReadAsync*
 
 ### 示例

@@ -18,14 +18,17 @@ public enum Direction
     ///     How the message(s) should be retrieved is unspecified.
     /// </summary>
     Unspecified,
+
     /// <summary>
     ///     The message(s) should be retrieved before a message.
     /// </summary>
     Before,
+
     /// <summary>
     ///     The message(s) should be retrieved around a message.
     /// </summary>
     Around,
+
     /// <summary>
     ///     The message(s) should be retrieved after a message.
     /// </summary>

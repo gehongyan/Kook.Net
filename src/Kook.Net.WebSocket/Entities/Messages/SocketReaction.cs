@@ -17,6 +17,7 @@ public class SocketReaction : IReaction
     ///     A user identifier associated with the user.
     /// </returns>
     public ulong UserId { get; }
+
     /// <summary>
     ///     Gets the user who added the reaction if possible.
     /// </summary>
@@ -36,6 +37,7 @@ public class SocketReaction : IReaction
     ///     A user object where possible; a value is not always returned.
     /// </returns>
     public IUser User { get; }
+
     /// <summary>
     ///     Gets the ID of the message that has been reacted to.
     /// </summary>
@@ -43,6 +45,7 @@ public class SocketReaction : IReaction
     ///     A message Guid associated with the message.
     /// </returns>
     public Guid MessageId { get; }
+
     /// <summary>
     ///     Gets the message that has been reacted to if possible.
     /// </summary>
@@ -50,6 +53,7 @@ public class SocketReaction : IReaction
     ///     A WebSocket-based message where possible; a value is not always returned.
     /// </returns>
     public SocketUserMessage Message { get; }
+
     /// <summary>
     ///     Gets the channel where the reaction takes place in.
     /// </summary>
@@ -57,6 +61,7 @@ public class SocketReaction : IReaction
     ///     A WebSocket-based message channel.
     /// </returns>
     public ISocketMessageChannel Channel { get; }
+
     /// <inheritdoc />
     public IEmote Emote { get; }
 
@@ -69,6 +74,7 @@ public class SocketReaction : IReaction
         User = user;
         Emote = emoji;
     }
+
     internal static SocketReaction Create(API.Gateway.Reaction model, ISocketMessageChannel channel, SocketUserMessage message, IUser user)
     {
         IEmote emote;
@@ -76,8 +82,10 @@ public class SocketReaction : IReaction
             emote = emoji;
         else
             emote = new Emote(model.Emoji.Id, model.Emoji.Name);
+
         return new SocketReaction(channel, model.MessageId, message, model.UserId, user, emote);
     }
+
     internal static SocketReaction Create(API.Gateway.PrivateReaction model, IDMChannel channel, SocketUserMessage message, IUser user)
     {
         IEmote emote;
@@ -85,6 +93,7 @@ public class SocketReaction : IReaction
             emote = emoji;
         else
             emote = new Emote(model.Emoji.Id, model.Emoji.Name);
+
         return new SocketReaction(channel as ISocketMessageChannel, model.MessageId, message, model.UserId, user, emote);
     }
 }

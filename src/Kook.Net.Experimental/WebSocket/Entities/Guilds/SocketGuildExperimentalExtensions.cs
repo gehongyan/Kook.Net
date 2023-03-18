@@ -21,6 +21,7 @@ public static class SocketGuildExperimentalExtensions
     /// </remarks>
     public static Task DeleteAsync(this SocketGuild guild, RequestOptions options = null)
         => ExperimentalGuildHelper.DeleteAsync(guild, guild.Kook, options);
+
     /// <summary>
     ///     Modifies this guild.
     /// </summary>

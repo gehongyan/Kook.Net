@@ -16,6 +16,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
 
     /// <inheritdoc />
     public virtual IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites => _rolePermissionOverwrites;
+
     /// <inheritdoc />
     public virtual IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites => _userPermissionOverwrites;
 
@@ -26,14 +27,19 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     ///     A guild object that this channel belongs to.
     /// </returns>
     internal IGuild Guild { get; }
+
     /// <inheritdoc />
     public ChannelType Type { get; private set; }
+
     /// <inheritdoc />
     public string Name { get; private set; }
+
     /// <inheritdoc />
     public int? Position { get; private set; }
+
     /// <inheritdoc />
     public ulong GuildId => Guild.Id;
+
     /// <inheritdoc />
     public ulong CreatorId { get; private set; }
 
@@ -43,22 +49,23 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         Type = type;
         Guild = guild;
     }
-    internal static RestGuildChannel Create(BaseKookClient kook, IGuild guild, Model model)
-    {
-        return model.Type switch
+
+    internal static RestGuildChannel Create(BaseKookClient kook, IGuild guild, Model model) =>
+        model.Type switch
         {
             ChannelType.Text => RestTextChannel.Create(kook, guild, model),
             ChannelType.Voice => RestVoiceChannel.Create(kook, guild, model),
             ChannelType.Category => RestCategoryChannel.Create(kook, guild, model),
-            _ => new RestGuildChannel(kook, guild, model.Id, model.Type),
+            _ => new RestGuildChannel(kook, guild, model.Id, model.Type)
         };
-    }
+
     internal static RestGuildChannel Create(BaseKookClient kook, IGuild guild, MentionedChannel model)
     {
-        var entity = new RestGuildChannel(kook, guild, model.Id, ChannelType.Unspecified);
+        RestGuildChannel entity = new(kook, guild, model.Id, ChannelType.Unspecified);
         entity.Update(model);
         return entity;
     }
+
     internal override void Update(Model model)
     {
         Type = model.Type;
@@ -68,29 +75,29 @@ public class RestGuildChannel : RestChannel, IGuildChannel
 
         if (model.UserPermissionOverwrites is not null)
         {
-            var overwrites = model.UserPermissionOverwrites;
-            var newOverwrites = ImmutableArray.CreateBuilder<UserPermissionOverwrite>(overwrites.Length);
-            for (int i = 0; i < overwrites.Length; i++)
-                newOverwrites.Add(overwrites[i].ToEntity());
+            API.UserPermissionOverwrite[] overwrites = model.UserPermissionOverwrites;
+            ImmutableArray<UserPermissionOverwrite>.Builder newOverwrites = ImmutableArray.CreateBuilder<UserPermissionOverwrite>(overwrites.Length);
+            for (int i = 0; i < overwrites.Length; i++) newOverwrites.Add(overwrites[i].ToEntity());
+
             _userPermissionOverwrites = newOverwrites.ToImmutable();
         }
+
         if (model.RolePermissionOverwrites is not null)
         {
-            var overwrites = model.RolePermissionOverwrites;
-            var newOverwrites = ImmutableArray.CreateBuilder<RolePermissionOverwrite>(overwrites.Length);
-            for (int i = 0; i < overwrites.Length; i++)
-                newOverwrites.Add(overwrites[i].ToEntity());
+            API.RolePermissionOverwrite[] overwrites = model.RolePermissionOverwrites;
+            ImmutableArray<RolePermissionOverwrite>.Builder newOverwrites = ImmutableArray.CreateBuilder<RolePermissionOverwrite>(overwrites.Length);
+            for (int i = 0; i < overwrites.Length; i++) newOverwrites.Add(overwrites[i].ToEntity());
+
             _rolePermissionOverwrites = newOverwrites.ToImmutable();
         }
     }
-    internal void Update(MentionedChannel model)
-    {
-        Name = model.Name;
-    }
+
+    internal void Update(MentionedChannel model) => Name = model.Name;
+
     /// <inheritdoc />
     public async Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions options = null)
     {
-        var model = await ChannelHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
+        Channel model = await ChannelHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
         Update(model);
     }
 
@@ -116,7 +123,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// <inheritdoc />
     public override async Task UpdateAsync(RequestOptions options = null)
     {
-        var model = await Kook.ApiClient.GetGuildChannelAsync(Id, options).ConfigureAwait(false);
+        Channel model = await Kook.ApiClient.GetGuildChannelAsync(Id, options).ConfigureAwait(false);
         Update(model);
     }
 
@@ -130,12 +137,12 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     public OverwritePermissions? GetPermissionOverwrite(IUser user)
     {
         for (int i = 0; i < _userPermissionOverwrites.Length; i++)
-        {
             if (_userPermissionOverwrites[i].Target.Id == user.Id)
                 return _userPermissionOverwrites[i].Permissions;
-        }
+
         return null;
     }
+
     /// <summary>
     ///     Gets the permission overwrite for a specific role.
     /// </summary>
@@ -146,10 +153,9 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     public OverwritePermissions? GetPermissionOverwrite(IRole role)
     {
         for (int i = 0; i < _rolePermissionOverwrites.Length; i++)
-        {
             if (_rolePermissionOverwrites[i].Target == role.Id)
                 return _rolePermissionOverwrites[i].Permissions;
-        }
+
         return null;
     }
 
@@ -163,9 +169,10 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// </returns>
     public async Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions options = null)
     {
-        var perms = await ChannelHelper.AddPermissionOverwriteAsync(this, Kook, user, options).ConfigureAwait(false);
+        UserPermissionOverwrite perms = await ChannelHelper.AddPermissionOverwriteAsync(this, Kook, user, options).ConfigureAwait(false);
         _userPermissionOverwrites = _userPermissionOverwrites.Add(perms);
     }
+
     /// <summary>
     ///     Adds the permission overwrite for the given role.
     /// </summary>
@@ -176,7 +183,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// </returns>
     public async Task AddPermissionOverwriteAsync(IRole role, RequestOptions options = null)
     {
-        var perms = await ChannelHelper.AddPermissionOverwriteAsync(this, Kook, role, options).ConfigureAwait(false);
+        RolePermissionOverwrite perms = await ChannelHelper.AddPermissionOverwriteAsync(this, Kook, role, options).ConfigureAwait(false);
         _rolePermissionOverwrites = _rolePermissionOverwrites.Add(perms);
     }
 
@@ -193,14 +200,13 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         await ChannelHelper.RemovePermissionOverwriteAsync(this, Kook, user, options).ConfigureAwait(false);
 
         for (int i = 0; i < _userPermissionOverwrites.Length; i++)
-        {
             if (_userPermissionOverwrites[i].Target.Id == user.Id)
             {
                 _userPermissionOverwrites = _userPermissionOverwrites.RemoveAt(i);
                 return;
             }
-        }
     }
+
     /// <summary>
     ///     Removes the permission overwrite for the given role, if one exists.
     /// </summary>
@@ -214,13 +220,11 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         await ChannelHelper.RemovePermissionOverwriteAsync(this, Kook, role, options).ConfigureAwait(false);
 
         for (int i = 0; i < _rolePermissionOverwrites.Length; i++)
-        {
             if (_rolePermissionOverwrites[i].Target == role.Id)
             {
                 _rolePermissionOverwrites = _rolePermissionOverwrites.RemoveAt(i);
                 return;
             }
-        }
     }
 
     /// <summary>
@@ -232,19 +236,18 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
-    public async Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null)
+    public async Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func,
+        RequestOptions options = null)
     {
-        var perms = await ChannelHelper.ModifyPermissionOverwriteAsync(this, Kook, user, func, options).ConfigureAwait(false);
+        UserPermissionOverwrite perms = await ChannelHelper.ModifyPermissionOverwriteAsync(this, Kook, user, func, options).ConfigureAwait(false);
 
         for (int i = 0; i < _userPermissionOverwrites.Length; i++)
-        {
             if (_userPermissionOverwrites[i].Target.Id == user.Id)
             {
                 _userPermissionOverwrites = _userPermissionOverwrites.RemoveAt(i);
                 _userPermissionOverwrites = _userPermissionOverwrites.Add(perms);
                 return;
             }
-        }
     }
 
     /// <summary>
@@ -258,17 +261,15 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// </returns>
     public async Task ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null)
     {
-        var perms = await ChannelHelper.ModifyPermissionOverwriteAsync(this, Kook, role, func, options).ConfigureAwait(false);
+        RolePermissionOverwrite perms = await ChannelHelper.ModifyPermissionOverwriteAsync(this, Kook, role, func, options).ConfigureAwait(false);
 
         for (int i = 0; i < _rolePermissionOverwrites.Length; i++)
-        {
             if (_rolePermissionOverwrites[i].Target == role.Id)
             {
                 _rolePermissionOverwrites = _rolePermissionOverwrites.RemoveAt(i);
                 _rolePermissionOverwrites = _rolePermissionOverwrites.Add(perms);
                 return;
             }
-        }
     }
 
     /// <summary>
@@ -288,8 +289,8 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     {
         get
         {
-            if (Guild != null)
-                return Guild;
+            if (Guild != null) return Guild;
+
             throw new InvalidOperationException("Unable to return this entity's parent unless it was fetched through that object.");
         }
     }
@@ -297,6 +298,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// <inheritdoc />
     OverwritePermissions? IGuildChannel.GetPermissionOverwrite(IRole role)
         => GetPermissionOverwrite(role);
+
     /// <inheritdoc />
     OverwritePermissions? IGuildChannel.GetPermissionOverwrite(IUser user)
         => GetPermissionOverwrite(user);
@@ -304,28 +306,36 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// <inheritdoc />
     async Task IGuildChannel.AddPermissionOverwriteAsync(IRole role, RequestOptions options)
         => await AddPermissionOverwriteAsync(role, options).ConfigureAwait(false);
+
     /// <inheritdoc />
     async Task IGuildChannel.AddPermissionOverwriteAsync(IGuildUser user, RequestOptions options)
         => await AddPermissionOverwriteAsync(user, options).ConfigureAwait(false);
+
     /// <inheritdoc />
     async Task IGuildChannel.RemovePermissionOverwriteAsync(IRole role, RequestOptions options)
         => await RemovePermissionOverwriteAsync(role, options).ConfigureAwait(false);
+
     /// <inheritdoc />
     async Task IGuildChannel.RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions options)
         => await RemovePermissionOverwriteAsync(user, options).ConfigureAwait(false);
+
     /// <inheritdoc />
     async Task IGuildChannel.ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options)
         => await ModifyPermissionOverwriteAsync(role, func, options).ConfigureAwait(false);
+
     /// <inheritdoc />
-    async Task IGuildChannel.ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options)
+    async Task IGuildChannel.ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func,
+        RequestOptions options)
         => await ModifyPermissionOverwriteAsync(user, func, options).ConfigureAwait(false);
 
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
         => AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>(); //Overridden in Text/Voice
+
     /// <inheritdoc />
     Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IGuildUser>(null); //Overridden in Text/Voice
+
     /// <inheritdoc />
     async Task<IUser> IGuildChannel.GetCreatorAsync(CacheMode mode, RequestOptions options)
     {
@@ -338,11 +348,14 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     #endregion
 
     #region IChannel
+
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
         => AsyncEnumerable.Empty<IReadOnlyCollection<IUser>>(); //Overridden in Text/Voice
+
     /// <inheritdoc />
     Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IUser>(null); //Overridden in Text/Voice
+
     #endregion
 }

@@ -8,8 +8,8 @@ internal class NullableTimeSpanConverter : JsonConverter<TimeSpan?>
     public override TimeSpan? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         ulong tick = reader.GetUInt64();
-        if (tick == 0)
-            return null;
+        if (tick == 0) return null;
+
         return TimeSpan.FromSeconds(tick);
     }
 

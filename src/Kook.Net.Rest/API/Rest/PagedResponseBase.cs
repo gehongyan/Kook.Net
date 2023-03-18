@@ -37,7 +37,7 @@ internal class PageMeta
     [JsonPropertyName("total")]
     public int Total { get; set; }
 
-    public static PageMeta Default => new PageMeta(1, 100);
+    public static PageMeta Default => new(1, 100);
 }
 
 internal struct PageSortInfo

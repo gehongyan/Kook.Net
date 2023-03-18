@@ -31,7 +31,7 @@ internal class Program
                     //.MinimumLevel.Override("Microsoft.EntityFrameworkCore.Database.Command", Serilog.Events.LogEventLevel.Warning)
                     .ReadFrom.Configuration(hostingContext.Configuration)
                     .Enrich.FromLogContext()
-                    .WriteTo.Console(restrictedToMinimumLevel: LogEventLevel.Verbose);
+                    .WriteTo.Console(LogEventLevel.Verbose);
             });
         return hostBuilder;
     }
@@ -64,12 +64,7 @@ internal class Program
             .AddSingleton<KookBotClientExtension>()
             .AddHostedService(p => p.GetRequiredService<KookBotClientExtension>())
             .AddSingleton(_ =>
-                new KookSocketClient(new KookSocketConfig
-                {
-                    AlwaysDownloadUsers = true,
-                    LogLevel = LogSeverity.Debug
-                }))
-
+                new KookSocketClient(new KookSocketConfig { AlwaysDownloadUsers = true, LogLevel = LogSeverity.Debug }))
             .AddHttpClient();
     }
 }

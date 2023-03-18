@@ -41,4 +41,5 @@ title: 管理连接
 如果您的客户端没能成功地重连，或许这是一个 Bug，快来 [KOOK Kook.Net 社区] 找我反馈吧！
 
 [events]: xref:Guides.Concepts.Events
+
 [KOOK Kook.Net 社区]: https://kaihei.co/EvxnOb

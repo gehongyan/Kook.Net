@@ -12,6 +12,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///     A read-only collection of WebSocket-based messages.
     /// </returns>
     IReadOnlyCollection<SocketMessage> CachedMessages { get; }
+
     /// <summary>
     ///     Gets a cached message from this channel.
     /// </summary>
@@ -78,6 +79,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///     A read-only collection of WebSocket-based messages.
     /// </returns>
     IReadOnlyCollection<SocketMessage> GetCachedMessages(Guid fromMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch);
+
     /// <summary>
     ///     Gets the last N cached messages starting from a certain message in this message channel.
     /// </summary>

@@ -1,85 +1,85 @@
 {
-  "metadata": [
-    {
-      "src": [
+    "metadata": [
         {
-          "src": "../src",
-          "exclude": [
-            "**/bin/**",
-            "**/obj/**"
-          ],
-          "files": [
-            "**.csproj"
-          ]
+            "src": [
+                {
+                    "src": "../src",
+                    "exclude": [
+                        "**/bin/**",
+                        "**/obj/**"
+                    ],
+                    "files": [
+                        "**.csproj"
+                    ]
+                }
+            ],
+            "dest": "api"
         }
-      ],
-      "dest": "api"
-    }
-  ],
-  "build": {
-    "content": [
-      {
-        "files": [
-          "api/**.yml",
-          "api/index.md"
-        ]
-      },
-      {
-        "files": [
-          "toc.yml",
-          "index.md"
-        ]
-      },
-      {
-        "files": [
-          "guides/**.md",
-          "guides/**/toc.yml"
-        ]
-      },
-      {
-        "files": [
-          "changelog/**.md",
-          "changelog/**/toc.yml"
-        ]
-      }
     ],
-    "resource": [
-      {
-        "files": [
-          "**/images/**",
-          "**/samples/**",
-          "langwordMapping.md"
+    "build": {
+        "content": [
+            {
+                "files": [
+                    "api/**.yml",
+                    "api/index.md"
+                ]
+            },
+            {
+                "files": [
+                    "toc.yml",
+                    "index.md"
+                ]
+            },
+            {
+                "files": [
+                    "guides/**.md",
+                    "guides/**/toc.yml"
+                ]
+            },
+            {
+                "files": [
+                    "changelog/**.md",
+                    "changelog/**/toc.yml"
+                ]
+            }
         ],
-        "exclude": [
-          "_site/**",
-          "**/obj/**",
-          "**.meta"
-        ]
-      }
-    ],
-    "dest": "_site",
-    "template": [
-      "default",
-      "templates/singulinkfx"
-    ],
-    "xrefService": [
-      "https://xref.docs.microsoft.com/query?uid={uid}"
-    ],
-    "postProcessors": [
-      "ExtractSearchIndex"
-    ],
-    "globalMetadata": {
-      "_appTitle": "Kook.Net 文档",
-      "_appName": "Kook.Net 文档",
-      "_appFooter": "Kook.Net (c) 2022-2023",
-      "_enableSearch": true,
-      "_appFaviconPath": "favicon.ico",
-      "_gitContribute": {
-        "branch": "master"
-      }
-    },
-    "sitemap": {
-      "baseUrl": "https://www.kooknet.dev"
+        "resource": [
+            {
+                "files": [
+                    "**/images/**",
+                    "**/samples/**",
+                    "langwordMapping.md"
+                ],
+                "exclude": [
+                    "_site/**",
+                    "**/obj/**",
+                    "**.meta"
+                ]
+            }
+        ],
+        "dest": "_site",
+        "template": [
+            "default",
+            "templates/singulinkfx"
+        ],
+        "xrefService": [
+            "https://xref.docs.microsoft.com/query?uid={uid}"
+        ],
+        "postProcessors": [
+            "ExtractSearchIndex"
+        ],
+        "globalMetadata": {
+            "_appTitle": "Kook.Net 文档",
+            "_appName": "Kook.Net 文档",
+            "_appFooter": "Kook.Net (c) 2022-2023",
+            "_enableSearch": true,
+            "_appFaviconPath": "favicon.ico",
+            "_gitContribute": {
+                "branch": "master"
+            }
+        },
+        "sitemap": {
+            "baseUrl": "https://www.kooknet.dev"
+        }
     }
-  }
 }

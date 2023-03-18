@@ -9,18 +9,22 @@ public interface ICommandContext
     ///     Gets the <see cref="IKookClient" /> that the command is executed with.
     /// </summary>
     IKookClient Client { get; }
+
     /// <summary>
     ///     Gets the <see cref="IGuild" /> that the command is executed in.
     /// </summary>
     IGuild Guild { get; }
+
     /// <summary>
     ///     Gets the <see cref="IMessageChannel" /> that the command is executed in.
     /// </summary>
     IMessageChannel Channel { get; }
+
     /// <summary>
     ///     Gets the <see cref="IUser" /> who executed the command.
     /// </summary>
     IUser User { get; }
+
     /// <summary>
     ///     Gets the <see cref="IUserMessage" /> that the command is interpreted from.
     /// </summary>

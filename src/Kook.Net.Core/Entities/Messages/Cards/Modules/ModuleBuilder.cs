@@ -34,12 +34,14 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
         {
             if (value?.Content is null)
                 throw new ArgumentException(
-                    message: $"Header content cannot be null.",
-                    paramName: nameof(Text));
+                    $"Header content cannot be null.",
+                    nameof(Text));
+
             if (value.Content.Length > MaxTitleContentLength)
                 throw new ArgumentException(
-                    message: $"Header content length must be less than or equal to {MaxTitleContentLength}.",
-                    paramName: nameof(Text));
+                    $"Header content length must be less than or equal to {MaxTitleContentLength}.",
+                    nameof(Text));
+
             _text = value;
         }
     }
@@ -132,8 +134,7 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     /// <returns><c>true</c> if the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(HeaderModuleBuilder headerModuleBuilder)
     {
-        if (headerModuleBuilder is null)
-            return false;
+        if (headerModuleBuilder is null) return false;
 
         return Type == headerModuleBuilder.Type
             && Text == headerModuleBuilder.Text;
@@ -180,8 +181,9 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
         {
             if (value.Type != ElementType.PlainText && value.Type != ElementType.KMarkdown && value.Type != ElementType.Paragraph)
                 throw new ArgumentException(
-                    message: "Section text must be a PlainText element, a KMarkdown element or a Paragraph struct.",
-                    paramName: nameof(value));
+                    "Section text must be a PlainText element, a KMarkdown element or a Paragraph struct.",
+                    nameof(value));
+
             _text = value;
         }
     }
@@ -202,8 +204,9 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
         {
             if (value.Type != ElementType.Image && value.Type != ElementType.Button)
                 throw new ArgumentException(
-                    message: $"Section text must be an {nameof(ImageElementBuilder)} or a {nameof(ButtonElement)}.",
-                    paramName: nameof(value));
+                    $"Section text must be an {nameof(ImageElementBuilder)} or a {nameof(ButtonElement)}.",
+                    nameof(value));
+
             _accessory = value;
         }
     }
@@ -369,7 +372,8 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     public SectionModule Build()
     {
         if (Mode == SectionAccessoryMode.Left && Accessory is ButtonElementBuilder)
-            throw new InvalidOperationException(message: "Button must be placed on the right");
+            throw new InvalidOperationException("Button must be placed on the right");
+
         return new SectionModule(Mode, Text?.Build(), Accessory?.Build());
     }
 
@@ -402,8 +406,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <returns><c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(SectionModuleBuilder sectionModuleBuilder)
     {
-        if (sectionModuleBuilder is null)
-            return false;
+        if (sectionModuleBuilder is null) return false;
 
         return Type == sectionModuleBuilder.Type
             && Mode == sectionModuleBuilder.Mode
@@ -430,10 +433,7 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
     /// <summary>
     ///     Initializes a new instance of the <see cref="ImageGroupModuleBuilder"/> class.
     /// </summary>
-    public ImageGroupModuleBuilder()
-    {
-        Elements = new List<ImageElementBuilder>();
-    }
+    public ImageGroupModuleBuilder() => Elements = new List<ImageElementBuilder>();
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.ImageGroup;
@@ -454,8 +454,9 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
         {
             if (value.Count > MaxElementCount)
                 throw new ArgumentException(
-                    message: $"Element count must be less than or equal to {MaxElementCount}.",
-                    paramName: nameof(Elements));
+                    $"Element count must be less than or equal to {MaxElementCount}.",
+                    nameof(Elements));
+
             _elements = value;
         }
     }
@@ -476,8 +477,9 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
     {
         if (Elements.Count >= MaxElementCount)
             throw new ArgumentException(
-                message: $"Element count must be less than or equal to {MaxElementCount}.",
-                paramName: nameof(field));
+                $"Element count must be less than or equal to {MaxElementCount}.",
+                nameof(field));
+
         Elements.Add(field);
         return this;
     }
@@ -540,11 +542,9 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
     /// <returns><c>true</c> if the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(ImageGroupModuleBuilder imageGroupModuleBuilder)
     {
-        if (imageGroupModuleBuilder is null)
-            return false;
+        if (imageGroupModuleBuilder is null) return false;
 
-        if (Elements.Count != imageGroupModuleBuilder.Elements.Count)
-            return false;
+        if (Elements.Count != imageGroupModuleBuilder.Elements.Count) return false;
 
         for (int i = 0; i < Elements.Count; i++)
             if (Elements[i] != imageGroupModuleBuilder.Elements[i])
@@ -572,10 +572,7 @@ public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModule
     /// <summary>
     ///     Initializes a new instance of the <see cref="ContainerModuleBuilder"/> class.
     /// </summary>
-    public ContainerModuleBuilder()
-    {
-        Elements = new List<ImageElementBuilder>();
-    }
+    public ContainerModuleBuilder() => Elements = new List<ImageElementBuilder>();
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Container;
@@ -596,8 +593,9 @@ public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModule
         {
             if (value.Count > MaxElementCount)
                 throw new ArgumentException(
-                    message: $"Element count must be less than or equal to {MaxElementCount}.",
-                    paramName: nameof(Elements));
+                    $"Element count must be less than or equal to {MaxElementCount}.",
+                    nameof(Elements));
+
             _elements = value;
         }
     }
@@ -618,8 +616,9 @@ public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModule
     {
         if (Elements.Count >= MaxElementCount)
             throw new ArgumentException(
-                message: $"Element count must be less than or equal to {MaxElementCount}.",
-                paramName: nameof(field));
+                $"Element count must be less than or equal to {MaxElementCount}.",
+                nameof(field));
+
         Elements.Add(field);
         return this;
     }
@@ -682,11 +681,9 @@ public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModule
     /// <returns><c>true</c> if the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(ContainerModuleBuilder containerModuleBuilder)
     {
-        if (containerModuleBuilder is null)
-            return false;
+        if (containerModuleBuilder is null) return false;
 
-        if (Elements.Count != containerModuleBuilder.Elements.Count)
-            return false;
+        if (Elements.Count != containerModuleBuilder.Elements.Count) return false;
 
         for (int i = 0; i < Elements.Count; i++)
             if (Elements[i] != containerModuleBuilder.Elements[i])
@@ -714,10 +711,7 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
     /// <summary>
     ///     Initializes a new instance of the <see cref="ActionGroupModuleBuilder"/> class.
     /// </summary>
-    public ActionGroupModuleBuilder()
-    {
-        Elements = new List<ButtonElementBuilder>();
-    }
+    public ActionGroupModuleBuilder() => Elements = new List<ButtonElementBuilder>();
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.ActionGroup;
@@ -738,8 +732,9 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
         {
             if (value.Count > MaxElementCount)
                 throw new ArgumentException(
-                    message: $"Element count must be less than or equal to {MaxElementCount}.",
-                    paramName: nameof(Elements));
+                    $"Element count must be less than or equal to {MaxElementCount}.",
+                    nameof(Elements));
+
             _elements = value;
         }
     }
@@ -760,8 +755,9 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
     {
         if (Elements.Count >= MaxElementCount)
             throw new ArgumentException(
-                message: $"Element count must be less than or equal to {MaxElementCount}.",
-                paramName: nameof(field));
+                $"Element count must be less than or equal to {MaxElementCount}.",
+                nameof(field));
+
         Elements.Add(field);
         return this;
     }
@@ -824,11 +820,9 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
     /// <returns><c>true</c> if the specified <see cref="ActionGroupModuleBuilder"/> is equal to the current <see cref="ActionGroupModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(ActionGroupModuleBuilder actionGroupModuleBuilder)
     {
-        if (actionGroupModuleBuilder is null)
-            return false;
+        if (actionGroupModuleBuilder is null) return false;
 
-        if (Elements.Count != actionGroupModuleBuilder.Elements.Count)
-            return false;
+        if (Elements.Count != actionGroupModuleBuilder.Elements.Count) return false;
 
         for (int i = 0; i < Elements.Count; i++)
             if (Elements[i] != actionGroupModuleBuilder.Elements[i])
@@ -856,10 +850,7 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// <summary>
     ///     Initializes a new instance of the <see cref="ContextModuleBuilder"/> class.
     /// </summary>
-    public ContextModuleBuilder()
-    {
-        Elements = new List<IElementBuilder>();
-    }
+    public ContextModuleBuilder() => Elements = new List<IElementBuilder>();
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Context;
@@ -881,14 +872,16 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
         {
             if (value.Count > MaxElementCount)
                 throw new ArgumentException(
-                    message: $"Element count must be less than or equal to {MaxElementCount}.",
-                    paramName: nameof(Elements));
+                    $"Element count must be less than or equal to {MaxElementCount}.",
+                    nameof(Elements));
+
             if (value.Any(e => e.Type != ElementType.PlainText
                     && e.Type != ElementType.KMarkdown
                     && e.Type != ElementType.Image))
                 throw new ArgumentException(
-                    message: "Elements must be of type PlainText, KMarkdown or Image.",
-                    paramName: nameof(Elements));
+                    "Elements must be of type PlainText, KMarkdown or Image.",
+                    nameof(Elements));
+
             _elements = value;
         }
     }
@@ -909,8 +902,9 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     {
         if (Elements.Count >= MaxElementCount)
             throw new ArgumentException(
-                message: $"Element count must be less than or equal to {MaxElementCount}.",
-                paramName: nameof(field));
+                $"Element count must be less than or equal to {MaxElementCount}.",
+                nameof(field));
+
         Elements.Add(field);
         return this;
     }
@@ -931,8 +925,9 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     {
         if (Elements.Count >= MaxElementCount)
             throw new ArgumentException(
-                message: $"Element count must be less than or equal to {MaxElementCount}.",
-                paramName: nameof(field));
+                $"Element count must be less than or equal to {MaxElementCount}.",
+                nameof(field));
+
         Elements.Add(field);
         return this;
     }
@@ -953,8 +948,9 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     {
         if (Elements.Count >= MaxElementCount)
             throw new ArgumentException(
-                message: $"Element count must be less than or equal to {MaxElementCount}.",
-                paramName: nameof(field));
+                $"Element count must be less than or equal to {MaxElementCount}.",
+                nameof(field));
+
         Elements.Add(field);
         return this;
     }
@@ -989,8 +985,8 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
                 break;
             default:
                 throw new ArgumentException(
-                    message: "Elements of contexts must be of type PlainText, KMarkdown or Image.",
-                    paramName: nameof(action));
+                    "Elements of contexts must be of type PlainText, KMarkdown or Image.",
+                    nameof(action));
         }
 
         return this;
@@ -1034,11 +1030,9 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// <returns><c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(ContextModuleBuilder contextModuleBuilder)
     {
-        if (contextModuleBuilder is null)
-            return false;
+        if (contextModuleBuilder is null) return false;
 
-        if (Elements.Count != contextModuleBuilder.Elements.Count)
-            return false;
+        if (Elements.Count != contextModuleBuilder.Elements.Count) return false;
 
         for (int i = 0; i < Elements.Count; i++)
             if (Elements[i] != contextModuleBuilder.Elements[i])
@@ -1096,8 +1090,7 @@ public class DividerModuleBuilder : IModuleBuilder, IEquatable<DividerModuleBuil
     /// <returns><c>true</c> if the specified <see cref="DividerModuleBuilder"/> is equal to the current <see cref="DividerModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(DividerModuleBuilder dividerModuleBuilder)
     {
-        if (dividerModuleBuilder is null)
-            return false;
+        if (dividerModuleBuilder is null) return false;
 
         return Type == dividerModuleBuilder.Type;
     }
@@ -1174,8 +1167,8 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>
     /// </exception>
     public FileModule Build()
     {
-        if (!UrlValidation.Validate(Source))
-            throw new ArgumentException("The link to a file cannot be null or empty.", nameof(Source));
+        if (!UrlValidation.Validate(Source)) throw new ArgumentException("The link to a file cannot be null or empty.", nameof(Source));
+
         return new FileModule(Source, Title);
     }
 
@@ -1208,8 +1201,7 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>
     /// <returns><c>true</c> if the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(FileModuleBuilder fileModuleBuilder)
     {
-        if (fileModuleBuilder is null)
-            return false;
+        if (fileModuleBuilder is null) return false;
 
         return Type == fileModuleBuilder.Type
             && Source == fileModuleBuilder.Source
@@ -1288,9 +1280,9 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     /// </exception>
     public VideoModule Build()
     {
-        if (!UrlValidation.Validate(Source))
-            throw new ArgumentException("The link to a file cannot be null or empty.", nameof(Source));
-        return new(Source, Title);
+        if (!UrlValidation.Validate(Source)) throw new ArgumentException("The link to a file cannot be null or empty.", nameof(Source));
+
+        return new VideoModule(Source, Title);
     }
 
     /// <inheritdoc />
@@ -1322,8 +1314,7 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     /// <returns><c>true</c> if the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(VideoModuleBuilder videoModuleBuilder)
     {
-        if (videoModuleBuilder is null)
-            return false;
+        if (videoModuleBuilder is null) return false;
 
         return Type == videoModuleBuilder.Type
             && Source == videoModuleBuilder.Source
@@ -1431,10 +1422,10 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     /// </exception>
     public AudioModule Build()
     {
-        if (!UrlValidation.Validate(Source))
-            throw new ArgumentException("The link to a file cannot be null or empty.", nameof(Source));
+        if (!UrlValidation.Validate(Source)) throw new ArgumentException("The link to a file cannot be null or empty.", nameof(Source));
+
         UrlValidation.Validate(Cover);
-        return new(Source, Title, Cover);
+        return new AudioModule(Source, Title, Cover);
     }
 
     /// <inheritdoc />
@@ -1466,8 +1457,7 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     /// <returns><c>true</c> if the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(AudioModuleBuilder audioModuleBuilder)
     {
-        if (audioModuleBuilder is null)
-            return false;
+        if (audioModuleBuilder is null) return false;
 
         return Type == audioModuleBuilder.Type
             && Source == audioModuleBuilder.Source
@@ -1576,18 +1566,22 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
         if (Mode != CountdownMode.Second && StartTime is not null)
             throw new InvalidOperationException(
                 "Only when the countdown is displayed as second mode can the start time be set.");
+
         if (EndTime < DateTimeOffset.Now)
             throw new ArgumentOutOfRangeException(
                 message: $"{nameof(EndTime)} must be equal or later than Unix epoch.",
                 paramName: nameof(EndTime));
+
         if (StartTime is not null && StartTime < DateTimeOffset.FromUnixTimeSeconds(0))
             throw new ArgumentOutOfRangeException(
                 message: $"{nameof(StartTime)} must be equal or later than current timestamp.",
                 paramName: nameof(StartTime));
+
         if (StartTime >= EndTime)
             throw new ArgumentOutOfRangeException(
                 message: $"{nameof(StartTime)} must be later than {nameof(EndTime)}.",
                 paramName: nameof(StartTime));
+
         return new CountdownModule(Mode, EndTime, StartTime);
     }
 
@@ -1620,8 +1614,7 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     /// <returns><c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(CountdownModuleBuilder countdownModuleBuilder)
     {
-        if (countdownModuleBuilder is null)
-            return false;
+        if (countdownModuleBuilder is null) return false;
 
         return Type == countdownModuleBuilder.Type
             && EndTime == countdownModuleBuilder.EndTime
@@ -1707,7 +1700,6 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
     /// <param name="obj">The object to compare with the current <see cref="InviteModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
-
         => obj is InviteModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>.</summary>
@@ -1715,8 +1707,7 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
     /// <returns><c>true</c> if the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(InviteModuleBuilder inviteModuleBuilder)
     {
-        if (inviteModuleBuilder is null)
-            return false;
+        if (inviteModuleBuilder is null) return false;
 
         return Type == inviteModuleBuilder.Type
             && Code == inviteModuleBuilder.Code;

@@ -16,23 +16,23 @@ public class RestSystemMessage : RestMessage, ISystemMessage
         : base(kook, id, messageType, channel, author, MessageSource.System)
     {
     }
-    internal new static RestSystemMessage Create(BaseKookClient kook, IMessageChannel channel, IUser author, Model model)
+
+    internal static new RestSystemMessage Create(BaseKookClient kook, IMessageChannel channel, IUser author, Model model)
     {
-        var entity = new RestSystemMessage(kook, model.Id, model.Type, channel, author);
+        RestSystemMessage entity = new(kook, model.Id, model.Type, channel, author);
         entity.Update(model);
         return entity;
-    }
-    internal new static RestSystemMessage Create(BaseKookClient kook, IMessageChannel channel, IUser author, API.DirectMessage model)
-    {
-        var entity = new RestSystemMessage(kook, model.Id, model.Type, channel, author);
-        entity.Update(model);
-        return entity;
-    }
-    internal override void Update(Model model)
-    {
-        base.Update(model);
-        // TODO: SystemMessageType
     }
 
+    internal static new RestSystemMessage Create(BaseKookClient kook, IMessageChannel channel, IUser author, API.DirectMessage model)
+    {
+        RestSystemMessage entity = new(kook, model.Id, model.Type, channel, author);
+        entity.Update(model);
+        return entity;
+    }
+
+    internal override void Update(Model model) => base.Update(model);
+
+    // TODO: SystemMessageType
     private string DebuggerDisplay => $"{Author}: {Content} ({Id}, {Type})";
 }

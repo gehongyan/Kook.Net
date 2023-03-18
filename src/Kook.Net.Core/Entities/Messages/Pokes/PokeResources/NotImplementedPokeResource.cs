@@ -55,8 +55,7 @@ public struct NotImplementedPokeResource : IPokeResource
     {
         options ??= new JsonSerializerOptions
         {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            NumberHandling = JsonNumberHandling.AllowReadingFromString
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
         T pokeResource = JsonNode.Deserialize<T>(options);
         return pokeResource;

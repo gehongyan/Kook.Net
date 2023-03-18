@@ -59,8 +59,7 @@ public struct NotImplementedEmbed : IEmbed
     {
         options ??= new JsonSerializerOptions
         {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            NumberHandling = JsonNumberHandling.AllowReadingFromString
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
         T embed = JsonNode.Deserialize<T>(options);
         return embed;

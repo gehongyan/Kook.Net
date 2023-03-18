@@ -21,7 +21,7 @@ public class PublicModule : ModuleBase<SocketCommandContext>
     public async Task CatAsync()
     {
         // Get a stream containing an image of a cat
-        var stream = await PictureService.GetCatPictureAsync();
+        Stream stream = await PictureService.GetCatPictureAsync();
         // Streams must be seeked to their beginning before being uploaded!
         stream.Seek(0, SeekOrigin.Begin);
         await ReplyFileAsync(stream, "cat.png", AttachmentType.Image);
@@ -37,10 +37,7 @@ public class PublicModule : ModuleBase<SocketCommandContext>
     }
 
     [Command("say")]
-    public async Task Emoji(string text)
-    {
-        await Context.Message.AddReactionAsync(new Emoji("\uD83D\uDC4C"));
-    }
+    public async Task Emoji(string text) => await Context.Message.AddReactionAsync(new Emoji("\uD83D\uDC4C"));
 
     // Ban a user
     [Command("ban")]
@@ -89,5 +86,4 @@ public class PublicModule : ModuleBase<SocketCommandContext>
         RestGuildUser guildUserAsync = await Context.Client.Rest.GetGuildUserAsync(7557797319758285, 1253960922);
         IReadOnlyCollection<uint> readOnlyCollection = guildUserAsync.RoleIds;
     }
-
 }

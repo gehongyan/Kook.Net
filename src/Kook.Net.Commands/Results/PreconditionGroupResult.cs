@@ -20,37 +20,39 @@ public class PreconditionGroupResult : PreconditionResult
     /// <param name="errorReason"> The reason for the error. </param>
     /// <param name="preconditions"> The results of the precondition checks. </param>
     protected PreconditionGroupResult(CommandError? error, string errorReason, ICollection<PreconditionResult> preconditions)
-        : base(error, errorReason)
-    {
+        : base(error, errorReason) =>
         PreconditionResults = (preconditions ?? new List<PreconditionResult>(0)).ToReadOnlyCollection();
-    }
 
     /// <summary>
     ///     Returns a <see cref="PreconditionResult" /> with no errors.
     /// </summary>
-    public new static PreconditionGroupResult FromSuccess()
-        => new PreconditionGroupResult(null, null, null);
+    public static new PreconditionGroupResult FromSuccess()
+        => new(null, null, null);
+
     /// <summary>
     ///     Returns a <see cref="PreconditionResult" /> with the reason and precondition results.
     /// </summary>
     /// <param name="reason"> The reason for the error. </param>
     /// <param name="preconditions"> The results of the precondition checks. </param>
     public static PreconditionGroupResult FromError(string reason, ICollection<PreconditionResult> preconditions)
-        => new PreconditionGroupResult(CommandError.UnmetPrecondition, reason, preconditions);
+        => new(CommandError.UnmetPrecondition, reason, preconditions);
+
     /// <summary>
     ///     Returns a <see cref="PreconditionResult" /> with an exception.
     /// </summary>
     /// <param name="ex"> The exception that occurred. </param>
-    public new static PreconditionGroupResult FromError(Exception ex)
-        => new PreconditionGroupResult(CommandError.Exception, ex.Message, null);
+    public static new PreconditionGroupResult FromError(Exception ex)
+        => new(CommandError.Exception, ex.Message, null);
+
     /// <summary>
     ///     Returns a <see cref="PreconditionResult" /> with the specified result.
     /// </summary>
     /// <param name="result"> The result of failure. </param>
-    public new static PreconditionGroupResult FromError(IResult result) //needed?
-        => new PreconditionGroupResult(result.Error, result.ErrorReason, null);
+    public static new PreconditionGroupResult FromError(IResult result) //needed?
+        => new(result.Error, result.ErrorReason, null);
 
     /// <inheritdoc />
     public override string ToString() => IsSuccess ? "Success" : $"{Error}: {ErrorReason}";
+
     private string DebuggerDisplay => IsSuccess ? "Success" : $"{Error}: {ErrorReason}";
 }

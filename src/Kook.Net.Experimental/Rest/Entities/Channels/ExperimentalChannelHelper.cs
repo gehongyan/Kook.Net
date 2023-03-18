@@ -11,11 +11,10 @@ internal static class ExperimentalChannelHelper
     public static async Task SyncPermissionsAsync(INestedChannel channel, BaseKookClient client,
         RequestOptions options)
     {
-        var category = await ChannelHelper.GetCategoryAsync(channel, client, options).ConfigureAwait(false);
-        if (category == null)
-            throw new InvalidOperationException("This channel does not have a parent channel.");
+        ICategoryChannel category = await ChannelHelper.GetCategoryAsync(channel, client, options).ConfigureAwait(false);
+        if (category == null) throw new InvalidOperationException("This channel does not have a parent channel.");
 
-        var args = new SyncChannelPermissionsParams(channel.Id);
+        SyncChannelPermissionsParams args = new(channel.Id);
         await client.ApiClient.SyncChannelPermissionsAsync(args, options).ConfigureAwait(false);
     }
 
@@ -25,14 +24,9 @@ internal static class ExperimentalChannelHelper
 
     public static async Task DisconnectUserAsync(IVoiceChannel channel, BaseKookClient client, IGuildUser user, RequestOptions options)
     {
-        var args = new DisconnectUserParams
-        {
-            UserId = user.Id,
-            ChannelId = channel.Id
-        };
+        DisconnectUserParams args = new() { UserId = user.Id, ChannelId = channel.Id };
         await client.ApiClient.DisconnectUserAsync(args, options).ConfigureAwait(false);
     }
 
     #endregion
-
 }

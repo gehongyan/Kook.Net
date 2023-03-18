@@ -13,6 +13,7 @@ public interface IResult
     ///     <c>null</c> if the operation was successful.
     /// </returns>
     CommandError? Error { get; }
+
     /// <summary>
     ///     Describes the reason for the error.
     /// </summary>
@@ -20,6 +21,7 @@ public interface IResult
     ///     A string containing the error reason.
     /// </returns>
     string ErrorReason { get; }
+
     /// <summary>
     ///     Indicates whether the operation was successful or not.
     /// </summary>

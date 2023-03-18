@@ -9,10 +9,7 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ContextModule : IModule, IEquatable<ContextModule>
 {
-    internal ContextModule(ImmutableArray<IElement> elements)
-    {
-        Elements = elements;
-    }
+    internal ContextModule(ImmutableArray<IElement> elements) => Elements = elements;
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Context;
@@ -61,8 +58,8 @@ public class ContextModule : IModule, IEquatable<ContextModule>
         {
             int hash = (int)2166136261;
             hash = (hash * 16777619) ^ Type.GetHashCode();
-            foreach (IElement element in Elements)
-                hash = (hash * 16777619) ^ element.GetHashCode();
+            foreach (IElement element in Elements) hash = (hash * 16777619) ^ element.GetHashCode();
+
             return hash;
         }
     }

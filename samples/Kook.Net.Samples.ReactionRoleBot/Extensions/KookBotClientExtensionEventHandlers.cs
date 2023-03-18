@@ -4,12 +4,12 @@ namespace Kook.Net.Samples.ReactionRoleBot.Extensions;
 
 public partial class KookBotClientExtension
 {
-    private async Task ProcessReactionRoleAdd(Cacheable<IUserMessage, Guid> message, Cacheable<IMessageChannel, ulong> channel, SocketReaction reaction)
+    private async Task ProcessReactionRoleAdd(Cacheable<IUserMessage, Guid> message, Cacheable<IMessageChannel, ulong> channel,
+        SocketReaction reaction)
     {
-        if (channel.Id != 5770952608991958)
-            return;
-        if (!reaction.Emote.Equals(Emoji.Parse(":computer:")))
-            return;
+        if (channel.Id != 5770952608991958) return;
+
+        if (!reaction.Emote.Equals(Emoji.Parse(":computer:"))) return;
 
         SocketRole socketRole = _kookSocketClient.GetGuild(1591057729615250).GetRole(3001653);
         SocketGuildUser socketGuildUser = (SocketGuildUser)reaction.User;
@@ -25,7 +25,7 @@ public partial class KookBotClientExtension
             .AddModule(new SectionModuleBuilder()
                 .WithText($"已在服务器 `{socketGuildUser.Guild.Name}` 内为您授予角色 `{socketRole.Name}`", true))
             .AddModule(new ContextModuleBuilder().AddElement(new KMarkdownElementBuilder()
-                    .WithContent($"{_kookSocketClient.CurrentUser.Username} | {time}")));
+                .WithContent($"{_kookSocketClient.CurrentUser.Username} | {time}")));
 
         await dmChannel.SendCardAsync(builder.Build());
 
@@ -33,12 +33,12 @@ public partial class KookBotClientExtension
             socketGuildUser.Username, socketGuildUser.IdentifyNumber, socketRole.Name);
     }
 
-    private async Task ProcessReactionRoleRemove(Cacheable<IUserMessage, Guid> message, Cacheable<IMessageChannel, ulong> channel, SocketReaction reaction)
+    private async Task ProcessReactionRoleRemove(Cacheable<IUserMessage, Guid> message, Cacheable<IMessageChannel, ulong> channel,
+        SocketReaction reaction)
     {
-        if (channel.Id != 5770952608991958)
-            return;
-        if (!reaction.Emote.Equals(Emoji.Parse(":computer:")))
-            return;
+        if (channel.Id != 5770952608991958) return;
+
+        if (!reaction.Emote.Equals(Emoji.Parse(":computer:"))) return;
 
         SocketRole socketRole = _kookSocketClient.GetGuild(1591057729615250).GetRole(3001653);
         SocketGuildUser socketGuildUser = (SocketGuildUser)reaction.User;
@@ -69,7 +69,7 @@ public partial class KookBotClientExtension
             .WithSize(CardSize.Large)
             .AddModule(new HeaderModuleBuilder().WithText("互动角色"))
             .AddModule(new SectionModuleBuilder().WithText("点击下方回应以获取/移除角色\n:computer: 开发者", true));
-        var response = await _kookSocketClient.GetGuild(1591057729615250).GetTextChannel(5770952608991958)
+        Cacheable<IUserMessage, Guid> response = await _kookSocketClient.GetGuild(1591057729615250).GetTextChannel(5770952608991958)
             .SendCardAsync(builder.Build()).ConfigureAwait(false);
         await _kookSocketClient.Rest.AddReactionAsync(response.Id, Emoji.Parse(":computer:"));
     }

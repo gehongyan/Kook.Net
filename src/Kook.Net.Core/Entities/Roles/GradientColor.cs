@@ -35,6 +35,7 @@ public struct GradientColor
     /// <param name="gradient"> The gradient color to convert. </param>
     /// <returns> The tuple of <see cref="Color"/>. </returns>
     public static implicit operator (Color Left, Color Right)(GradientColor gradient) => (gradient.Left, gradient.Right);
+
     /// <summary>
     ///     Converts the tuple of <see cref="Color"/> to a <see cref="GradientColor"/>.
     /// </summary>

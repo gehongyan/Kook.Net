@@ -16,8 +16,5 @@ public class SummaryAttribute : Attribute
     ///     Initializes a new <see cref="SummaryAttribute" /> attribute with the specified summary.
     /// </summary>
     /// <param name="text"></param>
-    public SummaryAttribute(string text)
-    {
-        Text = text;
-    }
+    public SummaryAttribute(string text) => Text = text;
 }

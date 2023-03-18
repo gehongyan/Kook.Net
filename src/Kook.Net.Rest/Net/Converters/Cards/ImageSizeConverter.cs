@@ -16,13 +16,11 @@ internal class ImageSizeConverter : JsonConverter<ImageSize>
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, ImageSize value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, ImageSize value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
             ImageSize.Small => "sm",
             ImageSize.Large => "lg",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
-    }
 }

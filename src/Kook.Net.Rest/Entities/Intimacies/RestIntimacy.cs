@@ -12,31 +12,33 @@ public class RestIntimacy : RestEntity<ulong>, IIntimacy
 
     /// <inheritdoc />
     public IUser User { get; }
+
     /// <inheritdoc />
     public string SocialInfo { get; internal set; }
+
     /// <inheritdoc />
     public DateTimeOffset LastReadAt { get; internal set; }
+
     /// <inheritdoc />
     public DateTimeOffset LastModifyAt { get; internal set; }
+
     /// <inheritdoc />
     public int Score { get; internal set; }
+
     /// <inheritdoc />
     public IReadOnlyCollection<IntimacyImage> Images => _images;
+
     /// <inheritdoc />
-    public async Task UpdateAsync(Action<IntimacyProperties> func, RequestOptions options = null)
-    {
+    public async Task UpdateAsync(Action<IntimacyProperties> func, RequestOptions options = null) =>
         await IntimacyHelper.UpdateAsync(this, Kook, func, options).ConfigureAwait(false);
-    }
 
     internal RestIntimacy(BaseKookClient kook, IUser user, ulong id)
-        : base(kook, id)
-    {
+        : base(kook, id) =>
         User = user;
-    }
 
     internal static RestIntimacy Create(BaseKookClient kook, IUser user, Model model)
     {
-        var entity = new RestIntimacy(kook, user, user.Id);
+        RestIntimacy entity = new(kook, user, user.Id);
         entity.Update(model);
         return entity;
     }
@@ -50,5 +52,4 @@ public class RestIntimacy : RestEntity<ulong>, IIntimacy
         Score = model.Score;
         _images = model.Images.Select(i => new IntimacyImage(i.Id, i.Url)).ToImmutableArray();
     }
-
 }

@@ -28,10 +28,7 @@ public class Emoji : IEmote
     ///     Initializes a new <see cref="Emoji"/> class with the provided Unicode.
     /// </summary>
     /// <param name="unicode">The pure UTF-8 encoding of an emoji.</param>
-    public Emoji(string unicode)
-    {
-        Name = TryParseAsUnicodePoint(unicode, out string name) ? name : unicode;
-    }
+    public Emoji(string unicode) => Name = TryParseAsUnicodePoint(unicode, out string name) ? name : unicode;
 
     /// <summary>
     ///     Determines whether the specified emoji is equal to the current one.
@@ -39,11 +36,9 @@ public class Emoji : IEmote
     /// <param name="other">The object to compare with the current object.</param>
     public override bool Equals(object other)
     {
-        if (other == null)
-            return false;
+        if (other == null) return false;
 
-        if (other == this)
-            return true;
+        if (other == this) return true;
 
         return other is Emoji otherEmoji && string.Equals(Name, otherEmoji.Name);
     }
@@ -54,14 +49,11 @@ public class Emoji : IEmote
     public static bool TryParse(string text, out Emoji result)
     {
         result = null;
-        if (string.IsNullOrWhiteSpace(text))
-            return false;
+        if (string.IsNullOrWhiteSpace(text)) return false;
 
-        if (NamesAndUnicodes.ContainsKey(text))
-            result = new Emoji(NamesAndUnicodes[text]);
+        if (NamesAndUnicodes.ContainsKey(text)) result = new Emoji(NamesAndUnicodes[text]);
 
-        if (Unicodes.Contains(text))
-            result = new Emoji(text);
+        if (Unicodes.Contains(text)) result = new Emoji(text);
 
         return result != null;
     }
@@ -71,8 +63,7 @@ public class Emoji : IEmote
     /// <exception cref="FormatException">String is not emoji or unicode!</exception>
     public static Emoji Parse(string emojiStr)
     {
-        if (!TryParse(emojiStr, out var emoji))
-            throw new FormatException("String is not emoji name or unicode.");
+        if (!TryParse(emojiStr, out Emoji emoji)) throw new FormatException("String is not emoji name or unicode.");
 
         return emoji;
     }
@@ -84,11 +75,9 @@ public class Emoji : IEmote
     internal bool TryParseAsUnicodePoint(string unicodePoint, out string name)
     {
         name = null;
-        if (!unicodePoint.StartsWith("[#") || !unicodePoint.EndsWith(";]"))
-            return false;
+        if (!unicodePoint.StartsWith("[#") || !unicodePoint.EndsWith(";]")) return false;
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-        if (!int.TryParse(unicodePoint[2..^2], out int codePoint))
-            return false;
+        if (!int.TryParse(unicodePoint[2..^2], out int codePoint)) return false;
 #else
         if (!int.TryParse(unicodePoint.Substring(2, unicodePoint.Length - 4), out int codePoint)) return false;
 #endif
@@ -1818,6 +1807,7 @@ public class Emoji : IEmote
     };
 
     private static IReadOnlyCollection<string> _unicodes;
+
     private static IReadOnlyCollection<string> Unicodes
     {
         get
@@ -1828,6 +1818,7 @@ public class Emoji : IEmote
     }
 
     private static IReadOnlyDictionary<string, ReadOnlyCollection<string>> _unicodesAndNames;
+
     private static IReadOnlyDictionary<string, ReadOnlyCollection<string>> UnicodesAndNames
     {
         get

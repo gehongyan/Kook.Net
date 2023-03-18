@@ -14,35 +14,48 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     #region RestGuild
 
     private ImmutableDictionary<uint, RestRole> _roles;
+
     private ImmutableDictionary<ulong, RestChannel> _channels;
     // private ImmutableArray<GuildEmote> _emotes;
 
     /// <inheritdoc />
     public string Name { get; private set; }
+
     /// <inheritdoc />
     public string Topic { get; private set; }
+
     /// <inheritdoc />
     public ulong OwnerId { get; private set; }
+
     /// <inheritdoc />
     public string Icon { get; private set; }
+
     /// <inheritdoc />
     public NotifyType NotifyType { get; private set; }
+
     /// <inheritdoc />
     public string Region { get; private set; }
+
     /// <inheritdoc />
     public bool IsOpenEnabled { get; private set; }
+
     /// <inheritdoc />
     public uint? OpenId { get; private set; }
+
     /// <inheritdoc />
     public ulong? DefaultChannelId { get; private set; }
+
     /// <inheritdoc />
     public ulong? WelcomeChannelId { get; private set; }
 
     internal bool Available { get; private set; }
+
     /// <inheritdoc/>
     public int MaxBitrate => GuildHelper.GetMaxBitrate(this);
+
     /// <inheritdoc/>
     public ulong MaxUploadLimit => GuildHelper.GetUploadLimit(this);
+
     /// <summary>
     ///     Gets the built-in role containing all users in this guild.
     /// </summary>
@@ -73,20 +86,26 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     </note>
     /// </remarks>
     public object[] Features { get; private set; }
+
     /// <inheritdoc />
     public int BoostSubscriptionCount { get; private set; }
+
     /// <inheritdoc />
     public int BufferBoostSubscriptionCount { get; private set; }
+
     /// <inheritdoc />
     public BoostLevel BoostLevel { get; private set; }
+
     /// <summary>
     ///     TODO: To be documented.
     /// </summary>
     public int Status { get; private set; }
+
     /// <summary>
     ///     TODO: To be documented.
     /// </summary>
     public string AutoDeleteTime { get; private set; }
+
     /// <inheritdoc cref="IGuild.RecommendInfo"/>
     public RecommendInfo RecommendInfo { get; private set; }
 
@@ -94,9 +113,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         : base(client, id)
     {
     }
+
     internal static RestGuild Create(BaseKookClient kook, Model model)
     {
-        var entity = new RestGuild(kook, model.Id);
+        RestGuild entity = new(kook, model.Id);
         entity.Update(model);
         return entity;
     }
@@ -113,6 +133,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         AutoDeleteTime = model.AutoDeleteTime;
         RecommendInfo = model.RecommendInfo?.ToEntity();
     }
+
     internal void Update(Model model)
     {
         Name = model.Name;
@@ -128,20 +149,18 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
         Available = true;
 
-        var roles = ImmutableDictionary.CreateBuilder<uint, RestRole>();
+        ImmutableDictionary<uint, RestRole>.Builder roles = ImmutableDictionary.CreateBuilder<uint, RestRole>();
         if (model.Roles != null)
-        {
             for (int i = 0; i < model.Roles.Length; i++)
                 roles[model.Roles[i].Id] = RestRole.Create(Kook, this, model.Roles[i]);
-        }
+
         _roles = roles.ToImmutable();
 
-        var channels = ImmutableDictionary.CreateBuilder<ulong, RestChannel>();
+        ImmutableDictionary<ulong, RestChannel>.Builder channels = ImmutableDictionary.CreateBuilder<ulong, RestChannel>();
         if (model.Channels != null)
-        {
             for (int i = 0; i < model.Channels.Length; i++)
                 channels[model.Channels[i].Id] = RestChannel.Create(Kook, model.Channels[i], this);
-        }
+
         _channels = channels.ToImmutable();
     }
 
@@ -152,17 +171,21 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     public async Task UpdateAsync(RequestOptions options = null)
     {
-        var model = await Kook.ApiClient.GetGuildAsync(Id, options).ConfigureAwait(false);
+        ExtendedModel model = await Kook.ApiClient.GetGuildAsync(Id, options).ConfigureAwait(false);
         Update(model);
     }
+
     /// <inheritdoc />
     public Task LeaveAsync(RequestOptions options = null)
         => GuildHelper.LeaveAsync(this, Kook, options);
+
     /// <inheritdoc />
     public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetBoostSubscriptionsAsync(RequestOptions options = null)
         => GuildHelper.GetBoostSubscriptionsAsync(this, Kook, options);
+
     /// <inheritdoc />
-    public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetActiveBoostSubscriptionsAsync(RequestOptions options = null)
+    public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetActiveBoostSubscriptionsAsync(
+        RequestOptions options = null)
         => GuildHelper.GetActiveBoostSubscriptionsAsync(this, Kook, options);
 
     #endregion
@@ -180,6 +203,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public Task<IReadOnlyCollection<RestBan>> GetBansAsync(RequestOptions options = null)
         => GuildHelper.GetBansAsync(this, Kook, options);
+
     /// <summary>
     ///     Gets a ban object for a banned user.
     /// </summary>
@@ -191,6 +215,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public Task<RestBan> GetBanAsync(IUser user, RequestOptions options = null)
         => GuildHelper.GetBanAsync(this, Kook, user.Id, options);
+
     /// <summary>
     ///     Gets a ban object for a banned user.
     /// </summary>
@@ -206,6 +231,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     public Task AddBanAsync(IUser user, int pruneDays = 0, string reason = null, RequestOptions options = null)
         => GuildHelper.AddBanAsync(this, Kook, user.Id, pruneDays, reason, options);
+
     /// <inheritdoc />
     public Task AddBanAsync(ulong userId, int pruneDays = 0, string reason = null, RequestOptions options = null)
         => GuildHelper.AddBanAsync(this, Kook, userId, pruneDays, reason, options);
@@ -213,6 +239,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     public Task RemoveBanAsync(IUser user, RequestOptions options = null)
         => GuildHelper.RemoveBanAsync(this, Kook, user.Id, options);
+
     /// <inheritdoc />
     public Task RemoveBanAsync(ulong userId, RequestOptions options = null)
         => GuildHelper.RemoveBanAsync(this, Kook, userId, options);
@@ -245,8 +272,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public RestRole GetRole(uint id)
     {
-        if (_roles.TryGetValue(id, out RestRole value))
-            return value;
+        if (_roles.TryGetValue(id, out RestRole value)) return value;
+
         return null;
     }
 
@@ -261,7 +288,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public async Task<RestRole> CreateRoleAsync(string name, RequestOptions options = null)
     {
-        var role = await GuildHelper.CreateRoleAsync(this, Kook, name, options).ConfigureAwait(false);
+        RestRole role = await GuildHelper.CreateRoleAsync(this, Kook, name, options).ConfigureAwait(false);
         _roles = _roles.Add(role.Id, role);
         return role;
     }
@@ -334,7 +361,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
     ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/> at <paramref name="func"/>.
     /// </returns>
-    public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func, int limit = KookConfig.MaxUsersPerBatch, RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func,
+        int limit = KookConfig.MaxUsersPerBatch, RequestOptions options = null)
         => GuildHelper.SearchUsersAsync(this, Kook, func, limit, options);
 
     #endregion
@@ -351,6 +379,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public Task<IReadOnlyCollection<RestGuildChannel>> GetChannelsAsync(RequestOptions options = null)
         => GuildHelper.GetChannelsAsync(this, Kook, options);
+
     /// <summary>
     ///     Gets a channel in this guild.
     /// </summary>
@@ -362,6 +391,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public Task<RestGuildChannel> GetChannelAsync(ulong id, RequestOptions options = null)
         => GuildHelper.GetChannelAsync(this, Kook, id, options);
+
     /// <summary>
     ///     Gets a text channel in this guild.
     /// </summary>
@@ -373,9 +403,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public async Task<RestTextChannel> GetTextChannelAsync(ulong id, RequestOptions options = null)
     {
-        var channel = await GuildHelper.GetChannelAsync(this, Kook, id, options).ConfigureAwait(false);
+        RestGuildChannel channel = await GuildHelper.GetChannelAsync(this, Kook, id, options).ConfigureAwait(false);
         return channel as RestTextChannel;
     }
+
     /// <summary>
     ///     Gets a collection of all text channels in this guild.
     /// </summary>
@@ -386,9 +417,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public async Task<IReadOnlyCollection<RestTextChannel>> GetTextChannelsAsync(RequestOptions options = null)
     {
-        var channels = await GuildHelper.GetChannelsAsync(this, Kook, options).ConfigureAwait(false);
+        IReadOnlyCollection<RestGuildChannel> channels = await GuildHelper.GetChannelsAsync(this, Kook, options).ConfigureAwait(false);
         return channels.OfType<RestTextChannel>().ToImmutableArray();
     }
+
     /// <summary>
     ///     Gets a voice channel in this guild.
     /// </summary>
@@ -400,9 +432,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public async Task<RestVoiceChannel> GetVoiceChannelAsync(ulong id, RequestOptions options = null)
     {
-        var channel = await GuildHelper.GetChannelAsync(this, Kook, id, options).ConfigureAwait(false);
+        RestGuildChannel channel = await GuildHelper.GetChannelAsync(this, Kook, id, options).ConfigureAwait(false);
         return channel as RestVoiceChannel;
     }
+
     /// <summary>
     ///     Gets a collection of all voice channels in this guild.
     /// </summary>
@@ -413,9 +446,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public async Task<IReadOnlyCollection<RestVoiceChannel>> GetVoiceChannelsAsync(RequestOptions options = null)
     {
-        var channels = await GuildHelper.GetChannelsAsync(this, Kook, options).ConfigureAwait(false);
+        IReadOnlyCollection<RestGuildChannel> channels = await GuildHelper.GetChannelsAsync(this, Kook, options).ConfigureAwait(false);
         return channels.OfType<RestVoiceChannel>().ToImmutableArray();
     }
+
     /// <summary>
     ///     Gets a collection of all category channels in this guild.
     /// </summary>
@@ -426,7 +460,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public async Task<IReadOnlyCollection<RestCategoryChannel>> GetCategoryChannelsAsync(RequestOptions options = null)
     {
-        var channels = await GuildHelper.GetChannelsAsync(this, Kook, options).ConfigureAwait(false);
+        IReadOnlyCollection<RestGuildChannel> channels = await GuildHelper.GetChannelsAsync(this, Kook, options).ConfigureAwait(false);
         return channels.OfType<RestCategoryChannel>().ToImmutableArray();
     }
 
@@ -446,8 +480,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
             RestGuildChannel channel = await GuildHelper.GetChannelAsync(this, Kook, welcomeChannelId.Value, options).ConfigureAwait(false);
             return channel as RestTextChannel;
         }
+
         return null;
     }
+
     // Get first channel
     // public async Task<RestTextChannel> GetDefaultChannelAsync(RequestOptions options = null)
     // {
@@ -473,6 +509,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
             RestGuildChannel channel = await GuildHelper.GetChannelAsync(this, Kook, welcomeChannelId.Value, options).ConfigureAwait(false);
             return channel as RestTextChannel;
         }
+
         return null;
     }
 
@@ -488,6 +525,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </returns>
     public Task<RestTextChannel> CreateTextChannelAsync(string name, Action<CreateTextChannelProperties> func = null, RequestOptions options = null)
         => GuildHelper.CreateTextChannelAsync(this, Kook, name, options, func);
+
     /// <summary>
     ///     Creates a voice channel with the provided name.
     /// </summary>
@@ -498,8 +536,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <returns>
     ///     The created voice channel.
     /// </returns>
-    public Task<RestVoiceChannel> CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties> func = null, RequestOptions options = null)
+    public Task<RestVoiceChannel> CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties> func = null,
+        RequestOptions options = null)
         => GuildHelper.CreateVoiceChannelAsync(this, Kook, name, options, func);
+
     /// <summary>
     ///     Creates a category channel with the provided name.
     /// </summary>
@@ -510,7 +550,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <returns>
     ///     The created category channel.
     /// </returns>
-    public Task<RestCategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties> func = null, RequestOptions options = null)
+    public Task<RestCategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties> func = null,
+        RequestOptions options = null)
         => GuildHelper.CreateCategoryChannelAsync(this, Kook, name, options, func);
 
     #endregion
@@ -528,16 +569,20 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     public Task<IReadOnlyCollection<GuildEmote>> GetEmotesAsync(RequestOptions options = null)
         => GuildHelper.GetEmotesAsync(this, Kook, options);
+
     /// <inheritdoc />
     public Task<GuildEmote> GetEmoteAsync(string id, RequestOptions options = null)
         => GuildHelper.GetEmoteAsync(this, Kook, id, options);
+
     /// <inheritdoc />
     public Task<GuildEmote> CreateEmoteAsync(string name, Image image, RequestOptions options = null)
         => GuildHelper.CreateEmoteAsync(this, Kook, name, image, options);
+
     /// <inheritdoc />
     /// <exception cref="ArgumentNullException"><paramref name="func"/> is <see langword="null"/>.</exception>
     public Task ModifyEmoteNameAsync(GuildEmote emote, Action<string> func, RequestOptions options = null)
         => GuildHelper.ModifyEmoteNameAsync(this, Kook, emote, func, options);
+
     /// <inheritdoc />
     public Task DeleteEmoteAsync(GuildEmote emote, RequestOptions options = null)
         => GuildHelper.DeleteEmoteAsync(this, Kook, emote.Id, options);
@@ -549,11 +594,14 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     public async Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null)
         => await GuildHelper.GetInvitesAsync(this, Kook, options).ConfigureAwait(false);
+
     /// <inheritdoc />
     public async Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null, RequestOptions options = null)
         => await GuildHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
+
     /// <inheritdoc />
-    public async Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited, RequestOptions options = null)
+    public async Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited,
+        RequestOptions options = null)
         => await GuildHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
 
     #endregion
@@ -590,6 +638,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
+
     /// <inheritdoc />
     async Task<IGuildUser> IGuild.GetOwnerAsync(CacheMode mode, RequestOptions options)
     {
@@ -598,6 +647,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
+
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IGuildUser>> IGuild.GetUsersAsync(CacheMode mode, RequestOptions options)
     {
@@ -606,27 +656,32 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return ImmutableArray.Create<IGuildUser>();
     }
+
     /// <inheritdoc />
     /// <exception cref="NotSupportedException">Downloading users is not supported for a REST-based guild.</exception>
     Task IGuild.DownloadUsersAsync(RequestOptions options) =>
         throw new NotSupportedException();
+
     /// <inheritdoc />
     /// <exception cref="NotSupportedException">Downloading voice states is not supported for a REST-based guild.</exception>
     Task IGuild.DownloadVoiceStatesAsync(RequestOptions options) =>
         throw new NotSupportedException();
+
     /// <inheritdoc />
     /// <exception cref="NotSupportedException">Downloading boost subscriptions is not supported for a REST-based guild.</exception>
     Task IGuild.DownloadBoostSubscriptionsAsync(RequestOptions options) =>
         throw new NotSupportedException();
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuild.SearchUsersAsync(Action<SearchGuildMemberProperties> func, int limit, CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuild.SearchUsersAsync(Action<SearchGuildMemberProperties> func, int limit, CacheMode mode,
+        RequestOptions options)
     {
         if (mode == CacheMode.AllowDownload)
             return SearchUsersAsync(func, limit, options);
         else
             return AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
     }
+
     /// <inheritdoc />
     async Task<IGuildUser> IGuild.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
     {
@@ -639,9 +694,11 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IBan>> IGuild.GetBansAsync(RequestOptions options)
         => await GetBansAsync(options).ConfigureAwait(false);
+
     /// <inheritdoc/>
     async Task<IBan> IGuild.GetBanAsync(IUser user, RequestOptions options)
         => await GetBanAsync(user, options).ConfigureAwait(false);
+
     /// <inheritdoc/>
     async Task<IBan> IGuild.GetBanAsync(ulong userId, RequestOptions options)
         => await GetBanAsync(userId, options).ConfigureAwait(false);
@@ -654,6 +711,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return ImmutableArray.Create<IGuildChannel>();
     }
+
     /// <inheritdoc />
     async Task<IGuildChannel> IGuild.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
     {
@@ -662,6 +720,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
+
     /// <inheritdoc />
     async Task<ITextChannel> IGuild.GetDefaultChannelAsync(CacheMode mode, RequestOptions options)
     {
@@ -670,6 +729,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
+
     /// <inheritdoc />
     async Task<ITextChannel> IGuild.GetWelcomeChannelAsync(CacheMode mode, RequestOptions options)
     {
@@ -678,6 +738,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
+
     /// <inheritdoc />
     async Task<IReadOnlyCollection<ITextChannel>> IGuild.GetTextChannelsAsync(CacheMode mode, RequestOptions options)
     {
@@ -686,6 +747,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return ImmutableArray.Create<ITextChannel>();
     }
+
     /// <inheritdoc />
     async Task<ITextChannel> IGuild.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions options)
     {
@@ -694,6 +756,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
+
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IVoiceChannel>> IGuild.GetVoiceChannelsAsync(CacheMode mode, RequestOptions options)
     {
@@ -702,6 +765,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return ImmutableArray.Create<IVoiceChannel>();
     }
+
     /// <inheritdoc />
     async Task<IVoiceChannel> IGuild.GetVoiceChannelAsync(ulong id, CacheMode mode, RequestOptions options)
     {
@@ -710,6 +774,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             return null;
     }
+
     /// <inheritdoc />
     async Task<IReadOnlyCollection<ICategoryChannel>> IGuild.GetCategoryChannelsAsync(CacheMode mode,
         RequestOptions options)
@@ -723,18 +788,18 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     async Task<ITextChannel> IGuild.CreateTextChannelAsync(string name, Action<CreateTextChannelProperties> func, RequestOptions options)
         => await CreateTextChannelAsync(name, func, options).ConfigureAwait(false);
+
     /// <inheritdoc />
     async Task<IVoiceChannel> IGuild.CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties> func, RequestOptions options)
         => await CreateVoiceChannelAsync(name, func, options).ConfigureAwait(false);
+
     /// <inheritdoc />
     async Task<ICategoryChannel> IGuild.CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties> func, RequestOptions options)
         => await CreateCategoryChannelAsync(name, func, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public async Task<Stream> GetBadgeAsync(BadgeStyle style = BadgeStyle.GuildName, RequestOptions options = null)
-    {
-        return await GuildHelper.GetBadgeAsync(this, Kook, style, options).ConfigureAwait(false);
-    }
+    public async Task<Stream> GetBadgeAsync(BadgeStyle style = BadgeStyle.GuildName, RequestOptions options = null) =>
+        await GuildHelper.GetBadgeAsync(this, Kook, style, options).ConfigureAwait(false);
 
     #endregion
 
@@ -745,5 +810,6 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     The name of the guild.
     /// </returns>
     public override string ToString() => Name;
+
     private string DebuggerDisplay => $"{Name} ({Id})";
 }

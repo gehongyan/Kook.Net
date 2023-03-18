@@ -46,6 +46,7 @@ public interface IMessageChannel : IChannel
     Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName,
         AttachmentType type = AttachmentType.File, IQuote quote = null, IUser ephemeralUser = null,
         RequestOptions options = null);
+
     /// <summary>
     ///     Sends a file to this message channel.
     /// </summary>
@@ -62,6 +63,7 @@ public interface IMessageChannel : IChannel
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
         IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null);
+
     /// <summary>
     ///     Sends a text message to this message channel.
     /// </summary>
@@ -75,6 +77,7 @@ public interface IMessageChannel : IChannel
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote quote = null,
         IUser ephemeralUser = null, RequestOptions options = null);
+
     /// <summary>
     ///     Sends a card message to this message channel.
     /// </summary>
@@ -88,6 +91,7 @@ public interface IMessageChannel : IChannel
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
         IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null);
+
     /// <summary>
     ///     Sends a card message to this message channel.
     /// </summary>
@@ -147,6 +151,7 @@ public interface IMessageChannel : IChannel
     /// </returns>
     IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch,
         CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a collection of messages in this channel.
     /// </summary>
@@ -177,8 +182,10 @@ public interface IMessageChannel : IChannel
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch,
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
+        int limit = KookConfig.MaxMessagesPerBatch,
         CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a collection of messages in this channel.
     /// </summary>
@@ -209,7 +216,8 @@ public interface IMessageChannel : IChannel
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch,
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
+        int limit = KookConfig.MaxMessagesPerBatch,
         CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
 
     #endregion
@@ -225,6 +233,7 @@ public interface IMessageChannel : IChannel
     ///     A task that represents the asynchronous removal operation.
     /// </returns>
     Task DeleteMessageAsync(Guid messageId, RequestOptions options = null);
+
     /// <summary> Deletes a message based on the provided message in this channel. </summary>
     /// <param name="message">The message that would be removed.</param>
     /// <param name="options">The options to be used when sending the request.</param>

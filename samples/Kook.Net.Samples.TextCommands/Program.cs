@@ -14,7 +14,7 @@ namespace TextCommandFramework;
 // - Here, under the 02_commands_framework sample
 // - https://github.com/foxbot/KookBotBase - a bare-bones bot template
 // - https://github.com/foxbot/patek - a more feature-filled bot, utilizing more aspects of the library
-class Program
+internal class Program
 {
     // There is no need to implement IDisposable like before as we are
     // using dependency injection, which handles calling Dispose for us.
@@ -26,9 +26,9 @@ class Program
         // when you are finished using it, at the end of your app's lifetime.
         // If you use another dependency injection framework, you should inspect
         // its documentation for the best way to do this.
-        using (var services = ConfigureServices())
+        using (ServiceProvider services = ConfigureServices())
         {
-            var client = services.GetRequiredService<KookSocketClient>();
+            KookSocketClient client = services.GetRequiredService<KookSocketClient>();
 
             client.Log += LogAsync;
             services.GetRequiredService<CommandService>().Log += LogAsync;
@@ -51,19 +51,15 @@ class Program
         return Task.CompletedTask;
     }
 
-    private ServiceProvider ConfigureServices()
-    {
-        return new ServiceCollection()
+    private ServiceProvider ConfigureServices() =>
+        new ServiceCollection()
             .AddSingleton(_ => new KookSocketClient(new KookSocketConfig()
             {
-                AlwaysDownloadUsers = true,
-                LogLevel = LogSeverity.Debug,
-                AcceptLanguage = "en-US"
+                AlwaysDownloadUsers = true, LogLevel = LogSeverity.Debug, AcceptLanguage = "en-US"
             }))
             .AddSingleton<CommandService>()
             .AddSingleton<CommandHandlingService>()
             .AddSingleton<HttpClient>()
             .AddSingleton<PictureService>()
             .BuildServiceProvider();
-    }
 }

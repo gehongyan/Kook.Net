@@ -23,7 +23,11 @@ public abstract class PreconditionAttribute : Attribute
     /// Setting this for a class that doesn't override
     /// this property is a no-op.
     /// </summary>
-    public virtual string ErrorMessage { get { return null; } set { } }
+    public virtual string ErrorMessage
+    {
+        get => null;
+        set { }
+    }
 
     /// <summary>
     ///     Checks if the <paramref name="command"/> has the sufficient permission to be executed.

@@ -10,10 +10,13 @@ public class RestPresence : IPresence
 {
     /// <inheritdoc />
     public bool? IsOnline { get; private set; }
+
     /// <inheritdoc />
     public ClientType? ActiveClient { get; private set; }
 
-    internal RestPresence() { }
+    internal RestPresence()
+    {
+    }
 
     internal RestPresence(bool? isOnline, ClientType? activeClient)
     {
@@ -23,15 +26,15 @@ public class RestPresence : IPresence
 
     internal static RestPresence Create(bool? isOnline, string activeClient)
     {
-        var entity = new RestPresence();
+        RestPresence entity = new();
         entity.Update(isOnline, activeClient);
         return entity;
     }
 
     internal void Update(bool? isOnline, string activeClient)
     {
-        if (isOnline.HasValue)
-            IsOnline = isOnline;
+        if (isOnline.HasValue) IsOnline = isOnline;
+
         ActiveClient = ConvertClientType(activeClient);
     }
 
@@ -46,10 +49,10 @@ public class RestPresence : IPresence
     /// </returns>
     private static ClientType? ConvertClientType(string clientType)
     {
-        if (string.IsNullOrWhiteSpace(clientType))
-            return null;
-        if (Enum.TryParse(clientType, true, out ClientType type))
-            return type;
+        if (string.IsNullOrWhiteSpace(clientType)) return null;
+
+        if (Enum.TryParse(clientType, true, out ClientType type)) return type;
+
         return null;
     }
 

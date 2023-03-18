@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Kook.API.Rest;
 
 namespace Kook.Rest;
 
@@ -20,29 +21,38 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <summary>
     ///     Gets the logged-in user.
     /// </summary>
-    public new RestSelfUser CurrentUser { get => base.CurrentUser as RestSelfUser; internal set => base.CurrentUser = value; }
+    public new RestSelfUser CurrentUser
+    {
+        get => base.CurrentUser as RestSelfUser;
+        internal set => base.CurrentUser = value;
+    }
 
     /// <summary>
     ///     Initializes a new REST-based KOOK client with the default configuration.
     /// </summary>
-    public KookRestClient() : this(new KookRestConfig()) { }
+    public KookRestClient() : this(new KookRestConfig())
+    {
+    }
 
     /// <summary>
     ///     Initializes a new REST-based KOOK client with the specified configuration.
     /// </summary>
     /// <param name="config"> The configuration to use. </param>
-    public KookRestClient(KookRestConfig config) : base(config, CreateApiClient(config)) { }
+    public KookRestClient(KookRestConfig config) : base(config, CreateApiClient(config))
+    {
+    }
 
-    internal KookRestClient(KookRestConfig config, API.KookRestApiClient api) : base(config, api) { }
+    internal KookRestClient(KookRestConfig config, API.KookRestApiClient api) : base(config, api)
+    {
+    }
 
     private static API.KookRestApiClient CreateApiClient(KookRestConfig config)
-        => new API.KookRestApiClient(config.RestClientProvider, KookRestConfig.UserAgent, acceptLanguage: config.AcceptLanguage,
-            defaultRetryMode: config.DefaultRetryMode, serializerOptions: SerializerOptions);
+        => new(config.RestClientProvider, KookConfig.UserAgent, config.AcceptLanguage,
+            config.DefaultRetryMode, SerializerOptions);
 
     internal override void Dispose(bool disposing)
     {
-        if (disposing)
-            ApiClient.Dispose();
+        if (disposing) ApiClient.Dispose();
 
         base.Dispose(disposing);
     }
@@ -50,21 +60,15 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <inheritdoc />
     internal override async Task OnLoginAsync(TokenType tokenType, string token)
     {
-        var user = await ApiClient.GetSelfUserAsync(new RequestOptions { RetryMode = RetryMode.AlwaysRetry }).ConfigureAwait(false);
+        SelfUser user = await ApiClient.GetSelfUserAsync(new RequestOptions { RetryMode = RetryMode.AlwaysRetry }).ConfigureAwait(false);
         ApiClient.CurrentUserId = user.Id;
         base.CurrentUser = RestSelfUser.Create(this, user);
     }
 
-    internal void CreateRestSelfUser(API.Rest.SelfUser user)
-    {
-        base.CurrentUser = RestSelfUser.Create(this, user);
-    }
+    internal void CreateRestSelfUser(SelfUser user) => base.CurrentUser = RestSelfUser.Create(this, user);
 
     /// <inheritdoc />
-    internal override Task OnLogoutAsync()
-    {
-        return Task.Delay(0);
-    }
+    internal override Task OnLogoutAsync() => Task.Delay(0);
 
     #endregion
 

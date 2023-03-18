@@ -9,7 +9,7 @@ public class PictureService
 
     public async Task<Stream> GetCatPictureAsync()
     {
-        var resp = await _http.GetAsync("https://cataas.com/cat");
+        HttpResponseMessage resp = await _http.GetAsync("https://cataas.com/cat");
         return await resp.Content.ReadAsStreamAsync();
     }
 }

@@ -9,10 +9,12 @@ public enum BadgeStyle
     ///     The badge contains only the guild name.
     /// </summary>
     GuildName = 0,
+
     /// <summary>
     ///     The badge contains the number of online members in the guild.
     /// </summary>
     OnlineMemberCount = 1,
+
     /// <summary>
     ///     The badge contains the number of both online and all members in the guild.
     /// </summary>

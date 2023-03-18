@@ -17,11 +17,10 @@ namespace Kook.Commands;
 [DebuggerDisplay("{Name,nq}")]
 public class CommandInfo
 {
-    private static readonly System.Reflection.MethodInfo _convertParamsMethod =
+    private static readonly MethodInfo _convertParamsMethod =
         typeof(CommandInfo).GetTypeInfo().GetDeclaredMethod(nameof(ConvertParamsList));
 
-    private static readonly ConcurrentDictionary<Type, Func<IEnumerable<object>, object>> _arrayConverters =
-        new ConcurrentDictionary<Type, Func<IEnumerable<object>, object>>();
+    private static readonly ConcurrentDictionary<Type, Func<IEnumerable<object>, object>> _arrayConverters = new();
 
     private readonly CommandService _commandService;
     private readonly Func<ICommandContext, object[], IServiceProvider, CommandInfo, Task> _action;
@@ -103,7 +102,7 @@ public class CommandInfo
         Summary = builder.Summary;
         Remarks = builder.Remarks;
 
-        RunMode = (builder.RunMode == RunMode.Default ? service._defaultRunMode : builder.RunMode);
+        RunMode = builder.RunMode == RunMode.Default ? service._defaultRunMode : builder.RunMode;
         Priority = builder.Priority;
 
         Aliases = module.Aliases
@@ -145,17 +144,14 @@ public class CommandInfo
             foreach (IGrouping<string, PreconditionAttribute> preconditionGroup in preconditions.GroupBy(p => p.Group, StringComparer.Ordinal))
             {
                 if (preconditionGroup.Key == null)
-                {
                     foreach (PreconditionAttribute precondition in preconditionGroup)
                     {
-                        var result = await precondition.CheckPermissionsAsync(context, this, services).ConfigureAwait(false);
-                        if (!result.IsSuccess)
-                            return result;
+                        PreconditionResult result = await precondition.CheckPermissionsAsync(context, this, services).ConfigureAwait(false);
+                        if (!result.IsSuccess) return result;
                     }
-                }
                 else
                 {
-                    var results = new List<PreconditionResult>();
+                    List<PreconditionResult> results = new();
                     foreach (PreconditionAttribute precondition in preconditionGroup)
                         results.Add(await precondition.CheckPermissionsAsync(context, this, services).ConfigureAwait(false));
 
@@ -167,13 +163,11 @@ public class CommandInfo
             return PreconditionGroupResult.FromSuccess();
         }
 
-        var moduleResult = await CheckGroups(Module.Preconditions, "Module").ConfigureAwait(false);
-        if (!moduleResult.IsSuccess)
-            return moduleResult;
+        PreconditionResult moduleResult = await CheckGroups(Module.Preconditions, "Module").ConfigureAwait(false);
+        if (!moduleResult.IsSuccess) return moduleResult;
 
-        var commandResult = await CheckGroups(Preconditions, "Command").ConfigureAwait(false);
-        if (!commandResult.IsSuccess)
-            return commandResult;
+        PreconditionResult commandResult = await CheckGroups(Preconditions, "Command").ConfigureAwait(false);
+        if (!commandResult.IsSuccess) return commandResult;
 
         return PreconditionResult.FromSuccess();
     }
@@ -192,10 +186,9 @@ public class CommandInfo
     {
         services ??= EmptyServiceProvider.Instance;
 
-        if (!searchResult.IsSuccess)
-            return ParseResult.FromError(searchResult);
-        if (preconditionResult != null && !preconditionResult.IsSuccess)
-            return ParseResult.FromError(preconditionResult);
+        if (!searchResult.IsSuccess) return ParseResult.FromError(searchResult);
+
+        if (preconditionResult != null && !preconditionResult.IsSuccess) return ParseResult.FromError(preconditionResult);
 
         string input = searchResult.Text.Substring(startIndex);
 
@@ -213,22 +206,21 @@ public class CommandInfo
     /// <returns> An <see cref="IResult"/> that indicates whether the execution was successful. </returns>
     public Task<IResult> ExecuteAsync(ICommandContext context, ParseResult parseResult, IServiceProvider services)
     {
-        if (!parseResult.IsSuccess)
-            return Task.FromResult((IResult)ExecuteResult.FromError(parseResult));
+        if (!parseResult.IsSuccess) return Task.FromResult((IResult)ExecuteResult.FromError(parseResult));
 
-        var argList = new object[parseResult.ArgValues.Count];
+        object[] argList = new object[parseResult.ArgValues.Count];
         for (int i = 0; i < parseResult.ArgValues.Count; i++)
         {
-            if (!parseResult.ArgValues[i].IsSuccess)
-                return Task.FromResult((IResult)ExecuteResult.FromError(parseResult.ArgValues[i]));
+            if (!parseResult.ArgValues[i].IsSuccess) return Task.FromResult((IResult)ExecuteResult.FromError(parseResult.ArgValues[i]));
+
             argList[i] = parseResult.ArgValues[i].Values.First().Value;
         }
 
-        var paramList = new object[parseResult.ParamValues.Count];
+        object[] paramList = new object[parseResult.ParamValues.Count];
         for (int i = 0; i < parseResult.ParamValues.Count; i++)
         {
-            if (!parseResult.ParamValues[i].IsSuccess)
-                return Task.FromResult((IResult)ExecuteResult.FromError(parseResult.ParamValues[i]));
+            if (!parseResult.ParamValues[i].IsSuccess) return Task.FromResult((IResult)ExecuteResult.FromError(parseResult.ParamValues[i]));
+
             paramList[i] = parseResult.ParamValues[i].Values.First().Value;
         }
 
@@ -254,9 +246,9 @@ public class CommandInfo
 
             for (int position = 0; position < Parameters.Count; position++)
             {
-                var parameter = Parameters[position];
+                ParameterInfo parameter = Parameters[position];
                 object argument = args[position];
-                var result = await parameter.CheckPreconditionsAsync(context, argument, services).ConfigureAwait(false);
+                PreconditionResult result = await parameter.CheckPreconditionsAsync(context, argument, services).ConfigureAwait(false);
                 if (!result.IsSuccess)
                 {
                     await Module.Service._commandExecutedEvent.InvokeAsync(this, context, result).ConfigureAwait(false);
@@ -269,10 +261,7 @@ public class CommandInfo
                 case RunMode.Sync: //Always sync
                     return await ExecuteInternalAsync(context, args, services).ConfigureAwait(false);
                 case RunMode.Async: //Always async
-                    var t2 = Task.Run(async () =>
-                    {
-                        await ExecuteInternalAsync(context, args, services).ConfigureAwait(false);
-                    });
+                    Task t2 = Task.Run(async () => { await ExecuteInternalAsync(context, args, services).ConfigureAwait(false); });
                     break;
             }
 
@@ -289,40 +278,39 @@ public class CommandInfo
         await Module.Service._cmdLogger.DebugAsync($"Executing {GetLogText(context)}").ConfigureAwait(false);
         try
         {
-            var task = _action(context, args, services, this);
+            Task task = _action(context, args, services, this);
             if (task is Task<IResult> resultTask)
             {
-                var result = await resultTask.ConfigureAwait(false);
+                IResult result = await resultTask.ConfigureAwait(false);
                 await Module.Service._commandExecutedEvent.InvokeAsync(this, context, result).ConfigureAwait(false);
-                if (result is RuntimeResult execResult)
-                    return execResult;
+                if (result is RuntimeResult execResult) return execResult;
             }
             else if (task is Task<ExecuteResult> execTask)
             {
-                var result = await execTask.ConfigureAwait(false);
+                ExecuteResult result = await execTask.ConfigureAwait(false);
                 await Module.Service._commandExecutedEvent.InvokeAsync(this, context, result).ConfigureAwait(false);
                 return result;
             }
             else
             {
                 await task.ConfigureAwait(false);
-                var result = ExecuteResult.FromSuccess();
+                ExecuteResult result = ExecuteResult.FromSuccess();
                 await Module.Service._commandExecutedEvent.InvokeAsync(this, context, result).ConfigureAwait(false);
             }
 
-            var executeResult = ExecuteResult.FromSuccess();
+            ExecuteResult executeResult = ExecuteResult.FromSuccess();
             return executeResult;
         }
         catch (Exception ex)
         {
-            var originalEx = ex;
+            Exception originalEx = ex;
             while (ex is TargetInvocationException) //Happens with void-returning commands
                 ex = ex.InnerException;
 
-            var wrappedEx = new CommandException(this, context, ex);
+            CommandException wrappedEx = new(this, context, ex);
             await Module.Service._cmdLogger.ErrorAsync(wrappedEx).ConfigureAwait(false);
 
-            var result = ExecuteResult.FromError(ex);
+            ExecuteResult result = ExecuteResult.FromError(ex);
             await Module.Service._commandExecutedEvent.InvokeAsync(this, context, result).ConfigureAwait(false);
 
             if (Module.Service._throwOnError)
@@ -344,26 +332,24 @@ public class CommandInfo
     private object[] GenerateArgs(IEnumerable<object> argList, IEnumerable<object> paramsList)
     {
         int argCount = Parameters.Count;
-        var array = new object[Parameters.Count];
-        if (HasVarArgs)
-            argCount--;
+        object[] array = new object[Parameters.Count];
+        if (HasVarArgs) argCount--;
 
         int i = 0;
         foreach (object arg in argList)
         {
-            if (i == argCount)
-                throw new InvalidOperationException("Command was invoked with too many parameters.");
+            if (i == argCount) throw new InvalidOperationException("Command was invoked with too many parameters.");
+
             array[i++] = arg;
         }
 
-        if (i < argCount)
-            throw new InvalidOperationException("Command was invoked with too few parameters.");
+        if (i < argCount) throw new InvalidOperationException("Command was invoked with too few parameters.");
 
         if (HasVarArgs)
         {
-            var func = _arrayConverters.GetOrAdd(Parameters[Parameters.Count - 1].Type, t =>
+            Func<IEnumerable<object>, object> func = _arrayConverters.GetOrAdd(Parameters[Parameters.Count - 1].Type, t =>
             {
-                var method = _convertParamsMethod.MakeGenericMethod(t);
+                MethodInfo method = _convertParamsMethod.MakeGenericMethod(t);
                 return (Func<IEnumerable<object>, object>)method.CreateDelegate(typeof(Func<IEnumerable<object>, object>));
             });
             array[i] = func(paramsList);

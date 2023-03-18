@@ -8,10 +8,7 @@ namespace Kook;
 /// </summary>
 public static class Format
 {
-    private static readonly string[] SensitiveCharacters =
-    {
-        "\\", "*", "~", "`", ":", "-", "]", ")", ">"
-    };
+    private static readonly string[] SensitiveCharacters = { "\\", "*", "~", "`", ":", "-", "]", ")", ">" };
 
     /// <summary> Returns a markdown-formatted string with bold formatting. </summary>
     public static string Bold(string text) => $"**{text}**";
@@ -37,8 +34,8 @@ public static class Format
     /// <summary> Sanitizes the string, safely escaping any Markdown sequences. </summary>
     public static string Sanitize(string text)
     {
-        if (text is null)
-            return null;
+        if (text is null) return null;
+
         return SensitiveCharacters.Aggregate(text,
             (current, unsafeChar) => current.Replace(unsafeChar, $"\\{unsafeChar}"));
     }
@@ -52,10 +49,9 @@ public static class Format
     {
         // do not modify null or whitespace text
         // whitespace does not get quoted properly
-        if (string.IsNullOrWhiteSpace(text))
-            return text;
+        if (string.IsNullOrWhiteSpace(text)) return text;
 
-        StringBuilder result = new StringBuilder();
+        StringBuilder result = new();
 
         int startIndex = 0;
         int newLineIndex;
@@ -65,13 +61,13 @@ public static class Format
             if (newLineIndex == -1)
             {
                 // read the rest of the string
-                var str = text.Substring(startIndex);
+                string str = text.Substring(startIndex);
                 result.Append($"> {str}");
             }
             else
             {
                 // read until the next newline
-                var str = text.Substring(startIndex, newLineIndex - startIndex);
+                string str = text.Substring(startIndex, newLineIndex - startIndex);
                 result.Append($"> {str}\n");
             }
 
@@ -104,8 +100,7 @@ public static class Format
     public static string BlockQuote(string text)
     {
         // do not modify null or whitespace
-        if (string.IsNullOrWhiteSpace(text))
-            return text;
+        if (string.IsNullOrWhiteSpace(text)) return text;
 
         return $">>> {text}";
     }
@@ -124,7 +119,7 @@ public static class Format
         //     RegexOptions.Compiled | RegexOptions.RightToLeft);
 
         // Remove Kook supported markdown
-        var newText = Regex.Replace(text, @"(\*|\(ins\)|\(spl\)|`|~|>|\\)", "");
+        string newText = Regex.Replace(text, @"(\*|\(ins\)|\(spl\)|`|~|>|\\)", "");
 
         return newText;
     }
@@ -135,10 +130,8 @@ public static class Format
     /// <param name="user">The user whose username and identify number to format</param>
     /// <param name="doBidirectional">To format the string in bidirectional unicode or not</param>
     /// <returns>The username + identify number</returns>
-    public static string UsernameAndIdentifyNumber(IUser user, bool doBidirectional)
-    {
-        return doBidirectional
+    public static string UsernameAndIdentifyNumber(IUser user, bool doBidirectional) =>
+        doBidirectional
             ? $"\u2066{user.Username}\u2069#{user.IdentifyNumber}"
             : $"{user.Username}#{user.IdentifyNumber}";
-    }
 }

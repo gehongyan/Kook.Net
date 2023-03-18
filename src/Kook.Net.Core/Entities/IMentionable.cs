@@ -12,6 +12,7 @@ public interface IMentionable
     ///     A string that is recognized by Kook as a mention in plain text formatted text.
     /// </returns>
     string PlainTextMention { get; }
+
     /// <summary>
     ///     Returns a special string used to mention this object in KMarkdown formatted text.
     /// </summary>

@@ -11,24 +11,16 @@ internal static class ChannelHelper
     #region General
 
     public static async Task DeleteGuildChannelAsync(IGuildChannel channel, BaseKookClient client,
-        RequestOptions options)
-    {
+        RequestOptions options) =>
         await client.ApiClient.DeleteGuildChannelAsync(channel.Id, options).ConfigureAwait(false);
-    }
 
     public static async Task<Model> ModifyAsync(IGuildChannel channel, BaseKookClient client,
         Action<ModifyGuildChannelProperties> func,
         RequestOptions options)
     {
-        var args = new ModifyGuildChannelProperties();
+        ModifyGuildChannelProperties args = new();
         func(args);
-        var apiArgs = new API.Rest.ModifyGuildChannelParams
-        {
-            ChannelId = channel.Id,
-            Name = args.Name,
-            Position = args.Position,
-            CategoryId = args.CategoryId,
-        };
+        ModifyGuildChannelParams apiArgs = new() { ChannelId = channel.Id, Name = args.Name, Position = args.Position, CategoryId = args.CategoryId };
         return await client.ApiClient.ModifyGuildChannelAsync(channel.Id, apiArgs, options).ConfigureAwait(false);
     }
 
@@ -36,16 +28,16 @@ internal static class ChannelHelper
         Action<ModifyTextChannelProperties> func,
         RequestOptions options)
     {
-        var args = new ModifyTextChannelProperties();
+        ModifyTextChannelProperties args = new();
         func(args);
-        var apiArgs = new API.Rest.ModifyTextChannelParams
+        ModifyTextChannelParams apiArgs = new()
         {
             ChannelId = channel.Id,
             Name = args.Name,
             Position = args.Position,
             CategoryId = args.CategoryId,
             Topic = args.Topic,
-            SlowModeInterval = (int?)args.SlowModeInterval * 1000,
+            SlowModeInterval = (int?)args.SlowModeInterval * 1000
         };
         return await client.ApiClient.ModifyGuildChannelAsync(channel.Id, apiArgs, options).ConfigureAwait(false);
     }
@@ -54,9 +46,9 @@ internal static class ChannelHelper
         Action<ModifyVoiceChannelProperties> func,
         RequestOptions options)
     {
-        var args = new ModifyVoiceChannelProperties();
+        ModifyVoiceChannelProperties args = new();
         func(args);
-        var apiArgs = new API.Rest.ModifyVoiceChannelParams
+        ModifyVoiceChannelParams apiArgs = new()
         {
             ChannelId = channel.Id,
             Name = args.Name,
@@ -70,14 +62,12 @@ internal static class ChannelHelper
     }
 
     public static async Task DeleteDMChannelAsync(IDMChannel channel, BaseKookClient client,
-        RequestOptions options)
-    {
+        RequestOptions options) =>
         await client.ApiClient.DeleteUserChatAsync(channel.ChatCode, options).ConfigureAwait(false);
-    }
 
     public static async Task UpdateAsync(RestChannel channel, BaseKookClient client, RequestOptions options)
     {
-        var model = await client.ApiClient.GetGuildChannelAsync(channel.Id, options).ConfigureAwait(false);
+        Channel model = await client.ApiClient.GetGuildChannelAsync(channel.Id, options).ConfigureAwait(false);
         channel.Update(model);
     }
 
@@ -88,14 +78,14 @@ internal static class ChannelHelper
     public static async Task<RestMessage> GetMessageAsync(IMessageChannel channel, BaseKookClient client,
         Guid id, RequestOptions options)
     {
-        var guildId = (channel as IGuildChannel)?.GuildId;
-        var guild = guildId != null
+        ulong? guildId = (channel as IGuildChannel)?.GuildId;
+        IGuild guild = guildId != null
             ? await (client as IKookClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).ConfigureAwait(false)
             : null;
-        var model = await client.ApiClient.GetMessageAsync(id, options).ConfigureAwait(false);
-        if (model == null)
-            return null;
-        var author = MessageHelper.GetAuthor(client, guild, model.Author);
+        Message model = await client.ApiClient.GetMessageAsync(id, options).ConfigureAwait(false);
+        if (model == null) return null;
+
+        IUser author = MessageHelper.GetAuthor(client, guild, model.Author);
         return RestMessage.Create(client, channel, author, model);
     }
 
@@ -103,18 +93,20 @@ internal static class ChannelHelper
         BaseKookClient client,
         Guid? referenceMessageId, Direction dir, int limit, bool includeReferenceMessage, RequestOptions options)
     {
-        var guildId = (channel as IGuildChannel)?.GuildId;
-        var guild = guildId != null
+        ulong? guildId = (channel as IGuildChannel)?.GuildId;
+        IGuild guild = guildId != null
             ? (client as IKookClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).GetAwaiter().GetResult()
             : null;
 
-        if (dir == Direction
+        if (dir
+            == Direction
                 .Around) //  && limit > KookConfig.MaxMessagesPerBatch // Around mode returns error messages from endpoint
         {
             int around = limit / 2;
             if (referenceMessageId.HasValue)
             {
-                var messages = GetMessagesAsync(channel, client, referenceMessageId, Direction.Before, around,
+                IAsyncEnumerable<IReadOnlyCollection<RestMessage>> messages = GetMessagesAsync(channel, client, referenceMessageId, Direction.Before,
+                    around,
                     includeReferenceMessage, options);
                 messages = messages.Concat(GetMessagesAsync(channel, client, referenceMessageId, Direction.After,
                     around, false, options));
@@ -129,20 +121,20 @@ internal static class ChannelHelper
             KookConfig.MaxMessagesPerBatch,
             async (info, ct) =>
             {
-                var models = await client.ApiClient.QueryMessagesAsync(channel.Id, referenceMessageId: info.Position,
+                IReadOnlyCollection<Message> models = await client.ApiClient.QueryMessagesAsync(channel.Id, info.Position,
                     dir: dir, count: limit, options: options).ConfigureAwait(false);
-                var builder = ImmutableArray.CreateBuilder<RestMessage>();
+                ImmutableArray<RestMessage>.Builder builder = ImmutableArray.CreateBuilder<RestMessage>();
                 // Insert the reference message before query results
                 if (includeReferenceMessage && info.Position.HasValue && dir == Direction.After)
                 {
                     Message currentMessage = await client.ApiClient.GetMessageAsync(info.Position.Value, options);
-                    var currentMessageAuthor = MessageHelper.GetAuthor(client, guild, currentMessage.Author);
+                    IUser currentMessageAuthor = MessageHelper.GetAuthor(client, guild, currentMessage.Author);
                     builder.Add(RestMessage.Create(client, channel, currentMessageAuthor, currentMessage));
                 }
 
-                foreach (var model in models)
+                foreach (Message model in models)
                 {
-                    var author = MessageHelper.GetAuthor(client, guild, model.Author);
+                    IUser author = MessageHelper.GetAuthor(client, guild, model.Author);
                     builder.Add(RestMessage.Create(client, channel, author, model));
                 }
 
@@ -150,16 +142,16 @@ internal static class ChannelHelper
                 if (includeReferenceMessage && info.Position.HasValue && dir == Direction.Before)
                 {
                     Message currentMessage = await client.ApiClient.GetMessageAsync(info.Position.Value, options);
-                    var currentMessageAuthor = MessageHelper.GetAuthor(client, guild, currentMessage.Author);
+                    IUser currentMessageAuthor = MessageHelper.GetAuthor(client, guild, currentMessage.Author);
                     builder.Add(RestMessage.Create(client, channel, currentMessageAuthor, currentMessage));
                 }
 
                 return builder.ToImmutable();
             },
-            nextPage: (info, lastPage) =>
+            (info, lastPage) =>
             {
-                if (lastPage.Count != KookConfig.MaxMessagesPerBatch)
-                    return false;
+                if (lastPage.Count != KookConfig.MaxMessagesPerBatch) return false;
+
                 if (dir == Direction.Before)
 #if NET6_0_OR_GREATER
                     info.Position = lastPage.MinBy(x => x.Timestamp)?.Id;
@@ -175,8 +167,8 @@ internal static class ChannelHelper
 #endif
                 return true;
             },
-            start: referenceMessageId,
-            count: limit
+            referenceMessageId,
+            limit
         );
     }
 
@@ -184,19 +176,19 @@ internal static class ChannelHelper
         BaseKookClient client,
         RequestOptions options)
     {
-        var guildId = (channel as IGuildChannel)?.GuildId;
-        var guild = guildId != null
+        ulong? guildId = (channel as IGuildChannel)?.GuildId;
+        IGuild guild = guildId != null
             ? await (client as IKookClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).ConfigureAwait(false)
             : null;
-        var models = await client.ApiClient.QueryMessagesAsync(channel.Id, queryPin: true, options: options)
+        IReadOnlyCollection<Message> models = await client.ApiClient.QueryMessagesAsync(channel.Id, queryPin: true, options: options)
             .ConfigureAwait(false);
-        var builder = ImmutableArray.CreateBuilder<RestMessage>();
-        foreach (var model in models)
+        ImmutableArray<RestMessage>.Builder builder = ImmutableArray.CreateBuilder<RestMessage>();
+        foreach (Message model in models)
         {
-            var author = MessageHelper.GetAuthor(client, guild, model.Author);
+            IUser author = MessageHelper.GetAuthor(client, guild, model.Author);
             RestMessage message = RestMessage.Create(client, channel, author, model);
-            if (message is RestUserMessage userMessage)
-                userMessage.IsPinned = true;
+            if (message is RestUserMessage userMessage) userMessage.IsPinned = true;
+
             builder.Add(message);
         }
 
@@ -209,8 +201,7 @@ internal static class ChannelHelper
     {
         CreateMessageParams args = new(messageType, channel.Id, content)
         {
-            QuotedMessageId = quote?.QuotedMessageId,
-            EphemeralUserId = ephemeralUser?.Id
+            QuotedMessageId = quote?.QuotedMessageId, EphemeralUserId = ephemeralUser?.Id
         };
         CreateMessageResponse model = await client.ApiClient.CreateMessageAsync(args, options).ConfigureAwait(false);
         return new Cacheable<IUserMessage, Guid>(null, model.MessageId, false,
@@ -222,25 +213,26 @@ internal static class ChannelHelper
         IUser ephemeralUser = null)
     {
         string json = MessageHelper.SerializeCards(cards);
-        return await SendMessageAsync(channel, client, MessageType.Card, json, options, quote: quote,
-            ephemeralUser: ephemeralUser);
+        return await SendMessageAsync(channel, client, MessageType.Card, json, options, quote,
+            ephemeralUser);
     }
+
     public static Task<Cacheable<IUserMessage, Guid>> SendCardAsync(IMessageChannel channel,
         BaseKookClient client, ICard card, RequestOptions options, IQuote quote = null,
         IUser ephemeralUser = null)
-        => SendCardsAsync(channel, client, new[] { card }, options, quote: quote, ephemeralUser: ephemeralUser);
+        => SendCardsAsync(channel, client, new[] { card }, options, quote, ephemeralUser);
 
     public static Task<Cacheable<IUserMessage, Guid>> SendFileAsync(IMessageChannel channel,
         BaseKookClient client, string path, string fileName, AttachmentType type, RequestOptions options,
         IQuote quote = null, IUser ephemeralUser = null)
-        => SendFileAsync(channel, client, new FileAttachment(path, fileName, type), options, quote: quote,
-            ephemeralUser: ephemeralUser);
+        => SendFileAsync(channel, client, new FileAttachment(path, fileName, type), options, quote,
+            ephemeralUser);
 
     public static Task<Cacheable<IUserMessage, Guid>> SendFileAsync(IMessageChannel channel,
         BaseKookClient client, Stream stream, string fileName, AttachmentType type, RequestOptions options,
         IQuote quote = null, IUser ephemeralUser = null)
-        => SendFileAsync(channel, client, new FileAttachment(stream, fileName, type), options, quote: quote,
-            ephemeralUser: ephemeralUser);
+        => SendFileAsync(channel, client, new FileAttachment(stream, fileName, type), options, quote,
+            ephemeralUser);
 
     public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(IMessageChannel channel,
         BaseKookClient client, FileAttachment attachment, RequestOptions options,
@@ -257,6 +249,7 @@ internal static class ChannelHelper
             case CreateAttachmentMode.AssetUri:
                 if (!UrlValidation.ValidateKookAssetUrl(attachment.Uri.OriginalString))
                     throw new ArgumentException("The uri cannot be blank.", nameof(attachment.Uri));
+
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(attachment.Mode), attachment.Mode, "Unknown attachment mode");
@@ -265,18 +258,18 @@ internal static class ChannelHelper
         return attachment.Type switch
         {
             AttachmentType.File => await SendMessageAsync(channel, client, MessageType.File,
-                attachment.Uri.OriginalString, options, quote: quote, ephemeralUser: ephemeralUser),
+                attachment.Uri.OriginalString, options, quote, ephemeralUser),
             AttachmentType.Image => await SendMessageAsync(channel, client, MessageType.Image,
-                attachment.Uri.OriginalString, options, quote: quote, ephemeralUser: ephemeralUser),
+                attachment.Uri.OriginalString, options, quote, ephemeralUser),
             AttachmentType.Video => await SendMessageAsync(channel, client, MessageType.Video,
-                attachment.Uri.OriginalString, options, quote: quote, ephemeralUser: ephemeralUser),
+                attachment.Uri.OriginalString, options, quote, ephemeralUser),
             AttachmentType.Audio => await SendCardAsync(channel, client,
                 new CardBuilder().WithSize(CardSize.Large)
                     .WithTheme(CardTheme.None)
                     .AddModule<AudioModuleBuilder>(x => x
                         .WithSource(attachment.Uri.OriginalString)
                         .WithTitle(attachment.FileName))
-                    .Build(), options, quote: quote, ephemeralUser: ephemeralUser),
+                    .Build(), options, quote, ephemeralUser),
             _ => throw new ArgumentOutOfRangeException(nameof(attachment.Type), attachment.Type,
                 "Unknown attachment type")
         };
@@ -302,10 +295,10 @@ internal static class ChannelHelper
     public static async Task<RestMessage> GetDirectMessageAsync(IDMChannel channel, BaseKookClient client,
         Guid id, RequestOptions options)
     {
-        var model = await client.ApiClient.GetDirectMessageAsync(id, chatCode: channel.Id, options: options)
+        DirectMessage model = await client.ApiClient.GetDirectMessageAsync(id, channel.Id, options: options)
             .ConfigureAwait(false);
-        if (model == null)
-            return null;
+        if (model == null) return null;
+
         // User userModel = await client.ApiClient.GetUserAsync(model.AuthorId, options);
         // var author = MessageHelper.GetAuthor(client, null, userModel);
         return RestMessage.Create(client, channel, channel.Recipient, model);
@@ -315,13 +308,15 @@ internal static class ChannelHelper
         BaseKookClient client,
         Guid? referenceMessageId, Direction dir, int limit, bool includeReferenceMessage, RequestOptions options)
     {
-        if (dir == Direction
+        if (dir
+            == Direction
                 .Around) //  && limit > KookConfig.MaxMessagesPerBatch // Around mode returns error messages from endpoint
         {
             int around = limit / 2;
             if (referenceMessageId.HasValue)
             {
-                var messages = GetDirectMessagesAsync(channel, client, referenceMessageId, Direction.Before, around,
+                IAsyncEnumerable<IReadOnlyCollection<RestMessage>> messages = GetDirectMessagesAsync(channel, client, referenceMessageId,
+                    Direction.Before, around,
                     includeReferenceMessage, options);
                 messages = messages.Concat(GetDirectMessagesAsync(channel, client, referenceMessageId, Direction.After,
                     around, false, options));
@@ -336,36 +331,33 @@ internal static class ChannelHelper
             KookConfig.MaxMessagesPerBatch,
             async (info, ct) =>
             {
-                var models = await client.ApiClient.QueryDirectMessagesAsync(channel.ChatCode,
+                IReadOnlyCollection<DirectMessage> models = await client.ApiClient.QueryDirectMessagesAsync(channel.ChatCode,
                     referenceMessageId: info.Position, dir: dir, count: limit, options: options).ConfigureAwait(false);
-                var builder = ImmutableArray.CreateBuilder<RestMessage>();
+                ImmutableArray<RestMessage>.Builder builder = ImmutableArray.CreateBuilder<RestMessage>();
                 // Insert the reference message before query results
                 if (includeReferenceMessage && info.Position.HasValue && dir == Direction.After)
                 {
                     DirectMessage currentMessage = await client.ApiClient.GetDirectMessageAsync(info.Position.Value,
-                        chatCode: channel.ChatCode, options: options);
+                        channel.ChatCode, options: options);
                     builder.Add(RestMessage.Create(client, channel, channel.Recipient, currentMessage));
                 }
 
-                foreach (var model in models)
-                {
-                    builder.Add(RestMessage.Create(client, channel, channel.Recipient, model));
-                }
+                foreach (DirectMessage model in models) builder.Add(RestMessage.Create(client, channel, channel.Recipient, model));
 
                 // Append the reference message after query results
                 if (includeReferenceMessage && info.Position.HasValue && dir == Direction.Before)
                 {
                     DirectMessage currentMessage = await client.ApiClient.GetDirectMessageAsync(info.Position.Value,
-                        chatCode: channel.ChatCode, options: options);
+                        channel.ChatCode, options: options);
                     builder.Add(RestMessage.Create(client, channel, channel.Recipient, currentMessage));
                 }
 
                 return builder.ToImmutable();
             },
-            nextPage: (info, lastPage) =>
+            (info, lastPage) =>
             {
-                if (lastPage.Count != KookConfig.MaxMessagesPerBatch)
-                    return false;
+                if (lastPage.Count != KookConfig.MaxMessagesPerBatch) return false;
+
                 if (dir == Direction.Before)
 #if NET6_0_OR_GREATER
                     info.Position = lastPage.MinBy(x => x.Timestamp)?.Id;
@@ -381,18 +373,15 @@ internal static class ChannelHelper
 #endif
                 return true;
             },
-            start: referenceMessageId,
-            count: limit
+            referenceMessageId,
+            limit
         );
     }
 
     public static async Task<Cacheable<IUserMessage, Guid>> SendDirectMessageAsync(IDMChannel channel,
         BaseKookClient client, MessageType messageType, string content, RequestOptions options, IQuote quote = null)
     {
-        CreateDirectMessageParams args = new(messageType, channel.Recipient.Id, content)
-        {
-            QuotedMessageId = quote?.QuotedMessageId,
-        };
+        CreateDirectMessageParams args = new(messageType, channel.Recipient.Id, content) { QuotedMessageId = quote?.QuotedMessageId };
         CreateDirectMessageResponse model = await client.ApiClient.CreateDirectMessageAsync(args, options).ConfigureAwait(false);
         return new Cacheable<IUserMessage, Guid>(null, model.MessageId, false,
             async () => await channel.GetMessageAsync(model.MessageId) as IUserMessage);
@@ -402,21 +391,22 @@ internal static class ChannelHelper
         BaseKookClient client, IEnumerable<ICard> cards, RequestOptions options, IQuote quote = null)
     {
         string json = MessageHelper.SerializeCards(cards);
-        return await SendDirectMessageAsync(channel, client, MessageType.Card, json, options, quote: quote);
+        return await SendDirectMessageAsync(channel, client, MessageType.Card, json, options, quote);
     }
+
     public static Task<Cacheable<IUserMessage, Guid>> SendDirectCardAsync(IDMChannel channel,
         BaseKookClient client, ICard card, RequestOptions options, IQuote quote = null)
-        => SendDirectCardsAsync(channel, client, new[] { card }, options, quote: quote);
+        => SendDirectCardsAsync(channel, client, new[] { card }, options, quote);
 
     public static Task<Cacheable<IUserMessage, Guid>> SendDirectFileAsync(IDMChannel channel,
         BaseKookClient client, string path, string fileName, AttachmentType type, RequestOptions options,
         IQuote quote = null)
-        => SendDirectFileAsync(channel, client, new FileAttachment(path, fileName, type), options, quote: quote);
+        => SendDirectFileAsync(channel, client, new FileAttachment(path, fileName, type), options, quote);
 
     public static Task<Cacheable<IUserMessage, Guid>> SendDirectFileAsync(IDMChannel channel,
         BaseKookClient client, Stream stream, string fileName, AttachmentType type, RequestOptions options,
         IQuote quote = null)
-        => SendDirectFileAsync(channel, client, new FileAttachment(stream, fileName, type), options, quote: quote);
+        => SendDirectFileAsync(channel, client, new FileAttachment(stream, fileName, type), options, quote);
 
     public static async Task<Cacheable<IUserMessage, Guid>> SendDirectFileAsync(IDMChannel channel,
         BaseKookClient client, FileAttachment attachment, RequestOptions options, IQuote quote = null)
@@ -432,6 +422,7 @@ internal static class ChannelHelper
             case CreateAttachmentMode.AssetUri:
                 if (!UrlValidation.ValidateKookAssetUrl(attachment.Uri.OriginalString))
                     throw new ArgumentException("The uri cannot be blank.", nameof(attachment.Uri));
+
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(attachment.Mode), attachment.Mode, "Unknown attachment mode");
@@ -440,18 +431,18 @@ internal static class ChannelHelper
         return attachment.Type switch
         {
             AttachmentType.File => await SendDirectMessageAsync(channel, client, MessageType.File,
-                attachment.Uri.OriginalString, options, quote: quote),
+                attachment.Uri.OriginalString, options, quote),
             AttachmentType.Image => await SendDirectMessageAsync(channel, client, MessageType.Image,
-                attachment.Uri.OriginalString, options, quote: quote),
+                attachment.Uri.OriginalString, options, quote),
             AttachmentType.Video => await SendDirectMessageAsync(channel, client, MessageType.Video,
-                attachment.Uri.OriginalString, options, quote: quote),
+                attachment.Uri.OriginalString, options, quote),
             AttachmentType.Audio => await SendDirectCardAsync(channel, client,
                 new CardBuilder().WithSize(CardSize.Large)
                     .WithTheme(CardTheme.None)
                     .AddModule<AudioModuleBuilder>(x => x
                         .WithSource(attachment.Uri.OriginalString)
                         .WithTitle(attachment.FileName))
-                    .Build(), options, quote: quote),
+                    .Build(), options, quote),
             _ => throw new ArgumentOutOfRangeException(nameof(attachment.Type), attachment.Type,
                 "Unknown attachment type")
         };
@@ -470,9 +461,11 @@ internal static class ChannelHelper
         BaseKookClient client,
         IUser user, RequestOptions options)
     {
-        var args = new CreateOrRemoveChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.User,
+        CreateOrRemoveChannelPermissionOverwriteParams args = new(channel.Id,
+            PermissionOverwriteTargetType.User,
             user.Id);
-        var resp = await client.ApiClient.CreateChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
+        CreateOrModifyChannelPermissionOverwriteResponse resp = await client.ApiClient.CreateChannelPermissionOverwriteAsync(args, options)
+            .ConfigureAwait(false);
         return new UserPermissionOverwrite(user, new OverwritePermissions(resp.Allow, resp.Deny));
     }
 
@@ -480,16 +473,19 @@ internal static class ChannelHelper
         BaseKookClient client,
         IRole role, RequestOptions options)
     {
-        var args = new CreateOrRemoveChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.Role,
+        CreateOrRemoveChannelPermissionOverwriteParams args = new(channel.Id,
+            PermissionOverwriteTargetType.Role,
             role.Id);
-        var resp = await client.ApiClient.CreateChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
+        CreateOrModifyChannelPermissionOverwriteResponse resp = await client.ApiClient.CreateChannelPermissionOverwriteAsync(args, options)
+            .ConfigureAwait(false);
         return new RolePermissionOverwrite(role.Id, new OverwritePermissions(resp.Allow, resp.Deny));
     }
 
     public static async Task RemovePermissionOverwriteAsync(IGuildChannel channel, BaseKookClient client,
         IUser user, RequestOptions options)
     {
-        var args = new CreateOrRemoveChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.User,
+        CreateOrRemoveChannelPermissionOverwriteParams args = new(channel.Id,
+            PermissionOverwriteTargetType.User,
             user.Id);
         await client.ApiClient.RemoveChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
     }
@@ -497,7 +493,8 @@ internal static class ChannelHelper
     public static async Task RemovePermissionOverwriteAsync(IGuildChannel channel, BaseKookClient client,
         IRole role, RequestOptions options)
     {
-        var args = new CreateOrRemoveChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.Role,
+        CreateOrRemoveChannelPermissionOverwriteParams args = new(channel.Id,
+            PermissionOverwriteTargetType.Role,
             role.Id);
         await client.ApiClient.RemoveChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
     }
@@ -506,13 +503,15 @@ internal static class ChannelHelper
         BaseKookClient client,
         IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options)
     {
-        var perms = channel.UserPermissionOverwrites.SingleOrDefault(x => x.Target.Id == user.Id)?.Permissions;
-        if (!perms.HasValue)
-            return null;
+        OverwritePermissions? perms = channel.UserPermissionOverwrites.SingleOrDefault(x => x.Target.Id == user.Id)?.Permissions;
+        if (!perms.HasValue) return null;
+
         perms = func(perms.Value);
-        var args = new ModifyChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.User, user.Id,
+        ModifyChannelPermissionOverwriteParams args = new(channel.Id, PermissionOverwriteTargetType.User,
+            user.Id,
             perms.Value.AllowValue, perms.Value.DenyValue);
-        var resp = await client.ApiClient.ModifyChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
+        CreateOrModifyChannelPermissionOverwriteResponse resp = await client.ApiClient.ModifyChannelPermissionOverwriteAsync(args, options)
+            .ConfigureAwait(false);
         return new UserPermissionOverwrite(user, new OverwritePermissions(resp.Allow, resp.Deny));
     }
 
@@ -520,13 +519,15 @@ internal static class ChannelHelper
         BaseKookClient client,
         IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options)
     {
-        var perms = channel.RolePermissionOverwrites.SingleOrDefault(x => x.Target == role.Id)?.Permissions;
-        if (!perms.HasValue)
-            return null;
+        OverwritePermissions? perms = channel.RolePermissionOverwrites.SingleOrDefault(x => x.Target == role.Id)?.Permissions;
+        if (!perms.HasValue) return null;
+
         perms = func(perms.Value);
-        var args = new ModifyChannelPermissionOverwriteParams(channel.Id, PermissionOverwriteTargetType.Role, role.Id,
+        ModifyChannelPermissionOverwriteParams args = new(channel.Id, PermissionOverwriteTargetType.Role,
+            role.Id,
             perms.Value.AllowValue, perms.Value.DenyValue);
-        var resp = await client.ApiClient.ModifyChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
+        CreateOrModifyChannelPermissionOverwriteResponse resp = await client.ApiClient.ModifyChannelPermissionOverwriteAsync(args, options)
+            .ConfigureAwait(false);
         return new RolePermissionOverwrite(role.Id, new OverwritePermissions(resp.Allow, resp.Deny));
     }
 
@@ -538,7 +539,7 @@ internal static class ChannelHelper
         BaseKookClient client,
         RequestOptions options)
     {
-        var models = await client.ApiClient.GetGuildInvitesAsync(channel.GuildId, channel.Id, options: options)
+        IEnumerable<Invite> models = await client.ApiClient.GetGuildInvitesAsync(channel.GuildId, channel.Id, options: options)
             .FlattenAsync().ConfigureAwait(false);
         return models.Select(x => RestInvite.Create(client, channel.Guild, channel, x)).ToImmutableArray();
     }
@@ -551,24 +552,19 @@ internal static class ChannelHelper
     public static async Task<RestInvite> CreateInviteAsync(IGuildChannel channel, BaseKookClient client,
         int? maxAge, int? maxUses, RequestOptions options)
     {
-        var args = new CreateGuildInviteParams()
+        CreateGuildInviteParams args = new()
         {
-            GuildId = channel.GuildId,
-            ChannelId = channel.Id,
-            MaxAge = (InviteMaxAge)(maxAge ?? 0),
-            MaxUses = (InviteMaxUses)(maxUses ?? -1),
+            GuildId = channel.GuildId, ChannelId = channel.Id, MaxAge = (InviteMaxAge)(maxAge ?? 0), MaxUses = (InviteMaxUses)(maxUses ?? -1)
         };
-        var model = await client.ApiClient.CreateGuildInviteAsync(args, options).ConfigureAwait(false);
-        var invites = await client.ApiClient.GetGuildInvitesAsync(channel.GuildId, channel.Id, options: options)
+        CreateGuildInviteResponse model = await client.ApiClient.CreateGuildInviteAsync(args, options).ConfigureAwait(false);
+        IEnumerable<Invite> invites = await client.ApiClient.GetGuildInvitesAsync(channel.GuildId, channel.Id, options: options)
             .FlattenAsync().ConfigureAwait(false);
         return RestInvite.Create(client, channel.Guild, channel, invites.SingleOrDefault(x => x.Url == model.Url));
     }
 
     public static Task<RestInvite> CreateInviteAsync(IGuildChannel channel, BaseKookClient client,
-        InviteMaxAge maxAge, InviteMaxUses maxUses, RequestOptions options)
-    {
-        return CreateInviteAsync(channel, client, (int?)maxAge, (int?)maxUses, options);
-    }
+        InviteMaxAge maxAge, InviteMaxUses maxUses, RequestOptions options) =>
+        CreateInviteAsync(channel, client, (int?)maxAge, (int?)maxUses, options);
 
     #endregion
 
@@ -578,12 +574,12 @@ internal static class ChannelHelper
         RequestOptions options)
     {
         // if no category id specified, return null
-        if (!channel.CategoryId.HasValue)
-            return null;
+        if (!channel.CategoryId.HasValue) return null;
+
         // CategoryId will contain a value here
-        var model = await client.ApiClient.GetGuildChannelAsync(channel.CategoryId.Value, options)
+        Channel model = await client.ApiClient.GetGuildChannelAsync(channel.CategoryId.Value, options)
             .ConfigureAwait(false);
-        return RestCategoryChannel.Create(client, model) as ICategoryChannel;
+        return RestChannel.Create(client, model) as ICategoryChannel;
     }
 
     #endregion
@@ -594,12 +590,11 @@ internal static class ChannelHelper
     public static async Task<RestGuildUser> GetUserAsync(IGuildChannel channel, IGuild guild, BaseKookClient client,
         ulong id, RequestOptions options)
     {
-        var model = await client.ApiClient.GetGuildMemberAsync(channel.GuildId, id, options).ConfigureAwait(false);
-        if (model == null)
-            return null;
-        var user = RestGuildUser.Create(client, guild, model);
-        if (!user.GetPermissions(channel).ViewChannel)
-            return null;
+        GuildMember model = await client.ApiClient.GetGuildMemberAsync(channel.GuildId, id, options).ConfigureAwait(false);
+        if (model == null) return null;
+
+        RestGuildUser user = RestGuildUser.Create(client, guild, model);
+        if (!user.GetPermissions(channel).ViewChannel) return null;
 
         return user;
     }
@@ -607,18 +602,16 @@ internal static class ChannelHelper
     /// <exception cref="InvalidOperationException">Resolving permissions requires the parent guild to be downloaded.</exception>
     public static IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> GetUsersAsync(IGuildChannel channel,
         IGuild guild, BaseKookClient client,
-        int limit, int fromPage, RequestOptions options)
-    {
-        return client.ApiClient.GetGuildMembersAsync(guild.Id, limit: limit, fromPage: fromPage, options: options)
+        int limit, int fromPage, RequestOptions options) =>
+        client.ApiClient.GetGuildMembersAsync(guild.Id, limit: limit, fromPage: fromPage, options: options)
             .Select(x => x.Select(y => RestGuildUser.Create(client, guild, y))
                 .Where(y => y.GetPermissions(channel).ViewChannel)
                 .ToImmutableArray() as IReadOnlyCollection<RestGuildUser>);
-    }
 
     public static async Task<IReadOnlyCollection<RestGuildUser>> GetConnectedUsersAsync(IVoiceChannel channel,
         IGuild guild, BaseKookClient client, RequestOptions options)
     {
-        var model = await client.ApiClient.GetConnectedUsersAsync(channel.Id, options: options);
+        IReadOnlyCollection<User> model = await client.ApiClient.GetConnectedUsersAsync(channel.Id, options);
         return model?.Select(x => RestGuildUser.Create(client, guild, x)).ToImmutableArray();
     }
 

@@ -14,18 +14,25 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
 
     /// <inheritdoc />
     public VoiceQuality? VoiceQuality { get; private set; }
+
     /// <inheritdoc />
     public int? UserLimit { get; private set; }
+
     /// <inheritdoc />
     public ulong? CategoryId { get; private set; }
+
     /// <inheritdoc />
     public string ServerUrl { get; private set; }
+
     /// <inheritdoc />
     public bool HasPassword { get; private set; }
+
     /// <inheritdoc />
     public bool? IsPermissionSynced { get; private set; }
+
     /// <inheritdoc />
     public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
+
     /// <inheritdoc />
     public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
 
@@ -34,12 +41,13 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     {
     }
 
-    internal new static RestVoiceChannel Create(BaseKookClient kook, IGuild guild, Model model)
+    internal static new RestVoiceChannel Create(BaseKookClient kook, IGuild guild, Model model)
     {
-        var entity = new RestVoiceChannel(kook, guild, model.Id);
+        RestVoiceChannel entity = new(kook, guild, model.Id);
         entity.Update(model);
         return entity;
     }
+
     /// <inheritdoc />
     internal override void Update(Model model)
     {
@@ -55,7 +63,7 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     /// <inheritdoc />
     public async Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null)
     {
-        var model = await ChannelHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
+        Model model = await ChannelHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
         Update(model);
     }
 
@@ -85,11 +93,14 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     /// <inheritdoc />
     public async Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null)
         => await ChannelHelper.GetInvitesAsync(this, Kook, options).ConfigureAwait(false);
+
     /// <inheritdoc />
     public async Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null, RequestOptions options = null)
         => await ChannelHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
+
     /// <inheritdoc />
-    public async Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited, RequestOptions options = null)
+    public async Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited,
+        RequestOptions options = null)
         => await ChannelHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
 
     #endregion
@@ -102,11 +113,10 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     /// <inheritdoc />
     Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IGuildUser>(null);
+
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
-    {
-        return AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
-    }
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options) =>
+        AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
 
     #endregion
 
@@ -116,7 +126,8 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     async Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
     {
         if (CategoryId.HasValue && mode == CacheMode.AllowDownload)
-            return (await Guild.GetChannelAsync(CategoryId.Value, mode, options).ConfigureAwait(false)) as ICategoryChannel;
+            return await Guild.GetChannelAsync(CategoryId.Value, mode, options).ConfigureAwait(false) as ICategoryChannel;
+
         return null;
     }
 

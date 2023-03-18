@@ -38,5 +38,7 @@ Kook.Net 是一个对 [KOOK（原开黑啦）API] 进行功能封装的类库，
 如果您在开发中遇到无法解决的问题，请访问我们的 [KOOK Kook.Net 社区] 寻求帮助。
 
 [用户指南]: ./guides/introduction/intro.md
+
 [API 文档]: ./api/index.md
+
 [KOOK Kook.Net 社区]: https://kook.top/EvxnOb

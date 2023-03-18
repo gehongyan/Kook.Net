@@ -11,10 +11,12 @@ public interface IKookClient : IDisposable
     ///     Gets the current state of connection.
     /// </summary>
     ConnectionState ConnectionState { get; }
+
     /// <summary>
     ///     Gets the currently logged-in user.
     /// </summary>
     ISelfUser CurrentUser { get; }
+
     /// <summary>
     ///     Gets the token type of the logged-in user.
     /// </summary>
@@ -34,6 +36,7 @@ public interface IKookClient : IDisposable
     ///     A task that represents the asynchronous start operation.
     /// </returns>
     Task StartAsync();
+
     /// <summary>
     ///     Stops the connection between Kook and the client.
     /// </summary>
@@ -57,6 +60,7 @@ public interface IKookClient : IDisposable
     ///     with the identifier; <c>null</c> when the channel cannot be found.
     /// </returns>
     Task<IChannel> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a direct message channel.
     /// </summary>
@@ -68,6 +72,7 @@ public interface IKookClient : IDisposable
     ///     of direct-message channels that the user currently partakes in.
     /// </returns>
     Task<IDMChannel> GetDMChannelAsync(Guid chatCode, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a collection of direct message channels opened in this session.
     /// </summary>
@@ -101,6 +106,7 @@ public interface IKookClient : IDisposable
     ///     with the identifier; <c>null</c> when the guild cannot be found.
     /// </returns>
     Task<IGuild> GetGuildAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a collection of guilds that the user is currently in.
     /// </summary>
@@ -127,6 +133,7 @@ public interface IKookClient : IDisposable
     ///     the identifier; <c>null</c> if the user is not found.
     /// </returns>
     Task<IUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a user.
     /// </summary>
@@ -140,5 +147,4 @@ public interface IKookClient : IDisposable
     Task<IUser> GetUserAsync(string username, string identifyNumber, RequestOptions options = null);
 
     #endregion
-
 }

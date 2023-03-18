@@ -5,12 +5,14 @@ namespace Kook.API.Rest;
 
 internal class CreateMessageParams
 {
-    [JsonPropertyName("type")] public MessageType Type { get; set; }
+    [JsonPropertyName("type")]
+    public MessageType Type { get; set; }
 
     [JsonPropertyName("target_id")]
     public ulong ChannelId { get; set; }
 
-    [JsonPropertyName("content")] public string Content { get; set; }
+    [JsonPropertyName("content")]
+    public string Content { get; set; }
 
     [JsonPropertyName("quote")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

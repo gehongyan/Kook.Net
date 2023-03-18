@@ -14,6 +14,7 @@ public struct LogMessage
     ///     A <see cref="LogSeverity"/> enum to indicate the severeness of the incident or event.
     /// </returns>
     public LogSeverity Severity { get; }
+
     /// <summary>
     ///     Gets the source of the log entry.
     /// </summary>
@@ -21,6 +22,7 @@ public struct LogMessage
     ///     A string representing the source of the log entry.
     /// </returns>
     public string Source { get; }
+
     /// <summary>
     ///     Gets the message of this log entry.
     /// </summary>
@@ -28,6 +30,7 @@ public struct LogMessage
     ///     A string containing the message of this log entry.
     /// </returns>
     public string Message { get; }
+
     /// <summary>
     ///     Gets the exception of this log entry.
     /// </summary>
@@ -67,17 +70,15 @@ public struct LogMessage
     /// <param name="timestampKind"> The kind of timestamp to use. </param>
     /// <param name="padSource"> The amount of padding to use for the source. </param>
     /// <returns> A string representation of this log message. </returns>
-    public string ToString(StringBuilder builder = null, bool fullException = true, bool prependTimestamp = true, DateTimeKind timestampKind = DateTimeKind.Local, int? padSource = 11)
+    public string ToString(StringBuilder builder = null, bool fullException = true, bool prependTimestamp = true,
+        DateTimeKind timestampKind = DateTimeKind.Local, int? padSource = 11)
     {
         string sourceName = Source;
         string message = Message;
         string exMessage = fullException ? Exception?.ToString() : Exception?.Message;
 
-        int maxLength = 1 +
-                        (prependTimestamp ? 8 : 0) + 1 +
-                        (padSource ?? (sourceName?.Length ?? 0)) + 1 +
-                        (message?.Length ?? 0) +
-                        (exMessage?.Length ?? 0) + 3;
+        int maxLength =
+            1 + (prependTimestamp ? 8 : 0) + 1 + (padSource ?? (sourceName?.Length ?? 0)) + 1 + (message?.Length ?? 0) + (exMessage?.Length ?? 0) + 3;
 
         if (builder == null)
             builder = new StringBuilder(maxLength);
@@ -94,10 +95,12 @@ public struct LogMessage
                 now = DateTime.UtcNow;
             else
                 now = DateTime.Now;
+
             string format = "HH:mm:ss";
             builder.Append(now.ToString(format));
             builder.Append(' ');
         }
+
         if (sourceName != null)
         {
             if (padSource.HasValue)
@@ -112,18 +115,18 @@ public struct LogMessage
                 else
                     builder.Append(sourceName);
             }
+
             builder.Append(' ');
         }
+
         if (!string.IsNullOrEmpty(Message))
-        {
             for (int i = 0; i < message.Length; i++)
             {
                 //Strip control chars
                 char c = message[i];
-                if (!char.IsControl(c))
-                    builder.Append(c);
+                if (!char.IsControl(c)) builder.Append(c);
             }
-        }
+
         if (exMessage != null)
         {
             if (!string.IsNullOrEmpty(Message))
@@ -131,6 +134,7 @@ public struct LogMessage
                 builder.Append(':');
                 builder.AppendLine();
             }
+
             builder.Append(exMessage);
         }
 

@@ -20,38 +20,47 @@ public enum TextTheme : ushort
     ///     Represents a primary theme.
     /// </summary>
     Primary,
+
     /// <summary>
     ///     Represents a success theme.
     /// </summary>
     Success,
+
     /// <summary>
     ///     Represents a danger theme.
     /// </summary>
     Danger,
+
     /// <summary>
     ///     Represents a warning theme.
     /// </summary>
     Warning,
+
     /// <summary>
     ///     Represents an info theme.
     /// </summary>
     Info,
+
     /// <summary>
     ///     Represents a secondary theme.
     /// </summary>
     Secondary,
+
     /// <summary>
     ///     Represents a body theme.
     /// </summary>
     Body,
+
     /// <summary>
     ///     Represents a tips theme.
     /// </summary>
     Tips,
+
     /// <summary>
     ///     Represents a pink theme.
     /// </summary>
     Pink,
+
     /// <summary>
     ///     Represents a purple theme.
     /// </summary>

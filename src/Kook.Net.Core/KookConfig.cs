@@ -37,6 +37,7 @@ public class KookConfig
     ///     The user agent used in each Kook.Net request.
     /// </returns>
     public static string UserAgent { get; } = $"KookBot (https://github.com/gehongyan/Kook.Net, v{Version})";
+
     /// <summary>
     ///     Gets the accept language that Kook.Net uses in its clients.
     /// </summary>
@@ -44,6 +45,7 @@ public class KookConfig
     ///     The accept language used in each Kook.Net request.
     /// </returns>
     public string AcceptLanguage { get; set; } = "zh-CN";
+
     /// <summary>
     ///     Returns the base Kook API URL.
     /// </summary>

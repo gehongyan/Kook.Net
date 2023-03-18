@@ -16,6 +16,7 @@ public class CommandBuilder
     ///     Gets the module builder that this command builder belongs to.
     /// </summary>
     public ModuleBuilder Module { get; }
+
     /// <summary>
     ///     Gets or sets the callback that is invoked when this command is executed.
     /// </summary>
@@ -25,26 +26,32 @@ public class CommandBuilder
     ///     Gets or sets the name of this command.
     /// </summary>
     public string Name { get; set; }
+
     /// <summary>
     ///     Gets or sets the summary of this command.
     /// </summary>
     public string Summary { get; set; }
+
     /// <summary>
     ///     Gets or sets the remarks of this command.
     /// </summary>
     public string Remarks { get; set; }
+
     /// <summary>
     ///     Gets or sets the primary alias of this command.
     /// </summary>
     public string PrimaryAlias { get; set; }
+
     /// <summary>
     ///     Gets or sets the run mode of this command.
     /// </summary>
     public RunMode RunMode { get; set; }
+
     /// <summary>
     ///     Gets or sets the priority of this command.
     /// </summary>
     public int Priority { get; set; }
+
     /// <summary>
     ///     Gets or sets whether the extra arguments should be ignored.
     /// </summary>
@@ -54,14 +61,17 @@ public class CommandBuilder
     ///     Gets the preconditions of this command.
     /// </summary>
     public IReadOnlyList<PreconditionAttribute> Preconditions => _preconditions;
+
     /// <summary>
     ///     Gets the parameters of this command.
     /// </summary>
     public IReadOnlyList<ParameterBuilder> Parameters => _parameters;
+
     /// <summary>
     ///     Gets the attributes of this command.
     /// </summary>
     public IReadOnlyList<Attribute> Attributes => _attributes;
+
     /// <summary>
     ///     Gets the aliases of this command.
     /// </summary>
@@ -171,8 +181,7 @@ public class CommandBuilder
         for (int i = 0; i < aliases.Length; i++)
         {
             string alias = aliases[i] ?? "";
-            if (!_aliases.Contains(alias))
-                _aliases.Add(alias);
+            if (!_aliases.Contains(alias)) _aliases.Add(alias);
         }
 
         return this;
@@ -209,7 +218,7 @@ public class CommandBuilder
     /// <returns> This command builder. </returns>
     public CommandBuilder AddParameter<T>(string name, Action<ParameterBuilder> createFunc)
     {
-        var param = new ParameterBuilder(this, name, typeof(T));
+        ParameterBuilder param = new(this, name, typeof(T));
         createFunc(param);
         _parameters.Add(param);
         return this;
@@ -224,7 +233,7 @@ public class CommandBuilder
     /// <returns> This command builder. </returns>
     public CommandBuilder AddParameter(string name, Type type, Action<ParameterBuilder> createFunc)
     {
-        var param = new ParameterBuilder(this, name, type);
+        ParameterBuilder param = new(this, name, type);
         createFunc(param);
         _parameters.Add(param);
         return this;
@@ -237,7 +246,7 @@ public class CommandBuilder
     /// <returns> This command builder. </returns>
     internal CommandBuilder AddParameter(Action<ParameterBuilder> createFunc)
     {
-        var param = new ParameterBuilder(this);
+        ParameterBuilder param = new(this);
         createFunc(param);
         _parameters.Add(param);
         return this;
@@ -257,15 +266,15 @@ public class CommandBuilder
 
         if (_parameters.Count > 0)
         {
-            var lastParam = _parameters[_parameters.Count - 1];
+            ParameterBuilder lastParam = _parameters[_parameters.Count - 1];
 
-            var firstMultipleParam = _parameters.FirstOrDefault(x => x.IsMultiple);
-            if ((firstMultipleParam != null) && (firstMultipleParam != lastParam))
+            ParameterBuilder firstMultipleParam = _parameters.FirstOrDefault(x => x.IsMultiple);
+            if (firstMultipleParam != null && firstMultipleParam != lastParam)
                 throw new InvalidOperationException(
                     $"Only the last parameter in a command may have the Multiple flag. Parameter: {firstMultipleParam.Name} in {PrimaryAlias}");
 
-            var firstRemainderParam = _parameters.FirstOrDefault(x => x.IsRemainder);
-            if ((firstRemainderParam != null) && (firstRemainderParam != lastParam))
+            ParameterBuilder firstRemainderParam = _parameters.FirstOrDefault(x => x.IsRemainder);
+            if (firstRemainderParam != null && firstRemainderParam != lastParam)
                 throw new InvalidOperationException(
                     $"Only the last parameter in a command may have the Remainder flag. Parameter: {firstRemainderParam.Name} in {PrimaryAlias}");
         }

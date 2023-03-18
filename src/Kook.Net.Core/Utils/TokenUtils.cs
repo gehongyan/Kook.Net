@@ -16,6 +16,7 @@ public static class TokenUtils
     ///     documentation, and pre-existing tokens.
     /// </remarks>
     internal const int MinBotTokenLength = 33;
+
     /// <summary>
     ///     The standard length of a Bot token.
     /// </summary>
@@ -49,20 +50,19 @@ public static class TokenUtils
     internal static string PadBase64String(string encodedBase64)
     {
         if (string.IsNullOrWhiteSpace(encodedBase64))
-            throw new ArgumentNullException(paramName: encodedBase64,
-                message: "The supplied base64-encoded string was null or whitespace.");
+            throw new ArgumentNullException(encodedBase64,
+                "The supplied base64-encoded string was null or whitespace.");
 
         // do not pad if already contains padding characters
-        if (encodedBase64.IndexOf(Base64Padding) != -1)
-            return encodedBase64;
+        if (encodedBase64.IndexOf(Base64Padding) != -1) return encodedBase64;
 
         // based from https://stackoverflow.com/a/1228744
-        var padding = (4 - (encodedBase64.Length % 4)) % 4;
+        int padding = (4 - encodedBase64.Length % 4) % 4;
         if (padding == 3)
             // can never have 3 characters of padding
             throw new FormatException("The provided base64 string is corrupt, as it requires an invalid amount of padding.");
-        else if (padding == 0)
-            return encodedBase64;
+        else if (padding == 0) return encodedBase64;
+
         return encodedBase64.PadRight(encodedBase64.Length + padding, Base64Padding);
     }
 
@@ -73,19 +73,17 @@ public static class TokenUtils
     /// <returns> A ulong containing the decoded value of the string, or null if the value was invalid. </returns>
     internal static ulong? DecodeBase64UserId(string encoded)
     {
-        if (string.IsNullOrWhiteSpace(encoded))
-            return null;
+        if (string.IsNullOrWhiteSpace(encoded)) return null;
 
         try
         {
             // re-add base64 padding if missing
             encoded = PadBase64String(encoded);
             // decode the base64 string
-            var bytes = Convert.FromBase64String(encoded);
-            var idStr = Encoding.UTF8.GetString(bytes);
+            byte[] bytes = Convert.FromBase64String(encoded);
+            string idStr = Encoding.UTF8.GetString(bytes);
             // try to parse a ulong from the resulting string
-            if (ulong.TryParse(idStr, NumberStyles.None, CultureInfo.InvariantCulture, out var id))
-                return id;
+            if (ulong.TryParse(idStr, NumberStyles.None, CultureInfo.InvariantCulture, out ulong id)) return id;
         }
         catch (DecoderFallbackException)
         {
@@ -99,6 +97,7 @@ public static class TokenUtils
         {
             // ignore exception, can be thrown by BitConverter, or by PadBase64String
         }
+
         return null;
     }
 
@@ -114,15 +113,14 @@ public static class TokenUtils
     /// </returns>
     internal static bool CheckBotTokenValidity(string message)
     {
-        if (string.IsNullOrWhiteSpace(message))
-            return false;
+        if (string.IsNullOrWhiteSpace(message)) return false;
 
         // split each component of the JWT
-        var segments = message.Split('/');
+        string[] segments = message.Split('/');
 
         // ensure that there are three parts
-        if (segments.Length < 3)
-            return false;
+        if (segments.Length < 3) return false;
+
         // return true if the user id could be determined
         return DecodeBase64UserId(segments[1]).HasValue;
     }
@@ -130,9 +128,7 @@ public static class TokenUtils
     /// <summary>
     ///     The set of all characters that are not allowed inside of a token.
     /// </summary>
-    internal static readonly char[] IllegalTokenCharacters = {
-        ' ', '\t', '\r', '\n'
-    };
+    internal static readonly char[] IllegalTokenCharacters = { ' ', '\t', '\r', '\n' };
 
     /// <summary>
     ///     Checks if the given token contains a whitespace or newline character
@@ -156,10 +152,12 @@ public static class TokenUtils
     {
         // A Null or WhiteSpace token of any type is invalid.
         if (string.IsNullOrWhiteSpace(token))
-            throw new ArgumentNullException(paramName: nameof(token), message: "A token cannot be null, empty, or contain only whitespace.");
+            throw new ArgumentNullException(nameof(token), "A token cannot be null, empty, or contain only whitespace.");
+
         // ensure that there are no whitespace or newline characters
         if (CheckContainsIllegalCharacters(token))
-            throw new ArgumentException(message: "The token contains a whitespace or newline character. Ensure that the token has been properly trimmed.", paramName: nameof(token));
+            throw new ArgumentException("The token contains a whitespace or newline character. Ensure that the token has been properly trimmed.",
+                nameof(token));
 
         switch (tokenType)
         {
@@ -171,17 +169,20 @@ public static class TokenUtils
                 // this value was determined by referencing examples in the Kook documentation, and by comparing with
                 // pre-existing tokens
                 if (token.Length < MinBotTokenLength || token.TrimEnd('=').Length > StandardBotTokenLength)
-                    throw new ArgumentException(message: $"A Bot token must be at least {MinBotTokenLength} characters in length. " +
-                                                         $"After the ending equal characters are trimmed, any Bot token should not be longer than {StandardBotTokenLength}. " +
-                                                         "Ensure that the Bot Token provided is not an OAuth client secret.", paramName: nameof(token));
+                    throw new ArgumentException(
+                        $"A Bot token must be at least {MinBotTokenLength} characters in length. "
+                        + $"After the ending equal characters are trimmed, any Bot token should not be longer than {StandardBotTokenLength}. "
+                        + "Ensure that the Bot Token provided is not an OAuth client secret.", nameof(token));
+
                 // check the validity of the bot token by decoding the ulong userid from the jwt
                 if (!CheckBotTokenValidity(token))
-                    throw new ArgumentException(message: "The Bot token was invalid. " +
-                                                         "Ensure that the Bot Token provided is not an OAuth client secret.", paramName: nameof(token));
+                    throw new ArgumentException("The Bot token was invalid. " + "Ensure that the Bot Token provided is not an OAuth client secret.",
+                        nameof(token));
+
                 break;
             default:
                 // All unrecognized TokenTypes (including User tokens) are considered to be invalid.
-                throw new ArgumentException(message: "Unrecognized TokenType.", paramName: nameof(token));
+                throw new ArgumentException("Unrecognized TokenType.", nameof(token));
         }
     }
 }

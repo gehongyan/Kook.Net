@@ -12,6 +12,7 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     ///     A guild representing the parent guild of this role.
     /// </returns>
     IGuild Guild { get; }
+
     /// <summary>
     ///     Gets the name of this role.
     /// </summary>
@@ -19,6 +20,7 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     ///     A string containing the name of this role.
     /// </returns>
     string Name { get; }
+
     /// <summary>
     ///     Gets the type of this role.
     /// </summary>
@@ -26,6 +28,7 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     ///     A <see cref="RoleType" /> representing the type of this role.
     /// </returns>
     RoleType? Type { get; }
+
     /// <summary>
     ///     Gets the color given to users of this role.
     /// </summary>
@@ -33,6 +36,7 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     ///     A <see cref="Color"/> struct representing the color of this role.
     /// </returns>
     Color Color { get; }
+
     /// <summary>
     ///     Gets the type of the color given to users of this role.
     /// </summary>
@@ -40,6 +44,7 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     ///     A <see cref="ColorType"/> struct representing the color type of this role.
     /// </returns>
     ColorType ColorType { get; }
+
     /// <summary>
     ///     Gets the gradient color given to users of this role.
     /// </summary>
@@ -48,6 +53,7 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     ///     <c>null</c> if the role does not have a gradient color.
     /// </returns>
     GradientColor? GradientColor { get; }
+
     /// <summary>
     ///     Gets this role's position relative to other roles in the same guild.
     /// </summary>
@@ -55,6 +61,7 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     ///     An <see cref="int"/> representing the position of the role in the role list of the guild.
     /// </returns>
     int Position { get; }
+
     /// <summary>
     ///     Gets a value that indicates whether the role can be separated in the user list.
     /// </summary>
@@ -62,6 +69,7 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     ///     <c>true</c> if users of this role are separated in the user list; otherwise <c>false</c>.
     /// </returns>
     bool IsHoisted { get; }
+
     /// <summary>
     ///     Gets a value that indicates whether the role is mentionable.
     /// </summary>
@@ -69,6 +77,7 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     ///     <c>true</c> if this role may be mentioned in messages; otherwise <c>false</c>.
     /// </returns>
     bool IsMentionable { get; }
+
     /// <summary>
     ///     Gets the permissions granted to members of this role.
     /// </summary>

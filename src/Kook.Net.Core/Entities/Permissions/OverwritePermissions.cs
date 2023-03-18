@@ -11,24 +11,27 @@ public struct OverwritePermissions
     /// <summary>
     ///     Gets a blank <see cref="OverwritePermissions" /> that inherits all permissions.
     /// </summary>
-    public static OverwritePermissions InheritAll { get; } = new OverwritePermissions();
+    public static OverwritePermissions InheritAll { get; } = new();
+
     /// <summary>
     ///     Gets a <see cref="OverwritePermissions" /> that grants all permissions for the given channel.
     /// </summary>
     /// <exception cref="ArgumentException">Unknown channel type.</exception>
     public static OverwritePermissions AllowAll(IChannel channel)
-        => new OverwritePermissions(ChannelPermissions.All(channel).RawValue, 0);
+        => new(ChannelPermissions.All(channel).RawValue, 0);
+
     /// <summary>
     ///     Gets a <see cref="OverwritePermissions" /> that denies all permissions for the given channel.
     /// </summary>
     /// <exception cref="ArgumentException">Unknown channel type.</exception>
     public static OverwritePermissions DenyAll(IChannel channel)
-        => new OverwritePermissions(0, ChannelPermissions.All(channel).RawValue);
+        => new(0, ChannelPermissions.All(channel).RawValue);
 
     /// <summary>
     ///     Gets a packed value representing all the allowed permissions in this <see cref="OverwritePermissions"/>.
     /// </summary>
     public ulong AllowValue { get; }
+
     /// <summary>
     ///     Gets a packed value representing all the denied permissions in this <see cref="OverwritePermissions"/>.
     /// </summary>
@@ -36,38 +39,55 @@ public struct OverwritePermissions
 
     /// <summary> If Allowed, a user may create invites. </summary>
     public PermValue CreateInvites => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.CreateInvites);
+
     /// <summary> If Allowed, a user may create, delete and modify channels. </summary>
     public PermValue ManageChannels => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageChannels);
+
     /// <summary> If Allowed, a user may adjust roles. </summary>
     public PermValue ManageRoles => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageRoles);
+
     /// <summary> If Allowed, a user may view channels. </summary>
     public PermValue ViewChannel => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ViewChannel);
+
     /// <summary> If Allowed, a user may send messages. </summary>
     public PermValue SendMessages => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.SendMessages);
+
     /// <summary> If Allowed, a user may delete messages. </summary>
     public PermValue ManageMessages => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageMessages);
+
     /// <summary> If Allowed, a user may send files. </summary>
     public PermValue AttachFiles => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.AttachFiles);
+
     /// <summary> If Allowed, a user may connect to a voice channel. </summary>
     public PermValue Connect => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.Connect);
+
     /// <summary> If Allowed, a user may kick other users from voice channels, and move other users between voice channels. </summary>
     public PermValue ManageVoice => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageVoice);
+
     /// <summary> If Allowed, a user may mention all users. </summary>
     public PermValue MentionEveryone => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.MentionEveryone);
+
     /// <summary> If Allowed, a user may add reactions. </summary>
     public PermValue AddReactions => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.AddReactions);
+
     /// <summary> If Allowed, a user may connect to a voice channel only when the user is invited or moved by other users. </summary>
     public PermValue PassiveConnect => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.PassiveConnect);
+
     /// <summary> If Allowed, a user may use voice activation. </summary>
     public PermValue UseVoiceActivity => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.UseVoiceActivity);
+
     /// <summary> If Allowed, a user may speak in a voice channel. </summary>
     public PermValue Speak => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.Speak);
+
     /// <summary> If Allowed, a user may deafen users. </summary>
     public PermValue DeafenMembers => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.DeafenMembers);
+
     /// <summary> If Allowed, a user may mute users. </summary>
     public PermValue MuteMembers => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.MuteMembers);
+
     /// <summary> If Allowed, a user may play soundtracks in a voice channel. </summary>
     public PermValue PlaySoundtrack => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.PlaySoundtrack);
+
     /// <summary> If Allowed, a user may share screen in a voice channel. </summary>
     public PermValue ShareScreen => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ShareScreen);
 
@@ -179,7 +199,7 @@ public struct OverwritePermissions
         PermValue? muteMembers = null,
         PermValue? playSoundtrack = null,
         PermValue? shareScreen = null)
-        => new OverwritePermissions(AllowValue, DenyValue, createInvites, manageChannels, manageRoles, viewChannel,
+        => new(AllowValue, DenyValue, createInvites, manageChannels, manageRoles, viewChannel,
             sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone, addReactions,
             passiveConnect, useVoiceActivity, speak, deafenMembers, muteMembers, playSoundtrack, shareScreen);
 
@@ -193,9 +213,8 @@ public struct OverwritePermissions
         for (byte i = 0; i < Permissions.MaxBits; i++)
         {
             // first operand must be long or ulong to shift >31 bits
-            ulong flag = ((ulong)1 << i);
-            if ((AllowValue & flag) != 0)
-                perms.Add((ChannelPermission)flag);
+            ulong flag = (ulong)1 << i;
+            if ((AllowValue & flag) != 0) perms.Add((ChannelPermission)flag);
         }
 
         return perms;
@@ -210,9 +229,8 @@ public struct OverwritePermissions
         List<ChannelPermission> perms = new();
         for (byte i = 0; i < Permissions.MaxBits; i++)
         {
-            ulong flag = ((ulong)1 << i);
-            if ((DenyValue & flag) != 0)
-                perms.Add((ChannelPermission)flag);
+            ulong flag = (ulong)1 << i;
+            if ((DenyValue & flag) != 0) perms.Add((ChannelPermission)flag);
         }
 
         return perms;
@@ -222,6 +240,5 @@ public struct OverwritePermissions
     public override string ToString() => $"Allow {AllowValue}, Deny {DenyValue}";
 
     private string DebuggerDisplay =>
-        $"Allow {string.Join(", ", ToAllowList())}, " +
-        $"Deny {string.Join(", ", ToDenyList())}";
+        $"Allow {string.Join(", ", ToAllowList())}, " + $"Deny {string.Join(", ", ToDenyList())}";
 }

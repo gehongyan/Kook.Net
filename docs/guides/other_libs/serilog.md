@@ -51,8 +51,8 @@ Now that you have set up Serilog, you can use it everywhere in your application 
 
 > [!NOTE]
 > Kook.Net 与 Serilog 对日志级别的定义不完全一致，要简化最低输出日志级别控制，有两种可选策略：
-> 
+>
 > * 将 Serilog 的 `MinimumLevel` 配置为 `Verbose`，转而在 Kook.Net 的 `KookConfig` 中配置 `LogLevel`
 > * 在 Kook.Net 的 `KookConfig` 中配置 `LogLevel` 为 `Debug`，转而在 Serilog 中配置 `MinimumLevel`
-> 
+>
 > 同时配置两侧的最低日志级别可能会导致预期之外的最低日志级别控制结果。

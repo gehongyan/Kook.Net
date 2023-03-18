@@ -10,10 +10,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     /// <summary>
     ///     Initializes a new instance of the <see cref="CardBuilder"/> class.
     /// </summary>
-    public CardBuilder()
-    {
-        Modules = new List<IModuleBuilder>();
-    }
+    public CardBuilder() => Modules = new List<IModuleBuilder>();
 
     /// <summary>
     ///     Gets the type of the card.
@@ -140,7 +137,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     ///     A <see cref="KMarkdownElement"/> represents the built element object.
     /// </returns>
     public Card Build() =>
-        new Card(Theme, Size, Color, Modules.Select(m => m.Build()).ToImmutableArray());
+        new(Theme, Size, Color, Modules.Select(m => m.Build()).ToImmutableArray());
 
     /// <inheritdoc />
     ICard ICardBuilder.Build() => Build();
@@ -176,20 +173,18 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     /// <returns><c>true</c> if the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.</returns>
     public bool Equals(CardBuilder cardBuilder)
     {
-        if (cardBuilder is null)
-            return false;
+        if (cardBuilder is null) return false;
 
-        if (Modules.Count != cardBuilder.Modules.Count)
-            return false;
+        if (Modules.Count != cardBuilder.Modules.Count) return false;
 
         for (int i = 0; i < Modules.Count; i++)
             if (Modules[i] != cardBuilder.Modules[i])
                 return false;
 
         return Type == cardBuilder.Type
-               && Theme == cardBuilder.Theme
-               && Color == cardBuilder.Color
-               && Size == cardBuilder.Size;
+            && Theme == cardBuilder.Theme
+            && Color == cardBuilder.Color
+            && Size == cardBuilder.Size;
     }
 
     /// <inheritdoc />

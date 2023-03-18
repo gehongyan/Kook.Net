@@ -13,6 +13,7 @@ public interface IVoiceState
     ///     otherwise <c>false</c>; <c>null</c> if unknown.
     /// </returns>
     bool? IsDeafened { get; }
+
     /// <summary>
     ///     Gets a value that indicates whether this user is muted (i.e. not permitted to speak via voice) by the
     ///     guild.
@@ -21,6 +22,7 @@ public interface IVoiceState
     ///     <c>true</c> if this user is muted by the guild; otherwise <c>false</c>; <c>null</c> if unknown.
     /// </returns>
     bool? IsMuted { get; }
+
     /// <summary>
     ///     Gets the voice channel this user is currently in.
     /// </summary>

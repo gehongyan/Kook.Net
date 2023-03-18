@@ -42,7 +42,7 @@ public class MatchResult : IResult
     /// <param name="pipeline"> The pipeline stage on which the command matched. </param>
     /// <returns> The match result. </returns>
     public static MatchResult FromSuccess(CommandMatch match, IResult pipeline)
-        => new MatchResult(match, pipeline, null, null);
+        => new(match, pipeline, null, null);
 
     /// <summary>
     ///     Creates a failed match result.
@@ -51,7 +51,7 @@ public class MatchResult : IResult
     /// <param name="reason"> The reason for the error. </param>
     /// <returns> The match result. </returns>
     public static MatchResult FromError(CommandError error, string reason)
-        => new MatchResult(null, null, error, reason);
+        => new(null, null, error, reason);
 
     /// <summary>
     ///     Creates a failed match result.
@@ -67,7 +67,7 @@ public class MatchResult : IResult
     /// <param name="result"> The result that failed. </param>
     /// <returns> The match result. </returns>
     public static MatchResult FromError(IResult result)
-        => new MatchResult(null, null, result.Error, result.ErrorReason);
+        => new(null, null, result.Error, result.ErrorReason);
 
     /// <summary>
     ///     Creates a failed match result.
@@ -77,7 +77,7 @@ public class MatchResult : IResult
     /// <param name="reason"> The reason for the error. </param>
     /// <returns> The match result. </returns>
     public static MatchResult FromError(IResult pipeline, CommandError error, string reason)
-        => new MatchResult(null, pipeline, error, reason);
+        => new(null, pipeline, error, reason);
 
     /// <inheritdoc />
     public override string ToString() => IsSuccess ? "Success" : $"{Error}: {ErrorReason}";

@@ -59,13 +59,12 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         : base(kook, id, guild)
     {
         Type = ChannelType.Text;
-        if (Kook.MessageCacheSize > 0)
-            _messages = new MessageCache(Kook);
+        if (Kook.MessageCacheSize > 0) _messages = new MessageCache(Kook);
     }
 
-    internal new static SocketTextChannel Create(SocketGuild guild, ClientState state, Model model)
+    internal static new SocketTextChannel Create(SocketGuild guild, ClientState state, Model model)
     {
-        var entity = new SocketTextChannel(guild.Kook, model.Id, guild);
+        SocketTextChannel entity = new(guild.Kook, model.Id, guild);
         entity.Update(state, model);
         return entity;
     }
@@ -110,8 +109,8 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     public async Task<IMessage> GetMessageAsync(Guid id, RequestOptions options = null)
     {
         IMessage msg = _messages?.Get(id);
-        if (msg == null)
-            msg = await ChannelHelper.GetMessageAsync(this, Kook, id, options).ConfigureAwait(false);
+        if (msg == null) msg = await ChannelHelper.GetMessageAsync(this, Kook, id, options).ConfigureAwait(false);
+
         return msg;
     }
 
@@ -185,32 +184,32 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <inheritdoc cref="IMessageChannel.SendFileAsync(string,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null, AttachmentType type = AttachmentType.File,
         Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-        => ChannelHelper.SendFileAsync(this, Kook, path, fileName, type, options, quote: quote, ephemeralUser: ephemeralUser);
+        => ChannelHelper.SendFileAsync(this, Kook, path, fileName, type, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendFileAsync(Stream,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName = null, AttachmentType type = AttachmentType.File,
         Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
-        => ChannelHelper.SendFileAsync(this, Kook, stream, fileName, type, options, quote: quote, ephemeralUser: ephemeralUser);
+        => ChannelHelper.SendFileAsync(this, Kook, stream, fileName, type, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendFileAsync(FileAttachment,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment, Quote quote = null, IUser ephemeralUser = null,
         RequestOptions options = null)
-        => ChannelHelper.SendFileAsync(this, Kook, attachment, options, quote: quote, ephemeralUser: ephemeralUser);
+        => ChannelHelper.SendFileAsync(this, Kook, attachment, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendTextAsync(string,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, Quote quote = null, IUser ephemeralUser = null,
         RequestOptions options = null)
-        => ChannelHelper.SendMessageAsync(this, Kook, MessageType.KMarkdown, text, options, quote: quote, ephemeralUser: ephemeralUser);
+        => ChannelHelper.SendMessageAsync(this, Kook, MessageType.KMarkdown, text, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendCardsAsync(IEnumerable{ICard},IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards, Quote quote = null, IUser ephemeralUser = null,
         RequestOptions options = null)
-        => ChannelHelper.SendCardsAsync(this, Kook, cards, options, quote: quote, ephemeralUser: ephemeralUser);
+        => ChannelHelper.SendCardsAsync(this, Kook, cards, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendCardAsync(ICard,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, Quote quote = null, IUser ephemeralUser = null,
         RequestOptions options = null)
-        => ChannelHelper.SendCardAsync(this, Kook, card, options, quote: quote, ephemeralUser: ephemeralUser);
+        => ChannelHelper.SendCardAsync(this, Kook, card, options, quote, ephemeralUser);
 
     /// <inheritdoc />
     public async Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions options = null)
@@ -254,13 +253,12 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <inheritdoc />
     public override SocketGuildUser GetUser(ulong id)
     {
-        var user = Guild.GetUser(id);
+        SocketGuildUser user = Guild.GetUser(id);
         if (user != null)
         {
-            var guildPerms = Permissions.ResolveGuild(Guild, user);
-            var channelPerms = Permissions.ResolveChannel(Guild, user, this, guildPerms);
-            if (Permissions.GetValue(channelPerms, ChannelPermission.ViewChannel))
-                return user;
+            ulong guildPerms = Permissions.ResolveGuild(Guild, user);
+            ulong channelPerms = Permissions.ResolveChannel(Guild, user, this, guildPerms);
+            if (Permissions.GetValue(channelPerms, ChannelPermission.ViewChannel)) return user;
         }
 
         return null;
@@ -273,20 +271,17 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <inheritdoc />
     async Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
     {
-        var user = GetUser(id);
-        if (user is not null || mode == CacheMode.CacheOnly)
-            return user;
+        SocketGuildUser user = GetUser(id);
+        if (user is not null || mode == CacheMode.CacheOnly) return user;
 
         return await ChannelHelper.GetUserAsync(this, Guild, Kook, id, options).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
-    {
-        return mode == CacheMode.AllowDownload
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options) =>
+        mode == CacheMode.AllowDownload
             ? ChannelHelper.GetUsersAsync(this, Guild, Kook, KookConfig.MaxUsersPerBatch, 1, options)
             : ImmutableArray.Create<IReadOnlyCollection<IGuildUser>>(Users).ToAsyncEnumerable();
-    }
 
     #endregion
 

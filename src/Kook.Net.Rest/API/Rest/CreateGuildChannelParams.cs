@@ -13,7 +13,9 @@ internal class CreateGuildChannelParams
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ulong? CategoryId { get; set; }
 
-    [JsonPropertyName("name")] public string Name { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
+
     [JsonPropertyName("type")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ChannelType? Type { get; set; }

@@ -10,10 +10,13 @@ public class SocketPresence : IPresence
 {
     /// <inheritdoc />
     public bool? IsOnline { get; private set; }
+
     /// <inheritdoc />
     public ClientType? ActiveClient { get; private set; }
 
-    internal SocketPresence() { }
+    internal SocketPresence()
+    {
+    }
 
     internal SocketPresence(bool? isOnline, ClientType? activeClient)
     {
@@ -23,21 +26,20 @@ public class SocketPresence : IPresence
 
     internal static SocketPresence Create(bool? isOnline, string activeClient)
     {
-        var entity = new SocketPresence();
+        SocketPresence entity = new();
         entity.Update(isOnline, activeClient);
         return entity;
     }
 
     internal void Update(bool? isOnline)
     {
-        if (isOnline.HasValue)
-            IsOnline = isOnline;
+        if (isOnline.HasValue) IsOnline = isOnline;
     }
 
     internal void Update(bool? isOnline, string activeClient)
     {
-        if (isOnline.HasValue)
-            IsOnline = isOnline;
+        if (isOnline.HasValue) IsOnline = isOnline;
+
         ActiveClient = ConvertClientType(activeClient);
     }
 
@@ -52,10 +54,10 @@ public class SocketPresence : IPresence
     /// </returns>
     private static ClientType? ConvertClientType(string clientType)
     {
-        if (string.IsNullOrWhiteSpace(clientType))
-            return null;
-        if (Enum.TryParse(clientType, true, out ClientType type))
-            return type;
+        if (string.IsNullOrWhiteSpace(clientType)) return null;
+
+        if (Enum.TryParse(clientType, true, out ClientType type)) return type;
+
         return null;
     }
 

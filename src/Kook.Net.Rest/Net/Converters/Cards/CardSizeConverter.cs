@@ -16,13 +16,11 @@ internal class CardSizeConverter : JsonConverter<CardSize>
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, CardSize value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, CardSize value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
             CardSize.Small => "sm",
             CardSize.Large => "lg",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
-    }
 }

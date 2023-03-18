@@ -10,6 +10,7 @@ public enum ContextType
     ///     Specifies the command to be executed within a guild.
     /// </summary>
     Guild = 0x01,
+
     /// <summary>
     ///     Specifies the command to be executed within a DM.
     /// </summary>
@@ -26,6 +27,7 @@ public class RequireContextAttribute : PreconditionAttribute
     ///     Gets the context required to execute the command.
     /// </summary>
     public ContextType Contexts { get; }
+
     /// <inheritdoc />
     public override string ErrorMessage { get; set; }
 
@@ -41,20 +43,16 @@ public class RequireContextAttribute : PreconditionAttribute
     ///     }
     /// </code>
     /// </example>
-    public RequireContextAttribute(ContextType contexts)
-    {
-        Contexts = contexts;
-    }
+    public RequireContextAttribute(ContextType contexts) => Contexts = contexts;
 
     /// <inheritdoc />
     public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
     {
         bool isValid = false;
 
-        if ((Contexts & ContextType.Guild) != 0)
-            isValid = context.Channel is IGuildChannel;
-        if ((Contexts & ContextType.DM) != 0)
-            isValid = isValid || context.Channel is IDMChannel;
+        if ((Contexts & ContextType.Guild) != 0) isValid = context.Channel is IGuildChannel;
+
+        if ((Contexts & ContextType.DM) != 0) isValid = isValid || context.Channel is IDMChannel;
 
         if (isValid)
             return Task.FromResult(PreconditionResult.FromSuccess());

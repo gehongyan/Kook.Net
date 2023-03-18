@@ -17,6 +17,7 @@ public class RestVoiceRegion : RestEntity<string>, IVoiceRegion
 {
     /// <inheritdoc />
     public string Name { get; private set; }
+
     /// <inheritdoc />
     public decimal Crowding { get; private set; }
 
@@ -24,12 +25,14 @@ public class RestVoiceRegion : RestEntity<string>, IVoiceRegion
         : base(kook, id)
     {
     }
+
     internal static RestVoiceRegion Create(BaseKookClient kook, Model model)
     {
-        var entity = new RestVoiceRegion(kook, model.Id);
+        RestVoiceRegion entity = new(kook, model.Id);
         entity.Update(model);
         return entity;
     }
+
     internal void Update(Model model)
     {
         Name = model.Name;
@@ -38,5 +41,6 @@ public class RestVoiceRegion : RestEntity<string>, IVoiceRegion
 
     /// <inheritdoc />
     public override string ToString() => Name;
+
     private string DebuggerDisplay => $"{Name} ({Id}, {Crowding:F2}%)";
 }

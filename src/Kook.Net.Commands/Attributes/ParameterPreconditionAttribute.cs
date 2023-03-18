@@ -14,5 +14,6 @@ public abstract class ParameterPreconditionAttribute : Attribute
     /// <param name="parameter">The parameter of the command being checked against.</param>
     /// <param name="value">The raw value of the parameter.</param>
     /// <param name="services">The service collection used for dependency injection.</param>
-    public abstract Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, ParameterInfo parameter, object value, IServiceProvider services);
+    public abstract Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, ParameterInfo parameter, object value,
+        IServiceProvider services);
 }

@@ -13,9 +13,9 @@ title: MediatR
 
 可通过集成开发环境的用户界面或 dotnet CLI 安装以下类库：
 
-| 名称                                                 | 链接                                                                                      |
-|----------------------------------------------------|-----------------------------------------------------------------------------------------|
-| `MediatR`                                          | [链接](https://www.nuget.org/packages/MediatR)                                            |
+| 名称                                                 | 链接                                                                                    |
+|----------------------------------------------------|---------------------------------------------------------------------------------------|
+| `MediatR`                                          | [链接](https://www.nuget.org/packages/MediatR)                                          |
 | `MediatR.Extensions.Microsoft.DependencyInjection` | [链接](https://www.nuget.org/packages/MediatR.Extensions.Microsoft.DependencyInjection) |
 
 ## 将 MediatR 添加到依赖注入服务容器中
@@ -45,7 +45,7 @@ MediatR 基于消息通知和其处理程序传递事件。下面的示例创建
 
 ## 添加事件订阅者添加到依赖注入服务容器中
 
-要开始监听事件，需在入口点函数内调用 `KookEventListener` 类的 `StartAsync()` 
+要开始监听事件，需在入口点函数内调用 `KookEventListener` 类的 `StartAsync()`
 方法，在此之前，需在依赖注入容器中注册 `KookEventListener` 类，并在入口点函数中获取对它的引用。
 
 [!code-csharp[Starting the event listener](samples/mediatr/start-listener.cs)]

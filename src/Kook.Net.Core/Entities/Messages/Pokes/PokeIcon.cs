@@ -9,6 +9,7 @@ public struct PokeIcon
     ///     Gets the resource uri of the icon.
     /// </summary>
     public string Resource { get; internal set; }
+
     /// <summary>
     ///     Gets the resource uri of the icon when the <see cref="IPoke"/> is expired.
     /// </summary>

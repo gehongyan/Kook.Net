@@ -11,100 +11,100 @@ public sealed class TypeReaderTests
     [Fact]
     public async Task TestNamedArgumentReader()
     {
-        using var commands = new CommandService();
-        var module = await commands.AddModuleAsync<TestModule>(null);
+        using CommandService commands = new();
+        ModuleInfo module = await commands.AddModuleAsync<TestModule>(null);
 
         Assert.NotNull(module);
         Assert.NotEmpty(module.Commands);
 
-        var cmd = module.Commands[0];
+        CommandInfo cmd = module.Commands[0];
         Assert.NotNull(cmd);
         Assert.NotEmpty(cmd.Parameters);
 
-        var param = cmd.Parameters[0];
+        ParameterInfo param = cmd.Parameters[0];
         Assert.NotNull(param);
         Assert.True(param.IsRemainder);
 
-        var result = await param.ParseAsync(null, "bar: hello foo: 42");
+        TypeReaderResult result = await param.ParseAsync(null, "bar: hello foo: 42");
         Assert.True(result.IsSuccess);
 
-        var m = result.BestMatch as ArgumentType;
+        ArgumentType m = result.BestMatch as ArgumentType;
         Assert.NotNull(m);
-        Assert.Equal(expected: 42, actual: m.Foo);
-        Assert.Equal(expected: "hello", actual: m.Bar);
+        Assert.Equal(42, m.Foo);
+        Assert.Equal("hello", m.Bar);
     }
 
     [Fact]
     public async Task TestQuotedArgumentValue()
     {
-        using var commands = new CommandService();
-        var module = await commands.AddModuleAsync<TestModule>(null);
+        using CommandService commands = new();
+        ModuleInfo module = await commands.AddModuleAsync<TestModule>(null);
 
         Assert.NotNull(module);
         Assert.NotEmpty(module.Commands);
 
-        var cmd = module.Commands[0];
+        CommandInfo cmd = module.Commands[0];
         Assert.NotNull(cmd);
         Assert.NotEmpty(cmd.Parameters);
 
-        var param = cmd.Parameters[0];
+        ParameterInfo param = cmd.Parameters[0];
         Assert.NotNull(param);
         Assert.True(param.IsRemainder);
 
-        var result = await param.ParseAsync(null, "foo: 42 bar: 《hello》");
+        TypeReaderResult result = await param.ParseAsync(null, "foo: 42 bar: 《hello》");
         Assert.True(result.IsSuccess);
 
-        var m = result.BestMatch as ArgumentType;
+        ArgumentType m = result.BestMatch as ArgumentType;
         Assert.NotNull(m);
-        Assert.Equal(expected: 42, actual: m.Foo);
-        Assert.Equal(expected: "hello", actual: m.Bar);
+        Assert.Equal(42, m.Foo);
+        Assert.Equal("hello", m.Bar);
     }
 
     [Fact]
     public async Task TestNonPatternInput()
     {
-        using var commands = new CommandService();
-        var module = await commands.AddModuleAsync<TestModule>(null);
+        using CommandService commands = new();
+        ModuleInfo module = await commands.AddModuleAsync<TestModule>(null);
 
         Assert.NotNull(module);
         Assert.NotEmpty(module.Commands);
 
-        var cmd = module.Commands[0];
+        CommandInfo cmd = module.Commands[0];
         Assert.NotNull(cmd);
         Assert.NotEmpty(cmd.Parameters);
 
-        var param = cmd.Parameters[0];
+        ParameterInfo param = cmd.Parameters[0];
         Assert.NotNull(param);
         Assert.True(param.IsRemainder);
 
-        var result = await param.ParseAsync(null, "foobar");
+        TypeReaderResult result = await param.ParseAsync(null, "foobar");
         Assert.False(result.IsSuccess);
-        Assert.Equal(expected: CommandError.Exception, actual: result.Error);
+        Assert.Equal(CommandError.Exception, result.Error);
     }
 
     [Fact]
     public async Task TestMultiple()
     {
-        using var commands = new CommandService();
-        var module = await commands.AddModuleAsync<TestModule>(null);
+        using CommandService commands = new();
+        ModuleInfo module = await commands.AddModuleAsync<TestModule>(null);
 
         Assert.NotNull(module);
         Assert.NotEmpty(module.Commands);
 
-        var cmd = module.Commands[0];
+        CommandInfo cmd = module.Commands[0];
         Assert.NotNull(cmd);
         Assert.NotEmpty(cmd.Parameters);
 
-        var param = cmd.Parameters[0];
+        ParameterInfo param = cmd.Parameters[0];
         Assert.NotNull(param);
         Assert.True(param.IsRemainder);
 
-        var result = await param.ParseAsync(null, "manyints: \"1, 2, 3, 4, 5, 6, 7\"");
+        TypeReaderResult result = await param.ParseAsync(null, "manyints: \"1, 2, 3, 4, 5, 6, 7\"");
         Assert.True(result.IsSuccess);
 
-        var m = result.BestMatch as ArgumentType;
+        ArgumentType m = result.BestMatch as ArgumentType;
         Assert.NotNull(m);
-        Assert.Equal(expected: new[] { 1, 2, 3, 4, 5, 6, 7 }, actual: m.ManyInts);
+        Assert.Equal(new[] { 1, 2, 3, 4, 5, 6, 7 }, m.ManyInts);
     }
 }
 

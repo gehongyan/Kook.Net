@@ -17,8 +17,7 @@ internal class EmbedTypeConverter : JsonConverter<EmbedType>
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, EmbedType value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, EmbedType value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
             EmbedType.Link => "link",
@@ -26,5 +25,4 @@ internal class EmbedTypeConverter : JsonConverter<EmbedType>
             EmbedType.BilibiliVideo => "bili-video",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
-    }
 }

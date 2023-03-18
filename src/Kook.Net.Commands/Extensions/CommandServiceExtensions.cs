@@ -14,26 +14,26 @@ public static class CommandServiceExtensions
     /// <returns>
     ///     A read-only collection of commands that can be executed under the current context.
     /// </returns>
-    public static async Task<IReadOnlyCollection<CommandInfo>> GetExecutableCommandsAsync(this ICollection<CommandInfo> commands, ICommandContext context, IServiceProvider provider)
+    public static async Task<IReadOnlyCollection<CommandInfo>> GetExecutableCommandsAsync(this ICollection<CommandInfo> commands,
+        ICommandContext context, IServiceProvider provider)
     {
-        var executableCommands = new List<CommandInfo>();
+        List<CommandInfo> executableCommands = new();
 
         var tasks = commands.Select(async c =>
         {
-            var result = await c.CheckPreconditionsAsync(context, provider).ConfigureAwait(false);
+            PreconditionResult result = await c.CheckPreconditionsAsync(context, provider).ConfigureAwait(false);
             return new { Command = c, PreconditionResult = result };
         });
 
         var results = await Task.WhenAll(tasks).ConfigureAwait(false);
 
         foreach (var result in results)
-        {
             if (result.PreconditionResult.IsSuccess)
                 executableCommands.Add(result.Command);
-        }
 
         return executableCommands;
     }
+
     /// <summary>
     ///     Returns commands that can be executed under the current context.
     /// </summary>
@@ -43,8 +43,10 @@ public static class CommandServiceExtensions
     /// <returns>
     ///     A read-only collection of commands that can be executed under the current context.
     /// </returns>
-    public static Task<IReadOnlyCollection<CommandInfo>> GetExecutableCommandsAsync(this CommandService commandService, ICommandContext context, IServiceProvider provider)
+    public static Task<IReadOnlyCollection<CommandInfo>> GetExecutableCommandsAsync(this CommandService commandService, ICommandContext context,
+        IServiceProvider provider)
         => GetExecutableCommandsAsync(commandService.Commands.ToArray(), context, provider);
+
     /// <summary>
     ///     Returns commands that can be executed under the current context.
     /// </summary>
@@ -54,14 +56,16 @@ public static class CommandServiceExtensions
     /// <returns>
     ///     A read-only collection of commands that can be executed under the current context.
     /// </returns>
-    public static async Task<IReadOnlyCollection<CommandInfo>> GetExecutableCommandsAsync(this ModuleInfo module, ICommandContext context, IServiceProvider provider)
+    public static async Task<IReadOnlyCollection<CommandInfo>> GetExecutableCommandsAsync(this ModuleInfo module, ICommandContext context,
+        IServiceProvider provider)
     {
-        var executableCommands = new List<CommandInfo>();
+        List<CommandInfo> executableCommands = new();
 
         executableCommands.AddRange(await module.Commands.ToArray().GetExecutableCommandsAsync(context, provider).ConfigureAwait(false));
 
-        var tasks = module.Submodules.Select(async s => await s.GetExecutableCommandsAsync(context, provider).ConfigureAwait(false));
-        var results = await Task.WhenAll(tasks).ConfigureAwait(false);
+        IEnumerable<Task<IReadOnlyCollection<CommandInfo>>> tasks =
+            module.Submodules.Select(async s => await s.GetExecutableCommandsAsync(context, provider).ConfigureAwait(false));
+        IReadOnlyCollection<CommandInfo>[] results = await Task.WhenAll(tasks).ConfigureAwait(false);
 
         executableCommands.AddRange(results.SelectMany(c => c));
 

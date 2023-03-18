@@ -158,6 +158,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     /// </returns>
     /// <seealso cref="IEmote"/>
     Task AddReactionAsync(IEmote emote, RequestOptions options = null);
+
     /// <summary>
     ///     Removes a reaction from message.
     /// </summary>
@@ -169,6 +170,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     /// </returns>
     /// <seealso cref="IEmote"/>
     Task RemoveReactionAsync(IEmote emote, IUser user, RequestOptions options = null);
+
     /// <summary>
     ///     Removes a reaction from message.
     /// </summary>

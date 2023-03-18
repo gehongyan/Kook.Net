@@ -8,10 +8,7 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class HeaderModule : IModule, IEquatable<HeaderModule>
 {
-    internal HeaderModule(PlainTextElement text)
-    {
-        Text = text;
-    }
+    internal HeaderModule(PlainTextElement text) => Text = text;
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Header;
@@ -26,6 +23,7 @@ public class HeaderModule : IModule, IEquatable<HeaderModule>
 
     /// <inheritdoc />
     public override string ToString() => Text.ToString();
+
     private string DebuggerDisplay => $"{Type}: {Text}";
 
     /// <summary>

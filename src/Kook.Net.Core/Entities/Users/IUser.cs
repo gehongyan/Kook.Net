@@ -9,42 +9,52 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     ///     Gets the username for this user.
     /// </summary>
     string Username { get; }
+
     /// <summary>
     ///     Gets the per-username unique ID for this user.
     /// </summary>
     string IdentifyNumber { get; }
+
     /// <summary>
     ///     Gets the per-username unique ID for this user.
     /// </summary>
     ushort? IdentifyNumberValue { get; }
+
     /// <summary>
     ///     Gets whether this user is a bot; <c>null</c> if unknown.
     /// </summary>
     bool? IsBot { get; }
+
     /// <summary>
     ///     Gets whether this user is banned; <c>null</c> if unknown.
     /// </summary>
     bool? IsBanned { get; }
+
     /// <summary>
     ///     Gets whether this user has subscribed to BUFF; <c>null</c> if unknown.
     /// </summary>
     bool? HasBuff { get; }
+
     /// <summary>
     ///     Gets the link to this user's avatar.
     /// </summary>
     string Avatar { get; }
+
     /// <summary>
     ///     Gets the link to this user's BUFF avatar.
     /// </summary>
     string BuffAvatar { get; }
+
     /// <summary>
     ///     Gets the link to this user's banner.
     /// </summary>
     string Banner { get; }
+
     /// <summary>
     ///     Gets whether this user enabled denoise feature; <c>null</c> if unknown.
     /// </summary>
     bool? IsDenoiseEnabled { get; }
+
     /// <summary>
     ///     Get the tag this user has.
     /// </summary>

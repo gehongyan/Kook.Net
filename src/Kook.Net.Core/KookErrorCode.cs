@@ -9,6 +9,7 @@ public enum KookErrorCode
     ///     The operation was successful.
     /// </summary>
     Success = 0,
+
     /// <summary>
     ///     The operation failed due to an unspecified error.
     /// </summary>
@@ -20,14 +21,17 @@ public enum KookErrorCode
     ///     The operation failed due to an missing argument.
     /// </summary>
     MissingArgument = 40100,
+
     /// <summary>
     ///     The operation failed due to an invalid authentication token.
     /// </summary>
     InvalidAuthenticationToken = 40101,
+
     /// <summary>
     ///     The operation failed because the authentication token verification failed.
     /// </summary>
     TokenVerificationFailed = 40102,
+
     /// <summary>
     ///     The operation failed because the authentication token has expired.
     /// </summary>
@@ -46,10 +50,12 @@ public enum KookErrorCode
     ///     The KOOK gateway requested a reconnect due to missing resume arguments.
     /// </summary>
     MissingResumeArgument = 40106,
+
     /// <summary>
     ///     The KOOK gateway requested a reconnect because the session has expired.
     /// </summary>
     SessionExpired = 40107,
+
     /// <summary>
     ///     The KOOK gateway requested a reconnect due to an invalid sequence number.
     /// </summary>

@@ -12,11 +12,12 @@ internal static class UrlValidation
     /// <returns><c>true</c> if URL is valid by our standard, <c>false</c> if null, throws an error upon invalid.</returns>
     public static bool Validate(string url)
     {
-        if (string.IsNullOrEmpty(url))
-            return false;
+        if (string.IsNullOrEmpty(url)) return false;
+
         if (!(url.StartsWith("http://", StringComparison.OrdinalIgnoreCase)
-              || url.StartsWith("https://", StringComparison.OrdinalIgnoreCase)))
+                || url.StartsWith("https://", StringComparison.OrdinalIgnoreCase)))
             throw new InvalidOperationException($"The url {url} must include a protocol (either HTTP or HTTPS)");
+
         return true;
     }
 
@@ -49,12 +50,13 @@ internal static class UrlValidation
     /// <returns><c>true</c> if URL represents a valid asset on the Kook OSS, <c>false</c> if null, throws an error upon invalid.</returns>
     public static bool ValidateKookAssetUrl(string url)
     {
-        if (string.IsNullOrEmpty(url))
-            return false;
+        if (string.IsNullOrEmpty(url)) return false;
+
         if (!Regex.IsMatch(url,
                 @"^https?:\/\/(img\.(kaiheila|kookapp)\.cn|kaiheila\.oss-cn-beijing\.aliyuncs\.com)\/(assets|attachments)\/\d{4}-\d{2}(\/\d{2})?\/\w{8,16}\.\w+$",
                 RegexOptions.Compiled | RegexOptions.IgnoreCase))
             throw new InvalidOperationException($"The url {url} must be a valid Kook asset URL");
+
         return true;
     }
 }

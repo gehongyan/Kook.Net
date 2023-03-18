@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../Kook.Net.targets" />
+  <Import Project="../Kook.Net.targets"/>
 
-    <PropertyGroup>
-        <RootNamespace>Kook.Rest</RootNamespace>
-    </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Kook.Rest</RootNamespace>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Kook.Net\Kook.Net.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Kook.Net\Kook.Net.csproj"/>
+  </ItemGroup>
 
 </Project>

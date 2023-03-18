@@ -11,6 +11,7 @@ public interface IRestClient : IDisposable
     /// <param name="key">The field name of the header.</param>
     /// <param name="value">The value of the header.</param>
     void SetHeader(string key, string value);
+
     /// <summary>
     ///     Sets the cancellation token for this client.
     /// </summary>
@@ -52,6 +53,7 @@ public interface IRestClient : IDisposable
     /// <param name="reason">The audit log reason.</param>
     /// <param name="requestHeaders">Additional headers to be sent with the request.</param>
     /// <returns> A task that represents an asynchronous send operation. The task result contains the REST response of the request. </returns>
-    Task<RestResponse> SendAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartParams, CancellationToken cancelToken, string reason = null,
+    Task<RestResponse> SendAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartParams,
+        CancellationToken cancelToken, string reason = null,
         IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null);
 }

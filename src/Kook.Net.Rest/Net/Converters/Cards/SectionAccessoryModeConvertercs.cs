@@ -16,8 +16,7 @@ internal class SectionAccessoryModeConverter : JsonConverter<SectionAccessoryMod
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, SectionAccessoryMode value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, SectionAccessoryMode value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
             SectionAccessoryMode.Left => "left",
@@ -25,5 +24,4 @@ internal class SectionAccessoryModeConverter : JsonConverter<SectionAccessoryMod
             SectionAccessoryMode.Unspecified => null,
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
-    }
 }

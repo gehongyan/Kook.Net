@@ -5,7 +5,8 @@ namespace Kook.API;
 
 internal class Invite
 {
-    [JsonPropertyName("id")] public uint Id { get; set; }
+    [JsonPropertyName("id")]
+    public uint Id { get; set; }
 
     [JsonPropertyName("channel_id")]
     [JsonConverter(typeof(NullableUInt64Converter))]
@@ -14,12 +15,23 @@ internal class Invite
     [JsonPropertyName("guild_id")]
     public ulong GuildId { get; set; }
 
-    [JsonPropertyName("guild_name")] public string GuildName { get; set; }
-    [JsonPropertyName("channel_name")] public string ChannelName { get; set; }
-    [JsonPropertyName("type")] public ChannelType ChannelType { get; set; }
-    [JsonPropertyName("url_code")] public string UrlCode { get; set; }
-    [JsonPropertyName("url")] public string Url { get; set; }
-    [JsonPropertyName("user")] public User Inviter { get; set; }
+    [JsonPropertyName("guild_name")]
+    public string GuildName { get; set; }
+
+    [JsonPropertyName("channel_name")]
+    public string ChannelName { get; set; }
+
+    [JsonPropertyName("type")]
+    public ChannelType ChannelType { get; set; }
+
+    [JsonPropertyName("url_code")]
+    public string UrlCode { get; set; }
+
+    [JsonPropertyName("url")]
+    public string Url { get; set; }
+
+    [JsonPropertyName("user")]
+    public User Inviter { get; set; }
 
     [JsonPropertyName("expire_time")]
     [JsonConverter(typeof(NullableDateTimeOffsetConverter))]

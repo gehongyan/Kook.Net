@@ -17,7 +17,7 @@ public class CardBuilderTests
     [Fact]
     public void Constructor()
     {
-        var builder = new CardBuilder()
+        CardBuilder builder = new CardBuilder()
             .WithTheme(CardTheme.Info)
             .WithSize(CardSize.Small)
             .WithColor(Color.Blue)
@@ -37,16 +37,7 @@ public class CardBuilderTests
             Theme = CardTheme.Danger,
             Size = CardSize.Large,
             Color = Color.Red,
-            Modules = new List<IModuleBuilder>
-            {
-                new SectionModuleBuilder
-                {
-                    Text = new PlainTextElementBuilder
-                    {
-                        Content = "content"
-                    }
-                }
-            }
+            Modules = new List<IModuleBuilder> { new SectionModuleBuilder { Text = new PlainTextElementBuilder { Content = "content" } } }
         };
         Assert.Equal(CardTheme.Danger, builder.Theme);
         Assert.Equal(CardTheme.Danger, builder.Build().Theme);
@@ -66,7 +57,7 @@ public class CardBuilderTests
     {
         foreach (CardTheme theme in (CardTheme[])Enum.GetValues(typeof(CardTheme)))
         {
-            var builder = new CardBuilder().WithTheme(theme);
+            CardBuilder builder = new CardBuilder().WithTheme(theme);
             Assert.Equal(theme, builder.Theme);
             Assert.Equal(theme, builder.Build().Theme);
         }
@@ -78,7 +69,7 @@ public class CardBuilderTests
     [Fact]
     public void WithColor()
     {
-        var builder = new CardBuilder().WithColor(Color.Red);
+        CardBuilder builder = new CardBuilder().WithColor(Color.Red);
         Assert.Equal(Color.Red.RawValue, builder.Color.Value.RawValue);
         Assert.Equal(Color.Red.RawValue, builder.Build().Color.Value.RawValue);
     }
@@ -91,7 +82,7 @@ public class CardBuilderTests
     {
         foreach (CardSize size in (CardSize[])Enum.GetValues(typeof(CardSize)))
         {
-            var builder = new CardBuilder().WithSize(size);
+            CardBuilder builder = new CardBuilder().WithSize(size);
             Assert.Equal(size, builder.Size);
             Assert.Equal(size, builder.Build().Size);
         }
@@ -103,7 +94,7 @@ public class CardBuilderTests
     [Fact]
     public void AddModuleAction()
     {
-        var builder = new CardBuilder()
+        CardBuilder builder = new CardBuilder()
             .WithTheme(CardTheme.Secondary)
             .WithSize(CardSize.Small)
             .WithColor(Color.Magenta)
@@ -120,10 +111,9 @@ public class CardBuilderTests
             .AddModule<ContainerModuleBuilder>(b => b
                 .AddElement(element => element
                     .WithSource(Icon)))
-            .AddModule<ActionGroupModuleBuilder>(b => b.
-                AddElement(button => button
-                    .WithTheme(ButtonTheme.Info)
-                    .WithText("Button")))
+            .AddModule<ActionGroupModuleBuilder>(b => b.AddElement(button => button
+                .WithTheme(ButtonTheme.Info)
+                .WithText("Button")))
             .AddModule<ContextModuleBuilder>(b => b
                 .AddElement<ImageElementBuilder>(element => element
                     .WithSource(Icon))
@@ -161,5 +151,4 @@ public class CardBuilderTests
             Assert.Equal(moduleBuilder.Build().GetType(), card.Modules[index].GetType());
         }
     }
-
 }

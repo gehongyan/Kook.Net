@@ -13,10 +13,12 @@ public struct Cacheable<TEntity, TId>
     ///     Gets whether this entity is cached.
     /// </summary>
     public bool HasValue { get; }
+
     /// <summary>
     ///     Gets the ID of this entity.
     /// </summary>
     public TId Id { get; }
+
     /// <summary>
     ///     Gets the entity if it could be pulled from cache.
     /// </summary>
@@ -25,6 +27,7 @@ public struct Cacheable<TEntity, TId>
     ///     <c>null</c>.
     /// </remarks>
     public TEntity Value { get; }
+
     private Func<Task<TEntity>> DownloadFunc { get; }
 
     internal Cacheable(TEntity value, TId id, bool hasValue, Func<Task<TEntity>> downloadFunc)
@@ -44,10 +47,7 @@ public struct Cacheable<TEntity, TId>
     ///     A task that represents the asynchronous download operation. The task result contains the downloaded
     ///     entity.
     /// </returns>
-    public async Task<TEntity> DownloadAsync()
-    {
-        return await DownloadFunc().ConfigureAwait(false);
-    }
+    public async Task<TEntity> DownloadAsync() => await DownloadFunc().ConfigureAwait(false);
 
     /// <summary>
     ///     Returns the cached entity if it exists; otherwise downloads it.
@@ -77,10 +77,12 @@ public struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationship, TId>
     ///     Gets whether this entity is cached.
     /// </summary>
     public bool HasValue { get; }
+
     /// <summary>
     ///     Gets the ID of this entity.
     /// </summary>
     public TId Id { get; }
+
     /// <summary>
     ///     Gets the entity if it could be pulled from cache.
     /// </summary>
@@ -89,6 +91,7 @@ public struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationship, TId>
     ///     <c>null</c>.
     /// </remarks>
     public TCachedEntity Value { get; }
+
     private Func<Task<TDownloadableEntity>> DownloadFunc { get; }
 
     internal Cacheable(TCachedEntity value, TId id, bool hasValue, Func<Task<TDownloadableEntity>> downloadFunc)
@@ -108,10 +111,7 @@ public struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationship, TId>
     ///     A task that represents the asynchronous download operation. The task result contains the downloaded
     ///     entity.
     /// </returns>
-    public async Task<TDownloadableEntity> DownloadAsync()
-    {
-        return await DownloadFunc().ConfigureAwait(false);
-    }
+    public async Task<TDownloadableEntity> DownloadAsync() => await DownloadFunc().ConfigureAwait(false);
 
     /// <summary>
     ///     Returns the cached entity if it exists; otherwise downloads it.

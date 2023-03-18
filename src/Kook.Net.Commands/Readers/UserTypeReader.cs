@@ -13,22 +13,20 @@ public class UserTypeReader<T> : TypeReader
     /// <inheritdoc />
     public override async Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
     {
-        var results = new Dictionary<ulong, TypeReaderValue>();
+        Dictionary<ulong, TypeReaderValue> results = new();
         IAsyncEnumerable<IUser> channelUsers = context.Channel.GetUsersAsync(CacheMode.CacheOnly).Flatten(); // it's better
         IReadOnlyCollection<IGuildUser> guildUsers = ImmutableArray.Create<IGuildUser>();
-        var tagMode = context.Message.Type switch
+        TagMode tagMode = context.Message.Type switch
         {
             MessageType.Text => TagMode.PlainText,
             MessageType.KMarkdown => TagMode.KMarkdown,
             _ => throw new ArgumentOutOfRangeException(nameof(context.Message.Type))
-
         };
 
-        if (context.Guild != null)
-            guildUsers = await context.Guild.GetUsersAsync(CacheMode.CacheOnly).ConfigureAwait(false);
+        if (context.Guild != null) guildUsers = await context.Guild.GetUsersAsync(CacheMode.CacheOnly).ConfigureAwait(false);
 
         //By Mention (1.0)
-        if (MentionUtils.TryParseUser(input, out var id, tagMode))
+        if (MentionUtils.TryParseUser(input, out ulong id, tagMode))
         {
             if (context.Guild != null)
                 AddResult(results, await context.Guild.GetUserAsync(id, CacheMode.CacheOnly).ConfigureAwait(false) as T, 1.00f);
@@ -52,12 +50,13 @@ public class UserTypeReader<T> : TypeReader
             string username = input.Substring(0, index);
             if (ushort.TryParse(input.Substring(index + 1), out ushort identifyNumber))
             {
-                var channelUser = await channelUsers.FirstOrDefaultAsync(x => x.IdentifyNumberValue == identifyNumber &&
-                                                                              string.Equals(username, x.Username, StringComparison.OrdinalIgnoreCase)).ConfigureAwait(false);
+                IUser channelUser = await channelUsers.FirstOrDefaultAsync(x =>
+                        x.IdentifyNumberValue == identifyNumber && string.Equals(username, x.Username, StringComparison.OrdinalIgnoreCase))
+                    .ConfigureAwait(false);
                 AddResult(results, channelUser as T, channelUser?.Username == username ? 0.85f : 0.75f);
 
-                var guildUser = guildUsers.FirstOrDefault(x => x.IdentifyNumberValue == identifyNumber &&
-                                                               string.Equals(username, x.Username, StringComparison.OrdinalIgnoreCase));
+                IGuildUser guildUser = guildUsers.FirstOrDefault(x =>
+                    x.IdentifyNumberValue == identifyNumber && string.Equals(username, x.Username, StringComparison.OrdinalIgnoreCase));
                 AddResult(results, guildUser as T, guildUser?.Username == username ? 0.80f : 0.70f);
             }
         }
@@ -69,7 +68,7 @@ public class UserTypeReader<T> : TypeReader
                 .ForEachAsync(channelUser => AddResult(results, channelUser as T, channelUser.Username == input ? 0.65f : 0.55f))
                 .ConfigureAwait(false);
 
-            foreach (var guildUser in guildUsers.Where(x => string.Equals(input, x.Username, StringComparison.OrdinalIgnoreCase)))
+            foreach (IGuildUser guildUser in guildUsers.Where(x => string.Equals(input, x.Username, StringComparison.OrdinalIgnoreCase)))
                 AddResult(results, guildUser as T, guildUser.Username == input ? 0.60f : 0.50f);
         }
 
@@ -80,18 +79,17 @@ public class UserTypeReader<T> : TypeReader
                 .ForEachAsync(channelUser => AddResult(results, channelUser as T, (channelUser as IGuildUser).Nickname == input ? 0.65f : 0.55f))
                 .ConfigureAwait(false);
 
-            foreach (var guildUser in guildUsers.Where(x => string.Equals(input, x.Nickname, StringComparison.OrdinalIgnoreCase)))
+            foreach (IGuildUser guildUser in guildUsers.Where(x => string.Equals(input, x.Nickname, StringComparison.OrdinalIgnoreCase)))
                 AddResult(results, guildUser as T, guildUser.Nickname == input ? 0.60f : 0.50f);
         }
 
-        if (results.Count > 0)
-            return TypeReaderResult.FromSuccess(results.Values.ToImmutableArray());
+        if (results.Count > 0) return TypeReaderResult.FromSuccess(results.Values.ToImmutableArray());
+
         return TypeReaderResult.FromError(CommandError.ObjectNotFound, "User not found.");
     }
 
     private void AddResult(Dictionary<ulong, TypeReaderValue> results, T user, float score)
     {
-        if (user != null && !results.ContainsKey(user.Id))
-            results.Add(user.Id, new TypeReaderValue(user, score));
+        if (user != null && !results.ContainsKey(user.Id)) results.Add(user.Id, new TypeReaderValue(user, score));
     }
 }

@@ -11,15 +11,17 @@ internal static class CommandParser
         Parameter,
         QuotedParameter
     }
-    public static async Task<ParseResult> ParseArgsAsync(CommandInfo command, ICommandContext context, bool ignoreExtraArgs, IServiceProvider services, string input, int startPos, IReadOnlyDictionary<char, char> aliasMap)
+
+    public static async Task<ParseResult> ParseArgsAsync(CommandInfo command, ICommandContext context, bool ignoreExtraArgs,
+        IServiceProvider services, string input, int startPos, IReadOnlyDictionary<char, char> aliasMap)
     {
         ParameterInfo curParam = null;
-        StringBuilder argBuilder = new StringBuilder(input.Length);
+        StringBuilder argBuilder = new(input.Length);
         int endPos = input.Length;
-        var curPart = ParserPart.None;
+        ParserPart curPart = ParserPart.None;
         int lastArgEndPos = int.MinValue;
-        var argList = ImmutableArray.CreateBuilder<TypeReaderResult>();
-        var paramList = ImmutableArray.CreateBuilder<TypeReaderResult>();
+        ImmutableArray<TypeReaderResult>.Builder argList = ImmutableArray.CreateBuilder<TypeReaderResult>();
+        ImmutableArray<TypeReaderResult>.Builder paramList = ImmutableArray.CreateBuilder<TypeReaderResult>();
         bool isEscaping = false;
         char c, matchQuote = '\0';
 
@@ -27,8 +29,8 @@ internal static class CommandParser
         bool IsOpenQuote(IReadOnlyDictionary<char, char> dict, char ch)
         {
             // return if the key is contained in the dictionary if it is populated
-            if (dict.Count != 0)
-                return dict.ContainsKey(ch);
+            if (dict.Count != 0) return dict.ContainsKey(ch);
+
             // or otherwise if it is the default double quote
             return c == '\"';
         }
@@ -37,8 +39,8 @@ internal static class CommandParser
         {
             // get the corresponding value for the key, if it exists
             // and if the dictionary is populated
-            if (dict.Count != 0 && dict.TryGetValue(ch, out var value))
-                return value;
+            if (dict.Count != 0 && dict.TryGetValue(ch, out char value)) return value;
+
             // or get the default pair of the default double quote
             return '\"';
         }
@@ -59,23 +61,20 @@ internal static class CommandParser
 
             //If this character is escaped, skip it
             if (isEscaping)
-            {
                 if (curPos != endPos)
                 {
                     // if this character matches the quotation mark of the end of the string
                     // means that it should be escaped
                     // but if is not, then there is no reason to escape it then
                     if (c != matchQuote)
-                    {
                         // if no reason to escape the next character, then re-add \ to the arg
                         argBuilder.Append('\\');
-                    }
 
                     argBuilder.Append(c);
                     isEscaping = false;
                     continue;
                 }
-            }
+
             //Are we escaping the next character?
             if (c == '\\' && (curParam == null || !curParam.IsRemainder))
             {
@@ -92,8 +91,7 @@ internal static class CommandParser
                     return ParseResult.FromError(CommandError.ParseFailed, "There must be at least one character of whitespace between arguments.");
                 else
                 {
-                    if (curParam == null)
-                        curParam = command.Parameters.Count > argList.Count ? command.Parameters[argList.Count] : null;
+                    if (curParam == null) curParam = command.Parameters.Count > argList.Count ? command.Parameters[argList.Count] : null;
 
                     if (curParam != null && curParam.IsRemainder)
                     {
@@ -107,6 +105,7 @@ internal static class CommandParser
                         matchQuote = GetMatch(aliasMap, c);
                         continue;
                     }
+
                     curPart = ParserPart.Parameter;
                 }
             }
@@ -144,7 +143,7 @@ internal static class CommandParser
                         return ParseResult.FromError(CommandError.BadArgCount, "The input text has too many parameters.");
                 }
 
-                var typeReaderResult = await curParam.ParseAsync(context, argString, services).ConfigureAwait(false);
+                TypeReaderResult typeReaderResult = await curParam.ParseAsync(context, argString, services).ConfigureAwait(false);
                 if (!typeReaderResult.IsSuccess && typeReaderResult.Error != CommandError.MultipleMatches)
                     return ParseResult.FromError(typeReaderResult, curParam);
 
@@ -161,31 +160,31 @@ internal static class CommandParser
                     curParam = null;
                     curPart = ParserPart.None;
                 }
+
                 argBuilder.Clear();
             }
         }
 
         if (curParam != null && curParam.IsRemainder)
         {
-            var typeReaderResult = await curParam.ParseAsync(context, argBuilder.ToString(), services).ConfigureAwait(false);
-            if (!typeReaderResult.IsSuccess)
-                return ParseResult.FromError(typeReaderResult, curParam);
+            TypeReaderResult typeReaderResult = await curParam.ParseAsync(context, argBuilder.ToString(), services).ConfigureAwait(false);
+            if (!typeReaderResult.IsSuccess) return ParseResult.FromError(typeReaderResult, curParam);
+
             argList.Add(typeReaderResult);
         }
 
-        if (isEscaping)
-            return ParseResult.FromError(CommandError.ParseFailed, "Input text may not end on an incomplete escape.");
-        if (curPart == ParserPart.QuotedParameter)
-            return ParseResult.FromError(CommandError.ParseFailed, "A quoted parameter is incomplete.");
+        if (isEscaping) return ParseResult.FromError(CommandError.ParseFailed, "Input text may not end on an incomplete escape.");
+
+        if (curPart == ParserPart.QuotedParameter) return ParseResult.FromError(CommandError.ParseFailed, "A quoted parameter is incomplete.");
 
         //Add missing optionals
         for (int i = argList.Count; i < command.Parameters.Count; i++)
         {
-            var param = command.Parameters[i];
-            if (param.IsMultiple)
-                continue;
-            if (!param.IsOptional)
-                return ParseResult.FromError(CommandError.BadArgCount, "The input text has too few parameters.");
+            ParameterInfo param = command.Parameters[i];
+            if (param.IsMultiple) continue;
+
+            if (!param.IsOptional) return ParseResult.FromError(CommandError.BadArgCount, "The input text has too few parameters.");
+
             argList.Add(TypeReaderResult.FromSuccess(param.DefaultValue));
         }
 

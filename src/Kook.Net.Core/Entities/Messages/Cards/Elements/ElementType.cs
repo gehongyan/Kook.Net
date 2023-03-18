@@ -9,18 +9,22 @@ public enum ElementType
     ///     The element is a plain text element.
     /// </summary>
     PlainText,
+
     /// <summary>
     ///     The element is a KMarkdown element.
     /// </summary>
     KMarkdown,
+
     /// <summary>
     ///     The element is an image element.
     /// </summary>
     Image,
+
     /// <summary>
     ///     The element is a button element.
     /// </summary>
     Button,
+
     /// <summary>
     ///     The element is a paragraph struct.
     /// </summary>

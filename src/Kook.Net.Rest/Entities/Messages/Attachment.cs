@@ -9,18 +9,25 @@ public class Attachment : IAttachment
 {
     /// <inheritdoc />
     public AttachmentType Type { get; }
+
     /// <inheritdoc />
     public string Url { get; }
+
     /// <inheritdoc />
     public string Filename { get; }
+
     /// <inheritdoc />
     public int? Size { get; }
+
     /// <inheritdoc />
     public string FileType { get; }
+
     /// <inheritdoc />
     public TimeSpan? Duration { get; }
+
     /// <inheritdoc />
     public int? Width { get; }
+
     /// <inheritdoc />
     public int? Height { get; }
 
@@ -58,5 +65,6 @@ public class Attachment : IAttachment
     ///     A string containing the filename of this attachment.
     /// </returns>
     public override string ToString() => Filename;
+
     private string DebuggerDisplay => $"{Filename}{(Size.HasValue ? $" ({Size} bytes)" : "")}";
 }

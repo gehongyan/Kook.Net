@@ -10,7 +10,6 @@ internal class PageSortInfoConverter : JsonConverter<PageSortInfo>
     {
         PageSortInfo pageSortInfo = new() { SortKey = null, SortMode = API.Rest.SortMode.Unspecified };
         while (reader.Read())
-        {
             switch (reader.TokenType)
             {
                 case JsonTokenType.PropertyName:
@@ -21,13 +20,13 @@ internal class PageSortInfoConverter : JsonConverter<PageSortInfo>
                     {
                         -1 => API.Rest.SortMode.Descending,
                         1 => API.Rest.SortMode.Ascending,
-                        _ => API.Rest.SortMode.Unspecified,
+                        _ => API.Rest.SortMode.Unspecified
                     };
                     break;
                 case JsonTokenType.EndObject:
                     return pageSortInfo;
             }
-        }
+
         return pageSortInfo;
     }
 
@@ -43,6 +42,7 @@ internal class PageSortInfoConverter : JsonConverter<PageSortInfo>
                 writer.WriteNumber(value.SortKey, -1);
                 break;
         }
+
         writer.WriteEndObject();
     }
 }

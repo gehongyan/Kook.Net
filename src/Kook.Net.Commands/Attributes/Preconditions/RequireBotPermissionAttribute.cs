@@ -10,12 +10,15 @@ public class RequireBotPermissionAttribute : PreconditionAttribute
     ///     Gets the specified <see cref="Kook.GuildPermission" /> of the precondition.
     /// </summary>
     public GuildPermission? GuildPermission { get; }
+
     /// <summary>
     ///     Gets the specified <see cref="Kook.ChannelPermission" /> of the precondition.
     /// </summary>
     public ChannelPermission? ChannelPermission { get; }
+
     /// <inheritdoc />
     public override string ErrorMessage { get; set; }
+
     /// <summary>
     ///     Gets or sets the error message if the precondition
     ///     fails due to being run outside of a Guild channel.
@@ -37,6 +40,7 @@ public class RequireBotPermissionAttribute : PreconditionAttribute
         GuildPermission = permission;
         ChannelPermission = null;
     }
+
     /// <summary>
     ///     Requires that the bot account to have a specific <see cref="Kook.ChannelPermission"/>.
     /// </summary>
@@ -54,13 +58,12 @@ public class RequireBotPermissionAttribute : PreconditionAttribute
     public override async Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
     {
         IGuildUser guildUser = null;
-        if (context.Guild != null)
-            guildUser = await context.Guild.GetCurrentUserAsync().ConfigureAwait(false);
+        if (context.Guild != null) guildUser = await context.Guild.GetCurrentUserAsync().ConfigureAwait(false);
 
         if (GuildPermission.HasValue)
         {
-            if (guildUser == null)
-                return PreconditionResult.FromError(NotAGuildErrorMessage ?? "Command must be used in a guild channel.");
+            if (guildUser == null) return PreconditionResult.FromError(NotAGuildErrorMessage ?? "Command must be used in a guild channel.");
+
             if (!guildUser.GuildPermissions.Has(GuildPermission.Value))
                 return PreconditionResult.FromError(ErrorMessage ?? $"Bot requires guild permission {GuildPermission.Value}.");
         }

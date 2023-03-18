@@ -41,5 +41,4 @@ public interface IUserMessage : IMessage
         TagHandling roleHandling = TagHandling.Name,
         TagHandling everyoneHandling = TagHandling.Name,
         TagHandling emojiHandling = TagHandling.Name);
-
 }

@@ -53,6 +53,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null,
         AttachmentType type = AttachmentType.File, IQuote quote = null, RequestOptions options = null);
+
     /// <summary>
     ///     Sends a file to this message channel.
     /// </summary>
@@ -62,6 +63,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName = null,
         AttachmentType type = AttachmentType.File, IQuote quote = null, RequestOptions options = null);
+
     /// <summary>
     ///     Sends a file to this message channel.
     /// </summary>
@@ -71,6 +73,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
         IQuote quote = null, RequestOptions options = null);
+
     /// <summary>
     ///     Sends a text message to this message channel.
     /// </summary>
@@ -90,6 +93,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
         IQuote quote = null, RequestOptions options = null);
+
     /// <summary>
     ///     Sends a card message to this message channel.
     /// </summary>

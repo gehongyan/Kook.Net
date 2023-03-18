@@ -75,8 +75,8 @@ public class ParagraphStruct : IElement, IEquatable<ParagraphStruct>
         {
             int hash = (int)2166136261;
             hash = (hash * 16777619) ^ (Type, ColumnCount).GetHashCode();
-            foreach (IElement element in Fields)
-                hash = (hash * 16777619) ^ element.GetHashCode();
+            foreach (IElement element in Fields) hash = (hash * 16777619) ^ element.GetHashCode();
+
             return hash;
         }
     }

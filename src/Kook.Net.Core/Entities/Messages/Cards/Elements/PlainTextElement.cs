@@ -42,6 +42,7 @@ public class PlainTextElement : IElement, IEquatable<PlainTextElement>
 
     /// <inheritdoc />
     public override string ToString() => Content;
+
     private string DebuggerDisplay => $"{Type}: {Content}";
 
     /// <summary>

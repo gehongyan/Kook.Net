@@ -20,14 +20,13 @@ public class ChannelTypeReader<T> : TypeReader
     {
         if (context.Guild != null)
         {
-            var results = new Dictionary<ulong, TypeReaderValue>();
-            var channels = await context.Guild.GetChannelsAsync(CacheMode.CacheOnly).ConfigureAwait(false);
-            var tagMode = context.Message.Type switch
+            Dictionary<ulong, TypeReaderValue> results = new();
+            IReadOnlyCollection<IGuildChannel> channels = await context.Guild.GetChannelsAsync(CacheMode.CacheOnly).ConfigureAwait(false);
+            TagMode tagMode = context.Message.Type switch
             {
                 MessageType.Text => TagMode.PlainText,
                 MessageType.KMarkdown => TagMode.KMarkdown,
                 _ => throw new ArgumentOutOfRangeException(nameof(context.Message.Type))
-
             };
             //By Mention (1.0)
             if (MentionUtils.TryParseChannel(input, out ulong id, tagMode))
@@ -38,11 +37,10 @@ public class ChannelTypeReader<T> : TypeReader
                 AddResult(results, await context.Guild.GetChannelAsync(id, CacheMode.CacheOnly).ConfigureAwait(false) as T, 0.90f);
 
             //By Name (0.7-0.8)
-            foreach (var channel in channels.Where(x => string.Equals(input, x.Name, StringComparison.OrdinalIgnoreCase)))
+            foreach (IGuildChannel channel in channels.Where(x => string.Equals(input, x.Name, StringComparison.OrdinalIgnoreCase)))
                 AddResult(results, channel as T, channel.Name == input ? 0.80f : 0.70f);
 
-            if (results.Count > 0)
-                return TypeReaderResult.FromSuccess(results.Values.ToReadOnlyCollection());
+            if (results.Count > 0) return TypeReaderResult.FromSuccess(results.Values.ToReadOnlyCollection());
         }
 
         return TypeReaderResult.FromError(CommandError.ObjectNotFound, "Channel not found.");
@@ -50,7 +48,6 @@ public class ChannelTypeReader<T> : TypeReader
 
     private void AddResult(Dictionary<ulong, TypeReaderValue> results, T channel, float score)
     {
-        if (channel != null && !results.ContainsKey(channel.Id))
-            results.Add(channel.Id, new TypeReaderValue(channel, score));
+        if (channel != null && !results.ContainsKey(channel.Id)) results.Add(channel.Id, new TypeReaderValue(channel, score));
     }
 }

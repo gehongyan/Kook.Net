@@ -5,8 +5,11 @@ namespace Kook.API.Rest;
 
 internal class ModifyMessageParams
 {
-    [JsonPropertyName("msg_id")] public Guid MessageId { get; set; }
-    [JsonPropertyName("content")] public string Content { get; set; }
+    [JsonPropertyName("msg_id")]
+    public Guid MessageId { get; set; }
+
+    [JsonPropertyName("content")]
+    public string Content { get; set; }
 
     [JsonPropertyName("quote")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

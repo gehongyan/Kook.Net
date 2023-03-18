@@ -13,23 +13,35 @@ public abstract class BaseKookClient : IKookClient
     /// <summary>
     ///     Fired when a log message is sent.
     /// </summary>
-    public event Func<LogMessage, Task> Log { add => _logEvent.Add(value); remove => _logEvent.Remove(value); }
+    public event Func<LogMessage, Task> Log
+    {
+        add => _logEvent.Add(value);
+        remove => _logEvent.Remove(value);
+    }
 
-    internal readonly AsyncEvent<Func<LogMessage, Task>> _logEvent = new AsyncEvent<Func<LogMessage, Task>>();
+    internal readonly AsyncEvent<Func<LogMessage, Task>> _logEvent = new();
 
     /// <summary>
     ///     Fired when the client has logged in.
     /// </summary>
-    public event Func<Task> LoggedIn { add => _loggedInEvent.Add(value); remove => _loggedInEvent.Remove(value); }
+    public event Func<Task> LoggedIn
+    {
+        add => _loggedInEvent.Add(value);
+        remove => _loggedInEvent.Remove(value);
+    }
 
-    private readonly AsyncEvent<Func<Task>> _loggedInEvent = new AsyncEvent<Func<Task>>();
+    private readonly AsyncEvent<Func<Task>> _loggedInEvent = new();
 
     /// <summary>
     ///     Fired when the client has logged out.
     /// </summary>
-    public event Func<Task> LoggedOut { add => _loggedOutEvent.Add(value); remove => _loggedOutEvent.Remove(value); }
+    public event Func<Task> LoggedOut
+    {
+        add => _loggedOutEvent.Add(value);
+        remove => _loggedOutEvent.Remove(value);
+    }
 
-    private readonly AsyncEvent<Func<Task>> _loggedOutEvent = new AsyncEvent<Func<Task>>();
+    private readonly AsyncEvent<Func<Task>> _loggedOutEvent = new();
 
     internal readonly Logger _restLogger;
     private readonly SemaphoreSlim _stateLock;
@@ -51,6 +63,7 @@ public abstract class BaseKookClient : IKookClient
 
     /// <inheritdoc />
     public TokenType TokenType => ApiClient.AuthTokenType;
+
     internal bool FormatUsersInBidirectionalUnicode { get; private set; }
 
     internal BaseKookClient(KookRestConfig config, API.KookRestApiClient client)
@@ -104,7 +117,10 @@ public abstract class BaseKookClient : IKookClient
         {
             await LoginInternalAsync(tokenType, token, validateToken).ConfigureAwait(false);
         }
-        finally { _stateLock.Release(); }
+        finally
+        {
+            _stateLock.Release();
+        }
     }
 
     internal virtual async Task LoginInternalAsync(TokenType tokenType, string token, bool validateToken)
@@ -115,8 +131,8 @@ public abstract class BaseKookClient : IKookClient
             await LogManager.WriteInitialLog().ConfigureAwait(false);
         }
 
-        if (LoginState != LoginState.LoggedOut)
-            await LogoutInternalAsync().ConfigureAwait(false);
+        if (LoginState != LoginState.LoggedOut) await LogoutInternalAsync().ConfigureAwait(false);
+
         LoginState = LoginState.LoggingIn;
 
         try
@@ -124,7 +140,6 @@ public abstract class BaseKookClient : IKookClient
             // If token validation is enabled, validate the token and let it throw any ArgumentExceptions
             // that result from invalid parameters
             if (validateToken)
-            {
                 try
                 {
                     TokenUtils.ValidateToken(tokenType, token);
@@ -134,7 +149,6 @@ public abstract class BaseKookClient : IKookClient
                     // log these ArgumentExceptions and allow for the client to attempt to log in anyways
                     await LogManager.WarningAsync("Kook", "A supplied token was invalid.", ex).ConfigureAwait(false);
                 }
-            }
 
             await ApiClient.LoginAsync(tokenType, token).ConfigureAwait(false);
             await OnLoginAsync(tokenType, token).ConfigureAwait(false);
@@ -162,15 +176,18 @@ public abstract class BaseKookClient : IKookClient
         {
             await LogoutInternalAsync().ConfigureAwait(false);
         }
-        finally { _stateLock.Release(); }
+        finally
+        {
+            _stateLock.Release();
+        }
     }
 
     internal virtual async Task LogoutInternalAsync()
     {
         await ApiClient.GoOfflineAsync();
 
-        if (LoginState == LoginState.LoggedOut)
-            return;
+        if (LoginState == LoginState.LoggedOut) return;
+
         LoginState = LoginState.LoggingOut;
 
         await ApiClient.LogoutAsync().ConfigureAwait(false);
@@ -218,6 +235,7 @@ public abstract class BaseKookClient : IKookClient
     /// <inheritdoc />
     Task<IUser> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IUser>(null);
+
     /// <inheritdoc />
     Task<IUser> IKookClient.GetUserAsync(string username, string identifyNumber, RequestOptions options)
         => Task.FromResult<IUser>(null);

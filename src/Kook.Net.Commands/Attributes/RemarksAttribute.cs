@@ -16,8 +16,5 @@ public class RemarksAttribute : Attribute
     ///     Initializes a new <see cref="RemarksAttribute" /> attribute with the specified remarks.
     /// </summary>
     /// <param name="text"></param>
-    public RemarksAttribute(string text)
-    {
-        Text = text;
-    }
+    public RemarksAttribute(string text) => Text = text;
 }

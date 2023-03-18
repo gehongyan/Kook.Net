@@ -9,10 +9,12 @@ public class RestReaction : IReaction
 {
     /// <inheritdoc />
     public IEmote Emote { get; }
+
     /// <summary>
     ///     Gets the number of reactions added.
     /// </summary>
     public int Count { get; }
+
     /// <summary>
     ///     Gets whether the reactions is added by the user.
     /// </summary>
@@ -24,6 +26,7 @@ public class RestReaction : IReaction
         Count = count;
         Me = me;
     }
+
     internal static RestReaction Create(Model model)
     {
         IEmote emote;
@@ -31,6 +34,7 @@ public class RestReaction : IReaction
             emote = emoji;
         else
             emote = new Emote(model.Emoji.Id, model.Emoji.Name);
+
         return new RestReaction(emote, model.Count, model.IsMe);
     }
 }

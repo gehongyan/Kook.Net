@@ -31,10 +31,8 @@ public class RestBan : IBan
         Reason = reason;
         CreatedAt = createdAt;
     }
-    internal static RestBan Create(BaseKookClient client, Model model)
-    {
-        return new RestBan(RestUser.Create(client, model.User), model.Reason, model.CreatedAt);
-    }
+
+    internal static RestBan Create(BaseKookClient client, Model model) => new(RestUser.Create(client, model.User), model.Reason, model.CreatedAt);
 
     /// <summary>
     ///     Gets the name of the banned user.
@@ -43,12 +41,15 @@ public class RestBan : IBan
     ///     A string containing the name of the user that was banned.
     /// </returns>
     public override string ToString() => User.ToString();
+
     private string DebuggerDisplay => $"{User}: {Reason}";
 
     #endregion
 
     #region IBan
+
     /// <inheritdoc />
     IUser IBan.User => User;
+
     #endregion
 }

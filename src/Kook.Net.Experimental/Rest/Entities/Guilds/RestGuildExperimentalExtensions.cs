@@ -1,3 +1,5 @@
+using Kook.API.Rest;
+
 namespace Kook.Rest;
 
 /// <summary>
@@ -19,6 +21,7 @@ public static class RestGuildExperimentalExtensions
     /// </remarks>
     public static Task DeleteAsync(this RestGuild guild, RequestOptions options = null)
         => ExperimentalGuildHelper.DeleteAsync(guild, guild.Kook, options);
+
     /// <summary>
     ///     Modifies this guild.
     /// </summary>
@@ -31,7 +34,7 @@ public static class RestGuildExperimentalExtensions
     /// <exception cref="ArgumentNullException"><paramref name="func"/> is <see langword="null"/>.</exception>
     public static async Task ModifyAsync(this RestGuild guild, Action<GuildProperties> func, RequestOptions options = null)
     {
-        var model = await ExperimentalGuildHelper.ModifyAsync(guild, guild.Kook, func, options).ConfigureAwait(false);
+        RichGuild model = await ExperimentalGuildHelper.ModifyAsync(guild, guild.Kook, func, options).ConfigureAwait(false);
         guild.Update(model);
     }
 }

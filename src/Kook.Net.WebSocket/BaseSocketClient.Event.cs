@@ -21,7 +21,9 @@ public abstract partial class BaseSocketClient
         add => _channelCreatedEvent.Add(value);
         remove => _channelCreatedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketChannel, Task>> _channelCreatedEvent = new AsyncEvent<Func<SocketChannel, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketChannel, Task>> _channelCreatedEvent = new();
+
     /// <summary> Fired when a channel is destroyed. </summary>
     /// <remarks>
     ///     <para>
@@ -39,7 +41,9 @@ public abstract partial class BaseSocketClient
         add => _channelDestroyedEvent.Add(value);
         remove => _channelDestroyedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketChannel, Task>> _channelDestroyedEvent = new AsyncEvent<Func<SocketChannel, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketChannel, Task>> _channelDestroyedEvent = new();
+
     /// <summary> Fired when a channel is updated. </summary>
     /// <remarks>
     ///     <para>
@@ -58,7 +62,9 @@ public abstract partial class BaseSocketClient
         add => _channelUpdatedEvent.Add(value);
         remove => _channelUpdatedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketChannel, SocketChannel, Task>> _channelUpdatedEvent = new AsyncEvent<Func<SocketChannel, SocketChannel, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketChannel, SocketChannel, Task>> _channelUpdatedEvent = new();
+
     /// <summary> Fired when a reaction is added to a channel message. </summary>
     /// <remarks>
     ///     <para>
@@ -90,14 +96,20 @@ public abstract partial class BaseSocketClient
         add => _reactionAddedEvent.Add(value);
         remove => _reactionAddedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IMessageChannel, ulong>, SocketReaction, Task>> _reactionAddedEvent = new AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IMessageChannel, ulong>, SocketReaction, Task>>();
+
+    internal readonly AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IMessageChannel, ulong>, SocketReaction, Task>> _reactionAddedEvent =
+        new();
+
     /// <summary> Fired when a reaction is removed from a message. </summary>
     public event Func<Cacheable<IUserMessage, Guid>, Cacheable<IMessageChannel, ulong>, SocketReaction, Task> ReactionRemoved
     {
         add => _reactionRemovedEvent.Add(value);
         remove => _reactionRemovedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IMessageChannel, ulong>, SocketReaction, Task>> _reactionRemovedEvent = new AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IMessageChannel, ulong>, SocketReaction, Task>>();
+
+    internal readonly AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IMessageChannel, ulong>, SocketReaction, Task>> _reactionRemovedEvent =
+        new();
+
     /// <summary> Fired when a reaction is added to a direct message. </summary>
     /// <remarks>
     ///     <para>
@@ -129,14 +141,19 @@ public abstract partial class BaseSocketClient
         add => _directReactionAddedEvent.Add(value);
         remove => _directReactionAddedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IDMChannel, Guid>, SocketReaction, Task>> _directReactionAddedEvent = new AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IDMChannel, Guid>, SocketReaction, Task>>();
+
+    internal readonly AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IDMChannel, Guid>, SocketReaction, Task>> _directReactionAddedEvent =
+        new();
+
     /// <summary> Fired when a reaction is removed from a message. </summary>
     public event Func<Cacheable<IUserMessage, Guid>, Cacheable<IDMChannel, Guid>, SocketReaction, Task> DirectReactionRemoved
     {
         add => _directReactionRemovedEvent.Add(value);
         remove => _directReactionRemovedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IDMChannel, Guid>, SocketReaction, Task>> _directReactionRemovedEvent = new AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IDMChannel, Guid>, SocketReaction, Task>>();
+
+    internal readonly AsyncEvent<Func<Cacheable<IUserMessage, Guid>, Cacheable<IDMChannel, Guid>, SocketReaction, Task>> _directReactionRemovedEvent =
+        new();
 
     #endregion
 
@@ -160,7 +177,9 @@ public abstract partial class BaseSocketClient
         add => _messageReceivedEvent.Add(value);
         remove => _messageReceivedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketMessage, Task>> _messageReceivedEvent = new AsyncEvent<Func<SocketMessage, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketMessage, Task>> _messageReceivedEvent = new();
+
     /// <summary> Fired when a message is deleted. </summary>
     /// <remarks>
     ///     <para>
@@ -189,7 +208,8 @@ public abstract partial class BaseSocketClient
         add => _messageDeletedEvent.Add(value);
         remove => _messageDeletedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IMessageChannel, ulong>, Task>> _messageDeletedEvent = new AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IMessageChannel, ulong>, Task>>();
+
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IMessageChannel, ulong>, Task>> _messageDeletedEvent = new();
 
     /// <summary> Fired when a message is updated. </summary>
     /// <remarks>
@@ -217,7 +237,8 @@ public abstract partial class BaseSocketClient
         add => _messageUpdatedEvent.Add(value);
         remove => _messageUpdatedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, Task>> _messageUpdatedEvent = new AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, Task>>();
+
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, Task>> _messageUpdatedEvent = new();
 
     /// <summary> Fired when a message is pinned. </summary>
     /// <remarks>
@@ -248,7 +269,9 @@ public abstract partial class BaseSocketClient
         add => _messagePinnedEvent.Add(value);
         remove => _messagePinnedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, SocketGuildUser, Task>> _messagePinnedEvent = new AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, SocketGuildUser, Task>>();
+
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, SocketGuildUser, Task>> _messagePinnedEvent =
+        new();
 
     /// <summary> Fired when a message is unpinned. </summary>
     /// <remarks>
@@ -279,8 +302,9 @@ public abstract partial class BaseSocketClient
         add => _messageUnpinnedEvent.Add(value);
         remove => _messageUnpinnedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, SocketGuildUser, Task>> _messageUnpinnedEvent = new AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, SocketGuildUser, Task>>();
 
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, SocketGuildUser, Task>> _messageUnpinnedEvent =
+        new();
 
     #endregion
 
@@ -304,7 +328,9 @@ public abstract partial class BaseSocketClient
         add => _directMessageReceivedEvent.Add(value);
         remove => _directMessageReceivedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketMessage, Task>> _directMessageReceivedEvent = new AsyncEvent<Func<SocketMessage, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketMessage, Task>> _directMessageReceivedEvent = new();
+
     /// <summary> Fired when a message is deleted. </summary>
     /// <remarks>
     ///     <para>
@@ -333,7 +359,8 @@ public abstract partial class BaseSocketClient
         add => _directMessageDeletedEvent.Add(value);
         remove => _directMessageDeletedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Task>> _directMessageDeletedEvent = new AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Task>>();
+
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Task>> _directMessageDeletedEvent = new();
 
     /// <summary> Fired when a message is updated. </summary>
     /// <remarks>
@@ -367,7 +394,8 @@ public abstract partial class BaseSocketClient
         add => _directMessageUpdatedEvent.Add(value);
         remove => _directMessageUpdatedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, IDMChannel, Task>> _directMessageUpdatedEvent = new AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, IDMChannel, Task>>();
+
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, IDMChannel, Task>> _directMessageUpdatedEvent = new();
 
     #endregion
 
@@ -384,14 +412,18 @@ public abstract partial class BaseSocketClient
         add => _userJoinedEvent.Add(value);
         remove => _userJoinedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketGuildUser, DateTimeOffset, Task>> _userJoinedEvent = new AsyncEvent<Func<SocketGuildUser, DateTimeOffset, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketGuildUser, DateTimeOffset, Task>> _userJoinedEvent = new();
+
     /// <summary> Fired when a user leaves a guild. </summary>
     public event Func<SocketGuild, SocketUser, DateTimeOffset, Task> UserLeft
     {
         add => _userLeftEvent.Add(value);
         remove => _userLeftEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketGuild, SocketUser, DateTimeOffset, Task>> _userLeftEvent = new AsyncEvent<Func<SocketGuild, SocketUser, DateTimeOffset, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketGuild, SocketUser, DateTimeOffset, Task>> _userLeftEvent = new();
+
     /// <summary> Fired when a user is banned from a guild. </summary>
     /// <remarks>
     ///     <para>
@@ -422,7 +454,9 @@ public abstract partial class BaseSocketClient
         add => _userBannedEvent.Add(value);
         remove => _userBannedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<IReadOnlyCollection<SocketUser>, SocketUser, SocketGuild, Task>> _userBannedEvent = new AsyncEvent<Func<IReadOnlyCollection<SocketUser>, SocketUser, SocketGuild, Task>>();
+
+    internal readonly AsyncEvent<Func<IReadOnlyCollection<SocketUser>, SocketUser, SocketGuild, Task>> _userBannedEvent = new();
+
     /// <summary> Fired when a user is unbanned from a guild. </summary>
     /// <remarks>
     ///     <para>
@@ -452,42 +486,53 @@ public abstract partial class BaseSocketClient
         add => _userUnbannedEvent.Add(value);
         remove => _userUnbannedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<IReadOnlyCollection<SocketUser>, SocketUser, SocketGuild, Task>> _userUnbannedEvent = new AsyncEvent<Func<IReadOnlyCollection<SocketUser>, SocketUser, SocketGuild, Task>>();
+
+    internal readonly AsyncEvent<Func<IReadOnlyCollection<SocketUser>, SocketUser, SocketGuild, Task>> _userUnbannedEvent = new();
+
     /// <summary> Fired when a user is updated. </summary>
     public event Func<SocketUser, SocketUser, Task> UserUpdated
     {
         add => _userUpdatedEvent.Add(value);
         remove => _userUpdatedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketUser, SocketUser, Task>> _userUpdatedEvent = new AsyncEvent<Func<SocketUser, SocketUser, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketUser, SocketUser, Task>> _userUpdatedEvent = new();
+
     /// <summary> Fired when the connected account is updated. </summary>
     public event Func<SocketSelfUser, SocketSelfUser, Task> CurrentUserUpdated
     {
         add => _selfUpdatedEvent.Add(value);
         remove => _selfUpdatedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketSelfUser, SocketSelfUser, Task>> _selfUpdatedEvent = new AsyncEvent<Func<SocketSelfUser, SocketSelfUser, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketSelfUser, SocketSelfUser, Task>> _selfUpdatedEvent = new();
+
     /// <summary> Fired when a guild member is updated. </summary>
     public event Func<Cacheable<SocketGuildUser, ulong>, SocketGuildUser, Task> GuildMemberUpdated
     {
         add => _guildMemberUpdatedEvent.Add(value);
         remove => _guildMemberUpdatedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketGuildUser, Task>> _guildMemberUpdatedEvent = new AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketGuildUser, Task>>();
+
+    internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketGuildUser, Task>> _guildMemberUpdatedEvent = new();
+
     /// <summary> Fired when a guild member is online. </summary>
     public event Func<IReadOnlyCollection<SocketGuildUser>, DateTimeOffset, Task> GuildMemberOnline
     {
         add => _guildMemberOnlineEvent.Add(value);
         remove => _guildMemberOnlineEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<IReadOnlyCollection<SocketGuildUser>, DateTimeOffset, Task>> _guildMemberOnlineEvent = new AsyncEvent<Func<IReadOnlyCollection<SocketGuildUser>, DateTimeOffset, Task>>();
+
+    internal readonly AsyncEvent<Func<IReadOnlyCollection<SocketGuildUser>, DateTimeOffset, Task>> _guildMemberOnlineEvent = new();
+
     /// <summary> Fired when a guild member is offline. </summary>
     public event Func<IReadOnlyCollection<SocketGuildUser>, DateTimeOffset, Task> GuildMemberOffline
     {
         add => _guildMemberOfflineEvent.Add(value);
         remove => _guildMemberOfflineEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<IReadOnlyCollection<SocketGuildUser>, DateTimeOffset, Task>> _guildMemberOfflineEvent = new AsyncEvent<Func<IReadOnlyCollection<SocketGuildUser>, DateTimeOffset, Task>>();
+
+    internal readonly AsyncEvent<Func<IReadOnlyCollection<SocketGuildUser>, DateTimeOffset, Task>> _guildMemberOfflineEvent = new();
 
     #endregion
 
@@ -499,14 +544,17 @@ public abstract partial class BaseSocketClient
         add => _userConnectedEvent.Add(value);
         remove => _userConnectedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketUser, SocketVoiceChannel, SocketGuild, DateTimeOffset, Task>> _userConnectedEvent = new AsyncEvent<Func<SocketUser, SocketVoiceChannel, SocketGuild, DateTimeOffset, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketUser, SocketVoiceChannel, SocketGuild, DateTimeOffset, Task>> _userConnectedEvent = new();
+
     /// <summary> Fired when a user disconnected to a voice channel. </summary>
     public event Func<SocketUser, SocketVoiceChannel, SocketGuild, DateTimeOffset, Task> UserDisconnected
     {
         add => _userDisconnectedEvent.Add(value);
         remove => _userDisconnectedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketUser, SocketVoiceChannel, SocketGuild, DateTimeOffset, Task>> _userDisconnectedEvent = new AsyncEvent<Func<SocketUser, SocketVoiceChannel, SocketGuild, DateTimeOffset, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketUser, SocketVoiceChannel, SocketGuild, DateTimeOffset, Task>> _userDisconnectedEvent = new();
 
     #endregion
 
@@ -518,21 +566,26 @@ public abstract partial class BaseSocketClient
         add => _roleCreatedEvent.Add(value);
         remove => _roleCreatedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketRole, Task>> _roleCreatedEvent = new AsyncEvent<Func<SocketRole, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketRole, Task>> _roleCreatedEvent = new();
+
     /// <summary> Fired when a role is deleted. </summary>
     public event Func<SocketRole, Task> RoleDeleted
     {
         add => _roleDeletedEvent.Add(value);
         remove => _roleDeletedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketRole, Task>> _roleDeletedEvent = new AsyncEvent<Func<SocketRole, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketRole, Task>> _roleDeletedEvent = new();
+
     /// <summary> Fired when a role is updated. </summary>
     public event Func<SocketRole, SocketRole, Task> RoleUpdated
     {
         add => _roleUpdatedEvent.Add(value);
         remove => _roleUpdatedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketRole, SocketRole, Task>> _roleUpdatedEvent = new AsyncEvent<Func<SocketRole, SocketRole, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketRole, SocketRole, Task>> _roleUpdatedEvent = new();
 
     #endregion
 
@@ -544,21 +597,26 @@ public abstract partial class BaseSocketClient
         add => _emoteCreatedEvent.Add(value);
         remove => _emoteCreatedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<GuildEmote, SocketGuild, Task>> _emoteCreatedEvent = new AsyncEvent<Func<GuildEmote, SocketGuild, Task>>();
+
+    internal readonly AsyncEvent<Func<GuildEmote, SocketGuild, Task>> _emoteCreatedEvent = new();
+
     /// <summary> Fired when a emote is deleted. </summary>
     public event Func<GuildEmote, SocketGuild, Task> EmoteDeleted
     {
         add => _emoteDeletedEvent.Add(value);
         remove => _emoteDeletedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<GuildEmote, SocketGuild, Task>> _emoteDeletedEvent = new AsyncEvent<Func<GuildEmote, SocketGuild, Task>>();
+
+    internal readonly AsyncEvent<Func<GuildEmote, SocketGuild, Task>> _emoteDeletedEvent = new();
+
     /// <summary> Fired when a emote is updated. </summary>
     public event Func<GuildEmote, GuildEmote, SocketGuild, Task> EmoteUpdated
     {
         add => _emoteUpdatedEvent.Add(value);
         remove => _emoteUpdatedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<GuildEmote, GuildEmote, SocketGuild, Task>> _emoteUpdatedEvent = new AsyncEvent<Func<GuildEmote, GuildEmote, SocketGuild, Task>>();
+
+    internal readonly AsyncEvent<Func<GuildEmote, GuildEmote, SocketGuild, Task>> _emoteUpdatedEvent = new();
 
     #endregion
 
@@ -570,35 +628,44 @@ public abstract partial class BaseSocketClient
         add => _joinedGuildEvent.Add(value);
         remove => _joinedGuildEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketGuild, Task>> _joinedGuildEvent = new AsyncEvent<Func<SocketGuild, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketGuild, Task>> _joinedGuildEvent = new();
+
     /// <summary> Fired when the connected account leaves a guild. </summary>
     public event Func<SocketGuild, Task> LeftGuild
     {
         add => _leftGuildEvent.Add(value);
         remove => _leftGuildEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketGuild, Task>> _leftGuildEvent = new AsyncEvent<Func<SocketGuild, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketGuild, Task>> _leftGuildEvent = new();
+
     /// <summary> Fired when a guild is updated. </summary>
     public event Func<SocketGuild, SocketGuild, Task> GuildUpdated
     {
         add => _guildUpdatedEvent.Add(value);
         remove => _guildUpdatedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketGuild, SocketGuild, Task>> _guildUpdatedEvent = new AsyncEvent<Func<SocketGuild, SocketGuild, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketGuild, SocketGuild, Task>> _guildUpdatedEvent = new();
+
     /// <summary> Fired when a guild becomes available. </summary>
     public event Func<SocketGuild, Task> GuildAvailable
     {
         add => _guildAvailableEvent.Add(value);
         remove => _guildAvailableEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketGuild, Task>> _guildAvailableEvent = new AsyncEvent<Func<SocketGuild, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketGuild, Task>> _guildAvailableEvent = new();
+
     /// <summary> Fired when a guild becomes unavailable. </summary>
     public event Func<SocketGuild, Task> GuildUnavailable
     {
         add => _guildUnavailableEvent.Add(value);
         remove => _guildUnavailableEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<SocketGuild, Task>> _guildUnavailableEvent = new AsyncEvent<Func<SocketGuild, Task>>();
+
+    internal readonly AsyncEvent<Func<SocketGuild, Task>> _guildUnavailableEvent = new();
 
     #endregion
 
@@ -610,7 +677,8 @@ public abstract partial class BaseSocketClient
         add => _messageButtonClickedEvent.Add(value);
         remove => _messageButtonClickedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<string, SocketUser, IMessage, SocketTextChannel, SocketGuild, Task>> _messageButtonClickedEvent = new AsyncEvent<Func<string, SocketUser, IMessage, SocketTextChannel, SocketGuild, Task>>();
+
+    internal readonly AsyncEvent<Func<string, SocketUser, IMessage, SocketTextChannel, SocketGuild, Task>> _messageButtonClickedEvent = new();
 
     /// <summary> Fired when a button is clicked in a direct card message. </summary>
     public event Func<string, SocketUser, IMessage, SocketDMChannel, Task> DirectMessageButtonClicked
@@ -618,7 +686,8 @@ public abstract partial class BaseSocketClient
         add => _directMessageButtonClickedEvent.Add(value);
         remove => _directMessageButtonClickedEvent.Remove(value);
     }
-    internal readonly AsyncEvent<Func<string, SocketUser, IMessage, SocketDMChannel, Task>> _directMessageButtonClickedEvent = new AsyncEvent<Func<string, SocketUser, IMessage, SocketDMChannel, Task>>();
+
+    internal readonly AsyncEvent<Func<string, SocketUser, IMessage, SocketDMChannel, Task>> _directMessageButtonClickedEvent = new();
 
     #endregion
 }

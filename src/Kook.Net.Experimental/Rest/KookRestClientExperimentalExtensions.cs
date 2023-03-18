@@ -22,6 +22,7 @@ public static class KookRestClientExperimentalExtensions
     /// </remarks>
     public static Task<IReadOnlyCollection<RestVoiceRegion>> GetVoiceRegionsAsync(this KookRestClient client, RequestOptions options = null)
         => ExperimentalClientHelper.GetVoiceRegionsAsync(client, options);
+
     /// <summary>
     ///     Gets a voice region.
     /// </summary>

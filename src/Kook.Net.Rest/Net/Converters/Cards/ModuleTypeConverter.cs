@@ -26,8 +26,7 @@ internal class ModuleTypeConverter : JsonConverter<ModuleType>
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, ModuleType value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, ModuleType value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
             ModuleType.Header => "header",
@@ -44,5 +43,4 @@ internal class ModuleTypeConverter : JsonConverter<ModuleType>
             ModuleType.Invite => "invite",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
-    }
 }

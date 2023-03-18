@@ -6,5 +6,4 @@ namespace Kook;
 /// <seealso cref="IGuild.CreateCategoryChannelAsync(string, System.Action{CreateCategoryChannelProperties}, RequestOptions)"/>
 public class CreateCategoryChannelProperties : CreateGuildChannelProperties
 {
-
 }

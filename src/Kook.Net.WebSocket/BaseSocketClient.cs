@@ -167,9 +167,8 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     /// <inheritdoc />
     async Task<IUser> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
     {
-        var user = GetUser(id);
-        if (user is not null || mode == CacheMode.CacheOnly)
-            return user;
+        SocketUser user = GetUser(id);
+        if (user is not null || mode == CacheMode.CacheOnly) return user;
 
         return await Rest.GetUserAsync(id, options).ConfigureAwait(false);
     }

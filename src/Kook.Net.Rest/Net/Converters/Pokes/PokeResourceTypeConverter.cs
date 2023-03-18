@@ -15,12 +15,10 @@ internal class PokeResourceTypeConverter : JsonConverter<PokeResourceType>
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, PokeResourceType value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, PokeResourceType value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
             PokeResourceType.ImageAnimation => "ImageAnimation",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
-    }
 }

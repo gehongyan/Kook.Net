@@ -39,7 +39,7 @@ Kook.Net 中的 Emote 指代 KOOK 中添加到服务器内的自定义表情符�
 目前 KOOK 中尚未提供便捷获取自定义表情符号的完全限定形式的方法，要获取自定义表情符号的完全限定形式，可通过一下几种方式：
 
 1. Kook.Net 对消息体中的表情符号部分进行了解析，可通过 @Kook.IMessage.Tags 获取 @Kook.ITag.Type 为
-@Kook.TagType.Emoji 的 @Kook.Emote 对象，通过 @Kook.Emote.ToKMarkdownString* 方法获取完全限定形式。
+   @Kook.TagType.Emoji 的 @Kook.Emote 对象，通过 @Kook.Emote.ToKMarkdownString* 方法获取完全限定形式。
 2. 通过 @Kook.WebSocket.SocketGuild.Emotes 属性获取服务器中的全部自定义表情符号，从而获取其完全限定形式。
 3. 通过 @Kook.WebSocket.SocketGuild.GetEmotesAsync* 方法获取服务器中的全部自定义表情符号，从而获取其完全限定形式。
 4. 在 KOOK 网页端或桌面客户端中启用开发者工具 (Ctrl+Alt+Shift+O)，通过跟踪与表情符号相关的网络请求负载或相应获取其完全限定形式。

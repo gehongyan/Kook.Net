@@ -1,24 +1,25 @@
 using Kook.Rest;
 using System.Collections.Immutable;
+using Kook.API;
 
 namespace Kook.WebSocket;
 
 internal static class SocketChannelHelper
 {
-    public static IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(ISocketMessageChannel channel, KookSocketClient kook, MessageCache messages,
+    public static IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(ISocketMessageChannel channel, KookSocketClient kook,
+        MessageCache messages,
         Guid? referenceMessageId, Direction dir, int limit, CacheMode mode, RequestOptions options)
     {
-        if (dir == Direction.After && referenceMessageId == null)
-            return AsyncEnumerable.Empty<IReadOnlyCollection<IMessage>>();
+        if (dir == Direction.After && referenceMessageId == null) return AsyncEnumerable.Empty<IReadOnlyCollection<IMessage>>();
 
-        var cachedMessages = GetCachedMessages(channel, kook, messages, referenceMessageId, dir, limit);
-        var result = ImmutableArray.Create(cachedMessages).ToAsyncEnumerable<IReadOnlyCollection<IMessage>>();
+        IReadOnlyCollection<SocketMessage> cachedMessages = GetCachedMessages(channel, kook, messages, referenceMessageId, dir, limit);
+        IAsyncEnumerable<IReadOnlyCollection<IMessage>> result = ImmutableArray.Create(cachedMessages)
+            .ToAsyncEnumerable<IReadOnlyCollection<IMessage>>();
 
         if (dir == Direction.Before)
         {
             limit -= cachedMessages.Count;
-            if (mode == CacheMode.CacheOnly || limit <= 0)
-                return result;
+            if (mode == CacheMode.CacheOnly || limit <= 0) return result;
 
             //Download remaining messages
             Guid? minId = cachedMessages.Count > 0
@@ -28,7 +29,8 @@ internal static class SocketChannelHelper
                 ? cachedMessages.OrderBy(x => x.Timestamp).FirstOrDefault()?.Id
 #endif
                 : referenceMessageId;
-            var downloadedMessages = ChannelHelper.GetMessagesAsync(channel, kook, minId, dir, limit, true, options);
+            IAsyncEnumerable<IReadOnlyCollection<RestMessage>> downloadedMessages =
+                ChannelHelper.GetMessagesAsync(channel, kook, minId, dir, limit, true, options);
             if (cachedMessages.Count != 0)
                 return result.Concat(downloadedMessages);
             else
@@ -37,8 +39,7 @@ internal static class SocketChannelHelper
         else if (dir == Direction.After)
         {
             limit -= cachedMessages.Count;
-            if (mode == CacheMode.CacheOnly || limit <= 0)
-                return result;
+            if (mode == CacheMode.CacheOnly || limit <= 0) return result;
 
             //Download remaining messages
             Guid? maxId = cachedMessages.Count > 0
@@ -48,7 +49,8 @@ internal static class SocketChannelHelper
                 ? cachedMessages.OrderByDescending(x => x.Timestamp).FirstOrDefault()?.Id
 #endif
                 : referenceMessageId;
-            var downloadedMessages = ChannelHelper.GetMessagesAsync(channel, kook, maxId, dir, limit, true, options);
+            IAsyncEnumerable<IReadOnlyCollection<RestMessage>> downloadedMessages =
+                ChannelHelper.GetMessagesAsync(channel, kook, maxId, dir, limit, true, options);
             if (cachedMessages.Count != 0)
                 return result.Concat(downloadedMessages);
             else
@@ -56,8 +58,7 @@ internal static class SocketChannelHelper
         }
         else //Direction.Around
         {
-            if (mode == CacheMode.CacheOnly || limit <= cachedMessages.Count)
-                return result;
+            if (mode == CacheMode.CacheOnly || limit <= cachedMessages.Count) return result;
 
             //Cache isn't useful here since Kook will send them anyways
             return ChannelHelper.GetMessagesAsync(channel, kook, referenceMessageId, dir, limit, true, options);
@@ -72,6 +73,7 @@ internal static class SocketChannelHelper
         else
             return ImmutableArray.Create<SocketMessage>();
     }
+
     /// <exception cref="NotSupportedException">Unexpected <see cref="ISocketMessageChannel"/> type.</exception>
     public static void AddMessage(ISocketMessageChannel channel, KookSocketClient kook,
         SocketMessage msg)
@@ -88,34 +90,33 @@ internal static class SocketChannelHelper
                 throw new NotSupportedException($"Unexpected {nameof(ISocketMessageChannel)} type.");
         }
     }
+
     /// <exception cref="NotSupportedException">Unexpected <see cref="ISocketMessageChannel"/> type.</exception>
     public static SocketMessage RemoveMessage(ISocketMessageChannel channel, KookSocketClient kook,
-        Guid id)
-    {
-        return channel switch
+        Guid id) =>
+        channel switch
         {
             SocketDMChannel dmChannel => dmChannel.RemoveMessage(id),
             SocketTextChannel textChannel => textChannel.RemoveMessage(id),
-            _ => throw new NotSupportedException($"Unexpected {nameof(ISocketMessageChannel)} type."),
+            _ => throw new NotSupportedException($"Unexpected {nameof(ISocketMessageChannel)} type.")
         };
-    }
 
     public static async Task UpdateAsync(SocketGuildChannel channel, RequestOptions options)
     {
-        var model = await channel.Kook.ApiClient.GetGuildChannelAsync(channel.Id, options).ConfigureAwait(false);
+        Channel model = await channel.Kook.ApiClient.GetGuildChannelAsync(channel.Id, options).ConfigureAwait(false);
         channel.Update(channel.Kook.State, model);
     }
 
     public static async Task UpdateAsync(SocketDMChannel channel, RequestOptions options)
     {
-        var model = await channel.Kook.ApiClient.GetUserChatAsync(channel.Id, options).ConfigureAwait(false);
+        UserChat model = await channel.Kook.ApiClient.GetUserChatAsync(channel.Id, options).ConfigureAwait(false);
         channel.Update(channel.Kook.State, model);
     }
 
     public static async Task<IReadOnlyCollection<SocketGuildUser>> GetConnectedUsersAsync(SocketVoiceChannel channel,
         SocketGuild guild, KookSocketClient kook, RequestOptions options)
     {
-        var users = await channel.Kook.ApiClient.GetConnectedUsersAsync(channel.Id, options).ConfigureAwait(false);
+        IReadOnlyCollection<User> users = await channel.Kook.ApiClient.GetConnectedUsersAsync(channel.Id, options).ConfigureAwait(false);
         return users.Select(x => SocketGuildUser.Create(guild, kook.State, x)).ToImmutableArray();
     }
 }

@@ -112,8 +112,8 @@ public class ParameterBuilder
 
         if (type.GetTypeInfo().IsValueType)
             DefaultValue = Activator.CreateInstance(type);
-        else if (type.IsArray)
-            DefaultValue = Array.CreateInstance(type.GetElementType(), 0);
+        else if (type.IsArray) DefaultValue = Array.CreateInstance(type.GetElementType(), 0);
+
         ParameterType = type;
     }
 
@@ -125,11 +125,11 @@ public class ParameterBuilder
     /// <exception cref="InvalidOperationException"> The type for the command must be a class with a public parameterless constructor to use as a NamedArgumentType. </exception>
     private TypeReader GetReader(Type type)
     {
-        var commands = Command.Module.Service;
+        CommandService commands = Command.Module.Service;
         if (type.GetTypeInfo().GetCustomAttribute<NamedArgumentTypeAttribute>() != null)
         {
             IsRemainder = true;
-            var reader = commands.GetTypeReaders(type)?.FirstOrDefault().Value;
+            TypeReader reader = commands.GetTypeReaders(type)?.FirstOrDefault().Value;
             if (reader == null)
             {
                 Type readerType;
@@ -152,7 +152,7 @@ public class ParameterBuilder
         }
 
 
-        var readers = commands.GetTypeReaders(type);
+        IDictionary<Type, TypeReader> readers = commands.GetTypeReaders(type);
         if (readers != null)
             return readers.FirstOrDefault().Value;
         else

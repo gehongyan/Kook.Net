@@ -7,6 +7,7 @@ internal class CreateOrModifyChannelPermissionOverwriteResponse
     [JsonPropertyName("role_id")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public uint? RoleId { get; set; }
+
     [JsonPropertyName("user")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public User User { get; set; }
@@ -16,10 +17,10 @@ internal class CreateOrModifyChannelPermissionOverwriteResponse
     {
         get
         {
-            if (RoleId is not null)
-                return PermissionOverwriteTargetType.Role;
-            if (User is not null)
-                return PermissionOverwriteTargetType.User;
+            if (RoleId is not null) return PermissionOverwriteTargetType.Role;
+
+            if (User is not null) return PermissionOverwriteTargetType.User;
+
             return PermissionOverwriteTargetType.Unspecified;
         }
     }

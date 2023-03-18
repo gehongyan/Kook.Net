@@ -9,14 +9,17 @@ public enum AttachmentType
     ///     The attachment is a file.
     /// </summary>
     File,
+
     /// <summary>
     ///     The attachment is an image.
     /// </summary>
     Image,
+
     /// <summary>
     ///     The attachment is a video.
     /// </summary>
     Video,
+
     /// <summary>
     ///     The attachment is an audio.
     /// </summary>

@@ -10,7 +10,6 @@ public class DividerModule : IModule, IEquatable<DividerModule>
 {
     internal DividerModule()
     {
-
     }
 
     /// <inheritdoc />

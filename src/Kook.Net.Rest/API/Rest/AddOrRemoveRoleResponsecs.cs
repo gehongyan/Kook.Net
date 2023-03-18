@@ -10,5 +10,6 @@ internal class AddOrRemoveRoleResponse
     [JsonPropertyName("user_id")]
     public ulong UserId { get; set; }
 
-    [JsonPropertyName("roles")] public uint[] RoleIds { get; set; }
+    [JsonPropertyName("roles")]
+    public uint[] RoleIds { get; set; }
 }

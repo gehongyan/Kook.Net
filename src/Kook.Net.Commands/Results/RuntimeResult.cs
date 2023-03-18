@@ -21,6 +21,7 @@ public abstract class RuntimeResult : IResult
 
     /// <inheritdoc/>
     public CommandError? Error { get; }
+
     /// <summary> Describes the execution reason or result. </summary>
     public string Reason { get; }
 
@@ -32,5 +33,6 @@ public abstract class RuntimeResult : IResult
 
     /// <inheritdoc />
     public override string ToString() => Reason ?? (IsSuccess ? "Successful" : "Unsuccessful");
+
     private string DebuggerDisplay => IsSuccess ? $"Success: {Reason ?? "No Reason"}" : $"{Error}: {Reason}";
 }

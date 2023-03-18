@@ -25,6 +25,7 @@ public class RoleTests : IClassFixture<RestGuildFixture>
         // capture all console output
         guildFixture.Client.Log += LogAsync;
     }
+
     private Task LogAsync(LogMessage message)
     {
         _output.WriteLine(message.ToString());
@@ -87,5 +88,4 @@ public class RoleTests : IClassFixture<RestGuildFixture>
             await role.DeleteAsync();
         }
     }
-
 }

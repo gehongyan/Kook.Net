@@ -11,10 +11,12 @@ public struct Image : IDisposable
     ///     Gets the stream to be uploaded to Kook.
     /// </summary>
     public Stream Stream { get; }
+
     /// <summary>
     ///     Gets the file extension of the image if possible.
     /// </summary>
     internal string FileExtension { get; }
+
     /// <summary>
     ///     Create the image with a <see cref="System.IO.Stream"/>.
     /// </summary>
@@ -26,9 +28,9 @@ public struct Image : IDisposable
     {
         _isDisposed = false;
         Stream = stream;
-        if (stream is FileStream fileStream)
-            FileExtension = Path.GetExtension(fileStream.Name).Replace(".", "");
+        if (stream is FileStream fileStream) FileExtension = Path.GetExtension(fileStream.Name).Replace(".", "");
     }
+
     internal Image(Stream stream, string fileExtension)
     {
         _isDisposed = false;
@@ -74,8 +76,8 @@ public struct Image : IDisposable
     /// <inheritdoc/>
     public void Dispose()
     {
-        if (_isDisposed)
-            return;
+        if (_isDisposed) return;
+
         Stream?.Dispose();
         _isDisposed = true;
     }

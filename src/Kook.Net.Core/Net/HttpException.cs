@@ -15,6 +15,7 @@ public class HttpException : Exception
     ///     An HTTP status code from Kook.
     /// </returns>
     public HttpStatusCode HttpCode { get; }
+
     /// <summary>
     ///     Gets the JSON error code returned by Kook.
     /// </summary>
@@ -22,14 +23,17 @@ public class HttpException : Exception
     ///     A JSON error code from Kook, or <c>null</c> if none.
     /// </returns>
     public KookErrorCode? KookCode { get; }
+
     /// <summary>
     ///     Gets the reason of the exception.
     /// </summary>
     public string Reason { get; }
+
     /// <summary>
     ///     Gets the request object used to send the request.
     /// </summary>
     public IRequest Request { get; }
+
     /// <summary>
     ///     Gets a collection of json errors describing what went wrong with the request.
     /// </summary>
@@ -43,7 +47,8 @@ public class HttpException : Exception
     /// <param name="kookCode"> The Kook status code returned. </param>
     /// <param name="reason"> The reason behind the exception. </param>
     /// <param name="errors"> A collection of json errors describing what went wrong with the request. </param>
-    public HttpException(HttpStatusCode httpCode, IRequest request, KookErrorCode? kookCode = null, string reason = null, KookJsonError[] errors = null)
+    public HttpException(HttpStatusCode httpCode, IRequest request, KookErrorCode? kookCode = null, string reason = null,
+        KookJsonError[] errors = null)
         : base(CreateMessage(httpCode, (int?)kookCode, reason))
     {
         HttpCode = httpCode;
@@ -70,6 +75,7 @@ public class HttpException : Exception
             else
                 msg = $"The server responded with error {(int)httpCode}: {httpCode}";
         }
+
         return msg;
     }
 }

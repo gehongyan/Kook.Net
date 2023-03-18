@@ -15,6 +15,7 @@ public struct ExecuteResult : IResult
 
     /// <inheritdoc />
     public CommandError? Error { get; }
+
     /// <inheritdoc />
     public string ErrorReason { get; }
 
@@ -35,7 +36,8 @@ public struct ExecuteResult : IResult
     ///     A <see cref="ExecuteResult" /> that does not contain any errors.
     /// </returns>
     public static ExecuteResult FromSuccess()
-        => new ExecuteResult(null, null, null);
+        => new(null, null, null);
+
     /// <summary>
     ///     Initializes a new <see cref="ExecuteResult" /> with a specified <see cref="CommandError" /> and its
     ///     reason, indicating an unsuccessful execution.
@@ -46,7 +48,8 @@ public struct ExecuteResult : IResult
     ///     A <see cref="ExecuteResult" /> that contains a <see cref="CommandError" /> and reason.
     /// </returns>
     public static ExecuteResult FromError(CommandError error, string reason)
-        => new ExecuteResult(null, error, reason);
+        => new(null, error, reason);
+
     /// <summary>
     ///     Initializes a new <see cref="ExecuteResult" /> with a specified exception, indicating an unsuccessful
     ///     execution.
@@ -58,7 +61,8 @@ public struct ExecuteResult : IResult
     ///     reason.
     /// </returns>
     public static ExecuteResult FromError(Exception ex)
-        => new ExecuteResult(ex, CommandError.Exception, ex.Message);
+        => new(ex, CommandError.Exception, ex.Message);
+
     /// <summary>
     ///     Initializes a new <see cref="ExecuteResult" /> with a specified result; this may or may not be an
     ///     successful execution depending on the <see cref="Kook.Commands.IResult.Error" /> and
@@ -69,7 +73,7 @@ public struct ExecuteResult : IResult
     ///     A <see cref="ExecuteResult"/> that inherits the <see cref="IResult"/> error type and reason.
     /// </returns>
     public static ExecuteResult FromError(IResult result)
-        => new ExecuteResult(null, result.Error, result.ErrorReason);
+        => new(null, result.Error, result.ErrorReason);
 
     /// <summary>
     ///     Gets a string that indicates the execution result.
@@ -79,5 +83,6 @@ public struct ExecuteResult : IResult
     ///     <see cref="ErrorReason"/>".
     /// </returns>
     public override string ToString() => IsSuccess ? "Success" : $"{Error}: {ErrorReason}";
+
     private string DebuggerDisplay => IsSuccess ? "Success" : $"{Error}: {ErrorReason}";
 }

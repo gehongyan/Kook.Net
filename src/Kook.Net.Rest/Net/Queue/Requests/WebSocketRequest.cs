@@ -26,8 +26,5 @@ internal class WebSocketRequest : IRequest
         Promise = new TaskCompletionSource<Stream>();
     }
 
-    public async Task SendAsync()
-    {
-        await Client.SendAsync(Data, 0, Data.Length, IsText).ConfigureAwait(false);
-    }
+    public async Task SendAsync() => await Client.SendAsync(Data, 0, Data.Length, IsText).ConfigureAwait(false);
 }

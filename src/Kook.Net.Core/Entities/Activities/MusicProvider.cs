@@ -9,14 +9,17 @@ public enum MusicProvider
     ///     Specifies that the music provider is unspecified.
     /// </summary>
     Unspecified = 0,
+
     /// <summary>
     ///     Specifies that the music provider is NetEase.
     /// </summary>
     NetEaseCloudMusic = 1,
+
     /// <summary>
     ///     Specifies that the music provider is Tencent QQ.
     /// </summary>
     TencentMusic = 2,
+
     /// <summary>
     ///     Specifies that the music provider is KuGou.
     /// </summary>

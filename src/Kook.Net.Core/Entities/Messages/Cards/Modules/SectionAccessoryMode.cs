@@ -9,10 +9,12 @@ public enum SectionAccessoryMode
     ///     How the accessory is positioned relative to the text element is not specified.
     /// </summary>
     Unspecified,
+
     /// <summary>
     ///     The accessory is positioned to the left of the text element.
     /// </summary>
     Left,
+
     /// <summary>
     ///     The accessory is positioned to the right of the text element.
     /// </summary>

@@ -1,14 +1,15 @@
 using System.Text.Json.Serialization;
 
-namespace Kook.API
+namespace Kook.API;
+
+internal class VoiceRegion
 {
-    internal class VoiceRegion
-    {
-        [JsonPropertyName("id")]
-        public string Id { get; set; }
-        [JsonPropertyName("name")]
-        public string Name { get; set; }
-        [JsonPropertyName("crowding")]
-        public int Crowding { get; set; }
-    }
+    [JsonPropertyName("id")]
+    public string Id { get; set; }
+
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
+
+    [JsonPropertyName("crowding")]
+    public int Crowding { get; set; }
 }

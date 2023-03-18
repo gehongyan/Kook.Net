@@ -21,8 +21,7 @@ internal class CardThemeConverter : JsonConverter<CardTheme>
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, CardTheme value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, CardTheme value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
             CardTheme.Primary => "primary",
@@ -34,5 +33,4 @@ internal class CardThemeConverter : JsonConverter<CardTheme>
             CardTheme.None => "none",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
-    }
 }

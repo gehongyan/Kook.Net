@@ -9,10 +9,12 @@ internal class PrivateReaction
     [JsonConverter(typeof(ChatCodeConverter))]
     public Guid ChatCode { get; set; }
 
-    [JsonPropertyName("msg_id")] public Guid MessageId { get; set; }
+    [JsonPropertyName("msg_id")]
+    public Guid MessageId { get; set; }
 
     [JsonPropertyName("user_id")]
     public ulong UserId { get; set; }
 
-    [JsonPropertyName("emoji")] public Emoji Emoji { get; set; }
+    [JsonPropertyName("emoji")]
+    public Emoji Emoji { get; set; }
 }

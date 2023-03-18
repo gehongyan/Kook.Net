@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Model = Kook.API.Role;
 
 namespace Kook.WebSocket;
+
 /// <summary>
 ///     Represents a WebSocket-based role to be given to a guild user.
 /// </summary>
@@ -23,20 +24,28 @@ public class SocketRole : SocketEntity<uint>, IRole
 
     /// <inheritdoc />
     public RoleType? Type { get; set; }
+
     /// <inheritdoc />
     public string Name { get; private set; }
+
     /// <inheritdoc />
     public Color Color { get; private set; }
+
     /// <inheritdoc />
     public ColorType ColorType { get; private set; }
+
     /// <inheritdoc />
     public GradientColor? GradientColor { get; private set; }
+
     /// <inheritdoc />
     public int Position { get; private set; }
+
     /// <inheritdoc />
     public bool IsHoisted { get; private set; }
+
     /// <inheritdoc />
     public bool IsMentionable { get; private set; }
+
     /// <inheritdoc />
     public GuildPermissions Permissions { get; private set; }
 
@@ -47,22 +56,24 @@ public class SocketRole : SocketEntity<uint>, IRole
     ///     <c>true</c> if the role is @everyone; otherwise <c>false</c>.
     /// </returns>
     public bool IsEveryone => Id == 0;
+
     /// <inheritdoc />
     public string KMarkdownMention => IsEveryone ? "@everyone" : MentionUtils.KMarkdownMentionRole(Id);
+
     /// <inheritdoc />
     public string PlainTextMention => IsEveryone ? "@全体成员" : MentionUtils.PlainTextMentionRole(Id);
 
     internal SocketRole(SocketGuild guild, uint id)
-        : base(guild.Kook, id)
-    {
+        : base(guild.Kook, id) =>
         Guild = guild;
-    }
+
     internal static SocketRole Create(SocketGuild guild, ClientState state, Model model)
     {
-        var entity = new SocketRole(guild, model.Id);
+        SocketRole entity = new(guild, model.Id);
         entity.Update(state, model);
         return entity;
     }
+
     internal void Update(ClientState state, Model model)
     {
         Name = model.Name;
@@ -89,6 +100,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     /// <inheritdoc />
     public Task ModifyAsync(Action<RoleProperties> func, RequestOptions options = null)
         => RoleHelper.ModifyAsync(this, Kook, func, options);
+
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
         => RoleHelper.DeleteAsync(this, Kook, options);
@@ -121,14 +133,14 @@ public class SocketRole : SocketEntity<uint>, IRole
                 .Select(x => x.Select(v => v.Value))
 #endif
                 .Select(c => c.ToImmutableArray() as IReadOnlyCollection<SocketGuildUser>);
-            foreach (IReadOnlyCollection<SocketGuildUser> users in userCollections)
-                yield return users;
+            foreach (IReadOnlyCollection<SocketGuildUser> users in userCollections) yield return users;
+
             yield break;
         }
 
         // Update SocketGuild.Users by fetching from REST API
         void Func(SearchGuildMemberProperties p) => p.RoleId = Id;
-        var restUserCollections = Kook.ApiClient
+        IAsyncEnumerable<IReadOnlyCollection<GuildMember>> restUserCollections = Kook.ApiClient
             .GetGuildMembersAsync(Guild.Id, Func, KookConfig.MaxUsersPerBatch, 1, options);
         await foreach (IReadOnlyCollection<GuildMember> restUsers in restUserCollections)
             yield return restUsers.Select(restUser => Guild.AddOrUpdateUser(restUser)).ToList();
@@ -146,6 +158,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     ///     A string that resolves to <see cref="Kook.WebSocket.SocketRole.Name" />.
     /// </returns>
     public override string ToString() => Name;
+
     private string DebuggerDisplay => $"{Name} ({Id})";
     internal SocketRole Clone() => MemberwiseClone() as SocketRole;
 

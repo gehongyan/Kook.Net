@@ -8,10 +8,7 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class InviteModule : IModule, IEquatable<InviteModule>
 {
-    internal InviteModule(string code)
-    {
-        Code = code;
-    }
+    internal InviteModule(string code) => Code = code;
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Invite;

@@ -18,7 +18,8 @@ internal class NullableNumberBooleanConverter : JsonConverter<bool?>
             case JsonTokenType.Number:
                 return reader.TryGetInt32(out int value) && value == 1;
             default:
-                throw new JsonException($"{nameof(NullableNumberBooleanConverter)} expects null, boolean or number token, but got {reader.TokenType}");
+                throw new JsonException(
+                    $"{nameof(NullableNumberBooleanConverter)} expects null, boolean or number token, but got {reader.TokenType}");
         }
     }
 

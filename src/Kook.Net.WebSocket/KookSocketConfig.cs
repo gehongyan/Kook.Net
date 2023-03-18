@@ -126,7 +126,7 @@ public class KookSocketConfig : KookRestConfig
     /// <exception cref="System.ArgumentException">Value must be at least 0.</exception>
     public int MaxWaitBetweenGuildAvailablesBeforeReady
     {
-        get { return _maxWaitForGuildAvailable; }
+        get => _maxWaitForGuildAvailable;
 
         set
         {

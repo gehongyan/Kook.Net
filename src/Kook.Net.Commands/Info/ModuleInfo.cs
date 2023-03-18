@@ -12,18 +12,22 @@ public class ModuleInfo
     ///     Gets the command service associated with this module.
     /// </summary>
     public CommandService Service { get; }
+
     /// <summary>
     ///     Gets the name of this module.
     /// </summary>
     public string Name { get; }
+
     /// <summary>
     ///     Gets the summary of this module.
     /// </summary>
     public string Summary { get; }
+
     /// <summary>
     ///     Gets the remarks of this module.
     /// </summary>
     public string Remarks { get; }
+
     /// <summary>
     ///     Gets the group name (main prefix) of this module.
     /// </summary>
@@ -33,26 +37,32 @@ public class ModuleInfo
     ///     Gets a read-only list of aliases associated with this module.
     /// </summary>
     public IReadOnlyList<string> Aliases { get; }
+
     /// <summary>
     ///     Gets a read-only list of commands associated with this module.
     /// </summary>
     public IReadOnlyList<CommandInfo> Commands { get; }
+
     /// <summary>
     ///     Gets a read-only list of preconditions that apply to this module.
     /// </summary>
     public IReadOnlyList<PreconditionAttribute> Preconditions { get; }
+
     /// <summary>
     ///     Gets a read-only list of attributes that apply to this module.
     /// </summary>
     public IReadOnlyList<Attribute> Attributes { get; }
+
     /// <summary>
     ///     Gets a read-only list of submodules associated with this module.
     /// </summary>
     public IReadOnlyList<ModuleInfo> Submodules { get; }
+
     /// <summary>
     ///     Gets the parent module of this submodule if applicable.
     /// </summary>
     public ModuleInfo Parent { get; }
+
     /// <summary>
     ///     Gets a value that indicates whether this module is a submodule or not.
     /// </summary>
@@ -78,16 +88,15 @@ public class ModuleInfo
 
     private static IEnumerable<string> BuildAliases(ModuleBuilder builder, CommandService service)
     {
-        var result = builder.Aliases.ToList();
-        var builderQueue = new Queue<ModuleBuilder>();
+        List<string> result = builder.Aliases.ToList();
+        Queue<ModuleBuilder> builderQueue = new();
 
-        var parent = builder;
-        while ((parent = parent.Parent) != null)
-            builderQueue.Enqueue(parent);
+        ModuleBuilder parent = builder;
+        while ((parent = parent.Parent) != null) builderQueue.Enqueue(parent);
 
         while (builderQueue.Count > 0)
         {
-            var level = builderQueue.Dequeue();
+            ModuleBuilder level = builderQueue.Dequeue();
             // permute in reverse because we want to *prefix* our aliases
             result = level.Aliases.Permutate(result, (first, second) =>
             {
@@ -105,17 +114,16 @@ public class ModuleInfo
 
     private List<ModuleInfo> BuildSubmodules(ModuleBuilder parent, CommandService service, IServiceProvider services)
     {
-        var result = new List<ModuleInfo>();
+        List<ModuleInfo> result = new();
 
-        foreach (var submodule in parent.Modules)
-            result.Add(submodule.Build(service, services, this));
+        foreach (ModuleBuilder submodule in parent.Modules) result.Add(submodule.Build(service, services, this));
 
         return result;
     }
 
     private static List<PreconditionAttribute> BuildPreconditions(ModuleBuilder builder)
     {
-        var result = new List<PreconditionAttribute>();
+        List<PreconditionAttribute> result = new();
 
         ModuleBuilder parent = builder;
         while (parent != null)
@@ -129,7 +137,7 @@ public class ModuleInfo
 
     private static List<Attribute> BuildAttributes(ModuleBuilder builder)
     {
-        var result = new List<Attribute>();
+        List<Attribute> result = new();
 
         ModuleBuilder parent = builder;
         while (parent != null)

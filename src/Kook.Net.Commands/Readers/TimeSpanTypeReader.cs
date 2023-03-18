@@ -23,30 +23,22 @@ internal class TimeSpanTypeReader : TypeReader
         "%h'h'",                //   3h
         "%m'm'%s's'",           //     2m1s
         "%m'm'",                //     2m
-        "%s's'",                //       1s
+        "%s's'"                 //       1s
     };
 
     /// <inheritdoc />
     public override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
     {
-        if (string.IsNullOrEmpty(input))
-            throw new ArgumentException(message: $"{nameof(input)} must not be null or empty.", paramName: nameof(input));
+        if (string.IsNullOrEmpty(input)) throw new ArgumentException($"{nameof(input)} must not be null or empty.", nameof(input));
 
-        var isNegative = input[0] == '-'; // Char for CultureInfo.InvariantCulture.NumberFormat.NegativeSign
-        if (isNegative)
-        {
-            input = input.Substring(1);
-        }
+        bool isNegative = input[0] == '-'; // Char for CultureInfo.InvariantCulture.NumberFormat.NegativeSign
+        if (isNegative) input = input.Substring(1);
 
-        if (TimeSpan.TryParseExact(input.ToLowerInvariant(), Formats, CultureInfo.InvariantCulture, out var timeSpan))
-        {
+        if (TimeSpan.TryParseExact(input.ToLowerInvariant(), Formats, CultureInfo.InvariantCulture, out TimeSpan timeSpan))
             return isNegative
                 ? Task.FromResult(TypeReaderResult.FromSuccess(-timeSpan))
                 : Task.FromResult(TypeReaderResult.FromSuccess(timeSpan));
-        }
         else
-        {
             return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "Failed to parse TimeSpan"));
-        }
     }
 }

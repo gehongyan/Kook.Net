@@ -9,30 +9,30 @@ namespace Kook;
 /// </summary>
 public static class MentionUtils
 {
-    internal static readonly Regex PlainTextUserRegex = new Regex(@"@[^#]+?#(?<id>\d{1,20})",
+    internal static readonly Regex PlainTextUserRegex = new(@"@[^#]+?#(?<id>\d{1,20})",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
-    internal static readonly Regex PlainTextRoleRegex = new Regex(@"@role:(?<id>\d{1,10}?);",
+    internal static readonly Regex PlainTextRoleRegex = new(@"@role:(?<id>\d{1,10}?);",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
-    internal static readonly Regex PlainTextChannelRegex = new Regex(@"#channel:(?<id>\d{1,20});",
+    internal static readonly Regex PlainTextChannelRegex = new(@"#channel:(?<id>\d{1,20});",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
-    internal static readonly Regex PlainTextTagRegex = new Regex(
+    internal static readonly Regex PlainTextTagRegex = new(
         @"(@[^#]+?#\d{1,20})|(@role:\d{1,10};)|(#channel:\d{1,20}?;)|(\[:[^:]{1,32}?:\d{1,20}\/\w{1,20}?\])",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
 
-    internal static readonly Regex KMarkdownUserRegex = new Regex(@"(\(met\))(?<id>\d{1,20}?)\1",
+    internal static readonly Regex KMarkdownUserRegex = new(@"(\(met\))(?<id>\d{1,20}?)\1",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
-    internal static readonly Regex KMarkdownRoleRegex = new Regex(@"(\(rol\))(?<id>\d{1,10}?)\1",
+    internal static readonly Regex KMarkdownRoleRegex = new(@"(\(rol\))(?<id>\d{1,10}?)\1",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
-    internal static readonly Regex KMarkdownChannelRegex = new Regex(@"(\(chn\))(?<id>\d{1,20}?)\1",
+    internal static readonly Regex KMarkdownChannelRegex = new(@"(\(chn\))(?<id>\d{1,20}?)\1",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
-    internal static readonly Regex KMarkdownTagRegex = new Regex(
+    internal static readonly Regex KMarkdownTagRegex = new(
         @"(\((met|rol|chn)\)\d{1,20}?\(\2\))|(\(emj\)[^\(\)]{1,32}?\(emj\)\[\d{1,20}\/\w{1,20}\])",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
@@ -109,9 +109,9 @@ public static class MentionUtils
     /// <exception cref="ArgumentException">Invalid mention format.</exception>
     public static ulong ParseUser(string text, TagMode tagMode)
     {
-        if (TryParseUser(text, out ulong id, tagMode))
-            return id;
-        throw new ArgumentException(message: "Invalid mention format.", paramName: nameof(text));
+        if (TryParseUser(text, out ulong id, tagMode)) return id;
+
+        throw new ArgumentException("Invalid mention format.", nameof(text));
     }
 
     /// <summary>
@@ -144,9 +144,9 @@ public static class MentionUtils
     /// <exception cref="ArgumentException">Invalid mention format.</exception>
     public static ulong ParseChannel(string text, TagMode tagMode)
     {
-        if (TryParseChannel(text, out ulong id, tagMode))
-            return id;
-        throw new ArgumentException(message: "Invalid mention format.", paramName: nameof(text));
+        if (TryParseChannel(text, out ulong id, tagMode)) return id;
+
+        throw new ArgumentException("Invalid mention format.", nameof(text));
     }
 
     /// <summary>
@@ -175,9 +175,9 @@ public static class MentionUtils
     /// <exception cref="ArgumentException">Invalid mention format.</exception>
     public static ulong ParseRole(string text, TagMode tagMode)
     {
-        if (TryParseRole(text, out uint id, tagMode))
-            return id;
-        throw new ArgumentException(message: "Invalid mention format.", paramName: nameof(text));
+        if (TryParseRole(text, out uint id, tagMode)) return id;
+
+        throw new ArgumentException("Invalid mention format.", nameof(text));
     }
 
     /// <summary>
@@ -204,49 +204,48 @@ public static class MentionUtils
         TagHandling roleHandling, TagHandling everyoneHandling, TagHandling emojiHandling)
     {
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-        var text = new StringBuilder(msg.Content[startIndex..]);
+        StringBuilder text = new(msg.Content[startIndex..]);
 #else
         var text = new StringBuilder(msg.Content.Substring(startIndex));
 #endif
-        var tags = msg.Tags;
+        IReadOnlyCollection<ITag> tags = msg.Tags;
         int indexOffset = -startIndex;
 
-        foreach (var tag in tags)
+        foreach (ITag tag in tags)
         {
-            if (tag.Index < startIndex)
-                continue;
+            if (tag.Index < startIndex) continue;
 
             string newText = "";
             switch (tag.Type)
             {
                 case TagType.UserMention:
-                    if (userHandling == TagHandling.Ignore)
-                        continue;
+                    if (userHandling == TagHandling.Ignore) continue;
+
                     newText = ResolveUserMention(tag, userHandling);
                     break;
                 case TagType.ChannelMention:
-                    if (channelHandling == TagHandling.Ignore)
-                        continue;
+                    if (channelHandling == TagHandling.Ignore) continue;
+
                     newText = ResolveChannelMention(tag, channelHandling);
                     break;
                 case TagType.RoleMention:
-                    if (roleHandling == TagHandling.Ignore)
-                        continue;
+                    if (roleHandling == TagHandling.Ignore) continue;
+
                     newText = ResolveRoleMention(tag, roleHandling);
                     break;
                 case TagType.EveryoneMention:
-                    if (everyoneHandling == TagHandling.Ignore)
-                        continue;
+                    if (everyoneHandling == TagHandling.Ignore) continue;
+
                     newText = ResolveEveryoneMention(tag, everyoneHandling);
                     break;
                 case TagType.HereMention:
-                    if (everyoneHandling == TagHandling.Ignore)
-                        continue;
+                    if (everyoneHandling == TagHandling.Ignore) continue;
+
                     newText = ResolveHereMention(tag, everyoneHandling);
                     break;
                 case TagType.Emoji:
-                    if (emojiHandling == TagHandling.Ignore)
-                        continue;
+                    if (emojiHandling == TagHandling.Ignore) continue;
+
                     newText = ResolveEmoji(tag, emojiHandling);
                     break;
             }
@@ -263,8 +262,8 @@ public static class MentionUtils
     {
         if (mode != TagHandling.Remove)
         {
-            var user = tag.Value as IUser;
-            var guildUser = user as IGuildUser;
+            IUser user = tag.Value as IUser;
+            IGuildUser guildUser = user as IGuildUser;
             switch (mode)
             {
                 case TagHandling.Name:
@@ -299,7 +298,7 @@ public static class MentionUtils
     {
         if (mode != TagHandling.Remove)
         {
-            var channel = tag.Value as IChannel;
+            IChannel channel = tag.Value as IChannel;
             switch (mode)
             {
                 case TagHandling.Name:
@@ -326,7 +325,7 @@ public static class MentionUtils
     {
         if (mode != TagHandling.Remove)
         {
-            var role = tag.Value as IRole;
+            IRole role = tag.Value as IRole;
             switch (mode)
             {
                 case TagHandling.Name:
@@ -352,7 +351,6 @@ public static class MentionUtils
     internal static string ResolveEveryoneMention(ITag tag, TagHandling mode)
     {
         if (mode != TagHandling.Remove)
-        {
             switch (mode)
             {
                 case TagHandling.Name:
@@ -364,7 +362,6 @@ public static class MentionUtils
                 case TagHandling.Sanitize:
                     return $"@{SanitizeChar}全体成员";
             }
-        }
 
         return "";
     }
@@ -372,7 +369,6 @@ public static class MentionUtils
     internal static string ResolveHereMention(ITag tag, TagHandling mode)
     {
         if (mode != TagHandling.Remove)
-        {
             switch (mode)
             {
                 case TagHandling.Name:
@@ -384,7 +380,6 @@ public static class MentionUtils
                 case TagHandling.Sanitize:
                     return $"@{SanitizeChar}在线成员";
             }
-        }
 
         return "";
     }
@@ -399,8 +394,7 @@ public static class MentionUtils
             for (int i = 0; i < emoji.Name.Length; i++)
             {
                 char c = emoji.Name[i];
-                if (!char.IsLetterOrDigit(c) && c != '_' && c != '-')
-                    return "";
+                if (!char.IsLetterOrDigit(c) && c != '_' && c != '-') return "";
             }
 
             switch (mode)

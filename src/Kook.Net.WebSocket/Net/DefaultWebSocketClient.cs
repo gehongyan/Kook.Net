@@ -8,7 +8,7 @@ namespace Kook.Net.WebSockets;
 internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
 {
     public const int ReceiveChunkSize = 16 * 1024; //16KB
-    public const int SendChunkSize = 4 * 1024; //4KB
+    public const int SendChunkSize = 4 * 1024;     //4KB
     private const int HR_TIMEOUT = -2147012894;
 
     public event Func<byte[], int, int, Task> BinaryMessage;
@@ -33,6 +33,7 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
         _headers = new Dictionary<string, string>();
         _proxy = proxy;
     }
+
     private void Dispose(bool disposing)
     {
         if (!_isDisposed)
@@ -44,13 +45,12 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
                 _cancelTokenSource?.Dispose();
                 _lock?.Dispose();
             }
+
             _isDisposed = true;
         }
     }
-    public void Dispose()
-    {
-        Dispose(true);
-    }
+
+    public void Dispose() => Dispose(true);
 
     public async Task ConnectAsync(string host)
     {
@@ -64,6 +64,7 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
             _lock.Release();
         }
     }
+
     private async Task ConnectInternalAsync(string host)
     {
         await DisconnectInternalAsync().ConfigureAwait(false);
@@ -79,11 +80,9 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
         _client = new ClientWebSocket();
         _client.Options.Proxy = _proxy;
         _client.Options.KeepAliveInterval = TimeSpan.Zero;
-        foreach (var header in _headers)
-        {
+        foreach (KeyValuePair<string, string> header in _headers)
             if (header.Value != null)
                 _client.Options.SetRequestHeader(header.Key, header.Value);
-        }
 
         await _client.ConnectAsync(new Uri(host), _cancelToken).ConfigureAwait(false);
         _task = RunAsync(_cancelToken);
@@ -94,19 +93,22 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
         await _lock.WaitAsync().ConfigureAwait(false);
         try
         {
-            await DisconnectInternalAsync(closeCode: closeCode).ConfigureAwait(false);
+            await DisconnectInternalAsync(closeCode).ConfigureAwait(false);
         }
         finally
         {
             _lock.Release();
         }
     }
+
     private async Task DisconnectInternalAsync(int closeCode = 1000, bool isDisposing = false)
     {
         _isDisconnecting = true;
 
         try
-        { _disconnectTokenSource.Cancel(false); }
+        {
+            _disconnectTokenSource.Cancel(false);
+        }
         catch
         {
             // ignored
@@ -116,16 +118,21 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
         {
             if (!isDisposing)
             {
-                var status = (WebSocketCloseStatus)closeCode;
+                WebSocketCloseStatus status = (WebSocketCloseStatus)closeCode;
                 try
-                { await _client.CloseOutputAsync(status, "", new CancellationToken()); }
+                {
+                    await _client.CloseOutputAsync(status, "", new CancellationToken());
+                }
                 catch
                 {
                     // ignored
                 }
             }
+
             try
-            { _client.Dispose(); }
+            {
+                _client.Dispose();
+            }
             catch
             {
                 // ignored
@@ -139,12 +146,15 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
             await (_task ?? Task.Delay(0)).ConfigureAwait(false);
             _task = null;
         }
-        finally { _isDisconnecting = false; }
+        finally
+        {
+            _isDisconnecting = false;
+        }
     }
+
     private async Task OnClosed(Exception ex)
     {
-        if (_isDisconnecting)
-            return; //Ignore, this disconnect was requested.
+        if (_isDisconnecting) return; //Ignore, this disconnect was requested.
 
         await _lock.WaitAsync().ConfigureAwait(false);
         try
@@ -155,13 +165,12 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
         {
             _lock.Release();
         }
+
         await Closed(ex);
     }
 
-    public void SetHeader(string key, string value)
-    {
-        _headers[key] = value;
-    }
+    public void SetHeader(string key, string value) => _headers[key] = value;
+
     public void SetCancelToken(CancellationToken cancelToken)
     {
         _cancelTokenSource?.Dispose();
@@ -181,24 +190,24 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
         {
             return;
         }
+
         try
         {
-            if (_client == null)
-                return;
+            if (_client == null) return;
 
             int frameCount = (int)Math.Ceiling((double)count / SendChunkSize);
 
             for (int i = 0; i < frameCount; i++, index += SendChunkSize)
             {
-                bool isLast = i == (frameCount - 1);
+                bool isLast = i == frameCount - 1;
 
                 int frameSize;
                 if (isLast)
-                    frameSize = count - (i * SendChunkSize);
+                    frameSize = count - i * SendChunkSize;
                 else
                     frameSize = SendChunkSize;
 
-                var type = isText ? WebSocketMessageType.Text : WebSocketMessageType.Binary;
+                WebSocketMessageType type = isText ? WebSocketMessageType.Text : WebSocketMessageType.Binary;
                 await _client.SendAsync(new ArraySegment<byte>(data, index, count), type, isLast, _cancelToken).ConfigureAwait(false);
             }
         }
@@ -210,7 +219,7 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
 
     private async Task RunAsync(CancellationToken cancelToken)
     {
-        var buffer = new ArraySegment<byte>(new byte[ReceiveChunkSize]);
+        ArraySegment<byte> buffer = new(new byte[ReceiveChunkSize]);
 
         try
         {
@@ -224,27 +233,23 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
                     throw new WebSocketClosedException((int)socketResult.CloseStatus, socketResult.CloseStatusDescription);
 
                 if (!socketResult.EndOfMessage)
-                {
                     //This is a large message (likely just READY), lets create a temporary expandable stream
-                    using (var stream = new MemoryStream())
+                    using (MemoryStream stream = new())
                     {
                         stream.Write(buffer.Array, 0, socketResult.Count);
                         do
                         {
-                            if (cancelToken.IsCancellationRequested)
-                                return;
+                            if (cancelToken.IsCancellationRequested) return;
+
                             socketResult = await _client.ReceiveAsync(buffer, cancelToken).ConfigureAwait(false);
                             stream.Write(buffer.Array, 0, socketResult.Count);
-                        }
-                        while (socketResult == null || !socketResult.EndOfMessage);
+                        } while (socketResult == null || !socketResult.EndOfMessage);
 
                         //Use the internal buffer if we can get it
                         resultCount = (int)stream.Length;
 
-                        result = stream.TryGetBuffer(out var streamBuffer) ? streamBuffer.Array : stream.ToArray();
-
+                        result = stream.TryGetBuffer(out ArraySegment<byte> streamBuffer) ? streamBuffer.Array : stream.ToArray();
                     }
-                }
                 else
                 {
                     //Small message
@@ -263,7 +268,7 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
         }
         catch (Win32Exception ex) when (ex.HResult == HR_TIMEOUT)
         {
-            var _ = OnClosed(new Exception("Connection timed out.", ex));
+            Task _ = OnClosed(new Exception("Connection timed out.", ex));
         }
         catch (OperationCanceledException)
         {
@@ -272,7 +277,7 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
         catch (Exception ex)
         {
             //This cannot be awaited otherwise we'll deadlock when KookApiClient waits for this task to complete.
-            var _ = OnClosed(ex);
+            Task _ = OnClosed(ex);
         }
     }
 }

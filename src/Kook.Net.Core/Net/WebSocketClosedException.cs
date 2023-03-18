@@ -14,6 +14,7 @@ public class WebSocketClosedException : Exception
     ///     from Kook.
     /// </returns>
     public int CloseCode { get; }
+
     /// <summary>
     ///     Gets the reason of the interruption.
     /// </summary>

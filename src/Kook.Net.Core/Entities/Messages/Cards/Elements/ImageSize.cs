@@ -9,6 +9,7 @@ public enum ImageSize
     ///     The image is displayed at small size.
     /// </summary>
     Small,
+
     /// <summary>
     ///     The image is displayed at large size.
     /// </summary>

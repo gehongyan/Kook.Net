@@ -27,6 +27,5 @@ public struct PokeQuality : IEntity<uint>
         Resources = resources;
     }
 
-    internal static PokeQuality Create(uint id, Color color, IReadOnlyDictionary<string, string> resources)
-        => new PokeQuality(id, color, resources);
+    internal static PokeQuality Create(uint id, Color color, IReadOnlyDictionary<string, string> resources) => new(id, color, resources);
 }

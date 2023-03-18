@@ -17,7 +17,7 @@ internal static class ConcurrentHashSet
         get
         {
             int now = Environment.TickCount;
-            if (s_processorCount == 0 || (now - s_lastProcessorCountRefreshTicks) >= PROCESSOR_COUNT_REFRESH_INTERVAL_MS)
+            if (s_processorCount == 0 || now - s_lastProcessorCountRefreshTicks >= PROCESSOR_COUNT_REFRESH_INTERVAL_MS)
             {
                 s_processorCount = Environment.ProcessorCount;
                 s_lastProcessorCountRefreshTicks = now;
@@ -46,6 +46,7 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             _countPerLock = countPerLock;
         }
     }
+
     private sealed class Node
     {
         internal readonly T _value;
@@ -68,11 +69,13 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
         int bucketNo = (hashcode & 0x7fffffff) % bucketCount;
         return bucketNo;
     }
+
     private static void GetBucketAndLockNo(int hashcode, out int bucketNo, out int lockNo, int bucketCount, int lockCount)
     {
         bucketNo = (hashcode & 0x7fffffff) % bucketCount;
         lockNo = bucketNo % lockCount;
     }
+
     private static int DefaultConcurrencyLevel => ConcurrentHashSet.DefaultConcurrencyLevel;
 
     private volatile Tables _tables;
@@ -91,14 +94,17 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             {
                 AcquireAllLocks(ref acquiredLocks);
 
-                for (int i = 0; i < _tables._countPerLock.Length; i++)
-                    count += _tables._countPerLock[i];
+                for (int i = 0; i < _tables._countPerLock.Length; i++) count += _tables._countPerLock[i];
             }
-            finally { ReleaseLocks(0, acquiredLocks); }
+            finally
+            {
+                ReleaseLocks(0, acquiredLocks);
+            }
 
             return count;
         }
     }
+
     public bool IsEmpty
     {
         get
@@ -110,16 +116,18 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
                 AcquireAllLocks(ref acquiredLocks);
 
                 for (int i = 0; i < _tables._countPerLock.Length; i++)
-                {
                     if (_tables._countPerLock[i] != 0)
                         return false;
-                }
             }
-            finally { ReleaseLocks(0, acquiredLocks); }
+            finally
+            {
+                ReleaseLocks(0, acquiredLocks);
+            }
 
             return true;
         }
     }
+
     public ReadOnlyCollection<T> Values
     {
         get
@@ -128,7 +136,7 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             try
             {
                 AcquireAllLocks(ref locksAcquired);
-                List<T> values = new List<T>();
+                List<T> values = new();
 
                 for (int i = 0; i < _tables._buckets.Length; i++)
                 {
@@ -142,55 +150,72 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
 
                 return new ReadOnlyCollection<T>(values);
             }
-            finally { ReleaseLocks(0, locksAcquired); }
+            finally
+            {
+                ReleaseLocks(0, locksAcquired);
+            }
         }
     }
 
     public ConcurrentHashSet()
-        : this(DefaultConcurrencyLevel, DefaultCapacity, true, EqualityComparer<T>.Default) { }
+        : this(DefaultConcurrencyLevel, DefaultCapacity, true, EqualityComparer<T>.Default)
+    {
+    }
+
     public ConcurrentHashSet(int concurrencyLevel, int capacity)
-        : this(concurrencyLevel, capacity, false, EqualityComparer<T>.Default) { }
+        : this(concurrencyLevel, capacity, false, EqualityComparer<T>.Default)
+    {
+    }
+
     public ConcurrentHashSet(IEnumerable<T> collection)
-        : this(collection, EqualityComparer<T>.Default) { }
+        : this(collection, EqualityComparer<T>.Default)
+    {
+    }
+
     public ConcurrentHashSet(IEqualityComparer<T> comparer)
-        : this(DefaultConcurrencyLevel, DefaultCapacity, true, comparer) { }
+        : this(DefaultConcurrencyLevel, DefaultCapacity, true, comparer)
+    {
+    }
+
     /// <exception cref="ArgumentNullException"><paramref name="collection"/> is <c>null</c></exception>
     public ConcurrentHashSet(IEnumerable<T> collection, IEqualityComparer<T> comparer)
         : this(comparer)
     {
-        if (collection == null)
-            throw new ArgumentNullException(paramName: nameof(collection));
+        if (collection == null) throw new ArgumentNullException(nameof(collection));
+
         InitializeFromCollection(collection);
     }
+
     /// <exception cref="ArgumentNullException">
     /// <paramref name="collection" /> or <paramref name="comparer" /> is <c>null</c>
     /// </exception>
     public ConcurrentHashSet(int concurrencyLevel, IEnumerable<T> collection, IEqualityComparer<T> comparer)
         : this(concurrencyLevel, DefaultCapacity, false, comparer)
     {
-        if (collection == null)
-            throw new ArgumentNullException(paramName: nameof(collection));
-        if (comparer == null)
-            throw new ArgumentNullException(paramName: nameof(comparer));
+        if (collection == null) throw new ArgumentNullException(nameof(collection));
+
+        if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+
         InitializeFromCollection(collection);
     }
+
     public ConcurrentHashSet(int concurrencyLevel, int capacity, IEqualityComparer<T> comparer)
-        : this(concurrencyLevel, capacity, false, comparer) { }
+        : this(concurrencyLevel, capacity, false, comparer)
+    {
+    }
+
     internal ConcurrentHashSet(int concurrencyLevel, int capacity, bool growLockArray, IEqualityComparer<T> comparer)
     {
-        if (concurrencyLevel < 1)
-            throw new ArgumentOutOfRangeException(paramName: nameof(concurrencyLevel));
-        if (capacity < 0)
-            throw new ArgumentOutOfRangeException(paramName: nameof(capacity));
-        if (comparer == null)
-            throw new ArgumentNullException(paramName: nameof(comparer));
+        if (concurrencyLevel < 1) throw new ArgumentOutOfRangeException(nameof(concurrencyLevel));
 
-        if (capacity < concurrencyLevel)
-            capacity = concurrencyLevel;
+        if (capacity < 0) throw new ArgumentOutOfRangeException(nameof(capacity));
+
+        if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+
+        if (capacity < concurrencyLevel) capacity = concurrencyLevel;
 
         object[] locks = new object[concurrencyLevel];
-        for (int i = 0; i < locks.Length; i++)
-            locks[i] = new object();
+        for (int i = 0; i < locks.Length; i++) locks[i] = new object();
 
         int[] countPerLock = new int[locks.Length];
         Node[] buckets = new Node[capacity];
@@ -200,27 +225,27 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
         _growLockArray = growLockArray;
         _budget = buckets.Length / locks.Length;
     }
+
     private void InitializeFromCollection(IEnumerable<T> collection)
     {
-        foreach (var value in collection)
+        foreach (T value in collection)
         {
-            if (value == null)
-                throw new ArgumentNullException(paramName: "key");
+            if (value == null) throw new ArgumentNullException("key");
 
-            if (!TryAddInternal(value, _comparer.GetHashCode(value), false))
-                throw new ArgumentException();
+            if (!TryAddInternal(value, _comparer.GetHashCode(value), false)) throw new ArgumentException();
         }
 
-        if (_budget == 0)
-            _budget = _tables._buckets.Length / _tables._locks.Length;
+        if (_budget == 0) _budget = _tables._buckets.Length / _tables._locks.Length;
     }
+
     /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c></exception>
     public bool ContainsKey(T value)
     {
-        if (value == null)
-            throw new ArgumentNullException(paramName: "key");
+        if (value == null) throw new ArgumentNullException("key");
+
         return ContainsKeyInternal(value, _comparer.GetHashCode(value));
     }
+
     private bool ContainsKeyInternal(T value, int hashcode)
     {
         Tables tables = _tables;
@@ -231,8 +256,8 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
 
         while (n != null)
         {
-            if (hashcode == n._hashcode && _comparer.Equals(n._value, value))
-                return true;
+            if (hashcode == n._hashcode && _comparer.Equals(n._value, value)) return true;
+
             n = n._next;
         }
 
@@ -242,10 +267,11 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
     /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c></exception>
     public bool TryAdd(T value)
     {
-        if (value == null)
-            throw new ArgumentNullException(paramName: "key");
+        if (value == null) throw new ArgumentNullException("key");
+
         return TryAddInternal(value, _comparer.GetHashCode(value), true);
     }
+
     private bool TryAddInternal(T value, int hashcode, bool acquireLock)
     {
         while (true)
@@ -257,35 +283,32 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             bool lockTaken = false;
             try
             {
-                if (acquireLock)
-                    Monitor.Enter(tables._locks[lockNo], ref lockTaken);
+                if (acquireLock) Monitor.Enter(tables._locks[lockNo], ref lockTaken);
 
-                if (tables != _tables)
-                    continue;
+                if (tables != _tables) continue;
 
                 Node prev = null;
                 for (Node node = tables._buckets[bucketNo]; node != null; node = node._next)
                 {
-                    if (hashcode == node._hashcode && _comparer.Equals(node._value, value))
-                        return false;
+                    if (hashcode == node._hashcode && _comparer.Equals(node._value, value)) return false;
+
                     prev = node;
                 }
 
                 Volatile.Write(ref tables._buckets[bucketNo], new Node(value, hashcode, tables._buckets[bucketNo]));
                 checked
-                { tables._countPerLock[lockNo]++; }
+                {
+                    tables._countPerLock[lockNo]++;
+                }
 
-                if (tables._countPerLock[lockNo] > _budget)
-                    resizeDesired = true;
+                if (tables._countPerLock[lockNo] > _budget) resizeDesired = true;
             }
             finally
             {
-                if (lockTaken)
-                    Monitor.Exit(tables._locks[lockNo]);
+                if (lockTaken) Monitor.Exit(tables._locks[lockNo]);
             }
 
-            if (resizeDesired)
-                GrowTable(tables);
+            if (resizeDesired) GrowTable(tables);
 
             return true;
         }
@@ -294,10 +317,11 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
     /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c></exception>
     public bool TryRemove(T value)
     {
-        if (value == null)
-            throw new ArgumentNullException(paramName: "key");
+        if (value == null) throw new ArgumentNullException("key");
+
         return TryRemoveInternal(value);
     }
+
     private bool TryRemoveInternal(T value)
     {
         int hashcode = _comparer.GetHashCode(value);
@@ -308,8 +332,7 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
 
             lock (tables._locks[lockNo])
             {
-                if (tables != _tables)
-                    continue;
+                if (tables != _tables) continue;
 
                 Node prev = null;
                 for (Node curr = tables._buckets[bucketNo]; curr != null; curr = curr._next)
@@ -325,6 +348,7 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
                         tables._countPerLock[lockNo]--;
                         return true;
                     }
+
                     prev = curr;
                 }
             }
@@ -341,7 +365,7 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
         {
             AcquireAllLocks(ref locksAcquired);
 
-            Tables newTables = new Tables(new Node[DefaultCapacity], _tables._locks, new int[_tables._countPerLock.Length]);
+            Tables newTables = new(new Node[DefaultCapacity], _tables._locks, new int[_tables._countPerLock.Length]);
             _tables = newTables;
             _budget = Math.Max(1, newTables._buckets.Length / newTables._locks.Length);
         }
@@ -366,6 +390,7 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             }
         }
     }
+
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     private void GrowTable(Tables tables)
@@ -375,18 +400,16 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
         try
         {
             AcquireLocks(0, 1, ref locksAcquired);
-            if (tables != _tables)
-                return;
+            if (tables != _tables) return;
 
             long approxCount = 0;
-            for (int i = 0; i < tables._countPerLock.Length; i++)
-                approxCount += tables._countPerLock[i];
+            for (int i = 0; i < tables._countPerLock.Length; i++) approxCount += tables._countPerLock[i];
 
             if (approxCount < tables._buckets.Length / 4)
             {
                 _budget = 2 * _budget;
-                if (_budget < 0)
-                    _budget = int.MaxValue;
+                if (_budget < 0) _budget = int.MaxValue;
+
                 return;
             }
 
@@ -397,11 +420,9 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
                 checked
                 {
                     newLength = tables._buckets.Length * 2 + 1;
-                    while (newLength % 3 == 0 || newLength % 5 == 0 || newLength % 7 == 0)
-                        newLength += 2;
+                    while (newLength % 3 == 0 || newLength % 5 == 0 || newLength % 7 == 0) newLength += 2;
 
-                    if (newLength > MaxArrayLength)
-                        maximizeTableSize = true;
+                    if (newLength > MaxArrayLength) maximizeTableSize = true;
                 }
             }
             catch (OverflowException)
@@ -423,8 +444,7 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             {
                 newLocks = new object[tables._locks.Length * 2];
                 Array.Copy(tables._locks, 0, newLocks, 0, tables._locks.Length);
-                for (int i = tables._locks.Length; i < newLocks.Length; i++)
-                    newLocks[i] = new object();
+                for (int i = tables._locks.Length; i < newLocks.Length; i++) newLocks[i] = new object();
             }
 
             Node[] newBuckets = new Node[newLength];
@@ -441,7 +461,9 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
                     newBuckets[newBucketNo] = new Node(current._value, current._hashcode, newBuckets[newBucketNo]);
 
                     checked
-                    { newCountPerLock[newLockNo]++; }
+                    {
+                        newCountPerLock[newLockNo]++;
+                    }
 
                     current = next;
                 }
@@ -450,7 +472,10 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             _budget = Math.Max(1, newBuckets.Length / newLocks.Length);
             _tables = new Tables(newBuckets, newLocks, newCountPerLock);
         }
-        finally { ReleaseLocks(0, locksAcquired); }
+        finally
+        {
+            ReleaseLocks(0, locksAcquired);
+        }
     }
 
     private void AcquireAllLocks(ref int locksAcquired)
@@ -458,6 +483,7 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
         AcquireLocks(0, 1, ref locksAcquired);
         AcquireLocks(1, _tables._locks.Length, ref locksAcquired);
     }
+
     private void AcquireLocks(int fromInclusive, int toExclusive, ref int locksAcquired)
     {
         object[] locks = _tables._locks;
@@ -471,14 +497,13 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             }
             finally
             {
-                if (lockTaken)
-                    locksAcquired++;
+                if (lockTaken) locksAcquired++;
             }
         }
     }
+
     private void ReleaseLocks(int fromInclusive, int toExclusive)
     {
-        for (int i = fromInclusive; i < toExclusive; i++)
-            Monitor.Exit(_tables._locks[i]);
+        for (int i = fromInclusive; i < toExclusive; i++) Monitor.Exit(_tables._locks[i]);
     }
 }

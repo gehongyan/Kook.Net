@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../Kook.Net.targets" />
+  <Import Project="../Kook.Net.targets"/>
 
-    <PropertyGroup>
-        <RootNamespace>Kook</RootNamespace>
-    </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Kook</RootNamespace>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
-      <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-      <PackageReference Include="System.Text.Json" Version="7.0.2" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Collections.Immutable" Version="7.0.0"/>
+    <PackageReference Include="System.Linq.Async" Version="6.0.1"/>
+    <PackageReference Include="System.Text.Json" Version="7.0.2"/>
+  </ItemGroup>
 
 </Project>

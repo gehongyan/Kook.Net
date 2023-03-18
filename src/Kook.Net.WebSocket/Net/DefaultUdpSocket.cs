@@ -22,6 +22,7 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
         _lock = new SemaphoreSlim(1, 1);
         _stopCancelTokenSource = new CancellationTokenSource();
     }
+
     private void Dispose(bool disposing)
     {
         if (!_isDisposed)
@@ -33,13 +34,12 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
                 _cancelTokenSource?.Dispose();
                 _lock?.Dispose();
             }
+
             _isDisposed = true;
         }
     }
-    public void Dispose()
-    {
-        Dispose(true);
-    }
+
+    public void Dispose() => Dispose(true);
 
 
     public async Task StartAsync()
@@ -54,6 +54,7 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
             _lock.Release();
         }
     }
+
     public async Task StartInternalAsync(CancellationToken cancelToken)
     {
         await StopInternalAsync().ConfigureAwait(false);
@@ -70,6 +71,7 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
 
         _task = RunAsync(_cancelToken);
     }
+
     public async Task StopAsync()
     {
         await _lock.WaitAsync().ConfigureAwait(false);
@@ -82,22 +84,26 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
             _lock.Release();
         }
     }
+
     public async Task StopInternalAsync(bool isDisposing = false)
     {
         try
-        { _stopCancelTokenSource.Cancel(false); }
+        {
+            _stopCancelTokenSource.Cancel(false);
+        }
         catch
         {
             // ignored
         }
 
-        if (!isDisposing)
-            await (_task ?? Task.Delay(0)).ConfigureAwait(false);
+        if (!isDisposing) await (_task ?? Task.Delay(0)).ConfigureAwait(false);
 
         if (_udp != null)
         {
             try
-            { _udp.Dispose(); }
+            {
+                _udp.Dispose();
+            }
             catch
             {
                 // ignored
@@ -107,10 +113,8 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
         }
     }
 
-    public void SetDestination(string ip, int port)
-    {
-        _destination = new IPEndPoint(IPAddress.Parse(ip), port);
-    }
+    public void SetDestination(string ip, int port) => _destination = new IPEndPoint(IPAddress.Parse(ip), port);
+
     public void SetCancelToken(CancellationToken cancelToken)
     {
         _cancelTokenSource?.Dispose();
@@ -124,32 +128,31 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
     {
         if (index != 0) //Should never happen?
         {
-            var newData = new byte[count];
+            byte[] newData = new byte[count];
             Buffer.BlockCopy(data, index, newData, 0, count);
             data = newData;
         }
+
         await _udp.SendAsync(data, count, _destination).ConfigureAwait(false);
     }
 
     private async Task RunAsync(CancellationToken cancelToken)
     {
-        var closeTask = Task.Delay(-1, cancelToken);
+        Task closeTask = Task.Delay(-1, cancelToken);
         while (!cancelToken.IsCancellationRequested)
         {
-            var receiveTask = _udp.ReceiveAsync();
+            Task<UdpReceiveResult> receiveTask = _udp.ReceiveAsync();
 
             _ = receiveTask.ContinueWith((receiveResult) =>
             {
                 //observe the exception as to not receive as unhandled exception
                 _ = receiveResult.Exception;
-
             }, TaskContinuationOptions.OnlyOnFaulted);
 
-            var task = await Task.WhenAny(closeTask, receiveTask).ConfigureAwait(false);
-            if (task == closeTask)
-                break;
+            Task task = await Task.WhenAny(closeTask, receiveTask).ConfigureAwait(false);
+            if (task == closeTask) break;
 
-            var result = receiveTask.Result;
+            UdpReceiveResult result = receiveTask.Result;
             await ReceivedDatagram(result.Buffer, 0, result.Buffer.Length).ConfigureAwait(false);
         }
     }

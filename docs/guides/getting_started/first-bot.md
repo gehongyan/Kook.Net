@@ -17,15 +17,15 @@ title: 从零开始
 4. 点击刚刚创建好的应用；
 5. 点击左侧的 `机器人`；
 
-    ![img.png](images/intro/intro-bot-entrance.png)
+   ![img.png](images/intro/intro-bot-entrance.png)
 
 6. 确保机器人的连接模式为 `WebSocket`；
 
-    ![img.png](images/intro/intro-bot-websocket.png)
+   ![img.png](images/intro/intro-bot-websocket.png)
 
 7. (可选) 如果要创建公共 Bot，开启 `开启公共机器人` 开关。
 
-    ![img.png](images/intro/intro-bot-public.png)
+   ![img.png](images/intro/intro-bot-public.png)
 
 ## 将 Bot 添加到服务器
 
@@ -34,10 +34,10 @@ Bot 无法通过访问服务器的邀请链接进入频道，因此需要 Bot �
 1. 在 [KOOK 开发者中心](https://developer.kaiheila.cn/bot) 中访问要添加到服务器的 Bot 应用；
 2. 点击左侧的 `邀请链接`；
 
-    ![img.png](images/intro/intro-bot-invite.png)
+   ![img.png](images/intro/intro-bot-invite.png)
 
 3. 在右侧的 `角色权限设置` 中勾选要在 Bot 进入服务器后直接拥有的权限；
-    
+
    > [!NOTE]
    > 这将会在服务器内创建一个仅可授予给该 Bot 的托管角色，该 Bot 将会在进入服务器后自动获得该角色。
    > 如需在进入服务器后变更权限，可通过 `服务器设置` 中的 `角色权限` 进行修改。
@@ -46,7 +46,7 @@ Bot 无法通过访问服务器的邀请链接进入频道，因此需要 Bot �
 5. 选择要将 Bot 添加到的服务器；
 6. 点击邀请。
 
-    ![img.png](images/intro/intro-bot-select.png)
+   ![img.png](images/intro/intro-bot-select.png)
 
    > [!NOTE]
    > 列表中仅显示您拥有 `管理服务器` 权限的服务器。
@@ -69,7 +69,7 @@ Kook.Net 广泛采用 .NET 的 [异步编程模型]，绝大多数操作都是�
 > 应用程序中异步上下文抛出的任何异常都会被持续向上层抛出直到首个同步方法，
 > 由于该程序的首个同步方法是程序的入口点函数 `Main`，
 > **所有**未经处理的异常都会被抛出到这里，这将导致程序退出。
-> 
+>
 > Kook.Net 会阻止事件处理函数中发生的异常，以避免该异常导致程序退出，
 > 但 `MainAsync` 中的任何其它未经处理的异常仍然会导致程序退出。
 
@@ -113,15 +113,21 @@ Kook.Net 中的事件与 C# 中的任何其他事件的工作机制类似。
 > [!IMPORTANT]
 > Token 可允许您获得对 Bot 的所有访问权限，因此，**不要**与任何无关人员共享 Token！
 > 如您要公开 Bot 的源代码，请将该 Token 存储在外部源中。
-> 
+>
 > 在下面的示例中，我们从预定义的变量中获取变量，这是**极其不安全**的，
 > 尤其是在有计划将应用程序以任何形式发布的情况下。
-> 
+>
 > 为了能够安全地处理该机密信息，建议以 [环境变量]、[配置文件]、[机密管理] 等形式存储 Token。
 >
-> [环境变量]: https://docs.microsoft.com/zh-cn/dotnet/api/system.environment.getenvironmentvariable?view=net-6.0
-> [配置文件]: https://docs.microsoft.com/zh-cn/dotnet/core/extensions/configuration
-> [机密管理]: https://docs.microsoft.com/zh-cn/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=linux
+>
+
+[环境变量]: https://docs.microsoft.com/zh-cn/dotnet/api/system.environment.getenvironmentvariable?view=net-6.0
+>
+
+[配置文件]: https://docs.microsoft.com/zh-cn/dotnet/core/extensions/configuration
+>
+
+[机密管理]: https://docs.microsoft.com/zh-cn/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=linux
 
 [!code-csharp[Create Client](samples/bot-client.cs)]
 
@@ -131,6 +137,9 @@ Kook.Net 中的事件与 C# 中的任何其他事件的工作机制类似。
 > 如需查看完整代码示例，可访问 [完整代码示例]。
 
 [KookSocketClient]: xref:Kook.WebSocket.KookSocketClient
+
 [LoginAsync]: xref:Kook.Rest.BaseKookClient.LoginAsync*
+
 [StartAsync]: xref:Kook.WebSocket.KookSocketClient.StartAsync*
+
 [完整代码示例]: samples/simple-bot.cs

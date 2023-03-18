@@ -8,18 +8,11 @@ internal static class IntimacyHelper
         Action<IntimacyProperties> func,
         RequestOptions options)
     {
-        IntimacyProperties properties = new()
-        {
-            Score = intimacy.Score,
-            SocialInfo = intimacy.SocialInfo
-        };
+        IntimacyProperties properties = new() { Score = intimacy.Score, SocialInfo = intimacy.SocialInfo };
         func(properties);
-        var args = new UpdateIntimacyValueParams()
+        UpdateIntimacyValueParams args = new()
         {
-            UserId = intimacy.User.Id,
-            Score = properties.Score,
-            SocialInfo = properties.SocialInfo,
-            ImageId = properties.ImageId
+            UserId = intimacy.User.Id, Score = properties.Score, SocialInfo = properties.SocialInfo, ImageId = properties.ImageId
         };
         await client.ApiClient.UpdateIntimacyValueAsync(args, options).ConfigureAwait(false);
     }

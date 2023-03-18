@@ -1,25 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../Kook.Net.targets" />
+  <Import Project="../Kook.Net.targets"/>
 
-    <PropertyGroup>
-        <RootNamespace>Kook.Rest</RootNamespace>
-    </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Kook.Rest</RootNamespace>
+  </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DefineConstants>TRACE_REST</DefineConstants>
-    </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DefineConstants>TRACE_REST</DefineConstants>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-      <PackageReference Include="System.Text.Json" Version="7.0.2" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Linq.Async" Version="6.0.1"/>
+    <PackageReference Include="System.Text.Json" Version="7.0.2"/>
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj"/>
+  </ItemGroup>
 
-    <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
-        <Reference Include="System.Net.Http" />
-    </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
+    <Reference Include="System.Net.Http"/>
+  </ItemGroup>
 </Project>

@@ -9,6 +9,7 @@ public enum TagMode
     ///     Parse tags as plain text.
     /// </summary>
     PlainText,
+
     /// <summary>
     ///     Parse tags as KMarkdown.
     /// </summary>

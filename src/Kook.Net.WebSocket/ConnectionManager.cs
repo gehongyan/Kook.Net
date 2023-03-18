@@ -5,10 +5,21 @@ namespace Kook;
 
 internal class ConnectionManager : IDisposable
 {
-    public event Func<Task> Connected { add { _connectedEvent.Add(value); } remove { _connectedEvent.Remove(value); } }
-    private readonly AsyncEvent<Func<Task>> _connectedEvent = new AsyncEvent<Func<Task>>();
-    public event Func<Exception, bool, Task> Disconnected { add { _disconnectedEvent.Add(value); } remove { _disconnectedEvent.Remove(value); } }
-    private readonly AsyncEvent<Func<Exception, bool, Task>> _disconnectedEvent = new AsyncEvent<Func<Exception, bool, Task>>();
+    public event Func<Task> Connected
+    {
+        add => _connectedEvent.Add(value);
+        remove => _connectedEvent.Remove(value);
+    }
+
+    private readonly AsyncEvent<Func<Task>> _connectedEvent = new();
+
+    public event Func<Exception, bool, Task> Disconnected
+    {
+        add => _disconnectedEvent.Add(value);
+        remove => _disconnectedEvent.Remove(value);
+    }
+
+    private readonly AsyncEvent<Func<Exception, bool, Task>> _disconnectedEvent = new();
 
     private readonly SemaphoreSlim _stateLock;
     private readonly Logger _logger;
@@ -38,7 +49,7 @@ internal class ConnectionManager : IDisposable
         {
             if (ex != null)
             {
-                var ex2 = ex as WebSocketClosedException;
+                WebSocketClosedException ex2 = ex as WebSocketClosedException;
                 if (ex2?.CloseCode == 4006)
                     CriticalError(new Exception("WebSocket session expired", ex));
                 else if (ex2?.CloseCode == 4014)
@@ -48,24 +59,24 @@ internal class ConnectionManager : IDisposable
             }
             else
                 Error(new Exception("WebSocket connection was closed"));
+
             return Task.Delay(0);
         });
     }
 
     public virtual async Task StartAsync()
     {
-        if (State != ConnectionState.Disconnected)
-            throw new InvalidOperationException("Cannot start an already running client.");
+        if (State != ConnectionState.Disconnected) throw new InvalidOperationException("Cannot start an already running client.");
 
         await AcquireConnectionLock().ConfigureAwait(false);
-        var reconnectCancelToken = new CancellationTokenSource();
+        CancellationTokenSource reconnectCancelToken = new();
         _reconnectCancelToken?.Dispose();
         _reconnectCancelToken = reconnectCancelToken;
         _task = Task.Run(async () =>
         {
             try
             {
-                Random jitter = new Random();
+                Random jitter = new();
                 int nextReconnectDelay = 1000;
                 while (!reconnectCancelToken.IsCancellationRequested)
                 {
@@ -94,15 +105,18 @@ internal class ConnectionManager : IDisposable
                     {
                         //Wait before reconnecting
                         await Task.Delay(nextReconnectDelay, reconnectCancelToken.Token).ConfigureAwait(false);
-                        nextReconnectDelay = (nextReconnectDelay * 2) + jitter.Next(-250, 250);
-                        if (nextReconnectDelay > 60000)
-                            nextReconnectDelay = 60000;
+                        nextReconnectDelay = nextReconnectDelay * 2 + jitter.Next(-250, 250);
+                        if (nextReconnectDelay > 60000) nextReconnectDelay = 60000;
                     }
                 }
             }
-            finally { _stateLock.Release(); }
+            finally
+            {
+                _stateLock.Release();
+            }
         });
     }
+
     public virtual Task StopAsync()
     {
         Cancel();
@@ -123,12 +137,12 @@ internal class ConnectionManager : IDisposable
 
         try
         {
-            var readyPromise = new TaskCompletionSource<bool>();
+            TaskCompletionSource<bool> readyPromise = new();
             _readyPromise = readyPromise;
 
             //Abort connection on timeout
-            var cancelToken = CancelToken;
-            var _ = Task.Run(async () =>
+            CancellationToken cancelToken = CancelToken;
+            Task _ = Task.Run(async () =>
             {
                 try
                 {
@@ -154,10 +168,11 @@ internal class ConnectionManager : IDisposable
             throw;
         }
     }
+
     private async Task DisconnectAsync(Exception ex, bool isReconnecting)
     {
-        if (State == ConnectionState.Disconnected)
-            return;
+        if (State == ConnectionState.Disconnected) return;
+
         State = ConnectionState.Disconnecting;
         await _logger.InfoAsync("Disconnecting").ConfigureAwait(false);
 
@@ -173,10 +188,8 @@ internal class ConnectionManager : IDisposable
         _readyPromise.TrySetResult(true);
         return Task.CompletedTask;
     }
-    public async Task WaitAsync()
-    {
-        await _readyPromise.Task.ConfigureAwait(false);
-    }
+
+    public async Task WaitAsync() => await _readyPromise.Task.ConfigureAwait(false);
 
     public void Cancel()
     {
@@ -185,30 +198,33 @@ internal class ConnectionManager : IDisposable
         _reconnectCancelToken?.Cancel();
         _connectionCancelToken?.Cancel();
     }
+
     public void Error(Exception ex)
     {
         _readyPromise.TrySetException(ex);
         _connectionPromise.TrySetException(ex);
         _connectionCancelToken?.Cancel();
     }
+
     public void CriticalError(Exception ex)
     {
         _reconnectCancelToken?.Cancel();
         Error(ex);
     }
+
     public void Reconnect()
     {
         _readyPromise.TrySetCanceled();
         _connectionPromise.TrySetCanceled();
         _connectionCancelToken?.Cancel();
     }
+
     private async Task AcquireConnectionLock()
     {
         while (true)
         {
             await StopAsync().ConfigureAwait(false);
-            if (await _stateLock.WaitAsync(0).ConfigureAwait(false))
-                break;
+            if (await _stateLock.WaitAsync(0).ConfigureAwait(false)) break;
         }
     }
 
@@ -227,8 +243,5 @@ internal class ConnectionManager : IDisposable
         }
     }
 
-    public void Dispose()
-    {
-        Dispose(true);
-    }
+    public void Dispose() => Dispose(true);
 }

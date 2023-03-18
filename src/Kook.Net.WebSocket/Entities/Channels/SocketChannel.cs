@@ -38,6 +38,7 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel, IUpdateable
     ///     A generic WebSocket-based user associated with the identifier.
     /// </returns>
     public SocketUser GetUser(ulong id) => GetUserInternal(id);
+
     internal abstract SocketUser GetUserInternal(ulong id);
     internal abstract IReadOnlyCollection<SocketUser> GetUsersInternal();
 
@@ -50,9 +51,11 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel, IUpdateable
 
     /// <inheritdoc />
     string IChannel.Name => null;
+
     /// <inheritdoc />
     Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IUser>(null); //Overridden
+
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
         => AsyncEnumerable.Empty<IReadOnlyCollection<IUser>>(); //Overridden

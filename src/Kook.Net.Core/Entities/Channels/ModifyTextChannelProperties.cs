@@ -14,6 +14,7 @@ public class ModifyTextChannelProperties : ModifyGuildChannelProperties
     ///     channel topic or description to the desired value.
     /// </remarks>
     public string Topic { get; set; }
+
     /// <summary>
     ///     Gets or sets the slow-mode ratelimit in seconds for this channel.
     /// </summary>

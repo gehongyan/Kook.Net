@@ -14,5 +14,5 @@ public enum BotEnvironment
     ///     生产
     /// </summary>
     [Description("生产")]
-    Production,
+    Production
 }

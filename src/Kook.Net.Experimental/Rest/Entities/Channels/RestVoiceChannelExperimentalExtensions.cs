@@ -21,6 +21,7 @@ public static class RestVoiceChannelExperimentalExtensions
     /// </remarks>
     public static Task SyncPermissionsAsync(this RestVoiceChannel channel, RequestOptions options = null)
         => ExperimentalChannelHelper.SyncPermissionsAsync(channel, channel.Kook, options);
+
     /// <summary>
     ///     Disconnects the specified user from the voice channel.
     /// </summary>

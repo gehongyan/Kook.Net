@@ -9,10 +9,12 @@ public interface IWebSocketClient : IDisposable
     ///     Fired when a binary message is received.
     /// </summary>
     event Func<byte[], int, int, Task> BinaryMessage;
+
     /// <summary>
     ///     Fired when a text message is received.
     /// </summary>
     event Func<string, Task> TextMessage;
+
     /// <summary>
     ///     Fired when the WebSocket connection is closed.
     /// </summary>
@@ -24,6 +26,7 @@ public interface IWebSocketClient : IDisposable
     /// <param name="key"> The field name of the header. </param>
     /// <param name="value"> The value of the header. </param>
     void SetHeader(string key, string value);
+
     /// <summary>
     ///     Sets the cancellation token for this client.
     /// </summary>
@@ -36,6 +39,7 @@ public interface IWebSocketClient : IDisposable
     /// <param name="host"> The host to connect to. </param>
     /// <returns> A task that represents an asynchronous connect operation. </returns>
     Task ConnectAsync(string host);
+
     /// <summary>
     ///     Disconnects from the host.
     /// </summary>

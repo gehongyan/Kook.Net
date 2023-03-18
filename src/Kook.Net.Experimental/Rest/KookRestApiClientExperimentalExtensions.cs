@@ -13,12 +13,13 @@ internal static class KookRestApiClientExperimentalExtensions
     {
         if (client.AuthTokenType is not TokenType.Bearer)
             throw new InvalidOperationException("Retrieving guilds where the current user has Administrator permission requires a Bearer token.");
+
         options = RequestOptions.CreateOrClone(options);
 
-        var ids = new KookRestApiClient.BucketIds();
+        KookRestApiClient.BucketIds ids = new();
         return client.SendPagedAsync<Guild>(HttpMethod.Get,
             (pageSize, page) => $"guild/list?page_size={pageSize}&page={page}&type=admin",
-            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: new PageMeta(page: fromPage, pageSize: limit), options: options);
+            ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
     public static async Task<RichGuild> CreateGuildAsync(this KookRestApiClient client, CreateGuildParams args, RequestOptions options = null)
@@ -27,35 +28,42 @@ internal static class KookRestApiClientExperimentalExtensions
         Preconditions.NotNullOrWhitespace(args.Name, nameof(args.Name));
         options = RequestOptions.CreateOrClone(options);
 
-        var ids = new KookRestApiClient.BucketIds();
-        return await client.SendJsonAsync<RichGuild>(HttpMethod.Post, () => "guild/create", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+        KookRestApiClient.BucketIds ids = new();
+        return await client.SendJsonAsync<RichGuild>(HttpMethod.Post, () => "guild/create", args, ids, ClientBucketType.SendEdit, options)
+            .ConfigureAwait(false);
     }
+
     public static async Task DeleteGuildAsync(this KookRestApiClient client, DeleteGuildParams args, RequestOptions options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
         options = RequestOptions.CreateOrClone(options);
 
-        var ids = new KookRestApiClient.BucketIds(guildId: args.GuildId);
-        await client.SendJsonAsync(HttpMethod.Post, () => $"guild/delete", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+        KookRestApiClient.BucketIds ids = new(args.GuildId);
+        await client.SendJsonAsync(HttpMethod.Post, () => $"guild/delete", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
-    public static async Task<RichGuild> ModifyGuildAsync(this KookRestApiClient client, ulong guildId, ModifyGuildParams args, RequestOptions options = null)
+
+    public static async Task<RichGuild> ModifyGuildAsync(this KookRestApiClient client, ulong guildId, ModifyGuildParams args,
+        RequestOptions options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         Preconditions.NotNull(args, nameof(args));
         options = RequestOptions.CreateOrClone(options);
 
-        var ids = new KookRestApiClient.BucketIds(guildId: guildId);
-        return await client.SendJsonAsync<RichGuild>(HttpMethod.Post, () => $"guild/update", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+        KookRestApiClient.BucketIds ids = new(guildId);
+        return await client.SendJsonAsync<RichGuild>(HttpMethod.Post, () => $"guild/update", args, ids, ClientBucketType.SendEdit, options)
+            .ConfigureAwait(false);
     }
-    public static async Task SyncChannelPermissionsAsync(this KookRestApiClient client, SyncChannelPermissionsParams args, RequestOptions options = null)
+
+    public static async Task SyncChannelPermissionsAsync(this KookRestApiClient client, SyncChannelPermissionsParams args,
+        RequestOptions options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
         options = RequestOptions.CreateOrClone(options);
 
-        var ids = new KookRestApiClient.BucketIds(channelId: args.ChannelId);
-        await client.SendJsonAsync(HttpMethod.Post, () => $"channel-role/sync", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+        KookRestApiClient.BucketIds ids = new(channelId: args.ChannelId);
+        await client.SendJsonAsync(HttpMethod.Post, () => $"channel-role/sync", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
     #endregion
@@ -66,10 +74,10 @@ internal static class KookRestApiClientExperimentalExtensions
         int limit = KookConfig.MaxUsersPerBatch, int fromPage = 1, RequestOptions options = null)
     {
         options = RequestOptions.CreateOrClone(options);
-        var ids = new KookRestApiClient.BucketIds();
+        KookRestApiClient.BucketIds ids = new();
         PageMeta pageMeta = new(fromPage, limit);
         return client.SendPagedAsync<VoiceRegion>(HttpMethod.Get, (pageSize, page) => $"guild/regions&page_size={pageSize}&page={page}",
-            ids, clientBucket: ClientBucketType.SendEdit, pageMeta: pageMeta, options: options);
+            ids, ClientBucketType.SendEdit, pageMeta, options);
     }
 
     #endregion
@@ -83,10 +91,9 @@ internal static class KookRestApiClientExperimentalExtensions
         Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
         options = RequestOptions.CreateOrClone(options);
 
-        var ids = new KookRestApiClient.BucketIds(channelId: args.ChannelId);
-        await client.SendJsonAsync(HttpMethod.Post, () => $"channel/kickout", args, ids, clientBucket: ClientBucketType.SendEdit, options: options).ConfigureAwait(false);
+        KookRestApiClient.BucketIds ids = new(channelId: args.ChannelId);
+        await client.SendJsonAsync(HttpMethod.Post, () => $"channel/kickout", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
     #endregion
-
 }

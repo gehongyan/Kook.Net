@@ -14,6 +14,7 @@ public class ModifyGuildChannelProperties
     ///     if this is <c>null</c>, the name will not be modified.
     /// </remarks>
     public string Name { get; set; }
+
     /// <summary>
     ///     Moves the channel to the following position. This property is one-based.
     /// </summary>
@@ -21,6 +22,7 @@ public class ModifyGuildChannelProperties
     ///     If this is <c>null</c>, the position will not be modified.
     /// </remarks>
     public int? Position { get; set; }
+
     /// <summary>
     ///     Gets or sets the category ID for this channel.
     /// </summary>

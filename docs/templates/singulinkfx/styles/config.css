@@ -1,19 +1,18 @@
 /* Theme Configuration Options */
 
-:root 
-{
+:root {
     /* General */
 
     --base-font-size: 16px;
     --smalldevice-base-font-size: 14px; /* Base font size for devices < 1024px */
-    
+
     --main-bg-color: #1f1f23;
-    --footer-bg-color: rgba(0,0,0,.4);
+    --footer-bg-color: rgba(0, 0, 0, .4);
     --separator-color: #42474f;
 
     --table-strip-bg-color: #151515;
     --table-header-bg-color: black;
-    --table-header-color: hsla(0,0%,100%,.8);
+    --table-header-color: hsla(0, 0%, 100%, .8);
     --table-header-border-color: #040405;
 
     /* Text */
@@ -29,11 +28,11 @@
     --text-color: #e1e1e1;
     --link-color: #00b0f4;
     --link-hover-color: #2ec4ff;
-    
+
     /* Mobile Topbar */
 
     --topbar-bg-color: #18191c;
-    
+
     /* Button */
 
     --button-color: #747f8d;
@@ -62,25 +61,25 @@
     /* Scrollbars */
 
     --scrollbar-bg-color: transparent;
-    --scrollbar-thumb-bg-color: rgba(0,0,0,.4);
+    --scrollbar-thumb-bg-color: rgba(0, 0, 0, .4);
     --scrollbar-thumb-border-color: transparent;
 
     /* Alerts and Blocks */
 
-    --alert-info-border-color: rgba(114,137,218,.5);
-    --alert-info-bg-color: rgba(114,137,218,.1);
+    --alert-info-border-color: rgba(114, 137, 218, .5);
+    --alert-info-bg-color: rgba(114, 137, 218, .1);
 
-    --alert-warning-border-color: rgba(250,166,26,.5);
-    --alert-warning-bg-color: rgba(250,166,26,.1);
+    --alert-warning-border-color: rgba(250, 166, 26, .5);
+    --alert-warning-bg-color: rgba(250, 166, 26, .1);
 
-    --alert-danger-border-color: rgba(240,71,71,.5);
-    --alert-danger-bg-color: rgba(240,71,71,.1);
+    --alert-danger-border-color: rgba(240, 71, 71, .5);
+    --alert-danger-bg-color: rgba(240, 71, 71, .1);
 
-    --alert-tip-border-color: rgba(255,255,255,.5);
-    --alert-tip-bg-color: rgba(255,255,255,.1);
+    --alert-tip-border-color: rgba(255, 255, 255, .5);
+    --alert-tip-bg-color: rgba(255, 255, 255, .1);
 
-    --blockquote-border-color: rgba(255,255,255,.5);
-    --blockquote-bg-color: rgba(255,255,255,.1);
+    --blockquote-border-color: rgba(255, 255, 255, .5);
+    --blockquote-bg-color: rgba(255, 255, 255, .1);
 
     --breadcrumb-bg-color: #2f3136;
 

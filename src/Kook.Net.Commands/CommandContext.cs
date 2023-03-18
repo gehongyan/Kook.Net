@@ -5,12 +5,16 @@ public class CommandContext : ICommandContext
 {
     /// <inheritdoc/>
     public IKookClient Client { get; }
+
     /// <inheritdoc/>
     public IGuild Guild { get; }
+
     /// <inheritdoc/>
     public IMessageChannel Channel { get; }
+
     /// <inheritdoc/>
     public IUser User { get; }
+
     /// <inheritdoc/>
     public IUserMessage Message { get; }
 

@@ -91,8 +91,8 @@ public class Card : ICard, IEquatable<Card>
         {
             int hash = (int)2166136261;
             hash = (hash * 16777619) ^ (Type, Theme, Color, Size).GetHashCode();
-            foreach (IModule module in Modules)
-                hash = (hash * 16777619) ^ module.GetHashCode();
+            foreach (IModule module in Modules) hash = (hash * 16777619) ^ module.GetHashCode();
+
             return hash;
         }
     }

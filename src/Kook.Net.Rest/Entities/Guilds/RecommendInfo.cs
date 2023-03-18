@@ -9,34 +9,49 @@ public class RecommendInfo : IRecommendInfo
 {
     /// <inheritdoc />
     public ulong GuildId { get; private set; }
+
     /// <inheritdoc />
     public uint OpenId { get; private set; }
+
     /// <inheritdoc />
     public ulong DefaultChannelId { get; private set; }
+
     /// <inheritdoc />
     public string Name { get; private set; }
+
     /// <inheritdoc />
     public string Icon { get; private set; }
+
     /// <inheritdoc />
     public string Banner { get; private set; }
+
     /// <inheritdoc />
     public string Description { get; private set; }
+
     /// <inheritdoc />
     public int Status { get; private set; }
+
     /// <inheritdoc />
     public string Tag { get; private set; }
+
     /// <inheritdoc />
     public object[] Features { get; private set; }
+
     /// <inheritdoc />
     public BoostLevel BoostLevel { get; private set; }
+
     /// <inheritdoc />
     public string CustomId { get; private set; }
+
     /// <inheritdoc />
     public bool IsOfficialPartner { get; private set; }
+
     /// <inheritdoc />
     public int Sort { get; private set; }
+
     /// <inheritdoc />
     public int AuditStatus { get; private set; }
+
     /// <inheritdoc />
     public int DaysBeforeModify { get; private set; }
 
@@ -46,7 +61,7 @@ public class RecommendInfo : IRecommendInfo
 
     internal static RecommendInfo Create(Model model)
     {
-        var entity = new RecommendInfo();
+        RecommendInfo entity = new();
         entity.Update(model);
         return entity;
     }

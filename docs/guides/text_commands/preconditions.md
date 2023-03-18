@@ -16,6 +16,7 @@ title: 先决条件
 有关这两种先决条件的详细信息，请参阅各自的 API 文档。
 
 [PreconditionAttribute]: xref:Kook.Commands.PreconditionAttribute
+
 [ParameterPreconditionAttribute]: xref:Kook.Commands.ParameterPreconditionAttribute
 
 ## 内置的先决条件
@@ -56,7 +57,7 @@ title: 先决条件
 
 要实现函数上的先决条件，请重写 [CheckPermissionsAsync] 方法。
 
-如果命令调用上下文满足条件，则返回 [PreconditionResult.FromSuccess] 
+如果命令调用上下文满足条件，则返回 [PreconditionResult.FromSuccess]
 创建的对象，否则，请返回 [PreconditionResult.FromError] 创建的对象，
 如有需要，请在返回的对象中添加错误消息。
 
@@ -69,5 +70,7 @@ title: 先决条件
 [!code-csharp[Custom Precondition](samples/preconditions/require_role.cs)]
 
 [CheckPermissionsAsync]: xref:Kook.Commands.PreconditionAttribute.CheckPermissionsAsync*
+
 [PreconditionResult.FromSuccess]: xref:Kook.Commands.PreconditionResult.FromSuccess*
+
 [PreconditionResult.FromError]: xref:Kook.Commands.PreconditionResult.FromError*

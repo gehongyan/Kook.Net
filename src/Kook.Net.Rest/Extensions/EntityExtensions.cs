@@ -7,7 +7,7 @@ internal static class EntityExtensions
     #region Emotes
 
     public static GuildEmote ToEntity(this API.Emoji model, ulong guildId)
-        => new GuildEmote(model.Id,
+        => new(model.Id,
             model.Name,
             model.Type == EmojiType.Animated,
             guildId,
@@ -19,8 +19,8 @@ internal static class EntityExtensions
 
     public static IElement ToEntity(this API.ElementBase model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return model.Type switch
         {
             ElementType.PlainText => (model as API.PlainTextElement).ToEntity(),
@@ -31,41 +31,46 @@ internal static class EntityExtensions
             _ => throw new ArgumentOutOfRangeException(nameof(API.ElementBase))
         };
     }
+
     public static PlainTextElement ToEntity(this API.PlainTextElement model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new PlainTextElement(model.Content, model.Emoji);
     }
+
     public static KMarkdownElement ToEntity(this API.KMarkdownElement model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new KMarkdownElement(model.Content);
     }
+
     public static ImageElement ToEntity(this API.ImageElement model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new ImageElement(model.Source, model.Alternative, model.Size, model.Circle);
     }
+
     public static ButtonElement ToEntity(this API.ButtonElement model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new ButtonElement(model.Theme, model.Value, model.Click, model.Text.ToEntity());
     }
+
     public static ParagraphStruct ToEntity(this API.ParagraphStruct model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new ParagraphStruct(model.ColumnCount, model.Fields.Select(e => e.ToEntity()).ToImmutableArray());
     }
 
     public static API.ElementBase ToModel(this IElement entity)
     {
-        if (entity is null)
-            return null;
+        if (entity is null) return null;
+
         return entity.Type switch
         {
             ElementType.PlainText => (entity as PlainTextElement).ToModel(),
@@ -76,31 +81,25 @@ internal static class EntityExtensions
             _ => throw new ArgumentOutOfRangeException(nameof(IElement))
         };
     }
+
     public static API.PlainTextElement ToModel(this PlainTextElement entity)
     {
-        if (entity is null)
-            return null;
-        return new API.PlainTextElement
-        {
-            Content = entity.Content,
-            Emoji = entity.Emoji,
-            Type = entity.Type
-        };
+        if (entity is null) return null;
+
+        return new API.PlainTextElement { Content = entity.Content, Emoji = entity.Emoji, Type = entity.Type };
     }
+
     public static API.KMarkdownElement ToModel(this KMarkdownElement entity)
     {
-        if (entity is null)
-            return null;
-        return new API.KMarkdownElement()
-        {
-            Content = entity.Content,
-            Type = entity.Type
-        };
+        if (entity is null) return null;
+
+        return new API.KMarkdownElement() { Content = entity.Content, Type = entity.Type };
     }
+
     public static API.ImageElement ToModel(this ImageElement entity)
     {
-        if (entity is null)
-            return null;
+        if (entity is null) return null;
+
         return new API.ImageElement()
         {
             Alternative = entity.Alternative,
@@ -110,10 +109,11 @@ internal static class EntityExtensions
             Type = entity.Type
         };
     }
+
     public static API.ButtonElement ToModel(this ButtonElement entity)
     {
-        if (entity is null)
-            return null;
+        if (entity is null) return null;
+
         return new API.ButtonElement()
         {
             Click = entity.Click,
@@ -123,15 +123,14 @@ internal static class EntityExtensions
             Value = entity.Value
         };
     }
+
     public static API.ParagraphStruct ToModel(this ParagraphStruct entity)
     {
-        if (entity is null)
-            return null;
+        if (entity is null) return null;
+
         return new API.ParagraphStruct()
         {
-            ColumnCount = entity.ColumnCount,
-            Fields = entity.Fields.Select(e => e.ToModel()).ToArray(),
-            Type = entity.Type
+            ColumnCount = entity.ColumnCount, Fields = entity.Fields.Select(e => e.ToModel()).ToArray(), Type = entity.Type
         };
     }
 
@@ -141,10 +140,10 @@ internal static class EntityExtensions
 
     public static IModule ToEntity(this API.ModuleBase model)
     {
-        if (model is null)
-            return null;
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
+        if (model is null) return null;
+
         return model.Type switch
         {
             ModuleType.Header => (model as API.HeaderModule).ToEntity(),
@@ -165,82 +164,93 @@ internal static class EntityExtensions
 
     public static HeaderModule ToEntity(this API.HeaderModule model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new HeaderModule(model.Text.ToEntity());
     }
+
     public static SectionModule ToEntity(this API.SectionModule model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new SectionModule(model.Mode, model.Text.ToEntity(), model.Accessory.ToEntity());
     }
+
     public static ImageGroupModule ToEntity(this API.ImageGroupModule model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new ImageGroupModule(model.Elements.Select(e => e.ToEntity()).ToImmutableArray());
     }
+
     public static ContainerModule ToEntity(this API.ContainerModule model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new ContainerModule(model.Elements.Select(e => e.ToEntity()).ToImmutableArray());
     }
+
     public static ActionGroupModule ToEntity(this API.ActionGroupModule model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new ActionGroupModule(model.Elements.Select(e => e.ToEntity()).ToImmutableArray());
     }
+
     public static ContextModule ToEntity(this API.ContextModule model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new ContextModule(model.Elements.Select(e => e.ToEntity()).ToImmutableArray());
     }
+
     public static DividerModule ToEntity(this API.DividerModule model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new DividerModule();
     }
+
     public static FileModule ToEntity(this API.FileModule model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new FileModule(model.Source, model.Title);
     }
+
     public static AudioModule ToEntity(this API.AudioModule model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new AudioModule(model.Source, model.Title, model.Cover);
     }
+
     public static VideoModule ToEntity(this API.VideoModule model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new VideoModule(model.Source, model.Title);
     }
+
     public static CountdownModule ToEntity(this API.CountdownModule model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new CountdownModule(model.Mode, model.EndTime, model.StartTime);
     }
+
     public static InviteModule ToEntity(this API.InviteModule model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new InviteModule(model.Code);
     }
 
 
     public static API.ModuleBase ToModel(this IModule entity)
     {
-        if (entity is null)
-            return null;
+        if (entity is null) return null;
+
         return entity.Type switch
         {
             ModuleType.Header => (entity as HeaderModule).ToModel(),
@@ -258,132 +268,92 @@ internal static class EntityExtensions
             _ => throw new ArgumentOutOfRangeException(nameof(IModule))
         };
     }
+
     public static API.HeaderModule ToModel(this HeaderModule entity)
     {
-        if (entity is null)
-            return null;
-        return new API.HeaderModule()
-        {
-            Text = entity.Text.ToModel(),
-            Type = entity.Type
-        };
+        if (entity is null) return null;
+
+        return new API.HeaderModule() { Text = entity.Text.ToModel(), Type = entity.Type };
     }
+
     public static API.SectionModule ToModel(this SectionModule entity)
     {
-        if (entity is null)
-            return null;
+        if (entity is null) return null;
+
         return new API.SectionModule()
         {
-            Accessory = entity.Accessory.ToModel(),
-            Mode = entity.Mode,
-            Text = entity.Text.ToModel(),
-            Type = entity.Type
+            Accessory = entity.Accessory.ToModel(), Mode = entity.Mode, Text = entity.Text.ToModel(), Type = entity.Type
         };
     }
+
     public static API.ImageGroupModule ToModel(this ImageGroupModule entity)
     {
-        if (entity is null)
-            return null;
-        return new API.ImageGroupModule()
-        {
-            Elements = entity.Elements.Select(e => e.ToModel()).ToArray(),
-            Type = entity.Type
-        };
+        if (entity is null) return null;
+
+        return new API.ImageGroupModule() { Elements = entity.Elements.Select(e => e.ToModel()).ToArray(), Type = entity.Type };
     }
+
     public static API.ContainerModule ToModel(this ContainerModule entity)
     {
-        if (entity is null)
-            return null;
-        return new API.ContainerModule()
-        {
-            Elements = entity.Elements.Select(e => e.ToModel()).ToArray(),
-            Type = entity.Type
-        };
+        if (entity is null) return null;
+
+        return new API.ContainerModule() { Elements = entity.Elements.Select(e => e.ToModel()).ToArray(), Type = entity.Type };
     }
+
     public static API.ActionGroupModule ToModel(this ActionGroupModule entity)
     {
-        if (entity is null)
-            return null;
-        return new API.ActionGroupModule()
-        {
-            Elements = entity.Elements.Select(e => e.ToModel()).ToArray(),
-            Type = entity.Type
-        };
+        if (entity is null) return null;
+
+        return new API.ActionGroupModule() { Elements = entity.Elements.Select(e => e.ToModel()).ToArray(), Type = entity.Type };
     }
+
     public static API.ContextModule ToModel(this ContextModule entity)
     {
-        if (entity is null)
-            return null;
-        return new API.ContextModule()
-        {
-            Elements = entity.Elements.Select(e => e.ToModel()).ToArray(),
-            Type = entity.Type
-        };
+        if (entity is null) return null;
+
+        return new API.ContextModule() { Elements = entity.Elements.Select(e => e.ToModel()).ToArray(), Type = entity.Type };
     }
+
     public static API.DividerModule ToModel(this DividerModule entity)
     {
-        if (entity is null)
-            return null;
-        return new API.DividerModule()
-        {
-            Type = entity.Type
-        };
+        if (entity is null) return null;
+
+        return new API.DividerModule() { Type = entity.Type };
     }
+
     public static API.FileModule ToModel(this FileModule entity)
     {
-        if (entity is null)
-            return null;
-        return new API.FileModule()
-        {
-            Source = entity.Source,
-            Title = entity.Title,
-            Type = entity.Type
-        };
+        if (entity is null) return null;
+
+        return new API.FileModule() { Source = entity.Source, Title = entity.Title, Type = entity.Type };
     }
+
     public static API.AudioModule ToModel(this AudioModule entity)
     {
-        if (entity is null)
-            return null;
-        return new API.AudioModule()
-        {
-            Cover = entity.Cover,
-            Source = entity.Source,
-            Title = entity.Title,
-            Type = entity.Type
-        };
+        if (entity is null) return null;
+
+        return new API.AudioModule() { Cover = entity.Cover, Source = entity.Source, Title = entity.Title, Type = entity.Type };
     }
+
     public static API.VideoModule ToModel(this VideoModule entity)
     {
-        if (entity is null)
-            return null;
-        return new API.VideoModule()
-        {
-            Source = entity.Source,
-            Title = entity.Title,
-            Type = entity.Type
-        };
+        if (entity is null) return null;
+
+        return new API.VideoModule() { Source = entity.Source, Title = entity.Title, Type = entity.Type };
     }
+
     public static API.CountdownModule ToModel(this CountdownModule entity)
     {
-        if (entity is null)
-            return null;
-        return new API.CountdownModule()
-        {
-            Mode = entity.Mode,
-            EndTime = entity.EndTime,
-            StartTime = entity.StartTime,
-            Type = entity.Type
-        };
+        if (entity is null) return null;
+
+        return new API.CountdownModule() { Mode = entity.Mode, EndTime = entity.EndTime, StartTime = entity.StartTime, Type = entity.Type };
     }
+
     public static API.InviteModule ToModel(this InviteModule entity)
     {
-        if (entity is null)
-            return null;
-        return new API.InviteModule()
-        {
-            Code = entity.Code,
-            Type = entity.Type
-        };
+        if (entity is null) return null;
+
+        return new API.InviteModule() { Code = entity.Code, Type = entity.Type };
     }
 
     #endregion
@@ -392,35 +362,37 @@ internal static class EntityExtensions
 
     public static ICard ToEntity(this API.CardBase model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return model.Type switch
         {
             CardType.Card => (model as API.Card).ToEntity(),
             _ => throw new ArgumentOutOfRangeException(nameof(API.CardBase))
         };
     }
+
     public static Card ToEntity(this API.Card model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return new Card(model.Theme, model.Size, model.Color, model.Modules.Select(m => m.ToEntity()).ToImmutableArray());
     }
 
     public static API.CardBase ToModel(this ICard entity)
     {
-        if (entity is null)
-            return null;
+        if (entity is null) return null;
+
         return entity.Type switch
         {
             CardType.Card => (entity as Card).ToModel(),
             _ => throw new ArgumentOutOfRangeException(nameof(ICard))
         };
     }
+
     public static API.Card ToModel(this Card entity)
     {
-        if (entity is null)
-            return null;
+        if (entity is null) return null;
+
         return new API.Card()
         {
             Theme = entity.Theme,
@@ -437,8 +409,8 @@ internal static class EntityExtensions
 
     public static IEmbed ToEntity(this API.EmbedBase model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return model.Type switch
         {
             EmbedType.Link => (model as API.LinkEmbed).ToEntity(),
@@ -447,23 +419,17 @@ internal static class EntityExtensions
             _ => (model as API.NotImplementedEmbed).ToNotImplementedEntity()
         };
     }
-    public static NotImplementedEmbed ToNotImplementedEntity(this API.NotImplementedEmbed model)
-    {
-        return new NotImplementedEmbed(model.RawType, model.RawJsonNode);
-    }
-    public static LinkEmbed ToEntity(this API.LinkEmbed model)
-    {
-        return new LinkEmbed(model.Url, model.Title, model.Description, model.SiteName, model.Color, model.Image);
-    }
-    public static ImageEmbed ToEntity(this API.ImageEmbed model)
-    {
-        return new ImageEmbed(model.Url, model.OriginUrl);
-    }
-    public static BilibiliVideoEmbed ToEntity(this API.BilibiliVideoEmbed model)
-    {
-        return new BilibiliVideoEmbed(model.Url, model.OriginUrl, model.BvNumber, model.IframePath,
+
+    public static NotImplementedEmbed ToNotImplementedEntity(this API.NotImplementedEmbed model) => new(model.RawType, model.RawJsonNode);
+
+    public static LinkEmbed ToEntity(this API.LinkEmbed model) =>
+        new(model.Url, model.Title, model.Description, model.SiteName, model.Color, model.Image);
+
+    public static ImageEmbed ToEntity(this API.ImageEmbed model) => new(model.Url, model.OriginUrl);
+
+    public static BilibiliVideoEmbed ToEntity(this API.BilibiliVideoEmbed model) =>
+        new(model.Url, model.OriginUrl, model.BvNumber, model.IframePath,
             TimeSpan.FromSeconds(model.Duration), model.Title, model.Cover);
-    }
 
     #endregion
 
@@ -471,38 +437,31 @@ internal static class EntityExtensions
 
     public static IPokeResource ToEntity(this API.PokeResourceBase model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return model.Type switch
         {
             PokeResourceType.ImageAnimation => (model as API.ImageAnimationPokeResource).ToEntity(),
             _ => (model as API.NotImplementedPokeResource).ToNotImplementedEntity()
         };
     }
-    public static NotImplementedPokeResource ToNotImplementedEntity(this API.NotImplementedPokeResource model)
-    {
-        return new NotImplementedPokeResource(model.RawType, model.RawJsonNode);
-    }
+
+    public static NotImplementedPokeResource ToNotImplementedEntity(this API.NotImplementedPokeResource model) =>
+        new(model.RawType, model.RawJsonNode);
+
     public static ImageAnimationPokeResource ToEntity(this API.ImageAnimationPokeResource model) =>
-        new(new Dictionary<string, string>()
-        {
-            ["webp"] = model.WebP,
-            ["pag"] = model.PAG,
-            ["gif"] = model.GIF
-        }, TimeSpan.FromMilliseconds(model.Duration), model.Width, model.Height, model.Percent / 100D);
+        new(new Dictionary<string, string>() { ["webp"] = model.WebP, ["pag"] = model.PAG, ["gif"] = model.GIF },
+            TimeSpan.FromMilliseconds(model.Duration), model.Width, model.Height, model.Percent / 100D);
 
     #endregion
 
     #region Overwrites
 
-    public static UserPermissionOverwrite ToEntity(this API.UserPermissionOverwrite model)
-    {
-        return new UserPermissionOverwrite(RestUser.Create(null, model.User), new OverwritePermissions(model.Allow, model.Deny));
-    }
-    public static RolePermissionOverwrite ToEntity(this API.RolePermissionOverwrite model)
-    {
-        return new RolePermissionOverwrite(model.RoleId, new OverwritePermissions(model.Allow, model.Deny));
-    }
+    public static UserPermissionOverwrite ToEntity(this API.UserPermissionOverwrite model) =>
+        new(RestUser.Create(null, model.User), new OverwritePermissions(model.Allow, model.Deny));
+
+    public static RolePermissionOverwrite ToEntity(this API.RolePermissionOverwrite model) =>
+        new(model.RoleId, new OverwritePermissions(model.Allow, model.Deny));
 
     #endregion
 
@@ -510,8 +469,8 @@ internal static class EntityExtensions
 
     public static RecommendInfo ToEntity(this API.RecommendInfo model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return RecommendInfo.Create(model);
     }
 
@@ -521,8 +480,8 @@ internal static class EntityExtensions
 
     public static UserTag ToEntity(this API.UserTag model)
     {
-        if (model is null)
-            return null;
+        if (model is null) return null;
+
         return UserTag.Create(model.Color, model.Text);
     }
 

@@ -9,7 +9,8 @@ internal class PagedAsyncEnumerable<T> : IAsyncEnumerable<IReadOnlyCollection<T>
     private readonly Func<PageInfo, CancellationToken, Task<IReadOnlyCollection<T>>> _getPage;
     private readonly Func<PageInfo, IReadOnlyCollection<T>, bool> _nextPage;
 
-    public PagedAsyncEnumerable(int pageSize, Func<PageInfo, CancellationToken, Task<IReadOnlyCollection<T>>> getPage, Func<PageInfo, IReadOnlyCollection<T>, bool> nextPage = null,
+    public PagedAsyncEnumerable(int pageSize, Func<PageInfo, CancellationToken, Task<IReadOnlyCollection<T>>> getPage,
+        Func<PageInfo, IReadOnlyCollection<T>, bool> nextPage = null,
         Guid? start = null, int? count = null)
     {
         PageSize = pageSize;
@@ -20,7 +21,9 @@ internal class PagedAsyncEnumerable<T> : IAsyncEnumerable<IReadOnlyCollection<T>
         _nextPage = nextPage;
     }
 
-    public IAsyncEnumerator<IReadOnlyCollection<T>> GetAsyncEnumerator(CancellationToken cancellationToken = new CancellationToken()) => new Enumerator(this, cancellationToken);
+    public IAsyncEnumerator<IReadOnlyCollection<T>> GetAsyncEnumerator(CancellationToken cancellationToken = new()) =>
+        new Enumerator(this, cancellationToken);
+
     internal class Enumerator : IAsyncEnumerator<IReadOnlyCollection<T>>
     {
         private readonly PagedAsyncEnumerable<T> _source;
@@ -38,10 +41,9 @@ internal class PagedAsyncEnumerable<T> : IAsyncEnumerable<IReadOnlyCollection<T>
 
         public async ValueTask<bool> MoveNextAsync()
         {
-            if (_info.Remaining == 0)
-                return false;
+            if (_info.Remaining == 0) return false;
 
-            var data = await _source._getPage(_info, _token).ConfigureAwait(false);
+            IReadOnlyCollection<T> data = await _source._getPage(_info, _token).ConfigureAwait(false);
             Current = new Page<T>(_info, data);
 
             _info.Page++;
@@ -54,16 +56,14 @@ internal class PagedAsyncEnumerable<T> : IAsyncEnumerable<IReadOnlyCollection<T>
             }
             else
             {
-                if (Current.Count == 0)
-                    _info.Remaining = 0;
+                if (Current.Count == 0) _info.Remaining = 0;
             }
+
             _info.PageSize = _info.Remaining != null ? Math.Min(_info.Remaining.Value, _source.PageSize) : _source.PageSize;
 
             if (_info.Remaining != 0)
-            {
                 if (!_source._nextPage(_info, data))
                     _info.Remaining = 0;
-            }
 
             return true;
         }
@@ -71,7 +71,7 @@ internal class PagedAsyncEnumerable<T> : IAsyncEnumerable<IReadOnlyCollection<T>
         public ValueTask DisposeAsync()
         {
             Current = null;
-            return default;
+            return default(ValueTask);
         }
     }
 }

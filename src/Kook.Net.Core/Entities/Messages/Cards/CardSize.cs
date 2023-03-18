@@ -9,6 +9,7 @@ public enum CardSize
     ///     The card is a small card.
     /// </summary>
     Small,
+
     /// <summary>
     ///     The card is a large card.
     /// </summary>

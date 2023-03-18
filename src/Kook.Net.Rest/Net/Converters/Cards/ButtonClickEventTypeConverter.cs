@@ -17,8 +17,7 @@ internal class ButtonClickEventTypeConverter : JsonConverter<ButtonClickEventTyp
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, ButtonClickEventType value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, ButtonClickEventType value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
             ButtonClickEventType.None => "",
@@ -26,5 +25,4 @@ internal class ButtonClickEventTypeConverter : JsonConverter<ButtonClickEventTyp
             ButtonClickEventType.ReturnValue => "return-val",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
-    }
 }

@@ -1,27 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Import Project="../Kook.Net.targets" />
+  <Import Project="../Kook.Net.targets"/>
 
-    <PropertyGroup>
-        <RootNamespace>Kook.WebSocket</RootNamespace>
-    </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Kook.WebSocket</RootNamespace>
+  </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-      <DefineConstants>TRACE_PACKETS</DefineConstants>
-    </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>TRACE_PACKETS</DefineConstants>
+  </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj" />
-      <ProjectReference Include="..\Kook.Net.Rest\Kook.Net.Rest.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj"/>
+    <ProjectReference Include="..\Kook.Net.Rest\Kook.Net.Rest.csproj"/>
+  </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="System.Linq.Async" Version="6.0.1" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Linq.Async" Version="6.0.1"/>
+  </ItemGroup>
 
 </Project>

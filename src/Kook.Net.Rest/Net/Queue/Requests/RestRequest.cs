@@ -23,8 +23,6 @@ internal class RestRequest : IRequest
         Promise = new TaskCompletionSource<Stream>();
     }
 
-    public virtual async Task<RestResponse> SendAsync()
-    {
-        return await Client.SendAsync(Method, Endpoint, Options.CancelToken, Options.AuditLogReason, Options.RequestHeaders).ConfigureAwait(false);
-    }
+    public virtual async Task<RestResponse> SendAsync() =>
+        await Client.SendAsync(Method, Endpoint, Options.CancelToken, Options.AuditLogReason, Options.RequestHeaders).ConfigureAwait(false);
 }

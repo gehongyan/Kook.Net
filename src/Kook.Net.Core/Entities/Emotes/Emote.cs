@@ -9,11 +9,10 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Emote : IEmote
 {
-
-    internal static readonly Regex PlainTextEmojiRegex = new Regex(@"\[:(?<name>[^:]{1,32}?):(?<id>\d{1,20}\/\w{1,20})\]",
+    internal static readonly Regex PlainTextEmojiRegex = new(@"\[:(?<name>[^:]{1,32}?):(?<id>\d{1,20}\/\w{1,20})\]",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
-    internal static readonly Regex KMarkdownEmojiRegex = new Regex(@"(\(emj\))(?<name>[^\(\)]{1,32}?)\1\[(?<id>\d{1,20}\/\w{1,20})\]",
+    internal static readonly Regex KMarkdownEmojiRegex = new(@"(\(emj\))(?<name>[^\(\)]{1,32}?)\1\[(?<id>\d{1,20}\/\w{1,20})\]",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
     /// <summary>
@@ -41,13 +40,11 @@ public class Emote : IEmote
     /// <inheritdoc />
     public override bool Equals(object other)
     {
-        if (other == null)
-            return false;
-        if (other == this)
-            return true;
+        if (other == null) return false;
 
-        if (other is not Emote otherEmote)
-            return false;
+        if (other == this) return true;
+
+        if (other is not Emote otherEmote) return false;
 
         return Id == otherEmote.Id;
     }
@@ -67,9 +64,9 @@ public class Emote : IEmote
     /// <exception cref="ArgumentException">Invalid emote format.</exception>
     public static Emote Parse(string text, TagMode tagMode)
     {
-        if (TryParse(text, out Emote result, tagMode))
-            return result;
-        throw new ArgumentException(message: "Invalid emote format.", paramName: nameof(text));
+        if (TryParse(text, out Emote result, tagMode)) return result;
+
+        throw new ArgumentException("Invalid emote format.", nameof(text));
     }
 
     /// <summary> Tries to parse an <see cref="Emote"/> from its raw format. </summary>
@@ -84,8 +81,7 @@ public class Emote : IEmote
     {
         result = null;
 
-        if (text == null)
-            return false;
+        if (text == null) return false;
 
         Match match = tagMode switch
         {
@@ -107,6 +103,7 @@ public class Emote : IEmote
     ///     Gets a string representation of the emote in KMarkdown format.
     /// </summary>
     public string ToKMarkdownString() => $"(emj){Name}(emj)[{Id}]";
+
     /// <summary>
     ///     Gets a string representation of the emote in plain text format.
     /// </summary>

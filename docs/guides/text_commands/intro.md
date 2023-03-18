@@ -21,6 +21,7 @@ title: 文本命令框架入门
 [!code-csharp[Command Handler](samples/intro/command_handler.cs)]
 
 [CommandService]: xref:Kook.Commands.CommandService
+
 [CommandServiceConfig]: xref:Kook.Commands.CommandServiceConfig
 
 ## 使用特性
@@ -102,7 +103,7 @@ title: 文本命令框架入门
 回复消息也可通过调用以 `Reply` 为前缀的方法完成，无需调用上下文中频道内发送消息的方法来回复命令。
 
 > [!WARNING]
-> 上下文的类型不应该混合使用，使用 `CommandContext` 上下文的模块与使用 `SocketCommandContext` 
+> 上下文的类型不应该混合使用，使用 `CommandContext` 上下文的模块与使用 `SocketCommandContext`
 > 的模块不可同时使用。
 
 > [!TIP]
@@ -115,6 +116,7 @@ title: 文本命令框架入门
 可以进行自动发现与模块加载。如果要指定某个模块跳过自动加载，可对其标记特性 [DontAutoLoadAttribute]。
 
 [DontAutoLoadAttribute]: xref:Kook.Commands.DontAutoLoadAttribute
+
 [CommandService.AddModulesAsync]: xref:Kook.Commands.CommandService.AddModulesAsync*
 
 #### 手动加载模块

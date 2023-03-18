@@ -12,6 +12,7 @@ public interface IBan
     ///     A user that was banned.
     /// </returns>
     IUser User { get; }
+
     /// <summary>
     ///     Gets the time when the ban was issued.
     /// </summary>
@@ -19,6 +20,7 @@ public interface IBan
     ///     A DateTime object that represents the time when the ban was issued.
     /// </returns>
     DateTimeOffset CreatedAt { get; }
+
     /// <summary>
     ///     Gets the reason why the user is banned if specified.
     /// </summary>

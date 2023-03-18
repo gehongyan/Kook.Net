@@ -9,10 +9,7 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>
 {
-    internal ActionGroupModule(ImmutableArray<ButtonElement> elements)
-    {
-        Elements = elements;
-    }
+    internal ActionGroupModule(ImmutableArray<ButtonElement> elements) => Elements = elements;
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.ActionGroup;
@@ -61,8 +58,8 @@ public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>
         {
             int hash = (int)2166136261;
             hash = (hash * 16777619) ^ Type.GetHashCode();
-            foreach (ButtonElement buttonElement in Elements)
-                hash = (hash * 16777619) ^ buttonElement.GetHashCode();
+            foreach (ButtonElement buttonElement in Elements) hash = (hash * 16777619) ^ buttonElement.GetHashCode();
+
             return hash;
         }
     }

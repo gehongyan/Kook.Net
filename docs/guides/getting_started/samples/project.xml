@@ -1,16 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <!--
-        目标框架与 Kook.Net 版本可能会随着未来的开发而发生变化
-    -->
+  <!--
+      目标框架与 Kook.Net 版本可能会随着未来的开发而发生变化
+  -->
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
-    </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Kook.Net" Version="0.0.18-alpha" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Kook.Net" Version="0.0.18-alpha"/>
+  </ItemGroup>
 
 </Project>

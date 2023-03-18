@@ -3,7 +3,7 @@
 using Kook;
 using Kook.WebSocket;
 
-class Program
+internal class Program
 {
     private readonly KookSocketClient _client;
     private readonly string _token;
@@ -12,8 +12,8 @@ class Program
     public Program()
     {
         _token = Environment.GetEnvironmentVariable("KookDebugToken", EnvironmentVariableTarget.User)
-                 ?? throw new ArgumentNullException(nameof(_token));
-        _client = new(new KookSocketConfig
+            ?? throw new ArgumentNullException(nameof(_token));
+        _client = new KookSocketClient(new KookSocketConfig
         {
             AlwaysDownloadUsers = true,
             AlwaysDownloadVoiceStates = true,
@@ -91,7 +91,6 @@ class Program
         _client.DirectMessageButtonClicked += (value, user, message, channel) => Task.CompletedTask;
 
         #endregion
-
     }
 
     public async Task MainAsync()

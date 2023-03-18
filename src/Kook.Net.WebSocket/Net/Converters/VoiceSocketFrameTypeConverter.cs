@@ -6,12 +6,10 @@ namespace Kook.Net.Converters;
 
 internal class VoiceSocketFrameTypeConverter : JsonConverter<VoiceSocketFrameType>
 {
-    public override VoiceSocketFrameType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        return Enum.TryParse(reader.GetString(), true, out VoiceSocketFrameType value)
+    public override VoiceSocketFrameType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+        Enum.TryParse(reader.GetString(), true, out VoiceSocketFrameType value)
             ? value
             : throw new ArgumentOutOfRangeException(nameof(VoiceSocketFrameType));
-    }
 
     public override void Write(Utf8JsonWriter writer, VoiceSocketFrameType value, JsonSerializerOptions options)
     {

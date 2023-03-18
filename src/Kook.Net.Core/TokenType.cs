@@ -9,6 +9,7 @@ public enum TokenType
     ///     An OAuth2 token type.
     /// </summary>
     Bearer,
+
     /// <summary>
     ///     A bot token type.
     /// </summary>

@@ -15,7 +15,6 @@ namespace Kook;
 [Trait("Category", "Integration")]
 public class MessageTests : IClassFixture<RestChannelFixture>
 {
-
     private readonly IGuild _guild;
     private readonly ITextChannel _channel;
     private readonly IGuildUser _selfUser;
@@ -31,6 +30,7 @@ public class MessageTests : IClassFixture<RestChannelFixture>
         // capture all console output
         channelFixture.Client.Log += LogAsync;
     }
+
     private Task LogAsync(LogMessage message)
     {
         _output.WriteLine(message.ToString());
@@ -76,8 +76,8 @@ UNDERLINESPOLIER
 🍁
 
 @Kook.Net Test#0721
-全体成员
-在线成员
+@全体成员
+@在线成员
 INLINE CODE
 csharp
 CODE BLOCK
@@ -142,5 +142,4 @@ CODE BLOCK
             await message.DeleteAsync();
         }
     }
-
 }

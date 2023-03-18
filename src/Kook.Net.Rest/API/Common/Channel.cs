@@ -8,7 +8,8 @@ internal class Channel
     [JsonPropertyName("id")]
     public ulong Id { get; set; }
 
-    [JsonPropertyName("name")] public string Name { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
     [JsonPropertyName("user_id")]
     public ulong CreatorId { get; set; }
@@ -23,8 +24,11 @@ internal class Channel
     [JsonConverter(typeof(NullableUInt64Converter))]
     public ulong? CategoryId { get; set; }
 
-    [JsonPropertyName("level")] public int? Position { get; set; }
-    [JsonPropertyName("type")] public ChannelType Type { get; set; }
+    [JsonPropertyName("level")]
+    public int? Position { get; set; }
+
+    [JsonPropertyName("type")]
+    public ChannelType Type { get; set; }
 
     [JsonPropertyName("permission_overwrites")]
     public RolePermissionOverwrite[] RolePermissionOverwrites { get; set; }
@@ -32,15 +36,19 @@ internal class Channel
     [JsonPropertyName("permission_users")]
     public UserPermissionOverwrite[] UserPermissionOverwrites { get; set; }
 
-    [JsonPropertyName("channels")] public Channel[] Channels { get; set; }
+    [JsonPropertyName("channels")]
+    public Channel[] Channels { get; set; }
 
     [JsonPropertyName("permission_sync")]
     [JsonConverter(typeof(NullableNumberBooleanConverter))]
     public bool? PermissionSync { get; set; }
 
     // Text
-    [JsonPropertyName("topic")] public string Topic { get; set; }
-    [JsonPropertyName("slow_mode")] public int SlowMode { get; set; }
+    [JsonPropertyName("topic")]
+    public string Topic { get; set; }
+
+    [JsonPropertyName("slow_mode")]
+    public int SlowMode { get; set; }
 
     // Voice
     [JsonPropertyName("limit_amount")]

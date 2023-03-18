@@ -12,16 +12,11 @@ public class GroupAttribute : Attribute
     public string Prefix { get; }
 
     /// <inheritdoc />
-    public GroupAttribute()
-    {
-        Prefix = null;
-    }
+    public GroupAttribute() => Prefix = null;
+
     /// <summary>
     ///     Initializes a new <see cref="GroupAttribute" /> with the provided prefix.
     /// </summary>
     /// <param name="prefix">The prefix of the module group.</param>
-    public GroupAttribute(string prefix)
-    {
-        Prefix = prefix;
-    }
+    public GroupAttribute(string prefix) => Prefix = prefix;
 }

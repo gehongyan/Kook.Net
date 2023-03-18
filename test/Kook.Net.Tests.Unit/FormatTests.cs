@@ -12,10 +12,8 @@ public class FormatTests
     [InlineData(@"~text~", @"\~text\~")]
     [InlineData(@"`text`", @"\`text\`")]
     [InlineData(@"> text", @"\> text")]
-    public void Sanitize(string input, string expected)
-    {
-        Assert.Equal(expected, Format.Sanitize(input));
-    }
+    public void Sanitize(string input, string expected) => Assert.Equal(expected, Format.Sanitize(input));
+
     [Fact]
     public void Code()
     {
@@ -26,11 +24,10 @@ public class FormatTests
         Assert.Equal("```cs\ntest\n```", Format.Code("test", "cs"));
         Assert.Equal("```cs\nanother\none\n```", Format.Code("another\none", "cs"));
     }
+
     [Fact]
-    public void QuoteNullString()
-    {
-        Assert.Null(Format.Quote(null));
-    }
+    public void QuoteNullString() => Assert.Null(Format.Quote(null));
+
     [Theory]
     [InlineData("", "")]
     [InlineData("\n", "\n")]
@@ -39,10 +36,8 @@ public class FormatTests
     // should work with CR or CRLF
     [InlineData("inb4\ngreentext", "> inb4\n> greentext")]
     [InlineData("inb4\r\ngreentext", "> inb4\r\n> greentext")]
-    public void Quote(string input, string expected)
-    {
-        Assert.Equal(expected, Format.Quote(input));
-    }
+    public void Quote(string input, string expected) => Assert.Equal(expected, Format.Quote(input));
+
     [Theory]
     [InlineData(null, null)]
     [InlineData("", "")]
@@ -52,10 +47,7 @@ public class FormatTests
     // should work with CR or CRLF
     [InlineData("inb4\ngreentext", ">>> inb4\ngreentext")]
     [InlineData("inb4\r\ngreentext", ">>> inb4\r\ngreentext")]
-    public void BlockQuote(string input, string expected)
-    {
-        Assert.Equal(expected, Format.BlockQuote(input));
-    }
+    public void BlockQuote(string input, string expected) => Assert.Equal(expected, Format.BlockQuote(input));
 
     [Theory]
     [InlineData("", "")]
@@ -66,10 +58,11 @@ public class FormatTests
     [InlineData("~uwu~", "uwu")]
     [InlineData("(ins)uwu(ins)", "uwu")]
     [InlineData("(spl)uwu(spl)", "uwu")]
-    [InlineData("berries and *Cream**, I'm a little lad who loves berries and cream", "berries and Cream, I'm a little lad who loves berries and cream")]
+    [InlineData("berries and *Cream**, I'm a little lad who loves berries and cream",
+        "berries and Cream, I'm a little lad who loves berries and cream")]
     public void StripMarkdown(string input, string expected)
     {
-        var test = Format.StripMarkDown(input);
+        string test = Format.StripMarkDown(input);
         Assert.Equal(expected, test);
     }
 }

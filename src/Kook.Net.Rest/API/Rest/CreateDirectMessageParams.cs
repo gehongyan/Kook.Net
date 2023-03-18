@@ -5,7 +5,8 @@ namespace Kook.API.Rest;
 
 internal class CreateDirectMessageParams
 {
-    [JsonPropertyName("type")] public MessageType Type { get; set; }
+    [JsonPropertyName("type")]
+    public MessageType Type { get; set; }
 
     [JsonPropertyName("target_id")]
     [JsonConverter(typeof(NullableUInt64Converter))]
@@ -17,7 +18,8 @@ internal class CreateDirectMessageParams
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public Guid? ChatCode { get; set; }
 
-    [JsonPropertyName("content")] public string Content { get; set; }
+    [JsonPropertyName("content")]
+    public string Content { get; set; }
 
     [JsonPropertyName("quote")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

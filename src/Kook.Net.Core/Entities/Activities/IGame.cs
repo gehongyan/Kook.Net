@@ -12,6 +12,7 @@ public interface IGame : IActivity, IEntity<int>, IDeletable
     ///     A string containing the name of the game.
     /// </returns>
     string Name { get; }
+
     /// <summary>
     ///     Gets the type of the game.
     /// </summary>
@@ -19,6 +20,7 @@ public interface IGame : IActivity, IEntity<int>, IDeletable
     ///     The type of the game.
     /// </returns>
     GameType GameType { get; }
+
     /// <summary>
     ///     Gets the additional information about the game.
     /// </summary>
@@ -26,6 +28,7 @@ public interface IGame : IActivity, IEntity<int>, IDeletable
     ///     A string containing the additional information about the game.
     /// </returns>
     string Options { get; }
+
     /// <summary>
     ///     Gets whether the Kook client needs administrator privileges to detect the game.
     /// </summary>
@@ -33,6 +36,7 @@ public interface IGame : IActivity, IEntity<int>, IDeletable
     ///     <c>true</c> if the Kook client needs administrator privileges to detect the game; otherwise, <c>false</c>.
     /// </returns>
     bool RequireAdminPrivilege { get; }
+
     /// <summary>
     ///     Gets the process names of the game.
     /// </summary>
@@ -40,6 +44,7 @@ public interface IGame : IActivity, IEntity<int>, IDeletable
     ///     An <see cref="IReadOnlyCollection{String}"/> containing the process names of the game.
     /// </returns>
     IReadOnlyCollection<string> ProcessNames { get; }
+
     /// <summary>
     ///     Gets the product names of the game.
     /// </summary>
@@ -47,6 +52,7 @@ public interface IGame : IActivity, IEntity<int>, IDeletable
     ///     An <see cref="IReadOnlyCollection{String}"/> containing the product names of the game.
     /// </returns>
     IReadOnlyCollection<string> ProductNames { get; }
+
     /// <summary>
     ///     Gets the URL of the game's icon.
     /// </summary>

@@ -17,8 +17,7 @@ internal class MusicProviderConverter : JsonConverter<MusicProvider>
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, MusicProvider value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, MusicProvider value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
             MusicProvider.NetEaseCloudMusic => "cloudmusic",
@@ -26,5 +25,4 @@ internal class MusicProviderConverter : JsonConverter<MusicProvider>
             MusicProvider.KuGouMusic => "kugou",
             _ => string.Empty
         });
-    }
 }

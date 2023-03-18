@@ -33,6 +33,7 @@ public class GuildEmote : Emote
     public ulong? CreatorId { get; }
 
     private string DebuggerDisplay => $"{Name} ({Id}{(Animated == true ? ", Animated" : "")})";
+
     /// <summary>
     ///     Gets the raw representation of the emote.
     /// </summary>
@@ -40,5 +41,6 @@ public class GuildEmote : Emote
     ///     A string representing the raw presentation of the emote.
     /// </returns>
     public override string ToString() => $"(emj){Name}(emj)[{Id}]";
+
     internal GuildEmote Clone() => MemberwiseClone() as GuildEmote;
 }

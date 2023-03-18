@@ -19,8 +19,7 @@ internal class ElementTypeConverter : JsonConverter<ElementType>
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, ElementType value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, ElementType value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
             ElementType.PlainText => "plain-text",
@@ -30,5 +29,4 @@ internal class ElementTypeConverter : JsonConverter<ElementType>
             ElementType.Paragraph => "paragraph",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
-    }
 }

@@ -33,9 +33,12 @@ public class SocketPokeAction : IPokeAction
 
     /// <inheritdoc />
     IUser IPokeAction.Operator => Operator;
+
     /// <inheritdoc />
     IReadOnlyCollection<IUser> IPokeAction.Targets => Targets;
+
     /// <inheritdoc />
     IPoke IPokeAction.Poke => Poke;
+
     #endregion
 }

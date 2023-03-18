@@ -26,6 +26,7 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
         // capture all console output
         guildFixture.Client.Log += LogAsync;
     }
+
     private Task LogAsync(LogMessage message)
     {
         _output.WriteLine(message.ToString());
@@ -115,6 +116,7 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
                 Assert.Equal(cat.Id, getCat.Id);
             }
         }
+
         // initially create these not under the category
         ICategoryChannel category = await _guild.CreateCategoryChannelAsync("CATEGORY");
         ITextChannel text = await _guild.CreateTextChannelAsync("TEXT");

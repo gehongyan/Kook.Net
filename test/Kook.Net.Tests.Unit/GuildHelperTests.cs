@@ -19,10 +19,10 @@ public class GuildHelperTests
     [InlineData(BoostLevel.Level6, 320)]
     public void GetMaxBitrate(BoostLevel level, int factor)
     {
-        var guild = Mock.Of<IGuild>(g => g.BoostLevel == level);
-        var expected = factor * 1000;
+        IGuild guild = Mock.Of<IGuild>(g => g.BoostLevel == level);
+        int expected = factor * 1000;
 
-        var actual = GuildHelper.GetMaxBitrate(guild);
+        int actual = GuildHelper.GetMaxBitrate(guild);
 
         actual.Should().Be(expected);
     }
@@ -37,10 +37,10 @@ public class GuildHelperTests
     [InlineData(BoostLevel.Level6, 300)]
     public void GetUploadLimit(BoostLevel level, ulong factor)
     {
-        var guild = Mock.Of<IGuild>(g => g.BoostLevel == level);
-        var expected = factor * (ulong)Math.Pow(2, 20);
+        IGuild guild = Mock.Of<IGuild>(g => g.BoostLevel == level);
+        ulong expected = factor * (ulong)Math.Pow(2, 20);
 
-        var actual = GuildHelper.GetUploadLimit(guild);
+        ulong actual = GuildHelper.GetUploadLimit(guild);
 
         actual.Should().Be(expected);
     }

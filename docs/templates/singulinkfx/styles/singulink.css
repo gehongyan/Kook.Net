@@ -64,7 +64,7 @@ h4 {
     margin-block-end: 1em;
     padding-bottom: 0;
     border-bottom: none;
-} 
+}
 
 h5 {
     font-size: 1.1em;
@@ -78,8 +78,7 @@ h5 {
     margin-block-end: 1.0em;
 }
 
-a.brand:hover
-{
+a.brand:hover {
     text-decoration: none;
 }
 
@@ -249,16 +248,14 @@ nav a.active, nav a.active:hover, nav a.active:focus {
     cursor: pointer;
 }
 
-.toc .nav > li > .expand-stub::before, .toc .nav > li.active > .expand-stub::before
-{
+.toc .nav > li > .expand-stub::before, .toc .nav > li.active > .expand-stub::before {
     width: 8px;
     height: 8px;
     top: 6px;
     left: 6px;
 }
 
-#toc ul.level2
-{
+#toc ul.level2 {
     margin-bottom: 20px;
 }
 
@@ -348,7 +345,7 @@ ul.level4 > li > a, ul.level4 > li > a.sidebar-item {
     margin-top: 1.5em;
 }
 
-#search-results .item-href {    
+#search-results .item-href {
     font-size: 0.85em;
 }
 

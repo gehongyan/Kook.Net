@@ -16,7 +16,6 @@ internal class PageInfo
         Remaining = count;
         PageSize = pageSize;
 
-        if (Count != null && Count.Value < PageSize)
-            PageSize = Count.Value;
+        if (Count != null && Count.Value < PageSize) PageSize = Count.Value;
     }
 }

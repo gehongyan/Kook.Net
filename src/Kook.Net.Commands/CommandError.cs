@@ -14,6 +14,7 @@ public enum CommandError
     /// Thrown when the command fails to be parsed.
     /// </summary>
     ParseFailed,
+
     /// <summary>
     /// Thrown when the input text has too few or too many arguments.
     /// </summary>
@@ -25,6 +26,7 @@ public enum CommandError
     /// Thrown when the object cannot be found by the <see cref="TypeReader"/>.
     /// </summary>
     ObjectNotFound,
+
     /// <summary>
     /// Thrown when more than one object is matched by <see cref="TypeReader"/>.
     /// </summary>

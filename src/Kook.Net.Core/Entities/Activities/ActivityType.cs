@@ -9,6 +9,7 @@ public enum ActivityType
     ///     Specifies that the activity is a game.
     /// </summary>
     Game = 1,
+
     /// <summary>
     ///     Specifies that the activity is music.
     /// </summary>

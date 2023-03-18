@@ -201,8 +201,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     {
         get
         {
-            var channels = _channels;
-            var state = Kook.State;
+            ConcurrentDictionary<ulong, SocketGuildChannel> channels = _channels;
+            ClientState state = Kook.State;
             return channels.Select(x => x.Value).Where(x => x != null).ToReadOnlyCollection(channels);
         }
     }
@@ -337,29 +337,32 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </remarks>
     public IReadOnlyCollection<SocketRole> Roles => _roles.ToReadOnlyCollection();
 
-    internal SocketGuild(KookSocketClient kook, ulong id) : base(kook, id) { }
+    internal SocketGuild(KookSocketClient kook, ulong id) : base(kook, id)
+    {
+    }
 
     internal static SocketGuild Create(KookSocketClient client, ClientState state, Model model)
     {
-        var entity = new SocketGuild(client, model.Id);
+        SocketGuild entity = new(client, model.Id);
         entity.Update(state, model);
         return entity;
     }
 
     internal static SocketGuild Create(KookSocketClient client, ClientState state, RichModel model)
     {
-        var entity = new SocketGuild(client, model.Id);
+        SocketGuild entity = new(client, model.Id);
         entity.Update(state, model);
         return entity;
     }
 
     internal void Update(ClientState state, IReadOnlyCollection<ChannelModel> models)
     {
-        var channels = new ConcurrentDictionary<ulong, SocketGuildChannel>(ConcurrentHashSet.DefaultConcurrencyLevel,
+        ConcurrentDictionary<ulong, SocketGuildChannel> channels = new(
+            ConcurrentHashSet.DefaultConcurrencyLevel,
             (int)(models.Count * 1.05));
         foreach (ChannelModel model in models)
         {
-            var channel = SocketGuildChannel.Create(this, state, model);
+            SocketGuildChannel channel = SocketGuildChannel.Create(this, state, model);
             state.AddChannel(channel);
             channels.TryAdd(channel.Id, channel);
         }
@@ -369,12 +372,11 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
     internal void Update(ClientState state, IReadOnlyCollection<MemberModel> models)
     {
-        var members = new ConcurrentDictionary<ulong, SocketGuildUser>(ConcurrentHashSet.DefaultConcurrencyLevel, (int)(models.Count * 1.05));
+        ConcurrentDictionary<ulong, SocketGuildUser> members = new(ConcurrentHashSet.DefaultConcurrencyLevel, (int)(models.Count * 1.05));
         foreach (MemberModel model in models)
         {
-            var member = SocketGuildUser.Create(this, state, model);
-            if (members.TryAdd(member.Id, member))
-                member.GlobalUser.AddRef();
+            SocketGuildUser member = SocketGuildUser.Create(this, state, model);
+            if (members.TryAdd(member.Id, member)) member.GlobalUser.AddRef();
         }
 
         DownloadedMemberCount = members.Count;
@@ -382,14 +384,12 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         MemberCount = members.Count;
     }
 
-    internal void Update(ClientState state, IReadOnlyCollection<BoostSubscription> models)
-    {
+    internal void Update(ClientState state, IReadOnlyCollection<BoostSubscription> models) =>
         _boostSubscriptions = models.GroupBy(x => x.UserId)
             .ToDictionary(x => RestUser.Create(Kook, x.First().User) as IUser,
                 x => x.GroupBy(y => (y.StartTime, y.EndTime))
                     .Select(y => new BoostSubscriptionMetadata(y.Key.StartTime, y.Key.EndTime, y.Count()))
                     .ToImmutableArray() as IReadOnlyCollection<BoostSubscriptionMetadata>);
-    }
 
     internal void Update(ClientState state, RichModel model)
     {
@@ -399,8 +399,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         if (model.Emojis != null)
         {
             _emotes.Clear();
-            foreach (API.Emoji emoji in model.Emojis)
-                _emotes.TryAdd(emoji.Id, emoji.ToEntity(model.Id));
+            foreach (API.Emoji emoji in model.Emojis) _emotes.TryAdd(emoji.Id, emoji.ToEntity(model.Id));
         }
     }
 
@@ -432,12 +431,12 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
         IsAvailable = true;
 
-        var roles = new ConcurrentDictionary<uint, SocketRole>(ConcurrentHashSet.DefaultConcurrencyLevel,
+        ConcurrentDictionary<uint, SocketRole> roles = new(ConcurrentHashSet.DefaultConcurrencyLevel,
             (int)((model.Roles?.Length ?? 0) * 1.05));
         {
             for (int i = 0; i < (model.Roles?.Length ?? 0); i++)
             {
-                var role = SocketRole.Create(this, state, model.Roles![i]);
+                SocketRole role = SocketRole.Create(this, state, model.Roles![i]);
                 roles.TryAdd(role.Id, role);
             }
         }
@@ -445,17 +444,18 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
         int channelCount = model.Channels?.Length ?? 0;
         channelCount += (model.Channels ?? Array.Empty<ChannelModel>()).Sum(x => x.Channels?.Length ?? 0);
-        var channels = new ConcurrentDictionary<ulong, SocketGuildChannel>(ConcurrentHashSet.DefaultConcurrencyLevel,
+        ConcurrentDictionary<ulong, SocketGuildChannel> channels = new(
+            ConcurrentHashSet.DefaultConcurrencyLevel,
             (int)(channelCount * 1.05));
         {
             for (int i = 0; i < (model.Channels?.Length ?? 0); i++)
             {
-                var channel = SocketGuildChannel.Create(this, state, model.Channels![i]);
+                SocketGuildChannel channel = SocketGuildChannel.Create(this, state, model.Channels![i]);
                 state.AddChannel(channel);
                 channels.TryAdd(channel.Id, channel);
                 for (int j = 0; j < (model.Channels[i].Channels?.Length ?? 0); j++)
                 {
-                    var nestedChannel = SocketGuildChannel.Create(this, state, model.Channels![i].Channels![j]);
+                    SocketGuildChannel nestedChannel = SocketGuildChannel.Create(this, state, model.Channels![i].Channels![j]);
                     state.AddChannel(nestedChannel);
                     channels.TryAdd(nestedChannel.Id, nestedChannel);
                 }
@@ -563,9 +563,9 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </returns>
     public SocketGuildChannel GetChannel(ulong id)
     {
-        var channel = Kook.State.GetChannel(id) as SocketGuildChannel;
-        if (channel?.Guild.Id == Id)
-            return channel;
+        SocketGuildChannel channel = Kook.State.GetChannel(id) as SocketGuildChannel;
+        if (channel?.Guild.Id == Id) return channel;
+
         return null;
     }
 
@@ -634,7 +634,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
     internal SocketGuildChannel AddChannel(ClientState state, ChannelModel model)
     {
-        var channel = SocketGuildChannel.Create(this, state, model);
+        SocketGuildChannel channel = SocketGuildChannel.Create(this, state, model);
         _channels.TryAdd(model.Id, channel);
         state.AddChannel(channel);
         return channel;
@@ -656,15 +656,14 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
     internal SocketGuildChannel RemoveChannel(ClientState state, ulong id)
     {
-        if (_channels.TryRemove(id, out var _))
-            return state.RemoveChannel(id) as SocketGuildChannel;
+        if (_channels.TryRemove(id, out SocketGuildChannel _)) return state.RemoveChannel(id) as SocketGuildChannel;
+
         return null;
     }
 
     internal void PurgeChannelCache(ClientState state)
     {
-        foreach (var channelId in _channels)
-            state.RemoveChannel(channelId.Key);
+        foreach (KeyValuePair<ulong, SocketGuildChannel> channelId in _channels) state.RemoveChannel(channelId.Key);
 
         _channels.Clear();
     }
@@ -697,8 +696,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </returns>
     public SocketRole GetRole(uint id)
     {
-        if (_roles.TryGetValue(id, out SocketRole value))
-            return value;
+        if (_roles.TryGetValue(id, out SocketRole value)) return value;
+
         return null;
     }
 
@@ -717,15 +716,15 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
     internal SocketRole AddRole(RoleModel model)
     {
-        var role = SocketRole.Create(this, Kook.State, model);
+        SocketRole role = SocketRole.Create(this, Kook.State, model);
         _roles[model.Id] = role;
         return role;
     }
 
     internal SocketRole RemoveRole(uint id)
     {
-        if (_roles.TryRemove(id, out SocketRole role))
-            return role;
+        if (_roles.TryRemove(id, out SocketRole role)) return role;
+
         return null;
     }
 
@@ -759,8 +758,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </returns>
     public SocketGuildUser GetUser(ulong id)
     {
-        if (_members.TryGetValue(id, out SocketGuildUser member))
-            return member;
+        if (_members.TryGetValue(id, out SocketGuildUser member)) return member;
+
         return null;
     }
 
@@ -820,15 +819,14 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <param name="predicate">The predicate used to select which users to clear.</param>
     public void PurgeUserCache(Func<SocketGuildUser, bool> predicate)
     {
-        var membersToPurge = Users.Where(x => predicate.Invoke(x) && x?.Id != Kook.CurrentUser.Id);
-        var membersToKeep = Users.Where(x => !predicate.Invoke(x) || x?.Id == Kook.CurrentUser.Id);
+        IEnumerable<SocketGuildUser> membersToPurge = Users.Where(x => predicate.Invoke(x) && x?.Id != Kook.CurrentUser.Id);
+        IEnumerable<SocketGuildUser> membersToKeep = Users.Where(x => !predicate.Invoke(x) || x?.Id == Kook.CurrentUser.Id);
 
-        foreach (var member in membersToPurge)
+        foreach (SocketGuildUser member in membersToPurge)
             if (_members.TryRemove(member.Id, out _))
                 member.GlobalUser.RemoveRef(Kook);
 
-        foreach (var member in membersToKeep)
-            _members.TryAdd(member.Id, member);
+        foreach (SocketGuildUser member in membersToKeep) _members.TryAdd(member.Id, member);
 
         DownloadedMemberCount = _members.Count;
     }
@@ -847,28 +845,22 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions options = null)
     {
-        if (HasAllMembers is true)
-            return ImmutableArray.Create(Users).ToAsyncEnumerable<IReadOnlyCollection<IGuildUser>>();
+        if (HasAllMembers is true) return ImmutableArray.Create(Users).ToAsyncEnumerable<IReadOnlyCollection<IGuildUser>>();
+
         return GuildHelper.GetUsersAsync(this, Kook, KookConfig.MaxUsersPerBatch, 1, options);
     }
 
     /// <inheritdoc />
-    public async Task DownloadUsersAsync(RequestOptions options = null)
-    {
+    public async Task DownloadUsersAsync(RequestOptions options = null) =>
         await Kook.DownloadUsersAsync(new[] { this }, options).ConfigureAwait(false);
-    }
 
     /// <inheritdoc />
-    public async Task DownloadVoiceStatesAsync(RequestOptions options = null)
-    {
+    public async Task DownloadVoiceStatesAsync(RequestOptions options = null) =>
         await Kook.DownloadVoiceStatesAsync(new[] { this }, options).ConfigureAwait(false);
-    }
 
     /// <inheritdoc />
-    public async Task DownloadBoostSubscriptionsAsync(RequestOptions options = null)
-    {
+    public async Task DownloadBoostSubscriptionsAsync(RequestOptions options = null) =>
         await Kook.DownloadBoostSubscriptionsAsync(new[] { this }, options).ConfigureAwait(false);
-    }
 
     /// <summary>
     ///     Gets a collection of users in this guild that the name or nickname contains the
@@ -910,29 +902,29 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </returns>
     public GuildEmote GetEmote(string id)
     {
-        if (_emotes.TryGetValue(id, out GuildEmote emote))
-            return emote;
+        if (_emotes.TryGetValue(id, out GuildEmote emote)) return emote;
+
         return null;
     }
 
     internal GuildEmote AddEmote(GuildEmojiEvent model)
     {
-        var emote = model.ToEntity(Id);
+        GuildEmote emote = model.ToEntity(Id);
         _emotes.TryAdd(model.Id, emote);
         return emote;
     }
 
     internal GuildEmote AddOrUpdateEmote(GuildEmojiEvent model)
     {
-        var emote = model.ToEntity(Id);
+        GuildEmote emote = model.ToEntity(Id);
         _emotes[model.Id] = emote;
         return emote;
     }
 
     internal GuildEmote RemoveEmote(string id)
     {
-        if (_emotes.TryRemove(id, out GuildEmote emote))
-            return emote;
+        if (_emotes.TryRemove(id, out GuildEmote emote)) return emote;
+
         return null;
     }
 
@@ -980,10 +972,10 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
     internal SocketVoiceState AddOrUpdateVoiceState(ulong userId, ulong? voiceChannelId)
     {
-        var voiceChannel = voiceChannelId.HasValue
+        SocketVoiceChannel voiceChannel = voiceChannelId.HasValue
             ? GetChannel(voiceChannelId.Value) as SocketVoiceChannel
             : null;
-        var socketState = GetVoiceState(userId) ?? SocketVoiceState.Default;
+        SocketVoiceState socketState = GetVoiceState(userId) ?? SocketVoiceState.Default;
         socketState.Update(voiceChannel);
         _voiceStates[userId] = socketState;
         return socketState;
@@ -991,7 +983,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
     internal SocketVoiceState AddOrUpdateVoiceState(ulong userId, bool? isMuted = null, bool? isDeafened = null)
     {
-        var socketState = GetVoiceState(userId) ?? SocketVoiceState.Default;
+        SocketVoiceState socketState = GetVoiceState(userId) ?? SocketVoiceState.Default;
         socketState.Update(isMuted, isDeafened);
         _voiceStates[userId] = socketState;
         return socketState;
@@ -999,15 +991,15 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
     internal SocketVoiceState? GetVoiceState(ulong id)
     {
-        if (_voiceStates.TryGetValue(id, out SocketVoiceState voiceState))
-            return voiceState;
+        if (_voiceStates.TryGetValue(id, out SocketVoiceState voiceState)) return voiceState;
+
         return null;
     }
 
     internal SocketVoiceState? RemoveVoiceState(ulong id)
     {
-        if (_voiceStates.TryRemove(id, out SocketVoiceState voiceState))
-            return voiceState;
+        if (_voiceStates.TryRemove(id, out SocketVoiceState voiceState)) return voiceState;
+
         return null;
     }
 
@@ -1019,7 +1011,9 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     bool IGuild.Available => true;
 
     /// <inheritdoc />
-    public void Dispose() { }
+    public void Dispose()
+    {
+    }
 
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IGuildUser>> IGuild.GetUsersAsync(CacheMode mode, RequestOptions options)
@@ -1133,10 +1127,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         => await CreateCategoryChannelAsync(name, func, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public async Task<Stream> GetBadgeAsync(BadgeStyle style = BadgeStyle.GuildName, RequestOptions options = null)
-    {
-        return await GuildHelper.GetBadgeAsync(this, Kook, style, options).ConfigureAwait(false);
-    }
+    public async Task<Stream> GetBadgeAsync(BadgeStyle style = BadgeStyle.GuildName, RequestOptions options = null) =>
+        await GuildHelper.GetBadgeAsync(this, Kook, style, options).ConfigureAwait(false);
 
     #endregion
 }

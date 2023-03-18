@@ -16,8 +16,5 @@ public class NameAttribute : Attribute
     ///     Marks the public name of a command, module, or parameter with the provided name.
     /// </summary>
     /// <param name="text">The public name of the object.</param>
-    public NameAttribute(string text)
-    {
-        Text = text;
-    }
+    public NameAttribute(string text) => Text = text;
 }

@@ -13,14 +13,10 @@ public class KookRestClientFixture : IDisposable
 
     public KookRestClientFixture()
     {
-        var token = Environment.GetEnvironmentVariable("KOOK_NET_TEST_TOKEN");
-        if (string.IsNullOrWhiteSpace(token))
-            throw new Exception("The KOOK_NET_TEST_TOKEN environment variable was not provided.");
-        Client = new KookRestClient(new KookRestConfig()
-        {
-            LogLevel = LogSeverity.Debug,
-            DefaultRetryMode = RetryMode.AlwaysRetry
-        });
+        string token = Environment.GetEnvironmentVariable("KOOK_NET_TEST_TOKEN");
+        if (string.IsNullOrWhiteSpace(token)) throw new Exception("The KOOK_NET_TEST_TOKEN environment variable was not provided.");
+
+        Client = new KookRestClient(new KookRestConfig() { LogLevel = LogSeverity.Debug, DefaultRetryMode = RetryMode.AlwaysRetry });
         Client.LoginAsync(TokenType.Bot, token).GetAwaiter().GetResult();
     }
 

@@ -4,10 +4,7 @@ namespace Kook.API.Rest;
 
 internal class EndGameActivityParams
 {
-    public EndGameActivityParams(ActivityType activityType)
-    {
-        ActivityType = activityType;
-    }
+    public EndGameActivityParams(ActivityType activityType) => ActivityType = activityType;
 
     [JsonInclude]
     [JsonPropertyName("data_type")]

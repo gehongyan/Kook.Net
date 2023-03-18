@@ -64,21 +64,17 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     public new virtual IReadOnlyCollection<SocketGuildUser> Users => ImmutableArray.Create<SocketGuildUser>();
 
     internal SocketGuildChannel(KookSocketClient kook, ulong id, SocketGuild guild)
-        : base(kook, id)
-    {
+        : base(kook, id) =>
         Guild = guild;
-    }
 
-    internal static SocketGuildChannel Create(SocketGuild guild, ClientState state, Model model)
-    {
-        return model.Type switch
+    internal static SocketGuildChannel Create(SocketGuild guild, ClientState state, Model model) =>
+        model.Type switch
         {
             ChannelType.Category => SocketCategoryChannel.Create(guild, state, model),
             ChannelType.Text => SocketTextChannel.Create(guild, state, model),
             ChannelType.Voice => SocketVoiceChannel.Create(guild, state, model),
-            _ => new SocketGuildChannel(guild.Kook, model.Id, guild),
+            _ => new SocketGuildChannel(guild.Kook, model.Id, guild)
         };
-    }
 
     /// <inheritdoc />
     internal override void Update(ClientState state, Model model)
@@ -87,16 +83,18 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
         Position = model.Position;
         CreatorId = model.CreatorId;
 
-        var rolePermissionOverwrites = model.RolePermissionOverwrites;
-        var newRoleOverwrites = ImmutableArray.CreateBuilder<RolePermissionOverwrite>(rolePermissionOverwrites.Length);
-        for (int i = 0; i < rolePermissionOverwrites.Length; i++)
-            newRoleOverwrites.Add(rolePermissionOverwrites[i].ToEntity());
+        API.RolePermissionOverwrite[] rolePermissionOverwrites = model.RolePermissionOverwrites;
+        ImmutableArray<RolePermissionOverwrite>.Builder newRoleOverwrites =
+            ImmutableArray.CreateBuilder<RolePermissionOverwrite>(rolePermissionOverwrites.Length);
+        for (int i = 0; i < rolePermissionOverwrites.Length; i++) newRoleOverwrites.Add(rolePermissionOverwrites[i].ToEntity());
+
         _rolePermissionOverwrites = newRoleOverwrites.ToImmutable();
 
-        var userPermissionOverwrites = model.UserPermissionOverwrites;
-        var newUserOverwrites = ImmutableArray.CreateBuilder<UserPermissionOverwrite>(userPermissionOverwrites.Length);
-        for (int i = 0; i < userPermissionOverwrites.Length; i++)
-            newUserOverwrites.Add(userPermissionOverwrites[i].ToEntity(Kook, state));
+        API.UserPermissionOverwrite[] userPermissionOverwrites = model.UserPermissionOverwrites;
+        ImmutableArray<UserPermissionOverwrite>.Builder newUserOverwrites =
+            ImmutableArray.CreateBuilder<UserPermissionOverwrite>(userPermissionOverwrites.Length);
+        for (int i = 0; i < userPermissionOverwrites.Length; i++) newUserOverwrites.Add(userPermissionOverwrites[i].ToEntity(Kook, state));
+
         _userPermissionOverwrites = newUserOverwrites.ToImmutable();
     }
 
@@ -122,10 +120,8 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     public virtual OverwritePermissions? GetPermissionOverwrite(IUser user)
     {
         for (int i = 0; i < _userPermissionOverwrites.Length; i++)
-        {
             if (_userPermissionOverwrites[i].Target.Id == user.Id)
                 return _userPermissionOverwrites[i].Permissions;
-        }
 
         return null;
     }
@@ -140,10 +136,8 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     public virtual OverwritePermissions? GetPermissionOverwrite(IRole role)
     {
         for (int i = 0; i < _rolePermissionOverwrites.Length; i++)
-        {
             if (_rolePermissionOverwrites[i].Target == role.Id)
                 return _rolePermissionOverwrites[i].Permissions;
-        }
 
         return null;
     }
@@ -156,10 +150,8 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
     /// </returns>
-    public async Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions options = null)
-    {
+    public async Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions options = null) =>
         await ChannelHelper.AddPermissionOverwriteAsync(this, Kook, user, options).ConfigureAwait(false);
-    }
 
     /// <summary>
     ///     Adds or updates the permission overwrite for the given role.
@@ -169,10 +161,8 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
     /// </returns>
-    public async Task AddPermissionOverwriteAsync(IRole role, RequestOptions options = null)
-    {
+    public async Task AddPermissionOverwriteAsync(IRole role, RequestOptions options = null) =>
         await ChannelHelper.AddPermissionOverwriteAsync(this, Kook, role, options).ConfigureAwait(false);
-    }
 
     /// <summary>
     ///     Removes the permission overwrite for the given user, if one exists.
@@ -182,10 +172,8 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
-    public async Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions options = null)
-    {
+    public async Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions options = null) =>
         await ChannelHelper.RemovePermissionOverwriteAsync(this, Kook, user, options).ConfigureAwait(false);
-    }
 
     /// <summary>
     ///     Removes the permission overwrite for the given role, if one exists.
@@ -195,10 +183,8 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
-    public async Task RemovePermissionOverwriteAsync(IRole role, RequestOptions options = null)
-    {
+    public async Task RemovePermissionOverwriteAsync(IRole role, RequestOptions options = null) =>
         await ChannelHelper.RemovePermissionOverwriteAsync(this, Kook, role, options).ConfigureAwait(false);
-    }
 
     /// <summary>
     ///     Updates the permission overwrite for the given user, if one exists.
@@ -210,10 +196,8 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
     public async Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func,
-        RequestOptions options = null)
-    {
+        RequestOptions options = null) =>
         await ChannelHelper.ModifyPermissionOverwriteAsync(this, Kook, user, func, options).ConfigureAwait(false);
-    }
 
     /// <summary>
     ///     Updates the permission overwrite for the given role, if one exists.
@@ -224,10 +208,9 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
-    public async Task ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null)
-    {
+    public async Task
+        ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null) =>
         await ChannelHelper.ModifyPermissionOverwriteAsync(this, Kook, role, func, options).ConfigureAwait(false);
-    }
 
     /// <summary>
     ///     Gets a <see cref="SocketGuildUser"/> from this channel.

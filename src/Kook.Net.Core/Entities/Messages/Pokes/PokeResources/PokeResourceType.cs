@@ -9,6 +9,7 @@ public enum PokeResourceType
     ///     Represents a resource that is not implemented.
     /// </summary>
     NotImplemented,
+
     /// <summary>
     ///     Represents a resource that is an image.
     /// </summary>

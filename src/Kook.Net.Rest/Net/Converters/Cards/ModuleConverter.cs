@@ -30,7 +30,6 @@ internal class ModuleConverter : JsonConverter<ModuleBase>
 
     public override void Write(Utf8JsonWriter writer, ModuleBase value, JsonSerializerOptions options)
     {
-
         switch (value.Type)
         {
             case ModuleType.Header:

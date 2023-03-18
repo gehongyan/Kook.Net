@@ -46,9 +46,9 @@ public static class MessageExtensions
     /// <seealso cref="IEmote"/>
     public static async Task AddReactionsAsync(this IUserMessage msg, IEnumerable<IEmote> reactions, RequestOptions options = null)
     {
-        foreach (IEmote rxn in reactions)
-            await msg.AddReactionAsync(rxn, options).ConfigureAwait(false);
+        foreach (IEmote rxn in reactions) await msg.AddReactionAsync(rxn, options).ConfigureAwait(false);
     }
+
     /// <summary>
     ///     Remove multiple reactions from a message.
     /// </summary>
@@ -71,8 +71,7 @@ public static class MessageExtensions
     /// <seealso cref="IEmote"/>
     public static async Task RemoveReactionsAsync(this IUserMessage msg, IUser user, IEnumerable<IEmote> reactions, RequestOptions options = null)
     {
-        foreach (IEmote rxn in reactions)
-            await msg.RemoveReactionAsync(rxn, user, options).ConfigureAwait(false);
+        foreach (IEmote rxn in reactions) await msg.RemoveReactionAsync(rxn, user, options).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -87,11 +86,10 @@ public static class MessageExtensions
     /// <param name="options">The options to be used when sending the request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
         string path, string fileName = null, AttachmentType type = AttachmentType.File, bool isQuote = false, bool isEphemeral = false,
-        RequestOptions options = null)
-    {
-        return await message.Channel.SendFileAsync(path, fileName, type, isQuote ? new Quote(message.Id) : null,
+        RequestOptions options = null) =>
+        await message.Channel.SendFileAsync(path, fileName, type, isQuote ? new Quote(message.Id) : null,
             isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    }
+
     /// <summary>
     ///     Sends an inline reply of file that references a message.
     /// </summary>
@@ -104,11 +102,10 @@ public static class MessageExtensions
     /// <param name="options">The options to be used when sending the request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
         Stream stream, string fileName = null, AttachmentType type = AttachmentType.File, bool isQuote = false, bool isEphemeral = false,
-        RequestOptions options = null)
-    {
-        return await message.Channel.SendFileAsync(stream, fileName, type, isQuote ? new Quote(message.Id) : null,
+        RequestOptions options = null) =>
+        await message.Channel.SendFileAsync(stream, fileName, type, isQuote ? new Quote(message.Id) : null,
             isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    }
+
     /// <summary>
     ///     Sends an inline reply of file that references a message.
     /// </summary>
@@ -118,11 +115,10 @@ public static class MessageExtensions
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
     /// <param name="options">The options to be used when sending the request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
-        FileAttachment attachment, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
-    {
-        return await message.Channel.SendFileAsync(attachment, isQuote ? new Quote(message.Id) : null,
+        FileAttachment attachment, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null) =>
+        await message.Channel.SendFileAsync(attachment, isQuote ? new Quote(message.Id) : null,
             isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    }
+
     /// <summary>
     ///     Sends an inline reply of text that references a message.
     /// </summary>
@@ -132,11 +128,10 @@ public static class MessageExtensions
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
     /// <param name="options">The request options for this <see langword="async"/> request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(this IUserMessage message,
-        string content, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
-    {
-        return await message.Channel.SendTextAsync(content, isQuote ? new Quote(message.Id) : null,
+        string content, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null) =>
+        await message.Channel.SendTextAsync(content, isQuote ? new Quote(message.Id) : null,
             isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    }
+
     /// <summary>
     ///     Sends a card message to the source channel.
     /// </summary>
@@ -146,11 +141,9 @@ public static class MessageExtensions
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
     /// <param name="options">The request options for this <see langword="async"/> request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(this IUserMessage message,
-        IEnumerable<ICard> cards, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
-    {
-        return await message.Channel.SendCardsAsync(cards, isQuote ? new Quote(message.Id) : null,
+        IEnumerable<ICard> cards, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null) =>
+        await message.Channel.SendCardsAsync(cards, isQuote ? new Quote(message.Id) : null,
             isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    }
 
     /// <summary>
     ///     Sends a card message to the source channel.
@@ -162,10 +155,7 @@ public static class MessageExtensions
     /// <param name="options">The request options for this <see langword="async"/> request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardAsync(
         this IUserMessage message,
-        ICard card, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null)
-    {
-        return await message.Channel.SendCardAsync(card, isQuote ? new Quote(message.Id) : null,
+        ICard card, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null) =>
+        await message.Channel.SendCardAsync(card, isQuote ? new Quote(message.Id) : null,
             isEphemeral ? message.Author : null, options).ConfigureAwait(false);
-    }
-
 }

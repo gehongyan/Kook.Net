@@ -164,8 +164,7 @@ public class ModuleBuilder
         for (int i = 0; i < aliases.Length; i++)
         {
             string alias = aliases[i] ?? "";
-            if (!_aliases.Contains(alias))
-                _aliases.Add(alias);
+            if (!_aliases.Contains(alias)) _aliases.Add(alias);
         }
 
         return this;
@@ -203,7 +202,7 @@ public class ModuleBuilder
     public ModuleBuilder AddCommand(string primaryAlias, Func<ICommandContext, object[], IServiceProvider, CommandInfo, Task> callback,
         Action<CommandBuilder> createFunc)
     {
-        var builder = new CommandBuilder(this, primaryAlias, callback);
+        CommandBuilder builder = new(this, primaryAlias, callback);
         createFunc(builder);
         _commands.Add(builder);
         return this;
@@ -216,7 +215,7 @@ public class ModuleBuilder
     /// <returns> This module builder. </returns>
     internal ModuleBuilder AddCommand(Action<CommandBuilder> createFunc)
     {
-        var builder = new CommandBuilder(this);
+        CommandBuilder builder = new(this);
         createFunc(builder);
         _commands.Add(builder);
         return this;
@@ -230,7 +229,7 @@ public class ModuleBuilder
     /// <returns> This module builder. </returns>
     public ModuleBuilder AddModule(string primaryAlias, Action<ModuleBuilder> createFunc)
     {
-        var builder = new ModuleBuilder(Service, this, primaryAlias);
+        ModuleBuilder builder = new(Service, this, primaryAlias);
         createFunc(builder);
         _submodules.Add(builder);
         return this;
@@ -243,7 +242,7 @@ public class ModuleBuilder
     /// <returns> This module builder. </returns>
     internal ModuleBuilder AddModule(Action<ModuleBuilder> createFunc)
     {
-        var builder = new ModuleBuilder(Service, this);
+        ModuleBuilder builder = new(Service, this);
         createFunc(builder);
         _submodules.Add(builder);
         return this;
@@ -259,12 +258,11 @@ public class ModuleBuilder
     private ModuleInfo BuildImpl(CommandService service, IServiceProvider services, ModuleInfo parent = null)
     {
         //Default name to first alias
-        if (Name == null)
-            Name = _aliases[0];
+        if (Name == null) Name = _aliases[0];
 
         if (TypeInfo != null && !TypeInfo.IsAbstract)
         {
-            var moduleInstance = ReflectionUtils.CreateObject<IModuleBase>(TypeInfo, service, services);
+            IModuleBase moduleInstance = ReflectionUtils.CreateObject<IModuleBase>(TypeInfo, service, services);
             moduleInstance.OnModuleBuilding(service, this);
         }
 

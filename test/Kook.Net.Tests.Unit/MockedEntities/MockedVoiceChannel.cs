@@ -22,75 +22,36 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
 
     public IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites => throw new NotImplementedException();
 
-    public Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions options = null)
-    {
-        throw new NotImplementedException();
-    }
+    public Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions options = null) => throw new NotImplementedException();
 
-    public OverwritePermissions? GetPermissionOverwrite(IRole role)
-    {
-        throw new NotImplementedException();
-    }
+    public OverwritePermissions? GetPermissionOverwrite(IRole role) => throw new NotImplementedException();
 
-    public OverwritePermissions? GetPermissionOverwrite(IUser user)
-    {
-        throw new NotImplementedException();
-    }
+    public OverwritePermissions? GetPermissionOverwrite(IUser user) => throw new NotImplementedException();
 
-    public Task RemovePermissionOverwriteAsync(IRole role, RequestOptions options = null)
-    {
-        throw new NotImplementedException();
-    }
+    public Task RemovePermissionOverwriteAsync(IRole role, RequestOptions options = null) => throw new NotImplementedException();
 
-    public Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions options = null)
-    {
-        throw new NotImplementedException();
-    }
+    public Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions options = null) => throw new NotImplementedException();
 
-    public Task AddPermissionOverwriteAsync(IRole role, RequestOptions options = null)
-    {
-        throw new NotImplementedException();
-    }
+    public Task AddPermissionOverwriteAsync(IRole role, RequestOptions options = null) => throw new NotImplementedException();
 
-    public Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions options = null)
-    {
-        throw new NotImplementedException();
-    }
+    public Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions options = null) => throw new NotImplementedException();
 
-    public Task ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null)
-    {
+    public Task ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null) =>
         throw new NotImplementedException();
-    }
 
-    public Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null)
-    {
+    public Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func,
+        RequestOptions options = null) => throw new NotImplementedException();
+
+    public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null) =>
         throw new NotImplementedException();
-    }
 
-    public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
-    {
-        throw new NotImplementedException();
-    }
+    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options) => throw new NotImplementedException();
 
-    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
-    {
-        throw new NotImplementedException();
-    }
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options) => GetUsersAsync(mode, options);
 
-    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
-    {
-        return GetUsersAsync(mode, options);
-    }
+    Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options) => throw new NotImplementedException();
 
-    Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteAsync(RequestOptions options = null)
-    {
-        throw new NotImplementedException();
-    }
+    public Task DeleteAsync(RequestOptions options = null) => throw new NotImplementedException();
 
     public ulong? CategoryId => throw new NotImplementedException();
 
@@ -98,36 +59,21 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
 
     public ulong CreatorId => throw new NotImplementedException();
 
-    public Task<ICategoryChannel> GetCategoryAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
-    {
+    public Task<ICategoryChannel> GetCategoryAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null) =>
         throw new NotImplementedException();
-    }
 
-    public Task SyncPermissionsAsync(RequestOptions options = null)
-    {
-        throw new NotImplementedException();
-    }
+    public Task SyncPermissionsAsync(RequestOptions options = null) => throw new NotImplementedException();
 
-    public Task<IUser> GetCreatorAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
-    {
+    public Task<IUser> GetCreatorAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null) =>
         throw new NotImplementedException();
-    }
 
-    public Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null)
-    {
-        throw new NotImplementedException();
-    }
+    public Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null) => throw new NotImplementedException();
 
     public Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited,
-        RequestOptions options = null)
-    {
+        RequestOptions options = null) =>
         throw new NotImplementedException();
-    }
 
-    public Task<IInvite> CreateInviteAsync(int? maxAge, int? maxUses = null, RequestOptions options = null)
-    {
-        throw new NotImplementedException();
-    }
+    public Task<IInvite> CreateInviteAsync(int? maxAge, int? maxUses = null, RequestOptions options = null) => throw new NotImplementedException();
 
     public string PlainTextMention => throw new NotImplementedException();
 
@@ -141,13 +87,8 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
 
     public bool HasPassword => throw new NotImplementedException();
 
-    public Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null)
-    {
-        throw new NotImplementedException();
-    }
+    public Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null) => throw new NotImplementedException();
 
-    public Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null)
-    {
+    public Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null) =>
         throw new NotImplementedException();
-    }
 }

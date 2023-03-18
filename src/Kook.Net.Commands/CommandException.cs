@@ -7,6 +7,7 @@ public class CommandException : Exception
 {
     /// <summary> Gets the command that caused the exception. </summary>
     public CommandInfo Command { get; }
+
     /// <summary> Gets the command context of the exception. </summary>
     public ICommandContext Context { get; }
 

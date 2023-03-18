@@ -9,6 +9,7 @@ public enum EmojiType
     ///     The emoji is static.
     /// </summary>
     Static = 1,
+
     /// <summary>
     ///     The emoji is animated.
     /// </summary>

@@ -8,10 +8,7 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class KMarkdownElement : IElement, IEquatable<KMarkdownElement>
 {
-    internal KMarkdownElement(string content)
-    {
-        Content = content;
-    }
+    internal KMarkdownElement(string content) => Content = content;
 
     /// <summary>
     ///     Gets the type of the element.
@@ -31,6 +28,7 @@ public class KMarkdownElement : IElement, IEquatable<KMarkdownElement>
 
     /// <inheritdoc />
     public override string ToString() => Content;
+
     private string DebuggerDisplay => $"{Type}: {Content}";
 
     /// <summary>

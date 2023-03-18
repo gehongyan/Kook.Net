@@ -9,7 +9,8 @@ internal class ButtonElement : ElementBase
     [JsonConverter(typeof(ButtonThemeConverter))]
     public ButtonTheme Theme { get; set; }
 
-    [JsonPropertyName("value")] public string Value { get; set; }
+    [JsonPropertyName("value")]
+    public string Value { get; set; }
 
     [JsonPropertyName("click")]
     [JsonConverter(typeof(ButtonClickEventTypeConverter))]

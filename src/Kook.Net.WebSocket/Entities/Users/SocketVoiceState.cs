@@ -11,7 +11,7 @@ public struct SocketVoiceState : IVoiceState
     /// <summary>
     ///     Initializes a default <see cref="SocketVoiceState"/> with everything set to <c>null</c> or <c>false</c>.
     /// </summary>
-    public static readonly SocketVoiceState Default = new SocketVoiceState(null, null, null);
+    public static readonly SocketVoiceState Default = new(null, null, null);
 
     /// <summary>
     ///     Initializes a new <see cref="SocketVoiceState"/> with the specified voice channel.
@@ -30,22 +30,22 @@ public struct SocketVoiceState : IVoiceState
     ///     Gets the voice channel that the user is currently in; or <c>null</c> if none.
     /// </summary>
     public SocketVoiceChannel VoiceChannel { get; private set; }
+
     /// <inheritdoc />
     public bool? IsMuted { get; private set; }
+
     /// <inheritdoc />
     public bool? IsDeafened { get; private set; }
 
-    internal void Update(SocketVoiceChannel voiceChannel)
-    {
-        VoiceChannel = voiceChannel;
-    }
+    internal void Update(SocketVoiceChannel voiceChannel) => VoiceChannel = voiceChannel;
+
     internal void Update(bool? isMuted, bool? isDeafened)
     {
-        if (isMuted.HasValue)
-            IsMuted = isMuted.Value;
-        if (isDeafened.HasValue)
-            IsDeafened = isDeafened.Value;
+        if (isMuted.HasValue) IsMuted = isMuted.Value;
+
+        if (isDeafened.HasValue) IsDeafened = isDeafened.Value;
     }
+
     /// <summary>
     ///     Gets the name of this voice channel.
     /// </summary>
@@ -53,7 +53,10 @@ public struct SocketVoiceState : IVoiceState
     ///     A string that resolves to name of this voice channel; otherwise "Unknown".
     /// </returns>
     public override string ToString() => VoiceChannel?.Name ?? "Unknown";
-    private string DebuggerDisplay => $"{VoiceChannel?.Name ?? "Unknown"} ({(IsMuted.HasValue ? IsMuted.Value ? "Muted" : "Unmuted" : "Unknown")} / {(IsDeafened.HasValue ? (IsDeafened.Value ? "Deafened" : "Undeafened") : "Unknown")})";
+
+    private string DebuggerDisplay =>
+        $"{VoiceChannel?.Name ?? "Unknown"} ({(IsMuted.HasValue ? IsMuted.Value ? "Muted" : "Unmuted" : "Unknown")} / {(IsDeafened.HasValue ? IsDeafened.Value ? "Deafened" : "Undeafened" : "Unknown")})";
+
     internal SocketVoiceState Clone() => this;
 
     /// <inheritdoc />

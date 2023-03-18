@@ -39,27 +39,26 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     public new IReadOnlyCollection<SocketUser> Users => ImmutableArray.Create(Kook.CurrentUser, Recipient);
 
     internal SocketDMChannel(KookSocketClient kook, Guid chatCode, SocketUser recipient)
-        : base(kook, default)
+        : base(kook, default(ulong))
     {
         Id = chatCode;
         Recipient = recipient;
     }
 
-    internal static SocketDMChannel Create(KookSocketClient kook, ClientState state, Guid chatCode, API.User recipient)
+    internal static SocketDMChannel Create(KookSocketClient kook, ClientState state, Guid chatCode, User recipient)
     {
-        var entity = new SocketDMChannel(kook, chatCode, kook.GetOrCreateTemporaryUser(state, recipient));
+        SocketDMChannel entity = new(kook, chatCode, kook.GetOrCreateTemporaryUser(state, recipient));
         entity.Update(state, recipient);
         return entity;
     }
-    internal void Update(ClientState state, API.User recipient)
+
+    internal void Update(ClientState state, User recipient)
     {
         Recipient.Update(state, recipient);
         Recipient.UpdatePresence(recipient.Online, recipient.OperatingSystem);
     }
-    internal void Update(ClientState state, UserChat model)
-    {
-        Recipient.Update(state, model.Recipient);
-    }
+
+    internal void Update(ClientState state, UserChat model) => Recipient.Update(state, model.Recipient);
 
     /// <inheritdoc />
     public override Task UpdateAsync(RequestOptions options = null)
@@ -72,6 +71,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     #endregion
 
     #region Messages
+
     /// <inheritdoc />
     public SocketMessage GetCachedMessage(Guid id)
         => null;
@@ -84,10 +84,8 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <returns>
     ///     The message gotten from either the cache or the download, or <c>null</c> if none is found.
     /// </returns>
-    public async Task<IMessage> GetMessageAsync(Guid id, RequestOptions options = null)
-    {
-        return await ChannelHelper.GetDirectMessageAsync(this, Kook, id, options).ConfigureAwait(false);
-    }
+    public async Task<IMessage> GetMessageAsync(Guid id, RequestOptions options = null) =>
+        await ChannelHelper.GetDirectMessageAsync(this, Kook, id, options).ConfigureAwait(false);
 
     /// <summary>
     ///     Gets the last N messages from this message channel.
@@ -103,6 +101,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
         => ChannelHelper.GetDirectMessagesAsync(this, Kook, null, Direction.Before, limit, true, options);
+
     /// <summary>
     ///     Gets a collection of messages in this channel.
     /// </summary>
@@ -117,8 +116,10 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
         => ChannelHelper.GetDirectMessagesAsync(this, Kook, referenceMessageId, dir, limit, true, options);
+
     /// <summary>
     ///     Gets a collection of messages in this channel.
     /// </summary>
@@ -133,14 +134,18 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
         => ChannelHelper.GetDirectMessagesAsync(this, Kook, referenceMessage.Id, dir, limit, true, options);
+
     /// <inheritdoc />
     public IReadOnlyCollection<SocketMessage> GetCachedMessages(int limit = KookConfig.MaxMessagesPerBatch)
         => ImmutableArray.Create<SocketMessage>();
+
     /// <inheritdoc />
     public IReadOnlyCollection<SocketMessage> GetCachedMessages(Guid fromMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch)
         => ImmutableArray.Create<SocketMessage>();
+
     /// <inheritdoc />
     public IReadOnlyCollection<SocketMessage> GetCachedMessages(IMessage fromMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch)
         => ImmutableArray.Create<SocketMessage>();
@@ -160,8 +165,10 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null, AttachmentType type = AttachmentType.File, IQuote quote = null, RequestOptions options = null)
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null, AttachmentType type = AttachmentType.File,
+        IQuote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectFileAsync(this, Kook, path, fileName, type, options, quote);
+
     /// <summary>
     ///     Sends a file to this message channel.
     /// </summary>
@@ -177,8 +184,10 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName = null, AttachmentType type = AttachmentType.File, IQuote quote = null, RequestOptions options = null)
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName = null, AttachmentType type = AttachmentType.File,
+        IQuote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectFileAsync(this, Kook, stream, fileName, type, options, quote);
+
     /// <summary>
     ///     Sends a file to this message channel.
     /// </summary>
@@ -194,6 +203,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment, IQuote quote = null, RequestOptions options = null)
         => ChannelHelper.SendDirectFileAsync(this, Kook, attachment, options, quote);
+
     /// <summary>
     ///     Sends a text message to this message channel.
     /// </summary>
@@ -205,7 +215,8 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote quote = null, RequestOptions options = null)
-        => ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, options, quote: quote);
+        => ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, options, quote);
+
     /// <summary>
     ///     Sends a card message to this message channel.
     /// </summary>
@@ -217,7 +228,8 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards, IQuote quote = null, RequestOptions options = null)
-        => ChannelHelper.SendDirectCardsAsync(this, Kook, cards, options, quote: quote);
+        => ChannelHelper.SendDirectCardsAsync(this, Kook, cards, options, quote);
+
     /// <summary>
     ///     Sends a card message to this message channel.
     /// </summary>
@@ -229,7 +241,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, IQuote quote = null, RequestOptions options = null)
-        => ChannelHelper.SendDirectCardAsync(this, Kook, card, options, quote: quote);
+        => ChannelHelper.SendDirectCardAsync(this, Kook, card, options, quote);
 
     /// <inheritdoc />
     public async Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions options = null)
@@ -238,6 +250,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <inheritdoc />
     public Task DeleteMessageAsync(Guid messageId, RequestOptions options = null)
         => ChannelHelper.DeleteDirectMessageAsync(this, messageId, Kook, options);
+
     /// <inheritdoc />
     public Task DeleteMessageAsync(IMessage message, RequestOptions options = null)
         => ChannelHelper.DeleteDirectMessageAsync(this, message.Id, Kook, options);
@@ -245,6 +258,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     internal void AddMessage(SocketMessage msg)
     {
     }
+
     internal SocketMessage RemoveMessage(Guid id)
         => null;
 
@@ -274,10 +288,8 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     #region SocketChannel
 
     /// <inheritdoc />
-    internal override void Update(ClientState state, Channel model)
-    {
+    internal override void Update(ClientState state, Channel model) =>
         throw new NotSupportedException("Update a DMChannel via Channel is not supported");
-    }
 
     /// <inheritdoc />
     internal override IReadOnlyCollection<SocketUser> GetUsersInternal() => Users;
@@ -291,14 +303,18 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
 
     /// <inheritdoc />
     IUser IDMChannel.Recipient => Recipient;
+
     #endregion
 
     #region ISocketPrivateChannel
+
     /// <inheritdoc />
     IReadOnlyCollection<SocketUser> ISocketPrivateChannel.Recipients => ImmutableArray.Create(Recipient);
+
     #endregion
 
     #region IPrivateChannel
+
     /// <inheritdoc />
     IReadOnlyCollection<IUser> IPrivateChannel.Recipients => ImmutableArray.Create<IUser>(Recipient);
 
@@ -310,22 +326,27 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendFileAsync(string path, string fileName,
         AttachmentType type, IQuote quote, RequestOptions options)
         => SendFileAsync(path, fileName, type, (Quote)quote, options);
+
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendFileAsync(Stream stream, string fileName,
         AttachmentType type, IQuote quote, RequestOptions options)
         => SendFileAsync(stream, fileName, type, (Quote)quote, options);
+
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendFileAsync(FileAttachment attachment,
         IQuote quote, RequestOptions options)
         => SendFileAsync(attachment, (Quote)quote, options);
+
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendTextAsync(string text,
         IQuote quote, RequestOptions options)
         => SendTextAsync(text, (Quote)quote, options);
+
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendCardAsync(ICard card,
         IQuote quote, RequestOptions options)
         => SendCardAsync(card, (Quote)quote, options);
+
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendCardsAsync(IEnumerable<ICard> cards,
         IQuote quote, RequestOptions options)
@@ -339,40 +360,51 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         else
             return GetCachedMessage(id);
     }
+
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(int limit, CacheMode mode, RequestOptions options)
         => mode == CacheMode.CacheOnly ? null : GetMessagesAsync(limit, options);
+
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit, CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit,
+        CacheMode mode, RequestOptions options)
         => mode == CacheMode.CacheOnly ? null : GetMessagesAsync(referenceMessageId, dir, limit, options);
+
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit, CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit,
+        CacheMode mode, RequestOptions options)
         => mode == CacheMode.CacheOnly ? null : GetMessagesAsync(referenceMessage.Id, dir, limit, options);
 
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(string path, string fileName,
         AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileAsync(path, fileName, type, quote, options);
+
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(Stream stream, string fileName,
         AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileAsync(stream, fileName, type, quote, options);
+
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(FileAttachment attachment,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendFileAsync(attachment, quote, options);
+
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendTextAsync(string text,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendTextAsync(text, quote, options);
+
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardsAsync(IEnumerable<ICard> cards,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendCardsAsync(cards, quote, options);
+
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardAsync(ICard card,
         IQuote quote, IUser ephemeralUser, RequestOptions options)
         => SendCardAsync(card, quote, options);
+
     #endregion
 
     #region IChannel
@@ -383,6 +415,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <inheritdoc />
     Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IUser>(GetUser(id));
+
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
         => ImmutableArray.Create<IReadOnlyCollection<IUser>>(Users).ToAsyncEnumerable();
@@ -393,6 +426,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     Returns the recipient user.
     /// </summary>
     public override string ToString() => $"@{Recipient}";
+
     private string DebuggerDisplay => $"@{Recipient} ({Id}, DM)";
     internal new SocketDMChannel Clone() => MemberwiseClone() as SocketDMChannel;
 }

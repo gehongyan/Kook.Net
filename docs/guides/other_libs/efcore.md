@@ -29,7 +29,8 @@ EF Core 中的 DbContext 是一个抽象类，它提供了一系列方法来操�
 [!code-csharp[DBContext Sample](samples/efcore/dbcontext-sample.cs)]
 
 > [!NOTE]
-> 有关创建用于 EF Core 的实体模型，请参阅 [EF Core 文档](https://docs.microsoft.com/ef/core/get-started/overview/first-app?tabs=netcore-cli#create-the-model)。
+> 有关创建用于 EF Core
+> 的实体模型，请参阅 [EF Core 文档](https://docs.microsoft.com/ef/core/get-started/overview/first-app?tabs=netcore-cli#create-the-model)。
 
 ## 将数据库上下文添加到依赖注入服务容器中
 

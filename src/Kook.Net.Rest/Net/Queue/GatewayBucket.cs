@@ -4,8 +4,9 @@ namespace Kook.Net.Queue;
 
 internal enum GatewayBucketType
 {
-    Unbucketed = 0,
+    Unbucketed = 0
 }
+
 internal struct GatewayBucket
 {
     private static readonly ImmutableDictionary<GatewayBucketType, GatewayBucket> DefsByType;
@@ -13,20 +14,20 @@ internal struct GatewayBucket
 
     static GatewayBucket()
     {
-        var buckets = new[]
+        GatewayBucket[] buckets = new[]
         {
             // Limit is 120/60s, but 3 will be reserved for heartbeats (2 for possible heartbeats in the same timeframe and a possible failure)
-            new GatewayBucket(GatewayBucketType.Unbucketed, BucketId.Create(null, "<gateway-unbucketed>", null), 117, 60),
+            new GatewayBucket(GatewayBucketType.Unbucketed, BucketId.Create(null, "<gateway-unbucketed>", null), 117, 60)
         };
 
-        var builder = ImmutableDictionary.CreateBuilder<GatewayBucketType, GatewayBucket>();
-        foreach (var bucket in buckets)
-            builder.Add(bucket.Type, bucket);
+        ImmutableDictionary<GatewayBucketType, GatewayBucket>.Builder builder = ImmutableDictionary.CreateBuilder<GatewayBucketType, GatewayBucket>();
+        foreach (GatewayBucket bucket in buckets) builder.Add(bucket.Type, bucket);
+
         DefsByType = builder.ToImmutable();
 
-        var builder2 = ImmutableDictionary.CreateBuilder<BucketId, GatewayBucket>();
-        foreach (var bucket in buckets)
-            builder2.Add(bucket.Id, bucket);
+        ImmutableDictionary<BucketId, GatewayBucket>.Builder builder2 = ImmutableDictionary.CreateBuilder<BucketId, GatewayBucket>();
+        foreach (GatewayBucket bucket in buckets) builder2.Add(bucket.Id, bucket);
+
         DefsById = builder2.ToImmutable();
     }
 

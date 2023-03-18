@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 #if DEBUG_LIMITS
 using System.Diagnostics;
 #endif
+
 #pragma warning disable CS8073
 
 namespace Kook.Net.Queue
@@ -45,8 +46,12 @@ namespace Kook.Net.Queue
                 _requestCancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancelToken, _clearToken.Token);
                 _requestCancelToken = _requestCancelTokenSource.Token;
             }
-            finally { _tokenLock.Release(); }
+            finally
+            {
+                _tokenLock.Release();
+            }
         }
+
         public async Task ClearAsync()
         {
             await _tokenLock.WaitAsync().ConfigureAwait(false);
@@ -59,7 +64,10 @@ namespace Kook.Net.Queue
                 _requestCancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_clearToken.Token, _parentToken);
                 _requestCancelToken = _requestCancelTokenSource.Token;
             }
-            finally { _tokenLock.Release(); }
+            finally
+            {
+                _tokenLock.Release();
+            }
         }
 
         public async Task<Stream> SendAsync(RestRequest request)
@@ -73,11 +81,12 @@ namespace Kook.Net.Queue
             else
                 request.Options.CancelToken = _requestCancelToken;
 
-            var bucket = GetOrCreateBucket(request.Options, request);
-            var result = await bucket.SendAsync(request).ConfigureAwait(false);
+            RequestBucket bucket = GetOrCreateBucket(request.Options, request);
+            Stream result = await bucket.SendAsync(request).ConfigureAwait(false);
             createdTokenSource?.Dispose();
             return result;
         }
+
         public async Task SendAsync(WebSocketRequest request)
         {
             CancellationTokenSource createdTokenSource = null;
@@ -89,7 +98,7 @@ namespace Kook.Net.Queue
             else
                 request.Options.CancelToken = _requestCancelToken;
 
-            var bucket = GetOrCreateBucket(request.Options, request);
+            RequestBucket bucket = GetOrCreateBucket(request.Options, request);
             await bucket.SendAsync(request).ConfigureAwait(false);
             createdTokenSource?.Dispose();
         }
@@ -105,56 +114,57 @@ namespace Kook.Net.Queue
                 await Task.Delay(millis).ConfigureAwait(false);
             }
         }
-        internal void PauseGlobal(RateLimitInfo info)
-        {
+
+        internal void PauseGlobal(RateLimitInfo info) =>
             _waitUntil = DateTimeOffset.UtcNow.Add(info.ResetAfter ?? TimeSpan.Zero).Add(info.Lag ?? TimeSpan.Zero);
-        }
+
         internal async Task EnterGlobalAsync(int id, WebSocketRequest request)
         {
             //If this is a global request (unbucketed), it'll be dealt in EnterAsync
-            var requestBucket = GatewayBucket.Get(request.Options.BucketId);
-            if (requestBucket.Type == GatewayBucketType.Unbucketed)
-                return;
+            GatewayBucket requestBucket = GatewayBucket.Get(request.Options.BucketId);
+            if (requestBucket.Type == GatewayBucketType.Unbucketed) return;
 
             //It's not a global request, so need to remove one from global (per-session)
-            var globalBucketType = GatewayBucket.Get(GatewayBucketType.Unbucketed);
-            var options = RequestOptions.CreateOrClone(request.Options);
+            GatewayBucket globalBucketType = GatewayBucket.Get(GatewayBucketType.Unbucketed);
+            RequestOptions options = RequestOptions.CreateOrClone(request.Options);
             options.BucketId = globalBucketType.Id;
-            var globalRequest = new WebSocketRequest(null, null, false, false, options);
-            var globalBucket = GetOrCreateBucket(options, globalRequest);
+            WebSocketRequest globalRequest = new(null, null, false, false, options);
+            RequestBucket globalBucket = GetOrCreateBucket(options, globalRequest);
             await globalBucket.TriggerAsync(id, globalRequest);
         }
 
         private RequestBucket GetOrCreateBucket(RequestOptions options, IRequest request)
         {
-            var bucketId = options.BucketId;
+            BucketId bucketId = options.BucketId;
             object obj = _buckets.GetOrAdd(bucketId, x => new RequestBucket(this, request, x));
             if (obj is BucketId hashBucket)
             {
                 options.BucketId = hashBucket;
                 return (RequestBucket)_buckets.GetOrAdd(hashBucket, x => new RequestBucket(this, request, x));
             }
+
             return (RequestBucket)obj;
         }
-        internal async Task RaiseRateLimitTriggered(BucketId bucketId, RateLimitInfo? info, string endpoint)
-        {
+
+        internal async Task RaiseRateLimitTriggered(BucketId bucketId, RateLimitInfo? info, string endpoint) =>
             await RateLimitTriggered(bucketId, info, endpoint).ConfigureAwait(false);
-        }
+
         internal (RequestBucket, BucketId) UpdateBucketHash(BucketId id, string kookHash)
         {
             if (!id.IsHashBucket)
             {
-                var bucket = BucketId.Create(kookHash, id);
-                var hashReqQueue = (RequestBucket)_buckets.GetOrAdd(bucket, _buckets[id]);
+                BucketId bucket = BucketId.Create(kookHash, id);
+                RequestBucket hashReqQueue = (RequestBucket)_buckets.GetOrAdd(bucket, _buckets[id]);
                 _buckets.AddOrUpdate(id, bucket, (_, _) => bucket);
                 return (hashReqQueue, bucket);
             }
+
             return (null, null);
         }
 
         public void ClearGatewayBuckets()
         {
-            foreach (var gwBucket in (GatewayBucketType[])Enum.GetValues(typeof(GatewayBucketType)))
+            foreach (GatewayBucketType gwBucket in (GatewayBucketType[])Enum.GetValues(typeof(GatewayBucketType)))
                 _buckets.TryRemove(GatewayBucket.Get(gwBucket).Id, out _);
         }
 
@@ -164,14 +174,15 @@ namespace Kook.Net.Queue
             {
                 while (!_cancelTokenSource.IsCancellationRequested)
                 {
-                    var now = DateTimeOffset.UtcNow;
-                    foreach (var bucket in _buckets.Where(x => x.Value is RequestBucket).Select(x => (RequestBucket)x.Value))
+                    DateTimeOffset now = DateTimeOffset.UtcNow;
+                    foreach (RequestBucket bucket in _buckets.Where(x => x.Value is RequestBucket).Select(x => (RequestBucket)x.Value))
                     {
                         if ((now - bucket.LastAttemptAt).TotalMinutes > 1.0)
                         {
                             if (bucket.Id.IsHashBucket)
-                                foreach (var redirectBucket in _buckets.Where(x => x.Value == bucket.Id).Select(x => (BucketId)x.Value))
+                                foreach (BucketId redirectBucket in _buckets.Where(x => x.Value == bucket.Id).Select(x => (BucketId)x.Value))
                                     _buckets.TryRemove(redirectBucket, out _); //remove redirections if hash bucket
+
                             _buckets.TryRemove(bucket.Id, out _);
                         }
                     }
@@ -197,6 +208,7 @@ namespace Kook.Net.Queue
                 _cancelTokenSource.Dispose();
                 _cleanupTask.GetAwaiter().GetResult();
             }
+
             _tokenLock?.Dispose();
             _clearToken?.Dispose();
             _requestCancelTokenSource?.Dispose();
@@ -210,6 +222,7 @@ namespace Kook.Net.Queue
                 _cancelTokenSource.Dispose();
                 await _cleanupTask.ConfigureAwait(false);
             }
+
             _tokenLock?.Dispose();
             _clearToken?.Dispose();
             _requestCancelTokenSource?.Dispose();

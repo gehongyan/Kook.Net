@@ -37,18 +37,17 @@ internal class MessageCache
 
     public SocketMessage Get(Guid id)
     {
-        if (_messages.TryGetValue(id, out SocketMessage result))
-            return result;
+        if (_messages.TryGetValue(id, out SocketMessage result)) return result;
+
         return null;
     }
 
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="limit"/> is less than 0.</exception>
     public IReadOnlyCollection<SocketMessage> GetMany(Guid? referenceMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch)
     {
-        if (limit < 0)
-            throw new ArgumentOutOfRangeException(nameof(limit));
-        if (limit == 0)
-            return ImmutableArray<SocketMessage>.Empty;
+        if (limit < 0) throw new ArgumentOutOfRangeException(nameof(limit));
+
+        if (limit == 0) return ImmutableArray<SocketMessage>.Empty;
 
         SocketMessage referenceMessage = _messages.SingleOrDefault(x => x.Key == referenceMessageId).Value;
 
@@ -61,25 +60,25 @@ internal class MessageCache
             cachedMessageIds = _orderedMessages.Where(x => x.Timestamp < referenceMessage.Timestamp).Select(x => x.MsgId);
         else //Direction.Around
         {
-            if (!_messages.TryGetValue(referenceMessageId.Value, out SocketMessage msg))
-                return ImmutableArray<SocketMessage>.Empty;
+            if (!_messages.TryGetValue(referenceMessageId.Value, out SocketMessage msg)) return ImmutableArray<SocketMessage>.Empty;
+
             int around = limit / 2;
-            var before = GetMany(referenceMessageId, Direction.Before, around);
-            var after = GetMany(referenceMessageId, Direction.After, around).Reverse();
+            IReadOnlyCollection<SocketMessage> before = GetMany(referenceMessageId, Direction.Before, around);
+            IEnumerable<SocketMessage> after = GetMany(referenceMessageId, Direction.After, around).Reverse();
 
             return after.Concat(new[] { msg }).Concat(before).ToImmutableArray();
         }
 
-        if (dir == Direction.Before)
-            cachedMessageIds = cachedMessageIds.Reverse();
+        if (dir == Direction.Before) cachedMessageIds = cachedMessageIds.Reverse();
+
         if (dir == Direction.Around) //Only happens if referenceMessageId is null, should only get "around" and itself (+1)
             limit = limit / 2 + 1;
 
         return cachedMessageIds
             .Select(x =>
             {
-                if (_messages.TryGetValue(x, out SocketMessage msg))
-                    return msg;
+                if (_messages.TryGetValue(x, out SocketMessage msg)) return msg;
+
                 return null;
             })
             .Where(x => x != null)

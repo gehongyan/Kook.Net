@@ -41,10 +41,7 @@ public class TokenUtilsTests
     [InlineData("1/MTEwMjQ=/Cw+A+pydai/97FPSOV7jEQ==")]
     // more than 35 characters
     [InlineData("1/MTEwMjQ=/Cw+A+pydai/97FPSOV7jEQ==========")]
-    public void BotTokenDoesNotThrowExceptions(string token)
-    {
-        TokenUtils.ValidateToken(TokenType.Bot, token);
-    }
+    public void BotTokenDoesNotThrowExceptions(string token) => TokenUtils.ValidateToken(TokenType.Bot, token);
 
     /// <summary>
     ///     Tests the usage of <see cref="TokenUtils.ValidateToken(TokenType, string)"/> with
@@ -72,10 +69,8 @@ public class TokenUtilsTests
     [InlineData("This is an invalid token, but it passes the check for string length.")]
     // valid token, but passed in twice
     [InlineData("1/MTEzNzc=/CG6PYkIyTgidPRRR7Oeojw==1/MTEzNzc=/CG6PYkIyTgidPRRR7Oeojw==")]
-    public void BotTokenInvalidThrowsArgumentException(string token)
-    {
+    public void BotTokenInvalidThrowsArgumentException(string token) =>
         Assert.Throws<ArgumentException>(() => TokenUtils.ValidateToken(TokenType.Bot, token));
-    }
 
     /// <summary>
     ///     Tests the behavior of <see cref="TokenUtils.ValidateToken(TokenType, string)"/>
@@ -87,11 +82,9 @@ public class TokenUtilsTests
     [InlineData(-1)]
     [InlineData(4)]
     [InlineData(7)]
-    public void UnrecognizedTokenType(int type)
-    {
+    public void UnrecognizedTokenType(int type) =>
         Assert.Throws<ArgumentException>(() =>
             TokenUtils.ValidateToken((TokenType)type, "1/MTEzNzc=/CG6PYkIyTgidPRRR7Oeojw=="));
-    }
 
     /// <summary>
     ///     Checks the <see cref="TokenUtils.CheckBotTokenValidity(string)"/> method for expected output.
@@ -109,10 +102,7 @@ public class TokenUtilsTests
     // should not throw an unexpected exception
     [InlineData("", false)]
     [InlineData(null, false)]
-    public void CheckBotTokenValidity(string token, bool expected)
-    {
-        Assert.Equal(expected, TokenUtils.CheckBotTokenValidity(token));
-    }
+    public void CheckBotTokenValidity(string token, bool expected) => Assert.Equal(expected, TokenUtils.CheckBotTokenValidity(token));
 
     [Theory]
     // cannot pass a ulong? as a param in InlineData, so have to have a separate param
@@ -126,7 +116,7 @@ public class TokenUtilsTests
     [InlineData("these chars aren't allowed @U#)*@#!)*", true, 0)]
     public void DecodeBase64UserId(string encodedUserId, bool isNull, ulong expectedUserId)
     {
-        var result = TokenUtils.DecodeBase64UserId(encodedUserId);
+        ulong? result = TokenUtils.DecodeBase64UserId(encodedUserId);
         if (isNull)
             Assert.Null(result);
         else

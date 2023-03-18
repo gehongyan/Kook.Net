@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Model = Kook.API.Invite;
+
 namespace Kook.Rest;
 
 /// <summary>
@@ -10,29 +11,40 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
 {
     /// <inheritdoc />
     public string Code { get; private set; }
+
     /// <inheritdoc />
     public string Url { get; private set; }
+
     /// <inheritdoc />
     public IUser Inviter { get; private set; }
+
     /// <inheritdoc />
     public ChannelType ChannelType { get; private set; }
+
     /// <inheritdoc />
     public ulong? ChannelId { get; private set; }
+
     /// <inheritdoc />
     public string ChannelName { get; private set; }
+
     /// <inheritdoc />
     public ulong? GuildId { get; private set; }
+
     /// <inheritdoc />
     public string GuildName { get; private set; }
+
     /// <inheritdoc />
     public DateTimeOffset? ExpiresAt { get; private set; }
 
     /// <inheritdoc />
     public TimeSpan? MaxAge { get; private set; }
+
     /// <inheritdoc />
     public int? MaxUses { get; private set; }
+
     /// <inheritdoc />
     public int? Uses { get; private set; }
+
     /// <inheritdoc />
     public int? RemainingUses { get; private set; }
 
@@ -45,12 +57,14 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
         Guild = guild;
         Channel = channel;
     }
+
     internal static RestInvite Create(BaseKookClient kook, IGuild guild, IChannel channel, Model model)
     {
-        var entity = new RestInvite(kook, guild, channel, model.Id);
+        RestInvite entity = new(kook, guild, channel, model.Id);
         entity.Update(model);
         return entity;
     }
+
     internal void Update(Model model)
     {
         Code = model.UrlCode;
@@ -71,9 +85,11 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
     /// <inheritdoc />
     public async Task UpdateAsync(RequestOptions options = null)
     {
-        var model = await Kook.ApiClient.GetGuildInvitesAsync(guildId: GuildId, channelId: ChannelId, options: options).FlattenAsync().ConfigureAwait(false);
+        IEnumerable<Model> model =
+            await Kook.ApiClient.GetGuildInvitesAsync(GuildId, ChannelId, options: options).FlattenAsync().ConfigureAwait(false);
         Update(model.SingleOrDefault(i => i.UrlCode == Code));
     }
+
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions options = null)
         => InviteHelper.DeleteAsync(this, Kook, options);
@@ -85,6 +101,7 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
     ///     A string that resolves to the Url of the invite.
     /// </returns>
     public override string ToString() => Url;
+
     private string DebuggerDisplay => $"{Url} ({GuildName} / {ChannelName ?? "Channel not specified"})";
 
     /// <inheritdoc />
@@ -92,20 +109,21 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
     {
         get
         {
-            if (Guild != null)
-                return Guild;
-            if (Channel is IGuildChannel guildChannel)
-                return guildChannel.Guild; //If it fails, it'll still return this exception
+            if (Guild != null) return Guild;
+
+            if (Channel is IGuildChannel guildChannel) return guildChannel.Guild; //If it fails, it'll still return this exception
+
             throw new InvalidOperationException("Unable to return this entity's parent unless it was fetched through that object.");
         }
     }
+
     /// <inheritdoc />
     IChannel IInvite.Channel
     {
         get
         {
-            if (Channel != null)
-                return Channel;
+            if (Channel != null) return Channel;
+
             throw new InvalidOperationException("Unable to return this entity's parent unless it was fetched through that object.");
         }
     }

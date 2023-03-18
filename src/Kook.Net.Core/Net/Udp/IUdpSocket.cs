@@ -33,6 +33,7 @@ public interface IUdpSocket : IDisposable
     /// </summary>
     /// <returns> A task that represents the asynchronous operation. </returns>
     Task StartAsync();
+
     /// <summary>
     ///     Stops the socket.
     /// </summary>

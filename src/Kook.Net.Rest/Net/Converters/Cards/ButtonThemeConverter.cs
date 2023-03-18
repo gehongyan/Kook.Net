@@ -20,8 +20,7 @@ internal class ButtonThemeConverter : JsonConverter<ButtonTheme>
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, ButtonTheme value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, ButtonTheme value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
             ButtonTheme.Primary => "primary",
@@ -32,5 +31,4 @@ internal class ButtonThemeConverter : JsonConverter<ButtonTheme>
             ButtonTheme.Secondary => "secondary",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
-    }
 }

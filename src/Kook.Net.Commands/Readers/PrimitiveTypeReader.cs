@@ -17,13 +17,13 @@ internal class PrimitiveTypeReader<T> : TypeReader
     /// <exception cref="ArgumentOutOfRangeException"><typeparamref name="T"/> must be within the range [0, 1].</exception>
     public PrimitiveTypeReader()
         : this(PrimitiveParsers.Get<T>(), 1)
-    { }
+    {
+    }
 
     /// <exception cref="ArgumentOutOfRangeException"><paramref name="score"/> must be within the range [0, 1].</exception>
     public PrimitiveTypeReader(TryParseDelegate<T> tryParse, float score)
     {
-        if (score < 0 || score > 1)
-            throw new ArgumentOutOfRangeException(nameof(score), score, "Scores must be within the range [0, 1].");
+        if (score < 0 || score > 1) throw new ArgumentOutOfRangeException(nameof(score), score, "Scores must be within the range [0, 1].");
 
         _tryParse = tryParse;
         _score = score;
@@ -31,8 +31,8 @@ internal class PrimitiveTypeReader<T> : TypeReader
 
     public override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
     {
-        if (_tryParse(input, out T value))
-            return Task.FromResult(TypeReaderResult.FromSuccess(new TypeReaderValue(value, _score)));
+        if (_tryParse(input, out T value)) return Task.FromResult(TypeReaderResult.FromSuccess(new TypeReaderValue(value, _score)));
+
         return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, $"Failed to parse {typeof(T).Name}."));
     }
 }

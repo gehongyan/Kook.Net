@@ -9,77 +9,106 @@ namespace Kook;
 public class GuildPermissions
 {
     /// <summary> Gets a blank <see cref="GuildPermissions"/> that grants no permissions. </summary>
-    public static readonly GuildPermissions None = new GuildPermissions();
+    public static readonly GuildPermissions None = new();
+
     /// <summary> Gets a <see cref="GuildPermissions"/> that grants all guild permissions. </summary>
-    public static readonly GuildPermissions All = new GuildPermissions(0b1_1111_1111_1111_1111_1111_1111_1111);
+    public static readonly GuildPermissions All = new(0b1_1111_1111_1111_1111_1111_1111_1111);
 
     /// <summary> Gets a packed value representing all the permissions in this <see cref="GuildPermissions"/>. </summary>
     public ulong RawValue { get; }
 
     /// <summary> If <c>true</c>, a user is granted all permissions, and cannot have them revoked via channel permissions. </summary>
     public bool Administrator => Permissions.GetValue(RawValue, GuildPermission.Administrator);
+
     /// <summary> If <c>true</c>, a user may adjust guild properties. </summary>
     public bool ManageGuild => Permissions.GetValue(RawValue, GuildPermission.ManageGuild);
+
     /// <summary> If <c>true</c>, a user may view the audit log. </summary>
     public bool ViewAuditLog => Permissions.GetValue(RawValue, GuildPermission.ViewAuditLog);
+
     /// <summary> If <c>true</c>, a user may create invites. </summary>
     public bool CreateInvites => Permissions.GetValue(RawValue, GuildPermission.CreateInvites);
+
     /// <summary> If <c>true</c>, a user may view and revoke invites. </summary>
     public bool ManageInvites => Permissions.GetValue(RawValue, GuildPermission.ManageInvites);
+
     /// <summary> If <c>true</c>, a user may create, delete and modify channels. </summary>
     public bool ManageChannels => Permissions.GetValue(RawValue, GuildPermission.ManageChannels);
+
     /// <summary> If <c>true</c>, a user may kick users from the guild. </summary>
     public bool KickMembers => Permissions.GetValue(RawValue, GuildPermission.KickMembers);
+
     /// <summary> If <c>true</c>, a user may ban users from the guild. </summary>
     public bool BanMembers => Permissions.GetValue(RawValue, GuildPermission.BanMembers);
+
     /// <summary> If <c>true</c>, a user may edit the emojis for this guild. </summary>
     public bool ManageEmojis => Permissions.GetValue(RawValue, GuildPermission.ManageEmojis);
+
     /// <summary> If <c>true</c>, a user may change their own nickname. </summary>
     public bool ChangeNickname => Permissions.GetValue(RawValue, GuildPermission.ChangeNickname);
+
     /// <summary> If <c>true</c>, a user may adjust roles. </summary>
     public bool ManageRoles => Permissions.GetValue(RawValue, GuildPermission.ManageRoles);
+
     /// <summary> If <c>true</c>, a user may view channels. </summary>
     public bool ViewChannel => Permissions.GetValue(RawValue, GuildPermission.ViewChannel);
+
     /// <summary> If <c>true</c>, a user may send messages. </summary>
     public bool SendMessages => Permissions.GetValue(RawValue, GuildPermission.SendMessages);
+
     /// <summary> If <c>true</c>, a user may delete messages. </summary>
     public bool ManageMessages => Permissions.GetValue(RawValue, GuildPermission.ManageMessages);
+
     /// <summary> If <c>true</c>, a user may send files. </summary>
     public bool AttachFiles => Permissions.GetValue(RawValue, GuildPermission.AttachFiles);
+
     /// <summary> If <c>true</c>, a user may connect to a voice channel. </summary>
     public bool Connect => Permissions.GetValue(RawValue, GuildPermission.Connect);
+
     /// <summary> If <c>true</c>, a user may kick other users from voice channels, and move other users between voice channels. </summary>
     public bool ManageVoice => Permissions.GetValue(RawValue, GuildPermission.ManageVoice);
+
     /// <summary> If <c>true</c>, a user may mention all users. </summary>
     public bool MentionEveryone => Permissions.GetValue(RawValue, GuildPermission.MentionEveryone);
+
     /// <summary> If <c>true</c>, a user may add reactions. </summary>
     public bool AddReactions => Permissions.GetValue(RawValue, GuildPermission.AddReactions);
+
     /// <summary> If <c>true</c>, a user may follow added reactions. </summary>
     public bool FollowReactions => Permissions.GetValue(RawValue, GuildPermission.FollowReactions);
+
     /// <summary> If <c>true</c>, a user may connect to a voice channel only when the user is invited or moved by other users. </summary>
     public bool PassiveConnect => Permissions.GetValue(RawValue, GuildPermission.PassiveConnect);
+
     /// <summary> If <c>true</c>, a user may speak only via push-to-talk. </summary>
     public bool OnlyPushToTalk => Permissions.GetValue(RawValue, GuildPermission.OnlyPushToTalk);
+
     /// <summary> If <c>true</c>, a user may use voice activation. </summary>
     public bool UseVoiceActivity => Permissions.GetValue(RawValue, GuildPermission.UseVoiceActivity);
+
     /// <summary> If <c>true</c>, a user may speak in a voice channel. </summary>
     public bool Speak => Permissions.GetValue(RawValue, GuildPermission.Speak);
+
     /// <summary> If <c>true</c>, a user may deafen users. </summary>
     public bool DeafenMembers => Permissions.GetValue(RawValue, GuildPermission.DeafenMembers);
+
     /// <summary> If <c>true</c>, a user may mute users. </summary>
     public bool MuteMembers => Permissions.GetValue(RawValue, GuildPermission.MuteMembers);
+
     /// <summary> If <c>true</c>, a user may change the nickname of other users. </summary>
     public bool ManageNicknames => Permissions.GetValue(RawValue, GuildPermission.ManageNicknames);
+
     /// <summary> If <c>true</c>, a user may play soundtracks in a voice channel. </summary>
     public bool PlaySoundtrack => Permissions.GetValue(RawValue, GuildPermission.PlaySoundtrack);
+
     /// <summary> If <c>true</c>, a user may share screen in a voice channel. </summary>
     public bool ShareScreen => Permissions.GetValue(RawValue, GuildPermission.ShareScreen);
 
     /// <summary> Creates a new <see cref="GuildPermissions"/> with the provided packed value. </summary>
-    public GuildPermissions(ulong rawValue) { RawValue = rawValue; }
+    public GuildPermissions(ulong rawValue) => RawValue = rawValue;
 
     /// <summary> Creates a new <see cref="GuildPermissions"/> with the provided packed value after converting to ulong. </summary>
-    public GuildPermissions(string rawValue) { RawValue = ulong.Parse(rawValue); }
+    public GuildPermissions(string rawValue) => RawValue = ulong.Parse(rawValue);
 
     private GuildPermissions(ulong initialValue,
         bool? administrator = null,
@@ -217,7 +246,7 @@ public class GuildPermissions
         bool? manageNicknames = null,
         bool? playSoundtrack = null,
         bool? shareScreen = null)
-        => new GuildPermissions(RawValue, administrator, manageGuild, viewAuditLog, createInvites, manageInvites,
+        => new(RawValue, administrator, manageGuild, viewAuditLog, createInvites, manageInvites,
             manageChannels, kickMembers, banMembers, manageEmojis, changeNickname, manageRoles, viewChannel,
             sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone, addReactions,
             followReactions, passiveConnect, onlyPushToTalk, useVoiceActivity, speak, deafenMembers, muteMembers,
@@ -244,9 +273,8 @@ public class GuildPermissions
         // each of the GuildPermissions increments by 2^i from 0 to MaxBits
         for (byte i = 0; i < Permissions.MaxBits; i++)
         {
-            ulong flag = ((ulong)1 << i);
-            if ((RawValue & flag) != 0)
-                perms.Add((GuildPermission)flag);
+            ulong flag = (ulong)1 << i;
+            if ((RawValue & flag) != 0) perms.Add((GuildPermission)flag);
         }
 
         return perms;
@@ -256,9 +284,9 @@ public class GuildPermissions
     {
         if (!Has(permissions))
         {
-            var vals = Enum.GetValues(typeof(GuildPermission)).Cast<GuildPermission>();
-            var currentValues = RawValue;
-            var missingValues = vals.Where(x => permissions.HasFlag(x) && !Permissions.GetValue(currentValues, x));
+            IEnumerable<GuildPermission> vals = Enum.GetValues(typeof(GuildPermission)).Cast<GuildPermission>();
+            ulong currentValues = RawValue;
+            IEnumerable<GuildPermission> missingValues = vals.Where(x => permissions.HasFlag(x) && !Permissions.GetValue(currentValues, x));
 
             throw new InvalidOperationException(
                 $"Missing required guild permission{(missingValues.Count() > 1 ? "s" : "")} {string.Join(", ", missingValues.Select(x => x.ToString()))} in order to execute this operation.");
@@ -269,5 +297,6 @@ public class GuildPermissions
     ///     Gets the raw value of the permissions.
     /// </summary>
     public override string ToString() => RawValue.ToString();
+
     private string DebuggerDisplay => $"{string.Join(", ", ToList())}";
 }

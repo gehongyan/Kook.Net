@@ -13,27 +13,28 @@ public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
         : base(kook, id)
     {
     }
-    internal static RestChannel Create(BaseKookClient kook, Model model)
-    {
-        return model.Type switch
+
+    internal static RestChannel Create(BaseKookClient kook, Model model) =>
+        model.Type switch
         {
             ChannelType.Text or ChannelType.Voice
                 => RestGuildChannel.Create(kook, new RestGuild(kook, model.GuildId), model),
             ChannelType.Category => RestCategoryChannel.Create(kook, new RestGuild(kook, model.GuildId), model),
-            _ => new RestChannel(kook, model.Id),
+            _ => new RestChannel(kook, model.Id)
         };
-    }
-    internal static RestChannel Create(BaseKookClient kook, Model model, IGuild guild)
-    {
-        return model.Type switch
+
+    internal static RestChannel Create(BaseKookClient kook, Model model, IGuild guild) =>
+        model.Type switch
         {
             ChannelType.Text or ChannelType.Voice
                 => RestGuildChannel.Create(kook, guild, model),
             ChannelType.Category => RestCategoryChannel.Create(kook, guild, model),
-            _ => new RestChannel(kook, model.Id),
+            _ => new RestChannel(kook, model.Id)
         };
+
+    internal virtual void Update(Model model)
+    {
     }
-    internal virtual void Update(Model model) { }
 
     /// <inheritdoc />
     public virtual Task UpdateAsync(RequestOptions options = null) => Task.Delay(0);
@@ -48,6 +49,7 @@ public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
     /// <inheritdoc />
     Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
         => Task.FromResult<IUser>(null); //Overridden
+
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
         => AsyncEnumerable.Empty<IReadOnlyCollection<IUser>>(); //Overridden

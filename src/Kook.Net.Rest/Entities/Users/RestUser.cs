@@ -15,35 +15,48 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
 
     /// <inheritdoc />
     public string Username { get; internal set; }
+
     /// <inheritdoc />
     public ushort? IdentifyNumberValue { get; internal set; }
 
     /// <inheritdoc />
     public bool? IsBot { get; internal set; }
+
     /// <inheritdoc />
     public bool? IsBanned { get; internal set; }
+
     /// <inheritdoc />
     public bool? HasBuff { get; internal set; }
+
     /// <inheritdoc />
     public string Avatar { get; internal set; }
+
     /// <inheritdoc />
     public string BuffAvatar { get; internal set; }
+
     /// <inheritdoc />
     public string Banner { get; internal set; }
+
     /// <inheritdoc />
     public bool? IsDenoiseEnabled { get; internal set; }
+
     /// <inheritdoc />
     public UserTag UserTag { get; internal set; }
+
     /// <inheritdoc />
     public string IdentifyNumber => IdentifyNumberValue?.ToString("D4");
+
     /// <inheritdoc />
     public string KMarkdownMention => MentionUtils.KMarkdownMentionUser(Id);
+
     /// <inheritdoc />
     public string PlainTextMention => MentionUtils.PlainTextMentionUser(Username, Id);
 
     internal RestPresence Presence { get; set; }
+
     /// <inheritdoc />
     public bool? IsOnline => Presence?.IsOnline;
+
     /// <inheritdoc />
     public ClientType? ActiveClient => Presence?.ActiveClient;
 
@@ -51,21 +64,24 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         : base(kook, id)
     {
     }
+
     internal static RestUser Create(BaseKookClient kook, Model model)
     {
-        RestUser entity = new RestUser(kook, model.Id);
+        RestUser entity = new(kook, model.Id);
         entity.Update(model);
         return entity;
     }
 
     internal static RestUser Create(BaseKookClient kook, API.MentionedUser model)
         => Create(kook, null, model);
+
     internal static RestUser Create(BaseKookClient kook, IGuild guild, API.MentionedUser model)
     {
-        RestUser entity = new RestUser(kook, model.Id);
+        RestUser entity = new(kook, model.Id);
         entity.Update(model);
         return entity;
     }
+
     internal virtual void Update(Model model)
     {
         Username = model.Username;
@@ -87,7 +103,9 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         Username = model.Username;
         IdentifyNumberValue = model.FullName.Length > 4
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-                              && ushort.TryParse(model.FullName[^4..], out ushort val) ? val : null;
+            && ushort.TryParse(model.FullName[^4..], out ushort val)
+                ? val
+                : null;
 #else
                               && ushort.TryParse(model.FullName.Substring(model.FullName.Length - 4), out ushort val) ? val : null;
 #endif
@@ -97,7 +115,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     /// <inheritdoc />
     public virtual async Task UpdateAsync(RequestOptions options = null)
     {
-        var model = await Kook.ApiClient.GetUserAsync(Id, options).ConfigureAwait(false);
+        Model model = await Kook.ApiClient.GetUserAsync(Id, options).ConfigureAwait(false);
         Update(model);
     }
 
@@ -106,6 +124,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         Presence ??= new RestPresence();
         Presence.Update(isOnline, activeClient);
     }
+
     /// <summary>
     ///     Creates a direct message channel to this user.
     /// </summary>
@@ -128,10 +147,9 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         => UserHelper.GetIntimacyAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public async Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options = null)
-    {
+    public async Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options = null) =>
         await UserHelper.UpdateIntimacyAsync(this, Kook, func, options).ConfigureAwait(false);
-    }
+
     #endregion
 
     /// <summary>
@@ -142,7 +160,8 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     /// </returns>
     public override string ToString() => Format.UsernameAndIdentifyNumber(this, Kook.FormatUsersInBidirectionalUnicode);
 
-    private string DebuggerDisplay => $"{Format.UsernameAndIdentifyNumber(this, Kook.FormatUsersInBidirectionalUnicode)} ({Id}{(IsBot ?? false ? ", Bot" : "")})";
+    private string DebuggerDisplay =>
+        $"{Format.UsernameAndIdentifyNumber(this, Kook.FormatUsersInBidirectionalUnicode)} ({Id}{(IsBot ?? false ? ", Bot" : "")})";
 
 
     #region IUser
@@ -150,6 +169,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     /// <inheritdoc />
     async Task<IDMChannel> IUser.CreateDMChannelAsync(RequestOptions options)
         => await CreateDMChannelAsync(options).ConfigureAwait(false);
+
     /// <inheritdoc />
     async Task<IIntimacy> IUser.GetIntimacyAsync(RequestOptions options)
         => await GetIntimacyAsync(options).ConfigureAwait(false);

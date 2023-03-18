@@ -9,6 +9,7 @@ public enum ColorType : ushort
     ///     The color is a solid color.
     /// </summary>
     Solid = 1,
+
     /// <summary>
     ///     The color is a gradient.
     /// </summary>

@@ -9,6 +9,7 @@ public interface IPresence
     ///     Gets the current status of this user.
     /// </summary>
     bool? IsOnline { get; }
+
     /// <summary>
     ///     Gets the type of the client where this user is currently active.
     /// </summary>

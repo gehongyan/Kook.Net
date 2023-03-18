@@ -19,6 +19,7 @@ public interface IRestMessageChannel : IMessageChannel
     ///     the retrieved message; <c>null</c> if no message is found with the specified identifier.
     /// </returns>
     Task<RestMessage> GetMessageAsync(Guid id, RequestOptions options = null);
+
     /// <summary>
     ///     Gets the last N messages from this message channel.
     /// </summary>
@@ -32,6 +33,7 @@ public interface IRestMessageChannel : IMessageChannel
     ///     Paged collection of messages.
     /// </returns>
     IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a collection of messages in this channel.
     /// </summary>
@@ -46,7 +48,9 @@ public interface IRestMessageChannel : IMessageChannel
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null);
+    IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a collection of messages in this channel.
     /// </summary>
@@ -61,5 +65,6 @@ public interface IRestMessageChannel : IMessageChannel
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null);
+    IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null);
 }

@@ -17,8 +17,7 @@ internal class CountdownModeConverter : JsonConverter<CountdownMode>
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, CountdownMode value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, CountdownMode value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
             CountdownMode.Day => "day",
@@ -26,5 +25,4 @@ internal class CountdownModeConverter : JsonConverter<CountdownMode>
             CountdownMode.Second => "second",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
-    }
 }

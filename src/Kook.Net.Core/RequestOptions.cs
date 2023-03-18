@@ -10,7 +10,7 @@ public class RequestOptions
     /// <summary>
     ///     Creates a new <see cref="RequestOptions" /> class with its default settings.
     /// </summary>
-    public static RequestOptions Default => new RequestOptions();
+    public static RequestOptions Default => new();
 
     /// <summary>
     ///     Gets or sets the maximum time to wait for this request to complete.
@@ -24,6 +24,7 @@ public class RequestOptions
     ///     An int in milliseconds for when the request times out.
     /// </returns>
     public int? Timeout { get; set; }
+
     /// <summary>
     ///     Gets or sets the cancellation token for this request.
     /// </summary>
@@ -31,10 +32,12 @@ public class RequestOptions
     ///     A <see cref="CancellationToken"/> for this request.
     /// </returns>
     public CancellationToken CancelToken { get; set; } = CancellationToken.None;
+
     /// <summary>
     ///     Gets or sets the retry behavior when the request fails.
     /// </summary>
     public RetryMode? RetryMode { get; set; }
+
     /// <summary>
     ///     Gets or sets the reason for this action in the guild's audit log.
     /// </summary>
@@ -43,6 +46,7 @@ public class RequestOptions
     ///     to all actions.
     /// </remarks>
     public string AuditLogReason { get; set; }
+
     /// <summary>
     ///     Gets or sets the callback to execute regarding ratelimits for this request.
     /// </summary>
@@ -65,13 +69,7 @@ public class RequestOptions
 
     internal void ExecuteRatelimitCallback(IRateLimitInfo info)
     {
-        if (RatelimitCallback != null)
-        {
-            _ = Task.Run(async () =>
-            {
-                await RatelimitCallback(info);
-            });
-        }
+        if (RatelimitCallback != null) _ = Task.Run(async () => { await RatelimitCallback(info); });
     }
 
     /// <summary>

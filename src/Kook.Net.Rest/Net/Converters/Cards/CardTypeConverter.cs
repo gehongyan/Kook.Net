@@ -15,12 +15,10 @@ internal class CardTypeConverter : JsonConverter<CardType>
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, CardType value, JsonSerializerOptions options)
-    {
+    public override void Write(Utf8JsonWriter writer, CardType value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
             CardType.Card => "card",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
-    }
 }

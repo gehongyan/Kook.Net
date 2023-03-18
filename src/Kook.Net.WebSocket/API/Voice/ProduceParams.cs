@@ -4,11 +4,11 @@ namespace Kook.API.Voice;
 
 internal class ProduceParams
 {
-    public ProduceParams() { }
-    public ProduceParams(Guid transportId)
+    public ProduceParams()
     {
-        TransportId = transportId;
     }
+
+    public ProduceParams(Guid transportId) => TransportId = transportId;
 
     [JsonPropertyName("appData")]
     public object AppData { get; set; }

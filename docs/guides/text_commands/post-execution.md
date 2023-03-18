@@ -80,10 +80,17 @@ next? We can take this further by using [RuntimeResult].
 [!code[Logger Sample](samples/post-execution/command-exception-log.cs)]
 
 [CommandException]: xref:Kook.Commands.CommandException
+
 [LogMessage.Exception]: xref:Kook.LogMessage.Exception
+
 [CommandService.Log]: xref:Kook.Commands.CommandService.Log
+
 [RuntimeResult]: xref:Kook.Commands.RuntimeResult
+
 [CommandExecuted]: xref:Kook.Commands.CommandService.CommandExecuted
+
 [ExecuteAsync]: xref:Kook.Commands.CommandService.ExecuteAsync*
+
 [ExecuteResult]: xref:Kook.Commands.ExecuteResult
+
 [文本命令框架入门]: xref:Guides.TextCommands.Intro

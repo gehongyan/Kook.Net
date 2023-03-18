@@ -21,6 +21,7 @@ public class MentionUtilsTests
         Assert.Equal("@test_username#123", MentionUtils.PlainTextMentionUser("test_username", "123"));
         Assert.Equal("(met)123(met)", MentionUtils.KMarkdownMentionUser("123"));
     }
+
     /// <summary>
     ///     Tests <see cref="MentionUtils.PlainTextMentionChannel(string)"/>
     ///     and <see cref="MentionUtils.KMarkdownMentionChannel(string)"/>
@@ -33,6 +34,7 @@ public class MentionUtilsTests
         Assert.Equal("#channel:123;", MentionUtils.PlainTextMentionChannel("123"));
         Assert.Equal("(chn)123(chn)", MentionUtils.KMarkdownMentionChannel("123"));
     }
+
     /// <summary>
     ///     Tests <see cref="MentionUtils.PlainTextMentionRole(string)"/>
     ///     and <see cref="MentionUtils.KMarkdownMentionRole(string)"/>
@@ -45,17 +47,19 @@ public class MentionUtilsTests
         Assert.Equal("@role:123;", MentionUtils.PlainTextMentionRole("123"));
         Assert.Equal("(rol)123(rol)", MentionUtils.KMarkdownMentionRole("123"));
     }
+
     [Theory]
     [InlineData("@test_username#123", TagMode.PlainText, 123)]
     [InlineData("(met)123(met)", TagMode.KMarkdown, 123)]
     public void ParseUser_Pass(string user, TagMode tagMode, ulong id)
     {
-        var parsed = MentionUtils.ParseUser(user, tagMode);
+        ulong parsed = MentionUtils.ParseUser(user, tagMode);
         Assert.Equal(id, parsed);
 
         Assert.True(MentionUtils.TryParseUser(user, out ulong result, tagMode));
         Assert.Equal(id, result);
     }
+
     [Theory]
     [InlineData(" ", TagMode.PlainText)]
     [InlineData(" ", TagMode.KMarkdown)]
@@ -70,6 +74,7 @@ public class MentionUtilsTests
         Assert.Throws<ArgumentException>(() => MentionUtils.ParseUser(user, tagMode));
         Assert.False(MentionUtils.TryParseUser(user, out _, tagMode));
     }
+
     [Fact]
     public void ParseUser_Null()
     {
@@ -78,17 +83,19 @@ public class MentionUtilsTests
         Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseUser(null, out _, TagMode.PlainText));
         Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseUser(null, out _, TagMode.KMarkdown));
     }
+
     [Theory]
     [InlineData("#channel:123;", TagMode.PlainText, 123)]
     [InlineData("(chn)123(chn)", TagMode.KMarkdown, 123)]
     public void ParseChannel_Pass(string channel, TagMode tagMode, ulong id)
     {
-        var parsed = MentionUtils.ParseChannel(channel, tagMode);
+        ulong parsed = MentionUtils.ParseChannel(channel, tagMode);
         Assert.Equal(id, parsed);
 
         Assert.True(MentionUtils.TryParseChannel(channel, out ulong result, tagMode));
         Assert.Equal(id, result);
     }
+
     [Theory]
     [InlineData(" ", TagMode.PlainText)]
     [InlineData(" ", TagMode.KMarkdown)]
@@ -103,6 +110,7 @@ public class MentionUtilsTests
         Assert.Throws<ArgumentException>(() => MentionUtils.ParseChannel(channel, tagMode));
         Assert.False(MentionUtils.TryParseChannel(channel, out _, tagMode));
     }
+
     [Fact]
     public void ParseChannel_Null()
     {
@@ -111,17 +119,19 @@ public class MentionUtilsTests
         Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseChannel(null, out _, TagMode.PlainText));
         Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseChannel(null, out _, TagMode.KMarkdown));
     }
+
     [Theory]
     [InlineData("@role:123;", TagMode.PlainText, 123)]
     [InlineData("(rol)123(rol)", TagMode.KMarkdown, 123)]
     public void ParseRole_Pass(string role, TagMode tagMode, uint id)
     {
-        var parsed = MentionUtils.ParseRole(role, tagMode);
+        ulong parsed = MentionUtils.ParseRole(role, tagMode);
         Assert.Equal(id, parsed);
 
         Assert.True(MentionUtils.TryParseRole(role, out uint result, tagMode));
         Assert.Equal(id, result);
     }
+
     [Theory]
     [InlineData(" ", TagMode.PlainText)]
     [InlineData(" ", TagMode.KMarkdown)]
@@ -136,6 +146,7 @@ public class MentionUtilsTests
         Assert.Throws<ArgumentException>(() => MentionUtils.ParseRole(role, tagMode));
         Assert.False(MentionUtils.TryParseRole(role, out _, tagMode));
     }
+
     [Fact]
     public void ParseRole_Null()
     {

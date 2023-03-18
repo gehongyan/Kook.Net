@@ -5,5 +5,4 @@ namespace Kook;
 /// </summary>
 public interface ICategoryChannel : IGuildChannel
 {
-
 }

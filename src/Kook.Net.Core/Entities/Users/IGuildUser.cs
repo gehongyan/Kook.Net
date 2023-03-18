@@ -14,6 +14,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A string representing the nickname of the user; <c>null</c> if none is set.
     /// </returns>
     string Nickname { get; }
+
     /// <summary>
     ///     Gets the displayed name for this user.
     /// </summary>
@@ -21,6 +22,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A string representing the display name of the user; If the nickname is null, this will be the username.
     /// </returns>
     string DisplayName { get; }
+
     /// <summary>
     ///     Gets a collection of IDs for the roles that this user currently possesses in the guild.
     /// </summary>
@@ -34,6 +36,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     this user possesses.
     /// </returns>
     IReadOnlyCollection<uint> RoleIds { get; }
+
     /// <summary>
     ///     Gets the guild for this user.
     /// </summary>
@@ -41,6 +44,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A guild object that this user belongs to.
     /// </returns>
     IGuild Guild { get; }
+
     /// <summary>
     ///     Gets the ID of the guild for this user.
     /// </summary>
@@ -48,6 +52,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     An <see langword="ulong"/> representing the identifier of the guild that this user belongs to.
     /// </returns>
     ulong GuildId { get; }
+
     /// <summary>
     ///     Gets whether the mobile number has been verified for this user.
     /// </summary>
@@ -55,6 +60,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     <c>true</c> if the mobile number has been verified; <c>false</c> otherwise.
     /// </returns>
     bool IsMobileVerified { get; }
+
     /// <summary>
     ///     Gets when this user joined the guild.
     /// </summary>
@@ -62,6 +68,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     The time of which the user has joined the guild.
     /// </returns>
     DateTimeOffset JoinedAt { get; }
+
     /// <summary>
     ///     Gets when this user was activated.
     /// </summary>
@@ -69,6 +76,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     The time of which the user was activated.
     /// </returns>
     DateTimeOffset ActiveAt { get; }
+
     /// <summary>
     ///     Gets the color the user's displayed name is being displayed in.
     /// </summary>
@@ -86,6 +94,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     </note>
     /// </remarks>
     Color Color { get; }
+
     /// <summary>
     ///     Gets whether this user owns the current guild.
     /// </summary>
@@ -172,6 +181,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A task that represents the asynchronous role addition operation.
     /// </returns>
     Task AddRoleAsync(uint roleId, RequestOptions options = null);
+
     /// <summary>
     ///     Adds the specified role to this user in the guild.
     /// </summary>
@@ -181,6 +191,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A task that represents the asynchronous role addition operation.
     /// </returns>
     Task AddRoleAsync(IRole role, RequestOptions options = null);
+
     /// <summary>
     ///     Adds the specified <paramref name="roleIds"/> to this user in the guild.
     /// </summary>
@@ -190,6 +201,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A task that represents the asynchronous role addition operation.
     /// </returns>
     Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null);
+
     /// <summary>
     ///     Adds the specified <paramref name="roles"/> to this user in the guild.
     /// </summary>
@@ -199,6 +211,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A task that represents the asynchronous role addition operation.
     /// </returns>
     Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null);
+
     /// <summary>
     ///     Removes the specified <paramref name="roleId"/> from this user in the guild.
     /// </summary>
@@ -208,6 +221,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A task that represents the asynchronous role removal operation.
     /// </returns>
     Task RemoveRoleAsync(uint roleId, RequestOptions options = null);
+
     /// <summary>
     ///     Removes the specified <paramref name="role"/> from this user in the guild.
     /// </summary>
@@ -217,6 +231,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A task that represents the asynchronous role removal operation.
     /// </returns>
     Task RemoveRoleAsync(IRole role, RequestOptions options = null);
+
     /// <summary>
     ///     Removes the specified <paramref name="roleIds"/> from this user in the guild.
     /// </summary>
@@ -226,6 +241,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A task that represents the asynchronous role removal operation.
     /// </returns>
     Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null);
+
     /// <summary>
     ///     Removes the specified <paramref name="roles"/> from this user in the guild.
     /// </summary>

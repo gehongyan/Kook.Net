@@ -31,8 +31,5 @@ public class AliasAttribute : Attribute
     /// <summary>
     ///     Creates a new <see cref="AliasAttribute" /> with the given aliases.
     /// </summary>
-    public AliasAttribute(params string[] aliases)
-    {
-        Aliases = aliases;
-    }
+    public AliasAttribute(params string[] aliases) => Aliases = aliases;
 }

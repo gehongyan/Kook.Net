@@ -14,10 +14,9 @@ public static class UserExtensions
     /// <param name="options">The options to be used when sending the request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(this IUser user,
         string path, string fileName = null, AttachmentType type = AttachmentType.File, IQuote quote = null,
-        RequestOptions options = null)
-    {
-        return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendFileAsync(path, fileName, type, quote, options).ConfigureAwait(false);
-    }
+        RequestOptions options = null) =>
+        await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendFileAsync(path, fileName, type, quote, options).ConfigureAwait(false);
+
     /// <summary>
     ///     Sends a file via DM.
     /// </summary>
@@ -29,11 +28,10 @@ public static class UserExtensions
     /// <param name="options">The options to be used when sending the request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(this IUser user,
         Stream stream, string fileName = null, AttachmentType type = AttachmentType.File, IQuote quote = null,
-        RequestOptions options = null)
-    {
-        return await (await user.CreateDMChannelAsync().ConfigureAwait(false))
+        RequestOptions options = null) =>
+        await (await user.CreateDMChannelAsync().ConfigureAwait(false))
             .SendFileAsync(stream, fileName, type, quote, options).ConfigureAwait(false);
-    }
+
     /// <summary>
     ///     Sends a file via DM.
     /// </summary>
@@ -42,10 +40,9 @@ public static class UserExtensions
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(this IUser user,
-        FileAttachment attachment, IQuote quote = null, RequestOptions options = null)
-    {
-        return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendFileAsync(attachment, quote, options).ConfigureAwait(false);
-    }
+        FileAttachment attachment, IQuote quote = null, RequestOptions options = null) =>
+        await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendFileAsync(attachment, quote, options).ConfigureAwait(false);
+
     /// <summary>
     ///     Sends a text message via DM.
     /// </summary>
@@ -56,10 +53,9 @@ public static class UserExtensions
     public static async Task<Cacheable<IUserMessage, Guid>> SendTextAsync(this IUser user,
         string content,
         IQuote quote = null,
-        RequestOptions options = null)
-    {
-        return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendTextAsync(content, quote, options).ConfigureAwait(false);
-    }
+        RequestOptions options = null) =>
+        await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendTextAsync(content, quote, options).ConfigureAwait(false);
+
     /// <summary>
     ///     Sends a card message message via DM.
     /// </summary>
@@ -68,10 +64,8 @@ public static class UserExtensions
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="options">The request options for this <see langword="async"/> request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(this IUser user,
-        IEnumerable<ICard> cards, IQuote quote = null, RequestOptions options = null)
-    {
-        return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendCardsAsync(cards, quote, options).ConfigureAwait(false);
-    }
+        IEnumerable<ICard> cards, IQuote quote = null, RequestOptions options = null) =>
+        await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendCardsAsync(cards, quote, options).ConfigureAwait(false);
 
     /// <summary>
     ///     Sends a card message message via DM.
@@ -81,10 +75,8 @@ public static class UserExtensions
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="options">The request options for this <see langword="async"/> request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> SendCardAsync(this IUser user,
-        ICard card, IQuote quote = null, RequestOptions options = null)
-    {
-        return await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendCardAsync(card, quote, options).ConfigureAwait(false);
-    }
+        ICard card, IQuote quote = null, RequestOptions options = null) =>
+        await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendCardAsync(card, quote, options).ConfigureAwait(false);
 
     /// <summary>
     ///     Bans the user from the guild and optionally prunes their recent messages.

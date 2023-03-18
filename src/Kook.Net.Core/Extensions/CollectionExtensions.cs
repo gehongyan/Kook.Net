@@ -9,12 +9,16 @@ internal static class CollectionExtensions
     //    => new CollectionWrapper<TValue>(source, () => source.Count);
     public static IReadOnlyCollection<TValue> ToReadOnlyCollection<TValue>(this ICollection<TValue> source)
         => new CollectionWrapper<TValue>(source, () => source.Count);
+
     //public static IReadOnlyCollection<TValue> ToReadOnlyCollection<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> source)
     //    => new CollectionWrapper<TValue>(source.Select(x => x.Value), () => source.Count);
     public static IReadOnlyCollection<TValue> ToReadOnlyCollection<TKey, TValue>(this IDictionary<TKey, TValue> source)
         => new CollectionWrapper<TValue>(source.Values, () => source.Count);
-    public static IReadOnlyCollection<TValue> ToReadOnlyCollection<TValue, TSource>(this IEnumerable<TValue> query, IReadOnlyCollection<TSource> source)
+
+    public static IReadOnlyCollection<TValue> ToReadOnlyCollection<TValue, TSource>(this IEnumerable<TValue> query,
+        IReadOnlyCollection<TSource> source)
         => new CollectionWrapper<TValue>(query, () => source.Count);
+
     public static IReadOnlyCollection<TValue> ToReadOnlyCollection<TValue>(this IEnumerable<TValue> query, Func<int> countFunc)
         => new CollectionWrapper<TValue>(query, countFunc);
 }

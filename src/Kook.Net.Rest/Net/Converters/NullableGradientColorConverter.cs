@@ -13,26 +13,33 @@ internal class NullableGradientColorConverter : JsonConverter<GradientColor?>
             reader.Read();
             if (reader.TokenType != JsonTokenType.PropertyName)
                 throw new JsonException($"{nameof(NullableGradientColorConverter)} expects property name token, but got {reader.TokenType}");
+
             string propertyName = reader.GetString();
             if (propertyName != "color_list")
                 throw new JsonException($"{nameof(NullableGradientColorConverter)} expects property name 'color_list', but got {propertyName}");
+
             reader.Read();
             if (reader.TokenType != JsonTokenType.StartArray)
                 throw new JsonException($"{nameof(NullableGradientColorConverter)} expects start array token, but got {reader.TokenType}");
+
             reader.Read();
             if (reader.TokenType != JsonTokenType.Number)
                 throw new JsonException($"{nameof(NullableGradientColorConverter)} expects number token, but got {reader.TokenType}");
-            var left = reader.GetUInt32();
+
+            uint left = reader.GetUInt32();
             reader.Read();
             if (reader.TokenType != JsonTokenType.Number)
                 throw new JsonException($"{nameof(NullableGradientColorConverter)} expects number token, but got {reader.TokenType}");
-            var right = reader.GetUInt32();
+
+            uint right = reader.GetUInt32();
             reader.Read();
             if (reader.TokenType != JsonTokenType.EndArray)
                 throw new JsonException($"{nameof(NullableGradientColorConverter)} expects end array token, but got {reader.TokenType}");
+
             reader.Read();
             if (reader.TokenType != JsonTokenType.EndObject)
                 throw new JsonException($"{nameof(NullableGradientColorConverter)} expects end object token, but got {reader.TokenType}");
+
             return new GradientColor(new Color(left), new Color(right));
         }
 
@@ -41,6 +48,7 @@ internal class NullableGradientColorConverter : JsonConverter<GradientColor?>
             reader.Read();
             if (reader.TokenType != JsonTokenType.EndArray)
                 throw new JsonException($"{nameof(NullableGradientColorConverter)} expects end array token, but got {reader.TokenType}");
+
             return null;
         }
 

@@ -16,7 +16,9 @@ title: Kook.Net 简介
 > 请注意，本文档中的代码片段仅为示例，请不要盲目地直接复制使用。
 
 [异步编程]: https://docs.microsoft.com/zh-cn/dotnet/csharp/async
+
 [多态]: https://docs.microsoft.com/zh-cn/dotnet/csharp/fundamentals/object-oriented/polymorphism
+
 [接口]: https://docs.microsoft.com/zh-cn/dotnet/csharp/fundamentals/types/interfaces
 
 ## 还不熟悉 .NET 与 C#？

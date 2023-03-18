@@ -69,4 +69,5 @@ public IEnumerable<int> Numbers { get; set; }
 可选参数容器类中的属性也可以使用 [OverrideTypeReader]。
 
 [OverrideTypeReader]: xref:Kook.Commands.OverrideTypeReaderAttribute
+
 [NamedArgumentTypeAttribute]: xref:Kook.Commands.NamedArgumentTypeAttribute

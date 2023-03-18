@@ -14,8 +14,5 @@ public class PriorityAttribute : Attribute
     /// <summary>
     ///     Initializes a new <see cref="PriorityAttribute" /> attribute with the given priority.
     /// </summary>
-    public PriorityAttribute(int priority)
-    {
-        Priority = priority;
-    }
+    public PriorityAttribute(int priority) => Priority = priority;
 }

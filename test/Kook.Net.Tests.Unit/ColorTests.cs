@@ -80,20 +80,11 @@ public class ColorTests
     }
 
     [Fact]
-    public void Color_Red()
-    {
-        Assert.Equal(0xAF, new Color(0xAF1390).R);
-    }
+    public void Color_Red() => Assert.Equal(0xAF, new Color(0xAF1390).R);
 
     [Fact]
-    public void Color_Green()
-    {
-        Assert.Equal(0x13, new Color(0xAF1390).G);
-    }
+    public void Color_Green() => Assert.Equal(0x13, new Color(0xAF1390).G);
 
     [Fact]
-    public void Color_Blue()
-    {
-        Assert.Equal(0x90, new Color(0xAF1390).B);
-    }
+    public void Color_Blue() => Assert.Equal(0x90, new Color(0xAF1390).B);
 }

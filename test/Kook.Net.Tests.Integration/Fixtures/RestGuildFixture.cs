@@ -32,18 +32,14 @@ public class RestGuildFixture : KookRestClientFixture
     private void RemoveAllChannels()
     {
         IReadOnlyCollection<RestGuildChannel> channels = Guild.GetChannelsAsync().GetAwaiter().GetResult();
-        foreach (RestGuildChannel channel in channels.Where(x => x is INestedChannel))
-            channel.DeleteAsync().GetAwaiter().GetResult();
-        foreach (RestGuildChannel channel in channels.Where(x => x is ICategoryChannel))
-            channel.DeleteAsync().GetAwaiter().GetResult();
+        foreach (RestGuildChannel channel in channels.Where(x => x is INestedChannel)) channel.DeleteAsync().GetAwaiter().GetResult();
+
+        foreach (RestGuildChannel channel in channels.Where(x => x is ICategoryChannel)) channel.DeleteAsync().GetAwaiter().GetResult();
     }
 
     private void RemoveAllRoles()
     {
         IEnumerable<RestRole> roles = Guild.Roles.Where(r => r.Type == RoleType.UserCreated);
-        foreach (RestRole role in roles)
-        {
-            role.DeleteAsync().GetAwaiter().GetResult();
-        }
+        foreach (RestRole role in roles) role.DeleteAsync().GetAwaiter().GetResult();
     }
 }

@@ -12,6 +12,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     A string containing the invite code (e.g. <c>wEAF5t</c>).
     /// </returns>
     string Code { get; }
+
     /// <summary>
     ///     Gets the URL used to accept this invite using <see cref="Code"/>.
     /// </summary>
@@ -27,6 +28,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     A user that created this invite.
     /// </returns>
     IUser Inviter { get; }
+
     /// <summary>
     ///     Gets the channel this invite is linked to.
     /// </summary>
@@ -34,10 +36,12 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     A generic channel that the invite points to.
     /// </returns>
     IChannel Channel { get; }
+
     /// <summary>
     ///     Gets the type of the channel this invite is linked to.
     /// </summary>
     ChannelType ChannelType { get; }
+
     /// <summary>
     ///     Gets the ID of the channel this invite is linked to.
     /// </summary>
@@ -45,6 +49,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     A ulong representing the channel identifier that the invite points to.
     /// </returns>
     ulong? ChannelId { get; }
+
     /// <summary>
     ///     Gets the name of the channel this invite is linked to.
     /// </summary>
@@ -60,6 +65,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     A guild object representing the guild that the invite points to.
     /// </returns>
     IGuild Guild { get; }
+
     /// <summary>
     ///     Gets the ID of the guild this invite is linked to.
     /// </summary>
@@ -67,6 +73,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     A ulong representing the guild identifier that the invite points to.
     /// </returns>
     ulong? GuildId { get; }
+
     /// <summary>
     ///     Gets the name of the guild this invite is linked to.
     /// </summary>
@@ -83,6 +90,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     invite never expires.
     /// </returns>
     DateTimeOffset? ExpiresAt { get; }
+
     /// <summary>
     ///     Gets the time span until the invite expires.
     /// </summary>
@@ -91,6 +99,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     invite never expires.
     /// </returns>
     TimeSpan? MaxAge { get; }
+
     /// <summary>
     ///     Gets the max number of uses this invite may have.
     /// </summary>
@@ -99,6 +108,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     from the guild; <c>null</c> if none is set.
     /// </returns>
     int? MaxUses { get; }
+
     /// <summary>
     ///     Gets the number of times this invite has been used.
     /// </summary>
@@ -106,6 +116,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     An int representing the number of times this invite has been used; <c>null</c> if none is set.
     /// </returns>
     int? Uses { get; }
+
     /// <summary>
     ///     Gets the number of times this invite still remains.
     /// </summary>

@@ -9,10 +9,7 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>
 {
-    internal ImageGroupModule(ImmutableArray<ImageElement> elements)
-    {
-        Elements = elements;
-    }
+    internal ImageGroupModule(ImmutableArray<ImageElement> elements) => Elements = elements;
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.ImageGroup;
@@ -65,8 +62,8 @@ public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>
         {
             int hash = (int)2166136261;
             hash = (hash * 16777619) ^ Type.GetHashCode();
-            foreach (ImageElement element in Elements)
-                hash = (hash * 16777619) ^ element.GetHashCode();
+            foreach (ImageElement element in Elements) hash = (hash * 16777619) ^ element.GetHashCode();
+
             return hash;
         }
     }

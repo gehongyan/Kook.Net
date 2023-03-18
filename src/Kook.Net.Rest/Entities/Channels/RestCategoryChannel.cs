@@ -15,9 +15,10 @@ public class RestCategoryChannel : RestGuildChannel, ICategoryChannel
         : base(kook, guild, id, ChannelType.Category)
     {
     }
-    internal new static RestCategoryChannel Create(BaseKookClient kook, IGuild guild, Model model)
+
+    internal static new RestCategoryChannel Create(BaseKookClient kook, IGuild guild, Model model)
     {
-        var entity = new RestCategoryChannel(kook, guild, model.Id);
+        RestCategoryChannel entity = new(kook, guild, model.Id);
         entity.Update(model);
         return entity;
     }
@@ -32,6 +33,7 @@ public class RestCategoryChannel : RestGuildChannel, ICategoryChannel
     /// <exception cref="NotSupportedException">This method is not supported with category channels.</exception>
     IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
         => throw new NotSupportedException();
+
     /// <inheritdoc />
     /// <exception cref="NotSupportedException">This method is not supported with category channels.</exception>
     Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)

@@ -10,10 +10,13 @@ public class Tag<T> : ITag
 {
     /// <inheritdoc />
     public TagType Type { get; }
+
     /// <inheritdoc />
     public int Index { get; }
+
     /// <inheritdoc />
     public int Length { get; }
+
     /// <inheritdoc />
     public dynamic Key { get; }
 

@@ -12,12 +12,15 @@ public class SocketInvite : SocketEntity<uint>, IInvite
 {
     /// <inheritdoc />
     public ulong? ChannelId { get; private set; }
+
     /// <summary>
     ///     Gets the channel where this invite was created.
     /// </summary>
     public SocketGuildChannel Channel { get; private set; }
+
     /// <inheritdoc />
     public ulong? GuildId { get; private set; }
+
     /// <summary>
     ///     Gets the guild where this invite was created.
     /// </summary>
@@ -32,10 +35,12 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     ///     Gets the time span until the invite expires.
     /// </summary>
     public TimeSpan? MaxAge { get; private set; }
+
     /// <summary>
     ///     Gets the max number of uses this invite may have.
     /// </summary>
     public int? MaxUses { get; private set; }
+
     /// <summary>
     ///     Gets the number of times this invite has been used.
     /// </summary>
@@ -53,6 +58,7 @@ public class SocketInvite : SocketEntity<uint>, IInvite
 
     /// <inheritdoc />
     public string Code { get; private set; }
+
     /// <inheritdoc />
     public string Url { get; private set; }
 
@@ -63,12 +69,14 @@ public class SocketInvite : SocketEntity<uint>, IInvite
         Channel = channel;
         Inviter = inviter;
     }
+
     internal static SocketInvite Create(KookSocketClient kook, SocketGuild guild, SocketGuildChannel channel, SocketGuildUser inviter, Model model)
     {
-        var entity = new SocketInvite(kook, guild, channel, inviter, model.Id);
+        SocketInvite entity = new(kook, guild, channel, inviter, model.Id);
         entity.Update(model);
         return entity;
     }
+
     internal void Update(Model model)
     {
         Code = model.UrlCode;
@@ -93,30 +101,31 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     ///     A string that resolves to the Url of the invite.
     /// </returns>
     public override string ToString() => Url;
+
     private string DebuggerDisplay => $"{Url} ({Guild?.Name} / {Channel.Name})";
 
     /// <inheritdoc />
     IGuild IInvite.Guild => Guild;
+
     /// <inheritdoc />
     IChannel IInvite.Channel => Channel;
+
     /// <inheritdoc />
     IUser IInvite.Inviter => Inviter;
+
     /// <inheritdoc />
-    ChannelType IInvite.ChannelType
-    {
-        get
+    ChannelType IInvite.ChannelType =>
+        Channel switch
         {
-            return Channel switch
-            {
-                IVoiceChannel voiceChannel => ChannelType.Voice,
-                ICategoryChannel categoryChannel => ChannelType.Category,
-                ITextChannel textChannel => ChannelType.Text,
-                _ => throw new InvalidOperationException("Invalid channel type."),
-            };
-        }
-    }
+            IVoiceChannel voiceChannel => ChannelType.Voice,
+            ICategoryChannel categoryChannel => ChannelType.Category,
+            ITextChannel textChannel => ChannelType.Text,
+            _ => throw new InvalidOperationException("Invalid channel type.")
+        };
+
     /// <inheritdoc />
     string IInvite.ChannelName => Channel.Name;
+
     /// <inheritdoc />
     string IInvite.GuildName => Guild.Name;
 }

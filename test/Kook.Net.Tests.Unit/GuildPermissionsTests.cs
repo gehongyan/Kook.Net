@@ -16,7 +16,7 @@ public class GuildPermissionsTests
     [Fact]
     public void DefaultConstructor()
     {
-        var p = new GuildPermissions();
+        GuildPermissions p = new();
         Assert.Equal((ulong)0, p.RawValue);
         Assert.Equal(GuildPermissions.None.RawValue, p.RawValue);
     }
@@ -36,9 +36,9 @@ public class GuildPermissionsTests
             yield return GuildPermissions.All.RawValue;
         }
 
-        foreach (var rawValue in GetTestValues())
+        foreach (ulong rawValue in GetTestValues())
         {
-            var p = new GuildPermissions(rawValue);
+            GuildPermissions p = new(rawValue);
             Assert.Equal(rawValue, p.RawValue);
         }
     }
@@ -53,14 +53,14 @@ public class GuildPermissionsTests
         // util method for asserting that the constructor sets the given flag
         void AssertFlag(Func<GuildPermissions> cstr, GuildPermission flag)
         {
-            var p = cstr();
+            GuildPermissions p = cstr();
             // ensure flag set to true
             Assert.True(p.Has(flag));
             // ensure only this flag is set
             Assert.Equal((ulong)flag, p.RawValue);
         }
 
-        AssertFlag(() => new GuildPermissions(administrator: true), GuildPermission.Administrator);
+        AssertFlag(() => new GuildPermissions(true), GuildPermission.Administrator);
         AssertFlag(() => new GuildPermissions(manageGuild: true), GuildPermission.ManageGuild);
         AssertFlag(() => new GuildPermissions(viewAuditLog: true), GuildPermission.ViewAuditLog);
         AssertFlag(() => new GuildPermissions(createInvites: true), GuildPermission.CreateInvites);
@@ -104,7 +104,7 @@ public class GuildPermissionsTests
             Func<GuildPermissions, bool> has,
             Func<GuildPermissions, bool, GuildPermissions> modify)
         {
-            var perm = new GuildPermissions();
+            GuildPermissions perm = new();
             // ensure permission initially false
             // use both the function and Has to ensure that the GetPermission
             // function is working
@@ -117,7 +117,7 @@ public class GuildPermissionsTests
             Assert.True(perm.Has(permission));
 
             // check ToList behavior
-            var list = perm.ToList();
+            List<GuildPermission> list = perm.ToList();
             Assert.Contains(permission, list);
             Assert.Single(list);
 
@@ -130,7 +130,7 @@ public class GuildPermissionsTests
             Assert.Equal(GuildPermissions.None.RawValue, perm.RawValue);
         }
 
-        AssertUtil(GuildPermission.Administrator, x => x.Administrator, (p, enable) => p.Modify(administrator: enable));
+        AssertUtil(GuildPermission.Administrator, x => x.Administrator, (p, enable) => p.Modify(enable));
         AssertUtil(GuildPermission.ManageGuild, x => x.ManageGuild, (p, enable) => p.Modify(manageGuild: enable));
         AssertUtil(GuildPermission.ViewAuditLog, x => x.ViewAuditLog, (p, enable) => p.Modify(viewAuditLog: enable));
         AssertUtil(GuildPermission.CreateInvites, x => x.CreateInvites, (p, enable) => p.Modify(createInvites: enable));
@@ -158,6 +158,5 @@ public class GuildPermissionsTests
         AssertUtil(GuildPermission.MuteMembers, x => x.MuteMembers, (p, enable) => p.Modify(muteMembers: enable));
         AssertUtil(GuildPermission.ManageNicknames, x => x.ManageNicknames, (p, enable) => p.Modify(manageNicknames: enable));
         AssertUtil(GuildPermission.PlaySoundtrack, x => x.PlaySoundtrack, (p, enable) => p.Modify(playSoundtrack: enable));
-
     }
 }

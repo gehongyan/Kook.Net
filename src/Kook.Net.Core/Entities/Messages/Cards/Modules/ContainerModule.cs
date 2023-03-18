@@ -9,10 +9,7 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ContainerModule : IModule, IEquatable<ContainerModule>
 {
-    internal ContainerModule(ImmutableArray<ImageElement> elements)
-    {
-        Elements = elements;
-    }
+    internal ContainerModule(ImmutableArray<ImageElement> elements) => Elements = elements;
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Container;
@@ -61,8 +58,8 @@ public class ContainerModule : IModule, IEquatable<ContainerModule>
         {
             int hash = (int)2166136261;
             hash = (hash * 16777619) ^ Type.GetHashCode();
-            foreach (ImageElement element in Elements)
-                hash = (hash * 16777619) ^ element.GetHashCode();
+            foreach (ImageElement element in Elements) hash = (hash * 16777619) ^ element.GetHashCode();
+
             return hash;
         }
     }

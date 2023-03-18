@@ -16,6 +16,7 @@ public interface IGuild : IEntity<ulong>
     ///     A string containing the name of this guild.
     /// </returns>
     string Name { get; }
+
     /// <summary>
     ///     Gets the topic for the guild.
     /// </summary>
@@ -23,6 +24,7 @@ public interface IGuild : IEntity<ulong>
     ///     The description for the guild; <see langword="null" /> if none is set.
     /// </returns>
     string Topic { get; }
+
     /// <summary>
     ///     Gets the ID of the user that owns this guild.
     /// </summary>
@@ -30,6 +32,7 @@ public interface IGuild : IEntity<ulong>
     ///     A <see langword="ulong"/> representing the identifier of the user that owns this guild.
     /// </returns>
     ulong OwnerId { get; }
+
     /// <summary>
     ///     Gets the URL of this guild's icon.
     /// </summary>
@@ -37,6 +40,7 @@ public interface IGuild : IEntity<ulong>
     ///     A URL pointing to the guild's icon; <see langword="null" /> if none is set.
     /// </returns>
     string Icon { get; }
+
     /// <summary>
     ///     Gets the default notification type for this guild.
     /// </summary>
@@ -44,6 +48,7 @@ public interface IGuild : IEntity<ulong>
     ///     A <see cref="NotifyType"/> representing the default notification type for this guild.
     /// </returns>
     NotifyType NotifyType { get; }
+
     /// <summary>
     ///     Gets the default voice region for this guild.
     /// </summary>
@@ -51,6 +56,7 @@ public interface IGuild : IEntity<ulong>
     ///     A string representing the default voice region for this guild.
     /// </returns>
     string Region { get; }
+
     /// <summary>
     ///     Gets whether this guild is public.
     /// </summary>
@@ -58,6 +64,7 @@ public interface IGuild : IEntity<ulong>
     ///     <c>true</c> if this guild is public; <c>false</c> otherwise.
     /// </returns>
     bool IsOpenEnabled { get; }
+
     /// <summary>
     ///     Gets the open ID for this guild.
     /// </summary>
@@ -66,6 +73,7 @@ public interface IGuild : IEntity<ulong>
     ///     this property should be <c>null</c> if <see cref="IsOpenEnabled"/> is <c>false</c>.
     /// </returns>
     uint? OpenId { get; }
+
     /// <summary>
     ///     Gets the default channel ID for this guild.
     /// </summary>
@@ -73,6 +81,7 @@ public interface IGuild : IEntity<ulong>
     ///     A <see langword="ulong"/> representing the default channel ID for this guild.
     /// </returns>
     ulong? DefaultChannelId { get; }
+
     /// <summary>
     ///     Gets the welcome channel ID for this guild.
     /// </summary>
@@ -80,6 +89,7 @@ public interface IGuild : IEntity<ulong>
     ///     A <see langword="ulong"/> representing the welcome channel ID for this guild.
     /// </returns>
     ulong? WelcomeChannelId { get; }
+
     /// <summary>
     ///     Determines if this guild is currently connected and ready to be used.
     /// </summary>
@@ -93,6 +103,7 @@ public interface IGuild : IEntity<ulong>
     ///     <c>true</c> if this guild is currently connected and ready to be used; otherwise <c>false</c>.
     /// </returns>
     bool Available { get; }
+
     /// <summary>
     ///     Gets the built-in role containing all users in this guild.
     /// </summary>
@@ -100,6 +111,7 @@ public interface IGuild : IEntity<ulong>
     ///     A role object that represents an <c>@everyone</c> role in this guild.
     /// </returns>
     IRole EveryoneRole { get; }
+
     /// <summary>
     ///     Gets the number of boost subscribers of this guild.
     /// </summary>
@@ -107,6 +119,7 @@ public interface IGuild : IEntity<ulong>
     ///     The number of boost subscribers of this guild.
     /// </returns>
     int BoostSubscriptionCount { get; }
+
     /// <summary>
     ///     Gets the number of boost subscribers who activates buffer of this guild.
     /// </summary>
@@ -114,6 +127,7 @@ public interface IGuild : IEntity<ulong>
     ///     The number of boost subscribers who activates buffer of this guild.
     /// </returns>
     int BufferBoostSubscriptionCount { get; }
+
     /// <summary>
     ///     Gets the max bitrate for voice channels in this guild.
     /// </summary>
@@ -121,10 +135,12 @@ public interface IGuild : IEntity<ulong>
     ///     A <see cref="int"/> representing the maximum bitrate value allowed by Kook in this guild.
     /// </returns>
     int MaxBitrate { get; }
+
     /// <summary>
     ///     Gets the upload limit in bytes for this guild. This number is dependent on the guild's boost status.
     /// </summary>
     ulong MaxUploadLimit { get; }
+
     /// <summary>
     ///     Gets the level of guild boosting in this guild.
     /// </summary>
@@ -132,6 +148,7 @@ public interface IGuild : IEntity<ulong>
     ///     The level of guild boosting in this guild.
     /// </returns>
     BoostLevel BoostLevel { get; }
+
     /// <summary>
     ///     Gets a collection of all custom emotes for this guild.
     /// </summary>
@@ -140,6 +157,7 @@ public interface IGuild : IEntity<ulong>
     /// </returns>
     /// <seealso cref="GetEmotesAsync"/>
     IReadOnlyCollection<GuildEmote> Emotes { get; }
+
     /// <summary>
     ///     Gets a collection of all roles in this guild.
     /// </summary>
@@ -147,6 +165,7 @@ public interface IGuild : IEntity<ulong>
     ///     A read-only collection of roles found within this guild.
     /// </returns>
     IReadOnlyCollection<IRole> Roles { get; }
+
     /// <summary>
     ///     Gets the recommendation information for this guild.
     /// </summary>
@@ -210,6 +229,7 @@ public interface IGuild : IEntity<ulong>
     ///     behind the ban.
     /// </returns>
     Task<IReadOnlyCollection<IBan>> GetBansAsync(RequestOptions options = null);
+
     /// <summary>
     ///     Gets a ban object for a banned user.
     /// </summary>
@@ -220,6 +240,7 @@ public interface IGuild : IEntity<ulong>
     ///     contains the user information and the reason for the ban; <see langword="null" /> if the ban entry cannot be found.
     /// </returns>
     Task<IBan> GetBanAsync(IUser user, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a ban object for a banned user.
     /// </summary>
@@ -230,6 +251,7 @@ public interface IGuild : IEntity<ulong>
     ///     contains the user information and the reason for the ban; <see langword="null" /> if the ban entry cannot be found.
     /// </returns>
     Task<IBan> GetBanAsync(ulong userId, RequestOptions options = null);
+
     /// <summary>
     ///     Bans the user from this guild and optionally prunes their recent messages.
     /// </summary>
@@ -242,6 +264,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous add operation for the ban.
     /// </returns>
     Task AddBanAsync(IUser user, int pruneDays = 0, string reason = null, RequestOptions options = null);
+
     /// <summary>
     ///     Bans the user from this guild and optionally prunes their recent messages.
     /// </summary>
@@ -254,6 +277,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous add operation for the ban.
     /// </returns>
     Task AddBanAsync(ulong userId, int pruneDays = 0, string reason = null, RequestOptions options = null);
+
     /// <summary>
     ///     Unbans the user if they are currently banned.
     /// </summary>
@@ -263,6 +287,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous removal operation for the ban.
     /// </returns>
     Task RemoveBanAsync(IUser user, RequestOptions options = null);
+
     /// <summary>
     ///     Unbans the user if they are currently banned.
     /// </summary>
@@ -287,6 +312,7 @@ public interface IGuild : IEntity<ulong>
     ///     generic channels found within this guild.
     /// </returns>
     Task<IReadOnlyCollection<IGuildChannel>> GetChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a channel in this guild.
     /// </summary>
@@ -298,6 +324,7 @@ public interface IGuild : IEntity<ulong>
     ///     associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
     /// </returns>
     Task<IGuildChannel> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a collection of all text channels in this guild.
     /// </summary>
@@ -308,6 +335,7 @@ public interface IGuild : IEntity<ulong>
     ///     message channels found within this guild.
     /// </returns>
     Task<IReadOnlyCollection<ITextChannel>> GetTextChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a text channel in this guild.
     /// </summary>
@@ -319,6 +347,7 @@ public interface IGuild : IEntity<ulong>
     ///     associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
     /// </returns>
     Task<ITextChannel> GetTextChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a collection of all voice channels in this guild.
     /// </summary>
@@ -329,6 +358,7 @@ public interface IGuild : IEntity<ulong>
     ///     voice channels found within this guild.
     /// </returns>
     Task<IReadOnlyCollection<IVoiceChannel>> GetVoiceChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a voice channel in this guild.
     /// </summary>
@@ -363,6 +393,7 @@ public interface IGuild : IEntity<ulong>
     ///     <see langword="null" /> if none is found.
     /// </returns>
     Task<ITextChannel> GetDefaultChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets the welcome text channel for this guild.
     /// </summary>
@@ -385,6 +416,7 @@ public interface IGuild : IEntity<ulong>
     ///     text channel.
     /// </returns>
     Task<ITextChannel> CreateTextChannelAsync(string name, Action<CreateTextChannelProperties> func = null, RequestOptions options = null);
+
     /// <summary>
     ///     Creates a new voice channel in this guild.
     /// </summary>
@@ -396,6 +428,7 @@ public interface IGuild : IEntity<ulong>
     ///     voice channel.
     /// </returns>
     Task<IVoiceChannel> CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties> func = null, RequestOptions options = null);
+
     /// <summary>
     ///     Creates a new channel category in this guild.
     /// </summary>
@@ -406,7 +439,8 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     category channel.
     /// </returns>
-    Task<ICategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties> func = null, RequestOptions options = null);
+    Task<ICategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties> func = null,
+        RequestOptions options = null);
 
     #endregion
 
@@ -432,7 +466,8 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous invite creation operation. The task result contains an invite
     ///     metadata object containing information for the created invite.
     /// </returns>
-    Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited, RequestOptions options = null);
+    Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited,
+        RequestOptions options = null);
 
     /// <summary>
     ///     Creates a new invite to this channel.
@@ -458,6 +493,7 @@ public interface IGuild : IEntity<ulong>
     ///     A role that is associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
     /// </returns>
     IRole GetRole(uint id);
+
     /// <summary>
     ///     Creates a new role with the provided name.
     /// </summary>
@@ -485,6 +521,7 @@ public interface IGuild : IEntity<ulong>
     ///     users found within this guild.
     /// </returns>
     Task<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets a user from this guild.
     /// </summary>
@@ -503,6 +540,7 @@ public interface IGuild : IEntity<ulong>
     ///     associated with the specified <paramref name="id"/>; <see langword="null" /> if none is found.
     /// </returns>
     Task<IGuildUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets the current user for this guild.
     /// </summary>
@@ -513,6 +551,7 @@ public interface IGuild : IEntity<ulong>
     ///     user within this guild.
     /// </returns>
     Task<IGuildUser> GetCurrentUserAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Gets the owner of this guild.
     /// </summary>
@@ -522,6 +561,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the owner of this guild.
     /// </returns>
     Task<IGuildUser> GetOwnerAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
     /// <summary>
     ///     Downloads all users for this guild if the current list is incomplete.
     /// </summary>
@@ -533,6 +573,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous download operation.
     /// </returns>
     Task DownloadUsersAsync(RequestOptions options = null);
+
     /// <summary>
     ///     Downloads all voice states for this guild.
     /// </summary>
@@ -544,6 +585,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous download operation.
     /// </returns>
     Task DownloadVoiceStatesAsync(RequestOptions options = null);
+
     /// <summary>
     ///     Downloads all boost subscriptions for this guild.
     /// </summary>
@@ -571,7 +613,8 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
     ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/> at <paramref name="func"/>.
     /// </returns>
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func, int limit = KookConfig.MaxUsersPerBatch, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func,
+        int limit = KookConfig.MaxUsersPerBatch, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
 
     #endregion
 
@@ -586,6 +629,7 @@ public interface IGuild : IEntity<ulong>
     ///     of emotes found within the guild.
     /// </returns>
     Task<IReadOnlyCollection<GuildEmote>> GetEmotesAsync(RequestOptions options = null);
+
     /// <summary>
     ///     Gets a specific emote from this guild.
     /// </summary>
@@ -596,6 +640,7 @@ public interface IGuild : IEntity<ulong>
     ///     specified <paramref name="id"/>; <see langword="null" /> if none is found.
     /// </returns>
     Task<GuildEmote> GetEmoteAsync(string id, RequestOptions options = null);
+
     /// <summary>
     ///     Creates a new <see cref="GuildEmote"/> in this guild.
     /// </summary>

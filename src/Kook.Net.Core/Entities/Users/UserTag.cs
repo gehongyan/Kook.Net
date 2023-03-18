@@ -15,6 +15,7 @@ public class UserTag : IEquatable<UserTag>
     ///     A <see cref="Color"/> struct representing the color of this tag.
     /// </returns>
     public Color Color { get; }
+
     /// <summary>
     ///     Gets the text of the tag given to user.
     /// </summary>
@@ -41,7 +42,7 @@ public class UserTag : IEquatable<UserTag>
     /// <returns>
     ///     A <see cref="UserTag"/> representing the given parameters.
     /// </returns>
-    public static UserTag Create(Color color, string text) => new UserTag(color, text);
+    public static UserTag Create(Color color, string text) => new(color, text);
 
     private string DebuggerDisplay => Text;
 
@@ -50,31 +51,27 @@ public class UserTag : IEquatable<UserTag>
     /// <inheritdoc />
     public bool Equals(UserTag other)
     {
-        if (ReferenceEquals(null, other))
-            return false;
-        if (ReferenceEquals(this, other))
-            return true;
+        if (ReferenceEquals(null, other)) return false;
+
+        if (ReferenceEquals(this, other)) return true;
+
         return Text == other.Text;
     }
 
     /// <inheritdoc />
     public override bool Equals(object obj)
     {
-        if (ReferenceEquals(null, obj))
-            return false;
-        if (ReferenceEquals(this, obj))
-            return true;
-        if (obj.GetType() != this.GetType())
-            return false;
+        if (ReferenceEquals(null, obj)) return false;
+
+        if (ReferenceEquals(this, obj)) return true;
+
+        if (obj.GetType() != GetType()) return false;
+
         return Equals((UserTag)obj);
     }
 
     /// <inheritdoc />
-    public override int GetHashCode()
-    {
-        return (Text != null ? Text.GetHashCode() : 0);
-    }
+    public override int GetHashCode() => Text != null ? Text.GetHashCode() : 0;
 
     #endregion
-
 }
