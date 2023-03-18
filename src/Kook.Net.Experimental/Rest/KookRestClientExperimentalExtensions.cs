@@ -61,9 +61,13 @@ public static class KookRestClientExperimentalExtensions
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the created guild.
     /// </returns>
-    public static Task<RestGuild> CreateGuildAsync(this KookRestClient client,
+    public static async Task<RestGuild> CreateGuildAsync(this KookRestClient client,
         string name, IVoiceRegion region = null, Stream icon = null, int? templateId = null, RequestOptions options = null)
-        => ExperimentalClientHelper.CreateGuildAsync(client, name, region, icon, templateId, options);
+    {
+        RestGuild guild = await ExperimentalClientHelper.CreateGuildAsync(client, name, region, icon, templateId, options);
+        await guild.UpdateAsync();
+        return guild;
+    }
 
     /// <summary>
     ///     Gets a collection of guilds where the current user has the
