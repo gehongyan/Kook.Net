@@ -260,11 +260,11 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     /// <param name="startIndex">The zero-based index at which to begin the resolving for the specified value.</param>
     /// <inheritdoc cref="IUserMessage.Resolve(TagHandling,TagHandling,TagHandling,TagHandling,TagHandling)"/>
     public string Resolve(int startIndex, TagHandling userHandling = TagHandling.Name, TagHandling channelHandling = TagHandling.Name,
-        TagHandling roleHandling = TagHandling.Name, TagHandling everyoneHandling = TagHandling.Ignore, TagHandling emojiHandling = TagHandling.Name)
+        TagHandling roleHandling = TagHandling.Name, TagHandling everyoneHandling = TagHandling.Name, TagHandling emojiHandling = TagHandling.Name)
         => MentionUtils.Resolve(this, startIndex, userHandling, channelHandling, roleHandling, everyoneHandling, emojiHandling);
     /// <inheritdoc />
     public string Resolve(TagHandling userHandling = TagHandling.Name, TagHandling channelHandling = TagHandling.Name,
-        TagHandling roleHandling = TagHandling.Name, TagHandling everyoneHandling = TagHandling.Ignore, TagHandling emojiHandling = TagHandling.Name)
+        TagHandling roleHandling = TagHandling.Name, TagHandling everyoneHandling = TagHandling.Name, TagHandling emojiHandling = TagHandling.Name)
         => MentionUtils.Resolve(this, 0, userHandling, channelHandling, roleHandling, everyoneHandling, emojiHandling);
 
     private string DebuggerDisplay => $"{Author}: {Content} ({Id}{(Attachments is not null && Attachments.Any() ? $", {Attachments.Count} Attachment{(Attachments.Count == 1 ? string.Empty : "s")}" : string.Empty)})";

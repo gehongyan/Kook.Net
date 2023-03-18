@@ -39,7 +39,7 @@ public interface IUserMessage : IMessage
         TagHandling userHandling = TagHandling.Name,
         TagHandling channelHandling = TagHandling.Name,
         TagHandling roleHandling = TagHandling.Name,
-        TagHandling everyoneHandling = TagHandling.Ignore,
+        TagHandling everyoneHandling = TagHandling.Name,
         TagHandling emojiHandling = TagHandling.Name);
 
 }

@@ -357,6 +357,7 @@ public static class MentionUtils
             {
                 case TagHandling.Name:
                 case TagHandling.FullName:
+                    return "@全体成员";
                 case TagHandling.NameNoPrefix:
                 case TagHandling.FullNameNoPrefix:
                     return "全体成员";
@@ -376,6 +377,7 @@ public static class MentionUtils
             {
                 case TagHandling.Name:
                 case TagHandling.FullName:
+                    return "@在线成员";
                 case TagHandling.NameNoPrefix:
                 case TagHandling.FullNameNoPrefix:
                     return "在线成员";
