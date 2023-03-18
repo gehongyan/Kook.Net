@@ -76,7 +76,7 @@ public class RestRole : RestEntity<uint>, IRole
         Name = model.Name;
         Type = model.Type;
         Color = model.Color;
-        ColorType = model.ColorType;
+        ColorType = model.ColorType ?? ColorType.Solid; // BUG: The API returns null when creating new roles.
         GradientColor = model.GradientColor;
         IsHoisted = model.Hoist == 1;
         IsMentionable = model.Mentionable == 1;
