@@ -60,6 +60,14 @@ public struct Cacheable<TEntity, TId>
     /// </returns>
     public async Task<TEntity> GetOrDownloadAsync() => HasValue ? Value : await DownloadAsync().ConfigureAwait(false);
 }
+
+/// <summary>
+///     Represents a cached entity that can be downloaded.
+/// </summary>
+/// <typeparam name="TCachedEntity"> The type of entity that is cached. </typeparam>
+/// <typeparam name="TDownloadableEntity"> The type of entity that can be downloaded. </typeparam>
+/// <typeparam name="TRelationship"> The common type of <typeparamref name="TCachedEntity" /> and <typeparamref name="TDownloadableEntity" />. </typeparam>
+/// <typeparam name="TId"> The type of the corresponding entity's ID. </typeparam>
 public struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationship, TId>
     where TCachedEntity : IEntity<TId>, TRelationship
     where TDownloadableEntity : IEntity<TId>, TRelationship

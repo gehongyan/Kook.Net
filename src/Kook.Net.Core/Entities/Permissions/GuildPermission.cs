@@ -1,5 +1,8 @@
 namespace Kook;
 
+/// <summary>
+///     Represents a permission can be granted to a guild.
+/// </summary>
 [Flags]
 public enum GuildPermission : uint
 {

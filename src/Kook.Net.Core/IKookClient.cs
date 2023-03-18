@@ -49,7 +49,7 @@ public interface IKookClient : IDisposable
     /// <summary>
     ///     Gets a generic channel.
     /// </summary>
-    /// <param name="id">The identifier of the channel (e.g. `381889909113225237`).</param>
+    /// <param name="id">The identifier of the channel.</param>
     /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
@@ -119,7 +119,7 @@ public interface IKookClient : IDisposable
     /// <summary>
     ///     Gets a user.
     /// </summary>
-    /// <param name="id">The identifier of the user (e.g. `168693960628371456`).</param>
+    /// <param name="id">The identifier of the user.</param>
     /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>

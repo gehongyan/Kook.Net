@@ -2,6 +2,9 @@ using System.Diagnostics;
 
 namespace Kook.Commands;
 
+/// <summary>
+///     Represents the runtime result of a command execution.
+/// </summary>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
 public abstract class RuntimeResult : IResult
 {
@@ -27,6 +30,7 @@ public abstract class RuntimeResult : IResult
     /// <inheritdoc/>
     string IResult.ErrorReason => Reason;
 
+    /// <inheritdoc />
     public override string ToString() => Reason ?? (IsSuccess ? "Successful" : "Unsuccessful");
     private string DebuggerDisplay => IsSuccess ? $"Success: {Reason ?? "No Reason"}" : $"{Error}: {Reason}";
 }

@@ -4,6 +4,9 @@ using Model = Kook.API.Channel;
 
 namespace Kook.Rest;
 
+/// <summary>
+///     Represents a REST-based guild channel in a guild.
+/// </summary>
 public class RestGuildChannel : RestChannel, IGuildChannel
 {
     #region RestGuildChannel

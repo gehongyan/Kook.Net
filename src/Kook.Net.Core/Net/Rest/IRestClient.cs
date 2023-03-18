@@ -18,18 +18,40 @@ public interface IRestClient : IDisposable
     void SetCancelToken(CancellationToken cancelToken);
 
     /// <summary>
-    /// Sends a REST request.
+    ///     Sends a REST request.
     /// </summary>
-    /// <param name="method">The method used to send this request (i.e. HTTP verb such as <c>GET</c>, <c>POST</c>).</param>
+    /// <param name="method">The method used to send this request (see <see cref="HttpMethod"/>).</param>
     /// <param name="endpoint">The endpoint to send this request to.</param>
     /// <param name="cancelToken">The cancellation token used to cancel the task.</param>
     /// <param name="reason">The audit log reason.</param>
     /// <param name="requestHeaders">Additional headers to be sent with the request.</param>
-    /// <returns></returns>
+    /// <returns> A task that represents an asynchronous send operation. The task result contains the REST response of the request. </returns>
     Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancelToken, string reason = null,
         IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null);
+
+    /// <summary>
+    ///     Sends a REST request with a JSON body.
+    /// </summary>
+    /// <param name="method">The method used to send this request (see <see cref="HttpMethod"/>).</param>
+    /// <param name="endpoint">The endpoint to send this request to.</param>
+    /// <param name="json">The JSON body of the request.</param>
+    /// <param name="cancelToken">The cancellation token used to cancel the task.</param>
+    /// <param name="reason">The audit log reason.</param>
+    /// <param name="requestHeaders">Additional headers to be sent with the request.</param>
+    /// <returns> A task that represents an asynchronous send operation. The task result contains the REST response of the request. </returns>
     Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json, CancellationToken cancelToken, string reason = null,
         IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null);
+
+    /// <summary>
+    ///     Sends a REST request with multipart parameters.
+    /// </summary>
+    /// <param name="method">The method used to send this request (see <see cref="HttpMethod"/>).</param>
+    /// <param name="endpoint">The endpoint to send this request to.</param>
+    /// <param name="multipartParams">The multipart parameters.</param>
+    /// <param name="cancelToken">The cancellation token used to cancel the task.</param>
+    /// <param name="reason">The audit log reason.</param>
+    /// <param name="requestHeaders">Additional headers to be sent with the request.</param>
+    /// <returns> A task that represents an asynchronous send operation. The task result contains the REST response of the request. </returns>
     Task<RestResponse> SendAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartParams, CancellationToken cancelToken, string reason = null,
         IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null);
 }

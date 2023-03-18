@@ -6,7 +6,7 @@ namespace Kook;
 public enum GameCreationSource
 {
     /// <summary>
-    ///     Represents that the game was created by myself.
+    ///     Represents that the game was created by the current user.
     /// </summary>
     SelfUser = 1,
 

@@ -129,6 +129,7 @@ public struct FileAttachment : IDisposable
         Uri = uri;
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
         if (!_isDisposed)

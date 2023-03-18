@@ -90,15 +90,19 @@ public class BucketId : IEquatable<BucketId>
     public string GetUniqueEndpoint()
         => HttpMethod != null ? $"{HttpMethod} {Endpoint}" : Endpoint;
 
+    /// <inheritdoc />
     public override bool Equals(object obj)
         => Equals(obj as BucketId);
 
+    /// <inheritdoc />
     public override int GetHashCode()
         => IsHashBucket ? (BucketHash, string.Join("/", MajorParameters.Select(x => x.Value))).GetHashCode() : (HttpMethod, Endpoint).GetHashCode();
 
+    /// <inheritdoc />
     public override string ToString()
         => GetBucketHash() ?? GetUniqueEndpoint();
 
+    /// <inheritdoc />
     public bool Equals(BucketId other)
     {
         if (other is null)

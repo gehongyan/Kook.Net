@@ -14,64 +14,64 @@ public struct Color
     /// <summary> Gets the default user color value. </summary>
     public static readonly Color Default = new(0);
     /// <summary> Gets the teal color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/1ABC9C">1ABC9C</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of 1ABC9C.</para> See http://www.color-hex.com/color/1ABC9C</returns>
     public static readonly Color Teal = new(0x1ABC9C);
     /// <summary> Gets the dark teal color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/11806A">11806A</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of 11806A.</para> See http://www.color-hex.com/color/11806A</returns>
     public static readonly Color DarkTeal = new(0x11806A);
     /// <summary> Gets the green color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/2ECC71">2ECC71</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of 2ECC71.</para> See http://www.color-hex.com/color/2ECC71</returns>
     public static readonly Color Green = new(0x2ECC71);
     /// <summary> Gets the dark green color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/1F8B4C">1F8B4C</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of 1F8B4C.</para> See http://www.color-hex.com/color/1F8B4C</returns>
     public static readonly Color DarkGreen = new(0x1F8B4C);
     /// <summary> Gets the blue color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/3498DB">3498DB</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of 3498DB.</para> See http://www.color-hex.com/color/3498DB</returns>
     public static readonly Color Blue = new(0x3498DB);
     /// <summary> Gets the dark blue color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/206694">206694</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of 206694.</para> See http://www.color-hex.com/color/206694</returns>
     public static readonly Color DarkBlue = new(0x206694);
     /// <summary> Gets the purple color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/9B59B6">9B59B6</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of 9B59B6.</para> See http://www.color-hex.com/color/9B59B6</returns>
     public static readonly Color Purple = new(0x9B59B6);
     /// <summary> Gets the dark purple color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/71368A">71368A</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of 71368A.</para> See http://www.color-hex.com/color/71368A</returns>
     public static readonly Color DarkPurple = new(0x71368A);
     /// <summary> Gets the magenta color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/E91E63">E91E63</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of E91E63.</para> See http://www.color-hex.com/color/E91E63</returns>
     public static readonly Color Magenta = new(0xE91E63);
     /// <summary> Gets the dark magenta color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/AD1457">AD1457</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of AD1457.</para> See http://www.color-hex.com/color/AD1457</returns>
     public static readonly Color DarkMagenta = new(0xAD1457);
     /// <summary> Gets the gold color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/F1C40F">F1C40F</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of F1C40F.</para> See http://www.color-hex.com/color/F1C40F</returns>
     public static readonly Color Gold = new(0xF1C40F);
     /// <summary> Gets the light orange color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/C27C0E">C27C0E</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of C27C0E.</para> See http://www.color-hex.com/color/C27C0E</returns>
     public static readonly Color LightOrange = new(0xC27C0E);
     /// <summary> Gets the orange color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/E67E22">E67E22</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of E67E22.</para> See http://www.color-hex.com/color/E67E22</returns>
     public static readonly Color Orange = new(0xE67E22);
     /// <summary> Gets the dark orange color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/A84300">A84300</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of A84300.</para> See http://www.color-hex.com/color/A84300</returns>
     public static readonly Color DarkOrange = new(0xA84300);
     /// <summary> Gets the red color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/E74C3C">E74C3C</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of E74C3C.</para> See http://www.color-hex.com/color/E74C3C</returns>
     public static readonly Color Red = new(0xE74C3C);
     /// <summary> Gets the dark red color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/992D22">992D22</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of 992D22.</para> See http://www.color-hex.com/color/992D22</returns>
     public static readonly Color DarkRed = new(0x992D22);
     /// <summary> Gets the light grey color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/95A5A6">95A5A6</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of 95A5A6.</para> See http://www.color-hex.com/color/95A5A6</returns>
     public static readonly Color LightGrey = new(0x95A5A6);
     /// <summary> Gets the grey color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/666D71">666D71</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of 666D71.</para> See http://www.color-hex.com/color/666D71</returns>
     public static readonly Color Grey = new(0x666D71);
     /// <summary> Gets the dark grey color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/607D8B">607D8B</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of 607D8B.</para> See http://www.color-hex.com/color/607D8B</returns>
     public static readonly Color DarkGrey = new(0x607D8B);
     /// <summary> Gets the darker grey color value. </summary>
-    /// <returns> A color struct with the hex value of <see href="http://www.color-hex.com/color/3A4B53">3A4B53</see>.</returns>
+    /// <returns> <para>A color struct with the hex value of 3A4B53.</para> See http://www.color-hex.com/color/3A4B53</returns>
     public static readonly Color DarkerGrey = new(0x3A4B53);
 
     /// <summary> Gets the encoded value for this color. </summary>
@@ -187,26 +187,56 @@ public struct Color
                    | (uint)(b * 255.0f);
     }
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="Color" /> is equal to this instance.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="Color" /> is equal to this instance; otherwise, <c>false</c> . </returns>
     public static bool operator ==(Color lhs, Color rhs)
         => lhs.RawValue == rhs.RawValue;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="Color" /> is not equal to this instance.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="Color" /> is not equal to this instance; otherwise, <c>false</c> . </returns>
     public static bool operator !=(Color lhs, Color rhs)
         => lhs.RawValue != rhs.RawValue;
 
+    /// <summary>
+    ///     Converts the given raw value of <see cref="uint"/> to a <see cref="Color"/>.
+    /// </summary>
+    /// <param name="rawValue"> The raw value of the color. </param>
+    /// <returns> The <see cref="Color"/> that represents the given raw value. </returns>
     public static implicit operator Color(uint rawValue)
         => new(rawValue);
 
+    /// <summary>
+    ///     Converts the given <see cref="Color"/> to its raw value of <see cref="uint"/>.
+    /// </summary>
+    /// <param name="color"> The <see cref="Color"/> to convert. </param>
+    /// <returns> The raw value of the given <see cref="Color"/>. </returns>
     public static implicit operator uint(Color color)
         => color.RawValue;
 
+    /// <inheritdoc />
     public override bool Equals(object obj)
         => obj is Color c && RawValue == c.RawValue;
 
+    /// <inheritdoc />
     public override int GetHashCode() => RawValue.GetHashCode();
 
+    /// <summary>
+    ///     Converts the given Kook.Net-defined <see cref="Color"/> to a .NET standard <see cref="StandardColor"/>.
+    /// </summary>
+    /// <param name="color"> The Kook.Net-defined <see cref="Color"/> to convert. </param>
+    /// <returns> The .NET standard <see cref="StandardColor"/> that represents the given Kook.Net-defined <see cref="Color"/>. </returns>
     public static implicit operator StandardColor(Color color)
         => StandardColor.FromArgb((int)color.RawValue);
 
+    /// <summary>
+    ///     Converts the given .NET standard <see cref="StandardColor"/> to a Kook.Net-defined <see cref="Color"/>.
+    /// </summary>
+    /// <param name="color"> The .NET standard <see cref="StandardColor"/> to convert. </param>
+    /// <returns> The Kook.Net-defined <see cref="Color"/> that represents the given .NET standard <see cref="StandardColor"/>. </returns>
     public static explicit operator Color(StandardColor color)
         => new((uint)color.ToArgb() << 8 >> 8);
 
@@ -216,8 +246,7 @@ public struct Color
     /// <returns>
     ///     A hexadecimal string of the color.
     /// </returns>
-    public override string ToString() =>
-        string.Format("#{0:X6}", RawValue);
-    private string DebuggerDisplay =>
-        string.Format("#{0:X6} ({0})", RawValue);
+    public override string ToString() => $"#{RawValue:X6}";
+
+    private string DebuggerDisplay => $"#{RawValue:X6} ({RawValue})";
 }

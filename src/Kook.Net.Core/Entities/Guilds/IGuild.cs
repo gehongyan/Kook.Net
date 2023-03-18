@@ -245,7 +245,7 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Bans the user from this guild and optionally prunes their recent messages.
     /// </summary>
-    /// <param name="userId">The snowflake ID of the user to ban.</param>
+    /// <param name="userId">The identifier of the user to ban.</param>
     /// <param name="pruneDays">The number of days to remove messages from this user for, and this number must be between [0, 7].</param>
     /// <param name="reason">The reason of the ban to be written in the audit log.</param>
     /// <param name="options">The options to be used when sending the request.</param>

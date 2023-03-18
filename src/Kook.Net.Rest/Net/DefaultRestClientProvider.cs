@@ -5,6 +5,9 @@ namespace Kook.Net.Rest;
 /// </summary>
 public static class DefaultRestClientProvider
 {
+    /// <summary>
+    ///     Gets a <see cref="RestClientProvider"/> delegate that creates <see cref="IRestClient"/> instances.
+    /// </summary>
     public static readonly RestClientProvider Instance = Create();
 
     /// <summary>

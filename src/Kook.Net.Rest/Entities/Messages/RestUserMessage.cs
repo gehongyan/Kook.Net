@@ -181,8 +181,15 @@ public class RestUserMessage : RestMessage, IUserMessage
             _pokes = ImmutableArray<RestPokeAction>.Empty;
     }
 
+    /// <summary>
+    ///     Transforms this message's text into a human-readable form by resolving its tags.
+    /// </summary>
     /// <param name="startIndex">The zero-based index at which to begin the resolving for the specified value.</param>
-    /// <inheritdoc cref="IUserMessage.Resolve(TagHandling,TagHandling,TagHandling,TagHandling,TagHandling)"/>
+    /// <param name="userHandling">Determines how the user tag should be handled.</param>
+    /// <param name="channelHandling">Determines how the channel tag should be handled.</param>
+    /// <param name="roleHandling">Determines how the role tag should be handled.</param>
+    /// <param name="everyoneHandling">Determines how the @everyone tag should be handled.</param>
+    /// <param name="emojiHandling">Determines how the emoji tag should be handled.</param>
     public string Resolve(int startIndex, TagHandling userHandling = TagHandling.Name, TagHandling channelHandling = TagHandling.Name,
         TagHandling roleHandling = TagHandling.Name, TagHandling everyoneHandling = TagHandling.Ignore, TagHandling emojiHandling = TagHandling.Name)
         => MentionUtils.Resolve(this, startIndex, userHandling, channelHandling, roleHandling, everyoneHandling, emojiHandling);

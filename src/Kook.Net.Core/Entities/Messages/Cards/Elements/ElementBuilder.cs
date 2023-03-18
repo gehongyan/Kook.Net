@@ -130,12 +130,25 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
     public static bool operator ==(PlainTextElementBuilder left, PlainTextElementBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="PlainTextElementBuilder"/> is not equal to the current <see cref="PlainTextElementBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is not equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
     public static bool operator !=(PlainTextElementBuilder left, PlainTextElementBuilder right)
         => !(left == right);
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="PlainTextElementBuilder"/>.
+    /// </summary>
+    /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="PlainTextElementBuilder"/>.</param>
+    /// <returns></returns>
     public override bool Equals(object obj)
         => obj is PlainTextElementBuilder builder && Equals(builder);
 
@@ -252,12 +265,25 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
     public static bool operator ==(KMarkdownElementBuilder left, KMarkdownElementBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="KMarkdownElementBuilder"/> is not equal to the current <see cref="KMarkdownElementBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="KMarkdownElementBuilder"/> is not equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
     public static bool operator !=(KMarkdownElementBuilder left, KMarkdownElementBuilder right)
         => !(left == right);
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="KMarkdownElementBuilder"/>.
+    /// </summary>
+    /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="KMarkdownElementBuilder"/>.</param>
+    /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
         => obj is KMarkdownElementBuilder builder && Equals(builder);
 
@@ -438,12 +464,25 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ImageElementBuilder"/> is equal to the current <see cref="ImageElementBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ImageElementBuilder"/> is equal to the current <see cref="ImageElementBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(ImageElementBuilder left, ImageElementBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ImageElementBuilder"/> is not equal to the current <see cref="ImageElementBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ImageElementBuilder"/> is not equal to the current <see cref="ImageElementBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(ImageElementBuilder left, ImageElementBuilder right)
         => !(left == right);
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="ImageElementBuilder"/>.
+    /// </summary>
+    /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="ImageElementBuilder"/>. </param>
+    /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="ImageElementBuilder"/>; otherwise, <c>false</c>. </returns>
     public override bool Equals(object obj)
         => obj is ImageElementBuilder builder && Equals(builder);
 
@@ -677,12 +716,25 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(ButtonElementBuilder left, ButtonElementBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ButtonElementBuilder"/> is not equal to the current <see cref="ButtonElementBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ButtonElementBuilder"/> is not equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(ButtonElementBuilder left, ButtonElementBuilder right)
         => !(left == right);
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="ButtonElementBuilder"/>.
+    /// </summary>
+    /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="ButtonElementBuilder"/>. </param>
+    /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>. </returns>
     public override bool Equals(object obj)
         => obj is ButtonElementBuilder builder && Equals(builder);
 
@@ -905,12 +957,25 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ParagraphStructBuilder"/> is equal to the current <see cref="ParagraphStructBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ParagraphStructBuilder"/> is equal to the current <see cref="ParagraphStructBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(ParagraphStructBuilder left, ParagraphStructBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ParagraphStructBuilder"/> is not equal to the current <see cref="ParagraphStructBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ParagraphStructBuilder"/> is not equal to the current <see cref="ParagraphStructBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(ParagraphStructBuilder left, ParagraphStructBuilder right)
         => !(left == right);
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="ParagraphStructBuilder"/>.
+    /// </summary>
+    /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="ParagraphStructBuilder"/>. </param>
+    /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="ParagraphStructBuilder"/>; otherwise, <c>false</c>. </returns>
     public override bool Equals(object obj)
         => obj is ParagraphStructBuilder builder && Equals(builder);
 

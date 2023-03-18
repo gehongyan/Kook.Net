@@ -106,12 +106,24 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(HeaderModuleBuilder left, HeaderModuleBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="HeaderModuleBuilder"/> is not equal to the current <see cref="HeaderModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="HeaderModuleBuilder"/> is not equal to the current <see cref="HeaderModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(HeaderModuleBuilder left, HeaderModuleBuilder right)
         => !(left == right);
 
+    /// <summary>Determines whether the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>.</summary>
+    /// <remarks>If the object passes is an <see cref="HeaderModuleBuilder"/>, <see cref="Equals(HeaderModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="HeaderModule"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
         => obj is HeaderModuleBuilder builder && Equals(builder);
 
@@ -124,7 +136,7 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
             return false;
 
         return Type == headerModuleBuilder.Type
-               && Text == headerModuleBuilder.Text;
+            && Text == headerModuleBuilder.Text;
     }
 
     /// <inheritdoc />
@@ -361,15 +373,27 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
         return new SectionModule(Mode, Text?.Build(), Accessory?.Build());
     }
 
-    /// <inheritdoc /> 
+    /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(SectionModuleBuilder left, SectionModuleBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="SectionModuleBuilder"/> is not equal to the current <see cref="SectionModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="SectionModuleBuilder"/> is not equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(SectionModuleBuilder left, SectionModuleBuilder right)
         => !(left == right);
 
+    /// <summary>Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.</summary>
+    /// <remarks>If the object passes is an <see cref="SectionModuleBuilder"/>, <see cref="Equals(SectionModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="SectionModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
         => obj is SectionModuleBuilder builder && Equals(builder);
 
@@ -382,9 +406,9 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
             return false;
 
         return Type == sectionModuleBuilder.Type
-               && Mode == sectionModuleBuilder.Mode
-               && Text == sectionModuleBuilder.Text
-               && Accessory == sectionModuleBuilder.Accessory;
+            && Mode == sectionModuleBuilder.Mode
+            && Text == sectionModuleBuilder.Text
+            && Accessory == sectionModuleBuilder.Accessory;
     }
 
     /// <inheritdoc />
@@ -490,12 +514,24 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(ImageGroupModuleBuilder left, ImageGroupModuleBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ImageGroupModuleBuilder"/> is not equal to the current <see cref="ImageGroupModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ImageGroupModuleBuilder"/> is not equal to the current <see cref="ImageGroupModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(ImageGroupModuleBuilder left, ImageGroupModuleBuilder right)
         => !(left == right);
 
+    /// <summary>Determines whether the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>.</summary>
+    /// <remarks>If the object passes is an <see cref="ImageGroupModuleBuilder"/>, <see cref="Equals(ImageGroupModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="ImageGroupModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
         => obj is ImageGroupModuleBuilder builder && Equals(builder);
 
@@ -620,12 +656,24 @@ public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModule
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(ContainerModuleBuilder left, ContainerModuleBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ContainerModuleBuilder"/> is not equal to the current <see cref="ContainerModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ContainerModuleBuilder"/> is not equal to the current <see cref="ContainerModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(ContainerModuleBuilder left, ContainerModuleBuilder right)
         => !(left == right);
 
+    /// <summary>Determines whether the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>.</summary>
+    /// <remarks>If the object passes is an <see cref="ContainerModuleBuilder"/>, <see cref="Equals(ContainerModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="ContainerModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
         => obj is ContainerModuleBuilder builder && Equals(builder);
 
@@ -663,6 +711,9 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
     /// </summary>
     public const int MaxElementCount = 4;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ActionGroupModuleBuilder"/> class.
+    /// </summary>
     public ActionGroupModuleBuilder()
     {
         Elements = new List<ButtonElementBuilder>();
@@ -747,12 +798,24 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ActionGroupModuleBuilder"/> is equal to the current <see cref="ActionGroupModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ActionGroupModuleBuilder"/> is equal to the current <see cref="ActionGroupModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(ActionGroupModuleBuilder left, ActionGroupModuleBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ActionGroupModuleBuilder"/> is not equal to the current <see cref="ActionGroupModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ActionGroupModuleBuilder"/> is not equal to the current <see cref="ActionGroupModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(ActionGroupModuleBuilder left, ActionGroupModuleBuilder right)
         => !(left == right);
 
+    /// <summary>Determines whether the specified <see cref="ActionGroupModuleBuilder"/> is equal to the current <see cref="ActionGroupModuleBuilder"/>.</summary>
+    /// <remarks>If the object passes is an <see cref="ActionGroupModuleBuilder"/>, <see cref="Equals(ActionGroupModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="ActionGroupModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="ActionGroupModuleBuilder"/> is equal to the current <see cref="ActionGroupModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
         => obj is ActionGroupModuleBuilder builder && Equals(builder);
 
@@ -821,8 +884,8 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
                     message: $"Element count must be less than or equal to {MaxElementCount}.",
                     paramName: nameof(Elements));
             if (value.Any(e => e.Type != ElementType.PlainText
-                               && e.Type != ElementType.KMarkdown
-                               && e.Type != ElementType.Image))
+                    && e.Type != ElementType.KMarkdown
+                    && e.Type != ElementType.Image))
                 throw new ArgumentException(
                     message: "Elements must be of type PlainText, KMarkdown or Image.",
                     paramName: nameof(Elements));
@@ -929,6 +992,7 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
                     message: "Elements of contexts must be of type PlainText, KMarkdown or Image.",
                     paramName: nameof(action));
         }
+
         return this;
     }
 
@@ -944,12 +1008,24 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(ContextModuleBuilder left, ContextModuleBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ContextModuleBuilder"/> is not equal to the current <see cref="ContextModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ContextModuleBuilder"/> is not equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(ContextModuleBuilder left, ContextModuleBuilder right)
         => !(left == right);
 
+    /// <summary>Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.</summary>
+    /// <remarks>If the object passes is an <see cref="ContextModuleBuilder"/>, <see cref="Equals(ContextModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="ContextModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
         => obj is ContextModuleBuilder builder && Equals(builder);
 
@@ -994,12 +1070,24 @@ public class DividerModuleBuilder : IModuleBuilder, IEquatable<DividerModuleBuil
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="DividerModuleBuilder"/> is equal to the current <see cref="DividerModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="DividerModuleBuilder"/> is equal to the current <see cref="DividerModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(DividerModuleBuilder left, DividerModuleBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="DividerModuleBuilder"/> is not equal to the current <see cref="DividerModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="DividerModuleBuilder"/> is not equal to the current <see cref="DividerModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(DividerModuleBuilder left, DividerModuleBuilder right)
         => !(left == right);
 
+    /// <summary>Determines whether the specified <see cref="DividerModuleBuilder"/> is equal to the current <see cref="DividerModuleBuilder"/>.</summary>
+    /// <remarks>If the object passes is an <see cref="DividerModuleBuilder"/>, <see cref="Equals(DividerModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="DividerModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="DividerModuleBuilder"/> is equal to the current <see cref="DividerModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
         => obj is DividerModuleBuilder builder && Equals(builder);
 
@@ -1094,12 +1182,24 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(FileModuleBuilder left, FileModuleBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="FileModuleBuilder"/> is not equal to the current <see cref="FileModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="FileModuleBuilder"/> is not equal to the current <see cref="FileModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(FileModuleBuilder left, FileModuleBuilder right)
         => !(left == right);
 
+    /// <summary>Determines whether the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>.</summary>
+    /// <remarks>If the object passes is an <see cref="FileModuleBuilder"/>, <see cref="Equals(FileModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="FileModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
         => obj is FileModuleBuilder builder && Equals(builder);
 
@@ -1196,12 +1296,24 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(VideoModuleBuilder left, VideoModuleBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="VideoModuleBuilder"/> is not equal to the current <see cref="VideoModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="VideoModuleBuilder"/> is not equal to the current <see cref="VideoModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(VideoModuleBuilder left, VideoModuleBuilder right)
         => !(left == right);
 
+    /// <summary>Determines whether the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>.</summary>
+    /// <remarks>If the object passes is an <see cref="VideoModuleBuilder"/>, <see cref="Equals(VideoModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="VideoModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
         => obj is VideoModuleBuilder builder && Equals(builder);
 
@@ -1214,8 +1326,8 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
             return false;
 
         return Type == videoModuleBuilder.Type
-               && Source == videoModuleBuilder.Source
-               && Title == videoModuleBuilder.Title;
+            && Source == videoModuleBuilder.Source
+            && Title == videoModuleBuilder.Title;
     }
 
     /// <inheritdoc />
@@ -1328,12 +1440,24 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(AudioModuleBuilder left, AudioModuleBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="AudioModuleBuilder"/> is not equal to the current <see cref="AudioModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="AudioModuleBuilder"/> is not equal to the current <see cref="AudioModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(AudioModuleBuilder left, AudioModuleBuilder right)
         => !(left == right);
 
+    /// <summary>Determines whether the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>.</summary>
+    /// <remarks>If the object passes is an <see cref="AudioModuleBuilder"/>, <see cref="Equals(AudioModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="AudioModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
         => obj is AudioModuleBuilder builder && Equals(builder);
 
@@ -1346,9 +1470,9 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
             return false;
 
         return Type == audioModuleBuilder.Type
-               && Source == audioModuleBuilder.Source
-               && Title == audioModuleBuilder.Title
-                && Cover == audioModuleBuilder.Cover;
+            && Source == audioModuleBuilder.Source
+            && Title == audioModuleBuilder.Title
+            && Cover == audioModuleBuilder.Cover;
     }
 
     /// <inheritdoc />
@@ -1370,6 +1494,7 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     ///     The time at which the countdown ends.
     /// </returns>
     public DateTimeOffset EndTime { get; set; }
+
     /// <summary>
     ///     Gets or sets the beginning time of the countdown.
     /// </summary>
@@ -1377,6 +1502,7 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     ///     The time at which the countdown begins.
     /// </returns>
     public DateTimeOffset? StartTime { get; set; }
+
     /// <summary>
     ///     Gets or sets how the countdown should be displayed.
     /// </summary>
@@ -1468,12 +1594,24 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(CountdownModuleBuilder left, CountdownModuleBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="CountdownModuleBuilder"/> is not equal to the current <see cref="CountdownModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is not equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(CountdownModuleBuilder left, CountdownModuleBuilder right)
         => !(left == right);
 
+    /// <summary>Determines whether the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>.</summary>
+    /// <remarks>If the object passes is an <see cref="CountdownModuleBuilder"/>, <see cref="Equals(CountdownModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="CountdownModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
         => obj is CountdownModuleBuilder builder && Equals(builder);
 
@@ -1500,7 +1638,6 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
 /// </summary>
 public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilder>
 {
-
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Invite;
 
@@ -1551,13 +1688,26 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(InviteModuleBuilder left, InviteModuleBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="InviteModuleBuilder"/> is not equal to the current <see cref="InviteModuleBuilder"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="InviteModuleBuilder"/> is not equal to the current <see cref="InviteModuleBuilder"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(InviteModuleBuilder left, InviteModuleBuilder right)
         => !(left == right);
 
+    /// <summary>Determines whether the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>.</summary>
+    /// <remarks>If the object passes is an <see cref="InviteModuleBuilder"/>, <see cref="Equals(InviteModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="InviteModuleBuilder"/>.</param>
+    /// <returns><c>true</c> if the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
+
         => obj is InviteModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>.</summary>

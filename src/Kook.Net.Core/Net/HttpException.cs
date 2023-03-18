@@ -38,10 +38,11 @@ public class HttpException : Exception
     /// <summary>
     ///     Initializes a new instance of the <see cref="HttpException" /> class.
     /// </summary>
-    /// <param name="httpCode">The HTTP status code returned.</param>
-    /// <param name="request">The request that was sent prior to the exception.</param>
-    /// <param name="kookCode">The Kook status code returned.</param>
-    /// <param name="reason">The reason behind the exception.</param>
+    /// <param name="httpCode"> The HTTP status code returned. </param>
+    /// <param name="request"> The request that was sent prior to the exception. </param>
+    /// <param name="kookCode"> The Kook status code returned. </param>
+    /// <param name="reason"> The reason behind the exception. </param>
+    /// <param name="errors"> A collection of json errors describing what went wrong with the request. </param>
     public HttpException(HttpStatusCode httpCode, IRequest request, KookErrorCode? kookCode = null, string reason = null, KookJsonError[] errors = null)
         : base(CreateMessage(httpCode, (int?)kookCode, reason))
     {

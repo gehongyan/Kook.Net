@@ -1,5 +1,8 @@
 namespace Kook;
 
+/// <summary>
+///     Represents a generic user.
+/// </summary>
 public interface IUser : IEntity<ulong>, IMentionable, IPresence
 {
     /// <summary>

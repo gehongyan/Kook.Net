@@ -15,6 +15,9 @@ using System.Text.Json.Serialization;
 
 namespace Kook.WebSocket;
 
+/// <summary>
+///     Represents a WebSocket-based KOOK client.
+/// </summary>
 public partial class KookSocketClient : BaseSocketClient, IKookClient
 {
     #region KookSocketClient
@@ -35,8 +38,13 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
     private bool _isDisposed;
 
+    /// <inheritdoc />
     public override KookSocketRestClient Rest { get; }
+
+    /// <inheritdoc />
     public ConnectionState ConnectionState => _connection.State;
+
+    /// <inheritdoc />
     public override int Latency { get; protected set; }
 
     #endregion
@@ -223,7 +231,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     /// <summary>
     ///     Gets a generic channel from the cache or does a rest request if unavailable.
     /// </summary>
-    /// <param name="id">The identifier of the channel (e.g. `381889909113225237`).</param>
+    /// <param name="id">The identifier of the channel.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
@@ -1641,14 +1649,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
     #endregion
 
-    // public async Task LoginAsync(TokenType tokenType, string token)
-    // {
-    //     await ApiClient.LoginAsync(tokenType, token);
-    //     ApiClient.LoginState = LoginState.LoggedIn;
-    //     // return Task.CompletedTask;
-    // }
-
+    /// <inheritdoc />
     public override async Task StartAsync() => await _connection.StartAsync().ConfigureAwait(false);
+
+    /// <inheritdoc />
     public override async Task StopAsync() => await _connection.StopAsync().ConfigureAwait(false);
 
     private async Task RunHeartbeatAsync(CancellationToken cancelToken)

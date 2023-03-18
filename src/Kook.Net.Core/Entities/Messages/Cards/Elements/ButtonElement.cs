@@ -58,9 +58,21 @@ public class ButtonElement : IElement, IEquatable<ButtonElement>
 
     private string DebuggerDisplay => $"{Type}: {Text} ({Click}, {Value}, {Theme})";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>; otherwise, <c>false</c>.
+    /// </returns>
     public static bool operator ==(ButtonElement left, ButtonElement right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ButtonElement"/> is not equal to the current <see cref="ButtonElement"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="ButtonElement"/> is not equal to the current <see cref="ButtonElement"/>; otherwise, <c>false</c>.
+    /// </returns>
     public static bool operator !=(ButtonElement left, ButtonElement right)
         => !(left == right);
 

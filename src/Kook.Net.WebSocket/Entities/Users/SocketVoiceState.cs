@@ -13,6 +13,12 @@ public struct SocketVoiceState : IVoiceState
     /// </summary>
     public static readonly SocketVoiceState Default = new SocketVoiceState(null, null, null);
 
+    /// <summary>
+    ///     Initializes a new <see cref="SocketVoiceState"/> with the specified voice channel.
+    /// </summary>
+    /// <param name="voiceChannel"> The voice channel that the user is currently in. </param>
+    /// <param name="isMuted"> Whether the user is muted. </param>
+    /// <param name="isDeafened"> Whether the user is deafened. </param>
     public SocketVoiceState(SocketVoiceChannel voiceChannel, bool? isMuted, bool? isDeafened)
     {
         VoiceChannel = voiceChannel;

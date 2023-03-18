@@ -27,9 +27,17 @@ public class ContainerModule : IModule, IEquatable<ContainerModule>
 
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(ContainerModule left, ContainerModule right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ContainerModule"/> is not equal to the current <see cref="ContainerModule"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ContainerModule"/> is not equal to the current <see cref="ContainerModule"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(ContainerModule left, ContainerModule right)
         => !(left == right);
 

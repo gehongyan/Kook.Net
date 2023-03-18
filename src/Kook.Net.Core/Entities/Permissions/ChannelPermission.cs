@@ -1,5 +1,8 @@
 namespace Kook;
 
+/// <summary>
+///     Represents a permission can be granted to a channel.
+/// </summary>
 [Flags]
 public enum ChannelPermission : uint
 {

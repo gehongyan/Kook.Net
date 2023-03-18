@@ -1,5 +1,8 @@
 namespace Kook;
 
+/// <summary>
+///     Provides extension methods for <see cref="IChannel"/>.
+/// </summary>
 public static class ChannelExtensions
 {
     /// <summary>

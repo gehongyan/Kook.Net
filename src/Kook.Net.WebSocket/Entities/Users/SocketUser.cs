@@ -46,6 +46,11 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     /// <inheritdoc />
     public ClientType? ActiveClient => Presence.ActiveClient;
 
+    /// <summary>
+    ///     Initializes a new WebSocket-based user.
+    /// </summary>
+    /// <param name="kook"> The WebSocket client. </param>
+    /// <param name="id"> The identifier of the user. </param>
     protected SocketUser(KookSocketClient kook, ulong id)
         : base(kook, id)
     {

@@ -2,6 +2,9 @@ using System.Diagnostics;
 
 namespace Kook;
 
+/// <summary>
+///     Represents a set of permissions for a guild.
+/// </summary>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
 public class GuildPermissions
 {
@@ -262,6 +265,9 @@ public class GuildPermissions
         }
     }
 
+    /// <summary>
+    ///     Gets the raw value of the permissions.
+    /// </summary>
     public override string ToString() => RawValue.ToString();
     private string DebuggerDisplay => $"{string.Join(", ", ToList())}";
 }

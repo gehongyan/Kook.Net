@@ -14,7 +14,7 @@ public enum MusicProvider
     /// </summary>
     NetEaseCloudMusic = 1,
     /// <summary>
-    ///     Specifies that the music provider is QQ.
+    ///     Specifies that the music provider is Tencent QQ.
     /// </summary>
     TencentMusic = 2,
     /// <summary>

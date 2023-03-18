@@ -40,6 +40,10 @@ public class PreconditionResult : IResult
     /// <param name="reason">The reason of failure.</param>
     public static PreconditionResult FromError(string reason)
         => new PreconditionResult(CommandError.UnmetPrecondition, reason);
+    /// <summary>
+    ///     Returns a <see cref="PreconditionResult" /> with an exception.
+    /// </summary>
+    /// <param name="ex"> The exception that occurred. </param>
     public static PreconditionResult FromError(Exception ex)
         => new PreconditionResult(CommandError.Exception, ex.Message);
     /// <summary>

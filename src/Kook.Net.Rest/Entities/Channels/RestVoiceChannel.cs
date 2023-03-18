@@ -59,6 +59,11 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
         Update(model);
     }
 
+    /// <summary>
+    ///     Gets the users connected to this voice channel.
+    /// </summary>
+    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <returns> A task that represents the asynchronous get operation. The task result contains a collection of users. </returns>
     public async Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(RequestOptions options)
         => await ChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false);
 

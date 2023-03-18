@@ -15,7 +15,7 @@
         <Company>gehongyan</Company>
         <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net7.0;net6.0;net462;netstandard2.0;netstandard2.1</TargetFrameworks>
         <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">net7.0;net6.0;netstandard2.0;netstandard2.1</TargetFrameworks>
-        <NoWarn>$(NoWarn);CS1591;CS1573;NU1803</NoWarn>
+        <NoWarn>$(NoWarn);NU1803</NoWarn>
         <PackageVersion>$(Version)</PackageVersion>
         <WarningLevel>6</WarningLevel>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

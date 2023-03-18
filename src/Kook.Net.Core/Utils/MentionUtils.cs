@@ -205,7 +205,7 @@ public static class MentionUtils
     {
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
         var text = new StringBuilder(msg.Content[startIndex..]);
-#else 
+#else
         var text = new StringBuilder(msg.Content.Substring(startIndex));
 #endif
         var tags = msg.Tags;

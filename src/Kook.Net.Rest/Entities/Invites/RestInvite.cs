@@ -2,6 +2,9 @@ using System.Diagnostics;
 using Model = Kook.API.Invite;
 namespace Kook.Rest;
 
+/// <summary>
+///     Represents a REST-based invite.
+/// </summary>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
 public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
 {

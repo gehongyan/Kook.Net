@@ -18,9 +18,17 @@ public class DividerModule : IModule, IEquatable<DividerModule>
 
     private string DebuggerDisplay => $"{Type}";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="DividerModule"/> is equal to the current <see cref="DividerModule"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="DividerModule"/> is equal to the current <see cref="DividerModule"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(DividerModule left, DividerModule right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="DividerModule"/> is not equal to the current <see cref="DividerModule"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="DividerModule"/> is not equal to the current <see cref="DividerModule"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(DividerModule left, DividerModule right)
         => !(left == right);
 

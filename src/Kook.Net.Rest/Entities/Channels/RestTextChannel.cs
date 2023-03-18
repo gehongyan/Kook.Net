@@ -94,6 +94,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     /// <inheritdoc />
     public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
         => ChannelHelper.GetMessagesAsync(this, Kook, referenceMessage.Id, dir, limit, true, options);
+    /// <inheritdoc cref="ITextChannel.GetPinnedMessagesAsync" />
     public Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions options = null)
         => ChannelHelper.GetPinnedMessagesAsync(this, Kook, options);
 

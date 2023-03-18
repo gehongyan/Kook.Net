@@ -40,9 +40,18 @@ public class ParagraphStruct : IElement, IEquatable<ParagraphStruct>
     public ImmutableArray<IElement> Fields { get; }
 
     private string DebuggerDisplay => $"{Type} ({ColumnCount} Columns, {Fields.Length} Fields)";
+
+    /// <summary>
+    ///     Determines whether the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(ParagraphStruct left, ParagraphStruct right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ParagraphStruct"/> is not equal to the current <see cref="ParagraphStruct"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ParagraphStruct"/> is not equal to the current <see cref="ParagraphStruct"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(ParagraphStruct left, ParagraphStruct right)
         => !(left == right);
 

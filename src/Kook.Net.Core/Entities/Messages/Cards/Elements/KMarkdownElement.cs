@@ -29,12 +29,21 @@ public class KMarkdownElement : IElement, IEquatable<KMarkdownElement>
     /// </returns>
     public string Content { get; }
 
+    /// <inheritdoc />
     public override string ToString() => Content;
     private string DebuggerDisplay => $"{Type}: {Content}";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="KMarkdownElement"/> is equal to the current <see cref="KMarkdownElement"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="KMarkdownElement"/> is equal to the current <see cref="KMarkdownElement"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(KMarkdownElement left, KMarkdownElement right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="KMarkdownElement"/> is not equal to the current <see cref="KMarkdownElement"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="KMarkdownElement"/> is not equal to the current <see cref="KMarkdownElement"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(KMarkdownElement left, KMarkdownElement right)
         => !(left == right);
 

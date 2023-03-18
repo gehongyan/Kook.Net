@@ -52,7 +52,21 @@ public struct LogMessage
         Exception = exception;
     }
 
+    /// <summary>
+    ///     Returns a string representation of this log message.
+    /// </summary>
+    /// <returns> A string representation of this log message. </returns>
     public override string ToString() => ToString();
+
+    /// <summary>
+    ///     Returns a string representation of this log message.
+    /// </summary>
+    /// <param name="builder"> The string builder to use. </param>
+    /// <param name="fullException"> Whether to include the full exception in the string. </param>
+    /// <param name="prependTimestamp"> Whether to prepend the timestamp to the string. </param>
+    /// <param name="timestampKind"> The kind of timestamp to use. </param>
+    /// <param name="padSource"> The amount of padding to use for the source. </param>
+    /// <returns> A string representation of this log message. </returns>
     public string ToString(StringBuilder builder = null, bool fullException = true, bool prependTimestamp = true, DateTimeKind timestampKind = DateTimeKind.Local, int? padSource = 11)
     {
         string sourceName = Source;

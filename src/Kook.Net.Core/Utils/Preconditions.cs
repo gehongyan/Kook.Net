@@ -1,5 +1,8 @@
 namespace Kook;
 
+/// <summary>
+///     Provides methods to check preconditions.
+/// </summary>
 public static class Preconditions
 {
     #region Objects

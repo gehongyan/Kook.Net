@@ -72,7 +72,7 @@ public class Emoji : IEmote
     public static Emoji Parse(string emojiStr)
     {
         if (!TryParse(emojiStr, out var emoji))
-            throw new FormatException("String is not emoji name or unicode!");
+            throw new FormatException("String is not emoji name or unicode.");
 
         return emoji;
     }
@@ -1845,5 +1845,12 @@ public class Emoji : IEmote
         }
     }
 
+    /// <summary>
+    ///     Parses the given string into an <see cref="Emoji" />.
+    /// </summary>
+    /// <param name="s"> The string to parse. </param>
+    /// <returns> The parsed <see cref="Emoji" />. </returns>
+    /// <exception cref="FormatException"> The provided string is not emoji name or unicode. </exception>
+    /// <seealso cref="Parse"/>
     public static implicit operator Emoji(string s) => Parse(s);
 }

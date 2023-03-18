@@ -40,12 +40,21 @@ public class PlainTextElement : IElement, IEquatable<PlainTextElement>
     /// </returns>
     public bool Emoji { get; }
 
+    /// <inheritdoc />
     public override string ToString() => Content;
     private string DebuggerDisplay => $"{Type}: {Content}";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="PlainTextElement"/> is equal to the current <see cref="PlainTextElement"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="PlainTextElement"/> is equal to the current <see cref="PlainTextElement"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(PlainTextElement left, PlainTextElement right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="PlainTextElement"/> is not equal to the current <see cref="PlainTextElement"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="PlainTextElement"/> is not equal to the current <see cref="PlainTextElement"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(PlainTextElement left, PlainTextElement right)
         => !(left == right);
 

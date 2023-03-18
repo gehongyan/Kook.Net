@@ -512,6 +512,7 @@ public abstract partial class BaseSocketClient
 
     #region Roles
 
+    /// <summary> Fired when a role is created. </summary>
     public event Func<SocketRole, Task> RoleCreated
     {
         add => _roleCreatedEvent.Add(value);

@@ -57,9 +57,17 @@ public class Card : ICard, IEquatable<Card>
 
     private string DebuggerDisplay => $"{Type} ({Modules.Length} Modules)";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="Card"/> is equal to the current <see cref="Card"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="Card"/> is equal to the current <see cref="Card"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(Card left, Card right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="Card"/> is not equal to the current <see cref="Card"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="Card"/> is not equal to the current <see cref="Card"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(Card left, Card right)
         => !(left == right);
 

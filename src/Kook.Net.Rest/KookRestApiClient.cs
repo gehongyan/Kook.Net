@@ -274,11 +274,6 @@ internal class KookRestApiClient : IDisposable
         return responseStream;
     }
 
-    /// <param name="endpointExpr">
-    ///     <example>
-    ///         <c>$"endpoint?params=args&amp;page_size={pageSize}&amp;page={page}"</c>
-    ///     </example>
-    /// </param>
     internal async IAsyncEnumerable<IReadOnlyCollection<T>> SendPagedAsync<T>(HttpMethod method,
         Expression<Func<int, int, string>> endpointExpr,
         BucketIds ids, ClientBucketType clientBucket = ClientBucketType.Unbucketed, PageMeta pageMeta = null, RequestOptions options = null)

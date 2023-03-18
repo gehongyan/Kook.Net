@@ -28,9 +28,17 @@ public class HeaderModule : IModule, IEquatable<HeaderModule>
     public override string ToString() => Text.ToString();
     private string DebuggerDisplay => $"{Type}: {Text}";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="HeaderModule"/> is equal to the current <see cref="HeaderModule"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="HeaderModule"/> is equal to the current <see cref="HeaderModule"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(HeaderModule left, HeaderModule right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="HeaderModule"/> is not equal to the current <see cref="HeaderModule"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="HeaderModule"/> is not equal to the current <see cref="HeaderModule"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(HeaderModule left, HeaderModule right)
         => !(left == right);
 

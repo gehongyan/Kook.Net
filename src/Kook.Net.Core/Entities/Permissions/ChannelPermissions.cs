@@ -2,6 +2,9 @@ using System.Diagnostics;
 
 namespace Kook;
 
+/// <summary>
+///     Represents a set of permissions for a channel.
+/// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct ChannelPermissions
 {
@@ -22,10 +25,10 @@ public struct ChannelPermissions
     {
         return channel switch
         {
-            ITextChannel _ => Text,
-            IVoiceChannel _ => Voice,
-            ICategoryChannel _ => Category,
-            IDMChannel _ => DM,
+            ITextChannel => Text,
+            IVoiceChannel => Voice,
+            ICategoryChannel => Category,
+            IDMChannel => DM,
             _ => throw new ArgumentException("Unknown channel type.", nameof(channel)),
         };
     }
@@ -210,6 +213,9 @@ public struct ChannelPermissions
         return perms;
     }
 
+    /// <summary>
+    ///     Gets the raw value of the permissions.
+    /// </summary>
     public override string ToString() => RawValue.ToString();
     private string DebuggerDisplay => $"{string.Join(", ", ToList())}";
 }

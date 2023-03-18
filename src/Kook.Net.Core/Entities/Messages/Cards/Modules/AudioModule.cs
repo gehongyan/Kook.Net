@@ -34,9 +34,17 @@ public class AudioModule : IMediaModule, IEquatable<AudioModule>
 
     private string DebuggerDisplay => $"{Type}: {Title}";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="AudioModule"/> is equal to the current <see cref="AudioModule"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="AudioModule"/> is equal to the current <see cref="AudioModule"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(AudioModule left, AudioModule right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="AudioModule"/> is not equal to the current <see cref="AudioModule"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="AudioModule"/> is not equal to the current <see cref="AudioModule"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(AudioModule left, AudioModule right)
         => !(left == right);
 

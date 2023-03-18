@@ -27,9 +27,17 @@ public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>
 
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ActionGroupModule"/> is equal to the current <see cref="ActionGroupModule"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ActionGroupModule"/> is equal to the current <see cref="ActionGroupModule"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(ActionGroupModule left, ActionGroupModule right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ActionGroupModule"/> is not equal to the current <see cref="ActionGroupModule"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ActionGroupModule"/> is not equal to the current <see cref="ActionGroupModule"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(ActionGroupModule left, ActionGroupModule right)
         => !(left == right);
 

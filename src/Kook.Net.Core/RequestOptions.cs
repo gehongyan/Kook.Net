@@ -84,5 +84,9 @@ public class RequestOptions
         RequestHeaders = new Dictionary<string, IEnumerable<string>>();
     }
 
+    /// <summary>
+    ///     Memberwise clones this <see cref="RequestOptions"/> object.
+    /// </summary>
+    /// <returns> A cloned <see cref="RequestOptions"/> object. </returns>
     public RequestOptions Clone() => MemberwiseClone() as RequestOptions;
 }

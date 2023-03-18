@@ -145,12 +145,29 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     /// <inheritdoc />
     ICard ICardBuilder.Build() => Build();
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.
+    /// </returns>
     public static bool operator ==(CardBuilder left, CardBuilder right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="CardBuilder"/> is not equal to the current <see cref="CardBuilder"/>.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the specified <see cref="CardBuilder"/> is not equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.
+    /// </returns>
     public static bool operator !=(CardBuilder left, CardBuilder right)
         => !(left == right);
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="CardBuilder"/>.
+    /// </summary>
+    /// <param name="obj"> The object to compare with the current <see cref="CardBuilder"/>.</param>
+    /// <returns> <c>true</c> if the specified object is equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.</returns>
     public override bool Equals(object obj)
         => obj is CardBuilder builder && Equals(builder);
 

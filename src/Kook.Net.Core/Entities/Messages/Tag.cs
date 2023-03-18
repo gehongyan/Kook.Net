@@ -37,7 +37,9 @@ public class Tag<T> : ITag
     }
 
     private string DebuggerDisplay => $"{(Type is TagType.HereMention ? "@在线成员" : Value?.ToString()) ?? "null"} ({Type})";
-    public override string ToString() => $"{(Type is TagType.HereMention ? "@在线成员" : Value?.ToString()) ?? "null"} ({Type})";
+
+    /// <inheritdoc />
+    public override string ToString() => DebuggerDisplay;
 
     /// <inheritdoc />
     object ITag.Value => Value;

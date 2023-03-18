@@ -218,6 +218,7 @@ public struct OverwritePermissions
         return perms;
     }
 
+    /// <inheritdoc />
     public override string ToString() => $"Allow {AllowValue}, Deny {DenyValue}";
 
     private string DebuggerDisplay =>

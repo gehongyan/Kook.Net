@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace Kook;
 
+/// <summary>
+///     Represents a guild emote.
+/// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Emote : IEmote
 {
@@ -13,10 +16,19 @@ public class Emote : IEmote
     internal static readonly Regex KMarkdownEmojiRegex = new Regex(@"(\(emj\))(?<name>[^\(\)]{1,32}?)\1\[(?<id>\d{1,20}\/\w{1,20})\]",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
+    /// <summary>
+    ///     Gets the identifier of this emote.
+    /// </summary>
     public string Id { get; }
 
+    /// <summary>
+    ///     Gets the name of this emote.
+    /// </summary>
     public string Name { get; }
 
+    /// <summary>
+    ///     Gets whether this emote is animated.
+    /// </summary>
     public bool? Animated { get; }
 
     internal Emote(string id, string name, bool? animated = null)
@@ -26,6 +38,7 @@ public class Emote : IEmote
         Animated = animated;
     }
 
+    /// <inheritdoc />
     public override bool Equals(object other)
     {
         if (other == null)
@@ -39,14 +52,15 @@ public class Emote : IEmote
         return Id == otherEmote.Id;
     }
 
+    /// <inheritdoc />
     public override int GetHashCode()
         => Id.GetHashCode();
 
     /// <summary> Parses an <see cref="Emote"/> from its raw format. </summary>
     /// <param name="text">
     ///     The raw encoding of an emote; for example,
-    ///     [:djbigfan:1990044438283387/hvBcVC4nHX03k03k] when <paramref name="tagMode"/> is <c>TagMode.PlainText</c>,
-    ///     or (emj)djbigfan(emj)[1990044438283387/hvBcVC4nHX03k03k] when <paramref name="tagMode"/> is <c>TagMode.KMarkdown</c>.
+    ///     [:emotename:1991895624896587/hbCFVWhu923k03k] when <paramref name="tagMode"/> is <c>TagMode.PlainText</c>,
+    ///     or (emj)emotename(emj)[1991895624896587/hbCFVWhu923k03k] when <paramref name="tagMode"/> is <c>TagMode.KMarkdown</c>.
     /// </param>
     /// <param name="tagMode"></param>
     /// <returns>An emote.</returns>
@@ -61,8 +75,8 @@ public class Emote : IEmote
     /// <summary> Tries to parse an <see cref="Emote"/> from its raw format. </summary>
     /// <param name="text">
     ///     The raw encoding of an emote; for example,
-    ///     [:djbigfan:1990044438283387/hvBcVC4nHX03k03k] when <paramref name="tagMode"/> is <c>TagMode.PlainText</c>,
-    ///     or (emj)djbigfan(emj)[1990044438283387/hvBcVC4nHX03k03k] when <paramref name="tagMode"/> is <c>TagMode.KMarkdown</c>.
+    ///     [:emotename:1991895624896587/hbCFVWhu923k03k] when <paramref name="tagMode"/> is <c>TagMode.PlainText</c>,
+    ///     or (emj)emotename(emj)[1991895624896587/hbCFVWhu923k03k] when <paramref name="tagMode"/> is <c>TagMode.KMarkdown</c>.
     /// </param>
     /// <param name="result">An emote.</param>
     /// <param name="tagMode"></param>

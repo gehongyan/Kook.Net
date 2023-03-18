@@ -60,9 +60,17 @@ public class ImageElement : IElement, IEquatable<ImageElement>
 
     private string DebuggerDisplay => $"{Type}: {Source}";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ImageElement"/> is equal to the current <see cref="ImageElement"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ImageElement"/> is equal to the current <see cref="ImageElement"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(ImageElement left, ImageElement right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ImageElement"/> is not equal to the current <see cref="ImageElement"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ImageElement"/> is not equal to the current <see cref="ImageElement"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(ImageElement left, ImageElement right)
         => !(left == right);
 

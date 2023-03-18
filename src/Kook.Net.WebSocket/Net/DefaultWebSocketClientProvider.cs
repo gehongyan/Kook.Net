@@ -8,7 +8,7 @@ namespace Kook.Net.WebSockets;
 public static class DefaultWebSocketProvider
 {
     /// <summary>
-    ///     The default <see cref="WebSocketProvider"/> instance.
+    ///     A delegate that creates a default <see cref="WebSocketProvider"/> instance.
     /// </summary>
     public static readonly WebSocketProvider Instance = Create();
 

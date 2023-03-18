@@ -137,6 +137,9 @@ public class KookSocketConfig : KookRestConfig
 
     private int _maxWaitForGuildAvailable = 10000;
 
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="KookSocketConfig"/> class.
+    /// </summary>
     public KookSocketConfig()
     {
         WebSocketProvider = DefaultWebSocketProvider.Instance;

@@ -30,6 +30,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     public string CleanContent => MessageHelper.SanitizeMessage(this);
 
+    /// <inheritdoc cref="IMessage.Attachments" />
     public virtual IReadOnlyCollection<Attachment> Attachments { get; private set; }
 
     /// <inheritdoc />

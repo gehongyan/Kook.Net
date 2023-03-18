@@ -27,9 +27,17 @@ public class ContextModule : IModule, IEquatable<ContextModule>
 
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ContextModule"/> is equal to the current <see cref="ContextModule"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ContextModule"/> is equal to the current <see cref="ContextModule"/>; otherwise, <c>false</c>. </returns>
     public static bool operator ==(ContextModule left, ContextModule right)
         => left?.Equals(right) ?? right is null;
 
+    /// <summary>
+    ///     Determines whether the specified <see cref="ContextModule"/> is not equal to the current <see cref="ContextModule"/>.
+    /// </summary>
+    /// <returns> <c>true</c> if the specified <see cref="ContextModule"/> is not equal to the current <see cref="ContextModule"/>; otherwise, <c>false</c>. </returns>
     public static bool operator !=(ContextModule left, ContextModule right)
         => !(left == right);
 
