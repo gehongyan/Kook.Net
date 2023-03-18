@@ -160,8 +160,8 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     /// <returns>
     ///     The full name of the user.
     /// </returns>
-    public override string ToString() => Format.UsernameAndIdentifyNumber(this);
-    private string DebuggerDisplay => $"{Format.UsernameAndIdentifyNumber(this)} ({Id}{(IsBot ?? false ? ", Bot" : "")})";
+    public override string ToString() => Format.UsernameAndIdentifyNumber(this, Kook.FormatUsersInBidirectionalUnicode);
+    private string DebuggerDisplay => $"{Format.UsernameAndIdentifyNumber(this, Kook.FormatUsersInBidirectionalUnicode)} ({Id}{(IsBot ?? false ? ", Bot" : "")})";
     internal SocketUser Clone() => MemberwiseClone() as SocketUser;
 
     #region IUser

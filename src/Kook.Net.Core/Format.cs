@@ -118,7 +118,7 @@ public static class Format
     public static string StripMarkDown(string text)
     {
         // // Remove color
-        // var newText = Regex.Replace(text, 
+        // var newText = Regex.Replace(text,
         //     @"(?<!\\)(?:\\.)*\(font\)(?<text>.+?)(?<!\\)(?:\\.)*\(font\)\[\w+\]",
         //     @"${text}",
         //     RegexOptions.Compiled | RegexOptions.RightToLeft);
@@ -133,9 +133,12 @@ public static class Format
     ///     Formats a user's username + identify number while maintaining bidirectional unicode
     /// </summary>
     /// <param name="user">The user whose username and identify number to format</param>
+    /// <param name="doBidirectional">To format the string in bidirectional unicode or not</param>
     /// <returns>The username + identify number</returns>
-    public static string UsernameAndIdentifyNumber(IUser user)
+    public static string UsernameAndIdentifyNumber(IUser user, bool doBidirectional)
     {
-        return $"\u2066{user.Username}\u2069#{user.IdentifyNumber}";
+        return doBidirectional
+            ? $"\u2066{user.Username}\u2069#{user.IdentifyNumber}"
+            : $"{user.Username}#{user.IdentifyNumber}";
     }
 }

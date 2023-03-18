@@ -30,6 +30,7 @@ public abstract class BaseKookClient : IKookClient
     public ISelfUser CurrentUser { get; protected set; }
     /// <inheritdoc />
     public TokenType TokenType => ApiClient.AuthTokenType;
+    internal bool FormatUsersInBidirectionalUnicode { get; private set; }
 
     internal BaseKookClient(KookRestConfig config, API.KookRestApiClient client)
     {
@@ -40,6 +41,8 @@ public abstract class BaseKookClient : IKookClient
         _stateLock = new SemaphoreSlim(1, 1);
         _restLogger = LogManager.CreateLogger("Rest");
         _isFirstLogin = config.DisplayInitialLog;
+
+        FormatUsersInBidirectionalUnicode = config.FormatUsersInBidirectionalUnicode;
 
         ApiClient.RequestQueue.RateLimitTriggered += async (id, info, endpoint) =>
         {

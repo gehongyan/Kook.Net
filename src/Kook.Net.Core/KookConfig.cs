@@ -7,12 +7,12 @@ namespace Kook;
 /// </summary>
 public class KookConfig
 {
-    /// <summary> 
-    ///     Returns the API version Kook.Net uses. 
+    /// <summary>
+    ///     Returns the API version Kook.Net uses.
     /// </summary>
     /// <returns>
     ///     An int representing the API version that Kook.Net uses to communicate with Kook.
-    ///     <para>A list of available API version can be seen on the official 
+    ///     <para>A list of available API version can be seen on the official
     ///     <see href="https://developer.kookapp.cn/doc/reference">Kook API documentation</see>
     ///     .</para>
     /// </returns>
@@ -52,16 +52,16 @@ public class KookConfig
     /// </returns>
     public static readonly string APIUrl = $"https://www.kookapp.cn/api/v{APIVersion}/";
 
-    /// <summary> 
-    ///     Returns the default timeout for requests. 
+    /// <summary>
+    ///     Returns the default timeout for requests.
     /// </summary>
     /// <returns>
     ///     The amount of time it takes in milliseconds before a request is timed out.
     /// </returns>
     public const int DefaultRequestTimeout = 6000;
 
-    /// <summary> 
-    ///     Returns the max length for a Kook message. 
+    /// <summary>
+    ///     Returns the max length for a Kook message.
     /// </summary>
     /// <returns>
     ///     The maximum length of a message allowed by Kook.
@@ -74,7 +74,7 @@ public class KookConfig
     /// </remarks>
     public const int MaxMessageSize = 20000;
 
-    /// <summary> 
+    /// <summary>
     ///     Returns the max users allowed to be in a request.
     /// </summary>
     /// <returns>
@@ -82,48 +82,48 @@ public class KookConfig
     /// </returns>
     public const int MaxUsersPerBatch = 50;
 
-    /// <summary> 
-    ///     Returns the max messages allowed to be in a request. 
+    /// <summary>
+    ///     Returns the max messages allowed to be in a request.
     /// </summary>
     /// <returns>
     ///     The maximum number of messages that can be gotten per-batch.
     /// </returns>
     public const int MaxMessagesPerBatch = 100;
 
-    /// <summary> 
-    ///     Returns the max items allowed to be in a request by default. 
+    /// <summary>
+    ///     Returns the max items allowed to be in a request by default.
     /// </summary>
     /// <returns>
     ///     The maximum number of items that can be gotten per-batch by default.
     /// </returns>
     public const int MaxItemsPerBatchByDefault = 100;
 
-    /// <summary> 
-    ///     Returns the min length for a Kook guild nickname. 
+    /// <summary>
+    ///     Returns the min length for a Kook guild nickname.
     /// </summary>
     /// <returns>
     ///     The minimum length of a nickname allowed by Kook.
     /// </returns>
     public const int MinNicknameSize = 2;
 
-    /// <summary> 
-    ///     Returns the max length for a Kook guild nickname. 
+    /// <summary>
+    ///     Returns the max length for a Kook guild nickname.
     /// </summary>
     /// <returns>
     ///     The maximum length of a nickname allowed by Kook.
     /// </returns>
     public const int MaxNicknameSize = 64;
 
-    /// <summary> 
-    ///     Returns the min value for a Kook intimacy score. 
+    /// <summary>
+    ///     Returns the min value for a Kook intimacy score.
     /// </summary>
     /// <returns>
     ///     The minimum value of an intimacy score allowed by Kook.
     /// </returns>
     public const int MinIntimacyScore = 0;
 
-    /// <summary> 
-    ///     Returns the max value for a Kook intimacy score. 
+    /// <summary>
+    ///     Returns the max value for a Kook intimacy score.
     /// </summary>
     /// <returns>
     ///     The maximum value of an intimacy score allowed by Kook.
@@ -172,4 +172,14 @@ public class KookConfig
     ///     Gets the user identifier of the author who sends system messages from Kook official.
     /// </summary>
     internal const ulong SystemMessageAuthorID = 3900775823;
+
+    /// <summary>
+    ///     Gets or sets if the Rest/Socket user <see cref="object.ToString"/> override formats the string in respect to bidirectional unicode.
+    /// </summary>
+    /// <remarks>
+    ///     By default, the returned value will be "?Discord?#1234", to work with bidirectional usernames.
+    ///     <br/>
+    ///     If set to <see langword="false"/>, this value will be "Discord#1234".
+    /// </remarks>
+    public bool FormatUsersInBidirectionalUnicode { get; set; } = true;
 }

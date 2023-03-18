@@ -140,9 +140,9 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     /// <returns>
     ///     A string that resolves to Username#IdentifyNumber of the user.
     /// </returns>
-    public override string ToString() => Format.UsernameAndIdentifyNumber(this);
+    public override string ToString() => Format.UsernameAndIdentifyNumber(this, Kook.FormatUsersInBidirectionalUnicode);
 
-    private string DebuggerDisplay => $"{Format.UsernameAndIdentifyNumber(this)} ({Id}{(IsBot ?? false ? ", Bot" : "")})";
+    private string DebuggerDisplay => $"{Format.UsernameAndIdentifyNumber(this, Kook.FormatUsersInBidirectionalUnicode)} ({Id}{(IsBot ?? false ? ", Bot" : "")})";
 
 
     #region IUser
