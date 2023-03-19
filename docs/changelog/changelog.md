@@ -18,7 +18,7 @@ title: 变更日志
 
 ### 更新路线
 
-此版本将 [IGuild.CreateRoleAsync](xref:Kook.IGuild.CreateRoleAsync*) 中的默认参数 `everyoneHandling`
+此版本将 [IUserMessage.Resolve](xref:Kook.IUserMessage.Resolve*) 中的默认参数 `everyoneHandling`
 变更为 [TagHandling.Name](xref:Kook.TagHandling.Name)，所有使用此方法的用法都需要留意此变更。
 
 ### 新增
