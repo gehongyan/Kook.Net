@@ -2,6 +2,14 @@
 
 ---
 
+## v0.3.1 [2023-03-19]
+
+### Added
+
+- Added `ICard.ToJsonString` and `ICardBuilder.ToJsonString` for cards JSON serialization;
+  Added `CardJsonExtension.Parse` and `CardJsonExtension.TryParse` for cards JSON deserialization.
+  (c076ce8feadf9c6aaa54b44bd68466b47d3767e4)
+
 ## v0.3.0 [2023-03-19]
 
 ### Update Path

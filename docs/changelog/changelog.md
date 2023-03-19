@@ -5,6 +5,15 @@ title: 变更日志
 
 # 变更日志
 
+## v0.3.1 [2023-03-19]
+
+### 新增
+
+- 新增 [ICard.ToJsonString](xref:Kook.Rest.CardJsonExtension.ToJsonString(Kook.ICard,System.Boolean)) 及
+  [ICardBuilder.ToJsonString](xref:Kook.Rest.CardJsonExtension.ToJsonString(Kook.ICardBuilder,System.Boolean)) 以支持卡片 JSON
+  序列化，新增 [CardJsonExtension.Parse](xref:Kook.Rest.CardJsonExtension.Parse(System.String)) 及
+  [CardJsonExtension.TryParse](xref:Kook.Rest.CardJsonExtension.TryParse(System.String,Kook.ICardBuilder@)) 以支持卡片 JSON 反序列化
+
 ## v0.3.0 [2023-03-19]
 
 ### 更新路线
