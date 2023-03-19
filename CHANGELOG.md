@@ -2,7 +2,40 @@
 
 ---
 
+## v0.3.0 [2023-03-19]
+
+### Update Path
+
+This release changed the default value of `everyoneHandling` parameter in `IUserMessage.Resolve` to `TagHandling.Name`.
+All usages of this method need to take note of this change.
+
+### Added
+
+- Added method overload `GetUserAsync(string,string,RequestOptions)` to the `IKookClient` interface and implemented it in `BaseSocketClient`.
+  (6555c2ba0c9993b4523a95a8cbdc544474541984)
+- Added support to disable Unicode bidirectional formatting of username strings via `KookConfig.FormatUsersInBidirectionalUnicode`.
+  (bfc038ec4ce68124aa7eef94b421f6d0f1f941ce)
+
+### Fixed
+
+- Fixed issue with `IUserMessage.Resolve` incorrectly textifying mentions for @everyone and @here.
+  (91c1175ad5eb22323cc1fe3a5cc93b9e8fc86ea5)
+- Fixed deserialization issue with `IGuild.CreateRoleAsync` results. (1726d5c7c36ead0544784eb937660537c6ec1f4f)
+- (Experimental feature) Fixed issue with `KookRestClient.CreateGuildAsync` not returning complete guild information.
+  (2b5c59d60e8db309c30cf42509a9756625e98903)
+
+### Misc
+
+- Added XML documentation to all public APIs. (fe1e9bcd0b7bd9a0a99c850234beef1b4993977b, 2ad3301bcc06a731e9f57bbd542484a31e77c438)
+- Applied code styling. (6325b16b9ad1f8f958a8eaaf125e7d34ae280a10)
+
 ## v0.2.5 [2023-03-16]
+
+### Update Path
+
+This release added a new optional parameter `Nullable<GameCreationSource>` for `Kook.GetGamesAsync`,
+to support getting games with specified creation source. All usages of this method that pass positional arguments
+to `RequestOptions` need to be updated.
 
 ### Added
 

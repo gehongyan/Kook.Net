@@ -8,7 +8,7 @@ namespace Kook.WebSocket;
 public static class BaseSocketClientExperimentalExtensions
 {
     /// <summary>
-    ///     Creates a guild for the logged-in user who is in less than 10 active guilds.
+    ///     Creates a guild for the logged-in user.
     /// </summary>
     /// <remarks>
     ///     This method creates a new guild on behalf of the logged-in user.
