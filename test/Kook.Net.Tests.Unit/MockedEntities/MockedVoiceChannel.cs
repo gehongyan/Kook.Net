@@ -62,8 +62,6 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
     public Task<ICategoryChannel> GetCategoryAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null) =>
         throw new NotImplementedException();
 
-    public Task SyncPermissionsAsync(RequestOptions options = null) => throw new NotImplementedException();
-
     public Task<IUser> GetCreatorAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null) =>
         throw new NotImplementedException();
 
