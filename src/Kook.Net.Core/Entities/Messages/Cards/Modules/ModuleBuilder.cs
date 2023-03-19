@@ -1,5 +1,5 @@
-using Kook.Utils;
 using System.Collections.Immutable;
+using Kook.Utils;
 
 namespace Kook;
 
@@ -32,12 +32,12 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
         get => _text;
         set
         {
-            if (value?.Content is null)
+            if (value is not null && value.Content is null)
                 throw new ArgumentException(
-                    $"Header content cannot be null.",
+                    "Header content cannot be null.",
                     nameof(Text));
 
-            if (value.Content.Length > MaxTitleContentLength)
+            if (value is not null && value.Content.Length > MaxTitleContentLength)
                 throw new ArgumentException(
                     $"Header content length must be less than or equal to {MaxTitleContentLength}.",
                     nameof(Text));
@@ -179,7 +179,10 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
         get => _text;
         set
         {
-            if (value.Type != ElementType.PlainText && value.Type != ElementType.KMarkdown && value.Type != ElementType.Paragraph)
+            if (value is not null
+                && value.Type != ElementType.PlainText
+                && value.Type != ElementType.KMarkdown
+                && value.Type != ElementType.Paragraph)
                 throw new ArgumentException(
                     "Section text must be a PlainText element, a KMarkdown element or a Paragraph struct.",
                     nameof(value));
@@ -202,7 +205,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
         get => _accessory;
         set
         {
-            if (value.Type != ElementType.Image && value.Type != ElementType.Button)
+            if (value is not null && value.Type != ElementType.Image && value.Type != ElementType.Button)
                 throw new ArgumentException(
                     $"Section text must be an {nameof(ImageElementBuilder)} or a {nameof(ButtonElement)}.",
                     nameof(value));
@@ -452,6 +455,10 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
         get => _elements;
         set
         {
+            if (value is null)
+                throw new ArgumentNullException(
+                    nameof(Elements),
+                    "Element cannot be null.");
             if (value.Count > MaxElementCount)
                 throw new ArgumentException(
                     $"Element count must be less than or equal to {MaxElementCount}.",
@@ -510,8 +517,14 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
     /// <returns>
     ///     An <see cref="ImageGroupModule"/> representing the built image group module object.
     /// </returns>
-    public ImageGroupModule Build() =>
-        new(Elements.Select(e => e.Build()).ToImmutableArray());
+    public ImageGroupModule Build()
+    {
+        if (Elements is null or { Count: 0 })
+            throw new ArgumentNullException(
+                nameof(Elements),
+                "Element cannot be null or empty list.");
+        return new ImageGroupModule(Elements.Select(e => e.Build()).ToImmutableArray());
+    }
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
@@ -591,6 +604,10 @@ public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModule
         get => _elements;
         set
         {
+            if (value is null)
+                throw new ArgumentNullException(
+                    nameof(Elements),
+                    "Element cannot be null.");
             if (value.Count > MaxElementCount)
                 throw new ArgumentException(
                     $"Element count must be less than or equal to {MaxElementCount}.",
@@ -649,8 +666,14 @@ public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModule
     /// <returns>
     ///     A <see cref="ContainerModule"/> representing the built container module object.
     /// </returns>
-    public ContainerModule Build() =>
-        new(Elements.Select(e => e.Build()).ToImmutableArray());
+    public ContainerModule Build()
+    {
+        if (Elements is null or { Count: 0 })
+            throw new ArgumentNullException(
+                nameof(Elements),
+                "Element cannot be null or empty list.");
+        return new ContainerModule(Elements.Select(e => e.Build()).ToImmutableArray());
+    }
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
@@ -730,6 +753,10 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
         get => _elements;
         set
         {
+            if (value is null)
+                throw new ArgumentNullException(
+                    nameof(Elements),
+                    "Element cannot be null.");
             if (value.Count > MaxElementCount)
                 throw new ArgumentException(
                     $"Element count must be less than or equal to {MaxElementCount}.",
@@ -788,8 +815,14 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
     /// <returns>
     ///     An <see cref="ActionGroupModule"/> representing the built action group module object.
     /// </returns>
-    public ActionGroupModule Build() =>
-        new(Elements.Select(e => e.Build()).ToImmutableArray());
+    public ActionGroupModule Build()
+    {
+        if (Elements is null or { Count: 0 })
+            throw new ArgumentNullException(
+                nameof(Elements),
+                "Element cannot be null or empty list.");
+        return new ActionGroupModule(Elements.Select(e => e.Build()).ToImmutableArray());
+    }
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
@@ -870,6 +903,11 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
         get => _elements;
         set
         {
+            if (value is null)
+                throw new ArgumentNullException(
+                    nameof(Elements),
+                    "Element cannot be null.");
+
             if (value.Count > MaxElementCount)
                 throw new ArgumentException(
                     $"Element count must be less than or equal to {MaxElementCount}.",

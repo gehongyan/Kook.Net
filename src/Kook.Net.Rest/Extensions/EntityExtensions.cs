@@ -28,7 +28,7 @@ internal static class EntityExtensions
             ElementType.Image => (model as API.ImageElement).ToEntity(),
             ElementType.Button => (model as API.ButtonElement).ToEntity(),
             ElementType.Paragraph => (model as API.ParagraphStruct).ToEntity(),
-            _ => throw new ArgumentOutOfRangeException(nameof(API.ElementBase))
+            _ => throw new ArgumentOutOfRangeException(nameof(model))
         };
     }
 
@@ -78,7 +78,7 @@ internal static class EntityExtensions
             ElementType.Image => (entity as ImageElement).ToModel(),
             ElementType.Button => (entity as ButtonElement).ToModel(),
             ElementType.Paragraph => (entity as ParagraphStruct).ToModel(),
-            _ => throw new ArgumentOutOfRangeException(nameof(IElement))
+            _ => throw new ArgumentOutOfRangeException(nameof(entity))
         };
     }
 
@@ -142,8 +142,6 @@ internal static class EntityExtensions
     {
         if (model is null) return null;
 
-        if (model is null) return null;
-
         return model.Type switch
         {
             ModuleType.Header => (model as API.HeaderModule).ToEntity(),
@@ -158,7 +156,7 @@ internal static class EntityExtensions
             ModuleType.Video => (model as API.VideoModule).ToEntity(),
             ModuleType.Countdown => (model as API.CountdownModule).ToEntity(),
             ModuleType.Invite => (model as API.InviteModule).ToEntity(),
-            _ => throw new ArgumentOutOfRangeException(nameof(API.ModuleBase))
+            _ => throw new ArgumentOutOfRangeException(nameof(model))
         };
     }
 
@@ -265,7 +263,7 @@ internal static class EntityExtensions
             ModuleType.Video => (entity as VideoModule).ToModel(),
             ModuleType.Countdown => (entity as CountdownModule).ToModel(),
             ModuleType.Invite => (entity as InviteModule).ToModel(),
-            _ => throw new ArgumentOutOfRangeException(nameof(IModule))
+            _ => throw new ArgumentOutOfRangeException(nameof(entity))
         };
     }
 
@@ -367,7 +365,7 @@ internal static class EntityExtensions
         return model.Type switch
         {
             CardType.Card => (model as API.Card).ToEntity(),
-            _ => throw new ArgumentOutOfRangeException(nameof(API.CardBase))
+            _ => throw new ArgumentOutOfRangeException(nameof(model))
         };
     }
 
@@ -385,7 +383,7 @@ internal static class EntityExtensions
         return entity.Type switch
         {
             CardType.Card => (entity as Card).ToModel(),
-            _ => throw new ArgumentOutOfRangeException(nameof(ICard))
+            _ => throw new ArgumentOutOfRangeException(nameof(entity))
         };
     }
 
@@ -420,8 +418,6 @@ internal static class EntityExtensions
         };
     }
 
-    public static NotImplementedEmbed ToNotImplementedEntity(this API.NotImplementedEmbed model) => new(model.RawType, model.RawJsonNode);
-
     public static LinkEmbed ToEntity(this API.LinkEmbed model) =>
         new(model.Url, model.Title, model.Description, model.SiteName, model.Color, model.Image);
 
@@ -430,6 +426,9 @@ internal static class EntityExtensions
     public static BilibiliVideoEmbed ToEntity(this API.BilibiliVideoEmbed model) =>
         new(model.Url, model.OriginUrl, model.BvNumber, model.IframePath,
             TimeSpan.FromSeconds(model.Duration), model.Title, model.Cover);
+
+    public static NotImplementedEmbed ToNotImplementedEntity(this API.NotImplementedEmbed model) =>
+        new(model.RawType, model.RawJsonNode);
 
     #endregion
 
