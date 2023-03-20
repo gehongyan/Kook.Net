@@ -1,6 +1,7 @@
 // See https://aka.ms/new-console-template for more information
 
 using Kook;
+using Kook.Rest;
 using Kook.WebSocket;
 
 internal class Program
@@ -15,9 +16,9 @@ internal class Program
             ?? throw new ArgumentNullException(nameof(_token));
         _client = new KookSocketClient(new KookSocketConfig
         {
-            AlwaysDownloadUsers = true,
-            AlwaysDownloadVoiceStates = true,
-            AlwaysDownloadBoostSubscriptions = true,
+            AlwaysDownloadUsers = false,
+            AlwaysDownloadVoiceStates = false,
+            AlwaysDownloadBoostSubscriptions = false,
             MessageCacheSize = 100,
             LogLevel = LogSeverity.Debug
         });
@@ -34,7 +35,10 @@ internal class Program
 
         _client.Connected += () => Task.CompletedTask;
         _client.Disconnected += exception => Task.CompletedTask;
-        _client.Ready += () => Task.CompletedTask;
+        _client.Ready += async () =>
+        {
+            IReadOnlyCollection<RestGuild> adminGuilds = await _client.Rest.GetAdminGuildsAsync();
+        };
         _client.LatencyUpdated += (before, after) => Task.CompletedTask;
 
         #endregion

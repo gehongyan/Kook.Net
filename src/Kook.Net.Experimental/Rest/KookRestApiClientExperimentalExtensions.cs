@@ -11,9 +11,6 @@ internal static class KookRestApiClientExperimentalExtensions
     public static IAsyncEnumerable<IReadOnlyCollection<Guild>> GetAdminGuildsAsync(this KookRestApiClient client,
         int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions options = null)
     {
-        if (client.AuthTokenType is not TokenType.Bearer)
-            throw new InvalidOperationException("Retrieving guilds where the current user has Administrator permission requires a Bearer token.");
-
         options = RequestOptions.CreateOrClone(options);
 
         KookRestApiClient.BucketIds ids = new();
