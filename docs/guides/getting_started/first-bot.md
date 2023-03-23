@@ -118,14 +118,10 @@ Kook.Net 中的事件与 C# 中的任何其他事件的工作机制类似。
 > 尤其是在有计划将应用程序以任何形式发布的情况下。
 >
 > 为了能够安全地处理该机密信息，建议以 [环境变量]、[配置文件]、[机密管理] 等形式存储 Token。
->
->
 
 [环境变量]: https://docs.microsoft.com/zh-cn/dotnet/api/system.environment.getenvironmentvariable?view=net-6.0
->
 
 [配置文件]: https://docs.microsoft.com/zh-cn/dotnet/core/extensions/configuration
->
 
 [机密管理]: https://docs.microsoft.com/zh-cn/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=linux
 
