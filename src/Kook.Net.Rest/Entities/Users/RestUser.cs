@@ -1,4 +1,3 @@
-using Kook.WebSocket;
 using System.Diagnostics;
 using System.Globalization;
 using Model = Kook.API.User;
