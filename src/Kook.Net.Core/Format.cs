@@ -11,98 +11,350 @@ public static class Format
     private static readonly string[] SensitiveCharacters = { "\\", "*", "~", "`", ":", "-", "]", ")", ">" };
 
     /// <summary> Returns a markdown-formatted string with bold formatting. </summary>
-    public static string Bold(string text) => $"**{text}**";
+    /// <param name="text">The text to format.</param>
+    /// <param name="sanitize"> Whether to sanitize the text. </param>
+    /// <returns>Gets the formatted text.</returns>
+    /// <remarks>
+    ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
+    ///     <c>*</c> with <c>\*</c>.
+    /// </remarks>
+    public static string Bold(this string text, bool sanitize = true) =>
+        $"**{(sanitize ? text.Sanitize("*") : text)}**";
 
     /// <summary> Returns a markdown-formatted string with italics formatting. </summary>
-    public static string Italics(string text) => $"*{text}*";
+    /// <param name="text">The text to format.</param>
+    /// <param name="sanitize"> Whether to sanitize the text. </param>
+    /// <returns>Gets the formatted text.</returns>
+    /// <remarks>
+    ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
+    ///     <c>*</c> with <c>\*</c>.
+    /// </remarks>
+    public static string Italics(this string text, bool sanitize = true) =>
+        $"*{(sanitize ? text.Sanitize("*") : text)}*";
+
+    /// <summary> Returns a markdown-formatted string with bold italics formatting. </summary>
+    /// <param name="text">The text to format.</param>
+    /// <param name="sanitize"> Whether to sanitize the text. </param>
+    /// <returns>Gets the formatted text.</returns>
+    /// <remarks>
+    ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
+    ///     <c>*</c> with <c>\*</c>.
+    /// </remarks>
+    public static string BoldItalics(this string text, bool sanitize = true) =>
+        $"***{(sanitize ? text.Sanitize("*") : text)}***";
 
     /// <summary> Returns a markdown-formatted string with strike-through formatting. </summary>
-    public static string Strikethrough(string text) => $"~~{text}~~";
+    /// <param name="text">The text to format.</param>
+    /// <param name="sanitize"> Whether to sanitize the text. </param>
+    /// <returns>Gets the formatted text.</returns>
+    /// <remarks>
+    ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
+    ///     <c>~</c> with <c>\~</c>.
+    /// </remarks>
+    public static string Strikethrough(this string text, bool sanitize = true) =>
+        $"~~{(sanitize ? text.Sanitize("~") : text)}~~";
 
     /// <summary> Returns a markdown-formatted string colored with the specified <see cref="TextTheme"/>. </summary>
+    /// <param name="text">The text to colorize.</param>
+    /// <param name="theme"> The theme to colorize the text with. </param>
+    /// <param name="sanitize"> Whether to sanitize the text. </param>
+    /// <returns>Gets the colorized text.</returns>
     /// <remarks>
     ///     <note type="warning">
     ///         Colored text is only supported in cards.
     ///     </note>
     /// </remarks>
-    public static string Colorize(string text, TextTheme theme) =>
-        $"(font){text}(font)[{theme.ToString().ToLowerInvariant()}]";
+    /// <remarks>
+    ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
+    ///     <c>(</c> and <c>)</c> with <c>\(</c> and <c>\)</c>.
+    /// </remarks>
+    public static string Colorize(this string text, TextTheme theme, bool sanitize = true) =>
+        $"(font){(sanitize ? text.Sanitize("(", ")") : text)}(font)[{theme.ToString().ToLowerInvariant()}]";
 
     /// <summary> Returns a markdown-formatted URL. </summary>
-    public static string Url(string text, string url) => $"[{text}]({url})";
+    /// <param name="text">The text to format.</param>
+    /// <param name="url"> The URL to format. </param>
+    /// <param name="sanitize"> Whether to sanitize the text and URL. </param>
+    /// <returns>Gets the formatted URL.</returns>
+    /// <remarks>
+    ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
+    ///     <c>[</c> and <c>]</c> with <c>\[</c> and <c>\]</c>, and the URL by replacing all occurrences of
+    ///     <c>(</c> and <c>)</c> with <c>\(</c> and <c>\)</c>.
+    /// </remarks>
+    public static string Url(this string text, string url, bool sanitize = true) =>
+        $"[{(sanitize ? text.Sanitize("[", "]") : text)}]({(sanitize ? url.Sanitize("(", ")") : url)})";
+
+
+    /// <inheritdoc cref="Url(string,string,bool)" />
+    public static string Url(this string text, Uri url, bool sanitize = true) => text.Url(url.ToString(), sanitize);
 
     /// <summary> Sanitizes the string, safely escaping any Markdown sequences. </summary>
-    public static string Sanitize(string text)
+    /// <param name="text">The text to sanitize.</param>
+    /// <param name="sensitiveCharacters"> The characters to sanitize. </param>
+    /// <returns>Gets the sanitized text.</returns>
+    /// <remarks>
+    ///     If no sensitive characters are specified, the default sensitive characters are used.
+    ///     The default sensitive characters are: <c>\</c>, <c>*</c>, <c>~</c>, <c>`</c>, <c>:</c>, <c>-</c>, <c>]</c>, <c>)</c>, <c>&gt;</c>.
+    /// </remarks>
+    public static string Sanitize(this string text, params string[] sensitiveCharacters)
     {
         if (text is null) return null;
 
-        return SensitiveCharacters.Aggregate(text,
+        if (sensitiveCharacters is not { Length: > 0 })
+            return SensitiveCharacters.Aggregate(text,
+                (current, unsafeChar) => current.Replace(unsafeChar, $"\\{unsafeChar}"));
+        return sensitiveCharacters.Aggregate(text,
             (current, unsafeChar) => current.Replace(unsafeChar, $"\\{unsafeChar}"));
     }
 
     /// <summary>
-    ///     Formats a string as a quote.
+    ///     Formats a string as split quotes seperated by multiple new lines.
     /// </summary>
     /// <param name="text">The text to format.</param>
+    /// <param name="sanitize"> Whether to sanitize the text. </param>
     /// <returns>Gets the formatted quote text.</returns>
-    public static string Quote(string text)
+    /// <remarks>
+    ///     <note type="warning">
+    ///         Due to the mechanism of the KOOK KMarkdown renderer, this method recognizes multiple text blocks
+    ///         based on two or more consecutive line breaks, and formats each block as a quote. For each text block,
+    ///         a greater than sign (<c>&gt;</c>) and a space is inserted at the beginning of the string, and a
+    ///         zero-width joiner (<c>\u200d</c>) is inserted when the beginning of the block is a whitespace
+    ///         character, to ensure proper display of the quote. When the user copies the text inside
+    ///         the quote, they will not copy this special character. However, if you obtain the
+    ///         message text from the server through message-related APIs, it will contain the
+    ///         special character inserted by this method. An additional line break is also appended
+    ///         at the end of the block to correct any missing line breaks caused by the quote formatting.
+    ///         The appended line break is consistent with the style of the nearby line breaks.
+    ///         To quote the entire text as a whole, use <see cref="BlockQuote"/> instead.
+    ///     </note>
+    ///     <para>
+    ///         Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
+    ///         <c>&gt;</c> with <c>\&gt;</c>.
+    ///     </para>
+    /// </remarks>
+    /// <seealso cref="BlockQuote"/>
+    public static string Quote(this string text, bool sanitize = true)
     {
+        string escaped = sanitize ? text.Sanitize(">") : text;
+
         // do not modify null or whitespace text
         // whitespace does not get quoted properly
-        if (string.IsNullOrWhiteSpace(text)) return text;
+        if (string.IsNullOrWhiteSpace(escaped)) return escaped;
 
         StringBuilder result = new();
 
-        int startIndex = 0;
-        int newLineIndex;
-        do
+        string lineEnding = null;
+        int textLength = escaped.Length;
+        for (int i = 0; i < textLength; i++)
         {
-            newLineIndex = text.IndexOf('\n', startIndex);
-            if (newLineIndex == -1)
+            // Checks for the seperated block beginning
+            if (escaped[i] is not ('\r' or '\n')
+                && (i == 0
+                    // The text begins with a new line then current character is not a new line
+                    // CR or LF style
+                    || (i == 1 && escaped[0] is '\r' or '\n')
+                    // CRLF style
+                    || (i == 2 && escaped[0] == '\r' && escaped[1] == '\n')
+                    // Two new lines before current character
+                    || (i > 1
+                        // CR or LF style
+                        && ((escaped[i - 2] == '\n' && escaped[i - 1] is '\r' or '\n')
+                            || (escaped[i - 2] == '\r' && escaped[i - 1] == '\r')
+                            // CRLF style
+                            || (i > 2
+                                && escaped[i - 3] is '\r' or '\n'
+                                && escaped[i - 2] == '\r'
+                                && escaped[i - 1] == '\n')))))
             {
-                // read the rest of the string
-                string str = text.Substring(startIndex);
-                result.Append($"> {str}");
-            }
-            else
-            {
-                // read until the next newline
-                string str = text.Substring(startIndex, newLineIndex - startIndex);
-                result.Append($"> {str}\n");
+                // The first character of the text
+                result.Append("> ");
+                if (char.IsWhiteSpace(escaped[i]))
+                    result.Append('\u200d');
             }
 
-            startIndex = newLineIndex + 1;
-        } while (newLineIndex != -1 && startIndex != text.Length);
+            // Adds current character
+            result.Append(escaped[i]);
+
+            // Checks for nearby line ending
+            if (escaped[i] == '\n' && i > 0 && escaped[i - 1] == '\r')
+                lineEnding = "\r\n";
+            else if (escaped[i] is '\r' or '\n')
+                lineEnding = escaped[i].ToString();
+
+            // Checks for the end of the seperated block to fix missing new line after quoting
+            if (escaped[i] is not ('\r' or '\n'))
+            {
+                // The last character of the text
+                if (i == textLength - 1)
+                    result.Append(lineEnding ?? "\n");
+
+                // Followed by a new line then the end of the text
+                // CR or LF style
+                else if (i == textLength - 2 && escaped[i + 1] is '\r' or '\n')
+                {
+                    result.Append(escaped[i + 1]);
+                    lineEnding = escaped[i + 1].ToString();
+                }
+
+                // CRLF style
+                else if (i == textLength - 3 && escaped[i + 1] == '\r' && escaped[i + 2] == '\n')
+                {
+                    result.Append("\r\n");
+                    lineEnding = "\r\n";
+                }
+
+                // Followed by two new lines
+                else if (i < textLength - 2
+                         // CR or LF style
+                         && ((escaped[i + 1] == '\n' && escaped[i + 2] is '\r' or '\n')
+                             || (escaped[i + 1] == '\r' && escaped[i + 2] == '\r')
+                             // CRLF style
+                             || (i < textLength - 3
+                                 && escaped[i + 1] == '\r'
+                                 && escaped[i + 2] == '\n'
+                                 && escaped[i + 3] is '\r' or '\n')))
+                {
+                    // CRLF style
+                    if (escaped[i + 1] == '\r' && escaped[i + 2] == '\n')
+                    {
+                        result.Append("\r\n");
+                        lineEnding = "\r\n";
+                    }
+                    // CR or LF style
+                    else
+                    {
+                        result.Append(escaped[i + 1]);
+                        lineEnding = escaped[i + 1].ToString();
+                    }
+                }
+            }
+        }
 
         return result.ToString();
     }
 
     /// <summary> Returns a markdown-formatted string with underline formatting. </summary>
-    public static string Underline(string text) => $"(ins){text}(ins)";
+    /// <param name="text">The text to format.</param>
+    /// <param name="sanitize">Whether to sanitize the text.</param>
+    /// <returns>Gets the formatted underlined text.</returns>
+    /// <remarks>
+    ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
+    ///     <c>(</c> and <c>)</c> with <c>\(</c> and <c>\)</c>.
+    /// </remarks>
+    public static string Underline(this string text, bool sanitize = true) =>
+        $"(ins){(sanitize ? text.Sanitize("(", ")") : text)}(ins)";
 
     /// <summary> Returns a string with spoiler formatting. </summary>
-    public static string Spoiler(string text) => $"(spl){text}(spl)";
+    /// <param name="text">The text to format.</param>
+    /// <param name="sanitize">Whether to sanitize the text.</param>
+    /// <returns>Gets the formatted spoiled text.</returns>
+    /// <remarks>
+    ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
+    ///     <c>(</c> and <c>)</c> with <c>\(</c> and <c>\)</c>.
+    /// </remarks>
+    public static string Spoiler(this string text, bool sanitize = true) =>
+        $"(spl){(sanitize ? text.Sanitize("(", ")") : text)}(spl)";
 
-    /// <summary> Returns a markdown-formatted string with code block formatting. </summary>
-    public static string Code(string text, string language = null)
+    /// <summary> Returns a markdown-formatted string with inline code or code block formatting. </summary>
+    /// <param name="text">The text to format.</param>
+    /// <param name="language"> The language of the code block. </param>
+    /// <param name="sanitize">Whether to sanitize the text.</param>
+    /// <returns>Gets the formatted inline code or code block.</returns>
+    /// <remarks>
+    ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
+    ///     <c>`</c> with <c>\`</c>.
+    /// </remarks>
+    public static string Code(this string text, string language = null, bool sanitize = true)
     {
-        if (language != null || text.Contains('\n'))
-            return $"```{language ?? ""}\n{text}\n```";
-        else
-            return $"`{text}`";
+        string newLine = null;
+        int length = text.Length;
+        for (int i = 0; i < length; i++)
+            if (text[i] is '\r' or '\n')
+            {
+                if (text[i] == '\r' && i < length - 1 && text[i + 1] == '\n')
+                    newLine = "\r\n";
+                else
+                    newLine = text[i].ToString();
+                break;
+            }
+
+        if (language != null || newLine != null)
+            return $"```{language ?? ""}{newLine ?? "\n"}{(sanitize ? text.Sanitize("`") : text)}{newLine ?? "\n"}```";
+        return $"`{(sanitize ? text.Sanitize("`") : text)}`";
     }
 
+    /// <summary> Returns a markdown-formatted string with code block formatting. </summary>
+    /// <param name="text">The text to format.</param>
+    /// <param name="language"> The language of the code block. </param>
+    /// <param name="sanitize">Whether to sanitize the text.</param>
+    /// <returns>Gets the formatted code block.</returns>
+    /// <remarks>
+    ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
+    ///     <c>`</c> with <c>\`</c>.
+    /// </remarks>
+    public static string CodeBlock(this string text, string language = null, bool sanitize = true)
+    {
+        string newLine = null;
+        int length = text.Length;
+        for (int i = 0; i < length; i++)
+            if (text[i] is '\r' or '\n')
+            {
+                if (text[i] == '\r' && i < length - 1 && text[i + 1] == '\n')
+                    newLine = "\r\n";
+                else
+                    newLine = text[i].ToString();
+                break;
+            }
+
+        return $"```{language ?? ""}{newLine ?? "\n"}{(sanitize ? text.Sanitize("`") : text)}{newLine ?? "\n"}```";
+    }
+
+
     /// <summary>
-    ///     Formats a string as a block quote.
+    ///     Formats a string as a block quote as a whole.
     /// </summary>
     /// <param name="text">The text to format.</param>
+    /// <param name="sanitize">Whether to sanitize the text.</param>
     /// <returns>Gets the formatted block quote text.</returns>
-    public static string BlockQuote(string text)
+    /// <remarks>
+    ///     <note type="warning">
+    ///         Due to the working mechanism of the KOOK KMarkdown renderer, this method will
+    ///         insert zero-width joiner special characters (\u200d) before the first empty line
+    ///         and between each empty line in the text by default, so that the renderer can
+    ///         display the entire text as a single quote. When the user copies the text inside
+    ///         the quote, they will not copy this special character. However, if you obtain the
+    ///         message text from the server through message-related APIs, it will contain the
+    ///         special character inserted by this method. If you want to disable this feature,
+    ///         please use <see cref="Quote"/> instead.
+    ///     </note>
+    ///     <para>
+    ///         Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing
+    ///         all occurrences of <c>&gt;</c> with <c>\&gt;</c>.
+    ///     </para>
+    /// </remarks>
+    /// <seealso cref="Quote"/>
+    public static string BlockQuote(this string text, bool sanitize = true)
     {
-        // do not modify null or whitespace
-        if (string.IsNullOrWhiteSpace(text)) return text;
+        string escaped = sanitize ? text.Sanitize(">") : text;
 
-        return $">>> {text}";
+        // do not modify null or whitespace text
+        // whitespace does not get quoted properly
+        if (string.IsNullOrWhiteSpace(escaped)) return escaped;
+
+        StringBuilder result = new("> ");
+        for (int i = 0; i < escaped.Length; i++)
+        {
+            if (escaped[i] is '\n' or '\r'
+                // the current is the very beginning
+                && (i == 0
+                    || escaped[i - 1] is '\n'
+                    || (escaped[i - 1] is '\r' && escaped[i] == '\r')))
+                result.Append('\u200d');
+            // 插入当前字符
+            result.Append(escaped[i]);
+        }
+
+        return result.ToString();
     }
 
     /// <summary>
@@ -110,15 +362,9 @@ public static class Format
     /// </summary>
     /// <param name="text">The to remove markdown from.</param>
     /// <returns>Gets the unformatted text.</returns>
-    public static string StripMarkDown(string text)
+    public static string StripMarkDown(this string text)
     {
-        // // Remove color
-        // var newText = Regex.Replace(text,
-        //     @"(?<!\\)(?:\\.)*\(font\)(?<text>.+?)(?<!\\)(?:\\.)*\(font\)\[\w+\]",
-        //     @"${text}",
-        //     RegexOptions.Compiled | RegexOptions.RightToLeft);
-
-        // Remove Kook supported markdown
+        // Remove KOOK supported markdown
         string newText = Regex.Replace(text, @"(\*|\(ins\)|\(spl\)|`|~|>|\\)", "");
 
         return newText;
@@ -127,10 +373,10 @@ public static class Format
     /// <summary>
     ///     Formats a user's username + identify number while maintaining bidirectional unicode
     /// </summary>
-    /// <param name="user">The user whose username and identify number to format</param>
-    /// <param name="doBidirectional">To format the string in bidirectional unicode or not</param>
-    /// <returns>The username + identify number</returns>
-    public static string UsernameAndIdentifyNumber(IUser user, bool doBidirectional) =>
+    /// <param name="user">The user whose username and identify number to format.</param>
+    /// <param name="doBidirectional">To format the string in bidirectional unicode or not.</param>
+    /// <returns>The username#identifyNumber.</returns>
+    public static string UsernameAndIdentifyNumber(this IUser user, bool doBidirectional) =>
         doBidirectional
             ? $"\u2066{user.Username}\u2069#{user.IdentifyNumber}"
             : $"{user.Username}#{user.IdentifyNumber}";

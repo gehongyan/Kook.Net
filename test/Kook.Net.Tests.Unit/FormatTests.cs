@@ -31,22 +31,26 @@ public class FormatTests
     [Theory]
     [InlineData("", "")]
     [InlineData("\n", "\n")]
-    [InlineData("foo\n\nbar", "> foo\n> \n> bar")]
-    [InlineData("input", "> input")] // single line
+    [InlineData("foo\n\nbar", "> foo\n\n\n> bar\n")]
+    [InlineData("input", "> input\n")] // single line
     // should work with CR or CRLF
-    [InlineData("inb4\ngreentext", "> inb4\n> greentext")]
-    [InlineData("inb4\r\ngreentext", "> inb4\r\n> greentext")]
+    [InlineData("inb4\ngreentext", "> inb4\ngreentext\n")]
+    [InlineData("inb4\r\ngreentext", "> inb4\r\ngreentext\r\n")]
     public void Quote(string input, string expected) => Assert.Equal(expected, Format.Quote(input));
 
     [Theory]
     [InlineData(null, null)]
     [InlineData("", "")]
     [InlineData("\n", "\n")]
-    [InlineData("foo\n\nbar", ">>> foo\n\nbar")]
-    [InlineData("input", ">>> input")] // single line
+    [InlineData("foo\n\nbar", "> foo\n\u200d\nbar")]
+    [InlineData("input", "> input")] // single line
     // should work with CR or CRLF
-    [InlineData("inb4\ngreentext", ">>> inb4\ngreentext")]
-    [InlineData("inb4\r\ngreentext", ">>> inb4\r\ngreentext")]
+    [InlineData("inb4\ngreentext", "> inb4\ngreentext")]
+    [InlineData("inb4\n\ngreentext", "> inb4\n\u200d\ngreentext")]
+    [InlineData("inb4\rgreentext", "> inb4\rgreentext")]
+    [InlineData("inb4\r\rgreentext", "> inb4\r\u200d\rgreentext")]
+    [InlineData("inb4\r\ngreentext", "> inb4\r\ngreentext")]
+    [InlineData("inb4\r\n\r\ngreentext", "> inb4\r\n\u200d\r\ngreentext")]
     public void BlockQuote(string input, string expected) => Assert.Equal(expected, Format.BlockQuote(input));
 
     [Theory]
