@@ -1,6 +1,6 @@
-using Kook.Rest;
 using System.Diagnostics;
 using System.Globalization;
+using Kook.Rest;
 using Model = Kook.API.User;
 
 namespace Kook.WebSocket;
@@ -179,7 +179,7 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     public Task<RestIntimacy> GetIntimacyAsync(RequestOptions options = null)
         => UserHelper.GetIntimacyAsync(this, Kook, options);
 
-    /// <inheritdoc />
+    /// <inheritdoc cref="IUser.UpdateIntimacyAsync(Action{IntimacyProperties},RequestOptions)" />
     public async Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options = null)
         => await UserHelper.UpdateIntimacyAsync(this, Kook, func, options).ConfigureAwait(false);
 
@@ -205,6 +205,10 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     /// <inheritdoc />
     async Task<IIntimacy> IUser.GetIntimacyAsync(RequestOptions options)
         => await GetIntimacyAsync(options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    async Task IUser.UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options)
+        => await UpdateIntimacyAsync(func, options).ConfigureAwait(false);
 
     #endregion
 }
