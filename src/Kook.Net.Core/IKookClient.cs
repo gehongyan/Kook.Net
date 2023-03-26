@@ -147,4 +147,41 @@ public interface IKookClient : IDisposable
     Task<IUser> GetUserAsync(string username, string identifyNumber, RequestOptions options = null);
 
     #endregion
+
+    #region Friends
+
+    /// <summary>
+    ///     Gets friends.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of users
+    ///     that are friends with the current user.
+    /// </returns>
+    Task<IReadOnlyCollection<IUser>> GetFriendsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
+    /// <summary>
+    ///     Gets friend requests.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of users
+    ///     that requested to be friends with the current user.
+    /// </returns>
+    Task<IReadOnlyCollection<IFriendRequest>> GetFriendRequestsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
+    /// <summary>
+    ///     Gets blocked users.
+    /// </summary>
+    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of users
+    ///     that are blocked by the current user.
+    /// </returns>
+    Task<IReadOnlyCollection<IUser>> GetBlockedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+
+    #endregion
 }

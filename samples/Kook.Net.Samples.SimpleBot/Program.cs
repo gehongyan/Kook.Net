@@ -37,7 +37,9 @@ internal class Program
         _client.Disconnected += exception => Task.CompletedTask;
         _client.Ready += async () =>
         {
-            IReadOnlyCollection<RestGuild> adminGuilds = await _client.Rest.GetAdminGuildsAsync();
+            IReadOnlyCollection<RestFriendRequest> friendRequests = await _client.Rest.GetFriendRequestsAsync();
+            IReadOnlyCollection<RestUser> friends = await _client.Rest.GetFriendsAsync();
+            IReadOnlyCollection<RestUser> blockedUsers = await _client.Rest.GetBlockedUsersAsync();
         };
         _client.LatencyUpdated += (before, after) => Task.CompletedTask;
 

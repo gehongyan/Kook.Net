@@ -1,6 +1,6 @@
-using Kook.API.Rest;
 using System.Collections.Immutable;
 using Kook.API;
+using Kook.API.Rest;
 
 namespace Kook.Rest;
 
@@ -84,6 +84,39 @@ internal static class ClientHelper
     {
         MoveUsersParams args = new() { ChannelId = targetChannel.Id, UserIds = userIds.Select(x => x.Id).ToArray() };
         await client.ApiClient.MoveUsersAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task<IReadOnlyCollection<RestUser>> GetFriendsAsync(BaseKookClient client, RequestOptions options)
+    {
+        GetFriendStatesResponse models = await client.ApiClient.GetFriendStatesAsync(FriendState.Accepted, options).ConfigureAwait(false);
+        if (models != null) return models.Friends.Select(x => RestUser.Create(client, x.User)).ToImmutableArray();
+
+        return null;
+    }
+
+    // public static async Task RequestFriendAsync(BaseKookClient client, string username, ushort identifyNumberValue, RequestOptions options)
+    // {
+    //     // TODO: Add a better way to validate the identify number.
+    //     Preconditions.AtMost(identifyNumberValue, (ushort)9999, nameof(identifyNumberValue));
+    //     Preconditions.AtLeast(identifyNumberValue, (ushort)1, nameof(identifyNumberValue));
+    //     RequestFriendParams args = new() { FullQualification = $"{username}#{identifyNumberValue:D4}", Source = RequestFriendSource.FullQualification };
+    //     await client.ApiClient.RequestFriendAsync(args, options).ConfigureAwait(false);
+    // }
+
+    public static async Task<IReadOnlyCollection<RestFriendRequest>> GetFriendRequestsAsync(BaseKookClient client, RequestOptions options)
+    {
+        GetFriendStatesResponse models = await client.ApiClient.GetFriendStatesAsync(FriendState.Pending, options).ConfigureAwait(false);
+        if (models != null) return models.FriendRequests.Select(x => RestFriendRequest.Create(client, x)).ToImmutableArray();
+
+        return null;
+    }
+
+    public static async Task<IReadOnlyCollection<RestUser>> GetBlockedUsersAsync(BaseKookClient client, RequestOptions options)
+    {
+        GetFriendStatesResponse models = await client.ApiClient.GetFriendStatesAsync(FriendState.Blocked, options).ConfigureAwait(false);
+        if (models != null) return models.BlockedUsers.Select(x => RestUser.Create(client, x.User)).ToImmutableArray();
+
+        return null;
     }
 
     public static async Task<string> CreateAssetAsync(BaseKookClient client, Stream stream, string fileName, RequestOptions options)

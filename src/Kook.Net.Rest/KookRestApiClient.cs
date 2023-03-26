@@ -1,7 +1,3 @@
-using Kook.API.Rest;
-using Kook.Net;
-using Kook.Net.Queue;
-using Kook.Net.Rest;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Globalization;
@@ -12,7 +8,10 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Web;
+using Kook.API.Rest;
+using Kook.Net;
+using Kook.Net.Queue;
+using Kook.Net.Rest;
 
 namespace Kook.API;
 
@@ -1021,6 +1020,7 @@ internal class KookRestApiClient : IDisposable
     public async Task<User> GetUserAsync(ulong userId, RequestOptions options = null)
     {
         Preconditions.NotEqual(userId, 0, nameof(userId));
+        options = RequestOptions.CreateOrClone(options);
 
         BucketIds ids = new();
         return await SendAsync<User>(HttpMethod.Get, () => $"user/view?user_id={userId}", ids, ClientBucketType.SendEdit, options)
@@ -1031,6 +1031,7 @@ internal class KookRestApiClient : IDisposable
     {
         Preconditions.NotEqual(userId, 0, nameof(userId));
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
+        options = RequestOptions.CreateOrClone(options);
 
         BucketIds ids = new(guildId);
         return await SendAsync<GuildMember>(HttpMethod.Get, () => $"user/view?user_id={userId}&guild_id={guildId}", ids, ClientBucketType.SendEdit,
@@ -1039,8 +1040,83 @@ internal class KookRestApiClient : IDisposable
 
     public async Task GoOfflineAsync(RequestOptions options = null)
     {
+        options = RequestOptions.CreateOrClone(options);
+
         BucketIds ids = new();
         await SendAsync(HttpMethod.Post, () => $"user/offline", ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
+    }
+
+    #endregion
+
+    #region Friends
+
+    public async Task<GetFriendStatesResponse> GetFriendStatesAsync(FriendState? friendState, RequestOptions options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        string query = friendState switch
+        {
+            FriendState.Pending => "?type=request",
+            FriendState.Accepted => "?type=friend",
+            FriendState.Blocked => "?type=blocked",
+            null => string.Empty,
+            _ => throw new ArgumentOutOfRangeException(nameof(friendState), friendState, null)
+        };
+        return await SendAsync<GetFriendStatesResponse>(HttpMethod.Get, () => $"friend{query}", ids, ClientBucketType.SendEdit, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task RequestFriendAsync(RequestFriendParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotNullOrWhitespace(args.FullQualification, nameof(args.FullQualification));
+        if (args.Source is RequestFriendSource.Guild)
+            Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(args.GuildId);
+        await SendJsonAsync(HttpMethod.Post, () => "friend/request", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
+    }
+
+    public async Task HandleFriendRequestAsync(HandleFriendRequestParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.Id, 0, nameof(args.Id));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        await SendJsonAsync(HttpMethod.Post, () => "friend/handle-request", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
+    }
+
+    public async Task RemoveFriendAsync(RemoveFriendParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        await SendJsonAsync(HttpMethod.Post, () => "friend/delete", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
+    }
+
+    public async Task BlockUserAsync(BlockUserParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        await SendJsonAsync(HttpMethod.Post, () => "friend/block", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
+    }
+
+    public async Task UnblockUserAsync(UnblockUserParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        await SendJsonAsync(HttpMethod.Post, () => "friend/unblock", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
     #endregion

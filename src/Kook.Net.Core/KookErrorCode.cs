@@ -66,5 +66,19 @@ public enum KookErrorCode
     /// <summary>
     ///     The operation failed due to missing permissions.
     /// </summary>
-    MissingPermissions = 40300
+    MissingPermissions = 40300,
+
+    #region Friends
+
+    /// <summary>
+    ///     The operation failed because the user has become a friend of the current user.
+    /// </summary>
+    HasBeenFriend = 42007,
+
+    /// <summary>
+    ///     The operation failed because the current user has requested to be friends with the user too fast.
+    /// </summary>
+    RequestFriendTooFast = 42008,
+
+    #endregion
 }
