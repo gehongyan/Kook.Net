@@ -1607,12 +1607,12 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
 
         if (EndTime < DateTimeOffset.Now)
             throw new ArgumentOutOfRangeException(
-                message: $"{nameof(EndTime)} must be equal or later than Unix epoch.",
+                message: $"{nameof(EndTime)} must be equal or later than current timestamp.",
                 paramName: nameof(EndTime));
 
         if (StartTime is not null && StartTime < DateTimeOffset.FromUnixTimeSeconds(0))
             throw new ArgumentOutOfRangeException(
-                message: $"{nameof(StartTime)} must be equal or later than current timestamp.",
+                message: $"{nameof(StartTime)} must be equal or later than Unix epoch.",
                 paramName: nameof(StartTime));
 
         if (StartTime >= EndTime)
