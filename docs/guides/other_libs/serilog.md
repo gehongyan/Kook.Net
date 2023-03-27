@@ -41,8 +41,6 @@ Serilog 需在异步函数入口点的顶部进行配置：
 
 至此，Serilog 已配置完毕，要想使用此日志记录器，只需按如下方式调用：
 
-Now that you have set up Serilog, you can use it everywhere in your application by simply calling
-
 [!code-csharp[Log debug sample](samples/serilog/log-debug-sample.cs)]
 
 > [!NOTE]
