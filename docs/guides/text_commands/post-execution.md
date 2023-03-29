@@ -32,9 +32,6 @@ title: 后处理程序
 
 [!code[CommandExecuted demo](samples/post-execution/command-executed-demo.cs)]
 
-So now we have a streamlined post-execution pipeline, great! What's
-next? We can take this further by using [RuntimeResult].
-
 ### RuntimeResult
 
 命令执行完成后可以返回 `RuntimeResult` 对象，`RuntimeResult`
