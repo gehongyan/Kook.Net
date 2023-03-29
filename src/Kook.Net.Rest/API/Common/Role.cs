@@ -1,5 +1,5 @@
-using Kook.Net.Converters;
 using System.Text.Json.Serialization;
+using Kook.Net.Converters;
 
 namespace Kook.API;
 
@@ -26,10 +26,12 @@ internal class Role
     public int Position { get; set; }
 
     [JsonPropertyName("hoist")]
-    public int Hoist { get; set; }
+    [JsonConverter(typeof(NumberBooleanConverter))]
+    public bool Hoist { get; set; }
 
     [JsonPropertyName("mentionable")]
-    public int Mentionable { get; set; }
+    [JsonConverter(typeof(NumberBooleanConverter))]
+    public bool Mentionable { get; set; }
 
     [JsonPropertyName("permissions")]
     public ulong Permissions { get; set; }

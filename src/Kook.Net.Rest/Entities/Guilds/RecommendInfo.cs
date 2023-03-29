@@ -81,7 +81,7 @@ public class RecommendInfo : IRecommendInfo
         Features = model.Features;
         BoostLevel = model.BoostLevel;
         CustomId = model.CustomId;
-        IsOfficialPartner = model.IsOfficialPartner == 1;
+        IsOfficialPartner = model.IsOfficialPartner;
         Sort = model.Sort;
         AuditStatus = model.AuditStatus;
         DaysBeforeModify = model.UpdateDayInterval;

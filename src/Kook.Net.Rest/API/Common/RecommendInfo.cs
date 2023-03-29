@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Kook.Net.Converters;
 
 namespace Kook.API;
 
@@ -41,7 +42,8 @@ internal class RecommendInfo
     public string CustomId { get; set; }
 
     [JsonPropertyName("is_official_partner")]
-    public int IsOfficialPartner { get; set; }
+    [JsonConverter(typeof(NumberBooleanConverter))]
+    public bool IsOfficialPartner { get; set; }
 
     [JsonPropertyName("sort")]
     public int Sort { get; set; }

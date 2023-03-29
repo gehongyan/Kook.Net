@@ -1,7 +1,7 @@
-using Kook.API.Rest;
-using Kook.Rest;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using Kook.API.Rest;
+using Kook.Rest;
 using Model = Kook.API.Role;
 
 namespace Kook.WebSocket;
@@ -82,18 +82,8 @@ public class SocketRole : SocketEntity<uint>, IRole
         ColorType = model.ColorType;
         GradientColor = model.GradientColor;
         Position = model.Position;
-        IsHoisted = model.Hoist switch
-        {
-            0 => false,
-            1 => true,
-            _ => throw new ArgumentOutOfRangeException(nameof(model.Hoist))
-        };
-        IsMentionable = model.Mentionable switch
-        {
-            0 => false,
-            1 => true,
-            _ => throw new ArgumentOutOfRangeException(nameof(model.Mentionable))
-        };
+        IsHoisted = model.Hoist;
+        IsMentionable = model.Mentionable;
         Permissions = new GuildPermissions(model.Permissions);
     }
 

@@ -78,8 +78,8 @@ public class RestRole : RestEntity<uint>, IRole
         Color = model.Color;
         ColorType = model.ColorType;
         GradientColor = model.GradientColor;
-        IsHoisted = model.Hoist == 1;
-        IsMentionable = model.Mentionable == 1;
+        IsHoisted = model.Hoist;
+        IsMentionable = model.Mentionable;
         Position = model.Position;
         Permissions = new GuildPermissions(model.Permissions);
     }
