@@ -16,7 +16,7 @@ internal class Role
     public Color Color { get; set; }
 
     [JsonPropertyName("color_type")]
-    public ColorType? ColorType { get; set; }
+    public ColorType ColorType { get; set; }
 
     [JsonPropertyName("color_map")]
     [JsonConverter(typeof(NullableGradientColorConverter))]
