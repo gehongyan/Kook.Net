@@ -1604,14 +1604,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     #endregion
 
                                     default:
-                                        await _gatewayLogger.WarningAsync($"Unknown SystemEventType ({extraData.Type})")
+                                        await _gatewayLogger.WarningAsync($"Unknown SystemEventType ({extraData.Type}). Payload: {payload}")
                                             .ConfigureAwait(false);
                                         break;
                                 }
                             }
                             break;
                         default:
-                            await _gatewayLogger.WarningAsync($"Unknown Event Type ({gatewayEvent.Type})")
+                            await _gatewayLogger.WarningAsync($"Unknown Event Type ({gatewayEvent.Type}). Payload: {payload}")
                                 .ConfigureAwait(false);
                             break;
                     }
@@ -1777,7 +1777,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                     break;
 
                 default:
-                    await _gatewayLogger.WarningAsync($"Unknown Socket Frame Type ({gatewaySocketFrameType})")
+                    await _gatewayLogger.WarningAsync($"Unknown Socket Frame Type ({gatewaySocketFrameType}). Payload: {payload}")
                         .ConfigureAwait(false);
                     break;
             }
