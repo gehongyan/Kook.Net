@@ -232,13 +232,14 @@ public abstract partial class BaseSocketClient
     ///         <see cref="ISocketMessageChannel"/> parameter.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, Task> MessageUpdated
+    public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketMessage, Guid>, ISocketMessageChannel, Task> MessageUpdated
     {
         add => _messageUpdatedEvent.Add(value);
         remove => _messageUpdatedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, Task>> _messageUpdatedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<SocketMessage, Guid>, ISocketMessageChannel, Task>> _messageUpdatedEvent =
+        new();
 
     /// <summary> Fired when a message is pinned. </summary>
     /// <remarks>
@@ -264,14 +265,17 @@ public abstract partial class BaseSocketClient
     ///         The operator who pinned the message will be passed into the <see cref="SocketGuildUser"/> parameter.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, SocketGuildUser, Task> MessagePinned
-    {
-        add => _messagePinnedEvent.Add(value);
-        remove => _messagePinnedEvent.Remove(value);
-    }
+    public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketMessage, Guid>, ISocketMessageChannel, Cacheable<SocketGuildUser, ulong>, Task>
+        MessagePinned
+        {
+            add => _messagePinnedEvent.Add(value);
+            remove => _messagePinnedEvent.Remove(value);
+        }
 
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, SocketGuildUser, Task>> _messagePinnedEvent =
-        new();
+    internal readonly
+        AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<SocketMessage, Guid>, ISocketMessageChannel, Cacheable<SocketGuildUser, ulong>, Task>>
+        _messagePinnedEvent =
+            new();
 
     /// <summary> Fired when a message is unpinned. </summary>
     /// <remarks>
@@ -297,14 +301,17 @@ public abstract partial class BaseSocketClient
     ///         The operator who unpinned the message will be passed into the <see cref="SocketGuildUser"/> parameter.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, SocketGuildUser, Task> MessageUnpinned
-    {
-        add => _messageUnpinnedEvent.Add(value);
-        remove => _messageUnpinnedEvent.Remove(value);
-    }
+    public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketMessage, Guid>, ISocketMessageChannel, Cacheable<SocketGuildUser, ulong>, Task>
+        MessageUnpinned
+        {
+            add => _messageUnpinnedEvent.Add(value);
+            remove => _messageUnpinnedEvent.Remove(value);
+        }
 
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, ISocketMessageChannel, SocketGuildUser, Task>> _messageUnpinnedEvent =
-        new();
+    internal readonly
+        AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<SocketMessage, Guid>, ISocketMessageChannel, Cacheable<SocketGuildUser, ulong>, Task>>
+        _messageUnpinnedEvent =
+            new();
 
     #endregion
 
@@ -389,13 +396,14 @@ public abstract partial class BaseSocketClient
     ///         </note>
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<IMessage, Guid>, SocketMessage, IDMChannel, Task> DirectMessageUpdated
+    public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketMessage, Guid>, IDMChannel, Task> DirectMessageUpdated
     {
         add => _directMessageUpdatedEvent.Add(value);
         remove => _directMessageUpdatedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketMessage, IDMChannel, Task>> _directMessageUpdatedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<SocketMessage, Guid>, IDMChannel, Task>>
+        _directMessageUpdatedEvent = new();
 
     #endregion
 
@@ -416,13 +424,13 @@ public abstract partial class BaseSocketClient
     internal readonly AsyncEvent<Func<SocketGuildUser, DateTimeOffset, Task>> _userJoinedEvent = new();
 
     /// <summary> Fired when a user leaves a guild. </summary>
-    public event Func<SocketGuild, SocketUser, DateTimeOffset, Task> UserLeft
+    public event Func<SocketGuild, Cacheable<SocketUser, ulong>, DateTimeOffset, Task> UserLeft
     {
         add => _userLeftEvent.Add(value);
         remove => _userLeftEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<SocketGuild, SocketUser, DateTimeOffset, Task>> _userLeftEvent = new();
+    internal readonly AsyncEvent<Func<SocketGuild, Cacheable<SocketUser, ulong>, DateTimeOffset, Task>> _userLeftEvent = new();
 
     /// <summary> Fired when a user is banned from a guild. </summary>
     /// <remarks>
@@ -490,13 +498,13 @@ public abstract partial class BaseSocketClient
     internal readonly AsyncEvent<Func<IReadOnlyCollection<SocketUser>, SocketUser, SocketGuild, Task>> _userUnbannedEvent = new();
 
     /// <summary> Fired when a user is updated. </summary>
-    public event Func<SocketUser, SocketUser, Task> UserUpdated
+    public event Func<Cacheable<SocketUser, ulong>, Cacheable<SocketUser, ulong>, Task> UserUpdated
     {
         add => _userUpdatedEvent.Add(value);
         remove => _userUpdatedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<SocketUser, SocketUser, Task>> _userUpdatedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<SocketUser, ulong>, Cacheable<SocketUser, ulong>, Task>> _userUpdatedEvent = new();
 
     /// <summary> Fired when the connected account is updated. </summary>
     public event Func<SocketSelfUser, SocketSelfUser, Task> CurrentUserUpdated
@@ -508,31 +516,31 @@ public abstract partial class BaseSocketClient
     internal readonly AsyncEvent<Func<SocketSelfUser, SocketSelfUser, Task>> _selfUpdatedEvent = new();
 
     /// <summary> Fired when a guild member is updated. </summary>
-    public event Func<Cacheable<SocketGuildUser, ulong>, SocketGuildUser, Task> GuildMemberUpdated
+    public event Func<Cacheable<SocketGuildUser, ulong>, Cacheable<SocketGuildUser, ulong>, Task> GuildMemberUpdated
     {
         add => _guildMemberUpdatedEvent.Add(value);
         remove => _guildMemberUpdatedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketGuildUser, Task>> _guildMemberUpdatedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, Cacheable<SocketGuildUser, ulong>, Task>> _guildMemberUpdatedEvent = new();
 
     /// <summary> Fired when a guild member is online. </summary>
-    public event Func<IReadOnlyCollection<SocketGuildUser>, DateTimeOffset, Task> GuildMemberOnline
+    public event Func<IReadOnlyCollection<Cacheable<SocketGuildUser, ulong>>, DateTimeOffset, Task> GuildMemberOnline
     {
         add => _guildMemberOnlineEvent.Add(value);
         remove => _guildMemberOnlineEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<IReadOnlyCollection<SocketGuildUser>, DateTimeOffset, Task>> _guildMemberOnlineEvent = new();
+    internal readonly AsyncEvent<Func<IReadOnlyCollection<Cacheable<SocketGuildUser, ulong>>, DateTimeOffset, Task>> _guildMemberOnlineEvent = new();
 
     /// <summary> Fired when a guild member is offline. </summary>
-    public event Func<IReadOnlyCollection<SocketGuildUser>, DateTimeOffset, Task> GuildMemberOffline
+    public event Func<IReadOnlyCollection<Cacheable<SocketGuildUser, ulong>>, DateTimeOffset, Task> GuildMemberOffline
     {
         add => _guildMemberOfflineEvent.Add(value);
         remove => _guildMemberOfflineEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<IReadOnlyCollection<SocketGuildUser>, DateTimeOffset, Task>> _guildMemberOfflineEvent = new();
+    internal readonly AsyncEvent<Func<IReadOnlyCollection<Cacheable<SocketGuildUser, ulong>>, DateTimeOffset, Task>> _guildMemberOfflineEvent = new();
 
     #endregion
 

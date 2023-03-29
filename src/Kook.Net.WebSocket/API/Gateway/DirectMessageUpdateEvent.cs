@@ -1,12 +1,12 @@
-using Kook.Net.Converters;
 using System.Text.Json.Serialization;
+using Kook.Net.Converters;
 
 namespace Kook.API.Gateway;
 
 internal class DirectMessageUpdateEvent
 {
     [JsonPropertyName("author_id")]
-    public uint AuthorId { get; set; }
+    public ulong AuthorId { get; set; }
 
     // self user id in fact
     [JsonPropertyName("target_id")]

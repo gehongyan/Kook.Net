@@ -1,3 +1,9 @@
+using System.Collections.Concurrent;
+using System.Collections.Immutable;
+using System.Net;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Kook.API;
 using Kook.API.Gateway;
 using Kook.API.Rest;
@@ -6,12 +12,6 @@ using Kook.Net;
 using Kook.Net.Udp;
 using Kook.Net.WebSockets;
 using Kook.Rest;
-using System.Collections.Concurrent;
-using System.Collections.Immutable;
-using System.Net;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Reaction = Kook.API.Gateway.Reaction;
 
 namespace Kook.WebSocket;
@@ -416,11 +416,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                     {
                         MessageType.System => ((JsonElement)gatewayEvent.ExtraData)
                             .Deserialize<GatewaySystemEventExtraData>(_serializerOptions),
-                        _ when gatewayEvent.ChannelType == "GROUP" => ((JsonElement)gatewayEvent.ExtraData).Deserialize<GatewayGroupMessageExtraData>(
-                            _serializerOptions),
+                        _ when gatewayEvent.ChannelType == "GROUP" => ((JsonElement)gatewayEvent.ExtraData)
+                            .Deserialize<GatewayGroupMessageExtraData>(_serializerOptions),
                         _ when gatewayEvent.ChannelType == "PERSON" => ((JsonElement)gatewayEvent.ExtraData)
-                            .Deserialize<GatewayPersonMessageExtraData>(
-                                _serializerOptions),
+                            .Deserialize<GatewayPersonMessageExtraData>(_serializerOptions),
                         _ => throw new InvalidOperationException("Unknown event type")
                     };
 
@@ -471,7 +470,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     GatewayPersonMessageExtraData extraData = eventExtraData as GatewayPersonMessageExtraData;
                                     SocketDMChannel channel = CreateDMChannel(extraData.Code, extraData.Author, State);
 
-                                    SocketUser author = (channel as SocketChannel).GetUser(extraData.Author.Id);
+                                    SocketUser author = channel.GetUser(extraData.Author.Id);
                                     if (author == null)
                                     {
                                         await UnknownChannelUserAsync(gatewayEvent.Type.ToString(), extraData.Author.Id, extraData.Code)
@@ -507,6 +506,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             IUser user = channel is not null
                                                 ? await channel.GetUserAsync(data.UserId, CacheMode.CacheOnly).ConfigureAwait(false)
                                                 : GetUser(data.UserId);
+                                            user ??= SocketUnknownUser.Create(this, State, data.UserId);
 
                                             Cacheable<IMessageChannel, ulong> cacheableChannel = new(channel,
                                                 data.ChannelId, channel != null,
@@ -541,6 +541,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             IUser user = channel is not null
                                                 ? await channel.GetUserAsync(data.UserId, CacheMode.CacheOnly).ConfigureAwait(false)
                                                 : GetUser(data.UserId);
+                                            user ??= SocketUnknownUser.Create(this, State, data.UserId);
 
                                             Cacheable<IMessageChannel, ulong> cacheableChannel = new(channel,
                                                 data.ChannelId, channel != null,
@@ -566,38 +567,50 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             await _gatewayLogger.DebugAsync("Received Event (updated_message)").ConfigureAwait(false);
                                             MessageUpdateEvent data =
                                                 ((JsonElement)extraData.Body).Deserialize<MessageUpdateEvent>(_serializerOptions);
-                                            ISocketMessageChannel channel = GetChannel(data.ChannelId) as ISocketMessageChannel;
-                                            SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
 
-                                            SocketMessage before = null, after = null;
-                                            SocketMessage cachedMsg = channel?.GetCachedMessage(data.MessageId);
-                                            bool isCached = cachedMsg != null;
-                                            if (isCached)
+                                            if (GetChannel(data.ChannelId) is not ISocketMessageChannel channel)
                                             {
-                                                before = cachedMsg.Clone();
+                                                await UnknownChannelAsync(extraData.Type, data.ChannelId).ConfigureAwait(false);
+                                                return;
+                                            }
+
+                                            SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
+                                            if (guild == null)
+                                            {
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                return;
+                                            }
+
+                                            SocketMessage cachedMsg = channel.GetCachedMessage(data.MessageId);
+                                            Cacheable<IMessage, Guid> cacheableBefore;
+                                            Cacheable<SocketMessage, Guid> cacheableAfter;
+                                            if (cachedMsg != null)
+                                            {
+                                                SocketMessage before = cachedMsg.Clone();
                                                 cachedMsg.Update(State, data);
-                                                after = cachedMsg;
+                                                cacheableBefore = new Cacheable<IMessage, Guid>(before, data.MessageId, true,
+                                                    () => Task.FromResult((IMessage)null));
+                                                cacheableAfter = new Cacheable<SocketMessage, Guid>(cachedMsg, data.MessageId, true,
+                                                    async () => await channel
+                                                        .GetMessageAsync(cachedMsg.Id).ConfigureAwait(false) as SocketMessage);
                                             }
                                             else
                                             {
-                                                Message msg = await ApiClient.GetMessageAsync(data.MessageId).ConfigureAwait(false);
-
-                                                SocketUser author = guild.GetUser(msg.Author.Id)
-                                                    ?? (SocketUser)new SocketUnknownUser(this, 0);
-
-                                                if (channel == null)
-                                                {
-                                                    await UnknownChannelAsync(extraData.Type, data.ChannelId).ConfigureAwait(false);
-                                                    return;
-                                                }
-
-                                                after = SocketMessage.Create(this, State, author, channel, msg);
+                                                cacheableBefore = new Cacheable<IMessage, Guid>(null, data.MessageId, false,
+                                                    () => Task.FromResult((IMessage)null));
+                                                cacheableAfter = new Cacheable<SocketMessage, Guid>(null, data.MessageId, false,
+                                                    async () =>
+                                                    {
+                                                        Message msg = await ApiClient.GetMessageAsync(data.MessageId).ConfigureAwait(false);
+                                                        SocketUser author = guild.GetUser(msg.Author.Id)
+                                                            ?? (SocketUser)new SocketUnknownUser(this, msg.Author.Id);
+                                                        SocketMessage after = SocketMessage.Create(this, State, author, channel, msg);
+                                                        return after;
+                                                    });
                                             }
 
-                                            Cacheable<IMessage, Guid> cacheableBefore = new(before, data.MessageId,
-                                                isCached, async () => await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false));
-
-                                            await TimedInvokeAsync(_messageUpdatedEvent, nameof(MessageUpdated), cacheableBefore, after, channel)
+                                            await TimedInvokeAsync(_messageUpdatedEvent, nameof(MessageUpdated), cacheableBefore, cacheableAfter,
+                                                    channel)
                                                 .ConfigureAwait(false);
                                         }
                                         break;
@@ -711,49 +724,53 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             }
 
                                             SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
-                                            if (guild != null)
-                                            {
-                                                SocketGuildUser operatorUser = guild.GetUser(data.OperatorUserId);
-                                                if (operatorUser == null)
-                                                {
-                                                    GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.OperatorUserId)
-                                                        .ConfigureAwait(false);
-                                                    operatorUser = guild.AddOrUpdateUser(model);
-                                                }
-
-                                                Cacheable<IMessage, Guid> cacheableBefore;
-                                                SocketMessage after;
-
-                                                SocketUserMessage cachedMsg = channel.GetCachedMessage(data.MessageId) as SocketUserMessage;
-                                                bool isCached = cachedMsg != null;
-                                                if (isCached)
-                                                {
-                                                    SocketMessage before = cachedMsg.Clone();
-                                                    cachedMsg.IsPinned = true;
-                                                    after = cachedMsg;
-
-                                                    cacheableBefore = new Cacheable<IMessage, Guid>(before, data.MessageId, true,
-                                                        async () => await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false));
-                                                }
-                                                else
-                                                {
-                                                    Message msg = await ApiClient.GetMessageAsync(data.MessageId).ConfigureAwait(false);
-                                                    SocketUser author = guild.GetUser(msg.Author.Id)
-                                                        ?? (SocketUser)new SocketUnknownUser(this, 0);
-                                                    after = SocketMessage.Create(this, State, author, channel, msg);
-
-                                                    cacheableBefore = new Cacheable<IMessage, Guid>(null, data.MessageId, false,
-                                                        async () => await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false));
-                                                }
-
-                                                await TimedInvokeAsync(_messagePinnedEvent, nameof(MessagePinned), cacheableBefore, after, channel,
-                                                    operatorUser).ConfigureAwait(false);
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            SocketGuildUser operatorUser = guild.GetUser(data.OperatorUserId);
+                                            Cacheable<SocketGuildUser, ulong> cacheableOperatorUser =
+                                                new(operatorUser, data.OperatorUserId, operatorUser != null,
+                                                    async () =>
+                                                    {
+                                                        GuildMember model = await ApiClient
+                                                            .GetGuildMemberAsync(guild.Id, data.OperatorUserId).ConfigureAwait(false);
+                                                        return guild.AddOrUpdateUser(model);
+                                                    });
+
+                                            SocketUserMessage cachedMsg = channel.GetCachedMessage(data.MessageId) as SocketUserMessage;
+                                            Cacheable<IMessage, Guid> cacheableBefore;
+                                            Cacheable<SocketMessage, Guid> cacheableAfter;
+
+                                            if (cachedMsg != null)
+                                            {
+                                                SocketMessage before = cachedMsg.Clone();
+                                                cachedMsg.IsPinned = true;
+                                                cacheableBefore = new Cacheable<IMessage, Guid>(before, data.MessageId, true,
+                                                    () => Task.FromResult((IMessage)null));
+                                                cacheableAfter = new Cacheable<SocketMessage, Guid>(cachedMsg, data.MessageId, true,
+                                                    async () => await channel
+                                                        .GetMessageAsync(cachedMsg.Id).ConfigureAwait(false) as SocketMessage);
+                                            }
+                                            else
+                                            {
+                                                cacheableBefore = new Cacheable<IMessage, Guid>(null, data.MessageId, false,
+                                                    () => Task.FromResult((IMessage)null));
+                                                cacheableAfter = new Cacheable<SocketMessage, Guid>(null, data.MessageId, false,
+                                                    async () =>
+                                                    {
+                                                        Message msg = await ApiClient.GetMessageAsync(data.MessageId).ConfigureAwait(false);
+                                                        SocketUser author = guild.GetUser(msg.Author.Id)
+                                                            ?? (SocketUser)new SocketUnknownUser(this, msg.Author.Id);
+                                                        SocketMessage after = SocketMessage.Create(this, State, author, channel, msg);
+                                                        return after;
+                                                    });
+                                            }
+
+                                            await TimedInvokeAsync(_messagePinnedEvent, nameof(MessagePinned), cacheableBefore, cacheableAfter,
+                                                channel, cacheableOperatorUser).ConfigureAwait(false);
                                         }
                                         break;
 
@@ -772,49 +789,53 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             }
 
                                             SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
-                                            if (guild != null)
-                                            {
-                                                SocketGuildUser operatorUser = guild.GetUser(data.OperatorUserId);
-                                                if (operatorUser == null)
-                                                {
-                                                    GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.OperatorUserId)
-                                                        .ConfigureAwait(false);
-                                                    operatorUser = guild.AddOrUpdateUser(model);
-                                                }
-
-                                                Cacheable<IMessage, Guid> cacheableBefore;
-                                                SocketMessage after;
-
-                                                SocketUserMessage cachedMsg = channel.GetCachedMessage(data.MessageId) as SocketUserMessage;
-                                                bool isCached = cachedMsg != null;
-                                                if (isCached)
-                                                {
-                                                    SocketMessage before = cachedMsg.Clone();
-                                                    cachedMsg.IsPinned = false;
-                                                    after = cachedMsg;
-
-                                                    cacheableBefore = new Cacheable<IMessage, Guid>(before, data.MessageId, true,
-                                                        async () => await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false));
-                                                }
-                                                else
-                                                {
-                                                    Message msg = await ApiClient.GetMessageAsync(data.MessageId).ConfigureAwait(false);
-                                                    SocketUser author = guild.GetUser(msg.Author.Id)
-                                                        ?? (SocketUser)new SocketUnknownUser(this, 0);
-                                                    after = SocketMessage.Create(this, State, author, channel, msg);
-
-                                                    cacheableBefore = new Cacheable<IMessage, Guid>(null, data.MessageId, false,
-                                                        async () => await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false));
-                                                }
-
-                                                await TimedInvokeAsync(_messageUnpinnedEvent, nameof(MessageUnpinned), cacheableBefore, after,
-                                                    channel, operatorUser).ConfigureAwait(false);
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            SocketGuildUser operatorUser = guild.GetUser(data.OperatorUserId);
+                                            Cacheable<SocketGuildUser, ulong> cacheableOperatorUser =
+                                                new(operatorUser, data.OperatorUserId, operatorUser != null,
+                                                    async () =>
+                                                    {
+                                                        GuildMember model = await ApiClient
+                                                            .GetGuildMemberAsync(guild.Id, data.OperatorUserId).ConfigureAwait(false);
+                                                        return guild.AddOrUpdateUser(model);
+                                                    });
+
+                                            SocketUserMessage cachedMsg = channel.GetCachedMessage(data.MessageId) as SocketUserMessage;
+                                            Cacheable<IMessage, Guid> cacheableBefore;
+                                            Cacheable<SocketMessage, Guid> cacheableAfter;
+
+                                            if (cachedMsg != null)
+                                            {
+                                                SocketMessage before = cachedMsg.Clone();
+                                                cachedMsg.IsPinned = false;
+                                                cacheableBefore = new Cacheable<IMessage, Guid>(before, data.MessageId, true,
+                                                    () => Task.FromResult((IMessage)null));
+                                                cacheableAfter = new Cacheable<SocketMessage, Guid>(cachedMsg, data.MessageId, true,
+                                                    async () => await channel
+                                                        .GetMessageAsync(cachedMsg.Id).ConfigureAwait(false) as SocketMessage);
+                                            }
+                                            else
+                                            {
+                                                cacheableBefore = new Cacheable<IMessage, Guid>(null, data.MessageId, false,
+                                                    () => Task.FromResult((IMessage)null));
+                                                cacheableAfter = new Cacheable<SocketMessage, Guid>(null, data.MessageId, false,
+                                                    async () =>
+                                                    {
+                                                        Message msg = await ApiClient.GetMessageAsync(data.MessageId).ConfigureAwait(false);
+                                                        SocketUser author = guild.GetUser(msg.Author.Id)
+                                                            ?? (SocketUser)new SocketUnknownUser(this, msg.Author.Id);
+                                                        SocketMessage after = SocketMessage.Create(this, State, author, channel, msg);
+                                                        return after;
+                                                    });
+                                            }
+
+                                            await TimedInvokeAsync(_messageUnpinnedEvent, nameof(MessageUnpinned), cacheableBefore, cacheableAfter,
+                                                channel, cacheableOperatorUser).ConfigureAwait(false);
                                         }
                                         break;
 
@@ -831,35 +852,37 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             User user = await ApiClient.GetUserAsync(data.AuthorId).ConfigureAwait(false);
                                             SocketDMChannel channel = CreateDMChannel(data.ChatCode, user, State);
 
-                                            SocketMessage before = null, after = null;
                                             SocketMessage cachedMsg = channel?.GetCachedMessage(data.MessageId);
-                                            bool isCached = cachedMsg != null;
-                                            if (isCached)
+                                            Cacheable<IMessage, Guid> cacheableBefore;
+                                            Cacheable<SocketMessage, Guid> cacheableAfter;
+                                            if (cachedMsg != null)
                                             {
-                                                before = cachedMsg.Clone();
+                                                SocketMessage before = cachedMsg.Clone();
                                                 cachedMsg.Update(State, data);
-                                                after = cachedMsg;
+                                                cacheableBefore = new Cacheable<IMessage, Guid>(before, data.MessageId, true,
+                                                    () => Task.FromResult((IMessage)null));
+                                                cacheableAfter = new Cacheable<SocketMessage, Guid>(cachedMsg, data.MessageId, true,
+                                                    async () => await channel
+                                                        .GetMessageAsync(cachedMsg.Id).ConfigureAwait(false) as SocketMessage);
                                             }
                                             else
                                             {
-                                                DirectMessage msg = await ApiClient.GetDirectMessageAsync(data.MessageId, data.ChatCode)
-                                                    .ConfigureAwait(false);
-                                                SocketUser author = State.GetUser(msg?.AuthorId ?? 0)
-                                                    ?? (SocketUser)new SocketUnknownUser(this, 0);
-
-                                                if (channel == null)
-                                                {
-                                                    await UnknownPrivateChannelAsync(extraData.Type, data.ChatCode).ConfigureAwait(false);
-                                                    return;
-                                                }
-
-                                                after = SocketMessage.Create(this, State, author, channel, msg);
+                                                cacheableBefore = new Cacheable<IMessage, Guid>(null, data.MessageId, false,
+                                                    () => Task.FromResult((IMessage)null));
+                                                cacheableAfter = new Cacheable<SocketMessage, Guid>(null, data.MessageId, false,
+                                                    async () =>
+                                                    {
+                                                        DirectMessage msg = await ApiClient.GetDirectMessageAsync(data.MessageId, data.ChatCode)
+                                                            .ConfigureAwait(false);
+                                                        SocketUser author = State.GetUser(data.AuthorId)
+                                                            ?? (SocketUser)new SocketUnknownUser(this, data.AuthorId);
+                                                        SocketMessage after = SocketMessage.Create(this, State, author, channel, msg);
+                                                        return after;
+                                                    });
                                             }
 
-                                            Cacheable<IMessage, Guid> cacheableBefore = new(before, data.MessageId,
-                                                isCached, async () => await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false));
-
-                                            await TimedInvokeAsync(_directMessageUpdatedEvent, nameof(DirectMessageUpdated), cacheableBefore, after,
+                                            await TimedInvokeAsync(_directMessageUpdatedEvent, nameof(DirectMessageUpdated), cacheableBefore,
+                                                cacheableAfter,
                                                 channel).ConfigureAwait(false);
                                         }
                                         break;
@@ -900,6 +923,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             IUser user = channel is not null
                                                 ? await channel.GetUserAsync(data.UserId, CacheMode.CacheOnly).ConfigureAwait(false)
                                                 : GetUser(data.UserId);
+                                            user ??= SocketUnknownUser.Create(this, State, data.UserId);
 
                                             Cacheable<IDMChannel, Guid> cacheableChannel = new((IDMChannel)channel,
                                                 data.ChatCode, channel != null,
@@ -933,6 +957,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             IUser user = channel is not null
                                                 ? await channel.GetUserAsync(data.UserId, CacheMode.CacheOnly).ConfigureAwait(false)
                                                 : GetUser(data.UserId);
+                                            user ??= SocketUnknownUser.Create(this, State, data.UserId);
 
                                             Cacheable<IDMChannel, Guid> cacheableChannel = new((IDMChannel)channel,
                                                 data.ChatCode, channel != null,
@@ -961,21 +986,19 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                         {
                                             await _gatewayLogger.DebugAsync("Received Event (joined_guild)").ConfigureAwait(false);
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
-                                            if (guild != null)
-                                            {
-                                                GuildMemberAddEvent data =
-                                                    ((JsonElement)extraData.Body).Deserialize<GuildMemberAddEvent>(_serializerOptions);
-                                                GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.UserId).ConfigureAwait(false);
-                                                SocketGuildUser user = guild.AddOrUpdateUser(model);
-                                                guild.MemberCount++;
-                                                await TimedInvokeAsync(_userJoinedEvent, nameof(UserJoined), user, data.JoinedAt)
-                                                    .ConfigureAwait(false);
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            GuildMemberAddEvent data =
+                                                ((JsonElement)extraData.Body).Deserialize<GuildMemberAddEvent>(_serializerOptions);
+                                            GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.UserId).ConfigureAwait(false);
+                                            SocketGuildUser user = guild.AddOrUpdateUser(model);
+                                            guild.MemberCount++;
+                                            await TimedInvokeAsync(_userJoinedEvent, nameof(UserJoined), user, data.JoinedAt)
+                                                .ConfigureAwait(false);
                                         }
                                         break;
 
@@ -984,32 +1007,30 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                         {
                                             await _gatewayLogger.DebugAsync("Received Event (exited_guild)").ConfigureAwait(false);
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
-                                            if (guild != null)
-                                            {
-                                                GuildMemberRemoveEvent data =
-                                                    ((JsonElement)extraData.Body).Deserialize<GuildMemberRemoveEvent>(_serializerOptions);
-                                                SocketUser user = guild.RemoveUser(data.UserId);
-                                                guild.MemberCount--;
-
-                                                user ??= State.GetUser(data.UserId);
-
-                                                User model = await ApiClient.GetUserAsync(data.UserId).ConfigureAwait(false);
-                                                if (user != null)
-                                                {
-                                                    user.Update(State, model);
-                                                    user.UpdatePresence(model.Online, model.OperatingSystem);
-                                                }
-                                                else
-                                                    user = State.GetOrAddUser(data.UserId, _ => SocketGlobalUser.Create(this, State, model));
-
-                                                await TimedInvokeAsync(_userLeftEvent, nameof(UserLeft), guild, user, data.ExitedAt)
-                                                    .ConfigureAwait(false);
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            GuildMemberRemoveEvent data =
+                                                ((JsonElement)extraData.Body).Deserialize<GuildMemberRemoveEvent>(_serializerOptions);
+                                            SocketUser user = guild.RemoveUser(data.UserId);
+                                            guild.MemberCount--;
+                                            user ??= State.GetUser(data.UserId);
+
+                                            Cacheable<SocketUser, ulong> cacheableUser = new(user, data.UserId, user != null,
+                                                async () =>
+                                                {
+                                                    User model = await ApiClient.GetUserAsync(data.UserId).ConfigureAwait(false);
+                                                    user = State.GetOrAddUser(data.UserId, _ => SocketGlobalUser.Create(this, State, model));
+                                                    user.Update(State, model);
+                                                    user.UpdatePresence(model.Online, model.OperatingSystem);
+                                                    return user;
+                                                });
+
+                                            await TimedInvokeAsync(_userLeftEvent, nameof(UserLeft), guild, cacheableUser, data.ExitedAt)
+                                                .ConfigureAwait(false);
                                         }
                                         break;
 
@@ -1018,44 +1039,41 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                         {
                                             await _gatewayLogger.DebugAsync("Received Event (updated_guild_member)").ConfigureAwait(false);
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
-                                            if (guild != null)
-                                            {
-                                                GuildMemberUpdateEvent data =
-                                                    ((JsonElement)extraData.Body).Deserialize<GuildMemberUpdateEvent>(_serializerOptions);
-                                                SocketGuildUser user = guild.GetUser(data.UserId);
-
-                                                if (user != null)
-                                                {
-                                                    // var globalBefore = user.GlobalUser.Clone();
-                                                    // if (user.GlobalUser.Update(State, model))
-                                                    // {
-                                                    //     //Global data was updated, trigger UserUpdated
-                                                    //     await TimedInvokeAsync(_userUpdatedEvent, nameof(UserUpdated), globalBefore, user).ConfigureAwait(false);
-                                                    // }
-
-                                                    SocketGuildUser before = user.Clone();
-                                                    user.Update(State, data);
-
-                                                    Cacheable<SocketGuildUser, ulong> cacheableBefore = new(before,
-                                                        user.Id, true, () => Task.FromResult<SocketGuildUser>(null));
-                                                    await TimedInvokeAsync(_guildMemberUpdatedEvent, nameof(GuildMemberUpdated), cacheableBefore,
-                                                        user).ConfigureAwait(false);
-                                                }
-                                                else
-                                                {
-                                                    GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.UserId)
-                                                        .ConfigureAwait(false);
-                                                    user = guild.AddOrUpdateUser(model);
-                                                    Cacheable<SocketGuildUser, ulong> cacheableBefore = new(null,
-                                                        user.Id, false, () => Task.FromResult<SocketGuildUser>(null));
-                                                    await TimedInvokeAsync(_guildMemberUpdatedEvent, nameof(GuildMemberUpdated), cacheableBefore,
-                                                        user).ConfigureAwait(false);
-                                                }
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
+                                            }
+
+                                            GuildMemberUpdateEvent data =
+                                                ((JsonElement)extraData.Body).Deserialize<GuildMemberUpdateEvent>(_serializerOptions);
+                                            SocketGuildUser user = guild.GetUser(data.UserId);
+
+                                            if (user != null)
+                                            {
+                                                SocketGuildUser before = user.Clone();
+                                                user.Update(State, data);
+
+                                                Cacheable<SocketGuildUser, ulong> cacheableBefore = new(before, user.Id, true,
+                                                    () => Task.FromResult<SocketGuildUser>(null));
+                                                Cacheable<SocketGuildUser, ulong> cacheableAfter = new(user, user.Id, true,
+                                                    () => Task.FromResult(user));
+                                                await TimedInvokeAsync(_guildMemberUpdatedEvent, nameof(GuildMemberUpdated),
+                                                    cacheableBefore, cacheableAfter).ConfigureAwait(false);
+                                            }
+                                            else
+                                            {
+                                                Cacheable<SocketGuildUser, ulong> cacheableBefore = new(null, data.UserId, false,
+                                                    () => Task.FromResult<SocketGuildUser>(null));
+                                                Cacheable<SocketGuildUser, ulong> cacheableAfter = new(null, data.UserId, false,
+                                                    async () =>
+                                                    {
+                                                        GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.UserId)
+                                                            .ConfigureAwait(false);
+                                                        return guild.AddOrUpdateUser(model);
+                                                    });
+                                                await TimedInvokeAsync(_guildMemberUpdatedEvent, nameof(GuildMemberUpdated),
+                                                    cacheableBefore, cacheableAfter).ConfigureAwait(false);
                                             }
                                         }
                                         break;
@@ -1066,23 +1084,33 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             await _gatewayLogger.DebugAsync("Received Event (guild_member_online)").ConfigureAwait(false);
                                             GuildMemberOnlineEvent data =
                                                 ((JsonElement)extraData.Body).Deserialize<GuildMemberOnlineEvent>(_serializerOptions);
-                                            List<SocketGuildUser> users = new();
+                                            List<Cacheable<SocketGuildUser, ulong>> users = new();
                                             foreach (ulong guildId in data.CommonGuilds)
                                             {
                                                 SocketGuild guild = State.GetGuild(guildId);
-                                                if (guild != null)
-                                                {
-                                                    SocketGuildUser user = guild.GetUser(data.UserId)
-                                                        ?? guild.AddOrUpdateUser(await ApiClient
-                                                            .GetGuildMemberAsync(guild.Id, data.UserId).ConfigureAwait(false));
-                                                    user.Presence.Update(true);
-                                                    users.Add(user);
-                                                }
-                                                else
+                                                if (guild == null)
                                                 {
                                                     await UnknownGuildAsync(extraData.Type, guildId).ConfigureAwait(false);
                                                     return;
                                                 }
+
+                                                SocketGuildUser user = guild.GetUser(data.UserId);
+                                                if (user is not null)
+                                                {
+                                                    user.Presence.Update(true);
+                                                    users.Add(new Cacheable<SocketGuildUser, ulong>(user, data.UserId, true,
+                                                        () => Task.FromResult(user)));
+                                                }
+                                                else
+                                                    users.Add(new Cacheable<SocketGuildUser, ulong>(null, data.UserId, false,
+                                                        async () =>
+                                                        {
+                                                            GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.UserId)
+                                                                .ConfigureAwait(false);
+                                                            user = guild.AddOrUpdateUser(model);
+                                                            user.Presence.Update(true);
+                                                            return user;
+                                                        }));
                                             }
 
                                             await TimedInvokeAsync(_guildMemberOnlineEvent, nameof(GuildMemberOnline), users, data.OnlineAt)
@@ -1096,23 +1124,33 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             await _gatewayLogger.DebugAsync("Received Event (guild_member_offline)").ConfigureAwait(false);
                                             GuildMemberOfflineEvent data =
                                                 ((JsonElement)extraData.Body).Deserialize<GuildMemberOfflineEvent>(_serializerOptions);
-                                            List<SocketGuildUser> users = new();
+                                            List<Cacheable<SocketGuildUser, ulong>> users = new();
                                             foreach (ulong guildId in data.CommonGuilds)
                                             {
                                                 SocketGuild guild = State.GetGuild(guildId);
-                                                if (guild != null)
-                                                {
-                                                    SocketGuildUser user = guild.GetUser(data.UserId)
-                                                        ?? guild.AddOrUpdateUser(await ApiClient
-                                                            .GetGuildMemberAsync(guild.Id, data.UserId).ConfigureAwait(false));
-                                                    user.Presence.Update(false);
-                                                    users.Add(user);
-                                                }
-                                                else
+                                                if (guild == null)
                                                 {
                                                     await UnknownGuildAsync(extraData.Type, guildId).ConfigureAwait(false);
                                                     return;
                                                 }
+
+                                                SocketGuildUser user = guild.GetUser(data.UserId);
+                                                if (user is not null)
+                                                {
+                                                    user.Presence.Update(false);
+                                                    users.Add(new Cacheable<SocketGuildUser, ulong>(user, data.UserId, true,
+                                                        () => Task.FromResult(user)));
+                                                }
+                                                else
+                                                    users.Add(new Cacheable<SocketGuildUser, ulong>(null, data.UserId, false,
+                                                        async () =>
+                                                        {
+                                                            GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.UserId)
+                                                                .ConfigureAwait(false);
+                                                            user = guild.AddOrUpdateUser(model);
+                                                            user.Presence.Update(false);
+                                                            return user;
+                                                        }));
                                             }
 
                                             await TimedInvokeAsync(_guildMemberOfflineEvent, nameof(GuildMemberOffline), users, data.OfflineAt)
@@ -1131,16 +1169,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             Role data = ((JsonElement)extraData.Body).Deserialize<Role>(_serializerOptions);
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
-                                            if (guild != null)
-                                            {
-                                                SocketRole role = guild.AddRole(data);
-                                                await TimedInvokeAsync(_roleCreatedEvent, nameof(RoleCreated), role).ConfigureAwait(false);
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            SocketRole role = guild.AddRole(data);
+                                            await TimedInvokeAsync(_roleCreatedEvent, nameof(RoleCreated), role).ConfigureAwait(false);
                                         }
                                         break;
 
@@ -1151,16 +1187,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             Role data = ((JsonElement)extraData.Body).Deserialize<Role>(_serializerOptions);
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
-                                            if (guild != null)
-                                            {
-                                                SocketRole role = guild.RemoveRole(data.Id);
-                                                await TimedInvokeAsync(_roleDeletedEvent, nameof(RoleDeleted), role).ConfigureAwait(false);
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            SocketRole role = guild.RemoveRole(data.Id);
+                                            await TimedInvokeAsync(_roleDeletedEvent, nameof(RoleDeleted), role).ConfigureAwait(false);
                                         }
                                         break;
 
@@ -1171,28 +1205,24 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             Role data = ((JsonElement)extraData.Body).Deserialize<Role>(_serializerOptions);
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
-                                            if (guild != null)
-                                            {
-                                                SocketRole role = guild.GetRole(data.Id);
-                                                if (role != null)
-                                                {
-                                                    SocketRole before = role.Clone();
-                                                    role.Update(State, data);
-
-                                                    await TimedInvokeAsync(_roleUpdatedEvent, nameof(RoleUpdated), before, role)
-                                                        .ConfigureAwait(false);
-                                                }
-                                                else
-                                                {
-                                                    await UnknownRoleAsync(extraData.Type, data.Id, guild.Id).ConfigureAwait(false);
-                                                    return;
-                                                }
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            SocketRole role = guild.GetRole(data.Id);
+                                            if (role == null)
+                                            {
+                                                await UnknownRoleAsync(extraData.Type, data.Id, guild.Id).ConfigureAwait(false);
+                                                return;
+                                            }
+
+                                            SocketRole before = role.Clone();
+                                            role.Update(State, data);
+
+                                            await TimedInvokeAsync(_roleUpdatedEvent, nameof(RoleUpdated), before, role)
+                                                .ConfigureAwait(false);
                                         }
                                         break;
 
@@ -1207,16 +1237,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             GuildEmojiEvent data = ((JsonElement)extraData.Body).Deserialize<GuildEmojiEvent>(_serializerOptions);
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
-                                            if (guild != null)
-                                            {
-                                                GuildEmote emote = guild.AddEmote(data);
-                                                await TimedInvokeAsync(_emoteCreatedEvent, nameof(EmoteCreated), emote, guild).ConfigureAwait(false);
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            GuildEmote emote = guild.AddEmote(data);
+                                            await TimedInvokeAsync(_emoteCreatedEvent, nameof(EmoteCreated), emote, guild).ConfigureAwait(false);
                                         }
                                         break;
 
@@ -1227,19 +1255,17 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             GuildEmojiEvent data = ((JsonElement)extraData.Body).Deserialize<GuildEmojiEvent>(_serializerOptions);
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
-                                            if (guild != null)
-                                            {
-                                                GuildEmote emote = guild.GetEmote(data?.Id);
-                                                GuildEmote before = emote.Clone();
-                                                GuildEmote after = guild.AddOrUpdateEmote(data);
-                                                await TimedInvokeAsync(_emoteUpdatedEvent, nameof(EmoteUpdated), before, after, guild)
-                                                    .ConfigureAwait(false);
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            GuildEmote emote = guild.GetEmote(data?.Id);
+                                            GuildEmote before = emote.Clone();
+                                            GuildEmote after = guild.AddOrUpdateEmote(data);
+                                            await TimedInvokeAsync(_emoteUpdatedEvent, nameof(EmoteUpdated), before, after, guild)
+                                                .ConfigureAwait(false);
                                         }
                                         break;
 
@@ -1250,16 +1276,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             GuildEmojiEvent data = ((JsonElement)extraData.Body).Deserialize<GuildEmojiEvent>(_serializerOptions);
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
-                                            if (guild != null)
-                                            {
-                                                GuildEmote emote = guild.RemoveEmote(data?.Id);
-                                                await TimedInvokeAsync(_emoteDeletedEvent, nameof(EmoteDeleted), emote, guild).ConfigureAwait(false);
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            GuildEmote emote = guild.RemoveEmote(data?.Id);
+                                            await TimedInvokeAsync(_emoteDeletedEvent, nameof(EmoteDeleted), emote, guild).ConfigureAwait(false);
                                         }
                                         break;
 
@@ -1274,22 +1298,20 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             GuildEvent data = ((JsonElement)extraData.Body).Deserialize<GuildEvent>(_serializerOptions);
                                             SocketGuild guild = State.GetGuild(data.GuildId);
-                                            if (guild != null)
-                                            {
-                                                SocketGuild before = guild.Clone();
-                                                guild.Update(State, data);
-                                                if (AlwaysDownloadBoostSubscriptions
-                                                    && (before.BoostSubscriptionCount != guild.BoostSubscriptionCount
-                                                        || before.BufferBoostSubscriptionCount != guild.BufferBoostSubscriptionCount))
-                                                    await guild.DownloadBoostSubscriptionsAsync().ConfigureAwait(false);
-
-                                                await TimedInvokeAsync(_guildUpdatedEvent, nameof(GuildUpdated), before, guild).ConfigureAwait(false);
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, data.GuildId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            SocketGuild before = guild.Clone();
+                                            guild.Update(State, data);
+                                            if (AlwaysDownloadBoostSubscriptions
+                                                && (before.BoostSubscriptionCount != guild.BoostSubscriptionCount
+                                                    || before.BufferBoostSubscriptionCount != guild.BufferBoostSubscriptionCount))
+                                                await guild.DownloadBoostSubscriptionsAsync().ConfigureAwait(false);
+
+                                            await TimedInvokeAsync(_guildUpdatedEvent, nameof(GuildUpdated), before, guild).ConfigureAwait(false);
                                         }
                                         break;
 
@@ -1300,17 +1322,15 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             GuildEvent data = ((JsonElement)extraData.Body).Deserialize<GuildEvent>(_serializerOptions);
 
                                             SocketGuild guild = RemoveGuild(data.GuildId);
-                                            if (guild != null)
-                                            {
-                                                await GuildUnavailableAsync(guild).ConfigureAwait(false);
-                                                await TimedInvokeAsync(_leftGuildEvent, nameof(LeftGuild), guild).ConfigureAwait(false);
-                                                ((IDisposable)guild).Dispose();
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            await GuildUnavailableAsync(guild).ConfigureAwait(false);
+                                            await TimedInvokeAsync(_leftGuildEvent, nameof(LeftGuild), guild).ConfigureAwait(false);
+                                            ((IDisposable)guild).Dispose();
                                         }
                                         break;
 
@@ -1320,21 +1340,19 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             await _gatewayLogger.DebugAsync("Received Event (added_block_list)").ConfigureAwait(false);
                                             GuildBanEvent data = ((JsonElement)extraData.Body).Deserialize<GuildBanEvent>(_serializerOptions);
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
-                                            if (guild != null)
-                                            {
-                                                SocketUser operatorUser = guild.GetUser(data.OperatorUserId)
-                                                    ?? (SocketUser)SocketUnknownUser.Create(this, State, data.OperatorUserId);
-                                                IReadOnlyCollection<SocketUser> bannedUsers = data.UserIds.Select(id => guild.GetUser(id)
-                                                        ?? (SocketUser)SocketUnknownUser.Create(this, State, id))
-                                                    .ToReadOnlyCollection(() => data.UserIds.Length);
-                                                await TimedInvokeAsync(_userBannedEvent, nameof(UserBanned), bannedUsers, operatorUser, guild)
-                                                    .ConfigureAwait(false);
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            SocketUser operatorUser = guild.GetUser(data.OperatorUserId)
+                                                ?? (SocketUser)SocketUnknownUser.Create(this, State, data.OperatorUserId);
+                                            IReadOnlyCollection<SocketUser> bannedUsers = data.UserIds.Select(id => guild.GetUser(id)
+                                                    ?? (SocketUser)SocketUnknownUser.Create(this, State, id))
+                                                .ToReadOnlyCollection(() => data.UserIds.Length);
+                                            await TimedInvokeAsync(_userBannedEvent, nameof(UserBanned), bannedUsers, operatorUser, guild)
+                                                .ConfigureAwait(false);
                                         }
                                         break;
 
@@ -1344,21 +1362,19 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             await _gatewayLogger.DebugAsync("Received Event (deleted_block_list)").ConfigureAwait(false);
                                             GuildBanEvent data = ((JsonElement)extraData.Body).Deserialize<GuildBanEvent>(_serializerOptions);
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
-                                            if (guild != null)
-                                            {
-                                                SocketUser operatorUser = guild.GetUser(data.OperatorUserId)
-                                                    ?? (SocketUser)SocketUnknownUser.Create(this, State, data.OperatorUserId);
-                                                IReadOnlyCollection<SocketUser> unbannedUsers = data.UserIds.Select(id => guild.GetUser(id)
-                                                        ?? (SocketUser)SocketUnknownUser.Create(this, State, id))
-                                                    .ToReadOnlyCollection(() => data.UserIds.Length);
-                                                await TimedInvokeAsync(_userUnbannedEvent, nameof(UserUnbanned), unbannedUsers, operatorUser, guild)
-                                                    .ConfigureAwait(false);
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            SocketUser operatorUser = guild.GetUser(data.OperatorUserId)
+                                                ?? (SocketUser)SocketUnknownUser.Create(this, State, data.OperatorUserId);
+                                            IReadOnlyCollection<SocketUser> unbannedUsers = data.UserIds.Select(id => guild.GetUser(id)
+                                                    ?? (SocketUser)SocketUnknownUser.Create(this, State, id))
+                                                .ToReadOnlyCollection(() => data.UserIds.Length);
+                                            await TimedInvokeAsync(_userUnbannedEvent, nameof(UserUnbanned), unbannedUsers, operatorUser, guild)
+                                                .ConfigureAwait(false);
                                         }
                                         break;
 
@@ -1443,10 +1459,31 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             else
                                             {
                                                 SocketUser user = GetUser(data.UserId);
-                                                SocketUser before = user.Clone();
-                                                user.Update(State, data);
-                                                await TimedInvokeAsync(_userUpdatedEvent, nameof(UserUpdated), before, CurrentUser)
-                                                    .ConfigureAwait(false);
+                                                if (user != null)
+                                                {
+                                                    SocketUser before = user.Clone();
+                                                    user.Update(State, data);
+                                                    await TimedInvokeAsync(_userUpdatedEvent, nameof(UserUpdated),
+                                                            new Cacheable<SocketUser, ulong>(before, data.UserId, true,
+                                                                () => Task.FromResult((SocketUser)null)),
+                                                            new Cacheable<SocketUser, ulong>(user, data.UserId, true,
+                                                                async () =>
+                                                                {
+                                                                    User model = await ApiClient.GetUserAsync(data.UserId).ConfigureAwait(false);
+                                                                    return SocketGlobalUser.Create(this, State, model);
+                                                                }))
+                                                        .ConfigureAwait(false);
+                                                }
+                                                else
+                                                    await TimedInvokeAsync(_userUpdatedEvent, nameof(UserUpdated),
+                                                        new Cacheable<SocketUser, ulong>(null, data.UserId, false,
+                                                            () => Task.FromResult((SocketUser)null)),
+                                                        new Cacheable<SocketUser, ulong>(null, data.UserId, false,
+                                                            async () =>
+                                                            {
+                                                                User model = await ApiClient.GetUserAsync(data.UserId).ConfigureAwait(false);
+                                                                return SocketGlobalUser.Create(this, State, model);
+                                                            }));
                                             }
                                         }
                                         break;
@@ -1457,29 +1494,41 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             await _gatewayLogger.DebugAsync("Received Event (self_joined_guild)").ConfigureAwait(false);
                                             SelfGuildEvent data = ((JsonElement)extraData.Body).Deserialize<SelfGuildEvent>(_serializerOptions);
 
-                                            Func<ulong, Task<ExtendedGuild>> task = new(async id =>
+                                            _ = Task.Run(async () =>
                                             {
-                                                int maxRetryTime = 5;
-                                                while (true)
+                                                try
                                                 {
-                                                    try
+                                                    int maxRetryTime = 10;
+                                                    while (true)
                                                     {
-                                                        return await ApiClient.GetGuildAsync(id).ConfigureAwait(false);
-                                                    }
-                                                    catch (HttpException ex) when (ex.HttpCode == HttpStatusCode.Forbidden)
-                                                    {
-                                                        if (--maxRetryTime == 0) throw;
-                                                    }
+                                                        try
+                                                        {
+                                                            return await ApiClient.GetGuildAsync(data.GuildId).ConfigureAwait(false);
+                                                        }
+                                                        catch (HttpException ex) when (ex.HttpCode == HttpStatusCode.Forbidden)
+                                                        {
+                                                            if (--maxRetryTime == 0) throw;
+                                                        }
 
-                                                    await Task.Delay(500).ConfigureAwait(false);
+                                                        await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
+                                                    }
                                                 }
+                                                catch (Exception e)
+                                                {
+                                                    await _gatewayLogger
+                                                        .ErrorAsync($"Error handling {gatewaySocketFrameType}. Payload: {payload}", e)
+                                                        .ConfigureAwait(false);
+                                                    return null;
+                                                }
+                                            }).ContinueWith(async t =>
+                                            {
+                                                ExtendedGuild model = t.Result;
+                                                if (model is null) return;
+                                                SocketGuild guild = AddGuild(model, State);
+                                                guild.Update(State, model);
+                                                await TimedInvokeAsync(_joinedGuildEvent, nameof(JoinedGuild), guild).ConfigureAwait(false);
+                                                await GuildAvailableAsync(guild).ConfigureAwait(false);
                                             });
-
-                                            ExtendedGuild model = await task(data.GuildId).ConfigureAwait(false);
-                                            SocketGuild guild = AddGuild(model, State);
-                                            guild.Update(State, model);
-                                            await TimedInvokeAsync(_joinedGuildEvent, nameof(JoinedGuild), guild).ConfigureAwait(false);
-                                            await GuildAvailableAsync(guild).ConfigureAwait(false);
                                         }
                                         break;
 
@@ -1490,17 +1539,15 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SelfGuildEvent data = ((JsonElement)extraData.Body).Deserialize<SelfGuildEvent>(_serializerOptions);
 
                                             SocketGuild guild = RemoveGuild(data.GuildId);
-                                            if (guild != null)
-                                            {
-                                                await GuildUnavailableAsync(guild).ConfigureAwait(false);
-                                                await TimedInvokeAsync(_leftGuildEvent, nameof(LeftGuild), guild).ConfigureAwait(false);
-                                                ((IDisposable)guild).Dispose();
-                                            }
-                                            else
+                                            if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            await GuildUnavailableAsync(guild).ConfigureAwait(false);
+                                            await TimedInvokeAsync(_leftGuildEvent, nameof(LeftGuild), guild).ConfigureAwait(false);
+                                            ((IDisposable)guild).Dispose();
                                         }
                                         break;
 
@@ -1518,25 +1565,23 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             {
                                                 SocketTextChannel channel = GetChannel(data.ChannelId) as SocketTextChannel;
                                                 SocketGuild guild = GetGuild(data.GuildId.Value);
-                                                if (guild != null)
-                                                {
-                                                    if (channel == null)
-                                                    {
-                                                        await UnknownChannelAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
-                                                        return;
-                                                    }
-
-                                                    SocketUser user = channel.GetUser(data.UserId)
-                                                        ?? SocketUnknownUser.Create(this, State, data.UserId) as SocketUser;
-                                                    IMessage msg = await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false);
-                                                    await TimedInvokeAsync(_messageButtonClickedEvent, nameof(MessageButtonClicked), data.Value, user,
-                                                        msg, channel, guild).ConfigureAwait(false);
-                                                }
-                                                else
+                                                if (guild == null)
                                                 {
                                                     await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
                                                     return;
                                                 }
+
+                                                if (channel == null)
+                                                {
+                                                    await UnknownChannelAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                    return;
+                                                }
+
+                                                SocketUser user = channel.GetUser(data.UserId)
+                                                    ?? SocketUnknownUser.Create(this, State, data.UserId) as SocketUser;
+                                                IMessage msg = await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false);
+                                                await TimedInvokeAsync(_messageButtonClickedEvent, nameof(MessageButtonClicked), data.Value, user,
+                                                    msg, channel, guild).ConfigureAwait(false);
                                             }
                                             else
                                             {

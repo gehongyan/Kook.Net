@@ -19,7 +19,7 @@ internal class Program
             AlwaysDownloadUsers = false,
             AlwaysDownloadVoiceStates = false,
             AlwaysDownloadBoostSubscriptions = false,
-            MessageCacheSize = 100,
+            MessageCacheSize = 0,
             LogLevel = LogSeverity.Debug
         });
 
