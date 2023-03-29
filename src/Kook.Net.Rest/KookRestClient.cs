@@ -202,6 +202,43 @@ public class KookRestClient : BaseKookClient, IKookClient
 
     #endregion
 
+    #region Friends
+
+    /// <summary>
+    ///     Gets friends.
+    /// </summary>
+    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of users
+    ///     that are friends with the current user.
+    /// </returns>
+    public Task<IReadOnlyCollection<RestUser>> GetFriendsAsync(RequestOptions options = null)
+        => ClientHelper.GetFriendsAsync(this, options);
+
+    /// <summary>
+    ///     Gets friend requests.
+    /// </summary>
+    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of
+    ///     friend requests that the current user has received.
+    /// </returns>
+    public Task<IReadOnlyCollection<RestFriendRequest>> GetFriendRequestsAsync(RequestOptions options = null)
+        => ClientHelper.GetFriendRequestsAsync(this, options);
+
+    /// <summary>
+    ///     Gets blocked users.
+    /// </summary>
+    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of users
+    ///     that are blocked by the current user.
+    /// </returns>
+    public Task<IReadOnlyCollection<RestUser>> GetBlockedUsersAsync(RequestOptions options = null)
+        => ClientHelper.GetBlockedUsersAsync(this, options);
+
+    #endregion
+
     #region Reactions
 
     /// <summary>
@@ -336,6 +373,33 @@ public class KookRestClient : BaseKookClient, IKookClient
     {
         if (mode == CacheMode.AllowDownload)
             return await GetUserAsync(id, options).ConfigureAwait(false);
+        else
+            return null;
+    }
+
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IUser>> IKookClient.GetFriendsAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetFriendsAsync(options).ConfigureAwait(false);
+        else
+            return null;
+    }
+
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IFriendRequest>> IKookClient.GetFriendRequestsAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetFriendRequestsAsync(options).ConfigureAwait(false);
+        else
+            return null;
+    }
+
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IUser>> IKookClient.GetBlockedUsersAsync(CacheMode mode, RequestOptions options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetBlockedUsersAsync(options).ConfigureAwait(false);
         else
             return null;
     }

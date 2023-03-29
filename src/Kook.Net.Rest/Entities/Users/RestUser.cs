@@ -103,11 +103,11 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         IdentifyNumberValue = model.FullName.Length > 4
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
             && ushort.TryParse(model.FullName[^4..], out ushort val)
+#else
+            && ushort.TryParse(model.FullName.Substring(model.FullName.Length - 4), out ushort val)
+#endif
                 ? val
                 : null;
-#else
-                              && ushort.TryParse(model.FullName.Substring(model.FullName.Length - 4), out ushort val) ? val : null;
-#endif
         Avatar = model.Avatar;
     }
 
@@ -149,6 +149,22 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     public async Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options = null) =>
         await UserHelper.UpdateIntimacyAsync(this, Kook, func, options).ConfigureAwait(false);
 
+    /// <inheritdoc />
+    public Task BlockAsync(RequestOptions options = null) =>
+        UserHelper.BlockAsync(this, Kook, options);
+
+    /// <inheritdoc />
+    public Task UnblockAsync(RequestOptions options = null) =>
+        UserHelper.UnblockAsync(this, Kook, options);
+
+    /// <inheritdoc />
+    public virtual Task RequestFriendAsync(RequestOptions options = null) =>
+        UserHelper.RequestFriendAsync(this, Kook, options);
+
+    /// <inheritdoc />
+    public Task RemoveFriendAsync(RequestOptions options = null) =>
+        UserHelper.RemoveFriendAsync(this, Kook, options);
+
     #endregion
 
     /// <summary>
@@ -161,7 +177,6 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
 
     private string DebuggerDisplay =>
         $"{Format.UsernameAndIdentifyNumber(this, Kook.FormatUsersInBidirectionalUnicode)} ({Id}{(IsBot ?? false ? ", Bot" : "")})";
-
 
     #region IUser
 

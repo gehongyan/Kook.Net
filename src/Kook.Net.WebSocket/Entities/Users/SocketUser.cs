@@ -183,6 +183,22 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     public async Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options = null)
         => await UserHelper.UpdateIntimacyAsync(this, Kook, func, options).ConfigureAwait(false);
 
+    /// <inheritdoc />
+    public Task BlockAsync(RequestOptions options = null) =>
+        UserHelper.BlockAsync(this, Kook, options);
+
+    /// <inheritdoc />
+    public Task UnblockAsync(RequestOptions options = null) =>
+        UserHelper.UnblockAsync(this, Kook, options);
+
+    /// <inheritdoc />
+    public Task RequestFriendAsync(RequestOptions options = null) =>
+        UserHelper.RequestFriendAsync(this, Kook, options);
+
+    /// <inheritdoc />
+    public Task RemoveFriendAsync(RequestOptions options = null) =>
+        UserHelper.RemoveFriendAsync(this, Kook, options);
+
     /// <summary>
     ///     Gets the full name of the user (e.g. Example#0001).
     /// </summary>

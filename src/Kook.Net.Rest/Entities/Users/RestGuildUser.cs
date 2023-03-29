@@ -218,6 +218,10 @@ public class RestGuildUser : RestUser, IGuildUser
         return new ChannelPermissions(Permissions.ResolveChannel(Guild, this, channel, guildPerms.RawValue));
     }
 
+    /// <inheritdoc />
+    public override Task RequestFriendAsync(RequestOptions options = null) =>
+        UserHelper.RequestFriendAsync(this, Kook, options);
+
     #endregion
 
     #region IGuildUser

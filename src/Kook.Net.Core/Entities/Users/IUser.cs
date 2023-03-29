@@ -96,5 +96,33 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// <param name="func">A delegate containing the properties to modify the <see cref="IIntimacy"/> with.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>A task that represents the asynchronous operation for updating the intimacy information.</returns>
-    Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options);
+    Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options = null);
+
+    /// <summary>
+    ///     Gets the friend state with this user.
+    /// </summary>
+    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <returns> A task that represents the asynchronous operation for getting the friend state. </returns>
+    Task BlockAsync(RequestOptions options = null);
+
+    /// <summary>
+    ///     Gets the friend state with this user.
+    /// </summary>
+    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <returns> A task that represents the asynchronous operation for getting the friend state. </returns>
+    Task UnblockAsync(RequestOptions options = null);
+
+    /// <summary>
+    ///     Sends a friend request to this user.
+    /// </summary>
+    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <returns> A task that represents the asynchronous operation for sending the friend request. </returns>
+    Task RequestFriendAsync(RequestOptions options = null);
+
+    /// <summary>
+    ///     Gets the friend state with this user.
+    /// </summary>
+    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <returns> A task that represents the asynchronous operation for getting the friend state. </returns>
+    Task RemoveFriendAsync(RequestOptions options = null);
 }

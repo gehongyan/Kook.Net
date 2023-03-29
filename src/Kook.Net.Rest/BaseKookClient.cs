@@ -1,5 +1,5 @@
-using Kook.Logging;
 using System.Collections.Immutable;
+using Kook.Logging;
 
 namespace Kook.Rest;
 
@@ -239,6 +239,18 @@ public abstract class BaseKookClient : IKookClient
     /// <inheritdoc />
     Task<IUser> IKookClient.GetUserAsync(string username, string identifyNumber, RequestOptions options)
         => Task.FromResult<IUser>(null);
+
+    /// <inheritdoc />
+    Task<IReadOnlyCollection<IUser>> IKookClient.GetFriendsAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<IReadOnlyCollection<IUser>>(ImmutableArray.Create<IUser>());
+
+    /// <inheritdoc />
+    Task<IReadOnlyCollection<IFriendRequest>> IKookClient.GetFriendRequestsAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<IReadOnlyCollection<IFriendRequest>>(ImmutableArray.Create<IFriendRequest>());
+
+    /// <inheritdoc />
+    Task<IReadOnlyCollection<IUser>> IKookClient.GetBlockedUsersAsync(CacheMode mode, RequestOptions options)
+        => Task.FromResult<IReadOnlyCollection<IUser>>(ImmutableArray.Create<IUser>());
 
     /// <inheritdoc />
     Task IKookClient.StartAsync()

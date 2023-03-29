@@ -1,6 +1,6 @@
+using System.Collections.Immutable;
 using Kook.API;
 using Kook.API.Rest;
-using System.Collections.Immutable;
 
 namespace Kook.Rest;
 
@@ -92,5 +92,47 @@ internal static class UserHelper
             UserId = user.Id, Score = properties.Score, SocialInfo = properties.SocialInfo, ImageId = properties.ImageId
         };
         await client.ApiClient.UpdateIntimacyValueAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task BlockAsync(IUser user, BaseKookClient client, RequestOptions options)
+    {
+        BlockUserParams args = new() { UserId = user.Id };
+        await client.ApiClient.BlockUserAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task UnblockAsync(IUser user, BaseKookClient client, RequestOptions options)
+    {
+        UnblockUserParams args = new() { UserId = user.Id };
+        await client.ApiClient.UnblockUserAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task RequestFriendAsync(IUser user, BaseKookClient client, RequestOptions options)
+    {
+        RequestFriendParams args = new()
+        {
+            FullQualification = user.UsernameAndIdentifyNumber(false), Source = RequestFriendSource.FullQualification
+        };
+        await client.ApiClient.RequestFriendAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task RequestFriendAsync(IGuildUser user, BaseKookClient client, RequestOptions options)
+    {
+        RequestFriendParams args = new()
+        {
+            FullQualification = user.UsernameAndIdentifyNumber(false), Source = RequestFriendSource.Guild, GuildId = user.GuildId
+        };
+        await client.ApiClient.RequestFriendAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task RemoveFriendAsync(IUser user, BaseKookClient client, RequestOptions options)
+    {
+        RemoveFriendParams args = new() { UserId = user.Id };
+        await client.ApiClient.RemoveFriendAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task HandleFriendRequestAsync(IFriendRequest request, bool handleResult, BaseKookClient client, RequestOptions options)
+    {
+        HandleFriendRequestParams args = new() { Id = request.Id, HandleResult = handleResult };
+        await client.ApiClient.HandleFriendRequestAsync(args, options).ConfigureAwait(false);
     }
 }
