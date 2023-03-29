@@ -1,18 +1,21 @@
-using Kook.API.Rest;
-using Kook.Net;
-using Kook.Net.Queue;
-using Kook.Net.Rest;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq.Expressions;
-using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Kook.API.Rest;
+using Kook.Net;
+using Kook.Net.Queue;
+using Kook.Net.Rest;
+#if NET462
+using System.Net;
+#else
 using System.Web;
+#endif
 
 namespace Kook.API;
 
