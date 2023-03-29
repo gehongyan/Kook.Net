@@ -326,7 +326,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                 .ConfigureAwait(false);
     }
 
-    private async Task ProcessUserDownloadsAsync(IEnumerable<IGuild> guilds, RequestOptions options)
+    private async Task ProcessUserDownloadsAsync(IEnumerable<SocketGuild> guilds, RequestOptions options)
     {
         foreach (SocketGuild socketGuild in guilds)
         {
@@ -350,9 +350,9 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                 options).ConfigureAwait(false);
     }
 
-    private async Task ProcessVoiceStateDownloadsAsync(IEnumerable<IGuild> guilds, RequestOptions options)
+    private async Task ProcessVoiceStateDownloadsAsync(IEnumerable<SocketGuild> guilds, RequestOptions options)
     {
-        foreach (SocketGuild socketGuild in guilds.OfType<SocketGuild>())
+        foreach (SocketGuild socketGuild in guilds)
         {
             foreach (ulong channelId in socketGuild.VoiceChannels.Select(x => x.Id))
             {
@@ -386,9 +386,9 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                 (guilds ?? Guilds.Where(x => x.IsAvailable)).Select(x => GetGuild(x.Id)).Where(x => x != null), options).ConfigureAwait(false);
     }
 
-    private async Task ProcessBoostSubscriptionsDownloadsAsync(IEnumerable<IGuild> guilds, RequestOptions options)
+    private async Task ProcessBoostSubscriptionsDownloadsAsync(IEnumerable<SocketGuild> guilds, RequestOptions options)
     {
-        foreach (SocketGuild socketGuild in guilds.OfType<SocketGuild>())
+        foreach (SocketGuild socketGuild in guilds)
         {
             IEnumerable<BoostSubscription> subscriptions = await ApiClient.GetGuildBoostSubscriptionsAsync(socketGuild.Id, options: options)
                 .FlattenAsync().ConfigureAwait(false);
