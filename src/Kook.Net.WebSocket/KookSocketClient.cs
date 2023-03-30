@@ -400,7 +400,12 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
     private async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType, int? sequence, object payload)
     {
-        if (sequence != null) _lastSeq = sequence.Value;
+        if (sequence != null)
+        {
+            if (sequence.Value != _lastSeq + 1)
+                await _gatewayLogger.WarningAsync($"Missed a sequence number. Expected {_lastSeq + 1}, got {sequence.Value}.");
+            _lastSeq = sequence.Value;
+        }
 
         _lastMessageTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
