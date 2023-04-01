@@ -1,5 +1,6 @@
 using Kook.Rest;
 using System;
+using System.Threading.Tasks;
 
 namespace Kook;
 
@@ -7,7 +8,7 @@ namespace Kook;
 ///     Test fixture type for integration tests which sets up the client from
 ///     the token provided in environment variables.
 /// </summary>
-public class KookRestClientFixture : IDisposable
+public class KookRestClientFixture : IDisposable, IAsyncDisposable
 {
     public KookRestClient Client { get; private set; }
 
@@ -20,9 +21,13 @@ public class KookRestClientFixture : IDisposable
         Client.LoginAsync(TokenType.Bot, token).GetAwaiter().GetResult();
     }
 
-    public void Dispose()
+    /// <inheritdoc />
+    public virtual async ValueTask DisposeAsync()
     {
-        Client.LogoutAsync().GetAwaiter().GetResult();
+        await Client.LogoutAsync();
         Client.Dispose();
     }
+
+    /// <inheritdoc />
+    public virtual void Dispose() => DisposeAsync().GetAwaiter().GetResult();
 }

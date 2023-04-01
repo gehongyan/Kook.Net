@@ -1,6 +1,7 @@
 using Kook.Rest;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Kook;
 
@@ -18,12 +19,19 @@ public class RestGuildFixture : KookRestClientFixture
             .Where(x => x.OwnerId == Client.CurrentUser.Id)
             .Where(x => x.Name == guildName)
             .ToList();
-        Guild = guilds.Any()
-            ? guilds.First()
-            : Client.CreateGuildAsync(guildName).GetAwaiter().GetResult();
+        RemoveUselessTestGuilds(guilds.Skip(1));
+
+        Guild = guilds.FirstOrDefault()
+            ?? Client.CreateGuildAsync(guildName).GetAwaiter().GetResult();
 
         RemoveAllChannels();
         RemoveAllRoles();
+    }
+
+    private void RemoveUselessTestGuilds(IEnumerable<RestGuild> guilds)
+    {
+        foreach (RestGuild guild in guilds)
+            guild.DeleteAsync().GetAwaiter().GetResult();
     }
 
     /// <summary>
@@ -42,4 +50,14 @@ public class RestGuildFixture : KookRestClientFixture
         IEnumerable<RestRole> roles = Guild.Roles.Where(r => r.Type == RoleType.UserCreated);
         foreach (RestRole role in roles) role.DeleteAsync().GetAwaiter().GetResult();
     }
+
+    /// <inheritdoc />
+    public override async ValueTask DisposeAsync()
+    {
+        await Guild.DeleteAsync();
+        await base.DisposeAsync();
+    }
+
+    /// <inheritdoc />
+    public override void Dispose() => DisposeAsync().GetAwaiter().GetResult();
 }

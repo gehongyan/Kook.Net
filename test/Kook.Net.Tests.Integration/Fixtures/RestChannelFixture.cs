@@ -1,12 +1,13 @@
 using Kook.Rest;
 using System;
+using System.Threading.Tasks;
 
 namespace Kook;
 
 /// <summary>
 ///     Gets or creates a guild to use for testing.
 /// </summary>
-public class RestChannelFixture : RestGuildFixture, IDisposable
+public class RestChannelFixture : RestGuildFixture
 {
     public RestTextChannel TextChannel { get; private set; }
 
@@ -17,9 +18,12 @@ public class RestChannelFixture : RestGuildFixture, IDisposable
         TextChannel = textChannel ?? throw new Exception("Test text channel cannot be created for test.");
     }
 
-    public new void Dispose()
+    public override async ValueTask DisposeAsync()
     {
-        TextChannel.DeleteAsync().GetAwaiter().GetResult();
-        base.Dispose();
+        await TextChannel.DeleteAsync();
+        await base.DisposeAsync();
     }
+
+    /// <inheritdoc />
+    public override void Dispose() => DisposeAsync().GetAwaiter().GetResult();
 }
