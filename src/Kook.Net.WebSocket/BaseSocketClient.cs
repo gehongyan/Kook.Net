@@ -117,6 +117,16 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     public abstract SocketDMChannel GetDMChannel(Guid chatCode);
 
     /// <summary>
+    ///     Gets a channel.
+    /// </summary>
+    /// <param name="userId">The user identifier of the direct-message channel.</param>
+    /// <returns>
+    ///     A generic WebSocket-based channel object (voice, text, category, etc.) associated with the identifier;
+    ///     <c>null</c> when the channel cannot be found.
+    /// </returns>
+    public abstract SocketDMChannel GetDMChannel(ulong userId);
+
+    /// <summary>
     ///     Gets a guild.
     /// </summary>
     /// <param name="id">The guild identifier.</param>

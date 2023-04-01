@@ -32,9 +32,9 @@ internal class ClientState
             (int)(estimatedUsersCount * CollectionMultiplier));
     }
 
-    internal SocketChannel GetChannel(ulong id)
+    internal SocketChannel GetChannel(ulong chatCode)
     {
-        if (_guildChannels.TryGetValue(id, out SocketChannel channel)) return channel;
+        if (_guildChannels.TryGetValue(chatCode, out SocketChannel channel)) return channel;
 
         return null;
     }
@@ -44,6 +44,11 @@ internal class ClientState
         if (_dmChannels.TryGetValue(userId, out SocketDMChannel channel)) return channel;
 
         return null;
+    }
+
+    internal SocketDMChannel GetDMChannel(ulong userId)
+    {
+        return _dmChannels.Values.FirstOrDefault(x => x.Recipient.Id == userId);
     }
 
     internal void AddChannel(SocketChannel channel) => _guildChannels[channel.Id] = channel;
