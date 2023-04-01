@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
+using RichModel = Kook.API.Rest.RichGuild;
 using ExtendedModel = Kook.API.Rest.ExtendedGuild;
 using Model = Kook.API.Guild;
 
@@ -16,7 +17,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     private ImmutableDictionary<uint, RestRole> _roles;
 
     private ImmutableDictionary<ulong, RestChannel> _channels;
-    // private ImmutableArray<GuildEmote> _emotes;
+    private ImmutableArray<GuildEmote> _emotes;
 
     /// <inheritdoc />
     public string Name { get; private set; }
@@ -61,8 +62,15 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </summary>
     public RestRole EveryoneRole => GetRole(0);
 
-    // /// <inheritdoc />
-    // public IReadOnlyCollection<GuildEmote> Emotes { get; set; }
+    /// <inheritdoc cref="IGuild.Emotes"/>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         This property may contain no elements if the current guild is fetched
+    ///         via <see cref="KookRestClient.GetGuildAsync"/>. In this case, you must
+    ///         use <see cref="GetEmoteAsync"/> to retrieve all emotes.
+    ///     </note>
+    /// </remarks>
+    public IReadOnlyCollection<GuildEmote> Emotes => _emotes.ToReadOnlyCollection();
 
     /// <summary>
     ///     Gets a collection of all roles in this guild.
@@ -112,6 +120,21 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     internal RestGuild(BaseKookClient client, ulong id)
         : base(client, id)
     {
+        _emotes = ImmutableArray.Create<GuildEmote>();
+    }
+
+    internal static RestGuild Create(BaseKookClient kook, RichModel model)
+    {
+        RestGuild entity = new(kook, model.Id);
+        entity.Update(model);
+        return entity;
+    }
+
+    internal static RestGuild Create(BaseKookClient kook, ExtendedModel model)
+    {
+        RestGuild entity = new(kook, model.Id);
+        entity.Update(model);
+        return entity;
     }
 
     internal static RestGuild Create(BaseKookClient kook, Model model)
@@ -119,6 +142,19 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         RestGuild entity = new(kook, model.Id);
         entity.Update(model);
         return entity;
+    }
+
+    internal void Update(RichModel model)
+    {
+        Update(model as ExtendedModel);
+
+        if (model.Emojis != null)
+        {
+            ImmutableArray<GuildEmote>.Builder emotes = ImmutableArray.CreateBuilder<GuildEmote>();
+            foreach (API.Emoji emoji in model.Emojis)
+                emotes.Add(emoji.ToEntity(model.Id));
+            _emotes = emotes.ToImmutable();
+        }
     }
 
     internal void Update(ExtendedModel model)
@@ -162,6 +198,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
                 channels[model.Channels[i].Id] = RestChannel.Create(Kook, model.Channels[i], this);
 
         _channels = channels.ToImmutable();
+        _emotes = ImmutableArray.Create<GuildEmote>();
     }
 
     #endregion
@@ -615,7 +652,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     IReadOnlyCollection<IRole> IGuild.Roles => Roles;
 
     /// <inheritdoc />
-    IReadOnlyCollection<GuildEmote> IGuild.Emotes => null;
+    IReadOnlyCollection<GuildEmote> IGuild.Emotes => Emotes;
 
     /// <inheritdoc />
     IRecommendInfo IGuild.RecommendInfo => RecommendInfo;

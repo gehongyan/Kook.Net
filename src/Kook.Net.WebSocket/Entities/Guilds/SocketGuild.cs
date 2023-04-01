@@ -234,7 +234,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         .SingleOrDefault(c => c.Id == WelcomeChannelId);
 
     /// <inheritdoc cref="IGuild.Emotes"/>
-    public IReadOnlyCollection<GuildEmote> Emotes => _emotes.Select(x => x.Value).Where(x => x != null).ToReadOnlyCollection(_emotes);
+    public IReadOnlyCollection<GuildEmote> Emotes => _emotes
+        .Select(x => x.Value).Where(x => x != null).ToReadOnlyCollection(_emotes);
 
     /// <summary>
     ///     Gets a dictionary of all boost subscriptions for this guild.
@@ -394,7 +395,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     internal void Update(ClientState state, RichModel model)
     {
         Update(state, model as ExtendedModel);
-        OwnerId = model.OwnerId; // override
 
         if (model.Emojis != null)
         {
