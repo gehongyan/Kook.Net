@@ -1,3 +1,6 @@
+using System.Diagnostics;
+using System.Reflection;
+
 namespace Kook;
 
 /// <summary>
@@ -5,6 +8,7 @@ namespace Kook;
 /// </summary>
 /// <typeparam name="TEntity">The type of entity that is cached.</typeparam>
 /// <typeparam name="TId">The type of this entity's ID.</typeparam>
+[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
 public struct Cacheable<TEntity, TId>
     where TEntity : IEntity<TId>
     where TId : IEquatable<TId>
@@ -59,6 +63,10 @@ public struct Cacheable<TEntity, TId>
     ///     download the entity. The task result contains the downloaded entity.
     /// </returns>
     public async Task<TEntity> GetOrDownloadAsync() => HasValue ? Value : await DownloadAsync().ConfigureAwait(false);
+
+    private string DebuggerDisplay => HasValue
+        ? $"{Value.GetType().GetProperty("DebuggerDisplay", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(Value) ?? Value.ToString()} (Cacheable)"
+        : $"{Id} (Cacheable, {typeof(TEntity).Name})";
 }
 
 /// <summary>
@@ -68,6 +76,7 @@ public struct Cacheable<TEntity, TId>
 /// <typeparam name="TDownloadableEntity"> The type of entity that can be downloaded. </typeparam>
 /// <typeparam name="TRelationship"> The common type of <typeparamref name="TCachedEntity" /> and <typeparamref name="TDownloadableEntity" />. </typeparam>
 /// <typeparam name="TId"> The type of the corresponding entity's ID. </typeparam>
+[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
 public struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationship, TId>
     where TCachedEntity : IEntity<TId>, TRelationship
     where TDownloadableEntity : IEntity<TId>, TRelationship
@@ -123,4 +132,7 @@ public struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationship, TId>
     ///     download the entity. The task result contains the downloaded entity.
     /// </returns>
     public async Task<TRelationship> GetOrDownloadAsync() => HasValue ? Value : await DownloadAsync().ConfigureAwait(false);
+    private string DebuggerDisplay => HasValue
+        ? $"{Value.GetType().GetProperty("DebuggerDisplay", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(Value) ?? Value.ToString()} (Cacheable)"
+        : $"{Id} (Cacheable, {typeof(TRelationship).Name})";
 }
