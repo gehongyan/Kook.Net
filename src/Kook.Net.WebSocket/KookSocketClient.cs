@@ -198,6 +198,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         }
         catch
         {
+            // ignored
         }
 
         await _connection.WaitAsync().ConfigureAwait(false);
