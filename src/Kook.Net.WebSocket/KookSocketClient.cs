@@ -1424,19 +1424,28 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             {
                                                 try
                                                 {
-                                                    int maxRetryTime = 10;
+                                                    int remainingRetryTimes = _baseConfig.MaxJoinedGuildDataFetchingRetryTimes;
                                                     while (true)
                                                     {
                                                         try
                                                         {
-                                                            return await ApiClient.GetGuildAsync(data.GuildId).ConfigureAwait(false);
+                                                            return await ApiClient.GetGuildAsync(data.GuildId)
+                                                                .ConfigureAwait(false);
                                                         }
-                                                        catch (HttpException ex) when (ex.HttpCode == HttpStatusCode.Forbidden)
+                                                        catch (HttpException ex) when (ex is
+                                                            {
+                                                                HttpCode: HttpStatusCode.OK,
+                                                                KookCode: KookErrorCode.GeneralError
+                                                            })
                                                         {
-                                                            if (--maxRetryTime == 0) throw;
+                                                            if (remainingRetryTimes < 0) throw;
                                                         }
 
-                                                        await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
+                                                        await _gatewayLogger
+                                                            .WarningAsync($"Failed to get guild {data.GuildId} after joining. Retrying in {_baseConfig.JoinedGuildDataFetchingRetryDelay:F3} second for {remainingRetryTimes} more times.")
+                                                            .ConfigureAwait(false);
+                                                        remainingRetryTimes--;
+                                                        await Task.Delay(TimeSpan.FromMilliseconds(_baseConfig.JoinedGuildDataFetchingRetryDelay)).ConfigureAwait(false);
                                                     }
                                                 }
                                                 catch (Exception e)

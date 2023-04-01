@@ -138,6 +138,33 @@ public class KookSocketConfig : KookRestConfig
     private int _maxWaitForGuildAvailable = 10000;
 
     /// <summary>
+    ///     Gets or sets the maximum number of times to retry fetching joined guild data.
+    /// </summary>
+    /// <remarks>
+    ///     Due to the KOOK API cannot return the newly joined guilds immediately well, this property is used to
+    ///     control the maximum number of times to retry fetching joined guild data. Each retry will be delayed
+    ///     by <see cref="JoinedGuildDataFetchingRetryDelay"/> milliseconds. Set to 0 or negative value to disable
+    ///     retrying.
+    /// </remarks>
+    public int MaxJoinedGuildDataFetchingRetryTimes { get; set; } = 10;
+
+    /// <summary>
+    ///     Gets or sets the delay in milliseconds between each retry of fetching joined guild data.
+    /// </summary>
+    /// <exception cref="System.ArgumentException">Value must be at least 0.</exception>
+    public int JoinedGuildDataFetchingRetryDelay
+    {
+        get => _joinedGuildDataFetchingRetryDelay;
+        set
+        {
+            Preconditions.AtLeast(value, 0, nameof(JoinedGuildDataFetchingRetryDelay));
+            _joinedGuildDataFetchingRetryDelay = value;
+        }
+    }
+
+    private int _joinedGuildDataFetchingRetryDelay = 500;
+
+    /// <summary>
     ///     Initializes a new instance of the <see cref="KookSocketConfig"/> class.
     /// </summary>
     public KookSocketConfig()
