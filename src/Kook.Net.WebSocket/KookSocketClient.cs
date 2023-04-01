@@ -460,7 +460,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             author = guild.AddOrUpdateUser(extraData.Author);
                                         else
                                         {
-                                            await UnknownChannelUserAsync(gatewayEvent.Type.ToString(), extraData.Author.Id, channel.Id)
+                                            await UnknownChannelUserAsync(gatewayEvent.Type.ToString(), extraData.Author.Id, channel.Id, payload)
                                                 .ConfigureAwait(false);
                                             return;
                                         }
@@ -478,7 +478,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     SocketUser author = channel.GetUser(extraData.Author.Id);
                                     if (author == null)
                                     {
-                                        await UnknownChannelUserAsync(gatewayEvent.Type.ToString(), extraData.Author.Id, extraData.Code)
+                                        await UnknownChannelUserAsync(gatewayEvent.Type.ToString(), extraData.Author.Id, extraData.Code, payload)
                                             .ConfigureAwait(false);
                                         return;
                                     }
@@ -575,14 +575,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             if (GetChannel(data.ChannelId) is not ISocketMessageChannel channel)
                                             {
-                                                await UnknownChannelAsync(extraData.Type, data.ChannelId).ConfigureAwait(false);
+                                                await UnknownChannelAsync(extraData.Type, data.ChannelId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
                                             SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -654,7 +654,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 channel = guild.AddChannel(State, data);
                                             else
                                             {
-                                                await UnknownGuildAsync(extraData.Type, data.GuildId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, data.GuildId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -669,20 +669,20 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             await _gatewayLogger.DebugAsync("Received Event (updated_channel)").ConfigureAwait(false);
                                             Channel data = ((JsonElement)extraData.Body).Deserialize<Channel>(_serializerOptions);
                                             SocketChannel channel = State.GetChannel(data.Id);
-                                            if (channel != null)
+                                            if (channel == null)
                                             {
-                                                SocketChannel before = channel.Clone();
-                                                channel.Update(State, data);
-
-                                                SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
-                                                await TimedInvokeAsync(_channelUpdatedEvent, nameof(ChannelUpdated), before, channel)
+                                                await UnknownChannelAsync(extraData.Type, data.Id, payload)
                                                     .ConfigureAwait(false);
-                                            }
-                                            else
-                                            {
-                                                await UnknownChannelAsync(extraData.Type, data.Id).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            SocketChannel before = channel.Clone();
+                                            channel.Update(State, data);
+
+                                            SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
+                                            await TimedInvokeAsync(_channelUpdatedEvent, nameof(ChannelUpdated),
+                                                    before, channel)
+                                                .ConfigureAwait(false);
                                         }
                                         break;
 
@@ -699,18 +699,19 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 channel = guild.RemoveChannel(State, data.ChannelId);
                                             else
                                             {
-                                                await UnknownGuildAsync(extraData.Type, 0).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, 0, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
-                                            if (channel != null)
-                                                await TimedInvokeAsync(_channelDestroyedEvent, nameof(ChannelDestroyed), channel)
-                                                    .ConfigureAwait(false);
-                                            else
+                                            if (channel == null)
                                             {
-                                                await UnknownChannelAsync(extraData.Type, data.ChannelId, guild?.Id ?? 0).ConfigureAwait(false);
+                                                await UnknownChannelAsync(extraData.Type, data.ChannelId, guild.Id, payload)
+                                                    .ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            await TimedInvokeAsync(_channelDestroyedEvent, nameof(ChannelDestroyed), channel)
+                                                .ConfigureAwait(false);
                                         }
                                         break;
 
@@ -724,14 +725,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             if (channel == null)
                                             {
-                                                await UnknownChannelAsync(extraData.Type, data.ChannelId).ConfigureAwait(false);
+                                                await UnknownChannelAsync(extraData.Type, data.ChannelId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
                                             SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -789,14 +790,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             if (channel == null)
                                             {
-                                                await UnknownChannelAsync(extraData.Type, data.ChannelId).ConfigureAwait(false);
+                                                await UnknownChannelAsync(extraData.Type, data.ChannelId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
                                             SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -993,7 +994,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -1014,7 +1015,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -1046,7 +1047,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -1095,7 +1096,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 SocketGuild guild = State.GetGuild(guildId);
                                                 if (guild == null)
                                                 {
-                                                    await UnknownGuildAsync(extraData.Type, guildId).ConfigureAwait(false);
+                                                    await UnknownGuildAsync(extraData.Type, guildId, payload).ConfigureAwait(false);
                                                     return;
                                                 }
 
@@ -1135,7 +1136,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 SocketGuild guild = State.GetGuild(guildId);
                                                 if (guild == null)
                                                 {
-                                                    await UnknownGuildAsync(extraData.Type, guildId).ConfigureAwait(false);
+                                                    await UnknownGuildAsync(extraData.Type, guildId, payload).ConfigureAwait(false);
                                                     return;
                                                 }
 
@@ -1176,7 +1177,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -1194,7 +1195,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -1212,14 +1213,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
                                             SocketRole role = guild.GetRole(data.Id);
                                             if (role == null)
                                             {
-                                                await UnknownRoleAsync(extraData.Type, data.Id, guild.Id).ConfigureAwait(false);
+                                                await UnknownRoleAsync(extraData.Type, data.Id, guild.Id, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -1244,7 +1245,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -1262,7 +1263,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -1283,7 +1284,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -1305,7 +1306,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketGuild guild = State.GetGuild(data.GuildId);
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, data.GuildId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, data.GuildId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -1329,7 +1330,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketGuild guild = RemoveGuild(data.GuildId);
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -1347,7 +1348,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -1369,7 +1370,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -1399,7 +1400,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                                 if (channel == null)
                                                 {
-                                                    await UnknownChannelAsync(extraData.Type, data.ChannelId).ConfigureAwait(false);
+                                                    await UnknownChannelAsync(extraData.Type, data.ChannelId, payload).ConfigureAwait(false);
                                                     return;
                                                 }
 
@@ -1412,7 +1413,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             }
                                             else
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
                                         }
@@ -1424,28 +1425,29 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             await _gatewayLogger.DebugAsync("Received Event (exited_channel)").ConfigureAwait(false);
                                             UserVoiceEvent data = ((JsonElement)extraData.Body).Deserialize<UserVoiceEvent>(_serializerOptions);
                                             SocketGuild guild = State.GetGuild(gatewayEvent.TargetId);
-                                            if (guild != null)
+                                            if (guild == null)
                                             {
-                                                SocketVoiceChannel channel = GetChannel(data.ChannelId) as SocketVoiceChannel;
-
-                                                if (channel == null)
-                                                {
-                                                    await UnknownChannelAsync(extraData.Type, data.ChannelId).ConfigureAwait(false);
-                                                    return;
-                                                }
-
-                                                SocketUser user = guild.GetUser(data.UserId)
-                                                    ?? SocketUnknownUser.Create(this, State, data.UserId) as SocketUser;
-                                                guild.AddOrUpdateVoiceState(user.Id, null);
-
-                                                await TimedInvokeAsync(_userDisconnectedEvent, nameof(UserDisconnected), user, channel, guild,
-                                                    data.At).ConfigureAwait(false);
-                                            }
-                                            else
-                                            {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload)
+                                                    .ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            SocketVoiceChannel channel = GetChannel(data.ChannelId) as SocketVoiceChannel;
+
+                                            if (channel == null)
+                                            {
+                                                await UnknownChannelAsync(extraData.Type, data.ChannelId, payload)
+                                                    .ConfigureAwait(false);
+                                                return;
+                                            }
+
+                                            SocketUser user = guild.GetUser(data.UserId)
+                                                ?? SocketUnknownUser.Create(this, State, data.UserId) as SocketUser;
+                                            guild.AddOrUpdateVoiceState(user.Id, null);
+
+                                            await TimedInvokeAsync(_userDisconnectedEvent, nameof(UserDisconnected),
+                                                user, channel, guild,
+                                                data.At).ConfigureAwait(false);
                                         }
                                         break;
 
@@ -1546,7 +1548,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketGuild guild = RemoveGuild(data.GuildId);
                                             if (guild == null)
                                             {
-                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
@@ -1572,13 +1574,13 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 SocketGuild guild = GetGuild(data.GuildId.Value);
                                                 if (guild == null)
                                                 {
-                                                    await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                    await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                     return;
                                                 }
 
                                                 if (channel == null)
                                                 {
-                                                    await UnknownChannelAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                    await UnknownChannelAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                     return;
                                                 }
 
@@ -1595,7 +1597,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 SocketDMChannel channel = await user.CreateDMChannelAsync().ConfigureAwait(false);
                                                 if (channel == null)
                                                 {
-                                                    await UnknownChannelAsync(extraData.Type, gatewayEvent.TargetId).ConfigureAwait(false);
+                                                    await UnknownChannelAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                     return;
                                                 }
 
@@ -1987,6 +1989,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     {
         try
         {
+            // ReSharper disable once PossibleInvalidOperationException
             Task timeoutTask = Task.Delay(HandlerTimeout.Value);
             Task handlersTask = action();
             if (await Task.WhenAny(timeoutTask, handlersTask).ConfigureAwait(false) == timeoutTask)
@@ -2002,82 +2005,82 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         }
     }
 
-    private async Task UnknownChannelUserAsync(string evnt, ulong userId, Guid chatCode)
+    private async Task UnknownChannelUserAsync(string evnt, ulong userId, Guid chatCode, object payload)
     {
         string details = $"{evnt} User={userId} ChatCode={chatCode}";
-        await _gatewayLogger.WarningAsync($"Unknown User ({details}).").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown User ({details}). Payload: {payload}").ConfigureAwait(false);
     }
 
-    private async Task UnknownGlobalUserAsync(string evnt, ulong userId)
+    private async Task UnknownGlobalUserAsync(string evnt, ulong userId, object payload)
     {
         string details = $"{evnt} User={userId}";
-        await _gatewayLogger.WarningAsync($"Unknown User ({details}).").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown User ({details}). Payload: {payload}").ConfigureAwait(false);
     }
 
-    private async Task UnknownChannelUserAsync(string evnt, ulong userId, ulong channelId)
+    private async Task UnknownChannelUserAsync(string evnt, ulong userId, ulong channelId, object payload)
     {
         string details = $"{evnt} User={userId} Channel={channelId}";
-        await _gatewayLogger.WarningAsync($"Unknown User ({details}).").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown User ({details}). Payload: {payload}").ConfigureAwait(false);
     }
 
-    private async Task UnknownGuildUserAsync(string evnt, ulong userId, ulong guildId)
+    private async Task UnknownGuildUserAsync(string evnt, ulong userId, ulong guildId, object payload)
     {
         string details = $"{evnt} User={userId} Guild={guildId}";
-        await _gatewayLogger.WarningAsync($"Unknown User ({details}).").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown User ({details}). Payload: {payload}").ConfigureAwait(false);
     }
 
-    private async Task IncompleteGuildUserAsync(string evnt, ulong userId, ulong guildId)
+    private async Task IncompleteGuildUserAsync(string evnt, ulong userId, ulong guildId, object payload)
     {
         string details = $"{evnt} User={userId} Guild={guildId}";
-        await _gatewayLogger.DebugAsync($"User has not been downloaded ({details}).").ConfigureAwait(false);
+        await _gatewayLogger.DebugAsync($"User has not been downloaded ({details}). Payload: {payload}").ConfigureAwait(false);
     }
 
-    private async Task UnknownPrivateChannelAsync(string evnt, Guid chatCode)
+    private async Task UnknownPrivateChannelAsync(string evnt, Guid chatCode, object payload)
     {
         string details = $"{evnt} Channel={chatCode}";
-        await _gatewayLogger.WarningAsync($"Unknown Private Channel ({details}).").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown Private Channel ({details}). Payload: {payload}").ConfigureAwait(false);
     }
 
-    private async Task UnknownChannelAsync(string evnt, ulong channelId)
+    private async Task UnknownChannelAsync(string evnt, ulong channelId, object payload)
     {
         string details = $"{evnt} Channel={channelId}";
-        await _gatewayLogger.WarningAsync($"Unknown Channel ({details}).").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown Channel ({details}). Payload: {payload}").ConfigureAwait(false);
     }
 
-    private async Task UnknownChannelAsync(string evnt, ulong channelId, ulong guildId)
+    private async Task UnknownChannelAsync(string evnt, ulong channelId, ulong guildId, object payload)
     {
         if (guildId == 0)
         {
-            await UnknownChannelAsync(evnt, channelId).ConfigureAwait(false);
+            await UnknownChannelAsync(evnt, channelId, payload).ConfigureAwait(false);
             return;
         }
 
         string details = $"{evnt} Channel={channelId} Guild={guildId}";
-        await _gatewayLogger.WarningAsync($"Unknown Channel ({details}).").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown Channel ({details}). Payload: {payload}").ConfigureAwait(false);
     }
 
-    private async Task UnknownRoleAsync(string evnt, ulong roleId, ulong guildId)
+    private async Task UnknownRoleAsync(string evnt, ulong roleId, ulong guildId, object payload)
     {
         string details = $"{evnt} Role={roleId} Guild={guildId}";
-        await _gatewayLogger.WarningAsync($"Unknown Role ({details}).").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown Role ({details}). Payload: {payload}").ConfigureAwait(false);
     }
 
-    private async Task UnknownGuildAsync(string evnt, ulong guildId)
+    private async Task UnknownGuildAsync(string evnt, ulong guildId, object payload)
     {
         string details = $"{evnt} Guild={guildId}";
-        await _gatewayLogger.WarningAsync($"Unknown Guild ({details}).").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown Guild ({details}). Payload: {payload}").ConfigureAwait(false);
     }
 
-    private async Task UnknownGuildEventAsync(string evnt, ulong eventId, ulong guildId)
+    private async Task UnknownGuildEventAsync(string evnt, ulong eventId, ulong guildId, object payload)
     {
         string details = $"{evnt} Event={eventId} Guild={guildId}";
-        await _gatewayLogger.WarningAsync($"Unknown Guild Event ({details}).").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown Guild Event ({details}). Payload: {payload}").ConfigureAwait(false);
     }
 
-    private async Task UnsyncedGuildAsync(string evnt, ulong guildId)
+    private async Task UnsyncedGuildAsync(string evnt, ulong guildId, object payload)
     {
         string details = $"{evnt} Guild={guildId}";
-        await _gatewayLogger.DebugAsync($"Unsynced Guild ({details}).").ConfigureAwait(false);
+        await _gatewayLogger.DebugAsync($"Unsynced Guild ({details}). Payload: {payload}").ConfigureAwait(false);
     }
 
     #region IKookClient
