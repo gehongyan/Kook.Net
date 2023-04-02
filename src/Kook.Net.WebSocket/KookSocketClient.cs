@@ -485,7 +485,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             break;
                                         }
                                     default:
-                                        await _gatewayLogger.WarningAsync($"Unknown Event Type ({gatewayEvent.Type}). Payload: {payload}")
+                                        await _gatewayLogger.WarningAsync($"Unknown Event Type ({gatewayEvent.Type}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}")
                                             .ConfigureAwait(false);
                                         break;
                                 }
@@ -1445,7 +1445,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 catch (Exception e)
                                                 {
                                                     await _gatewayLogger
-                                                        .ErrorAsync($"Error handling {gatewaySocketFrameType}. Payload: {payload}", e)
+                                                        .ErrorAsync($"Error handling {gatewaySocketFrameType}. Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}", e)
                                                         .ConfigureAwait(false);
                                                     return null;
                                                 }
@@ -1562,14 +1562,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     #endregion
 
                                     default:
-                                        await _gatewayLogger.WarningAsync($"Unknown SystemEventType ({extraData.Type}). Payload: {payload}")
+                                        await _gatewayLogger.WarningAsync($"Unknown SystemEventType ({extraData.Type}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}")
                                             .ConfigureAwait(false);
                                         break;
                                 }
                             }
                             break;
                         default:
-                            await _gatewayLogger.WarningAsync($"Unknown Event Type ({gatewayEvent.Type}). Payload: {payload}")
+                            await _gatewayLogger.WarningAsync($"Unknown Event Type ({gatewayEvent.Type}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}")
                                 .ConfigureAwait(false);
                             break;
                     }
@@ -1735,14 +1735,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                     break;
 
                 default:
-                    await _gatewayLogger.WarningAsync($"Unknown Socket Frame Type ({gatewaySocketFrameType}). Payload: {payload}")
+                    await _gatewayLogger.WarningAsync($"Unknown Socket Frame Type ({gatewaySocketFrameType}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}")
                         .ConfigureAwait(false);
                     break;
             }
         }
         catch (Exception ex)
         {
-            await _gatewayLogger.ErrorAsync($"Error handling {gatewaySocketFrameType}. Payload: {payload}", ex).ConfigureAwait(false);
+            await _gatewayLogger.ErrorAsync($"Error handling {gatewaySocketFrameType}. Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}", ex).ConfigureAwait(false);
         }
     }
 
@@ -1965,43 +1965,43 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     private async Task UnknownChannelUserAsync(string evnt, ulong userId, Guid chatCode, object payload)
     {
         string details = $"{evnt} User={userId} ChatCode={chatCode}";
-        await _gatewayLogger.WarningAsync($"Unknown User ({details}). Payload: {payload}").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown User ({details}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}").ConfigureAwait(false);
     }
 
     private async Task UnknownGlobalUserAsync(string evnt, ulong userId, object payload)
     {
         string details = $"{evnt} User={userId}";
-        await _gatewayLogger.WarningAsync($"Unknown User ({details}). Payload: {payload}").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown User ({details}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}").ConfigureAwait(false);
     }
 
     private async Task UnknownChannelUserAsync(string evnt, ulong userId, ulong channelId, object payload)
     {
         string details = $"{evnt} User={userId} Channel={channelId}";
-        await _gatewayLogger.WarningAsync($"Unknown User ({details}). Payload: {payload}").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown User ({details}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}").ConfigureAwait(false);
     }
 
     private async Task UnknownGuildUserAsync(string evnt, ulong userId, ulong guildId, object payload)
     {
         string details = $"{evnt} User={userId} Guild={guildId}";
-        await _gatewayLogger.WarningAsync($"Unknown User ({details}). Payload: {payload}").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown User ({details}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}").ConfigureAwait(false);
     }
 
     private async Task IncompleteGuildUserAsync(string evnt, ulong userId, ulong guildId, object payload)
     {
         string details = $"{evnt} User={userId} Guild={guildId}";
-        await _gatewayLogger.DebugAsync($"User has not been downloaded ({details}). Payload: {payload}").ConfigureAwait(false);
+        await _gatewayLogger.DebugAsync($"User has not been downloaded ({details}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}").ConfigureAwait(false);
     }
 
     private async Task UnknownPrivateChannelAsync(string evnt, Guid chatCode, object payload)
     {
         string details = $"{evnt} Channel={chatCode}";
-        await _gatewayLogger.WarningAsync($"Unknown Private Channel ({details}). Payload: {payload}").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown Private Channel ({details}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}").ConfigureAwait(false);
     }
 
     private async Task UnknownChannelAsync(string evnt, ulong channelId, object payload)
     {
         string details = $"{evnt} Channel={channelId}";
-        await _gatewayLogger.WarningAsync($"Unknown Channel ({details}). Payload: {payload}").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown Channel ({details}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}").ConfigureAwait(false);
     }
 
     private async Task UnknownChannelAsync(string evnt, ulong channelId, ulong guildId, object payload)
@@ -2013,31 +2013,31 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         }
 
         string details = $"{evnt} Channel={channelId} Guild={guildId}";
-        await _gatewayLogger.WarningAsync($"Unknown Channel ({details}). Payload: {payload}").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown Channel ({details}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}").ConfigureAwait(false);
     }
 
     private async Task UnknownRoleAsync(string evnt, ulong roleId, ulong guildId, object payload)
     {
         string details = $"{evnt} Role={roleId} Guild={guildId}";
-        await _gatewayLogger.WarningAsync($"Unknown Role ({details}). Payload: {payload}").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown Role ({details}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}").ConfigureAwait(false);
     }
 
     private async Task UnknownGuildAsync(string evnt, ulong guildId, object payload)
     {
         string details = $"{evnt} Guild={guildId}";
-        await _gatewayLogger.WarningAsync($"Unknown Guild ({details}). Payload: {payload}").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown Guild ({details}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}").ConfigureAwait(false);
     }
 
     private async Task UnknownGuildEventAsync(string evnt, ulong eventId, ulong guildId, object payload)
     {
         string details = $"{evnt} Event={eventId} Guild={guildId}";
-        await _gatewayLogger.WarningAsync($"Unknown Guild Event ({details}). Payload: {payload}").ConfigureAwait(false);
+        await _gatewayLogger.WarningAsync($"Unknown Guild Event ({details}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}").ConfigureAwait(false);
     }
 
     private async Task UnsyncedGuildAsync(string evnt, ulong guildId, object payload)
     {
         string details = $"{evnt} Guild={guildId}";
-        await _gatewayLogger.DebugAsync($"Unsynced Guild ({details}). Payload: {payload}").ConfigureAwait(false);
+        await _gatewayLogger.DebugAsync($"Unsynced Guild ({details}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}").ConfigureAwait(false);
     }
 
     #region IKookClient
