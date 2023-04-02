@@ -143,8 +143,9 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         Content = gatewayEvent.Content;
         RawContent = model.KMarkdownInfo?.RawContent;
         if (model.Quote is not null)
-            _quote = Quote.Create(model.Quote.Id, model.Quote.QuotedMessageId, model.Quote.Type, model.Quote.Content,
-                model.Quote.CreateAt, state.GetUser(model.Quote.Author.Id));
+            _quote = Quote.Create(model.Quote.Id,
+                model.Quote.QuotedMessageId, model.Quote.Type, model.Quote.Content, model.Quote.CreateAt,
+                state.GetOrAddUser(model.Quote.Author.Id, _ => SocketGlobalUser.Create(Kook, state, model.Quote.Author)));
 
         if (model.Attachment is not null) _attachments = _attachments.Add(Attachment.Create(model.Attachment));
 
