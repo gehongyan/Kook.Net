@@ -33,6 +33,7 @@ internal class RecommendInfo
     public string Tag { get; set; }
 
     [JsonPropertyName("features")]
+    [JsonConverter(typeof(GuildFeaturesConverter))]
     public GuildFeatures Features { get; set; }
 
     [JsonPropertyName("level")]
