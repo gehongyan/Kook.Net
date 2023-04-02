@@ -1,6 +1,9 @@
+using System.Diagnostics;
+
 namespace Kook;
 
 /// <inheritdoc cref="IQuote"/>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Quote : IQuote
 {
     /// <inheritdoc />
@@ -27,7 +30,7 @@ public class Quote : IQuote
     /// <remarks>
     ///     Used to delete a quote when modifying a message.
     /// </remarks>
-    public Quote Empty => new(Guid.Empty);
+    public static Quote Empty => new(Guid.Empty);
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Quote"/> class.
@@ -49,4 +52,6 @@ public class Quote : IQuote
 
     internal static Quote Create(string id, Guid quotedMessageId, MessageType type, string content, DateTimeOffset createAt, IUser author) =>
         new(id, quotedMessageId, type, content, createAt, author);
+
+    private string DebuggerDisplay => $"{Author}: {Content} ({Id})";
 }
