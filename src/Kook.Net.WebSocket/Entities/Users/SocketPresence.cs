@@ -61,7 +61,7 @@ public class SocketPresence : IPresence
         return null;
     }
 
-    private string DebuggerDisplay => $"{IsOnline switch { true => "Online", false => "Offline", _ => "Unknown Status" }}{ActiveClient.ToString()}";
+    private string DebuggerDisplay => $"{IsOnline switch { true => "Online", false => "Offline", _ => "Unknown Status" }}, {ActiveClient.ToString()}";
 
     internal SocketPresence Clone() => MemberwiseClone() as SocketPresence;
 }
