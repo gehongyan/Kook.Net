@@ -61,7 +61,7 @@ public class CardJsonTests
             .AddModule(new CountdownModuleBuilder().WithMode(CountdownMode.Second).WithEndTime(nowWithoutMilliseconds.AddMinutes(2))
                 .WithStartTime(nowWithoutMilliseconds.AddMinutes(1)));
         string json = source.ToJsonString();
-        ICardBuilder parsed = CardJsonExtension.Parse(json);
+        ICardBuilder parsed = CardJsonExtension.ParseSingle(json);
         Assert.Equivalent(source, parsed);
     }
 }

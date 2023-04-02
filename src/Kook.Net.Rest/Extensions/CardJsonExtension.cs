@@ -19,12 +19,12 @@ public static class CardJsonExtension
     });
 
     /// <summary>
-    ///     Tries to parse a string into an <see cref="CardBuilder"/>.
+    ///     Tries to parse a string into an <see cref="ICardBuilder"/>.
     /// </summary>
     /// <param name="json">The json string to parse.</param>
-    /// <param name="builder">The <see cref="CardBuilder"/> with populated values. An empty instance if method returns <see langword="false"/>.</param>
+    /// <param name="builder">The <see cref="ICardBuilder"/> with populated values. An empty instance if method returns <see langword="false"/>.</param>
     /// <returns><see langword="true"/> if <paramref name="json"/> was successfully parsed. <see langword="false"/> if not.</returns>
-    public static bool TryParse(string json, out ICardBuilder builder)
+    public static bool TryParseSingle(string json, out ICardBuilder builder)
     {
         builder = new CardBuilder();
         try
@@ -46,12 +46,39 @@ public static class CardJsonExtension
     }
 
     /// <summary>
-    ///     Parses a string into an <see cref="CardBuilder"/>.
+    ///     Tries to parse a string into an <see cref="ICardBuilder"/>.
     /// </summary>
     /// <param name="json">The json string to parse.</param>
-    /// <returns>An <see cref="CardBuilder"/> with populated values from the passed <paramref name="json"/>.</returns>
+    /// <param name="builders">A collection of <see cref="ICardBuilder"/> with populated values. An empty instance if method returns <see langword="false"/>.</param>
+    /// <returns><see langword="true"/> if <paramref name="json"/> was successfully parsed. <see langword="false"/> if not.</returns>
+    public static bool TryParseMany(string json, out IEnumerable<ICardBuilder> builders)
+    {
+        builders = Enumerable.Empty<ICardBuilder>();
+        try
+        {
+            IEnumerable<CardBase> models = JsonSerializer.Deserialize<IEnumerable<CardBase>>(json, _options.Value);
+
+            if (models is not null)
+            {
+                builders = models.Select(x => x.ToEntity().ToBuilder());
+                return true;
+            }
+
+            return false;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    ///     Parses a string into an <see cref="ICardBuilder"/>.
+    /// </summary>
+    /// <param name="json">The json string to parse.</param>
+    /// <returns>An <see cref="ICardBuilder"/> with populated values from the passed <paramref name="json"/>.</returns>
     /// <exception cref="InvalidOperationException">Thrown if the string passed is not valid json.</exception>
-    public static ICardBuilder Parse(string json)
+    public static ICardBuilder ParseSingle(string json)
     {
         CardBase model = JsonSerializer.Deserialize<CardBase>(json, _options.Value);
 
@@ -62,10 +89,26 @@ public static class CardJsonExtension
     }
 
     /// <summary>
+    ///     Parses a string into a collection of <see cref="ICardBuilder"/>s.
+    /// </summary>
+    /// <param name="json">The json string to parse.</param>
+    /// <returns>A collection of <see cref="ICardBuilder"/>s with populated values from the passed <paramref name="json"/>.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the string passed is not valid json.</exception>
+    public static IEnumerable<ICardBuilder> ParseMany(string json)
+    {
+        IEnumerable<CardBase> models = JsonSerializer.Deserialize<IEnumerable<CardBase>>(json, _options.Value);
+
+        if (models is not null)
+            return models.Select(x => x.ToEntity().ToBuilder());
+
+        return Enumerable.Empty<ICardBuilder>();
+    }
+
+    /// <summary>
     ///     Gets a Json formatted <see langword="string"/> from an <see cref="CardBuilder"/>.
     /// </summary>
     /// <remarks>
-    ///     See <see cref="TryParse(string, out ICardBuilder)"/> to parse Json back into card.
+    ///     See <see cref="TryParseSingle"/> to parse Json back into card.
     /// </remarks>
     /// <param name="builder">The builder to format as Json <see langword="string"/>.</param>
     /// <param name="writeIndented">Whether to write the json with indents.</param>
@@ -77,7 +120,7 @@ public static class CardJsonExtension
     ///     Gets a Json formatted <see langword="string"/> from an <see cref="Card"/>.
     /// </summary>
     /// <remarks>
-    ///     See <see cref="TryParse(string, out ICardBuilder)"/> to parse Json back into card.
+    ///     See <see cref="TryParseSingle"/> to parse Json back into card.
     /// </remarks>
     /// <param name="card">The card to format as Json <see langword="string"/>.</param>
     /// <param name="writeIndented">Whether to write the json with indents.</param>
