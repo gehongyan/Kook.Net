@@ -703,17 +703,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                         return guild.AddOrUpdateUser(model);
                                                     });
 
-                                            Cacheable<SocketMessage, Guid> cacheableBefore;
-                                            Cacheable<SocketMessage, Guid> cacheableAfter;
-
                                             SocketUserMessage cachedMsg = channel.GetCachedMessage(data.MessageId) as SocketUserMessage;
                                             SocketMessage before = cachedMsg?.Clone();
                                             if (cachedMsg != null)
                                                 cachedMsg.IsPinned = true;
 
-                                            cacheableBefore = new Cacheable<SocketMessage, Guid>(before, data.MessageId, before is not null,
+                                            Cacheable<SocketMessage, Guid> cacheableBefore = new(before, data.MessageId, before is not null,
                                                 () => Task.FromResult((SocketMessage)null));
-                                            cacheableAfter = new Cacheable<SocketMessage, Guid>(cachedMsg, data.MessageId, cachedMsg is not null,
+                                            Cacheable<SocketMessage, Guid> cacheableAfter = new(cachedMsg, data.MessageId, cachedMsg is not null,
                                                 async () => await channel
                                                     .GetMessageAsync(data.MessageId).ConfigureAwait(false) as SocketMessage);
 
@@ -752,17 +749,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                         return guild.AddOrUpdateUser(model);
                                                     });
 
-                                            Cacheable<SocketMessage, Guid> cacheableBefore;
-                                            Cacheable<SocketMessage, Guid> cacheableAfter;
-
                                             SocketUserMessage cachedMsg = channel.GetCachedMessage(data.MessageId) as SocketUserMessage;
                                             SocketMessage before = cachedMsg?.Clone();
                                             if (cachedMsg != null)
                                                 cachedMsg.IsPinned = false;
 
-                                            cacheableBefore = new Cacheable<SocketMessage, Guid>(before, data.MessageId, before is not null,
+                                            Cacheable<SocketMessage, Guid> cacheableBefore = new(before, data.MessageId, before is not null,
                                                 () => Task.FromResult((SocketMessage)null));
-                                            cacheableAfter = new Cacheable<SocketMessage, Guid>(cachedMsg, data.MessageId, cachedMsg is not null,
+                                            Cacheable<SocketMessage, Guid> cacheableAfter = new(cachedMsg, data.MessageId, cachedMsg is not null,
                                                 async () => await channel
                                                     .GetMessageAsync(data.MessageId).ConfigureAwait(false) as SocketMessage);
 
@@ -953,9 +947,9 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             SocketGuildUser before = user?.Clone();
                                             user?.Update(State, data);
-                                            Cacheable<SocketGuildUser, ulong> cacheableBefore = new(before, data.UserId, false,
+                                            Cacheable<SocketGuildUser, ulong> cacheableBefore = new(before, data.UserId, before is not null,
                                                 () => Task.FromResult<SocketGuildUser>(null));
-                                            Cacheable<SocketGuildUser, ulong> cacheableAfter = new(user, data.UserId, false,
+                                            Cacheable<SocketGuildUser, ulong> cacheableAfter = new(user, data.UserId, user is not null,
                                                 async () =>
                                                 {
                                                     GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.UserId)
