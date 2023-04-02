@@ -93,7 +93,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///         What this property represents is not well investigated.
     ///     </note>
     /// </remarks>
-    public object[] Features { get; private set; }
+    public GuildFeatures Features { get; private set; }
 
     /// <inheritdoc />
     public int BoostSubscriptionCount { get; private set; }

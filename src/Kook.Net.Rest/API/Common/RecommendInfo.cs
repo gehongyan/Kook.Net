@@ -33,7 +33,7 @@ internal class RecommendInfo
     public string Tag { get; set; }
 
     [JsonPropertyName("features")]
-    public object[] Features { get; set; }
+    public GuildFeatures Features { get; set; }
 
     [JsonPropertyName("level")]
     public BoostLevel BoostLevel { get; set; }

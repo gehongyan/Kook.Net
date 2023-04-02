@@ -113,6 +113,14 @@ public interface IGuild : IEntity<ulong>
     IRole EveryoneRole { get; }
 
     /// <summary>
+    ///     Gets the features of this guild.
+    /// </summary>
+    /// <returns>
+    ///     An array of string representing the features of this guild.
+    /// </returns>
+    GuildFeatures Features { get; }
+
+    /// <summary>
     ///     Gets the number of boost subscribers of this guild.
     /// </summary>
     /// <returns>

@@ -1,11 +1,13 @@
 using System.Text.Json.Serialization;
+using Kook.Net.Converters;
 
 namespace Kook.API.Rest;
 
 internal class ExtendedGuild : Guild
 {
     [JsonPropertyName("features")]
-    public object[] Features { get; set; }
+    [JsonConverter(typeof(GuildFeaturesConverter))]
+    public GuildFeatures Features { get; set; }
 
     [JsonPropertyName("boost_num")]
     public int BoostSubscriptionCount { get; set; }

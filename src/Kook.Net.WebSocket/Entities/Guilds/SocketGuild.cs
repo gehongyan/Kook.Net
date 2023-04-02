@@ -63,18 +63,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc />
     public ulong? WelcomeChannelId { get; private set; }
 
-    /// <summary>
-    ///     Gets the features of this guild.
-    /// </summary>
-    /// <returns>
-    ///     An array of objects representing the features of this guild.
-    /// </returns>
-    /// <remarks>
-    ///      <note type="important">
-    ///         What this property represents is not well investigated.
-    ///     </note>
-    /// </remarks>
-    public object[] Features { get; private set; }
+    /// <inheritdoc />
+    public GuildFeatures Features { get; private set; }
 
     /// <inheritdoc />
     public int BoostSubscriptionCount { get; private set; }

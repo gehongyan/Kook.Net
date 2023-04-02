@@ -35,7 +35,7 @@ public class RecommendInfo : IRecommendInfo
     public string Tag { get; private set; }
 
     /// <inheritdoc />
-    public object[] Features { get; private set; }
+    public GuildFeatures Features { get; private set; }
 
     /// <inheritdoc />
     public BoostLevel BoostLevel { get; private set; }

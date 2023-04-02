@@ -75,9 +75,9 @@ public interface IRecommendInfo
     string Tag { get; }
 
     /// <summary>
-    ///     TODO: To be documented.
+    ///     Gets the features of the recommended guild.
     /// </summary>
-    object[] Features { get; }
+    GuildFeatures Features { get; }
 
     /// <summary>
     ///     Gets the boost level of the recommended guild.
