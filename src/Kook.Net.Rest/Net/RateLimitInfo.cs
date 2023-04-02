@@ -53,7 +53,7 @@ public struct RateLimitInfo : IRateLimitInfo
             && double.TryParse(temp, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out double resetAfter)
                 ? TimeSpan.FromSeconds(resetAfter)
                 : (TimeSpan?)null;
-        // Reset = headers.TryGetValue("X-Rate-Limit-Reset", out temp) && 
+        // Reset = headers.TryGetValue("X-Rate-Limit-Reset", out temp) &&
         //         double.TryParse(temp, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var reset) && reset != 0 ? DateTimeOffset.FromUnixTimeMilliseconds((long)(reset * 1000)) : (DateTimeOffset?)null;
         Bucket = headers.TryGetValue("X-Rate-Limit-Bucket", out temp) ? temp : null;
         Lag = headers.TryGetValue("Date", out temp)

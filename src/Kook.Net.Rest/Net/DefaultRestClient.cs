@@ -22,8 +22,7 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 
 #if DEBUG_REST
     private readonly JsonSerializerOptions _serializerOptions;
-    private int _requestId;
-    private readonly SemaphoreSlim _requestIdLock = new SemaphoreSlim(1, 1);
+    private static int _nextId;
 #endif
 
     public DefaultRestClient(string baseUrl, bool useProxy = false)
@@ -178,15 +177,12 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
     private async Task<RestResponse> SendInternalAsync(HttpRequestMessage request, CancellationToken cancelToken)
     {
 #if DEBUG_REST
-        await _requestIdLock.WaitAsync(1, cancelToken);
-        _requestId++;
-        int requestId = _requestId;
-        _requestIdLock.Release();
+        int id = Interlocked.Increment(ref _nextId);
 #endif
         using (CancellationTokenSource cancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancelToken, cancelToken))
         {
 #if DEBUG_REST
-            Debug.WriteLine($"[REST] [{requestId}] {request.Method} {request.RequestUri} {request.Content?.Headers.ContentType?.MediaType}");
+            Debug.WriteLine($"[REST] [{id}] {request.Method} {request.RequestUri} {request.Content?.Headers.ContentType?.MediaType}");
             if (request.Content?.Headers.ContentType?.MediaType == "application/json")
                 Debug.WriteLine($"[REST] {await request.Content.ReadAsStringAsync().ConfigureAwait(false)}");
 #endif
@@ -198,9 +194,9 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
             Stream stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
 #if DEBUG_REST
-                Debug.WriteLine($"[REST] [{requestId}] {response.StatusCode} {response.ReasonPhrase}");
+                Debug.WriteLine($"[REST] [{id}] {response.StatusCode} {response.ReasonPhrase}");
                 if (response.Content?.Headers.ContentType?.MediaType == "application/json")
-                    Debug.WriteLine($"[REST] [{requestId}] {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
+                    Debug.WriteLine($"[REST] [{id}] {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
 #endif
             return new RestResponse(response.StatusCode, headers, stream, response.Content?.Headers.ContentType);
         }
