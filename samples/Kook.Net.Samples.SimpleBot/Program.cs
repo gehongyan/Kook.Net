@@ -71,8 +71,14 @@ internal class Program
         _client.GuildMemberOnline += (users, time) => Task.CompletedTask;
         _client.GuildMemberOffline += (users, time) => Task.CompletedTask;
 
-        _client.UserConnected += (user, channel, guild, time) => Task.CompletedTask;
-        _client.UserDisconnected += (user, channel, guild, time) => Task.CompletedTask;
+        _client.UserConnected += async (user, channel, time) =>
+        {
+            SocketUser socketUser = await user.GetOrDownloadAsync();
+        };
+        _client.UserDisconnected += async (user, channel, time) =>
+        {
+            SocketUser socketUser = await user.GetOrDownloadAsync();
+        };
 
         _client.RoleCreated += role => Task.CompletedTask;
         _client.RoleDeleted += role => Task.CompletedTask;
@@ -88,8 +94,14 @@ internal class Program
         _client.GuildAvailable += guild => Task.CompletedTask;
         _client.GuildUnavailable += guild => Task.CompletedTask;
 
-        _client.MessageButtonClicked += (value, user, message, channel, guild) => Task.CompletedTask;
-        _client.DirectMessageButtonClicked += (value, user, message, channel) => Task.CompletedTask;
+        _client.MessageButtonClicked += async (value, user, message, channel) =>
+        {
+            SocketUser socketUser = await user.GetOrDownloadAsync();
+        };
+        _client.DirectMessageButtonClicked += async (value, user, message, channel) =>
+        {
+            SocketUser socketUser = await user.GetOrDownloadAsync();
+        };
 
         #endregion
     }

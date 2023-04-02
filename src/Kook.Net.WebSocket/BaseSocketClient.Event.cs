@@ -761,21 +761,17 @@ public abstract partial class BaseSocketClient
     ///         <see cref="SocketVoiceChannel"/>.
     ///     </para>
     ///     <para>
-    ///         The guild that the user connected to is passed into the event handler parameter as
-    ///         <see cref="SocketGuild"/>.
-    ///     </para>
-    ///     <para>
     ///         The time when the user is offline is passed into the event handler parameter as
     ///         <see cref="DateTimeOffset"/>.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<SocketUser, ulong>, SocketVoiceChannel, SocketGuild, DateTimeOffset, Task> UserConnected
+    public event Func<Cacheable<SocketUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task> UserConnected
     {
         add => _userConnectedEvent.Add(value);
         remove => _userConnectedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<SocketUser, ulong>, SocketVoiceChannel, SocketGuild, DateTimeOffset, Task>> _userConnectedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<SocketUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task>> _userConnectedEvent = new();
 
     /// <summary> Fired when a user disconnected to a voice channel. </summary>
     /// <remarks>
@@ -796,21 +792,17 @@ public abstract partial class BaseSocketClient
     ///         <see cref="SocketVoiceChannel"/>.
     ///     </para>
     ///     <para>
-    ///         The guild that the user disconnected to is passed into the event handler parameter as
-    ///         <see cref="SocketGuild"/>.
-    ///     </para>
-    ///     <para>
     ///         The time when the user is offline is passed into the event handler parameter as
     ///         <see cref="DateTimeOffset"/>.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<SocketUser, ulong>, SocketVoiceChannel, SocketGuild, DateTimeOffset, Task> UserDisconnected
+    public event Func<Cacheable<SocketUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task> UserDisconnected
     {
         add => _userDisconnectedEvent.Add(value);
         remove => _userDisconnectedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<SocketUser, ulong>, SocketVoiceChannel, SocketGuild, DateTimeOffset, Task>> _userDisconnectedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<SocketUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task>> _userDisconnectedEvent = new();
 
     #endregion
 
@@ -1092,18 +1084,14 @@ public abstract partial class BaseSocketClient
     ///         The channel where the button is clicked is passed into the event handler parameter as
     ///         <see cref="SocketTextChannel"/>.
     ///     </para>
-    ///     <para>
-    ///         The guild where the button is clicked is passed into the event handler parameter as
-    ///         <see cref="SocketGuild"/>.
-    ///     </para>
     /// </remarks>
-    public event Func<string, Cacheable<SocketUser, ulong>, Cacheable<IMessage, Guid>, SocketTextChannel, SocketGuild, Task> MessageButtonClicked
+    public event Func<string, Cacheable<SocketUser, ulong>, Cacheable<IMessage, Guid>, SocketTextChannel, Task> MessageButtonClicked
     {
         add => _messageButtonClickedEvent.Add(value);
         remove => _messageButtonClickedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<string, Cacheable<SocketUser, ulong>, Cacheable<IMessage, Guid>, SocketTextChannel, SocketGuild, Task>> _messageButtonClickedEvent = new();
+    internal readonly AsyncEvent<Func<string, Cacheable<SocketUser, ulong>, Cacheable<IMessage, Guid>, SocketTextChannel, Task>> _messageButtonClickedEvent = new();
 
     /// <summary> Fired when a button is clicked in a direct card message. </summary>
     /// <remarks>

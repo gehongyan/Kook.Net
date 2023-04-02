@@ -1327,8 +1327,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 });
                                             guild.AddOrUpdateVoiceState(data.UserId, channel.Id);
 
-                                            await TimedInvokeAsync(_userConnectedEvent, nameof(UserConnected), cacheableUser,
-                                                    channel, guild, data.At)
+                                            await TimedInvokeAsync(_userConnectedEvent, nameof(UserConnected), cacheableUser, channel, data.At)
                                                 .ConfigureAwait(false);
                                         }
                                         break;
@@ -1367,8 +1366,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 });
                                             guild.AddOrUpdateVoiceState(data.UserId, null);
 
-                                            await TimedInvokeAsync(_userDisconnectedEvent, nameof(UserDisconnected), cacheableUser,
-                                                channel, guild, data.At).ConfigureAwait(false);
+                                            await TimedInvokeAsync(_userDisconnectedEvent, nameof(UserDisconnected), cacheableUser, channel, data.At)
+                                                .ConfigureAwait(false);
                                         }
                                         break;
 
@@ -1519,7 +1518,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 Cacheable<IMessage, Guid> cacheableMsg = new(cachedMsg, data.MessageId, cachedMsg is not null,
                                                     async () => await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false));
                                                 await TimedInvokeAsync(_messageButtonClickedEvent, nameof(MessageButtonClicked),
-                                                    data.Value, cacheableUser, cacheableMsg, channel, guild).ConfigureAwait(false);
+                                                    data.Value, cacheableUser, cacheableMsg, channel).ConfigureAwait(false);
                                             }
                                             else
                                             {
