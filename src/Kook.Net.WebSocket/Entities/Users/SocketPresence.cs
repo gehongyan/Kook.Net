@@ -40,7 +40,8 @@ public class SocketPresence : IPresence
     {
         if (isOnline.HasValue) IsOnline = isOnline;
 
-        ActiveClient = ConvertClientType(activeClient);
+        if (!string.IsNullOrWhiteSpace(activeClient))
+            ActiveClient = ConvertClientType(activeClient);
     }
 
     /// <summary>
