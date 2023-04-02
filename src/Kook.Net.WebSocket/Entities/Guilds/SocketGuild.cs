@@ -774,7 +774,10 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     internal SocketGuildUser AddOrUpdateUser(MemberModel model)
     {
         if (_members.TryGetValue(model.Id, out SocketGuildUser member))
+        {
             member.Update(Kook.State, model);
+            member.UpdatePresence(model.Online, model.OperatingSystem);
+        }
         else
         {
             member = SocketGuildUser.Create(this, Kook.State, model);

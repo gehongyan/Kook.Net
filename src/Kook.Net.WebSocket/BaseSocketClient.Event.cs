@@ -765,13 +765,13 @@ public abstract partial class BaseSocketClient
     ///         <see cref="DateTimeOffset"/>.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<SocketUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task> UserConnected
+    public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task> UserConnected
     {
         add => _userConnectedEvent.Add(value);
         remove => _userConnectedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<SocketUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task>> _userConnectedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task>> _userConnectedEvent = new();
 
     /// <summary> Fired when a user disconnected to a voice channel. </summary>
     /// <remarks>
@@ -796,13 +796,13 @@ public abstract partial class BaseSocketClient
     ///         <see cref="DateTimeOffset"/>.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<SocketUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task> UserDisconnected
+    public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task> UserDisconnected
     {
         add => _userDisconnectedEvent.Add(value);
         remove => _userDisconnectedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<SocketUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task>> _userDisconnectedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task>> _userDisconnectedEvent = new();
 
     #endregion
 

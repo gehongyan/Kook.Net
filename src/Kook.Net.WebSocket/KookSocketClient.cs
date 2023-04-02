@@ -1315,15 +1315,12 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 return;
                                             }
 
-                                            SocketUser user = guild.GetUser(data.UserId);
-                                            Cacheable<SocketUser, ulong> cacheableUser = new(user, data.UserId, user != null,
+                                            SocketGuildUser user = guild.GetUser(data.UserId);
+                                            Cacheable<SocketGuildUser, ulong> cacheableUser = new(user, data.UserId, user != null,
                                                 async () =>
                                                 {
-                                                    User model = await ApiClient.GetUserAsync(data.UserId).ConfigureAwait(false);
-                                                    SocketGlobalUser globalUser = State.GetOrAddUser(data.UserId, _ => SocketGlobalUser.Create(this, State, model));
-                                                    globalUser.Update(State, model);
-                                                    globalUser.UpdatePresence(model.Online, model.OperatingSystem);
-                                                    return globalUser;
+                                                    GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.UserId).ConfigureAwait(false);
+                                                    return guild.AddOrUpdateUser(model);
                                                 });
                                             guild.AddOrUpdateVoiceState(data.UserId, channel.Id);
 
@@ -1354,15 +1351,12 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 return;
                                             }
 
-                                            SocketUser user = guild.GetUser(data.UserId);
-                                            Cacheable<SocketUser, ulong> cacheableUser = new(user, data.UserId, user != null,
+                                            SocketGuildUser user = guild.GetUser(data.UserId);
+                                            Cacheable<SocketGuildUser, ulong> cacheableUser = new(user, data.UserId, user != null,
                                                 async () =>
                                                 {
-                                                    User model = await ApiClient.GetUserAsync(data.UserId).ConfigureAwait(false);
-                                                    SocketGlobalUser globalUser = State.GetOrAddUser(data.UserId, _ => SocketGlobalUser.Create(this, State, model));
-                                                    globalUser.Update(State, model);
-                                                    globalUser.UpdatePresence(model.Online, model.OperatingSystem);
-                                                    return globalUser;
+                                                    GuildMember model = await ApiClient.GetGuildMemberAsync(guild.Id, data.UserId).ConfigureAwait(false);
+                                                    return guild.AddOrUpdateUser(model);
                                                 });
                                             guild.AddOrUpdateVoiceState(data.UserId, null);
 

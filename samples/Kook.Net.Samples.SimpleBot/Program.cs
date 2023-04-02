@@ -71,14 +71,8 @@ internal class Program
         _client.GuildMemberOnline += (users, time) => Task.CompletedTask;
         _client.GuildMemberOffline += (users, time) => Task.CompletedTask;
 
-        _client.UserConnected += async (user, channel, time) =>
-        {
-            SocketUser socketUser = await user.GetOrDownloadAsync();
-        };
-        _client.UserDisconnected += async (user, channel, time) =>
-        {
-            SocketUser socketUser = await user.GetOrDownloadAsync();
-        };
+        _client.UserConnected += (user, channel, time) => Task.CompletedTask;
+        _client.UserDisconnected +=  (user, channel, time) => Task.CompletedTask;
 
         _client.RoleCreated += role => Task.CompletedTask;
         _client.RoleDeleted += role => Task.CompletedTask;
