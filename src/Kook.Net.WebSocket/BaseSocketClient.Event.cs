@@ -523,8 +523,8 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     <para>
     ///         This event is fired when a user is banned. The event handler must return a
-    ///         <see cref="Task"/> and accept an <see cref="IReadOnlyCollection{T}"/>, a <see cref="SocketMessage"/>
-    ///         and a <see cref="SocketGuild"/> as its parameter.
+    ///         <see cref="Task"/> and accept an <see cref="IReadOnlyCollection{T}"/>, a <see cref="SocketMessage"/>,
+    ///         a <see langword="string"/> and a <see cref="SocketGuild"/> as its parameter.
     ///     </para>
     ///     <para>
     ///         <note type="important">
@@ -547,14 +547,17 @@ public abstract partial class BaseSocketClient
     ///         The guild where the banning action takes place is passed in the event handler parameter as
     ///         <see cref="SocketGuild"/>.
     ///     </para>
+    ///     <para>
+    ///         The reason of the ban is passed into the event handler parameter as <see langword="string"/>.
+    ///     </para>
     /// </remarks>
-    public event Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketUser, ulong>, SocketGuild, Task> UserBanned
+    public event Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketUser, ulong>, SocketGuild, string, Task> UserBanned
     {
         add => _userBannedEvent.Add(value);
         remove => _userBannedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketUser, ulong>, SocketGuild, Task>> _userBannedEvent = new();
+    internal readonly AsyncEvent<Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketUser, ulong>, SocketGuild, string, Task>> _userBannedEvent = new();
 
     /// <summary> Fired when a user is unbanned from a guild. </summary>
     /// <remarks>
@@ -1067,12 +1070,12 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     <para>
     ///         This event is fired when a button is clicked in a card message. The event handler must
-    ///         return a <see cref="Task"/> and accept a <see cref="string"/>,
+    ///         return a <see cref="Task"/> and accept a <see langword="string"/>,
     ///         a <see cref="Cacheable{TEntity,TId}"/>, a <see cref="Cacheable{TEntity,TId}"/>,
     ///         a <see cref="SocketTextChannel"/>, and a <see cref="SocketGuild"/> as its parameter.
     ///     </para>
     ///     <para>
-    ///         The button value is passed into the event handler parameter as <see cref="string"/>.
+    ///         The button value is passed into the event handler parameter as <see langword="string"/>.
     ///     </para>
     ///     <para>
     ///         The users who clicked the button is passed into the event handler parameter as
@@ -1106,12 +1109,12 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     <para>
     ///         This event is fired when a button is clicked in a direct card message. The event handler must
-    ///         return a <see cref="Task"/> and accept a <see cref="string"/>,
+    ///         return a <see cref="Task"/> and accept a <see langword="string"/>,
     ///         a <see cref="Cacheable{TEntity,TId}"/>, a <see cref="Cacheable{TEntity,TId}"/>,
     ///         and a <see cref="SocketTextChannel"/> as its parameter.
     ///     </para>
     ///     <para>
-    ///         The button value is passed into the event handler parameter as <see cref="string"/>.
+    ///         The button value is passed into the event handler parameter as <see langword="string"/>.
     ///     </para>
     ///     <para>
     ///         The users who clicked the button is passed into the event handler parameter as

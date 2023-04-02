@@ -1235,8 +1235,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 return new Cacheable<SocketUser, ulong>(bannedUser, id, bannedUser != null,
                                                     async () =>
                                                     {
-                                                        User model = await ApiClient.GetUserAsync(data.OperatorUserId)
-                                                            .ConfigureAwait(false);
+                                                        User model = await ApiClient.GetUserAsync(id).ConfigureAwait(false);
                                                         SocketGlobalUser bannedGlobalUser = State.GetOrAddUser(id,
                                                             _ => SocketGlobalUser.Create(this, State, model));
                                                         bannedGlobalUser.Update(State, model);
@@ -1244,7 +1243,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                         return bannedGlobalUser;
                                                     });
                                             }).ToReadOnlyCollection(() => data.UserIds.Length);
-                                            await TimedInvokeAsync(_userBannedEvent, nameof(UserBanned), bannedUsers, cacheableOperatorUser, guild)
+                                            await TimedInvokeAsync(_userBannedEvent, nameof(UserBanned), bannedUsers, cacheableOperatorUser, guild, data.Reason)
                                                 .ConfigureAwait(false);
                                         }
                                         break;
@@ -1277,8 +1276,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 return new Cacheable<SocketUser, ulong>(bannedUser, id, bannedUser != null,
                                                     async () =>
                                                     {
-                                                        User model = await ApiClient.GetUserAsync(data.OperatorUserId)
-                                                            .ConfigureAwait(false);
+                                                        User model = await ApiClient.GetUserAsync(id).ConfigureAwait(false);
                                                         SocketGlobalUser unbannedGlobalUser = State.GetOrAddUser(id,
                                                             _ => SocketGlobalUser.Create(this, State, model));
                                                         unbannedGlobalUser.Update(State, model);

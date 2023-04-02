@@ -28,7 +28,7 @@ public class IntimacyImage
     ///     Gets the URL of the image of an intimacy.
     /// </summary>
     /// <returns>
-    ///     A <see cref="string"/> representing the URL of the image of an intimacy.
+    ///     A <see langword="string"/> representing the URL of the image of an intimacy.
     /// </returns>
     public string Url { get; }
 }

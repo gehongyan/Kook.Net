@@ -19,7 +19,7 @@ internal class Program
             AlwaysDownloadUsers = false,
             AlwaysDownloadVoiceStates = false,
             AlwaysDownloadBoostSubscriptions = false,
-            MessageCacheSize = 0,
+            MessageCacheSize = 100,
             LogLevel = LogSeverity.Debug
         });
 
@@ -35,12 +35,7 @@ internal class Program
 
         _client.Connected += () => Task.CompletedTask;
         _client.Disconnected += exception => Task.CompletedTask;
-        _client.Ready += async () =>
-        {
-            IReadOnlyCollection<RestFriendRequest> friendRequests = await _client.Rest.GetFriendRequestsAsync();
-            IReadOnlyCollection<RestUser> friends = await _client.Rest.GetFriendsAsync();
-            IReadOnlyCollection<RestUser> blockedUsers = await _client.Rest.GetBlockedUsersAsync();
-        };
+        _client.Ready += () => Task.CompletedTask;
         _client.LatencyUpdated += (before, after) => Task.CompletedTask;
 
         #endregion
@@ -68,7 +63,7 @@ internal class Program
 
         _client.UserJoined += (user, time) => Task.CompletedTask;
         _client.UserLeft += (guild, user, time) => Task.CompletedTask;
-        _client.UserBanned += (users, @operator, guild) => Task.CompletedTask;
+        _client.UserBanned += (users, @operator, guild, reason) => Task.CompletedTask;
         _client.UserUnbanned += (users, @operator, guild) => Task.CompletedTask;
         _client.UserUpdated += (before, after) => Task.CompletedTask;
         _client.CurrentUserUpdated += (before, after) => Task.CompletedTask;
