@@ -980,6 +980,11 @@ public abstract partial class BaseSocketClient
     ///         return a <see cref="Task"/> and accept a <see cref="SocketGuild"/> as its parameter.
     ///     </para>
     ///     <para>
+    ///         <note type="important">
+    ///             This parameter must be accessed within the current thread context. After
+    ///             waiting for completion of the task in this asynchronous event, the object
+    ///             passed to it will be disposed.
+    ///         </note>
     ///         The guild where the account leaves is passed into the event handler parameter as
     ///         <see cref="SocketGuild"/>.
     ///     </para>
@@ -1085,13 +1090,13 @@ public abstract partial class BaseSocketClient
     ///         <see cref="SocketTextChannel"/>.
     ///     </para>
     /// </remarks>
-    public event Func<string, Cacheable<SocketUser, ulong>, Cacheable<IMessage, Guid>, SocketTextChannel, Task> MessageButtonClicked
+    public event Func<string, Cacheable<SocketGuildUser, ulong>, Cacheable<IMessage, Guid>, SocketTextChannel, Task> MessageButtonClicked
     {
         add => _messageButtonClickedEvent.Add(value);
         remove => _messageButtonClickedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<string, Cacheable<SocketUser, ulong>, Cacheable<IMessage, Guid>, SocketTextChannel, Task>> _messageButtonClickedEvent = new();
+    internal readonly AsyncEvent<Func<string, Cacheable<SocketGuildUser, ulong>, Cacheable<IMessage, Guid>, SocketTextChannel, Task>> _messageButtonClickedEvent = new();
 
     /// <summary> Fired when a button is clicked in a direct card message. </summary>
     /// <remarks>

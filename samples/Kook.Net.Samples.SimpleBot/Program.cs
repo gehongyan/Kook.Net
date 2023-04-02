@@ -88,14 +88,8 @@ internal class Program
         _client.GuildAvailable += guild => Task.CompletedTask;
         _client.GuildUnavailable += guild => Task.CompletedTask;
 
-        _client.MessageButtonClicked += async (value, user, message, channel) =>
-        {
-            SocketUser socketUser = await user.GetOrDownloadAsync();
-        };
-        _client.DirectMessageButtonClicked += async (value, user, message, channel) =>
-        {
-            SocketUser socketUser = await user.GetOrDownloadAsync();
-        };
+        _client.MessageButtonClicked += (value, user, message, channel) => Task.CompletedTask;
+        _client.DirectMessageButtonClicked += (value, user, message, channel) => Task.CompletedTask;
 
         #endregion
     }
