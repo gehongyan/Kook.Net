@@ -81,4 +81,28 @@ public static class KookRestClientExperimentalExtensions
     /// </returns>
     public static Task<IReadOnlyCollection<RestGuild>> GetAdminGuildsAsync(this KookRestClient client, RequestOptions options = null)
         => ExperimentalClientHelper.GetAdminGuildsAsync(client, options);
+
+    /// <summary>
+    ///     Validates a card.
+    /// </summary>
+    /// <param name="client">The KOOK rest client instance.</param>
+    /// <param name="card">The card to be validated.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous validation operation.
+    /// </returns>
+    public static Task ValidateCardAsync(this KookRestClient client, ICard card, RequestOptions options = null)
+        => ValidateCardsAsync(client, new[] { card }, options);
+
+    /// <summary>
+    ///     Validates a collection of cards.
+    /// </summary>
+    /// <param name="client">The KOOK rest client instance.</param>
+    /// <param name="cards">The cards to be validated.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous validation operation.
+    /// </returns>
+    public static Task ValidateCardsAsync(this KookRestClient client, IEnumerable<ICard> cards, RequestOptions options = null)
+        => ExperimentalClientHelper.ValidateCardsAsync(client, cards, options);
 }

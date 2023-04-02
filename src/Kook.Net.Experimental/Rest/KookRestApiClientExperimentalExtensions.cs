@@ -93,4 +93,18 @@ internal static class KookRestApiClientExperimentalExtensions
     }
 
     #endregion
+
+    #region Messages
+
+    public static async Task ValidateCardsAsync(this KookRestApiClient client, ValidateCardsParams args, RequestOptions options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotNullOrEmpty(args.Content, nameof(args.Content));
+        options = RequestOptions.CreateOrClone(options);
+
+        KookRestApiClient.BucketIds ids = new();
+        await client.SendJsonAsync(HttpMethod.Post, () => $"message/check-card", args, ids, ClientBucketType.Unbucketed, options).ConfigureAwait(false);
+    }
+
+    #endregion
 }
