@@ -709,11 +709,11 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketUserMessage cachedMsg = channel.GetCachedMessage(data.MessageId) as SocketUserMessage;
                                             SocketMessage before = cachedMsg?.Clone();
                                             if (cachedMsg != null)
-                                                cachedMsg.IsPinned = false;
+                                                cachedMsg.IsPinned = true;
 
-                                            cacheableBefore = new Cacheable<SocketMessage, Guid>(before, data.MessageId, true,
+                                            cacheableBefore = new Cacheable<SocketMessage, Guid>(before, data.MessageId, before is not null,
                                                 () => Task.FromResult((SocketMessage)null));
-                                            cacheableAfter = new Cacheable<SocketMessage, Guid>(cachedMsg, data.MessageId, true,
+                                            cacheableAfter = new Cacheable<SocketMessage, Guid>(cachedMsg, data.MessageId, cachedMsg is not null,
                                                 async () => await channel
                                                     .GetMessageAsync(data.MessageId).ConfigureAwait(false) as SocketMessage);
 
@@ -760,9 +760,9 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             if (cachedMsg != null)
                                                 cachedMsg.IsPinned = false;
 
-                                            cacheableBefore = new Cacheable<SocketMessage, Guid>(before, data.MessageId, true,
+                                            cacheableBefore = new Cacheable<SocketMessage, Guid>(before, data.MessageId, before is not null,
                                                 () => Task.FromResult((SocketMessage)null));
-                                            cacheableAfter = new Cacheable<SocketMessage, Guid>(cachedMsg, data.MessageId, true,
+                                            cacheableAfter = new Cacheable<SocketMessage, Guid>(cachedMsg, data.MessageId, cachedMsg is not null,
                                                 async () => await channel
                                                     .GetMessageAsync(data.MessageId).ConfigureAwait(false) as SocketMessage);
 

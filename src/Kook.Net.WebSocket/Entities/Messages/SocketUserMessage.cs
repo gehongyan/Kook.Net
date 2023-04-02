@@ -108,8 +108,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         SocketGuild guild = (Channel as SocketGuildChannel)?.Guild;
         _isMentioningEveryone = model.MentionedAll;
         _isMentioningHere = model.MentionedHere;
-        _roleMentions = model.MentionedRoles?.Select(x => guild.GetRole(x)).ToImmutableArray() ?? new ImmutableArray<SocketRole>();
-        _channelMentions = model.MentionedChannels?.Select(x => guild.GetChannel(x)).ToImmutableArray() ?? new ImmutableArray<SocketGuildChannel>();
+        _roleMentions = model.MentionedRoles?.Select(x => guild?.GetRole(x)).ToImmutableArray() ?? new ImmutableArray<SocketRole>();
+        _channelMentions = model.MentionedChannels?.Select(x => guild?.GetChannel(x)).ToImmutableArray() ?? new ImmutableArray<SocketGuildChannel>();
         Content = gatewayEvent.Content;
         RawContent = model.KMarkdownInfo?.RawContent;
         if (Type == MessageType.Text)
@@ -119,7 +119,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
         if (model.Quote is not null)
             _quote = Quote.Create(model.Quote.Id, model.Quote.QuotedMessageId, model.Quote.Type, model.Quote.Content,
-                model.Quote.CreateAt, guild.GetUser(model.Quote.Author.Id));
+                model.Quote.CreateAt, guild?.GetUser(model.Quote.Author.Id));
 
         if (model.Attachment is not null) _attachments = _attachments.Add(Attachment.Create(model.Attachment));
 
@@ -133,6 +133,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             ? model.KMarkdownInfo.Pokes.Select(x => SocketPokeAction.Create(Kook, Author, MentionedUsers, x)).ToImmutableArray()
             : ImmutableArray<SocketPokeAction>.Empty;
 
+        IsPinned = false;
         Guild = guild;
     }
 
