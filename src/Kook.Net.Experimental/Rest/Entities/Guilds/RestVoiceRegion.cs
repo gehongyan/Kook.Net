@@ -21,6 +21,9 @@ public class RestVoiceRegion : RestEntity<string>, IVoiceRegion
     /// <inheritdoc />
     public decimal Crowding { get; private set; }
 
+    /// <inheritdoc />
+    public BoostLevel MinimumBoostLevel { get; set; }
+
     internal RestVoiceRegion(BaseKookClient kook, string id)
         : base(kook, id)
     {
@@ -37,6 +40,7 @@ public class RestVoiceRegion : RestEntity<string>, IVoiceRegion
     {
         Name = model.Name;
         Crowding = model.Crowding / 100M;
+        MinimumBoostLevel = model.MinimumBoostLevel;
     }
 
     /// <inheritdoc />

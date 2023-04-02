@@ -34,4 +34,12 @@ public interface IVoiceRegion
     ///     A decimal between <c>0.0</c> and <c>1.0</c> that represents the crowding of this voice region.
     /// </returns>
     decimal Crowding { get; }
+
+    /// <summary>
+    ///     Gets the minimum boost level required to use this voice region.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="BoostLevel"/> that represents the minimum boost level required to use this voice region.
+    /// </returns>
+    BoostLevel MinimumBoostLevel { get; }
 }

@@ -12,4 +12,7 @@ internal class VoiceRegion
 
     [JsonPropertyName("crowding")]
     public int Crowding { get; set; }
+
+    [JsonPropertyName("level")]
+    public BoostLevel MinimumBoostLevel { get; set; }
 }
