@@ -25,6 +25,14 @@ public partial class KookSocketClient
     /// <summary>
     ///     Fired when guild data has finished downloading.
     /// </summary>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         Because guilds may contain a large amount of members,
+    ///         this event will not wait for all users, subscriptions, and voice states
+    ///         to be downloaded. It will only wait for guilds, channels, roles, and
+    ///         emojis to be downloaded.
+    ///     </note>
+    /// </remarks>
     public event Func<Task> Ready
     {
         add => _readyEvent.Add(value);
