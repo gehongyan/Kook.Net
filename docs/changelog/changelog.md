@@ -27,7 +27,11 @@ KMarkdown 格式化帮助类 `Format` 中的各格式化方法皆已变更为扩
 `sanitize`，以支持是否对文本内的特殊字符进行转义，默认为 `true`。扩展方法的调用方式仍然兼容原有的静态方法调用方式。
 默认情况下，各格式化方法会对文本内与 KMarkdown 语法冲突的特殊字符进行转义，以避免 KMarkdown 语法解析错误。
 此特性默认启用，可通过 `sanitize` 参数禁用。所有涉及到传入此方法的文本参数如已对特殊字符进行转义，
-则应将 `sanitize` 参数设置为 `false`，或调整传入参数为未转义的原始文本。
+则应将 `sanitize` 参数设置为 `false`，或调整传入参数为未转义的原始文本。另外，`Format.Quote` 与
+`Format.BlockQuote` 方法的逻辑已调整，现在会在文本内按需插入换行符与零宽连字符，以保持文本在 KOOK
+客户端中的显示效果。其中，`Format.BlockQuote` 方法的格式化结果可以保证整段文本在 KOOK
+客户端中的显示为一段引用块，而 `Format.Quote` 方法的格式化结果则将文本按空行分割为多个引用块，
+空行不会包括在引用块内。
 
 `CardJsonExtension` 类中的 `Parse` 与 `TryParse` 方法已重命名为 `ParseSingle` 与 `TryParseSingle`，
 以避免与解析多个卡片时使用的 `ParseMany` 与 `TryParseMany` 方法产生冲突。所有涉及到此方法的调用都需要进行相应的更新。
