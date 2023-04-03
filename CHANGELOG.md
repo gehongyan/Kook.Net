@@ -2,6 +2,160 @@
 
 ---
 
+## v0.4.0 [2023-04-03]
+
+### Update Path
+
+Due to the following reasons, this version has made adjustments to the parameter types passed in some events
+in `BaseSocketClient`:
+
+- Some parameters are always present and do not need to be wrapped with `Cacheable`, such as `MessageDeleted`
+  and `UserConnected`;
+- The data sent by the gateway is incomplete, resulting in missing parameters in some events. These event parameters
+  have been adjusted to entities wrapped with `Cacheable` to fix the issue of unknown entity IDs that cannot be obtained
+  through the REST client API request for complete data;
+- The original processing logic for incomplete data sent by the gateway was to obtain complete data by initiating API
+  requests through the REST client, which may cause performance issues or timeouts in large servers, such
+  as `GuildMemberOnline` and `GuildMemberOffline`. These event parameters have been adjusted to entities wrapped
+  with `Cacheable`, and can be obtained on demand through the `GetOrDownloadAsync` method;
+- Some event parameters are too specific, resulting in a mismatch of types and passing empty values, such
+  as `ReactionAdded`;
+- Some event parameters are too general, such as `MessageDeleted` and `UserConnected`, which can avoid unnecessary
+  pattern matching;
+- Some event parameters are missing, such as `UserBanned`;
+- Some events pass excessively redundant parameters, such as `MessageButtonClicked`.
+- The specific changes to the event parameters can be found in the appendix at the end of the document. All applications
+  involving these events need to be updated accordingly.
+
+All formatting methods in the KMarkdown formatting helper class `Format` have been changed to extension methods, and a
+new optional parameter sanitize has been added to support whether to escape special characters in the text, which
+defaults to true. The calling method of extension methods is still compatible with the original static method calling
+method. By default, all formatting methods escape special characters in the text that conflict with KMarkdown syntax to
+avoid syntax parsing errors. This feature is enabled by default and can be disabled through the sanitize parameter. If
+the text parameter passed to this method has already escaped special characters, the sanitize parameter should be set to
+false, or the input parameter should be adjusted to the original unescaped text.
+
+The `Parse` and `TryParse` methods in the `CardJsonExtension` class have been renamed to `ParseSingle`
+and `TryParseSingle` to avoid conflicts with the `ParseMany` and `TryParseMany` methods used to parse multiple cards.
+All calls involving this method need to be updated accordingly.
+
+The `Features` property type in `IGuild` and `IRecommendInfo` was originally `object[]`, and is now implemented as
+the `GuildFeatures` type. All calls involving this property need to be updated accordingly.
+
+The `RestPresence` namespace has been corrected to `Kook.Rest`. All calls involving `RestPresence` need to update the
+namespace reference accordingly.
+
+### Added
+
+- Added methods for managing friends and blocked users. For details, see the appendix at the end of the document.
+- Added debug display text for the `Cacheable` and `Quote` classes
+- Added `MaxJoinedGuildDataFetchingRetryTimes` and `JoinedGuildDataFetchingRetryDelay` properties to `KookSocketConfig`
+  for controlling the number of times and delay between retries for fetching data when joining a server
+- Added `ParseMany` and `TryParseMany` methods to `CardJsonExtension`
+- (Experimental feature) Added the `IVoiceRegion.MinimumBoostLevel` property
+- (Experimental feature) Added `ValidateCardAsync` and `ValidateCardsAsync` methods to `KookRestClient`
+
+### Changed
+
+- Changed the parameter types for some events in `BaseSocketClient`. For details, see the appendix at the end of the
+  document.
+- The formatting methods in the `Format` helper class have been changed to extension methods, and a new optional
+  sanitize parameter has been added to support escaping special characters in the text. The default value is true.
+- Renamed the `Parse` and `TryParse` methods in `CardJsonExtension` to `ParseSingle` and `TryParseSingle`.
+- Implemented the `Features` property of `IGuild` and `IRecommendInfo` as the `GuildFeatures` type.
+- Corrected the namespace for `RestPresence` to `Kook.Rest`.
+- (Experimental feature) The `KookRestClient.GetAdminGuildsAsync` method now supports bot authentication.
+
+### Fixed
+
+- Fixed an issue where the results of the `Format.Quote` and `Format.BlockQuote` methods were displayed incorrectly in
+  KOOK
+- Fixed an issue where the error message displayed when `CountdownModuleBuilder.Build` throws an exception was incorrect
+- Fixed an issue where `BaseSocketClient.DirectMessageUpdated` might pass an incorrect user entity
+- Fixed an issue where the `Author` property was null in message-related events when the user was not cached
+- Fixed an issue where `IGuild.OwnerId` was `0`
+- Fixed an issue where the `IsPinned` property was not set correctly in `BaseSocketClient.Pinned`
+  and `BaseSocketClient.Unpinned` events
+- Fixed an issue where the `IPresence.ActiveClient` property could be unintentionally cleared
+- Fixed an issue where the debug display format of `IPresence` was incorrect
+- Fixed an issue where the default implementation of `IRestClient` could throw an exception when `DEBUG_REST`
+  preprocessor directive was enabled for debugging high-concurrency requests in the source code
+- Fixed an issue where `Quote.Empty` was not a static property.
+
+### Optimized
+
+- Fixed an issue with missing preprocessor directives in `KookRestApiClient`.
+- Optimized the `SocketUser.UpdateIntimacyAsync` method's implementation of the `IUser` interface.
+- Improved the use of `NumberBooleanConverter`.
+- `KookSocketClient` logs the content of received packets when they are out of order or not handled correctly.
+- When printing exception packets, `KookSocketClient` uses the passed-in serializerOptions serialization options.
+- Completed XML documentation for `BaseSocketClient` events.
+
+### Misc
+
+- Due to the issue of missing field values when creating roles being fixed on the KOOK server side, commit
+  1726d5c7c36ead0544784eb937660537c6ec1f4f has been reverted.
+- Corrected some errors in the documentation.
+- Fixed the issue where the test server created by integration testing was not properly deleted.
+
+### Appendix
+
+Added APIs:
+
+- Get all friends: `IKookClient.GetFriendsAsync`
+- Request to add a friend: `IUser.RequestFriendAsync`
+- Remove a friend: `IUser.RemoveFriendAsync`
+- Get all friend requests: `IKookClient.GetFriendRequestsAsync`
+- Accept a friend request: `IFriendRequest.AcceptAsync`
+- Decline a friend request: `IFriendRequest.DeclineAsync`
+- Get all blocked users: `IKookClient.GetBlockedUsersAsync`
+- Block a user: `IUser.BlockAsync`
+- Unblock a user: `IUser.UnblockAsync`
+
+Event parameter changes in `BaseSocketClient`:
+
+- `ReactionAdded` and `ReactionRemoved`
+  - `Cacheable<IUserMessage, Guid>` → `Cacheable<IMessage, ulong>`
+  - `Cacheable<IMessageChannel, ulong>` → `ISocketMessageChannel`
+- `DirectReactionAdded` and `DirectReactionRemoved`
+  - `Cacheable<IUserMessage, Guid>` → `Cacheable<IMessage, ulong>`
+- `MessageDeleted`
+  - `Cacheable<IMessageChannel, ulong>` → `ISocketMessageChannel`
+- `MessageUpdated`
+  - `Cacheable<IMessage, Guid>` → `Cacheable<SocketMessage, Guid>`
+  - `SocketMessage` → `Cacheable<SocketMessage, Guid>`
+- `MessagePinned` and `MessageUnpinned`
+  - `Cacheable<IMessage, Guid>` → `Cacheable<SocketMessage, Guid>`
+  - `SocketMessage` → `Cacheable<SocketMessage, Guid>`
+  - `SocketGuildUser` → `Cacheable<SocketGuildUser, ulong>`
+- `DirectMessageUpdated`
+  - `SocketMessage` → `Cacheable<SocketMessage, Guid>`
+- `UserLeft`
+  - `SocketUser` → `Cacheable<SocketUser, ulong>`
+- `UserBanned`
+  - `IReadOnlyCollection<SocketUser>` → `IReadOnlyCollection<Cacheable<SocketUser, ulong>>`
+  - `SocketUser` → `Cacheable<SocketUser, ulong>`
+  - Add a new parameter of type `string` to represent the reason for adding to the blacklist.
+- `UserUnbanned`
+  - `IReadOnlyCollection<SocketUser>` → `IReadOnlyCollection<Cacheable<SocketUser, ulong>>`
+  - `SocketUser` → `Cacheable<SocketUser, ulong>`
+- `UserUpdated`
+  - `SocketUser` → `Cacheable<SocketUser, ulong>`
+- `GuildMemberUpdated`
+  - `SocketGuildUser` → `Cacheable<SocketGuildUser, ulong>`
+- `GuildMemberOnline` and `GuildMemberOffline`
+  - `IReadOnlyCollection<SocketGuildUser>` → `IReadOnlyCollection<Cacheable<SocketGuildUser, ulong>>`
+- `UserConnected` and `UserDisconnected`
+  - `SocketUser` → `Cacheable<SocketGuildUser, ulong>`
+  - Remove the `SocketGuild` parameter, please retrieve it from `SocketVoiceChannel.Guild`.
+- `MessageButtonClicked`
+  - `SocketUser` → `Cacheable<SocketGuildUser, ulong>`
+  - `IMessage` → `Cacheable<IMessage, Guid>`
+  - Remove the `SocketGuild` parameter, please retrieve it from `SocketVoiceChannel.Guild`.
+- `DirectMessageButtonClicked`
+  - `SocketUser` → `Cacheable<SocketUser, ulong>`
+  - `IMessage` → `Cacheable<IMessage, Guid>`
+
 ## v0.3.1 [2023-03-19]
 
 ### Added
