@@ -44,7 +44,7 @@ KMarkdown 格式化帮助类 `Format` 中的各格式化方法皆已变更为扩
 ### 新增
 
 - 新增好友管理与用户屏蔽管理相关方法，变更详情参见文末的附录
-- 为 `Cacheable` 与 `Qupte` 类新增调试显示文本
+- 为 `Cacheable` 与 `Quote` 类新增调试显示文本
 - `KookSocketConfig` 新增 `MaxJoinedGuildDataFetchingRetryTimes` 与 `JoinedGuildDataFetchingRetryDelay`
   属性，控制加入服务器时的数据获取重试次数与重试间隔
 - `CardJsonExtension` 新增 `ParseMany` 与 `TryParseMany` 方法
