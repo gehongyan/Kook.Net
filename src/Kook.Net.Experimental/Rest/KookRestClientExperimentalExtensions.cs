@@ -105,4 +105,16 @@ public static class KookRestClientExperimentalExtensions
     /// </returns>
     public static Task ValidateCardsAsync(this KookRestClient client, IEnumerable<ICard> cards, RequestOptions options = null)
         => ExperimentalClientHelper.ValidateCardsAsync(client, cards, options);
+
+    /// <summary>
+    ///     Validates a collection of cards.
+    /// </summary>
+    /// <param name="client">The KOOK rest client instance.</param>
+    /// <param name="cardsJson">The JSON representation of the cards to be validated.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous validation operation.
+    /// </returns>
+    public static Task ValidateCardsAsync(this KookRestClient client, string cardsJson, RequestOptions options = null)
+        => ExperimentalClientHelper.ValidateCardsAsync(client, cardsJson, options);
 }

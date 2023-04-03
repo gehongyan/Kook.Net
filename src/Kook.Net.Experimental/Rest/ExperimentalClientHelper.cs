@@ -46,9 +46,19 @@ internal static class ExperimentalClientHelper
 
     #endregion
 
+    #region Messages
+
     public static Task ValidateCardsAsync(KookRestClient client, IEnumerable<ICard> cards, RequestOptions options)
     {
         ValidateCardsParams args = ValidateCardsParams.FromCards(cards);
         return client.ApiClient.ValidateCardsAsync(args, options);
     }
+
+    public static Task ValidateCardsAsync(KookRestClient client, string cardsJson, RequestOptions options)
+    {
+        ValidateCardsParams args = cardsJson;
+        return client.ApiClient.ValidateCardsAsync(args, options);
+    }
+
+    #endregion
 }
