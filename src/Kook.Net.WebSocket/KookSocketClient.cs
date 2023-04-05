@@ -925,6 +925,9 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                     return globalUser;
                                                 });
 
+                                            foreach (SocketGuildChannel channel in guild.Channels)
+                                                channel.RemoveUserPermissionOverwrite(data.UserId);
+
                                             await TimedInvokeAsync(_userLeftEvent, nameof(UserLeft), guild, cacheableUser, data.ExitedAt)
                                                 .ConfigureAwait(false);
                                         }
@@ -1065,6 +1068,9 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
                                                 return;
                                             }
+
+                                            foreach (SocketGuildChannel channel in guild.Channels)
+                                                channel.RemoveRolePermissionOverwrite(data.Id);
 
                                             SocketRole role = guild.RemoveRole(data.Id);
                                             await TimedInvokeAsync(_roleDeletedEvent, nameof(RoleDeleted), role).ConfigureAwait(false);

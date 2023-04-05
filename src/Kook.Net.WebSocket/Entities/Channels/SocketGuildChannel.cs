@@ -98,6 +98,26 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
         _userPermissionOverwrites = newUserOverwrites.ToImmutable();
     }
 
+    internal void RemoveRolePermissionOverwrite(uint roleId)
+    {
+        for (int i = 0; i < _rolePermissionOverwrites.Length; i++)
+            if (_rolePermissionOverwrites[i].Target == roleId)
+            {
+                _rolePermissionOverwrites = _rolePermissionOverwrites.RemoveAt(i);
+                return;
+            }
+    }
+
+    internal void RemoveUserPermissionOverwrite(ulong userId)
+    {
+        for (int i = 0; i < _userPermissionOverwrites.Length; i++)
+            if (_userPermissionOverwrites[i].Target.Id == userId)
+            {
+                _userPermissionOverwrites = _userPermissionOverwrites.RemoveAt(i);
+                return;
+            }
+    }
+
     /// <inheritdoc />
     public override Task UpdateAsync(RequestOptions options = null)
         => SocketChannelHelper.UpdateAsync(this, options);
