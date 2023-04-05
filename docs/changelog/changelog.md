@@ -5,6 +5,13 @@ title: 变更日志
 
 # 变更日志
 
+## v0.4.1 [2023-04-05]
+
+### 修复
+
+- 修复用户离开服务器或角色被删除时，`SocketGuildChannel.UserPermissionOverwrites` 与
+  `SocketGuildChannel.RolePermissionOverwrites` 属性未移除对应的权限覆盖项的问题
+
 ## v0.4.0 [2023-04-03]
 
 ### 更新路线

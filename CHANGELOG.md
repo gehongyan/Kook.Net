@@ -2,6 +2,13 @@
 
 ---
 
+## v0.4.1 [2023-04-05]
+
+### Fixed
+
+- Fixed an issue where the corresponding permission overwrites of `SocketGuildChannel.UserPermissionOverwrites` and
+  `SocketGuildChannel.RolePermissionOverwrites` were not removed when a user left the guild or a role was deleted.
+
 ## v0.4.0 [2023-04-03]
 
 ### Update Path
