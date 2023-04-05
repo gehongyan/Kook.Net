@@ -599,6 +599,8 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <remarks>
     ///     This method downloads all boost subscriptions for this guild through the Gateway and caches them.
+    ///     To download all boost subscriptions, the current user must has the
+    ///     <see cref="GuildPermission.ManageGuild"/> permission.
     /// </remarks>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>

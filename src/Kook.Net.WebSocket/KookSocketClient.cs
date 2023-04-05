@@ -382,6 +382,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     /// </summary>
     /// <param name="guilds">
     ///     The guilds to download the boost subscriptions for. If <c>null</c>, all available guilds will be downloaded.
+    ///     To download all boost subscriptions, the current user must has the
+    ///     <see cref="GuildPermission.ManageGuild"/> permission.
     /// </param>
     /// <param name="options">The options to be used when sending the request.</param>
     public async Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null)
