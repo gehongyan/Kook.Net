@@ -26,6 +26,11 @@ public class GuildFeatures
     public bool IsOfficial => HasFeature(GuildFeature.Official);
 
     /// <summary>
+    ///     Gets whether or not the guild is a partner guild.
+    /// </summary>
+    public bool IsPartner => HasFeature(GuildFeature.Partner);
+
+    /// <summary>
     ///     // TODO: To be investigated.
     /// </summary>
     public bool IsKa => HasFeature(GuildFeature.Ka);

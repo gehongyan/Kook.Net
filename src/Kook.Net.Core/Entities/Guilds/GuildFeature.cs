@@ -17,7 +17,12 @@ public enum GuildFeature : uint
     Official = 1 << 0,
 
     /// <summary>
+    ///     The guild is a partner guild.
+    /// </summary>
+    Partner = 1 << 1,
+
+    /// <summary>
     ///     // TODO: To be investigated.
     /// </summary>
-    Ka = 1 << 1,
+    Ka = 1 << 2,
 }
