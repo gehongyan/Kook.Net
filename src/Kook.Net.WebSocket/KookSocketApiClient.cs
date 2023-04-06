@@ -254,8 +254,8 @@ internal class KookSocketApiClient : KookRestApiClient
         await _sentGatewayMessageEvent.InvokeAsync(gatewaySocketFrameType).ConfigureAwait(false);
 
 #if DEBUG_PACKETS
-        Debug.WriteLine($"-> [{gatewaySocketFrameType}] : #{sequence} \n{JsonSerializer.Serialize(payload, new JsonSerializerOptions {WriteIndented =
- true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
+        string payloadString = JsonSerializer.Serialize(payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping});
+        Debug.WriteLine($"-> [{gatewaySocketFrameType}] : #{sequence} \n{payloadString}".TrimEnd('\n'));
 #endif
     }
 }
