@@ -15,6 +15,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     #region RestGuild
 
     private ImmutableDictionary<uint, RestRole> _roles;
+    private ImmutableArray<RestRole> _currentUserRoles;
 
     private ImmutableDictionary<ulong, RestChannel> _channels;
     private ImmutableArray<GuildEmote> _emotes;
@@ -33,6 +34,21 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
     /// <inheritdoc />
     public string Banner { get; private set; }
+
+    /// <summary>
+    ///     Gets the nickname of the current user in this guild.
+    /// </summary>
+    public string CurrentUserNickname { get; private set; }
+
+    /// <summary>
+    ///     Gets the display name of the current user in this guild.
+    /// </summary>
+    public string CurrentUserDisplayName { get; private set; }
+
+    /// <summary>
+    ///     Gets the roles of the current user in this guild.
+    /// </summary>
+    public IReadOnlyCollection<RestRole> CurrentUserRoles => _currentUserRoles.ToReadOnlyCollection();
 
     /// <inheritdoc />
     public NotifyType NotifyType { get; private set; }
@@ -152,6 +168,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         Update(model as ExtendedModel);
 
         Banner = model.Banner;
+        CurrentUserNickname = model.CurrentUserNickname == Kook.CurrentUser.Username ? null : model.CurrentUserNickname;
+        CurrentUserDisplayName = CurrentUserNickname ?? Kook.CurrentUser.Username;
+        _currentUserRoles = model.CurrentUserRoles?.Select(GetRole).ToImmutableArray() ?? ImmutableArray.Create<RestRole>();
+
         if (model.Emojis != null)
         {
             ImmutableArray<GuildEmote>.Builder emotes = ImmutableArray.CreateBuilder<GuildEmote>();

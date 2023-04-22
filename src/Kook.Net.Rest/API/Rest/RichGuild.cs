@@ -9,4 +9,10 @@ internal class RichGuild : ExtendedGuild
 
     [JsonPropertyName("banner")]
     public string Banner { get; set; }
+
+    [JsonPropertyName("my_nickname")]
+    public string CurrentUserNickname { get; set; }
+
+    [JsonPropertyName("my_roles")]
+    public uint[] CurrentUserRoles { get; set; }
 }
