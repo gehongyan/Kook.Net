@@ -54,10 +54,10 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     public string PlainTextMention => MentionUtils.PlainTextMentionUser(Username, Id);
 
     /// <inheritdoc />
-    public bool? IsOnline => Presence.IsOnline;
+    public bool? IsOnline => Presence?.IsOnline;
 
     /// <inheritdoc />
-    public ClientType? ActiveClient => Presence.ActiveClient;
+    public ClientType? ActiveClient => Presence?.ActiveClient;
 
     /// <summary>
     ///     Initializes a new WebSocket-based user.
