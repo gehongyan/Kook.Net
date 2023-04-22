@@ -37,6 +37,9 @@ internal class Guild
     [JsonPropertyName("default_channel_id")]
     public ulong DefaultChannelId { get; set; }
 
+    [JsonPropertyName("default_channel_id_setting")]
+    public ulong DefaultChannelIdSetting { get; set; }
+
     [JsonPropertyName("welcome_channel_id")]
     public ulong WelcomeChannelId { get; set; }
 

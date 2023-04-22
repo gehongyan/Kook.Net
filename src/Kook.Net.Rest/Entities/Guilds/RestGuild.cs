@@ -184,7 +184,12 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         Region = model.Region;
         IsOpenEnabled = model.EnableOpen;
         OpenId = model.OpenId != 0 ? model.OpenId : null;
-        DefaultChannelId = model.DefaultChannelId != 0 ? model.DefaultChannelId : null;
+        if (model.DefaultChannelIdSetting != 0)
+            DefaultChannelId = model.DefaultChannelIdSetting;
+        else if (model.DefaultChannelId != 0)
+            DefaultChannelId = model.DefaultChannelId;
+        else
+            DefaultChannelId = null;
         WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
 
         Available = true;

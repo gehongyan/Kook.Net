@@ -420,19 +420,22 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         Region = model.Region;
         IsOpenEnabled = model.EnableOpen;
         OpenId = model.OpenId != 0 ? model.OpenId : null;
-        DefaultChannelId = model.DefaultChannelId != 0 ? model.DefaultChannelId : null;
+        if (model.DefaultChannelIdSetting != 0)
+            DefaultChannelId = model.DefaultChannelIdSetting;
+        else if (model.DefaultChannelId != 0)
+            DefaultChannelId = model.DefaultChannelId;
+        else
+            DefaultChannelId = null;
         WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
 
         IsAvailable = true;
 
         ConcurrentDictionary<uint, SocketRole> roles = new(ConcurrentHashSet.DefaultConcurrencyLevel,
             (int)((model.Roles?.Length ?? 0) * 1.05));
+        for (int i = 0; i < (model.Roles?.Length ?? 0); i++)
         {
-            for (int i = 0; i < (model.Roles?.Length ?? 0); i++)
-            {
-                SocketRole role = SocketRole.Create(this, state, model.Roles![i]);
-                roles.TryAdd(role.Id, role);
-            }
+            SocketRole role = SocketRole.Create(this, state, model.Roles![i]);
+            roles.TryAdd(role.Id, role);
         }
         _roles = roles;
 
@@ -441,18 +444,16 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         ConcurrentDictionary<ulong, SocketGuildChannel> channels = new(
             ConcurrentHashSet.DefaultConcurrencyLevel,
             (int)(channelCount * 1.05));
+        for (int i = 0; i < (model.Channels?.Length ?? 0); i++)
         {
-            for (int i = 0; i < (model.Channels?.Length ?? 0); i++)
+            SocketGuildChannel channel = SocketGuildChannel.Create(this, state, model.Channels![i]);
+            state.AddChannel(channel);
+            channels.TryAdd(channel.Id, channel);
+            for (int j = 0; j < (model.Channels[i].Channels?.Length ?? 0); j++)
             {
-                SocketGuildChannel channel = SocketGuildChannel.Create(this, state, model.Channels![i]);
-                state.AddChannel(channel);
-                channels.TryAdd(channel.Id, channel);
-                for (int j = 0; j < (model.Channels[i].Channels?.Length ?? 0); j++)
-                {
-                    SocketGuildChannel nestedChannel = SocketGuildChannel.Create(this, state, model.Channels![i].Channels![j]);
-                    state.AddChannel(nestedChannel);
-                    channels.TryAdd(nestedChannel.Id, nestedChannel);
-                }
+                SocketGuildChannel nestedChannel = SocketGuildChannel.Create(this, state, model.Channels![i].Channels![j]);
+                state.AddChannel(nestedChannel);
+                channels.TryAdd(nestedChannel.Id, nestedChannel);
             }
         }
         _channels = channels;
