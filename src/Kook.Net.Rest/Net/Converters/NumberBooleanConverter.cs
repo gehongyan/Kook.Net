@@ -15,6 +15,8 @@ internal class NumberBooleanConverter : JsonConverter<bool>
                 return false;
             case JsonTokenType.Number:
                 return reader.TryGetInt32(out int value) && value == 1;
+            case JsonTokenType.String:
+                return reader.GetString() == "1";
             default:
                 throw new JsonException($"{nameof(NumberBooleanConverter)} expects boolean or number token, but got {reader.TokenType}");
         }
