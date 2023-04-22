@@ -42,6 +42,14 @@ public interface IGuild : IEntity<ulong>
     string Icon { get; }
 
     /// <summary>
+    ///     Gets the URL of this guild's banner image.
+    /// </summary>
+    /// <returns>
+    ///     A URL pointing to the guild's banner image; <see langword="null" /> if none is set.
+    /// </returns>
+    string Banner { get; }
+
+    /// <summary>
     ///     Gets the default notification type for this guild.
     /// </summary>
     /// <returns>

@@ -32,6 +32,9 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     public string Icon { get; private set; }
 
     /// <inheritdoc />
+    public string Banner { get; private set; }
+
+    /// <inheritdoc />
     public NotifyType NotifyType { get; private set; }
 
     /// <inheritdoc />
@@ -148,6 +151,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     {
         Update(model as ExtendedModel);
 
+        Banner = model.Banner;
         if (model.Emojis != null)
         {
             ImmutableArray<GuildEmote>.Builder emotes = ImmutableArray.CreateBuilder<GuildEmote>();

@@ -46,6 +46,9 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     public string Icon { get; private set; }
 
     /// <inheritdoc />
+    public string Banner { get; private set; }
+
+    /// <inheritdoc />
     public NotifyType NotifyType { get; private set; }
 
     /// <inheritdoc />
@@ -386,6 +389,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     {
         Update(state, model as ExtendedModel);
 
+        Banner = model.Banner;
         if (model.Emojis != null)
         {
             _emotes.Clear();

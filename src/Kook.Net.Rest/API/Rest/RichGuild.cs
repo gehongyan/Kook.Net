@@ -6,4 +6,7 @@ internal class RichGuild : ExtendedGuild
 {
     [JsonPropertyName("emojis")]
     public Emoji[] Emojis { get; set; }
+
+    [JsonPropertyName("banner")]
+    public string Banner { get; set; }
 }
