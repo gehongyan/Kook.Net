@@ -395,6 +395,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
             _emotes.Clear();
             foreach (API.Emoji emoji in model.Emojis) _emotes.TryAdd(emoji.Id, emoji.ToEntity(model.Id));
         }
+
+        AddOrUpdateCurrentUser(model);
     }
 
     internal void Update(ClientState state, ExtendedModel model)
@@ -782,6 +784,23 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         {
             member.Update(Kook.State, model);
             member.UpdatePresence(model.Online, model.OperatingSystem);
+        }
+        else
+        {
+            member = SocketGuildUser.Create(this, Kook.State, model);
+            member.GlobalUser.AddRef();
+            _members[member.Id] = member;
+            DownloadedMemberCount++;
+        }
+
+        return member;
+    }
+
+    internal SocketGuildUser AddOrUpdateCurrentUser(RichModel model)
+    {
+        if (_members.TryGetValue(Kook.CurrentUser.Id, out SocketGuildUser member))
+        {
+            member.Update(Kook.State, model);
         }
         else
         {

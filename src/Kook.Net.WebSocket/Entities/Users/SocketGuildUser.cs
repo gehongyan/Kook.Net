@@ -1,4 +1,5 @@
 using Kook.API.Gateway;
+using Kook.API.Rest;
 using Kook.Rest;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -218,6 +219,13 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         return entity;
     }
 
+    internal static SocketGuildUser Create(SocketGuild guild, ClientState state, RichGuild model)
+    {
+        SocketGuildUser entity = new(guild, guild.Kook.CurrentUser.GlobalUser);
+        entity.Update(state, model);
+        return entity;
+    }
+
     internal void Update(ClientState state, MemberModel model)
     {
         base.Update(state, model);
@@ -230,6 +238,12 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         Color = model.Color;
         IsOwner = model.IsOwner;
         UpdateRoles(model.Roles);
+    }
+
+    internal void Update(ClientState state, RichGuild guildModel)
+    {
+        Nickname = guildModel.CurrentUserNickname == Username ? null : guildModel.CurrentUserNickname;
+        UpdateRoles(guildModel.CurrentUserRoles);
     }
 
     internal void Update(ClientState state, GuildMemberUpdateEvent model) => Nickname = model.Nickname;
