@@ -17,7 +17,7 @@ internal class Channel
     [JsonPropertyName("guild_id")]
     public ulong GuildId { get; set; }
 
-    // [JsonPropertyName("is_category")] 
+    // [JsonPropertyName("is_category")]
     // public bool IsCategory { get; set; } // TODO: Bool when API but int when event
 
     [JsonPropertyName("parent_id")]
@@ -40,7 +40,7 @@ internal class Channel
     public Channel[] Channels { get; set; }
 
     [JsonPropertyName("permission_sync")]
-    [JsonConverter(typeof(NullableNumberBooleanConverter))]
+    [JsonConverter(typeof(NumberBooleanConverter))]
     public bool? PermissionSync { get; set; }
 
     // Text
@@ -52,16 +52,13 @@ internal class Channel
 
     // Voice
     [JsonPropertyName("limit_amount")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? UserLimit { get; set; }
 
     [JsonPropertyName("voice_quality")]
     [JsonConverter(typeof(NullableVoiceQualityConverter))]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public VoiceQuality? VoiceQuality { get; set; }
 
     [JsonPropertyName("server_url")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public string ServerUrl { get; set; }
 
     [JsonPropertyName("has_password")]

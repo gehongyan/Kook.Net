@@ -5,22 +5,16 @@ namespace Kook.Net.Converters;
 
 internal class NumberBooleanConverter : JsonConverter<bool>
 {
-    public override bool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        switch (reader.TokenType)
+    public override bool Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+        reader.TokenType switch
         {
-            case JsonTokenType.True:
-                return true;
-            case JsonTokenType.False:
-                return false;
-            case JsonTokenType.Number:
-                return reader.TryGetInt32(out int value) && value == 1;
-            case JsonTokenType.String:
-                return reader.GetString() == "1";
-            default:
-                throw new JsonException($"{nameof(NumberBooleanConverter)} expects boolean or number token, but got {reader.TokenType}");
-        }
-    }
+            JsonTokenType.True => true,
+            JsonTokenType.False => false,
+            JsonTokenType.Number => reader.TryGetInt32(out int value) && value == 1,
+            JsonTokenType.String => reader.GetString() == "1",
+            _ => throw new JsonException(
+                $"{nameof(NumberBooleanConverter)} expects boolean, string or number token, but got {reader.TokenType}")
+        };
 
     public override void Write(Utf8JsonWriter writer, bool value, JsonSerializerOptions options) => writer.WriteBooleanValue(value);
 }

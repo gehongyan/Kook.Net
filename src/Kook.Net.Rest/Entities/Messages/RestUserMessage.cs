@@ -169,7 +169,8 @@ public class RestUserMessage : RestMessage, IUserMessage
                 refMsgAuthor);
         }
 
-        if (model.Attachment is not null) _attachments = _attachments.Add(Attachment.Create(model.Attachment));
+        if (model.Attachment is not null)
+            _attachments = _attachments.Add(Attachment.Create(model.Attachment));
 
         if (Type == MessageType.Card)
         {

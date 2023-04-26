@@ -308,9 +308,7 @@ internal static class ChannelHelper
         BaseKookClient client,
         Guid? referenceMessageId, Direction dir, int limit, bool includeReferenceMessage, RequestOptions options)
     {
-        if (dir
-            == Direction
-                .Around) //  && limit > KookConfig.MaxMessagesPerBatch // Around mode returns error messages from endpoint
+        if (dir == Direction.Around) //  && limit > KookConfig.MaxMessagesPerBatch // Around mode returns error messages from endpoint
         {
             int around = limit / 2;
             if (referenceMessageId.HasValue)
