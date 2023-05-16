@@ -60,7 +60,7 @@
         "dest": "_site",
         "template": [
             "default",
-            "templates/singulinkfx"
+            "templates/docfx-tmpl/src"
         ],
         "xrefService": [
             "https://xref.docs.microsoft.com/query?uid={uid}"
