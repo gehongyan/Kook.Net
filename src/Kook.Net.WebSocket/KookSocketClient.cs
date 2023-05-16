@@ -443,7 +443,6 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                         case MessageType.File:
                         case MessageType.Audio:
                         case MessageType.KMarkdown:
-                        case MessageType.Poke:
                         case MessageType.Card:
                             {
                                 await _gatewayLogger.DebugAsync($"Received Message ({gatewayEvent.Type}, {gatewayEvent.ChannelType})")
@@ -465,6 +464,56 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             SocketUser author = guild.GetUser(groupMessageExtraData.Author.Id) ?? guild.AddOrUpdateUser(groupMessageExtraData.Author);
                                             SocketMessage msg = SocketMessage.Create(this, State, author, channel, groupMessageExtraData, gatewayEvent);
                                             SocketChannelHelper.AddMessage(channel, this, msg);
+                                            await TimedInvokeAsync(_messageReceivedEvent, nameof(MessageReceived), msg).ConfigureAwait(false);
+                                            break;
+                                        }
+                                    case "PERSON" when eventExtraData is GatewayPersonMessageExtraData personMessageExtraData:
+                                        {
+                                            SocketDMChannel channel = GetDMChannel(personMessageExtraData.Code)
+                                                ?? AddDMChannel(personMessageExtraData.Code, personMessageExtraData.Author, State);
+
+                                            SocketUser author = channel.GetUser(personMessageExtraData.Author.Id);
+                                            if (author == null)
+                                            {
+                                                await UnknownChannelUserAsync(gatewayEvent.Type.ToString(), personMessageExtraData.Author.Id, personMessageExtraData.Code, payload)
+                                                    .ConfigureAwait(false);
+                                                return;
+                                            }
+
+                                            SocketMessage msg = SocketMessage.Create(this, State, author, channel, personMessageExtraData, gatewayEvent);
+                                            SocketChannelHelper.AddMessage(channel, this, msg);
+                                            await TimedInvokeAsync(_directMessageReceivedEvent, nameof(DirectMessageReceived), msg).ConfigureAwait(false);
+                                            break;
+                                        }
+                                    default:
+                                        await _gatewayLogger.WarningAsync($"Unknown Event Type ({gatewayEvent.Type}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}")
+                                            .ConfigureAwait(false);
+                                        break;
+                                }
+                            }
+                            break;
+
+                        case MessageType.Poke:
+                            {
+                                await _gatewayLogger.DebugAsync($"Received Message ({gatewayEvent.Type}, {gatewayEvent.ChannelType})")
+                                    .ConfigureAwait(false);
+                                switch (gatewayEvent.ChannelType)
+                                {
+                                    case "GROUP" when eventExtraData is GatewayGroupMessageExtraData groupMessageExtraData:
+                                        {
+                                            SocketChannel channel = GetChannel(gatewayEvent.TargetId);
+
+                                            if (channel is not SocketTextChannel textChannel)
+                                            {
+                                                await UnknownChannelAsync(gatewayEvent.ChannelType, gatewayEvent.TargetId, payload)
+                                                    .ConfigureAwait(false);
+                                                return;
+                                            }
+
+                                            SocketGuild guild = textChannel.Guild;
+                                            SocketUser author = guild.GetUser(groupMessageExtraData.Author.Id) ?? guild.AddOrUpdateUser(groupMessageExtraData.Author);
+                                            SocketMessage msg = SocketMessage.Create(this, State, author, textChannel, groupMessageExtraData, gatewayEvent);
+                                            SocketChannelHelper.AddMessage(textChannel, this, msg);
                                             await TimedInvokeAsync(_messageReceivedEvent, nameof(MessageReceived), msg).ConfigureAwait(false);
                                             break;
                                         }
