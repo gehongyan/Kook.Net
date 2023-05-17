@@ -38,6 +38,12 @@
             },
             {
                 "files": [
+                    "quick-reference/**.md",
+                    "quick-reference/**/toc.yml"
+                ]
+            },
+            {
+                "files": [
                     "changelog/**.md",
                     "changelog/**/toc.yml"
                 ]
