@@ -41,5 +41,5 @@ public class RoleProperties
     /// <summary>
     ///     Gets or sets the role's <see cref="GuildPermission"/>.
     /// </summary>
-    public GuildPermissions Permissions { get; set; }
+    public GuildPermissions? Permissions { get; set; }
 }

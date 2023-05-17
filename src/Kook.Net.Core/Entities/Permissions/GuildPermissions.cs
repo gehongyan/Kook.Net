@@ -6,7 +6,7 @@ namespace Kook;
 ///     Represents a set of permissions for a guild.
 /// </summary>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-public class GuildPermissions
+public struct GuildPermissions
 {
     /// <summary> Gets a blank <see cref="GuildPermissions"/> that grants no permissions. </summary>
     public static readonly GuildPermissions None = new();
