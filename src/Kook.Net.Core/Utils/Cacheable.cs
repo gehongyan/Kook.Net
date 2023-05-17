@@ -64,7 +64,7 @@ public struct Cacheable<TEntity, TId>
     /// </returns>
     public async Task<TEntity> GetOrDownloadAsync() => HasValue ? Value : await DownloadAsync().ConfigureAwait(false);
 
-    private string DebuggerDisplay => HasValue
+    private string DebuggerDisplay => HasValue && Value != null
         ? $"{Value.GetType().GetProperty("DebuggerDisplay", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(Value) ?? Value.ToString()} (Cacheable)"
         : $"{Id} (Cacheable, {typeof(TEntity).Name})";
 }
@@ -132,7 +132,7 @@ public struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationship, TId>
     ///     download the entity. The task result contains the downloaded entity.
     /// </returns>
     public async Task<TRelationship> GetOrDownloadAsync() => HasValue ? Value : await DownloadAsync().ConfigureAwait(false);
-    private string DebuggerDisplay => HasValue
+    private string DebuggerDisplay => HasValue && Value != null
         ? $"{Value.GetType().GetProperty("DebuggerDisplay", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(Value) ?? Value.ToString()} (Cacheable)"
         : $"{Id} (Cacheable, {typeof(TRelationship).Name})";
 }
