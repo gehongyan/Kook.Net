@@ -293,7 +293,7 @@ public interface IGuildUser : IUser, IVoiceState
     Task UndeafenAsync(RequestOptions options = null);
 
     /// <summary>
-    ///     Gets a collection of voice channels a user
+    ///     Gets a collection of voice channels a user.
     /// </summary>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
