@@ -31,9 +31,9 @@ public class GuildFeatures
     public bool IsPartner => HasFeature(GuildFeature.Partner);
 
     /// <summary>
-    ///     // TODO: To be investigated.
+    ///     Gets whether or not the guild is a key account guild.
     /// </summary>
-    public bool IsKa => HasFeature(GuildFeature.Ka);
+    public bool IsKeyAccount => HasFeature(GuildFeature.KeyAccount);
 
     internal GuildFeatures(GuildFeature value, IEnumerable<string> rawValues)
     {

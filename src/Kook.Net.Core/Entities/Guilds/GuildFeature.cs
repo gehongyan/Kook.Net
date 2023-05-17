@@ -22,7 +22,7 @@ public enum GuildFeature : uint
     Partner = 1 << 1,
 
     /// <summary>
-    ///     // TODO: To be investigated.
+    ///     The guild is a key account guild.
     /// </summary>
-    Ka = 1 << 2,
+    KeyAccount = 1 << 2,
 }
