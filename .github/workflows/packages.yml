@@ -40,6 +40,7 @@ jobs:
         run: dotnet pack src --configuration Release --output packages
 
       - name: Push Packages to NuGet
+        if: !contains(github.ref, '-dev')
         run: dotnet nuget push .\packages\*.nupkg -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json --skip-duplicate
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}

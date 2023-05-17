@@ -21,6 +21,7 @@ jobs:
     name: Push Packages
     needs: build_and_test
     uses: ./.github/workflows/packages.yml
+    if: startsWith(github.event.ref, 'refs/tags/v')
     with:
       dotnet-version: 7.0.x
     secrets:
