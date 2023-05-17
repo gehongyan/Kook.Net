@@ -461,18 +461,18 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             }
 
                                             SocketTextChannel channel = guild.GetTextChannel(gatewayEvent.TargetId);
-                                            SocketUser author = guild.GetUser(groupMessageExtraData.Author.Id) ?? guild.AddOrUpdateUser(groupMessageExtraData.Author);
+                                            SocketGuildUser author = guild.GetUser(groupMessageExtraData.Author.Id) ?? guild.AddOrUpdateUser(groupMessageExtraData.Author);
                                             SocketMessage msg = SocketMessage.Create(this, State, author, channel, groupMessageExtraData, gatewayEvent);
                                             SocketChannelHelper.AddMessage(channel, this, msg);
-                                            await TimedInvokeAsync(_messageReceivedEvent, nameof(MessageReceived), msg).ConfigureAwait(false);
+                                            await TimedInvokeAsync(_messageReceivedEvent, nameof(MessageReceived), msg, author, channel).ConfigureAwait(false);
                                             break;
                                         }
                                     case "PERSON" when eventExtraData is GatewayPersonMessageExtraData personMessageExtraData:
                                         {
+                                            SocketUser author = State.GetOrAddUser(personMessageExtraData.Author.Id,
+                                                _ => SocketGlobalUser.Create(this, State, personMessageExtraData.Author));
                                             SocketDMChannel channel = GetDMChannel(personMessageExtraData.Code)
                                                 ?? AddDMChannel(personMessageExtraData.Code, personMessageExtraData.Author, State);
-
-                                            SocketUser author = channel.GetUser(personMessageExtraData.Author.Id);
                                             if (author == null)
                                             {
                                                 await UnknownChannelUserAsync(gatewayEvent.Type.ToString(), personMessageExtraData.Author.Id, personMessageExtraData.Code, payload)
@@ -482,7 +482,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             SocketMessage msg = SocketMessage.Create(this, State, author, channel, personMessageExtraData, gatewayEvent);
                                             SocketChannelHelper.AddMessage(channel, this, msg);
-                                            await TimedInvokeAsync(_directMessageReceivedEvent, nameof(DirectMessageReceived), msg).ConfigureAwait(false);
+                                            await TimedInvokeAsync(_directMessageReceivedEvent, nameof(DirectMessageReceived), msg, author, channel).ConfigureAwait(false);
                                             break;
                                         }
                                     default:
@@ -511,18 +511,18 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             }
 
                                             SocketGuild guild = textChannel.Guild;
-                                            SocketUser author = guild.GetUser(groupMessageExtraData.Author.Id) ?? guild.AddOrUpdateUser(groupMessageExtraData.Author);
+                                            SocketGuildUser author = guild.GetUser(groupMessageExtraData.Author.Id) ?? guild.AddOrUpdateUser(groupMessageExtraData.Author);
                                             SocketMessage msg = SocketMessage.Create(this, State, author, textChannel, groupMessageExtraData, gatewayEvent);
                                             SocketChannelHelper.AddMessage(textChannel, this, msg);
-                                            await TimedInvokeAsync(_messageReceivedEvent, nameof(MessageReceived), msg).ConfigureAwait(false);
+                                            await TimedInvokeAsync(_messageReceivedEvent, nameof(MessageReceived), msg, author, textChannel).ConfigureAwait(false);
                                             break;
                                         }
                                     case "PERSON" when eventExtraData is GatewayPersonMessageExtraData personMessageExtraData:
                                         {
+                                            SocketUser author = State.GetOrAddUser(personMessageExtraData.Author.Id,
+                                                _ => SocketGlobalUser.Create(this, State, personMessageExtraData.Author));
                                             SocketDMChannel channel = GetDMChannel(personMessageExtraData.Code)
                                                 ?? AddDMChannel(personMessageExtraData.Code, personMessageExtraData.Author, State);
-
-                                            SocketUser author = channel.GetUser(personMessageExtraData.Author.Id);
                                             if (author == null)
                                             {
                                                 await UnknownChannelUserAsync(gatewayEvent.Type.ToString(), personMessageExtraData.Author.Id, personMessageExtraData.Code, payload)
@@ -532,7 +532,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             SocketMessage msg = SocketMessage.Create(this, State, author, channel, personMessageExtraData, gatewayEvent);
                                             SocketChannelHelper.AddMessage(channel, this, msg);
-                                            await TimedInvokeAsync(_directMessageReceivedEvent, nameof(DirectMessageReceived), msg).ConfigureAwait(false);
+                                            await TimedInvokeAsync(_directMessageReceivedEvent, nameof(DirectMessageReceived), msg, author, channel).ConfigureAwait(false);
                                             break;
                                         }
                                     default:
@@ -556,9 +556,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             await _gatewayLogger.DebugAsync("Received Event (added_reaction)").ConfigureAwait(false);
 
                                             Reaction data = ((JsonElement)extraData.Body).Deserialize<Reaction>(_serializerOptions);
-                                            ISocketMessageChannel channel = GetChannel(data.ChannelId) as ISocketMessageChannel;
 
-                                            if (channel is null)
+                                            if (GetChannel(data.ChannelId) is not SocketTextChannel channel)
                                             {
                                                 await UnknownChannelAsync(extraData.Type, data.ChannelId, payload).ConfigureAwait(false);
                                                 return;
@@ -566,6 +565,15 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             SocketUserMessage cachedMsg = channel.GetCachedMessage(data.MessageId) as SocketUserMessage;
                                             SocketUser user = GetUser(data.UserId) ?? SocketUnknownUser.Create(this, State, data.UserId);
+                                            SocketGuildUser socketGuildUser = channel.GetUser(data.UserId);
+                                            Cacheable<SocketGuildUser, ulong> cacheableUser =
+                                                new(socketGuildUser, data.UserId, socketGuildUser != null,
+                                                    async () =>
+                                                    {
+                                                        GuildMember model = await ApiClient
+                                                            .GetGuildMemberAsync(channel.Guild.Id, data.UserId).ConfigureAwait(false);
+                                                        return channel.Guild.AddOrUpdateUser(model);
+                                                    });
                                             Cacheable<IMessage, Guid> cacheableMsg = new(cachedMsg, data.MessageId, cachedMsg is not null,
                                                 async () => await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false));
                                             SocketReaction reaction = SocketReaction.Create(data, channel, cachedMsg, user);
@@ -573,7 +581,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             cachedMsg?.AddReaction(reaction);
 
                                             await TimedInvokeAsync(_reactionAddedEvent, nameof(ReactionAdded), cacheableMsg, channel,
-                                                reaction).ConfigureAwait(false);
+                                                cacheableUser, reaction).ConfigureAwait(false);
                                         }
                                         break;
 
@@ -583,9 +591,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             await _gatewayLogger.DebugAsync("Received Event (deleted_reaction)").ConfigureAwait(false);
 
                                             Reaction data = ((JsonElement)extraData.Body).Deserialize<Reaction>(_serializerOptions);
-                                            ISocketMessageChannel channel = GetChannel(data.ChannelId) as ISocketMessageChannel;
 
-                                            if (channel is null)
+                                            if (GetChannel(data.ChannelId) is not SocketTextChannel channel)
                                             {
                                                 await UnknownChannelAsync(extraData.Type, data.ChannelId, payload).ConfigureAwait(false);
                                                 return;
@@ -593,6 +600,15 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                             SocketUserMessage cachedMsg = channel.GetCachedMessage(data.MessageId) as SocketUserMessage;
                                             SocketUser user = GetUser(data.UserId) ?? SocketUnknownUser.Create(this, State, data.UserId);
+                                            SocketGuildUser socketGuildUser = channel.GetUser(data.UserId);
+                                            Cacheable<SocketGuildUser, ulong> cacheableUser =
+                                                new(socketGuildUser, data.UserId, socketGuildUser != null,
+                                                    async () =>
+                                                    {
+                                                        GuildMember model = await ApiClient
+                                                            .GetGuildMemberAsync(channel.Guild.Id, data.UserId).ConfigureAwait(false);
+                                                        return channel.Guild.AddOrUpdateUser(model);
+                                                    });
                                             Cacheable<IMessage, Guid> cacheableMsg = new(cachedMsg, data.MessageId, cachedMsg is not null,
                                                 async () => await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false));
                                             SocketReaction reaction = SocketReaction.Create(data, channel, cachedMsg, user);
@@ -600,7 +616,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             cachedMsg?.RemoveReaction(reaction);
 
                                             await TimedInvokeAsync(_reactionRemovedEvent, nameof(ReactionRemoved), cacheableMsg, channel,
-                                                reaction).ConfigureAwait(false);
+                                                cacheableUser, reaction).ConfigureAwait(false);
                                         }
                                         break;
 
@@ -611,13 +627,13 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             MessageUpdateEvent data =
                                                 ((JsonElement)extraData.Body).Deserialize<MessageUpdateEvent>(_serializerOptions);
 
-                                            if (GetChannel(data.ChannelId) is not ISocketMessageChannel channel)
+                                            if (GetChannel(data.ChannelId) is not SocketTextChannel channel)
                                             {
                                                 await UnknownChannelAsync(extraData.Type, data.ChannelId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
-                                            SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
+                                            SocketGuild guild = channel.Guild;
                                             if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
@@ -645,7 +661,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             MessageDeleteEvent data =
                                                 ((JsonElement)extraData.Body).Deserialize<MessageDeleteEvent>(_serializerOptions);
 
-                                            if (GetChannel(data.ChannelId) is not ISocketMessageChannel channel)
+                                            if (GetChannel(data.ChannelId) is not SocketTextChannel channel)
                                             {
                                                 await UnknownChannelAsync(extraData.Type, data.ChannelId, payload).ConfigureAwait(false);
                                                 return;
@@ -731,13 +747,13 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             PinnedMessageEvent data =
                                                 ((JsonElement)extraData.Body).Deserialize<PinnedMessageEvent>(_serializerOptions);
 
-                                            if (GetChannel(data.ChannelId) is not ISocketMessageChannel channel)
+                                            if (GetChannel(data.ChannelId) is not SocketTextChannel channel)
                                             {
                                                 await UnknownChannelAsync(extraData.Type, data.ChannelId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
-                                            SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
+                                            SocketGuild guild = channel.Guild;
                                             if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
@@ -777,13 +793,13 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             UnpinnedMessageEvent data =
                                                 ((JsonElement)extraData.Body).Deserialize<UnpinnedMessageEvent>(_serializerOptions);
 
-                                            if (GetChannel(data.ChannelId) is not ISocketMessageChannel channel)
+                                            if (GetChannel(data.ChannelId) is not SocketTextChannel channel)
                                             {
                                                 await UnknownChannelAsync(extraData.Type, data.ChannelId, payload).ConfigureAwait(false);
                                                 return;
                                             }
 
-                                            SocketGuild guild = (channel as SocketGuildChannel)?.Guild;
+                                            SocketGuild guild = channel.Guild;
                                             if (guild == null)
                                             {
                                                 await UnknownGuildAsync(extraData.Type, gatewayEvent.TargetId, payload).ConfigureAwait(false);
@@ -826,27 +842,40 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             await _gatewayLogger.DebugAsync("Received Event (updated_private_message)").ConfigureAwait(false);
                                             DirectMessageUpdateEvent data =
                                                 ((JsonElement)extraData.Body).Deserialize<DirectMessageUpdateEvent>(_serializerOptions);
-                                            User user = await ApiClient.GetUserAsync(data.AuthorId).ConfigureAwait(false);
-                                            SocketDMChannel channel = CreateDMChannel(data.ChatCode, user, State);
+                                            SocketDMChannel channel = GetDMChannel(data.ChatCode);
+                                            Cacheable<SocketDMChannel, Guid> cacheableChannel = new(channel, data.ChatCode, channel != null,
+                                                async () => {
+                                                    User user = await ApiClient.GetUserAsync(data.AuthorId).ConfigureAwait(false);
+                                                    return CreateDMChannel(data.ChatCode, user, State);
+                                                });
 
                                             SocketMessage cachedMsg = channel?.GetCachedMessage(data.MessageId);
                                             SocketMessage before = cachedMsg?.Clone();
                                             cachedMsg?.Update(State, data);
                                             Cacheable<IMessage, Guid> cacheableBefore = new(before, data.MessageId, before is not null,
                                                 () => Task.FromResult((IMessage)null));
+                                            SocketUser user = State.GetUser(data.AuthorId);
                                             Cacheable<SocketMessage, Guid> cacheableAfter = new(cachedMsg, data.MessageId, cachedMsg is not null,
                                                 async () =>
                                                 {
                                                     DirectMessage msg = await ApiClient.GetDirectMessageAsync(data.MessageId, data.ChatCode)
                                                         .ConfigureAwait(false);
-                                                    SocketUser author = State.GetUser(data.AuthorId)
-                                                        ?? (SocketUser)new SocketUnknownUser(this, data.AuthorId);
+                                                    SocketUser author = user ?? new SocketUnknownUser(this, data.AuthorId);
                                                     SocketMessage after = SocketMessage.Create(this, State, author, channel, msg);
                                                     return after;
                                                 });
+                                            Cacheable<SocketUser, ulong> cacheableUser = new(user, data.AuthorId, user != null,
+                                                async () =>
+                                                {
+                                                    User model = await ApiClient.GetUserAsync(data.AuthorId).ConfigureAwait(false);
+                                                    SocketGlobalUser globalUser = State.GetOrAddUser(data.AuthorId, _ => SocketGlobalUser.Create(this, State, model));
+                                                    globalUser.Update(State, model);
+                                                    globalUser.UpdatePresence(model.Online, model.OperatingSystem);
+                                                    return globalUser;
+                                                });
 
                                             await TimedInvokeAsync(_directMessageUpdatedEvent, nameof(DirectMessageUpdated), cacheableBefore,
-                                                cacheableAfter, channel).ConfigureAwait(false);
+                                                cacheableAfter, cacheableUser, cacheableChannel).ConfigureAwait(false);
                                         }
                                         break;
 
@@ -856,19 +885,31 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             await _gatewayLogger.DebugAsync("Received Event (deleted_private_message)").ConfigureAwait(false);
                                             DirectMessageDeleteEvent data =
                                                 ((JsonElement)extraData.Body).Deserialize<DirectMessageDeleteEvent>(_serializerOptions);
-                                            User user = await ApiClient.GetUserAsync(data.AuthorId).ConfigureAwait(false);
-                                            SocketDMChannel channel = CreateDMChannel(data.ChatCode, user, State);
+                                            SocketDMChannel channel = GetDMChannel(data.ChatCode);
+                                            Cacheable<SocketDMChannel, Guid> cacheableChannel = new(channel, data.ChatCode, channel != null,
+                                                async () => {
+                                                    User user = await ApiClient.GetUserAsync(data.AuthorId).ConfigureAwait(false);
+                                                    return CreateDMChannel(data.ChatCode, user, State);
+                                                });
 
                                             SocketMessage msg = null;
                                             if (channel != null) msg = SocketChannelHelper.RemoveMessage(channel, this, data.MessageId);
 
                                             Cacheable<IMessage, Guid> cacheableMsg = new(msg, data.MessageId, msg != null,
                                                 () => Task.FromResult((IMessage)null));
-                                            Cacheable<IDMChannel, Guid> cacheableChannel = new(channel, data.ChatCode, channel != null,
-                                                async () => await GetDMChannelAsync(data.ChatCode).ConfigureAwait(false));
+                                            SocketUser user = State.GetUser(data.AuthorId);
+                                            Cacheable<SocketUser, ulong> cacheableUser = new(user, data.AuthorId, user != null,
+                                                async () =>
+                                                {
+                                                    User model = await ApiClient.GetUserAsync(data.AuthorId).ConfigureAwait(false);
+                                                    SocketGlobalUser globalUser = State.GetOrAddUser(data.AuthorId, _ => SocketGlobalUser.Create(this, State, model));
+                                                    globalUser.Update(State, model);
+                                                    globalUser.UpdatePresence(model.Online, model.OperatingSystem);
+                                                    return globalUser;
+                                                });
 
                                             await TimedInvokeAsync(_directMessageDeletedEvent, nameof(DirectMessageDeleted), cacheableMsg,
-                                                cacheableChannel).ConfigureAwait(false);
+                                                cacheableUser, cacheableChannel).ConfigureAwait(false);
                                         }
                                         break;
 
@@ -880,7 +921,17 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             PrivateReaction data = ((JsonElement)extraData.Body).Deserialize<PrivateReaction>(_serializerOptions);
                                             SocketDMChannel channel = GetDMChannel(data.ChatCode);
                                             SocketUserMessage cachedMsg = channel?.GetCachedMessage(data.MessageId) as SocketUserMessage;
-                                            SocketUser user = GetUser(data.UserId) ?? SocketUnknownUser.Create(this, State, data.UserId);
+                                            SocketUser user = GetUser(data.UserId);
+                                            SocketUser operatorUser = user ?? SocketUnknownUser.Create(this, State, data.UserId);
+                                            Cacheable<SocketUser, ulong> cacheableUser = new(user, data.UserId, user != null,
+                                                async () =>
+                                                {
+                                                    User model = await ApiClient.GetUserAsync(data.UserId).ConfigureAwait(false);
+                                                    SocketGlobalUser globalUser = State.GetOrAddUser(data.UserId, _ => SocketGlobalUser.Create(this, State, model));
+                                                    globalUser.Update(State, model);
+                                                    globalUser.UpdatePresence(model.Online, model.OperatingSystem);
+                                                    return globalUser;
+                                                });
 
                                             Cacheable<IDMChannel, Guid> cacheableChannel = new(channel, data.ChatCode, channel is not null,
                                                 async () => await GetDMChannelAsync(data.ChatCode).ConfigureAwait(false));
@@ -889,12 +940,12 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 IDMChannel channelObj = await cacheableChannel.GetOrDownloadAsync().ConfigureAwait(false);
                                                 return await channelObj.GetMessageAsync(data.MessageId).ConfigureAwait(false);
                                             });
-                                            SocketReaction reaction = SocketReaction.Create(data, channel, cachedMsg, user);
+                                            SocketReaction reaction = SocketReaction.Create(data, channel, cachedMsg, operatorUser);
 
                                             cachedMsg?.AddReaction(reaction);
 
                                             await TimedInvokeAsync(_directReactionAddedEvent, nameof(DirectReactionAdded), cacheableMsg,
-                                                cacheableChannel, reaction).ConfigureAwait(false);
+                                                cacheableChannel, cacheableUser, reaction).ConfigureAwait(false);
                                         }
                                         break;
 
@@ -906,7 +957,17 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                             PrivateReaction data = ((JsonElement)extraData.Body).Deserialize<PrivateReaction>(_serializerOptions);
                                             SocketDMChannel channel = GetDMChannel(data.ChatCode);
                                             SocketUserMessage cachedMsg = channel?.GetCachedMessage(data.MessageId) as SocketUserMessage;
-                                            SocketUser user = GetUser(data.UserId) ?? SocketUnknownUser.Create(this, State, data.UserId);
+                                            SocketUser user = GetUser(data.UserId);
+                                            SocketUser operatorUser = user ?? SocketUnknownUser.Create(this, State, data.UserId);
+                                            Cacheable<SocketUser, ulong> cacheableUser = new(user, data.UserId, user != null,
+                                                async () =>
+                                                {
+                                                    User model = await ApiClient.GetUserAsync(data.UserId).ConfigureAwait(false);
+                                                    SocketGlobalUser globalUser = State.GetOrAddUser(data.UserId, _ => SocketGlobalUser.Create(this, State, model));
+                                                    globalUser.Update(State, model);
+                                                    globalUser.UpdatePresence(model.Online, model.OperatingSystem);
+                                                    return globalUser;
+                                                });
 
                                             Cacheable<IDMChannel, Guid> cacheableChannel = new(channel, data.ChatCode, channel is not null,
                                                 async () => await GetDMChannelAsync(data.ChatCode).ConfigureAwait(false));
@@ -915,12 +976,12 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                                 IDMChannel channelObj = await cacheableChannel.GetOrDownloadAsync().ConfigureAwait(false);
                                                 return await channelObj.GetMessageAsync(data.MessageId).ConfigureAwait(false);
                                             });
-                                            SocketReaction reaction = SocketReaction.Create(data, channel, cachedMsg, user);
+                                            SocketReaction reaction = SocketReaction.Create(data, channel, cachedMsg, operatorUser);
 
                                             cachedMsg?.RemoveReaction(reaction);
 
                                             await TimedInvokeAsync(_directReactionRemovedEvent, nameof(DirectReactionRemoved), cacheableMsg,
-                                                cacheableChannel, reaction).ConfigureAwait(false);
+                                                cacheableChannel, cacheableUser, reaction).ConfigureAwait(false);
                                         }
                                         break;
 

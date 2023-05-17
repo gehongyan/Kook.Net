@@ -46,20 +46,24 @@ internal class Program
         _client.ChannelDestroyed += channel => Task.CompletedTask;
         _client.ChannelUpdated += (before, after) => Task.CompletedTask;
 
-        _client.ReactionAdded += (message, channel, reaction) => Task.CompletedTask;
-        _client.ReactionRemoved += (message, channel, reaction) => Task.CompletedTask;
-        _client.DirectReactionAdded += (message, channel, reaction) => Task.CompletedTask;
-        _client.DirectReactionRemoved += (message, channel, reaction) => Task.CompletedTask;
+        _client.ReactionAdded += (message, channel, user, reaction) => Task.CompletedTask;
+        _client.ReactionRemoved += (message, channel, user, reaction) =>
+        {
+            var s = channel;
+            return Task.CompletedTask;
+        };
+        _client.DirectReactionAdded += (message, channel, user, reaction) => Task.CompletedTask;
+        _client.DirectReactionRemoved += (message, channel, user, reaction) => Task.CompletedTask;
 
-        _client.MessageReceived += message => Task.CompletedTask;
+        _client.MessageReceived += (message, author, channel) => Task.CompletedTask;
         _client.MessageDeleted += (message, channel) => Task.CompletedTask;
         _client.MessageUpdated += (before, after, channel) => Task.CompletedTask;
         _client.MessagePinned += (before, after, channel, @operator) => Task.CompletedTask;
         _client.MessageUnpinned += (before, after, channel, @operator) => Task.CompletedTask;
 
-        _client.DirectMessageReceived += message => Task.CompletedTask;
-        _client.DirectMessageDeleted += (message, channel) => Task.CompletedTask;
-        _client.DirectMessageUpdated += (before, after, channel) => Task.CompletedTask;
+        _client.DirectMessageReceived += (message, author, channel) => Task.CompletedTask;
+        _client.DirectMessageDeleted += (message, author, channel) => Task.CompletedTask;
+        _client.DirectMessageUpdated += (before, after, author, channel) => Task.CompletedTask;
 
         _client.UserJoined += (user, time) => Task.CompletedTask;
         _client.UserLeft += (guild, user, time) => Task.CompletedTask;

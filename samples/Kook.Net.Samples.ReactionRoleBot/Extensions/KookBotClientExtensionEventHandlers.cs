@@ -4,8 +4,8 @@ namespace Kook.Net.Samples.ReactionRoleBot.Extensions;
 
 public partial class KookBotClientExtension
 {
-    private async Task ProcessReactionRoleAdd(Cacheable<IMessage, Guid> message, ISocketMessageChannel channel,
-        SocketReaction reaction)
+    private async Task ProcessReactionRoleAdd(Cacheable<IMessage, Guid> message, SocketTextChannel channel,
+        Cacheable<SocketGuildUser,ulong> user, SocketReaction reaction)
     {
         if (channel.Id != 5770952608991958) return;
 
@@ -33,8 +33,8 @@ public partial class KookBotClientExtension
             socketGuildUser.Username, socketGuildUser.IdentifyNumber, socketRole.Name);
     }
 
-    private async Task ProcessReactionRoleRemove(Cacheable<IMessage, Guid> message, ISocketMessageChannel channel,
-        SocketReaction reaction)
+    private async Task ProcessReactionRoleRemove(Cacheable<IMessage, Guid> message, SocketTextChannel channel,
+        Cacheable<SocketGuildUser,ulong> user, SocketReaction reaction)
     {
         if (channel.Id != 5770952608991958) return;
 

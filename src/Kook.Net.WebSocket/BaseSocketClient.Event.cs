@@ -70,7 +70,8 @@ public abstract partial class BaseSocketClient
     ///     <para>
     ///         This event is fired when a reaction is added to a message in a channel. The event handler must return a
     ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, an
-    ///         <see cref="ISocketMessageChannel"/>, and a <see cref="SocketReaction"/> as its parameter.
+    ///         <see cref="SocketTextChannel"/>, a <see cref="Cacheable{TEntity,TId}"/>, and a
+    ///         <see cref="SocketReaction"/> as its parameter.
     ///     </para>
     ///     <para>
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
@@ -79,7 +80,10 @@ public abstract partial class BaseSocketClient
     ///     </para>
     ///     <para>
     ///         The source channel of the reaction addition will be passed into the
-    ///         <see cref="ISocketMessageChannel"/> parameter.
+    ///         <see cref="SocketTextChannel"/> parameter.
+    ///     </para>
+    ///     <para>
+    ///         The user who added the reaction will be passed into the <see cref="Cacheable{TEntity,TId}"/>.
     ///     </para>
     ///     <para>
     ///         The reaction that was added will be passed into the <see cref="SocketReaction"/> parameter.
@@ -90,20 +94,21 @@ public abstract partial class BaseSocketClient
     ///         information.
     ///     </note>
     /// </remarks>
-    public event Func<Cacheable<IMessage, Guid>, ISocketMessageChannel, SocketReaction, Task> ReactionAdded
+    public event Func<Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, SocketReaction, Task> ReactionAdded
     {
         add => _reactionAddedEvent.Add(value);
         remove => _reactionAddedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, ISocketMessageChannel, SocketReaction, Task>> _reactionAddedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, SocketReaction, Task>> _reactionAddedEvent = new();
 
     /// <summary> Fired when a reaction is removed from a message. </summary>
     /// <remarks>
     ///     <para>
     ///         This event is fired when a reaction is removed from a message in a channel. The event handler must return a
     ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, an
-    ///         <see cref="ISocketMessageChannel"/>, and a <see cref="SocketReaction"/> as its parameter.
+    ///         <see cref="SocketTextChannel"/>, a <see cref="Cacheable{TEntity,TId}"/>, and a
+    ///         <see cref="SocketReaction"/> as its parameter.
     ///     </para>
     ///     <para>
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
@@ -112,7 +117,10 @@ public abstract partial class BaseSocketClient
     ///     </para>
     ///     <para>
     ///         The source channel of the reaction addition will be passed into the
-    ///         <see cref="ISocketMessageChannel"/> parameter.
+    ///         <see cref="SocketTextChannel"/> parameter.
+    ///     </para>
+    ///     <para>
+    ///         The user who removed the reaction will be passed into the <see cref="Cacheable{TEntity,TId}"/>.
     ///     </para>
     ///     <para>
     ///         The reaction that was removed will be passed into the <see cref="SocketReaction"/> parameter.
@@ -123,20 +131,21 @@ public abstract partial class BaseSocketClient
     ///         information.
     ///     </note>
     /// </remarks>
-    public event Func<Cacheable<IMessage, Guid>, ISocketMessageChannel, SocketReaction, Task> ReactionRemoved
+    public event Func<Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, SocketReaction, Task> ReactionRemoved
     {
         add => _reactionRemovedEvent.Add(value);
         remove => _reactionRemovedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, ISocketMessageChannel, SocketReaction, Task>> _reactionRemovedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, SocketReaction, Task>> _reactionRemovedEvent = new();
 
     /// <summary> Fired when a reaction is added to a direct message. </summary>
     /// <remarks>
     ///     <para>
     ///         This event is fired when a reaction is added to a user message in a private channel. The event handler must return a
     ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, a
-    ///         <see cref="Cacheable{TEntity,TId}"/>, and a <see cref="SocketReaction"/> as its parameter.
+    ///         <see cref="Cacheable{TEntity,TId}"/>, a <see cref="Cacheable{TEntity,TId}"/>, and a
+    ///         <see cref="SocketReaction"/> as its parameter.
     ///     </para>
     ///     <para>
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
@@ -150,6 +159,9 @@ public abstract partial class BaseSocketClient
     ///         otherwise, the direct message channel has not been created yet, and the <see cref="Guid"/> as chat code will be preserved.
     ///     </para>
     ///     <para>
+    ///         The user who removed the reaction will be passed into the <see cref="Cacheable{TEntity,TId}"/>.
+    ///     </para>
+    ///     <para>
     ///         The reaction that was added will be passed into the <see cref="SocketReaction"/> parameter.
     ///     </para>
     ///     <note>
@@ -158,20 +170,21 @@ public abstract partial class BaseSocketClient
     ///         information.
     ///     </note>
     /// </remarks>
-    public event Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, SocketReaction, Task> DirectReactionAdded
+    public event Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task> DirectReactionAdded
     {
         add => _directReactionAddedEvent.Add(value);
         remove => _directReactionAddedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, SocketReaction, Task>> _directReactionAddedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task>> _directReactionAddedEvent = new();
 
     /// <summary> Fired when a reaction is removed from a message. </summary>
     /// <remarks>
     ///     <para>
     ///         This event is fired when a reaction is removed from a user message in a private channel. The event handler must return a
     ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, a
-    ///         <see cref="Cacheable{TEntity,TId}"/>, and a <see cref="SocketReaction"/> as its parameter.
+    ///         <see cref="Cacheable{TEntity,TId}"/>, a <see cref="Cacheable{TEntity,TId}"/>, and a
+    ///         <see cref="SocketReaction"/> as its parameter.
     ///     </para>
     ///     <para>
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
@@ -185,6 +198,9 @@ public abstract partial class BaseSocketClient
     ///         otherwise, the direct message channel has not been created yet, and the <see cref="Guid"/> as chat code will be preserved.
     ///     </para>
     ///     <para>
+    ///         The user who added the reaction will be passed into the <see cref="Cacheable{TEntity,TId}"/>.
+    ///     </para>
+    ///     <para>
     ///         The reaction that was added will be passed into the <see cref="SocketReaction"/> parameter.
     ///     </para>
     ///     <note>
@@ -193,13 +209,13 @@ public abstract partial class BaseSocketClient
     ///         information.
     ///     </note>
     /// </remarks>
-    public event Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, SocketReaction, Task> DirectReactionRemoved
+    public event Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task> DirectReactionRemoved
     {
         add => _directReactionRemovedEvent.Add(value);
         remove => _directReactionRemovedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, SocketReaction, Task>> _directReactionRemovedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task>> _directReactionRemovedEvent = new();
 
     #endregion
 
@@ -209,7 +225,8 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     <para>
     ///         This event is fired when a message is received. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketMessage"/> as its parameter.
+    ///         <see cref="Task"/> and accept a <see cref="SocketMessage"/>, a
+    ///         <see cref="SocketGuildUser"/>, and a <see cref="SocketTextChannel"/> as its parameter.
     ///     </para>
     ///     <para>
     ///         The message that is sent to the client is passed into the event handler parameter as
@@ -217,21 +234,29 @@ public abstract partial class BaseSocketClient
     ///         <see cref="SocketSystemMessage"/>) or a user message (i.e. <see cref="SocketUserMessage"/>. See the
     ///         derived classes of <see cref="SocketMessage"/> for more details.
     ///     </para>
+    ///     <para>
+    ///         The guild member that sent this message is passed into the event handler parameter as
+    ///         <see cref="SocketGuildUser"/>.
+    ///     </para>
+    ///     <para>
+    ///         The source channel of the removed message will be passed into the
+    ///         <see cref="SocketTextChannel"/> parameter.
+    ///     </para>
     /// </remarks>
-    public event Func<SocketMessage, Task> MessageReceived
+    public event Func<SocketMessage, SocketGuildUser, SocketTextChannel, Task> MessageReceived
     {
         add => _messageReceivedEvent.Add(value);
         remove => _messageReceivedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<SocketMessage, Task>> _messageReceivedEvent = new();
+    internal readonly AsyncEvent<Func<SocketMessage, SocketGuildUser, SocketTextChannel, Task>> _messageReceivedEvent = new();
 
     /// <summary> Fired when a message is deleted. </summary>
     /// <remarks>
     ///     <para>
     ///         This event is fired when a message is deleted. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/> and
-    ///         <see cref="ISocketMessageChannel"/> as its parameters.
+    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, and a
+    ///         <see cref="SocketTextChannel"/> as its parameter.
     ///     </para>
     ///     <para>
     ///         <note type="important">
@@ -246,23 +271,23 @@ public abstract partial class BaseSocketClient
     ///     </para>
     ///     <para>
     ///         The source channel of the removed message will be passed into the
-    ///         <see cref="ISocketMessageChannel"/> parameter.
+    ///         <see cref="SocketTextChannel"/> parameter.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<IMessage, Guid>, ISocketMessageChannel, Task> MessageDeleted
+    public event Func<Cacheable<IMessage, Guid>, SocketTextChannel, Task> MessageDeleted
     {
         add => _messageDeletedEvent.Add(value);
         remove => _messageDeletedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, ISocketMessageChannel, Task>> _messageDeletedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketTextChannel, Task>> _messageDeletedEvent = new();
 
     /// <summary> Fired when a message is updated. </summary>
     /// <remarks>
     ///     <para>
     ///         This event is fired when a message is updated. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, <see cref="SocketMessage"/>,
-    ///         and <see cref="ISocketMessageChannel"/> as its parameters.
+    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>,
+    ///         a <see cref="Cacheable{TEntity,TId}"/>, and <see cref="SocketTextChannel"/> as its parameters.
     ///     </para>
     ///     <para>
     ///         <note type="important">
@@ -283,23 +308,23 @@ public abstract partial class BaseSocketClient
     ///     </para>
     ///     <para>
     ///         The source channel of the updated message will be passed into the
-    ///         <see cref="ISocketMessageChannel"/> parameter.
+    ///         <see cref="SocketTextChannel"/> parameter.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, ISocketMessageChannel, Task> MessageUpdated
+    public event Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, SocketTextChannel, Task> MessageUpdated
     {
         add => _messageUpdatedEvent.Add(value);
         remove => _messageUpdatedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, ISocketMessageChannel, Task>> _messageUpdatedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, SocketTextChannel, Task>> _messageUpdatedEvent = new();
 
     /// <summary> Fired when a message is pinned. </summary>
     /// <remarks>
     ///     <para>
     ///         This event is fired when a message is pinned. The event handler must return a
     ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, <see cref="SocketMessage"/>,
-    ///         and <see cref="ISocketMessageChannel"/> as its parameters.
+    ///         and <see cref="SocketTextChannel"/> as its parameters.
     ///     </para>
     ///     <para>
     ///         <note type="important">
@@ -320,26 +345,29 @@ public abstract partial class BaseSocketClient
     ///     </para>
     ///     <para>
     ///         The source channel of the updated message will be passed into the
-    ///         <see cref="ISocketMessageChannel"/> parameter.
+    ///         <see cref="SocketTextChannel"/> parameter.
     ///     </para>
     ///     <para>
-    ///         The operator who pinned the message will be passed into the <see cref="SocketGuildUser"/> parameter.
+    ///         The guild member that pinned this message is passed into the event handler parameter as
+    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the guild member
+    ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
+    ///         is preserved in the <see cref="ulong"/>.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, ISocketMessageChannel, Cacheable<SocketGuildUser, ulong>, Task> MessagePinned
+    public event Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task> MessagePinned
     {
         add => _messagePinnedEvent.Add(value);
         remove => _messagePinnedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, ISocketMessageChannel, Cacheable<SocketGuildUser, ulong>, Task>> _messagePinnedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task>> _messagePinnedEvent = new();
 
     /// <summary> Fired when a message is unpinned. </summary>
     /// <remarks>
     ///     <para>
     ///         This event is fired when a message is unpinned. The event handler must return a
     ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, <see cref="SocketMessage"/>,
-    ///         and <see cref="ISocketMessageChannel"/> as its parameters.
+    ///         and <see cref="SocketTextChannel"/> as its parameters.
     ///     </para>
     ///     <para>
     ///         <note type="important">
@@ -360,19 +388,22 @@ public abstract partial class BaseSocketClient
     ///     </para>
     ///     <para>
     ///         The source channel of the updated message will be passed into the
-    ///         <see cref="ISocketMessageChannel"/> parameter.
+    ///         <see cref="SocketTextChannel"/> parameter.
     ///     </para>
     ///     <para>
-    ///         The operator who unpinned the message will be passed into the <see cref="SocketGuildUser"/> parameter.
+    ///         The guild member that unpinned this message is passed into the event handler parameter as
+    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the guild member
+    ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
+    ///         is preserved in the <see cref="ulong"/>.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, ISocketMessageChannel, Cacheable<SocketGuildUser, ulong>, Task> MessageUnpinned
+    public event Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task> MessageUnpinned
     {
         add => _messageUnpinnedEvent.Add(value);
         remove => _messageUnpinnedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, ISocketMessageChannel, Cacheable<SocketGuildUser, ulong>, Task>> _messageUnpinnedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task>> _messageUnpinnedEvent = new();
 
     #endregion
 
@@ -382,7 +413,9 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     <para>
     ///         This event is fired when a direct message is received. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketMessage"/> as its parameter.
+    ///         <see cref="Task"/> and accept a <see cref="SocketMessage"/>, a
+    ///         <see cref="SocketUser"/>, and a <see cref="SocketDMChannel"/>
+    ///         as its parameters.
     ///     </para>
     ///     <para>
     ///         The message that is sent to the client is passed into the event handler parameter as
@@ -390,21 +423,30 @@ public abstract partial class BaseSocketClient
     ///         <see cref="SocketSystemMessage"/>) or a user message (i.e. <see cref="SocketUserMessage"/>. See the
     ///         derived classes of <see cref="SocketMessage"/> for more details.
     ///     </para>
+    ///     <para>
+    ///         The user that sent this direct message is passed into the event handler parameter as
+    ///         <see cref="SocketUser"/>.
+    ///     </para>
+    ///     <para>
+    ///         The source direct channel of the removed message will be passed into the
+    ///         <see cref="SocketTextChannel"/> parameter.
+    ///     </para>
     /// </remarks>
-    public event Func<SocketMessage, Task> DirectMessageReceived
+    public event Func<SocketMessage, SocketUser, SocketDMChannel, Task> DirectMessageReceived
     {
         add => _directMessageReceivedEvent.Add(value);
         remove => _directMessageReceivedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<SocketMessage, Task>> _directMessageReceivedEvent = new();
+    internal readonly AsyncEvent<Func<SocketMessage, SocketUser, SocketDMChannel, Task>> _directMessageReceivedEvent = new();
 
     /// <summary> Fired when a direct message is deleted. </summary>
     /// <remarks>
     ///     <para>
     ///         This event is fired when a direct message is deleted. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/> and
-    ///         <see cref="IDMChannel"/> as its parameters.
+    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>,
+    ///         a <see cref="Cacheable{TEntity,TId}"/>, and a <see cref="Cacheable{TEntity,TId}"/>
+    ///         as its parameters.
     ///     </para>
     ///     <para>
     ///         <note type="important">
@@ -418,25 +460,32 @@ public abstract partial class BaseSocketClient
     ///         <see cref="Guid"/>.
     ///     </para>
     ///     <para>
+    ///         The user that originally sent this direct message is passed into the event handler parameter as
+    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the guild member
+    ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
+    ///         is preserved in the <see cref="ulong"/>.
+    ///     </para>
+    ///     <para>
     ///         If a direct message was sent by the current user to this user, or the recipient had sent a message before
     ///         in current session, the <see cref="Cacheable{TEntity,TId}"/> entity will contains the direct message channel;
     ///         otherwise, the direct message channel has not been created yet, and the <see cref="Guid"/> as chat code will be preserved.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Task> DirectMessageDeleted
+    public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketUser, ulong>, Cacheable<SocketDMChannel, Guid>, Task> DirectMessageDeleted
     {
         add => _directMessageDeletedEvent.Add(value);
         remove => _directMessageDeletedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Task>> _directMessageDeletedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<SocketUser, ulong>, Cacheable<SocketDMChannel, Guid>, Task>> _directMessageDeletedEvent = new();
 
     /// <summary> Fired when a message is updated. </summary>
     /// <remarks>
     ///     <para>
     ///         This event is fired when a direct message is updated. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/> and
-    ///         <see cref="IDMChannel"/> as its parameters.
+    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>,
+    ///         a <see cref="Cacheable{TEntity,TId}"/>, a <see cref="Cacheable{TEntity,TId}"/>,
+    ///         and a <see cref="Cacheable{TEntity,TId}"/> as its parameters.
     ///     </para>
     ///     <para>
     ///         <note type="important">
@@ -450,18 +499,24 @@ public abstract partial class BaseSocketClient
     ///         <see cref="Guid"/>.
     ///     </para>
     ///     <para>
+    ///         The user that originally sent this direct message is passed into the event handler parameter as
+    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the guild member
+    ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
+    ///         is preserved in the <see cref="ulong"/>.
+    ///     </para>
+    ///     <para>
     ///         If a direct message was sent by the current user to this user, or the recipient had sent a message before
     ///         in current session, the <see cref="Cacheable{TEntity,TId}"/> entity will contains the direct message channel;
     ///         otherwise, the direct message channel has not been created yet, and the <see cref="Guid"/> as chat code will be preserved.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketMessage, Guid>, IDMChannel, Task> DirectMessageUpdated
+    public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketMessage, Guid>, Cacheable<SocketUser, ulong>, Cacheable<SocketDMChannel, Guid>, Task> DirectMessageUpdated
     {
         add => _directMessageUpdatedEvent.Add(value);
         remove => _directMessageUpdatedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<SocketMessage, Guid>, IDMChannel, Task>> _directMessageUpdatedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<SocketMessage, Guid>, Cacheable<SocketUser, ulong>, Cacheable<SocketDMChannel, Guid>, Task>> _directMessageUpdatedEvent = new();
 
     #endregion
 

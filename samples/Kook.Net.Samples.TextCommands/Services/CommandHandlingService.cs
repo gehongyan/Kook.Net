@@ -30,12 +30,10 @@ public class CommandHandlingService
         // Register modules that are public and inherit ModuleBase<T>.
         await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
 
-    public async Task MessageReceivedAsync(SocketMessage rawMessage)
+    public async Task MessageReceivedAsync(SocketMessage rawMessage, SocketUser user, ISocketMessageChannel channel)
     {
         // Ignore system messages, or messages from other bots
-        if (!(rawMessage is SocketUserMessage message)) return;
-
-        if (message.Source != MessageSource.User) return;
+        if (rawMessage is not SocketUserMessage {Source: MessageSource.User} message) return;
 
         // This value holds the offset where the prefix ends
         int argPos = 0;
