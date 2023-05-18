@@ -324,7 +324,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     The guilds to download the users for. If <c>null</c>, all available guilds will be downloaded.
     /// </param>
     /// <param name="options">The options to be used when sending the request.</param>
-    public override async Task DownloadUsersAsync(IEnumerable<IGuild> guilds, RequestOptions options)
+    public override async Task DownloadUsersAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null)
     {
         if (ConnectionState == ConnectionState.Connected)
             await ProcessUserDownloadsAsync((guilds ?? Guilds.Where(x => x.IsAvailable)).Select(x => GetGuild(x.Id)).Where(x => x != null), options)
@@ -348,7 +348,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     The guilds to download the voice states for. If <c>null</c>, all available guilds will be downloaded.
     /// </param>
     /// <param name="options">The options to be used when sending the request.</param>
-    public async Task DownloadVoiceStatesAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null)
+    public override async Task DownloadVoiceStatesAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null)
     {
         if (ConnectionState == ConnectionState.Connected)
             await ProcessVoiceStateDownloadsAsync((guilds ?? Guilds.Where(x => x.IsAvailable)).Select(x => GetGuild(x.Id)).Where(x => x != null),
@@ -386,7 +386,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     <see cref="GuildPermission.ManageGuild"/> permission.
     /// </param>
     /// <param name="options">The options to be used when sending the request.</param>
-    public async Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null)
+    public override async Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null)
     {
         if (ConnectionState == ConnectionState.Connected)
             await ProcessBoostSubscriptionsDownloadsAsync(
