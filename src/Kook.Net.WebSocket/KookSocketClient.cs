@@ -366,12 +366,12 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             }
 
             GetGuildMuteDeafListResponse model = await ApiClient.GetGuildMutedDeafenedUsersAsync(socketGuild.Id).ConfigureAwait(false);
-            foreach (ulong id in model.Muted.UserIds) socketGuild.AddOrUpdateVoiceState(id, true);
-
-            foreach (ulong id in socketGuild.Users.Select(x => x.Id).Except(model.Deafened.UserIds)) socketGuild.AddOrUpdateVoiceState(id, false);
-
-            foreach (ulong id in model.Deafened.UserIds) socketGuild.AddOrUpdateVoiceState(id, isDeafened: true);
-
+            foreach (ulong id in model.Muted.UserIds)
+                socketGuild.AddOrUpdateVoiceState(id, true);
+            foreach (ulong id in socketGuild.Users.Select(x => x.Id).Except(model.Deafened.UserIds))
+                socketGuild.AddOrUpdateVoiceState(id, false);
+            foreach (ulong id in model.Deafened.UserIds)
+                socketGuild.AddOrUpdateVoiceState(id, isDeafened: true);
             foreach (ulong id in socketGuild.Users.Select(x => x.Id).Except(model.Muted.UserIds))
                 socketGuild.AddOrUpdateVoiceState(id, isDeafened: false);
         }
