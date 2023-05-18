@@ -34,7 +34,8 @@ IReadOnlyCollection<RestGuild> restGuilds = await _restClient.GetGuildsAsync();
 GET `/api/v3/guild/view`
 
 ```csharp
-ulong guildId = 0; // 服务器 ID
+// 服务器 ID
+ulong guildId = 0;
 // 缓存获取指定服务器
 SocketGuild socketGuild = _socketClient.GetGuild(guildId);
 // API 请求
@@ -56,7 +57,8 @@ await _socketClient.DownloadUsersAsync(guilds);
 // 主动更新指定服务器用户列表缓存
 await socketGuild.DownloadUsersAsync();
 
-ulong guildId = 0; // 服务器 ID
+// 服务器 ID
+ulong guildId = 0;
 // 缓存获取 SocketGuild 对象
 SocketGuild socketGuild = _socketClient.GetGuild(guildId);
 // 缓存获取用户列表
@@ -66,8 +68,6 @@ IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> pagedGuildUsers = socketGuild.
 // 合并分页结果
 IEnumerable<IGuildUser> guildUsers = await pagedGuildUsers.FlattenAsync();
 
-// 已有 RestGuild 对象
-RestGuild restGuild = null;
 // API 请求
 IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> pagedRestGuildUsers = restGuild.GetUsersAsync();
 // 合并分页结果
@@ -121,7 +121,7 @@ await _socketClient.DownloadVoiceStatesAsync(guilds);
 await socketGuild.DownloadVoiceStatesAsync();
 
 // 缓存获取服务器内的所有语音状态信息
-IEnumerable<SocketVoiceState?> guildUserVoiceStates = socketGuild.Users.Select(x => x.VoiceState);
+Dictionary<ulong, SocketVoiceState?> voiceStates = socketGuild.Users.ToDictionary(x => x.Id, x => x.VoiceState);
 // 缓存获取被服务器闭麦的用户列表
 IEnumerable<SocketGuildUser> mutedUsers = socketGuild.Users.Where(x => x.VoiceState?.IsMuted == true);
 // 缓存获取被服务器静音的用户列表
