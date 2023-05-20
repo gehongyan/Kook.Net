@@ -38,8 +38,8 @@
             },
             {
                 "files": [
-                    "quick-reference/**.md",
-                    "quick-reference/**/toc.yml"
+                    "quick_reference/**.md",
+                    "quick_reference/**/toc.yml"
                 ]
             },
             {

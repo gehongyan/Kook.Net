@@ -1,5 +1,7 @@
 - name: 快速参考指南
   topicUid: Guides.QuickReference
+- name: 登录与启动
+  topicUid: Guides.QuickReference.Startup
 - name: HTTP 接口
   items:
     - name: 服务器相关接口列表

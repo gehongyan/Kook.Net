@@ -9,7 +9,9 @@ title: 快速参考指南
 
 [KOOK 开发者平台]: https://developer.kookapp.cn/
 
-- @Guides.QuickReference.Http.Guild
+- @Guides.QuickReference.Startup
+- HTTP 接口
+  - @Guides.QuickReference.Http.Guild
 
 ---
 
