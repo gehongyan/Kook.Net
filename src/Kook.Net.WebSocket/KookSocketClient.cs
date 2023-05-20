@@ -254,7 +254,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
     ///     with the identifier; <c>null</c> when the channel cannot be found.
     /// </returns>
-    public async ValueTask<IChannel> GetChannelAsync(ulong id, RequestOptions options = null)
+    public async Task<IChannel> GetChannelAsync(ulong id, RequestOptions options = null)
         => GetChannel(id) ?? (IChannel)await ClientHelper.GetChannelAsync(this, id, options).ConfigureAwait(false);
 
     /// <summary>
@@ -266,7 +266,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
     ///     with the identifier; <c>null</c> when the channel cannot be found.
     /// </returns>
-    public async ValueTask<IDMChannel> GetDMChannelAsync(Guid chatCode, RequestOptions options = null)
+    public async Task<IDMChannel> GetDMChannelAsync(Guid chatCode, RequestOptions options = null)
         => await ClientHelper.GetDMChannelAsync(this, chatCode, options).ConfigureAwait(false);
 
     /// <summary>
@@ -277,7 +277,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
     ///     with the identifier; <c>null</c> when the channel cannot be found.
     /// </returns>
-    public async ValueTask<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(RequestOptions options = null)
+    public async Task<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(RequestOptions options = null)
         => (await ClientHelper.GetDMChannelsAsync(this, options).ConfigureAwait(false)).ToImmutableArray();
 
     /// <summary>
@@ -289,7 +289,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains the user associated with
     ///     the identifier; <c>null</c> if the user is not found.
     /// </returns>
-    public async ValueTask<IUser> GetUserAsync(ulong id, RequestOptions options = null)
+    public async Task<IUser> GetUserAsync(ulong id, RequestOptions options = null)
         => await ((IKookClient)this).GetUserAsync(id, CacheMode.AllowDownload, options).ConfigureAwait(false);
 
     /// <inheritdoc />
