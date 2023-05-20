@@ -38,58 +38,58 @@ public struct ChannelPermissions
     /// <summary> Gets a packed value representing all the permissions in this <see cref="ChannelPermissions"/>.</summary>
     public ulong RawValue { get; }
 
-    /// <summary> If <c>true</c>, a user may create invites. </summary>
+    /// <summary> If <see langword="true"/>, a user may create invites. </summary>
     public bool CreateInvites => Permissions.GetValue(RawValue, ChannelPermission.CreateInvites);
 
-    /// <summary> If <c>true</c>, a user may view and revoke invites. </summary>
+    /// <summary> If <see langword="true"/>, a user may view and revoke invites. </summary>
     public bool ManageChannels => Permissions.GetValue(RawValue, ChannelPermission.ManageChannels);
 
-    /// <summary> If <c>true</c>, a user may adjust roles. </summary>
+    /// <summary> If <see langword="true"/>, a user may adjust roles. </summary>
     public bool ManageRoles => Permissions.GetValue(RawValue, ChannelPermission.ManageRoles);
 
-    /// <summary> If <c>true</c>, a user may view channels. </summary>
+    /// <summary> If <see langword="true"/>, a user may view channels. </summary>
     public bool ViewChannel => Permissions.GetValue(RawValue, ChannelPermission.ViewChannel);
 
-    /// <summary> If <c>true</c>, a user may send messages. </summary>
+    /// <summary> If <see langword="true"/>, a user may send messages. </summary>
     public bool SendMessages => Permissions.GetValue(RawValue, ChannelPermission.SendMessages);
 
-    /// <summary> If <c>true</c>, a user may delete messages. </summary>
+    /// <summary> If <see langword="true"/>, a user may delete messages. </summary>
     public bool ManageMessages => Permissions.GetValue(RawValue, ChannelPermission.ManageMessages);
 
-    /// <summary> If <c>true</c>, a user may send files. </summary>
+    /// <summary> If <see langword="true"/>, a user may send files. </summary>
     public bool AttachFiles => Permissions.GetValue(RawValue, ChannelPermission.AttachFiles);
 
-    /// <summary> If <c>true</c>, a user may connect to a voice channel. </summary>
+    /// <summary> If <see langword="true"/>, a user may connect to a voice channel. </summary>
     public bool Connect => Permissions.GetValue(RawValue, ChannelPermission.Connect);
 
-    /// <summary> If <c>true</c>, a user may kick other users from voice channels, and move other users between voice channels. </summary>
+    /// <summary> If <see langword="true"/>, a user may kick other users from voice channels, and move other users between voice channels. </summary>
     public bool ManageVoice => Permissions.GetValue(RawValue, ChannelPermission.ManageVoice);
 
-    /// <summary> If <c>true</c>, a user may mention all users. </summary>
+    /// <summary> If <see langword="true"/>, a user may mention all users. </summary>
     public bool MentionEveryone => Permissions.GetValue(RawValue, ChannelPermission.MentionEveryone);
 
-    /// <summary> If <c>true</c>, a user may add reactions. </summary>
+    /// <summary> If <see langword="true"/>, a user may add reactions. </summary>
     public bool AddReactions => Permissions.GetValue(RawValue, ChannelPermission.AddReactions);
 
-    /// <summary> If <c>true</c>, a user may connect to a voice channel only when the user is invited or moved by other users. </summary>
+    /// <summary> If <see langword="true"/>, a user may connect to a voice channel only when the user is invited or moved by other users. </summary>
     public bool PassiveConnect => Permissions.GetValue(RawValue, ChannelPermission.PassiveConnect);
 
-    /// <summary> If <c>true</c>, a user may use voice activation. </summary>
+    /// <summary> If <see langword="true"/>, a user may use voice activation. </summary>
     public bool UseVoiceActivity => Permissions.GetValue(RawValue, ChannelPermission.UseVoiceActivity);
 
-    /// <summary> If <c>true</c>, a user may speak in a voice channel. </summary>
+    /// <summary> If <see langword="true"/>, a user may speak in a voice channel. </summary>
     public bool Speak => Permissions.GetValue(RawValue, ChannelPermission.Speak);
 
-    /// <summary> If <c>true</c>, a user may deafen users. </summary>
+    /// <summary> If <see langword="true"/>, a user may deafen users. </summary>
     public bool DeafenMembers => Permissions.GetValue(RawValue, ChannelPermission.DeafenMembers);
 
-    /// <summary> If <c>true</c>, a user may mute users. </summary>
+    /// <summary> If <see langword="true"/>, a user may mute users. </summary>
     public bool MuteMembers => Permissions.GetValue(RawValue, ChannelPermission.MuteMembers);
 
-    /// <summary> If <c>true</c>, a user may play soundtracks in a voice channel. </summary>
+    /// <summary> If <see langword="true"/>, a user may play soundtracks in a voice channel. </summary>
     public bool PlaySoundtrack => Permissions.GetValue(RawValue, ChannelPermission.PlaySoundtrack);
 
-    /// <summary> If <c>true</c>, a user may share screen in a voice channel. </summary>
+    /// <summary> If <see langword="true"/>, a user may share screen in a voice channel. </summary>
     public bool ShareScreen => Permissions.GetValue(RawValue, ChannelPermission.ShareScreen);
 
     /// <summary> Creates a new <see cref="ChannelPermissions"/> with the provided packed value.</summary>
@@ -210,7 +210,7 @@ public struct ChannelPermissions
     ///     in these permissions.
     /// </summary>
     /// <param name="permission">The permission value to check for.</param>
-    /// <returns><c>true</c> if the permission is enabled, <c>false</c> otherwise.</returns>
+    /// <returns><see langword="true"/> if the permission is enabled, <c>false</c> otherwise.</returns>
     public bool Has(ChannelPermission permission) => Permissions.GetValue(RawValue, permission);
 
     /// <summary>

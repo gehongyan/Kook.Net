@@ -17,91 +17,91 @@ public struct GuildPermissions
     /// <summary> Gets a packed value representing all the permissions in this <see cref="GuildPermissions"/>. </summary>
     public ulong RawValue { get; }
 
-    /// <summary> If <c>true</c>, a user is granted all permissions, and cannot have them revoked via channel permissions. </summary>
+    /// <summary> If <see langword="true"/>, a user is granted all permissions, and cannot have them revoked via channel permissions. </summary>
     public bool Administrator => Permissions.GetValue(RawValue, GuildPermission.Administrator);
 
-    /// <summary> If <c>true</c>, a user may adjust guild properties. </summary>
+    /// <summary> If <see langword="true"/>, a user may adjust guild properties. </summary>
     public bool ManageGuild => Permissions.GetValue(RawValue, GuildPermission.ManageGuild);
 
-    /// <summary> If <c>true</c>, a user may view the audit log. </summary>
+    /// <summary> If <see langword="true"/>, a user may view the audit log. </summary>
     public bool ViewAuditLog => Permissions.GetValue(RawValue, GuildPermission.ViewAuditLog);
 
-    /// <summary> If <c>true</c>, a user may create invites. </summary>
+    /// <summary> If <see langword="true"/>, a user may create invites. </summary>
     public bool CreateInvites => Permissions.GetValue(RawValue, GuildPermission.CreateInvites);
 
-    /// <summary> If <c>true</c>, a user may view and revoke invites. </summary>
+    /// <summary> If <see langword="true"/>, a user may view and revoke invites. </summary>
     public bool ManageInvites => Permissions.GetValue(RawValue, GuildPermission.ManageInvites);
 
-    /// <summary> If <c>true</c>, a user may create, delete and modify channels. </summary>
+    /// <summary> If <see langword="true"/>, a user may create, delete and modify channels. </summary>
     public bool ManageChannels => Permissions.GetValue(RawValue, GuildPermission.ManageChannels);
 
-    /// <summary> If <c>true</c>, a user may kick users from the guild. </summary>
+    /// <summary> If <see langword="true"/>, a user may kick users from the guild. </summary>
     public bool KickMembers => Permissions.GetValue(RawValue, GuildPermission.KickMembers);
 
-    /// <summary> If <c>true</c>, a user may ban users from the guild. </summary>
+    /// <summary> If <see langword="true"/>, a user may ban users from the guild. </summary>
     public bool BanMembers => Permissions.GetValue(RawValue, GuildPermission.BanMembers);
 
-    /// <summary> If <c>true</c>, a user may edit the emojis for this guild. </summary>
+    /// <summary> If <see langword="true"/>, a user may edit the emojis for this guild. </summary>
     public bool ManageEmojis => Permissions.GetValue(RawValue, GuildPermission.ManageEmojis);
 
-    /// <summary> If <c>true</c>, a user may change their own nickname. </summary>
+    /// <summary> If <see langword="true"/>, a user may change their own nickname. </summary>
     public bool ChangeNickname => Permissions.GetValue(RawValue, GuildPermission.ChangeNickname);
 
-    /// <summary> If <c>true</c>, a user may adjust roles. </summary>
+    /// <summary> If <see langword="true"/>, a user may adjust roles. </summary>
     public bool ManageRoles => Permissions.GetValue(RawValue, GuildPermission.ManageRoles);
 
-    /// <summary> If <c>true</c>, a user may view channels. </summary>
+    /// <summary> If <see langword="true"/>, a user may view channels. </summary>
     public bool ViewChannel => Permissions.GetValue(RawValue, GuildPermission.ViewChannel);
 
-    /// <summary> If <c>true</c>, a user may send messages. </summary>
+    /// <summary> If <see langword="true"/>, a user may send messages. </summary>
     public bool SendMessages => Permissions.GetValue(RawValue, GuildPermission.SendMessages);
 
-    /// <summary> If <c>true</c>, a user may delete messages. </summary>
+    /// <summary> If <see langword="true"/>, a user may delete messages. </summary>
     public bool ManageMessages => Permissions.GetValue(RawValue, GuildPermission.ManageMessages);
 
-    /// <summary> If <c>true</c>, a user may send files. </summary>
+    /// <summary> If <see langword="true"/>, a user may send files. </summary>
     public bool AttachFiles => Permissions.GetValue(RawValue, GuildPermission.AttachFiles);
 
-    /// <summary> If <c>true</c>, a user may connect to a voice channel. </summary>
+    /// <summary> If <see langword="true"/>, a user may connect to a voice channel. </summary>
     public bool Connect => Permissions.GetValue(RawValue, GuildPermission.Connect);
 
-    /// <summary> If <c>true</c>, a user may kick other users from voice channels, and move other users between voice channels. </summary>
+    /// <summary> If <see langword="true"/>, a user may kick other users from voice channels, and move other users between voice channels. </summary>
     public bool ManageVoice => Permissions.GetValue(RawValue, GuildPermission.ManageVoice);
 
-    /// <summary> If <c>true</c>, a user may mention all users. </summary>
+    /// <summary> If <see langword="true"/>, a user may mention all users. </summary>
     public bool MentionEveryone => Permissions.GetValue(RawValue, GuildPermission.MentionEveryone);
 
-    /// <summary> If <c>true</c>, a user may add reactions. </summary>
+    /// <summary> If <see langword="true"/>, a user may add reactions. </summary>
     public bool AddReactions => Permissions.GetValue(RawValue, GuildPermission.AddReactions);
 
-    /// <summary> If <c>true</c>, a user may follow added reactions. </summary>
+    /// <summary> If <see langword="true"/>, a user may follow added reactions. </summary>
     public bool FollowReactions => Permissions.GetValue(RawValue, GuildPermission.FollowReactions);
 
-    /// <summary> If <c>true</c>, a user may connect to a voice channel only when the user is invited or moved by other users. </summary>
+    /// <summary> If <see langword="true"/>, a user may connect to a voice channel only when the user is invited or moved by other users. </summary>
     public bool PassiveConnect => Permissions.GetValue(RawValue, GuildPermission.PassiveConnect);
 
-    /// <summary> If <c>true</c>, a user may speak only via push-to-talk. </summary>
+    /// <summary> If <see langword="true"/>, a user may speak only via push-to-talk. </summary>
     public bool OnlyPushToTalk => Permissions.GetValue(RawValue, GuildPermission.OnlyPushToTalk);
 
-    /// <summary> If <c>true</c>, a user may use voice activation. </summary>
+    /// <summary> If <see langword="true"/>, a user may use voice activation. </summary>
     public bool UseVoiceActivity => Permissions.GetValue(RawValue, GuildPermission.UseVoiceActivity);
 
-    /// <summary> If <c>true</c>, a user may speak in a voice channel. </summary>
+    /// <summary> If <see langword="true"/>, a user may speak in a voice channel. </summary>
     public bool Speak => Permissions.GetValue(RawValue, GuildPermission.Speak);
 
-    /// <summary> If <c>true</c>, a user may deafen users. </summary>
+    /// <summary> If <see langword="true"/>, a user may deafen users. </summary>
     public bool DeafenMembers => Permissions.GetValue(RawValue, GuildPermission.DeafenMembers);
 
-    /// <summary> If <c>true</c>, a user may mute users. </summary>
+    /// <summary> If <see langword="true"/>, a user may mute users. </summary>
     public bool MuteMembers => Permissions.GetValue(RawValue, GuildPermission.MuteMembers);
 
-    /// <summary> If <c>true</c>, a user may change the nickname of other users. </summary>
+    /// <summary> If <see langword="true"/>, a user may change the nickname of other users. </summary>
     public bool ManageNicknames => Permissions.GetValue(RawValue, GuildPermission.ManageNicknames);
 
-    /// <summary> If <c>true</c>, a user may play soundtracks in a voice channel. </summary>
+    /// <summary> If <see langword="true"/>, a user may play soundtracks in a voice channel. </summary>
     public bool PlaySoundtrack => Permissions.GetValue(RawValue, GuildPermission.PlaySoundtrack);
 
-    /// <summary> If <c>true</c>, a user may share screen in a voice channel. </summary>
+    /// <summary> If <see langword="true"/>, a user may share screen in a voice channel. </summary>
     public bool ShareScreen => Permissions.GetValue(RawValue, GuildPermission.ShareScreen);
 
     /// <summary> Creates a new <see cref="GuildPermissions"/> with the provided packed value. </summary>
@@ -257,7 +257,7 @@ public struct GuildPermissions
     ///     in these permissions.
     /// </summary>
     /// <param name="permission">The permission value to check for.</param>
-    /// <returns><c>true</c> if the permission is enabled, <c>false</c> otherwise.</returns>
+    /// <returns><see langword="true"/> if the permission is enabled, <c>false</c> otherwise.</returns>
     public bool Has(GuildPermission permission) => Permissions.GetValue(RawValue, permission);
 
     /// <summary>

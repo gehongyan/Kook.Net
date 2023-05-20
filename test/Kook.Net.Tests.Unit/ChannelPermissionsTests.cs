@@ -82,10 +82,11 @@ public class ChannelPermissionsTests
         AssertFlag(() => new ChannelPermissions(deafenMembers: true), ChannelPermission.DeafenMembers);
         AssertFlag(() => new ChannelPermissions(muteMembers: true), ChannelPermission.MuteMembers);
         AssertFlag(() => new ChannelPermissions(playSoundtrack: true), ChannelPermission.PlaySoundtrack);
+        AssertFlag(() => new ChannelPermissions(shareScreen: true), ChannelPermission.ShareScreen);
     }
 
     /// <summary>
-    ///     Tests the behavior of <see cref="Kook.ChannelPermissions.Modify(bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?)"/>
+    ///     Tests the behavior of <see cref="Kook.ChannelPermissions.Modify(bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?, bool?)"/>
     ///     with each of the parameters.
     /// </summary>
     [Fact]
@@ -141,6 +142,7 @@ public class ChannelPermissionsTests
         AssertUtil(ChannelPermission.DeafenMembers, x => x.DeafenMembers, (p, enable) => p.Modify(deafenMembers: enable));
         AssertUtil(ChannelPermission.MuteMembers, x => x.MuteMembers, (p, enable) => p.Modify(muteMembers: enable));
         AssertUtil(ChannelPermission.PlaySoundtrack, x => x.PlaySoundtrack, (p, enable) => p.Modify(playSoundtrack: enable));
+        AssertUtil(ChannelPermission.ShareScreen, x => x.ShareScreen, (p, enable) => p.Modify(shareScreen: enable));
     }
 
     /// <summary>
