@@ -47,11 +47,7 @@ internal class Program
         _client.ChannelUpdated += (before, after) => Task.CompletedTask;
 
         _client.ReactionAdded += (message, channel, user, reaction) => Task.CompletedTask;
-        _client.ReactionRemoved += (message, channel, user, reaction) =>
-        {
-            var s = channel;
-            return Task.CompletedTask;
-        };
+        _client.ReactionRemoved += (message, channel, user, reaction) => Task.CompletedTask;
         _client.DirectReactionAdded += (message, channel, user, reaction) => Task.CompletedTask;
         _client.DirectReactionRemoved += (message, channel, user, reaction) => Task.CompletedTask;
 

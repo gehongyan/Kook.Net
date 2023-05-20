@@ -121,7 +121,7 @@ await _socketClient.DownloadVoiceStatesAsync(guilds);
 await socketGuild.DownloadVoiceStatesAsync();
 
 // 缓存获取服务器内的所有语音状态信息
-Dictionary<ulong, SocketVoiceState?> voiceStates = socketGuild.Users.ToDictionary(x => x.Id, x => x.VoiceState);
+Dictionary<SocketGuildUser, SocketVoiceState?> voiceStates = socketGuild.Users.ToDictionary(x => x, x => x.VoiceState);
 // 缓存获取被服务器闭麦的用户列表
 IEnumerable<SocketGuildUser> mutedUsers = socketGuild.Users.Where(x => x.VoiceState?.IsMuted == true);
 // 缓存获取被服务器静音的用户列表
