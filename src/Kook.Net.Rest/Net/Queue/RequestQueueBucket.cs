@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Mime;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -66,10 +67,11 @@ namespace Kook.Net.Queue
 #if DEBUG_LIMITS
                 Debug.WriteLine($"[{id}] Sending...");
 #endif
+                RestResponse response = default;
                 RateLimitInfo info = default;
                 try
                 {
-                    RestResponse response = await request.SendAsync().ConfigureAwait(false);
+                    response = await request.SendAsync().ConfigureAwait(false);
                     info = new RateLimitInfo(response.Headers, request.Endpoint);
 
                     request.Options.ExecuteRatelimitCallback(info);
@@ -90,7 +92,6 @@ namespace Kook.Net.Queue
 #if DEBUG_LIMITS
                                     Debug.WriteLine($"[{id}] (!) 429");
 #endif
-                                    UpdateRateLimit(id, request, info, true);
                                 }
 
                                 await _queue.RaiseRateLimitTriggered(Id, info, $"{request.Method} {request.Endpoint}").ConfigureAwait(false);
@@ -136,7 +137,11 @@ namespace Kook.Net.Queue
 #if DEBUG_LIMITS
                         Debug.WriteLine($"[{id}] Success");
 #endif
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+                        if (response.MediaTypeHeader.MediaType == MediaTypeNames.Application.Json)
+#else
                         if (response.MediaTypeHeader.MediaType == "application/json")
+#endif
                         {
                             API.Rest.RestResponseBase responseBase =
                                 await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream, _serializerOptions);
@@ -158,7 +163,8 @@ namespace Kook.Net.Queue
 
                             return new MemoryStream(Encoding.UTF8.GetBytes(responseBase?.Data.ToString() ?? string.Empty));
                         }
-                        else if (response.MediaTypeHeader.MediaType == "image/svg+xml") return response.Stream;
+                        else if (response.MediaTypeHeader.MediaType == "image/svg+xml")
+                            return response.Stream;
                     }
                 }
                 //catch (HttpException) { throw; } //Pass through
@@ -185,7 +191,7 @@ namespace Kook.Net.Queue
                 }*/
                 finally
                 {
-                    UpdateRateLimit(id, request, info, false);
+                    UpdateRateLimit(id, request, info, response.StatusCode == (HttpStatusCode)429);
 #if DEBUG_LIMITS
                     Debug.WriteLine($"[{id}] Stop");
 #endif
@@ -279,7 +285,7 @@ namespace Kook.Net.Queue
 
                 DateTimeOffset? timeoutAt = request.TimeoutAt;
                 int semaphore = Interlocked.Decrement(ref _semaphore);
-                if (windowCount > 0 && semaphore < 0)
+                if (windowCount >= 0 && semaphore < 0)
                 {
                     if (!isRateLimited)
                     {
@@ -349,10 +355,13 @@ namespace Kook.Net.Queue
 
             lock (_lock)
             {
+#if DEBUG_LIMITS
+                Debug.WriteLine($"[{id}] Raw RateLimitInto: IsGlobal: {info.IsGlobal}, Limit: {info.Limit}, Remaining: {info.Remaining}, ResetAfter: {info.ResetAfter?.TotalSeconds}");
+#endif
                 if (redirected)
                 {
-                    Interlocked.Decrement(
-                        ref _semaphore); //we might still hit a real ratelimit if all tickets were already taken, can't do much about it since we didn't know they were the same
+                    // we might still hit a real ratelimit if all tickets were already taken, can't do much about it since we didn't know they were the same
+                    Interlocked.Decrement(ref _semaphore);
 #if DEBUG_LIMITS
                     Debug.WriteLine($"[{id}] Decrease Semaphore");
 #endif
@@ -374,9 +383,10 @@ namespace Kook.Net.Queue
                         }
                         else
                         {
-                            _redirectBucket =
-                                hashBucket.Item1; //this request should be part of another bucket, this bucket will be disabled, redirect everything
-                            _redirectBucket.UpdateRateLimit(id, request, info, is429, true); //update the hash bucket ratelimit
+                            // this request should be part of another bucket, this bucket will be disabled, redirect everything
+                            _redirectBucket = hashBucket.Item1;
+                            // update the hash bucket ratelimit
+                            _redirectBucket.UpdateRateLimit(id, request, info, is429, true);
 #if DEBUG_LIMITS
                             Debug.WriteLine($"[{id}] Redirected to {_redirectBucket.Id}");
 #endif
@@ -388,9 +398,16 @@ namespace Kook.Net.Queue
                 if (info.Limit.HasValue && WindowCount != info.Limit.Value)
                 {
                     WindowCount = info.Limit.Value;
-                    _semaphore = is429 ? 0 : info.Remaining.Value;
 #if DEBUG_LIMITS
-                    Debug.WriteLine($"[{id}] Upgraded Semaphore to {info.Remaining.Value}/{WindowCount}");
+                    Debug.WriteLine($"[{id}] Updated Limit to {WindowCount}");
+#endif
+                }
+
+                if (info.Remaining.HasValue && _semaphore != info.Remaining.Value)
+                {
+                    _semaphore = info.Remaining.Value;
+#if DEBUG_LIMITS
+                    Debug.WriteLine($"[{id}] Updated Semaphore (Remaining) to {_semaphore}");
 #endif
                 }
 
@@ -402,16 +419,26 @@ namespace Kook.Net.Queue
                     Debug.WriteLine($"[{id}] X-Rate-Limit-Remaining: " + info.Remaining.Value);
                     _semaphore = info.Remaining.Value;
                 }*/
-                //                 if (info.RetryAfter.HasValue)
-                //                 {
-                //                     //RetryAfter is more accurate than Reset, where available
-                //                     resetTick = DateTimeOffset.UtcNow.AddSeconds(info.RetryAfter.Value);
-                // #if DEBUG_LIMITS
-                //                     Debug.WriteLine($"[{id}] Retry-After: {info.RetryAfter.Value} ({info.RetryAfter.Value} ms)");
-                // #endif
-                //                 }
-                /*else*/
-                if (info.ResetAfter.HasValue) // && (request.Options.UseSystemClock.HasValue && !request.Options.UseSystemClock.Value)
+                if (is429)
+                {
+                    // Stop all requests until the QueueReset task is complete
+                    _semaphore = 0;
+
+                    // Read the Reset-After header
+                    resetTick = DateTimeOffset.UtcNow.Add(TimeSpan.FromSeconds(info.ResetAfter?.TotalSeconds ?? 0));
+#if DEBUG_LIMITS
+                    Debug.WriteLine($"[{id}] Reset-After: {info.ResetAfter.Value} ({info.ResetAfter?.TotalMilliseconds} ms)");
+#endif
+                }
+//                 if (info.RetryAfter.HasValue)
+//                 {
+//                     //RetryAfter is more accurate than Reset, where available
+//                     resetTick = DateTimeOffset.UtcNow.AddSeconds(info.RetryAfter.Value);
+// #if DEBUG_LIMITS
+//                     Debug.WriteLine($"[{id}] Retry-After: {info.RetryAfter.Value} ({info.RetryAfter.Value} ms)");
+// #endif
+//                 }
+                else if (info.ResetAfter.HasValue) // && (request.Options.UseSystemClock.HasValue && !request.Options.UseSystemClock.Value)
                 {
                     resetTick = DateTimeOffset.UtcNow.Add(info.ResetAfter.Value);
 #if DEBUG_LIMITS
@@ -460,7 +487,7 @@ namespace Kook.Net.Queue
 
                 if (resetTick == null)
                 {
-                    WindowCount = 0; //No rate limit info, disable limits on this bucket
+                    WindowCount = -1; //No rate limit info, disable limits on this bucket
 #if DEBUG_LIMITS
                     Debug.WriteLine($"[{id}] Disabled Semaphore");
 #endif
