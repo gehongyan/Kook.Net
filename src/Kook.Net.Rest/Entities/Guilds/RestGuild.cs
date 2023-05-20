@@ -97,6 +97,39 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     public IReadOnlyCollection<RestRole> Roles => _roles.ToReadOnlyCollection();
 
     /// <summary>
+    ///     Gets a collection of all text channels in this guild.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of message channels found within this guild.
+    /// </returns>
+    public IReadOnlyCollection<RestTextChannel> TextChannels
+        => Channels.OfType<RestTextChannel>().ToImmutableArray();
+
+    /// <summary>
+    ///     Gets a collection of all voice channels in this guild.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of voice channels found within this guild.
+    /// </returns>
+    public IReadOnlyCollection<RestVoiceChannel> VoiceChannels
+        => Channels.OfType<RestVoiceChannel>().ToImmutableArray();
+
+    /// <summary>
+    ///     Gets a collection of all stage channels in this guild.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of stage channels found within this guild.
+    /// </returns>
+    /// <summary>
+    ///     Gets a collection of all category channels in this guild.
+    /// </summary>
+    /// <returns>
+    ///     A read-only collection of category channels found within this guild.
+    /// </returns>
+    public IReadOnlyCollection<RestCategoryChannel> CategoryChannels
+        => Channels.OfType<RestCategoryChannel>().ToImmutableArray();
+
+    /// <summary>
     ///     Gets a collection of all channels in this guild.
     /// </summary>
     public IReadOnlyCollection<RestGuildChannel> Channels => _channels.ToReadOnlyCollection();
