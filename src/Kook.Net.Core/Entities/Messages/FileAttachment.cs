@@ -27,7 +27,7 @@ public struct FileAttachment : IDisposable
     /// <summary>
     ///     Gets the stream containing the file content.
     /// </summary>
-    public Stream Stream { get; private set; }
+    public Stream Stream { get; }
 
     /// <summary>
     ///     Gets the URI of the file.
@@ -114,7 +114,7 @@ public struct FileAttachment : IDisposable
     ///     If the resource the URI points to is not stored on KOOK OSS, this constructor will throw an exception.
     ///     Under this circumstance, please create asset in advance.
     /// </remarks>
-    /// <param name="uri"></param>
+    /// <param name="uri">The URI of the file.</param>
     /// <param name="fileName">The name of the attachment.</param>
     /// <param name="type">The type of the attachment.</param>
     /// <exception cref="InvalidOperationException">The URI provided is not an asset on the KOOK OSS.</exception>

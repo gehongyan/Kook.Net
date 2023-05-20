@@ -222,17 +222,21 @@ internal static class ChannelHelper
         IUser ephemeralUser = null)
         => SendCardsAsync(channel, client, new[] { card }, options, quote, ephemeralUser);
 
-    public static Task<Cacheable<IUserMessage, Guid>> SendFileAsync(IMessageChannel channel,
+    public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(IMessageChannel channel,
         BaseKookClient client, string path, string fileName, AttachmentType type, RequestOptions options,
         IQuote quote = null, IUser ephemeralUser = null)
-        => SendFileAsync(channel, client, new FileAttachment(path, fileName, type), options, quote,
-            ephemeralUser);
+    {
+        using FileAttachment file = new(path, fileName, type);
+        return await SendFileAsync(channel, client, file, options, quote, ephemeralUser);
+    }
 
-    public static Task<Cacheable<IUserMessage, Guid>> SendFileAsync(IMessageChannel channel,
+    public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(IMessageChannel channel,
         BaseKookClient client, Stream stream, string fileName, AttachmentType type, RequestOptions options,
         IQuote quote = null, IUser ephemeralUser = null)
-        => SendFileAsync(channel, client, new FileAttachment(stream, fileName, type), options, quote,
-            ephemeralUser);
+    {
+        using FileAttachment file = new(stream, fileName, type);
+        return await SendFileAsync(channel, client, file, options, quote, ephemeralUser);
+    }
 
     public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(IMessageChannel channel,
         BaseKookClient client, FileAttachment attachment, RequestOptions options,
@@ -396,15 +400,21 @@ internal static class ChannelHelper
         BaseKookClient client, ICard card, RequestOptions options, IQuote quote = null)
         => SendDirectCardsAsync(channel, client, new[] { card }, options, quote);
 
-    public static Task<Cacheable<IUserMessage, Guid>> SendDirectFileAsync(IDMChannel channel,
+    public static async Task<Cacheable<IUserMessage, Guid>> SendDirectFileAsync(IDMChannel channel,
         BaseKookClient client, string path, string fileName, AttachmentType type, RequestOptions options,
         IQuote quote = null)
-        => SendDirectFileAsync(channel, client, new FileAttachment(path, fileName, type), options, quote);
+    {
+        using FileAttachment file = new(path, fileName, type);
+        return await SendDirectFileAsync(channel, client, file, options, quote);
+    }
 
-    public static Task<Cacheable<IUserMessage, Guid>> SendDirectFileAsync(IDMChannel channel,
+    public static async Task<Cacheable<IUserMessage, Guid>> SendDirectFileAsync(IDMChannel channel,
         BaseKookClient client, Stream stream, string fileName, AttachmentType type, RequestOptions options,
         IQuote quote = null)
-        => SendDirectFileAsync(channel, client, new FileAttachment(stream, fileName, type), options, quote);
+    {
+        using FileAttachment file = new(stream, fileName, type);
+        return await SendDirectFileAsync(channel, client, file, options, quote);
+    }
 
     public static async Task<Cacheable<IUserMessage, Guid>> SendDirectFileAsync(IDMChannel channel,
         BaseKookClient client, FileAttachment attachment, RequestOptions options, IQuote quote = null)
