@@ -6,3 +6,5 @@
   items:
     - name: 服务器相关接口列表
       topicUid: Guides.QuickReference.Http.Guild
+    - name: 频道相关接口列表
+      topicUid: Guides.QuickReference.Http.Channel
