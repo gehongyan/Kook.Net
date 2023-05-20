@@ -17,7 +17,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     private ImmutableDictionary<uint, RestRole> _roles;
     private ImmutableArray<RestRole> _currentUserRoles;
 
-    private ImmutableDictionary<ulong, RestChannel> _channels;
+    private ImmutableDictionary<ulong, RestGuildChannel> _channels;
     private ImmutableArray<GuildEmote> _emotes;
 
     /// <inheritdoc />
@@ -99,7 +99,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets a collection of all channels in this guild.
     /// </summary>
-    public IReadOnlyCollection<RestChannel> Channels => _channels.ToReadOnlyCollection();
+    public IReadOnlyCollection<RestGuildChannel> Channels => _channels.ToReadOnlyCollection();
 
     /// <summary>
     ///     Gets the features of this guild.
@@ -221,10 +221,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
         _roles = roles.ToImmutable();
 
-        ImmutableDictionary<ulong, RestChannel>.Builder channels = ImmutableDictionary.CreateBuilder<ulong, RestChannel>();
+        ImmutableDictionary<ulong, RestGuildChannel>.Builder channels = ImmutableDictionary.CreateBuilder<ulong, RestGuildChannel>();
         if (model.Channels != null)
             for (int i = 0; i < model.Channels.Length; i++)
-                channels[model.Channels[i].Id] = RestChannel.Create(Kook, model.Channels[i], this);
+                channels[model.Channels[i].Id] = RestGuildChannel.Create(Kook, this, model.Channels[i]);
 
         _channels = channels.ToImmutable();
         _emotes = ImmutableArray.Create<GuildEmote>();
