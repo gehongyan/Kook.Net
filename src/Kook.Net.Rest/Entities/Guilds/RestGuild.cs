@@ -550,6 +550,21 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <summary>
+    ///     Gets a category channel in this guild.
+    /// </summary>
+    /// <param name="id">The identifier for the category channel.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains the category channel associated
+    ///     with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    /// </returns>
+    public async Task<RestCategoryChannel> GetCategoryChannelAsync(ulong id, RequestOptions options = null)
+    {
+        RestGuildChannel channel = await GuildHelper.GetChannelAsync(this, Kook, id, options).ConfigureAwait(false);
+        return channel as RestCategoryChannel;
+    }
+
+    /// <summary>
     ///     Gets a collection of all category channels in this guild.
     /// </summary>
     /// <param name="options">The options to be used when sending the request.</param>
