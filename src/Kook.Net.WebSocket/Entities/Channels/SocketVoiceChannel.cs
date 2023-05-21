@@ -126,6 +126,10 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
             return ConnectedUsers;
     }
 
+    /// <inheritdoc />
+    public virtual Task SyncPermissionsAsync(RequestOptions options = null)
+        => ChannelHelper.SyncPermissionsAsync(this, Kook, options);
+
     #endregion
 
     #region Invites

@@ -25,6 +25,15 @@ public interface INestedChannel : IGuildChannel
     bool? IsPermissionSynced { get; }
 
     /// <summary>
+    ///     Syncs the permissions of this nested channel with its parent's.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous operation for syncing channel permissions with its parent's.
+    /// </returns>
+    Task SyncPermissionsAsync(RequestOptions options = null);
+
+    /// <summary>
     ///     Gets the parent (category) channel of this channel.
     /// </summary>
     /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>

@@ -60,6 +60,9 @@ internal sealed class MockedTextChannel : ITextChannel
 
     public ulong CreatorId => throw new NotImplementedException();
 
+    /// <inheritdoc />
+    public Task SyncPermissionsAsync(RequestOptions options = null) => throw new NotImplementedException();
+
     public Task<ICategoryChannel> GetCategoryAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null) =>
         throw new NotImplementedException();
 

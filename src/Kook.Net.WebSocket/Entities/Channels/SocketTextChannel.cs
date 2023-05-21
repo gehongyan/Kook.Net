@@ -82,6 +82,10 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     public virtual Task ModifyAsync(Action<ModifyTextChannelProperties> func, RequestOptions options = null)
         => ChannelHelper.ModifyAsync(this, Kook, func, options);
 
+    /// <inheritdoc />
+    public virtual Task SyncPermissionsAsync(RequestOptions options = null)
+        => ChannelHelper.SyncPermissionsAsync(this, Kook, options);
+
     private string DebuggerDisplay => $"{Name} ({Id}, Text)";
     internal new SocketTextChannel Clone() => MemberwiseClone() as SocketTextChannel;
 
