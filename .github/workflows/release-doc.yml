@@ -1,6 +1,10 @@
 name: Kook.Net on Release
 
 on:
+  push:
+    branches: [ doc ]
+  pull_request:
+    branches: [ doc ]
   release:
     types: [ published ]
 
