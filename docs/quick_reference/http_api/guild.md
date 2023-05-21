@@ -34,8 +34,8 @@ IReadOnlyCollection<RestGuild> restGuilds = await _restClient.GetGuildsAsync();
 GET `/api/v3/guild/view`
 
 ```csharp
-// 服务器 ID
-ulong guildId = 0;
+ulong guildId = default; // 服务器 ID
+
 // 缓存获取指定服务器
 SocketGuild socketGuild = _socketClient.GetGuild(guildId);
 // API 请求
@@ -48,6 +48,8 @@ RestGuild restGuild = await _restClient.GetGuildAsync(guildId);
 GET `/api/v3/guild/user-list`
 
 ```csharp
+ulong guildId = default; // 服务器 ID
+
 // 要在启动时缓存服务器用户列表，请设置 AlwaysDownloadUsers = true
 // 主动更新所有服务器用户列表缓存
 await _socketClient.DownloadUsersAsync();
@@ -57,8 +59,6 @@ await _socketClient.DownloadUsersAsync(guilds);
 // 主动更新指定服务器用户列表缓存
 await socketGuild.DownloadUsersAsync();
 
-// 服务器 ID
-ulong guildId = 0;
 // 缓存获取 SocketGuild 对象
 SocketGuild socketGuild = _socketClient.GetGuild(guildId);
 // 缓存获取用户列表
