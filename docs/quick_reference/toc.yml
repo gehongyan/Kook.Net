@@ -4,7 +4,37 @@
   topicUid: Guides.QuickReference.Startup
 - name: HTTP 接口
   items:
-    - name: 服务器相关接口列表
+    - name: 服务器相关接口
       topicUid: Guides.QuickReference.Http.Guild
-    - name: 频道相关接口列表
+    - name: 频道相关接口
       topicUid: Guides.QuickReference.Http.Channel
+    - name: 频道消息相关接口
+      topicUid: Guides.QuickReference.Http.Message
+    - name: 频道用户相关接口
+      topicUid: Guides.QuickReference.Http.ChannelUser
+    - name: 私信聊天会话接口
+      topicUid: Guides.QuickReference.Http.UserChat
+    - name: 用户私聊消息接口
+      topicUid: Guides.QuickReference.Http.DirectMessage
+    - name: Gateway 相关接口
+      topicUid: Guides.QuickReference.Http.Gateway
+    - name: 用户相关接口
+      topicUid: Guides.QuickReference.Http.User
+    - name: 媒体接口
+      topicUid: Guides.QuickReference.Http.Asset
+    - name: 服务器角色权限相关接口
+      topicUid: Guides.QuickReference.Http.GuildRole
+    - name: 亲密度相关接口
+      topicUid: Guides.QuickReference.Http.Intimacy
+    - name: 服务器表情相关接口
+      topicUid: Guides.QuickReference.Http.GuildEmoji
+    - name: 邀请相关接口
+      topicUid: Guides.QuickReference.Http.Invite
+    - name: 黑名单相关接口
+      topicUid: Guides.QuickReference.Http.Blacklist
+    - name: Badge 相关接口
+      topicUid: Guides.QuickReference.Http.Badge
+    - name: 用户动态相关接口
+      topicUid: Guides.QuickReference.Http.Game
+    - name: OAuth 2.0 相关接口
+      topicUid: Guides.QuickReference.Http.OAuth

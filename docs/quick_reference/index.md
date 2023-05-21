@@ -12,6 +12,22 @@ title: 快速参考指南
 - @Guides.QuickReference.Startup
 - HTTP 接口
   - @Guides.QuickReference.Http.Guild
+  - @Guides.QuickReference.Http.Channel
+  - @Guides.QuickReference.Http.Message
+  - @Guides.QuickReference.Http.ChannelUser
+  - @Guides.QuickReference.Http.UserChat
+  - @Guides.QuickReference.Http.DirectMessage
+  - @Guides.QuickReference.Http.Gateway
+  - @Guides.QuickReference.Http.User
+  - @Guides.QuickReference.Http.Asset
+  - @Guides.QuickReference.Http.GuildRole
+  - @Guides.QuickReference.Http.Intimacy
+  - @Guides.QuickReference.Http.GuildEmoji
+  - @Guides.QuickReference.Http.Invite
+  - @Guides.QuickReference.Http.Blacklist
+  - @Guides.QuickReference.Http.Badge
+  - @Guides.QuickReference.Http.Game
+  - @Guides.QuickReference.Http.OAuth
 
 ---
 

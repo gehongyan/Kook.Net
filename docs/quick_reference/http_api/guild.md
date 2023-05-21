@@ -1,9 +1,9 @@
 ---
 uid: Guides.QuickReference.Http.Guild
-title: 服务器相关接口列表
+title: 服务器相关接口
 ---
 
-# 服务器相关接口列表
+# 服务器相关接口
 
 预声明变量
 

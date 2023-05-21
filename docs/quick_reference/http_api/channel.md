@@ -1,9 +1,9 @@
 ---
 uid: Guides.QuickReference.Http.Channel
-title: 频道相关接口列表
+title: 频道相关接口
 ---
 
-# 频道相关接口列表
+# 频道相关接口
 
 预声明变量
 
