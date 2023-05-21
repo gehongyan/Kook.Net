@@ -246,6 +246,8 @@ internal static class ChannelHelper
         {
             case CreateAttachmentMode.FilePath:
             case CreateAttachmentMode.Stream:
+                if (attachment.Uri != null)
+                    break;
                 CreateAssetResponse assetResponse = await client.ApiClient
                     .CreateAssetAsync(new CreateAssetParams { File = attachment.Stream, FileName = attachment.FileName }, options);
                 attachment.Uri = new Uri(assetResponse.Url);
