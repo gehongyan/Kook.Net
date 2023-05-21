@@ -5,6 +5,91 @@ title: 变更日志
 
 # 变更日志
 
+## v0.5.0 [2023-05-21]
+
+### 更新路线
+
+出于便利性原因，此版本对 `BaseSocketClient` 中的部分事件所传递的参数类型进行了调整，事件参数所发生的具体变更可参阅文末的附录，
+对涉及到的事件的应用都需要进行相应的更新。
+
+`GuildFeature` 与 `GuildFeatures` 中表示重要客户的枚举值与属性已被重命名为更准确的名称；`GuildPermissions`
+已被重构为结构体，`RoleProperties.Permissions` 属性的类型也已被相应变更；`RestGuild.Channels`
+的类型被错误地声明为值的类型为 `RestChannel` 的字典，已被修正为值的类型为 `RestGuildChannel` 的字典；`KookSocketClient`
+上的部分方法的返回类型为 `ValueTask`，现已统一为 `Task`。涉及到以上 `API` 的用法都需要进行相应的更新。
+
+### 新增
+
+- 新增 `GuildFeature.Partner` 枚举值及 `GuildFeatures.IsPartner` 属性
+- 新增 `IGuild.Banner` 属性
+- 新增 `RestGuild` 上的 `CurrentUserNickname`、`CurrentUserDisplayName` 与 `CurrentUserRoles` 属性
+- 新增 `INestedChannel.SyncPermissionsAsync` 方法
+- 新增 `BaseSocketClient` 上的 `DownloadVoiceStatesAsync` 与 `DownloadBoostSubscriptionsAsync` 抽象方法
+- 新增 `RestGuild` 上的 `TextChannels`、`VoiceChannels` 与 `CategoryChannels` 属性
+
+### 变更
+
+- 重命名 `GuildFeature.Ka` 为 `GuildFeature.KeyAccount`，`GuildFeatures.IsKa` 为 `GuildFeatures.IsKeyAccount`
+- 变更 `GuildPermissions` 为结构体，变更 `RoleProperties.Permissions` 为 `GuildPermissions?` 类型
+- 出于便利性目的，为部分 `BaseSocketClient` 中的事件变更或新增了事件参数，变更详情参见文末的附录
+- 变更 `BaseSocketClient` 上的 `DownloadBoostSubscriptionsAsync` 方法参数都为可选参数
+- 变更 `RestGuild.Channels` 的类型为 `ImmutableDictionary<ulong, RestGuildChannel>`
+- 变更 `KookSocketClient` 上的 `GetChannelAsync`、`GetDMChannelAsync`、`GetDMChannelsAsync` 与 `GetUserAsync`
+  的方法返回类型为 `Task<*>`
+
+### 修复
+
+- 修复部分 API 对 bool 类型返回字符串 `1` 或 `0` 时未能正确解析的问题
+- 修复 `IGuild.DefaultChannelId` 未能正确设置为服务器实际配置的默认文字频道的问题
+- 修复为下载服务器用户列表时 `SocketGuild.CurrentUser` 为 `null` 的问题
+- 修复 `SocketUser` 上的 `IsOnline` 与 `ActiveClient` 可能会抛出空引用异常的问题
+- 修复 `MessageType.Poke` 类型的消息未被正确解析的问题
+- 修复请求桶未能对 HTTP 429 Too Many Requests 错误进行正确处理的问题
+
+### 优化
+
+- 优化 `Cacheable` 的调试器显示文本
+- `FileAttachment.Stream` 现已可以复用
+- `SendFileAsync` 与 `ReplyFileAsync` 方法对通过文件或流创建的 `FileAttachment`
+  附件进行多次发送前所创建的资产地址将会被缓存，以避免重复上传相同的文件
+
+### 其它
+
+- 修正了一些奇怪的代码缩进
+- 变更文档主题
+- 新增依赖于 doc 分支的文档更新独立工作流
+- 新增 API 快速参考文档
+- 补充权限相关单元测试中缺失的权限值
+
+### 附录
+
+**`BaseSocketClient` 中变更参数的事件列表：**
+
+`ReactionAdded` 与 `ReactionRemoved`
+- `ISocketMessageChannel` → `SocketTextChannel`
+- 新增 `Cacheable<SocketGuildUser, ulong>` 参数表示添加或取消回应的服务器用户
+
+`DirectReactionAdded` 与 `DirectReactionRemoved`
+- 新增 `Cacheable<SocketUser, ulong>` 参数表示添加或取消回应的用户
+
+`MessageReceived`
+- 新增 `SocketGuildUser` 表示发送消息的服务器用户
+- 新增 `SocketTextChannel` 表示消息所在的服务器文字频道
+
+`MessageDeleted`、`MessageUpdated`、`MessagePinned` 与 `MessageUnpinned`
+- `ISocketMessageChannel` → `SocketTextChannel`
+
+`DirectMessageReceived`
+- 新增 `SocketUser` 表示发送消息的用户
+- 新增 `SocketDMChannel` 表示消息所在的私聊频道
+
+`DirectMessageDeleted`
+- `Cacheable<IDMChannel, Guid>` → `Cacheable<SocketDMChannel, ulong>`
+- 新增 `Cacheable<SocketUser, ulong>` 表示消息的发送者
+
+`DirectMessageUpdated`
+- `IDMChannel` → `Cacheable<SocketDMChannel, ulong>`
+- 新增 `Cacheable<SocketUser, ulong>` 表示消息的发送者
+
 ## v0.4.1 [2023-04-05]
 
 ### 修复

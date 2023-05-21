@@ -2,6 +2,96 @@
 
 ---
 
+## v0.5.0 [2023-05-21]
+
+### Update Path
+
+For the sake of convenience, this version has made adjustments to the parameter types passed in some events
+in `BaseSocketClient`. Please refer to the appendix at the end of the document for specific changes to event parameters.
+Applications involving these events need to be updated accordingly.
+
+The enum values and properties representing key accounts in `GuildFeature` and `GuildFeatures` have been renamed
+for more accurate naming. `GuildPermissions` has been refactored as a struct, and the type of
+the `RoleProperties.Permissions` property has been changed accordingly. The type of `RestGuild.Channels` was incorrectly
+declared as a dictionary with values of type `RestChannel`, and has been corrected to a dictionary with values of
+type `RestGuildChannel`. The return type of some methods on `KookSocketClient` was previously `ValueTask`, but has now
+been unified to `Task`. Usages involving these APIs need to be updated accordingly.
+
+### Added
+
+- Added `GuildFeature.Partner` enum value and `GuildFeatures.IsPartner` property.
+- Added `IGuild.Banner` property.
+- Added `CurrentUserNickname`, `CurrentUserDisplayName`, and `CurrentUserRoles` properties on `RestGuild`.
+- Added `SyncPermissionsAsync` method on `INestedChannel`.
+- Added `DownloadVoiceStatesAsync` and `DownloadBoostSubscriptionsAsync` abstract methods on `BaseSocketClient`.
+- Added `TextChannels`, `VoiceChannels`, and `CategoryChannels` properties on `RestGuild`.
+
+### Changed
+.
+- Renamed `GuildFeature.Ka` to `GuildFeature.KeyAccount` and `GuildFeatures.IsKa` to `GuildFeatures.IsKeyAccount`.
+- Changed `GuildPermissions` to a struct and changed `RoleProperties.Permissions` to type `GuildPermissions?`.
+- For convenience, some events in `BaseSocketClient` have been changed or added with event parameters. See the appendix
+  at the end of the document for details..
+- Changed all parameters of `DownloadBoostSubscriptionsAsync` method on `BaseSocketClient` to optional parameters.
+- Changed the type of `RestGuild.Channels` to `ImmutableDictionary<ulong, RestGuildChannel>`.
+- Changed the return type of `GetChannelAsync`, `GetDMChannelAsync`, `GetDMChannelsAsync`, and `GetUserAsync` methods
+  on `KookSocketClient` to `Task<*>`.
+
+### Fixed
+
+- Fixed an issue where some APIs were unable to correctly parse the string `1` or `0` when returning a bool type.
+- Fixed an issue where `IGuild.DefaultChannelId` was not correctly set to the actual default text channel configured on
+  the server.
+- Fixed an issue where `SocketGuild.CurrentUser` was null when downloading the server user list.
+- Fixed an issue where `IsOnline` and `ActiveClient` on `SocketUser` could throw null reference exceptions.
+- Fixed an issue where messages of type `MessageType.Poke` were not correctly parsed.
+- Fixed an issue where the request bucket was not handling HTTP 429 Too Many Requests errors correctly.
+
+### Optimized
+
+- Optimized the debugger display text of `Cacheable`.
+- `FileAttachment.Stream` can now be reused.
+- The `SendFileAsync` and `ReplyFileAsync` methods will now cache the asset URI created for `FileAttachment` attachments
+  created through files or streams before multiple sends, to avoid uploading the same file repeatedly.
+
+### Misc
+
+- Fixed some strange code indentation.
+- Changed the document theme.
+- Added a separate workflow for updating the documentation that depends on the `doc` branch.
+- Added an API quick reference document.
+- Added missing permission values to permission-related unit tests.
+
+### Appendix
+
+Event parameter changes in `BaseSocketClient`:
+
+- `ReactionAdded` and `ReactionRemoved`
+  - `ISocketMessageChannel` → `SocketTextChannel`
+  - Add `Cacheable<SocketGuildUser, ulong>` representing the user who added or removed the reaction
+
+- `DirectReactionAdded` and `DirectReactionRemoved`
+  - Add `Cacheable<SocketUser, ulong>` representing the user who added or removed the reaction
+
+- `MessageReceived`
+  - Add `SocketGuildUser` representing the user who sent the message
+  - Add `SocketTextChannel` representing the text channel where the message was sent
+
+- `MessageDeleted`、`MessageUpdated`、`MessagePinned` 与 `MessageUnpinned`
+  - `ISocketMessageChannel` → `SocketTextChannel`
+
+- `DirectMessageReceived`
+  - Add `SocketUser` representing the user who sent the message
+  - Add `SocketDMChannel`representing the DM channel where the message was sent
+
+- `DirectMessageDeleted`
+  - `Cacheable<IDMChannel, Guid>` → `Cacheable<SocketDMChannel, ulong>`
+  - Add `Cacheable<SocketUser, ulong>` representing the user who sent the message
+
+- `DirectMessageUpdated`
+  - `IDMChannel` → `Cacheable<SocketDMChannel, ulong>`
+  - Add `Cacheable<SocketUser, ulong>` representing the user who sent the message
+
 ## v0.4.1 [2023-04-05]
 
 ### Fixed
