@@ -18,7 +18,7 @@ public static class MessageExtensions
         return channel switch
         {
             IDMChannel dmChannel => $"https://www.kookapp.cn/app/home/privatemessage/{dmChannel.Recipient.Id}/{msg.Id}",
-            IGuildChannel guildChannel => $"https://https://www.kookapp.cn/app/channels/{guildChannel.GuildId}/{channel.Id}/{msg.Id}",
+            IGuildChannel guildChannel => $"https://www.kookapp.cn/app/channels/{guildChannel.GuildId}/{channel.Id}/{msg.Id}",
             _ => throw new ArgumentException("Message must be in a guild or a DM channel.", nameof(msg))
         };
     }
