@@ -92,8 +92,17 @@ internal class KookSocketApiClient : KookRestApiClient
         if (gatewaySocketFrame is not null)
         {
 #if DEBUG_PACKETS
-            Debug.WriteLine($"<- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence} \n{JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions {WriteIndented
- = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
+            string raw = Encoding.Default.GetString(decompressed.ToArray()).TrimEnd('\n');
+            string parsed = JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            }).TrimEnd('\n');
+            Debug.WriteLine($"""
+                <- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence}
+                [Raw] {raw}
+                [Parsed] {parsed}
+                """);
 #endif
             await _receivedGatewayEvent.InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, gatewaySocketFrame.Payload)
                 .ConfigureAwait(false);
@@ -106,8 +115,16 @@ internal class KookSocketApiClient : KookRestApiClient
         if (gatewaySocketFrame is not null)
         {
 #if DEBUG_PACKETS
-            Debug.WriteLine($"<- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence} \n{JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions {WriteIndented
- = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping})}".TrimEnd('\n'));
+            string parsed = JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+            }).TrimEnd('\n');
+            Debug.WriteLine($"""
+                <- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence}
+                [Raw] {message}
+                [Parsed] {parsed}
+                """);
 #endif
             await _receivedGatewayEvent.InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, gatewaySocketFrame.Payload)
                 .ConfigureAwait(false);
