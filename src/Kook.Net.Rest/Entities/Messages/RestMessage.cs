@@ -213,7 +213,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
 
         if (Channel is IDMChannel dmChannel)
         {
-            DirectMessage model = await Kook.ApiClient.GetDirectMessageAsync(Id, dmChannel.ChatCode, dmChannel.Recipient.Id, options)
+            DirectMessage model = await Kook.ApiClient.GetDirectMessageAsync(Id, dmChannel.ChatCode, options)
                 .ConfigureAwait(false);
             Update(model);
             return;

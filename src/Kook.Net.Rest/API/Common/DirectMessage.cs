@@ -41,6 +41,7 @@ internal class DirectMessage
     public bool ReadStatus { get; set; }
 
     [JsonPropertyName("quote")]
+    [JsonConverter(typeof(DirectMessageQuoteFixtureConverter))]
     public Quote Quote { get; set; }
 
     [JsonPropertyName("mention_info")]

@@ -851,44 +851,21 @@ internal class KookRestApiClient : IDisposable
 
     #region Direct Messages
 
-    public async Task<DirectMessage> GetDirectMessageAsync(Guid messageId, Guid? chatCode = null, ulong? userId = null,
+    public async Task<DirectMessage> GetDirectMessageAsync(Guid messageId, Guid chatCode,
         RequestOptions options = null)
     {
-        // Waiting for direct-message/view endpoint
-        // Try getting by fetching all messages
-        IReadOnlyCollection<DirectMessage> messages = await QueryDirectMessagesAsync(chatCode, userId, messageId, Direction.Around, 50, options);
-        int count = messages.Count;
-        DirectMessage message = messages.SingleOrDefault(x => x.Id == messageId);
-        if (message is not null) return message;
+        Preconditions.NotEqual(messageId, Guid.Empty, nameof(messageId));
+        Preconditions.NotEqual(chatCode, Guid.Empty, nameof(chatCode));
+        options = RequestOptions.CreateOrClone(options);
 
-        // We have fetched all messages, but the message we're looking for is not there, hence null
-        if (count < 50) return null;
-
-        // Try getting by fetching the message next to the targeted one
-        // Try getting by before mode
-        DirectMessage messageBefore =
-            (await QueryDirectMessagesAsync(chatCode, userId, messageId, Direction.Before, 1, options)).SingleOrDefault(x => x.Id == messageId);
-        if (messageBefore is not null)
-            return (await QueryDirectMessagesAsync(chatCode, userId, messageBefore.Id, Direction.After, 1, options)).SingleOrDefault(x =>
-                x.Id == messageId);
-
-        // Try getting by after mode
-        DirectMessage messageAfter =
-            (await QueryDirectMessagesAsync(chatCode, userId, messageId, Direction.After, 1, options)).SingleOrDefault(x => x.Id == messageId);
-        if (messageAfter is not null)
-            return (await QueryDirectMessagesAsync(chatCode, userId, messageAfter.Id, Direction.Before, 1, options)).SingleOrDefault(x =>
-                x.Id == messageId);
-
-        // Try getting by fetching the message without reference
-        IReadOnlyCollection<DirectMessage> messagesWithoutReference =
-            await QueryDirectMessagesAsync(chatCode, userId, null, Direction.Unspecified, 50, options);
-        message = messagesWithoutReference.SingleOrDefault(x => x.Id == messageId);
-        return message;
+        BucketIds ids = new();
+        return await SendAsync<DirectMessage>(HttpMethod.Get, () => $"direct-message/view?msg_id={messageId}&chat_code={chatCode:N}",
+                ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
     public async Task<IReadOnlyCollection<DirectMessage>> QueryDirectMessagesAsync(Guid? chatCode = null,
         ulong? userId = null, Guid? referenceMessageId = null,
-        Direction dir = Direction.Unspecified, int count = 50, RequestOptions options = null)
+        Direction dir = Direction.Unspecified, int count = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
     {
         if (chatCode is null && userId is null)
             throw new ArgumentException($"At least one argument must be provided between {nameof(chatCode)} and {nameof(userId)}.",
@@ -917,7 +894,8 @@ internal class KookRestApiClient : IDisposable
             Direction.After => "after",
             _ => string.Empty
         };
-        if (dir != Direction.Unspecified) query += $"&flag={flag}";
+        if (dir != Direction.Unspecified)
+            query += $"&flag={flag}";
 
         query += $"&page_size={count}";
         QueryUserChatMessagesResponse queryMessagesResponse =
