@@ -90,7 +90,7 @@ public class KookConfig
     /// <returns>
     ///     The maximum number of messages that can be gotten per-batch.
     /// </returns>
-    public const int MaxMessagesPerBatch = 100;
+    public const int MaxMessagesPerBatch = 50;
 
     /// <summary>
     ///     Returns the max items allowed to be in a request by default.
