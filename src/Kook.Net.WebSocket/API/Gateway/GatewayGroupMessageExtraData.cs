@@ -34,6 +34,7 @@ internal class GatewayGroupMessageExtraData
     public Rest.GuildMember Author { get; set; }
 
     [JsonPropertyName("quote")]
+    [JsonConverter(typeof(QuoteConverter))]
     public Quote Quote { get; set; }
 
     [JsonPropertyName("attachments")]

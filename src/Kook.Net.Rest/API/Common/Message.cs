@@ -53,6 +53,7 @@ internal class Message
     public bool ReadStatus { get; set; }
 
     [JsonPropertyName("quote")]
+    [JsonConverter(typeof(QuoteConverter))]
     public Quote Quote { get; set; }
 
     [JsonPropertyName("mention_info")]

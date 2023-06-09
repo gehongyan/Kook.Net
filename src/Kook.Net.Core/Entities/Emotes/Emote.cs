@@ -110,4 +110,12 @@ public class Emote : IEmote
     public string ToPlainTextString() => $"[:{Name}:{Id}]";
 
     private string DebuggerDisplay => $"{Name} ({Id})";
+
+    /// <summary>
+    ///     Returns the raw representation of the emote.
+    /// </summary>
+    /// <returns>
+    ///     A string representing the raw presentation of the emote (e.g. <c>[:thonkang:282745590985523200]</c>).
+    /// </returns>
+    public override string ToString() => $"[:{Name}:{Id}]";
 }

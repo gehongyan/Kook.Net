@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Kook.Net.Converters;
 
-internal class DirectMessageQuoteFixtureConverter : JsonConverter<API.Quote>
+internal class QuoteConverter : JsonConverter<API.Quote>
 {
     /// <inheritdoc />
     public override API.Quote Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>

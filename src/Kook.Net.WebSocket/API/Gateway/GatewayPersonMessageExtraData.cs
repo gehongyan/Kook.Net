@@ -23,6 +23,7 @@ internal class GatewayPersonMessageExtraData
     public string LastMessageContent { get; set; }
 
     [JsonPropertyName("quote")]
+    [JsonConverter(typeof(QuoteConverter))]
     public Quote Quote { get; set; }
 
     [JsonPropertyName("attachments")]
