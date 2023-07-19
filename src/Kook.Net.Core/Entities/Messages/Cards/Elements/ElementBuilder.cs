@@ -833,7 +833,7 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     ///     Gets or sets the fields of the paragraph.
     /// </summary>
     /// <exception cref="ArgumentNullException" accessor="set">
-    ///     The <paramref name="value"/> is <see langword="null"/>.
+    ///     The <paramref name="value"/> is <c>null</c>.
     /// </exception>
     /// <exception cref="ArgumentException" accessor="set">
     ///     The <paramref name="value"/> contains more than <see cref="MaxFieldCount"/> elements.

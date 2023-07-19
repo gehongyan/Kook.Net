@@ -126,7 +126,7 @@ public static class MessageExtensions
     /// <param name="content">Contents of the message.</param>
     /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
-    /// <param name="options">The request options for this <see langword="async"/> request.</param>
+    /// <param name="options">The request options for this <c>async</c> request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(this IUserMessage message,
         string content, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null) =>
         await message.Channel.SendTextAsync(content, isQuote ? new Quote(message.Id) : null,
@@ -139,7 +139,7 @@ public static class MessageExtensions
     /// <param name="cards">The cards to be sent.</param>
     /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
-    /// <param name="options">The request options for this <see langword="async"/> request.</param>
+    /// <param name="options">The request options for this <c>async</c> request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(this IUserMessage message,
         IEnumerable<ICard> cards, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null) =>
         await message.Channel.SendCardsAsync(cards, isQuote ? new Quote(message.Id) : null,
@@ -152,7 +152,7 @@ public static class MessageExtensions
     /// <param name="card">The card to be sent.</param>
     /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
-    /// <param name="options">The request options for this <see langword="async"/> request.</param>
+    /// <param name="options">The request options for this <c>async</c> request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardAsync(
         this IUserMessage message,
         ICard card, bool isQuote = false, bool isEphemeral = false, RequestOptions options = null) =>

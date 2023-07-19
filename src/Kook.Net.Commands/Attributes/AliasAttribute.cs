@@ -14,7 +14,7 @@ namespace Kook.Commands;
 ///     <code language="cs">
 ///     [Command("stats")]
 ///     [Alias("stat", "info")]
-///     public <see langword="async"/> Task GetStatsAsync(IUser user)
+///     public <c>async</c> Task GetStatsAsync(IUser user)
 ///     {
 ///         // ...pull stats
 ///     }

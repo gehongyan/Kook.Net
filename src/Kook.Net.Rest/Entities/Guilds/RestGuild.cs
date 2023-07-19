@@ -310,7 +310,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
-    ///     contains the user information and the reason for the ban; <see langword="null"/> if the ban entry cannot be found.
+    ///     contains the user information and the reason for the ban; <c>null</c> if the ban entry cannot be found.
     /// </returns>
     public Task<RestBan> GetBanAsync(IUser user, RequestOptions options = null)
         => GuildHelper.GetBanAsync(this, Kook, user.Id, options);
@@ -322,7 +322,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
-    ///     contains the user information and the reason for the ban; <see langword="null"/> if the ban entry cannot be found.
+    ///     contains the user information and the reason for the ban; <c>null</c> if the ban entry cannot be found.
     /// </returns>
     public Task<RestBan> GetBanAsync(ulong userId, RequestOptions options = null)
         => GuildHelper.GetBanAsync(this, Kook, userId, options);
@@ -367,7 +367,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </summary>
     /// <param name="id">The identifier for the role.</param>
     /// <returns>
-    ///     A role that is associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    ///     A role that is associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
     public RestRole GetRole(uint id)
     {
@@ -420,7 +420,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the guild user
-    ///     associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
     public Task<RestGuildUser> GetUserAsync(ulong id, RequestOptions options = null)
         => GuildHelper.GetUserAsync(this, Kook, id, options);
@@ -448,7 +448,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
     /// <summary>
     ///     Gets a collection of users in this guild that the name or nickname contains the
-    ///     provided <see langword="string"/> at <paramref name="func"/>.
+    ///     provided <c>string</c> at <paramref name="func"/>.
     /// </summary>
     /// <remarks>
     ///     The <paramref name="limit"/> can not be higher than <see cref="KookConfig.MaxUsersPerBatch"/>.
@@ -486,7 +486,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the generic channel
-    ///     associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
     public Task<RestGuildChannel> GetChannelAsync(ulong id, RequestOptions options = null)
         => GuildHelper.GetChannelAsync(this, Kook, id, options);
@@ -498,7 +498,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the text channel
-    ///     associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
     public async Task<RestTextChannel> GetTextChannelAsync(ulong id, RequestOptions options = null)
     {
@@ -527,7 +527,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the voice channel associated
-    ///     with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    ///     with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
     public async Task<RestVoiceChannel> GetVoiceChannelAsync(ulong id, RequestOptions options = null)
     {
@@ -556,7 +556,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the category channel associated
-    ///     with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    ///     with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
     public async Task<RestCategoryChannel> GetCategoryChannelAsync(ulong id, RequestOptions options = null)
     {
@@ -584,7 +584,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the default text channel of this guild;
-    ///     <see langword="null" /> if none is found.
+    ///     <c>null</c> if none is found.
     /// </returns>
     public async Task<RestTextChannel> GetDefaultChannelAsync(RequestOptions options = null)
     {
@@ -613,7 +613,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the welcome text channel of this guild;
-    ///     <see langword="null" /> if none is found.
+    ///     <c>null</c> if none is found.
     /// </returns>
     public async Task<RestTextChannel> GetWelcomeChannelAsync(RequestOptions options = null)
     {
@@ -646,7 +646,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <param name="name">The name of the new channel.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
     /// <param name="options">The options to be used when sending the request.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="name" /> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name" /> is <c>null</c>.</exception>
     /// <returns>
     ///     The created voice channel.
     /// </returns>
@@ -660,7 +660,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <param name="name">The name of the new channel.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
     /// <param name="options">The options to be used when sending the request.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="name" /> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name" /> is <c>null</c>.</exception>
     /// <returns>
     ///     The created category channel.
     /// </returns>
@@ -693,7 +693,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         => GuildHelper.CreateEmoteAsync(this, Kook, name, image, options);
 
     /// <inheritdoc />
-    /// <exception cref="ArgumentNullException"><paramref name="func"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="func"/> is <c>null</c>.</exception>
     public Task ModifyEmoteNameAsync(GuildEmote emote, Action<string> func, RequestOptions options = null)
         => GuildHelper.ModifyEmoteNameAsync(this, Kook, emote, func, options);
 

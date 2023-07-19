@@ -108,8 +108,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     </para>
     ///     </note>
     ///     <note type="warning">
-    ///         Only when <see cref="KookSocketConfig.AlwaysDownloadUsers"/> is set to <see langword="true"/>
-    ///         will this property be populated upon startup. Otherwise, this property will be <see langword="null"/>,
+    ///         Only when <see cref="KookSocketConfig.AlwaysDownloadUsers"/> is set to <c>true</c>
+    ///         will this property be populated upon startup. Otherwise, this property will be <c>null</c>,
     ///         and will be populated when <see cref="DownloadUsersAsync"/> is called.
     ///     </note>
     /// </remarks>
@@ -126,7 +126,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <summary> Indicates whether the client has all the members downloaded to the local guild cache. </summary>
     /// <remarks>
     ///     <note type="warning">
-    ///         If <see cref="MemberCount"/> is <see langword="null"/>, this property will always return <see langword="null"/>,
+    ///         If <see cref="MemberCount"/> is <c>null</c>, this property will always return <c>null</c>,
     ///         which means that the client is unable to determine whether all the members are downloaded or not.
     ///     </note>
     /// </remarks>
@@ -235,12 +235,12 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <returns>
     ///     A read-only dictionary containing all boost subscription metadata for this guild grouped by users;
-    ///     or <see langword="null"/> if the boost subscription data has never been cached.
+    ///     or <c>null</c> if the boost subscription data has never been cached.
     /// </returns>
     /// <remarks>
     ///     <note type="warning">
     ///         <para>
-    ///             Only when <see cref="KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> is set to <see langword="true"/>
+    ///             Only when <see cref="KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> is set to <c>true</c>
     ///             will this property be populated upon startup. Due to the lack of event support for boost subscriptions,
     ///             this property will never be updated. The changes of <see cref="SocketGuild.BoostSubscriptionCount"/> will trigger the update
     ///             of this property, but KOOK gateway will not publish this event resulting from the changes of total boost subscription
@@ -262,12 +262,12 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <returns>
     ///     A read-only dictionary containing all boost subscription metadata which have not expired for this guild grouped by users;
-    ///     or <see langword="null"/> if the boost subscription data has never been cached.
+    ///     or <c>null</c> if the boost subscription data has never been cached.
     /// </returns>
     /// <remarks>
     ///     <note type="warning">
     ///         <para>
-    ///             Only when <see cref="KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> is set to <see langword="true"/>
+    ///             Only when <see cref="KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> is set to <c>true</c>
     ///             will this property be populated upon startup. Due to the lack of event support for boost subscriptions,
     ///             this property will never be updated. The changes of <see cref="SocketGuild.BoostSubscriptionCount"/> will trigger the update
     ///             of this property, but KOOK gateway will not publish this event resulting from the changes of total boost subscription
@@ -556,7 +556,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <param name="id">The identifier for the channel.</param>
     /// <returns>
-    ///     A generic channel associated with the specified <paramref name="id" />; <see langword="null"/> if none is found.
+    ///     A generic channel associated with the specified <paramref name="id" />; <c>null</c> if none is found.
     /// </returns>
     public SocketGuildChannel GetChannel(ulong id)
     {
@@ -571,7 +571,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <param name="id">The identifier for the text channel.</param>
     /// <returns>
-    ///     A text channel associated with the specified <paramref name="id" />; <see langword="null"/> if none is found.
+    ///     A text channel associated with the specified <paramref name="id" />; <c>null</c> if none is found.
     /// </returns>
     public SocketTextChannel GetTextChannel(ulong id)
         => GetChannel(id) as SocketTextChannel;
@@ -581,7 +581,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <param name="id">The identifier for the voice channel.</param>
     /// <returns>
-    ///     A voice channel associated with the specified <paramref name="id" />; <see langword="null"/> if none is found.
+    ///     A voice channel associated with the specified <paramref name="id" />; <c>null</c> if none is found.
     /// </returns>
     public SocketVoiceChannel GetVoiceChannel(ulong id)
         => GetChannel(id) as SocketVoiceChannel;
@@ -591,7 +591,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <param name="id">The snowflake identifier for the category channel.</param>
     /// <returns>
-    ///     A category channel associated with the specified <paramref name="id" />; <see langword="null"/> if none is found.
+    ///     A category channel associated with the specified <paramref name="id" />; <c>null</c> if none is found.
     /// </returns>
     public SocketCategoryChannel GetCategoryChannel(ulong id)
         => GetChannel(id) as SocketCategoryChannel;
@@ -615,7 +615,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <param name="name">The new name for the voice channel.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
     /// <param name="options">The options to be used when sending the request.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     voice channel.
@@ -630,7 +630,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <param name="name">The new name for the category.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
     /// <param name="options">The options to be used when sending the request.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     category channel.
@@ -699,7 +699,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <param name="id">The identifier for the role.</param>
     /// <returns>
-    ///     A role that is associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    ///     A role that is associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
     public SocketRole GetRole(uint id)
     {
@@ -713,7 +713,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <param name="name">The new name for the role.</param>
     /// <param name="options">The options to be used when sending the request.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     role.
@@ -755,13 +755,13 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <remarks>
     ///     This method retrieves a user found within this guild.
     ///     <note>
-    ///         This may return <see langword="null"/> in the WebSocket implementation due to incomplete user collection in
+    ///         This may return <c>null</c> in the WebSocket implementation due to incomplete user collection in
     ///         large guilds.
     ///     </note>
     /// </remarks>
     /// <param name="id">The identifier of the user.</param>
     /// <returns>
-    ///     A guild user associated with the specified <paramref name="id"/>; <see langword="null"/> if none is found.
+    ///     A guild user associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
     public SocketGuildUser GetUser(ulong id)
     {
@@ -925,7 +925,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <param name="id">The identifier for the guild emoji.</param>
     /// <returns>
-    ///     A guild emoji associated with the specified <paramref name="id" />; <see langword="null"/> if none is found.
+    ///     A guild emoji associated with the specified <paramref name="id" />; <c>null</c> if none is found.
     /// </returns>
     public GuildEmote GetEmote(string id)
     {
@@ -968,7 +968,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         => GuildHelper.CreateEmoteAsync(this, Kook, name, image, options);
 
     /// <inheritdoc />
-    /// <exception cref="ArgumentNullException"><paramref name="func"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="func"/> is <c>null</c>.</exception>
     public Task ModifyEmoteNameAsync(GuildEmote emote, Action<string> func, RequestOptions options = null)
         => GuildHelper.ModifyEmoteNameAsync(this, Kook, emote, func, options);
 

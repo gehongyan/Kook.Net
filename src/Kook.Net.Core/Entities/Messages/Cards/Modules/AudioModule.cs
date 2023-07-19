@@ -28,7 +28,7 @@ public class AudioModule : IMediaModule, IEquatable<AudioModule>
     ///     Gets the cover of the audio associated with this module.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the cover of the audio associated with this module.
+    ///     A <c>string</c> representing the cover of the audio associated with this module.
     /// </returns>
     public string Cover { get; }
 

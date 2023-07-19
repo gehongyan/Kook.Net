@@ -30,7 +30,7 @@ public class GuildProperties
     ///     Gets or sets the ID of the default channel.
     /// </summary>
     /// <returns>
-    ///     An <see langword="ulong"/> representing the identifier of the default channel.
+    ///     An <c>ulong</c> representing the identifier of the default channel.
     ///     <c>null</c> if nothing changes. <c>0</c> if set to none.
     /// </returns>
     public ulong? DefaultChannelId { get; set; }
@@ -48,7 +48,7 @@ public class GuildProperties
     ///     Gets or sets the ID of welcome channel.
     /// </summary>
     /// <returns>
-    ///     An <see langword="ulong"/> representing the identifier of the channel where welcome messages are sent;
+    ///     An <c>ulong</c> representing the identifier of the channel where welcome messages are sent;
     ///     <c>null</c> if nothing changes. <c>0</c> if set to none.
     /// </returns>
     public ulong? WelcomeChannelId { get; set; }
@@ -71,8 +71,8 @@ public class GuildProperties
     ///     Gets the ID of the channel assigned to the widget of this guild.
     /// </summary>
     /// <returns>
-    ///     A <see langword="ulong"/> representing the identifier of the channel assigned to the widget found
-    ///     within the widget settings of this guild; <see langword="null" /> if nothing changes; <c>0</c> if
+    ///     A <c>ulong</c> representing the identifier of the channel assigned to the widget found
+    ///     within the widget settings of this guild; <c>null</c> if nothing changes; <c>0</c> if
     ///     set to none.
     /// </returns>
     public ulong? WidgetChannelId { get; set; }
@@ -82,7 +82,7 @@ public class GuildProperties
     /// </summary>
     /// <returns>
     ///     An <see cref="ITextChannel"/> assigned to the widget found within the widget settings of this guild;
-    ///     <see langword="null" /> if nothing changes; To clear the widget channel,
+    ///     <c>null</c> if nothing changes; To clear the widget channel,
     ///     set <see cref="WidgetChannelId"/> to <c>0</c> instead.
     /// </returns>
     public ITextChannel WidgetChannel { get; set; }

@@ -32,7 +32,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     implementation, only a collection of identifiers can be retrieved instead of the full role objects.
     /// </remarks>
     /// <returns>
-    ///     A read-only collection of <see langword="uint"/>, each representing an identifier for a role that
+    ///     A read-only collection of <c>uint</c>, each representing an identifier for a role that
     ///     this user possesses.
     /// </returns>
     IReadOnlyCollection<uint> RoleIds { get; }
@@ -49,7 +49,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     Gets the ID of the guild for this user.
     /// </summary>
     /// <returns>
-    ///     An <see langword="ulong"/> representing the identifier of the guild that this user belongs to.
+    ///     An <c>ulong</c> representing the identifier of the guild that this user belongs to.
     /// </returns>
     ulong GuildId { get; }
 

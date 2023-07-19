@@ -24,7 +24,7 @@ public struct NotImplementedEmbed : IEmbed
     ///     Gets the type of the embed.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the type of the embed.
+    ///     A <c>string</c> representing the type of the embed.
     /// </returns>
     /// <remarks>
     ///     This value originally came from the <c>type</c> field of the <see cref="JsonNode"/>.

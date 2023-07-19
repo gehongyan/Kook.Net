@@ -18,7 +18,7 @@ public interface IEmbed
     ///     Gets the URL of this embed.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> that represents the URL of this embed.
+    ///     A <c>string</c> that represents the URL of this embed.
     /// </returns>
     string Url { get; }
 }

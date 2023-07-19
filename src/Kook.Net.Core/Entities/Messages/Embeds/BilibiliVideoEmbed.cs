@@ -23,17 +23,17 @@ public struct BilibiliVideoEmbed : IEmbed
     public string Url { get; internal set; }
 
     /// <summary>
-    ///     A <see langword="string"/> that represents the origin URL of the Bilibili video.
+    ///     A <c>string</c> that represents the origin URL of the Bilibili video.
     /// </summary>
     public string OriginUrl { get; internal set; }
 
     /// <summary>
-    ///     A <see langword="string"/> that represents the Bilibili video number in BV format.
+    ///     A <c>string</c> that represents the Bilibili video number in BV format.
     /// </summary>
     public string BvNumber { get; internal set; }
 
     /// <summary>
-    ///     A <see langword="string"/> that represents the path of the iframe.
+    ///     A <c>string</c> that represents the path of the iframe.
     /// </summary>
     public string IframePath { get; internal set; }
 
@@ -43,12 +43,12 @@ public struct BilibiliVideoEmbed : IEmbed
     public TimeSpan Duration { get; internal set; }
 
     /// <summary>
-    ///     A <see langword="string"/> that represents the title of the Bilibili video.
+    ///     A <c>string</c> that represents the title of the Bilibili video.
     /// </summary>
     public string Title { get; internal set; }
 
     /// <summary>
-    ///     A <see langword="string"/> that represents the cover of the Bilibili video.
+    ///     A <c>string</c> that represents the cover of the Bilibili video.
     /// </summary>
     public string Cover { get; internal set; }
 }

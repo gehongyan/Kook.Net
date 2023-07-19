@@ -59,7 +59,7 @@ public class CommandInfo
     public int Priority { get; }
 
     /// <summary>
-    ///     Indicates whether the command accepts a <see langword="params"/> <see cref="Type"/>[] for its
+    ///     Indicates whether the command accepts a <c>params</c> <see cref="Type"/>[] for its
     ///     parameter.
     /// </summary>
     public bool HasVarArgs { get; }

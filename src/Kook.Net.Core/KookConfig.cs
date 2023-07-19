@@ -181,7 +181,7 @@ public class KookConfig
     /// <remarks>
     ///     By default, the returned value will be "?Discord?#1234", to work with bidirectional usernames.
     ///     <br/>
-    ///     If set to <see langword="false"/>, this value will be "Discord#1234".
+    ///     If set to <c>false</c>, this value will be "Discord#1234".
     /// </remarks>
     public bool FormatUsersInBidirectionalUnicode { get; set; } = true;
 }

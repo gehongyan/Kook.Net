@@ -23,7 +23,7 @@ public struct NotImplementedPokeResource : IPokeResource
     ///     Gets the type of the poke resource.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the type of the poke resource.
+    ///     A <c>string</c> representing the type of the poke resource.
     /// </returns>
     /// <remarks>
     ///     This value originally came from the <c>type</c> field of the <see cref="JsonNode"/>.

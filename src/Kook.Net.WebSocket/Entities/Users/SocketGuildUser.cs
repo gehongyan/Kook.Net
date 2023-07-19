@@ -136,12 +136,12 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// </summary>
     /// <returns>
     ///     A read-only collection of boost subscription metadata of this user for this guild;
-    ///     or <see langword="null"/> if the boost subscription data has never been cached.
+    ///     or <c>null</c> if the boost subscription data has never been cached.
     /// </returns>
     /// <remarks>
     ///     <note type="warning">
     ///         <para>
-    ///             Only when <see cref="KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> is set to <see langword="true"/>
+    ///             Only when <see cref="KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> is set to <c>true</c>
     ///             will this property be populated upon startup. Due to the lack of event support for boost subscriptions,
     ///             this property may be not up-to-date. The changes of <see cref="SocketGuild.BoostSubscriptionCount"/> will trigger the update
     ///             of this property, but KOOK gateway will not publish this event resulting from the changes of total boost subscription

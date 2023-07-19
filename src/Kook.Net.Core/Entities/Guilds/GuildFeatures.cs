@@ -13,7 +13,7 @@ public class GuildFeatures
     public GuildFeature Value { get; }
 
     /// <summary>
-    ///     Gets a collection of <see langword="string"/>s representing the raw values of the features.
+    ///     Gets a collection of <c>string</c>s representing the raw values of the features.
     /// </summary>
     /// <remarks>
     ///     Features that are not contained in <see cref="GuildFeature"/> can be found here.
@@ -45,7 +45,7 @@ public class GuildFeatures
     ///     Returns whether or not this guild has a feature.
     /// </summary>
     /// <param name="feature">The feature(s) to check for.</param>
-    /// <returns><see langword="true"/> if this guild has the provided feature(s), otherwise <see langword="false"/>.</returns>
+    /// <returns><c>true</c> if this guild has the provided feature(s), otherwise <c>false</c>.</returns>
     public bool HasFeature(GuildFeature feature)
         => Value.HasFlag(feature);
 
@@ -53,7 +53,7 @@ public class GuildFeatures
     ///     Returns whether or not this guild has a feature.
     /// </summary>
     /// <param name="feature">The feature to check for.</param>
-    /// <returns><see langword="true"/> if this guild has the provided feature, otherwise <see langword="false"/>.</returns>
+    /// <returns><c>true</c> if this guild has the provided feature, otherwise <c>false</c>.</returns>
     public bool HasFeature(string feature)
         => RawValues.Contains(feature);
 

@@ -20,7 +20,7 @@ public class IntimacyImage
     ///     Gets the ID of the image of an intimacy.
     /// </summary>
     /// <returns>
-    ///     An <see langword="int"/> representing the ID of the image of an intimacy.
+    ///     An <c>int</c> representing the ID of the image of an intimacy.
     /// </returns>
     public uint Id { get; }
 
@@ -28,7 +28,7 @@ public class IntimacyImage
     ///     Gets the URL of the image of an intimacy.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the URL of the image of an intimacy.
+    ///     A <c>string</c> representing the URL of the image of an intimacy.
     /// </returns>
     public string Url { get; }
 }

@@ -17,7 +17,7 @@ public interface IAttachment
     ///     Gets the URL of the attachment.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the URL of the attachment.
+    ///     A <c>string</c> representing the URL of the attachment.
     /// </returns>
     string Url { get; }
 
@@ -25,7 +25,7 @@ public interface IAttachment
     ///     Gets the filename of this attachment.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> containing the full filename of this attachment.
+    ///     A <c>string</c> containing the full filename of this attachment.
     /// </returns>
     string Filename { get; }
 
@@ -33,7 +33,7 @@ public interface IAttachment
     ///     Gets the file size of the attachment.
     /// </summary>
     /// <returns>
-    ///     An <see langword="int"/> representing the file size of the attachment;
+    ///     An <c>int</c> representing the file size of the attachment;
     ///     <c>null</c> if the file size is unknown or not applicable.
     /// </returns>
     int? Size { get; }
@@ -42,7 +42,7 @@ public interface IAttachment
     ///     Gets the file type of the attachment.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the file type of the attachment;
+    ///     A <c>string</c> representing the file type of the attachment;
     ///     <c>null</c> if the file type is unknown or not applicable.
     /// </returns>
     string FileType { get; }
@@ -60,7 +60,7 @@ public interface IAttachment
     ///     Gets the width of the attachment.
     /// </summary>
     /// <returns>
-    ///     An <see langword="int"/> representing the width of the attachment;
+    ///     An <c>int</c> representing the width of the attachment;
     ///     <c>null</c> if the width is unknown or not applicable.
     /// </returns>
     int? Width { get; }
@@ -69,7 +69,7 @@ public interface IAttachment
     ///     Gets the height of the attachment.
     /// </summary>
     /// <returns>
-    ///     An <see langword="int"/> representing the height of the attachment;
+    ///     An <c>int</c> representing the height of the attachment;
     ///     <c>null</c> if the height is unknown or not applicable.
     /// </returns>
     int? Height { get; }

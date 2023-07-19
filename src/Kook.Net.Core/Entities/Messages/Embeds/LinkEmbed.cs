@@ -25,7 +25,7 @@ public struct LinkEmbed : IEmbed
     ///     Gets the title of the website the link directs to.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string" /> representing the title of the website the link directs to.
+    ///     A <c>string</c> representing the title of the website the link directs to.
     /// </returns>
     public string Title { get; internal set; }
 
@@ -33,7 +33,7 @@ public struct LinkEmbed : IEmbed
     ///     Gets the description of the website the link directs to.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string" /> representing the description of the website the link directs to.
+    ///     A <c>string</c> representing the description of the website the link directs to.
     /// </returns>
     public string Description { get; internal set; }
 
@@ -41,7 +41,7 @@ public struct LinkEmbed : IEmbed
     ///     Gets the name of the website the link directs to.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string" /> representing the name of the website the link directs to.
+    ///     A <c>string</c> representing the name of the website the link directs to.
     /// </returns>
     public string SiteName { get; internal set; }
 
@@ -49,7 +49,7 @@ public struct LinkEmbed : IEmbed
     ///     Gets the color displayed along the left side of the card.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string" /> representing the color displayed along the left side of the card.
+    ///     A <c>string</c> representing the color displayed along the left side of the card.
     /// </returns>
     public Color Color { get; internal set; }
 
@@ -57,7 +57,7 @@ public struct LinkEmbed : IEmbed
     ///     Gets the URL of the image related to the website the link directs to.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string" /> representing the URL of the image related to the website the link directs to.
+    ///     A <c>string</c> representing the URL of the image related to the website the link directs to.
     /// </returns>
     public string Image { get; internal set; }
 }

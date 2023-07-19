@@ -579,7 +579,7 @@ public abstract partial class BaseSocketClient
     ///     <para>
     ///         This event is fired when a user is banned. The event handler must return a
     ///         <see cref="Task"/> and accept an <see cref="IReadOnlyCollection{T}"/>, a <see cref="SocketMessage"/>,
-    ///         a <see langword="string"/> and a <see cref="SocketGuild"/> as its parameter.
+    ///         a <c>string</c> and a <see cref="SocketGuild"/> as its parameter.
     ///     </para>
     ///     <para>
     ///         <note type="important">
@@ -603,7 +603,7 @@ public abstract partial class BaseSocketClient
     ///         <see cref="SocketGuild"/>.
     ///     </para>
     ///     <para>
-    ///         The reason of the ban is passed into the event handler parameter as <see langword="string"/>.
+    ///         The reason of the ban is passed into the event handler parameter as <c>string</c>.
     ///     </para>
     /// </remarks>
     public event Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketUser, ulong>, SocketGuild, string, Task> UserBanned
@@ -1122,12 +1122,12 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     <para>
     ///         This event is fired when a button is clicked in a card message. The event handler must
-    ///         return a <see cref="Task"/> and accept a <see langword="string"/>,
+    ///         return a <see cref="Task"/> and accept a <c>string</c>,
     ///         a <see cref="Cacheable{TEntity,TId}"/>, a <see cref="Cacheable{TEntity,TId}"/>,
     ///         a <see cref="SocketTextChannel"/>, and a <see cref="SocketGuild"/> as its parameter.
     ///     </para>
     ///     <para>
-    ///         The button value is passed into the event handler parameter as <see langword="string"/>.
+    ///         The button value is passed into the event handler parameter as <c>string</c>.
     ///     </para>
     ///     <para>
     ///         The users who clicked the button is passed into the event handler parameter as
@@ -1157,12 +1157,12 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     <para>
     ///         This event is fired when a button is clicked in a direct card message. The event handler must
-    ///         return a <see cref="Task"/> and accept a <see langword="string"/>,
+    ///         return a <see cref="Task"/> and accept a <c>string</c>,
     ///         a <see cref="Cacheable{TEntity,TId}"/>, a <see cref="Cacheable{TEntity,TId}"/>,
     ///         and a <see cref="SocketTextChannel"/> as its parameter.
     ///     </para>
     ///     <para>
-    ///         The button value is passed into the event handler parameter as <see langword="string"/>.
+    ///         The button value is passed into the event handler parameter as <c>string</c>.
     ///     </para>
     ///     <para>
     ///         The users who clicked the button is passed into the event handler parameter as

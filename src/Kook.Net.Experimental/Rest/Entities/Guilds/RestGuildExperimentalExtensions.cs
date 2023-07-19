@@ -31,7 +31,7 @@ public static class RestGuildExperimentalExtensions
     /// <returns>
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
-    /// <exception cref="ArgumentNullException"><paramref name="func"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentNullException"><paramref name="func"/> is <c>null</c>.</exception>
     public static async Task ModifyAsync(this RestGuild guild, Action<GuildProperties> func, RequestOptions options = null)
     {
         RichGuild model = await ExperimentalGuildHelper.ModifyAsync(guild, guild.Kook, func, options).ConfigureAwait(false);

@@ -21,7 +21,7 @@ public class CreateVoiceChannelProperties : CreateGuildChannelProperties
     /// </summary>
     /// <remarks>
     ///     Setting this value to a category's identifier will set this channel's parent to the
-    ///     specified channel; setting this value to <see langword="null"/> will leave this channel alone
+    ///     specified channel; setting this value to <c>null</c> will leave this channel alone
     ///     from any parents.
     /// </remarks>
     public ulong? CategoryId { get; set; }

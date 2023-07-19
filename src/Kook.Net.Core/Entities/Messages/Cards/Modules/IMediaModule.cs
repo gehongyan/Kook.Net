@@ -9,7 +9,7 @@ public interface IMediaModule : IModule
     ///     Gets the source of the media associated with this module.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the source of the audio associated with this module.
+    ///     A <c>string</c> representing the source of the audio associated with this module.
     /// </returns>
     string Source { get; }
 
@@ -17,7 +17,7 @@ public interface IMediaModule : IModule
     ///     Gets the title of the media associated with this module.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the title of the media associated with this module.
+    ///     A <c>string</c> representing the title of the media associated with this module.
     /// </returns>
     string Title { get; }
 }

@@ -62,7 +62,7 @@ public static class UserExtensions
     /// <param name="user">The user to send the DM to.</param>
     /// <param name="cards">The cards to be sent.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The request options for this <see langword="async"/> request.</param>
+    /// <param name="options">The request options for this <c>async</c> request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(this IUser user,
         IEnumerable<ICard> cards, IQuote quote = null, RequestOptions options = null) =>
         await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendCardsAsync(cards, quote, options).ConfigureAwait(false);
@@ -73,7 +73,7 @@ public static class UserExtensions
     /// <param name="user">The user to send the DM to.</param>
     /// <param name="card">The card to be sent.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The request options for this <see langword="async"/> request.</param>
+    /// <param name="options">The request options for this <c>async</c> request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> SendCardAsync(this IUser user,
         ICard card, IQuote quote = null, RequestOptions options = null) =>
         await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendCardAsync(card, quote, options).ConfigureAwait(false);

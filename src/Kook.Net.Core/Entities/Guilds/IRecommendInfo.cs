@@ -9,7 +9,7 @@ public interface IRecommendInfo
     ///     Gets the ID of the recommended guild.
     /// </summary>
     /// <returns>
-    ///     A <see langword="ulong" /> representing the ID of the recommended guild.
+    ///     A <c>ulong</c> representing the ID of the recommended guild.
     /// </returns>
     ulong GuildId { get; }
 
@@ -22,7 +22,7 @@ public interface IRecommendInfo
     ///     Gets the default channel ID of the recommended guild.
     /// </summary>
     /// <returns>
-    ///     A <see langword="ulong" /> representing the default channel ID of the recommended guild.
+    ///     A <c>ulong</c> representing the default channel ID of the recommended guild.
     /// </returns>
     ulong DefaultChannelId { get; }
 
@@ -30,7 +30,7 @@ public interface IRecommendInfo
     ///     Gets the name of the recommended guild.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the name of the recommended guild.
+    ///     A <c>string</c> representing the name of the recommended guild.
     /// </returns>
     string Name { get; }
 
@@ -38,7 +38,7 @@ public interface IRecommendInfo
     ///     Gets the icon URL of the recommended guild.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the icon URL of the recommended guild.
+    ///     A <c>string</c> representing the icon URL of the recommended guild.
     /// </returns>
     string Icon { get; }
 
@@ -46,7 +46,7 @@ public interface IRecommendInfo
     ///     Gets the banner URL of the recommended guild.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the banner URL of the recommended guild.
+    ///     A <c>string</c> representing the banner URL of the recommended guild.
     /// </returns>
     string Banner { get; }
 
@@ -54,7 +54,7 @@ public interface IRecommendInfo
     ///     Gets the description of the recommended guild.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the description of the recommended guild.
+    ///     A <c>string</c> representing the description of the recommended guild.
     /// </returns>
     string Description { get; }
 
@@ -62,7 +62,7 @@ public interface IRecommendInfo
     ///     Gets the status of the recommended guild.
     /// </summary>
     /// <returns>
-    ///     A <see langword="int" /> representing the status of the recommended guild.
+    ///     A <c>int</c> representing the status of the recommended guild.
     /// </returns>
     int Status { get; }
 
@@ -70,7 +70,7 @@ public interface IRecommendInfo
     ///     Gets the tag of the recommended guild.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the tag of the recommended guild.
+    ///     A <c>string</c> representing the tag of the recommended guild.
     /// </returns>
     string Tag { get; }
 
@@ -96,7 +96,7 @@ public interface IRecommendInfo
     ///     Gets whether the recommended guild is an official partner.
     /// </summary>
     /// <returns>
-    ///     A <see langword="bool"/> representing whether the recommended guild is an official partner.
+    ///     A <c>bool</c> representing whether the recommended guild is an official partner.
     /// </returns>
     bool IsOfficialPartner { get; }
 

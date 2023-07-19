@@ -17,7 +17,7 @@ public interface IIntimacy : IEntity<ulong>
     ///     Gets the social information associated with this intimacy.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the social information associated with this intimacy.
+    ///     A <c>string</c> representing the social information associated with this intimacy.
     /// </returns>
     string SocialInfo { get; }
 
@@ -41,7 +41,7 @@ public interface IIntimacy : IEntity<ulong>
     ///     Gets the score associated with this intimacy.
     /// </summary>
     /// <returns>
-    ///     A <see langword="int"/> representing the score associated with this intimacy.
+    ///     A <c>int</c> representing the score associated with this intimacy.
     /// </returns>
     int Score { get; }
 

@@ -21,7 +21,7 @@ public struct ImageEmbed : IEmbed
     ///     Gets the original URL of the image.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string" /> representing the original URL of the image.
+    ///     A <c>string</c> representing the original URL of the image.
     /// </returns>
     public string OriginUrl { get; internal set; }
 }

@@ -1676,7 +1676,7 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
     ///     Gets or sets the code of the invite.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the code of the invite.
+    ///     A <c>string</c> representing the code of the invite.
     /// </returns>
     public string Code { get; set; }
 

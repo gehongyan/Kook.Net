@@ -20,7 +20,7 @@ public class UserTag : IEquatable<UserTag>
     ///     Gets the text of the tag given to user.
     /// </summary>
     /// <returns>
-    ///     A <see langword="string"/> representing the text of this tag.
+    ///     A <c>string</c> representing the text of this tag.
     /// </returns>
     public string Text { get; }
 

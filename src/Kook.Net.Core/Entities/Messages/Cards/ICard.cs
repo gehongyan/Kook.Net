@@ -17,7 +17,7 @@ public interface ICard
     ///     Gets the number of the modules in this card.
     /// </summary>
     /// <returns>
-    ///     An <see langword="int"/> value that represents how many modules are in this card.
+    ///     An <c>int</c> value that represents how many modules are in this card.
     /// </returns>
     int ModuleCount { get; }
 }
