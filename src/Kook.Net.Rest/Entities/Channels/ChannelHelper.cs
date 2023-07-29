@@ -514,7 +514,9 @@ internal static class ChannelHelper
         IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options)
     {
         OverwritePermissions? perms = channel.UserPermissionOverwrites.SingleOrDefault(x => x.Target.Id == user.Id)?.Permissions;
-        if (!perms.HasValue) return null;
+        if (!perms.HasValue)
+            throw new ArgumentNullException(nameof(user),
+                "The user does not have any permission overwrites on this channel.");
 
         perms = func(perms.Value);
         ModifyChannelPermissionOverwriteParams args = new(channel.Id, PermissionOverwriteTargetType.User,
@@ -530,7 +532,9 @@ internal static class ChannelHelper
         IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options)
     {
         OverwritePermissions? perms = channel.RolePermissionOverwrites.SingleOrDefault(x => x.Target == role.Id)?.Permissions;
-        if (!perms.HasValue) return null;
+        if (!perms.HasValue)
+            throw new ArgumentNullException(nameof(role),
+                "The role does not have any permission overwrites on this channel.");
 
         perms = func(perms.Value);
         ModifyChannelPermissionOverwriteParams args = new(channel.Id, PermissionOverwriteTargetType.Role,
