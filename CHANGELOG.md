@@ -2,6 +2,27 @@
 
 ---
 
+## v0.5.1 [2023-07-29]
+
+### Added
+
+- Introduced new methods `SocketGuild.GetCategoryChannel` and `RestGuild.GetCategoryChannelAsync`.
+
+### Fixed
+
+- Resolved an issue where the `GetJumpUrl` method was returning incorrect results.
+- Corrected the value of `KookConfig.MaxMessagesPerBatch` that was not being set correctly.
+- Fixed the incorrect deserialization of deleted quotes.
+- Addressed the problem where the `RequestOptions` parameter of `MoveUsersAsync` was not optional.
+- Fixed the failure of the `MoveUsersAsync` method.
+- Fixed an issue where modifying channel permissions immediately after creating them on a `SocketGuildChannel`
+  could result in failure without any error information.
+
+### Optimized
+
+- Optimized the internal implementation of the `GetDirectMessageAsync` method.
+- Ensured consistent string representation for `langword` in comments.
+
 ## v0.5.0 [2023-05-21]
 
 ### Update Path

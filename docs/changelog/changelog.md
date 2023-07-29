@@ -5,6 +5,26 @@ title: 变更日志
 
 # 变更日志
 
+## v0.5.1 [2023-07-29]
+
+### 新增
+
+- 添加了 `SocketGuild.GetCategoryChannel` 和 `RestGuild.GetCategoryChannelAsync` 方法
+
+### 修复
+
+- 修复了 `GetJumpUrl` 方法返回结果不正确的问题
+- 修复了 `KookConfig.MaxMessagesPerBatch` 设置不正确的问题
+- 修复了已删除引用的反序列化不正确的问题
+- 修复了 `MoveUsersAsync` 方法的 `RequestOptions` 参数不为可选参数的问题
+- 修复了 `MoveUsersAsync` 方法的失败问题
+- 修复了在 SocketGuildChannel 上创建频道权限复写后立即修改可能会导致失败且无错误信息的问题
+
+### 优化
+
+- 优化了 `GetDirectMessageAsync` 方法的内部实现
+- 统一了注释中 `langword` 的字符串表示方式
+
 ## v0.5.0 [2023-05-21]
 
 ### 更新路线
