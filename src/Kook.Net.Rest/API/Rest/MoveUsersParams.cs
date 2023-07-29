@@ -8,5 +8,6 @@ internal class MoveUsersParams
     public ulong ChannelId { get; set; }
 
     [JsonPropertyName("user_ids")]
+    [JsonNumberHandling(JsonNumberHandling.WriteAsString)]
     public ulong[] UserIds { get; set; }
 }
