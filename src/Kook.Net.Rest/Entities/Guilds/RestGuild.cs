@@ -673,7 +673,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     #region Voices
 
     /// <inheritdoc />
-    public async Task MoveUsersAsync(IEnumerable<IGuildUser> users, IVoiceChannel targetChannel, RequestOptions options)
+    public async Task MoveUsersAsync(IEnumerable<IGuildUser> users, IVoiceChannel targetChannel, RequestOptions options = null)
         => await ClientHelper.MoveUsersAsync(Kook, users, targetChannel, options).ConfigureAwait(false);
 
     #endregion
