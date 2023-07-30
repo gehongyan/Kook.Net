@@ -27,7 +27,7 @@ GET `/api/v3/message/list`
 IMessage referenceMessage = null; // 获取消息列表所根据的参考消息位置的
 Guid referenceMessageId = default; // 获取消息列表所根据的参考消息位置的 ID
 Direction direction = Direction.Before; // 获取消息列表的方向
-int limit = 25; // 获取消息列表的数量
+int limit = default; // 获取消息列表的数量
 
 // 要缓存文字频道聊天消息，请设置 MessageCacheSize 的值
 // 缓存获取文字频道的聊天消息列表
