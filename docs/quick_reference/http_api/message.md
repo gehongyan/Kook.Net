@@ -26,7 +26,7 @@ GET `/api/v3/message/list`
 ```csharp
 IMessage referenceMessage = null; // 获取消息列表所根据的参考消息位置的
 Guid referenceMessageId = default; // 获取消息列表所根据的参考消息位置的 ID
-Direction direction = Direction.Before; // 获取消息列表的方向
+Direction direction = default; // 获取消息列表的方向
 int limit = default; // 获取消息列表的数量
 
 // 要缓存文字频道聊天消息，请设置 MessageCacheSize 的值
@@ -88,7 +88,7 @@ Cacheable<IUserMessage,Guid> textMessage = await textChannel.SendTextAsync(text,
 // API 请求，发送文件消息
 Cacheable<IUserMessage,Guid> fileMessageFromPath = await textChannel.SendFileAsync(filePath, fileName, fileType, quote, ephemeralUser);
 Cacheable<IUserMessage,Guid> fileMessageFromStream = await textChannel.SendFileAsync(stream, fileName, fileType, quote, ephemeralUser);
-Cacheable<IUserMessage,Guid> fileMessageFromAttachment = await textChannel.SendFileAsync(attachment, fileName, fileType, quote, ephemeralUser);
+Cacheable<IUserMessage,Guid> fileMessageFromAttachment = await textChannel.SendFileAsync(attachment, quote, ephemeralUser);
 // API 请求，发送单卡片消息
 Cacheable<IUserMessage,Guid> cardMessage = await textChannel.SendCardAsync(card, quote, ephemeralUser);
 // API 请求，发送多卡片消息
@@ -124,7 +124,7 @@ POST `/api/v3/message/delete`
 await userMessage.DeleteAsync();
 ```
 
-### [获取频道消息某个回应的用户列表]
+### [获取频道消息某回应的用户列表]
 
 GET `/api/v3/message/reaction-list`
 
@@ -142,7 +142,7 @@ IReadOnlyCollection<IUser> reactionUsers = await userMessage.GetReactionUsersAsy
 
 POST `/api/v3/message/add-reaction`
 
-有关 Emoji 的详细信息，请参考 [表情符号](xref:Guides.Emoji)。
+有关如何构造 Emoji，请参考 [表情符号](xref:Guides.Emoji)。
 
 ```
 IEmote emoji = null; // 要添加的回应的表情
@@ -172,6 +172,6 @@ await userMessage.RemoveReactionsAsync(user, emojis);
 [发送频道聊天消息]: https://developer.kookapp.cn/doc/http/message#发送频道聊天消息
 [更新频道聊天消息]: https://developer.kookapp.cn/doc/http/message#更新频道聊天消息
 [删除频道聊天消息]: https://developer.kookapp.cn/doc/http/message#删除频道聊天消息
-[获取频道消息某个回应的用户列表]: https://developer.kookapp.cn/doc/http/message#获取频道消息某个回应的用户列表
+[获取频道消息某回应的用户列表]: https://developer.kookapp.cn/doc/http/message#获取频道消息某回应的用户列表
 [给某个消息添加回应]: https://developer.kookapp.cn/doc/http/message#给某个消息添加回应
 [删除消息的某个回应]: https://developer.kookapp.cn/doc/http/message#删除消息的某个回应
