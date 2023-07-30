@@ -96,4 +96,30 @@ public class SocketReaction : IReaction
 
         return new SocketReaction(channel as ISocketMessageChannel, model.MessageId, message, model.UserId, user, emote);
     }
+
+    /// <inheritdoc />
+    public override bool Equals(object obj)
+    {
+        if (obj == null)
+            return false;
+        if (obj == this)
+            return true;
+
+        if (obj is not SocketReaction otherReaction)
+            return false;
+
+        return UserId == otherReaction.UserId && MessageId == otherReaction.MessageId && Emote.Equals(otherReaction.Emote);
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            var hashCode = UserId.GetHashCode();
+            hashCode = (hashCode * 397) ^ MessageId.GetHashCode();
+            hashCode = (hashCode * 397) ^ Emote.GetHashCode();
+            return hashCode;
+        }
+    }
 }

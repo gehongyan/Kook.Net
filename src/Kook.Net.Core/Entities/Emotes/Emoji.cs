@@ -33,14 +33,14 @@ public class Emoji : IEmote
     /// <summary>
     ///     Determines whether the specified emoji is equal to the current one.
     /// </summary>
-    /// <param name="other">The object to compare with the current object.</param>
-    public override bool Equals(object other)
+    /// <param name="obj">The object to compare with the current object.</param>
+    public override bool Equals(object obj)
     {
-        if (other == null) return false;
+        if (obj == null) return false;
 
-        if (other == this) return true;
+        if (obj == this) return true;
 
-        return other is Emoji otherEmoji && string.Equals(Name, otherEmoji.Name);
+        return obj is Emoji otherEmoji && string.Equals(Name, otherEmoji.Name);
     }
 
     /// <summary> Tries to parse an <see cref="Emoji"/> from its raw format. </summary>

@@ -38,13 +38,13 @@ public class Emote : IEmote
     }
 
     /// <inheritdoc />
-    public override bool Equals(object other)
+    public override bool Equals(object obj)
     {
-        if (other == null) return false;
+        if (obj == null) return false;
 
-        if (other == this) return true;
+        if (obj == this) return true;
 
-        if (other is not Emote otherEmote) return false;
+        if (obj is not Emote otherEmote) return false;
 
         return Id == otherEmote.Id;
     }
