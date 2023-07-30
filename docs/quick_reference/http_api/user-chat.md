@@ -10,6 +10,7 @@ title: 私信聊天会话接口
 ```csharp
 readonly KookSocketClient _socketClient = null;
 readonly KookRestClient _restClient = null;
+readonly IKookClient _client = null;
 ```
 
 ### [获取私信聊天会话列表]
@@ -18,7 +19,7 @@ GET `/api/v3/user-chat/list`
 
 ```csharp
 // 缓存获取私信聊天会话列表
-IReadOnlyCollection<SocketDMChannel> cachedDmChannels = _client.DMChannels;
+IReadOnlyCollection<SocketDMChannel> cachedDmChannels = _socketClient.DMChannels;
 
 // API 请求
 IReadOnlyCollection<IDMChannel> dmChannels = await _client.GetDMChannelsAsync();
@@ -33,8 +34,8 @@ Guid chatCode = default; // 要获取详情的私信聊天会话的 ChatCode
 ulong userId = default; // 要获取详情的私信聊天会话的 UserId
 
 // 缓存获取私信聊天会话详情
-SocketDMChannel dmChannelByChatCode = _client.GetDMChannel(chatCode);
-SocketDMChannel dmChannelByUserId = _client.GetDMChannel(userId);
+SocketDMChannel dmChannelByChatCode = _socketClient.GetDMChannel(chatCode);
+SocketDMChannel dmChannelByUserId = _socketClient.GetDMChannel(userId);
 
 // API 请求
 IDMChannel dmChannel = await _client.GetDMChannelAsync(chatCode);
