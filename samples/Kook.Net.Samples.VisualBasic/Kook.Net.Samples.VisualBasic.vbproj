@@ -4,6 +4,7 @@
         <OutputType>Exe</OutputType>
         <RootNamespace>Kook.Net.Samples.VisualBasic</RootNamespace>
         <TargetFramework>net7.0</TargetFramework>
+        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
 
