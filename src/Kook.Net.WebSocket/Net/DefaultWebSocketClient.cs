@@ -105,15 +105,6 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
     {
         _isDisconnecting = true;
 
-        try
-        {
-            _disconnectTokenSource.Cancel(false);
-        }
-        catch
-        {
-            // ignored
-        }
-
         if (_client != null)
         {
             if (!isDisposing)
@@ -132,6 +123,15 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
             try
             {
                 _client.Dispose();
+            }
+            catch
+            {
+                // ignored
+            }
+
+            try
+            {
+                _disconnectTokenSource.Cancel(false);
             }
             catch
             {

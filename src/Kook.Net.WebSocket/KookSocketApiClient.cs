@@ -221,6 +221,11 @@ internal class KookSocketApiClient : KookRestApiClient
 
         ConnectionState = ConnectionState.Disconnecting;
 
+        if (ex is GatewayReconnectException)
+            await WebSocketClient.DisconnectAsync(4000).ConfigureAwait(false);
+        else
+            await WebSocketClient.DisconnectAsync().ConfigureAwait(false);
+
         try
         {
             _connectCancelToken?.Cancel(false);
@@ -229,11 +234,6 @@ internal class KookSocketApiClient : KookRestApiClient
         {
             // ignored
         }
-
-        if (ex is GatewayReconnectException)
-            await WebSocketClient.DisconnectAsync(4000).ConfigureAwait(false);
-        else
-            await WebSocketClient.DisconnectAsync().ConfigureAwait(false);
 
         ConnectionState = ConnectionState.Disconnected;
     }
