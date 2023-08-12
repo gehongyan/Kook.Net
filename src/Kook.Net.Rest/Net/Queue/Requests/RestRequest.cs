@@ -1,3 +1,7 @@
+#if NET462
+using System.Net.Http;
+#endif
+
 using Kook.Net.Rest;
 
 namespace Kook.Net.Queue;

@@ -163,9 +163,11 @@ let token =
 if token = null then
     raise (ArgumentNullException("KookDebugToken"))
 
+// 阻塞程序直到关闭
 async {
     do! client.LoginAsync(TokenType.Bot, token) |> Async.AwaitTask
     do! client.StartAsync() |> Async.AwaitTask
+
     // 阻塞程序直到关闭
     do! Task.Delay(Timeout.Infinite) |> Async.AwaitTask
 }

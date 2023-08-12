@@ -1,8 +1,10 @@
 #if NET462
 using System.Net;
+using System.Net.Http;
 #else
 using System.Web;
 #endif
+
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Globalization;

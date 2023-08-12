@@ -5,6 +5,10 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 #endif
 
+#if NET462
+using System.Net.Http;
+#endif
+
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
 using System.Net.Mime;
 #endif
