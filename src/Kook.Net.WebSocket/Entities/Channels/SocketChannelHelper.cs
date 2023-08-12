@@ -38,20 +38,37 @@ internal static class SocketChannelHelper
         }
         else if (dir == Direction.After)
         {
-            limit -= cachedMessages.Count;
-            if (mode == CacheMode.CacheOnly || limit <= 0) return result;
+            if (mode == CacheMode.CacheOnly)
+                return result;
+
+            bool ignoreCache = false;
+
+            // We can find two cases:
+            // 1. referenceMessageId is not null and corresponds to a message that is not in the cache,
+            // so we have to make a request and ignore the cache
+            if (referenceMessageId.HasValue && messages?.Get(referenceMessageId.Value) == null)
+            {
+                ignoreCache = true;
+            }
+            // 2. referenceMessageId is null or already in the cache, so we start from the cache
+            else if (cachedMessages.Count > 0)
+            {
+                referenceMessageId = cachedMessages
+#if NET6_0_OR_GREATER
+                    .MaxBy(x => x.Timestamp)?.Id;
+#else
+                    .OrderByDescending(x => x.Timestamp).FirstOrDefault()?.Id;
+#endif
+                limit -= cachedMessages.Count;
+
+                if (limit <= 0)
+                    return result;
+            }
 
             //Download remaining messages
-            Guid? maxId = cachedMessages.Count > 0
-#if NET6_0_OR_GREATER
-                ? cachedMessages.MaxBy(x => x.Timestamp)?.Id
-#else
-                ? cachedMessages.OrderByDescending(x => x.Timestamp).FirstOrDefault()?.Id
-#endif
-                : referenceMessageId;
-            IAsyncEnumerable<IReadOnlyCollection<RestMessage>> downloadedMessages =
-                ChannelHelper.GetMessagesAsync(channel, kook, maxId, dir, limit, true, options);
-            if (cachedMessages.Count != 0)
+            var downloadedMessages = ChannelHelper.GetMessagesAsync(
+                channel, kook, referenceMessageId, dir, limit, true, options);
+            if (!ignoreCache && cachedMessages.Count != 0)
                 return result.Concat(downloadedMessages);
             else
                 return downloadedMessages;
