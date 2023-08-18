@@ -17,6 +17,7 @@ title: 快速参考指南
   - @Guides.QuickReference.Http.ChannelUser
   - @Guides.QuickReference.Http.UserChat
   - @Guides.QuickReference.Http.DirectMessage
+  - @Guides.QuickReference.Http.Friend
   - @Guides.QuickReference.Http.Gateway
   - @Guides.QuickReference.Http.User
   - @Guides.QuickReference.Http.Asset
