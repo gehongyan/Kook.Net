@@ -304,15 +304,11 @@ internal static class GuildHelper
         return emote.ToEntity(guild.Id);
     }
 
-    /// <exception cref="ArgumentNullException"><paramref name="func"/> is <c>null</c>.</exception>
-    public static async Task ModifyEmoteNameAsync(IGuild guild, BaseKookClient client, IEmote emote, Action<string> func,
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
+    public static async Task ModifyEmoteNameAsync(IGuild guild, BaseKookClient client, IEmote emote, string name,
         RequestOptions options)
     {
-        if (func == null) throw new ArgumentNullException(nameof(func));
-
-        string name = emote.Name;
-        func(name);
-
+        if (name == null) throw new ArgumentNullException(nameof(name));
         ModifyGuildEmoteParams args = new() { Name = name, Id = emote.Id };
         await client.ApiClient.ModifyGuildEmoteAsync(args, options).ConfigureAwait(false);
     }

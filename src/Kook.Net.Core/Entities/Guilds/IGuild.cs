@@ -674,13 +674,13 @@ public interface IGuild : IEntity<ulong>
     ///     Modifies an existing <see cref="GuildEmote"/> in this guild.
     /// </summary>
     /// <param name="emote">The emote to be modified.</param>
-    /// <param name="func">The delegate containing the properties to modify the emote with.</param>
+    /// <param name="name"> The new name of the emote.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous modification operation. The task result contains the modified
     ///     emote.
     /// </returns>
-    Task ModifyEmoteNameAsync(GuildEmote emote, Action<string> func, RequestOptions options = null);
+    Task ModifyEmoteNameAsync(GuildEmote emote, string name, RequestOptions options = null);
 
     /// <summary>
     ///     Deletes an existing <see cref="GuildEmote"/> from this guild.

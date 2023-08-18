@@ -968,9 +968,9 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         => GuildHelper.CreateEmoteAsync(this, Kook, name, image, options);
 
     /// <inheritdoc />
-    /// <exception cref="ArgumentNullException"><paramref name="func"/> is <c>null</c>.</exception>
-    public Task ModifyEmoteNameAsync(GuildEmote emote, Action<string> func, RequestOptions options = null)
-        => GuildHelper.ModifyEmoteNameAsync(this, Kook, emote, func, options);
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
+    public Task ModifyEmoteNameAsync(GuildEmote emote, string name, RequestOptions options = null)
+        => GuildHelper.ModifyEmoteNameAsync(this, Kook, emote, name, options);
 
     /// <inheritdoc />
     public Task DeleteEmoteAsync(GuildEmote emote, RequestOptions options = null)
