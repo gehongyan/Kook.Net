@@ -1,6 +1,6 @@
 ---
-uid: Guides.QuickReference.Event.Guild
-title: 服务器相关事件
+uid: Guides.QuickReference.Event.Channel
+title: 频道相关事件
 ---
 
 # 频道相关事件

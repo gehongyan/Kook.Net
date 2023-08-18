@@ -1,6 +1,6 @@
 ---
-uid: Guides.QuickReference.Event.Guild
-title: 服务器相关事件
+uid: Guides.QuickReference.Event.DirectMessage
+title: 私聊消息事件
 ---
 
 # 私聊消息事件

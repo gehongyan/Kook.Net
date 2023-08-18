@@ -1,6 +1,6 @@
 ---
-uid: Guides.QuickReference.Event.Guild
-title: 服务器相关事件
+uid: Guides.QuickReference.Event.User
+title: 用户相关事件列表
 ---
 
 # 用户相关事件列表

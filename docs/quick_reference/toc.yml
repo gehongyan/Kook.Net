@@ -16,6 +16,8 @@
       topicUid: Guides.QuickReference.Http.UserChat
     - name: 用户私聊消息接口
       topicUid: Guides.QuickReference.Http.DirectMessage
+    - name: 好友相关接口
+      topicUid: Guides.QuickReference.Http.Friend
     - name: Gateway 相关接口
       topicUid: Guides.QuickReference.Http.Gateway
     - name: 用户相关接口
@@ -38,3 +40,19 @@
       topicUid: Guides.QuickReference.Http.Game
     - name: OAuth 2.0 相关接口
       topicUid: Guides.QuickReference.Http.OAuth
+- name: 网关事件
+  items:
+    - name: 频道相关事件
+      topicUid: Guides.QuickReference.Event.Channel
+    - name: 服务器相关事件
+      topicUid: Guides.QuickReference.Event.Guild
+    - name: 私聊消息事件
+      topicUid: Guides.QuickReference.Event.DirectMessage
+    - name: 服务器成员相关事件
+      topicUid: Guides.QuickReference.Event.GuildMember
+    - name: 服务器角色相关事件
+      topicUid: Guides.QuickReference.Event.GuildRole
+    - name: 消息相关事件列表
+      topicUid: Guides.QuickReference.Event.Message
+    - name: 用户相关事件列表
+      topicUid: Guides.QuickReference.Event.User

@@ -3,7 +3,7 @@ uid: Guides.QuickReference.Http.OAuth
 title: OAuth 2.0 相关接口
 ---
 
-# 频道用户相关
+# OAuth 2.0 相关接口
 
 预声明变量
 

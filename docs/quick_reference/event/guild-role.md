@@ -1,6 +1,6 @@
 ---
-uid: Guides.QuickReference.Event.Guild
-title: 服务器相关事件
+uid: Guides.QuickReference.Event.GuildRole
+title: 服务器角色相关事件
 ---
 
 # 服务器角色相关事件
