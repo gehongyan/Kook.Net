@@ -29,7 +29,11 @@ title: 快速参考指南
   - @Guides.QuickReference.Http.Badge
   - @Guides.QuickReference.Http.Game
   - @Guides.QuickReference.Http.OAuth
-
----
-
-持续施工中……
+- 网关事件
+  - @Guides.QuickReference.Event.Channel
+  - @Guides.QuickReference.Event.DirectMessage
+  - @Guides.QuickReference.Event.GuildMember
+  - @Guides.QuickReference.Event.GuildRole
+  - @Guides.QuickReference.Event.Guild
+  - @Guides.QuickReference.Event.Message
+  - @Guides.QuickReference.Event.User
