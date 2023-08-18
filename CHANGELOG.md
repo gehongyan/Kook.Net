@@ -2,6 +2,29 @@
 
 ---
 
+## v0.5.2 [2023-08-18]
+
+### Update Path
+
+The parameter `Action<string>` of the `ModifyEmoteNameAsync` method has been changed to `string`. All usages of this
+method need to be updated.
+
+### Fixed
+
+- Fixed an issue where incorrect comparison of `SocketReaction` caused the reaction cannot be removed from the cached
+  message when a reaction is removed.
+- Fixed an issue where the Socket client did not correctly send the close code when disconnecting.
+- Fixed an issue where the results were incorrect when querying messages after a reference message in
+  the `GetMessagesAsync` method.
+- Fixed an issue where the `ModifyEmoteNameAsync` method did not correctly rename guild emotes.
+
+### Misc
+
+- Completed the quick reference guide.
+- Added actual functionality to the sample program `SimpleBot`, which can respond to a simple command, reply with
+  buttons, and respond to button click events.
+- Added implementation examples for Visual Basic and F#.
+
 ## v0.5.1 [2023-07-29]
 
 ### Added
