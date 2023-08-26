@@ -31,7 +31,9 @@ Kook.Net 是一个对 [KOOK（原开黑啦）API] 进行功能封装的类库，
 
 如果您是初次使用 Kook.Net，请参考 [用户指南]。
 
-如果您想浏览 Kook.Net API，请参考 [API 文档]。
+如果您熟悉 KOOK 开发者文档，想快速了解如何在 Kook.Net 中访问这些接口与事件，请参考 [快速参考指南]。
+
+如果您想浏览完整的 Kook.Net API，请参考 [API 文档]。
 
 ## 寻求帮助？
 
@@ -40,6 +42,8 @@ Kook.Net 是一个对 [KOOK（原开黑啦）API] 进行功能封装的类库，
 [GitHub]: https://github.com/gehongyan/Kook.Net
 
 [用户指南]: ./guides/introduction/intro.md
+
+[快速参考指南]: ./quick_reference/index.md
 
 [API 文档]: ./api/index.md
 

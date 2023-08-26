@@ -128,7 +128,7 @@ title: 文本命令框架入门
 
 ### 模块构造函数
 
-模块通过 [依赖注入](xref:Guides.TextCommands.DI) 进行构造，
+模块通过 [依赖注入](xref:Guides.DI.Injection) 进行构造，
 构造函数内的任何参数都应先注入服务容器中。
 
 > [!TIP]
