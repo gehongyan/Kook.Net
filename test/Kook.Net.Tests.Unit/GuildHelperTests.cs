@@ -1,7 +1,6 @@
-using FluentAssertions;
 using Kook.Rest;
-using Moq;
 using System;
+using NSubstitute;
 using Xunit;
 
 namespace Kook;
@@ -19,12 +18,13 @@ public class GuildHelperTests
     [InlineData(BoostLevel.Level6, 320)]
     public void GetMaxBitrate(BoostLevel level, int factor)
     {
-        IGuild guild = Mock.Of<IGuild>(g => g.BoostLevel == level);
+        var guild = Substitute.For<IGuild>();
+        guild.BoostLevel.Returns(level);
         int expected = factor * 1000;
 
         int actual = GuildHelper.GetMaxBitrate(guild);
 
-        actual.Should().Be(expected);
+        Assert.Equal(expected, actual);
     }
 
     [Theory]
@@ -37,11 +37,12 @@ public class GuildHelperTests
     [InlineData(BoostLevel.Level6, 300)]
     public void GetUploadLimit(BoostLevel level, ulong factor)
     {
-        IGuild guild = Mock.Of<IGuild>(g => g.BoostLevel == level);
+        var guild = Substitute.For<IGuild>();
+        guild.BoostLevel.Returns(level);
         ulong expected = factor * (ulong)Math.Pow(2, 20);
 
         ulong actual = GuildHelper.GetUploadLimit(guild);
 
-        actual.Should().Be(expected);
+        Assert.Equal(expected, actual);
     }
 }
