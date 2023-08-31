@@ -369,12 +369,12 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     ///     A <see cref="SectionModule"/> representing the built section module object.
     /// </returns>
     /// <exception cref="InvalidOperationException">
-    ///     The <see cref="ButtonElement"/> was positioned to the left of the <see cref="Text"/>,
+    ///     The <see cref="ButtonElement"/> was not positioned to the right of the <see cref="Text"/>,
     ///     which is not allowed.
     /// </exception>
     public SectionModule Build()
     {
-        if (Mode == SectionAccessoryMode.Left && Accessory is ButtonElementBuilder)
+        if (Mode != SectionAccessoryMode.Right && Accessory is ButtonElementBuilder)
             throw new InvalidOperationException("Button must be placed on the right");
 
         return new SectionModule(Mode, Text?.Build(), Accessory?.Build());
