@@ -24,14 +24,6 @@ public interface IVoiceChannel : INestedChannel, IAudioChannel, IMentionable
     int? UserLimit { get; }
 
     /// <summary>
-    ///     Gets the server url that clients should connect to to join this voice channel.
-    /// </summary>
-    /// <returns>
-    ///     A string representing the url that clients should connect to to join this voice channel.
-    /// </returns>
-    string ServerUrl { get; }
-
-    /// <summary>
     ///     Gets whether this voice channel is locked by a password.
     /// </summary>
     /// <returns>

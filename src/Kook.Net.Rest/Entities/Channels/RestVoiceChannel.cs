@@ -25,6 +25,12 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     public string ServerUrl { get; private set; }
 
     /// <inheritdoc />
+    public bool? IsVoiceRegionOverwritten { get; private set; }
+
+    /// <inheritdoc />
+    public string VoiceRegion { get; private set; }
+
+    /// <inheritdoc />
     public bool HasPassword { get; private set; }
 
     /// <inheritdoc />
@@ -57,6 +63,8 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
         UserLimit = model.UserLimit;
         ServerUrl = model.ServerUrl;
         IsPermissionSynced = model.PermissionSync;
+        IsVoiceRegionOverwritten = model.OverwriteVoiceRegion;
+        VoiceRegion = model.VoiceRegion;
         HasPassword = model.HasPassword;
     }
 

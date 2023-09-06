@@ -15,7 +15,7 @@ public class ModifyVoiceChannelProperties : ModifyGuildChannelProperties
     ///         This property cannot be set to the quality equivalent or higher than
     ///         <see cref="Kook.VoiceQuality._128kbps"/> via Kook REST API
     ///         because of the server-side limitation despite of the fact that
-    ///         the voice channel exists in a boosted guild. 
+    ///         the voice channel exists in a boosted guild.
     ///     </note>
     /// </remarks>
     public VoiceQuality? VoiceQuality { get; set; }
@@ -30,4 +30,15 @@ public class ModifyVoiceChannelProperties : ModifyGuildChannelProperties
     ///     Gets or sets the password of the channel, or empty string to clear the password; <c>null</c> if not set.
     /// </summary>
     public string Password { get; set; }
+
+    /// <summary>
+    ///     Gets or sets a value that indicates whether the voice region of the channel is overwritten;
+    ///     <c>null</c> if not set.
+    /// </summary>
+    public bool? OverwriteVoiceRegion { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the voice region of the channel; <c>null</c> if not set.
+    /// </summary>
+    public string VoiceRegion { get; set; }
 }

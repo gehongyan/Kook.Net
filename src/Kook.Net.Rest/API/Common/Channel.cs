@@ -63,4 +63,12 @@ internal class Channel
 
     [JsonPropertyName("has_password")]
     public bool HasPassword { get; set; }
+
+    // 为 0 时表示同步，因此命名为 OverwriteVoiceRegion
+    [JsonPropertyName("sync_guild_region")]
+    [JsonConverter(typeof(NumberBooleanConverter))]
+    public bool? OverwriteVoiceRegion { get; set; }
+
+    [JsonPropertyName("region")]
+    public string VoiceRegion { get; set; }
 }

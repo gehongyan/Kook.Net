@@ -56,7 +56,9 @@ internal static class ChannelHelper
             CategoryId = args.CategoryId,
             VoiceQuality = args.VoiceQuality,
             UserLimit = args.UserLimit,
-            Password = args.Password
+            Password = args.Password,
+            OverwriteVoiceRegion = args.OverwriteVoiceRegion,
+            VoiceRegion = args.VoiceRegion
         };
         return await client.ApiClient.ModifyGuildChannelAsync(channel.Id, apiArgs, options).ConfigureAwait(false);
     }

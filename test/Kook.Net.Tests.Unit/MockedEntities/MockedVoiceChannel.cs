@@ -84,6 +84,12 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
 
     public int? UserLimit => throw new NotImplementedException();
 
+    /// <inheritdoc />
+    public bool? IsVoiceRegionOverwritten => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public string VoiceRegion => throw new NotImplementedException();
+
     public string ServerUrl => throw new NotImplementedException();
 
     public bool HasPassword => throw new NotImplementedException();

@@ -44,6 +44,12 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     public string ServerUrl { get; set; }
 
     /// <inheritdoc />
+    public bool? IsVoiceRegionOverwritten { get; private set; }
+
+    /// <inheritdoc />
+    public string VoiceRegion { get; private set; }
+
+    /// <inheritdoc />
     public bool HasPassword { get; set; }
 
     /// <inheritdoc />
@@ -92,7 +98,9 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
         UserLimit = model.UserLimit ?? 0;
         ServerUrl = model.ServerUrl;
         IsPermissionSynced = model.PermissionSync;
+        VoiceRegion = model.VoiceRegion;
         HasPassword = model.HasPassword;
+        IsVoiceRegionOverwritten = model.OverwriteVoiceRegion;
     }
 
     /// <inheritdoc />
