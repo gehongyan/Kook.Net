@@ -16,7 +16,7 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     /// <summary>
     ///     Gets the channel where this invite was created.
     /// </summary>
-    public SocketGuildChannel Channel { get; private set; }
+    public SocketGuildChannel Channel { get; }
 
     /// <inheritdoc />
     public ulong? GuildId { get; private set; }
@@ -24,12 +24,12 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     /// <summary>
     ///     Gets the guild where this invite was created.
     /// </summary>
-    public SocketGuild Guild { get; private set; }
+    public SocketGuild Guild { get; }
 
     /// <summary>
     ///     Gets the time at which this invite will expire.
     /// </summary>
-    public DateTimeOffset? ExpiresAt { get; set; }
+    public DateTimeOffset? ExpiresAt { get; private set; }
 
     /// <summary>
     ///     Gets the time span until the invite expires.

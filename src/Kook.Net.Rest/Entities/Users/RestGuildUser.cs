@@ -39,7 +39,7 @@ public class RestGuildUser : RestUser, IGuildUser
     public Color Color { get; private set; }
 
     /// <inheritdoc />
-    public bool? IsOwner { get; set; }
+    public bool? IsOwner { get; private set; }
 
     /// <inheritdoc />
     /// <exception cref="InvalidOperationException" accessor="get">Resolving permissions requires the parent guild to be downloaded.</exception>

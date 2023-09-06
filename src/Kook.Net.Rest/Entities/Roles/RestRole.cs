@@ -20,7 +20,7 @@ public class RestRole : RestEntity<uint>, IRole
     internal IGuild Guild { get; }
 
     /// <inheritdoc />
-    public RoleType? Type { get; set; }
+    public RoleType? Type { get; private set; }
 
     /// <inheritdoc />
     public Color Color { get; private set; }

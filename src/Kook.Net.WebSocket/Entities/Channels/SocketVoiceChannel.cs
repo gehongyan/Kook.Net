@@ -14,7 +14,7 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     #region SocketVoiceChannel
 
     /// <inheritdoc />
-    public ulong? CategoryId { get; set; }
+    public ulong? CategoryId { get; private set; }
 
     /// <summary>
     ///     Gets the parent (category) of this channel in the guild's channel list.
@@ -35,13 +35,13 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
 
     /// <inheritdoc />
-    public VoiceQuality? VoiceQuality { get; set; }
+    public VoiceQuality? VoiceQuality { get; private set; }
 
     /// <inheritdoc />
-    public int? UserLimit { get; set; }
+    public int? UserLimit { get; private set; }
 
     /// <inheritdoc />
-    public string ServerUrl { get; set; }
+    public string ServerUrl { get; private set; }
 
     /// <inheritdoc />
     public bool? IsVoiceRegionOverwritten { get; private set; }
@@ -50,7 +50,7 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     public string VoiceRegion { get; private set; }
 
     /// <inheritdoc />
-    public bool HasPassword { get; set; }
+    public bool HasPassword { get; private set; }
 
     /// <inheritdoc />
     /// <seealso cref="SocketVoiceChannel.ConnectedUsers"/>

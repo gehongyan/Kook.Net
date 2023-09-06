@@ -16,10 +16,10 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     private readonly MessageCache _messages;
 
     /// <inheritdoc />
-    public string Topic { get; set; }
+    public string Topic { get; private set; }
 
     /// <inheritdoc />
-    public int SlowModeInterval { get; set; }
+    public int SlowModeInterval { get; private set; }
 
     /// <inheritdoc />
     public ulong? CategoryId { get; private set; }

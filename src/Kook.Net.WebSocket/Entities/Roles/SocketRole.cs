@@ -23,7 +23,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     public SocketGuild Guild { get; }
 
     /// <inheritdoc />
-    public RoleType? Type { get; set; }
+    public RoleType? Type { get; private set; }
 
     /// <inheritdoc />
     public string Name { get; private set; }

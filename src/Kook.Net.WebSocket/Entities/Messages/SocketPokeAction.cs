@@ -14,7 +14,7 @@ public class SocketPokeAction : IPokeAction
     public IReadOnlyCollection<SocketUser> Targets { get; }
 
     /// <inheritdoc cref="IPokeAction.Poke" />
-    public Poke Poke { get; set; }
+    public Poke Poke { get; private set; }
 
     internal SocketPokeAction(SocketUser @operator, IEnumerable<SocketUser> targets, Poke poke)
     {
