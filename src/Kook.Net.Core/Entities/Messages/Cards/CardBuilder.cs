@@ -13,6 +13,21 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     public CardBuilder() => Modules = new List<IModuleBuilder>();
 
     /// <summary>
+    ///     Initializes a new instance of the <see cref="CardBuilder"/> class with the specified parameters.
+    /// </summary>
+    /// <param name="theme"> The theme of the card.</param>
+    /// <param name="color"> The color displayed along the left side of the card.</param>
+    /// <param name="size"> The size of the card.</param>
+    /// <param name="modules"> The modules in the card.</param>
+    public CardBuilder(CardTheme theme, Color? color = null, CardSize size = CardSize.Large, List<IModuleBuilder> modules = null)
+    {
+        WithTheme(theme);
+        if (color.HasValue) WithColor(color.Value);
+        WithSize(size);
+        Modules = modules ?? new List<IModuleBuilder>();
+    }
+
+    /// <summary>
     ///     Gets the type of the card.
     /// </summary>
     /// <returns>
