@@ -8,12 +8,6 @@ public interface IAudioChannel : IChannel
     /// <summary>
     ///     Gets whether the voice region of this audio channel is overwritten.
     /// </summary>
-    /// <remarks>
-    ///     <note type="warning">
-    ///         This property may be <see langword="null" />
-    ///         due to the lack of fields of KOOK API.
-    ///     </note>
-    /// </remarks>
     bool? IsVoiceRegionOverwritten { get; }
 
     /// <summary>
@@ -21,8 +15,7 @@ public interface IAudioChannel : IChannel
     /// </summary>
     /// <remarks>
     ///     <note type="warning">
-    ///         This property may be <see langword="null" />
-    ///         due to the lack of fields of KOOK API.
+    ///         This property may be empty if the voice channel is created before this feature was released.
     ///     </note>
     /// </remarks>
     string VoiceRegion { get; }
