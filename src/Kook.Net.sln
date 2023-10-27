@@ -32,7 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Experimental", "Experimenta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kook.Net.Experimental", "Kook.Net.Experimental\Kook.Net.Experimental.csproj", "{95881FD6-BAF5-43A6-9D75-9F9181FC9D21}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{55F21D65-BA1A-4A4B-B370-FD2CA0204EB2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "SolutionItems", "{55F21D65-BA1A-4A4B-B370-FD2CA0204EB2}"
 	ProjectSection(SolutionItems) = preProject
 		Kook.Net.targets = Kook.Net.targets
 	EndProjectSection
@@ -40,6 +40,8 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Kook.Net.Samples.VisualBasic", "..\samples\Kook.Net.Samples.VisualBasic\Kook.Net.Samples.VisualBasic.vbproj", "{43C91115-7D09-4A28-95CD-380C3B00EAE0}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Kook.Net.Samples.FSharp", "..\samples\Kook.Net.Samples.FSharp\Kook.Net.Samples.FSharp.fsproj", "{DCD692BE-9D91-4DE1-8603-CD8923C59B6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kook.Net.Samples.Docker", "..\samples\Kook.Net.Samples.Docker\Kook.Net.Samples.Docker.csproj", "{B8A50094-A959-4807-AB36-6256A1EEEE61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +101,10 @@ Global
 		{DCD692BE-9D91-4DE1-8603-CD8923C59B6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCD692BE-9D91-4DE1-8603-CD8923C59B6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCD692BE-9D91-4DE1-8603-CD8923C59B6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8A50094-A959-4807-AB36-6256A1EEEE61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8A50094-A959-4807-AB36-6256A1EEEE61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8A50094-A959-4807-AB36-6256A1EEEE61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8A50094-A959-4807-AB36-6256A1EEEE61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{57F76D67-0E55-4609-A61C-3A4C3073CA0E} = {58B166AB-82DD-472F-AC70-9318DA4F881E}
@@ -112,5 +118,6 @@ Global
 		{95881FD6-BAF5-43A6-9D75-9F9181FC9D21} = {BB39595B-5DCE-4B1C-8740-A013C261E317}
 		{43C91115-7D09-4A28-95CD-380C3B00EAE0} = {8DE556F9-829D-48D3-A41C-FA57207CAE72}
 		{DCD692BE-9D91-4DE1-8603-CD8923C59B6A} = {8DE556F9-829D-48D3-A41C-FA57207CAE72}
+		{B8A50094-A959-4807-AB36-6256A1EEEE61} = {8DE556F9-829D-48D3-A41C-FA57207CAE72}
 	EndGlobalSection
 EndGlobal
