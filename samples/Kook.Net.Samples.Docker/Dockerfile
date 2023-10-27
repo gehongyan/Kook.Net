@@ -2,11 +2,11 @@
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-WORKDIR /src
+WORKDIR /samples
 COPY ["Kook.Net.Samples.Docker/Kook.Net.Samples.Docker.csproj", "Kook.Net.Samples.Docker/"]
 RUN dotnet restore "Kook.Net.Samples.Docker/Kook.Net.Samples.Docker.csproj"
 COPY . .
-WORKDIR "/src/Kook.Net.Samples.Docker"
+WORKDIR "/samples/Kook.Net.Samples.Docker"
 RUN dotnet build "Kook.Net.Samples.Docker.csproj" -c Release -o /app/build
 
 FROM build AS publish
