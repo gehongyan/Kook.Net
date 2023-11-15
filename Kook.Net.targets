@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <VersionPrefix>0.5.2</VersionPrefix>
+    <VersionPrefix>0.5.3</VersionPrefix>
     <IsPackable>false</IsPackable>
     <!--        <VersionSuffix>rc</VersionSuffix>-->
     <LangVersion>latest</LangVersion>
