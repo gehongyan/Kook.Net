@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="../Kook.Net.targets" />
+  <Import Project="../../Kook.Net.targets" />
 
   <PropertyGroup>
     <RootNamespace>Kook.Rest</RootNamespace>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

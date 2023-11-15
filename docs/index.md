@@ -19,6 +19,7 @@ title: 首页
 
 Kook.Net 是一个对 [KOOK（原开黑啦）API] 进行功能封装的类库，以 C# 编写，编译所采用的目标框架包括
 
+- [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [.NET 7.0](https://dotnet.microsoft.com/download/dotnet/7.0)
 - [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
 - [.NET Standard 2.1](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-1)

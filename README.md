@@ -3,7 +3,7 @@
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/gehongyan/Kook.Net/push-or-pr.yml?branch=master)
 ![GitHub Top Language](https://img.shields.io/github/languages/top/gehongyan/Kook.Net)
 [![Nuget Version](https://img.shields.io/nuget/v/Kook.Net)](https://www.nuget.org/packages/Kook.Net)
-[![Nuget](https://img.shields.io/nuget/dt/Kook.Net.Core?color=%230099ff)](https://www.nuget.org/packages/Kook.Net)
+[![Nuget](https://img.shields.io/nuget/dt/Kook.Net?color=%230099ff)](https://www.nuget.org/packages/Kook.Net)
 [![License](https://img.shields.io/github/license/gehongyan/Kook.Net)](https://github.com/gehongyan/Kook.Net/blob/master/LICENSE)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net?ref=badge_shield)
 [![Chat on Kook](https://www.kookapp.cn/api/v3/badge/guild?guild_id=1591057729615250)](https://kook.top/EvxnOb)
@@ -22,6 +22,7 @@
 
 ## Targets
 
+- [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [.NET 7.0](https://dotnet.microsoft.com/download/dotnet/7.0)
 - [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
 - [.NET Standard 2.1](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-1)
@@ -81,8 +82,8 @@ for portion of the code in this repository according to [this license](https://g
 Special thanks to [Discord.Net](https://github.com/discord-net/Discord.Net) for such a great project.
 
 <p>
-  <img src="./assets/Rider_Icon.svg" height="50"/>
-  <img src="./assets/ReSharper_Icon.png" height="50"/>
+  <img src="./assets/Rider_Icon.svg" height="50" alt="RiderIcon"/>
+  <img src="./assets/ReSharper_Icon.png" height="50" alt="Resharper_Icon"/>
 </p>
 
 Special thanks to [JetBrains](https://www.jetbrains.com) for providing free licenses for their awesome tools -

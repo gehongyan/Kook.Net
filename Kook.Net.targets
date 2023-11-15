@@ -3,6 +3,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <VersionPrefix>0.5.2</VersionPrefix>
+    <IsPackable>false</IsPackable>
     <!--        <VersionSuffix>rc</VersionSuffix>-->
     <LangVersion>latest</LangVersion>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -13,8 +14,9 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/gehongyan/Kook.Net.git</RepositoryUrl>
     <Company>gehongyan</Company>
-    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net7.0;net6.0;net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">net7.0;net6.0;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net8.0;net7.0;net6.0;net462;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">net8.0;net7.0;net6.0;netstandard2.0;netstandard2.1</TargetFrameworks>
     <NoWarn>$(NoWarn);NU1803</NoWarn>
     <PackageVersion>$(Version)</PackageVersion>
     <WarningLevel>6</WarningLevel>
@@ -26,4 +28,7 @@
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 </Project>

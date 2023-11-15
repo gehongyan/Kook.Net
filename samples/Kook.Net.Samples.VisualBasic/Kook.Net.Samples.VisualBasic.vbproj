@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <RootNamespace>Kook.Net.Samples.VisualBasic</RootNamespace>
-        <TargetFramework>net7.0</TargetFramework>
-        <IsPackable>false</IsPackable>
-    </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Kook.Net.Samples.VisualBasic</RootNamespace>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
 
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\Kook.Net\Kook.Net.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Kook.Net\Kook.Net.csproj"/>
+  </ItemGroup>
 
 </Project>
