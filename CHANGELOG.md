@@ -2,6 +2,34 @@
 
 ---
 
+## v0.5.3 [2023-11-15]
+
+### Update Path
+
+The `IVoiceChannel.ServerUrl` property has been moved to the `IAudioChannel` interface.
+All usages of this property need to be updated.
+
+### Added
+
+- Added voice region properties to the `IAudioChannel` interface.
+- Added support for modifying voice region properties in the `IVoiceChannel.ModifyAsync` method.
+- Added parameterized constructors to card, module, and element builders.
+
+### Changed
+
+- The `IVoiceChannel.ServerUrl` property has been moved to the `IAudioChannel` interface.
+- Removed unintentionally provided public set accessors on some properties.
+
+### Fixed
+
+- Fixed incorrect build validation conditions for `SectionModuleBuild`.
+
+### Other
+
+- Replaced the Moq testing mock framework with NSubstitute.
+- Added Docker usage examples.
+- Added support for targeting .NET 8.
+
 ## v0.5.2 [2023-08-18]
 
 ### Update Path

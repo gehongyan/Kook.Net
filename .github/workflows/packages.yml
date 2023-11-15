@@ -37,7 +37,7 @@ jobs:
             ${{ runner.os }}-nuget
 
       - name: Generate Packages
-        run: dotnet pack src --configuration Release --output packages
+        run: dotnet pack --configuration Release --output packages
 
       - name: Push Packages to NuGet
         run: dotnet nuget push .\packages\*.nupkg -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json --skip-duplicate

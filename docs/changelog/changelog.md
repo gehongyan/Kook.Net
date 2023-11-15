@@ -5,6 +5,33 @@ title: 变更日志
 
 # 变更日志
 
+## v0.5.3 [2023-11-15]
+
+### 更新路线
+
+`IVoiceChannel.ServerUrl` 属性已移动至 `IAudioChannel` 接口，所有使用此属性的用法都需要更新。
+
+### 新增
+
+- 在 `IAudioChannel` 接口上新增语音区域相关属性
+- `IVoiceChannel.ModifyAsync` 方法参数新增支持修改语音区域相关属性
+- 为卡片、模块、元素构造器相关类新增有参构造函数
+
+### 变更
+
+- `IVoiceChannel.ServerUrl` 属性已移动至 `IAudioChannel` 接口
+- 移除了部分属性上的意外提供的公开 set 访问器
+
+### 修复
+
+- 修复了 `SectionModuleBuild` 的构建校验条件不正确的问题
+
+### 其它
+
+- 替换测试 Mock 框架 Moq 为 NSubstitute
+- 新增 Docker 使用示例
+- 新增面向 .NET 8 的目标框架构建
+
 ## v0.5.2 [2023-08-18]
 
 ### 更新路线
