@@ -9,10 +9,10 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Emote : IEmote
 {
-    internal static readonly Regex PlainTextEmojiRegex = new(@"\[:(?<name>[^:]{1,32}?):(?<id>\d{1,20}\/\w{1,20})\]",
+    internal static readonly Regex PlainTextEmojiRegex = new(@"\[:(?<name>[^:]{1,32}?):(?<id>[\w\/]{1,40}?)\]",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
-    internal static readonly Regex KMarkdownEmojiRegex = new(@"(\(emj\))(?<name>[^\(\)]{1,32}?)\1\[(?<id>\d{1,20}\/\w{1,20})\]",
+    internal static readonly Regex KMarkdownEmojiRegex = new(@"(\(emj\))(?<name>[^\(\)]{1,32}?)\1\[(?<id>[\w\/]{1,40}?)\]",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
     /// <summary>

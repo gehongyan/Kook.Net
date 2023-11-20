@@ -32,6 +32,8 @@ public class EmojiTests
     [Theory]
     [InlineData("[:test:1990044438283387/aIVQrtPv4z10b10b]", "test", "1990044438283387/aIVQrtPv4z10b10b", TagMode.PlainText)]
     [InlineData("(emj)test(emj)[1990044438283387/aIVQrtPv4z10b10b]", "test", "1990044438283387/aIVQrtPv4z10b10b", TagMode.KMarkdown)]
+    [InlineData("[:两颗骰子:0/24677/ofbqSypFUx0a00a0]", "两颗骰子", "0/24677/ofbqSypFUx0a00a0", TagMode.PlainText)]
+    [InlineData("(emj)两颗骰子(emj)[0/24677/ofbqSypFUx0a00a0]", "两颗骰子", "0/24677/ofbqSypFUx0a00a0", TagMode.KMarkdown)]
     public void Test_Emote_Parse(string input, string name, string id, TagMode tagMode)
     {
         Assert.True(Emote.TryParse(input, out Emote emote, tagMode));
@@ -43,8 +45,8 @@ public class EmojiTests
     [Theory]
     [InlineData("invalid", TagMode.PlainText)]
     [InlineData("invalid", TagMode.KMarkdown)]
-    [InlineData("[:test:not_a_number/aIVQrtPv4z10b10b]", TagMode.PlainText)]
-    [InlineData("(emj)test(emj)[not_a_number/aIVQrtPv4z10b10b]", TagMode.KMarkdown)]
+    [InlineData("[:test:invalid-token/aIVQrtPv4z10b10b]", TagMode.PlainText)]
+    [InlineData("(emj)test(emj)[invalid-token/aIVQrtPv4z10b10b]", TagMode.KMarkdown)]
     public void Test_Invalid_Emote_Parse(string input, TagMode tagMode)
     {
         Assert.False(Emote.TryParse(input, out _, tagMode));

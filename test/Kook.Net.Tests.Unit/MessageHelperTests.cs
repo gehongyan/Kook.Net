@@ -88,6 +88,7 @@ public class MessageHelperTests
     [InlineData("(emj)test(emj)[1990044438283387/aIVQrtPv4z10b10b]")]
     [InlineData("**(emj)test(emj)[1990044438283387/aIVQrtPv4z10b10b]**")]
     [InlineData("<>(emj)test(emj)[1990044438283387/aIVQrtPv4z10b10b]")]
+    [InlineData("(emj)一颗骰子(emj)[0/24677/OaRgXkJ8gB0a00a0]")]
     public void ParseEmoji(string emoji)
     {
         ImmutableArray<ITag> result = MessageHelper.ParseTags(emoji, null, null, null, TagMode.KMarkdown);
