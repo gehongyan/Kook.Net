@@ -46,6 +46,9 @@ internal class User
     [JsonPropertyName("banner")]
     public string Banner { get; set; }
 
+    [JsonPropertyName("nameplate")]
+    public Nameplate[] Nameplates { get; set; }
+
     [JsonPropertyName("is_sys")]
     public bool? IsSystemUser { get; set; }
 }

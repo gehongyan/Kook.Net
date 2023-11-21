@@ -40,6 +40,9 @@ internal class SocketGlobalUser : SocketUser
     public override UserTag UserTag { get; internal set; }
 
     /// <inheritdoc />
+    public override IReadOnlyCollection<Nameplate> Nameplates { get; internal set; }
+
+    /// <inheritdoc />
     public override bool? IsSystemUser { get; internal set; }
 
     /// <inheritdoc />

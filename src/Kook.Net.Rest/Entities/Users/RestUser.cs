@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Globalization;
 using Model = Kook.API.User;
@@ -44,6 +45,9 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
 
     /// <inheritdoc />
     public UserTag UserTag { get; internal set; }
+
+    /// <inheritdoc />
+    public IReadOnlyCollection<Nameplate> Nameplates { get; internal set; }
 
     /// <inheritdoc />
     public bool? IsSystemUser { get; internal set; }
@@ -100,6 +104,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         BuffAvatar = model.BuffAvatar;
         IsDenoiseEnabled = model.IsDenoiseEnabled;
         UserTag = model.UserTag?.ToEntity();
+        Nameplates = model.Nameplates?.Select(x => x.ToEntity()).ToImmutableArray();
         IsSystemUser = model.IsSystemUser;
 
         UpdatePresence(model.Online, model.OperatingSystem);

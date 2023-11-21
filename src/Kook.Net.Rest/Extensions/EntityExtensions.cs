@@ -485,4 +485,15 @@ internal static class EntityExtensions
     }
 
     #endregion
+
+    #region Nameplates
+
+    public static Nameplate ToEntity(this API.Nameplate model)
+    {
+        if (model is null) return null;
+
+        return Nameplate.Create(model.Name, model.Type, model.Icon, model.Tips);
+    }
+
+    #endregion
 }

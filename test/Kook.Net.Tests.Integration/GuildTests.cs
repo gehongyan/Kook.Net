@@ -46,6 +46,7 @@ public class GuildTests : IClassFixture<RestGuildFixture>
             .Excluding(x => x.HasBuff)
             .Excluding(x => x.HasAnnualBuff)
             .Excluding(x => x.UserTag)
+            .Excluding(x => x.Nameplates)
             .Excluding(x => x.IsDenoiseEnabled)
             .Excluding(x => x.IsOwner)
             .Excluding(x => x.IsSystemUser)

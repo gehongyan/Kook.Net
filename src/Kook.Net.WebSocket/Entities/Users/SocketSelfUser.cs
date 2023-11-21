@@ -90,6 +90,13 @@ public class SocketSelfUser : SocketUser, ISelfUser
     }
 
     /// <inheritdoc />
+    public override IReadOnlyCollection<Nameplate> Nameplates
+    {
+        get => GlobalUser.Nameplates;
+        internal set => GlobalUser.Nameplates = value;
+    }
+
+    /// <inheritdoc />
     public override bool? IsSystemUser
     {
         get => GlobalUser.IsSystemUser;

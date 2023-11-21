@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Globalization;
 using Kook.Rest;
@@ -43,6 +44,9 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
 
     /// <inheritdoc />
     public abstract UserTag UserTag { get; internal set; }
+
+    /// <inheritdoc />
+    public abstract IReadOnlyCollection<Nameplate> Nameplates { get; internal set; }
 
     /// <inheritdoc />
     public abstract bool? IsSystemUser { get; internal set; }
@@ -162,9 +166,17 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
             hasChanges = true;
         }
 
-        if (model.UserTag is not null && !model.UserTag.ToEntity().Equals(UserTag))
+        UserTag userTag = model.UserTag.ToEntity();
+        if (model.UserTag is not null && !userTag.Equals(UserTag))
         {
-            UserTag = model.UserTag.ToEntity();
+            UserTag = userTag;
+            hasChanges = true;
+        }
+
+        IReadOnlyCollection<Nameplate> nameplates = model.Nameplates.Select(x => x.ToEntity()).ToImmutableList();
+        if (model.Nameplates is not null && !nameplates.SequenceEqual(Nameplates))
+        {
+            Nameplates = nameplates;
             hasChanges = true;
         }
 
