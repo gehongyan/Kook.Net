@@ -9,6 +9,10 @@ internal class UserTag
     [JsonConverter(typeof(HexColorConverter))]
     public Color Color { get; set; }
 
+    [JsonPropertyName("bg_color")]
+    [JsonConverter(typeof(HexAlphaColorConverter))]
+    public AlphaColor BackgroundColor { get; set; }
+
     [JsonPropertyName("text")]
     public string Text { get; set; }
 }

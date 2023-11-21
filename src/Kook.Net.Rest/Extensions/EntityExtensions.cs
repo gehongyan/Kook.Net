@@ -481,7 +481,7 @@ internal static class EntityExtensions
     {
         if (model is null) return null;
 
-        return UserTag.Create(model.Color, model.Text);
+        return UserTag.Create(model.Color, model.BackgroundColor, model.Text);
     }
 
     #endregion

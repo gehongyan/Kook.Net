@@ -151,7 +151,8 @@ public struct Color
             | ((uint)g << 8)
             | (uint)b;
 
-        if (value > MaxDecimalValue) throw new ArgumentException($"{nameof(RawValue)} of color cannot be greater than {MaxDecimalValue}!");
+        if (value > MaxDecimalValue)
+            throw new ArgumentException($"{nameof(RawValue)} of color cannot be greater than {MaxDecimalValue}!");
 
         RawValue = value;
     }
@@ -172,11 +173,14 @@ public struct Color
     /// <exception cref="ArgumentOutOfRangeException">The argument value is not between 0 to 255.</exception>
     public Color(int r, int g, int b)
     {
-        if (r < 0 || r > 255) throw new ArgumentOutOfRangeException(nameof(r), "Value must be within [0,255].");
+        if (r < 0 || r > 255)
+            throw new ArgumentOutOfRangeException(nameof(r), "Value must be within [0,255].");
 
-        if (g < 0 || g > 255) throw new ArgumentOutOfRangeException(nameof(g), "Value must be within [0,255].");
+        if (g < 0 || g > 255)
+            throw new ArgumentOutOfRangeException(nameof(g), "Value must be within [0,255].");
 
-        if (b < 0 || b > 255) throw new ArgumentOutOfRangeException(nameof(b), "Value must be within [0,255].");
+        if (b < 0 || b > 255)
+            throw new ArgumentOutOfRangeException(nameof(b), "Value must be within [0,255].");
 
         RawValue = ((uint)r << 16)
             | ((uint)g << 8)
@@ -188,7 +192,7 @@ public struct Color
     /// </summary>
     /// <example>
     ///     The following will create a color that has a value of
-    ///     <see href="http://www.color-hex.com/color/607c8c">#607c8c</see>.
+    ///     <see href="http://www.color-hex.com/color/607c8c">#607C8C</see>.
     ///     <code language="cs">
     ///     Color darkGrey = new Color(0.38f, 0.49f, 0.55f);
     ///     </code>
@@ -199,11 +203,14 @@ public struct Color
     /// <exception cref="ArgumentOutOfRangeException">The argument value is not between 0 to 1.</exception>
     public Color(float r, float g, float b)
     {
-        if (r < 0.0f || r > 1.0f) throw new ArgumentOutOfRangeException(nameof(r), "Value must be within [0,1].");
+        if (r < 0.0f || r > 1.0f)
+            throw new ArgumentOutOfRangeException(nameof(r), "Value must be within [0,1].");
 
-        if (g < 0.0f || g > 1.0f) throw new ArgumentOutOfRangeException(nameof(g), "Value must be within [0,1].");
+        if (g < 0.0f || g > 1.0f)
+            throw new ArgumentOutOfRangeException(nameof(g), "Value must be within [0,1].");
 
-        if (b < 0.0f || b > 1.0f) throw new ArgumentOutOfRangeException(nameof(b), "Value must be within [0,1].");
+        if (b < 0.0f || b > 1.0f)
+            throw new ArgumentOutOfRangeException(nameof(b), "Value must be within [0,1].");
 
         RawValue = ((uint)(r * 255.0f) << 16)
             | ((uint)(g * 255.0f) << 8)
