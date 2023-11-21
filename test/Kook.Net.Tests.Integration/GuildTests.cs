@@ -48,6 +48,7 @@ public class GuildTests : IClassFixture<RestGuildFixture>
             .Excluding(x => x.UserTag)
             .Excluding(x => x.IsDenoiseEnabled)
             .Excluding(x => x.IsOwner)
+            .Excluding(x => x.IsSystemUser)
             // Due to different domain names
             .Excluding(x => x.Avatar)
             .Excluding(x => x.BuffAvatar)

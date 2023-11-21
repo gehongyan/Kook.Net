@@ -66,6 +66,11 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     UserTag UserTag { get; }
 
     /// <summary>
+    ///     Gets whether this user is a system user.
+    /// </summary>
+    bool? IsSystemUser { get; }
+
+    /// <summary>
     ///     Creates the direct message channel of this user.
     /// </summary>
     /// <remarks>

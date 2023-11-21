@@ -128,7 +128,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     internal static SocketMessage Create(KookSocketClient kook, ClientState state, SocketUser author, ISocketMessageChannel channel,
         GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
     {
-        if (model.Author.Id == KookConfig.SystemMessageAuthorID)
+        if (model.Author.IsSystemUser ?? model.Author.Id == KookConfig.SystemMessageAuthorID)
             return SocketSystemMessage.Create(kook, state, author, channel, model, gatewayEvent);
         else
             return SocketUserMessage.Create(kook, state, author, channel, model, gatewayEvent);
@@ -161,7 +161,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     internal static SocketMessage Create(KookSocketClient kook, ClientState state, SocketUser author, ISocketMessageChannel channel,
         GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
     {
-        if (model.Author.Id == KookConfig.SystemMessageAuthorID)
+        if (model.Author.IsSystemUser ?? model.Author.Id == KookConfig.SystemMessageAuthorID)
             return SocketSystemMessage.Create(kook, state, author, channel, model, gatewayEvent);
         else
             return SocketUserMessage.Create(kook, state, author, channel, model, gatewayEvent);
@@ -179,7 +179,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     {
         if (model is null) return null;
 
-        if (model.Author.Id == KookConfig.SystemMessageAuthorID)
+        if (model.Author.IsSystemUser ?? model.Author.Id == KookConfig.SystemMessageAuthorID)
             return SocketSystemMessage.Create(kook, state, author, channel, model);
         else
             return SocketUserMessage.Create(kook, state, author, channel, model);
@@ -190,7 +190,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     {
         if (model is null) return null;
 
-        if (model.AuthorId == KookConfig.SystemMessageAuthorID)
+        if (author.IsSystemUser ?? model.AuthorId == KookConfig.SystemMessageAuthorID)
             return SocketSystemMessage.Create(kook, state, author, channel, model);
         else
             return SocketUserMessage.Create(kook, state, author, channel, model);

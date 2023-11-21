@@ -8,7 +8,8 @@ internal static class SocketMessageHelper
     {
         if (msg.Author.Bot ?? false) return MessageSource.Bot;
 
-        if (msg.Author.Id == KookConfig.SystemMessageAuthorID) return MessageSource.System;
+        if (msg.Author.IsSystemUser ?? msg.Author.Id == KookConfig.SystemMessageAuthorID)
+            return MessageSource.System;
 
         return MessageSource.User;
     }
@@ -17,7 +18,8 @@ internal static class SocketMessageHelper
     {
         if (user.IsBot ?? false) return MessageSource.Bot;
 
-        if (msg.AuthorId == KookConfig.SystemMessageAuthorID) return MessageSource.System;
+        if (user.IsSystemUser ?? msg.AuthorId == KookConfig.SystemMessageAuthorID)
+            return MessageSource.System;
 
         return MessageSource.User;
     }
@@ -26,7 +28,8 @@ internal static class SocketMessageHelper
     {
         if (msg.Author.Bot ?? false) return MessageSource.Bot;
 
-        if (msg.Author.Id == KookConfig.SystemMessageAuthorID) return MessageSource.System;
+        if (msg.Author.IsSystemUser ?? msg.Author.Id == KookConfig.SystemMessageAuthorID)
+            return MessageSource.System;
 
         return MessageSource.User;
     }
@@ -35,7 +38,8 @@ internal static class SocketMessageHelper
     {
         if (msg.Author.Bot ?? false) return MessageSource.Bot;
 
-        if (msg.Author.Id == KookConfig.SystemMessageAuthorID) return MessageSource.System;
+        if (msg.Author.IsSystemUser ?? msg.Author.Id == KookConfig.SystemMessageAuthorID)
+            return MessageSource.System;
 
         return MessageSource.User;
     }

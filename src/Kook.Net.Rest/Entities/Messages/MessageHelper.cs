@@ -466,18 +466,20 @@ internal static class MessageHelper
 
     public static MessageSource GetSource(Model msg)
     {
-        if (msg.Author.Bot ?? false) return MessageSource.Bot;
+        if (msg.Author.Bot == true) return MessageSource.Bot;
 
-        if (msg.Author.Id == KookConfig.SystemMessageAuthorID) return MessageSource.System;
+        if (msg.Author.IsSystemUser ?? msg.Author.Id == KookConfig.SystemMessageAuthorID)
+            return MessageSource.System;
 
         return MessageSource.User;
     }
 
     public static MessageSource GetSource(DirectMessage msg, IUser author)
     {
-        if (author.IsBot ?? false) return MessageSource.Bot;
+        if (author.IsBot == true) return MessageSource.Bot;
 
-        if (msg.AuthorId == KookConfig.SystemMessageAuthorID) return MessageSource.System;
+        if (author.IsSystemUser ?? msg.AuthorId == KookConfig.SystemMessageAuthorID)
+            return MessageSource.System;
 
         return MessageSource.User;
     }

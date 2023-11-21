@@ -90,6 +90,13 @@ public class SocketSelfUser : SocketUser, ISelfUser
     }
 
     /// <inheritdoc />
+    public override bool? IsSystemUser
+    {
+        get => GlobalUser.IsSystemUser;
+        internal set => GlobalUser.IsSystemUser = value;
+    }
+
+    /// <inheritdoc />
     internal override SocketPresence Presence
     {
         get => GlobalUser.Presence;

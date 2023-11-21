@@ -127,6 +127,13 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     }
 
     /// <inheritdoc />
+    public override bool? IsSystemUser
+    {
+        get => GlobalUser.IsSystemUser;
+        internal set => GlobalUser.IsSystemUser = value;
+    }
+
+    /// <inheritdoc />
     public GuildPermissions GuildPermissions => new(Permissions.ResolveGuild(Guild, this));
 
     /// <inheritdoc />

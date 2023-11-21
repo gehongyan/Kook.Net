@@ -44,6 +44,9 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     /// <inheritdoc />
     public abstract UserTag UserTag { get; internal set; }
 
+    /// <inheritdoc />
+    public abstract bool? IsSystemUser { get; internal set; }
+
     internal abstract SocketGlobalUser GlobalUser { get; }
     internal abstract SocketPresence Presence { get; set; }
 
@@ -162,6 +165,12 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
         if (model.UserTag is not null && !model.UserTag.ToEntity().Equals(UserTag))
         {
             UserTag = model.UserTag.ToEntity();
+            hasChanges = true;
+        }
+
+        if (model.IsSystemUser != IsSystemUser)
+        {
+            IsSystemUser = model.IsSystemUser;
             hasChanges = true;
         }
 

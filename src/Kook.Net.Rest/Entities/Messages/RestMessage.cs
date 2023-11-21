@@ -96,18 +96,18 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
 
     internal static RestMessage Create(BaseKookClient kook, IMessageChannel channel, IUser author, Model model)
     {
-        if (model.Author.Id != KookConfig.SystemMessageAuthorID)
-            return RestUserMessage.Create(kook, channel, author, model);
-        else
+        if (model.Author.IsSystemUser ?? model.Author.Id == KookConfig.SystemMessageAuthorID)
             return RestSystemMessage.Create(kook, channel, author, model);
+        else
+            return RestUserMessage.Create(kook, channel, author, model);
     }
 
     internal static RestMessage Create(BaseKookClient kook, IMessageChannel channel, IUser author, DirectMessage model)
     {
-        if (model.AuthorId != KookConfig.SystemMessageAuthorID)
-            return RestUserMessage.Create(kook, channel, author, model);
-        else
+        if (author.IsSystemUser ?? model.AuthorId == KookConfig.SystemMessageAuthorID)
             return RestSystemMessage.Create(kook, channel, author, model);
+        else
+            return RestUserMessage.Create(kook, channel, author, model);
     }
 
     internal virtual void Update(Model model)

@@ -46,6 +46,9 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     public UserTag UserTag { get; internal set; }
 
     /// <inheritdoc />
+    public bool? IsSystemUser { get; internal set; }
+
+    /// <inheritdoc />
     public string IdentifyNumber => IdentifyNumberValue?.ToString("D4");
 
     /// <inheritdoc />
@@ -97,6 +100,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         BuffAvatar = model.BuffAvatar;
         IsDenoiseEnabled = model.IsDenoiseEnabled;
         UserTag = model.UserTag?.ToEntity();
+        IsSystemUser = model.IsSystemUser;
 
         UpdatePresence(model.Online, model.OperatingSystem);
     }

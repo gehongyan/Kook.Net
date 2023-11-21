@@ -46,6 +46,9 @@ public class SocketUnknownUser : SocketUser
     public override UserTag UserTag { get; internal set; }
 
     /// <inheritdoc />
+    public override bool? IsSystemUser { get; internal set; }
+
+    /// <inheritdoc />
     internal override SocketPresence Presence
     {
         get => new(null, null);
