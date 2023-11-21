@@ -34,6 +34,9 @@ internal class User
     [JsonPropertyName("is_vip")]
     public bool? HasBuff { get; set; }
 
+    [JsonPropertyName("vip_amp")]
+    public bool? HasAnnualBuff { get; set; }
+
     [JsonPropertyName("is_ai_reduce_noise")]
     public bool? IsDenoiseEnabled { get; set; }
 

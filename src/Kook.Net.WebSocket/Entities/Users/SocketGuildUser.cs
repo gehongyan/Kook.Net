@@ -106,6 +106,13 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     }
 
     /// <inheritdoc />
+    public override bool? HasAnnualBuff
+    {
+        get => GlobalUser.HasAnnualBuff;
+        internal set => GlobalUser.HasAnnualBuff = value;
+    }
+
+    /// <inheritdoc />
     public override bool? IsDenoiseEnabled
     {
         get => GlobalUser.IsDenoiseEnabled;

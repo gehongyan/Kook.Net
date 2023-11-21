@@ -27,6 +27,9 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     public abstract bool? HasBuff { get; internal set; }
 
     /// <inheritdoc />
+    public abstract bool? HasAnnualBuff { get; internal set; }
+
+    /// <inheritdoc />
     public abstract string Avatar { get; internal set; }
 
     /// <inheritdoc />
@@ -123,6 +126,12 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
         if (model.HasBuff != HasBuff)
         {
             HasBuff = model.HasBuff;
+            hasChanges = true;
+        }
+
+        if (model.HasAnnualBuff != HasAnnualBuff)
+        {
+            HasAnnualBuff = model.HasAnnualBuff;
             hasChanges = true;
         }
 

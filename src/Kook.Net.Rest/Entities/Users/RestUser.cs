@@ -28,6 +28,9 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     public bool? HasBuff { get; internal set; }
 
     /// <inheritdoc />
+    public bool? HasAnnualBuff { get; internal set; }
+
+    /// <inheritdoc />
     public string Avatar { get; internal set; }
 
     /// <inheritdoc />
@@ -88,6 +91,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         IsBot = model.Bot;
         IsBanned = model.Status == 10;
         HasBuff = model.HasBuff;
+        HasAnnualBuff = model.HasAnnualBuff;
         Avatar = model.Avatar;
         Banner = model.Banner;
         BuffAvatar = model.BuffAvatar;

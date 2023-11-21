@@ -22,6 +22,9 @@ internal class SocketGlobalUser : SocketUser
     public override bool? HasBuff { get; internal set; }
 
     /// <inheritdoc />
+    public override bool? HasAnnualBuff { get; internal set; }
+
+    /// <inheritdoc />
     public override string Avatar { get; internal set; }
 
     /// <inheritdoc />

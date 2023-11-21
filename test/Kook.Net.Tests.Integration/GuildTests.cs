@@ -44,6 +44,7 @@ public class GuildTests : IClassFixture<RestGuildFixture>
             // Due to lack of fields from guild user list
             .Excluding(x => x.ActiveClient)
             .Excluding(x => x.HasBuff)
+            .Excluding(x => x.HasAnnualBuff)
             .Excluding(x => x.UserTag)
             .Excluding(x => x.IsDenoiseEnabled)
             .Excluding(x => x.IsOwner)

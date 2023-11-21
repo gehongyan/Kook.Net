@@ -69,6 +69,13 @@ public class SocketSelfUser : SocketUser, ISelfUser
     }
 
     /// <inheritdoc />
+    public override bool? HasAnnualBuff
+    {
+        get => GlobalUser.HasAnnualBuff;
+        internal set => GlobalUser.HasAnnualBuff = value;
+    }
+
+    /// <inheritdoc />
     public override bool? IsDenoiseEnabled
     {
         get => GlobalUser.IsDenoiseEnabled;

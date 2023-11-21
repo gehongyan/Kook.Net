@@ -36,6 +36,11 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     bool? HasBuff { get; }
 
     /// <summary>
+    ///     Gets whether this user's BUFF subscription is annual; <c>null</c> if unknown.
+    /// </summary>
+    bool? HasAnnualBuff { get; }
+
+    /// <summary>
     ///     Gets the link to this user's avatar.
     /// </summary>
     string Avatar { get; }
