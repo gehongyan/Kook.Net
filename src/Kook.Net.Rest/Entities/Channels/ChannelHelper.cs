@@ -485,9 +485,7 @@ internal static class ChannelHelper
         BaseKookClient client,
         IRole role, RequestOptions options)
     {
-        CreateOrRemoveChannelPermissionOverwriteParams args = new(channel.Id,
-            PermissionOverwriteTargetType.Role,
-            role.Id);
+        CreateOrRemoveChannelPermissionOverwriteParams args = new(channel.Id, PermissionOverwriteTargetType.Role, role.Id);
         CreateOrModifyChannelPermissionOverwriteResponse resp = await client.ApiClient.CreateChannelPermissionOverwriteAsync(args, options)
             .ConfigureAwait(false);
         return new RolePermissionOverwrite(role.Id, new OverwritePermissions(resp.Allow, resp.Deny));

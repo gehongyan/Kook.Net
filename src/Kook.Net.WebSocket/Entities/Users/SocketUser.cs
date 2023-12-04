@@ -173,8 +173,9 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
             hasChanges = true;
         }
 
-        IReadOnlyCollection<Nameplate> nameplates = model.Nameplates.Select(x => x.ToEntity()).ToImmutableList();
-        if (model.Nameplates is not null && !nameplates.SequenceEqual(Nameplates))
+        IReadOnlyCollection<Nameplate> nameplates = model.Nameplates?.Select(x => x.ToEntity())
+            .ToImmutableList() ?? ImmutableList<Nameplate>.Empty;
+        if (Nameplates is null || !nameplates.SequenceEqual(Nameplates))
         {
             Nameplates = nameplates;
             hasChanges = true;
