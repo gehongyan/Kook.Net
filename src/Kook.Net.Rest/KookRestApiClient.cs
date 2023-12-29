@@ -46,9 +46,9 @@ internal class KookRestApiClient : IDisposable
     public string UserAgent { get; }
 
     internal RequestQueue RequestQueue { get; }
-    public LoginState LoginState { get; internal set; }
-    public TokenType AuthTokenType { get; set; }
-    public string AuthToken { get; set; }
+    public LoginState LoginState { get; private set; }
+    public TokenType AuthTokenType { get; private set; }
+    internal string AuthToken { get; private set; }
     internal IRestClient RestClient { get; private set; }
     internal ulong? CurrentUserId { get; set; }
     internal Func<IRateLimitInfo, Task> DefaultRatelimitCallback { get; set; }
