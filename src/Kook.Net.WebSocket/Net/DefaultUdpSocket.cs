@@ -153,7 +153,8 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
             if (task == closeTask) break;
 
             UdpReceiveResult result = receiveTask.Result;
-            await ReceivedDatagram(result.Buffer, 0, result.Buffer.Length).ConfigureAwait(false);
+            if (ReceivedDatagram != null)
+                await ReceivedDatagram(result.Buffer, 0, result.Buffer.Length).ConfigureAwait(false);
         }
     }
 }

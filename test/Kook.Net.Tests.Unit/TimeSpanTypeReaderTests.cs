@@ -1,5 +1,6 @@
 using Kook.Commands;
 using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Kook;
@@ -39,10 +40,10 @@ public class TimeSpanTypeReaderTests
     [InlineData("-2m1s", true)]     // tests format "-%m'm'%s's'"
     [InlineData("-2m", true)]       // tests format "-%m'm'"
     [InlineData("-1s", true)]       // tests format "-%s's'"
-    public void TestTimeSpanParse(string input, bool isNegative)
+    public async Task TestTimeSpanParse(string input, bool isNegative)
     {
         TimeSpanTypeReader reader = new();
-        TypeReaderResult result = reader.ReadAsync(null, input, null).Result;
+        TypeReaderResult result = await reader.ReadAsync(null, input, null);
         Assert.True(result.IsSuccess);
 
         TimeSpan actual = (TimeSpan)result.BestMatch;

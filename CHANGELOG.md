@@ -6,14 +6,14 @@
 
 ### Update Path
 
-The set accessibility of the AuthTokenType and AuthToken properties in the KookRestApiClient has been changed to
+The set accessibility of the `AuthTokenType` and `AuthToken` properties in the `KookRestApiClient` has been changed to
 private. Modifying these properties directly in user code may result in framework runtime exceptions. If you need to log
-in with a different authentication on the KOOK gateway, please re-login using LoginAsync after calling LogoutAsync.
+in with a different authentication on the KOOK gateway, please re-login using `LoginAsync` after calling `LogoutAsync`.
 
 ### Added
 
-- Added HasAnnualBuff, IsSystemUser, and Nameplates properties to the IUser interface.
-- Added BackgroundColor property to the UserTag.
+- Added `HasAnnualBuff`, `IsSystemUser`, and `Nameplates` properties to the `IUser` interface.
+- Added `BackgroundColor` property to the `UserTag`.
 - Added support for parsing interactive emojis.
 
 ### Changed

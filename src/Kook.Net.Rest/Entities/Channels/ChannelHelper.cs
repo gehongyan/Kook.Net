@@ -87,7 +87,7 @@ internal static class ChannelHelper
         Message model = await client.ApiClient.GetMessageAsync(id, options).ConfigureAwait(false);
         if (model == null) return null;
 
-        IUser author = MessageHelper.GetAuthor(client, guild, model.Author);
+        IUser author = await MessageHelper.GetAuthorAsync(client, guild, model.Author);
         return RestMessage.Create(client, channel, author, model);
     }
 
@@ -130,13 +130,13 @@ internal static class ChannelHelper
                 if (includeReferenceMessage && info.Position.HasValue && dir == Direction.After)
                 {
                     Message currentMessage = await client.ApiClient.GetMessageAsync(info.Position.Value, options);
-                    IUser currentMessageAuthor = MessageHelper.GetAuthor(client, guild, currentMessage.Author);
+                    IUser currentMessageAuthor = await MessageHelper.GetAuthorAsync(client, guild, currentMessage.Author);
                     builder.Add(RestMessage.Create(client, channel, currentMessageAuthor, currentMessage));
                 }
 
                 foreach (Message model in models)
                 {
-                    IUser author = MessageHelper.GetAuthor(client, guild, model.Author);
+                    IUser author = await MessageHelper.GetAuthorAsync(client, guild, model.Author);
                     builder.Add(RestMessage.Create(client, channel, author, model));
                 }
 
@@ -144,7 +144,7 @@ internal static class ChannelHelper
                 if (includeReferenceMessage && info.Position.HasValue && dir == Direction.Before)
                 {
                     Message currentMessage = await client.ApiClient.GetMessageAsync(info.Position.Value, options);
-                    IUser currentMessageAuthor = MessageHelper.GetAuthor(client, guild, currentMessage.Author);
+                    IUser currentMessageAuthor = await MessageHelper.GetAuthorAsync(client, guild, currentMessage.Author);
                     builder.Add(RestMessage.Create(client, channel, currentMessageAuthor, currentMessage));
                 }
 
@@ -187,7 +187,7 @@ internal static class ChannelHelper
         ImmutableArray<RestMessage>.Builder builder = ImmutableArray.CreateBuilder<RestMessage>();
         foreach (Message model in models)
         {
-            IUser author = MessageHelper.GetAuthor(client, guild, model.Author);
+            IUser author = await MessageHelper.GetAuthorAsync(client, guild, model.Author);
             RestMessage message = RestMessage.Create(client, channel, author, model);
             if (message is RestUserMessage userMessage) userMessage.IsPinned = true;
 

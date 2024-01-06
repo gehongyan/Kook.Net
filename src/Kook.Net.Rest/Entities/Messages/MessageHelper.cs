@@ -487,9 +487,24 @@ internal static class MessageHelper
     public static IUser GetAuthor(BaseKookClient client, IGuild guild, UserModel model)
     {
         IUser author = null;
-        if (guild != null) author = guild.GetUserAsync(model.Id, CacheMode.CacheOnly).Result;
+        if (guild != null)
+            // TODO: Migrate to async call
+            author = guild.GetUserAsync(model.Id, CacheMode.CacheOnly).GetAwaiter().GetResult();
 
-        if (author == null) author = RestUser.Create(client, model);
+        if (author == null)
+            author = RestUser.Create(client, model);
+
+        return author;
+    }
+
+    public static async Task<IUser> GetAuthorAsync(BaseKookClient client, IGuild guild, UserModel model)
+    {
+        IUser author = null;
+        if (guild != null)
+            author = await guild.GetUserAsync(model.Id, CacheMode.CacheOnly);
+
+        if (author == null)
+            author = RestUser.Create(client, model);
 
         return author;
     }

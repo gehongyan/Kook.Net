@@ -15,7 +15,7 @@
     <RepositoryUrl>https://github.com/gehongyan/Kook.Net.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>kook;kookapp</PackageTags>
-    <PackageReleaseNotes>See https://github.com/gehongyan/Kook.Net/releases/tag/v$(Version)</PackageReleaseNotes>
+    <PackageReleaseNotes>See https://github.com/gehongyan/Kook.Net/releases</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <TargetFrameworks Condition=" '$(OS)' == 'Windows_NT' ">net8.0;net7.0;net6.0;net462;netstandard2.0;netstandard2.1</TargetFrameworks>
     <TargetFrameworks Condition=" '$(OS)' != 'Windows_NT' ">net8.0;net7.0;net6.0;netstandard2.0;netstandard2.1</TargetFrameworks>
