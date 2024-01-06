@@ -5,6 +5,8 @@
   <PropertyGroup>
     <RootNamespace>Kook.Commands</RootNamespace>
     <IsPackable>true</IsPackable>
+    <PackageId>Kook.Net.Commands</PackageId>
+    <Description>The text message based command framework extension for Kook.Net.</Description>
   </PropertyGroup>
 
   <ItemGroup>

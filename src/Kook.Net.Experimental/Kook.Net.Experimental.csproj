@@ -5,6 +5,8 @@
   <PropertyGroup>
     <RootNamespace>Kook.Rest</RootNamespace>
     <IsPackable>true</IsPackable>
+    <PackageId>Kook.Net.Experimental</PackageId>
+    <Description>The experimental functionality for Kook.Net, implementing non-official released API.</Description>
   </PropertyGroup>
 
   <ItemGroup>

@@ -5,6 +5,8 @@
   <PropertyGroup>
     <RootNamespace>Kook</RootNamespace>
     <IsPackable>true</IsPackable>
+    <PackageId>Kook.Net</PackageId>
+    <Description>An unofficial C# .NET implementation for KOOK API, including all necessary components for building a KOOK bot.</Description>
   </PropertyGroup>
 
   <ItemGroup>

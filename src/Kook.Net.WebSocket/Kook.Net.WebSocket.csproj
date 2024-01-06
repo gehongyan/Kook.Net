@@ -5,6 +5,8 @@
   <PropertyGroup>
     <RootNamespace>Kook.WebSocket</RootNamespace>
     <IsPackable>true</IsPackable>
+    <PackageId>Kook.Net.WebSocket</PackageId>
+    <Description>The WebSocket API implementation for Kook.Net.</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

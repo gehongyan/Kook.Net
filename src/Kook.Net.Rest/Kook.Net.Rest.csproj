@@ -5,6 +5,8 @@
   <PropertyGroup>
     <RootNamespace>Kook.Rest</RootNamespace>
     <IsPackable>true</IsPackable>
+    <PackageId>Kook.Net.Rest</PackageId>
+    <Description>The REST API implementation for Kook.Net.</Description>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

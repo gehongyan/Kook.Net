@@ -5,6 +5,24 @@ title: 变更日志
 
 # 变更日志
 
+## v0.5.4 [2024-01-06]
+
+### 更新路线
+
+`KookRestApiClient` 的 `AuthTokenType` 与 `AuthToken` 属性的 set 访问性已更改为
+private，用户代码对这些属性的更改可能会导致框架运行异常，如需使用不同的身份认证登录 KOOK 网关，请在 `LogoutAsync`
+后重新 `LoginAsync`。
+
+### 新增
+
+- `IUser` 接口上新增 `HasAnnualBuff`、`IsSystemUser`、`Nameplates` 属性
+- `UserTag` 上新增 `BackgroundColor` 属性
+- 新增支持解析互动表情
+
+### 变更
+
+- `KookRestApiClient` 的 `AuthTokenType` 与 `AuthToken` 属性的 set 访问性已更改为 private
+
 ## v0.5.3 [2023-11-15]
 
 ### 更新路线

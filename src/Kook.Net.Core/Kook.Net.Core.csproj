@@ -5,6 +5,8 @@
   <PropertyGroup>
     <RootNamespace>Kook</RootNamespace>
     <IsPackable>true</IsPackable>
+    <PackageId>Kook.Net.Core</PackageId>
+    <Description>The core definition library for Kook.Net.</Description>
   </PropertyGroup>
 
   <ItemGroup>
