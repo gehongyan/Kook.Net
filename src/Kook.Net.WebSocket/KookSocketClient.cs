@@ -1777,13 +1777,49 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                                 // Download user list if enabled
                                 if (_baseConfig.AlwaysDownloadUsers)
-                                    _ = DownloadUsersAsync(Guilds.Where(x => x.IsAvailable && x.HasAllMembers is not true), RequestOptions.Default);
+                                {
+                                    _ = Task.Run(async () =>
+                                    {
+                                        try
+                                        {
+                                            await DownloadUsersAsync(Guilds.Where(x => x.IsAvailable && x.HasAllMembers is not true));
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            await _gatewayLogger.WarningAsync("Downloading users failed", ex).ConfigureAwait(false);
+                                        }
+                                    });
+                                }
 
                                 if (_baseConfig.AlwaysDownloadVoiceStates)
-                                    _ = DownloadVoiceStatesAsync(Guilds.Where(x => x.IsAvailable), RequestOptions.Default);
+                                {
+                                    _ = Task.Run(async () =>
+                                    {
+                                        try
+                                        {
+                                            await DownloadVoiceStatesAsync(Guilds.Where(x => x.IsAvailable));
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            await _gatewayLogger.WarningAsync("Downloading voice states failed", ex).ConfigureAwait(false);
+                                        }
+                                    });
+                                }
 
                                 if (_baseConfig.AlwaysDownloadBoostSubscriptions)
-                                    _ = DownloadBoostSubscriptionsAsync(Guilds.Where(x => x.IsAvailable), RequestOptions.Default);
+                                {
+                                    _ = Task.Run(async () =>
+                                    {
+                                        try
+                                        {
+                                            await DownloadBoostSubscriptionsAsync(Guilds.Where(x => x.IsAvailable));
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            await _gatewayLogger.WarningAsync("Downloading boost subscriptions failed", ex).ConfigureAwait(false);
+                                        }
+                                    });
+                                }
 
                                 await TimedInvokeAsync(_readyEvent, nameof(Ready)).ConfigureAwait(false);
                                 await _gatewayLogger.InfoAsync("Ready").ConfigureAwait(false);
