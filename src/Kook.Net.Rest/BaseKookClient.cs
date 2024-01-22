@@ -131,7 +131,8 @@ public abstract class BaseKookClient : IKookClient
             await LogManager.WriteInitialLog().ConfigureAwait(false);
         }
 
-        if (LoginState != LoginState.LoggedOut) await LogoutInternalAsync().ConfigureAwait(false);
+        if (LoginState != LoginState.LoggedOut)
+            await LogoutInternalAsync().ConfigureAwait(false);
 
         LoginState = LoginState.LoggingIn;
 

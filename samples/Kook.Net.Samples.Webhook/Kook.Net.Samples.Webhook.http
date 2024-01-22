@@ -1,0 +1,6 @@
+@Kook.Net.Samples.Webhook_HostAddress = http://localhost:5043
+
+GET {{Kook.Net.Samples.Webhook_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

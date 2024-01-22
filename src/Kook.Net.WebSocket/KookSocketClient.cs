@@ -95,7 +95,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     {
     }
 
-    private KookSocketClient(KookSocketConfig config, KookSocketApiClient client)
+    internal KookSocketClient(KookSocketConfig config, KookSocketApiClient client)
         : base(config, client)
     {
         MessageCacheSize = config.MessageCacheSize;
@@ -147,7 +147,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         };
     }
 
-    private static KookSocketApiClient CreateApiClient(KookSocketConfig config)
+    internal static KookSocketApiClient CreateApiClient(KookSocketConfig config)
         => new(config.RestClientProvider, config.WebSocketProvider, KookConfig.UserAgent,
             config.AcceptLanguage, config.GatewayHost, defaultRatelimitCallback: config.DefaultRatelimitCallback);
 
@@ -405,7 +405,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
     #region ProcessMessageAsync
 
-    private async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType, int? sequence, object payload)
+    /// <summary>
+    ///     Processes a message received from the gateway.
+    /// </summary>
+    /// <param name="gatewaySocketFrameType"> The type of the gateway socket frame. </param>
+    /// <param name="sequence"> The sequence number of the message. </param>
+    /// <param name="payload"> The payload of the message. </param>
+    /// <exception cref="InvalidOperationException"> Unknown event type. </exception>
+    internal async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType, int? sequence, object payload)
     {
         if (sequence != null)
         {
