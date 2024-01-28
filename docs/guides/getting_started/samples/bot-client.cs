@@ -1,23 +1,17 @@
-private KookSocketClient _client;
+using KookSocketClient client = new();
+client.Log += LogAsync;
 
-public async Task MainAsync()
-{
-    _client = new KookSocketClient();
+//  将 Token 写入字符串变量，用于 Bot 登录过程的身份认证
+//  这很不安全，尤其是在有公开源代码的情况下，不应该这么做
+string token = "token";
 
-    _client.Log += Log;
+// 一些其它存储 Token 的方案，如环境变量、文件等
+// string token = Environment.GetEnvironmentVariable("NameOfYourEnvironmentVariable");
+// string token = File.ReadAllText("token.txt");
+// string token = JsonConvert.DeserializeObject<AConfigurationClass>(File.ReadAllText("config.json")).Token;
 
-    //  将 Token 写入字符串变量，用于 Bot 登录过程的身份认证
-    //  这很不安全，尤其是在有公开源代码的情况下，不应该这么做
-    var token = "token";
+await client.LoginAsync(TokenType.Bot, token);
+await client.StartAsync();
 
-    // 一些其它存储 Token 的方案，如环境变量、文件等
-    // var token = Environment.GetEnvironmentVariable("NameOfYourEnvironmentVariable");
-    // var token = File.ReadAllText("token.txt");
-    // var token = JsonConvert.DeserializeObject<AConfigurationClass>(File.ReadAllText("config.json")).Token;
-
-    await _client.LoginAsync(TokenType.Bot, token);
-    await _client.StartAsync();
-
-    // 阻止程序退出
-    await Task.Delay(Timeout.Infinite);
-}
+// 阻塞程序直到关闭
+await Task.Delay(Timeout.Infinite);

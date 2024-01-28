@@ -18,6 +18,24 @@ Public Class Program
         program.MainAsync().GetAwaiter().GetResult()
     End Sub
 
+    Public Async Function MainAsync() As Task
+        ' 令牌（Tokens）应被视为机密数据，永远不应硬编码在代码中
+        ' 在实际开发中，为了保护令牌的安全性，建议将令牌存储在安全的环境中
+        ' 例如本地 .json、.yaml、.xml、.txt 文件、环境变量或密钥管理系统
+        ' 这样可以避免将敏感信息直接暴露在代码中，以防止令牌被滥用或泄露
+        Dim token As String = Environment.GetEnvironmentVariable("KookDebugToken", EnvironmentVariableTarget.User)
+        If token Is Nothing Then
+            Throw New ArgumentNullException("KookDebugToken")
+        End If
+
+        Await _client.LoginAsync(TokenType.Bot, token)
+        Await _client.StartAsync()
+
+        ' 阻塞程序直到关闭
+        Await Task.Delay(Timeout.Infinite)
+        _client.Dispose()
+    End Function
+
     Public Sub New()
         ' KookSocketConfig 是 KookSocketClient 的配置类
         Dim config As New KookSocketConfig() With {
@@ -193,12 +211,14 @@ Public Class Program
     End Sub
 
     ' Log 事件，此处以直接输出到控制台为例
-    Public Function LogAsync(log As LogMessage) As Task
+
+    Public Shared Function LogAsync(log As LogMessage) As Task
         Console.WriteLine(log.ToString())
         Return Task.CompletedTask
     End Function
 
     ' Ready 事件表示客户端已经建立了连接，现在可以安全地访问缓存
+
     Public Function ReadyAsync() As Task
         Console.WriteLine($"{_client.CurrentUser} 已连接！")
         Return Task.CompletedTask
@@ -247,22 +267,5 @@ Public Class Program
         Else
             Console.WriteLine("接收到了一个没有对应处理程序的按钮值！")
         End If
-    End Function
-
-    Public Async Function MainAsync() As Task
-        ' 令牌（Tokens）应被视为机密数据，永远不应硬编码在代码中
-        ' 在实际开发中，为了保护令牌的安全性，建议将令牌存储在安全的环境中
-        ' 例如本地 .json、.yaml、.xml、.txt 文件、环境变量或密钥管理系统
-        ' 这样可以避免将敏感信息直接暴露在代码中，以防止令牌被滥用或泄露
-        Dim token As String = Environment.GetEnvironmentVariable("KookDebugToken", EnvironmentVariableTarget.User)
-        If token Is Nothing Then
-            Throw New ArgumentNullException("KookDebugToken")
-        End If
-
-        Await _client.LoginAsync(TokenType.Bot, token)
-        Await _client.StartAsync()
-
-        ' 阻塞程序直到关闭
-        Await Task.Delay(Timeout.Infinite)
     End Function
 End Class

@@ -15,7 +15,7 @@ KookSocketConfig config = new()
 };
 
 // 在使用完 Kook.Net 的客户端后，建议在应用程序的生命周期结束时进行 Dispose 操作
-KookSocketClient client = new(config);
+using KookSocketClient client = new(config);
 
 // 此处列举了 Kook.Net 的 KookSocketClient 的所有事件
 
@@ -89,6 +89,20 @@ client.DirectMessageButtonClicked += (value, user, message, channel) => Task.Com
 
 #endregion
 
+// 令牌（Tokens）应被视为机密数据，永远不应硬编码在代码中
+// 在实际开发中，为了保护令牌的安全性，建议将令牌存储在安全的环境中
+// 例如本地 .json、.yaml、.xml、.txt 文件、环境变量或密钥管理系统
+// 这样可以避免将敏感信息直接暴露在代码中，以防止令牌被滥用或泄露
+string token = Environment.GetEnvironmentVariable("KookDebugToken")
+    ?? throw new ArgumentNullException("KookDebugToken");
+
+await client.LoginAsync(TokenType.Bot, token);
+await client.StartAsync();
+
+// 阻塞程序直到关闭
+await Task.Delay(Timeout.Infinite);
+return;
+
 // Log 事件，此处以直接输出到控制台为例
 Task LogAsync(LogMessage log)
 {
@@ -150,16 +164,3 @@ async Task MessageButtonClickedAsync(string value,
     else
         Console.WriteLine("接收到了一个没有对应处理程序的按钮值！");
 }
-
-// 令牌（Tokens）应被视为机密数据，永远不应硬编码在代码中
-// 在实际开发中，为了保护令牌的安全性，建议将令牌存储在安全的环境中
-// 例如本地 .json、.yaml、.xml、.txt 文件、环境变量或密钥管理系统
-// 这样可以避免将敏感信息直接暴露在代码中，以防止令牌被滥用或泄露
-string token = Environment.GetEnvironmentVariable("KookDebugToken")
-    ?? throw new ArgumentNullException("KookDebugToken");
-
-await client.LoginAsync(TokenType.Bot, token);
-await client.StartAsync();
-
-// 阻塞程序直到关闭
-await Task.Delay(Timeout.Infinite);

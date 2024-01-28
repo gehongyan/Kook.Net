@@ -25,6 +25,7 @@ let config =
     )
 
 // 在使用完 Kook.Net 的客户端后，建议在应用程序的生命周期结束时进行 Dispose 操作
+// 由于 F# 中 use 绑定在模块中被视为 let 绑定，此处使用 let 来创建一个作用域
 let client = new KookSocketClient(config)
 
 // Log 事件，此处以直接输出到控制台为例
@@ -170,5 +171,6 @@ async {
 
     // 阻塞程序直到关闭
     do! Task.Delay(Timeout.Infinite) |> Async.AwaitTask
+    client.Dispose()
 }
 |> Async.RunSynchronously
