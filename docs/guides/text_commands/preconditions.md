@@ -25,6 +25,7 @@ title: 先决条件
 
 * @Kook.Commands.RequireContextAttribute
 * @Kook.Commands.RequireUserAttribute
+* @Kook.Commands.RequireRoleAttribute
 * @Kook.Commands.RequireBotPermissionAttribute
 * @Kook.Commands.RequireUserPermissionAttribute
 
@@ -52,22 +53,19 @@ title: 先决条件
 
 ## 自定义先决条件
 
-要创建自定义先决条件，请根据用途创建一个继承自 [PreconditionAttribute] 或
-[ParameterPreconditionAttribute] 的类。
+要创建自定义先决条件，请根据用途创建一个继承自 [PreconditionAttribute] 或 [ParameterPreconditionAttribute] 的类。
 
 要实现函数上的先决条件，请重写 [CheckPermissionsAsync] 方法。
 
-如果命令调用上下文满足条件，则返回 [PreconditionResult.FromSuccess]
-创建的对象，否则，请返回 [PreconditionResult.FromError] 创建的对象，
-如有需要，请在返回的对象中添加错误消息。
+如果命令调用上下文满足条件，则返回 [PreconditionResult.FromSuccess] 创建的对象，否则，请返回 [PreconditionResult.FromError]
+创建的对象，如有需要，请在返回的对象中添加错误消息。
 
 > [!NOTE]
-> Visual Studio、JetBrains Rider 等集成开发环境中的 IntelliSense
-> 智能提示可以帮助您添加抽象类的实现中缺失的成员。
+> Visual Studio、JetBrains Rider 等集成开发环境中的 IntelliSense 智能提示可以帮助您添加抽象类的实现中缺失的成员。
 
 ### 示例
 
-[!code-csharp[Custom Precondition](samples/preconditions/require_role.cs)]
+[!code-csharp[Custom Precondition](samples/preconditions/require_time.cs)]
 
 [CheckPermissionsAsync]: xref:Kook.Commands.PreconditionAttribute.CheckPermissionsAsync*
 
