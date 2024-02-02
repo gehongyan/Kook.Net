@@ -21,6 +21,30 @@ public class CommandAttribute : Attribute
     /// </summary>
     public bool? IgnoreExtraArgs { get; }
 
+    /// <summary>
+    ///     Attaches a summary to your command.
+    /// </summary>
+    /// <remarks>
+    ///     <see cref="Summary"/> overrides the value of this property if present.
+    /// </remarks>
+    public string Summary { get; set; }
+
+    /// <summary>
+    ///     Marks the aliases for a command.
+    /// </summary>
+    /// <remarks>
+    ///     <see cref="AliasAttribute"/> extends the base value of this if present.
+    /// </remarks>
+    public string[] Aliases { get; set; }
+
+    /// <summary>
+    ///     Attaches remarks to your commands.
+    /// </summary>
+    /// <remarks>
+    ///     <see cref="RemainderAttribute"/> overrides the value of this property if present.
+    /// </remarks>
+    public string Remarks { get; set; }
+
     /// <inheritdoc />
     public CommandAttribute() => Text = null;
 
@@ -36,9 +60,16 @@ public class CommandAttribute : Attribute
     /// </summary>
     /// <param name="text"> The name of the command. </param>
     /// <param name="ignoreExtraArgs"> Whether to ignore extra arguments. </param>
-    public CommandAttribute(string text, bool ignoreExtraArgs)
+    /// <param name="summary"> The summary of the command. </param>
+    /// <param name="aliases"> The aliases of the command. </param>
+    /// <param name="remarks"> The remarks of the command. </param>
+    public CommandAttribute(string text, bool ignoreExtraArgs,
+        string summary = default, string[] aliases = default, string remarks = default)
     {
         Text = text;
         IgnoreExtraArgs = ignoreExtraArgs;
+        Summary = summary;
+        Aliases = aliases;
+        Remarks = remarks;
     }
 }
