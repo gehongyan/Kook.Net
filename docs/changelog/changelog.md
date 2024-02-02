@@ -5,6 +5,25 @@ title: 变更日志
 
 # 变更日志
 
+## v0.5.5 [2024-02-02]
+
+### 更新路线
+
+`RequireUserAttribute` 不再支持通过 `IUser` 参数构造，请改用 `IUser.Id` 作为参数。
+
+### 新增
+
+- 文本命令框架先决条件新增 `RequireRoleAttribute`
+- 文本命令框架 `CommandAttribute` 新增 `Aliases`、`Summary`、`Remarks` 属性及可选参数
+
+### 修复
+
+- 修复了 Bot 启动时下载数据的异常没有被正确地输出到日志的问题
+
+### 变更
+
+- 移除了 `RequireUserAttribute` 上不切实际地接收 `IUser` 参数的构造函数
+
 ## v0.5.4 [2024-01-06]
 
 ### 更新路线

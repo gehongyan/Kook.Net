@@ -2,6 +2,26 @@
 
 ---
 
+## v0.5.5 [2024-02-02]
+
+### Update Path
+
+`RequireUserAttribute` no longer supports construction via the `IUser` parameter; please use `IUser.Id` instead.
+
+### Added
+
+- Added `RequireRoleAttribute` as a precondition in the text command framework.
+- Added `Aliases`, `Summary`, and `Remarks` properties, and optional parameters to `CommandAttribute` in the text
+  command framework.
+
+### Fixed
+
+- Fixed an issue where exceptions during data download at Bot startup were not properly outputted to the log.
+
+### Changed
+
+- Removed the unrealistic constructor on `RequireUserAttribute` that accepted an `IUser` parameter.
+
 ## v0.5.4 [2024-01-06]
 
 ### Update Path
@@ -117,7 +137,9 @@ been unified to `Task`. Usages involving these APIs need to be updated according
 - Added `TextChannels`, `VoiceChannels`, and `CategoryChannels` properties on `RestGuild`.
 
 ### Changed
+
 .
+
 - Renamed `GuildFeature.Ka` to `GuildFeature.KeyAccount` and `GuildFeatures.IsKa` to `GuildFeatures.IsKeyAccount`.
 - Changed `GuildPermissions` to a struct and changed `RoleProperties.Permissions` to type `GuildPermissions?`.
 - For convenience, some events in `BaseSocketClient` have been changed or added with event parameters. See the appendix
@@ -157,30 +179,30 @@ been unified to `Task`. Usages involving these APIs need to be updated according
 Event parameter changes in `BaseSocketClient`:
 
 - `ReactionAdded` and `ReactionRemoved`
-  - `ISocketMessageChannel` → `SocketTextChannel`
-  - Add `Cacheable<SocketGuildUser, ulong>` representing the user who added or removed the reaction
+    - `ISocketMessageChannel` → `SocketTextChannel`
+    - Add `Cacheable<SocketGuildUser, ulong>` representing the user who added or removed the reaction
 
 - `DirectReactionAdded` and `DirectReactionRemoved`
-  - Add `Cacheable<SocketUser, ulong>` representing the user who added or removed the reaction
+    - Add `Cacheable<SocketUser, ulong>` representing the user who added or removed the reaction
 
 - `MessageReceived`
-  - Add `SocketGuildUser` representing the user who sent the message
-  - Add `SocketTextChannel` representing the text channel where the message was sent
+    - Add `SocketGuildUser` representing the user who sent the message
+    - Add `SocketTextChannel` representing the text channel where the message was sent
 
 - `MessageDeleted`、`MessageUpdated`、`MessagePinned` 与 `MessageUnpinned`
-  - `ISocketMessageChannel` → `SocketTextChannel`
+    - `ISocketMessageChannel` → `SocketTextChannel`
 
 - `DirectMessageReceived`
-  - Add `SocketUser` representing the user who sent the message
-  - Add `SocketDMChannel`representing the DM channel where the message was sent
+    - Add `SocketUser` representing the user who sent the message
+    - Add `SocketDMChannel`representing the DM channel where the message was sent
 
 - `DirectMessageDeleted`
-  - `Cacheable<IDMChannel, Guid>` → `Cacheable<SocketDMChannel, ulong>`
-  - Add `Cacheable<SocketUser, ulong>` representing the user who sent the message
+    - `Cacheable<IDMChannel, Guid>` → `Cacheable<SocketDMChannel, ulong>`
+    - Add `Cacheable<SocketUser, ulong>` representing the user who sent the message
 
 - `DirectMessageUpdated`
-  - `IDMChannel` → `Cacheable<SocketDMChannel, ulong>`
-  - Add `Cacheable<SocketUser, ulong>` representing the user who sent the message
+    - `IDMChannel` → `Cacheable<SocketDMChannel, ulong>`
+    - Add `Cacheable<SocketUser, ulong>` representing the user who sent the message
 
 ## v0.4.1 [2023-04-05]
 
@@ -309,46 +331,46 @@ Added APIs:
 Event parameter changes in `BaseSocketClient`:
 
 - `ReactionAdded` and `ReactionRemoved`
-  - `Cacheable<IUserMessage, Guid>` → `Cacheable<IMessage, ulong>`
-  - `Cacheable<IMessageChannel, ulong>` → `ISocketMessageChannel`
+    - `Cacheable<IUserMessage, Guid>` → `Cacheable<IMessage, ulong>`
+    - `Cacheable<IMessageChannel, ulong>` → `ISocketMessageChannel`
 - `DirectReactionAdded` and `DirectReactionRemoved`
-  - `Cacheable<IUserMessage, Guid>` → `Cacheable<IMessage, ulong>`
+    - `Cacheable<IUserMessage, Guid>` → `Cacheable<IMessage, ulong>`
 - `MessageDeleted`
-  - `Cacheable<IMessageChannel, ulong>` → `ISocketMessageChannel`
+    - `Cacheable<IMessageChannel, ulong>` → `ISocketMessageChannel`
 - `MessageUpdated`
-  - `Cacheable<IMessage, Guid>` → `Cacheable<SocketMessage, Guid>`
-  - `SocketMessage` → `Cacheable<SocketMessage, Guid>`
+    - `Cacheable<IMessage, Guid>` → `Cacheable<SocketMessage, Guid>`
+    - `SocketMessage` → `Cacheable<SocketMessage, Guid>`
 - `MessagePinned` and `MessageUnpinned`
-  - `Cacheable<IMessage, Guid>` → `Cacheable<SocketMessage, Guid>`
-  - `SocketMessage` → `Cacheable<SocketMessage, Guid>`
-  - `SocketGuildUser` → `Cacheable<SocketGuildUser, ulong>`
+    - `Cacheable<IMessage, Guid>` → `Cacheable<SocketMessage, Guid>`
+    - `SocketMessage` → `Cacheable<SocketMessage, Guid>`
+    - `SocketGuildUser` → `Cacheable<SocketGuildUser, ulong>`
 - `DirectMessageUpdated`
-  - `SocketMessage` → `Cacheable<SocketMessage, Guid>`
+    - `SocketMessage` → `Cacheable<SocketMessage, Guid>`
 - `UserLeft`
-  - `SocketUser` → `Cacheable<SocketUser, ulong>`
+    - `SocketUser` → `Cacheable<SocketUser, ulong>`
 - `UserBanned`
-  - `IReadOnlyCollection<SocketUser>` → `IReadOnlyCollection<Cacheable<SocketUser, ulong>>`
-  - `SocketUser` → `Cacheable<SocketUser, ulong>`
-  - Add a new parameter of type `string` to represent the reason for adding to the blacklist.
+    - `IReadOnlyCollection<SocketUser>` → `IReadOnlyCollection<Cacheable<SocketUser, ulong>>`
+    - `SocketUser` → `Cacheable<SocketUser, ulong>`
+    - Add a new parameter of type `string` to represent the reason for adding to the blacklist.
 - `UserUnbanned`
-  - `IReadOnlyCollection<SocketUser>` → `IReadOnlyCollection<Cacheable<SocketUser, ulong>>`
-  - `SocketUser` → `Cacheable<SocketUser, ulong>`
+    - `IReadOnlyCollection<SocketUser>` → `IReadOnlyCollection<Cacheable<SocketUser, ulong>>`
+    - `SocketUser` → `Cacheable<SocketUser, ulong>`
 - `UserUpdated`
-  - `SocketUser` → `Cacheable<SocketUser, ulong>`
+    - `SocketUser` → `Cacheable<SocketUser, ulong>`
 - `GuildMemberUpdated`
-  - `SocketGuildUser` → `Cacheable<SocketGuildUser, ulong>`
+    - `SocketGuildUser` → `Cacheable<SocketGuildUser, ulong>`
 - `GuildMemberOnline` and `GuildMemberOffline`
-  - `IReadOnlyCollection<SocketGuildUser>` → `IReadOnlyCollection<Cacheable<SocketGuildUser, ulong>>`
+    - `IReadOnlyCollection<SocketGuildUser>` → `IReadOnlyCollection<Cacheable<SocketGuildUser, ulong>>`
 - `UserConnected` and `UserDisconnected`
-  - `SocketUser` → `Cacheable<SocketGuildUser, ulong>`
-  - Remove the `SocketGuild` parameter, please retrieve it from `SocketVoiceChannel.Guild`.
+    - `SocketUser` → `Cacheable<SocketGuildUser, ulong>`
+    - Remove the `SocketGuild` parameter, please retrieve it from `SocketVoiceChannel.Guild`.
 - `MessageButtonClicked`
-  - `SocketUser` → `Cacheable<SocketGuildUser, ulong>`
-  - `IMessage` → `Cacheable<IMessage, Guid>`
-  - Remove the `SocketGuild` parameter, please retrieve it from `SocketVoiceChannel.Guild`.
+    - `SocketUser` → `Cacheable<SocketGuildUser, ulong>`
+    - `IMessage` → `Cacheable<IMessage, Guid>`
+    - Remove the `SocketGuild` parameter, please retrieve it from `SocketVoiceChannel.Guild`.
 - `DirectMessageButtonClicked`
-  - `SocketUser` → `Cacheable<SocketUser, ulong>`
-  - `IMessage` → `Cacheable<IMessage, Guid>`
+    - `SocketUser` → `Cacheable<SocketUser, ulong>`
+    - `IMessage` → `Cacheable<IMessage, Guid>`
 
 ## v0.3.1 [2023-03-19]
 
@@ -367,9 +389,11 @@ All usages of this method need to take note of this change.
 
 ### Added
 
-- Added method overload `GetUserAsync(string,string,RequestOptions)` to the `IKookClient` interface and implemented it in `BaseSocketClient`.
+- Added method overload `GetUserAsync(string,string,RequestOptions)` to the `IKookClient` interface and implemented it
+  in `BaseSocketClient`.
   (6555c2ba0c9993b4523a95a8cbdc544474541984)
-- Added support to disable Unicode bidirectional formatting of username strings via `KookConfig.FormatUsersInBidirectionalUnicode`.
+- Added support to disable Unicode bidirectional formatting of username strings
+  via `KookConfig.FormatUsersInBidirectionalUnicode`.
   (bfc038ec4ce68124aa7eef94b421f6d0f1f941ce)
 
 ### Fixed
@@ -382,7 +406,8 @@ All usages of this method need to take note of this change.
 
 ### Misc
 
-- Added XML documentation to all public APIs. (fe1e9bcd0b7bd9a0a99c850234beef1b4993977b, 2ad3301bcc06a731e9f57bbd542484a31e77c438)
+- Added XML documentation to all public APIs. (fe1e9bcd0b7bd9a0a99c850234beef1b4993977b,
+  2ad3301bcc06a731e9f57bbd542484a31e77c438)
 - Applied code styling. (6325b16b9ad1f8f958a8eaaf125e7d34ae280a10)
 
 ## v0.2.5 [2023-03-16]
@@ -480,7 +505,8 @@ All usages relying on these two properties need to be updated.
 ### Added:
 
 - Added `IGuild.GetActiveBoostSubscriptionsAsync()` (32b1617a2e8c6bb0fa86f3e2ebc40e97a203bf61)
-- Payloads themselves will be logged as well when deserialization exceptions occur (369dd044f5bd4e94bec37c4ba8e4d76e586cd01d)
+- Payloads themselves will be logged as well when deserialization exceptions occur (
+  369dd044f5bd4e94bec37c4ba8e4d76e586cd01d)
 
 ### Fixed
 
