@@ -36,12 +36,6 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     /// <inheritdoc />
     public bool? IsPermissionSynced { get; private set; }
 
-    /// <inheritdoc />
-    public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
-
-    /// <inheritdoc />
-    public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
-
     internal RestVoiceChannel(BaseKookClient kook, IGuild guild, ulong id)
         : base(kook, guild, id, ChannelType.Voice)
     {

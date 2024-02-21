@@ -29,12 +29,6 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     public bool? IsPermissionSynced { get; private set; }
 
     /// <inheritdoc />
-    public string KMarkdownMention => MentionUtils.KMarkdownMentionChannel(Id);
-
-    /// <inheritdoc />
-    public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
-
-    /// <inheritdoc />
     public VoiceQuality? VoiceQuality { get; private set; }
 
     /// <inheritdoc />
