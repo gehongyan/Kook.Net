@@ -52,7 +52,7 @@ internal static class GuildHelper
 
     public static ulong GetUploadLimit(IGuild guild)
     {
-        int tierFactor = guild.BoostLevel switch
+        ulong tierFactor = guild.BoostLevel switch
         {
             BoostLevel.Level1 => 20,
             BoostLevel.Level2 => 50,
@@ -63,8 +63,8 @@ internal static class GuildHelper
             _ => 5
         };
 
-        double mebibyte = Math.Pow(2, 20);
-        return (ulong)(tierFactor * mebibyte);
+        const ulong mebibyte = 1UL << 20;
+        return tierFactor * mebibyte;
     }
 
     #endregion
