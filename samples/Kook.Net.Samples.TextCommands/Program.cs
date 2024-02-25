@@ -1,8 +1,8 @@
 using Kook;
 using Kook.Commands;
+using Kook.Net.Samples.TextCommands.Services;
 using Kook.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using TextCommandFramework.Services;
 
 // 这是一个使用 Kook.Net 的文本命令框架的简单示例
 

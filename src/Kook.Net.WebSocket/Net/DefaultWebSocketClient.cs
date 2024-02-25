@@ -18,20 +18,22 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
     private readonly SemaphoreSlim _lock;
     private readonly Dictionary<string, string> _headers;
     private readonly IWebProxy _proxy;
+    private TimeSpan _keepAliveInterval;
     private ClientWebSocket _client;
     private Task _task;
-    private CancellationTokenSource _disconnectTokenSource, _cancelTokenSource;
-    private CancellationToken _cancelToken, _parentToken;
+    private CancellationTokenSource _disconnectTokenSource, _cancellationTokenSource;
+    private CancellationToken _cancellationToken, _parentToken;
     private bool _isDisposed, _isDisconnecting;
 
     public DefaultWebSocketClient(IWebProxy proxy = null)
     {
         _lock = new SemaphoreSlim(1, 1);
         _disconnectTokenSource = new CancellationTokenSource();
-        _cancelToken = CancellationToken.None;
+        _cancellationToken = CancellationToken.None;
         _parentToken = CancellationToken.None;
         _headers = new Dictionary<string, string>();
         _proxy = proxy;
+        _keepAliveInterval = System.Net.WebSockets.WebSocket.DefaultKeepAliveInterval;
     }
 
     private void Dispose(bool disposing)
@@ -42,7 +44,7 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
             {
                 DisconnectInternalAsync(isDisposing: true).GetAwaiter().GetResult();
                 _disconnectTokenSource?.Dispose();
-                _cancelTokenSource?.Dispose();
+                _cancellationTokenSource?.Dispose();
                 _lock?.Dispose();
             }
 
@@ -70,22 +72,22 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
         await DisconnectInternalAsync().ConfigureAwait(false);
 
         _disconnectTokenSource?.Dispose();
-        _cancelTokenSource?.Dispose();
+        _cancellationTokenSource?.Dispose();
 
         _disconnectTokenSource = new CancellationTokenSource();
-        _cancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_parentToken, _disconnectTokenSource.Token);
-        _cancelToken = _cancelTokenSource.Token;
+        _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_parentToken, _disconnectTokenSource.Token);
+        _cancellationToken = _cancellationTokenSource.Token;
 
         _client?.Dispose();
         _client = new ClientWebSocket();
         _client.Options.Proxy = _proxy;
-        _client.Options.KeepAliveInterval = TimeSpan.Zero;
+        _client.Options.KeepAliveInterval = _keepAliveInterval;
         foreach (KeyValuePair<string, string> header in _headers)
             if (header.Value != null)
                 _client.Options.SetRequestHeader(header.Key, header.Value);
 
-        await _client.ConnectAsync(new Uri(host), _cancelToken).ConfigureAwait(false);
-        _task = RunAsync(_cancelToken);
+        await _client.ConnectAsync(new Uri(host), _cancellationToken).ConfigureAwait(false);
+        _task = RunAsync(_cancellationToken);
     }
 
     public async Task DisconnectAsync(int closeCode = 1000)
@@ -171,20 +173,25 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
 
     public void SetHeader(string key, string value) => _headers[key] = value;
 
-    public void SetCancelToken(CancellationToken cancelToken)
+    public void SetKeepAliveInterval(TimeSpan keepAliveInterval)
     {
-        _cancelTokenSource?.Dispose();
+        _keepAliveInterval = keepAliveInterval;
+    }
 
-        _parentToken = cancelToken;
-        _cancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_parentToken, _disconnectTokenSource.Token);
-        _cancelToken = _cancelTokenSource.Token;
+    public void SetCancellationToken(CancellationToken cancellationToken)
+    {
+        _cancellationTokenSource?.Dispose();
+
+        _parentToken = cancellationToken;
+        _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_parentToken, _disconnectTokenSource.Token);
+        _cancellationToken = _cancellationTokenSource.Token;
     }
 
     public async Task SendAsync(byte[] data, int index, int count, bool isText)
     {
         try
         {
-            await _lock.WaitAsync(_cancelToken).ConfigureAwait(false);
+            await _lock.WaitAsync(_cancellationToken).ConfigureAwait(false);
         }
         catch (TaskCanceledException)
         {
@@ -208,7 +215,7 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
                     frameSize = SendChunkSize;
 
                 WebSocketMessageType type = isText ? WebSocketMessageType.Text : WebSocketMessageType.Binary;
-                await _client.SendAsync(new ArraySegment<byte>(data, index, count), type, isLast, _cancelToken).ConfigureAwait(false);
+                await _client.SendAsync(new ArraySegment<byte>(data, index, count), type, isLast, _cancellationToken).ConfigureAwait(false);
             }
         }
         finally
@@ -217,15 +224,15 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
         }
     }
 
-    private async Task RunAsync(CancellationToken cancelToken)
+    private async Task RunAsync(CancellationToken cancellationToken)
     {
         ArraySegment<byte> buffer = new(new byte[ReceiveChunkSize]);
 
         try
         {
-            while (!cancelToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                WebSocketReceiveResult socketResult = await _client.ReceiveAsync(buffer, cancelToken).ConfigureAwait(false);
+                WebSocketReceiveResult socketResult = await _client.ReceiveAsync(buffer, cancellationToken).ConfigureAwait(false);
                 byte[] result;
                 int resultCount;
 
@@ -239,9 +246,9 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
                         stream.Write(buffer.Array, 0, socketResult.Count);
                         do
                         {
-                            if (cancelToken.IsCancellationRequested) return;
+                            if (cancellationToken.IsCancellationRequested) return;
 
-                            socketResult = await _client.ReceiveAsync(buffer, cancelToken).ConfigureAwait(false);
+                            socketResult = await _client.ReceiveAsync(buffer, cancellationToken).ConfigureAwait(false);
                             stream.Write(buffer.Array, 0, socketResult.Count);
                         } while (socketResult == null || !socketResult.EndOfMessage);
 

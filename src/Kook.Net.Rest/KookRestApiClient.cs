@@ -40,7 +40,7 @@ internal class KookRestApiClient : IDisposable
     private readonly RestClientProvider _restClientProvider;
 
     protected bool _isDisposed;
-    private CancellationTokenSource _loginCancelToken;
+    private CancellationTokenSource _loginCancellationToken;
 
     public RetryMode DefaultRetryMode { get; }
     public string UserAgent { get; }
@@ -120,12 +120,12 @@ internal class KookRestApiClient : IDisposable
 
         try
         {
-            _loginCancelToken?.Dispose();
-            _loginCancelToken = new CancellationTokenSource();
+            _loginCancellationToken?.Dispose();
+            _loginCancellationToken = new CancellationTokenSource();
 
             AuthToken = null;
-            await RequestQueue.SetCancelTokenAsync(_loginCancelToken.Token).ConfigureAwait(false);
-            RestClient.SetCancelToken(_loginCancelToken.Token);
+            await RequestQueue.SetCancellationTokenAsync(_loginCancellationToken.Token).ConfigureAwait(false);
+            RestClient.SetCancellationToken(_loginCancellationToken.Token);
 
             AuthTokenType = tokenType;
             AuthToken = token?.TrimEnd();
@@ -162,7 +162,7 @@ internal class KookRestApiClient : IDisposable
 
         try
         {
-            _loginCancelToken?.Cancel(false);
+            _loginCancellationToken?.Cancel(false);
         }
         catch
         {
@@ -172,8 +172,8 @@ internal class KookRestApiClient : IDisposable
         await DisconnectInternalAsync(null).ConfigureAwait(false);
         await RequestQueue.ClearAsync().ConfigureAwait(false);
 
-        await RequestQueue.SetCancelTokenAsync(CancellationToken.None).ConfigureAwait(false);
-        RestClient.SetCancelToken(CancellationToken.None);
+        await RequestQueue.SetCancellationTokenAsync(CancellationToken.None).ConfigureAwait(false);
+        RestClient.SetCancellationToken(CancellationToken.None);
 
         // CurrentUserId = null;
         LoginState = LoginState.LoggedOut;

@@ -28,5 +28,5 @@ internal class RestRequest : IRequest
     }
 
     public virtual async Task<RestResponse> SendAsync() =>
-        await Client.SendAsync(Method, Endpoint, Options.CancelToken, Options.AuditLogReason, Options.RequestHeaders).ConfigureAwait(false);
+        await Client.SendAsync(Method, Endpoint, Options.CancellationToken, Options.AuditLogReason, Options.RequestHeaders).ConfigureAwait(false);
 }

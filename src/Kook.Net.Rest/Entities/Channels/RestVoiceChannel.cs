@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
+using Kook.Audio;
 using Model = Kook.API.Channel;
 
 namespace Kook.Rest;
@@ -112,6 +113,18 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
 
     private string DebuggerDisplay => $"{Name} ({Id}, Voice)";
 
+    #region IAudioChannel
+
+    /// <inheritdoc />
+    /// <exception cref="NotSupportedException">Connecting to a REST-based channel is not supported.</exception>
+    Task<IAudioClient> IAudioChannel.ConnectAsync(/*bool selfDeaf, bool selfMute, */bool external) =>
+        throw new NotSupportedException();
+
+    /// <inheritdoc />
+    /// <exception cref="NotSupportedException">Connecting to a REST-based channel is not supported.</exception>
+    Task IAudioChannel.DisconnectAsync() => throw new NotSupportedException();
+
+    #endregion
 
     #region IGuildChannel
 

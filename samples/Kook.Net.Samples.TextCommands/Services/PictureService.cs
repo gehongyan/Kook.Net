@@ -1,4 +1,4 @@
-namespace TextCommandFramework.Services;
+namespace Kook.Net.Samples.TextCommands.Services;
 
 public class PictureService
 {

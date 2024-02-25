@@ -10,8 +10,8 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
     private readonly SemaphoreSlim _lock;
     private UdpClient _udp;
     private IPEndPoint _destination;
-    private CancellationTokenSource _stopCancelTokenSource, _cancelTokenSource;
-    private CancellationToken _cancelToken, _parentToken;
+    private CancellationTokenSource _stopCancellationTokenSource, _cancellationTokenSource;
+    private CancellationToken _cancellationToken, _parentToken;
     private Task _task;
     private bool _isDisposed;
 
@@ -20,7 +20,7 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
     public DefaultUdpSocket()
     {
         _lock = new SemaphoreSlim(1, 1);
-        _stopCancelTokenSource = new CancellationTokenSource();
+        _stopCancellationTokenSource = new CancellationTokenSource();
     }
 
     private void Dispose(bool disposing)
@@ -30,8 +30,8 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
             if (disposing)
             {
                 StopInternalAsync(true).GetAwaiter().GetResult();
-                _stopCancelTokenSource?.Dispose();
-                _cancelTokenSource?.Dispose();
+                _stopCancellationTokenSource?.Dispose();
+                _cancellationTokenSource?.Dispose();
                 _lock?.Dispose();
             }
 
@@ -47,7 +47,7 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
         await _lock.WaitAsync().ConfigureAwait(false);
         try
         {
-            await StartInternalAsync(_cancelToken).ConfigureAwait(false);
+            await StartInternalAsync(_cancellationToken).ConfigureAwait(false);
         }
         finally
         {
@@ -55,21 +55,21 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
         }
     }
 
-    public async Task StartInternalAsync(CancellationToken cancelToken)
+    public async Task StartInternalAsync(CancellationToken cancellationToken)
     {
         await StopInternalAsync().ConfigureAwait(false);
 
-        _stopCancelTokenSource?.Dispose();
-        _cancelTokenSource?.Dispose();
+        _stopCancellationTokenSource?.Dispose();
+        _cancellationTokenSource?.Dispose();
 
-        _stopCancelTokenSource = new CancellationTokenSource();
-        _cancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_parentToken, _stopCancelTokenSource.Token);
-        _cancelToken = _cancelTokenSource.Token;
+        _stopCancellationTokenSource = new CancellationTokenSource();
+        _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_parentToken, _stopCancellationTokenSource.Token);
+        _cancellationToken = _cancellationTokenSource.Token;
 
         _udp?.Dispose();
         _udp = new UdpClient(0);
 
-        _task = RunAsync(_cancelToken);
+        _task = RunAsync(_cancellationToken);
     }
 
     public async Task StopAsync()
@@ -89,7 +89,7 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
     {
         try
         {
-            _stopCancelTokenSource.Cancel(false);
+            _stopCancellationTokenSource.Cancel(false);
         }
         catch
         {
@@ -113,15 +113,16 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
         }
     }
 
-    public void SetDestination(string ip, int port) => _destination = new IPEndPoint(IPAddress.Parse(ip), port);
+    public void SetDestination(string ip, int port) =>
+        _destination = new IPEndPoint(IPAddress.Parse(ip), port);
 
-    public void SetCancelToken(CancellationToken cancelToken)
+    public void SetCancellationToken(CancellationToken cancellationToken)
     {
-        _cancelTokenSource?.Dispose();
+        _cancellationTokenSource?.Dispose();
 
-        _parentToken = cancelToken;
-        _cancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_parentToken, _stopCancelTokenSource.Token);
-        _cancelToken = _cancelTokenSource.Token;
+        _parentToken = cancellationToken;
+        _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_parentToken, _stopCancellationTokenSource.Token);
+        _cancellationToken = _cancellationTokenSource.Token;
     }
 
     public async Task SendAsync(byte[] data, int index, int count)
@@ -136,10 +137,10 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
         await _udp.SendAsync(data, count, _destination).ConfigureAwait(false);
     }
 
-    private async Task RunAsync(CancellationToken cancelToken)
+    private async Task RunAsync(CancellationToken cancellationToken)
     {
-        Task closeTask = Task.Delay(-1, cancelToken);
-        while (!cancelToken.IsCancellationRequested)
+        Task closeTask = Task.Delay(-1, cancellationToken);
+        while (!cancellationToken.IsCancellationRequested)
         {
             Task<UdpReceiveResult> receiveTask = _udp.ReceiveAsync();
 

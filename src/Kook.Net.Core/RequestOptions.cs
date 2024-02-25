@@ -29,9 +29,9 @@ public class RequestOptions
     ///     Gets or sets the cancellation token for this request.
     /// </summary>
     /// <returns>
-    ///     A <see cref="CancellationToken"/> for this request.
+    ///     A <see cref="System.Threading.CancellationToken"/> for this request.
     /// </returns>
-    public CancellationToken CancelToken { get; set; } = CancellationToken.None;
+    public CancellationToken CancellationToken { get; set; } = CancellationToken.None;
 
     /// <summary>
     ///     Gets or sets the retry behavior when the request fails.

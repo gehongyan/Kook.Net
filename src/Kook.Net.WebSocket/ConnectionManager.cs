@@ -28,13 +28,13 @@ internal class ConnectionManager : IDisposable
     private readonly Func<Exception, Task> _onDisconnecting;
 
     private TaskCompletionSource<bool> _connectionPromise, _readyPromise;
-    private CancellationTokenSource _combinedCancelToken, _reconnectCancelToken, _connectionCancelToken;
+    private CancellationTokenSource _combinedCancellationToken, _reconnectCancellationToken, _connectionCancellationToken;
     private Task _task;
 
     private bool _isDisposed;
 
     public ConnectionState State { get; private set; }
-    public CancellationToken CancelToken { get; private set; }
+    public CancellationToken CancellationToken { get; private set; }
 
     internal ConnectionManager(SemaphoreSlim stateLock, Logger logger, int connectionTimeout,
         Func<Task> onConnecting, Func<Exception, Task> onDisconnecting, Action<Func<Exception, Task>> clientDisconnectHandler)
@@ -69,27 +69,27 @@ internal class ConnectionManager : IDisposable
         if (State != ConnectionState.Disconnected) throw new InvalidOperationException("Cannot start an already running client.");
 
         await AcquireConnectionLock().ConfigureAwait(false);
-        CancellationTokenSource reconnectCancelToken = new();
-        _reconnectCancelToken?.Dispose();
-        _reconnectCancelToken = reconnectCancelToken;
+        CancellationTokenSource reconnectCancellationToken = new();
+        _reconnectCancellationToken?.Dispose();
+        _reconnectCancellationToken = reconnectCancellationToken;
         _task = Task.Run(async () =>
         {
             try
             {
                 Random jitter = new();
                 int nextReconnectDelay = 1000;
-                while (!reconnectCancelToken.IsCancellationRequested)
+                while (!reconnectCancellationToken.IsCancellationRequested)
                 {
                     try
                     {
-                        await ConnectAsync(reconnectCancelToken).ConfigureAwait(false);
+                        await ConnectAsync(reconnectCancellationToken).ConfigureAwait(false);
                         nextReconnectDelay = 1000; //Reset delay
                         await _connectionPromise.Task.ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
                         Error(ex); //In case this exception didn't come from another Error call
-                        if (!reconnectCancelToken.IsCancellationRequested)
+                        if (!reconnectCancellationToken.IsCancellationRequested)
                         {
                             await _logger.WarningAsync(ex).ConfigureAwait(false);
                             await DisconnectAsync(ex, true).ConfigureAwait(false);
@@ -101,10 +101,10 @@ internal class ConnectionManager : IDisposable
                         }
                     }
 
-                    if (!reconnectCancelToken.IsCancellationRequested)
+                    if (!reconnectCancellationToken.IsCancellationRequested)
                     {
                         //Wait before reconnecting
-                        await Task.Delay(nextReconnectDelay, reconnectCancelToken.Token).ConfigureAwait(false);
+                        await Task.Delay(nextReconnectDelay, reconnectCancellationToken.Token).ConfigureAwait(false);
                         nextReconnectDelay = nextReconnectDelay * 2 + jitter.Next(-250, 250);
                         if (nextReconnectDelay > 60000) nextReconnectDelay = 60000;
                     }
@@ -123,13 +123,13 @@ internal class ConnectionManager : IDisposable
         return Task.CompletedTask;
     }
 
-    private async Task ConnectAsync(CancellationTokenSource reconnectCancelToken)
+    private async Task ConnectAsync(CancellationTokenSource reconnectCancellationToken)
     {
-        _connectionCancelToken?.Dispose();
-        _combinedCancelToken?.Dispose();
-        _connectionCancelToken = new CancellationTokenSource();
-        _combinedCancelToken = CancellationTokenSource.CreateLinkedTokenSource(_connectionCancelToken.Token, reconnectCancelToken.Token);
-        CancelToken = _combinedCancelToken.Token;
+        _connectionCancellationToken?.Dispose();
+        _combinedCancellationToken?.Dispose();
+        _connectionCancellationToken = new CancellationTokenSource();
+        _combinedCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(_connectionCancellationToken.Token, reconnectCancellationToken.Token);
+        CancellationToken = _combinedCancellationToken.Token;
 
         _connectionPromise = new TaskCompletionSource<bool>();
         State = ConnectionState.Connecting;
@@ -141,12 +141,12 @@ internal class ConnectionManager : IDisposable
             _readyPromise = readyPromise;
 
             //Abort connection on timeout
-            CancellationToken cancelToken = CancelToken;
+            CancellationToken cancellationToken = CancellationToken;
             Task _ = Task.Run(async () =>
             {
                 try
                 {
-                    await Task.Delay(_connectionTimeout, cancelToken).ConfigureAwait(false);
+                    await Task.Delay(_connectionTimeout, cancellationToken).ConfigureAwait(false);
                     readyPromise.TrySetException(new TimeoutException());
                 }
                 catch (OperationCanceledException e)
@@ -195,20 +195,20 @@ internal class ConnectionManager : IDisposable
     {
         _readyPromise?.TrySetCanceled();
         _connectionPromise?.TrySetCanceled();
-        _reconnectCancelToken?.Cancel();
-        _connectionCancelToken?.Cancel();
+        _reconnectCancellationToken?.Cancel();
+        _connectionCancellationToken?.Cancel();
     }
 
     public void Error(Exception ex)
     {
         _readyPromise.TrySetException(ex);
         _connectionPromise.TrySetException(ex);
-        _connectionCancelToken?.Cancel();
+        _connectionCancellationToken?.Cancel();
     }
 
     public void CriticalError(Exception ex)
     {
-        _reconnectCancelToken?.Cancel();
+        _reconnectCancellationToken?.Cancel();
         Error(ex);
     }
 
@@ -216,7 +216,7 @@ internal class ConnectionManager : IDisposable
     {
         _readyPromise.TrySetCanceled();
         _connectionPromise.TrySetCanceled();
-        _connectionCancelToken?.Cancel();
+        _connectionCancellationToken?.Cancel();
     }
 
     private async Task AcquireConnectionLock()
@@ -234,9 +234,9 @@ internal class ConnectionManager : IDisposable
         {
             if (disposing)
             {
-                _combinedCancelToken?.Dispose();
-                _reconnectCancelToken?.Dispose();
-                _connectionCancelToken?.Dispose();
+                _combinedCancellationToken?.Dispose();
+                _reconnectCancellationToken?.Dispose();
+                _connectionCancellationToken?.Dispose();
             }
 
             _isDisposed = true;

@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
+using Kook.Audio;
 using RichModel = Kook.API.Rest.RichGuild;
 using ExtendedModel = Kook.API.Rest.ExtendedGuild;
 using Model = Kook.API.Guild;
@@ -721,6 +722,9 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     #endregion
 
     #region IGuild
+
+    /// <inheritdoc />
+    IAudioClient IGuild.AudioClient => null;
 
     /// <inheritdoc />
     bool IGuild.Available => Available;

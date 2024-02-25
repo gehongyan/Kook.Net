@@ -1,10 +1,9 @@
-using Kook;
 using Kook.Commands;
+using Kook.Net.Samples.TextCommands.Services;
 using Kook.Rest;
 using Kook.WebSocket;
-using TextCommandFramework.Services;
 
-namespace TextCommandFramework.Modules;
+namespace Kook.Net.Samples.TextCommands.Modules;
 
 // Modules must be public and inherit from an IModuleBase
 public class PublicModule : ModuleBase<SocketCommandContext>

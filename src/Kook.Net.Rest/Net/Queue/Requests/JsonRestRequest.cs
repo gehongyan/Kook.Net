@@ -15,5 +15,5 @@ internal class JsonRestRequest : RestRequest
         Json = json;
 
     public override async Task<RestResponse> SendAsync() => await Client
-        .SendAsync(Method, Endpoint, Json, Options.CancelToken, Options.AuditLogReason, Options.RequestHeaders).ConfigureAwait(false);
+        .SendAsync(Method, Endpoint, Json, Options.CancellationToken, Options.AuditLogReason, Options.RequestHeaders).ConfigureAwait(false);
 }

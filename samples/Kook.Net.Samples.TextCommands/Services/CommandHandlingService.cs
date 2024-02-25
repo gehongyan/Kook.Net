@@ -1,10 +1,9 @@
-using Kook;
+using System.Reflection;
 using Kook.Commands;
 using Kook.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
-namespace TextCommandFramework.Services;
+namespace Kook.Net.Samples.TextCommands.Services;
 
 public class CommandHandlingService
 {

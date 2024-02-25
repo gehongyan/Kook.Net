@@ -11,7 +11,7 @@ internal class WebSocketRequest : IRequest
     public DateTimeOffset? TimeoutAt { get; }
     public TaskCompletionSource<Stream> Promise { get; }
     public RequestOptions Options { get; }
-    public CancellationToken CancelToken { get; internal set; }
+    public CancellationToken cancellationToken { get; internal set; }
 
     public WebSocketRequest(IWebSocketClient client, byte[] data, bool isText, bool ignoreLimit, RequestOptions options)
     {

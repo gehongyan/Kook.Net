@@ -1,6 +1,7 @@
 using Kook.Rest;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using Kook.Audio;
 using Model = Kook.API.Channel;
 
 namespace Kook.WebSocket;
@@ -161,6 +162,18 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
 
     private string DebuggerDisplay => $"{Name} ({Id}, Voice)";
     internal new SocketVoiceChannel Clone() => MemberwiseClone() as SocketVoiceChannel;
+
+    #region IAudioChannel
+
+    /// <inheritdoc />
+    public Task<IAudioClient> ConnectAsync(/*bool selfDeaf = false, bool selfMute = false, */bool external = false)
+        => Guild.ConnectAudioAsync(Id, /*selfDeaf, selfMute, */external);
+
+    /// <inheritdoc />
+    public Task DisconnectAsync()
+        => Guild.DisconnectAudioAsync();
+
+    #endregion
 
     #region IGuildChannel
 

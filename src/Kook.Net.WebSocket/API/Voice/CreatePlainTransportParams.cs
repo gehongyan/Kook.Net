@@ -8,7 +8,7 @@ internal class CreatePlainTransportParams
     public bool Comedia { get; set; }
 
     [JsonPropertyName("rtcpMux")]
-    public bool RTCPMultiplexing { get; set; }
+    public bool RtcpMultiplexing { get; set; }
 
     [JsonPropertyName("type")]
     public string Type { get; set; }

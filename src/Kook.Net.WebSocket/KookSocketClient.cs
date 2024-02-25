@@ -36,6 +36,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     private Task _heartbeatTask, _guildDownloadTask;
     private int _unavailableGuildCount;
     private long _lastGuildAvailableTime, _lastMessageTime;
+    private int _nextAudioId;
 
     private bool _isDisposed;
 
@@ -1691,7 +1692,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                             GatewayHelloPayload gatewayHelloPayload =
                                 ((JsonElement)payload).Deserialize<GatewayHelloPayload>(_serializerOptions);
                             _sessionId = gatewayHelloPayload?.SessionId;
-                            _heartbeatTask = RunHeartbeatAsync(_connection.CancelToken);
+                            _heartbeatTask = RunHeartbeatAsync(_connection.CancellationToken);
                         }
                         catch (Exception ex)
                         {
@@ -1765,7 +1766,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                         // }
 
                         _lastGuildAvailableTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-                        _guildDownloadTask = WaitForGuildsAsync(_connection.CancelToken, _gatewayLogger)
+                        _guildDownloadTask = WaitForGuildsAsync(_connection.CancellationToken, _gatewayLogger)
                             .ContinueWith(async task =>
                             {
                                 if (task.IsFaulted)
@@ -1773,7 +1774,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                     _connection.Error(task.Exception);
                                     return;
                                 }
-                                else if (_connection.CancelToken.IsCancellationRequested) return;
+                                else if (_connection.CancellationToken.IsCancellationRequested) return;
 
                                 // Download user list if enabled
                                 if (_baseConfig.AlwaysDownloadUsers)
@@ -1896,13 +1897,13 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     /// <inheritdoc />
     public override async Task StopAsync() => await _connection.StopAsync().ConfigureAwait(false);
 
-    private async Task RunHeartbeatAsync(CancellationToken cancelToken)
+    private async Task RunHeartbeatAsync(CancellationToken cancellationToken)
     {
         int intervalMillis = KookSocketConfig.HeartbeatIntervalMilliseconds;
         try
         {
             await _gatewayLogger.DebugAsync("Heartbeat Started").ConfigureAwait(false);
-            while (!cancelToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
@@ -1924,7 +1925,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                     await _gatewayLogger.WarningAsync("Heartbeat Errored", ex).ConfigureAwait(false);
                 }
 
-                await Task.Delay(intervalMillis, cancelToken).ConfigureAwait(false);
+                await Task.Delay(intervalMillis, cancellationToken).ConfigureAwait(false);
             }
 
             await _gatewayLogger.DebugAsync("Heartbeat Stopped").ConfigureAwait(false);
@@ -1939,7 +1940,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         }
     }
 
-    private async Task WaitForGuildsAsync(CancellationToken cancelToken, Logger logger)
+    private async Task WaitForGuildsAsync(CancellationToken cancellationToken, Logger logger)
     {
         //Wait for GUILD_AVAILABLEs
         try
@@ -1947,7 +1948,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             await logger.DebugAsync("GuildDownloader Started").ConfigureAwait(false);
             while (_unavailableGuildCount != 0
                    && DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - _lastGuildAvailableTime < _baseConfig.MaxWaitBetweenGuildAvailablesBeforeReady)
-                await Task.Delay(500, cancelToken).ConfigureAwait(false);
+                await Task.Delay(500, cancellationToken).ConfigureAwait(false);
 
             await logger.DebugAsync("GuildDownloader Stopped").ConfigureAwait(false);
         }
@@ -2181,6 +2182,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         string details = $"{evnt} Guild={guildId}";
         await _gatewayLogger.DebugAsync($"Unsynced Guild ({details}). Payload: {JsonSerializer.Serialize(payload, _serializerOptions)}").ConfigureAwait(false);
     }
+
+    internal int GetAudioId() => _nextAudioId++;
 
     #region IKookClient
 

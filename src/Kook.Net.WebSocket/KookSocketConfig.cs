@@ -47,6 +47,11 @@ public class KookSocketConfig : KookRestConfig
     public const int HeartbeatIntervalMilliseconds = 30000;
 
     /// <summary>
+    ///     Gets the RTCP interval of RTP connection in milliseconds.
+    /// </summary>
+    public const int RtcpIntervalMilliseconds = 5000;
+
+    /// <summary>
     ///     Gets or sets the timeout for event handlers, in milliseconds, after which a warning will be logged.
     ///     Setting this property to <c>null</c>disables this check.
     /// </summary>

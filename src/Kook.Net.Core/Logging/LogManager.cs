@@ -23,7 +23,8 @@ internal class LogManager
     {
         try
         {
-            if (severity <= Level) await _messageEvent.InvokeAsync(new LogMessage(severity, source, null, ex)).ConfigureAwait(false);
+            if (severity <= Level)
+                await _messageEvent.InvokeAsync(new LogMessage(severity, source, null, ex)).ConfigureAwait(false);
         }
         catch
         {
@@ -35,7 +36,8 @@ internal class LogManager
     {
         try
         {
-            if (severity <= Level) await _messageEvent.InvokeAsync(new LogMessage(severity, source, message, ex)).ConfigureAwait(false);
+            if (severity <= Level)
+                await _messageEvent.InvokeAsync(new LogMessage(severity, source, message, ex)).ConfigureAwait(false);
         }
         catch
         {
@@ -47,7 +49,8 @@ internal class LogManager
     {
         try
         {
-            if (severity <= Level) await _messageEvent.InvokeAsync(new LogMessage(severity, source, message.ToString(), ex)).ConfigureAwait(false);
+            if (severity <= Level)
+                await _messageEvent.InvokeAsync(new LogMessage(severity, source, message.ToString(), ex)).ConfigureAwait(false);
         }
         catch
         {

@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using Kook.Audio;
 
 namespace Kook;
 
@@ -64,6 +65,14 @@ public interface IGuild : IEntity<ulong>
     ///     A string representing the default voice region for this guild.
     /// </returns>
     string Region { get; }
+
+    /// <summary>
+    ///     Gets the <see cref="IAudioClient"/> currently associated with this guild.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="IAudioClient"/> currently associated with this guild.
+    /// </returns>
+    IAudioClient AudioClient { get; }
 
     /// <summary>
     ///     Gets whether this guild is public.

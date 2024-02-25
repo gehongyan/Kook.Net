@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Kook.Audio;
 
 namespace Kook;
 
@@ -93,6 +94,12 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
     public string ServerUrl => throw new NotImplementedException();
 
     public bool HasPassword => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task<IAudioClient> ConnectAsync(/*bool selfDeaf = false, bool selfMute = false, */bool external = false) => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task DisconnectAsync() => throw new NotImplementedException();
 
     public Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null) => throw new NotImplementedException();
 

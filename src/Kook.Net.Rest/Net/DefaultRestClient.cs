@@ -27,7 +27,7 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 
     private readonly HttpClient _client;
     private readonly string _baseUrl;
-    private CancellationToken _cancelToken;
+    private CancellationToken _cancellationToken;
     private bool _isDisposed;
 
 #if DEBUG_REST
@@ -47,7 +47,7 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 #pragma warning restore IDISP014
         SetHeader("accept-encoding", "gzip, deflate");
 
-        _cancelToken = CancellationToken.None;
+        _cancellationToken = CancellationToken.None;
 
 #if DEBUG_REST
         _serializerOptions = new JsonSerializerOptions
@@ -76,9 +76,9 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         if (value != null) _client.DefaultRequestHeaders.Add(key, value);
     }
 
-    public void SetCancelToken(CancellationToken cancelToken) => _cancelToken = cancelToken;
+    public void SetCancellationToken(CancellationToken cancellationToken) => _cancellationToken = cancellationToken;
 
-    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancelToken, string reason = null,
+    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancellationToken, string reason = null,
         IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
     {
         string uri = Path.Combine(_baseUrl, endpoint);
@@ -90,11 +90,11 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
                 foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
                     restRequest.Headers.Add(header.Key, header.Value);
 
-            return await SendInternalAsync(restRequest, cancelToken).ConfigureAwait(false);
+            return await SendInternalAsync(restRequest, cancellationToken).ConfigureAwait(false);
         }
     }
 
-    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json, CancellationToken cancelToken, string reason = null,
+    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json, CancellationToken cancellationToken, string reason = null,
         IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
     {
         string uri = Path.Combine(_baseUrl, endpoint);
@@ -109,12 +109,12 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 #else
         restRequest.Content = new StringContent(json, Encoding.UTF8, "application/json");
 #endif
-        return await SendInternalAsync(restRequest, cancelToken).ConfigureAwait(false);
+        return await SendInternalAsync(restRequest, cancellationToken).ConfigureAwait(false);
     }
 
     /// <exception cref="InvalidOperationException">Unsupported param type.</exception>
     public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartParams,
-        CancellationToken cancelToken, string reason = null,
+        CancellationToken cancellationToken, string reason = null,
         IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
     {
         string uri = Path.Combine(_baseUrl, endpoint);
@@ -179,15 +179,15 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         }
 
         restRequest.Content = content;
-        return await SendInternalAsync(restRequest, cancelToken).ConfigureAwait(false);
+        return await SendInternalAsync(restRequest, cancellationToken).ConfigureAwait(false);
     }
 
-    private async Task<RestResponse> SendInternalAsync(HttpRequestMessage request, CancellationToken cancelToken)
+    private async Task<RestResponse> SendInternalAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
 #if DEBUG_REST
         int id = Interlocked.Increment(ref _nextId);
 #endif
-        using CancellationTokenSource cancelTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancelToken, cancelToken);
+        using CancellationTokenSource cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancellationToken, cancellationToken);
 #if DEBUG_REST
         Debug.WriteLine($"[REST] [{id}] {request.Method} {request.RequestUri} {request.Content?.Headers.ContentType?.MediaType}");
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
@@ -197,8 +197,8 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 #endif
             Debug.WriteLine($"[REST] {await request.Content.ReadAsStringAsync().ConfigureAwait(false)}");
 #endif
-        cancelToken = cancelTokenSource.Token;
-        HttpResponseMessage response = await _client.SendAsync(request, cancelToken).ConfigureAwait(false);
+        cancellationToken = cancellationTokenSource.Token;
+        HttpResponseMessage response = await _client.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
         Dictionary<string, string> headers =
             response.Headers.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault(), StringComparer.OrdinalIgnoreCase);

@@ -41,7 +41,7 @@ internal class KookSocketApiClient : KookRestApiClient
     private readonly AsyncEvent<Func<Exception, Task>> _disconnectedEvent = new();
 
     private readonly bool _isExplicitUrl;
-    private CancellationTokenSource _connectCancelToken;
+    private CancellationTokenSource _connectCancellationToken;
     private string _gatewayUrl;
     private Guid? _sessionId;
     private int _lastSeq;
@@ -57,6 +57,7 @@ internal class KookSocketApiClient : KookRestApiClient
         if (url != null) _isExplicitUrl = true;
 
         WebSocketClient = webSocketProvider();
+        WebSocketClient.SetKeepAliveInterval(TimeSpan.Zero);
         WebSocketClient.TextMessage += OnTextMessage;
         WebSocketClient.BinaryMessage += OnBinaryMessage;
         WebSocketClient.Closed += async ex =>
@@ -137,7 +138,7 @@ internal class KookSocketApiClient : KookRestApiClient
         {
             if (disposing)
             {
-                _connectCancelToken?.Dispose();
+                _connectCancellationToken?.Dispose();
                 WebSocketClient?.Dispose();
             }
 
@@ -174,9 +175,9 @@ internal class KookSocketApiClient : KookRestApiClient
 
         try
         {
-            _connectCancelToken?.Dispose();
-            _connectCancelToken = new CancellationTokenSource();
-            WebSocketClient?.SetCancelToken(_connectCancelToken.Token);
+            _connectCancellationToken?.Dispose();
+            _connectCancellationToken = new CancellationTokenSource();
+            WebSocketClient?.SetCancellationToken(_connectCancellationToken.Token);
 
             if (!_isExplicitUrl)
             {
@@ -228,7 +229,7 @@ internal class KookSocketApiClient : KookRestApiClient
 
         try
         {
-            _connectCancelToken?.Cancel(false);
+            _connectCancellationToken?.Cancel(false);
         }
         catch
         {

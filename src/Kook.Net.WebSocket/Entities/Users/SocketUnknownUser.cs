@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using Model = Kook.API.User;
 
 namespace Kook.WebSocket;
 

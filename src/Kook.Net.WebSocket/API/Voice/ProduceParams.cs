@@ -4,12 +4,6 @@ namespace Kook.API.Voice;
 
 internal class ProduceParams
 {
-    public ProduceParams()
-    {
-    }
-
-    public ProduceParams(Guid transportId) => TransportId = transportId;
-
     [JsonPropertyName("appData")]
     public object AppData { get; set; }
 
@@ -20,27 +14,28 @@ internal class ProduceParams
     public string PeerId { get; set; }
 
     [JsonPropertyName("rtpParameters")]
-    public RTPParameters RTPParameters { get; set; }
+    public RtpParameters RtpParameters { get; set; }
 
     [JsonPropertyName("transportId")]
     public Guid TransportId { get; set; }
 }
 
-internal class RTPParameters
+internal class RtpParameters
 {
     [JsonPropertyName("codecs")]
-    public Codec[] Codecs { get; set; }
+    public CodecParams[] Codecs { get; set; }
 
     [JsonPropertyName("encodings")]
-    public Encoding[] Encodings { get; set; }
+    public EncodingParams[] Encodings { get; set; }
 }
 
-internal class Encoding
+internal class EncodingParams
 {
-    public uint SSRC { get; set; }
+    [JsonPropertyName("ssrc")]
+    public uint Ssrc { get; set; }
 }
 
-internal class Codec
+internal class CodecParams
 {
     [JsonPropertyName("channels")]
     public int Channels { get; set; }

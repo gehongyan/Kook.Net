@@ -1,8 +1,9 @@
 using System.Text.Json.Serialization;
+using Kook.Net.Converters;
 
 namespace Kook.API.Voice;
 
-internal class VoiceSocketResponseFrame
+internal class VoiceSocketIncomeFrame
 {
     [JsonPropertyName("response")]
     public bool Response { get; set; }
@@ -15,4 +16,11 @@ internal class VoiceSocketResponseFrame
 
     [JsonPropertyName("data")]
     public object Payload { get; set; }
+
+    [JsonPropertyName("notification")]
+    public bool Notification { get; set; }
+
+    [JsonPropertyName("method")]
+    [JsonConverter(typeof(VoiceSocketFrameTypeConverter))]
+    public VoiceSocketFrameType Method { get; set; }
 }

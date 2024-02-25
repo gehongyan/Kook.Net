@@ -19,6 +19,15 @@ public class KookConfig
     public const int APIVersion = 3;
 
     /// <summary>
+    ///     Returns the Voice API version Kook.Net uses.
+    /// </summary>
+    /// <returns>
+    ///     An <see cref="int"/> representing the API version that Discord.Net uses to communicate with KOOK's
+    ///     voice server.
+    /// </returns>
+    public const int VoiceAPIVersion = 1;
+
+    /// <summary>
     ///     Gets the Kook.Net version, including the build number.
     /// </summary>
     /// <returns>
@@ -179,9 +188,9 @@ public class KookConfig
     ///     Gets or sets if the Rest/Socket user <see cref="object.ToString"/> override formats the string in respect to bidirectional unicode.
     /// </summary>
     /// <remarks>
-    ///     By default, the returned value will be "?Discord?#1234", to work with bidirectional usernames.
+    ///     By default, the returned value will be "?Kook?#1234", to work with bidirectional usernames.
     ///     <br/>
-    ///     If set to <c>false</c>, this value will be "Discord#1234".
+    ///     If set to <c>false</c>, this value will be "Kook#1234".
     /// </remarks>
     public bool FormatUsersInBidirectionalUnicode { get; set; } = true;
 }

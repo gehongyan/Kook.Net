@@ -18,8 +18,8 @@ public interface IUdpSocket : IDisposable
     /// <summary>
     ///     Sets the cancellation token.
     /// </summary>
-    /// <param name="cancelToken"> The cancellation token. </param>
-    void SetCancelToken(CancellationToken cancelToken);
+    /// <param name="cancellationToken"> The cancellation token. </param>
+    void SetCancellationToken(CancellationToken cancellationToken);
 
     /// <summary>
     ///     Sets the destination of the socket.

@@ -107,7 +107,8 @@ public class CommandService : IDisposable
         _separatorChar = config.SeparatorChar;
         _defaultRunMode = config.DefaultRunMode;
         _quotationMarkAliasMap = (config.QuotationMarkAliasMap ?? new Dictionary<char, char>()).ToImmutableDictionary();
-        if (_defaultRunMode == RunMode.Default) throw new InvalidOperationException("The default run mode cannot be set to Default.");
+        if (_defaultRunMode == RunMode.Default)
+            throw new InvalidOperationException("The default run mode cannot be set to Default.");
 
         _logManager = new LogManager(config.LogLevel);
         _logManager.Message += async msg => await _logEvent.InvokeAsync(msg).ConfigureAwait(false);

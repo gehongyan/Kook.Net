@@ -1,3 +1,5 @@
+using Kook.Audio;
+
 namespace Kook;
 
 /// <summary>
@@ -27,4 +29,24 @@ public interface IAudioChannel : IChannel
     ///     A string representing the url that clients should connect to to join this voice channel.
     /// </returns>
     string ServerUrl { get; }
+
+    // /// <param name="selfDeaf">Determines whether the client should deaf itself upon connection.</param>
+    // /// <param name="selfMute">Determines whether the client should mute itself upon connection.</param>
+    /// <summary>
+    ///     Connects to this audio channel.
+    /// </summary>
+    /// <param name="external">Determines whether the audio client is an external one or not.</param>
+    /// <returns>
+    ///     A task representing the asynchronous connection operation. The task result contains the
+    ///     <see cref="IAudioClient"/> responsible for the connection.
+    /// </returns>
+    Task<IAudioClient> ConnectAsync(/*bool selfDeaf = false, bool selfMute = false, */bool external = false);
+
+    /// <summary>
+    ///     Disconnects from this audio channel.
+    /// </summary>
+    /// <returns>
+    ///     A task representing the asynchronous operation for disconnecting from the audio channel.
+    /// </returns>
+    Task DisconnectAsync();
 }

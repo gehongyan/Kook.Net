@@ -28,10 +28,20 @@ public interface IWebSocketClient : IDisposable
     void SetHeader(string key, string value);
 
     /// <summary>
+    ///     Sets the keep-alive interval for this client.
+    /// </summary>
+    /// <param name="keepAliveInterval"> The keep-alive interval to be used. </param>
+    /// <remarks>
+    ///     If this method is not called, the default keep-alive interval will be
+    ///     <see cref="P:System.Net.WebSockets.WebSocket.DefaultKeepAliveInterval"/>.
+    /// </remarks>
+    void SetKeepAliveInterval(TimeSpan keepAliveInterval);
+
+    /// <summary>
     ///     Sets the cancellation token for this client.
     /// </summary>
-    /// <param name="cancelToken"> The cancellation token to be used. </param>
-    void SetCancelToken(CancellationToken cancelToken);
+    /// <param name="cancellationToken"> The cancellation token to be used. </param>
+    void SetCancellationToken(CancellationToken cancellationToken);
 
     /// <summary>
     ///     Connects to the specified host.
