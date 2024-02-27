@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using Kook.API;
 using Kook.API.Gateway;
 using Kook.API.Rest;
+using Kook.Gateway;
 using Kook.Logging;
 using Kook.Net;
 using Kook.Net.Udp;
@@ -19,7 +20,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based KOOK client.
 /// </summary>
-public partial class KookSocketClient : BaseSocketClient, IKookClient
+public partial class KookSocketClient : KookGatewayClient, IKookClient
 {
     #region KookSocketClient
 

@@ -4,6 +4,7 @@ using Kook.WebSocket;
 using System.Text.Json;
 using Kook.API.Rest;
 using Kook.Audio.Streams;
+using Kook.Gateway;
 
 namespace Kook.Audio;
 

@@ -2,6 +2,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Kook.Audio;
 using Kook.Commands;
+using Kook.Gateway;
 using Kook.Net.Samples.Audio.Services;
 using Kook.WebSocket;
 

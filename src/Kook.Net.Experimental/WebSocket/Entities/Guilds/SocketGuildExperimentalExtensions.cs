@@ -1,3 +1,4 @@
+using Kook.Gateway;
 using Kook.Rest;
 
 namespace Kook.WebSocket;

@@ -1,4 +1,5 @@
 Imports System.Threading
+Imports Kook.Gateway
 Imports Kook.WebSocket
 
 ' 这是一个使用 Kook.Net 的 Visual Basic 简单示例

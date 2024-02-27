@@ -1,4 +1,5 @@
 using Kook;
+using Kook.Gateway;
 using Kook.WebSocket;
 
 // 这是一个使用 Kook.Net 的 C# 简单示例

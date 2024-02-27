@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using Kook.Audio;
+using Kook.Gateway;
 using Kook.WebSocket;
 
 namespace Kook.Net.Samples.Audio.Services;

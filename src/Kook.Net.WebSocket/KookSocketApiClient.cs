@@ -7,6 +7,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using Kook.API.Gateway;
 using Kook.API.Rest;
+using Kook.Gateway;
 using Kook.Net.Queue;
 using Kook.Net.Rest;
 using Kook.Net.WebSockets;
@@ -14,7 +15,7 @@ using Kook.WebSocket;
 
 namespace Kook.API;
 
-internal class KookSocketApiClient : KookRestApiClient
+internal class KookSocketApiClient : KookGatewayApiClient
 {
     public event Func<GatewaySocketFrameType, Task> SentGatewayMessage
     {
@@ -51,10 +52,12 @@ internal class KookSocketApiClient : KookRestApiClient
     public KookSocketApiClient(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider, string userAgent, string acceptLanguage,
         string url = null, RetryMode defaultRetryMode = RetryMode.AlwaysRetry, JsonSerializerOptions serializerOptions = null,
         Func<IRateLimitInfo, Task> defaultRatelimitCallback = null)
-        : base(restClientProvider, userAgent, acceptLanguage, defaultRetryMode, serializerOptions, defaultRatelimitCallback)
+        : base(restClientProvider, webSocketProvider, userAgent, acceptLanguage, url, defaultRetryMode,
+            serializerOptions, defaultRatelimitCallback)
     {
         _gatewayUrl = url;
-        if (url != null) _isExplicitUrl = true;
+        if (url != null)
+            _isExplicitUrl = true;
 
         WebSocketClient = webSocketProvider();
         WebSocketClient.SetKeepAliveInterval(TimeSpan.Zero);

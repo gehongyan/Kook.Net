@@ -1,3 +1,4 @@
+using Kook.Gateway;
 using Kook.WebSocket;
 
 namespace Kook.Net.Samples.ReactionRoleBot.Extensions;

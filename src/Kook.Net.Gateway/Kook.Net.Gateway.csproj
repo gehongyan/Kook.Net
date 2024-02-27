@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../Kook.Net.targets"/>
+
+  <PropertyGroup>
+    <RootNamespace>Kook.Gateway</RootNamespace>
+    <IsPackable>true</IsPackable>
+    <PackageId>Kook.Net.Gateway</PackageId>
+    <Description>The Gateway API abstraction for Kook.Net.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj"/>
+    <ProjectReference Include="..\Kook.Net.Rest\Kook.Net.Rest.csproj"/>
+  </ItemGroup>
+
+</Project>

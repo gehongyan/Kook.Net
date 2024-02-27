@@ -1,4 +1,5 @@
 using Kook.Commands;
+using Kook.Gateway;
 using Kook.Net.Samples.TextCommands.Services;
 using Kook.Rest;
 using Kook.WebSocket;

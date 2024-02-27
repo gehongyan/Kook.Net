@@ -1,3 +1,5 @@
+using Kook.Gateway;
+
 namespace Kook.WebSocket;
 
 internal static class SocketEntityExtensions

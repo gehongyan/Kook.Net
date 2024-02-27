@@ -1,5 +1,6 @@
 using System.Reflection;
 using Kook.Commands;
+using Kook.Gateway;
 using Kook.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
