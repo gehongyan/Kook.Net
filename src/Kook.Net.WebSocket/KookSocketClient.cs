@@ -44,7 +44,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     public override KookSocketRestClient Rest { get; }
 
     /// <inheritdoc />
-    public ConnectionState ConnectionState => _connection.State;
+    public override ConnectionState ConnectionState => _connection.State;
 
     /// <inheritdoc />
     public override int Latency { get; protected set; }

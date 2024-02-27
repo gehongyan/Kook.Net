@@ -202,12 +202,12 @@ public abstract class BaseKookClient : IKookClient
     internal virtual Task OnLogoutAsync()
         => Task.Delay(0);
 
+    /// <inheritdoc />
+    public virtual ConnectionState ConnectionState => ConnectionState.Disconnected;
+
     #endregion
 
     #region IKookClient
-
-    /// <inheritdoc />
-    ConnectionState IKookClient.ConnectionState => ConnectionState.Disconnected;
 
     /// <inheritdoc />
     ISelfUser IKookClient.CurrentUser => CurrentUser;
