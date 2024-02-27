@@ -96,7 +96,7 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
     public bool HasPassword => throw new NotImplementedException();
 
     /// <inheritdoc />
-    public Task<IAudioClient> ConnectAsync(/*bool selfDeaf = false, bool selfMute = false, */bool external = false) => throw new NotImplementedException();
+    public Task<IAudioClient> ConnectAsync(/*bool selfDeaf = false, bool selfMute = false, */bool external = false, bool disconnect = true) => throw new NotImplementedException();
 
     /// <inheritdoc />
     public Task DisconnectAsync() => throw new NotImplementedException();

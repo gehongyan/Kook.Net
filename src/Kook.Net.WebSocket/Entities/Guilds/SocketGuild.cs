@@ -1045,14 +1045,15 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
     #region Audio
 
-    internal async Task<IAudioClient> ConnectAudioAsync(ulong channelId, /*bool selfDeaf, bool selfMute, */bool external)
+    internal async Task<IAudioClient> ConnectAudioAsync(ulong channelId, /*bool selfDeaf, bool selfMute, */bool external, bool disconnect)
     {
         TaskCompletionSource<AudioClient> promise;
 
         await _audioLock.WaitAsync().ConfigureAwait(false);
         try
         {
-            await DisconnectAudioInternalAsync().ConfigureAwait(false);
+            if (disconnect || !external)
+                await DisconnectAudioInternalAsync().ConfigureAwait(false);
             promise = new TaskCompletionSource<AudioClient>();
             _audioConnectPromise = promise;
 

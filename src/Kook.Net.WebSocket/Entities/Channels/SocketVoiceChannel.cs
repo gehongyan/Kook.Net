@@ -166,8 +166,8 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     #region IAudioChannel
 
     /// <inheritdoc />
-    public Task<IAudioClient> ConnectAsync(/*bool selfDeaf = false, bool selfMute = false, */bool external = false)
-        => Guild.ConnectAudioAsync(Id, /*selfDeaf, selfMute, */external);
+    public Task<IAudioClient> ConnectAsync(/*bool selfDeaf = false, bool selfMute = false, */bool external = false, bool disconnect = true)
+        => Guild.ConnectAudioAsync(Id, /*selfDeaf, selfMute, */external, disconnect);
 
     /// <inheritdoc />
     public Task DisconnectAsync()
