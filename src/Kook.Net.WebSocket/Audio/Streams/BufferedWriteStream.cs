@@ -101,8 +101,8 @@ public class BufferedWriteStream : AudioOutStream
                             _client.SentOctets += (uint)frame.Bytes;
                             // _silenceFrames = 0;
 #if DEBUG
-                            // _ = _logger?.DebugAsync(
-                            //     $"Sent {frame.Bytes} bytes ({_queuedFrames.Count} frames buffered)");
+                            _ = _logger?.DebugAsync(
+                                $"Sent {frame.Bytes} bytes ({_queuedFrames.Count} frames buffered)");
 #endif
                         }
                         else
