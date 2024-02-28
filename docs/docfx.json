@@ -44,6 +44,12 @@
             },
             {
                 "files": [
+                    "demos/**.md",
+                    "demos/**/toc.yml"
+                ]
+            },
+            {
+                "files": [
                     "changelog/**.md",
                     "changelog/**/toc.yml"
                 ]

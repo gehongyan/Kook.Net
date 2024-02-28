@@ -62,3 +62,5 @@
       topicUid: Guides.Emoji
     - name: 表情符号列表
       topicUid: Guides.Emoji.EmojiList
+- name: 语音推流
+  topicUid: Guides.Voice.SendingVoice

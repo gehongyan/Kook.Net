@@ -175,7 +175,6 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// </remarks>
     /// <seealso cref="SocketGuild.DownloadBoostSubscriptionsAsync"/>
     /// <seealso cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/>
-    /// <seealso cref="KookSocketClient.AlwaysDownloadBoostSubscriptions"/>
     public IReadOnlyCollection<BoostSubscriptionMetadata> BoostSubscriptions =>
         Guild.BoostSubscriptions?
             .Where(x => x.Key.Id == Id)

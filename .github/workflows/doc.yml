@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -33,16 +33,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget
 
-      - name: Restore Dependencies
-        run: dotnet restore
+      - name: Setup DocFX
+        run: dotnet tool install -g docfx --version 2.75.3
 
-      - name: Build
-        run: dotnet build --no-restore
-
-      - uses: nikeee/docfx-action@v1.0.0
-        name: Build Doc
-        with:
-          args: ./docs/docfx.json
+      - name: Build docs
+        run: docfx docs/docfx.json
 
       - uses: finnp/create-file-action@master
         name: Add CNAME

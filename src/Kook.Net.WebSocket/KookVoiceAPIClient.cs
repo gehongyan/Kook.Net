@@ -14,7 +14,7 @@ internal class KookVoiceAPIClient : IDisposable
 {
     #region KookVoiceAPIClient
 
-    public const int MaxBitrate = 128 * 1024;
+    public const int MaxBitrate = 500 * 1024;
     public static readonly DateTimeOffset PrimeEpoch = new(1900, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
     public event Func<string, string, double, Task> SentRequest

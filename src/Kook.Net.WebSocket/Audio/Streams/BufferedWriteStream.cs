@@ -3,12 +3,6 @@ using System.Collections.Concurrent;
 
 namespace Kook.Audio.Streams;
 
-internal struct RtpPacketStatistics
-{
-    public uint Sequence { get; set; }
-    public uint Timestamp { get; set; }
-}
-
 ///<summary> Wraps another stream with a timed buffer. </summary>
 public class BufferedWriteStream : AudioOutStream
 {

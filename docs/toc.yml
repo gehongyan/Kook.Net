@@ -2,8 +2,11 @@
   href: guides/
   topicUid: Guides.Introduction
 - name: 快速参考指南
-  href: quick/
+  href: quick_reference/
   topicUid: Guides.QuickReference
+- name: 示例项目
+  href: demos/
+  topicUid: Guides.Demos
 - name: API 文档
   href: api/
   topicUid: API.Docs

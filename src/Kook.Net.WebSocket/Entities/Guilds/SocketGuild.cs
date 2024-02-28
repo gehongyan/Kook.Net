@@ -263,7 +263,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <seealso cref="ValidBoostSubscriptions"/>
     /// <seealso cref="DownloadBoostSubscriptionsAsync"/>
     /// <seealso cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/>
-    /// <seealso cref="KookSocketClient.AlwaysDownloadBoostSubscriptions"/>
     public ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>> BoostSubscriptions =>
         _boostSubscriptions?.ToImmutableDictionary();
 
@@ -290,7 +289,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <seealso cref="BoostSubscriptions"/>
     /// <seealso cref="DownloadBoostSubscriptionsAsync"/>
     /// <seealso cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/>
-    /// <seealso cref="KookSocketClient.AlwaysDownloadBoostSubscriptions"/>
     public ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>> ValidBoostSubscriptions =>
         _boostSubscriptions?.Select(x =>
                 new KeyValuePair<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>(x.Key, x.Value
@@ -321,7 +319,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     A collection of guild users found within this guild.
     /// </returns>
     /// <seealso cref="DownloadUsersAsync"/>
-    /// <seealso cref="KookSocketClient.AlwaysDownloadUsers"/>
     /// <seealso cref="KookSocketClient.DownloadUsersAsync"/>
     public IReadOnlyCollection<SocketGuildUser> Users => _members.ToReadOnlyCollection();
 

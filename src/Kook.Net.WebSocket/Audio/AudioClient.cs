@@ -134,20 +134,20 @@ internal partial class AudioClient : IAudioClient
     }
 
     /// <inheritdoc />
-    public AudioOutStream CreatePcmStream(AudioApplication application, int? bitrate = null, int bufferMillis = 1000, int packetLoss = 30)
+    public AudioOutStream CreatePcmStream(AudioApplication application, int bitrate = 96 * 1024, int bufferMillis = 1000, int packetLoss = 30)
     {
         var outputStream = new OutputStream(ApiClient);
         var rtpWriter = new RtpWriteStream(outputStream, _ssrc);
         var bufferedStream = new BufferedWriteStream(rtpWriter, this, bufferMillis, _connection.CancellationToken, _audioLogger); //Ignores header, generates header
-        return new OpusEncodeStream(bufferedStream, bitrate ?? (96 * 1024), application, packetLoss);
+        return new OpusEncodeStream(bufferedStream, bitrate, application, packetLoss);
     }
 
     /// <inheritdoc />
-    public AudioOutStream CreateDirectPcmStream(AudioApplication application, int? bitrate = null, int packetLoss = 30)
+    public AudioOutStream CreateDirectPcmStream(AudioApplication application, int bitrate = 96 * 1024, int packetLoss = 30)
     {
         var outputStream = new OutputStream(ApiClient);
         var rtpWriter = new RtpWriteStream(outputStream, _ssrc);
-        return new OpusEncodeStream(rtpWriter, bitrate ?? (96 * 1024), application, packetLoss);
+        return new OpusEncodeStream(rtpWriter, bitrate, application, packetLoss);
     }
 
     private async Task ProcessMessageAsync(VoiceSocketFrameType type, bool okay, object payload)
@@ -334,7 +334,7 @@ internal partial class AudioClient : IAudioClient
         }
     }
 
-    internal void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (disposing)
         {

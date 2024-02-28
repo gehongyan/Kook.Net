@@ -39,7 +39,7 @@ static void ConfigureServices(HostBuilderContext hostContext, IServiceCollection
         .AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", true, true)
         .Build();
 
-    // KOOK Webhook 配置
+    // KOOK 配置
     KookBotConfigurations kookBotConfigurations = new();
     configurationRoot.GetSection(nameof(KookBotConfigurations))
         .Bind(kookBotConfigurations);

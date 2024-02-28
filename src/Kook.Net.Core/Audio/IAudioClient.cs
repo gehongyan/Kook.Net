@@ -89,7 +89,7 @@ public interface IAudioClient : IDisposable
     /// <param name="bufferMillis"> The buffer size, in milliseconds, of the audio stream. </param>
     /// <param name="packetLoss"> The packet loss percentage of the audio stream. </param>
     /// <returns> A new PCM audio stream. </returns>
-    AudioOutStream CreatePcmStream(AudioApplication application, int? bitrate = null, int bufferMillis = 1000, int packetLoss = 30);
+    AudioOutStream CreatePcmStream(AudioApplication application, int bitrate = 96 * 1024, int bufferMillis = 1000, int packetLoss = 30);
 
     /// <summary>
     ///     Creates a new audio stream from the PCM codec without buffering.
@@ -98,5 +98,5 @@ public interface IAudioClient : IDisposable
     /// <param name="bitrate"> The bitrate of the audio stream. </param>
     /// <param name="packetLoss"> The packet loss percentage of the audio stream. </param>
     /// <returns> A new PCM audio stream. </returns>
-    AudioOutStream CreateDirectPcmStream(AudioApplication application, int? bitrate = null, int packetLoss = 30);
+    AudioOutStream CreateDirectPcmStream(AudioApplication application, int bitrate = 96 * 1024, int packetLoss = 30);
 }
