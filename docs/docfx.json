@@ -72,13 +72,16 @@
         "dest": "_site",
         "template": [
             "default",
-            "templates/docfx-tmpl/src"
+            "modern",
+            "_template/material",
+            "_template/description-generator"
         ],
         "xrefService": [
             "https://xref.docs.microsoft.com/query?uid={uid}"
         ],
         "postProcessors": [
-            "ExtractSearchIndex"
+            "ExtractSearchIndex",
+            "DescriptionPostProcessor"
         ],
         "globalMetadata": {
             "_appTitle": "Kook.Net 文档",
