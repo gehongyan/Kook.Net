@@ -5,6 +5,32 @@ title: 变更日志
 
 # 变更日志
 
+## v0.6.0 [2024-02-28]
+
+### 更新路线
+
+KOOK 内不支持在文本消息中提及语音频道，即 `IVoiceChannel` 不可被提及，现已不再派生自 `IMentionable`
+接口。有关提及 `IVoiceChannel` 的错误用法应该予以移除或变更。
+
+有关取消令牌的的名称已从 `CancelToken` 更改为 `CancellationToken`，现有关于取消用牌的方法、变量、属性、参数的名称都应该更新。
+
+### 新增
+
+- 新增语音频道的连接与推流
+
+### 修复
+
+- 修复 `KookSocketClient` 转换为 `IKookClient` 或 `BaseKookClient` 时 `ConnectionState` 不正确的问题
+
+### 变更
+
+- `IVoiceChannel` 不再派生自的 `IMentionable` 接口
+- 重命名方法、变量、属性、参数的名称 `CancelToken` 为 `CancellationToken`
+
+### 其它
+
+- 更改文档模板，新增示例项目页面，新增语音推流文档
+
 ## v0.5.5 [2024-02-02]
 
 ### 更新路线

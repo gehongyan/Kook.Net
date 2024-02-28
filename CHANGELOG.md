@@ -2,6 +2,31 @@
 
 ---
 
+## v0.6.0 [2024-02-28]
+
+### Update Roadmap
+
+In KOOK, mentioning voice channels in text messages is not supported, meaning `IVoiceChannel` should not be derived from `IMentionable` interface. Incorrect usage of mentioning `IVoiceChannel` should be removed or modified.
+
+The name of the cancellation token has been changed from `CancelToken` to `CancellationToken`. Existing methods, variables, properties, and parameters related to cancellation token should be updated.
+
+### Added
+
+- Added connection and streaming for voice channels.
+
+### Fixed
+
+- Fixed an issue where `KookSocketClient` did not correctly handle `ConnectionState` when casted to `IKookClient` or `BaseKookClient`.
+
+### Changes
+
+- `IVoiceChannel` no longer derived from `IMentionable` interface.
+- Renamed the name of methods, variables, properties, and parameters from `CancelToken` to `CancellationToken`.
+
+### Other
+
+- Updated document template, added example project page, and added voice streaming documentation.
+
 ## v0.5.5 [2024-02-02]
 
 ### Update Path
