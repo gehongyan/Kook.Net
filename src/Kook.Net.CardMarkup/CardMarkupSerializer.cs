@@ -98,7 +98,7 @@ public static class CardMarkupSerializer
                     break;
 
                 case XmlNodeType.Text:
-                    stack.Peek().Text = xmlReader.Value.Trim();
+                    stack.Peek().Text = xmlReader.Value;
                     break;
             }
         }

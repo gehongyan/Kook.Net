@@ -182,12 +182,12 @@ internal static class CardBuilderExtensions
     private static PlainTextElementBuilder ToPlainTextElement(this MarkupElement element)
     {
         bool emoji = element.Attributes.GetBoolean("emoji", true);
-        return new PlainTextElementBuilder(element.Text, emoji);
+        return new PlainTextElementBuilder(element.Text.ParseText(), emoji);
     }
 
     private static KMarkdownElementBuilder ToKMarkdownElement(this MarkupElement element)
     {
-        return new KMarkdownElementBuilder(element.Text);
+        return new KMarkdownElementBuilder(element.Text.ParseText());
     }
 
     private static ImageElementBuilder ToImageElement(this MarkupElement element)
@@ -222,6 +222,19 @@ internal static class CardBuilderExtensions
             .ToList();
 
         return new ParagraphStructBuilder(cols, elements);
+    }
+
+    #endregion
+
+    #region Helpers
+
+    private static string ParseText(this string text)
+    {
+        var multiLine = text
+            .Split(["\r\n", "\r", "\n"], StringSplitOptions.None)
+            .Where(x => string.IsNullOrEmpty(x) is false)
+            .Select(x => x.Trim());
+        return string.Join("\n", multiLine);
     }
 
     #endregion
