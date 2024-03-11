@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../Kook.Net.targets"/>
+
+  <PropertyGroup>
+    <RootNamespace>Kook.CardMarkup</RootNamespace>
+    <IsPackable>true</IsPackable>
+    <PackageId>Kook.Net.CardMarkup</PackageId>
+    <Description>XML based markup language Card Message builder.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj"/>
+  </ItemGroup>
+
+</Project>
