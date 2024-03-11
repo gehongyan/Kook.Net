@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<xs:schema  targetNamespace="https://kooknet.dev"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns="https://kooknet.dev"
+            elementFormDefault="qualified">
+
+    <!-- ================= Root ================== -->
+    <xs:element name="card-message">
+        <xs:complexType>
+            <xs:sequence maxOccurs="5">
+                <xs:element ref="card" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="card">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="modules" />
+            </xs:sequence>
+            <xs:attribute name="theme" type="enum-card-theme" />
+            <xs:attribute name="size" type="enum-card-size" />
+            <xs:attribute name="color" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="modules">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="header" type="mod-header" />
+                    <xs:element name="section" type="mod-section" />
+                    <xs:element name="images" type="mod-image-group" />
+                    <xs:element name="container" type="mod-container" />
+                    <xs:element name="actions" type="mod-action-group" />
+                    <xs:element name="context" type="mod-context" />
+                    <xs:element name="divider" type="mod-divider" />
+                    <xs:element name="file" type="mod-file-or-video" />
+                    <xs:element name="video" type="mod-file-or-video" />
+                    <xs:element name="audio" type="mod-audio" />
+                    <xs:element name="countdown" type="mod-countdown" />
+                    <xs:element name="invite" type="mod-invite" />
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ================ Modules ================ -->
+
+    <!-- 标题模块 -->
+    <xs:complexType name="mod-header">
+        <xs:sequence>
+            <xs:element ref="plain" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- 内容模块 -->
+    <xs:complexType name="mod-section">
+        <xs:sequence>
+            <xs:element name="text">
+                <xs:complexType>
+                    <xs:choice>
+                        <xs:element ref="plain" />
+                        <xs:element ref="kmarkdown" />
+                        <xs:element ref="paragraph" />
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="accessory" minOccurs="0">
+                <xs:complexType>
+                    <xs:choice>
+                        <xs:element ref="button" />
+                        <xs:element ref="image" />
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="mode" type="enum-section-mode" />
+    </xs:complexType>
+
+    <!-- 图片组模块 -->
+    <xs:complexType name="mod-image-group">
+        <xs:sequence maxOccurs="9">
+            <xs:element ref="image" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- 容器模块 -->
+    <xs:complexType name="mod-container">
+        <xs:sequence maxOccurs="9">
+            <xs:element ref="image" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- 交互模块 -->
+    <xs:complexType name="mod-action-group">
+        <xs:sequence maxOccurs="4">
+            <xs:element ref="button" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- 备注模块 -->
+    <xs:complexType name="mod-context">
+        <xs:sequence>
+            <xs:choice maxOccurs="10">
+                <xs:element ref="plain" />
+                <xs:element ref="kmarkdown" />
+                <xs:element ref="image" />
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- 分割线模块 -->
+    <xs:complexType name="mod-divider">
+    </xs:complexType>
+
+    <!-- 文件模块 (文件/视频) -->
+    <xs:complexType name="mod-file-or-video">
+        <xs:attribute name="src" type="xs:anyURI" use="required" />
+        <xs:attribute name="title" type="xs:string" />
+    </xs:complexType>
+
+    <!-- 文件模块 (音频) -->
+    <xs:complexType name="mod-audio">
+        <xs:attribute name="src" type="xs:anyURI" use="required" />
+        <xs:attribute name="title" type="xs:string" />
+        <xs:attribute name="cover" type="xs:anyURI" />
+    </xs:complexType>
+
+    <!-- 倒计时模块 -->
+    <xs:complexType name="mod-countdown">
+        <xs:attribute name="start" type="xs:unsignedLong" />
+        <xs:attribute name="end" type="xs:unsignedLong" use="required" />
+        <xs:attribute name="mode" type="enum-countdown-mode" use="required" />
+    </xs:complexType>
+
+    <!-- 邀请模块 -->
+    <xs:complexType name="mod-invite">
+        <xs:attribute name="code" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <!-- ================ Elements =============== -->
+
+    <!-- 普通文本 -->
+    <xs:element name="plain">
+        <xs:complexType mixed="true">
+            <xs:attribute name="emoji" type="xs:boolean" default="true" />
+        </xs:complexType>
+    </xs:element>
+
+    <!-- KMarkdown -->
+    <xs:element name="kmarkdown">
+        <xs:simpleType>
+            <xs:restriction base="xs:string" />
+        </xs:simpleType>
+    </xs:element>
+
+    <!-- 图片 -->
+    <xs:element name="image">
+        <xs:complexType>
+            <xs:attribute name="src" type="xs:anyURI" use="required" />
+            <xs:attribute name="alt" type="xs:string" />
+            <xs:attribute name="size" type="enum-image-size" />
+            <xs:attribute name="circle" type="xs:boolean" />
+        </xs:complexType>
+    </xs:element>
+
+    <!-- 按钮 -->
+    <xs:element name="button">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice>
+                    <xs:element ref="plain" />
+                    <xs:element ref="kmarkdown" />
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="theme" type="enum-button-theme" />
+            <xs:attribute name="value" type="xs:string" />
+            <xs:attribute name="click" type="enum-button-event"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- 区域文本 -->
+    <xs:element name="paragraph">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice maxOccurs="50">
+                    <xs:element ref="plain" />
+                    <xs:element ref="kmarkdown" />
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="cols" type="xs:int" use="required" />
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ================= Enums ================== -->
+    <xs:simpleType name="enum-card-theme">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="primary" />
+            <xs:enumeration value="success" />
+            <xs:enumeration value="danger" />
+            <xs:enumeration value="warning" />
+            <xs:enumeration value="info" />
+            <xs:enumeration value="secondary" />
+            <xs:enumeration value="none" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="enum-card-size">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="small" />
+            <xs:enumeration value="large" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="enum-image-size">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="small" />
+            <xs:enumeration value="large" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="enum-button-theme">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="primary" />
+            <xs:enumeration value="success" />
+            <xs:enumeration value="danger" />
+            <xs:enumeration value="warning" />
+            <xs:enumeration value="info" />
+            <xs:enumeration value="secondary" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="enum-button-event">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="link" />
+            <xs:enumeration value="return-val" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="enum-section-mode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="left" />
+            <xs:enumeration value="right" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="enum-countdown-mode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="day" />
+            <xs:enumeration value="hour" />
+            <xs:enumeration value="second" />
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

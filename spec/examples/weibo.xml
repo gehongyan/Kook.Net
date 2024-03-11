@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<card-message xmlns="https://kooknet.dev">
+  <card>
+    <modules>
+
+      <context>
+        <image src="https://img.kaiheila.cn/assets/2021-01/bUZJOyqnMG0d30d3.png/ld" size="small" />
+        <plain>小岛工作室</plain>
+        <plain> 1月18日 20:07</plain>
+      </context>
+
+      <section>
+        <text>
+          <plain>谢谢所有参与 LUDENS fan art 征集的朋友们！我们收到了许多十分精彩的作品！...</plain>
+        </text>
+      </section>
+
+      <images>
+        <image src="https://img.kaiheila.cn/assets/2021-01/V3zmettTwN0j608y.png"/>
+      </images>
+
+      <divider />
+
+      <context>
+        <image src="https://img.kaiheila.cn/assets/2021-01/p9e9Adqkg104x04x.jpeg" />
+        <plain>微博</plain>
+      </context>
+
+    </modules>
+  </card>
+</card-message>
