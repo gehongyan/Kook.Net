@@ -6,9 +6,9 @@
             title: 'GitHub'
         },
         {
-            icon: 'discord',
-            href: 'https://discord.gg/dnet',
-            title: 'Discord'
+            icon: 'chat',
+            href: 'https://kook.top/EvxnOb',
+            title: 'KOOK'
         }
     ]
 }

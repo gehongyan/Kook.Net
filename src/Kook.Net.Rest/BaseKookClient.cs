@@ -1,3 +1,7 @@
+#if NET462
+using System.Net.Http;
+#endif
+
 using System.Collections.Immutable;
 using Kook.Logging;
 
@@ -42,6 +46,18 @@ public abstract class BaseKookClient : IKookClient
     }
 
     private readonly AsyncEvent<Func<Task>> _loggedOutEvent = new();
+
+    /// <summary>
+    ///     Fired when a REST request is sent to the API. First parameter is the HTTP method,
+    ///     second is the endpoint, and third is the time taken to complete the request.
+    /// </summary>
+    public event Func<HttpMethod, string, double, Task> SentRequest
+    {
+        add { _sentRequest.Add(value); }
+        remove { _sentRequest.Remove(value); }
+    }
+
+    internal readonly AsyncEvent<Func<HttpMethod, string, double, Task>> _sentRequest = new();
 
     internal readonly Logger _restLogger;
     private readonly SemaphoreSlim _stateLock;
@@ -89,6 +105,7 @@ public abstract class BaseKookClient : IKookClient
         };
         ApiClient.SentRequest += async (method, endpoint, millis) =>
             await _restLogger.VerboseAsync($"{method} {endpoint}: {millis} ms").ConfigureAwait(false);
+        ApiClient.SentRequest += (method, endpoint, millis) => _sentRequest.InvokeAsync(method, endpoint, millis);
     }
 
     internal virtual void Dispose(bool disposing)

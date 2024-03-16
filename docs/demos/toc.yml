@@ -1,2 +1,4 @@
 - name: 示例项目
   topicUid: Guides.Demos
+- name: 社区示例项目
+  topicUid: Guides.Demos.Community
