@@ -40,12 +40,12 @@ jobs:
         run: dotnet pack --configuration Release --output packages
 
       - name: Push Packages to NuGet
-        run: dotnet nuget push .\packages\*.nupkg -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push ./packages/*.nupkg -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json --skip-duplicate
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
       - name: Push Packages to Github
-        run: dotnet nuget push .\packages\*.nupkg -k $env:GITHUB_PACKAGES_KEY -s https://nuget.pkg.github.com/gehongyan/index.json --skip-duplicate
+        run: dotnet nuget push ./packages/*.nupkg -k $env:GITHUB_PACKAGES_KEY -s https://nuget.pkg.github.com/gehongyan/index.json --skip-duplicate
         env:
           GITHUB_PACKAGES_KEY: ${{ secrets.GITHUB_PACKAGES_KEY }}
 
