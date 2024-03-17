@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\..\spec\card-message.xsd" Label="card-message.xsd" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
 </Project>
