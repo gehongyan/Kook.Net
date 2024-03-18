@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <RootNamespace>Kook.CardMarkup</RootNamespace>
-    <IsPackable>true</IsPackable>
+    <IsPackable>false</IsPackable>
     <PackageId>Kook.Net.CardMarkup</PackageId>
     <Description>XML based markup language Card Message builder.</Description>
   </PropertyGroup>
