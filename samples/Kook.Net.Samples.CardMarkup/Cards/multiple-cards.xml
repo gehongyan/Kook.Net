@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<card-message xmlns="https://kooknet.dev">
+  <card>
+    <modules>
+      <header>
+        <plain>卡片 1</plain>
+      </header>
+    </modules>
+  </card>
+  <card>
+    <modules>
+      <header>
+        <plain>卡片 2</plain>
+      </header>
+    </modules>
+  </card>
+  <card>
+    <modules>
+      <header>
+        <plain>卡片 3</plain>
+      </header>
+    </modules>
+  </card>
+</card-message>

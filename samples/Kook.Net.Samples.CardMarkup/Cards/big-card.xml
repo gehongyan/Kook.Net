@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<card-message xmlns="https://kooknet.dev">
+  <card size="large" theme="info" color="#FFFFFF">
+    <modules>
+
+      <header>
+        <plain>测试卡片</plain>
+      </header>
+
+      <divider />
+
+      <section>
+        <text>
+          <plain>内容模块，无 Accessary</plain>
+        </text>
+      </section>
+
+      <section mode="right">
+        <text>
+          <kmarkdown>内容模块，**使用 KMarkdown**</kmarkdown>
+        </text>
+        <accessory>
+          <button theme="danger" click="return-val" value="TEST_VALUE">
+            <kmarkdown>**测试按钮**</kmarkdown>
+          </button>
+        </accessory>
+      </section>
+
+      <section>
+        <text>
+          <paragraph cols="3">
+            <kmarkdown>***Header 1***</kmarkdown>
+            <kmarkdown>***Header 2***</kmarkdown>
+            <kmarkdown>***Header 3***</kmarkdown>
+            <plain>Value 1</plain>
+            <plain>Value 2</plain>
+            <plain>Value 3</plain>
+            <plain>Value 4</plain>
+            <plain>Value 5</plain>
+            <plain>Value 6</plain>
+            <plain>Value 7</plain>
+            <plain>Value 8</plain>
+            <plain>Value 9</plain>
+          </paragraph>
+        </text>
+      </section>
+
+      <images>
+        <image src="https://img.kaiheila.cn/assets/2021-01/V3zmettTwN0j608y.png" />
+        <image src="https://img.kaiheila.cn/assets/2021-01/V3zmettTwN0j608y.png" />
+        <image src="https://img.kaiheila.cn/assets/2021-01/V3zmettTwN0j608y.png" />
+      </images>
+
+      <container>
+        <image src="https://img.kaiheila.cn/assets/2021-01/V3zmettTwN0j608y.png" />
+        <image src="https://img.kaiheila.cn/assets/2021-01/V3zmettTwN0j608y.png" />
+      </container>
+
+      <actions>
+        <button theme="success">
+          <plain>测试按钮</plain>
+        </button>
+      </actions>
+
+      <context>
+        <image src="https://img.kaiheila.cn/assets/2021-01/bUZJOyqnMG0d30d3.png/ld" size="small" />
+        <plain>测试 Context</plain>
+        <kmarkdown>~~KMarkdown~~ 测试(spl)内容(spl)</kmarkdown>
+      </context>
+
+      <file src="https://img.kaiheila.cn/attachments/2021-01/21/600972b5d0d31.txt"
+            title="KOOK 介绍" />
+      <audio src="https://img.kaiheila.cn/attachments/2021-01/21/600975671b9ab.mp3"
+             cover="https://img.kaiheila.cn/assets/2021-01/rcdqa8fAOO0hs0mc.jpg"
+             title="命运" />
+      <video src="https://img.kaiheila.cn/attachments/2021-01/20/6008127e8c8de.mp4"
+             title="测试视频" />
+
+      <countdown end="1710758046409" mode="day" />
+      <countdown end="1710758046409" mode="hour" />
+      <countdown end="1710758046409" start="1710754446409" mode="second" />
+
+      <divider/>
+
+      <invite code="CJlEJE"/>
+
+    </modules>
+  </card>
+</card-message>

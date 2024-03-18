@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <LangVersion>latestmajor</LangVersion>
+    <RootNamespace>Kook.Net.Samples.CardMarkup</RootNamespace>
+    <NoWarn>NU1803</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Kook.Net.CardMarkup\Kook.Net.CardMarkup.csproj" />
+    <ProjectReference Include="..\..\src\Kook.Net.Commands\Kook.Net.Commands.csproj" />
+    <ProjectReference Include="..\..\src\Kook.Net.Core\Kook.Net.Core.csproj" />
+    <ProjectReference Include="..\..\src\Kook.Net.Rest\Kook.Net.Rest.csproj" />
+    <ProjectReference Include="..\..\src\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fluid" Version="2.0.2" />
+    <PackageReference Include="Fluid.Core" Version="2.6.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Cards\vote.xml.liquid">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Cards\big-card.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Cards\multiple-cards.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
