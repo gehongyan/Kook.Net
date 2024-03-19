@@ -48,6 +48,18 @@
       topicUid: Guides.TextCommands.Preconditions
     - name: 后处理程序
       topicUid: Guides.TextCommands.PostExecution
+- name: XML 卡片消息
+  items:
+    - name: 入门
+      topicUid: Guides.CardMarkup.Intro
+    - name: 卡片
+      topicUid: Guides.CardMarkup.Card
+    - name: 模块
+      topicUid: Guides.CardMarkup.Modules
+    - name: 元素
+      topicUid: Guides.CardMarkup.Elements
+    - name: 结构体
+      topicUid: Guides.CardMarkup.Structures
 - name: 与其它类库结合使用
   items:
     - name: Serilog

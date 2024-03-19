@@ -1,0 +1,77 @@
+<card theme="warning">
+  <modules>
+
+    <header>
+      <plain>朋友们，今晚开黑玩什么游戏？</plain>
+    </header>
+
+    <divider />
+
+    <section mode="right">
+      <text>
+        <kmarkdown>
+          **英雄联盟**
+          艾欧尼亚，昂扬不灭。
+        </kmarkdown>
+      </text>
+      <accessory>
+        <button theme="primary" value="123">
+          <plain>+1</plain>
+        </button>
+      </accessory>
+    </section>
+    <context>
+      <image src="https://img.kaiheila.cn/avatars/2020-09/ov2wQ8r2qZ0dc07i.gif/icon" circle="true"/>
+      <image src="https://img.kaiheila.cn/avatars/2020-11/LjtEMkmH3U0hs0hs.jpg/icon" circle="true"/>
+      <image src="https://img.kaiheila.cn/avatars/2021-01/YaJKS70ClV04g04g.png/icon" circle="true"/>
+      <kmarkdown>
+        等12人把票投给了英雄联盟
+      </kmarkdown>
+    </context>
+
+    <section mode="right">
+      <text>
+        <kmarkdown>
+          **Warframe**
+          &lt;&lt;网络连接无响应&gt;&gt;。
+        </kmarkdown>
+      </text>
+      <accessory>
+        <button theme="primary" value="123">
+          <plain>+1</plain>
+        </button>
+      </accessory>
+    </section>
+    <context>
+      <image src="https://img.kaiheila.cn/avatars/2020-11/reWIJpyTQt05k05k.png/icon" circle="true"/>
+      <image src="https://img.kaiheila.cn/assets/2021-01/qcU601U2IH0xc0pn.png/icon" circle="true"/>
+      <image src="https://img.kaiheila.cn/avatars/2020-12/MKUoDHdTVK0u00u0.jpg/icon" circle="true"/>
+      <kmarkdown>
+        等12人把票投给了Warframe
+      </kmarkdown>
+    </context>
+
+    <section mode="right">
+      <text>
+        <kmarkdown>
+          **CSGO**
+          不听不听，无甲沙鹰。
+        </kmarkdown>
+      </text>
+      <accessory>
+        <button theme="primary" value="123">
+          <plain>+1</plain>
+        </button>
+      </accessory>
+    </section>
+    <context>
+      <image src="https://img.kaiheila.cn/avatars/2020-06/q4hNJU6KhU02s02s.jpg/icon" circle="true"/>
+      <image src="https://img.kaiheila.cn/avatars/2020-11/acXV4jRb4A08c08c.jpg/icon" circle="true"/>
+      <image src="https://img.kaiheila.cn/avatars/2020-06/SbFPjoBb5202s02s.jpg/icon" circle="true"/>
+      <kmarkdown>
+        等12人把票投给了CSGO
+      </kmarkdown>
+    </context>
+
+  </modules>
+</card>

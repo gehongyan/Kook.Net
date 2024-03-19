@@ -67,6 +67,12 @@
                     "**/obj/**",
                     "**.meta"
                 ]
+            },
+            {
+                "files": [
+                    "card-message.xsd"
+                ],
+                "src": "../spec"
             }
         ],
         "dest": "_site",

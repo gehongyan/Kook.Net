@@ -25,6 +25,12 @@ title: 示例项目
 
 该示例项目演示了如何使用 Kook.Net 中的文本命令框架，来构建一个易于扩展与维护的基于文本的命令交互 Bot。
 
+## XML 卡片消息
+
+### [Kook.Net.Samples.CardMarkup](https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.CardMarkup)
+
+该示例项目显示了如何使用 Kook.Net 中的 XML 卡片消息功能，使用 XML 标记语言来构建卡片消息，以及配合使用 Liquid 模版引擎，使用 `Fluid.Core` 库来在运行时通过模版构建卡片消息。
+
 ## 语音
 
 ### [Kook.Net.Samples.Audio](https://github.com/gehongyan/Kook.Net/tree/dev/samples/Kook.Net.Samples.Audio)

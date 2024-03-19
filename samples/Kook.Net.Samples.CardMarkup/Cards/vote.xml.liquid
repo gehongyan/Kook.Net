@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<card-message xmlns="https://kooknet.dev">
+
+    <card theme="warning">
+        <modules>
+
+            <header>
+                <plain>{{ Title }}</plain>
+            </header>
+
+            <divider />
+
+            {% for game in Games %}
+
+                <section mode="right">
+                    <text>
+                        <kmarkdown>
+                            **{{ game.Name }}**
+                            {{ game.Slogan }}
+                        </kmarkdown>
+                    </text>
+                    <accessory>
+                        <button theme="primary" value="123">
+                            <plain>+1</plain>
+                        </button>
+                    </accessory>
+                </section>
+                <context>
+                    {% for voter in game.Voters limit:3 %}
+                        <image src="{{ voter.Avatar }}" circle="true"/>
+                    {% endfor %}
+                    <kmarkdown>
+                        {% if game.Voters.size > 3 %}等{% endif %}{{ game.Voters.size }}人把票投给了{{ game.Name }}
+                    </kmarkdown>
+                </context>
+
+            {% endfor %}
+
+        </modules>
+    </card>
+
+</card-message>

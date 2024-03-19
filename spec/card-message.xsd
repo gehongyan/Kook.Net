@@ -1,0 +1,507 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<xs:schema targetNamespace="https://kooknet.dev"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="https://kooknet.dev"
+           elementFormDefault="qualified">
+
+    <!-- ================= Root ================== -->
+    <xs:element name="card-message">
+        <xs:annotation>
+            <xs:documentation>
+                卡片消息，每个卡片消息可以包含多个卡片
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence maxOccurs="5">
+                <xs:element ref="card" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="card">
+        <xs:annotation>
+            <xs:documentation>
+                卡片
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="modules" />
+            </xs:sequence>
+            <xs:attribute name="theme" type="enum-card-theme">
+                <xs:annotation>
+                    <xs:documentation>
+                        卡片主题
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="size" type="enum-card-size">
+                <xs:annotation>
+                    <xs:documentation>
+                        卡片尺寸
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="color" type="type-card-color">
+                <xs:annotation>
+                    <xs:documentation>
+                        卡片颜色，支持 16 进制颜色值，例如 #FF0000，代表卡片边框具体颜色，如果填了，则使用该 color，如果未填，则使用 theme 来渲染卡片颜色
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="modules">
+        <xs:annotation>
+            <xs:documentation>
+                模块，单个 Card 模块数量不限制，但是一条消息中所有卡片的模块数量之和最多是 50
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="header" type="mod-header" />
+                    <xs:element name="section" type="mod-section" />
+                    <xs:element name="images" type="mod-image-group" />
+                    <xs:element name="container" type="mod-container" />
+                    <xs:element name="actions" type="mod-action-group" />
+                    <xs:element name="context" type="mod-context" />
+                    <xs:element name="divider" type="mod-divider" />
+                    <xs:element name="file" type="mod-file-or-video" />
+                    <xs:element name="video" type="mod-file-or-video" />
+                    <xs:element name="audio" type="mod-audio" />
+                    <xs:element name="countdown" type="mod-countdown" />
+                    <xs:element name="invite" type="mod-invite" />
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ================ Modules ================ -->
+
+    <!-- 标题模块 -->
+    <xs:complexType name="mod-header">
+        <xs:annotation>
+            <xs:documentation>
+                标题模块，只能支持展示标准文本 (plain)，突出标题样式
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="plain" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- 内容模块 -->
+    <xs:complexType name="mod-section">
+        <xs:annotation>
+            <xs:documentation>
+                内容模块，结构化的内容，显示文本 + 其它元素
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="text">
+                <xs:complexType>
+                    <xs:annotation>
+                        <xs:documentation>
+                            内容模块的文本元素，可以是纯文本 (plain)、KMarkdown、段落 (paragraph)
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:choice>
+                        <xs:element ref="plain" />
+                        <xs:element ref="kmarkdown" />
+                        <xs:element ref="paragraph" />
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="accessory" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        内容模块的其它元素，可以是按钮 (button)、图片 (image)
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:choice>
+                        <xs:element ref="button" />
+                        <xs:element ref="image" />
+                    </xs:choice>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="mode" type="enum-section-mode">
+            <xs:annotation>
+                <xs:documentation>
+                    其它元素的放置位置，其中，按钮 (button) 不能放置在左侧
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <!-- 图片组模块 -->
+    <xs:complexType name="mod-image-group">
+        <xs:annotation>
+            <xs:documentation>
+                图片组模块，1 到多张图片的组合，最多支持 9 张图片
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence maxOccurs="9">
+            <xs:element ref="image" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- 容器模块 -->
+    <xs:complexType name="mod-container">
+        <xs:annotation>
+            <xs:documentation>
+                容器模块，1 到多张图片的组合，与图片组模块不同，图片并不会裁切为正方形，多张图片会纵向排列，最多支持 9 张图片
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence maxOccurs="9">
+            <xs:element ref="image" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- 交互模块 -->
+    <xs:complexType name="mod-action-group">
+        <xs:annotation>
+            <xs:documentation>
+                交互模块，包含交互控件元素，目前支持的交互控件为按钮 (button)，最多支持 4 个按钮
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence maxOccurs="4">
+            <xs:element ref="button" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- 备注模块 -->
+    <xs:complexType name="mod-context">
+        <xs:annotation>
+            <xs:documentation>
+                备注模块，展示图文混合的内容，支持纯文本 (plain)、KMarkdown、图片 (image)，最多支持 10 个元素
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice maxOccurs="10">
+                <xs:element ref="plain" />
+                <xs:element ref="kmarkdown" />
+                <xs:element ref="image" />
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- 分割线模块 -->
+    <xs:complexType name="mod-divider">
+        <xs:annotation>
+            <xs:documentation>
+                分割线模块，展示分割线
+            </xs:documentation>
+        </xs:annotation>
+    </xs:complexType>
+
+    <!-- 文件模块 (文件/视频) -->
+    <xs:complexType name="mod-file-or-video">
+        <xs:annotation>
+            <xs:documentation>
+                文件、视频模块，文件请用 file 元素，视频请用 video 元素
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="src" type="type-file-url" use="required" />
+        <xs:attribute name="title" type="type-file-title" />
+    </xs:complexType>
+
+    <!-- 文件模块 (音频) -->
+    <xs:complexType name="mod-audio">
+        <xs:annotation>
+            <xs:documentation>
+                音频模块，展示音频文件
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="src" type="type-file-url" use="required" />
+        <xs:attribute name="title" type="type-file-title" />
+        <xs:attribute name="cover" type="type-file-url" />
+    </xs:complexType>
+
+    <!-- 倒计时模块 -->
+    <xs:complexType name="mod-countdown">
+        <xs:annotation>
+            <xs:documentation>
+                倒计时模块，展示倒计时
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="start" type="xs:unsignedLong">
+            <xs:annotation>
+                <xs:documentation>
+                    起始的毫秒时间戳，仅当 mode 为 second 才有这个字段
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="end" type="xs:unsignedLong" use="required">
+            <xs:annotation>
+                <xs:documentation>
+                    到期的毫秒时间戳
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="mode" type="enum-countdown-mode" use="required" />
+    </xs:complexType>
+
+    <!-- 邀请模块 -->
+    <xs:complexType name="mod-invite">
+        <xs:annotation>
+            <xs:documentation>
+                邀请模块，提供服务器邀请/语音频道邀请
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="code" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>
+                    邀请链接或者邀请码
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <!-- ================ Elements =============== -->
+
+    <!-- 普通文本 -->
+    <xs:element name="plain">
+        <xs:annotation>
+            <xs:documentation>
+                纯文本元素，支持普通文本，最大 2000 个字
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType mixed="true">
+            <xs:attribute name="emoji" type="xs:boolean" default="true">
+                <xs:annotation>
+                    <xs:documentation>
+                        如果为 true，会把 emoji 的 shortcut 转为 emoji
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- KMarkdown -->
+    <xs:element name="kmarkdown">
+        <xs:annotation>
+            <xs:documentation>
+                KMarkdown 元素，支持 KMarkdown 格式的文本，最大 5000 个字
+            </xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+            <xs:restriction base="xs:string" />
+        </xs:simpleType>
+    </xs:element>
+
+    <!-- 图片 -->
+    <xs:element name="image">
+        <xs:annotation>
+            <xs:documentation>
+                图片元素，展示图片，仅支持 `image/jpeg` `image/gif` `image/png` 格式
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:attribute name="src" type="type-file-url" use="required" />
+            <xs:attribute name="alt" type="xs:string" />
+            <xs:attribute name="size" type="enum-image-size" />
+            <xs:attribute name="circle" type="xs:boolean" />
+        </xs:complexType>
+    </xs:element>
+
+    <!-- 按钮 -->
+    <xs:element name="button">
+        <xs:annotation>
+            <xs:documentation>
+                按钮元素，提供交互的功能
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice>
+                    <xs:element ref="plain" />
+                    <xs:element ref="kmarkdown" />
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="theme" type="enum-button-theme" />
+            <xs:attribute name="value" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>
+                        按钮需要传递的 value
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:attribute>
+            <xs:attribute name="click" type="enum-button-event"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- 区域文本 -->
+    <xs:element name="paragraph">
+        <xs:annotation>
+            <xs:documentation>
+                区域文本结构体，支持分栏结构，将模块分为左右两栏，根据顺序自动排列，支持更自由的文字排版模式，可以包含纯文本 (plain)、KMarkdown
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice maxOccurs="50">
+                    <xs:element ref="plain" />
+                    <xs:element ref="kmarkdown" />
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="cols" type="type-column-count" use="required" />
+        </xs:complexType>
+    </xs:element>
+
+    <!-- ================= Enums ================== -->
+    <xs:simpleType name="enum-card-theme">
+        <xs:annotation>
+            <xs:documentation>
+                卡片主题
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="primary" />
+            <xs:enumeration value="success" />
+            <xs:enumeration value="danger" />
+            <xs:enumeration value="warning" />
+            <xs:enumeration value="info" />
+            <xs:enumeration value="secondary" />
+            <xs:enumeration value="none" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="enum-card-size">
+        <xs:annotation>
+            <xs:documentation>
+                卡片尺寸
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="small" />
+            <xs:enumeration value="large" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="enum-image-size">
+        <xs:annotation>
+            <xs:documentation>
+                图片尺寸
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="small" />
+            <xs:enumeration value="large" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="enum-button-theme">
+        <xs:annotation>
+            <xs:documentation>
+                按钮主题
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="primary" />
+            <xs:enumeration value="success" />
+            <xs:enumeration value="danger" />
+            <xs:enumeration value="warning" />
+            <xs:enumeration value="info" />
+            <xs:enumeration value="secondary" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="enum-button-event">
+        <xs:annotation>
+            <xs:documentation>
+                按钮事件类型
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="link">
+                <xs:annotation>
+                    <xs:documentation>
+                        点击时，跳转到 value 代表的链接
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+            <xs:enumeration value="return-val">
+                <xs:annotation>
+                    <xs:documentation>
+                        点击时，系统会通过系统消息将消息 id、点击用户 id 和 value 发回给发送者，发送者可以根据自己的需求进行处理
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="enum-section-mode">
+        <xs:annotation>
+            <xs:documentation>
+                内容模块的显示模式
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="left" />
+            <xs:enumeration value="right" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="enum-countdown-mode">
+        <xs:annotation>
+            <xs:documentation>
+                倒计时模块的显示模式
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="day" />
+            <xs:enumeration value="hour" />
+            <xs:enumeration value="second" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- ================= Types ================== -->
+    <xs:simpleType name="type-card-color">
+        <xs:annotation>
+            <xs:documentation>
+                卡片颜色
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="#[0-9a-fA-F]{6}" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="type-column-count">
+        <xs:annotation>
+            <xs:documentation>
+                区域文本的列数
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:integer">
+            <xs:minInclusive value="1" />
+            <xs:maxInclusive value="3" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="type-file-url">
+        <xs:annotation>
+            <xs:documentation>
+                文件地址，必须是 HTTPS 链接
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:anyURI">
+            <xs:pattern value="https?://.+" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="type-file-title">
+        <xs:annotation>
+            <xs:documentation>
+                文件标题
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string" />
+    </xs:simpleType>
+
+</xs:schema>

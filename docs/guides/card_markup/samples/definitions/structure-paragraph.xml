@@ -1,0 +1,8 @@
+<paragraph cols="3">
+  <plain>Header 1</plain>
+  <plain>Header 2</plain>
+  <plain>Header 3</plain>
+  <kmarkdown>Value 1</kmarkdown>
+  <kmarkdown>Value 2</kmarkdown>
+  <kmarkdown>Value 3</kmarkdown>
+</paragraph>

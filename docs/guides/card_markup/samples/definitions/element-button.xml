@@ -1,0 +1,3 @@
+<button theme="danger" click="return-val" value="TEST_VALUE">
+  <kmarkdown>**测试按钮**</kmarkdown>
+</button>

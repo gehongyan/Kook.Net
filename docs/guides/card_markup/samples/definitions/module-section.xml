@@ -1,0 +1,10 @@
+<section mode="right">
+  <text>
+    <kmarkdown>内容模块，**使用 KMarkdown**</kmarkdown>
+  </text>
+  <accessory>
+    <button theme="danger" click="return-val" value="TEST_VALUE">
+      <kmarkdown>**测试按钮**</kmarkdown>
+    </button>
+  </accessory>
+</section>
