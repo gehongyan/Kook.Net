@@ -5,7 +5,7 @@ title: 结构体
 
 # 结构体
 
-[KooK 开发者文档 - 卡片消息 - 结构体](https://developer.kookapp.cn/doc/cardmessage#%E7%BB%93%E6%9E%84%E4%BD%93)
+[KOOK 开发者文档 - 卡片消息 - 结构体](https://developer.kookapp.cn/doc/cardmessage#%E7%BB%93%E6%9E%84%E4%BD%93)
 
 ## 区域文本 `paragraph`
 
