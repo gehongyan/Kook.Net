@@ -23,9 +23,7 @@ title: XML 卡片消息入门
 
 > [!WARNING]
 > 字符编码必须是 `UTF-8`。
-
-> [!TIP]
-> XML 版本分为 1.0 和 1.1 两个版本，绝大多数时候建议使用 1.1 版本。
+> XML 版本必须是 `1.0`。
 
 [!code-xml[Sample Card - XML Declaration](samples/intro/sample-card.xml#L1)]
 
