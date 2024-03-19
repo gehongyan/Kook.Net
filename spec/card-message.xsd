@@ -43,10 +43,10 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
-            <xs:attribute name="color" type="xs:string">
+            <xs:attribute name="color" type="type-card-color">
                 <xs:annotation>
                     <xs:documentation>
-                        卡片颜色，支持 16 进制颜色值，代表卡片边框具体颜色，如果填了，则使用该 color，如果未填，则使用 theme 来渲染卡片颜色
+                        卡片颜色，支持 16 进制颜色值，例如 #FF0000，代表卡片边框具体颜色，如果填了，则使用该 color，如果未填，则使用 theme 来渲染卡片颜色
                     </xs:documentation>
                 </xs:annotation>
             </xs:attribute>
@@ -461,6 +461,17 @@
     </xs:simpleType>
 
     <!-- ================= Types ================== -->
+    <xs:simpleType name="type-card-color">
+        <xs:annotation>
+            <xs:documentation>
+                卡片颜色
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:pattern value="#[0-9a-fA-F]{6}" />
+        </xs:restriction>
+    </xs:simpleType>
+
     <xs:simpleType name="type-column-count">
         <xs:annotation>
             <xs:documentation>
@@ -490,9 +501,7 @@
                 文件标题
             </xs:documentation>
         </xs:annotation>
-        <xs:restriction base="xs:anyURI">
-            <xs:pattern value="https?://.+" />
-        </xs:restriction>
+        <xs:restriction base="xs:string" />
     </xs:simpleType>
 
 </xs:schema>
