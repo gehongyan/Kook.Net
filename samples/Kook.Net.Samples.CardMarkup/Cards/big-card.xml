@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
 <card-message xmlns="https://kooknet.dev">
   <card size="large" theme="info" color="#FFFFFF">
@@ -77,13 +77,13 @@
       <video src="https://img.kaiheila.cn/attachments/2021-01/20/6008127e8c8de.mp4"
              title="测试视频" />
 
-      <countdown end="1710758046409" mode="day" />
-      <countdown end="1710758046409" mode="hour" />
-      <countdown end="1710758046409" start="1710754446409" mode="second" />
+      <countdown end="4080251224000" mode="day" />
+      <countdown end="4080251224000" mode="hour" />
+      <countdown end="4080251224000" start="4077572824000" mode="second" />
 
       <divider/>
 
-      <invite code="CJlEJE"/>
+      <invite code="EvxnOb"/>
 
     </modules>
   </card>
