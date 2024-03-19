@@ -2,9 +2,9 @@
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <VersionPrefix>0.6.0</VersionPrefix>
+    <VersionPrefix>0.7.0</VersionPrefix>
     <IsPackable>false</IsPackable>
-    <!-- <VersionSuffix>beta1</VersionSuffix> -->
+    <VersionSuffix>beta1</VersionSuffix>
     <LangVersion>latest</LangVersion>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageVersion>$(Version)</PackageVersion>
