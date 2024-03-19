@@ -51,6 +51,8 @@ Individual components of the main package can be installed separately.
   [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.WebSocket)
 - Kook.Net.Commands: [NuGet](https://www.nuget.org/packages/Kook.Net.Commands/),
   [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Commands)
+- Kook.Net.CardMarkup: [NuGet](https://www.nuget.org/packages/Kook.Net.CardMarkup/),
+  [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.CardMarkup)
 
 ### Experimental Packages
 

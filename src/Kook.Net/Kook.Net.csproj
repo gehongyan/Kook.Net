@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kook.Net.CardMarkup\Kook.Net.CardMarkup.csproj"/>
     <ProjectReference Include="..\Kook.Net.Commands\Kook.Net.Commands.csproj"/>
     <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj"/>
     <ProjectReference Include="..\Kook.Net.Rest\Kook.Net.Rest.csproj"/>
