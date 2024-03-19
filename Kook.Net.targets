@@ -4,7 +4,9 @@
     <Nullable>disable</Nullable>
     <VersionPrefix>0.7.0</VersionPrefix>
     <IsPackable>false</IsPackable>
-    <VersionSuffix>beta1</VersionSuffix>
+    <IsTrimmable>false</IsTrimmable>
+    <IsAotCompatible>false</IsAotCompatible>
+    <VersionSuffix>beta2</VersionSuffix>
     <LangVersion>latest</LangVersion>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageVersion>$(Version)</PackageVersion>

@@ -48,7 +48,10 @@ public static class CardExtensions
     public static ImageElementBuilder ToBuilder(this ImageElement entity)
     {
         if (entity is null) return null;
-        return new ImageElementBuilder { Source = entity.Source, Alternative = entity.Alternative, Size = entity.Size, Circle = entity.Circle };
+        return new ImageElementBuilder
+        {
+            Source = entity.Source, Alternative = entity.Alternative, Size = entity.Size, Circle = entity.Circle
+        };
     }
 
     /// <summary>
@@ -57,7 +60,10 @@ public static class CardExtensions
     public static ButtonElementBuilder ToBuilder(this ButtonElement entity)
     {
         if (entity is null) return null;
-        return new ButtonElementBuilder { Theme = entity.Theme, Click = entity.Click, Value = entity.Value, Text = entity.Text.ToBuilder() };
+        return new ButtonElementBuilder
+        {
+            Theme = entity.Theme, Click = entity.Click, Value = entity.Value, Text = entity.Text.ToBuilder()
+        };
     }
 
     /// <summary>
@@ -66,7 +72,10 @@ public static class CardExtensions
     public static ParagraphStructBuilder ToBuilder(this ParagraphStruct entity)
     {
         if (entity is null) return null;
-        return new ParagraphStructBuilder { ColumnCount = entity.ColumnCount, Fields = entity.Fields.Select(x => x.ToBuilder()).ToList() };
+        return new ParagraphStructBuilder
+        {
+            ColumnCount = entity.ColumnCount, Fields = entity.Fields.Select(x => x.ToBuilder()).ToList()
+        };
     }
 
     #endregion
@@ -112,7 +121,12 @@ public static class CardExtensions
     public static SectionModuleBuilder ToBuilder(this SectionModule entity)
     {
         if (entity is null) return null;
-        return new SectionModuleBuilder { Mode = entity.Mode, Text = entity.Text.ToBuilder(), Accessory = entity.Accessory.ToBuilder() };
+        return new SectionModuleBuilder
+        {
+            Mode = entity.Mode,
+            Text = entity.Text.ToBuilder(),
+            Accessory = entity.Accessory.ToBuilder()
+        };
     }
 
     /// <summary>
@@ -193,7 +207,10 @@ public static class CardExtensions
     public static CountdownModuleBuilder ToBuilder(this CountdownModule entity)
     {
         if (entity is null) return null;
-        return new CountdownModuleBuilder { Mode = entity.Mode, EndTime = entity.EndTime, StartTime = entity.StartTime };
+        return new CountdownModuleBuilder
+        {
+            Mode = entity.Mode, EndTime = entity.EndTime, StartTime = entity.StartTime
+        };
     }
 
     /// <summary>
@@ -232,7 +249,10 @@ public static class CardExtensions
 
         return new CardBuilder
         {
-            Theme = builder.Theme, Size = builder.Size, Color = builder.Color, Modules = builder.Modules.Select(m => m.ToBuilder()).ToList()
+            Theme = builder.Theme,
+            Size = builder.Size,
+            Color = builder.Color,
+            Modules = builder.Modules.Select(m => m.ToBuilder()).ToList()
         };
     }
 
