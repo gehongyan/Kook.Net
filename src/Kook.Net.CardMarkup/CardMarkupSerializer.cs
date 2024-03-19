@@ -3,6 +3,10 @@ using System.Xml;
 using Kook.CardMarkup.Extensions;
 using Kook.CardMarkup.Models;
 
+#if NETSTANDARD2_1 || NET5_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
+
 namespace Kook.CardMarkup;
 
 /// <summary>
@@ -242,7 +246,11 @@ public static class CardMarkupSerializer
     /// <param name="file">UTF-8 encoded XML file</param>
     /// <param name="cards"><see cref="ICard"/> enumerable, will be null if return value is false</param>
     /// <returns>True if deserialization is successful, otherwise false</returns>
-    public static bool TryDeserialize(FileInfo file, out IEnumerable<ICard>? cards)
+    public static bool TryDeserialize(FileInfo file,
+#if NETSTANDARD2_1 || NET5_0_OR_GREATER
+        [NotNullWhen(true)]
+#endif
+        out IEnumerable<ICard>? cards)
     {
         try
         {
@@ -262,7 +270,11 @@ public static class CardMarkupSerializer
     /// <param name="xmlText">UTF-8 encoded XML text</param>
     /// <param name="cards"><see cref="ICard"/> enumerable, will be null if return value is false</param>
     /// <returns>True if deserialization is successful, otherwise false</returns>
-    public static bool TryDeserialize(string xmlText, out IEnumerable<ICard>? cards)
+    public static bool TryDeserialize(string xmlText,
+#if NETSTANDARD2_1 || NET5_0_OR_GREATER
+        [NotNullWhen(true)]
+#endif
+        out IEnumerable<ICard>? cards)
     {
         try
         {
@@ -282,7 +294,11 @@ public static class CardMarkupSerializer
     /// <param name="xmlStream">UTF-8 encoded XML stream</param>
     /// <param name="cards"><see cref="ICard"/> enumerable, will be null if return value is false</param>
     /// <returns>True if deserialization is successful, otherwise false</returns>
-    public static bool TryDeserialize(Stream xmlStream, out IEnumerable<ICard>? cards)
+    public static bool TryDeserialize(Stream xmlStream,
+#if NETSTANDARD2_1 || NET5_0_OR_GREATER
+        [NotNullWhen(true)]
+#endif
+        out IEnumerable<ICard>? cards)
     {
         try
         {

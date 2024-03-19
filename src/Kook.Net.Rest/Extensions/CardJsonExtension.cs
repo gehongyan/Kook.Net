@@ -4,6 +4,10 @@ using System.Text.Json.Serialization;
 using Kook.API;
 using Kook.Net.Converters;
 
+#if NETSTANDARD2_1 || NET5_0_OR_GREATER
+using System.Diagnostics.CodeAnalysis;
+#endif
+
 namespace Kook.Rest;
 
 /// <summary>
@@ -24,9 +28,12 @@ public static class CardJsonExtension
     /// <param name="json">The json string to parse.</param>
     /// <param name="builder">The <see cref="ICardBuilder"/> with populated values. An empty instance if method returns <c>false</c>.</param>
     /// <returns><c>true</c> if <paramref name="json"/> was successfully parsed. <c>false</c> if not.</returns>
-    public static bool TryParseSingle(string json, out ICardBuilder builder)
+    public static bool TryParseSingle(string json,
+#if NETSTANDARD2_1 || NET5_0_OR_GREATER
+        [NotNullWhen(true)]
+#endif
+        out ICardBuilder builder)
     {
-        builder = new CardBuilder();
         try
         {
             CardBase model = JsonSerializer.Deserialize<CardBase>(json, _options.Value);
@@ -37,10 +44,12 @@ public static class CardJsonExtension
                 return true;
             }
 
+            builder = new CardBuilder();
             return false;
         }
         catch
         {
+            builder = new CardBuilder();
             return false;
         }
     }
@@ -51,9 +60,12 @@ public static class CardJsonExtension
     /// <param name="json">The json string to parse.</param>
     /// <param name="builders">A collection of <see cref="ICardBuilder"/> with populated values. An empty instance if method returns <c>false</c>.</param>
     /// <returns><c>true</c> if <paramref name="json"/> was successfully parsed. <c>false</c> if not.</returns>
-    public static bool TryParseMany(string json, out IEnumerable<ICardBuilder> builders)
+    public static bool TryParseMany(string json,
+#if NETSTANDARD2_1 || NET5_0_OR_GREATER
+        [NotNullWhen(true)]
+#endif
+        out IEnumerable<ICardBuilder> builders)
     {
-        builders = Enumerable.Empty<ICardBuilder>();
         try
         {
             IEnumerable<CardBase> models = JsonSerializer.Deserialize<IEnumerable<CardBase>>(json, _options.Value);
@@ -64,10 +76,12 @@ public static class CardJsonExtension
                 return true;
             }
 
+            builders = null;
             return false;
         }
         catch
         {
+            builders = null;
             return false;
         }
     }
