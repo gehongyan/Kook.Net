@@ -1,0 +1,5 @@
+<actions>
+  <button theme="success">
+    <plain>测试按钮</plain>
+  </button>
+</actions>

@@ -1,0 +1,60 @@
+[
+    {
+        "type": "card",
+        "theme": "secondary",
+        "size": "lg",
+        "modules": [
+            {
+                "type": "header",
+                "text": {
+                    "type": "plain-text",
+                    "content": "KOOK：一款出色的文字、语音与组队工具"
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "image-group",
+                "elements": [
+                    {
+                        "type": "image",
+                        "src": "https://img.kaiheila.cn/assets/2021-01/pWsmcLsPJq08c08c.jpeg"
+                    },
+                    {
+                        "type": "image",
+                        "src": "https://img.kaiheila.cn/assets/2021-01/YIfHfnvxaV0dw0dw.jpg"
+                    },
+                    {
+                        "type": "image",
+                        "src": "https://img.kaiheila.cn/assets/2021-01/YevTY6eGJa0fk0f2.jpeg"
+                    },
+                    {
+                        "type": "image",
+                        "src": "https://img.kaiheila.cn/assets/2021-01/r2K9RjHZ4s0xc0xc.jpeg"
+                    },
+                    {
+                        "type": "image",
+                        "src": "https://img.kaiheila.cn/assets/2021-01/klosFRTVy90jz0k0.jpg"
+                    },
+                    {
+                        "type": "image",
+                        "src": "https://img.kaiheila.cn/assets/2021-01/veHnEhzu6c0dw0dv.jpg"
+                    },
+                    {
+                        "type": "image",
+                        "src": "https://img.kaiheila.cn/assets/2021-01/tiVWPIuTrf0dw0dw.jpg"
+                    },
+                    {
+                        "type": "image",
+                        "src": "https://img.kaiheila.cn/assets/2021-01/wExzRIrTeR0j60j7.jpeg"
+                    },
+                    {
+                        "type": "image",
+                        "src": "https://img.kaiheila.cn/assets/2021-01/AybvLWYQgA0dw0dw.jpg"
+                    }
+                ]
+            }
+        ]
+    }
+]

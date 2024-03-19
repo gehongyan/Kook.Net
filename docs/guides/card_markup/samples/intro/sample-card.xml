@@ -1,0 +1,31 @@
+<?xml version="1.1" encoding="UTF-8"?>
+
+<card-message xmlns="https://kooknet.dev"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="https://kooknet.dev https://kooknet.dev/card-message.xsd">
+
+  <card>
+    <modules>
+
+      <header>
+        <plain>KOOK：一款出色的文字、语音与组队工具</plain>
+      </header>
+
+      <divider />
+
+      <images>
+        <image src="https://img.kaiheila.cn/assets/2021-01/pWsmcLsPJq08c08c.jpeg" />
+        <image src="https://img.kaiheila.cn/assets/2021-01/YIfHfnvxaV0dw0dw.jpg" />
+        <image src="https://img.kaiheila.cn/assets/2021-01/YevTY6eGJa0fk0f2.jpeg" />
+        <image src="https://img.kaiheila.cn/assets/2021-01/r2K9RjHZ4s0xc0xc.jpeg" />
+        <image src="https://img.kaiheila.cn/assets/2021-01/klosFRTVy90jz0k0.jpg" />
+        <image src="https://img.kaiheila.cn/assets/2021-01/veHnEhzu6c0dw0dv.jpg" />
+        <image src="https://img.kaiheila.cn/assets/2021-01/tiVWPIuTrf0dw0dw.jpg" />
+        <image src="https://img.kaiheila.cn/assets/2021-01/wExzRIrTeR0j60j7.jpeg" />
+        <image src="https://img.kaiheila.cn/assets/2021-01/AybvLWYQgA0dw0dw.jpg" />
+      </images>
+
+    </modules>
+  </card>
+
+</card-message>
