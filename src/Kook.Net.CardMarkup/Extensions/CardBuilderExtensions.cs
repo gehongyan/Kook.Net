@@ -232,7 +232,7 @@ internal static class CardBuilderExtensions
     {
         var multiLine = text
             .Split(["\r\n", "\r", "\n"], StringSplitOptions.None)
-            .Where(x => string.IsNullOrEmpty(x) is false)
+            .Where(x => !string.IsNullOrEmpty(x))
             .Select(x => x.Trim());
         return string.Join("\n", multiLine);
     }

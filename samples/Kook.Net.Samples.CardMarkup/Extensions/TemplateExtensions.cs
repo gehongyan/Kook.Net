@@ -14,7 +14,7 @@ public static class TemplateExtensions
 
     public static async Task<IEnumerable<ICard>?> RenderVoteAsync(this Vote vote)
     {
-        if (await LoadVoteTemplateAsync() is false)
+        if (!await LoadVoteTemplateAsync())
         {
             return null;
         }
@@ -59,7 +59,7 @@ public static class TemplateExtensions
         var parser = new FluidParser();
         var result = parser.TryParse(source, out var template);
 
-        if (result is false)
+        if (!result)
         {
             return false;
         }
