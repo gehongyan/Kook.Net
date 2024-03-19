@@ -4,6 +4,8 @@
     <Nullable>disable</Nullable>
     <VersionPrefix>0.6.0</VersionPrefix>
     <IsPackable>false</IsPackable>
+    <IsTrimmable>false</IsTrimmable>
+    <IsAotCompatible>false</IsAotCompatible>
     <!-- <VersionSuffix>beta1</VersionSuffix> -->
     <LangVersion>latest</LangVersion>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
