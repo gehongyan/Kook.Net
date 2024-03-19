@@ -5,7 +5,7 @@ title: 元素
 
 # 元素
 
-[KooK 开发者文档 - 卡片消息 - 元素](https://developer.kookapp.cn/doc/cardmessage#%E5%85%83%E7%B4%A0)
+[KOOK 开发者文档 - 卡片消息 - 元素](https://developer.kookapp.cn/doc/cardmessage#%E5%85%83%E7%B4%A0)
 
 ## 普通文本 `plain`
 

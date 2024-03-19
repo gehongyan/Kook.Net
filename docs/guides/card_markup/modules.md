@@ -5,7 +5,7 @@ title: 模块
 
 # 模块
 
-[KooK 开发者文档 - 卡片消息 - 模块](https://developer.kookapp.cn/doc/cardmessage#%E6%A8%A1%E5%9D%97)
+[KOOK 开发者文档 - 卡片消息 - 模块](https://developer.kookapp.cn/doc/cardmessage#%E6%A8%A1%E5%9D%97)
 
 ## 标题 `header`
 

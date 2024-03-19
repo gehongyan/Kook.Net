@@ -39,6 +39,6 @@ title: 卡片
 
 ## 示例 3
 
-KooK 消息编辑器中的投票消息模版。
+KOOK 消息编辑器中的投票消息模版。
 
 [!code-xml[Card 03](samples/card/sample-03.xml)]
