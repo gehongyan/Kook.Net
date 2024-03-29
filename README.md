@@ -1,4 +1,4 @@
-![KookNetLogo.png](./docs/logo/Logo_Labeled.png)
+<img src="./docs/logo/Logo_Labeled.png" alt="logo" height="160"/>
 
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/gehongyan/Kook.Net/push-or-pr.yml?branch=master)
 ![GitHub Top Language](https://img.shields.io/github/languages/top/gehongyan/Kook.Net)
