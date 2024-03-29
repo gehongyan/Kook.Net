@@ -184,9 +184,22 @@ code {
 }
 
 /* MAKES PARAMETERS MORE SPACIOUS */
-dl.parameters > dt > code {
+:not(pre) > code {
     padding: 3px;
 }
+
+/* MAKES LIST ITEMS BE SLIGHTLY MORE SEPARATED */
+/* THIS AVOIDS CODE BLOCK OVERLAP */
+ul:not(.navbar-nav) > li:not(:last-child) {
+    margin-bottom: 4px;
+}
+
+/* MAKES NAVBAR LINKS LOOK BETTER IN MOBILE */
+.navbar-expand-md .navbar-nav .nav-link {
+    padding-right: var(--bs-navbar-nav-link-padding-x);
+    padding-left: var(--bs-navbar-nav-link-padding-x);
+}
+
 
 /* MAKES INHERITANCE LIST READABLE */
 :is(dl.typelist.inheritedMembers, dl.typelist.extensionMethods) > dd > div::after {
@@ -202,10 +215,14 @@ dl.parameters > dt > code {
     font-weight: normal !important;
 }
 
-/* MAKES INDEX LOGO VISIBLE ON DIFFERENT THEMES */
-article[data-uid="Root.Landing"] img[alt="logo"] {
-    height: 100pt !important;
-    box-shadow: none;
+/* MAKES LOGO SMALLER */
+img#logo {
+    height: 36pt;
+    margin-right: 4px;
+}
+
+article img[alt="header_logo"] {
+    width: 60vh;
 }
 
 /* MAKES SIDEBAR LINKS A BIT MORE DISTINGUISHABLE */

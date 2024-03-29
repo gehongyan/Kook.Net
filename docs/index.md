@@ -1,9 +1,10 @@
 ---
 uid: Root.Landing
 title: 首页
+_layout: landing
 ---
 
-# Kook.Net 文档
+[![header_logo](logo/Logo_Labeled.png)](https://kooknet.dev/)
 
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/gehongyan/Kook.Net/push-or-pr.yml?branch=master)](https://github.com/gehongyan/Kook.Net)
 [![GitHub Top Language](https://img.shields.io/github/languages/top/gehongyan/Kook.Net)](https://github.com/gehongyan/Kook.Net)

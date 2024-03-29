@@ -60,6 +60,8 @@
                 "files": [
                     "**/images/**",
                     "**/samples/**",
+                    "logo/**.png",
+                    "favicon.ico",
                     "langwordMapping.md"
                 ],
                 "exclude": [
@@ -94,6 +96,7 @@
             "_appName": "Kook.Net 文档",
             "_appFooter": "Kook.Net (c) 2022-2024",
             "_enableSearch": true,
+            "_appLogoPath": "logo/Logo_Small.png",
             "_appFaviconPath": "favicon.ico",
             "_gitContribute": {
                 "branch": "master"
