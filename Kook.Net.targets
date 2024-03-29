@@ -19,6 +19,7 @@
     <PackageTags>kook;kookapp</PackageTags>
     <PackageReleaseNotes>See https://github.com/gehongyan/Kook.Net/releases</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>Logo_Small.png</PackageIcon>
     <TargetFrameworks>net8.0;net7.0;net6.0;net462;netstandard2.0;netstandard2.1</TargetFrameworks>
     <NoWarn>$(NoWarn);NU1803</NoWarn>
     <WarningLevel>6</WarningLevel>
@@ -37,5 +38,6 @@
   <ItemGroup>
     <None Include="../../README.md" Pack="true" PackagePath="\"/>
     <None Include="../../LICENSE" Pack="true" PackagePath="\"/>
+    <None Include="../../docs/logo/Logo_Small.png" Pack="true" PackagePath=""/>
   </ItemGroup>
 </Project>
