@@ -9,7 +9,6 @@ using System.Text.RegularExpressions;
 
 namespace Kook.Rest;
 
-using Model = Message;
 using UserModel = User;
 
 internal static class MessageHelper
@@ -464,7 +463,7 @@ internal static class MessageHelper
         return i;
     }
 
-    public static MessageSource GetSource(Model msg)
+    public static MessageSource GetSource(MessageInText msg)
     {
         if (msg.Author.Bot == true) return MessageSource.Bot;
 

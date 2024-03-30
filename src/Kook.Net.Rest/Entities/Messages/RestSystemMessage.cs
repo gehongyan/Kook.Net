@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using Model = Kook.API.Message;
+using Kook.API;
 
 namespace Kook.Rest;
 
@@ -17,7 +17,7 @@ public class RestSystemMessage : RestMessage, ISystemMessage
     {
     }
 
-    internal static new RestSystemMessage Create(BaseKookClient kook, IMessageChannel channel, IUser author, Model model)
+    internal static new RestSystemMessage Create(BaseKookClient kook, IMessageChannel channel, IUser author, MessageInText model)
     {
         RestSystemMessage entity = new(kook, model.Id, model.Type, channel, author);
         entity.Update(model);
@@ -31,7 +31,7 @@ public class RestSystemMessage : RestMessage, ISystemMessage
         return entity;
     }
 
-    internal override void Update(Model model) => base.Update(model);
+    internal override void Update(MessageInText model) => base.Update(model);
 
     // TODO: SystemMessageType
     private string DebuggerDisplay => $"{Author}: {Content} ({Id}, {Type})";

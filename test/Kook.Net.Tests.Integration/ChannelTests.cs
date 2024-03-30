@@ -80,11 +80,15 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
                 x.Name = "UPDATED VOICE";
                 x.UserLimit = 5;
                 x.VoiceQuality = VoiceQuality._96kbps;
+                x.Topic = "TOPIC";
+                x.SlowModeInterval = SlowModeInterval._5;
             });
             // check that these were updated
             Assert.Equal("UPDATED VOICE", channel.Name);
             Assert.Equal(5, channel.UserLimit);
             Assert.Equal(VoiceQuality._96kbps, channel.VoiceQuality);
+            Assert.Equal("TOPIC", channel.Topic);
+            Assert.Equal(5, channel.SlowModeInterval);
         }
         finally
         {

@@ -4,7 +4,7 @@ namespace Kook;
 ///     Provides properties that are used to modify an <see cref="IVoiceChannel"/> with the specified properties.
 /// </summary>
 /// <seealso cref="IVoiceChannel.ModifyAsync(System.Action{ModifyVoiceChannelProperties}, RequestOptions)"/>
-public class ModifyVoiceChannelProperties : ModifyGuildChannelProperties
+public class ModifyVoiceChannelProperties : ModifyTextChannelProperties
 {
     /// <summary>
     ///     Gets or sets the voice quality that the clients in this voice channel are requested to use;

@@ -59,7 +59,8 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         : base(kook, id, guild)
     {
         Type = ChannelType.Text;
-        if (Kook.MessageCacheSize > 0) _messages = new MessageCache(Kook);
+        if (Kook.MessageCacheSize > 0)
+            _messages = new MessageCache(Kook);
     }
 
     internal static new SocketTextChannel Create(SocketGuild guild, ClientState state, Model model)
@@ -130,7 +131,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+    public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
         => SocketChannelHelper.GetMessagesAsync(this, Kook, _messages, null, Direction.Before, limit, CacheMode.AllowDownload, options);
 
     /// <summary>
@@ -147,7 +148,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
+    public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
         int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
         => SocketChannelHelper.GetMessagesAsync(this, Kook, _messages, referenceMessageId, dir, limit, CacheMode.AllowDownload, options);
 
@@ -165,7 +166,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
+    public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
         int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
         => SocketChannelHelper.GetMessagesAsync(this, Kook, _messages, referenceMessage.Id, dir, limit, CacheMode.AllowDownload, options);
 

@@ -30,8 +30,9 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     public string PlainTextMention => MentionUtils.PlainTextMentionChannel(Id);
 
     internal RestTextChannel(BaseKookClient kook, IGuild guild, ulong id)
-        : base(kook, guild, id, ChannelType.Text)
+        : base(kook, guild, id)
     {
+        Type = ChannelType.Text;
     }
 
     internal static new RestTextChannel Create(BaseKookClient kook, IGuild guild, Model model)
@@ -93,22 +94,22 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         => ChannelHelper.GetMessageAsync(this, Kook, id, options);
 
     /// <inheritdoc />
-    public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch,
+    public virtual IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch,
         RequestOptions options = null)
         => ChannelHelper.GetMessagesAsync(this, Kook, null, Direction.Before, limit, true, options);
 
     /// <inheritdoc />
-    public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
+    public virtual IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
         int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
         => ChannelHelper.GetMessagesAsync(this, Kook, referenceMessageId, dir, limit, true, options);
 
     /// <inheritdoc />
-    public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
+    public virtual IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
         int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
         => ChannelHelper.GetMessagesAsync(this, Kook, referenceMessage.Id, dir, limit, true, options);
 
     /// <inheritdoc cref="ITextChannel.GetPinnedMessagesAsync" />
-    public Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions options = null)
+    public virtual Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions options = null)
         => ChannelHelper.GetPinnedMessagesAsync(this, Kook, options);
 
     /// <inheritdoc cref="IMessageChannel.SendFileAsync(string,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
@@ -151,6 +152,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     /// </returns>
     public Task<ICategoryChannel> GetCategoryAsync(RequestOptions options = null)
         => ChannelHelper.GetCategoryAsync(this, Kook, options);
+
     /// <inheritdoc />
     public Task SyncPermissionsAsync(RequestOptions options = null)
         => ChannelHelper.SyncPermissionsAsync(this, Kook, options);

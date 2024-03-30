@@ -10,24 +10,9 @@ namespace Kook.WebSocket;
 ///     Represents a WebSocket-based voice channel in a guild.
 /// </summary>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudioChannel
+public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudioChannel
 {
     #region SocketVoiceChannel
-
-    /// <inheritdoc />
-    public ulong? CategoryId { get; private set; }
-
-    /// <summary>
-    ///     Gets the parent (category) of this channel in the guild's channel list.
-    /// </summary>
-    /// <returns>
-    ///     An <see cref="ICategoryChannel"/> representing the parent of this channel; <c>null</c> if none is set.
-    /// </returns>
-    public ICategoryChannel Category
-        => CategoryId.HasValue ? Guild.GetChannel(CategoryId.Value) as ICategoryChannel : null;
-
-    /// <inheritdoc />
-    public bool? IsPermissionSynced { get; private set; }
 
     /// <inheritdoc />
     public VoiceQuality? VoiceQuality { get; private set; }
@@ -74,8 +59,10 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
         => Guild.Users.Where(x => x.VoiceChannel?.Id == Id).ToImmutableArray();
 
     internal SocketVoiceChannel(KookSocketClient kook, ulong id, SocketGuild guild)
-        : base(kook, id, guild) =>
+        : base(kook, id, guild)
+    {
         Type = ChannelType.Voice;
+    }
 
     internal static new SocketVoiceChannel Create(SocketGuild guild, ClientState state, Model model)
     {
@@ -88,11 +75,9 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     internal override void Update(ClientState state, Model model)
     {
         base.Update(state, model);
-        CategoryId = model.CategoryId != 0 ? model.CategoryId : null;
         VoiceQuality = model.VoiceQuality;
         UserLimit = model.UserLimit ?? 0;
         ServerUrl = model.ServerUrl;
-        IsPermissionSynced = model.PermissionSync;
         VoiceRegion = model.VoiceRegion;
         HasPassword = model.HasPassword;
         IsVoiceRegionOverwritten = model.OverwriteVoiceRegion;
@@ -102,8 +87,8 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
     public override SocketGuildUser GetUser(ulong id)
     {
         SocketGuildUser user = Guild.GetUser(id);
-        if (user?.VoiceChannel?.Id == Id) return user;
-
+        if (user?.VoiceChannel?.Id == Id)
+            return user;
         return null;
     }
 
@@ -129,26 +114,33 @@ public class SocketVoiceChannel : SocketGuildChannel, IVoiceChannel, ISocketAudi
             return ConnectedUsers;
     }
 
-    /// <inheritdoc />
-    public virtual Task SyncPermissionsAsync(RequestOptions options = null)
-        => ChannelHelper.SyncPermissionsAsync(this, Kook, options);
-
     #endregion
 
-    #region Invites
+    #region TextOverrides
 
     /// <inheritdoc />
-    public async Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null)
-        => await ChannelHelper.GetInvitesAsync(this, Kook, options).ConfigureAwait(false);
+    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    public override IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
-    public async Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null, RequestOptions options = null)
-        => await ChannelHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
+    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    public override IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
-    public async Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited,
-        RequestOptions options = null)
-        => await ChannelHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
+    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    public override IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
+
+    /// <inheritdoc />
+    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    Task<IReadOnlyCollection<IMessage>> ITextChannel.GetPinnedMessagesAsync(RequestOptions options)
+        => Task.FromException<IReadOnlyCollection<IMessage>>(
+            new NotSupportedException("Getting messages from a voice channel is not supported."));
 
     #endregion
 

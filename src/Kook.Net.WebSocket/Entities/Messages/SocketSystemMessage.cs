@@ -34,7 +34,7 @@ public class SocketSystemMessage : SocketMessage, ISystemMessage
     }
 
     internal static new SocketSystemMessage Create(KookSocketClient kook, ClientState state, SocketUser author, ISocketMessageChannel channel,
-        API.Message model)
+        API.MessageInText model)
     {
         SocketSystemMessage entity = new(kook, model.Id, channel, author);
         entity.Update(state, model);
@@ -57,7 +57,7 @@ public class SocketSystemMessage : SocketMessage, ISystemMessage
         base.Update(state, model, gatewayEvent);
 
     // TODO: SystemMessageType
-    internal override void Update(ClientState state, API.Message model) => base.Update(state, model);
+    internal override void Update(ClientState state, API.MessageInText model) => base.Update(state, model);
 
     // TODO: SystemMessageType
     internal override void Update(ClientState state, MessageUpdateEvent model) => base.Update(state, model);

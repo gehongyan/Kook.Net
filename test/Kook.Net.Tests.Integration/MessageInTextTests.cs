@@ -11,16 +11,16 @@ namespace Kook;
 /// <summary>
 ///     Tests that channels can be created and modified.
 /// </summary>
-[CollectionDefinition(nameof(MessageTests), DisableParallelization = true)]
+[CollectionDefinition(nameof(MessageInTextTests), DisableParallelization = true)]
 [Trait("Category", "Integration")]
-public class MessageTests : IClassFixture<RestChannelFixture>
+public class MessageInTextTests : IClassFixture<RestChannelFixture>
 {
     private readonly IGuild _guild;
     private readonly ITextChannel _channel;
     private readonly IGuildUser _selfUser;
     private readonly ITestOutputHelper _output;
 
-    public MessageTests(RestChannelFixture channelFixture, ITestOutputHelper output)
+    public MessageInTextTests(RestChannelFixture channelFixture, ITestOutputHelper output)
     {
         _guild = channelFixture.Guild;
         _channel = channelFixture.TextChannel;
@@ -98,10 +98,10 @@ CODE BLOCK
             Assert.Equal(MessageSource.Bot, message.Source);
             Assert.Equal(4, message.Tags.Count);
             List<ITag> tags = message.Tags.ToList();
-            Assert.Equal(tags.Single(tag => tag.Type == TagType.ChannelMention).Key, _channel.Id);
-            Assert.Equal(tags.Single(tag => tag.Type == TagType.UserMention).Key, _selfUser.Id);
-            Assert.Equal(tags.Single(tag => tag.Type == TagType.EveryoneMention).Key, 0);
-            Assert.Equal(tags.Single(tag => tag.Type == TagType.HereMention).Key, 0);
+            Assert.Equal(_channel.Id, tags.Single(tag => tag.Type == TagType.ChannelMention).Key);
+            Assert.Equal(_selfUser.Id, tags.Single(tag => tag.Type == TagType.UserMention).Key);
+            Assert.Equal(0, tags.Single(tag => tag.Type == TagType.EveryoneMention).Key);
+            Assert.Equal(0, tags.Single(tag => tag.Type == TagType.HereMention).Key);
         }
         finally
         {

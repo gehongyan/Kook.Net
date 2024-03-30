@@ -7,15 +7,6 @@ namespace Kook;
 public class CreateTextChannelProperties : CreateGuildChannelProperties
 {
     /// <summary>
-    ///     Gets or sets the topic of the channel.
-    /// </summary>
-    /// <remarks>
-    ///     Setting this value to any string other than <c>null</c> or <see cref="string.Empty"/> will set the
-    ///     channel topic or description to the desired value.
-    /// </remarks>
-    public string Topic { get; set; }
-
-    /// <summary>
     ///     Gets or sets the category ID for this channel.
     /// </summary>
     /// <remarks>

@@ -9,7 +9,7 @@ namespace Kook.Rest;
 ///     Represents a REST-based voice channel in a guild.
 /// </summary>
 [DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChannel
+public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChannel
 {
     #region RestVoiceChannel
 
@@ -18,9 +18,6 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
 
     /// <inheritdoc />
     public int? UserLimit { get; private set; }
-
-    /// <inheritdoc />
-    public ulong? CategoryId { get; private set; }
 
     /// <inheritdoc />
     public string ServerUrl { get; private set; }
@@ -34,12 +31,10 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     /// <inheritdoc />
     public bool HasPassword { get; private set; }
 
-    /// <inheritdoc />
-    public bool? IsPermissionSynced { get; private set; }
-
     internal RestVoiceChannel(BaseKookClient kook, IGuild guild, ulong id)
-        : base(kook, guild, id, ChannelType.Voice)
+        : base(kook, guild, id)
     {
+        Type = ChannelType.Voice;
     }
 
     internal static new RestVoiceChannel Create(BaseKookClient kook, IGuild guild, Model model)
@@ -53,11 +48,9 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     internal override void Update(Model model)
     {
         base.Update(model);
-        CategoryId = model.CategoryId != 0 ? model.CategoryId : null;
         VoiceQuality = model.VoiceQuality;
         UserLimit = model.UserLimit;
         ServerUrl = model.ServerUrl;
-        IsPermissionSynced = model.PermissionSync;
         IsVoiceRegionOverwritten = model.OverwriteVoiceRegion;
         VoiceRegion = model.VoiceRegion;
         HasPassword = model.HasPassword;
@@ -78,40 +71,36 @@ public class RestVoiceChannel : RestGuildChannel, IVoiceChannel, IRestAudioChann
     public async Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(RequestOptions options)
         => await ChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false);
 
-    /// <summary>
-    ///     Gets the parent (category) channel of this channel.
-    /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the category channel
-    ///     representing the parent of this channel; <c>null</c> if none is set.
-    /// </returns>
-    public Task<ICategoryChannel> GetCategoryAsync(RequestOptions options = null)
-        => ChannelHelper.GetCategoryAsync(this, Kook, options);
-    /// <inheritdoc />
-    public Task SyncPermissionsAsync(RequestOptions options = null)
-        => ChannelHelper.SyncPermissionsAsync(this, Kook, options);
-
-    #endregion
-
-    #region Invites
-
-    /// <inheritdoc />
-    public async Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null)
-        => await ChannelHelper.GetInvitesAsync(this, Kook, options).ConfigureAwait(false);
-
-    /// <inheritdoc />
-    public async Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null, RequestOptions options = null)
-        => await ChannelHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
-
-    /// <inheritdoc />
-    public async Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited,
-        RequestOptions options = null)
-        => await ChannelHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
-
     #endregion
 
     private string DebuggerDisplay => $"{Name} ({Id}, Voice)";
+
+    #region TextOverrides
+
+    /// <inheritdoc />
+    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    public override IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch,
+        RequestOptions options = null)
+        => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
+
+    /// <inheritdoc />
+    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    public override IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
+
+    /// <inheritdoc />
+    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    public override IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
+
+    /// <inheritdoc />
+    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    public override Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions options = null)
+        => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
+
+    #endregion
 
     #region IAudioChannel
 

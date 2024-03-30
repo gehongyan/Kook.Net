@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Kook.Audio;
 
@@ -105,4 +106,67 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
 
     public Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null) =>
         throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null, AttachmentType type = AttachmentType.File, IQuote quote = null,
+        IUser ephemeralUser = null, RequestOptions options = null) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName, AttachmentType type = AttachmentType.File, IQuote quote = null,
+        IUser ephemeralUser = null, RequestOptions options = null) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment, IQuote quote = null, IUser ephemeralUser = null,
+        RequestOptions options = null) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null) => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null) => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards, IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null) => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task<IMessage> GetMessageAsync(Guid id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null) => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch, CacheMode mode = CacheMode.AllowDownload,
+        RequestOptions options = null) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch,
+        CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch,
+        CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task DeleteMessageAsync(Guid messageId, RequestOptions options = null) => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task DeleteMessageAsync(IMessage message, RequestOptions options = null) => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions options = null) => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public string Topic => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public int SlowModeInterval => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task ModifyAsync(Action<ModifyTextChannelProperties> func, RequestOptions options = null) => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task<IReadOnlyCollection<IMessage>> GetPinnedMessagesAsync(RequestOptions options = null) => throw new NotImplementedException();
 }

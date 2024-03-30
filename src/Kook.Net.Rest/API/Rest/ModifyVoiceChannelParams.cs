@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Kook.API.Rest;
 
-internal class ModifyVoiceChannelParams : ModifyGuildChannelParams
+internal class ModifyVoiceChannelParams : ModifyTextChannelParams
 {
     [JsonPropertyName("voice_quality")]
     [JsonConverter(typeof(NullableVoiceQualityConverter))]

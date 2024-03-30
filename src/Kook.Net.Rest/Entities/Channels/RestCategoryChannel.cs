@@ -12,8 +12,9 @@ public class RestCategoryChannel : RestGuildChannel, ICategoryChannel
     #region RestCategoryChannel
 
     internal RestCategoryChannel(BaseKookClient kook, IGuild guild, ulong id)
-        : base(kook, guild, id, ChannelType.Category)
+        : base(kook, guild, id)
     {
+        Type = ChannelType.Category;
     }
 
     internal static new RestCategoryChannel Create(BaseKookClient kook, IGuild guild, Model model)

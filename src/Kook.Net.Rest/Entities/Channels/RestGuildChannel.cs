@@ -29,7 +29,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     internal IGuild Guild { get; }
 
     /// <inheritdoc />
-    public ChannelType Type { get; private set; }
+    public ChannelType Type { get; internal set; }
 
     /// <inheritdoc />
     public string Name { get; private set; }
@@ -43,11 +43,11 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// <inheritdoc />
     public ulong CreatorId { get; private set; }
 
-    internal RestGuildChannel(BaseKookClient kook, IGuild guild, ulong id, ChannelType type)
+    internal RestGuildChannel(BaseKookClient kook, IGuild guild, ulong id)
         : base(kook, id)
     {
-        Type = type;
         Guild = guild;
+        Type = ChannelType.Unspecified;
     }
 
     internal static RestGuildChannel Create(BaseKookClient kook, IGuild guild, Model model) =>
@@ -56,12 +56,12 @@ public class RestGuildChannel : RestChannel, IGuildChannel
             ChannelType.Text => RestTextChannel.Create(kook, guild, model),
             ChannelType.Voice => RestVoiceChannel.Create(kook, guild, model),
             ChannelType.Category => RestCategoryChannel.Create(kook, guild, model),
-            _ => new RestGuildChannel(kook, guild, model.Id, model.Type)
+            _ => new RestGuildChannel(kook, guild, model.Id)
         };
 
     internal static RestGuildChannel Create(BaseKookClient kook, IGuild guild, MentionedChannel model)
     {
-        RestGuildChannel entity = new(kook, guild, model.Id, ChannelType.Unspecified);
+        RestGuildChannel entity = new(kook, guild, model.Id);
         entity.Update(model);
         return entity;
     }

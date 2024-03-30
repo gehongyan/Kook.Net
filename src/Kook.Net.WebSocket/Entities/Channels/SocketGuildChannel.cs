@@ -64,8 +64,11 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     public new virtual IReadOnlyCollection<SocketGuildUser> Users => ImmutableArray.Create<SocketGuildUser>();
 
     internal SocketGuildChannel(KookSocketClient kook, ulong id, SocketGuild guild)
-        : base(kook, id) =>
+        : base(kook, id)
+    {
         Guild = guild;
+        Type = ChannelType.Unspecified;
+    }
 
     internal static SocketGuildChannel Create(SocketGuild guild, ClientState state, Model model) =>
         model.Type switch
@@ -86,14 +89,16 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
         API.RolePermissionOverwrite[] rolePermissionOverwrites = model.RolePermissionOverwrites;
         ImmutableArray<RolePermissionOverwrite>.Builder newRoleOverwrites =
             ImmutableArray.CreateBuilder<RolePermissionOverwrite>(rolePermissionOverwrites.Length);
-        for (int i = 0; i < rolePermissionOverwrites.Length; i++) newRoleOverwrites.Add(rolePermissionOverwrites[i].ToEntity());
+        foreach (API.RolePermissionOverwrite x in rolePermissionOverwrites)
+            newRoleOverwrites.Add(x.ToEntity());
 
         _rolePermissionOverwrites = newRoleOverwrites.ToImmutable();
 
         API.UserPermissionOverwrite[] userPermissionOverwrites = model.UserPermissionOverwrites;
         ImmutableArray<UserPermissionOverwrite>.Builder newUserOverwrites =
             ImmutableArray.CreateBuilder<UserPermissionOverwrite>(userPermissionOverwrites.Length);
-        for (int i = 0; i < userPermissionOverwrites.Length; i++) newUserOverwrites.Add(userPermissionOverwrites[i].ToEntity(Kook, state));
+        foreach (API.UserPermissionOverwrite x in userPermissionOverwrites)
+            newUserOverwrites.Add(x.ToEntity(Kook, state));
 
         _userPermissionOverwrites = newUserOverwrites.ToImmutable();
     }

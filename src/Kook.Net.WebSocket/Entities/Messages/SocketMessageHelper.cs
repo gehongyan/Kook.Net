@@ -4,7 +4,7 @@ namespace Kook.WebSocket;
 
 internal static class SocketMessageHelper
 {
-    public static MessageSource GetSource(API.Message msg)
+    public static MessageSource GetSource(API.MessageInText msg)
     {
         if (msg.Author.Bot ?? false) return MessageSource.Bot;
 

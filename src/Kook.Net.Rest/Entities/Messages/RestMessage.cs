@@ -1,6 +1,5 @@
 using Kook.API;
 using System.Collections.Immutable;
-using Model = Kook.API.Message;
 
 namespace Kook.Rest;
 
@@ -94,7 +93,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         Source = source;
     }
 
-    internal static RestMessage Create(BaseKookClient kook, IMessageChannel channel, IUser author, Model model)
+    internal static RestMessage Create(BaseKookClient kook, IMessageChannel channel, IUser author, MessageInText model)
     {
         if (model.Author.IsSystemUser ?? model.Author.Id == KookConfig.SystemMessageAuthorID)
             return RestSystemMessage.Create(kook, channel, author, model);
@@ -110,7 +109,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
             return RestUserMessage.Create(kook, channel, author, model);
     }
 
-    internal virtual void Update(Model model)
+    internal virtual void Update(MessageInText model)
     {
         Timestamp = model.CreateAt;
         EditedTimestamp = model.UpdateAt;
@@ -206,7 +205,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     {
         if (Channel is IGuildChannel)
         {
-            Message model = await Kook.ApiClient.GetMessageAsync(Id, options).ConfigureAwait(false);
+            MessageInText model = await Kook.ApiClient.GetMessageAsync(Id, options).ConfigureAwait(false);
             Update(model);
             return;
         }

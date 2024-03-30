@@ -15,7 +15,7 @@ public struct ChannelPermissions
     public static readonly ChannelPermissions Text = new(0b0_0000_0000_0110_0111_1100_0010_1000);
 
     /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for voice channels.</summary>
-    public static readonly ChannelPermissions Voice = new(0b1_1011_1101_0001_1000_1100_0010_1000);
+    public static readonly ChannelPermissions Voice = new(0b1_1011_1101_0111_1111_1100_0010_1000);
 
     /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for category channels.</summary>
     public static readonly ChannelPermissions Category = new(0b1_1011_1101_0111_1111_1100_0010_1000);
@@ -28,8 +28,8 @@ public struct ChannelPermissions
     public static ChannelPermissions All(IChannel channel) =>
         channel switch
         {
-            ITextChannel => Text,
             IVoiceChannel => Voice,
+            ITextChannel => Text,
             ICategoryChannel => Category,
             IDMChannel => DM,
             _ => throw new ArgumentException("Unknown channel type.", nameof(channel))

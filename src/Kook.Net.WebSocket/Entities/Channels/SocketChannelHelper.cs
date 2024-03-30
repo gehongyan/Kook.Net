@@ -109,8 +109,7 @@ internal static class SocketChannelHelper
     }
 
     /// <exception cref="NotSupportedException">Unexpected <see cref="ISocketMessageChannel"/> type.</exception>
-    public static SocketMessage RemoveMessage(ISocketMessageChannel channel, KookSocketClient kook,
-        Guid id) =>
+    public static SocketMessage RemoveMessage(ISocketMessageChannel channel, KookSocketClient kook, Guid id) =>
         channel switch
         {
             SocketDMChannel dmChannel => dmChannel.RemoveMessage(id),
