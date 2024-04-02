@@ -5,6 +5,48 @@ title: 变更日志
 
 # 变更日志
 
+## v0.7.0 [2024-04-02]
+
+### 更新路线
+
+KOOK 客户端现已支持在语音频道内发送消息，与此相关地以下 API 产生了变动：
+
+- `CreateVoiceChannelProperties` 现已继承自 `CreateTextChannelProperties`
+- `ModifyVoiceChannelProperties` 现已继承自 `ModifyTextChannelProperties`
+- `IVoiceChannel` 现已继承自 `ITextChannel`
+- `ChannelPermissions.Voice` 的值已附加文字频道的权限
+- `SocketTextChannel.GetMessagesAsync` 系列方法现已为虚方法，以供 `SocketVoiceChannel` 重写
+
+需要注意的是，受限于 KOOK API，语音频道内不支持通过 API 获取历史消息，无置顶消息功能，因此，语音频道上不支持调用
+`IMessageChannel` 的 `GetMessagesAsync` 与 `GetPinnedMessagesAsync` 方法。
+
+另外，语音频道在 API 层面支持操作 Topic 及 SlowModeInterval，但 KOOK 客户端暂无相关表现。
+
+创建频道时不支持立即指定 `Topic`，`CreateTextChannelProperties` 中的 `Topic` 属性不生效，现已移除，
+请在创建频道后调用 `ITextChannel.ModifyAsync` 方法进行修改。
+
+### 新增
+
+- 新增支持通过 XML 定义卡片消息
+- `IVoiceChannel` 现已继承自 `ITextChannel`，相关实现已更新
+- `BaseKookClient` 新增 `SentRequest` 事件
+- 为卡片消息解析相关的 `Try*` 方法添加非空结果提示诊断
+
+### 修复
+
+- 修正 `ConnectionManager` 引发 `Disconnected` 时 `State` 不正确的问题
+
+### 变更
+
+- CreateTextChannelProperties 中的 Topic 属性已移除
+
+### 其它
+
+- 标记项目不支持 AOT 及程序集裁剪
+- 新增示例项目 Kook.Net.Samples.CardMarkup
+- 新增 XML 定义卡片消息的相关文档
+- 新增 Logo
+
 ## v0.6.0 [2024-02-28]
 
 ### 更新路线

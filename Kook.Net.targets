@@ -6,7 +6,7 @@
     <IsPackable>false</IsPackable>
     <IsTrimmable>false</IsTrimmable>
     <IsAotCompatible>false</IsAotCompatible>
-    <VersionSuffix>beta3</VersionSuffix>
+<!--    <VersionSuffix>beta3</VersionSuffix>-->
     <LangVersion>latest</LangVersion>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageVersion>$(Version)</PackageVersion>

@@ -2,6 +2,52 @@
 
 ---
 
+## v0.7.0 [2024-04-02]
+
+### Update Roadmap
+
+The KOOK client now supports sending messages within voice channels. As a result, the following APIs have been modified:
+
+- `CreateVoiceChannelProperties` now inherits from `CreateTextChannelProperties`.
+- `ModifyVoiceChannelProperties` now inherits from `ModifyTextChannelProperties`.
+- `IVoiceChannel` now inherits from `ITextChannel`.
+- The value of `ChannelPermissions.Voice` now includes permissions for text channels.
+- The `SocketTextChannel.GetMessagesAsync` series of methods are now virtual methods, to be overridden
+  by `SocketVoiceChannel`.
+
+It's important to note that, due to limitations in the KOOK API, fetching message history and pinning messages are not
+supported within voice channels. Therefore, calling `GetMessagesAsync` and `GetPinnedMessagesAsync` methods from
+`IMessageChannel` on voice channels is not supported.
+
+Additionally, while voice channels support operations on `Topic` and `SlowModeInterval` at the API level, the KOOK client
+currently does not reflect these capabilities.
+
+Creating channels does not immediately support specifying a Topic. The `Topic` property in `CreateTextChannelProperties`
+has been removed and does not take effect. Please use the `ITextChannel.ModifyAsync` method to modify the channel after
+creation.
+
+### Added
+
+- Added support for defining card messages via XML.
+- `IVoiceChannel` now inherits from `ITextChannel`, with relevant implementations updated.
+- Added `SentRequest` event to `BaseKookClient`.
+- Added non-null result prompts for parsing card message-related `Try*` methods.
+
+### Fixed
+
+- Corrected the issue with `ConnectionManager` incorrectly updating `State` when `Disconnected`.
+
+### Changed
+
+- Removed the `Topic` property from `CreateTextChannelProperties`.
+
+### Miscellaneous
+
+- Marked the project as not supporting AOT and assembly trimming.
+- Added example project `Kook.Net.Samples.CardMarkup`.
+- Added documentation for defining card messages via XML.
+- Added Logo.
+
 ## v0.6.0 [2024-02-28]
 
 ### Update Roadmap
