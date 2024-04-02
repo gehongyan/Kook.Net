@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Kook.Net.CardMarkup\Kook.Net.CardMarkup.csproj" />
     <ProjectReference Include="..\..\src\Kook.Net.Commands\Kook.Net.Commands.csproj"/>
     <ProjectReference Include="..\..\src\Kook.Net.Core\Kook.Net.Core.csproj"/>
     <ProjectReference Include="..\..\src\Kook.Net.Rest\Kook.Net.Rest.csproj"/>
