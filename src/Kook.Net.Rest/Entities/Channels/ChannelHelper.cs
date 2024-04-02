@@ -86,7 +86,7 @@ internal static class ChannelHelper
         IGuild guild = guildId != null
             ? await (client as IKookClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).ConfigureAwait(false)
             : null;
-        MessageInText model = await client.ApiClient.GetMessageAsync(id, options).ConfigureAwait(false);
+        Message model = await client.ApiClient.GetMessageAsync(id, options).ConfigureAwait(false);
         if (model == null) return null;
 
         IUser author = await MessageHelper.GetAuthorAsync(client, guild, model.Author);
@@ -125,18 +125,18 @@ internal static class ChannelHelper
             KookConfig.MaxMessagesPerBatch,
             async (info, ct) =>
             {
-                IReadOnlyCollection<MessageInText> models = await client.ApiClient.QueryMessagesAsync(channel.Id, info.Position,
+                IReadOnlyCollection<Message> models = await client.ApiClient.QueryMessagesAsync(channel.Id, info.Position,
                     dir: dir, count: limit, options: options).ConfigureAwait(false);
                 ImmutableArray<RestMessage>.Builder builder = ImmutableArray.CreateBuilder<RestMessage>();
                 // Insert the reference message before query results
                 if (includeReferenceMessage && info.Position.HasValue && dir == Direction.After)
                 {
-                    MessageInText currentMessageInText = await client.ApiClient.GetMessageAsync(info.Position.Value, options);
-                    IUser currentMessageAuthor = await MessageHelper.GetAuthorAsync(client, guild, currentMessageInText.Author);
-                    builder.Add(RestMessage.Create(client, channel, currentMessageAuthor, currentMessageInText));
+                    Message currentMessage = await client.ApiClient.GetMessageAsync(info.Position.Value, options);
+                    IUser currentMessageAuthor = await MessageHelper.GetAuthorAsync(client, guild, currentMessage.Author);
+                    builder.Add(RestMessage.Create(client, channel, currentMessageAuthor, currentMessage));
                 }
 
-                foreach (MessageInText model in models)
+                foreach (Message model in models)
                 {
                     IUser author = await MessageHelper.GetAuthorAsync(client, guild, model.Author);
                     builder.Add(RestMessage.Create(client, channel, author, model));
@@ -145,9 +145,9 @@ internal static class ChannelHelper
                 // Append the reference message after query results
                 if (includeReferenceMessage && info.Position.HasValue && dir == Direction.Before)
                 {
-                    MessageInText currentMessageInText = await client.ApiClient.GetMessageAsync(info.Position.Value, options);
-                    IUser currentMessageAuthor = await MessageHelper.GetAuthorAsync(client, guild, currentMessageInText.Author);
-                    builder.Add(RestMessage.Create(client, channel, currentMessageAuthor, currentMessageInText));
+                    Message currentMessage = await client.ApiClient.GetMessageAsync(info.Position.Value, options);
+                    IUser currentMessageAuthor = await MessageHelper.GetAuthorAsync(client, guild, currentMessage.Author);
+                    builder.Add(RestMessage.Create(client, channel, currentMessageAuthor, currentMessage));
                 }
 
                 return builder.ToImmutable();
@@ -184,10 +184,10 @@ internal static class ChannelHelper
         IGuild guild = guildId != null
             ? await (client as IKookClient).GetGuildAsync(guildId.Value, CacheMode.CacheOnly).ConfigureAwait(false)
             : null;
-        IReadOnlyCollection<MessageInText> models = await client.ApiClient.QueryMessagesAsync(channel.Id, queryPin: true, options: options)
+        IReadOnlyCollection<Message> models = await client.ApiClient.QueryMessagesAsync(channel.Id, queryPin: true, options: options)
             .ConfigureAwait(false);
         ImmutableArray<RestMessage>.Builder builder = ImmutableArray.CreateBuilder<RestMessage>();
-        foreach (MessageInText model in models)
+        foreach (Message model in models)
         {
             IUser author = await MessageHelper.GetAuthorAsync(client, guild, model.Author);
             RestMessage message = RestMessage.Create(client, channel, author, model);

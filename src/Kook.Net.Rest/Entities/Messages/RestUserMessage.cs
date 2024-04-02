@@ -67,7 +67,7 @@ public class RestUserMessage : RestMessage, IUserMessage
     {
     }
 
-    internal static new RestUserMessage Create(BaseKookClient kook, IMessageChannel channel, IUser author, MessageInText model)
+    internal static new RestUserMessage Create(BaseKookClient kook, IMessageChannel channel, IUser author, Message model)
     {
         RestUserMessage entity = new(kook, model.Id, model.Type, channel, author, MessageHelper.GetSource(model));
         entity.Update(model);
@@ -81,7 +81,7 @@ public class RestUserMessage : RestMessage, IUserMessage
         return entity;
     }
 
-    internal override void Update(MessageInText model)
+    internal override void Update(Message model)
     {
         base.Update(model);
         ulong? guildId = (Channel as IGuildChannel)?.GuildId;

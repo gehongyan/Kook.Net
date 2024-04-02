@@ -463,7 +463,7 @@ internal static class MessageHelper
         return i;
     }
 
-    public static MessageSource GetSource(MessageInText msg)
+    public static MessageSource GetSource(Message msg)
     {
         if (msg.Author.Bot == true) return MessageSource.Bot;
 

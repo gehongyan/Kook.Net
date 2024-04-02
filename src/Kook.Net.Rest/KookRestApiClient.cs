@@ -675,7 +675,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Messages
 
-    public async Task<IReadOnlyCollection<MessageInText>> QueryMessagesAsync(ulong channelId, Guid? referenceMessageId = null,
+    public async Task<IReadOnlyCollection<Message>> QueryMessagesAsync(ulong channelId, Guid? referenceMessageId = null,
         bool? queryPin = null, Direction dir = Direction.Unspecified, int count = 50, RequestOptions options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
@@ -707,13 +707,13 @@ internal class KookRestApiClient : IDisposable
         return queryMessagesResponse.Items;
     }
 
-    public async Task<MessageInText> GetMessageAsync(Guid messageId, RequestOptions options = null)
+    public async Task<Message> GetMessageAsync(Guid messageId, RequestOptions options = null)
     {
         Preconditions.NotEqual(messageId, Guid.Empty, nameof(messageId));
         options = RequestOptions.CreateOrClone(options);
 
         BucketIds ids = new();
-        return await SendAsync<MessageInText>(HttpMethod.Get, () => $"message/view?msg_id={messageId}", ids, ClientBucketType.SendEdit, options)
+        return await SendAsync<Message>(HttpMethod.Get, () => $"message/view?msg_id={messageId}", ids, ClientBucketType.SendEdit, options)
             .ConfigureAwait(false);
     }
 

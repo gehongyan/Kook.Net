@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Kook.API;
 
-internal class MessageInText
+internal class Message
 {
     [JsonPropertyName("id")]
     public Guid Id { get; set; }

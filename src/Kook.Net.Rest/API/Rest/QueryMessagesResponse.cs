@@ -5,5 +5,5 @@ namespace Kook.API.Rest;
 internal class QueryMessagesResponse
 {
     [JsonPropertyName("items")]
-    public MessageInText[] Items { get; set; }
+    public Message[] Items { get; set; }
 }

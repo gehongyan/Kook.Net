@@ -87,7 +87,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     }
 
     internal static new SocketUserMessage Create(KookSocketClient kook, ClientState state, SocketUser author, ISocketMessageChannel channel,
-        API.MessageInText model)
+        API.Message model)
     {
         SocketUserMessage entity = new(kook, model.Id, channel, author, SocketMessageHelper.GetSource(model));
         entity.Update(state, model);
@@ -171,7 +171,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     }
 
 
-    internal override void Update(ClientState state, API.MessageInText model)
+    internal override void Update(ClientState state, API.Message model)
     {
         base.Update(state, model);
         SocketGuild guild = (Channel as SocketGuildChannel)?.Guild;

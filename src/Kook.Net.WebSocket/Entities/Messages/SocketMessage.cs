@@ -175,7 +175,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     }
 
     internal static SocketMessage Create(KookSocketClient kook, ClientState state, SocketUser author, ISocketMessageChannel channel,
-        API.MessageInText model)
+        API.Message model)
     {
         if (model is null) return null;
 
@@ -196,7 +196,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
             return SocketUserMessage.Create(kook, state, author, channel, model);
     }
 
-    internal virtual void Update(ClientState state, API.MessageInText model)
+    internal virtual void Update(ClientState state, API.Message model)
     {
         Type = model.Type;
         Timestamp = model.CreateAt;
