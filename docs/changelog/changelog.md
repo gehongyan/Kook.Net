@@ -9,7 +9,7 @@ title: 变更日志
 
 ### 更新路线
 
-KOOK 客户端现已支持在语音频道内发送消息，与此相关地以下 API 产生了变动：
+KOOK 客户端现已支持在语音频道内发送消息，与此相关的以下 API 产生了变动：
 
 - `CreateVoiceChannelProperties` 现已继承自 `CreateTextChannelProperties`
 - `ModifyVoiceChannelProperties` 现已继承自 `ModifyTextChannelProperties`
@@ -20,7 +20,7 @@ KOOK 客户端现已支持在语音频道内发送消息，与此相关地以下
 需要注意的是，受限于 KOOK API，语音频道内不支持通过 API 获取历史消息，无置顶消息功能，因此，语音频道上不支持调用
 `IMessageChannel` 的 `GetMessagesAsync` 与 `GetPinnedMessagesAsync` 方法。
 
-另外，语音频道在 API 层面支持操作 Topic 及 SlowModeInterval，但 KOOK 客户端暂无相关表现。
+另外，语音频道在 API 层面支持操作 `Topic` 及 `SlowModeInterval`，但 KOOK 客户端暂无相关表现。
 
 创建频道时不支持立即指定 `Topic`，`CreateTextChannelProperties` 中的 `Topic` 属性不生效，现已移除，
 请在创建频道后调用 `ITextChannel.ModifyAsync` 方法进行修改。

@@ -37,11 +37,11 @@ creation.
 
 - Corrected the issue with `ConnectionManager` incorrectly updating `State` when `Disconnected`.
 
-### Changed
+### Changes
 
 - Removed the `Topic` property from `CreateTextChannelProperties`.
 
-### Miscellaneous
+### Misc
 
 - Marked the project as not supporting AOT and assembly trimming.
 - Added example project `Kook.Net.Samples.CardMarkup`.
@@ -69,7 +69,7 @@ The name of the cancellation token has been changed from `CancelToken` to `Cance
 - `IVoiceChannel` no longer derived from `IMentionable` interface.
 - Renamed the name of methods, variables, properties, and parameters from `CancelToken` to `CancellationToken`.
 
-### Other
+### Misc
 
 - Updated document template, added example project page, and added voice streaming documentation.
 
@@ -133,7 +133,7 @@ All usages of this property need to be updated.
 
 - Fixed incorrect build validation conditions for `SectionModuleBuild`.
 
-### Other
+### Misc
 
 - Replaced the Moq testing mock framework with NSubstitute.
 - Added Docker usage examples.
