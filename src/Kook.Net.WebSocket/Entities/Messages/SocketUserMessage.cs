@@ -8,7 +8,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based message sent by a user.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketUserMessage : SocketMessage, IUserMessage
 {
     private bool? _isMentioningEveryone;
@@ -108,8 +108,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         SocketGuild guild = (Channel as SocketGuildChannel)?.Guild;
         _isMentioningEveryone = model.MentionedAll;
         _isMentioningHere = model.MentionedHere;
-        _roleMentions = model.MentionedRoles?.Select(x => guild?.GetRole(x)).ToImmutableArray() ?? new ImmutableArray<SocketRole>();
-        _channelMentions = model.MentionedChannels?.Select(x => guild?.GetChannel(x)).ToImmutableArray() ?? new ImmutableArray<SocketGuildChannel>();
+        _roleMentions = model.MentionedRoles?.Select(x => guild?.GetRole(x)).ToImmutableArray() ?? [];
+        _channelMentions = model.MentionedChannels?.Select(x => guild?.GetChannel(x)).ToImmutableArray() ?? [];
         Content = gatewayEvent.Content;
         RawContent = model.KMarkdownInfo?.RawContent;
         if (Type == MessageType.Text)
@@ -177,9 +177,9 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         SocketGuild guild = (Channel as SocketGuildChannel)?.Guild;
         _isMentioningEveryone = model.MentionedAll;
         _isMentioningHere = model.MentionedHere;
-        _roleMentions = model.MentionedRoles?.Select(x => guild.GetRole(x)).ToImmutableArray() ?? new ImmutableArray<SocketRole>();
+        _roleMentions = model.MentionedRoles?.Select(x => guild.GetRole(x)).ToImmutableArray() ?? [];
         _channelMentions = model.MentionInfo?.MentionedChannels?.Select(x => guild.GetChannel(x.Id)).ToImmutableArray()
-            ?? new ImmutableArray<SocketGuildChannel>();
+            ?? [];
         Content = model.Content;
         if (Type == MessageType.Text)
             _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText);
@@ -244,7 +244,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         _isMentioningEveryone = model.MentionAll;
         _isMentioningHere = model.MentionHere;
         _roleMentions = model.MentionRoles?.Select(x => Guild.GetRole(x)).ToImmutableArray()
-            ?? new ImmutableArray<SocketRole>();
+            ?? [];
         Content = model.Content;
         if (Type == MessageType.Text)
             _tags = MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText);

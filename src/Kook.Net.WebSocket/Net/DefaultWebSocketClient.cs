@@ -11,9 +11,9 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
     public const int SendChunkSize = 4 * 1024;     //4KB
     private const int HR_TIMEOUT = -2147012894;
 
-    public event Func<byte[], int, int, Task> BinaryMessage;
-    public event Func<string, Task> TextMessage;
-    public event Func<Exception, Task> Closed;
+    public event Func<byte[], int, int, Task>? BinaryMessage;
+    public event Func<string, Task>? TextMessage;
+    public event Func<Exception, Task>? Closed;
 
     private readonly SemaphoreSlim _lock;
     private readonly Dictionary<string, string> _headers;

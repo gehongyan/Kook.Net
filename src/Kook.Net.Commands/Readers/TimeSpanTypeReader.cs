@@ -8,7 +8,7 @@ internal class TimeSpanTypeReader : TypeReader
     /// TimeSpan try parse formats.
     /// </summary>
     private static readonly string[] Formats =
-    {
+    [
         "%d'd'%h'h'%m'm'%s's'", // 4d3h2m1s
         "%d'd'%h'h'%m'm'",      // 4d3h2m
         "%d'd'%h'h'%s's'",      // 4d3h  1s
@@ -24,7 +24,7 @@ internal class TimeSpanTypeReader : TypeReader
         "%m'm'%s's'",           //     2m1s
         "%m'm'",                //     2m
         "%s's'"                 //       1s
-    };
+    ];
 
     /// <inheritdoc />
     public override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)

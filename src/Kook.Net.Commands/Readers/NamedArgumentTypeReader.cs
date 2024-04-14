@@ -27,7 +27,7 @@ internal sealed class NamedArgumentTypeReader<T> : TypeReader
                 PropertyInfo prop = Read(out string arg);
                 object propVal = await ReadArgumentAsync(prop, arg).ConfigureAwait(false);
                 if (propVal != null)
-                    prop.SetMethod.Invoke(result, new[] { propVal });
+                    prop.SetMethod.Invoke(result, [propVal]);
                 else
                     return TypeReaderResult.FromError(CommandError.ParseFailed,
                         $"Could not parse the argument for the parameter '{prop.Name}' as type '{prop.PropertyType}'.");
@@ -138,7 +138,8 @@ internal sealed class NamedArgumentTypeReader<T> : TypeReader
                 if (isCollection)
                 {
                     MethodInfo method = _readMultipleMethod.MakeGenericMethod(elemType);
-                    Task<IEnumerable> task = (Task<IEnumerable>)method.Invoke(null, new object[] { reader, context, arg.Split(','), services });
+                    Task<IEnumerable> task = (Task<IEnumerable>)method.Invoke(null, [reader, context, arg.Split(','), services
+                    ]);
                     return await task.ConfigureAwait(false);
                 }
                 else
@@ -160,7 +161,7 @@ internal sealed class NamedArgumentTypeReader<T> : TypeReader
     private static async Task<IEnumerable> ReadMultiple<TObj>(TypeReader reader, ICommandContext context, IEnumerable<string> args,
         IServiceProvider services)
     {
-        List<TObj> objs = new();
+        List<TObj> objs = [];
         foreach (string arg in args)
         {
             object read = await ReadSingle(reader, context, arg.Trim(), services).ConfigureAwait(false);

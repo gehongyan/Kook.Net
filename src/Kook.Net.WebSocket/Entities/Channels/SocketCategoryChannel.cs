@@ -8,7 +8,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based category channel.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
 {
     #region SocketCategoryChannel
@@ -67,13 +67,13 @@ public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
 
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode,
-        RequestOptions options) =>
+        RequestOptions? options = null) =>
         mode == CacheMode.AllowDownload
             ? ChannelHelper.GetUsersAsync(this, Guild, Kook, KookConfig.MaxUsersPerBatch, 1, options)
             : ImmutableArray.Create<IReadOnlyCollection<IGuildUser>>(Users).ToAsyncEnumerable();
 
     /// <inheritdoc />
-    async Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    async Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
     {
         SocketGuildUser user = GetUser(id);
         if (user is not null || mode == CacheMode.CacheOnly) return user;
@@ -86,13 +86,13 @@ public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
     #region IChannel
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options) =>
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options = null) =>
         mode == CacheMode.AllowDownload
             ? ChannelHelper.GetUsersAsync(this, Guild, Kook, KookConfig.MaxUsersPerBatch, 1, options)
             : ImmutableArray.Create<IReadOnlyCollection<IGuildUser>>(Users).ToAsyncEnumerable();
 
     /// <inheritdoc />
-    async Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    async Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
     {
         SocketGuildUser user = GetUser(id);
         if (user is not null || mode == CacheMode.CacheOnly) return user;

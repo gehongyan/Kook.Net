@@ -19,7 +19,7 @@ internal class LogManager
         ClientLogger = new Logger(this, "Kook");
     }
 
-    public async Task LogAsync(LogSeverity severity, string source, Exception ex)
+    public async Task LogAsync(LogSeverity severity, string source, Exception? ex)
     {
         try
         {
@@ -32,7 +32,7 @@ internal class LogManager
         }
     }
 
-    public async Task LogAsync(LogSeverity severity, string source, string message, Exception ex = null)
+    public async Task LogAsync(LogSeverity severity, string source, string message, Exception? ex = null)
     {
         try
         {
@@ -45,7 +45,7 @@ internal class LogManager
         }
     }
 
-    public async Task LogAsync(LogSeverity severity, string source, FormattableString message, Exception ex = null)
+    public async Task LogAsync(LogSeverity severity, string source, FormattableString message, Exception? ex = null)
     {
         try
         {
@@ -59,53 +59,53 @@ internal class LogManager
     }
 
 
-    public Task ErrorAsync(string source, Exception ex)
+    public Task ErrorAsync(string source, Exception? ex)
         => LogAsync(LogSeverity.Error, source, ex);
 
-    public Task ErrorAsync(string source, string message, Exception ex = null)
+    public Task ErrorAsync(string source, string message, Exception? ex = null)
         => LogAsync(LogSeverity.Error, source, message, ex);
 
-    public Task ErrorAsync(string source, FormattableString message, Exception ex = null)
+    public Task ErrorAsync(string source, FormattableString message, Exception? ex = null)
         => LogAsync(LogSeverity.Error, source, message, ex);
 
 
-    public Task WarningAsync(string source, Exception ex)
+    public Task WarningAsync(string source, Exception? ex)
         => LogAsync(LogSeverity.Warning, source, ex);
 
-    public Task WarningAsync(string source, string message, Exception ex = null)
+    public Task WarningAsync(string source, string message, Exception? ex = null)
         => LogAsync(LogSeverity.Warning, source, message, ex);
 
-    public Task WarningAsync(string source, FormattableString message, Exception ex = null)
+    public Task WarningAsync(string source, FormattableString message, Exception? ex = null)
         => LogAsync(LogSeverity.Warning, source, message, ex);
 
 
-    public Task InfoAsync(string source, Exception ex)
+    public Task InfoAsync(string source, Exception? ex)
         => LogAsync(LogSeverity.Info, source, ex);
 
-    public Task InfoAsync(string source, string message, Exception ex = null)
+    public Task InfoAsync(string source, string message, Exception? ex = null)
         => LogAsync(LogSeverity.Info, source, message, ex);
 
-    public Task InfoAsync(string source, FormattableString message, Exception ex = null)
+    public Task InfoAsync(string source, FormattableString message, Exception? ex = null)
         => LogAsync(LogSeverity.Info, source, message, ex);
 
 
-    public Task VerboseAsync(string source, Exception ex)
+    public Task VerboseAsync(string source, Exception? ex)
         => LogAsync(LogSeverity.Verbose, source, ex);
 
-    public Task VerboseAsync(string source, string message, Exception ex = null)
+    public Task VerboseAsync(string source, string message, Exception? ex = null)
         => LogAsync(LogSeverity.Verbose, source, message, ex);
 
-    public Task VerboseAsync(string source, FormattableString message, Exception ex = null)
+    public Task VerboseAsync(string source, FormattableString message, Exception? ex = null)
         => LogAsync(LogSeverity.Verbose, source, message, ex);
 
 
-    public Task DebugAsync(string source, Exception ex)
+    public Task DebugAsync(string source, Exception? ex)
         => LogAsync(LogSeverity.Debug, source, ex);
 
-    public Task DebugAsync(string source, string message, Exception ex = null)
+    public Task DebugAsync(string source, string message, Exception? ex = null)
         => LogAsync(LogSeverity.Debug, source, message, ex);
 
-    public Task DebugAsync(string source, FormattableString message, Exception ex = null)
+    public Task DebugAsync(string source, FormattableString message, Exception? ex = null)
         => LogAsync(LogSeverity.Debug, source, message, ex);
 
     public Logger CreateLogger(string name) => new(this, name);

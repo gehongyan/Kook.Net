@@ -15,11 +15,11 @@ internal struct ClientBucket
 
     static ClientBucket()
     {
-        ClientBucket[] buckets = new[]
-        {
+        ClientBucket[] buckets =
+        [
             new ClientBucket(ClientBucketType.Unbucketed, BucketId.Create(null, "<unbucketed>", null), 10, 10),
             new ClientBucket(ClientBucketType.SendEdit, BucketId.Create(null, "<send_edit>", null), 10, 10)
-        };
+        ];
 
         ImmutableDictionary<ClientBucketType, ClientBucket>.Builder builder = ImmutableDictionary.CreateBuilder<ClientBucketType, ClientBucket>();
         foreach (ClientBucket bucket in buckets) builder.Add(bucket.Type, bucket);

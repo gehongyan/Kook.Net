@@ -5,7 +5,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     Contains information for the parsing result from the command service's parser.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct ParseResult : IResult
 {
     /// <summary>

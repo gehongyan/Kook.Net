@@ -8,7 +8,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     Represents a REST-based user.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestUser : RestEntity<ulong>, IUser, IUpdateable
 {
     #region RestUser

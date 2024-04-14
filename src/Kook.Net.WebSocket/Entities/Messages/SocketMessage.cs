@@ -11,7 +11,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
 {
     #region SocketMessage
 
-    private readonly List<SocketReaction> _reactions = new();
+    private readonly List<SocketReaction> _reactions = [];
     private ImmutableArray<SocketUser> _userMentions = ImmutableArray.Create<SocketUser>();
 
     /// <summary>
@@ -278,7 +278,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         => SocketMessageHelper.UpdateAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task AddReactionAsync(IEmote emote, RequestOptions options = null) =>
+    public Task AddReactionAsync(IEmote emote, RequestOptions? options = null) =>
         Channel switch
         {
             ITextChannel => MessageHelper.AddReactionAsync(this, emote, Kook, options),
@@ -287,7 +287,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         };
 
     /// <inheritdoc />
-    public Task RemoveReactionAsync(IEmote emote, IUser user, RequestOptions options = null) =>
+    public Task RemoveReactionAsync(IEmote emote, IUser user, RequestOptions? options = null) =>
         Channel switch
         {
             ITextChannel => MessageHelper.RemoveReactionAsync(this, user.Id, emote, Kook, options),
@@ -296,7 +296,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         };
 
     /// <inheritdoc />
-    public Task RemoveReactionAsync(IEmote emote, ulong userId, RequestOptions options = null) =>
+    public Task RemoveReactionAsync(IEmote emote, ulong userId, RequestOptions? options = null) =>
         Channel switch
         {
             ITextChannel => MessageHelper.RemoveReactionAsync(this, userId, emote, Kook, options),
@@ -305,7 +305,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         };
 
     /// <inheritdoc />
-    public Task<IReadOnlyCollection<IUser>> GetReactionUsersAsync(IEmote emote, RequestOptions options = null) =>
+    public Task<IReadOnlyCollection<IUser>> GetReactionUsersAsync(IEmote emote, RequestOptions? options = null) =>
         Channel switch
         {
             ITextChannel => MessageHelper.GetReactionUsersAsync(this, emote, Kook, options),

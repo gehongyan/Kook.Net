@@ -4,7 +4,7 @@ using Model = Kook.API.Attachment;
 namespace Kook;
 
 /// <inheritdoc cref="IAttachment"/>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Attachment : IAttachment
 {
     /// <inheritdoc />

@@ -31,8 +31,8 @@ public interface IRestClient : IDisposable
     /// <param name="reason">The audit log reason.</param>
     /// <param name="requestHeaders">Additional headers to be sent with the request.</param>
     /// <returns> A task that represents an asynchronous send operation. The task result contains the REST response of the request. </returns>
-    Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancellationToken, string reason = null,
-        IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null);
+    Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancellationToken,
+        string? reason = null, IEnumerable<KeyValuePair<string, IEnumerable<string>>>? requestHeaders = null);
 
     /// <summary>
     ///     Sends a REST request with a JSON body.
@@ -44,8 +44,8 @@ public interface IRestClient : IDisposable
     /// <param name="reason">The audit log reason.</param>
     /// <param name="requestHeaders">Additional headers to be sent with the request.</param>
     /// <returns> A task that represents an asynchronous send operation. The task result contains the REST response of the request. </returns>
-    Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json, CancellationToken cancellationToken, string reason = null,
-        IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null);
+    Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json, CancellationToken cancellationToken,
+        string? reason = null, IEnumerable<KeyValuePair<string, IEnumerable<string>>>? requestHeaders = null);
 
     /// <summary>
     ///     Sends a REST request with multipart parameters.
@@ -58,6 +58,6 @@ public interface IRestClient : IDisposable
     /// <param name="requestHeaders">Additional headers to be sent with the request.</param>
     /// <returns> A task that represents an asynchronous send operation. The task result contains the REST response of the request. </returns>
     Task<RestResponse> SendAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartParams,
-        CancellationToken cancellationToken, string reason = null,
-        IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null);
+        CancellationToken cancellationToken, string? reason = null,
+        IEnumerable<KeyValuePair<string, IEnumerable<string>>>? requestHeaders = null);
 }

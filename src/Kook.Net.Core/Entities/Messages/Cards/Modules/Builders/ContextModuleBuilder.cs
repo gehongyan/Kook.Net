@@ -17,7 +17,7 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// <summary>
     ///     Initializes a new instance of the <see cref="ContextModuleBuilder"/> class.
     /// </summary>
-    public ContextModuleBuilder() => Elements = new List<IElementBuilder>();
+    public ContextModuleBuilder() => Elements = [];
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ContextModuleBuilder"/> class.

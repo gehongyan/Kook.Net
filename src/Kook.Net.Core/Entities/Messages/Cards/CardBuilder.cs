@@ -10,7 +10,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     /// <summary>
     ///     Initializes a new instance of the <see cref="CardBuilder"/> class.
     /// </summary>
-    public CardBuilder() => Modules = new List<IModuleBuilder>();
+    public CardBuilder() => Modules = [];
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="CardBuilder"/> class with the specified parameters.
@@ -24,7 +24,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
         WithTheme(theme);
         if (color.HasValue) WithColor(color.Value);
         WithSize(size);
-        Modules = modules ?? new List<IModuleBuilder>();
+        Modules = modules ?? [];
     }
 
     /// <summary>

@@ -6,7 +6,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     Represents a REST-based role.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestRole : RestEntity<uint>, IRole
 {
     #region RestRole

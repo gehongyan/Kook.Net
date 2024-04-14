@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
@@ -6,7 +7,7 @@ namespace Kook;
 ///     A plain text element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class PlainTextElement : IElement, IEquatable<PlainTextElement>
+public sealed class PlainTextElement : IElement, IEquatable<PlainTextElement>
 {
     internal PlainTextElement(string content, bool emoji)
     {
@@ -63,13 +64,13 @@ public class PlainTextElement : IElement, IEquatable<PlainTextElement>
     /// <remarks>If the object passes is an <see cref="PlainTextElement"/>, <see cref="Equals(PlainTextElement)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="PlainTextElement"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="PlainTextElement"/> is equal to the current <see cref="PlainTextElement"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is PlainTextElement plainTextElement && Equals(plainTextElement);
 
     /// <summary>Determines whether the specified <see cref="PlainTextElement"/> is equal to the current <see cref="PlainTextElement"/>.</summary>
     /// <param name="plainTextElement">The <see cref="PlainTextElement"/> to compare with the current <see cref="PlainTextElement"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="PlainTextElement"/> is equal to the current <see cref="PlainTextElement"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(PlainTextElement plainTextElement)
+    public bool Equals([NotNullWhen(true)] PlainTextElement? plainTextElement)
         => GetHashCode() == plainTextElement?.GetHashCode();
 
     /// <inheritdoc />

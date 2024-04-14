@@ -11,7 +11,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based guild user.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
 {
     #region SocketGuildUser

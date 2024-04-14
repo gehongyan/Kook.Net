@@ -6,7 +6,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     Represents a REST-based invite.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
 {
     /// <inheritdoc />

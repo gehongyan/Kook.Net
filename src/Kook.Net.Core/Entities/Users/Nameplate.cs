@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     Representing a nameplate an <see cref="IUser"/> can have.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Nameplate : IEquatable<Nameplate>
 {
     /// <summary>

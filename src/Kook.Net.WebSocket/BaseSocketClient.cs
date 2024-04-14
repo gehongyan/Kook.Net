@@ -179,23 +179,23 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     public abstract Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null);
 
     /// <inheritdoc />
-    Task<IChannel> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
+    Task<IChannel> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<IChannel>(GetChannel(id));
 
     /// <inheritdoc />
-    Task<IDMChannel> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions options)
+    Task<IDMChannel> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<IDMChannel>(GetDMChannel(chatCode));
 
     /// <inheritdoc />
-    Task<IGuild> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions options)
+    Task<IGuild> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<IGuild>(GetGuild(id));
 
     /// <inheritdoc />
-    Task<IReadOnlyCollection<IGuild>> IKookClient.GetGuildsAsync(CacheMode mode, RequestOptions options)
+    Task<IReadOnlyCollection<IGuild>> IKookClient.GetGuildsAsync(CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<IReadOnlyCollection<IGuild>>(Guilds);
 
     /// <inheritdoc />
-    async Task<IUser> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    async Task<IUser> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
     {
         SocketUser user = GetUser(id);
         if (user is not null || mode == CacheMode.CacheOnly) return user;
@@ -204,6 +204,6 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     }
 
     /// <inheritdoc />
-    Task<IUser> IKookClient.GetUserAsync(string username, string identifyNumber, RequestOptions options)
+    Task<IUser> IKookClient.GetUserAsync(string username, string identifyNumber, RequestOptions? options)
         => Task.FromResult<IUser>(GetUser(username, identifyNumber));
 }

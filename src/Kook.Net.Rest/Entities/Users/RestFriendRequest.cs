@@ -6,7 +6,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     Represents a REST-based friend request.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestFriendRequest : RestEntity<ulong>, IFriendRequest
 {
     /// <inheritdoc />

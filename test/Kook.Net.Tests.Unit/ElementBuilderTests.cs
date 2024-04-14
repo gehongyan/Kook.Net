@@ -337,10 +337,11 @@ public class ElementBuilderTests
         builder = new ParagraphStructBuilder
         {
             ColumnCount = 3,
-            Fields = new List<IElementBuilder>
-            {
-                new KMarkdownElementBuilder().WithContent("KMarkdown"), new PlainTextElementBuilder().WithContent("PlainText")
-            }
+            Fields =
+            [
+                new KMarkdownElementBuilder().WithContent("KMarkdown"),
+                new PlainTextElementBuilder().WithContent("PlainText")
+            ]
         };
         Assert.Equal(ElementType.Paragraph, builder.Type);
         Assert.Equal(ElementType.Paragraph, builder.Build().Type);
@@ -371,11 +372,11 @@ public class ElementBuilderTests
         Assert.Throws<ArgumentException>(() => builder.AddField<ButtonElementBuilder>(b => b.WithText("button")));
         Assert.Throws<ArgumentException>(() => builder = new ParagraphStructBuilder
         {
-            Fields = new List<IElementBuilder> { new ImageElementBuilder().WithSource(Icon) }
+            Fields = [new ImageElementBuilder().WithSource(Icon)]
         });
         Assert.Throws<ArgumentException>(() => builder = new ParagraphStructBuilder
         {
-            Fields = new List<IElementBuilder> { new ButtonElementBuilder().WithText("button") }
+            Fields = [new ButtonElementBuilder().WithText("button")]
         });
     }
 

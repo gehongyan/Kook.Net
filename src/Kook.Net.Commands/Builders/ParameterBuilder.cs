@@ -77,8 +77,8 @@ public class ParameterBuilder
     /// <param name="command"> The command builder that this parameter builder belongs to. </param>
     internal ParameterBuilder(CommandBuilder command)
     {
-        _preconditions = new List<ParameterPreconditionAttribute>();
-        _attributes = new List<Attribute>();
+        _preconditions = [];
+        _attributes = [];
 
         Command = command;
     }
@@ -135,7 +135,7 @@ public class ParameterBuilder
                 Type readerType;
                 try
                 {
-                    readerType = typeof(NamedArgumentTypeReader<>).MakeGenericType(new[] { type });
+                    readerType = typeof(NamedArgumentTypeReader<>).MakeGenericType([type]);
                 }
                 catch (ArgumentException ex)
                 {
@@ -144,7 +144,7 @@ public class ParameterBuilder
                         ex);
                 }
 
-                reader = (TypeReader)Activator.CreateInstance(readerType, new[] { commands });
+                reader = (TypeReader)Activator.CreateInstance(readerType, [commands]);
                 commands.AddTypeReader(type, reader);
             }
 

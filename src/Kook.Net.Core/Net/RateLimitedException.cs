@@ -15,6 +15,8 @@ public class RateLimitedException : TimeoutException
     ///     <paramref name="request"/> sent.
     /// </summary>
     public RateLimitedException(IRequest request)
-        : base("You are being rate limited.") =>
+        : base("You are being rate limited.")
+    {
         Request = request;
+    }
 }

@@ -17,7 +17,7 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
     /// <summary>
     ///     Initializes a new instance of the <see cref="ActionGroupModuleBuilder"/> class.
     /// </summary>
-    public ActionGroupModuleBuilder() => Elements = new List<ButtonElementBuilder>();
+    public ActionGroupModuleBuilder() => Elements = [];
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ActionGroupModuleBuilder"/> class.

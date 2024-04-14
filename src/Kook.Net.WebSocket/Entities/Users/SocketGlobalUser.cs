@@ -3,7 +3,7 @@ using Model = Kook.API.User;
 
 namespace Kook.WebSocket;
 
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 internal class SocketGlobalUser : SocketUser
 {
     /// <inheritdoc />

@@ -5,7 +5,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     Represents the result of a command search.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct SearchResult : IResult
 {
     /// <summary>

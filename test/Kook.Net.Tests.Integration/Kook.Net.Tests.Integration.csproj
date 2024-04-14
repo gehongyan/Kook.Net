@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>disable</Nullable>
+    <Nullable>enabled</Nullable>
     <IsPackable>false</IsPackable>
     <RootNamespace>Kook.Net.Tests</RootNamespace>
     <LangVersion>default</LangVersion>

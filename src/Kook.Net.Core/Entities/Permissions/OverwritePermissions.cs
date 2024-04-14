@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     Represents a container for a series of overwrite permissions.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct OverwritePermissions
 {
     /// <summary>

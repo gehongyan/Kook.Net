@@ -171,7 +171,7 @@ public class ModuleBuilderTests
         Assert.Equal(ModuleType.ImageGroup, builder.Build().Type);
         Assert.Equal(Icon, builder.Elements[0].Source);
         Assert.Equal(Icon, builder.Build().Elements[0].Source);
-        builder = new ImageGroupModuleBuilder { Elements = new List<ImageElementBuilder> { new ImageElementBuilder().WithSource(Icon) } };
+        builder = new ImageGroupModuleBuilder { Elements = [new ImageElementBuilder().WithSource(Icon)] };
         Assert.Equal(ModuleType.ImageGroup, builder.Type);
         Assert.Equal(ModuleType.ImageGroup, builder.Build().Type);
         Assert.Equal(Icon, builder.Elements[0].Source);
@@ -222,7 +222,7 @@ public class ModuleBuilderTests
         Assert.Equal(ModuleType.Container, builder.Build().Type);
         Assert.Equal(Icon, builder.Elements[0].Source);
         Assert.Equal(Icon, builder.Build().Elements[0].Source);
-        builder = new ContainerModuleBuilder { Elements = new List<ImageElementBuilder> { new ImageElementBuilder().WithSource(Icon) } };
+        builder = new ContainerModuleBuilder { Elements = [new ImageElementBuilder().WithSource(Icon)] };
         Assert.Equal(ModuleType.Container, builder.Type);
         Assert.Equal(ModuleType.Container, builder.Build().Type);
         Assert.Equal(Icon, builder.Elements[0].Source);
@@ -273,7 +273,7 @@ public class ModuleBuilderTests
         Assert.Equal(ModuleType.ActionGroup, builder.Build().Type);
         Assert.Equal(Name, ((PlainTextElementBuilder)builder.Elements[0].Text).Content);
         Assert.Equal(Name, ((PlainTextElement)builder.Build().Elements[0].Text).Content);
-        builder = new ActionGroupModuleBuilder { Elements = new List<ButtonElementBuilder> { new ButtonElementBuilder().WithText(Name, true) } };
+        builder = new ActionGroupModuleBuilder { Elements = [new ButtonElementBuilder().WithText(Name, true)] };
         Assert.Equal(ModuleType.ActionGroup, builder.Type);
         Assert.Equal(ModuleType.ActionGroup, builder.Build().Type);
         Assert.Equal(Name, ((KMarkdownElementBuilder)builder.Elements[0].Text).Content);
@@ -324,7 +324,7 @@ public class ModuleBuilderTests
         Assert.Equal(ModuleType.Context, builder.Build().Type);
         Assert.Equal(Name, ((PlainTextElementBuilder)builder.Elements[0]).Content);
         Assert.Equal(Name, ((PlainTextElement)builder.Build().Elements[0]).Content);
-        builder = new ContextModuleBuilder { Elements = new List<IElementBuilder> { new KMarkdownElementBuilder().WithContent(Name) } };
+        builder = new ContextModuleBuilder { Elements = [new KMarkdownElementBuilder().WithContent(Name)] };
         Assert.Equal(ModuleType.Context, builder.Type);
         Assert.Equal(ModuleType.Context, builder.Build().Type);
         Assert.Equal(Name, ((KMarkdownElementBuilder)builder.Elements[0]).Content);

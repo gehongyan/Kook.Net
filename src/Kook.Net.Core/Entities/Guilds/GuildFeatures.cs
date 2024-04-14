@@ -59,13 +59,9 @@ public class GuildFeatures
 
     internal void EnsureFeature(GuildFeature feature)
     {
-        if (!HasFeature(feature))
-        {
-            IEnumerable<GuildFeature> values = Enum.GetValues(typeof(GuildFeature)).Cast<GuildFeature>();
-
-            IEnumerable<GuildFeature> missingValues = values.Where(x => feature.HasFlag(x) && !Value.HasFlag(x)).ToList();
-
-            throw new InvalidOperationException($"Missing required guild feature{(missingValues.Count() > 1 ? "s" : "")} {string.Join(", ", missingValues.Select(x => x.ToString()))} in order to execute this operation.");
-        }
+        if (HasFeature(feature)) return;
+        IEnumerable<GuildFeature> values = Enum.GetValues(typeof(GuildFeature)).Cast<GuildFeature>();
+        IEnumerable<GuildFeature> missingValues = values.Where(x => feature.HasFlag(x) && !Value.HasFlag(x)).ToList();
+        throw new InvalidOperationException($"Missing required guild feature{(missingValues.Count() > 1 ? "s" : "")} {string.Join(", ", missingValues.Select(x => x.ToString()))} in order to execute this operation.");
     }
 }

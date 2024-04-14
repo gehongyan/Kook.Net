@@ -59,7 +59,7 @@ public interface IGame : IActivity, IEntity<int>, IDeletable
     /// <returns>
     ///     A string representing the URL of the game's icon.
     /// </returns>
-    string Icon { get; }
+    string? Icon { get; }
 
     /// <summary>
     ///     Modifies this game.
@@ -73,5 +73,5 @@ public interface IGame : IActivity, IEntity<int>, IDeletable
     /// <returns>
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
-    Task<IGame> ModifyAsync(Action<GameProperties> func, RequestOptions options = null);
+    Task<IGame> ModifyAsync(Action<GameProperties> func, RequestOptions? options = null);
 }

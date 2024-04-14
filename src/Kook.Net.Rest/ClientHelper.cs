@@ -132,9 +132,14 @@ internal static class ClientHelper
         client.ApiClient.GetGamesAsync(source, options: options)
             .Select(x => x.Select(y => RestGame.Create(client, y)).ToImmutableArray() as IReadOnlyCollection<RestGame>);
 
-    public static async Task<RestGame> CreateGameAsync(BaseKookClient client, string name, string processName, string iconUrl, RequestOptions options)
+    public static async Task<RestGame> CreateGameAsync(BaseKookClient client, string name, string? processName, string? iconUrl, RequestOptions? options = null)
     {
-        CreateGameParams args = new() { Icon = iconUrl, Name = name, ProcessName = processName };
+        CreateGameParams args = new()
+        {
+            Icon = iconUrl,
+            Name = name,
+            ProcessName = processName
+        };
         Game model = await client.ApiClient.CreateGameAsync(args, options).ConfigureAwait(false);
         return RestGame.Create(client, model);
     }

@@ -5,7 +5,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     Represents a result type for command preconditions.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class PreconditionResult : IResult
 {
     /// <inheritdoc/>

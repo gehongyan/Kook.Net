@@ -222,7 +222,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     }
 
     /// <inheritdoc />
-    public Task AddReactionAsync(IEmote emote, RequestOptions options = null) =>
+    public Task AddReactionAsync(IEmote emote, RequestOptions? options = null) =>
         Channel switch
         {
             ITextChannel => MessageHelper.AddReactionAsync(this, emote, Kook, options),
@@ -231,7 +231,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         };
 
     /// <inheritdoc />
-    public Task RemoveReactionAsync(IEmote emote, IUser user, RequestOptions options = null) =>
+    public Task RemoveReactionAsync(IEmote emote, IUser user, RequestOptions? options = null) =>
         Channel switch
         {
             ITextChannel => MessageHelper.RemoveReactionAsync(this, user.Id, emote, Kook, options),
@@ -240,7 +240,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         };
 
     /// <inheritdoc />
-    public Task RemoveReactionAsync(IEmote emote, ulong userId, RequestOptions options = null) =>
+    public Task RemoveReactionAsync(IEmote emote, ulong userId, RequestOptions? options = null) =>
         Channel switch
         {
             ITextChannel => MessageHelper.RemoveReactionAsync(this, userId, emote, Kook, options),
@@ -249,7 +249,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         };
 
     /// <inheritdoc />
-    public Task<IReadOnlyCollection<IUser>> GetReactionUsersAsync(IEmote emote, RequestOptions options = null) =>
+    public Task<IReadOnlyCollection<IUser>> GetReactionUsersAsync(IEmote emote, RequestOptions? options = null) =>
         Channel switch
         {
             ITextChannel => MessageHelper.GetReactionUsersAsync(this, emote, Kook, options),

@@ -15,8 +15,8 @@ internal static class TaskCompletionSourceExtensions
         => Task.Run(() => source.TrySetException(ex));
 
     public static Task SetCanceledAsync<T>(this TaskCompletionSource<T> source)
-        => Task.Run(() => source.SetCanceled());
+        => Task.Run(source.SetCanceled);
 
     public static Task<bool> TrySetCanceledAsync<T>(this TaskCompletionSource<T> source)
-        => Task.Run(() => source.TrySetCanceled());
+        => Task.Run(source.TrySetCanceled);
 }

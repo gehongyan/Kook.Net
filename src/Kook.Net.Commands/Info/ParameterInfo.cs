@@ -7,7 +7,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     Provides the information of a parameter.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ParameterInfo
 {
     private readonly TypeReader _reader;

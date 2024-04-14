@@ -187,11 +187,11 @@ internal class KookRestApiClient : IDisposable
     #region Core
 
     internal Task SendAsync(HttpMethod method, Expression<Func<string>> endpointExpr, BucketIds ids,
-        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null)
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions? options = null, [CallerMemberName] string? funcName = null)
         => SendAsync(method, GetEndpoint(endpointExpr), GetBucketId(method, ids, endpointExpr, funcName), clientBucket, options);
 
     public async Task SendAsync(HttpMethod method, string endpoint,
-        BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null)
+        BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions? options = null)
     {
         options ??= new RequestOptions();
         options.BucketId = bucketId;
@@ -201,11 +201,11 @@ internal class KookRestApiClient : IDisposable
     }
 
     internal Task SendJsonAsync(HttpMethod method, Expression<Func<string>> endpointExpr, object payload, BucketIds ids,
-        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null)
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions? options = null, [CallerMemberName] string? funcName = null)
         => SendJsonAsync(method, GetEndpoint(endpointExpr), payload, GetBucketId(method, ids, endpointExpr, funcName), clientBucket, options);
 
     public async Task SendJsonAsync(HttpMethod method, string endpoint, object payload,
-        BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null)
+        BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions? options = null)
     {
         options ??= new RequestOptions();
         options.BucketId = bucketId;
@@ -217,12 +217,12 @@ internal class KookRestApiClient : IDisposable
 
     internal Task SendMultipartAsync(HttpMethod method, Expression<Func<string>> endpointExpr, IReadOnlyDictionary<string, object> multipartArgs,
         BucketIds ids,
-        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null)
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions? options = null, [CallerMemberName] string? funcName = null)
         => SendMultipartAsync(method, GetEndpoint(endpointExpr), multipartArgs, GetBucketId(method, ids, endpointExpr, funcName), clientBucket,
             options);
 
     public async Task SendMultipartAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartArgs,
-        BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null)
+        BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions? options = null)
     {
         options ??= new RequestOptions();
         options.BucketId = bucketId;
@@ -232,21 +232,21 @@ internal class KookRestApiClient : IDisposable
     }
 
     internal async Task<TResponse> SendAsync<TResponse>(HttpMethod method, Expression<Func<string>> endpointExpr, BucketIds ids,
-        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null,
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions? options = null, [CallerMemberName] string? funcName = null,
         bool bypassDeserialization = false) where TResponse : class
         => await SendAsync<TResponse>(method, GetEndpoint(endpointExpr), GetBucketId(method, ids, endpointExpr, funcName), clientBucket,
             bypassDeserialization, options);
 
     internal async Task<TResponse> SendAsync<TResponse, TArg1, TArg2>(HttpMethod method, Expression<Func<TArg1, TArg2, string>> endpointExpr,
         TArg1 arg1, TArg2 arg2, BucketIds ids,
-        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null,
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions? options = null, [CallerMemberName] string? funcName = null,
         bool bypassDeserialization = false) where TResponse : class
         => await SendAsync<TResponse>(method, GetEndpoint(endpointExpr, arg1, arg2), GetBucketId(method, ids, endpointExpr, arg1, arg2, funcName),
             clientBucket, bypassDeserialization, options);
 
     public async Task<TResponse> SendAsync<TResponse>(HttpMethod method, string endpoint,
         BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, bool bypassDeserialization = false,
-        RequestOptions options = null) where TResponse : class
+        RequestOptions? options = null) where TResponse : class
     {
         options ??= new RequestOptions();
         options.BucketId = bucketId;
@@ -257,14 +257,14 @@ internal class KookRestApiClient : IDisposable
     }
 
     internal async Task<TResponse> SendJsonAsync<TResponse>(HttpMethod method, Expression<Func<string>> endpointExpr, object payload, BucketIds ids,
-        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null,
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions? options = null, [CallerMemberName] string? funcName = null,
         bool bypassDeserialization = false) where TResponse : class
         => await SendJsonAsync<TResponse>(method, GetEndpoint(endpointExpr), payload, GetBucketId(method, ids, endpointExpr, funcName), clientBucket,
             bypassDeserialization, options);
 
     public async Task<TResponse> SendJsonAsync<TResponse>(HttpMethod method, string endpoint, object payload,
         BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, bool bypassDeserialization = false,
-        RequestOptions options = null) where TResponse : class
+        RequestOptions? options = null) where TResponse : class
     {
         options ??= new RequestOptions();
         options.BucketId = bucketId;
@@ -278,14 +278,14 @@ internal class KookRestApiClient : IDisposable
 
     internal Task<TResponse> SendMultipartAsync<TResponse>(HttpMethod method, Expression<Func<string>> endpointExpr,
         IReadOnlyDictionary<string, object> multipartArgs, BucketIds ids,
-        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions options = null, [CallerMemberName] string funcName = null,
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions? options = null, [CallerMemberName] string? funcName = null,
         bool bypassDeserialization = false) where TResponse : class
         => SendMultipartAsync<TResponse>(method, GetEndpoint(endpointExpr), multipartArgs, GetBucketId(method, ids, endpointExpr, funcName),
             clientBucket, bypassDeserialization, options);
 
     public async Task<TResponse> SendMultipartAsync<TResponse>(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartArgs,
         BucketId bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed, bool bypassDeserialization = false,
-        RequestOptions options = null) where TResponse : class
+        RequestOptions? options = null) where TResponse : class
     {
         options ??= new RequestOptions();
         options.BucketId = bucketId;
@@ -314,7 +314,7 @@ internal class KookRestApiClient : IDisposable
 
     internal async IAsyncEnumerable<IReadOnlyCollection<T>> SendPagedAsync<T>(HttpMethod method,
         Expression<Func<int, int, string>> endpointExpr,
-        BucketIds ids, ClientBucketType clientBucket = ClientBucketType.Unbucketed, PageMeta pageMeta = null, RequestOptions options = null)
+        BucketIds ids, ClientBucketType clientBucket = ClientBucketType.Unbucketed, PageMeta pageMeta = null, RequestOptions? options = null)
         where T : class
     {
         pageMeta ??= PageMeta.Default;
@@ -335,7 +335,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Guilds
 
-    public async Task<IReadOnlyCollection<RichGuild>> ListGuildsAsync(RequestOptions options = null)
+    public async Task<IReadOnlyCollection<RichGuild>> ListGuildsAsync(RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
 
@@ -345,7 +345,7 @@ internal class KookRestApiClient : IDisposable
     }
 
     public IAsyncEnumerable<IReadOnlyCollection<Guild>> GetGuildsAsync(int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1,
-        RequestOptions options = null)
+        RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
 
@@ -355,7 +355,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task<ExtendedGuild> GetGuildAsync(ulong guildId, RequestOptions options = null)
+    public async Task<ExtendedGuild> GetGuildAsync(ulong guildId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
@@ -365,7 +365,7 @@ internal class KookRestApiClient : IDisposable
             () => $"guild/view?guild_id={guildId}", ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async ValueTask<int> GetGuildMemberCountAsync(ulong guildId, RequestOptions options = null)
+    public async ValueTask<int> GetGuildMemberCountAsync(ulong guildId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
@@ -377,7 +377,7 @@ internal class KookRestApiClient : IDisposable
     }
 
     public IAsyncEnumerable<IReadOnlyCollection<GuildMember>> GetGuildMembersAsync(ulong guildId, Action<SearchGuildMemberProperties> func = null,
-        int limit = KookConfig.MaxUsersPerBatch, int fromPage = 1, RequestOptions options = null)
+        int limit = KookConfig.MaxUsersPerBatch, int fromPage = 1, RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         Preconditions.GreaterThan(limit, 0, nameof(limit));
@@ -407,7 +407,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task ModifyGuildMemberNicknameAsync(ModifyGuildMemberNicknameParams args, RequestOptions options = null)
+    public async Task ModifyGuildMemberNicknameAsync(ModifyGuildMemberNicknameParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -427,7 +427,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"guild/nickname", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task LeaveGuildAsync(LeaveGuildParams args, RequestOptions options = null)
+    public async Task LeaveGuildAsync(LeaveGuildParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -437,7 +437,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"guild/leave", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task KickOutGuildMemberAsync(KickOutGuildMemberParams args, RequestOptions options = null)
+    public async Task KickOutGuildMemberAsync(KickOutGuildMemberParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -448,7 +448,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"guild/kickout", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task<GetGuildMuteDeafListResponse> GetGuildMutedDeafenedUsersAsync(ulong guildId, RequestOptions options = null)
+    public async Task<GetGuildMuteDeafListResponse> GetGuildMutedDeafenedUsersAsync(ulong guildId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
@@ -458,7 +458,7 @@ internal class KookRestApiClient : IDisposable
             ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task CreateGuildMuteDeafAsync(CreateOrRemoveGuildMuteDeafParams args, RequestOptions options = null)
+    public async Task CreateGuildMuteDeafAsync(CreateOrRemoveGuildMuteDeafParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -469,7 +469,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"guild-mute/create", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task RemoveGuildMuteDeafAsync(CreateOrRemoveGuildMuteDeafParams args, RequestOptions options = null)
+    public async Task RemoveGuildMuteDeafAsync(CreateOrRemoveGuildMuteDeafParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -482,7 +482,7 @@ internal class KookRestApiClient : IDisposable
 
     public IAsyncEnumerable<IReadOnlyCollection<BoostSubscription>> GetGuildBoostSubscriptionsAsync(ulong guildId,
         DateTimeOffset? since = null, DateTimeOffset? until = null,
-        int limit = KookConfig.MaxUsersPerBatch, int fromPage = 1, RequestOptions options = null)
+        int limit = KookConfig.MaxUsersPerBatch, int fromPage = 1, RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         string query = $"guild_id={guildId}";
@@ -502,7 +502,7 @@ internal class KookRestApiClient : IDisposable
     #region Channels
 
     public IAsyncEnumerable<IReadOnlyCollection<Channel>> GetGuildChannelsAsync(ulong guildId, int limit = KookConfig.MaxItemsPerBatchByDefault,
-        int fromPage = 1, RequestOptions options = null)
+        int fromPage = 1, RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
@@ -513,7 +513,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task<Channel> GetGuildChannelAsync(ulong channelId, RequestOptions options = null)
+    public async Task<Channel> GetGuildChannelAsync(ulong channelId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         options = RequestOptions.CreateOrClone(options);
@@ -523,7 +523,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<Channel> ModifyGuildChannelAsync(ulong channelId, ModifyGuildChannelParams args, RequestOptions options = null)
+    public async Task<Channel> ModifyGuildChannelAsync(ulong channelId, ModifyGuildChannelParams args, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         Preconditions.NotNull(args, nameof(args));
@@ -537,7 +537,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<Channel> ModifyGuildChannelAsync(ulong channelId, ModifyTextChannelParams args, RequestOptions options = null)
+    public async Task<Channel> ModifyGuildChannelAsync(ulong channelId, ModifyTextChannelParams args, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         Preconditions.NotNull(args, nameof(args));
@@ -551,7 +551,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<Channel> ModifyGuildChannelAsync(ulong channelId, ModifyVoiceChannelParams args, RequestOptions options = null)
+    public async Task<Channel> ModifyGuildChannelAsync(ulong channelId, ModifyVoiceChannelParams args, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         Preconditions.NotNull(args, nameof(args));
@@ -566,7 +566,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<Channel> CreateGuildChannelAsync(CreateGuildChannelParams args, RequestOptions options = null)
+    public async Task<Channel> CreateGuildChannelAsync(CreateGuildChannelParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -579,7 +579,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task DeleteGuildChannelAsync(DeleteGuildChannelParams args, RequestOptions options = null)
+    public async Task DeleteGuildChannelAsync(DeleteGuildChannelParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
@@ -589,7 +589,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"channel/delete", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task MoveUsersAsync(MoveUsersParams args, RequestOptions options = null)
+    public async Task MoveUsersAsync(MoveUsersParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
@@ -599,7 +599,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"channel/move-user", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyCollection<User>> GetConnectedUsersAsync(ulong channelId, RequestOptions options = null)
+    public async Task<IReadOnlyCollection<User>> GetConnectedUsersAsync(ulong channelId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         options = RequestOptions.CreateOrClone(options);
@@ -613,7 +613,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Channel Permissions
 
-    public async Task<GetChannelPermissionOverwritesResponse> GetChannelPermissionOverwritesAsync(ulong channelId, RequestOptions options = null)
+    public async Task<GetChannelPermissionOverwritesResponse> GetChannelPermissionOverwritesAsync(ulong channelId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         options = RequestOptions.CreateOrClone(options);
@@ -624,7 +624,7 @@ internal class KookRestApiClient : IDisposable
     }
 
     public async Task<CreateOrModifyChannelPermissionOverwriteResponse> CreateChannelPermissionOverwriteAsync(
-        CreateOrRemoveChannelPermissionOverwriteParams args, RequestOptions options = null)
+        CreateOrRemoveChannelPermissionOverwriteParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
@@ -637,7 +637,7 @@ internal class KookRestApiClient : IDisposable
     }
 
     public async Task<CreateOrModifyChannelPermissionOverwriteResponse> ModifyChannelPermissionOverwriteAsync(
-        ModifyChannelPermissionOverwriteParams args, RequestOptions options = null)
+        ModifyChannelPermissionOverwriteParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
@@ -650,7 +650,7 @@ internal class KookRestApiClient : IDisposable
             ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task RemoveChannelPermissionOverwriteAsync(CreateOrRemoveChannelPermissionOverwriteParams args, RequestOptions options = null)
+    public async Task RemoveChannelPermissionOverwriteAsync(CreateOrRemoveChannelPermissionOverwriteParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
@@ -661,7 +661,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"channel-role/delete", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task SyncChannelPermissionsAsync(SyncChannelPermissionsParams args, RequestOptions options = null)
+    public async Task SyncChannelPermissionsAsync(SyncChannelPermissionsParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
@@ -676,7 +676,7 @@ internal class KookRestApiClient : IDisposable
     #region Messages
 
     public async Task<IReadOnlyCollection<Message>> QueryMessagesAsync(ulong channelId, Guid? referenceMessageId = null,
-        bool? queryPin = null, Direction dir = Direction.Unspecified, int count = 50, RequestOptions options = null)
+        bool? queryPin = null, Direction dir = Direction.Unspecified, int count = 50, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         if (referenceMessageId is not null) Preconditions.NotEqual(referenceMessageId.Value, Guid.Empty, nameof(referenceMessageId));
@@ -707,7 +707,7 @@ internal class KookRestApiClient : IDisposable
         return queryMessagesResponse.Items;
     }
 
-    public async Task<Message> GetMessageAsync(Guid messageId, RequestOptions options = null)
+    public async Task<Message> GetMessageAsync(Guid messageId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(messageId, Guid.Empty, nameof(messageId));
         options = RequestOptions.CreateOrClone(options);
@@ -717,7 +717,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<CreateMessageResponse> CreateMessageAsync(CreateMessageParams args, RequestOptions options = null)
+    public async Task<CreateMessageResponse> CreateMessageAsync(CreateMessageParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
@@ -733,7 +733,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task ModifyMessageAsync(ModifyMessageParams args, RequestOptions options = null)
+    public async Task ModifyMessageAsync(ModifyMessageParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
@@ -743,7 +743,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"message/update", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task DeleteMessageAsync(DeleteMessageParams args, RequestOptions options = null)
+    public async Task DeleteMessageAsync(DeleteMessageParams args, RequestOptions? options = null)
     {
         Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
         options = RequestOptions.CreateOrClone(options);
@@ -752,7 +752,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"message/delete", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyCollection<ReactionUserResponse>> GetReactionUsersAsync(Guid messageId, string emojiId, RequestOptions options = null)
+    public async Task<IReadOnlyCollection<ReactionUserResponse>> GetReactionUsersAsync(Guid messageId, string emojiId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(messageId, Guid.Empty, nameof(messageId));
         options = RequestOptions.CreateOrClone(options);
@@ -767,7 +767,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task AddReactionAsync(AddReactionParams args, RequestOptions options = null)
+    public async Task AddReactionAsync(AddReactionParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
@@ -776,7 +776,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"message/add-reaction", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task RemoveReactionAsync(RemoveReactionParams args, RequestOptions options = null)
+    public async Task RemoveReactionAsync(RemoveReactionParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
@@ -792,7 +792,7 @@ internal class KookRestApiClient : IDisposable
 
     public IAsyncEnumerable<IReadOnlyCollection<Channel>> GetAudioChannelsUserConnectsAsync(ulong? guildId = null,
         ulong? userId = null, int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1,
-        RequestOptions options = null)
+        RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         Preconditions.NotEqual(userId, 0, nameof(userId));
@@ -810,7 +810,7 @@ internal class KookRestApiClient : IDisposable
     #region User Chats
 
     public IAsyncEnumerable<IReadOnlyCollection<UserChat>> GetUserChatsAsync(int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1,
-        RequestOptions options = null)
+        RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
 
@@ -820,7 +820,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task<UserChat> GetUserChatAsync(Guid chatCode, RequestOptions options = null)
+    public async Task<UserChat> GetUserChatAsync(Guid chatCode, RequestOptions? options = null)
     {
         Preconditions.NotEqual(chatCode, Guid.Empty, nameof(chatCode));
         options = RequestOptions.CreateOrClone(options);
@@ -830,7 +830,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<UserChat> CreateUserChatAsync(CreateUserChatParams args, RequestOptions options = null)
+    public async Task<UserChat> CreateUserChatAsync(CreateUserChatParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
@@ -840,7 +840,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task DeleteUserChatAsync(DeleteUserChatParams args, RequestOptions options = null)
+    public async Task DeleteUserChatAsync(DeleteUserChatParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChatCode, Guid.Empty, nameof(args.ChatCode));
@@ -854,7 +854,7 @@ internal class KookRestApiClient : IDisposable
     #region Direct Messages
 
     public async Task<DirectMessage> GetDirectMessageAsync(Guid messageId, Guid chatCode,
-        RequestOptions options = null)
+        RequestOptions? options = null)
     {
         Preconditions.NotEqual(messageId, Guid.Empty, nameof(messageId));
         Preconditions.NotEqual(chatCode, Guid.Empty, nameof(chatCode));
@@ -867,7 +867,7 @@ internal class KookRestApiClient : IDisposable
 
     public async Task<IReadOnlyCollection<DirectMessage>> QueryDirectMessagesAsync(Guid? chatCode = null,
         ulong? userId = null, Guid? referenceMessageId = null,
-        Direction dir = Direction.Unspecified, int count = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        Direction dir = Direction.Unspecified, int count = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
     {
         if (chatCode is null && userId is null)
             throw new ArgumentException($"At least one argument must be provided between {nameof(chatCode)} and {nameof(userId)}.",
@@ -906,7 +906,7 @@ internal class KookRestApiClient : IDisposable
         return queryMessagesResponse.Items;
     }
 
-    public async Task<CreateDirectMessageResponse> CreateDirectMessageAsync(CreateDirectMessageParams args, RequestOptions options = null)
+    public async Task<CreateDirectMessageResponse> CreateDirectMessageAsync(CreateDirectMessageParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         if (args.ChatCode is null && args.UserId is null)
@@ -924,7 +924,7 @@ internal class KookRestApiClient : IDisposable
             options).ConfigureAwait(false);
     }
 
-    public async Task ModifyDirectMessageAsync(ModifyDirectMessageParams args, RequestOptions options = null)
+    public async Task ModifyDirectMessageAsync(ModifyDirectMessageParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
@@ -934,7 +934,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"direct-message/update", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task DeleteDirectMessageAsync(DeleteDirectMessageParams args, RequestOptions options = null)
+    public async Task DeleteDirectMessageAsync(DeleteDirectMessageParams args, RequestOptions? options = null)
     {
         Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
         options = RequestOptions.CreateOrClone(options);
@@ -944,7 +944,7 @@ internal class KookRestApiClient : IDisposable
     }
 
     public async Task<IReadOnlyCollection<ReactionUserResponse>> GetDirectMessageReactionUsersAsync(Guid messageId, string emojiId,
-        RequestOptions options = null)
+        RequestOptions? options = null)
     {
         Preconditions.NotEqual(messageId, Guid.Empty, nameof(messageId));
         options = RequestOptions.CreateOrClone(options);
@@ -959,7 +959,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task AddDirectMessageReactionAsync(AddReactionParams args, RequestOptions options = null)
+    public async Task AddDirectMessageReactionAsync(AddReactionParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
@@ -969,7 +969,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task RemoveDirectMessageReactionAsync(RemoveReactionParams args, RequestOptions options = null)
+    public async Task RemoveDirectMessageReactionAsync(RemoveReactionParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
@@ -984,14 +984,14 @@ internal class KookRestApiClient : IDisposable
 
     #region Gateway
 
-    public async Task<GetBotGatewayResponse> GetBotGatewayAsync(bool isCompressed = true, RequestOptions options = null)
+    public async Task<GetBotGatewayResponse> GetBotGatewayAsync(bool isCompressed = true, RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
         return await SendAsync<GetBotGatewayResponse>(HttpMethod.Get, () => $"gateway/index?compress={(isCompressed ? 1 : 0)}", new BucketIds(),
             options: options).ConfigureAwait(false);
     }
 
-    public async Task<GetVoiceGatewayResponse> GetVoiceGatewayAsync(ulong channelId, RequestOptions options = null)
+    public async Task<GetVoiceGatewayResponse> GetVoiceGatewayAsync(ulong channelId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         options = RequestOptions.CreateOrClone(options);
@@ -1003,7 +1003,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Users
 
-    public async Task<SelfUser> GetSelfUserAsync(RequestOptions options = null)
+    public async Task<SelfUser> GetSelfUserAsync(RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
 
@@ -1011,7 +1011,7 @@ internal class KookRestApiClient : IDisposable
         return await SendAsync<SelfUser>(HttpMethod.Get, () => "user/me", ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task<User> GetUserAsync(ulong userId, RequestOptions options = null)
+    public async Task<User> GetUserAsync(ulong userId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(userId, 0, nameof(userId));
         options = RequestOptions.CreateOrClone(options);
@@ -1021,7 +1021,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<GuildMember> GetGuildMemberAsync(ulong guildId, ulong userId, RequestOptions options = null)
+    public async Task<GuildMember> GetGuildMemberAsync(ulong guildId, ulong userId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(userId, 0, nameof(userId));
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
@@ -1032,7 +1032,7 @@ internal class KookRestApiClient : IDisposable
             options).ConfigureAwait(false);
     }
 
-    public async Task GoOfflineAsync(RequestOptions options = null)
+    public async Task GoOfflineAsync(RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
 
@@ -1044,7 +1044,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Friends
 
-    public async Task<GetFriendStatesResponse> GetFriendStatesAsync(FriendState? friendState, RequestOptions options = null)
+    public async Task<GetFriendStatesResponse> GetFriendStatesAsync(FriendState? friendState, RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
 
@@ -1061,7 +1061,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task RequestFriendAsync(RequestFriendParams args, RequestOptions options = null)
+    public async Task RequestFriendAsync(RequestFriendParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotNullOrWhitespace(args.FullQualification, nameof(args.FullQualification));
@@ -1073,7 +1073,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => "friend/request", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task HandleFriendRequestAsync(HandleFriendRequestParams args, RequestOptions options = null)
+    public async Task HandleFriendRequestAsync(HandleFriendRequestParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.Id, 0, nameof(args.Id));
@@ -1083,7 +1083,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => "friend/handle-request", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task RemoveFriendAsync(RemoveFriendParams args, RequestOptions options = null)
+    public async Task RemoveFriendAsync(RemoveFriendParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
@@ -1093,7 +1093,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => "friend/delete", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task BlockUserAsync(BlockUserParams args, RequestOptions options = null)
+    public async Task BlockUserAsync(BlockUserParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
@@ -1103,7 +1103,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => "friend/block", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task UnblockUserAsync(UnblockUserParams args, RequestOptions options = null)
+    public async Task UnblockUserAsync(UnblockUserParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
@@ -1117,7 +1117,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Assets
 
-    public async Task<CreateAssetResponse> CreateAssetAsync(CreateAssetParams args, RequestOptions options = null)
+    public async Task<CreateAssetResponse> CreateAssetAsync(CreateAssetParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         options = RequestOptions.CreateOrClone(options);
@@ -1132,7 +1132,7 @@ internal class KookRestApiClient : IDisposable
     #region Guild Roles
 
     public IAsyncEnumerable<IReadOnlyCollection<Role>> GetGuildRolesAsync(ulong guildId, int limit = KookConfig.MaxItemsPerBatchByDefault,
-        int fromPage = 1, RequestOptions options = null)
+        int fromPage = 1, RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
@@ -1143,7 +1143,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task<Role> CreateGuildRoleAsync(CreateGuildRoleParams args, RequestOptions options = null)
+    public async Task<Role> CreateGuildRoleAsync(CreateGuildRoleParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -1154,7 +1154,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<Role> ModifyGuildRoleAsync(ModifyGuildRoleParams args, RequestOptions options = null)
+    public async Task<Role> ModifyGuildRoleAsync(ModifyGuildRoleParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -1165,7 +1165,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task DeleteGuildRoleAsync(DeleteGuildRoleParams args, RequestOptions options = null)
+    public async Task DeleteGuildRoleAsync(DeleteGuildRoleParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -1175,7 +1175,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"guild-role/delete", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task<AddOrRemoveRoleResponse> AddRoleAsync(AddOrRemoveRoleParams args, RequestOptions options = null)
+    public async Task<AddOrRemoveRoleResponse> AddRoleAsync(AddOrRemoveRoleParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -1186,7 +1186,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<AddOrRemoveRoleResponse> RemoveRoleAsync(AddOrRemoveRoleParams args, RequestOptions options = null)
+    public async Task<AddOrRemoveRoleResponse> RemoveRoleAsync(AddOrRemoveRoleParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -1201,7 +1201,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Intimacy
 
-    public async Task<Intimacy> GetIntimacyAsync(ulong userId, RequestOptions options = null)
+    public async Task<Intimacy> GetIntimacyAsync(ulong userId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(userId, 0, nameof(userId));
         options = RequestOptions.CreateOrClone(options);
@@ -1210,7 +1210,7 @@ internal class KookRestApiClient : IDisposable
         return await SendAsync<Intimacy>(HttpMethod.Get, () => $"intimacy/index", ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task UpdateIntimacyValueAsync(UpdateIntimacyValueParams args, RequestOptions options = null)
+    public async Task UpdateIntimacyValueAsync(UpdateIntimacyValueParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
@@ -1228,7 +1228,7 @@ internal class KookRestApiClient : IDisposable
     #region Guild Emoji
 
     public IAsyncEnumerable<IReadOnlyCollection<Emoji>> GetGuildEmotesAsync(ulong guildId, int limit = KookConfig.MaxItemsPerBatchByDefault,
-        int fromPage = 1, RequestOptions options = null)
+        int fromPage = 1, RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
@@ -1239,7 +1239,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task<Emoji> CreateGuildEmoteAsync(CreateGuildEmoteParams args, RequestOptions options = null)
+    public async Task<Emoji> CreateGuildEmoteAsync(CreateGuildEmoteParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         if (args.Name is not null)
@@ -1255,7 +1255,7 @@ internal class KookRestApiClient : IDisposable
             options).ConfigureAwait(false);
     }
 
-    public async Task ModifyGuildEmoteAsync(ModifyGuildEmoteParams args, RequestOptions options = null)
+    public async Task ModifyGuildEmoteAsync(ModifyGuildEmoteParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         if (args.Name is not null)
@@ -1270,7 +1270,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"guild-emoji/update", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task DeleteGuildEmoteAsync(DeleteGuildEmoteParams args, RequestOptions options = null)
+    public async Task DeleteGuildEmoteAsync(DeleteGuildEmoteParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         options = RequestOptions.CreateOrClone(options);
@@ -1284,7 +1284,7 @@ internal class KookRestApiClient : IDisposable
     #region Guild Invites
 
     public IAsyncEnumerable<IReadOnlyCollection<Invite>> GetGuildInvitesAsync(ulong? guildId = null, ulong? channelId = null,
-        int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions options = null)
+        int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions? options = null)
     {
         if (guildId is null && channelId is null)
             throw new ArgumentException($"At least one argument must be provided between {nameof(guildId)} and {nameof(channelId)}.",
@@ -1309,7 +1309,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task<CreateGuildInviteResponse> CreateGuildInviteAsync(CreateGuildInviteParams args, RequestOptions options = null)
+    public async Task<CreateGuildInviteResponse> CreateGuildInviteAsync(CreateGuildInviteParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         if (args.GuildId is null && args.ChannelId is null)
@@ -1327,7 +1327,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task DeleteGuildInviteAsync(DeleteGuildInviteParams args, RequestOptions options = null)
+    public async Task DeleteGuildInviteAsync(DeleteGuildInviteParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotNullOrWhitespace(args.UrlCode, nameof(args.UrlCode));
@@ -1345,7 +1345,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Guild Bans
 
-    public async Task<IReadOnlyCollection<Ban>> GetGuildBansAsync(ulong guildId, RequestOptions options = null)
+    public async Task<IReadOnlyCollection<Ban>> GetGuildBansAsync(ulong guildId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
@@ -1355,7 +1355,7 @@ internal class KookRestApiClient : IDisposable
             options).ConfigureAwait(false);
     }
 
-    public async Task CreateGuildBanAsync(CreateGuildBanParams args, RequestOptions options = null)
+    public async Task CreateGuildBanAsync(CreateGuildBanParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -1372,7 +1372,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"blacklist/create", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task RemoveGuildBanAsync(RemoveGuildBanParams args, RequestOptions options = null)
+    public async Task RemoveGuildBanAsync(RemoveGuildBanParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -1387,7 +1387,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Badges
 
-    public async Task<Stream> GetGuildBadgeAsync(ulong guildId, BadgeStyle style = BadgeStyle.GuildName, RequestOptions options = null)
+    public async Task<Stream> GetGuildBadgeAsync(ulong guildId, BadgeStyle style = BadgeStyle.GuildName, RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
@@ -1402,7 +1402,7 @@ internal class KookRestApiClient : IDisposable
     #region Games
 
     public IAsyncEnumerable<IReadOnlyCollection<Game>> GetGamesAsync(GameCreationSource? source, int limit = KookConfig.MaxItemsPerBatchByDefault,
-        int fromPage = 1, RequestOptions options = null)
+        int fromPage = 1, RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
 
@@ -1418,7 +1418,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task<Game> CreateGameAsync(CreateGameParams args, RequestOptions options = null)
+    public async Task<Game> CreateGameAsync(CreateGameParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotNullOrWhitespace(args.Name, nameof(args.Name));
@@ -1428,7 +1428,7 @@ internal class KookRestApiClient : IDisposable
         return await SendJsonAsync<Game>(HttpMethod.Post, () => $"game/create", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task<Game> ModifyGameAsync(ModifyGameParams args, RequestOptions options = null)
+    public async Task<Game> ModifyGameAsync(ModifyGameParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.GreaterThan(args.Id, 0, nameof(args.Id));
@@ -1438,7 +1438,7 @@ internal class KookRestApiClient : IDisposable
         return await SendJsonAsync<Game>(HttpMethod.Post, () => $"game/update", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task DeleteGameAsync(DeleteGameParams args, RequestOptions options = null)
+    public async Task DeleteGameAsync(DeleteGameParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.GreaterThan(args.Id, 0, nameof(args.Id));
@@ -1448,7 +1448,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"game/delete", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task BeginActivityAsync(BeginActivityParams args, RequestOptions options = null)
+    public async Task BeginActivityAsync(BeginActivityParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         switch (args.ActivityType)
@@ -1471,7 +1471,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"game/activity", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task EndActivityAsync(EndGameActivityParams args, RequestOptions options = null)
+    public async Task EndActivityAsync(EndGameActivityParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         options = RequestOptions.CreateOrClone(options);
@@ -1528,7 +1528,7 @@ internal class KookRestApiClient : IDisposable
         }
 
         internal object[] ToArray()
-            => new object[] { HttpMethod, GuildId, ChannelId };
+            => [HttpMethod, GuildId, ChannelId];
 
         internal Dictionary<string, string> ToMajorParametersDictionary()
         {
@@ -1554,8 +1554,9 @@ internal class KookRestApiClient : IDisposable
 
     private static string GetEndpoint<T1, T2>(Expression<Func<T1, T2, string>> endpointExpr, T1 arg1, T2 arg2) => endpointExpr.Compile()(arg1, arg2);
 
-    private static BucketId GetBucketId(HttpMethod httpMethod, BucketIds ids, Expression<Func<string>> endpointExpr, string callingMethod)
+    private static BucketId GetBucketId(HttpMethod httpMethod, BucketIds ids, Expression<Func<string>> endpointExpr, string? callingMethod)
     {
+        Preconditions.NotNull(callingMethod, nameof(callingMethod));
         ids.HttpMethod = httpMethod;
         return _bucketIdGenerators.GetOrAdd(callingMethod, x => CreateBucketId(endpointExpr))(ids);
     }

@@ -5,7 +5,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     Represents the REST user's presence status. This may include their online status and their activity.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestPresence : IPresence
 {
     /// <inheritdoc />

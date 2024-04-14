@@ -6,7 +6,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     Represents a parsing result of a type reader.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct TypeReaderValue
 {
     /// <summary>
@@ -39,7 +39,7 @@ public struct TypeReaderValue
 /// <summary>
 ///     Represents a parsing result of a type reader.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct TypeReaderResult : IResult
 {
     /// <summary>

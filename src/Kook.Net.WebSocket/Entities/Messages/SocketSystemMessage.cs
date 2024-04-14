@@ -6,7 +6,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based message sent by the system.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketSystemMessage : SocketMessage, ISystemMessage
 {
     /// <inheritdoc />

@@ -17,7 +17,7 @@ public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModule
     /// <summary>
     ///     Initializes a new instance of the <see cref="ContainerModuleBuilder"/> class.
     /// </summary>
-    public ContainerModuleBuilder() => Elements = new List<ImageElementBuilder>();
+    public ContainerModuleBuilder() => Elements = [];
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ContainerModuleBuilder"/> class.

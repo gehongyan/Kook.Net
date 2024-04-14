@@ -8,7 +8,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     Represents a REST-based voice channel in a guild.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChannel
 {
     #region RestVoiceChannel
@@ -57,7 +57,7 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
     }
 
     /// <inheritdoc />
-    public async Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null)
+    public async Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions? options = null)
     {
         Model model = await ChannelHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
         Update(model);
@@ -118,11 +118,12 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
     #region IGuildChannel
 
     /// <inheritdoc />
-    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<IGuildUser>(null);
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options) =>
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode,
+        RequestOptions? options = null) =>
         AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
 
     #endregion
@@ -130,7 +131,7 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
     #region INestedChannel
 
     /// <inheritdoc />
-    async Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
+    async Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions? options = null)
     {
         if (CategoryId.HasValue && mode == CacheMode.AllowDownload)
             return await Guild.GetChannelAsync(CategoryId.Value, mode, options).ConfigureAwait(false) as ICategoryChannel;
@@ -142,7 +143,8 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
 
     #region IVoiceChannel
 
-    async Task<IReadOnlyCollection<IUser>> IVoiceChannel.GetConnectedUsersAsync(CacheMode mode, RequestOptions options)
+    async Task<IReadOnlyCollection<IUser>> IVoiceChannel.GetConnectedUsersAsync(CacheMode mode,
+        RequestOptions? options = null)
     {
         if (mode is CacheMode.AllowDownload)
             return await ChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false);

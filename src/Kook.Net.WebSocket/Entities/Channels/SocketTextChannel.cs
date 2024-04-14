@@ -8,7 +8,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based channel in a guild that can send and receive messages.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessageChannel
 {
     #region SocketTextChannel
@@ -80,11 +80,11 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     }
 
     /// <inheritdoc />
-    public virtual Task ModifyAsync(Action<ModifyTextChannelProperties> func, RequestOptions options = null)
+    public virtual Task ModifyAsync(Action<ModifyTextChannelProperties> func, RequestOptions? options = null)
         => ChannelHelper.ModifyAsync(this, Kook, func, options);
 
     /// <inheritdoc />
-    public virtual Task SyncPermissionsAsync(RequestOptions options = null)
+    public virtual Task SyncPermissionsAsync(RequestOptions? options = null)
         => ChannelHelper.SyncPermissionsAsync(this, Kook, options);
 
     private string DebuggerDisplay => $"{Name} ({Id}, Text)";
@@ -217,15 +217,15 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         => ChannelHelper.SendCardAsync(this, Kook, card, options, quote, ephemeralUser);
 
     /// <inheritdoc />
-    public async Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions options = null)
+    public async Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions? options = null)
         => await ChannelHelper.ModifyMessageAsync(this, messageId, func, Kook, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public Task DeleteMessageAsync(Guid messageId, RequestOptions options = null)
+    public Task DeleteMessageAsync(Guid messageId, RequestOptions? options = null)
         => ChannelHelper.DeleteMessageAsync(this, messageId, Kook, options);
 
     /// <inheritdoc />
-    public Task DeleteMessageAsync(IMessage message, RequestOptions options = null)
+    public Task DeleteMessageAsync(IMessage message, RequestOptions? options = null)
         => ChannelHelper.DeleteMessageAsync(this, message.Id, Kook, options);
 
     internal void AddMessage(SocketMessage msg)
@@ -239,16 +239,18 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     #region Invites
 
     /// <inheritdoc />
-    public async Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null)
+    public async Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions? options = null)
         => await ChannelHelper.GetInvitesAsync(this, Kook, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public async Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null, RequestOptions options = null)
+    public async Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null,
+        RequestOptions? options = null)
         => await ChannelHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public async Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited,
-        RequestOptions options = null)
+    public async Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800,
+        InviteMaxUses maxUses = InviteMaxUses.Unlimited,
+        RequestOptions? options = null)
         => await ChannelHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
 
     #endregion
@@ -274,7 +276,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     #region IGuildChannel
 
     /// <inheritdoc />
-    async Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    async Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
     {
         SocketGuildUser user = GetUser(id);
         if (user is not null || mode == CacheMode.CacheOnly) return user;
@@ -283,7 +285,8 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     }
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options) =>
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode,
+        RequestOptions? options = null) =>
         mode == CacheMode.AllowDownload
             ? ChannelHelper.GetUsersAsync(this, Guild, Kook, KookConfig.MaxUsersPerBatch, 1, options)
             : ImmutableArray.Create<IReadOnlyCollection<IGuildUser>>(Users).ToAsyncEnumerable();
@@ -293,37 +296,38 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     #region IMessageChannel
 
     /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(string path, string fileName,
-        AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(string path, string? fileName,
+        AttachmentType type = AttachmentType.File, IQuote? quote = null, IUser? ephemeralUser = null,
+        RequestOptions? options = null)
         => SendFileAsync(path, fileName, type, (Quote)quote, ephemeralUser, options);
 
     /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(Stream stream, string fileName,
-        AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(Stream stream, string? fileName,
+        AttachmentType type, IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null)
         => SendFileAsync(stream, fileName, type, (Quote)quote, ephemeralUser, options);
 
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(FileAttachment attachment,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        IQuote? quote, IUser? ephemeralUser = null, RequestOptions? options = null)
         => SendFileAsync(attachment, (Quote)quote, ephemeralUser, options);
 
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendTextAsync(string text,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        IQuote? quote, IUser? ephemeralUser = null, RequestOptions? options = null)
         => SendTextAsync(text, (Quote)quote, ephemeralUser, options);
 
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardAsync(ICard card,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        IQuote? quote, IUser? ephemeralUser = null, RequestOptions? options = null)
         => SendCardAsync(card, (Quote)quote, ephemeralUser, options);
 
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardsAsync(IEnumerable<ICard> cards,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        IQuote? quote, IUser? ephemeralUser = null, RequestOptions? options = null)
         => SendCardsAsync(cards, (Quote)quote, ephemeralUser, options);
 
     /// <inheritdoc />
-    async Task<IMessage> IMessageChannel.GetMessageAsync(Guid id, CacheMode mode, RequestOptions options)
+    async Task<IMessage> IMessageChannel.GetMessageAsync(Guid id, CacheMode mode, RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetMessageAsync(id, options).ConfigureAwait(false);
@@ -332,21 +336,24 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     }
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(int limit, CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(int limit,
+        CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null)
         => SocketChannelHelper.GetMessagesAsync(this, Kook, _messages, null, Direction.Before, limit, mode, options);
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit,
-        CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(Guid referenceMessageId,
+        Direction dir, int limit,
+        CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null)
         => SocketChannelHelper.GetMessagesAsync(this, Kook, _messages, referenceMessageId, dir, limit, mode, options);
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit,
-        CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(IMessage referenceMessage,
+        Direction dir, int limit,
+        CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null)
         => SocketChannelHelper.GetMessagesAsync(this, Kook, _messages, referenceMessage.Id, dir, limit, mode, options);
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IMessage>> ITextChannel.GetPinnedMessagesAsync(RequestOptions options)
+    async Task<IReadOnlyCollection<IMessage>> ITextChannel.GetPinnedMessagesAsync(RequestOptions? options)
         => await GetPinnedMessagesAsync(options).ConfigureAwait(false);
 
     #endregion
@@ -354,7 +361,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     #region INestedChannel
 
     /// <inheritdoc />
-    Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
+    Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions? options = null)
         => Task.FromResult(Category);
 
     #endregion

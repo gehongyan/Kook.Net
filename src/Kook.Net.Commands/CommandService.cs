@@ -549,7 +549,7 @@ public class CommandService : IDisposable
     public SearchResult Search(string input)
     {
         string searchInput = _caseSensitive ? input : input.ToLowerInvariant();
-        ImmutableArray<CommandMatch> matches = _map.GetCommands(searchInput).OrderByDescending(x => x.Command.Priority).ToImmutableArray();
+        ImmutableArray<CommandMatch> matches = [.._map.GetCommands(searchInput).OrderByDescending(x => x.Command.Priority)];
 
         if (matches.Length > 0)
             return SearchResult.FromSuccess(input, matches);

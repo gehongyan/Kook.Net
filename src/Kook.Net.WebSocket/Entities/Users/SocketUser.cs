@@ -9,7 +9,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based user.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public abstract class SocketUser : SocketEntity<ulong>, IUser
 {
     /// <inheritdoc />

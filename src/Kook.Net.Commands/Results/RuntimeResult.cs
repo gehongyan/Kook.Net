@@ -5,7 +5,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     Represents the runtime result of a command execution.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public abstract class RuntimeResult : IResult
 {
     /// <summary>

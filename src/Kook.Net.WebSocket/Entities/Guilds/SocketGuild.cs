@@ -19,7 +19,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based guild object.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 {
     #region SocketGuild
@@ -511,16 +511,17 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     #region General
 
     /// <inheritdoc />
-    public Task LeaveAsync(RequestOptions options = null)
+    public Task LeaveAsync(RequestOptions? options = null)
         => GuildHelper.LeaveAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetBoostSubscriptionsAsync(RequestOptions options = null)
+    public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetBoostSubscriptionsAsync(
+        RequestOptions? options = null)
         => SocketGuildHelper.GetBoostSubscriptionsAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetActiveBoostSubscriptionsAsync(
-        RequestOptions options = null)
+    public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>>
+        GetActiveBoostSubscriptionsAsync(RequestOptions? options = null)
         => SocketGuildHelper.GetActiveBoostSubscriptionsAsync(this, Kook, options);
 
     #endregion
@@ -540,19 +541,19 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         => GuildHelper.GetBanAsync(this, Kook, userId, options);
 
     /// <inheritdoc />
-    public Task AddBanAsync(IUser user, int pruneDays = 0, string reason = null, RequestOptions options = null)
+    public Task AddBanAsync(IUser user, int pruneDays = 0, string? reason = null, RequestOptions? options = null)
         => GuildHelper.AddBanAsync(this, Kook, user.Id, pruneDays, reason, options);
 
     /// <inheritdoc />
-    public Task AddBanAsync(ulong userId, int pruneDays = 0, string reason = null, RequestOptions options = null)
+    public Task AddBanAsync(ulong userId, int pruneDays = 0, string? reason = null, RequestOptions? options = null)
         => GuildHelper.AddBanAsync(this, Kook, userId, pruneDays, reason, options);
 
     /// <inheritdoc />
-    public Task RemoveBanAsync(IUser user, RequestOptions options = null)
+    public Task RemoveBanAsync(IUser user, RequestOptions? options = null)
         => GuildHelper.RemoveBanAsync(this, Kook, user.Id, options);
 
     /// <inheritdoc />
-    public Task RemoveBanAsync(ulong userId, RequestOptions options = null)
+    public Task RemoveBanAsync(ulong userId, RequestOptions? options = null)
         => GuildHelper.RemoveBanAsync(this, Kook, userId, options);
 
     #endregion
@@ -1218,23 +1219,23 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         => await CreateRoleAsync(name, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IBan>> IGuild.GetBansAsync(RequestOptions options)
+    async Task<IReadOnlyCollection<IBan>> IGuild.GetBansAsync(RequestOptions? options)
         => await GetBansAsync(options).ConfigureAwait(false);
 
     /// <inheritdoc/>
-    async Task<IBan> IGuild.GetBanAsync(IUser user, RequestOptions options)
+    async Task<IBan> IGuild.GetBanAsync(IUser user, RequestOptions? options)
         => await GetBanAsync(user, options).ConfigureAwait(false);
 
     /// <inheritdoc/>
-    async Task<IBan> IGuild.GetBanAsync(ulong userId, RequestOptions options)
+    async Task<IBan> IGuild.GetBanAsync(ulong userId, RequestOptions? options)
         => await GetBanAsync(userId, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    Task<IReadOnlyCollection<IGuildChannel>> IGuild.GetChannelsAsync(CacheMode mode, RequestOptions options)
+    Task<IReadOnlyCollection<IGuildChannel>> IGuild.GetChannelsAsync(CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<IReadOnlyCollection<IGuildChannel>>(Channels);
 
     /// <inheritdoc />
-    Task<IGuildChannel> IGuild.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
+    Task<IGuildChannel> IGuild.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<IGuildChannel>(GetChannel(id));
 
     /// <inheritdoc />
@@ -1246,11 +1247,11 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         => Task.FromResult<ITextChannel>(WelcomeChannel);
 
     /// <inheritdoc />
-    Task<IReadOnlyCollection<ITextChannel>> IGuild.GetTextChannelsAsync(CacheMode mode, RequestOptions options)
+    Task<IReadOnlyCollection<ITextChannel>> IGuild.GetTextChannelsAsync(CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<IReadOnlyCollection<ITextChannel>>(TextChannels);
 
     /// <inheritdoc />
-    Task<ITextChannel> IGuild.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions options)
+    Task<ITextChannel> IGuild.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<ITextChannel>(GetTextChannel(id));
 
     /// <inheritdoc />

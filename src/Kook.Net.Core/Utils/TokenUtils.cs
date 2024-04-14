@@ -26,6 +26,9 @@ public static class TokenUtils
     /// </remarks>
     internal const int StandardBotTokenLength = 35;
 
+    /// <summary>
+    ///     The padding character used in base64 encoding.
+    /// </summary>
     internal const char Base64Padding = '=';
 
     /// <summary>
@@ -54,15 +57,16 @@ public static class TokenUtils
                 "The supplied base64-encoded string was null or whitespace.");
 
         // do not pad if already contains padding characters
-        if (encodedBase64.IndexOf(Base64Padding) != -1) return encodedBase64;
+        if (encodedBase64.IndexOf(Base64Padding) != -1)
+            return encodedBase64;
 
         // based from https://stackoverflow.com/a/1228744
         int padding = (4 - encodedBase64.Length % 4) % 4;
         if (padding == 3)
             // can never have 3 characters of padding
             throw new FormatException("The provided base64 string is corrupt, as it requires an invalid amount of padding.");
-        else if (padding == 0) return encodedBase64;
-
+        if (padding == 0)
+            return encodedBase64;
         return encodedBase64.PadRight(encodedBase64.Length + padding, Base64Padding);
     }
 
@@ -128,7 +132,7 @@ public static class TokenUtils
     /// <summary>
     ///     The set of all characters that are not allowed inside of a token.
     /// </summary>
-    internal static readonly char[] IllegalTokenCharacters = { ' ', '\t', '\r', '\n' };
+    internal static readonly char[] IllegalTokenCharacters = [' ', '\t', '\r', '\n'];
 
     /// <summary>
     ///     Checks if the given token contains a whitespace or newline character

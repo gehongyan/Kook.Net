@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
@@ -6,7 +7,7 @@ namespace Kook;
 ///     A KMarkdown element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class KMarkdownElement : IElement, IEquatable<KMarkdownElement>
+public sealed class KMarkdownElement : IElement, IEquatable<KMarkdownElement>
 {
     internal KMarkdownElement(string content) => Content = content;
 
@@ -49,13 +50,13 @@ public class KMarkdownElement : IElement, IEquatable<KMarkdownElement>
     /// <remarks>If the object passes is an <see cref="KMarkdownElement"/>, <see cref="Equals(KMarkdownElement)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="KMarkdownElement"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="KMarkdownElement"/> is equal to the current <see cref="KMarkdownElement"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is KMarkdownElement kMarkdownElement && Equals(kMarkdownElement);
 
     /// <summary>Determines whether the specified <see cref="KMarkdownElement"/> is equal to the current <see cref="KMarkdownElement"/>.</summary>
     /// <param name="kMarkdownElement">The <see cref="KMarkdownElement"/> to compare with the current <see cref="KMarkdownElement"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="KMarkdownElement"/> is equal to the current <see cref="KMarkdownElement"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(KMarkdownElement kMarkdownElement)
+    public bool Equals([NotNullWhen(true)] KMarkdownElement? kMarkdownElement)
         => GetHashCode() == kMarkdownElement?.GetHashCode();
 
     /// <inheritdoc />

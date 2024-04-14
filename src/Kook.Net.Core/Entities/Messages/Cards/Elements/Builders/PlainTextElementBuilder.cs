@@ -1,11 +1,13 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Kook;
 
 /// <summary>
 ///     An element builder to build a <see cref="PlainTextElement"/>.
 /// </summary>
-public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElementBuilder>
+public sealed class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElementBuilder>
 {
-    private string _content;
+    private string? _content;
 
     /// <summary>
     ///     Gets the maximum plain text length allowed by Kook.
@@ -29,8 +31,8 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <param name="emoji"> A boolean value that indicates whether the shortcuts should be translated into emojis.</param>
     public PlainTextElementBuilder(string content, bool emoji = true)
     {
-        WithContent(content);
-        WithEmoji(emoji);
+        Content = content;
+        Emoji = emoji;
     }
 
     /// <summary>
@@ -53,12 +55,13 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <exception cref="ArgumentException" accessor="set">
     ///     The length of <paramref name="value"/> is greater than <see cref="MaxPlainTextLength"/>.
     /// </exception>
-    public string Content
+    public string? Content
     {
         get => _content;
         set
         {
-            if (value is null) throw new ArgumentException("The content cannot be null.", nameof(value));
+            if (value is null)
+                throw new ArgumentException("The content cannot be null.", nameof(value));
 
             if (value.Length > MaxPlainTextLength)
                 throw new ArgumentException(
@@ -121,8 +124,13 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <returns>
     ///     A <see cref="PlainTextElement"/> represents the built element object.
     /// </returns>
+    [MemberNotNull(nameof(Content))]
     public PlainTextElement Build()
-        => new(Content, Emoji);
+    {
+        if (Content is null)
+            throw new InvalidOperationException("The content cannot be null.");
+        return new PlainTextElement(Content, Emoji);
+    }
 
     /// <summary>
     ///     Initialized a new instance of the <see cref="PlainTextElementBuilder"/> class
@@ -140,10 +148,10 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <exception cref="ArgumentException" accessor="set">
     ///     The length of <paramref name="content"/> is greater than <see cref="MaxPlainTextLength"/>.
     /// </exception>
-    public static implicit operator PlainTextElementBuilder(string content) =>
-        new PlainTextElementBuilder().WithContent(content);
+    public static implicit operator PlainTextElementBuilder(string content) => new(content);
 
     /// <inheritdoc />
+    [MemberNotNull(nameof(Content))]
     IElement IElementBuilder.Build() => Build();
 
     /// <summary>
@@ -165,13 +173,13 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// </summary>
     /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="PlainTextElementBuilder"/>.</param>
     /// <returns></returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is PlainTextElementBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>.</summary>
     /// <param name="plainTextElementBuilder">The <see cref="PlainTextElementBuilder"/> to compare with the current <see cref="PlainTextElementBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(PlainTextElementBuilder plainTextElementBuilder)
+    public bool Equals([NotNullWhen(true)] PlainTextElementBuilder? plainTextElementBuilder)
     {
         if (plainTextElementBuilder is null) return false;
 

@@ -13,7 +13,7 @@ internal static class ModuleClassBuilder
             info.DeclaredMethods.Any(x => x.GetCustomAttribute<CommandAttribute>() != null)
             && info.GetCustomAttribute<DontAutoLoadAttribute>() == null;
 
-        List<TypeInfo> result = new();
+        List<TypeInfo> result = [];
 
         foreach (TypeInfo typeInfo in assembly.DefinedTypes)
         {
@@ -44,7 +44,7 @@ internal static class ModuleClassBuilder
         IEnumerable<TypeInfo> topLevelGroups =
             validTypes.Where(x => x.DeclaringType == null || !IsValidModuleDefinition(x.DeclaringType.GetTypeInfo()));
 
-        List<TypeInfo> builtTypes = new();
+        List<TypeInfo> builtTypes = [];
 
         Dictionary<Type, ModuleInfo> result = new();
 

@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     Represents a gradient color.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct GradientColor
 {
     /// <summary>

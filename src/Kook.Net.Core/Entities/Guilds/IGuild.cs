@@ -217,7 +217,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A task that represents the asynchronous leave operation.
     /// </returns>
-    Task LeaveAsync(RequestOptions options = null);
+    Task LeaveAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Gets all subscriptions for this guild.
@@ -227,7 +227,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous retrieval operation. The task result contains
     ///     a collection of <see cref="BoostSubscriptionMetadata"/>, each representing the subscriptions information.
     /// </returns>
-    Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetBoostSubscriptionsAsync(RequestOptions options = null);
+    Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetBoostSubscriptionsAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Gets subscriptions which are not expired for this guild.
@@ -238,7 +238,7 @@ public interface IGuild : IEntity<ulong>
     ///     a collection of <see cref="BoostSubscriptionMetadata"/> which are not expired,
     ///     each representing the subscriptions information.
     /// </returns>
-    Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetActiveBoostSubscriptionsAsync(RequestOptions options = null);
+    Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetActiveBoostSubscriptionsAsync(RequestOptions? options = null);
 
     #endregion
 
@@ -253,7 +253,7 @@ public interface IGuild : IEntity<ulong>
     ///     ban objects that this guild currently possesses, with each object containing the user banned and reason
     ///     behind the ban.
     /// </returns>
-    Task<IReadOnlyCollection<IBan>> GetBansAsync(RequestOptions options = null);
+    Task<IReadOnlyCollection<IBan>> GetBansAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a ban object for a banned user.
@@ -264,7 +264,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
     ///     contains the user information and the reason for the ban; <c>null</c> if the ban entry cannot be found.
     /// </returns>
-    Task<IBan> GetBanAsync(IUser user, RequestOptions options = null);
+    Task<IBan> GetBanAsync(IUser user, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a ban object for a banned user.
@@ -275,7 +275,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
     ///     contains the user information and the reason for the ban; <c>null</c> if the ban entry cannot be found.
     /// </returns>
-    Task<IBan> GetBanAsync(ulong userId, RequestOptions options = null);
+    Task<IBan> GetBanAsync(ulong userId, RequestOptions? options = null);
 
     /// <summary>
     ///     Bans the user from this guild and optionally prunes their recent messages.
@@ -288,7 +288,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A task that represents the asynchronous add operation for the ban.
     /// </returns>
-    Task AddBanAsync(IUser user, int pruneDays = 0, string reason = null, RequestOptions options = null);
+    Task AddBanAsync(IUser user, int pruneDays = 0, string? reason = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Bans the user from this guild and optionally prunes their recent messages.
@@ -301,7 +301,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A task that represents the asynchronous add operation for the ban.
     /// </returns>
-    Task AddBanAsync(ulong userId, int pruneDays = 0, string reason = null, RequestOptions options = null);
+    Task AddBanAsync(ulong userId, int pruneDays = 0, string? reason = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Unbans the user if they are currently banned.
@@ -311,7 +311,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A task that represents the asynchronous removal operation for the ban.
     /// </returns>
-    Task RemoveBanAsync(IUser user, RequestOptions options = null);
+    Task RemoveBanAsync(IUser user, RequestOptions? options = null);
 
     /// <summary>
     ///     Unbans the user if they are currently banned.
@@ -321,7 +321,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A task that represents the asynchronous removal operation for the ban.
     /// </returns>
-    Task RemoveBanAsync(ulong userId, RequestOptions options = null);
+    Task RemoveBanAsync(ulong userId, RequestOptions? options = null);
 
     #endregion
 
@@ -336,7 +336,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     generic channels found within this guild.
     /// </returns>
-    Task<IReadOnlyCollection<IGuildChannel>> GetChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IReadOnlyCollection<IGuildChannel>> GetChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a channel in this guild.
@@ -348,7 +348,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the generic channel
     ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
-    Task<IGuildChannel> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IGuildChannel> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a collection of all text channels in this guild.
@@ -359,7 +359,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     message channels found within this guild.
     /// </returns>
-    Task<IReadOnlyCollection<ITextChannel>> GetTextChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IReadOnlyCollection<ITextChannel>> GetTextChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a text channel in this guild.
@@ -371,7 +371,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the text channel
     ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
-    Task<ITextChannel> GetTextChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<ITextChannel> GetTextChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a collection of all voice channels in this guild.
@@ -382,7 +382,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     voice channels found within this guild.
     /// </returns>
-    Task<IReadOnlyCollection<IVoiceChannel>> GetVoiceChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IReadOnlyCollection<IVoiceChannel>> GetVoiceChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a voice channel in this guild.
@@ -394,7 +394,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the voice channel associated
     ///     with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
-    Task<IVoiceChannel> GetVoiceChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IVoiceChannel> GetVoiceChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a collection of all category channels in this guild.
@@ -406,7 +406,7 @@ public interface IGuild : IEntity<ulong>
     ///     category channels found within this guild.
     /// </returns>
     Task<IReadOnlyCollection<ICategoryChannel>> GetCategoryChannelsAsync(CacheMode mode = CacheMode.AllowDownload,
-        RequestOptions options = null);
+        RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the default text channel for this guild.
@@ -417,7 +417,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the default text channel for this guild;
     ///     <c>null</c> if none is found.
     /// </returns>
-    Task<ITextChannel> GetDefaultChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<ITextChannel> GetDefaultChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the welcome text channel for this guild.
@@ -428,7 +428,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the welcome text channel for this guild;
     ///     <c>null</c> if none is found.
     /// </returns>
-    Task<ITextChannel> GetWelcomeChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<ITextChannel> GetWelcomeChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Creates a new text channel in this guild.
@@ -440,7 +440,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     text channel.
     /// </returns>
-    Task<ITextChannel> CreateTextChannelAsync(string name, Action<CreateTextChannelProperties> func = null, RequestOptions options = null);
+    Task<ITextChannel> CreateTextChannelAsync(string name, Action<CreateTextChannelProperties>? func = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Creates a new voice channel in this guild.
@@ -452,7 +452,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     voice channel.
     /// </returns>
-    Task<IVoiceChannel> CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties> func = null, RequestOptions options = null);
+    Task<IVoiceChannel> CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties>? func = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Creates a new channel category in this guild.
@@ -464,8 +464,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     category channel.
     /// </returns>
-    Task<ICategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties> func = null,
-        RequestOptions options = null);
+    Task<ICategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties>? func = null, RequestOptions? options = null);
 
     #endregion
 
@@ -479,7 +478,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     invite, each representing information for an invite found within this guild.
     /// </returns>
-    Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null);
+    Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Creates a new invite to this channel.
@@ -491,8 +490,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous invite creation operation. The task result contains an invite
     ///     metadata object containing information for the created invite.
     /// </returns>
-    Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited,
-        RequestOptions options = null);
+    Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited, RequestOptions? options = null);
 
     /// <summary>
     ///     Creates a new invite to this channel.
@@ -504,7 +502,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous invite creation operation. The task result contains an invite
     ///     metadata object containing information for the created invite.
     /// </returns>
-    Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null, RequestOptions options = null);
+    Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null, RequestOptions? options = null);
 
     #endregion
 
@@ -527,7 +525,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created role.
     /// </returns>
-    Task<IRole> CreateRoleAsync(string name, RequestOptions options = null);
+    Task<IRole> CreateRoleAsync(string name, RequestOptions? options = null);
 
     #endregion
 
@@ -545,7 +543,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
     ///     users found within this guild.
     /// </returns>
-    Task<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a user from this guild.
@@ -564,7 +562,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the guild user
     ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
-    Task<IGuildUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IGuildUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the current user for this guild.
@@ -575,7 +573,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the currently logged-in
     ///     user within this guild.
     /// </returns>
-    Task<IGuildUser> GetCurrentUserAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IGuildUser> GetCurrentUserAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the owner of this guild.
@@ -585,7 +583,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the owner of this guild.
     /// </returns>
-    Task<IGuildUser> GetOwnerAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IGuildUser> GetOwnerAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Downloads all users for this guild if the current list is incomplete.
@@ -597,7 +595,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A task that represents the asynchronous download operation.
     /// </returns>
-    Task DownloadUsersAsync(RequestOptions options = null);
+    Task DownloadUsersAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Downloads all voice states for this guild.
@@ -609,7 +607,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A task that represents the asynchronous download operation.
     /// </returns>
-    Task DownloadVoiceStatesAsync(RequestOptions options = null);
+    Task DownloadVoiceStatesAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Downloads all boost subscriptions for this guild.
@@ -623,7 +621,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A task that represents the asynchronous download operation.
     /// </returns>
-    Task DownloadBoostSubscriptionsAsync(RequestOptions options = null);
+    Task DownloadBoostSubscriptionsAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a collection of users in this guild that the name or nickname contains the
@@ -641,7 +639,7 @@ public interface IGuild : IEntity<ulong>
     ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/> at <paramref name="func"/>.
     /// </returns>
     IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func,
-        int limit = KookConfig.MaxUsersPerBatch, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+        int limit = KookConfig.MaxUsersPerBatch, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 
@@ -655,7 +653,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of emotes found within the guild.
     /// </returns>
-    Task<IReadOnlyCollection<GuildEmote>> GetEmotesAsync(RequestOptions options = null);
+    Task<IReadOnlyCollection<GuildEmote>> GetEmotesAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a specific emote from this guild.
@@ -666,7 +664,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the emote found with the
     ///     specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
-    Task<GuildEmote> GetEmoteAsync(string id, RequestOptions options = null);
+    Task<GuildEmote> GetEmoteAsync(string id, RequestOptions? options = null);
 
     /// <summary>
     ///     Creates a new <see cref="GuildEmote"/> in this guild.
@@ -677,7 +675,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the created emote.
     /// </returns>
-    Task<GuildEmote> CreateEmoteAsync(string name, Image image, RequestOptions options = null);
+    Task<GuildEmote> CreateEmoteAsync(string name, Image image, RequestOptions? options = null);
 
     /// <summary>
     ///     Modifies an existing <see cref="GuildEmote"/> in this guild.
@@ -689,7 +687,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous modification operation. The task result contains the modified
     ///     emote.
     /// </returns>
-    Task ModifyEmoteNameAsync(GuildEmote emote, string name, RequestOptions options = null);
+    Task ModifyEmoteNameAsync(GuildEmote emote, string name, RequestOptions? options = null);
 
     /// <summary>
     ///     Deletes an existing <see cref="GuildEmote"/> from this guild.
@@ -699,7 +697,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A task that represents the asynchronous removal operation.
     /// </returns>
-    Task DeleteEmoteAsync(GuildEmote emote, RequestOptions options = null);
+    Task DeleteEmoteAsync(GuildEmote emote, RequestOptions? options = null);
 
     #endregion
 
@@ -712,7 +710,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="targetChannel">the channel where the user gets moved to.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>A task that represents the asynchronous operation for moving a user.</returns>
-    Task MoveUsersAsync(IEnumerable<IGuildUser> users, IVoiceChannel targetChannel, RequestOptions options = null);
+    Task MoveUsersAsync(IEnumerable<IGuildUser> users, IVoiceChannel targetChannel, RequestOptions? options = null);
 
     #endregion
 
@@ -727,7 +725,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the stream of the badge
     ///     associated with this guild.
     /// </returns>
-    Task<Stream> GetBadgeAsync(BadgeStyle style = BadgeStyle.GuildName, RequestOptions options = null);
+    Task<Stream> GetBadgeAsync(BadgeStyle style = BadgeStyle.GuildName, RequestOptions? options = null);
 
     #endregion
 }

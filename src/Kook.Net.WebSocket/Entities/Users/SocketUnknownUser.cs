@@ -8,7 +8,7 @@ namespace Kook.WebSocket;
 /// <remarks>
 ///     A user may not be recognized due to the user missing from the cache or failed to be recognized properly.
 /// </remarks>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketUnknownUser : SocketUser
 {
     /// <inheritdoc />

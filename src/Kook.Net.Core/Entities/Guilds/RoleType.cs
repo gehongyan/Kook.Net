@@ -21,7 +21,7 @@ public enum RoleType : ushort
     Booster = 2,
 
     /// <summary>
-    ///     Represents tht role is the default everyone role.
+    ///     Represents the role is the default everyone role.
     /// </summary>
     Everyone = 255
 }

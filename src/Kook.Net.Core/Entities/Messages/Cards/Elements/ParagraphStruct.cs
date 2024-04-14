@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
@@ -7,7 +8,7 @@ namespace Kook;
 ///     A paragraph struct that can be used in modules.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class ParagraphStruct : IElement, IEquatable<ParagraphStruct>
+public sealed class ParagraphStruct : IElement, IEquatable<ParagraphStruct>
 {
     internal ParagraphStruct(int columnCount, ImmutableArray<IElement> fields)
     {
@@ -59,13 +60,13 @@ public class ParagraphStruct : IElement, IEquatable<ParagraphStruct>
     /// <remarks>If the object passes is an <see cref="ParagraphStruct"/>, <see cref="Equals(ParagraphStruct)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="ParagraphStruct"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is ParagraphStruct paragraphStruct && Equals(paragraphStruct);
 
     /// <summary>Determines whether the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>.</summary>
     /// <param name="paragraphStruct">The <see cref="ParagraphStruct"/> to compare with the current <see cref="ParagraphStruct"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(ParagraphStruct paragraphStruct)
+    public bool Equals([NotNullWhen(true)] ParagraphStruct? paragraphStruct)
         => GetHashCode() == paragraphStruct?.GetHashCode();
 
     /// <inheritdoc />
@@ -73,10 +74,10 @@ public class ParagraphStruct : IElement, IEquatable<ParagraphStruct>
     {
         unchecked
         {
-            int hash = (int)2166136261;
+            int hash = (int) 2166136261;
             hash = (hash * 16777619) ^ (Type, ColumnCount).GetHashCode();
-            foreach (IElement element in Fields) hash = (hash * 16777619) ^ element.GetHashCode();
-
+            foreach (IElement element in Fields)
+                hash = (hash * 16777619) ^ element.GetHashCode();
             return hash;
         }
     }

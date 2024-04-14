@@ -10,7 +10,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     Represents a REST-based guild/server.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 {
     #region RestGuild
@@ -276,16 +276,17 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <inheritdoc />
-    public Task LeaveAsync(RequestOptions options = null)
+    public Task LeaveAsync(RequestOptions? options = null)
         => GuildHelper.LeaveAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetBoostSubscriptionsAsync(RequestOptions options = null)
+    public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetBoostSubscriptionsAsync(
+        RequestOptions? options = null)
         => GuildHelper.GetBoostSubscriptionsAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetActiveBoostSubscriptionsAsync(
-        RequestOptions options = null)
+    public Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>>
+        GetActiveBoostSubscriptionsAsync(RequestOptions? options = null)
         => GuildHelper.GetActiveBoostSubscriptionsAsync(this, Kook, options);
 
     #endregion
@@ -329,19 +330,19 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         => GuildHelper.GetBanAsync(this, Kook, userId, options);
 
     /// <inheritdoc />
-    public Task AddBanAsync(IUser user, int pruneDays = 0, string reason = null, RequestOptions options = null)
+    public Task AddBanAsync(IUser user, int pruneDays = 0, string? reason = null, RequestOptions? options = null)
         => GuildHelper.AddBanAsync(this, Kook, user.Id, pruneDays, reason, options);
 
     /// <inheritdoc />
-    public Task AddBanAsync(ulong userId, int pruneDays = 0, string reason = null, RequestOptions options = null)
+    public Task AddBanAsync(ulong userId, int pruneDays = 0, string? reason = null, RequestOptions? options = null)
         => GuildHelper.AddBanAsync(this, Kook, userId, pruneDays, reason, options);
 
     /// <inheritdoc />
-    public Task RemoveBanAsync(IUser user, RequestOptions options = null)
+    public Task RemoveBanAsync(IUser user, RequestOptions? options = null)
         => GuildHelper.RemoveBanAsync(this, Kook, user.Id, options);
 
     /// <inheritdoc />
-    public Task RemoveBanAsync(ulong userId, RequestOptions options = null)
+    public Task RemoveBanAsync(ulong userId, RequestOptions? options = null)
         => GuildHelper.RemoveBanAsync(this, Kook, userId, options);
 
     #endregion
@@ -810,19 +811,20 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IBan>> IGuild.GetBansAsync(RequestOptions options)
+    async Task<IReadOnlyCollection<IBan>> IGuild.GetBansAsync(RequestOptions? options)
         => await GetBansAsync(options).ConfigureAwait(false);
 
     /// <inheritdoc/>
-    async Task<IBan> IGuild.GetBanAsync(IUser user, RequestOptions options)
+    async Task<IBan> IGuild.GetBanAsync(IUser user, RequestOptions? options)
         => await GetBanAsync(user, options).ConfigureAwait(false);
 
     /// <inheritdoc/>
-    async Task<IBan> IGuild.GetBanAsync(ulong userId, RequestOptions options)
+    async Task<IBan> IGuild.GetBanAsync(ulong userId, RequestOptions? options)
         => await GetBanAsync(userId, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IGuildChannel>> IGuild.GetChannelsAsync(CacheMode mode, RequestOptions options)
+    async Task<IReadOnlyCollection<IGuildChannel>> IGuild.GetChannelsAsync(CacheMode mode,
+        RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetChannelsAsync(options).ConfigureAwait(false);
@@ -831,7 +833,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <inheritdoc />
-    async Task<IGuildChannel> IGuild.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
+    async Task<IGuildChannel> IGuild.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetChannelAsync(id, options).ConfigureAwait(false);
@@ -858,7 +860,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<ITextChannel>> IGuild.GetTextChannelsAsync(CacheMode mode, RequestOptions options)
+    async Task<IReadOnlyCollection<ITextChannel>> IGuild.GetTextChannelsAsync(CacheMode mode,
+        RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetTextChannelsAsync(options).ConfigureAwait(false);
@@ -867,7 +870,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <inheritdoc />
-    async Task<ITextChannel> IGuild.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions options)
+    async Task<ITextChannel> IGuild.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetTextChannelAsync(id, options).ConfigureAwait(false);

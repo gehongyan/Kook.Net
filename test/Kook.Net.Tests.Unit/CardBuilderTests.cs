@@ -37,7 +37,7 @@ public class CardBuilderTests
             Theme = CardTheme.Danger,
             Size = CardSize.Large,
             Color = Color.Red,
-            Modules = new List<IModuleBuilder> { new SectionModuleBuilder { Text = new PlainTextElementBuilder { Content = "content" } } }
+            Modules = [new SectionModuleBuilder { Text = new PlainTextElementBuilder { Content = "content" } }]
         };
         Assert.Equal(CardTheme.Danger, builder.Theme);
         Assert.Equal(CardTheme.Danger, builder.Build().Theme);

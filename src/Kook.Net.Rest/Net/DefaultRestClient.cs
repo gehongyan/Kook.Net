@@ -78,8 +78,9 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 
     public void SetCancellationToken(CancellationToken cancellationToken) => _cancellationToken = cancellationToken;
 
-    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancellationToken, string reason = null,
-        IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
+    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancellationToken,
+        string? reason = null,
+        IEnumerable<KeyValuePair<string, IEnumerable<string>>>? requestHeaders = null)
     {
         string uri = Path.Combine(_baseUrl, endpoint);
         using (HttpRequestMessage restRequest = new(method, uri))
@@ -94,8 +95,9 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         }
     }
 
-    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json, CancellationToken cancellationToken, string reason = null,
-        IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
+    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json,
+        CancellationToken cancellationToken, string? reason = null,
+        IEnumerable<KeyValuePair<string, IEnumerable<string>>>? requestHeaders = null)
     {
         string uri = Path.Combine(_baseUrl, endpoint);
         using HttpRequestMessage restRequest = new(method, uri);
@@ -113,9 +115,10 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
     }
 
     /// <exception cref="InvalidOperationException">Unsupported param type.</exception>
-    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartParams,
-        CancellationToken cancellationToken, string reason = null,
-        IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
+    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint,
+        IReadOnlyDictionary<string, object> multipartParams,
+        CancellationToken cancellationToken, string? reason = null,
+        IEnumerable<KeyValuePair<string, IEnumerable<string>>>? requestHeaders = null)
     {
         string uri = Path.Combine(_baseUrl, endpoint);
 

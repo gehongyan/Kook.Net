@@ -6,7 +6,7 @@ namespace Kook;
 /// <summary>
 ///     Represents a <see cref="Color"/> with an alpha channel.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct AlphaColor
 {
     /// <summary> Gets the max decimal value of an color with an alpha channel. </summary>

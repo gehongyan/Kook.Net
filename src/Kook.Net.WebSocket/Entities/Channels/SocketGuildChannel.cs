@@ -8,7 +8,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represent a WebSocket-based guild channel.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketGuildChannel : SocketChannel, IGuildChannel
 {
     private ImmutableArray<RolePermissionOverwrite> _rolePermissionOverwrites;
@@ -128,7 +128,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
         => SocketChannelHelper.UpdateAsync(this, options);
 
     /// <inheritdoc />
-    public Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions options = null)
+    public Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions? options = null)
         => ChannelHelper.ModifyAsync(this, Kook, func, options);
 
     /// <inheritdoc />
@@ -318,36 +318,39 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     ulong IGuildChannel.GuildId => Guild.Id;
 
     /// <inheritdoc />
-    async Task IGuildChannel.AddPermissionOverwriteAsync(IRole role, RequestOptions options)
+    async Task IGuildChannel.AddPermissionOverwriteAsync(IRole role, RequestOptions? options)
         => await AddPermissionOverwriteAsync(role, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task IGuildChannel.AddPermissionOverwriteAsync(IGuildUser user, RequestOptions options)
+    async Task IGuildChannel.AddPermissionOverwriteAsync(IGuildUser user, RequestOptions? options)
         => await AddPermissionOverwriteAsync(user, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task IGuildChannel.RemovePermissionOverwriteAsync(IRole role, RequestOptions options)
+    async Task IGuildChannel.RemovePermissionOverwriteAsync(IRole role, RequestOptions? options)
         => await RemovePermissionOverwriteAsync(role, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task IGuildChannel.RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions options)
+    async Task IGuildChannel.RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions? options)
         => await RemovePermissionOverwriteAsync(user, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task IGuildChannel.ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options)
+    async Task IGuildChannel.ModifyPermissionOverwriteAsync(IRole role,
+        Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options)
         => await ModifyPermissionOverwriteAsync(role, func, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task IGuildChannel.ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func,
-        RequestOptions options)
+    async Task IGuildChannel.ModifyPermissionOverwriteAsync(IGuildUser user,
+        Func<OverwritePermissions, OverwritePermissions> func,
+        RequestOptions? options)
         => await ModifyPermissionOverwriteAsync(user, func, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode,
+        RequestOptions? options = null)
         => ImmutableArray.Create<IReadOnlyCollection<IGuildUser>>(Users).ToAsyncEnumerable(); //Overridden in Text/Voice
 
     /// <inheritdoc />
-    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<IGuildUser>(GetUser(id)); //Overridden in Text/Voice
 
     /// <summary>
@@ -361,7 +364,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
     /// </returns>
-    Task<IUser> IGuildChannel.GetCreatorAsync(CacheMode mode, RequestOptions options)
+    Task<IUser> IGuildChannel.GetCreatorAsync(CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<IUser>(Creator);
 
     #endregion
@@ -369,11 +372,11 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     #region IChannel
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options = null)
         => ImmutableArray.Create<IReadOnlyCollection<IUser>>(Users).ToAsyncEnumerable(); //Overridden in Text/Voice
 
     /// <inheritdoc />
-    Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<IUser>(GetUser(id)); //Overridden in Text/Voice
 
     #endregion

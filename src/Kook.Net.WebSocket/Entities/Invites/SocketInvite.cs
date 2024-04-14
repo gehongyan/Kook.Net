@@ -7,7 +7,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based invite to a guild.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketInvite : SocketEntity<uint>, IInvite
 {
     /// <inheritdoc />

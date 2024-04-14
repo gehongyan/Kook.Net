@@ -13,7 +13,7 @@ public class ModifyGuildChannelProperties
     ///     This property defines the new name for this channel;
     ///     if this is <c>null</c>, the name will not be modified.
     /// </remarks>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     ///     Moves the channel to the following position. This property is one-based.

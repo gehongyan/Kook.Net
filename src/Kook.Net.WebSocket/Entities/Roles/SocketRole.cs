@@ -9,7 +9,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based role to be given to a guild user.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketRole : SocketEntity<uint>, IRole
 {
     #region SocketRole

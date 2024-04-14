@@ -343,7 +343,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <param name="iconUrl"> The icon URI of the game. </param>
     /// <param name="options"> The options to be used when sending the request. </param>
     /// <returns></returns>
-    public Task<RestGame> CreateGameAsync(string name, string processName, string iconUrl, RequestOptions options = null)
+    public Task<RestGame> CreateGameAsync(string name, string? processName = null, string? iconUrl = null, RequestOptions options = null)
         => ClientHelper.CreateGameAsync(this, name, processName, iconUrl, options);
 
     #endregion
@@ -351,7 +351,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     #region IKookClient
 
     /// <inheritdoc />
-    async Task<IGuild> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions options)
+    async Task<IGuild> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetGuildAsync(id, options).ConfigureAwait(false);
@@ -360,7 +360,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     }
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IGuild>> IKookClient.GetGuildsAsync(CacheMode mode, RequestOptions options)
+    async Task<IReadOnlyCollection<IGuild>> IKookClient.GetGuildsAsync(CacheMode mode, RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetGuildsAsync(options).ConfigureAwait(false);
@@ -369,7 +369,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     }
 
     /// <inheritdoc />
-    async Task<IUser> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    async Task<IUser> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetUserAsync(id, options).ConfigureAwait(false);
@@ -378,7 +378,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     }
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IUser>> IKookClient.GetFriendsAsync(CacheMode mode, RequestOptions options)
+    async Task<IReadOnlyCollection<IUser>> IKookClient.GetFriendsAsync(CacheMode mode, RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetFriendsAsync(options).ConfigureAwait(false);
@@ -387,7 +387,8 @@ public class KookRestClient : BaseKookClient, IKookClient
     }
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IFriendRequest>> IKookClient.GetFriendRequestsAsync(CacheMode mode, RequestOptions options)
+    async Task<IReadOnlyCollection<IFriendRequest>> IKookClient.GetFriendRequestsAsync(CacheMode mode,
+        RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetFriendRequestsAsync(options).ConfigureAwait(false);
@@ -396,7 +397,8 @@ public class KookRestClient : BaseKookClient, IKookClient
     }
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IUser>> IKookClient.GetBlockedUsersAsync(CacheMode mode, RequestOptions options)
+    async Task<IReadOnlyCollection<IUser>> IKookClient.GetBlockedUsersAsync(CacheMode mode,
+        RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetBlockedUsersAsync(options).ConfigureAwait(false);
@@ -405,7 +407,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     }
 
     /// <inheritdoc />
-    async Task<IChannel> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions options)
+    async Task<IChannel> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetChannelAsync(id, options).ConfigureAwait(false);
@@ -414,7 +416,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     }
 
     /// <inheritdoc />
-    async Task<IDMChannel> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions options)
+    async Task<IDMChannel> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetDMChannelAsync(chatCode, options).ConfigureAwait(false);
@@ -423,7 +425,8 @@ public class KookRestClient : BaseKookClient, IKookClient
     }
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IDMChannel>> IKookClient.GetDMChannelsAsync(CacheMode mode, RequestOptions options)
+    async Task<IReadOnlyCollection<IDMChannel>> IKookClient.GetDMChannelsAsync(CacheMode mode,
+        RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetDMChannelsAsync(options).ConfigureAwait(false);

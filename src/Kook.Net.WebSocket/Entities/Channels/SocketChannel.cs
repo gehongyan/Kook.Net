@@ -6,7 +6,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based channel.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public abstract class SocketChannel : SocketEntity<ulong>, IChannel, IUpdateable
 {
     #region SocketChannel
@@ -53,11 +53,11 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel, IUpdateable
     string IChannel.Name => null;
 
     /// <inheritdoc />
-    Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<IUser>(null); //Overridden
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options = null)
         => AsyncEnumerable.Empty<IReadOnlyCollection<IUser>>(); //Overridden
 
     #endregion

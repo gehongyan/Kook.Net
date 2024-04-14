@@ -22,7 +22,7 @@ public class KookConfig
     ///     Returns the Voice API version Kook.Net uses.
     /// </summary>
     /// <returns>
-    ///     An <see cref="int"/> representing the API version that Discord.Net uses to communicate with KOOK's
+    ///     An <see cref="int"/> representing the API version that Kook.Net uses to communicate with KOOK's
     ///     voice server.
     /// </returns>
     public const int VoiceAPIVersion = 1;
@@ -160,7 +160,7 @@ public class KookConfig
     /// <remarks>
     ///     This property is mutually exclusive with <see cref="RequestOptions.RatelimitCallback"/>.
     /// </remarks>
-    public Func<IRateLimitInfo, Task> DefaultRatelimitCallback { get; set; }
+    public Func<IRateLimitInfo, Task>? DefaultRatelimitCallback { get; set; }
 
     /// <summary>
     ///     Gets or sets the minimum log level severity that will be sent to the Log event.

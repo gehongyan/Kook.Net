@@ -96,11 +96,11 @@ public class ModuleBuilder
         Service = service;
         Parent = parent;
 
-        _commands = new List<CommandBuilder>();
-        _submodules = new List<ModuleBuilder>();
-        _preconditions = new List<PreconditionAttribute>();
-        _attributes = new List<Attribute>();
-        _aliases = new List<string>();
+        _commands = [];
+        _submodules = [];
+        _preconditions = [];
+        _attributes = [];
+        _aliases = [];
     }
 
     #endregion
@@ -118,7 +118,7 @@ public class ModuleBuilder
     {
         Kook.Preconditions.NotNull(primaryAlias, nameof(primaryAlias));
 
-        _aliases = new List<string> { primaryAlias };
+        _aliases = [primaryAlias];
     }
 
     /// <summary>

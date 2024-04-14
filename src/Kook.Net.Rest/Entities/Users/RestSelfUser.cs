@@ -6,7 +6,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     Represents the logged-in REST-based user.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestSelfUser : RestUser, ISelfUser
 {
     /// <inheritdoc />

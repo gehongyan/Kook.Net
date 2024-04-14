@@ -39,7 +39,7 @@ public interface IChannel : IEntity<ulong>
     /// <returns>
     ///     Paged collection of users.
     /// </returns>
-    IAsyncEnumerable<IReadOnlyCollection<IUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a user in this channel.
@@ -51,7 +51,7 @@ public interface IChannel : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains a user object that
     ///     represents the found user; <c>null</c> if none is found.
     /// </returns>
-    Task<IUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 }

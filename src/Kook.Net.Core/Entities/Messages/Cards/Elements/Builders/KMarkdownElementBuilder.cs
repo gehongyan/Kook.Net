@@ -1,11 +1,13 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Kook;
 
 /// <summary>
 ///     An element builder to build a <see cref="KMarkdownElement"/>.
 /// </summary>
-public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElementBuilder>
+public sealed class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElementBuilder>
 {
-    private string _content;
+    private string? _content;
 
     /// <summary>
     ///     Gets the maximum KMarkdown length allowed by Kook.
@@ -23,7 +25,10 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     ///     Initializes a new instance of the <see cref="KMarkdownElementBuilder"/> class.
     /// </summary>
     /// <param name="content"></param>
-    public KMarkdownElementBuilder(string content) => WithContent(content);
+    public KMarkdownElementBuilder(string content)
+    {
+        Content = content;
+    }
 
     /// <summary>
     ///     Gets the type of the element that this builder builds.
@@ -45,12 +50,13 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     /// <returns>
     ///     The content of the <see cref="KMarkdownElementBuilder"/>.
     /// </returns>
-    public string Content
+    public string? Content
     {
         get => _content;
         set
         {
-            if (value is null) throw new ArgumentException("The content cannot be null.", nameof(value));
+            if (value is null)
+                throw new ArgumentException("The content cannot be null.", nameof(value));
 
             if (value.Length > MaxKMarkdownLength)
                 throw new ArgumentException(
@@ -86,8 +92,13 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     /// <returns>
     ///     A <see cref="KMarkdownElement"/> represents the built element object.
     /// </returns>
+    [MemberNotNull(nameof(Content))]
     public KMarkdownElement Build()
-        => new(Content);
+    {
+        if (Content is null)
+            throw new InvalidOperationException("The content cannot be null.");
+        return new KMarkdownElement(Content);
+    }
 
     /// <summary>
     ///     Initialized a new instance of the <see cref="KMarkdownElementBuilder"/> class
@@ -105,10 +116,10 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     /// <exception cref="ArgumentException" accessor="set">
     ///     The length of <paramref name="content"/> is greater than <see cref="MaxKMarkdownLength"/>.
     /// </exception>
-    public static implicit operator KMarkdownElementBuilder(string content) =>
-        new KMarkdownElementBuilder().WithContent(content);
+    public static implicit operator KMarkdownElementBuilder(string content) => new(content);
 
     /// <inheritdoc />
+    [MemberNotNull(nameof(Content))]
     IElement IElementBuilder.Build() => Build();
 
     /// <summary>
@@ -130,16 +141,16 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     /// </summary>
     /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="KMarkdownElementBuilder"/>.</param>
     /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is KMarkdownElementBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>.</summary>
     /// <param name="kMarkdownElementBuilder">The <see cref="KMarkdownElementBuilder"/> to compare with the current <see cref="KMarkdownElementBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(KMarkdownElementBuilder kMarkdownElementBuilder)
+    public bool Equals([NotNullWhen(true)] KMarkdownElementBuilder? kMarkdownElementBuilder)
     {
-        if (kMarkdownElementBuilder is null) return false;
-
+        if (kMarkdownElementBuilder is null)
+            return false;
         return Type == kMarkdownElementBuilder.Type
             && Content == kMarkdownElementBuilder.Content;
     }

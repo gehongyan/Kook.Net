@@ -9,7 +9,7 @@ internal static class EnumTypeReader
     {
         Type baseType = Enum.GetUnderlyingType(type);
         ConstructorInfo constructor = typeof(EnumTypeReader<>).MakeGenericType(baseType).GetTypeInfo().DeclaredConstructors.First();
-        return (TypeReader)constructor.Invoke(new object[] { type, PrimitiveParsers.Get(baseType) });
+        return (TypeReader) constructor.Invoke([type, PrimitiveParsers.Get(baseType)]);
     }
 }
 

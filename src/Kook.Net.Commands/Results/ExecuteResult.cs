@@ -5,7 +5,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     Contains information of the command's overall execution result.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct ExecuteResult : IResult
 {
     /// <summary>

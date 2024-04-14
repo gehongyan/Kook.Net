@@ -5,7 +5,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents the WebSocket user's presence status. This may include their online status and their activity.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketPresence : IPresence
 {
     /// <inheritdoc />

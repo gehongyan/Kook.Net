@@ -26,7 +26,7 @@ public class RestGame : RestEntity<int>, IGame
     public bool RequireAdminPrivilege { get; private set; }
 
     /// <inheritdoc />
-    public string Icon { get; private set; }
+    public string? Icon { get; private set; }
 
     /// <inheritdoc />
     public IReadOnlyCollection<string> ProductNames => _productNames.ToReadOnlyCollection();
@@ -65,7 +65,7 @@ public class RestGame : RestEntity<int>, IGame
     public async Task DeleteAsync(RequestOptions options = null) => await GameHelper.DeleteAsync(this, Kook, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task<IGame> IGame.ModifyAsync(Action<GameProperties> func, RequestOptions options)
+    async Task<IGame> IGame.ModifyAsync(Action<GameProperties> func, RequestOptions? options)
         => await ModifyAsync(func, options);
 
     private string DebuggerDisplay => $"{Name} ({Id}, {GameType.ToString()})";

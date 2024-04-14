@@ -14,11 +14,11 @@ internal struct GatewayBucket
 
     static GatewayBucket()
     {
-        GatewayBucket[] buckets = new[]
-        {
+        GatewayBucket[] buckets =
+        [
             // Limit is 120/60s, but 3 will be reserved for heartbeats (2 for possible heartbeats in the same timeframe and a possible failure)
             new GatewayBucket(GatewayBucketType.Unbucketed, BucketId.Create(null, "<gateway-unbucketed>", null), 117, 60)
-        };
+        ];
 
         ImmutableDictionary<GatewayBucketType, GatewayBucket>.Builder builder = ImmutableDictionary.CreateBuilder<GatewayBucketType, GatewayBucket>();
         foreach (GatewayBucket bucket in buckets) builder.Add(bucket.Type, bucket);

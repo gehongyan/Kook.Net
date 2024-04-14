@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
@@ -6,9 +7,9 @@ namespace Kook;
 ///     An image element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class ImageElement : IElement, IEquatable<ImageElement>
+public sealed class ImageElement : IElement, IEquatable<ImageElement>
 {
-    internal ImageElement(string source, string alternative = null, ImageSize? size = null, bool? circle = null)
+    internal ImageElement(string source, string? alternative = null, ImageSize? size = null, bool? circle = null)
     {
         Source = source;
         Alternative = alternative;
@@ -38,7 +39,7 @@ public class ImageElement : IElement, IEquatable<ImageElement>
     /// <returns>
     ///     A string that represents the alternative text of the image.
     /// </returns>
-    public string Alternative { get; }
+    public string? Alternative { get; }
 
     /// <summary>
     ///     Gets the size of the image.
@@ -78,13 +79,13 @@ public class ImageElement : IElement, IEquatable<ImageElement>
     /// <remarks>If the object passes is an <see cref="ImageElement"/>, <see cref="Equals(ImageElement)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="ImageElement"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ImageElement"/> is equal to the current <see cref="ImageElement"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is ImageElement imageElement && Equals(imageElement);
 
     /// <summary>Determines whether the specified <see cref="ImageElement"/> is equal to the current <see cref="ImageElement"/>.</summary>
     /// <param name="imageElement">The <see cref="ImageElement"/> to compare with the current <see cref="ImageElement"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ImageElement"/> is equal to the current <see cref="ImageElement"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(ImageElement imageElement)
+    public bool Equals([NotNullWhen(true)] ImageElement? imageElement)
         => GetHashCode() == imageElement?.GetHashCode();
 
     /// <inheritdoc />

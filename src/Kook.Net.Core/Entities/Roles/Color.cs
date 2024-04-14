@@ -6,7 +6,7 @@ namespace Kook;
 /// <summary>
 ///     Represents a color used in Kook.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct Color
 {
     /// <summary> Gets the max decimal value of color. </summary>

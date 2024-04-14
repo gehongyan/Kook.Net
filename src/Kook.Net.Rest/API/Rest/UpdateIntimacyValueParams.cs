@@ -8,11 +8,11 @@ internal class UpdateIntimacyValueParams
     public ulong UserId { get; set; }
 
     [JsonPropertyName("score")]
-    public int Score { get; set; }
+    public int? Score { get; set; }
 
     [JsonPropertyName("social_info")]
-    public string SocialInfo { get; set; }
+    public string? SocialInfo { get; set; }
 
     [JsonPropertyName("img_id")]
-    public uint ImageId { get; set; }
+    public uint? ImageId { get; set; }
 }

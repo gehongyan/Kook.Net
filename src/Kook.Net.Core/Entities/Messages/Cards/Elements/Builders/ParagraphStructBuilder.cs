@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
@@ -8,7 +9,7 @@ namespace Kook;
 public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStructBuilder>
 {
     private int _columnCount;
-    private List<IElementBuilder> _fields;
+    private List<IElementBuilder> _fields = [];
 
     /// <summary>
     ///     Returns the maximum number of fields allowed by Kook.
@@ -30,16 +31,16 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     /// </summary>
     public ParagraphStructBuilder()
     {
-        Fields = new List<IElementBuilder>();
     }
 
     /// <summary>
     ///     Initializes a new <see cref="ParagraphStructBuilder"/> class.
     /// </summary>
-    public ParagraphStructBuilder(int columnCount, List<IElementBuilder> fields = null)
+    public ParagraphStructBuilder(int columnCount, List<IElementBuilder>? fields = null)
     {
-        WithColumnCount(columnCount);
-        Fields = fields ?? new List<IElementBuilder>();
+        ColumnCount = columnCount;
+        if (fields != null)
+            Fields = fields;
     }
 
     /// <summary>
@@ -62,7 +63,8 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     public int ColumnCount
     {
         get => _columnCount;
-        set =>
+        set
+        {
             _columnCount = value switch
             {
                 < MinColumnCount => throw new ArgumentException(
@@ -71,6 +73,7 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
                     $"Column must be less than or equal to {MaxColumnCount}.", nameof(ColumnCount)),
                 _ => value
             };
+        }
     }
 
     /// <summary>
@@ -103,7 +106,7 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
                     $"Field count must be less than or equal to {MaxFieldCount}.",
                     nameof(Fields));
 
-            if (value.Any(field => field is not PlainTextElementBuilder && field is not KMarkdownElementBuilder))
+            if (value.Exists(field => field is not PlainTextElementBuilder && field is not KMarkdownElementBuilder))
                 throw new ArgumentException(
                     "The elements of fields in a paragraph must be PlainTextElementBuilder or KMarkdownElementBuilder.",
                     nameof(Fields));
@@ -185,11 +188,11 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public ParagraphStructBuilder AddField<T>(Action<T> action = null)
+    public ParagraphStructBuilder AddField<T>(Action<T> action)
         where T : IElementBuilder, new()
     {
         T field = new();
-        action?.Invoke(field);
+        action.Invoke(field);
         switch (field)
         {
             case PlainTextElementBuilder plainText:
@@ -214,7 +217,7 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     ///     A <see cref="ParagraphStruct"/> represents the built element object.
     /// </returns>
     public ParagraphStruct Build() =>
-        new(ColumnCount, Fields.Select(f => f.Build()).ToImmutableArray());
+        new(ColumnCount, [..Fields.Select(f => f.Build())]);
 
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
@@ -238,21 +241,24 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     /// </summary>
     /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="ParagraphStructBuilder"/>. </param>
     /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="ParagraphStructBuilder"/>; otherwise, <c>false</c>. </returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is ParagraphStructBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="ParagraphStructBuilder"/> is equal to the current <see cref="ParagraphStructBuilder"/>.</summary>
     /// <param name="paragraphStructBuilder">The <see cref="ParagraphStructBuilder"/> to compare with the current <see cref="ParagraphStructBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ParagraphStructBuilder"/> is equal to the current <see cref="ParagraphStructBuilder"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(ParagraphStructBuilder paragraphStructBuilder)
+    public bool Equals([NotNullWhen(true)] ParagraphStructBuilder? paragraphStructBuilder)
     {
-        if (paragraphStructBuilder is null) return false;
+        if (paragraphStructBuilder is null)
+            return false;
 
-        if (Fields.Count != paragraphStructBuilder.Fields.Count) return false;
+        if (Fields.Count != paragraphStructBuilder.Fields.Count)
+            return false;
 
-        for (int i = 0; i < Fields.Count; i++)
-            if (Fields[i] != paragraphStructBuilder.Fields[i])
-                return false;
+        if (Fields
+            .Zip(paragraphStructBuilder.Fields, (x, y) => (x, y))
+            .Any(pair => pair.x != pair.y))
+            return false;
 
         return Type == paragraphStructBuilder.Type
             && ColumnCount == paragraphStructBuilder.ColumnCount;

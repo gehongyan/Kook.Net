@@ -19,10 +19,9 @@ internal static class Permissions
     {
         if (HasFlag(allow, flag))
             return PermValue.Allow;
-        else if (HasFlag(deny, flag))
+        if (HasFlag(deny, flag))
             return PermValue.Deny;
-        else
-            return PermValue.Inherit;
+        return PermValue.Inherit;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -125,7 +124,7 @@ internal static class Permissions
 
         ulong mask = ChannelPermissions.All(channel).RawValue;
         if (GetValue(guildPermissions, GuildPermission.Administrator)) //Includes owner
-            resolvedPermissions = mask;                                //Owners and administrators always have all permissions
+            resolvedPermissions = mask;                                    //Owners and administrators always have all permissions
         else
         {
             //Start with this user's guild permissions

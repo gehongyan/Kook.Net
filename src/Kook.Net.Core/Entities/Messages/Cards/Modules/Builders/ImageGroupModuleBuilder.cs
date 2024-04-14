@@ -17,7 +17,7 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
     /// <summary>
     ///     Initializes a new instance of the <see cref="ImageGroupModuleBuilder"/> class.
     /// </summary>
-    public ImageGroupModuleBuilder() => Elements = new List<ImageElementBuilder>();
+    public ImageGroupModuleBuilder() => Elements = [];
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ImageGroupModuleBuilder"/> class.

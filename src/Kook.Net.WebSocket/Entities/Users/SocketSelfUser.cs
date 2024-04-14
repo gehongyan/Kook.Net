@@ -7,7 +7,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents the logged-in WebSocket-based user.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketSelfUser : SocketUser, ISelfUser
 {
     internal override SocketGlobalUser GlobalUser { get; }

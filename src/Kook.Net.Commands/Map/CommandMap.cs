@@ -4,7 +4,7 @@ internal class CommandMap
 {
     private readonly CommandService _service;
     private readonly CommandMapNode _root;
-    private static readonly string[] BlankAliases = { "" };
+    private static readonly string[] BlankAliases = [""];
 
     public CommandMap(CommandService service)
     {

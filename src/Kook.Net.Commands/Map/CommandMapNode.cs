@@ -5,7 +5,7 @@ namespace Kook.Commands;
 
 internal class CommandMapNode
 {
-    private static readonly char[] WhitespaceChars = { ' ', '\r', '\n' };
+    private static readonly char[] WhitespaceChars = [' ', '\r', '\n'];
 
     private readonly ConcurrentDictionary<string, CommandMapNode> _nodes;
     private readonly string _name;

@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     Represents a tag found in <see cref="IMessage"/>.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Tag<T> : ITag
 {
     /// <inheritdoc />

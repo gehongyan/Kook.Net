@@ -37,7 +37,7 @@ public static class MentionUtils
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
 
-    private const char SanitizeChar = '\x200b';
+    private const char SanitizeChar = '\u200b';
 
     internal static string KMarkdownMentionUser(string id) => $"(met){id}(met)";
 
@@ -100,7 +100,6 @@ public static class MentionUtils
     /// </returns>
     public static string PlainTextMentionRole(uint id) => PlainTextMentionRole(id.ToString());
 
-
     /// <summary>
     ///     Parses a provided user mention string.
     /// </summary>
@@ -109,7 +108,8 @@ public static class MentionUtils
     /// <exception cref="ArgumentException">Invalid mention format.</exception>
     public static ulong ParseUser(string text, TagMode tagMode)
     {
-        if (TryParseUser(text, out ulong id, tagMode)) return id;
+        if (TryParseUser(text, out ulong id, tagMode))
+            return id;
 
         throw new ArgumentException("Invalid mention format.", nameof(text));
     }
@@ -144,7 +144,8 @@ public static class MentionUtils
     /// <exception cref="ArgumentException">Invalid mention format.</exception>
     public static ulong ParseChannel(string text, TagMode tagMode)
     {
-        if (TryParseChannel(text, out ulong id, tagMode)) return id;
+        if (TryParseChannel(text, out ulong id, tagMode))
+            return id;
 
         throw new ArgumentException("Invalid mention format.", nameof(text));
     }
@@ -203,11 +204,7 @@ public static class MentionUtils
     internal static string Resolve(IMessage msg, int startIndex, TagHandling userHandling, TagHandling channelHandling,
         TagHandling roleHandling, TagHandling everyoneHandling, TagHandling emojiHandling)
     {
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
         StringBuilder text = new(msg.Content[startIndex..]);
-#else
-        var text = new StringBuilder(msg.Content.Substring(startIndex));
-#endif
         IReadOnlyCollection<ITag> tags = msg.Tags;
         int indexOffset = -startIndex;
 
@@ -215,38 +212,41 @@ public static class MentionUtils
         {
             if (tag.Index < startIndex) continue;
 
-            string newText = "";
+            string newText;
             switch (tag.Type)
             {
                 case TagType.UserMention:
-                    if (userHandling == TagHandling.Ignore) continue;
-
+                    if (userHandling == TagHandling.Ignore)
+                        continue;
                     newText = ResolveUserMention(tag, userHandling);
                     break;
                 case TagType.ChannelMention:
-                    if (channelHandling == TagHandling.Ignore) continue;
-
+                    if (channelHandling == TagHandling.Ignore)
+                        continue;
                     newText = ResolveChannelMention(tag, channelHandling);
                     break;
                 case TagType.RoleMention:
-                    if (roleHandling == TagHandling.Ignore) continue;
-
+                    if (roleHandling == TagHandling.Ignore)
+                        continue;
                     newText = ResolveRoleMention(tag, roleHandling);
                     break;
                 case TagType.EveryoneMention:
-                    if (everyoneHandling == TagHandling.Ignore) continue;
-
+                    if (everyoneHandling == TagHandling.Ignore)
+                        continue;
                     newText = ResolveEveryoneMention(tag, everyoneHandling);
                     break;
                 case TagType.HereMention:
-                    if (everyoneHandling == TagHandling.Ignore) continue;
-
+                    if (everyoneHandling == TagHandling.Ignore)
+                        continue;
                     newText = ResolveHereMention(tag, everyoneHandling);
                     break;
                 case TagType.Emoji:
-                    if (emojiHandling == TagHandling.Ignore) continue;
-
+                    if (emojiHandling == TagHandling.Ignore)
+                        continue;
                     newText = ResolveEmoji(tag, emojiHandling);
+                    break;
+                default:
+                    newText = string.Empty;
                     break;
             }
 
@@ -260,156 +260,96 @@ public static class MentionUtils
 
     internal static string ResolveUserMention(ITag tag, TagHandling mode)
     {
-        if (mode != TagHandling.Remove)
-        {
-            IUser user = tag.Value as IUser;
-            IGuildUser guildUser = user as IGuildUser;
-            switch (mode)
-            {
-                case TagHandling.Name:
-                    if (user != null)
-                        return $"@{guildUser?.Nickname ?? user?.Username}";
-                    else
-                        return "";
-                case TagHandling.NameNoPrefix:
-                    if (user != null)
-                        return $"{guildUser?.Nickname ?? user?.Username}";
-                    else
-                        return "";
-                case TagHandling.FullName:
-                    if (user != null)
-                        return $"@{user.Username}#{user.IdentifyNumber}";
-                    else
-                        return "";
-                case TagHandling.FullNameNoPrefix:
-                    if (user != null)
-                        return $"{user.Username}#{user.IdentifyNumber}";
-                    else
-                        return "";
-                case TagHandling.Sanitize:
-                    return KMarkdownMentionUser($"{SanitizeChar}{tag.Key}");
-            }
-        }
+        if (mode == TagHandling.Remove)
+            return string.Empty;
+        if (tag.Value is not IUser user)
+            return string.Empty;
 
-        return "";
+        IGuildUser? guildUser = user as IGuildUser;
+        return mode switch
+        {
+            TagHandling.Name => $"@{guildUser?.Nickname ?? user.Username}",
+            TagHandling.NameNoPrefix => $"{guildUser?.Nickname ?? user.Username}",
+            TagHandling.FullName => $"@{user.Username}#{user.IdentifyNumber}",
+            TagHandling.FullNameNoPrefix => $"{user.Username}#{user.IdentifyNumber}",
+            TagHandling.Sanitize => KMarkdownMentionUser($"{SanitizeChar}{tag.Key}"),
+            _ => string.Empty
+        };
     }
 
     internal static string ResolveChannelMention(ITag tag, TagHandling mode)
     {
-        if (mode != TagHandling.Remove)
+        if (mode == TagHandling.Remove)
+            return string.Empty;
+        if (tag.Value is not IChannel channel)
+            return string.Empty;
+        return mode switch
         {
-            IChannel channel = tag.Value as IChannel;
-            switch (mode)
-            {
-                case TagHandling.Name:
-                case TagHandling.FullName:
-                    if (channel != null)
-                        return $"#{channel.Name}";
-                    else
-                        return "";
-                case TagHandling.NameNoPrefix:
-                case TagHandling.FullNameNoPrefix:
-                    if (channel != null)
-                        return $"{channel.Name}";
-                    else
-                        return "";
-                case TagHandling.Sanitize:
-                    return KMarkdownMentionChannel($"{SanitizeChar}{tag.Key}");
-            }
-        }
-
-        return "";
+            TagHandling.Name or TagHandling.FullName => $"#{channel.Name}",
+            TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => $"{channel.Name}",
+            TagHandling.Sanitize => KMarkdownMentionChannel($"{SanitizeChar}{tag.Key}"),
+            _ => string.Empty
+        };
     }
 
     internal static string ResolveRoleMention(ITag tag, TagHandling mode)
     {
-        if (mode != TagHandling.Remove)
+        if (mode == TagHandling.Remove)
+            return string.Empty;
+        if (tag.Value is not IRole role)
+            return string.Empty;
+        return mode switch
         {
-            IRole role = tag.Value as IRole;
-            switch (mode)
-            {
-                case TagHandling.Name:
-                case TagHandling.FullName:
-                    if (role != null)
-                        return $"@{role.Name}";
-                    else
-                        return "";
-                case TagHandling.NameNoPrefix:
-                case TagHandling.FullNameNoPrefix:
-                    if (role != null)
-                        return $"{role.Name}";
-                    else
-                        return "";
-                case TagHandling.Sanitize:
-                    return KMarkdownMentionRole($"{SanitizeChar}{tag.Key}");
-            }
-        }
-
-        return "";
+            TagHandling.Name or TagHandling.FullName => $"@{role.Name}",
+            TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => $"{role.Name}",
+            TagHandling.Sanitize => KMarkdownMentionRole($"{SanitizeChar}{tag.Key}"),
+            _ => string.Empty
+        };
     }
 
     internal static string ResolveEveryoneMention(ITag tag, TagHandling mode)
     {
-        if (mode != TagHandling.Remove)
-            switch (mode)
-            {
-                case TagHandling.Name:
-                case TagHandling.FullName:
-                    return "@全体成员";
-                case TagHandling.NameNoPrefix:
-                case TagHandling.FullNameNoPrefix:
-                    return "全体成员";
-                case TagHandling.Sanitize:
-                    return $"@{SanitizeChar}全体成员";
-            }
-
-        return "";
+        if (mode == TagHandling.Remove)
+            return string.Empty;
+        return mode switch
+        {
+            TagHandling.Name or TagHandling.FullName => "@全体成员",
+            TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => "全体成员",
+            TagHandling.Sanitize => $"@{SanitizeChar}全体成员",
+            _ => string.Empty
+        };
     }
 
     internal static string ResolveHereMention(ITag tag, TagHandling mode)
     {
-        if (mode != TagHandling.Remove)
-            switch (mode)
-            {
-                case TagHandling.Name:
-                case TagHandling.FullName:
-                    return "@在线成员";
-                case TagHandling.NameNoPrefix:
-                case TagHandling.FullNameNoPrefix:
-                    return "在线成员";
-                case TagHandling.Sanitize:
-                    return $"@{SanitizeChar}在线成员";
-            }
-
-        return "";
+        if (mode == TagHandling.Remove)
+            return string.Empty;
+        return mode switch
+        {
+            TagHandling.Name or TagHandling.FullName => "@在线成员",
+            TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => "在线成员",
+            TagHandling.Sanitize => $"@{SanitizeChar}在线成员",
+            _ => ""
+        };
     }
 
     internal static string ResolveEmoji(ITag tag, TagHandling mode)
     {
-        if (mode != TagHandling.Remove)
+        if (mode == TagHandling.Remove)
+            return string.Empty;
+        if (tag.Value is not Emote emoji)
+            return string.Empty;
+
+        //Remove if its name contains any bad chars (prevents a few tag exploits)
+        if (emoji.Name.Any(c => !char.IsLetterOrDigit(c) && c != '_' && c != '-'))
+            return string.Empty;
+
+        return mode switch
         {
-            Emote emoji = (Emote)tag.Value;
-
-            //Remove if its name contains any bad chars (prevents a few tag exploits)
-            for (int i = 0; i < emoji.Name.Length; i++)
-            {
-                char c = emoji.Name[i];
-                if (!char.IsLetterOrDigit(c) && c != '_' && c != '-') return "";
-            }
-
-            switch (mode)
-            {
-                case TagHandling.Name:
-                case TagHandling.FullName:
-                    return $":{emoji.Name}:";
-                case TagHandling.NameNoPrefix:
-                case TagHandling.FullNameNoPrefix:
-                    return $"{emoji.Name}";
-                case TagHandling.Sanitize:
-                    return $"[{SanitizeChar}{emoji.Name}{SanitizeChar}:{emoji.Id}]";
-            }
-        }
-
-        return "";
+            TagHandling.Name or TagHandling.FullName => $":{emoji.Name}:",
+            TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => $"{emoji.Name}",
+            TagHandling.Sanitize => $"[{SanitizeChar}{emoji.Name}{SanitizeChar}:{emoji.Id}]",
+            _ => ""
+        };
     }
 }

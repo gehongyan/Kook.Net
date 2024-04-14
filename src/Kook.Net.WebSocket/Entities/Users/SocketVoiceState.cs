@@ -5,7 +5,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket user's voice connection status.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct SocketVoiceState : IVoiceState
 {
     /// <summary>

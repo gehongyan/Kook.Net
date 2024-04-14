@@ -65,7 +65,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         => SocketChannelHelper.UpdateAsync(this, options);
 
     /// <inheritdoc />
-    public Task CloseAsync(RequestOptions options = null)
+    public Task CloseAsync(RequestOptions? options = null)
         => ChannelHelper.DeleteDMChannelAsync(this, Kook, options);
 
     #endregion
@@ -244,15 +244,15 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         => ChannelHelper.SendDirectCardAsync(this, Kook, card, options, quote);
 
     /// <inheritdoc />
-    public async Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions options = null)
+    public async Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions? options = null)
         => await ChannelHelper.ModifyDirectMessageAsync(this, messageId, func, Kook, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public Task DeleteMessageAsync(Guid messageId, RequestOptions options = null)
+    public Task DeleteMessageAsync(Guid messageId, RequestOptions? options = null)
         => ChannelHelper.DeleteDirectMessageAsync(this, messageId, Kook, options);
 
     /// <inheritdoc />
-    public Task DeleteMessageAsync(IMessage message, RequestOptions options = null)
+    public Task DeleteMessageAsync(IMessage message, RequestOptions? options = null)
         => ChannelHelper.DeleteDirectMessageAsync(this, message.Id, Kook, options);
 
     internal void AddMessage(SocketMessage msg)
@@ -323,37 +323,37 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     #region IMessageChannel
 
     /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendFileAsync(string path, string fileName,
-        AttachmentType type, IQuote quote, RequestOptions options)
+    Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendFileAsync(string path, string? fileName,
+        AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null)
         => SendFileAsync(path, fileName, type, (Quote)quote, options);
 
     /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendFileAsync(Stream stream, string fileName,
-        AttachmentType type, IQuote quote, RequestOptions options)
+    Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendFileAsync(Stream stream, string? fileName,
+        AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null)
         => SendFileAsync(stream, fileName, type, (Quote)quote, options);
 
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendFileAsync(FileAttachment attachment,
-        IQuote quote, RequestOptions options)
+        IQuote? quote, RequestOptions? options = null)
         => SendFileAsync(attachment, (Quote)quote, options);
 
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendTextAsync(string text,
-        IQuote quote, RequestOptions options)
+        IQuote? quote, RequestOptions? options = null)
         => SendTextAsync(text, (Quote)quote, options);
 
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendCardAsync(ICard card,
-        IQuote quote, RequestOptions options)
+        IQuote? quote, RequestOptions? options = null)
         => SendCardAsync(card, (Quote)quote, options);
 
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendCardsAsync(IEnumerable<ICard> cards,
-        IQuote quote, RequestOptions options)
+        IQuote? quote, RequestOptions? options = null)
         => SendCardsAsync(cards, (Quote)quote, options);
 
     /// <inheritdoc />
-    async Task<IMessage> IMessageChannel.GetMessageAsync(Guid id, CacheMode mode, RequestOptions options)
+    async Task<IMessage> IMessageChannel.GetMessageAsync(Guid id, CacheMode mode, RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetMessageAsync(id, options).ConfigureAwait(false);
@@ -362,47 +362,51 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     }
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(int limit, CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(int limit,
+        CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null)
         => mode == CacheMode.CacheOnly ? null : GetMessagesAsync(limit, options);
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(Guid referenceMessageId, Direction dir, int limit,
-        CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(Guid referenceMessageId,
+        Direction dir, int limit,
+        CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null)
         => mode == CacheMode.CacheOnly ? null : GetMessagesAsync(referenceMessageId, dir, limit, options);
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(IMessage referenceMessage, Direction dir, int limit,
-        CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IMessage>> IMessageChannel.GetMessagesAsync(IMessage referenceMessage,
+        Direction dir, int limit,
+        CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null)
         => mode == CacheMode.CacheOnly ? null : GetMessagesAsync(referenceMessage.Id, dir, limit, options);
 
     /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(string path, string fileName,
-        AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(string path, string? fileName,
+        AttachmentType type = AttachmentType.File, IQuote? quote = null, IUser? ephemeralUser = null,
+        RequestOptions? options = null)
         => SendFileAsync(path, fileName, type, quote, options);
 
     /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(Stream stream, string fileName,
-        AttachmentType type, IQuote quote, IUser ephemeralUser, RequestOptions options)
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(Stream stream, string? fileName,
+        AttachmentType type, IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null)
         => SendFileAsync(stream, fileName, type, quote, options);
 
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendFileAsync(FileAttachment attachment,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        IQuote? quote, IUser? ephemeralUser = null, RequestOptions? options = null)
         => SendFileAsync(attachment, quote, options);
 
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendTextAsync(string text,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        IQuote? quote, IUser? ephemeralUser = null, RequestOptions? options = null)
         => SendTextAsync(text, quote, options);
 
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardsAsync(IEnumerable<ICard> cards,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        IQuote? quote, IUser? ephemeralUser = null, RequestOptions? options = null)
         => SendCardsAsync(cards, quote, options);
 
     /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardAsync(ICard card,
-        IQuote quote, IUser ephemeralUser, RequestOptions options)
+        IQuote? quote, IUser? ephemeralUser = null, RequestOptions? options = null)
         => SendCardAsync(card, quote, options);
 
     #endregion
@@ -413,11 +417,11 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     string IChannel.Name => $"@{Recipient}";
 
     /// <inheritdoc />
-    Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<IUser>(GetUser(id));
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options = null)
         => ImmutableArray.Create<IReadOnlyCollection<IUser>>(Users).ToAsyncEnumerable();
 
     #endregion

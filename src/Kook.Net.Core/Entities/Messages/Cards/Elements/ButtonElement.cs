@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
@@ -6,9 +7,9 @@ namespace Kook;
 ///     A button element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class ButtonElement : IElement, IEquatable<ButtonElement>
+public sealed class ButtonElement : IElement, IEquatable<ButtonElement>
 {
-    internal ButtonElement(ButtonTheme theme, string value, ButtonClickEventType click, IElement text)
+    internal ButtonElement(ButtonTheme theme, string? value, ButtonClickEventType click, IElement text)
     {
         Theme = theme;
         Value = value;
@@ -38,7 +39,7 @@ public class ButtonElement : IElement, IEquatable<ButtonElement>
     /// <returns>
     ///     A string value that represents the value of the button.
     /// </returns>
-    public string Value { get; }
+    public string? Value { get; }
 
     /// <summary>
     ///     Gets the event type fired when the button is clicked.
@@ -80,13 +81,13 @@ public class ButtonElement : IElement, IEquatable<ButtonElement>
     /// <remarks>If the object passes is an <see cref="ButtonElement"/>, <see cref="Equals(ButtonElement)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="ButtonElement"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is ButtonElement buttonElement && Equals(buttonElement);
 
     /// <summary>Determines whether the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>.</summary>
     /// <param name="buttonElement">The <see cref="ButtonElement"/> to compare with the current <see cref="ButtonElement"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(ButtonElement buttonElement)
+    public bool Equals([NotNullWhen(true)] ButtonElement? buttonElement)
         => GetHashCode() == buttonElement?.GetHashCode();
 
     /// <inheritdoc />
@@ -94,7 +95,7 @@ public class ButtonElement : IElement, IEquatable<ButtonElement>
     {
         unchecked
         {
-            int hash = (int)2166136261;
+            int hash = (int) 2166136261;
             hash = (hash * 16777619) ^ (Type, Theme, Value, Click).GetHashCode();
             hash = (hash * 16777619) ^ Text.GetHashCode();
             return hash;

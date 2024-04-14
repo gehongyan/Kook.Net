@@ -5,7 +5,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     Represents the result of a grouped precondition check.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class PreconditionGroupResult : PreconditionResult
 {
     /// <summary>

@@ -1,7 +1,7 @@
+root = true
 # editorconfig.org
 
 # top-most EditorConfig file
-root = true
 
 # Default settings:
 # A newline ending every file
@@ -19,12 +19,13 @@ generated_code = true
 # C# files
 [*.cs]
 # New line preferences
-csharp_new_line_before_open_brace = all
+`csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true
 csharp_new_line_before_catch = true
 csharp_new_line_before_finally = true
-csharp_new_line_before_members_in_object_initializers = true
 csharp_new_line_before_members_in_anonymous_types = true
+csharp_new_line_before_members_in_object_initializers = false
+csharp_new_line_before_open_brace = all
 csharp_new_line_between_query_expression_clauses = true
 
 # Indentation preferences
@@ -36,6 +37,7 @@ csharp_indent_switch_labels = true
 csharp_indent_labels = one_less_than_current
 
 # Modifier preferences
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggestion
 csharp_preferred_modifier_order = public, private, protected, internal, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, volatile, async:suggestion
 
 # avoid this. unless absolutely necessary
@@ -44,15 +46,15 @@ dotnet_style_qualification_for_property = false:suggestion
 dotnet_style_qualification_for_method = false:suggestion
 dotnet_style_qualification_for_event = false:suggestion
 
-# Types: use keywords instead of BCL types, and permit var only when the type is clear
+# Types: use keywords instead of BCL types, and use explicit type instead of var
 csharp_style_var_for_built_in_types = false:suggestion
-csharp_style_var_when_type_is_apparent = false:none
+csharp_style_var_when_type_is_apparent = false:suggestion
 csharp_style_var_elsewhere = false:suggestion
 dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
 dotnet_style_predefined_type_for_member_access = true:suggestion
 
 # name all constant fields using PascalCase
-dotnet_naming_rule.constant_fields_should_be_pascal_case.severity = silent
+dotnet_naming_rule.constant_fields_should_be_pascal_case.severity = suggestion
 dotnet_naming_rule.constant_fields_should_be_pascal_case.symbols = constant_fields
 dotnet_naming_rule.constant_fields_should_be_pascal_case.style = pascal_case_style
 dotnet_naming_symbols.constant_fields.applicable_kinds = field
@@ -81,7 +83,7 @@ dotnet_naming_style.camel_case_underscore_style.capitalization = camel_case
 # Code style defaults
 csharp_using_directive_placement = outside_namespace:suggestion
 dotnet_sort_system_directives_first = true
-csharp_prefer_braces = when_multiline:silent
+csharp_prefer_braces = when_multiline:suggestion
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = false
 csharp_prefer_static_local_function = true:suggestion
@@ -128,7 +130,7 @@ csharp_style_prefer_range_operator = true:suggestion
 csharp_style_pattern_local_over_anonymous_function = true:suggestion
 
 # Space preferences
-csharp_space_after_cast = false
+csharp_space_after_cast = true
 csharp_space_after_colon_in_inheritance_clause = true
 csharp_space_after_comma = true
 csharp_space_after_dot = false
@@ -150,6 +152,28 @@ csharp_space_between_method_declaration_name_and_open_parenthesis = false
 csharp_space_between_method_declaration_parameter_list_parentheses = false
 csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
+
+# ReSharper properties
+resharper_braces_for_for = required_for_multiline
+resharper_braces_for_while = required_for_multiline
+resharper_constructor_or_destructor_body = block_body
+resharper_indent_nested_fixed_stmt = true
+resharper_indent_nested_foreach_stmt = true
+resharper_indent_nested_for_stmt = true
+resharper_indent_nested_lock_stmt = true
+resharper_indent_nested_usings_stmt = true
+resharper_indent_nested_while_stmt = true
+resharper_indent_primary_constructor_decl_pars = inside
+resharper_indent_raw_literal_string = indent
+resharper_max_initializer_elements_on_line = 1
+resharper_use_heuristics_for_body_style = true
+resharper_wrap_before_primary_constructor_declaration_lpar = true
+resharper_wrap_object_and_collection_initializer_style = chop_if_long
+
+# ReSharper inspection severities
+resharper_arrange_accessor_owner_body_highlighting = hint
+resharper_arrange_constructor_or_destructor_body_highlighting = hint
+resharper_arrange_method_or_operator_body_highlighting = hint
 
 # Xml project files
 [*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,nativeproj,locproj}]
