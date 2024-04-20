@@ -7,7 +7,7 @@ internal class PokeResourceTypeConverter : JsonConverter<PokeResourceType>
 {
     public override PokeResourceType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string type = reader.GetString();
+        string? type = reader.GetString();
         return type switch
         {
             "ImageAnimation" => PokeResourceType.ImageAnimation,

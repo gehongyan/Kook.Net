@@ -36,28 +36,28 @@ internal static class MessageHelper
     private static Regex KMarkdownEmojiRegex => Emote.KMarkdownEmojiRegex;
     private static Regex KMarkdownTagRegex => MentionUtils.KMarkdownTagRegex;
 
-    public static Task DeleteAsync(IMessage msg, BaseKookClient client, RequestOptions options)
+    public static Task DeleteAsync(IMessage msg, BaseKookClient client, RequestOptions? options)
         => DeleteAsync(msg.Id, client, options);
 
     public static async Task DeleteAsync(Guid msgId, BaseKookClient client,
-        RequestOptions options) =>
+        RequestOptions? options) =>
         await client.ApiClient.DeleteMessageAsync(msgId, options).ConfigureAwait(false);
 
-    public static Task DeleteDirectAsync(IMessage msg, BaseKookClient client, RequestOptions options)
+    public static Task DeleteDirectAsync(IMessage msg, BaseKookClient client, RequestOptions? options)
         => DeleteDirectAsync(msg.Id, client, options);
 
     public static async Task DeleteDirectAsync(Guid msgId, BaseKookClient client,
-        RequestOptions options) =>
+        RequestOptions? options) =>
         await client.ApiClient.DeleteDirectMessageAsync(msgId, options).ConfigureAwait(false);
 
     public static async Task AddReactionAsync(Guid messageId, IEmote emote, BaseKookClient client,
-        RequestOptions options)
+        RequestOptions? options)
     {
         AddReactionParams args = new() { EmojiId = emote.Id, MessageId = messageId };
         await client.ApiClient.AddReactionAsync(args, options).ConfigureAwait(false);
     }
 
-    public static async Task AddReactionAsync(IMessage msg, IEmote emote, BaseKookClient client, RequestOptions options)
+    public static async Task AddReactionAsync(IMessage msg, IEmote emote, BaseKookClient client, RequestOptions? options)
     {
         AddReactionParams args = new() { EmojiId = emote.Id, MessageId = msg.Id };
 
@@ -65,46 +65,46 @@ internal static class MessageHelper
     }
 
     public static async Task AddDirectMessageReactionAsync(Guid messageId, IEmote emote, BaseKookClient client,
-        RequestOptions options)
+        RequestOptions? options)
     {
         AddReactionParams args = new() { EmojiId = emote.Id, MessageId = messageId };
         await client.ApiClient.AddDirectMessageReactionAsync(args, options).ConfigureAwait(false);
     }
 
-    public static async Task AddDirectMessageReactionAsync(IMessage msg, IEmote emote, BaseKookClient client, RequestOptions options)
+    public static async Task AddDirectMessageReactionAsync(IMessage msg, IEmote emote, BaseKookClient client, RequestOptions? options)
     {
         AddReactionParams args = new() { EmojiId = emote.Id, MessageId = msg.Id };
 
         await client.ApiClient.AddDirectMessageReactionAsync(args, options).ConfigureAwait(false);
     }
 
-    public static async Task RemoveReactionAsync(Guid messageId, ulong userId, IEmote emote, BaseKookClient client, RequestOptions options)
+    public static async Task RemoveReactionAsync(Guid messageId, ulong userId, IEmote emote, BaseKookClient client, RequestOptions? options)
     {
         RemoveReactionParams args = new() { EmojiId = emote.Id, MessageId = messageId, UserId = userId == client.CurrentUser.Id ? null : userId };
         await client.ApiClient.RemoveReactionAsync(args, options).ConfigureAwait(false);
     }
 
-    public static async Task RemoveReactionAsync(IMessage msg, ulong userId, IEmote emote, BaseKookClient client, RequestOptions options)
+    public static async Task RemoveReactionAsync(IMessage msg, ulong userId, IEmote emote, BaseKookClient client, RequestOptions? options)
     {
         RemoveReactionParams args = new() { EmojiId = emote.Id, MessageId = msg.Id, UserId = userId == client.CurrentUser.Id ? null : userId };
         await client.ApiClient.RemoveReactionAsync(args, options).ConfigureAwait(false);
     }
 
     public static async Task RemoveDirectMessageReactionAsync(Guid messageId, ulong userId, IEmote emote, BaseKookClient client,
-        RequestOptions options)
+        RequestOptions? options)
     {
         RemoveReactionParams args = new() { EmojiId = emote.Id, MessageId = messageId, UserId = userId == client.CurrentUser.Id ? null : userId };
         await client.ApiClient.RemoveDirectMessageReactionAsync(args, options).ConfigureAwait(false);
     }
 
-    public static async Task RemoveDirectMessageReactionAsync(IMessage msg, ulong userId, IEmote emote, BaseKookClient client, RequestOptions options)
+    public static async Task RemoveDirectMessageReactionAsync(IMessage msg, ulong userId, IEmote emote, BaseKookClient client, RequestOptions? options)
     {
         RemoveReactionParams args = new() { EmojiId = emote.Id, MessageId = msg.Id, UserId = userId == client.CurrentUser.Id ? null : userId };
         await client.ApiClient.RemoveDirectMessageReactionAsync(args, options).ConfigureAwait(false);
     }
 
     public static async Task<IReadOnlyCollection<IUser>> GetReactionUsersAsync(IMessage msg, IEmote emote, BaseKookClient client,
-        RequestOptions options)
+        RequestOptions? options)
     {
         IReadOnlyCollection<ReactionUserResponse> models =
             await client.ApiClient.GetReactionUsersAsync(msg.Id, emote.Id, options).ConfigureAwait(false);
@@ -112,7 +112,7 @@ internal static class MessageHelper
     }
 
     public static async Task<IReadOnlyCollection<IUser>> GetDirectMessageReactionUsersAsync(IMessage msg, IEmote emote, BaseKookClient client,
-        RequestOptions options)
+        RequestOptions? options)
     {
         IReadOnlyCollection<ReactionUserResponse> models =
             await client.ApiClient.GetDirectMessageReactionUsersAsync(msg.Id, emote.Id, options).ConfigureAwait(false);
@@ -120,7 +120,7 @@ internal static class MessageHelper
     }
 
     public static async Task ModifyAsync(IUserMessage msg, BaseKookClient client, Action<MessageProperties> func,
-        RequestOptions options)
+        RequestOptions? options)
     {
         if (msg.Type == MessageType.KMarkdown)
         {
@@ -146,7 +146,7 @@ internal static class MessageHelper
     }
 
     public static async Task ModifyAsync(Guid msgId, BaseKookClient client, Action<MessageProperties> func,
-        RequestOptions options, IQuote quote = null, IUser ephemeralUser = null)
+        RequestOptions? options, IQuote quote = null, IUser ephemeralUser = null)
     {
         MessageProperties properties = new();
         func(properties);
@@ -162,14 +162,14 @@ internal static class MessageHelper
     }
 
     public static async Task ModifyAsync(Guid msgId, BaseKookClient client, string content,
-        RequestOptions options, IQuote quote = null, IUser ephemeralUser = null)
+        RequestOptions? options, IQuote quote = null, IUser ephemeralUser = null)
     {
         ModifyMessageParams args = new(msgId, content) { QuotedMessageId = quote?.QuotedMessageId, EphemeralUserId = ephemeralUser?.Id };
         await client.ApiClient.ModifyMessageAsync(args, options).ConfigureAwait(false);
     }
 
     public static async Task ModifyDirectAsync(Guid msgId, BaseKookClient client, Action<MessageProperties> func,
-        RequestOptions options, IQuote quote = null)
+        RequestOptions? options, IQuote quote = null)
     {
         MessageProperties properties = new();
         func(properties);
@@ -185,7 +185,7 @@ internal static class MessageHelper
     }
 
     public static async Task ModifyDirectAsync(Guid msgId, BaseKookClient client, string content,
-        RequestOptions options, IQuote quote = null)
+        RequestOptions? options, IQuote quote = null)
     {
         ModifyDirectMessageParams args = new(msgId, content) { QuotedMessageId = quote?.QuotedMessageId };
         await client.ApiClient.ModifyDirectMessageAsync(args, options).ConfigureAwait(false);

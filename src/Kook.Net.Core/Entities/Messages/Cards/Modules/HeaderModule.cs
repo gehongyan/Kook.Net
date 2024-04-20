@@ -9,7 +9,7 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class HeaderModule : IModule, IEquatable<HeaderModule>, IEquatable<IModule>
 {
-    internal HeaderModule(PlainTextElement text)
+    internal HeaderModule(PlainTextElement? text)
     {
         Text = text;
     }
@@ -23,10 +23,10 @@ public class HeaderModule : IModule, IEquatable<HeaderModule>, IEquatable<IModul
     /// <returns>
     ///     A <see cref="PlainTextElement"/> representing the text of the header.
     /// </returns>
-    public PlainTextElement Text { get; }
+    public PlainTextElement? Text { get; }
 
     /// <inheritdoc />
-    public override string? ToString() => Text.ToString();
+    public override string? ToString() => Text?.ToString();
 
     private string DebuggerDisplay => $"{Type}: {Text}";
 
@@ -64,7 +64,7 @@ public class HeaderModule : IModule, IEquatable<HeaderModule>, IEquatable<IModul
         {
             int hash = (int)2166136261;
             hash = (hash * 16777619) ^ Type.GetHashCode();
-            hash = (hash * 16777619) ^ Text.GetHashCode();
+            hash = (hash * 16777619) ^ (Text?.GetHashCode() ?? 0);
             return hash;
         }
     }

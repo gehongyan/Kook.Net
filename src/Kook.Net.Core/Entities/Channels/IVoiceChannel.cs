@@ -21,7 +21,7 @@ public interface IVoiceChannel : ITextChannel, IAudioChannel
     ///     An int representing the maximum number of users that are allowed to be connected to this
     ///     channel at once; <c>null</c> if a limit is not set.
     /// </returns>
-    int? UserLimit { get; }
+    int UserLimit { get; }
 
     /// <summary>
     ///     Gets whether this voice channel is locked by a password.

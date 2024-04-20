@@ -77,7 +77,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         {
             API.UserPermissionOverwrite[] overwrites = model.UserPermissionOverwrites;
             ImmutableArray<UserPermissionOverwrite>.Builder newOverwrites = ImmutableArray.CreateBuilder<UserPermissionOverwrite>(overwrites.Length);
-            for (int i = 0; i < overwrites.Length; i++) newOverwrites.Add(overwrites[i].ToEntity());
+            for (int i = 0; i < overwrites.Length; i++) newOverwrites.Add(overwrites[i].ToEntity(Kook));
 
             _userPermissionOverwrites = newOverwrites.ToImmutable();
         }

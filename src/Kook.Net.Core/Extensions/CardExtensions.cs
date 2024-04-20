@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Kook;
 
 /// <summary>
@@ -33,7 +31,7 @@ public static class CardExtensions
         return new PlainTextElementBuilder
         {
             Content = entity.Content,
-            Emoji = entity.Emoji
+            Emoji = entity.Emoji ?? true
         };
     }
 
@@ -66,8 +64,8 @@ public static class CardExtensions
     {
         return new ButtonElementBuilder
         {
-            Theme = entity.Theme,
-            Click = entity.Click,
+            Theme = entity.Theme ?? ButtonTheme.Primary,
+            Click = entity.Click ?? ButtonClickEventType.None,
             Value = entity.Value,
             Text = entity.Text.ToBuilder()
         };
@@ -80,7 +78,7 @@ public static class CardExtensions
     {
         return new ParagraphStructBuilder
         {
-            ColumnCount = entity.ColumnCount,
+            ColumnCount = entity.ColumnCount ?? 1,
             Fields = entity.Fields.Select(x => x.ToBuilder()).ToList()
         };
     }
@@ -119,7 +117,7 @@ public static class CardExtensions
     {
         return new HeaderModuleBuilder
         {
-            Text = entity.Text.ToBuilder()
+            Text = entity.Text?.ToBuilder()
         };
     }
 

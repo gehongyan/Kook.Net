@@ -16,7 +16,7 @@ public struct RestResponse
     /// <summary>
     ///     Gets the headers of the response.
     /// </summary>
-    public Dictionary<string, string> Headers { get; }
+    public Dictionary<string, string?> Headers { get; }
 
     /// <summary>
     ///     Gets the stream of the response.
@@ -28,7 +28,7 @@ public struct RestResponse
     /// </summary>
     public MediaTypeHeaderValue? MediaTypeHeader { get; }
 
-    internal RestResponse(HttpStatusCode statusCode, Dictionary<string, string> headers, Stream stream,
+    internal RestResponse(HttpStatusCode statusCode, Dictionary<string, string?> headers, Stream stream,
         MediaTypeHeaderValue? mediaTypeHeader)
     {
         StatusCode = statusCode;

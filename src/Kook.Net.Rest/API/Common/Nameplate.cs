@@ -5,14 +5,20 @@ namespace Kook.API;
 internal class Nameplate
 {
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [JsonPropertyName("type")]
-    public int Type { get; set; }
+    public required int Type { get; set; }
 
     [JsonPropertyName("icon")]
-    public string Icon { get; set; }
+    public required string Icon { get; set; }
 
     [JsonPropertyName("tips")]
-    public string Tips { get; set; }
+    public required string Tips { get; set; }
+
+    [JsonPropertyName("h")]
+    public int? Height { get; set; }
+
+    [JsonPropertyName("w")]
+    public int? Width { get; set; }
 }

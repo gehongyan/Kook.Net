@@ -57,7 +57,7 @@ public sealed class BucketId : IEquatable<BucketId>
     ///     A <see cref="BucketId"/> based on the <see cref="HttpMethod"/>
     ///     and the <see cref="Endpoint"/> with the provided data.
     /// </returns>
-    public static BucketId Create(HttpMethod httpMethod, string endpoint, Dictionary<string, string> majorParams)
+    public static BucketId Create(HttpMethod? httpMethod, string? endpoint, Dictionary<string, string>? majorParams)
     {
         Preconditions.NotNullOrWhitespace(endpoint, nameof(endpoint));
         majorParams ??= new Dictionary<string, string>();

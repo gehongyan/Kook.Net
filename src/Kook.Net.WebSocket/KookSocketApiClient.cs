@@ -214,7 +214,7 @@ internal class KookSocketApiClient : KookRestApiClient
         }
     }
 
-    internal override async Task DisconnectInternalAsync(Exception ex = null)
+    internal override async Task DisconnectInternalAsync(Exception? ex = null)
     {
         if (WebSocketClient == null) throw new NotSupportedException("This client is not configured with WebSocket support.");
 
@@ -264,7 +264,7 @@ internal class KookSocketApiClient : KookRestApiClient
         byte[] bytes = Encoding.UTF8.GetBytes(SerializeJson(payload));
 
         options.IsGatewayBucket = true;
-        if (options.BucketId == null) options.BucketId = GatewayBucket.Get(GatewayBucketType.Unbucketed).Id;
+        options.BucketId ??= GatewayBucket.Get(GatewayBucketType.Unbucketed).Id;
 
         await RequestQueue
             .SendAsync(new WebSocketRequest(WebSocketClient, bytes, true, gatewaySocketFrameType == GatewaySocketFrameType.Ping, options))
@@ -272,7 +272,10 @@ internal class KookSocketApiClient : KookRestApiClient
         await _sentGatewayMessageEvent.InvokeAsync(gatewaySocketFrameType).ConfigureAwait(false);
 
 #if DEBUG_PACKETS
-        string payloadString = JsonSerializer.Serialize(payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping});
+        string payloadString = JsonSerializer.Serialize(payload, new JsonSerializerOptions
+        {
+            WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        });
         Debug.WriteLine($"-> [{gatewaySocketFrameType}] : #{sequence} \n{payloadString}".TrimEnd('\n'));
 #endif
     }

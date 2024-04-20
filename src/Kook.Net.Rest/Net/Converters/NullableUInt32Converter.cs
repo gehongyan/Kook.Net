@@ -5,12 +5,17 @@ namespace Kook.Net.Converters;
 
 internal class NullableUInt32Converter : JsonConverter<uint?>
 {
+    /// <inheritdoc />
+    public override bool HandleNull => true;
+
     public override uint? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         switch (reader.TokenType)
         {
+            case JsonTokenType.Null:
+                return null;
             case JsonTokenType.String:
-                string value = reader.GetString();
+                string? value = reader.GetString();
                 return !string.IsNullOrWhiteSpace(value) && uint.TryParse(value, out uint result)
                     ? result
                     : null;

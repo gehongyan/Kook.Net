@@ -7,10 +7,10 @@ namespace Kook.Net.Converters;
 
 internal class ElementConverter : JsonConverter<ElementBase>
 {
-    public override ElementBase Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override ElementBase? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        JsonNode jsonNode = JsonNode.Parse(ref reader);
-        return jsonNode["type"].GetValue<string>() switch
+        JsonNode? jsonNode = JsonNode.Parse(ref reader);
+        return jsonNode?["type"]?.GetValue<string>() switch
         {
             "plain-text" => JsonSerializer.Deserialize<API.PlainTextElement>(jsonNode.ToJsonString(), options),
             "kmarkdown" => JsonSerializer.Deserialize<API.KMarkdownElement>(jsonNode.ToJsonString(), options),

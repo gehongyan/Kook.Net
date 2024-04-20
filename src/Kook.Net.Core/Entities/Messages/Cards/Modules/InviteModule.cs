@@ -9,7 +9,7 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class InviteModule : IModule, IEquatable<InviteModule>, IEquatable<IModule>
 {
-    internal InviteModule(string code)
+    internal InviteModule(string? code)
     {
         Code = code;
     }
@@ -20,7 +20,7 @@ public class InviteModule : IModule, IEquatable<InviteModule>, IEquatable<IModul
     /// <summary>
     ///     Gets the invite code.
     /// </summary>
-    public string Code { get; }
+    public string? Code { get; }
 
     private string DebuggerDisplay => $"{Type}: {Code}";
 

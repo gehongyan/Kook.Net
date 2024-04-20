@@ -9,7 +9,7 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class PlainTextElement : IElement, IEquatable<PlainTextElement>, IEquatable<IElement>
 {
-    internal PlainTextElement(string? content, bool emoji)
+    internal PlainTextElement(string content, bool? emoji)
     {
         Content = content;
         Emoji = emoji;
@@ -29,7 +29,7 @@ public class PlainTextElement : IElement, IEquatable<PlainTextElement>, IEquatab
     /// <returns>
     ///     A string that represents the KMarkdown content of the element.
     /// </returns>
-    public string? Content { get; }
+    public string Content { get; }
 
     /// <summary>
     ///     Gets whether the shortcuts should be translated into emojis.
@@ -39,10 +39,10 @@ public class PlainTextElement : IElement, IEquatable<PlainTextElement>, IEquatab
     ///     <c>true</c> if the shortcuts should be translated into emojis;
     ///     <c>false</c> if the text should be displayed as is.
     /// </returns>
-    public bool Emoji { get; }
+    public bool? Emoji { get; }
 
     /// <inheritdoc />
-    public override string? ToString() => Content;
+    public override string ToString() => Content;
 
     private string DebuggerDisplay => $"{Type}: {Content}";
 

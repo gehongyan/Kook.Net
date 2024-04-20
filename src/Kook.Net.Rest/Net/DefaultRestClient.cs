@@ -106,11 +106,7 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         if (requestHeaders != null)
             foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
                 restRequest.Headers.Add(header.Key, header.Value);
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-        restRequest.Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
-#else
         restRequest.Content = new StringContent(json, Encoding.UTF8, "application/json");
-#endif
         return await SendInternalAsync(restRequest, cancellationToken).ConfigureAwait(false);
     }
 
@@ -203,8 +199,13 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         cancellationToken = cancellationTokenSource.Token;
         HttpResponseMessage response = await _client.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
-        Dictionary<string, string> headers =
-            response.Headers.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault(), StringComparer.OrdinalIgnoreCase);
+        Dictionary<string, string?> headers = [];
+        foreach (KeyValuePair<string, IEnumerable<string>> kvp in response.Headers)
+        {
+            string? value = kvp.Value.FirstOrDefault();
+            headers[kvp.Key] = value;
+        }
+        // ReSharper disable once MethodSupportsCancellation
         Stream stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
 #if DEBUG_REST

@@ -9,7 +9,7 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ButtonElement : IElement, IEquatable<ButtonElement>, IEquatable<IElement>
 {
-    internal ButtonElement(ButtonTheme theme, string? value, ButtonClickEventType click, IElement text)
+    internal ButtonElement(ButtonTheme? theme, string? value, ButtonClickEventType? click, IElement text)
     {
         Theme = theme;
         Value = value;
@@ -31,7 +31,7 @@ public class ButtonElement : IElement, IEquatable<ButtonElement>, IEquatable<IEl
     /// <returns>
     ///     A <see cref="ButtonTheme"/> value that represents the theme of the button.
     /// </returns>
-    public ButtonTheme Theme { get; }
+    public ButtonTheme? Theme { get; }
 
     /// <summary>
     ///     Gets the value of the button.
@@ -47,7 +47,7 @@ public class ButtonElement : IElement, IEquatable<ButtonElement>, IEquatable<IEl
     /// <returns>
     ///     A <see cref="ButtonClickEventType"/> value that represents the event type fired when the button is clicked.
     /// </returns>
-    public ButtonClickEventType Click { get; }
+    public ButtonClickEventType? Click { get; }
 
     /// <summary>
     ///     Gets the text element of the button.

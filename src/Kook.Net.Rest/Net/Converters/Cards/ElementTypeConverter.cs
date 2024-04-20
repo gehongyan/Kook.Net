@@ -7,7 +7,7 @@ internal class ElementTypeConverter : JsonConverter<ElementType>
 {
     public override ElementType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string type = reader.GetString();
+        string? type = reader.GetString();
         return type switch
         {
             "plain-text" => ElementType.PlainText,

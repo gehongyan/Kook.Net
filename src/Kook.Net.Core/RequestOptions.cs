@@ -59,7 +59,7 @@ public class RequestOptions
 
     internal IDictionary<string, IEnumerable<string>>? RequestHeaders { get; }
 
-    internal static RequestOptions CreateOrClone(RequestOptions options) =>
+    internal static RequestOptions CreateOrClone(RequestOptions? options) =>
         options == null
             ? new RequestOptions()
             : options.Clone();

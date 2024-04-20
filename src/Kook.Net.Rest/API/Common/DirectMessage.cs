@@ -12,38 +12,38 @@ internal class DirectMessage
     public MessageType Type { get; set; }
 
     [JsonPropertyName("content")]
-    public string Content { get; set; }
+    public required string Content { get; set; }
 
     [JsonPropertyName("embeds")]
-    public EmbedBase[] Embeds { get; set; }
+    public required EmbedBase[] Embeds { get; set; }
 
-    [JsonPropertyName("attachment")]
-    public Attachment Attachment { get; set; }
+    [JsonPropertyName("attachments")]
+    public Attachment? Attachment { get; set; }
 
     [JsonPropertyName("create_at")]
     [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset CreateAt { get; set; }
 
     [JsonPropertyName("update_at")]
-    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
-    public DateTimeOffset UpdateAt { get; set; }
+    [JsonConverter(typeof(NullableDateTimeOffsetUnixTimeMillisecondsConverter))]
+    public DateTimeOffset? UpdateAt { get; set; }
 
     [JsonPropertyName("reactions")]
-    public Reaction[] Reactions { get; set; }
+    public required Reaction[] Reactions { get; set; }
 
     [JsonPropertyName("author_id")]
     public ulong AuthorId { get; set; }
 
     [JsonPropertyName("image_name")]
-    public string ImageName { get; set; }
+    public required string ImageName { get; set; }
 
     [JsonPropertyName("read_status")]
     public bool ReadStatus { get; set; }
 
     [JsonPropertyName("quote")]
     [JsonConverter(typeof(QuoteConverter))]
-    public Quote Quote { get; set; }
+    public Quote? Quote { get; set; }
 
     [JsonPropertyName("mention_info")]
-    public MentionInfo MentionInfo { get; set; }
+    public MentionInfo? MentionInfo { get; set; }
 }

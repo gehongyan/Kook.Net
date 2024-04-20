@@ -7,6 +7,8 @@
     <RootNamespace>Kook.Net.Tests</RootNamespace>
     <LangVersion>default</LangVersion>
     <NoWarn>NU1803</NoWarn>
+    <Configurations>Debug;Release;Debug Packets</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

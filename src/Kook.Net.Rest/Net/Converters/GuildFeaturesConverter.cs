@@ -7,12 +7,12 @@ internal class GuildFeaturesConverter : JsonConverter<GuildFeatures>
 {
     public override GuildFeatures Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        IList<string> rawValues = JsonSerializer.Deserialize<IList<string>>(ref reader, options);
+        IList<string> rawValues = JsonSerializer.Deserialize<IList<string>>(ref reader, options) ?? [];
         GuildFeature features = GuildFeature.None;
 
         foreach (string item in rawValues)
         {
-            if (Enum.TryParse<GuildFeature>(item, true, out var result))
+            if (Enum.TryParse(item, true, out GuildFeature result))
                 features |= result;
         }
 
@@ -26,7 +26,7 @@ internal class GuildFeaturesConverter : JsonConverter<GuildFeatures>
         writer.WriteStartArray();
         foreach (object enumValue in enumValues)
         {
-            var val = (GuildFeature)enumValue;
+            GuildFeature val = (GuildFeature)enumValue;
             if (val is GuildFeature.None)
                 continue;
 

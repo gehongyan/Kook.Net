@@ -275,7 +275,7 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
         }
         catch (Win32Exception ex) when (ex.HResult == HR_TIMEOUT)
         {
-            Task _ = OnClosed(new Exception("Connection timed out.", ex));
+            _ = OnClosed(new Exception("Connection timed out.", ex));
         }
         catch (OperationCanceledException)
         {
@@ -284,7 +284,7 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
         catch (Exception ex)
         {
             //This cannot be awaited otherwise we'll deadlock when KookApiClient waits for this task to complete.
-            Task _ = OnClosed(ex);
+            _ = OnClosed(ex);
         }
     }
 }

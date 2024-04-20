@@ -2192,11 +2192,11 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         => Task.FromResult<IReadOnlyCollection<IGuild>>(Guilds);
 
     /// <inheritdoc />
-    Task<IGuild> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions? options = null)
+    Task<IGuild?> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions? options = null)
         => Task.FromResult<IGuild>(GetGuild(id));
 
     /// <inheritdoc />
-    async Task<IUser> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
+    async Task<IUser?> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
     {
         SocketUser user = GetUser(id);
         if (user is not null || mode == CacheMode.CacheOnly) return user;
@@ -2205,11 +2205,11 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     }
 
     /// <inheritdoc />
-    async Task<IChannel> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options = null)
+    async Task<IChannel?> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options = null)
         => mode == CacheMode.AllowDownload ? await GetChannelAsync(id, options).ConfigureAwait(false) : GetChannel(id);
 
     /// <inheritdoc />
-    async Task<IDMChannel> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions? options = null)
+    async Task<IDMChannel?> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions? options = null)
         => mode == CacheMode.AllowDownload ? await GetDMChannelAsync(chatCode, options).ConfigureAwait(false) : GetDMChannel(chatCode);
 
     /// <inheritdoc />

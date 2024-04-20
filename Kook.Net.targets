@@ -25,10 +25,23 @@
     <WarningLevel>6</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Configurations>Debug;Release;Debug Rest</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <Configurations>Debug;Release;Debug Rest;Debug Packets</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
+
   <PropertyGroup>
     <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug Rest' ">
+    <DefineConstant>DEBUG_REST</DefineConstant>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug Packets' ">
+    <DefineConstant>DEBUG_PACKETS</DefineConstant>
   </PropertyGroup>
 
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4')) AND '$(MSBuildRuntimeType)' == 'Core' AND '$(OS)' != 'Windows_NT'">

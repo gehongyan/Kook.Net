@@ -6,10 +6,10 @@ namespace Kook.API;
 internal class ImageElement : ElementBase
 {
     [JsonPropertyName("src")]
-    public string Source { get; set; }
+    public required string Source { get; set; }
 
     [JsonPropertyName("alt")]
-    public string Alternative { get; set; }
+    public string? Alternative { get; set; }
 
     [JsonPropertyName("size")]
     [JsonConverter(typeof(ImageSizeConverter))]

@@ -6,6 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <IsPackable>false</IsPackable>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <Configurations>Debug;Release;Debug Rest;Debug Packets</Configurations>
+        <Platforms>AnyCPU</Platforms>
     </PropertyGroup>
 
     <ItemGroup>

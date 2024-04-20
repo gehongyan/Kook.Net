@@ -8,5 +8,5 @@ internal class PokeResourceBase : IPokeResource
 {
     [JsonPropertyName("type")]
     [JsonConverter(typeof(PokeResourceTypeConverter))]
-    public PokeResourceType Type { get; set; }
+    public required PokeResourceType Type { get; set; }
 }

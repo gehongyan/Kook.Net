@@ -5,6 +5,8 @@
     <RootNamespace>Kook.Net.Samples.VisualBasic</RootNamespace>
     <TargetFramework>net8.0</TargetFramework>
     <IsPackable>false</IsPackable>
+    <Configurations>Debug;Release;Debug Packets</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,7 +4,7 @@ namespace Kook.Net.Queue;
 
 internal class WebSocketRequest : IRequest
 {
-    public IWebSocketClient Client { get; }
+    public IWebSocketClient? Client { get; }
     public byte[] Data { get; }
     public bool IsText { get; }
     public bool IgnoreLimit { get; }
@@ -12,7 +12,7 @@ internal class WebSocketRequest : IRequest
     public TaskCompletionSource<Stream> Promise { get; }
     public RequestOptions Options { get; }
 
-    public WebSocketRequest(IWebSocketClient client, byte[] data, bool isText, bool ignoreLimit, RequestOptions options)
+    public WebSocketRequest(IWebSocketClient? client, byte[] data, bool isText, bool ignoreLimit, RequestOptions options)
     {
         Preconditions.NotNull(options, nameof(options));
 
@@ -25,5 +25,13 @@ internal class WebSocketRequest : IRequest
         Promise = new TaskCompletionSource<Stream>();
     }
 
-    public async Task SendAsync() => await Client.SendAsync(Data, 0, Data.Length, IsText).ConfigureAwait(false);
+    public async Task SendAsync()
+    {
+        if (Client == null)
+        {
+            Promise.SetException(new InvalidOperationException("WebSocket client is not set."));
+            return;
+        }
+        await Client.SendAsync(Data, 0, Data.Length, IsText).ConfigureAwait(false);
+    }
 }

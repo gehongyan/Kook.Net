@@ -7,7 +7,7 @@ internal class SectionAccessoryModeConverter : JsonConverter<SectionAccessoryMod
 {
     public override SectionAccessoryMode Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string mode = reader.GetString();
+        string? mode = reader.GetString();
         return mode switch
         {
             "left" => SectionAccessoryMode.Left,

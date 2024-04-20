@@ -5,16 +5,16 @@ namespace Kook.API;
 internal class Attachment
 {
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public required string Type { get; set; }
 
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public required string Url { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [JsonPropertyName("file_type")]
-    public string FileType { get; set; }
+    public string? FileType { get; set; }
 
     [JsonPropertyName("size")]
     public int? Size { get; set; }

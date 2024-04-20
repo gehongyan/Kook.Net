@@ -96,12 +96,19 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <returns>
     ///     A <see cref="PlainTextElement"/> represents the built element object.
     /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     The <see cref="Content"/> is null.
+    /// </exception>
     /// <exception cref="ArgumentException">
     ///     The length of the <see cref="Content"/> is greater than <see cref="MaxPlainTextLength"/>.
     /// </exception>
+    [MemberNotNull(nameof(Content))]
     public PlainTextElement Build()
     {
-        if (Content?.Length > MaxPlainTextLength)
+        if (Content == null)
+            throw new ArgumentNullException(nameof(Content), $"The {nameof(Content)} cannot be null.");
+
+        if (Content.Length > MaxPlainTextLength)
             throw new ArgumentException(
                 $"Plain text length must be less than or equal to {MaxPlainTextLength}.",
                 nameof(Content));
@@ -122,6 +129,7 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     public static implicit operator PlainTextElementBuilder(string content) => new(content);
 
     /// <inheritdoc />
+    [MemberNotNull(nameof(Content))]
     IElement IElementBuilder.Build() => Build();
 
     /// <summary>

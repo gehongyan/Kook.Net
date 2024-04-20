@@ -10,7 +10,10 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ContextModule : IModule, IEquatable<ContextModule>, IEquatable<IModule>
 {
-    internal ContextModule(ImmutableArray<IElement> elements) => Elements = elements;
+    internal ContextModule(ImmutableArray<IElement> elements)
+    {
+        Elements = elements;
+    }
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Context;

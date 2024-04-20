@@ -10,7 +10,7 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ParagraphStruct : IElement, IEquatable<ParagraphStruct>, IEquatable<IElement>
 {
-    internal ParagraphStruct(int columnCount, ImmutableArray<IElement> fields)
+    internal ParagraphStruct(int? columnCount, ImmutableArray<IElement> fields)
     {
         ColumnCount = columnCount;
         Fields = fields;
@@ -30,7 +30,7 @@ public class ParagraphStruct : IElement, IEquatable<ParagraphStruct>, IEquatable
     /// <returns>
     ///     An int value that represents the number of columns in the paragraph.
     /// </returns>
-    public int ColumnCount { get; }
+    public int? ColumnCount { get; }
 
     /// <summary>
     ///     Gets the fields in the paragraph.

@@ -33,16 +33,13 @@ internal class PageSortInfoConverter : JsonConverter<PageSortInfo>
     public override void Write(Utf8JsonWriter writer, PageSortInfo value, JsonSerializerOptions options)
     {
         writer.WriteStartObject();
-        switch (value.SortMode)
+        if (value.SortKey is not null)
         {
-            case API.Rest.SortMode.Ascending:
+            if (value.SortMode == API.Rest.SortMode.Ascending)
                 writer.WriteNumber(value.SortKey, 1);
-                break;
-            case API.Rest.SortMode.Descending:
+            else if (value.SortMode == API.Rest.SortMode.Descending)
                 writer.WriteNumber(value.SortKey, -1);
-                break;
         }
-
         writer.WriteEndObject();
     }
 }

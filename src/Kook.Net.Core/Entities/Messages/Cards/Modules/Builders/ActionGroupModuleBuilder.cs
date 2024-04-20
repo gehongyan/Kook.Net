@@ -94,7 +94,7 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
         if (Elements == null)
             throw new ArgumentNullException(
                 nameof(Elements), "Element cannot be null or empty list.");
-        if (Elements is { Count: 0 })
+        if (Elements.Count == 0)
             throw new ArgumentException(
                 "Element cannot be null or empty list.", nameof(Elements));
         if (Elements.Count > MaxElementCount)

@@ -18,7 +18,7 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     public VoiceQuality? VoiceQuality { get; private set; }
 
     /// <inheritdoc />
-    public int? UserLimit { get; private set; }
+    public int UserLimit { get; private set; }
 
     /// <inheritdoc />
     public string ServerUrl { get; private set; }

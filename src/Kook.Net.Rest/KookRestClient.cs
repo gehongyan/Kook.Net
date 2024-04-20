@@ -21,7 +21,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <summary>
     ///     Gets the logged-in user.
     /// </summary>
-    public new RestSelfUser CurrentUser
+    public new RestSelfUser? CurrentUser
     {
         get => base.CurrentUser as RestSelfUser;
         internal set => base.CurrentUser = value;
@@ -60,7 +60,9 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <inheritdoc />
     internal override async Task OnLoginAsync(TokenType tokenType, string token)
     {
-        SelfUser user = await ApiClient.GetSelfUserAsync(new RequestOptions { RetryMode = RetryMode.AlwaysRetry }).ConfigureAwait(false);
+        SelfUser? user = await ApiClient.GetSelfUserAsync(new RequestOptions { RetryMode = RetryMode.AlwaysRetry }).ConfigureAwait(false);
+        if (user is null)
+            throw new InvalidOperationException("Failed to retrieve the current user.");
         ApiClient.CurrentUserId = user.Id;
         base.CurrentUser = RestSelfUser.Create(this, user);
     }
@@ -83,7 +85,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains the guild associated
     ///     with the identifier; <c>null</c> when the guild cannot be found.
     /// </returns>
-    public Task<RestGuild> GetGuildAsync(ulong id, RequestOptions options = null)
+    public Task<RestGuild?> GetGuildAsync(ulong id, RequestOptions? options = null)
         => ClientHelper.GetGuildAsync(this, id, options);
 
     /// <summary>
@@ -94,7 +96,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of guilds that the current user is in.
     /// </returns>
-    public Task<IReadOnlyCollection<RestGuild>> GetGuildsAsync(RequestOptions options = null)
+    public Task<IReadOnlyCollection<RestGuild>> GetGuildsAsync(RequestOptions? options = null)
         => ClientHelper.GetGuildsAsync(this, options);
 
     #endregion
@@ -110,7 +112,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
     ///     with the identifier; <c>null</c> when the channel cannot be found.
     /// </returns>
-    public Task<RestChannel> GetChannelAsync(ulong id, RequestOptions options = null)
+    public Task<RestChannel?> GetChannelAsync(ulong id, RequestOptions? options = null)
         => ClientHelper.GetChannelAsync(this, id, options);
 
     /// <summary>
@@ -122,7 +124,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of direct-message channels that the user currently partakes in.
     /// </returns>
-    public Task<RestDMChannel> GetDMChannelAsync(Guid chatCode, RequestOptions options = null)
+    public Task<RestDMChannel?> GetDMChannelAsync(Guid chatCode, RequestOptions? options = null)
         => ClientHelper.GetDMChannelAsync(this, chatCode, options);
 
     /// <summary>
@@ -140,7 +142,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of direct-message channels that the user currently partakes in.
     /// </returns>
-    public Task<IReadOnlyCollection<RestDMChannel>> GetDMChannelsAsync(RequestOptions options = null)
+    public Task<IReadOnlyCollection<RestDMChannel>> GetDMChannelsAsync(RequestOptions? options = null)
         => ClientHelper.GetDMChannelsAsync(this, options);
 
     #endregion
@@ -184,7 +186,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains the user associated with
     ///     the identifier; <c>null</c> if the user is not found.
     /// </returns>
-    public Task<RestUser> GetUserAsync(ulong id, RequestOptions options = null)
+    public Task<RestUser?> GetUserAsync(ulong id, RequestOptions? options = null)
         => ClientHelper.GetUserAsync(this, id, options);
 
     /// <summary>
@@ -197,7 +199,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains the user from a guild
     ///     associated with the identifier; <c>null</c> if the user is not found in the guild.
     /// </returns>
-    public Task<RestGuildUser> GetGuildUserAsync(ulong guildId, ulong id, RequestOptions options = null)
+    public Task<RestGuildUser?> GetGuildUserAsync(ulong guildId, ulong id, RequestOptions? options = null)
         => ClientHelper.GetGuildMemberAsync(this, guildId, id, options);
 
     #endregion
@@ -212,7 +214,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains a collection of users
     ///     that are friends with the current user.
     /// </returns>
-    public Task<IReadOnlyCollection<RestUser>> GetFriendsAsync(RequestOptions options = null)
+    public Task<IReadOnlyCollection<RestUser>> GetFriendsAsync(RequestOptions? options = null)
         => ClientHelper.GetFriendsAsync(this, options);
 
     /// <summary>
@@ -223,7 +225,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains a collection of
     ///     friend requests that the current user has received.
     /// </returns>
-    public Task<IReadOnlyCollection<RestFriendRequest>> GetFriendRequestsAsync(RequestOptions options = null)
+    public Task<IReadOnlyCollection<RestFriendRequest>> GetFriendRequestsAsync(RequestOptions? options = null)
         => ClientHelper.GetFriendRequestsAsync(this, options);
 
     /// <summary>
@@ -234,7 +236,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains a collection of users
     ///     that are blocked by the current user.
     /// </returns>
-    public Task<IReadOnlyCollection<RestUser>> GetBlockedUsersAsync(RequestOptions options = null)
+    public Task<IReadOnlyCollection<RestUser>> GetBlockedUsersAsync(RequestOptions? options = null)
         => ClientHelper.GetBlockedUsersAsync(this, options);
 
     #endregion
@@ -251,7 +253,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     A task that represents the asynchronous operation for adding a reaction to the message.
     /// </returns>
     /// <seealso cref="IEmote"/>
-    public Task AddReactionAsync(Guid messageId, IEmote emote, RequestOptions options = null)
+    public Task AddReactionAsync(Guid messageId, IEmote emote, RequestOptions? options = null)
         => MessageHelper.AddReactionAsync(messageId, emote, this, options);
 
     /// <summary>
@@ -265,7 +267,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     A task that represents the asynchronous operation for removing a reaction from the message.
     /// </returns>
     /// <seealso cref="IEmote"/>
-    public Task RemoveReactionAsync(Guid messageId, ulong userId, IEmote emote, RequestOptions options = null)
+    public Task RemoveReactionAsync(Guid messageId, ulong userId, IEmote emote, RequestOptions? options = null)
         => MessageHelper.RemoveReactionAsync(messageId, userId, emote, this, options);
 
     /// <summary>
@@ -278,7 +280,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     A task that represents the asynchronous operation for adding a reaction to the direct message.
     /// </returns>
     /// <seealso cref="IEmote"/>
-    public Task AddDirectMessageReactionAsync(Guid messageId, IEmote emote, RequestOptions options = null)
+    public Task AddDirectMessageReactionAsync(Guid messageId, IEmote emote, RequestOptions? options = null)
         => MessageHelper.AddDirectMessageReactionAsync(messageId, emote, this, options);
 
     /// <summary>
@@ -292,7 +294,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     A task that represents the asynchronous operation for removing a reaction from the direct message.
     /// </returns>
     /// <seealso cref="IEmote"/>
-    public Task RemoveDirectMessageReactionAsync(Guid messageId, ulong userId, IEmote emote, RequestOptions options = null)
+    public Task RemoveDirectMessageReactionAsync(Guid messageId, ulong userId, IEmote emote, RequestOptions? options = null)
         => MessageHelper.RemoveDirectMessageReactionAsync(messageId, userId, emote, this, options);
 
     #endregion
@@ -306,7 +308,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <param name="fileName"> The name of the file. </param>
     /// <param name="options"> The options to be used when sending the request. </param>
     /// <returns> The asset resource URI of the uploaded file. </returns>
-    public Task<string> CreateAssetAsync(string path, string fileName, RequestOptions options = null)
+    public Task<string?> CreateAssetAsync(string path, string fileName, RequestOptions? options = null)
         => ClientHelper.CreateAssetAsync(this, File.OpenRead(path), fileName, options);
 
     /// <summary>
@@ -316,7 +318,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <param name="fileName"> The name of the file. </param>
     /// <param name="options"> The options to be used when sending the request. </param>
     /// <returns> The asset resource URI of the uploaded file. </returns>
-    public Task<string> CreateAssetAsync(Stream stream, string fileName, RequestOptions options = null)
+    public Task<string?> CreateAssetAsync(Stream stream, string fileName, RequestOptions? options = null)
         => ClientHelper.CreateAssetAsync(this, stream, fileName, options);
 
     #endregion
@@ -332,7 +334,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// </param>
     /// <param name="options"> The options to be used when sending the request. </param>
     /// <returns> A collection of games information. </returns>
-    public IAsyncEnumerable<IReadOnlyCollection<RestGame>> GetGamesAsync(GameCreationSource? source = null, RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<RestGame>> GetGamesAsync(GameCreationSource? source = null, RequestOptions? options = null)
         => ClientHelper.GetGamesAsync(this, source, options);
 
     /// <summary>
@@ -343,7 +345,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <param name="iconUrl"> The icon URI of the game. </param>
     /// <param name="options"> The options to be used when sending the request. </param>
     /// <returns></returns>
-    public Task<RestGame> CreateGameAsync(string name, string? processName = null, string? iconUrl = null, RequestOptions options = null)
+    public Task<RestGame?> CreateGameAsync(string name, string? processName = null, string? iconUrl = null, RequestOptions? options = null)
         => ClientHelper.CreateGameAsync(this, name, processName, iconUrl, options);
 
     #endregion
@@ -351,87 +353,78 @@ public class KookRestClient : BaseKookClient, IKookClient
     #region IKookClient
 
     /// <inheritdoc />
-    async Task<IGuild> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions? options = null)
+    async Task<IGuild?> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions? options)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetGuildAsync(id, options).ConfigureAwait(false);
-        else
-            return null;
+        return null;
     }
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IGuild>> IKookClient.GetGuildsAsync(CacheMode mode, RequestOptions? options = null)
+    async Task<IReadOnlyCollection<IGuild>> IKookClient.GetGuildsAsync(CacheMode mode, RequestOptions? options)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetGuildsAsync(options).ConfigureAwait(false);
-        else
-            return ImmutableArray.Create<IGuild>();
+        return ImmutableArray.Create<IGuild>();
     }
 
     /// <inheritdoc />
-    async Task<IUser> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
+    async Task<IUser?> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetUserAsync(id, options).ConfigureAwait(false);
-        else
-            return null;
+        return null;
     }
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IUser>> IKookClient.GetFriendsAsync(CacheMode mode, RequestOptions? options = null)
+    async Task<IReadOnlyCollection<IUser>> IKookClient.GetFriendsAsync(CacheMode mode, RequestOptions? options)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetFriendsAsync(options).ConfigureAwait(false);
-        else
-            return null;
+        return [];
     }
 
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IFriendRequest>> IKookClient.GetFriendRequestsAsync(CacheMode mode,
-        RequestOptions? options = null)
+        RequestOptions? options)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetFriendRequestsAsync(options).ConfigureAwait(false);
-        else
-            return null;
+        return [];
     }
 
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IUser>> IKookClient.GetBlockedUsersAsync(CacheMode mode,
-        RequestOptions? options = null)
+        RequestOptions? options)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetBlockedUsersAsync(options).ConfigureAwait(false);
-        else
-            return null;
+        return [];
     }
 
     /// <inheritdoc />
-    async Task<IChannel> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options = null)
+    async Task<IChannel?> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetChannelAsync(id, options).ConfigureAwait(false);
-        else
-            return null;
+        return null;
     }
 
     /// <inheritdoc />
-    async Task<IDMChannel> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions? options = null)
+    async Task<IDMChannel?> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions? options)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetDMChannelAsync(chatCode, options).ConfigureAwait(false);
-        else
-            return null;
+        return null;
     }
 
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IDMChannel>> IKookClient.GetDMChannelsAsync(CacheMode mode,
-        RequestOptions? options = null)
+        RequestOptions? options)
     {
         if (mode == CacheMode.AllowDownload)
             return await GetDMChannelsAsync(options).ConfigureAwait(false);
-        else
-            return ImmutableArray.Create<IDMChannel>();
+        return ImmutableArray.Create<IDMChannel>();
     }
 
     #endregion

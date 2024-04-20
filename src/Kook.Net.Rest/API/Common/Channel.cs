@@ -9,7 +9,7 @@ internal class Channel
     public ulong Id { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [JsonPropertyName("user_id")]
     public ulong CreatorId { get; set; }
@@ -31,13 +31,13 @@ internal class Channel
     public ChannelType Type { get; set; }
 
     [JsonPropertyName("permission_overwrites")]
-    public RolePermissionOverwrite[] RolePermissionOverwrites { get; set; }
+    public required RolePermissionOverwrite[] RolePermissionOverwrites { get; set; }
 
     [JsonPropertyName("permission_users")]
-    public UserPermissionOverwrite[] UserPermissionOverwrites { get; set; }
+    public required UserPermissionOverwrite[] UserPermissionOverwrites { get; set; }
 
     [JsonPropertyName("channels")]
-    public Channel[] Channels { get; set; }
+    public Channel[]? Channels { get; set; }
 
     [JsonPropertyName("permission_sync")]
     [JsonConverter(typeof(NumberBooleanConverter))]
@@ -45,21 +45,21 @@ internal class Channel
 
     // Text
     [JsonPropertyName("topic")]
-    public string Topic { get; set; }
+    public required string Topic { get; set; }
 
     [JsonPropertyName("slow_mode")]
     public int SlowMode { get; set; }
 
     // Voice
     [JsonPropertyName("limit_amount")]
-    public int? UserLimit { get; set; }
+    public int UserLimit { get; set; }
 
     [JsonPropertyName("voice_quality")]
     [JsonConverter(typeof(NullableVoiceQualityConverter))]
     public VoiceQuality? VoiceQuality { get; set; }
 
     [JsonPropertyName("server_url")]
-    public string ServerUrl { get; set; }
+    public string? ServerUrl { get; set; }
 
     [JsonPropertyName("has_password")]
     public bool HasPassword { get; set; }
@@ -70,5 +70,5 @@ internal class Channel
     public bool? OverwriteVoiceRegion { get; set; }
 
     [JsonPropertyName("region")]
-    public string VoiceRegion { get; set; }
+    public string? VoiceRegion { get; set; }
 }

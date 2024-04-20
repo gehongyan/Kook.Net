@@ -63,12 +63,19 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     /// <returns>
     ///     A <see cref="KMarkdownElement"/> represents the built element object.
     /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     The <see cref="Content"/> is null.
+    /// </exception>
     /// <exception cref="ArgumentException">
     ///     The length of <see cref="Content"/> is greater than <see cref="MaxKMarkdownLength"/>.
     /// </exception>
+    [MemberNotNull(nameof(Content))]
     public KMarkdownElement Build()
     {
-        if (Content?.Length > MaxKMarkdownLength)
+        if (Content == null)
+            throw new ArgumentNullException(nameof(Content), $"The {nameof(Content)} cannot be null.");
+
+        if (Content.Length > MaxKMarkdownLength)
             throw new ArgumentException(
                 $"KMarkdown length must be less than or equal to {MaxKMarkdownLength}.",
                 nameof(Content));
@@ -89,6 +96,7 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     public static implicit operator KMarkdownElementBuilder(string content) => new(content);
 
     /// <inheritdoc />
+    [MemberNotNull(nameof(Content))]
     IElement IElementBuilder.Build() => Build();
 
     /// <summary>

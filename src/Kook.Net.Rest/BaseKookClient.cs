@@ -75,7 +75,7 @@ public abstract class BaseKookClient : IKookClient
     /// <summary>
     ///     Gets the logged-in user.
     /// </summary>
-    public ISelfUser CurrentUser { get; protected set; }
+    public ISelfUser? CurrentUser { get; protected set; }
 
     /// <inheritdoc />
     public TokenType TokenType => ApiClient.AuthTokenType;
@@ -97,15 +97,14 @@ public abstract class BaseKookClient : IKookClient
         ApiClient.RequestQueue.RateLimitTriggered += async (id, info, endpoint) =>
         {
             if (info == null)
-                await _restLogger.VerboseAsync($"Preemptive Rate limit triggered: {endpoint} {(id.IsHashBucket ? $"(Bucket: {id.BucketHash})" : "")}")
-                    .ConfigureAwait(false);
+                await _restLogger.VerboseAsync($"Preemptive Rate limit triggered: {endpoint} {(id.IsHashBucket ? $"(Bucket: {id.BucketHash})" : "")}").ConfigureAwait(false);
             else
-                await _restLogger.WarningAsync($"Rate limit triggered: {endpoint} {(id.IsHashBucket ? $"(Bucket: {id.BucketHash})" : "")}")
-                    .ConfigureAwait(false);
+                await _restLogger.WarningAsync($"Rate limit triggered: {endpoint} {(id.IsHashBucket ? $"(Bucket: {id.BucketHash})" : "")}").ConfigureAwait(false);
         };
         ApiClient.SentRequest += async (method, endpoint, millis) =>
             await _restLogger.VerboseAsync($"{method} {endpoint}: {millis} ms").ConfigureAwait(false);
-        ApiClient.SentRequest += (method, endpoint, millis) => _sentRequest.InvokeAsync(method, endpoint, millis);
+        ApiClient.SentRequest += (method, endpoint, millis) =>
+            _sentRequest.InvokeAsync(method, endpoint, millis);
     }
 
     internal virtual void Dispose(bool disposing)
@@ -148,7 +147,8 @@ public abstract class BaseKookClient : IKookClient
             await LogManager.WriteInitialLog().ConfigureAwait(false);
         }
 
-        if (LoginState != LoginState.LoggedOut) await LogoutInternalAsync().ConfigureAwait(false);
+        if (LoginState != LoginState.LoggedOut)
+            await LogoutInternalAsync().ConfigureAwait(false);
 
         LoginState = LoginState.LoggingIn;
 
@@ -157,6 +157,7 @@ public abstract class BaseKookClient : IKookClient
             // If token validation is enabled, validate the token and let it throw any ArgumentExceptions
             // that result from invalid parameters
             if (validateToken)
+            {
                 try
                 {
                     TokenUtils.ValidateToken(tokenType, token);
@@ -166,6 +167,7 @@ public abstract class BaseKookClient : IKookClient
                     // log these ArgumentExceptions and allow for the client to attempt to log in anyways
                     await LogManager.WarningAsync("Kook", "A supplied token was invalid.", ex).ConfigureAwait(false);
                 }
+            }
 
             await ApiClient.LoginAsync(tokenType, token).ConfigureAwait(false);
             await OnLoginAsync(tokenType, token).ConfigureAwait(false);
@@ -180,8 +182,7 @@ public abstract class BaseKookClient : IKookClient
         await _loggedInEvent.InvokeAsync().ConfigureAwait(false);
     }
 
-    internal virtual Task OnLoginAsync(TokenType tokenType, string token)
-        => Task.Delay(0);
+    internal virtual Task OnLoginAsync(TokenType tokenType, string token) => Task.CompletedTask;
 
     /// <summary>
     ///     Logs out from the Kook API.
@@ -202,22 +203,17 @@ public abstract class BaseKookClient : IKookClient
     internal virtual async Task LogoutInternalAsync()
     {
         await ApiClient.GoOfflineAsync();
-
-        if (LoginState == LoginState.LoggedOut) return;
-
+        if (LoginState == LoginState.LoggedOut)
+            return;
         LoginState = LoginState.LoggingOut;
-
         await ApiClient.LogoutAsync().ConfigureAwait(false);
-
         await OnLogoutAsync().ConfigureAwait(false);
         CurrentUser = null;
         LoginState = LoginState.LoggedOut;
-
         await _loggedOutEvent.InvokeAsync().ConfigureAwait(false);
     }
 
-    internal virtual Task OnLogoutAsync()
-        => Task.Delay(0);
+    internal virtual Task OnLogoutAsync() => Task.CompletedTask;
 
     /// <inheritdoc />
     public virtual ConnectionState ConnectionState => ConnectionState.Disconnected;
@@ -227,47 +223,46 @@ public abstract class BaseKookClient : IKookClient
     #region IKookClient
 
     /// <inheritdoc />
-    ISelfUser IKookClient.CurrentUser => CurrentUser;
+    ISelfUser? IKookClient.CurrentUser => CurrentUser;
 
     /// <inheritdoc />
-    Task<IGuild> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions? options = null)
-        => Task.FromResult<IGuild>(null);
+    Task<IGuild?> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions? options)
+        => Task.FromResult<IGuild?>(null);
 
     /// <inheritdoc />
-    Task<IReadOnlyCollection<IGuild>> IKookClient.GetGuildsAsync(CacheMode mode, RequestOptions? options = null)
+    Task<IReadOnlyCollection<IGuild>> IKookClient.GetGuildsAsync(CacheMode mode, RequestOptions? options)
         => Task.FromResult<IReadOnlyCollection<IGuild>>(ImmutableArray.Create<IGuild>());
 
     /// <inheritdoc />
-    Task<IChannel> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options = null)
-        => Task.FromResult<IChannel>(null);
+    Task<IChannel?> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options)
+        => Task.FromResult<IChannel?>(null);
 
     /// <inheritdoc />
-    Task<IDMChannel> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions? options = null)
-        => Task.FromResult<IDMChannel>(null);
+    Task<IDMChannel?> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions? options)
+        => Task.FromResult<IDMChannel?>(null);
 
     /// <inheritdoc />
-    Task<IReadOnlyCollection<IDMChannel>> IKookClient.GetDMChannelsAsync(CacheMode mode, RequestOptions? options = null)
+    Task<IReadOnlyCollection<IDMChannel>> IKookClient.GetDMChannelsAsync(CacheMode mode, RequestOptions? options)
         => Task.FromResult<IReadOnlyCollection<IDMChannel>>(ImmutableArray.Create<IDMChannel>());
 
     /// <inheritdoc />
-    Task<IUser> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
-        => Task.FromResult<IUser>(null);
+    Task<IUser?> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options)
+        => Task.FromResult<IUser?>(null);
 
     /// <inheritdoc />
-    Task<IUser> IKookClient.GetUserAsync(string username, string identifyNumber, RequestOptions? options)
-        => Task.FromResult<IUser>(null);
+    Task<IUser?> IKookClient.GetUserAsync(string username, string identifyNumber, RequestOptions? options)
+        => Task.FromResult<IUser?>(null);
 
     /// <inheritdoc />
-    Task<IReadOnlyCollection<IUser>> IKookClient.GetFriendsAsync(CacheMode mode, RequestOptions? options = null)
+    Task<IReadOnlyCollection<IUser>> IKookClient.GetFriendsAsync(CacheMode mode, RequestOptions? options)
         => Task.FromResult<IReadOnlyCollection<IUser>>(ImmutableArray.Create<IUser>());
 
     /// <inheritdoc />
-    Task<IReadOnlyCollection<IFriendRequest>> IKookClient.GetFriendRequestsAsync(CacheMode mode,
-        RequestOptions? options = null)
+    Task<IReadOnlyCollection<IFriendRequest>> IKookClient.GetFriendRequestsAsync(CacheMode mode, RequestOptions? options)
         => Task.FromResult<IReadOnlyCollection<IFriendRequest>>(ImmutableArray.Create<IFriendRequest>());
 
     /// <inheritdoc />
-    Task<IReadOnlyCollection<IUser>> IKookClient.GetBlockedUsersAsync(CacheMode mode, RequestOptions? options = null)
+    Task<IReadOnlyCollection<IUser>> IKookClient.GetBlockedUsersAsync(CacheMode mode, RequestOptions? options)
         => Task.FromResult<IReadOnlyCollection<IUser>>(ImmutableArray.Create<IUser>());
 
     /// <inheritdoc />

@@ -142,7 +142,7 @@ internal class ConnectionManager : IDisposable
 
             //Abort connection on timeout
             CancellationToken cancellationToken = CancellationToken;
-            Task _ = Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 try
                 {
