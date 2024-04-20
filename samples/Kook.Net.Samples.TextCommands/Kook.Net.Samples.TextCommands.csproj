@@ -9,8 +9,6 @@
     <LangVersion>latestmajor</LangVersion>
     <RootNamespace>Kook.Net.Samples.TextCommands</RootNamespace>
     <NoWarn>NU1803</NoWarn>
-    <Configurations>Debug;Release;Debug Packets</Configurations>
-    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
