@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using StandardColor = System.Drawing.Color;
 
 namespace Kook;
@@ -7,7 +8,7 @@ namespace Kook;
 ///     Represents a color used in Kook.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public struct Color
+public readonly struct Color
 {
     /// <summary> Gets the max decimal value of color. </summary>
     public const uint MaxDecimalValue = 0xFFFFFF;
@@ -173,13 +174,13 @@ public struct Color
     /// <exception cref="ArgumentOutOfRangeException">The argument value is not between 0 to 255.</exception>
     public Color(int r, int g, int b)
     {
-        if (r < 0 || r > 255)
+        if (r is < 0 or > 255)
             throw new ArgumentOutOfRangeException(nameof(r), "Value must be within [0,255].");
 
-        if (g < 0 || g > 255)
+        if (g is < 0 or > 255)
             throw new ArgumentOutOfRangeException(nameof(g), "Value must be within [0,255].");
 
-        if (b < 0 || b > 255)
+        if (b is < 0 or > 255)
             throw new ArgumentOutOfRangeException(nameof(b), "Value must be within [0,255].");
 
         RawValue = ((uint)r << 16)
@@ -203,13 +204,13 @@ public struct Color
     /// <exception cref="ArgumentOutOfRangeException">The argument value is not between 0 to 1.</exception>
     public Color(float r, float g, float b)
     {
-        if (r < 0.0f || r > 1.0f)
+        if (r is < 0.0f or > 1.0f)
             throw new ArgumentOutOfRangeException(nameof(r), "Value must be within [0,1].");
 
-        if (g < 0.0f || g > 1.0f)
+        if (g is < 0.0f or > 1.0f)
             throw new ArgumentOutOfRangeException(nameof(g), "Value must be within [0,1].");
 
-        if (b < 0.0f || b > 1.0f)
+        if (b is < 0.0f or > 1.0f)
             throw new ArgumentOutOfRangeException(nameof(b), "Value must be within [0,1].");
 
         RawValue = ((uint)(r * 255.0f) << 16)
@@ -248,7 +249,7 @@ public struct Color
         => color.RawValue;
 
     /// <inheritdoc />
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is Color c && RawValue == c.RawValue;
 
     /// <inheritdoc />

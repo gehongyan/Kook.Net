@@ -492,7 +492,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     }
 
     /// <inheritdoc />
-    public Task UpdateAsync(RequestOptions options = null)
+    public Task UpdateAsync(RequestOptions? options = null)
         => SocketGuildHelper.UpdateAsync(this, Kook, options);
 
     #endregion

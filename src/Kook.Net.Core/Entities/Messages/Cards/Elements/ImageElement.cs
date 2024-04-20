@@ -7,7 +7,7 @@ namespace Kook;
 ///     An image element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public sealed class ImageElement : IElement, IEquatable<ImageElement>
+public class ImageElement : IElement, IEquatable<ImageElement>, IEquatable<IElement>
 {
     internal ImageElement(string source, string? alternative = null, ImageSize? size = null, bool? circle = null)
     {
@@ -65,14 +65,14 @@ public sealed class ImageElement : IElement, IEquatable<ImageElement>
     ///     Determines whether the specified <see cref="ImageElement"/> is equal to the current <see cref="ImageElement"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ImageElement"/> is equal to the current <see cref="ImageElement"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ImageElement left, ImageElement right)
+    public static bool operator ==(ImageElement? left, ImageElement? right)
         => left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ImageElement"/> is not equal to the current <see cref="ImageElement"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ImageElement"/> is not equal to the current <see cref="ImageElement"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ImageElement left, ImageElement right)
+    public static bool operator !=(ImageElement? left, ImageElement? right)
         => !(left == right);
 
     /// <summary>Determines whether the specified <see cref="ImageElement"/> is equal to the current <see cref="ImageElement"/>.</summary>
@@ -91,4 +91,7 @@ public sealed class ImageElement : IElement, IEquatable<ImageElement>
     /// <inheritdoc />
     public override int GetHashCode()
         => (Type, Source, Alternative, Size, Circle).GetHashCode();
+
+    bool IEquatable<IElement>.Equals([NotNullWhen(true)] IElement? element) =>
+        Equals(element as ImageElement);
 }

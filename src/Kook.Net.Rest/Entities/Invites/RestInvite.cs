@@ -83,7 +83,7 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
     }
 
     /// <inheritdoc />
-    public async Task UpdateAsync(RequestOptions options = null)
+    public async Task UpdateAsync(RequestOptions? options = null)
     {
         IEnumerable<Model> model =
             await Kook.ApiClient.GetGuildInvitesAsync(GuildId, ChannelId, options: options).FlattenAsync().ConfigureAwait(false);
@@ -91,7 +91,7 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
     }
 
     /// <inheritdoc />
-    public Task DeleteAsync(RequestOptions options = null)
+    public Task DeleteAsync(RequestOptions? options = null)
         => InviteHelper.DeleteAsync(this, Kook, options);
 
     /// <summary>

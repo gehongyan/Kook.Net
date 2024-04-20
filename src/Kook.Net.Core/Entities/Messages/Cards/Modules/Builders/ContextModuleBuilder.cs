@@ -1,14 +1,13 @@
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
 /// <summary>
 ///     Represents a context module builder for creating a <see cref="ContextModule"/>.
 /// </summary>
-public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuilder>
+public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuilder>, IEquatable<IModuleBuilder>
 {
-    private List<IElementBuilder> _elements;
-
     /// <summary>
     ///     Returns the maximum number of elements allowed by Kook.
     /// </summary>
@@ -17,12 +16,18 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// <summary>
     ///     Initializes a new instance of the <see cref="ContextModuleBuilder"/> class.
     /// </summary>
-    public ContextModuleBuilder() => Elements = [];
+    public ContextModuleBuilder()
+    {
+        Elements = [];
+    }
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="ContextModuleBuilder"/> class.
     /// </summary>
-    public ContextModuleBuilder(List<IElementBuilder> elements) => Elements = elements;
+    public ContextModuleBuilder(IList<IElementBuilder> elements)
+    {
+        Elements = elements;
+    }
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Context;
@@ -30,38 +35,7 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// <summary>
     ///     Gets or sets the elements of the context module.
     /// </summary>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
-    /// </exception>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The <paramref name="value"/> contains disallowed type of element builder. Allowed element builders are
-    ///     <see cref="PlainTextElementBuilder"/>, <see cref="KMarkdownElementBuilder"/>, and <see cref="ImageElementBuilder"/>.
-    /// </exception>
-    public List<IElementBuilder> Elements
-    {
-        get => _elements;
-        set
-        {
-            if (value is null)
-                throw new ArgumentNullException(
-                    nameof(Elements),
-                    "Element cannot be null.");
-
-            if (value.Count > MaxElementCount)
-                throw new ArgumentException(
-                    $"Element count must be less than or equal to {MaxElementCount}.",
-                    nameof(Elements));
-
-            if (value.Exists(e => e.Type != ElementType.PlainText
-                    && e.Type != ElementType.KMarkdown
-                    && e.Type != ElementType.Image))
-                throw new ArgumentException(
-                    "Elements must be of type PlainText, KMarkdown or Image.",
-                    nameof(Elements));
-
-            _elements = value;
-        }
-    }
+    public IList<IElementBuilder> Elements { get; set; }
 
     /// <summary>
     ///     Adds a PlainText element to the context module.
@@ -77,11 +51,6 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// </exception>
     public ContextModuleBuilder AddElement(PlainTextElementBuilder field)
     {
-        if (Elements.Count >= MaxElementCount)
-            throw new ArgumentException(
-                $"Element count must be less than or equal to {MaxElementCount}.",
-                nameof(field));
-
         Elements.Add(field);
         return this;
     }
@@ -95,16 +64,8 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// <returns>
     ///     The current builder.
     /// </returns>
-    /// <exception cref="ArgumentException">
-    ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
-    /// </exception>
     public ContextModuleBuilder AddElement(KMarkdownElementBuilder field)
     {
-        if (Elements.Count >= MaxElementCount)
-            throw new ArgumentException(
-                $"Element count must be less than or equal to {MaxElementCount}.",
-                nameof(field));
-
         Elements.Add(field);
         return this;
     }
@@ -123,11 +84,6 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// </exception>
     public ContextModuleBuilder AddElement(ImageElementBuilder field)
     {
-        if (Elements.Count >= MaxElementCount)
-            throw new ArgumentException(
-                $"Element count must be less than or equal to {MaxElementCount}.",
-                nameof(field));
-
         Elements.Add(field);
         return this;
     }
@@ -141,31 +97,12 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// <returns>
     ///     The current builder.
     /// </returns>
-    /// <exception cref="ArgumentException">
-    ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
-    /// </exception>
-    public ContextModuleBuilder AddElement<T>(Action<T> action = null)
+    public ContextModuleBuilder AddElement<T>(Action<T>? action = null)
         where T : IElementBuilder, new()
     {
         T field = new();
         action?.Invoke(field);
-        switch (field)
-        {
-            case PlainTextElementBuilder plainText:
-                AddElement(plainText);
-                break;
-            case KMarkdownElementBuilder kMarkdown:
-                AddElement(kMarkdown);
-                break;
-            case ImageElementBuilder image:
-                AddElement(image);
-                break;
-            default:
-                throw new ArgumentException(
-                    "Elements of contexts must be of type PlainText, KMarkdown or Image.",
-                    nameof(action));
-        }
-
+        Elements.Add(field);
         return this;
     }
 
@@ -175,8 +112,35 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// <returns>
     ///     A <see cref="ContextModule"/> representing the built context module object.
     /// </returns>
-    public ContextModule Build() =>
-        new(Elements.Select(e => e.Build()).ToImmutableArray());
+    /// <exception cref="ArgumentNullException">
+    ///     The <see cref="Elements"/> is null.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     The <see cref="Elements"/> count is greater than <see cref="MaxElementCount"/>.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     The <see cref="Elements"/> contain an element that is not a <see cref="PlainTextElementBuilder"/>,
+    ///     <see cref="KMarkdownElementBuilder"/>, or <see cref="ImageElementBuilder"/>.
+    /// </exception>
+    public ContextModule Build()
+    {
+        if (Elements is null)
+            throw new ArgumentNullException(
+                nameof(Elements),
+                "Element cannot be null.");
+
+        if (Elements.Count > MaxElementCount)
+            throw new ArgumentException(
+                $"Element count must be less than or equal to {MaxElementCount}.",
+                nameof(Elements));
+
+        if (Elements.Any(e => e is not (PlainTextElementBuilder or KMarkdownElementBuilder or ImageElementBuilder)))
+            throw new ArgumentException(
+                "Elements must be of type PlainText, KMarkdown or Image.",
+                nameof(Elements));
+
+        return new ContextModule([..Elements.Select(e => e.Build())]);
+    }
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
@@ -185,39 +149,45 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     ///     Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ContextModuleBuilder left, ContextModuleBuilder right)
+    public static bool operator ==(ContextModuleBuilder? left, ContextModuleBuilder? right)
         => left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ContextModuleBuilder"/> is not equal to the current <see cref="ContextModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ContextModuleBuilder"/> is not equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ContextModuleBuilder left, ContextModuleBuilder right)
+    public static bool operator !=(ContextModuleBuilder? left, ContextModuleBuilder? right)
         => !(left == right);
 
     /// <summary>Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="ContextModuleBuilder"/>, <see cref="Equals(ContextModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="ContextModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is ContextModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.</summary>
     /// <param name="contextModuleBuilder">The <see cref="ContextModuleBuilder"/> to compare with the current <see cref="ContextModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(ContextModuleBuilder contextModuleBuilder)
+    public bool Equals([NotNullWhen(true)] ContextModuleBuilder? contextModuleBuilder)
     {
-        if (contextModuleBuilder is null) return false;
+        if (contextModuleBuilder is null)
+            return false;
 
-        if (Elements.Count != contextModuleBuilder.Elements.Count) return false;
+        if (Elements.Count != contextModuleBuilder.Elements.Count)
+            return false;
 
-        for (int i = 0; i < Elements.Count; i++)
-            if (Elements[i] != contextModuleBuilder.Elements[i])
-                return false;
+        if (Elements
+            .Zip(contextModuleBuilder.Elements, (x, y) => (x, y))
+            .Any(pair => pair.x != pair.y))
+            return false;
 
         return Type == contextModuleBuilder.Type;
     }
 
     /// <inheritdoc />
     public override int GetHashCode() => base.GetHashCode();
+
+    bool IEquatable<IModuleBuilder>.Equals([NotNullWhen(true)] IModuleBuilder? moduleBuilder) =>
+        Equals(moduleBuilder as ContextModuleBuilder);
 }

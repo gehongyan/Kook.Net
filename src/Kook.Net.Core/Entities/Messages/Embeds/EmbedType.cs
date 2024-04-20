@@ -23,7 +23,12 @@ public enum EmbedType
     /// <summary>
     ///     Represents an embed that is a Bilibili video.
     /// </summary>
-    BilibiliVideo
+    BilibiliVideo,
+
+    /// <summary>
+    ///     Represents an embed that is a card.
+    /// </summary>
+    Card,
 
     // TODO: To be investigated
 }

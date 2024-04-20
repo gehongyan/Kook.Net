@@ -171,15 +171,15 @@ public class SocketSelfUser : SocketUser, ISelfUser
     #region ISelfUser
 
     /// <inheritdoc />
-    public async Task StartPlayingAsync(IGame game, RequestOptions options = null)
+    public async Task StartPlayingAsync(IGame game, RequestOptions? options = null)
         => await UserHelper.StartPlayingAsync(this, Kook, game, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public async Task StartPlayingAsync(Music music, RequestOptions options = null)
+    public async Task StartPlayingAsync(Music music, RequestOptions? options = null)
         => await UserHelper.StartPlayingAsync(this, Kook, music, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public async Task StopPlayingAsync(ActivityType type, RequestOptions options = null)
+    public async Task StopPlayingAsync(ActivityType type, RequestOptions? options = null)
         => await UserHelper.StopPlayingAsync(this, Kook, type, options).ConfigureAwait(false);
 
     #endregion

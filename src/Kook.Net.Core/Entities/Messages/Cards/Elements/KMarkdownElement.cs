@@ -7,9 +7,12 @@ namespace Kook;
 ///     A KMarkdown element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public sealed class KMarkdownElement : IElement, IEquatable<KMarkdownElement>
+public class KMarkdownElement : IElement, IEquatable<KMarkdownElement>, IEquatable<IElement>
 {
-    internal KMarkdownElement(string content) => Content = content;
+    internal KMarkdownElement(string? content)
+    {
+        Content = content;
+    }
 
     /// <summary>
     ///     Gets the type of the element.
@@ -25,10 +28,10 @@ public sealed class KMarkdownElement : IElement, IEquatable<KMarkdownElement>
     /// <returns>
     ///     A string that represents the KMarkdown content of the element.
     /// </returns>
-    public string Content { get; }
+    public string? Content { get; }
 
     /// <inheritdoc />
-    public override string ToString() => Content;
+    public override string? ToString() => Content;
 
     private string DebuggerDisplay => $"{Type}: {Content}";
 
@@ -36,14 +39,14 @@ public sealed class KMarkdownElement : IElement, IEquatable<KMarkdownElement>
     ///     Determines whether the specified <see cref="KMarkdownElement"/> is equal to the current <see cref="KMarkdownElement"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="KMarkdownElement"/> is equal to the current <see cref="KMarkdownElement"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(KMarkdownElement left, KMarkdownElement right)
+    public static bool operator ==(KMarkdownElement? left, KMarkdownElement? right)
         => left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="KMarkdownElement"/> is not equal to the current <see cref="KMarkdownElement"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="KMarkdownElement"/> is not equal to the current <see cref="KMarkdownElement"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(KMarkdownElement left, KMarkdownElement right)
+    public static bool operator !=(KMarkdownElement? left, KMarkdownElement? right)
         => !(left == right);
 
     /// <summary>Determines whether the specified <see cref="KMarkdownElement"/> is equal to the current <see cref="KMarkdownElement"/>.</summary>
@@ -62,4 +65,7 @@ public sealed class KMarkdownElement : IElement, IEquatable<KMarkdownElement>
     /// <inheritdoc />
     public override int GetHashCode()
         => (Type, Content).GetHashCode();
+
+    bool IEquatable<IElement>.Equals([NotNullWhen(true)] IElement? element) =>
+        Equals(element as KMarkdownElement);
 }

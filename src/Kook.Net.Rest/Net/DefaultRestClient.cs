@@ -70,7 +70,7 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 
     public void Dispose() => Dispose(true);
 
-    public void SetHeader(string key, string value)
+    public void SetHeader(string key, string? value)
     {
         _client.DefaultRequestHeaders.Remove(key);
         if (value != null) _client.DefaultRequestHeaders.Add(key, value);

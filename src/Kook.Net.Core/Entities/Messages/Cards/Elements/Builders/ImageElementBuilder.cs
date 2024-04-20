@@ -6,10 +6,8 @@ namespace Kook;
 /// <summary>
 ///     An element builder to build an <see cref="ImageElement"/>.
 /// </summary>
-public sealed class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuilder>
+public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuilder>, IEquatable<IElementBuilder>
 {
-    private string? _alternative;
-
     /// <summary>
     ///     Gets the maximum image alternative text length allowed by Kook.
     /// </summary>
@@ -20,7 +18,6 @@ public sealed class ImageElementBuilder : IElementBuilder, IEquatable<ImageEleme
     /// </summary>
     public ImageElementBuilder()
     {
-        Source = string.Empty;
     }
 
     /// <summary>
@@ -30,7 +27,8 @@ public sealed class ImageElementBuilder : IElementBuilder, IEquatable<ImageEleme
     /// <param name="alternative"> The alternative text of the image. </param>
     /// <param name="size"> The size of the image. </param>
     /// <param name="circle"> Whether the image should be rendered as a circle. </param>
-    public ImageElementBuilder(string source, string? alternative = null, ImageSize size = ImageSize.Small, bool circle = false)
+    public ImageElementBuilder(string source, string? alternative = null, ImageSize size = ImageSize.Small,
+        bool circle = false)
     {
         Source = source;
         Alternative = alternative;
@@ -57,27 +55,10 @@ public sealed class ImageElementBuilder : IElementBuilder, IEquatable<ImageEleme
     /// <summary>
     ///     Gets or sets the alternative text of an <see cref="ImageElementBuilder"/>.
     /// </summary>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="value"/> is greater than <see cref="MaxAlternativeLength"/>.
-    /// </exception>
     /// <returns>
     ///     A string that represents the alternative text of the <see cref="ImageElementBuilder"/>.
     /// </returns>
-    public string? Alternative
-    {
-        get => _alternative;
-        set
-        {
-            if (value?.Length > MaxAlternativeLength)
-            {
-                throw new ArgumentException(
-                    $"Image alternative length must be less than or equal to {MaxAlternativeLength}.",
-                    nameof(Alternative));
-            }
-
-            _alternative = value;
-        }
-    }
+    public string? Alternative { get; set; }
 
     /// <summary>
     ///     Gets or sets the size of the image of an <see cref="ImageElementBuilder"/>.
@@ -121,10 +102,7 @@ public sealed class ImageElementBuilder : IElementBuilder, IEquatable<ImageEleme
     /// <returns>
     ///     The current builder.
     /// </returns>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="alternative"/> is greater than <see cref="MaxAlternativeLength"/>.
-    /// </exception>
-    public ImageElementBuilder WithAlternative(string alternative)
+    public ImageElementBuilder WithAlternative(string? alternative)
     {
         Alternative = alternative;
         return this;
@@ -139,7 +117,7 @@ public sealed class ImageElementBuilder : IElementBuilder, IEquatable<ImageEleme
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public ImageElementBuilder WithSize(ImageSize size)
+    public ImageElementBuilder WithSize(ImageSize? size)
     {
         Size = size;
         return this;
@@ -154,7 +132,7 @@ public sealed class ImageElementBuilder : IElementBuilder, IEquatable<ImageEleme
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public ImageElementBuilder WithCircle(bool circle)
+    public ImageElementBuilder WithCircle(bool? circle)
     {
         Circle = circle;
         return this;
@@ -166,15 +144,35 @@ public sealed class ImageElementBuilder : IElementBuilder, IEquatable<ImageEleme
     /// <returns>
     ///     An <see cref="ImageElement"/> represents the built element object.
     /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     The <see cref="Source"/> url is null.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     The <see cref="Source"/> url is empty.
+    /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///     The source url does not include a protocol (either HTTP or HTTPS).
+    ///     The <see cref="Source"/> url does not include a protocol (either HTTP or HTTPS).
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     The length of <see cref="Alternative"/> is greater than <see cref="MaxAlternativeLength"/>.
     /// </exception>
     [MemberNotNull(nameof(Source))]
     public ImageElement Build()
     {
-        if (Source == null || !string.IsNullOrEmpty(Source))
+        if (Source == null)
+            throw new ArgumentNullException(nameof(Source), "The source url cannot be null or empty.");
+        if (!string.IsNullOrEmpty(Source))
             throw new ArgumentException("The source url cannot be null or empty.", nameof(Source));
+
         UrlValidation.Validate(Source);
+
+        if (Alternative?.Length > MaxAlternativeLength)
+        {
+            throw new ArgumentException(
+                $"Image alternative length must be less than or equal to {MaxAlternativeLength}.",
+                nameof(Alternative));
+        }
+
         return new ImageElement(Source, Alternative, Size, Circle);
     }
 
@@ -188,9 +186,6 @@ public sealed class ImageElementBuilder : IElementBuilder, IEquatable<ImageEleme
     /// <returns>
     ///     An <see cref="ImageElementBuilder"/> object that is initialized with the specified image source.
     /// </returns>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="source"/> is greater than <see cref="MaxAlternativeLength"/>.
-    /// </exception>
     public static implicit operator ImageElementBuilder(string source) => new(source);
 
     /// <inheritdoc />
@@ -201,14 +196,14 @@ public sealed class ImageElementBuilder : IElementBuilder, IEquatable<ImageEleme
     ///     Determines whether the specified <see cref="ImageElementBuilder"/> is equal to the current <see cref="ImageElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ImageElementBuilder"/> is equal to the current <see cref="ImageElementBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ImageElementBuilder left, ImageElementBuilder right)
+    public static bool operator ==(ImageElementBuilder? left, ImageElementBuilder? right)
         => left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ImageElementBuilder"/> is not equal to the current <see cref="ImageElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ImageElementBuilder"/> is not equal to the current <see cref="ImageElementBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ImageElementBuilder left, ImageElementBuilder right)
+    public static bool operator !=(ImageElementBuilder? left, ImageElementBuilder? right)
         => !(left == right);
 
     /// <summary>
@@ -235,4 +230,7 @@ public sealed class ImageElementBuilder : IElementBuilder, IEquatable<ImageEleme
 
     /// <inheritdoc />
     public override int GetHashCode() => base.GetHashCode();
+
+    bool IEquatable<IElementBuilder>.Equals([NotNullWhen(true)] IElementBuilder? elementBuilder) =>
+        Equals(elementBuilder as ImageElementBuilder);
 }

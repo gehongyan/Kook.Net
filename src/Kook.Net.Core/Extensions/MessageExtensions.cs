@@ -31,9 +31,9 @@ public static class MessageExtensions
     /// </remarks>
     /// <example>
     /// <code language="cs">
-    /// IEmote A = new Emoji("🅰");
-    /// IEmote B = new Emoji("🅱");
-    /// await msg.AddReactionsAsync(new[] { A, B });
+    /// IEmote a = new Emoji("🅰");
+    /// IEmote b = new Emoji("🅱");
+    /// await msg.AddReactionsAsync([a, b]);
     /// </code>
     /// </example>
     /// <param name="msg">The message to add reactions to.</param>
@@ -59,7 +59,7 @@ public static class MessageExtensions
     /// </remarks>
     /// <example>
     /// <code language="cs">
-    /// await msg.RemoveReactionsAsync(currentUser, new[] { A, B });
+    /// await msg.RemoveReactionsAsync(currentUser, [A, B]);
     /// </code>
     /// </example>
     /// <param name="msg">The message to remove reactions from.</param>
@@ -92,7 +92,7 @@ public static class MessageExtensions
         string path, string? fileName = null, AttachmentType type = AttachmentType.File, bool isQuote = false,
         bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendFileAsync(path, fileName, type,
-                isQuote ? new Quote(message.Id) : null,
+                isQuote ? new MessageReference(message.Id) : null,
                 isEphemeral ? message.Author : null,
                 options)
             .ConfigureAwait(false);
@@ -111,7 +111,7 @@ public static class MessageExtensions
         Stream stream, string? fileName = null, AttachmentType type = AttachmentType.File, bool isQuote = false,
         bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendFileAsync(stream, fileName, type,
-                isQuote ? new Quote(message.Id) : null,
+                isQuote ? new MessageReference(message.Id) : null,
                 isEphemeral ? message.Author : null,
                 options)
             .ConfigureAwait(false);
@@ -127,7 +127,7 @@ public static class MessageExtensions
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
         FileAttachment attachment, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendFileAsync(attachment,
-                isQuote ? new Quote(message.Id) : null,
+                isQuote ? new MessageReference(message.Id) : null,
                 isEphemeral ? message.Author : null,
                 options)
             .ConfigureAwait(false);
@@ -143,7 +143,7 @@ public static class MessageExtensions
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(this IUserMessage message,
         string content, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendTextAsync(content,
-                isQuote ? new Quote(message.Id) : null,
+                isQuote ? new MessageReference(message.Id) : null,
                 isEphemeral ? message.Author : null,
                 options)
             .ConfigureAwait(false);
@@ -159,7 +159,7 @@ public static class MessageExtensions
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(this IUserMessage message,
         IEnumerable<ICard> cards, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendCardsAsync(cards,
-                isQuote ? new Quote(message.Id) : null,
+                isQuote ? new MessageReference(message.Id) : null,
                 isEphemeral ? message.Author : null,
                 options)
             .ConfigureAwait(false);
@@ -175,7 +175,7 @@ public static class MessageExtensions
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardAsync(this IUserMessage message,
         ICard card, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendCardAsync(card,
-                isQuote ? new Quote(message.Id) : null,
+                isQuote ? new MessageReference(message.Id) : null,
                 isEphemeral ? message.Author : null,
                 options)
             .ConfigureAwait(false);

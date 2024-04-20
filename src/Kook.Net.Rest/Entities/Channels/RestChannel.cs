@@ -37,7 +37,7 @@ public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
     }
 
     /// <inheritdoc />
-    public virtual Task UpdateAsync(RequestOptions options = null) => Task.Delay(0);
+    public virtual Task UpdateAsync(RequestOptions? options = null) => Task.Delay(0);
 
     #endregion
 

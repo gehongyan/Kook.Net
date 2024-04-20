@@ -1,11 +1,12 @@
+using System.Diagnostics.CodeAnalysis;
 using Kook.Utils;
 
 namespace Kook;
 
 /// <summary>
-///     Represents a audio module builder for creating an <see cref="AudioModule"/>.
+///     Represents an audio module builder for creating an <see cref="AudioModule"/>.
 /// </summary>
-public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
+public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>, IEquatable<IModuleBuilder>
 {
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Audio;
@@ -23,11 +24,11 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     /// <param name="source"> The source URL of the video. </param>
     /// <param name="cover"> The cover URL of the video. </param>
     /// <param name="title"> The title of the video. </param>
-    public AudioModuleBuilder(string source, string cover = null, string title = null)
+    public AudioModuleBuilder(string source, string? cover = null, string? title = null)
     {
-        WithSource(source);
-        WithCover(cover);
-        WithTitle(title);
+        Source = source;
+        Cover = cover;
+        Title = title;
     }
 
     /// <summary>
@@ -36,7 +37,7 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     /// <returns>
     ///     The source URL of the video.
     /// </returns>
-    public string Source { get; set; }
+    public string? Source { get; set; }
 
     /// <summary>
     ///     Gets or sets the cover URL of the video.
@@ -44,7 +45,7 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     /// <returns>
     ///     The cover URL of the video.
     /// </returns>
-    public string Cover { get; set; }
+    public string? Cover { get; set; }
 
     /// <summary>
     ///     Gets or sets the title of the video.
@@ -52,7 +53,7 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     /// <returns>
     ///     The title of the video.
     /// </returns>
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
     /// <summary>
     ///     Sets the source URL of the video.
@@ -63,7 +64,7 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public AudioModuleBuilder WithSource(string source)
+    public AudioModuleBuilder WithSource(string? source)
     {
         Source = source;
         return this;
@@ -78,7 +79,7 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public AudioModuleBuilder WithCover(string cover)
+    public AudioModuleBuilder WithCover(string? cover)
     {
         Cover = cover;
         return this;
@@ -93,7 +94,7 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public AudioModuleBuilder WithTitle(string title)
+    public AudioModuleBuilder WithTitle(string? title)
     {
         Title = title;
         return this;
@@ -105,56 +106,63 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     /// <returns>
     ///     An <see cref="AudioModule"/> representing the built audio module object.
     /// </returns>
-    /// <exception cref="InvalidOperationException">
-    ///     <see cref="Source"/> does not include a protocol (neither HTTP nor HTTPS)
-    /// </exception>
-    /// <exception cref="InvalidOperationException">
-    ///     <see cref="Cover"/> does not include a protocol (neither HTTP nor HTTPS)
+    /// <exception cref="ArgumentNullException">
+    ///     <see cref="Source"/> cannot be null
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     <see cref="Source"/> cannot be null or empty
+    ///     <see cref="Source"/> cannot be empty
     /// </exception>
-    /// <exception cref="ArgumentException">
-    ///     <see cref="Cover"/> cannot be null or empty
+    /// <exception cref="UriFormatException">
+    ///     <see cref="Source"/> is not a valid URL
     /// </exception>
+    /// <exception cref="UriFormatException">
+    ///     <see cref="Cover"/> is not a valid URL
+    /// </exception>
+    [MemberNotNull(nameof(Source))]
     public AudioModule Build()
     {
-        if (!UrlValidation.Validate(Source)) throw new ArgumentException("The link to a file cannot be null or empty.", nameof(Source));
-
-        UrlValidation.Validate(Cover);
+        if (Source == null)
+            throw new ArgumentNullException(nameof(Source), "The source url cannot be null.");
+        if (!string.IsNullOrEmpty(Source))
+            throw new ArgumentException("The source url cannot be empty.", nameof(Source));
+        UrlValidation.Validate(Source);
+        if (Cover != null)
+            UrlValidation.Validate(Cover);
         return new AudioModule(Source, Title, Cover);
     }
 
     /// <inheritdoc />
+    [MemberNotNull(nameof(Source))]
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
     ///     Determines whether the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(AudioModuleBuilder left, AudioModuleBuilder right)
+    public static bool operator ==(AudioModuleBuilder? left, AudioModuleBuilder? right)
         => left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="AudioModuleBuilder"/> is not equal to the current <see cref="AudioModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="AudioModuleBuilder"/> is not equal to the current <see cref="AudioModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(AudioModuleBuilder left, AudioModuleBuilder right)
+    public static bool operator !=(AudioModuleBuilder? left, AudioModuleBuilder? right)
         => !(left == right);
 
     /// <summary>Determines whether the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="AudioModuleBuilder"/>, <see cref="Equals(AudioModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="AudioModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is AudioModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>.</summary>
     /// <param name="audioModuleBuilder">The <see cref="AudioModuleBuilder"/> to compare with the current <see cref="AudioModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(AudioModuleBuilder audioModuleBuilder)
+    public bool Equals([NotNullWhen(true)] AudioModuleBuilder? audioModuleBuilder)
     {
-        if (audioModuleBuilder is null) return false;
+        if (audioModuleBuilder is null)
+            return false;
 
         return Type == audioModuleBuilder.Type
             && Source == audioModuleBuilder.Source
@@ -164,4 +172,7 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
 
     /// <inheritdoc />
     public override int GetHashCode() => base.GetHashCode();
+
+    bool IEquatable<IModuleBuilder>.Equals([NotNullWhen(true)] IModuleBuilder? moduleBuilder) =>
+        Equals(moduleBuilder as AudioModuleBuilder);
 }

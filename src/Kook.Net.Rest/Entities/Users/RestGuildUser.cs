@@ -102,14 +102,14 @@ public class RestGuildUser : RestUser, IGuildUser
     }
 
     /// <inheritdoc />
-    public override async Task UpdateAsync(RequestOptions options = null)
+    public override async Task UpdateAsync(RequestOptions? options = null)
     {
         MemberModel model = await Kook.ApiClient.GetGuildMemberAsync(GuildId, Id, options).ConfigureAwait(false);
         Update(model);
     }
 
     /// <inheritdoc />
-    public async Task ModifyNicknameAsync(string name, RequestOptions options = null)
+    public async Task ModifyNicknameAsync(string name, RequestOptions? options = null)
     {
         string nickname = await UserHelper.ModifyNicknameAsync(this, Kook, name, options);
         // The KOOK API will clear the nickname if the nickname is set to the same as the username at present.
@@ -119,11 +119,12 @@ public class RestGuildUser : RestUser, IGuildUser
     }
 
     /// <inheritdoc />
-    public Task<IReadOnlyCollection<BoostSubscriptionMetadata>> GetBoostSubscriptionsAsync(RequestOptions options = null)
+    public Task<IReadOnlyCollection<BoostSubscriptionMetadata>> GetBoostSubscriptionsAsync(
+        RequestOptions? options = null)
         => UserHelper.GetBoostSubscriptionsAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task KickAsync(RequestOptions options = null)
+    public Task KickAsync(RequestOptions? options = null)
         => UserHelper.KickAsync(this, Kook, options);
 
     /// <inheritdoc />
@@ -131,7 +132,7 @@ public class RestGuildUser : RestUser, IGuildUser
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task AddRoleAsync(uint roleId, RequestOptions options = null)
+    public Task AddRoleAsync(uint roleId, RequestOptions? options = null)
         => AddRolesAsync(new[] { roleId }, options);
 
     /// <inheritdoc />
@@ -139,7 +140,7 @@ public class RestGuildUser : RestUser, IGuildUser
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task AddRoleAsync(IRole role, RequestOptions options = null)
+    public Task AddRoleAsync(IRole role, RequestOptions? options = null)
         => AddRoleAsync(role.Id, options);
 
     /// <inheritdoc />
@@ -147,7 +148,7 @@ public class RestGuildUser : RestUser, IGuildUser
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null)
+    public Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null)
         => UserHelper.AddRolesAsync(this, Kook, roleIds, options);
 
     /// <inheritdoc />
@@ -155,7 +156,7 @@ public class RestGuildUser : RestUser, IGuildUser
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null)
+    public Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null)
         => AddRolesAsync(roles.Select(x => x.Id), options);
 
     /// <inheritdoc />
@@ -163,7 +164,7 @@ public class RestGuildUser : RestUser, IGuildUser
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRoleAsync(uint roleId, RequestOptions options = null)
+    public Task RemoveRoleAsync(uint roleId, RequestOptions? options = null)
         => RemoveRolesAsync(new[] { roleId }, options);
 
     /// <inheritdoc />
@@ -171,7 +172,7 @@ public class RestGuildUser : RestUser, IGuildUser
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRoleAsync(IRole role, RequestOptions options = null)
+    public Task RemoveRoleAsync(IRole role, RequestOptions? options = null)
         => RemoveRoleAsync(role.Id, options);
 
     /// <inheritdoc />
@@ -179,7 +180,7 @@ public class RestGuildUser : RestUser, IGuildUser
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null)
+    public Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null)
         => UserHelper.RemoveRolesAsync(this, Kook, roleIds, options);
 
     /// <inheritdoc />
@@ -187,27 +188,27 @@ public class RestGuildUser : RestUser, IGuildUser
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null)
+    public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null)
         => RemoveRolesAsync(roles.Select(x => x.Id));
 
     /// <inheritdoc />
-    public Task MuteAsync(RequestOptions options = null)
+    public Task MuteAsync(RequestOptions? options = null)
         => GuildHelper.MuteUserAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task DeafenAsync(RequestOptions options = null)
+    public Task DeafenAsync(RequestOptions? options = null)
         => GuildHelper.DeafenUserAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task UnmuteAsync(RequestOptions options = null)
+    public Task UnmuteAsync(RequestOptions? options = null)
         => GuildHelper.UnmuteUserAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task UndeafenAsync(RequestOptions options = null)
+    public Task UndeafenAsync(RequestOptions? options = null)
         => GuildHelper.UndeafenUserAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null)
+    public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions? options = null)
         => UserHelper.GetConnectedChannelAsync(this, Kook, options);
 
     /// <inheritdoc />
@@ -219,7 +220,7 @@ public class RestGuildUser : RestUser, IGuildUser
     }
 
     /// <inheritdoc />
-    public override Task RequestFriendAsync(RequestOptions options = null) =>
+    public override Task RequestFriendAsync(RequestOptions? options = null) =>
         UserHelper.RequestFriendAsync(this, Kook, options);
 
     #endregion
@@ -248,7 +249,7 @@ public class RestGuildUser : RestUser, IGuildUser
     bool? IVoiceState.IsDeafened => null;
 
     /// <inheritdoc />
-    IVoiceChannel IVoiceState.VoiceChannel => null;
+    IVoiceChannel? IVoiceState.VoiceChannel => null;
 
     #endregion
 }

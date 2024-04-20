@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
@@ -6,9 +7,9 @@ namespace Kook;
 ///     A file module that can be used in an <see cref="ICard"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class FileModule : IMediaModule, IEquatable<FileModule>
+public class FileModule : IMediaModule, IEquatable<FileModule>, IEquatable<IModule>
 {
-    internal FileModule(string source, string title)
+    internal FileModule(string source, string? title)
     {
         Source = source;
         Title = title;
@@ -21,7 +22,7 @@ public class FileModule : IMediaModule, IEquatable<FileModule>
     public string Source { get; }
 
     /// <inheritdoc />
-    public string Title { get; }
+    public string? Title { get; }
 
     private string DebuggerDisplay => $"{Type}: {Title}";
 
@@ -47,16 +48,19 @@ public class FileModule : IMediaModule, IEquatable<FileModule>
     /// <remarks>If the object passes is an <see cref="FileModule"/>, <see cref="Equals(FileModule)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="FileModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="FileModule"/> is equal to the current <see cref="FileModule"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is FileModule fileModule && Equals(fileModule);
 
     /// <summary>Determines whether the specified <see cref="FileModule"/> is equal to the current <see cref="FileModule"/>.</summary>
     /// <param name="fileModule">The <see cref="FileModule"/> to compare with the current <see cref="FileModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="FileModule"/> is equal to the current <see cref="FileModule"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(FileModule fileModule)
+    public bool Equals([NotNullWhen(true)] FileModule? fileModule)
         => GetHashCode() == fileModule?.GetHashCode();
 
     /// <inheritdoc />
     public override int GetHashCode()
         => (Type, Source, Title).GetHashCode();
+
+    bool IEquatable<IModule>.Equals([NotNullWhen(true)] IModule? module) =>
+        Equals(module as FileModule);
 }

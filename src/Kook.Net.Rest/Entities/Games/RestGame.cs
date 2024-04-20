@@ -62,7 +62,7 @@ public class RestGame : RestEntity<int>, IGame
         await GameHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public async Task DeleteAsync(RequestOptions options = null) => await GameHelper.DeleteAsync(this, Kook, options).ConfigureAwait(false);
+    public async Task DeleteAsync(RequestOptions? options = null) => await GameHelper.DeleteAsync(this, Kook, options).ConfigureAwait(false);
 
     /// <inheritdoc />
     async Task<IGame> IGame.ModifyAsync(Action<GameProperties> func, RequestOptions? options)

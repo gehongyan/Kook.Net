@@ -5,10 +5,8 @@ namespace Kook;
 /// <summary>
 ///     An element builder to build a <see cref="KMarkdownElement"/>.
 /// </summary>
-public sealed class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElementBuilder>
+public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElementBuilder>, IEquatable<IElementBuilder>
 {
-    private string? _content;
-
     /// <summary>
     ///     Gets the maximum KMarkdown length allowed by Kook.
     /// </summary>
@@ -25,7 +23,7 @@ public sealed class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkd
     ///     Initializes a new instance of the <see cref="KMarkdownElementBuilder"/> class.
     /// </summary>
     /// <param name="content"></param>
-    public KMarkdownElementBuilder(string content)
+    public KMarkdownElementBuilder(string? content)
     {
         Content = content;
     }
@@ -41,31 +39,10 @@ public sealed class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkd
     /// <summary>
     ///     Gets or sets the content of a <see cref="KMarkdownElementBuilder"/>.
     /// </summary>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The <paramref name="value"/> cannot be null.
-    /// </exception>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="value"/> is greater than <see cref="MaxKMarkdownLength"/>.
-    /// </exception>
     /// <returns>
     ///     The content of the <see cref="KMarkdownElementBuilder"/>.
     /// </returns>
-    public string? Content
-    {
-        get => _content;
-        set
-        {
-            if (value is null)
-                throw new ArgumentException("The content cannot be null.", nameof(value));
-
-            if (value.Length > MaxKMarkdownLength)
-                throw new ArgumentException(
-                    $"KMarkdown length must be less than or equal to {MaxKMarkdownLength}.",
-                    nameof(Content));
-
-            _content = value;
-        }
-    }
+    public string? Content { get; set; }
 
     /// <summary>
     ///     Sets the content of a <see cref="KMarkdownElementBuilder"/>.
@@ -74,12 +51,6 @@ public sealed class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkd
     /// <returns>
     ///     The current builder.
     /// </returns>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The <paramref name="content"/> cannot be null.
-    /// </exception>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="content"/> is greater than <see cref="MaxKMarkdownLength"/>.
-    /// </exception>
     public KMarkdownElementBuilder WithContent(string content)
     {
         Content = content;
@@ -92,11 +63,16 @@ public sealed class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkd
     /// <returns>
     ///     A <see cref="KMarkdownElement"/> represents the built element object.
     /// </returns>
-    [MemberNotNull(nameof(Content))]
+    /// <exception cref="ArgumentException">
+    ///     The length of <see cref="Content"/> is greater than <see cref="MaxKMarkdownLength"/>.
+    /// </exception>
     public KMarkdownElement Build()
     {
-        if (Content is null)
-            throw new InvalidOperationException("The content cannot be null.");
+        if (Content?.Length > MaxKMarkdownLength)
+            throw new ArgumentException(
+                $"KMarkdown length must be less than or equal to {MaxKMarkdownLength}.",
+                nameof(Content));
+
         return new KMarkdownElement(Content);
     }
 
@@ -110,30 +86,23 @@ public sealed class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkd
     /// <returns>
     ///     A <see cref="KMarkdownElementBuilder"/> object that is initialized with the specified content.
     /// </returns>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The <paramref name="content"/> cannot be null.
-    /// </exception>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="content"/> is greater than <see cref="MaxKMarkdownLength"/>.
-    /// </exception>
     public static implicit operator KMarkdownElementBuilder(string content) => new(content);
 
     /// <inheritdoc />
-    [MemberNotNull(nameof(Content))]
     IElement IElementBuilder.Build() => Build();
 
     /// <summary>
     ///     Determines whether the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public static bool operator ==(KMarkdownElementBuilder left, KMarkdownElementBuilder right)
+    public static bool operator ==(KMarkdownElementBuilder? left, KMarkdownElementBuilder? right)
         => left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="KMarkdownElementBuilder"/> is not equal to the current <see cref="KMarkdownElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="KMarkdownElementBuilder"/> is not equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public static bool operator !=(KMarkdownElementBuilder left, KMarkdownElementBuilder right)
+    public static bool operator !=(KMarkdownElementBuilder? left, KMarkdownElementBuilder? right)
         => !(left == right);
 
     /// <summary>
@@ -157,4 +126,7 @@ public sealed class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkd
 
     /// <inheritdoc />
     public override int GetHashCode() => base.GetHashCode();
+
+    bool IEquatable<IElementBuilder>.Equals([NotNullWhen(true)] IElementBuilder? elementBuilder) =>
+        Equals(elementBuilder as KMarkdownElementBuilder);
 }

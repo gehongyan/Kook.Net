@@ -215,19 +215,19 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
         => await UserHelper.UpdateIntimacyAsync(this, Kook, func, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public Task BlockAsync(RequestOptions options = null) =>
+    public Task BlockAsync(RequestOptions? options = null) =>
         UserHelper.BlockAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task UnblockAsync(RequestOptions options = null) =>
+    public Task UnblockAsync(RequestOptions? options = null) =>
         UserHelper.UnblockAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task RequestFriendAsync(RequestOptions options = null) =>
+    public Task RequestFriendAsync(RequestOptions? options = null) =>
         UserHelper.RequestFriendAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task RemoveFriendAsync(RequestOptions options = null) =>
+    public Task RemoveFriendAsync(RequestOptions? options = null) =>
         UserHelper.RemoveFriendAsync(this, Kook, options);
 
     /// <summary>
@@ -246,15 +246,15 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     #region IUser
 
     /// <inheritdoc />
-    async Task<IDMChannel> IUser.CreateDMChannelAsync(RequestOptions options)
+    async Task<IDMChannel> IUser.CreateDMChannelAsync(RequestOptions? options)
         => await CreateDMChannelAsync(options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task<IIntimacy> IUser.GetIntimacyAsync(RequestOptions options)
+    async Task<IIntimacy> IUser.GetIntimacyAsync(RequestOptions? options)
         => await GetIntimacyAsync(options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task IUser.UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options)
+    async Task IUser.UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions? options)
         => await UpdateIntimacyAsync(func, options).ConfigureAwait(false);
 
     #endregion

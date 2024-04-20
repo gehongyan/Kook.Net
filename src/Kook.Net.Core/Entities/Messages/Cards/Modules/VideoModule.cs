@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
@@ -6,9 +7,9 @@ namespace Kook;
 ///     Represents a video module in an <see cref="ICard"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class VideoModule : IMediaModule, IEquatable<VideoModule>
+public class VideoModule : IMediaModule, IEquatable<VideoModule>, IEquatable<IModule>
 {
-    internal VideoModule(string source, string title)
+    internal VideoModule(string source, string? title)
     {
         Source = source;
         Title = title;
@@ -21,7 +22,7 @@ public class VideoModule : IMediaModule, IEquatable<VideoModule>
     public string Source { get; }
 
     /// <inheritdoc />
-    public string Title { get; }
+    public string? Title { get; }
 
     private string DebuggerDisplay => $"{Type}: {Title}";
 
@@ -47,16 +48,19 @@ public class VideoModule : IMediaModule, IEquatable<VideoModule>
     /// <remarks>If the object passes is an <see cref="VideoModule"/>, <see cref="Equals(VideoModule)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="VideoModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="VideoModule"/> is equal to the current <see cref="VideoModule"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)]object? obj)
         => obj is VideoModule videoModule && Equals(videoModule);
 
     /// <summary>Determines whether the specified <see cref="VideoModule"/> is equal to the current <see cref="VideoModule"/>.</summary>
     /// <param name="videoModule">The <see cref="VideoModule"/> to compare with the current <see cref="VideoModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="VideoModule"/> is equal to the current <see cref="VideoModule"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(VideoModule videoModule)
+    public bool Equals([NotNullWhen(true)]VideoModule? videoModule)
         => GetHashCode() == videoModule?.GetHashCode();
 
     /// <inheritdoc />
     public override int GetHashCode()
         => (Type, Source, Title).GetHashCode();
+
+    bool IEquatable<IModule>.Equals([NotNullWhen(true)] IModule? module) =>
+        Equals(module as VideoModule);
 }

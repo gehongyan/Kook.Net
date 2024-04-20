@@ -209,12 +209,13 @@ public struct OverwritePermissions
     /// <returns>A <see cref="List{T}"/> of all allowed <see cref="ChannelPermission"/> flags. If none, the list will be empty.</returns>
     public List<ChannelPermission> ToAllowList()
     {
-        List<ChannelPermission> perms = new();
+        List<ChannelPermission> perms = [];
         for (byte i = 0; i < Permissions.MaxBits; i++)
         {
             // first operand must be long or ulong to shift >31 bits
             ulong flag = (ulong)1 << i;
-            if ((AllowValue & flag) != 0) perms.Add((ChannelPermission)flag);
+            if ((AllowValue & flag) != 0)
+                perms.Add((ChannelPermission)flag);
         }
 
         return perms;
@@ -230,7 +231,8 @@ public struct OverwritePermissions
         for (byte i = 0; i < Permissions.MaxBits; i++)
         {
             ulong flag = (ulong)1 << i;
-            if ((DenyValue & flag) != 0) perms.Add((ChannelPermission)flag);
+            if ((DenyValue & flag) != 0)
+                perms.Add((ChannelPermission)flag);
         }
 
         return perms;

@@ -20,19 +20,19 @@ public struct FileAttachment : IDisposable
     public AttachmentType Type { get; private set; }
 
     /// <summary>
-    ///     Gets  the filename.
+    ///     Gets the filename.
     /// </summary>
     public string FileName { get; private set; }
 
     /// <summary>
     ///     Gets the stream containing the file content.
     /// </summary>
-    public Stream Stream { get; }
+    public Stream? Stream { get; }
 
     /// <summary>
     ///     Gets the URI of the file.
     /// </summary>
-    public Uri Uri { get; internal set; }
+    public Uri? Uri { get; internal set; }
 
     /// <summary>
     ///     Creates a file attachment from a stream.
@@ -96,7 +96,7 @@ public struct FileAttachment : IDisposable
     /// <exception cref="IOException">
     ///     An I/O error occurred while opening the file.
     /// </exception>
-    public FileAttachment(string path, string fileName = null, AttachmentType type = AttachmentType.File)
+    public FileAttachment(string path, string? fileName = null, AttachmentType type = AttachmentType.File)
     {
         _isDisposed = false;
         Mode = CreateAttachmentMode.FilePath;

@@ -20,4 +20,7 @@ internal class LinkEmbed : EmbedBase
 
     [JsonPropertyName("image")]
     public string Image { get; set; }
+
+    [JsonPropertyName("url")]
+    public string Url { get; set; }
 }

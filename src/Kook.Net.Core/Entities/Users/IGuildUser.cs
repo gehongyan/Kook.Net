@@ -137,7 +137,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous kick operation.
     /// </returns>
-    Task KickAsync(RequestOptions options = null);
+    Task KickAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Modifies this user's nickname in this guild.
@@ -156,7 +156,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
-    Task ModifyNicknameAsync(string name, RequestOptions options = null);
+    Task ModifyNicknameAsync(string name, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets all subscriptions of this user for this guild.
@@ -164,9 +164,9 @@ public interface IGuildUser : IUser, IVoiceState
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     A task that represents the asynchronous retrieval operation. The task result contains
-    ///     a collection of <see cref="BoostSubscriptionMetadata"/>, each representing the subscriptions information.
+    ///     a collection of <see cref="BoostSubscriptionMetadata"/>, each representing the subscription information.
     /// </returns>
-    Task<IReadOnlyCollection<BoostSubscriptionMetadata>> GetBoostSubscriptionsAsync(RequestOptions options = null);
+    Task<IReadOnlyCollection<BoostSubscriptionMetadata>> GetBoostSubscriptionsAsync(RequestOptions? options = null);
 
     #endregion
 
@@ -180,7 +180,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous role addition operation.
     /// </returns>
-    Task AddRoleAsync(uint roleId, RequestOptions options = null);
+    Task AddRoleAsync(uint roleId, RequestOptions? options = null);
 
     /// <summary>
     ///     Adds the specified role to this user in the guild.
@@ -190,7 +190,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous role addition operation.
     /// </returns>
-    Task AddRoleAsync(IRole role, RequestOptions options = null);
+    Task AddRoleAsync(IRole role, RequestOptions? options = null);
 
     /// <summary>
     ///     Adds the specified <paramref name="roleIds"/> to this user in the guild.
@@ -200,7 +200,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous role addition operation.
     /// </returns>
-    Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null);
+    Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null);
 
     /// <summary>
     ///     Adds the specified <paramref name="roles"/> to this user in the guild.
@@ -210,7 +210,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous role addition operation.
     /// </returns>
-    Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null);
+    Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null);
 
     /// <summary>
     ///     Removes the specified <paramref name="roleId"/> from this user in the guild.
@@ -220,7 +220,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous role removal operation.
     /// </returns>
-    Task RemoveRoleAsync(uint roleId, RequestOptions options = null);
+    Task RemoveRoleAsync(uint roleId, RequestOptions? options = null);
 
     /// <summary>
     ///     Removes the specified <paramref name="role"/> from this user in the guild.
@@ -230,7 +230,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous role removal operation.
     /// </returns>
-    Task RemoveRoleAsync(IRole role, RequestOptions options = null);
+    Task RemoveRoleAsync(IRole role, RequestOptions? options = null);
 
     /// <summary>
     ///     Removes the specified <paramref name="roleIds"/> from this user in the guild.
@@ -240,7 +240,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous role removal operation.
     /// </returns>
-    Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null);
+    Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null);
 
     /// <summary>
     ///     Removes the specified <paramref name="roles"/> from this user in the guild.
@@ -250,7 +250,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous role removal operation.
     /// </returns>
-    Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null);
+    Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null);
 
     #endregion
 
@@ -263,7 +263,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous muting operation.
     /// </returns>
-    Task MuteAsync(RequestOptions options = null);
+    Task MuteAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Deafen this user in this guild.
@@ -272,7 +272,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous deafening operation.
     /// </returns>
-    Task DeafenAsync(RequestOptions options = null);
+    Task DeafenAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Unmute this user in this guild.
@@ -281,7 +281,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous unmuting operation.
     /// </returns>
-    Task UnmuteAsync(RequestOptions options = null);
+    Task UnmuteAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Undeafen this user in this guild.
@@ -290,7 +290,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous undeafening operation.
     /// </returns>
-    Task UndeafenAsync(RequestOptions options = null);
+    Task UndeafenAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a collection of voice channels a user.
@@ -300,7 +300,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     A task that represents the asynchronous get operation. The task result contains a collection of
     ///     voice channels the user is connected to.
     /// </returns>
-    Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null);
+    Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions? options = null);
 
     #endregion
 }

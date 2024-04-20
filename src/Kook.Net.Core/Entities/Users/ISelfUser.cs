@@ -33,7 +33,7 @@ public interface ISelfUser : IUser
     /// <returns>
     ///     A task that represents the asynchronous operation for starting a game activity.
     /// </returns>
-    Task StartPlayingAsync(IGame game, RequestOptions options = null);
+    Task StartPlayingAsync(IGame game, RequestOptions? options = null);
 
     /// <summary>
     ///     Starts a new music activity. After this operation, a music activity will be displayed on the currently connected user's profile.
@@ -43,7 +43,7 @@ public interface ISelfUser : IUser
     /// <returns>
     ///     A task that represents the asynchronous operation for starting a music activity.
     /// </returns>
-    Task StartPlayingAsync(Music music, RequestOptions options = null);
+    Task StartPlayingAsync(Music music, RequestOptions? options = null);
 
     /// <summary>
     ///     Stops an activity. After this operation, the activity on the currently connected user's profile will disappear.
@@ -53,5 +53,5 @@ public interface ISelfUser : IUser
     /// <returns>
     ///     A task that represents the asynchronous operation for stopping an activity.
     /// </returns>
-    Task StopPlayingAsync(ActivityType type, RequestOptions options = null);
+    Task StopPlayingAsync(ActivityType type, RequestOptions? options = null);
 }

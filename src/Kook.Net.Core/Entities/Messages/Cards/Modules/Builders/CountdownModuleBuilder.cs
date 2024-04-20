@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Kook;
 
 /// <summary>
 ///     Represents a countdown module builder for creating a <see cref="CountdownModule"/>.
 /// </summary>
-public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModuleBuilder>
+public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModuleBuilder>, IEquatable<IModuleBuilder>
 {
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Countdown;
@@ -20,10 +22,9 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     /// </summary>
     public CountdownModuleBuilder(CountdownMode mode, DateTimeOffset endTime, DateTimeOffset? startTime = null)
     {
-        WithMode(mode);
-        WithEndTime(endTime);
-        if (startTime.HasValue)
-            WithStartTime(startTime.Value);
+        Mode = mode;
+        EndTime = endTime;
+        StartTime = startTime;
     }
 
     /// <summary>
@@ -89,7 +90,7 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public CountdownModuleBuilder WithStartTime(DateTimeOffset startTime)
+    public CountdownModuleBuilder WithStartTime(DateTimeOffset? startTime)
     {
         StartTime = startTime;
         return this;
@@ -101,6 +102,9 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     /// <returns>
     ///     A <see cref="CountdownModule"/> representing the built countdown module object.
     /// </returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    ///     <see cref="CountdownMode"/> is not <see cref="CountdownMode.Second"/> but <see cref="StartTime"/> is set.
+    /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
     ///     <see cref="EndTime"/> is before the current time.
     /// </exception>
@@ -118,8 +122,8 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
 
         if (EndTime < DateTimeOffset.Now)
             throw new ArgumentOutOfRangeException(
-                message: $"{nameof(EndTime)} must be equal or later than current timestamp.",
-                paramName: nameof(EndTime));
+                nameof(EndTime),
+                $"{nameof(EndTime)} must be equal or later than current timestamp.");
 
         if (StartTime is not null && StartTime < DateTimeOffset.FromUnixTimeSeconds(0))
             throw new ArgumentOutOfRangeException(
@@ -141,27 +145,27 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     ///     Determines whether the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(CountdownModuleBuilder left, CountdownModuleBuilder right)
+    public static bool operator ==(CountdownModuleBuilder? left, CountdownModuleBuilder? right)
         => left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="CountdownModuleBuilder"/> is not equal to the current <see cref="CountdownModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is not equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(CountdownModuleBuilder left, CountdownModuleBuilder right)
+    public static bool operator !=(CountdownModuleBuilder? left, CountdownModuleBuilder? right)
         => !(left == right);
 
     /// <summary>Determines whether the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="CountdownModuleBuilder"/>, <see cref="Equals(CountdownModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="CountdownModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is CountdownModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>.</summary>
     /// <param name="countdownModuleBuilder">The <see cref="CountdownModuleBuilder"/> to compare with the current <see cref="CountdownModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(CountdownModuleBuilder countdownModuleBuilder)
+    public bool Equals([NotNullWhen(true)] CountdownModuleBuilder? countdownModuleBuilder)
     {
         if (countdownModuleBuilder is null) return false;
 
@@ -173,4 +177,7 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
 
     /// <inheritdoc />
     public override int GetHashCode() => base.GetHashCode();
+
+    bool IEquatable<IModuleBuilder>.Equals([NotNullWhen(true)] IModuleBuilder? moduleBuilder) =>
+        Equals(moduleBuilder as CountdownModuleBuilder);
 }

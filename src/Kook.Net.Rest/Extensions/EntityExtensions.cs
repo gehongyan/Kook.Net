@@ -407,13 +407,15 @@ internal static class EntityExtensions
 
     public static IEmbed ToEntity(this API.EmbedBase model)
     {
-        if (model is null) return null;
+        if (model is null)
+            return null;
 
         return model.Type switch
         {
             EmbedType.Link => (model as API.LinkEmbed).ToEntity(),
             EmbedType.Image => (model as API.ImageEmbed).ToEntity(),
             EmbedType.BilibiliVideo => (model as API.BilibiliVideoEmbed).ToEntity(),
+            EmbedType.Card => (model as API.CardEmbed).ToEntity(),
             _ => (model as API.NotImplementedEmbed).ToNotImplementedEntity()
         };
     }
@@ -426,6 +428,13 @@ internal static class EntityExtensions
     public static BilibiliVideoEmbed ToEntity(this API.BilibiliVideoEmbed model) =>
         new(model.Url, model.OriginUrl, model.BvNumber, model.IframePath,
             TimeSpan.FromSeconds(model.Duration), model.Title, model.Cover);
+
+    public static CardEmbed ToEntity(this API.CardEmbed model)
+    {
+        return new CardEmbed(new Card(model.Theme, model.Size, model.Color,
+            model.Modules.Select(m => m.ToEntity()).ToImmutableArray()));
+    }
+
 
     public static NotImplementedEmbed ToNotImplementedEntity(this API.NotImplementedEmbed model) =>
         new(model.RawType, model.RawJsonNode);

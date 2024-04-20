@@ -8,7 +8,7 @@ namespace Kook;
 ///     A paragraph struct that can be used in modules.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public sealed class ParagraphStruct : IElement, IEquatable<ParagraphStruct>
+public class ParagraphStruct : IElement, IEquatable<ParagraphStruct>, IEquatable<IElement>
 {
     internal ParagraphStruct(int columnCount, ImmutableArray<IElement> fields)
     {
@@ -46,14 +46,14 @@ public sealed class ParagraphStruct : IElement, IEquatable<ParagraphStruct>
     ///     Determines whether the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ParagraphStruct left, ParagraphStruct right)
+    public static bool operator ==(ParagraphStruct? left, ParagraphStruct? right)
         => left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ParagraphStruct"/> is not equal to the current <see cref="ParagraphStruct"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ParagraphStruct"/> is not equal to the current <see cref="ParagraphStruct"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ParagraphStruct left, ParagraphStruct right)
+    public static bool operator !=(ParagraphStruct? left, ParagraphStruct? right)
         => !(left == right);
 
     /// <summary>Determines whether the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>.</summary>
@@ -81,4 +81,7 @@ public sealed class ParagraphStruct : IElement, IEquatable<ParagraphStruct>
             return hash;
         }
     }
+
+    bool IEquatable<IElement>.Equals([NotNullWhen(true)] IElement? element) =>
+        Equals(element as ParagraphStruct);
 }

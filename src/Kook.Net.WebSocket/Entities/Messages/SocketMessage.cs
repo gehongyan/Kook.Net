@@ -259,7 +259,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     }
 
     /// <inheritdoc />
-    public Task DeleteAsync(RequestOptions options = null)
+    public Task DeleteAsync(RequestOptions? options = null)
         => MessageHelper.DeleteAsync(this, Kook, options);
 
 
@@ -274,7 +274,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     internal void RemoveReactionsForEmote(IEmote emote) => _reactions.RemoveAll(x => x.Emote.Equals(emote));
 
     /// <inheritdoc />
-    public Task UpdateAsync(RequestOptions options = null)
+    public Task UpdateAsync(RequestOptions? options = null)
         => SocketMessageHelper.UpdateAsync(this, Kook, options);
 
     /// <inheritdoc />

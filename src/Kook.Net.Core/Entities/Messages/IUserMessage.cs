@@ -25,7 +25,7 @@ public interface IUserMessage : IMessage
     /// <returns>
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
-    Task ModifyAsync(Action<MessageProperties> func, RequestOptions options = null);
+    Task ModifyAsync(Action<MessageProperties> func, RequestOptions? options = null);
 
     /// <summary>
     ///     Transforms this message's text into a human-readable form by resolving its tags.

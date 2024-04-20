@@ -59,7 +59,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     internal void Update(Model model) => Recipient.Update(model.Recipient);
 
     /// <inheritdoc />
-    public override async Task UpdateAsync(RequestOptions options = null)
+    public override async Task UpdateAsync(RequestOptions? options = null)
     {
         Model model = await Kook.ApiClient.GetUserChatAsync(Id, options).ConfigureAwait(false);
         Update(model);

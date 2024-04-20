@@ -117,11 +117,11 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         => ClientHelper.GetUserAsync(Kook, CreatorId, options);
 
     /// <inheritdoc />
-    public Task DeleteAsync(RequestOptions options = null)
+    public Task DeleteAsync(RequestOptions? options = null)
         => ChannelHelper.DeleteGuildChannelAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public override async Task UpdateAsync(RequestOptions options = null)
+    public override async Task UpdateAsync(RequestOptions? options = null)
     {
         Channel model = await Kook.ApiClient.GetGuildChannelAsync(Id, options).ConfigureAwait(false);
         Update(model);

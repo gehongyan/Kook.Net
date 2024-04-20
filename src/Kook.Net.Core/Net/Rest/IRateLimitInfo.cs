@@ -6,7 +6,7 @@ namespace Kook;
 public interface IRateLimitInfo
 {
     /// <summary>
-    ///     Gets whether or not this ratelimit info is global.
+    ///     Gets whether this ratelimit info is global.
     /// </summary>
     bool IsGlobal { get; }
 

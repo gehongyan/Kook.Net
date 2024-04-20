@@ -7,11 +7,13 @@ internal static class CollectionExtensions
 {
     //public static IReadOnlyCollection<TValue> ToReadOnlyCollection<TValue>(this IReadOnlyCollection<TValue> source)
     //    => new CollectionWrapper<TValue>(source, () => source.Count);
+
     public static IReadOnlyCollection<TValue> ToReadOnlyCollection<TValue>(this ICollection<TValue> source)
         => new CollectionWrapper<TValue>(source, () => source.Count);
 
     //public static IReadOnlyCollection<TValue> ToReadOnlyCollection<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> source)
     //    => new CollectionWrapper<TValue>(source.Select(x => x.Value), () => source.Count);
+
     public static IReadOnlyCollection<TValue> ToReadOnlyCollection<TKey, TValue>(this IDictionary<TKey, TValue> source)
         => new CollectionWrapper<TValue>(source.Values, () => source.Count);
 

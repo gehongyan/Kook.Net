@@ -10,7 +10,7 @@ public class SearchGuildMemberProperties
     ///     Gets or sets the name of the user to be searched for;
     ///     <c>null</c> to not search via a name.
     /// </summary>
-    public string SearchName { get; set; }
+    public string? SearchName { get; set; }
 
     /// <summary>
     ///     Gets or sets the ID of the role the user must have to be searched for;

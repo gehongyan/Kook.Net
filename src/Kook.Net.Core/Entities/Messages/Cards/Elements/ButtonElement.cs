@@ -7,7 +7,7 @@ namespace Kook;
 ///     A button element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public sealed class ButtonElement : IElement, IEquatable<ButtonElement>
+public class ButtonElement : IElement, IEquatable<ButtonElement>, IEquatable<IElement>
 {
     internal ButtonElement(ButtonTheme theme, string? value, ButtonClickEventType click, IElement text)
     {
@@ -65,7 +65,7 @@ public sealed class ButtonElement : IElement, IEquatable<ButtonElement>
     /// <returns>
     ///     <c>true</c> if the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>; otherwise, <c>false</c>.
     /// </returns>
-    public static bool operator ==(ButtonElement left, ButtonElement right)
+    public static bool operator ==(ButtonElement? left, ButtonElement? right)
         => left?.Equals(right) ?? right is null;
 
     /// <summary>
@@ -74,7 +74,7 @@ public sealed class ButtonElement : IElement, IEquatable<ButtonElement>
     /// <returns>
     ///     <c>true</c> if the specified <see cref="ButtonElement"/> is not equal to the current <see cref="ButtonElement"/>; otherwise, <c>false</c>.
     /// </returns>
-    public static bool operator !=(ButtonElement left, ButtonElement right)
+    public static bool operator !=(ButtonElement? left, ButtonElement? right)
         => !(left == right);
 
     /// <summary>Determines whether the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>.</summary>
@@ -101,4 +101,7 @@ public sealed class ButtonElement : IElement, IEquatable<ButtonElement>
             return hash;
         }
     }
+
+    bool IEquatable<IElement>.Equals([NotNullWhen(true)] IElement? element) =>
+        Equals(element as ButtonElement);
 }

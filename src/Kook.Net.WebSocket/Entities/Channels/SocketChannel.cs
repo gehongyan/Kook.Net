@@ -24,7 +24,7 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel, IUpdateable
     internal abstract void Update(ClientState state, Model model);
 
     /// <inheritdoc />
-    public virtual Task UpdateAsync(RequestOptions options = null) => Task.Delay(0);
+    public virtual Task UpdateAsync(RequestOptions? options = null) => Task.Delay(0);
 
     #endregion
 

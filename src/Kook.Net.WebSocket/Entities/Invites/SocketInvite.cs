@@ -91,7 +91,7 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     }
 
     /// <inheritdoc />
-    public Task DeleteAsync(RequestOptions options = null)
+    public Task DeleteAsync(RequestOptions? options = null)
         => InviteHelper.DeleteAsync(this, Kook, options);
 
     /// <summary>

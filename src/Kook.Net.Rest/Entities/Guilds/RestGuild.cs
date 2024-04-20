@@ -269,7 +269,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     #region Generals
 
     /// <inheritdoc />
-    public async Task UpdateAsync(RequestOptions options = null)
+    public async Task UpdateAsync(RequestOptions? options = null)
     {
         ExtendedModel model = await Kook.ApiClient.GetGuildAsync(Id, options).ConfigureAwait(false);
         Update(model);

@@ -23,7 +23,7 @@ public struct ImageAnimationPokeResource : IPokeResource
     public IReadOnlyDictionary<string, string> Resources { get; internal set; }
 
     /// <summary>
-    ///     Gets how long this animation animation should last filling the full screen.
+    ///     Gets how long this animation should last filling the full screen.
     /// </summary>
     public TimeSpan Duration { get; internal set; }
 

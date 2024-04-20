@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Kook.Utils;
 
 namespace Kook;
@@ -5,7 +6,7 @@ namespace Kook;
 /// <summary>
 ///     Represents a video module builder for creating a <see cref="VideoModule"/>.
 /// </summary>
-public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
+public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>, IEquatable<IModuleBuilder>
 {
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Video;
@@ -22,10 +23,10 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     /// </summary>
     /// <param name="source"> The source URL of the video. </param>
     /// <param name="title"> The title of the video. </param>
-    public VideoModuleBuilder(string source, string title = null)
+    public VideoModuleBuilder(string source, string? title = null)
     {
-        WithSource(source);
-        WithTitle(title);
+        Source = source;
+        Title = title;
     }
 
     /// <summary>
@@ -34,7 +35,7 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     /// <returns>
     ///     The source URL of the video.
     /// </returns>
-    public string Source { get; set; }
+    public string? Source { get; set; }
 
     /// <summary>
     ///     Gets or sets the title of the video.
@@ -42,7 +43,7 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     /// <returns>
     ///     The title of the video.
     /// </returns>
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
     /// <summary>
     ///     Sets the source URL of the video.
@@ -80,47 +81,57 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     /// <returns>
     ///     A <see cref="VideoModule"/> representing the built video module object.
     /// </returns>
-    /// <exception cref="InvalidOperationException">
-    ///     <see cref="Source"/> does not include a protocol (neither HTTP nor HTTPS)
+    /// <exception cref="ArgumentNullException">
+    ///     The <see cref="Source"/> url is null.
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     <see cref="Source"/> cannot be null or empty
+    ///     The <see cref="Source"/> url is empty.
     /// </exception>
+    /// <exception cref="InvalidOperationException">
+    ///     The <see cref="Source"/> url does not include a protocol (either HTTP or HTTPS).
+    /// </exception>
+    [MemberNotNull(nameof(Source))]
     public VideoModule Build()
     {
-        if (!UrlValidation.Validate(Source)) throw new ArgumentException("The link to a file cannot be null or empty.", nameof(Source));
+        if (Source == null)
+            throw new ArgumentNullException(nameof(Source), "The source url cannot be null or empty.");
+        if (!string.IsNullOrEmpty(Source))
+            throw new ArgumentException("The source url cannot be null or empty.", nameof(Source));
+
+        UrlValidation.Validate(Source);
 
         return new VideoModule(Source, Title);
     }
 
     /// <inheritdoc />
+    [MemberNotNull(nameof(Source))]
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
     ///     Determines whether the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(VideoModuleBuilder left, VideoModuleBuilder right)
+    public static bool operator ==(VideoModuleBuilder? left, VideoModuleBuilder? right)
         => left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="VideoModuleBuilder"/> is not equal to the current <see cref="VideoModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="VideoModuleBuilder"/> is not equal to the current <see cref="VideoModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(VideoModuleBuilder left, VideoModuleBuilder right)
+    public static bool operator !=(VideoModuleBuilder? left, VideoModuleBuilder? right)
         => !(left == right);
 
     /// <summary>Determines whether the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="VideoModuleBuilder"/>, <see cref="Equals(VideoModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="VideoModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is VideoModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>.</summary>
     /// <param name="videoModuleBuilder">The <see cref="VideoModuleBuilder"/> to compare with the current <see cref="VideoModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(VideoModuleBuilder videoModuleBuilder)
+    public bool Equals([NotNullWhen(true)] VideoModuleBuilder? videoModuleBuilder)
     {
         if (videoModuleBuilder is null) return false;
 
@@ -131,4 +142,7 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
 
     /// <inheritdoc />
     public override int GetHashCode() => base.GetHashCode();
+
+    bool IEquatable<IModuleBuilder>.Equals([NotNullWhen(true)] IModuleBuilder? moduleBuilder) =>
+        Equals(moduleBuilder as VideoModuleBuilder);
 }

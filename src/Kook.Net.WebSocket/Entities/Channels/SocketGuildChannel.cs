@@ -124,7 +124,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     }
 
     /// <inheritdoc />
-    public override Task UpdateAsync(RequestOptions options = null)
+    public override Task UpdateAsync(RequestOptions? options = null)
         => SocketChannelHelper.UpdateAsync(this, options);
 
     /// <inheritdoc />
@@ -132,7 +132,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
         => ChannelHelper.ModifyAsync(this, Kook, func, options);
 
     /// <inheritdoc />
-    public Task DeleteAsync(RequestOptions options = null)
+    public Task DeleteAsync(RequestOptions? options = null)
         => ChannelHelper.DeleteGuildChannelAsync(this, Kook, options);
 
     /// <summary>

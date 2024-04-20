@@ -30,10 +30,10 @@ public class RestFriendRequest : RestEntity<ulong>, IFriendRequest
     public IUser User { get; internal set; }
 
     /// <inheritdoc />
-    public Task AcceptAsync(RequestOptions options = null) =>
+    public Task AcceptAsync(RequestOptions? options = null) =>
         UserHelper.HandleFriendRequestAsync(this, true, Kook, options);
 
     /// <inheritdoc />
-    public Task DeclineAsync(RequestOptions options = null) =>
+    public Task DeclineAsync(RequestOptions? options = null) =>
         UserHelper.HandleFriendRequestAsync(this, false, Kook, options);
 }

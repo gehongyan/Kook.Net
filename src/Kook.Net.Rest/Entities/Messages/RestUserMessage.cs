@@ -218,7 +218,7 @@ public class RestUserMessage : RestMessage, IUserMessage
     #region IUserMessage
 
     /// <inheritdoc />
-    public async Task ModifyAsync(Action<MessageProperties> func, RequestOptions options = null)
+    public async Task ModifyAsync(Action<MessageProperties> func, RequestOptions? options = null)
     {
         await MessageHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
         MessageProperties properties = new() { Content = Content, Cards = Cards, Quote = Quote };

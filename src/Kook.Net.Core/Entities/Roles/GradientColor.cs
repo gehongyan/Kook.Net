@@ -6,7 +6,7 @@ namespace Kook;
 ///     Represents a gradient color.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public struct GradientColor
+public readonly struct GradientColor
 {
     /// <summary>
     ///     Initializes a new instance of <see cref="GradientColor"/>.

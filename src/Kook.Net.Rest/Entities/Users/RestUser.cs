@@ -125,7 +125,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     }
 
     /// <inheritdoc />
-    public virtual async Task UpdateAsync(RequestOptions options = null)
+    public virtual async Task UpdateAsync(RequestOptions? options = null)
     {
         Model model = await Kook.ApiClient.GetUserAsync(Id, options).ConfigureAwait(false);
         Update(model);
@@ -159,23 +159,23 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         => UserHelper.GetIntimacyAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public async Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options = null) =>
+    public async Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions? options = null) =>
         await UserHelper.UpdateIntimacyAsync(this, Kook, func, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public Task BlockAsync(RequestOptions options = null) =>
+    public Task BlockAsync(RequestOptions? options = null) =>
         UserHelper.BlockAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task UnblockAsync(RequestOptions options = null) =>
+    public Task UnblockAsync(RequestOptions? options = null) =>
         UserHelper.UnblockAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public virtual Task RequestFriendAsync(RequestOptions options = null) =>
+    public virtual Task RequestFriendAsync(RequestOptions? options = null) =>
         UserHelper.RequestFriendAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task RemoveFriendAsync(RequestOptions options = null) =>
+    public Task RemoveFriendAsync(RequestOptions? options = null) =>
         UserHelper.RemoveFriendAsync(this, Kook, options);
 
     #endregion
@@ -194,11 +194,11 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     #region IUser
 
     /// <inheritdoc />
-    async Task<IDMChannel> IUser.CreateDMChannelAsync(RequestOptions options)
+    async Task<IDMChannel> IUser.CreateDMChannelAsync(RequestOptions? options)
         => await CreateDMChannelAsync(options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task<IIntimacy> IUser.GetIntimacyAsync(RequestOptions options)
+    async Task<IIntimacy> IUser.GetIntimacyAsync(RequestOptions? options)
         => await GetIntimacyAsync(options).ConfigureAwait(false);
 
     #endregion

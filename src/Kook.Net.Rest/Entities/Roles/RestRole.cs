@@ -85,14 +85,14 @@ public class RestRole : RestEntity<uint>, IRole
     }
 
     /// <inheritdoc />
-    public async Task ModifyAsync(Action<RoleProperties> func, RequestOptions options = null)
+    public async Task ModifyAsync(Action<RoleProperties> func, RequestOptions? options = null)
     {
         Model model = await RoleHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
         Update(model);
     }
 
     /// <inheritdoc />
-    public Task DeleteAsync(RequestOptions options = null)
+    public Task DeleteAsync(RequestOptions? options = null)
         => RoleHelper.DeleteAsync(this, Kook, options);
 
     /// <inheritdoc cref="IRole.GetUsersAsync(CacheMode,RequestOptions)"/>
@@ -121,7 +121,8 @@ public class RestRole : RestEntity<uint>, IRole
     }
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IRole.GetUsersAsync(CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IRole.GetUsersAsync(CacheMode mode,
+        RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return GetUsersAsync(options);

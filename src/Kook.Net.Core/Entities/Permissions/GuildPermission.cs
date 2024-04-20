@@ -17,7 +17,7 @@ public enum GuildPermission : uint
     ManageGuild = 1 << 1,
 
     /// <summary>
-    ///		Allows for viewing of audit logs.
+    ///	    Allows for viewing of audit logs.
     /// </summary>
     ViewAuditLog = 1 << 2,
 

@@ -12,10 +12,8 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="IElement"/> to a <see cref="IElementBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static IElementBuilder? ToBuilder(this IElement? entity)
+    public static IElementBuilder ToBuilder(this IElement entity)
     {
-        if (entity is null) return null;
         return entity switch
         {
             PlainTextElement { Type: ElementType.PlainText } plainTextElement => plainTextElement.ToBuilder(),
@@ -30,11 +28,8 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="PlainTextElement"/> to a <see cref="PlainTextElementBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static PlainTextElementBuilder? ToBuilder(this PlainTextElement? entity)
+    public static PlainTextElementBuilder ToBuilder(this PlainTextElement entity)
     {
-        if (entity is null)
-            return null;
         return new PlainTextElementBuilder
         {
             Content = entity.Content,
@@ -45,22 +40,16 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="KMarkdownElement"/> to a <see cref="KMarkdownElementBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static KMarkdownElementBuilder? ToBuilder(this KMarkdownElement? entity)
+    public static KMarkdownElementBuilder ToBuilder(this KMarkdownElement entity)
     {
-        if (entity is null)
-            return null;
         return new KMarkdownElementBuilder { Content = entity.Content };
     }
 
     /// <summary>
-    ///     Converts the <see cref="ImageElement"/> to a <see cref="ImageElementBuilder"/> with the same properties.
+    ///     Converts the <see cref="ImageElement"/> to an <see cref="ImageElementBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static ImageElementBuilder? ToBuilder(this ImageElement? entity)
+    public static ImageElementBuilder ToBuilder(this ImageElement entity)
     {
-        if (entity is null)
-            return null;
         return new ImageElementBuilder
         {
             Source = entity.Source,
@@ -73,11 +62,8 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="ButtonElement"/> to a <see cref="ButtonElementBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static ButtonElementBuilder? ToBuilder(this ButtonElement? entity)
+    public static ButtonElementBuilder ToBuilder(this ButtonElement entity)
     {
-        if (entity is null)
-            return null;
         return new ButtonElementBuilder
         {
             Theme = entity.Theme,
@@ -90,11 +76,8 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="ParagraphStruct"/> to a <see cref="ParagraphStructBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static ParagraphStructBuilder? ToBuilder(this ParagraphStruct? entity)
+    public static ParagraphStructBuilder ToBuilder(this ParagraphStruct entity)
     {
-        if (entity is null)
-            return null;
         return new ParagraphStructBuilder
         {
             ColumnCount = entity.ColumnCount,
@@ -109,11 +92,8 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="IModule"/> to a <see cref="IModuleBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static IModuleBuilder? ToBuilder(this IModule? entity)
+    public static IModuleBuilder ToBuilder(this IModule entity)
     {
-        if (entity is null)
-            return null;
         return entity switch
         {
             HeaderModule { Type: ModuleType.Header } headerModule => headerModule.ToBuilder(),
@@ -135,11 +115,8 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="HeaderModule"/> to a <see cref="HeaderModuleBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static HeaderModuleBuilder? ToBuilder(this HeaderModule? entity)
+    public static HeaderModuleBuilder ToBuilder(this HeaderModule entity)
     {
-        if (entity is null)
-            return null;
         return new HeaderModuleBuilder
         {
             Text = entity.Text.ToBuilder()
@@ -149,27 +126,21 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="SectionModule"/> to a <see cref="SectionModuleBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static SectionModuleBuilder? ToBuilder(this SectionModule? entity)
+    public static SectionModuleBuilder ToBuilder(this SectionModule entity)
     {
-        if (entity is null)
-            return null;
         return new SectionModuleBuilder
         {
             Mode = entity.Mode,
-            Text = entity.Text.ToBuilder(),
-            Accessory = entity.Accessory.ToBuilder()
+            Text = entity.Text?.ToBuilder(),
+            Accessory = entity.Accessory?.ToBuilder()
         };
     }
 
     /// <summary>
     ///     Converts the <see cref="ImageGroupModule"/> to a <see cref="ImageGroupModuleBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static ImageGroupModuleBuilder? ToBuilder(this ImageGroupModule? entity)
+    public static ImageGroupModuleBuilder ToBuilder(this ImageGroupModule entity)
     {
-        if (entity is null)
-            return null;
         return new ImageGroupModuleBuilder
         {
             Elements = entity.Elements.Select(x => x.ToBuilder()).ToList()
@@ -179,11 +150,8 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="ContainerModule"/> to a <see cref="ContainerModuleBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static ContainerModuleBuilder? ToBuilder(this ContainerModule? entity)
+    public static ContainerModuleBuilder ToBuilder(this ContainerModule entity)
     {
-        if (entity is null)
-            return null;
         return new ContainerModuleBuilder
         {
             Elements = entity.Elements.Select(x => x.ToBuilder()).ToList()
@@ -193,11 +161,8 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="ActionGroupModule"/> to a <see cref="ActionGroupModuleBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static ActionGroupModuleBuilder? ToBuilder(this ActionGroupModule? entity)
+    public static ActionGroupModuleBuilder ToBuilder(this ActionGroupModule entity)
     {
-        if (entity is null)
-            return null;
         return new ActionGroupModuleBuilder
         {
             Elements = entity.Elements.Select(x => x.ToBuilder()).ToList()
@@ -207,11 +172,8 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="ContextModule"/> to a <see cref="ContextModuleBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static ContextModuleBuilder? ToBuilder(this ContextModule? entity)
+    public static ContextModuleBuilder ToBuilder(this ContextModule entity)
     {
-        if (entity is null)
-            return null;
         return new ContextModuleBuilder
         {
             Elements = entity.Elements.Select(e => e.ToBuilder()).ToList()
@@ -221,22 +183,16 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="DividerModule"/> to a <see cref="DividerModuleBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static DividerModuleBuilder? ToBuilder(this DividerModule? entity)
+    public static DividerModuleBuilder ToBuilder(this DividerModule _)
     {
-        if (entity is null)
-            return null;
         return new DividerModuleBuilder();
     }
 
     /// <summary>
     ///     Converts the <see cref="FileModule"/> to a <see cref="FileModuleBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static FileModuleBuilder? ToBuilder(this FileModule? entity)
+    public static FileModuleBuilder ToBuilder(this FileModule entity)
     {
-        if (entity is null)
-            return null;
         return new FileModuleBuilder
         {
             Source = entity.Source,
@@ -245,13 +201,10 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="AudioModule"/> to a <see cref="AudioModuleBuilder"/> with the same properties.
+    ///     Converts the <see cref="AudioModule"/> to an <see cref="AudioModuleBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static AudioModuleBuilder? ToBuilder(this AudioModule? entity)
+    public static AudioModuleBuilder ToBuilder(this AudioModule entity)
     {
-        if (entity is null)
-            return null;
         return new AudioModuleBuilder
         {
             Source = entity.Source,
@@ -263,11 +216,8 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="VideoModule"/> to a <see cref="VideoModuleBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static VideoModuleBuilder? ToBuilder(this VideoModule? entity)
+    public static VideoModuleBuilder ToBuilder(this VideoModule entity)
     {
-        if (entity is null)
-            return null;
         return new VideoModuleBuilder
         {
             Source = entity.Source,
@@ -278,11 +228,8 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="CountdownModule"/> to a <see cref="CountdownModuleBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static CountdownModuleBuilder? ToBuilder(this CountdownModule? entity)
+    public static CountdownModuleBuilder ToBuilder(this CountdownModule entity)
     {
-        if (entity is null)
-            return null;
         return new CountdownModuleBuilder
         {
             Mode = entity.Mode,
@@ -292,13 +239,10 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="InviteModule"/> to a <see cref="InviteModuleBuilder"/> with the same properties.
+    ///     Converts the <see cref="InviteModule"/> to an <see cref="InviteModuleBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static InviteModuleBuilder? ToBuilder(this InviteModule? entity)
+    public static InviteModuleBuilder ToBuilder(this InviteModule entity)
     {
-        if (entity is null)
-            return null;
         return new InviteModuleBuilder
         {
             Code = entity.Code
@@ -310,14 +254,10 @@ public static class CardExtensions
     #region Cards
 
     /// <summary>
-    ///     Converts the <see cref="ICard"/> to a <see cref="ICardBuilder"/> with the same properties.
+    ///     Converts the <see cref="ICard"/> to an <see cref="ICardBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static ICardBuilder? ToBuilder(this ICard? entity)
+    public static ICardBuilder ToBuilder(this ICard entity)
     {
-        if (entity is null)
-            return null;
-
         return entity switch
         {
             Card { Type: CardType.Card } card => card.ToBuilder(),
@@ -328,11 +268,8 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="Card"/> to a <see cref="CardBuilder"/> with the same properties.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(entity))]
-    public static CardBuilder? ToBuilder(this Card? entity)
+    public static CardBuilder ToBuilder(this Card entity)
     {
-        if (entity is null) return null;
-
         return new CardBuilder
         {
             Theme = entity.Theme,

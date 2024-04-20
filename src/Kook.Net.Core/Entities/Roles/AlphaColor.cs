@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using StandardColor = System.Drawing.Color;
 
 namespace Kook;
@@ -7,7 +8,7 @@ namespace Kook;
 ///     Represents a <see cref="Color"/> with an alpha channel.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public struct AlphaColor
+public readonly struct AlphaColor
 {
     /// <summary> Gets the max decimal value of an color with an alpha channel. </summary>
     public const ulong MaxDecimalValue = 0xFFFFFFFF;
@@ -111,16 +112,16 @@ public struct AlphaColor
     /// <exception cref="ArgumentOutOfRangeException">The argument value is not between 0 to 255.</exception>
     public AlphaColor(int r, int g, int b, int a)
     {
-        if (r < 0 || r > 255)
+        if (r is < 0 or > 255)
             throw new ArgumentOutOfRangeException(nameof(r), "Value must be within [0,255].");
 
-        if (g < 0 || g > 255)
+        if (g is < 0 or > 255)
             throw new ArgumentOutOfRangeException(nameof(g), "Value must be within [0,255].");
 
-        if (b < 0 || b > 255)
+        if (b is < 0 or > 255)
             throw new ArgumentOutOfRangeException(nameof(b), "Value must be within [0,255].");
 
-        if (a < 0 || a > 255)
+        if (a is < 0 or > 255)
             throw new ArgumentOutOfRangeException(nameof(a), "Value must be within [0,255].");
 
         RawValue = ((ulong)(uint)r << 24)
@@ -146,16 +147,16 @@ public struct AlphaColor
     /// <exception cref="ArgumentOutOfRangeException">The argument value is not between 0 to 1.</exception>
     public AlphaColor(float r, float g, float b, float a)
     {
-        if (r < 0.0f || r > 1.0f)
+        if (r is < 0.0f or > 1.0f)
             throw new ArgumentOutOfRangeException(nameof(r), "Value must be within [0,1].");
 
-        if (g < 0.0f || g > 1.0f)
+        if (g is < 0.0f or > 1.0f)
             throw new ArgumentOutOfRangeException(nameof(g), "Value must be within [0,1].");
 
-        if (b < 0.0f || b > 1.0f)
+        if (b is < 0.0f or > 1.0f)
             throw new ArgumentOutOfRangeException(nameof(b), "Value must be within [0,1].");
 
-        if (a < 0.0f || a > 1.0f)
+        if (a is < 0.0f or > 1.0f)
             throw new ArgumentOutOfRangeException(nameof(a), "Value must be within [0,1].");
 
         RawValue = ((uint)(r * 255.0f) << 24)
@@ -195,7 +196,7 @@ public struct AlphaColor
         => color.RawValue;
 
     /// <inheritdoc />
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is AlphaColor c && RawValue == c.RawValue;
 
     /// <inheritdoc />

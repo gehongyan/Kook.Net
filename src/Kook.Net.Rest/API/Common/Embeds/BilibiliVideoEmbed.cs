@@ -21,4 +21,7 @@ internal class BilibiliVideoEmbed : EmbedBase
 
     [JsonPropertyName("pic")]
     public string Cover { get; set; }
+
+    [JsonPropertyName("url")]
+    public string Url { get; set; }
 }

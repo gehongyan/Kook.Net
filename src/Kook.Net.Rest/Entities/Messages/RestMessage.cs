@@ -194,14 +194,14 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
             x => new ReactionMetadata { ReactionCount = x.Count, IsMe = x.Me });
 
     /// <inheritdoc />
-    public Task DeleteAsync(RequestOptions options = null)
+    public Task DeleteAsync(RequestOptions? options = null)
         => MessageHelper.DeleteAsync(this, Kook, options);
 
     /// <inheritdoc />
     /// <exception cref="InvalidOperationException">
     ///     This message is neither a guild channel message nor a direct message.
     /// </exception>
-    public async Task UpdateAsync(RequestOptions options = null)
+    public async Task UpdateAsync(RequestOptions? options = null)
     {
         if (Channel is IGuildChannel)
         {

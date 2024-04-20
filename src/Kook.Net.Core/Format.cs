@@ -369,11 +369,9 @@ public static class Format
     /// </summary>
     /// <param name="text">The to remove markdown from.</param>
     /// <returns>Gets the unformatted text.</returns>
-    public static string StripMarkDown(this string text)
-    {
+    public static string StripMarkDown(this string text) =>
         // Remove KOOK supported markdown
-        return Regex.Replace(text, @"(\*|\(ins\)|\(spl\)|`|~|>|\\)", "", RegexOptions.Compiled);
-    }
+        Regex.Replace(text, @"(\*|\(ins\)|\(spl\)|`|~|>|\\)", "", RegexOptions.Compiled);
 
     /// <summary>
     ///     Formats a user's username + identify number while maintaining bidirectional unicode

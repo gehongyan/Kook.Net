@@ -98,15 +98,15 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     /// <returns>
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
-    Task ModifyAsync(Action<RoleProperties> func, RequestOptions options = null);
+    Task ModifyAsync(Action<RoleProperties> func, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a collection of users with this role.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
     /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
+    /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     Paged collection of users with this role.
     /// </returns>
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 }

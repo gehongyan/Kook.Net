@@ -5,10 +5,8 @@ namespace Kook;
 /// <summary>
 ///     An element builder to build a <see cref="PlainTextElement"/>.
 /// </summary>
-public sealed class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElementBuilder>
+public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElementBuilder>, IEquatable<IElementBuilder>
 {
-    private string? _content;
-
     /// <summary>
     ///     Gets the maximum plain text length allowed by Kook.
     /// </summary>
@@ -22,6 +20,7 @@ public sealed class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainT
     /// </summary>
     public PlainTextElementBuilder()
     {
+        Content = string.Empty;
     }
 
     /// <summary>
@@ -29,7 +28,7 @@ public sealed class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainT
     /// </summary>
     /// <param name="content"> The content of the <see cref="PlainTextElement"/>.</param>
     /// <param name="emoji"> A boolean value that indicates whether the shortcuts should be translated into emojis.</param>
-    public PlainTextElementBuilder(string content, bool emoji = true)
+    public PlainTextElementBuilder(string? content, bool emoji = true)
     {
         Content = content;
         Emoji = emoji;
@@ -49,28 +48,7 @@ public sealed class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainT
     /// <returns>
     ///     The content of the <see cref="PlainTextElement"/>.
     /// </returns>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The <paramref name="value"/> cannot be null.
-    /// </exception>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="value"/> is greater than <see cref="MaxPlainTextLength"/>.
-    /// </exception>
-    public string? Content
-    {
-        get => _content;
-        set
-        {
-            if (value is null)
-                throw new ArgumentException("The content cannot be null.", nameof(value));
-
-            if (value.Length > MaxPlainTextLength)
-                throw new ArgumentException(
-                    $"Plain text length must be less than or equal to {MaxPlainTextLength}.",
-                    nameof(Content));
-
-            _content = value;
-        }
-    }
+    public string? Content { get; set; }
 
     /// <summary>
     ///     Gets whether the shortcuts should be translated into emojis.
@@ -89,12 +67,6 @@ public sealed class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainT
     /// <returns>
     ///     The current builder.
     /// </returns>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The <paramref name="content"/> cannot be null.
-    /// </exception>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="content"/> is greater than <see cref="MaxPlainTextLength"/>.
-    /// </exception>
     public PlainTextElementBuilder WithContent(string content)
     {
         Content = content;
@@ -124,11 +96,16 @@ public sealed class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainT
     /// <returns>
     ///     A <see cref="PlainTextElement"/> represents the built element object.
     /// </returns>
-    [MemberNotNull(nameof(Content))]
+    /// <exception cref="ArgumentException">
+    ///     The length of the <see cref="Content"/> is greater than <see cref="MaxPlainTextLength"/>.
+    /// </exception>
     public PlainTextElement Build()
     {
-        if (Content is null)
-            throw new InvalidOperationException("The content cannot be null.");
+        if (Content?.Length > MaxPlainTextLength)
+            throw new ArgumentException(
+                $"Plain text length must be less than or equal to {MaxPlainTextLength}.",
+                nameof(Content));
+
         return new PlainTextElement(Content, Emoji);
     }
 
@@ -142,30 +119,23 @@ public sealed class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainT
     /// <returns>
     ///     A <see cref="PlainTextElementBuilder"/> object that is initialized with the specified content.
     /// </returns>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The <paramref name="content"/> cannot be null.
-    /// </exception>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="content"/> is greater than <see cref="MaxPlainTextLength"/>.
-    /// </exception>
     public static implicit operator PlainTextElementBuilder(string content) => new(content);
 
     /// <inheritdoc />
-    [MemberNotNull(nameof(Content))]
     IElement IElementBuilder.Build() => Build();
 
     /// <summary>
     ///     Determines whether the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public static bool operator ==(PlainTextElementBuilder left, PlainTextElementBuilder right)
+    public static bool operator ==(PlainTextElementBuilder? left, PlainTextElementBuilder? right)
         => left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="PlainTextElementBuilder"/> is not equal to the current <see cref="PlainTextElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is not equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public static bool operator !=(PlainTextElementBuilder left, PlainTextElementBuilder right)
+    public static bool operator !=(PlainTextElementBuilder? left, PlainTextElementBuilder? right)
         => !(left == right);
 
     /// <summary>
@@ -190,4 +160,7 @@ public sealed class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainT
 
     /// <inheritdoc />
     public override int GetHashCode() => base.GetHashCode();
+
+    bool IEquatable<IElementBuilder>.Equals([NotNullWhen(true)] IElementBuilder? elementBuilder) =>
+        Equals(elementBuilder as PlainTextElementBuilder);
 }

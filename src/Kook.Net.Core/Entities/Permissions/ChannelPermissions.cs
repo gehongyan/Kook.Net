@@ -93,7 +93,10 @@ public struct ChannelPermissions
     public bool ShareScreen => Permissions.GetValue(RawValue, ChannelPermission.ShareScreen);
 
     /// <summary> Creates a new <see cref="ChannelPermissions"/> with the provided packed value.</summary>
-    public ChannelPermissions(ulong rawValue) => RawValue = rawValue;
+    public ChannelPermissions(ulong rawValue)
+    {
+        RawValue = rawValue;
+    }
 
     private ChannelPermissions(ulong initialValue,
         bool? createInvites = null,
@@ -220,14 +223,15 @@ public struct ChannelPermissions
     /// <returns>A <see cref="List{T}"/> containing <see cref="ChannelPermission"/> flags. Empty if none are enabled.</returns>
     public List<ChannelPermission> ToList()
     {
-        List<ChannelPermission> perms = new();
+        List<ChannelPermission> perms = [];
 
         // bitwise operations on raw value
         // each of the ChannelPermissions increments by 2^i from 0 to MaxBits
         for (byte i = 0; i < Permissions.MaxBits; i++)
         {
             ulong flag = (ulong)1 << i;
-            if ((RawValue & flag) != 0) perms.Add((ChannelPermission)flag);
+            if ((RawValue & flag) != 0)
+                perms.Add((ChannelPermission)flag);
         }
 
         return perms;

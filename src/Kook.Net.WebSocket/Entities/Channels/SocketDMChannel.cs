@@ -61,7 +61,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     internal void Update(ClientState state, UserChat model) => Recipient.Update(state, model.Recipient);
 
     /// <inheritdoc />
-    public override Task UpdateAsync(RequestOptions options = null)
+    public override Task UpdateAsync(RequestOptions? options = null)
         => SocketChannelHelper.UpdateAsync(this, options);
 
     /// <inheritdoc />

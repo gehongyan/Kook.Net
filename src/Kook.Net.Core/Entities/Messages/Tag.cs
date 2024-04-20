@@ -45,5 +45,5 @@ public class Tag<T> : ITag
     public override string ToString() => DebuggerDisplay;
 
     /// <inheritdoc />
-    object ITag.Value => Value;
+    object? ITag.Value => Value;
 }

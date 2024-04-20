@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
@@ -7,9 +8,12 @@ namespace Kook;
 ///     Represents an action group module that can be used in an <see cref="ICard"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>
+public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>, IEquatable<IModule>
 {
-    internal ActionGroupModule(ImmutableArray<ButtonElement> elements) => Elements = elements;
+    internal ActionGroupModule(ImmutableArray<ButtonElement> elements)
+    {
+        Elements = elements;
+    }
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.ActionGroup;
@@ -42,13 +46,13 @@ public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>
     /// <remarks>If the object passes is an <see cref="ActionGroupModule"/>, <see cref="Equals(ActionGroupModule)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="ActionGroupModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ActionGroupModule"/> is equal to the current <see cref="ActionGroupModule"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
         => obj is ActionGroupModule actionGroupModule && Equals(actionGroupModule);
 
     /// <summary>Determines whether the specified <see cref="ActionGroupModule"/> is equal to the current <see cref="ActionGroupModule"/>.</summary>
     /// <param name="actionGroupModule">The <see cref="ActionGroupModule"/> to compare with the current <see cref="ActionGroupModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ActionGroupModule"/> is equal to the current <see cref="ActionGroupModule"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(ActionGroupModule actionGroupModule)
+    public bool Equals([NotNullWhen(true)] ActionGroupModule? actionGroupModule)
         => GetHashCode() == actionGroupModule?.GetHashCode();
 
     /// <inheritdoc />
@@ -58,9 +62,12 @@ public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>
         {
             int hash = (int)2166136261;
             hash = (hash * 16777619) ^ Type.GetHashCode();
-            foreach (ButtonElement buttonElement in Elements) hash = (hash * 16777619) ^ buttonElement.GetHashCode();
-
+            foreach (ButtonElement buttonElement in Elements)
+                hash = (hash * 16777619) ^ buttonElement.GetHashCode();
             return hash;
         }
     }
+
+    bool IEquatable<IModule>.Equals([NotNullWhen(true)] IModule? module) =>
+        Equals(module as ActionGroupModule);
 }

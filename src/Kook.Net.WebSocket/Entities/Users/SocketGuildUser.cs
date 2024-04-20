@@ -290,15 +290,16 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     }
 
     /// <inheritdoc />
-    public Task ModifyNicknameAsync(string name, RequestOptions options = null)
+    public Task ModifyNicknameAsync(string name, RequestOptions? options = null)
         => UserHelper.ModifyNicknameAsync(this, Kook, name, options);
 
     /// <inheritdoc />
-    public Task<IReadOnlyCollection<BoostSubscriptionMetadata>> GetBoostSubscriptionsAsync(RequestOptions options = null)
+    public Task<IReadOnlyCollection<BoostSubscriptionMetadata>> GetBoostSubscriptionsAsync(
+        RequestOptions? options = null)
         => UserHelper.GetBoostSubscriptionsAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task KickAsync(RequestOptions options = null)
+    public Task KickAsync(RequestOptions? options = null)
         => UserHelper.KickAsync(this, Kook, options);
 
     /// <inheritdoc />
@@ -307,7 +308,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task AddRoleAsync(uint roleId, RequestOptions options = null)
+    public Task AddRoleAsync(uint roleId, RequestOptions? options = null)
         => AddRolesAsync(new[] { roleId }, options);
 
     /// <inheritdoc />
@@ -316,7 +317,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task AddRoleAsync(IRole role, RequestOptions options = null)
+    public Task AddRoleAsync(IRole role, RequestOptions? options = null)
         => AddRoleAsync(role.Id, options);
 
     /// <inheritdoc />
@@ -325,7 +326,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null)
+    public Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null)
         => UserHelper.AddRolesAsync(this, Kook, roleIds, options);
 
     /// <inheritdoc />
@@ -334,7 +335,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null)
+    public Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null)
         => AddRolesAsync(roles.Select(x => x.Id), options);
 
     /// <inheritdoc />
@@ -343,7 +344,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRoleAsync(uint roleId, RequestOptions options = null)
+    public Task RemoveRoleAsync(uint roleId, RequestOptions? options = null)
         => RemoveRolesAsync(new[] { roleId }, options);
 
     /// <inheritdoc />
@@ -352,7 +353,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRoleAsync(IRole role, RequestOptions options = null)
+    public Task RemoveRoleAsync(IRole role, RequestOptions? options = null)
         => RemoveRoleAsync(role.Id, options);
 
     /// <inheritdoc />
@@ -361,7 +362,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null)
+    public Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null)
         => UserHelper.RemoveRolesAsync(this, Kook, roleIds, options);
 
     /// <inheritdoc />
@@ -370,23 +371,23 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null)
+    public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null)
         => RemoveRolesAsync(roles.Select(x => x.Id));
 
     /// <inheritdoc />
-    public Task MuteAsync(RequestOptions options = null)
+    public Task MuteAsync(RequestOptions? options = null)
         => GuildHelper.MuteUserAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task DeafenAsync(RequestOptions options = null)
+    public Task DeafenAsync(RequestOptions? options = null)
         => GuildHelper.DeafenUserAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task UnmuteAsync(RequestOptions options = null)
+    public Task UnmuteAsync(RequestOptions? options = null)
         => GuildHelper.UnmuteUserAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task UndeafenAsync(RequestOptions options = null)
+    public Task UndeafenAsync(RequestOptions? options = null)
         => GuildHelper.UndeafenUserAsync(this, Kook, options);
 
     /// <inheritdoc cref="IGuildUser.GetConnectedVoiceChannelsAsync"/>
@@ -407,7 +408,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// <returns>
     ///     A task that represents the asynchronous reloading operation.
     /// </returns>
-    public Task UpdateAsync(RequestOptions options = null)
+    public Task UpdateAsync(RequestOptions? options = null)
         => SocketUserHelper.UpdateAsync(this, Kook, options);
 
     /// <inheritdoc />
@@ -428,7 +429,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     IReadOnlyCollection<uint> IGuildUser.RoleIds => _roleIds;
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IVoiceChannel>> IGuildUser.GetConnectedVoiceChannelsAsync(RequestOptions options)
+    async Task<IReadOnlyCollection<IVoiceChannel>> IGuildUser.GetConnectedVoiceChannelsAsync(RequestOptions? options)
         => await GetConnectedVoiceChannelsAsync(options).ConfigureAwait(false);
 
     #endregion
@@ -436,7 +437,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     #region IVoiceState
 
     /// <inheritdoc />
-    IVoiceChannel IVoiceState.VoiceChannel => VoiceChannel;
+    IVoiceChannel? IVoiceState.VoiceChannel => VoiceChannel;
 
     #endregion
 

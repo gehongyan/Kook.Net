@@ -19,5 +19,5 @@ public interface IMediaModule : IModule
     /// <returns>
     ///     A <c>string</c> representing the title of the media associated with this module.
     /// </returns>
-    string Title { get; }
+    string? Title { get; }
 }

@@ -26,9 +26,10 @@ public struct RestResponse
     /// <summary>
     ///     Gets the media type header of the response.
     /// </summary>
-    public MediaTypeHeaderValue MediaTypeHeader { get; }
+    public MediaTypeHeaderValue? MediaTypeHeader { get; }
 
-    internal RestResponse(HttpStatusCode statusCode, Dictionary<string, string> headers, Stream stream, MediaTypeHeaderValue mediaTypeHeader)
+    internal RestResponse(HttpStatusCode statusCode, Dictionary<string, string> headers, Stream stream,
+        MediaTypeHeaderValue? mediaTypeHeader)
     {
         StatusCode = statusCode;
         Headers = headers;

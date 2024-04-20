@@ -105,10 +105,16 @@ public struct GuildPermissions
     public bool ShareScreen => Permissions.GetValue(RawValue, GuildPermission.ShareScreen);
 
     /// <summary> Creates a new <see cref="GuildPermissions"/> with the provided packed value. </summary>
-    public GuildPermissions(ulong rawValue) => RawValue = rawValue;
+    public GuildPermissions(ulong rawValue)
+    {
+        RawValue = rawValue;
+    }
 
     /// <summary> Creates a new <see cref="GuildPermissions"/> with the provided packed value after converting to ulong. </summary>
-    public GuildPermissions(string rawValue) => RawValue = ulong.Parse(rawValue);
+    public GuildPermissions(string rawValue)
+    {
+        RawValue = ulong.Parse(rawValue);
+    }
 
     private GuildPermissions(ulong initialValue,
         bool? administrator = null,
@@ -267,14 +273,15 @@ public struct GuildPermissions
     /// <returns>A <see cref="List{T}"/> containing <see cref="GuildPermission"/> flags. Empty if none are enabled.</returns>
     public List<GuildPermission> ToList()
     {
-        List<GuildPermission> perms = new();
+        List<GuildPermission> perms = [];
 
         // bitwise operations on raw value
         // each of the GuildPermissions increments by 2^i from 0 to MaxBits
         for (byte i = 0; i < Permissions.MaxBits; i++)
         {
             ulong flag = (ulong)1 << i;
-            if ((RawValue & flag) != 0) perms.Add((GuildPermission)flag);
+            if ((RawValue & flag) != 0)
+                perms.Add((GuildPermission)flag);
         }
 
         return perms;
@@ -284,9 +291,13 @@ public struct GuildPermissions
     {
         if (!Has(permissions))
         {
-            IEnumerable<GuildPermission> vals = Enum.GetValues(typeof(GuildPermission)).Cast<GuildPermission>();
+            IEnumerable<GuildPermission> vals = Enum
+                .GetValues(typeof(GuildPermission))
+                .Cast<GuildPermission>();
             ulong currentValues = RawValue;
-            IEnumerable<GuildPermission> missingValues = vals.Where(x => permissions.HasFlag(x) && !Permissions.GetValue(currentValues, x));
+            IEnumerable<GuildPermission> missingValues = vals
+                .Where(x => permissions.HasFlag(x) && !Permissions.GetValue(currentValues, x))
+                .ToList();
 
             throw new InvalidOperationException(
                 $"Missing required guild permission{(missingValues.Count() > 1 ? "s" : "")} {string.Join(", ", missingValues.Select(x => x.ToString()))} in order to execute this operation.");

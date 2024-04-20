@@ -88,11 +88,11 @@ public class SocketRole : SocketEntity<uint>, IRole
     }
 
     /// <inheritdoc />
-    public Task ModifyAsync(Action<RoleProperties> func, RequestOptions options = null)
+    public Task ModifyAsync(Action<RoleProperties> func, RequestOptions? options = null)
         => RoleHelper.ModifyAsync(this, Kook, func, options);
 
     /// <inheritdoc />
-    public Task DeleteAsync(RequestOptions options = null)
+    public Task DeleteAsync(RequestOptions? options = null)
         => RoleHelper.DeleteAsync(this, Kook, options);
 
     /// <summary>
@@ -158,7 +158,8 @@ public class SocketRole : SocketEntity<uint>, IRole
     IGuild IRole.Guild => Guild;
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IRole.GetUsersAsync(CacheMode mode, RequestOptions options)
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IRole.GetUsersAsync(CacheMode mode,
+        RequestOptions? options = null)
     {
         if (mode == CacheMode.AllowDownload)
             return GetUsersAsync(options);

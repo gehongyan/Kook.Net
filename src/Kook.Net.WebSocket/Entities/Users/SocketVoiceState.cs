@@ -60,5 +60,5 @@ public struct SocketVoiceState : IVoiceState
     internal SocketVoiceState Clone() => this;
 
     /// <inheritdoc />
-    IVoiceChannel IVoiceState.VoiceChannel => VoiceChannel;
+    IVoiceChannel? IVoiceState.VoiceChannel => VoiceChannel;
 }

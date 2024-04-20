@@ -7,9 +7,9 @@ namespace Kook;
 ///     A plain text element that can be used in an <see cref="IModule"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public sealed class PlainTextElement : IElement, IEquatable<PlainTextElement>
+public class PlainTextElement : IElement, IEquatable<PlainTextElement>, IEquatable<IElement>
 {
-    internal PlainTextElement(string content, bool emoji)
+    internal PlainTextElement(string? content, bool emoji)
     {
         Content = content;
         Emoji = emoji;
@@ -29,7 +29,7 @@ public sealed class PlainTextElement : IElement, IEquatable<PlainTextElement>
     /// <returns>
     ///     A string that represents the KMarkdown content of the element.
     /// </returns>
-    public string Content { get; }
+    public string? Content { get; }
 
     /// <summary>
     ///     Gets whether the shortcuts should be translated into emojis.
@@ -42,7 +42,7 @@ public sealed class PlainTextElement : IElement, IEquatable<PlainTextElement>
     public bool Emoji { get; }
 
     /// <inheritdoc />
-    public override string ToString() => Content;
+    public override string? ToString() => Content;
 
     private string DebuggerDisplay => $"{Type}: {Content}";
 
@@ -50,14 +50,14 @@ public sealed class PlainTextElement : IElement, IEquatable<PlainTextElement>
     ///     Determines whether the specified <see cref="PlainTextElement"/> is equal to the current <see cref="PlainTextElement"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="PlainTextElement"/> is equal to the current <see cref="PlainTextElement"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(PlainTextElement left, PlainTextElement right)
+    public static bool operator ==(PlainTextElement? left, PlainTextElement? right)
         => left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="PlainTextElement"/> is not equal to the current <see cref="PlainTextElement"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="PlainTextElement"/> is not equal to the current <see cref="PlainTextElement"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(PlainTextElement left, PlainTextElement right)
+    public static bool operator !=(PlainTextElement? left, PlainTextElement? right)
         => !(left == right);
 
     /// <summary>Determines whether the specified <see cref="PlainTextElement"/> is equal to the current <see cref="PlainTextElement"/>.</summary>
@@ -76,4 +76,7 @@ public sealed class PlainTextElement : IElement, IEquatable<PlainTextElement>
     /// <inheritdoc />
     public override int GetHashCode()
         => (Type, Content, Emoji).GetHashCode();
+
+    bool IEquatable<IElement>.Equals([NotNullWhen(true)] IElement? element) =>
+        Equals(element as PlainTextElement);
 }
