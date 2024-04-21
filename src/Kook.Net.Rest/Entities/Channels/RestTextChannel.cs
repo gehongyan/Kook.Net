@@ -71,7 +71,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     ///     A task representing the asynchronous get operation. The task result contains a guild user object that
     ///     represents the user; <c>null</c> if none is found.
     /// </returns>
-    public Task<RestGuildUser> GetUserAsync(ulong id, RequestOptions options = null)
+    public Task<RestGuildUser> GetUserAsync(ulong id, RequestOptions? options = null)
         => ChannelHelper.GetUserAsync(this, Guild, Kook, id, options);
 
     /// <summary>
@@ -86,60 +86,60 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     ///     paginated response into a collection of users with
     ///     <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/> is required if you wish to access the users.
     /// </returns>
-    public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> GetUsersAsync(RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> GetUsersAsync(RequestOptions? options = null)
         => ChannelHelper.GetUsersAsync(this, Guild, Kook, KookConfig.MaxUsersPerBatch, 1, options);
 
     /// <inheritdoc />
-    public Task<RestMessage> GetMessageAsync(Guid id, RequestOptions options = null)
+    public Task<RestMessage> GetMessageAsync(Guid id, RequestOptions? options = null)
         => ChannelHelper.GetMessageAsync(this, Kook, id, options);
 
     /// <inheritdoc />
     public virtual IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch,
-        RequestOptions options = null)
+        RequestOptions? options = null)
         => ChannelHelper.GetMessagesAsync(this, Kook, null, Direction.Before, limit, true, options);
 
     /// <inheritdoc />
     public virtual IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
         => ChannelHelper.GetMessagesAsync(this, Kook, referenceMessageId, dir, limit, true, options);
 
     /// <inheritdoc />
     public virtual IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
         => ChannelHelper.GetMessagesAsync(this, Kook, referenceMessage.Id, dir, limit, true, options);
 
     /// <inheritdoc cref="ITextChannel.GetPinnedMessagesAsync" />
-    public virtual Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions options = null)
+    public virtual Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions? options = null)
         => ChannelHelper.GetPinnedMessagesAsync(this, Kook, options);
 
     /// <inheritdoc cref="IMessageChannel.SendFileAsync(string,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null, AttachmentType type = AttachmentType.File,
-        Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        Quote quote = null, IUser ephemeralUser = null, RequestOptions? options = null)
         => ChannelHelper.SendFileAsync(this, Kook, path, fileName, type, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendFileAsync(Stream,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName = null, AttachmentType type = AttachmentType.File,
-        Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        Quote quote = null, IUser ephemeralUser = null, RequestOptions? options = null)
         => ChannelHelper.SendFileAsync(this, Kook, stream, fileName, type, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendFileAsync(FileAttachment,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment, Quote quote = null, IUser ephemeralUser = null,
-        RequestOptions options = null)
+        RequestOptions? options = null)
         => ChannelHelper.SendFileAsync(this, Kook, attachment, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendTextAsync(string,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, Quote quote = null, IUser ephemeralUser = null,
-        RequestOptions options = null)
+        RequestOptions? options = null)
         => ChannelHelper.SendMessageAsync(this, Kook, MessageType.KMarkdown, text, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendCardsAsync(IEnumerable{ICard},IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards, Quote quote = null, IUser ephemeralUser = null,
-        RequestOptions options = null)
+        RequestOptions? options = null)
         => ChannelHelper.SendCardsAsync(this, Kook, cards, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendCardAsync(ICard,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, Quote quote = null, IUser ephemeralUser = null,
-        RequestOptions options = null)
+        RequestOptions? options = null)
         => ChannelHelper.SendCardAsync(this, Kook, card, options, quote, ephemeralUser);
 
     /// <summary>
@@ -150,7 +150,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     ///     A task that represents the asynchronous get operation. The task result contains the category channel
     ///     representing the parent of this channel; <c>null</c> if none is set.
     /// </returns>
-    public Task<ICategoryChannel> GetCategoryAsync(RequestOptions options = null)
+    public Task<ICategoryChannel> GetCategoryAsync(RequestOptions? options = null)
         => ChannelHelper.GetCategoryAsync(this, Kook, options);
 
     /// <inheritdoc />

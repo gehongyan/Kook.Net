@@ -8,14 +8,14 @@ internal static class RoleHelper
     #region General
 
     public static async Task DeleteAsync(IRole role, BaseKookClient client,
-        RequestOptions options)
+        RequestOptions? options)
     {
         DeleteGuildRoleParams args = new() { Id = role.Id, GuildId = role.Guild.Id };
         await client.ApiClient.DeleteGuildRoleAsync(args, options).ConfigureAwait(false);
     }
 
     public static async Task<Model> ModifyAsync(IRole role, BaseKookClient client,
-        Action<RoleProperties> func, RequestOptions options)
+        Action<RoleProperties> func, RequestOptions? options)
     {
         RoleProperties args = new();
         func(args);

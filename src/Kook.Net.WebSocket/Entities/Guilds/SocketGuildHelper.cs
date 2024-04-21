@@ -7,7 +7,7 @@ namespace Kook.WebSocket;
 internal static class SocketGuildHelper
 {
     public static async Task UpdateAsync(SocketGuild guild, KookSocketClient client,
-        RequestOptions options)
+        RequestOptions? options)
     {
         ExtendedGuild extendedGuild = await client.ApiClient.GetGuildAsync(guild.Id, options).ConfigureAwait(false);
         if (client.AlwaysDownloadBoostSubscriptions
@@ -19,7 +19,7 @@ internal static class SocketGuildHelper
     }
 
     public static async Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetBoostSubscriptionsAsync(
-        SocketGuild guild, BaseSocketClient client, RequestOptions options)
+        SocketGuild guild, BaseSocketClient client, RequestOptions? options)
     {
         IEnumerable<BoostSubscription> subscriptions = await client.ApiClient
             .GetGuildBoostSubscriptionsAsync(guild.Id, options: options).FlattenAsync();
@@ -31,7 +31,7 @@ internal static class SocketGuildHelper
     }
 
     public static async Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetActiveBoostSubscriptionsAsync(
-        SocketGuild guild, BaseSocketClient client, RequestOptions options)
+        SocketGuild guild, BaseSocketClient client, RequestOptions? options)
     {
         IEnumerable<BoostSubscription> subscriptions = await client.ApiClient
             .GetGuildBoostSubscriptionsAsync(guild.Id, DateTimeOffset.Now.Add(-KookConfig.BoostPackDuration), options: options).FlattenAsync();

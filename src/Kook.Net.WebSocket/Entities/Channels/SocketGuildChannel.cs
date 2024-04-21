@@ -175,7 +175,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
     /// </returns>
-    public async Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions options = null)
+    public async Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null)
     {
         UserPermissionOverwrite perms = await ChannelHelper.AddPermissionOverwriteAsync(this, Kook, user, options).ConfigureAwait(false);
         _userPermissionOverwrites = _userPermissionOverwrites.Add(perms);
@@ -189,7 +189,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
     /// </returns>
-    public async Task AddPermissionOverwriteAsync(IRole role, RequestOptions options = null)
+    public async Task AddPermissionOverwriteAsync(IRole role, RequestOptions? options = null)
     {
         RolePermissionOverwrite perms = await ChannelHelper.AddPermissionOverwriteAsync(this, Kook, role, options).ConfigureAwait(false);
         _rolePermissionOverwrites = _rolePermissionOverwrites.Add(perms);
@@ -203,7 +203,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
-    public async Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions options = null)
+    public async Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null)
     {
         await ChannelHelper.RemovePermissionOverwriteAsync(this, Kook, user, options).ConfigureAwait(false);
 
@@ -223,7 +223,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
-    public async Task RemovePermissionOverwriteAsync(IRole role, RequestOptions options = null)
+    public async Task RemovePermissionOverwriteAsync(IRole role, RequestOptions? options = null)
     {
         await ChannelHelper.RemovePermissionOverwriteAsync(this, Kook, role, options).ConfigureAwait(false);
 
@@ -244,7 +244,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
-    public async Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null)
+    public async Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options = null)
     {
         UserPermissionOverwrite perms = await ChannelHelper.ModifyPermissionOverwriteAsync(this, Kook, user, func, options).ConfigureAwait(false);
 
@@ -266,7 +266,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
-    public async Task ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null)
+    public async Task ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options = null)
     {
         RolePermissionOverwrite perms = await ChannelHelper.ModifyPermissionOverwriteAsync(this, Kook, role, func, options).ConfigureAwait(false);
 

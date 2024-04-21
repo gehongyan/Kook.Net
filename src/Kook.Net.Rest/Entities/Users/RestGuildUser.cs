@@ -109,7 +109,7 @@ public class RestGuildUser : RestUser, IGuildUser
     }
 
     /// <inheritdoc />
-    public async Task ModifyNicknameAsync(string name, RequestOptions? options = null)
+    public async Task ModifyNicknameAsync(string? name, RequestOptions? options = null)
     {
         string nickname = await UserHelper.ModifyNicknameAsync(this, Kook, name, options);
         // The KOOK API will clear the nickname if the nickname is set to the same as the username at present.

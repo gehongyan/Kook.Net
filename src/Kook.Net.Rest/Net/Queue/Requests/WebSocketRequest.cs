@@ -12,7 +12,7 @@ internal class WebSocketRequest : IRequest
     public TaskCompletionSource<Stream> Promise { get; }
     public RequestOptions Options { get; }
 
-    public WebSocketRequest(IWebSocketClient? client, byte[] data, bool isText, bool ignoreLimit, RequestOptions options)
+    public WebSocketRequest(IWebSocketClient? client, byte[] data, bool isText, bool ignoreLimit, RequestOptions? options)
     {
         Preconditions.NotNull(options, nameof(options));
 

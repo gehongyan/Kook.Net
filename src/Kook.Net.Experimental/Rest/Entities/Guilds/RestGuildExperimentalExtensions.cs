@@ -19,7 +19,7 @@ public static class RestGuildExperimentalExtensions
     ///         usage, may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
     ///     </note>
     /// </remarks>
-    public static Task DeleteAsync(this RestGuild guild, RequestOptions options = null)
+    public static Task DeleteAsync(this RestGuild guild, RequestOptions? options = null)
         => ExperimentalGuildHelper.DeleteAsync(guild, guild.Kook, options);
 
     /// <summary>
@@ -32,7 +32,7 @@ public static class RestGuildExperimentalExtensions
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
     /// <exception cref="ArgumentNullException"><paramref name="func"/> is <c>null</c>.</exception>
-    public static async Task ModifyAsync(this RestGuild guild, Action<GuildProperties> func, RequestOptions options = null)
+    public static async Task ModifyAsync(this RestGuild guild, Action<GuildProperties> func, RequestOptions? options = null)
     {
         RichGuild model = await ExperimentalGuildHelper.ModifyAsync(guild, guild.Kook, func, options).ConfigureAwait(false);
         guild.Update(model);

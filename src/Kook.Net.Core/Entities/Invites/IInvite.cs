@@ -83,6 +83,14 @@ public interface IInvite : IEntity<uint>, IDeletable
     string GuildName { get; }
 
     /// <summary>
+    ///     Gets the time at which this invite was created.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="DateTimeOffset"/> representing the time at which this invite was created.
+    /// </returns>
+    DateTimeOffset CreatedAt { get; }
+
+    /// <summary>
     ///     Gets the time at which this invite will expire.
     /// </summary>
     /// <returns>
@@ -124,4 +132,12 @@ public interface IInvite : IEntity<uint>, IDeletable
     ///     An int representing the number of times this invite still remains; <c>null</c> if none is set.
     /// </returns>
     int? RemainingUses { get; }
+
+    /// <summary>
+    ///     Gets the number of users that have accepted this invite.
+    /// </summary>
+    /// <returns>
+    ///     An int representing the number of users that have accepted this invite.
+    /// </returns>
+    int InvitedUsersCount { get; }
 }

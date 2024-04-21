@@ -239,23 +239,23 @@ internal class KookSocketApiClient : KookRestApiClient
         ConnectionState = ConnectionState.Disconnected;
     }
 
-    public async Task SendHeartbeatAsync(int lastSeq, RequestOptions options = null)
+    public async Task SendHeartbeatAsync(int lastSeq, RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
         await SendGatewayAsync(GatewaySocketFrameType.Ping, sequence: lastSeq, options: options).ConfigureAwait(false);
     }
 
-    public async Task SendResumeAsync(int lastSeq, RequestOptions options = null)
+    public async Task SendResumeAsync(int lastSeq, RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
         await SendGatewayAsync(GatewaySocketFrameType.Resume, sequence: lastSeq, options: options).ConfigureAwait(false);
     }
 
     public Task SendGatewayAsync(GatewaySocketFrameType gatewaySocketFrameType, object payload = null, int? sequence = null,
-        RequestOptions options = null)
+        RequestOptions? options = null)
         => SendGatewayInternalAsync(gatewaySocketFrameType, options, payload, sequence);
 
-    private async Task SendGatewayInternalAsync(GatewaySocketFrameType gatewaySocketFrameType, RequestOptions options, object payload = null,
+    private async Task SendGatewayInternalAsync(GatewaySocketFrameType gatewaySocketFrameType, RequestOptions? options, object payload = null,
         int? sequence = null)
     {
         CheckState();

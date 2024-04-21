@@ -6,15 +6,15 @@ namespace Kook.API.Rest;
 internal class CreateGuildChannelParams
 {
     [JsonPropertyName("guild_id")]
-    public ulong GuildId { get; set; }
+    public required ulong GuildId { get; set; }
+
+    [JsonPropertyName("name")]
+    public required string Name { get; set; }
 
     [JsonPropertyName("parent_id")]
     [JsonConverter(typeof(NullableUInt64Converter))]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ulong? CategoryId { get; set; }
-
-    [JsonPropertyName("name")]
-    public string Name { get; set; }
 
     [JsonPropertyName("type")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

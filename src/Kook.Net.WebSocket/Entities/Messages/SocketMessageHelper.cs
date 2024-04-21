@@ -44,7 +44,7 @@ internal static class SocketMessageHelper
         return MessageSource.User;
     }
 
-    public static async Task UpdateAsync(SocketMessage msg, KookSocketClient client, RequestOptions options)
+    public static async Task UpdateAsync(SocketMessage msg, KookSocketClient client, RequestOptions? options)
     {
         switch (msg.Channel)
         {

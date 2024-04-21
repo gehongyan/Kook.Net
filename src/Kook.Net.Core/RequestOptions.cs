@@ -67,7 +67,7 @@ public class RequestOptions
     internal void ExecuteRatelimitCallback(IRateLimitInfo info)
     {
         if (RatelimitCallback != null)
-            _ = Task.Run(async () => await RatelimitCallback(info), CancellationToken.None);
+            _ = Task.Run(async () => await RatelimitCallback(info).ConfigureAwait(false), CancellationToken.None);
     }
 
     /// <summary>

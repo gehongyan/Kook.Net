@@ -106,7 +106,7 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     ///     that are currently connected to this voice channel.
     /// </returns>
     public async Task<IReadOnlyCollection<SocketGuildUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload,
-        RequestOptions options = null)
+        RequestOptions? options = null)
     {
         if (mode is CacheMode.AllowDownload)
             return await SocketChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false);
@@ -121,19 +121,19 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     /// <inheritdoc />
     /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
     public override IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
         => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
     /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
     public override IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
         => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
     /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
     public override IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
         => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />

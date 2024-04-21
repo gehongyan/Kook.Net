@@ -43,7 +43,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// </param>
     /// <param name="options">The request options for this <c>async</c> request.</param>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(string path, string fileName = null,
-        AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false, RequestOptions options = null) =>
+        AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendFileAsync(path, fileName, type, isQuote ? new Quote(Context.Message.Id) : null,
             isEphemeral ? Context.User : null, options).ConfigureAwait(false);
 
@@ -65,7 +65,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// </param>
     /// <param name="options">The request options for this <c>async</c> request.</param>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(Stream stream, string fileName = null,
-        AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false, RequestOptions options = null) =>
+        AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendFileAsync(stream, fileName, type, isQuote ? new Quote(Context.Message.Id) : null,
             isEphemeral ? Context.User : null, options).ConfigureAwait(false);
 
@@ -81,7 +81,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// </param>
     /// <param name="options">The request options for this <c>async</c> request.</param>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(FileAttachment attachment, bool isQuote = true,
-        bool isEphemeral = false, RequestOptions options = null) =>
+        bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendFileAsync(attachment, isQuote ? new Quote(Context.Message.Id) : null,
             isEphemeral ? Context.User : null, options).ConfigureAwait(false);
 
@@ -99,7 +99,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// </param>
     /// <param name="options">The request options for this <c>async</c> request.</param>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(string message, bool isQuote = true,
-        bool isEphemeral = false, RequestOptions options = null) =>
+        bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendTextAsync(message, isQuote ? new Quote(Context.Message.Id) : null,
             isEphemeral ? Context.User : null, options).ConfigureAwait(false);
 
@@ -117,7 +117,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// </param>
     /// <param name="options">The request options for this <c>async</c> request.</param>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(IEnumerable<ICard> cards, bool isQuote = true,
-        bool isEphemeral = false, RequestOptions options = null) =>
+        bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendCardsAsync(cards, isQuote ? new Quote(Context.Message.Id) : null,
             isEphemeral ? Context.User : null, options).ConfigureAwait(false);
 
@@ -136,7 +136,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// <param name="options">The request options for this <c>async</c> request.</param>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyCardAsync(ICard card,
         bool isQuote = true,
-        bool isEphemeral = false, RequestOptions options = null) =>
+        bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendCardAsync(card, isQuote ? new Quote(Context.Message.Id) : null,
             isEphemeral ? Context.User : null, options).ConfigureAwait(false);
 

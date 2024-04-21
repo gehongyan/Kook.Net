@@ -96,7 +96,7 @@ public class RestRole : RestEntity<uint>, IRole
         => RoleHelper.DeleteAsync(this, Kook, options);
 
     /// <inheritdoc cref="IRole.GetUsersAsync(CacheMode,RequestOptions)"/>
-    public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions? options = null)
     {
         void Func(SearchGuildMemberProperties p) => p.RoleId = Id;
         return GuildHelper.SearchUsersAsync(Guild, Kook, Func, KookConfig.MaxUsersPerBatch, options);

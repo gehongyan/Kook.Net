@@ -255,7 +255,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
     ///     with the identifier; <c>null</c> when the channel cannot be found.
     /// </returns>
-    public async Task<IChannel> GetChannelAsync(ulong id, RequestOptions options = null)
+    public async Task<IChannel> GetChannelAsync(ulong id, RequestOptions? options = null)
         => GetChannel(id) ?? (IChannel)await ClientHelper.GetChannelAsync(this, id, options).ConfigureAwait(false);
 
     /// <summary>
@@ -267,7 +267,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
     ///     with the identifier; <c>null</c> when the channel cannot be found.
     /// </returns>
-    public async Task<IDMChannel> GetDMChannelAsync(Guid chatCode, RequestOptions options = null)
+    public async Task<IDMChannel> GetDMChannelAsync(Guid chatCode, RequestOptions? options = null)
         => await ClientHelper.GetDMChannelAsync(this, chatCode, options).ConfigureAwait(false);
 
     /// <summary>
@@ -278,7 +278,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
     ///     with the identifier; <c>null</c> when the channel cannot be found.
     /// </returns>
-    public async Task<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(RequestOptions options = null)
+    public async Task<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(RequestOptions? options = null)
         => (await ClientHelper.GetDMChannelsAsync(this, options).ConfigureAwait(false)).ToImmutableArray();
 
     /// <summary>
@@ -290,7 +290,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     A task that represents the asynchronous get operation. The task result contains the user associated with
     ///     the identifier; <c>null</c> if the user is not found.
     /// </returns>
-    public async Task<IUser> GetUserAsync(ulong id, RequestOptions options = null)
+    public async Task<IUser> GetUserAsync(ulong id, RequestOptions? options = null)
         => await ((IKookClient)this).GetUserAsync(id, CacheMode.AllowDownload, options).ConfigureAwait(false);
 
     /// <inheritdoc />
@@ -325,14 +325,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     The guilds to download the users for. If <c>null</c>, all available guilds will be downloaded.
     /// </param>
     /// <param name="options">The options to be used when sending the request.</param>
-    public override async Task DownloadUsersAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null)
+    public override async Task DownloadUsersAsync(IEnumerable<IGuild> guilds = null, RequestOptions? options = null)
     {
         if (ConnectionState == ConnectionState.Connected)
             await ProcessUserDownloadsAsync((guilds ?? Guilds.Where(x => x.IsAvailable)).Select(x => GetGuild(x.Id)).Where(x => x != null), options)
                 .ConfigureAwait(false);
     }
 
-    private async Task ProcessUserDownloadsAsync(IEnumerable<SocketGuild> guilds, RequestOptions options)
+    private async Task ProcessUserDownloadsAsync(IEnumerable<SocketGuild> guilds, RequestOptions? options)
     {
         foreach (SocketGuild socketGuild in guilds)
         {
@@ -349,14 +349,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     The guilds to download the voice states for. If <c>null</c>, all available guilds will be downloaded.
     /// </param>
     /// <param name="options">The options to be used when sending the request.</param>
-    public override async Task DownloadVoiceStatesAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null)
+    public override async Task DownloadVoiceStatesAsync(IEnumerable<IGuild> guilds = null, RequestOptions? options = null)
     {
         if (ConnectionState == ConnectionState.Connected)
             await ProcessVoiceStateDownloadsAsync((guilds ?? Guilds.Where(x => x.IsAvailable)).Select(x => GetGuild(x.Id)).Where(x => x != null),
                 options).ConfigureAwait(false);
     }
 
-    private async Task ProcessVoiceStateDownloadsAsync(IEnumerable<SocketGuild> guilds, RequestOptions options)
+    private async Task ProcessVoiceStateDownloadsAsync(IEnumerable<SocketGuild> guilds, RequestOptions? options)
     {
         foreach (SocketGuild socketGuild in guilds)
         {
@@ -387,14 +387,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     <see cref="GuildPermission.ManageGuild"/> permission.
     /// </param>
     /// <param name="options">The options to be used when sending the request.</param>
-    public override async Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null)
+    public override async Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild> guilds = null, RequestOptions? options = null)
     {
         if (ConnectionState == ConnectionState.Connected)
             await ProcessBoostSubscriptionsDownloadsAsync(
                 (guilds ?? Guilds.Where(x => x.IsAvailable)).Select(x => GetGuild(x.Id)).Where(x => x != null), options).ConfigureAwait(false);
     }
 
-    private async Task ProcessBoostSubscriptionsDownloadsAsync(IEnumerable<SocketGuild> guilds, RequestOptions options)
+    private async Task ProcessBoostSubscriptionsDownloadsAsync(IEnumerable<SocketGuild> guilds, RequestOptions? options)
     {
         foreach (SocketGuild socketGuild in guilds)
         {

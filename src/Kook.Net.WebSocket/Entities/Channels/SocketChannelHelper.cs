@@ -8,7 +8,7 @@ internal static class SocketChannelHelper
 {
     public static IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(ISocketMessageChannel channel, KookSocketClient kook,
         MessageCache messages,
-        Guid? referenceMessageId, Direction dir, int limit, CacheMode mode, RequestOptions options)
+        Guid? referenceMessageId, Direction dir, int limit, CacheMode mode, RequestOptions? options)
     {
         if (dir == Direction.After && referenceMessageId == null) return AsyncEnumerable.Empty<IReadOnlyCollection<IMessage>>();
 
@@ -117,20 +117,20 @@ internal static class SocketChannelHelper
             _ => throw new NotSupportedException($"Unexpected {nameof(ISocketMessageChannel)} type.")
         };
 
-    public static async Task UpdateAsync(SocketGuildChannel channel, RequestOptions options)
+    public static async Task UpdateAsync(SocketGuildChannel channel, RequestOptions? options)
     {
         Channel model = await channel.Kook.ApiClient.GetGuildChannelAsync(channel.Id, options).ConfigureAwait(false);
         channel.Update(channel.Kook.State, model);
     }
 
-    public static async Task UpdateAsync(SocketDMChannel channel, RequestOptions options)
+    public static async Task UpdateAsync(SocketDMChannel channel, RequestOptions? options)
     {
         UserChat model = await channel.Kook.ApiClient.GetUserChatAsync(channel.Id, options).ConfigureAwait(false);
         channel.Update(channel.Kook.State, model);
     }
 
     public static async Task<IReadOnlyCollection<SocketGuildUser>> GetConnectedUsersAsync(SocketVoiceChannel channel,
-        SocketGuild guild, KookSocketClient kook, RequestOptions options)
+        SocketGuild guild, KookSocketClient kook, RequestOptions? options)
     {
         IReadOnlyCollection<User> users = await channel.Kook.ApiClient.GetConnectedUsersAsync(channel.Id, options).ConfigureAwait(false);
         return users.Select(x => SocketGuildUser.Create(guild, kook.State, x)).ToImmutableArray();

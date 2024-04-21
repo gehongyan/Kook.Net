@@ -12,7 +12,11 @@ internal class NullableDateTimeOffsetUnixTimeMillisecondsConverter : JsonConvert
     {
         if (reader.TokenType == JsonTokenType.Null)
             return null;
-        return DateTimeOffset.FromUnixTimeMilliseconds(reader.GetInt64());
+        long tick = reader.GetInt64();
+        if (tick == 0)
+            return null;
+
+        return DateTimeOffset.FromUnixTimeMilliseconds(tick);
     }
 
     public override void Write(Utf8JsonWriter writer, DateTimeOffset? value, JsonSerializerOptions options)

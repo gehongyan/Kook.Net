@@ -6,7 +6,7 @@ internal static class IntimacyHelper
 {
     public static async Task UpdateAsync(IIntimacy intimacy, BaseKookClient client,
         Action<IntimacyProperties> func,
-        RequestOptions options)
+        RequestOptions? options)
     {
         IntimacyProperties properties = new(intimacy.SocialInfo, intimacy.Score);
         func(properties);

@@ -13,7 +13,7 @@ internal static class KookRestApiClientExperimentalExtensions
     #region Guilds
 
     public static IAsyncEnumerable<IReadOnlyCollection<Guild>> GetAdminGuildsAsync(this KookRestApiClient client,
-        int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions options = null)
+        int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
 
@@ -23,7 +23,7 @@ internal static class KookRestApiClientExperimentalExtensions
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public static async Task<RichGuild> CreateGuildAsync(this KookRestApiClient client, CreateGuildParams args, RequestOptions options = null)
+    public static async Task<RichGuild> CreateGuildAsync(this KookRestApiClient client, CreateGuildParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotNullOrWhitespace(args.Name, nameof(args.Name));
@@ -34,7 +34,7 @@ internal static class KookRestApiClientExperimentalExtensions
             .ConfigureAwait(false);
     }
 
-    public static async Task DeleteGuildAsync(this KookRestApiClient client, DeleteGuildParams args, RequestOptions options = null)
+    public static async Task DeleteGuildAsync(this KookRestApiClient client, DeleteGuildParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -45,7 +45,7 @@ internal static class KookRestApiClientExperimentalExtensions
     }
 
     public static async Task<RichGuild> ModifyGuildAsync(this KookRestApiClient client, ulong guildId, ModifyGuildParams args,
-        RequestOptions options = null)
+        RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         Preconditions.NotNull(args, nameof(args));
@@ -57,7 +57,7 @@ internal static class KookRestApiClientExperimentalExtensions
     }
 
     public static async Task SyncChannelPermissionsAsync(this KookRestApiClient client, SyncChannelPermissionsParams args,
-        RequestOptions options = null)
+        RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
@@ -72,7 +72,7 @@ internal static class KookRestApiClientExperimentalExtensions
     #region Voice Regions
 
     public static IAsyncEnumerable<IReadOnlyCollection<VoiceRegion>> GetVoiceRegionsAsync(this KookRestApiClient client,
-        int limit = KookConfig.MaxUsersPerBatch, int fromPage = 1, RequestOptions options = null)
+        int limit = KookConfig.MaxUsersPerBatch, int fromPage = 1, RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
         KookRestApiClient.BucketIds ids = new();
@@ -85,7 +85,7 @@ internal static class KookRestApiClientExperimentalExtensions
 
     #region Voice
 
-    public static async Task DisconnectUserAsync(this KookRestApiClient client, DisconnectUserParams args, RequestOptions options = null)
+    public static async Task DisconnectUserAsync(this KookRestApiClient client, DisconnectUserParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
@@ -100,7 +100,7 @@ internal static class KookRestApiClientExperimentalExtensions
 
     #region Messages
 
-    public static async Task ValidateCardsAsync(this KookRestApiClient client, ValidateCardsParams args, RequestOptions options = null)
+    public static async Task ValidateCardsAsync(this KookRestApiClient client, ValidateCardsParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotNullOrEmpty(args.Content, nameof(args.Content));

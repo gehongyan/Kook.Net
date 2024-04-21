@@ -29,7 +29,7 @@ public class RestIntimacy : RestEntity<ulong>, IIntimacy
     public IReadOnlyCollection<IntimacyImage> Images => _images;
 
     /// <inheritdoc />
-    public async Task UpdateAsync(Action<IntimacyProperties> func, RequestOptions options = null) =>
+    public async Task UpdateAsync(Action<IntimacyProperties> func, RequestOptions? options = null) =>
         await IntimacyHelper.UpdateAsync(this, Kook, func, options).ConfigureAwait(false);
 
     internal RestIntimacy(BaseKookClient kook, IUser user, ulong id)

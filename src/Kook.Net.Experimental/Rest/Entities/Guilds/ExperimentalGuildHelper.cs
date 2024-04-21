@@ -8,7 +8,7 @@ internal static class ExperimentalGuildHelper
 {
     /// <exception cref="ArgumentNullException"><paramref name="func"/> is <c>null</c>.</exception>
     public static async Task<RichModel> ModifyAsync(IGuild guild, BaseKookClient client,
-        Action<GuildProperties> func, RequestOptions options)
+        Action<GuildProperties> func, RequestOptions? options)
     {
         if (func == null) throw new ArgumentNullException(nameof(func));
 
@@ -37,6 +37,6 @@ internal static class ExperimentalGuildHelper
     }
 
     public static async Task DeleteAsync(IGuild guild, BaseKookClient client,
-        RequestOptions options) =>
+        RequestOptions? options) =>
         await client.ApiClient.DeleteGuildAsync(guild.Id, options).ConfigureAwait(false);
 }

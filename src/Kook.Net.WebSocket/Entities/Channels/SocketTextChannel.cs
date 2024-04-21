@@ -111,7 +111,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     ///     A task that represents an asynchronous get operation for retrieving the message. The task result contains
     ///     the retrieved message; <c>null</c> if no message is found with the specified identifier.
     /// </returns>
-    public async Task<IMessage> GetMessageAsync(Guid id, RequestOptions options = null)
+    public async Task<IMessage> GetMessageAsync(Guid id, RequestOptions? options = null)
     {
         IMessage msg = _messages?.Get(id);
         if (msg == null) msg = await ChannelHelper.GetMessageAsync(this, Kook, id, options).ConfigureAwait(false);
@@ -131,7 +131,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+    public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
         => SocketChannelHelper.GetMessagesAsync(this, Kook, _messages, null, Direction.Before, limit, CacheMode.AllowDownload, options);
 
     /// <summary>
@@ -149,7 +149,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     ///     Paged collection of messages.
     /// </returns>
     public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
         => SocketChannelHelper.GetMessagesAsync(this, Kook, _messages, referenceMessageId, dir, limit, CacheMode.AllowDownload, options);
 
     /// <summary>
@@ -167,7 +167,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     ///     Paged collection of messages.
     /// </returns>
     public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
         => SocketChannelHelper.GetMessagesAsync(this, Kook, _messages, referenceMessage.Id, dir, limit, CacheMode.AllowDownload, options);
 
     /// <inheritdoc />
@@ -183,37 +183,37 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         => SocketChannelHelper.GetCachedMessages(this, Kook, _messages, fromMessage.Id, dir, limit);
 
     /// <inheritdoc cref="ITextChannel.GetPinnedMessagesAsync(RequestOptions)"/>
-    public Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions options = null)
+    public Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions? options = null)
         => ChannelHelper.GetPinnedMessagesAsync(this, Kook, options);
 
     /// <inheritdoc cref="IMessageChannel.SendFileAsync(string,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null, AttachmentType type = AttachmentType.File,
-        Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        Quote quote = null, IUser ephemeralUser = null, RequestOptions? options = null)
         => ChannelHelper.SendFileAsync(this, Kook, path, fileName, type, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendFileAsync(Stream,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName = null, AttachmentType type = AttachmentType.File,
-        Quote quote = null, IUser ephemeralUser = null, RequestOptions options = null)
+        Quote quote = null, IUser ephemeralUser = null, RequestOptions? options = null)
         => ChannelHelper.SendFileAsync(this, Kook, stream, fileName, type, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendFileAsync(FileAttachment,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment, Quote quote = null, IUser ephemeralUser = null,
-        RequestOptions options = null)
+        RequestOptions? options = null)
         => ChannelHelper.SendFileAsync(this, Kook, attachment, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendTextAsync(string,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, Quote quote = null, IUser ephemeralUser = null,
-        RequestOptions options = null)
+        RequestOptions? options = null)
         => ChannelHelper.SendMessageAsync(this, Kook, MessageType.KMarkdown, text, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendCardsAsync(IEnumerable{ICard},IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards, Quote quote = null, IUser ephemeralUser = null,
-        RequestOptions options = null)
+        RequestOptions? options = null)
         => ChannelHelper.SendCardsAsync(this, Kook, cards, options, quote, ephemeralUser);
 
     /// <inheritdoc cref="IMessageChannel.SendCardAsync(ICard,IQuote,IUser,RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, Quote quote = null, IUser ephemeralUser = null,
-        RequestOptions options = null)
+        RequestOptions? options = null)
         => ChannelHelper.SendCardAsync(this, Kook, card, options, quote, ephemeralUser);
 
     /// <inheritdoc />

@@ -84,7 +84,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <returns>
     ///     The message gotten from either the cache or the download, or <c>null</c> if none is found.
     /// </returns>
-    public async Task<IMessage> GetMessageAsync(Guid id, RequestOptions options = null) =>
+    public async Task<IMessage> GetMessageAsync(Guid id, RequestOptions? options = null) =>
         await ChannelHelper.GetDirectMessageAsync(this, Kook, id, options).ConfigureAwait(false);
 
     /// <summary>
@@ -99,7 +99,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
         => ChannelHelper.GetDirectMessagesAsync(this, Kook, null, Direction.Before, limit, true, options);
 
     /// <summary>
@@ -117,7 +117,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     Paged collection of messages.
     /// </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
         => ChannelHelper.GetDirectMessagesAsync(this, Kook, referenceMessageId, dir, limit, true, options);
 
     /// <summary>
@@ -135,7 +135,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     Paged collection of messages.
     /// </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
         => ChannelHelper.GetDirectMessagesAsync(this, Kook, referenceMessage.Id, dir, limit, true, options);
 
     /// <inheritdoc />
@@ -166,7 +166,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null, AttachmentType type = AttachmentType.File,
-        IQuote quote = null, RequestOptions options = null)
+        IQuote quote = null, RequestOptions? options = null)
         => ChannelHelper.SendDirectFileAsync(this, Kook, path, fileName, type, options, quote);
 
     /// <summary>
@@ -185,7 +185,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName = null, AttachmentType type = AttachmentType.File,
-        IQuote quote = null, RequestOptions options = null)
+        IQuote quote = null, RequestOptions? options = null)
         => ChannelHelper.SendDirectFileAsync(this, Kook, stream, fileName, type, options, quote);
 
     /// <summary>
@@ -201,7 +201,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment, IQuote quote = null, RequestOptions options = null)
+    public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment, IQuote quote = null, RequestOptions? options = null)
         => ChannelHelper.SendDirectFileAsync(this, Kook, attachment, options, quote);
 
     /// <summary>
@@ -214,7 +214,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote quote = null, RequestOptions options = null)
+    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote quote = null, RequestOptions? options = null)
         => ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, options, quote);
 
     /// <summary>
@@ -227,7 +227,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards, IQuote quote = null, RequestOptions options = null)
+    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards, IQuote quote = null, RequestOptions? options = null)
         => ChannelHelper.SendDirectCardsAsync(this, Kook, cards, options, quote);
 
     /// <summary>
@@ -240,7 +240,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, IQuote quote = null, RequestOptions options = null)
+    public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, IQuote quote = null, RequestOptions? options = null)
         => ChannelHelper.SendDirectCardAsync(this, Kook, card, options, quote);
 
     /// <inheritdoc />

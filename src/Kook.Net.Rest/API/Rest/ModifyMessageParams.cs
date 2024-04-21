@@ -6,10 +6,10 @@ namespace Kook.API.Rest;
 internal class ModifyMessageParams
 {
     [JsonPropertyName("msg_id")]
-    public Guid MessageId { get; set; }
+    public required Guid MessageId { get; set; }
 
     [JsonPropertyName("content")]
-    public string Content { get; set; }
+    public required string Content { get; set; }
 
     [JsonPropertyName("quote")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -20,10 +20,4 @@ internal class ModifyMessageParams
     [JsonConverter(typeof(NullableUInt64Converter))]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ulong? EphemeralUserId { get; set; }
-
-    public ModifyMessageParams(Guid messageId, string content)
-    {
-        MessageId = messageId;
-        Content = content;
-    }
 }

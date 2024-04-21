@@ -15,7 +15,7 @@ internal class RestRequest : IRequest
     public TaskCompletionSource<Stream> Promise { get; }
     public RequestOptions Options { get; }
 
-    public RestRequest(IRestClient client, HttpMethod method, string endpoint, RequestOptions options)
+    public RestRequest(IRestClient client, HttpMethod method, string endpoint, RequestOptions? options)
     {
         Preconditions.NotNull(options, nameof(options));
 

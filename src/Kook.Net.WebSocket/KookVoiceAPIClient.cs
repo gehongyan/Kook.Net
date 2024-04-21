@@ -206,7 +206,7 @@ internal class KookVoiceAPIClient : IDisposable
 
     public void Dispose() => Dispose(true);
 
-    public async Task SendAsync(VoiceSocketFrameType type, uint sequence, object payload, RequestOptions options = null)
+    public async Task SendAsync(VoiceSocketFrameType type, uint sequence, object payload, RequestOptions? options = null)
     {
         object frame = new VoiceSocketRequestFrame { Type = type, Id = sequence, Request = true, Payload = payload };
         string json = SerializeJson(frame);
@@ -238,19 +238,19 @@ internal class KookVoiceAPIClient : IDisposable
 
     #region WebSocket
 
-    public async Task SendGetRouterRtpCapabilitiesRequestAsync(uint sequence, RequestOptions options = null) =>
+    public async Task SendGetRouterRtpCapabilitiesRequestAsync(uint sequence, RequestOptions? options = null) =>
         await SendAsync(VoiceSocketFrameType.GetRouterRtpCapabilities, sequence, new object(), options)
             .ConfigureAwait(false);
 
-    public async Task SendJoinRequestAsync(uint sequence, RequestOptions options = null) =>
+    public async Task SendJoinRequestAsync(uint sequence, RequestOptions? options = null) =>
         await SendAsync(VoiceSocketFrameType.Join, sequence, new JoinParams { DisplayName = string.Empty }, options).ConfigureAwait(false);
 
-    public async Task SendCreatePlainTransportRequestAsync(uint sequence, RequestOptions options = null) =>
+    public async Task SendCreatePlainTransportRequestAsync(uint sequence, RequestOptions? options = null) =>
         await SendAsync(VoiceSocketFrameType.CreatePlainTransport, sequence,
             new CreatePlainTransportParams { Comedia = true, RtcpMultiplexing = false, Type = "plain" }, options).ConfigureAwait(false);
 
     public async Task SendProduceRequestAsync(uint sequence, ulong peerId, Guid transportId, uint ssrc,
-        RequestOptions options = null) =>
+        RequestOptions? options = null) =>
         await SendAsync(VoiceSocketFrameType.Produce,
             sequence,
             new ProduceParams
@@ -277,7 +277,7 @@ internal class KookVoiceAPIClient : IDisposable
             }, options).ConfigureAwait(false);
 
     public async Task SendRtcpAsync(uint ssrc, uint rtpTimestamp, uint sentPackets, uint sentOctets,
-        RequestOptions options = null)
+        RequestOptions? options = null)
     {
         byte[] packet = new byte[28];
         // 10.. .... = Version: RFC 1889 Version (2)

@@ -108,7 +108,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     ///     the data via REST and update the guild users cache, otherwise it will
     ///     return the cached data.
     /// </remarks>
-    public async IAsyncEnumerable<IReadOnlyCollection<SocketGuildUser>> GetUsersAsync(RequestOptions options = null)
+    public async IAsyncEnumerable<IReadOnlyCollection<SocketGuildUser>> GetUsersAsync(RequestOptions? options = null)
     {
         // From SocketGuild.Users
         if (Guild.HasAllMembers is true)

@@ -290,7 +290,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     }
 
     /// <inheritdoc />
-    public Task ModifyNicknameAsync(string name, RequestOptions? options = null)
+    public Task ModifyNicknameAsync(string? name, RequestOptions? options = null)
         => UserHelper.ModifyNicknameAsync(this, Kook, name, options);
 
     /// <inheritdoc />
@@ -391,7 +391,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         => GuildHelper.UndeafenUserAsync(this, Kook, options);
 
     /// <inheritdoc cref="IGuildUser.GetConnectedVoiceChannelsAsync"/>
-    public async Task<IReadOnlyCollection<SocketVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null)
+    public async Task<IReadOnlyCollection<SocketVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions? options = null)
     {
         IReadOnlyCollection<SocketVoiceChannel> channels =
             await SocketUserHelper.GetConnectedChannelsAsync(this, Kook, options).ConfigureAwait(false);

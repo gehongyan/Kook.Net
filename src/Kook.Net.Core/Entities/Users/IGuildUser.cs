@@ -156,7 +156,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
-    Task ModifyNicknameAsync(string name, RequestOptions? options = null);
+    Task ModifyNicknameAsync(string? name, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets all subscriptions of this user for this guild.

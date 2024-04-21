@@ -5,7 +5,7 @@ namespace Kook.API;
 internal class Reaction
 {
     [JsonPropertyName("emoji")]
-    public Emoji Emoji { get; set; }
+    public required Emoji Emoji { get; set; }
 
     [JsonPropertyName("count")]
     public int Count { get; set; }

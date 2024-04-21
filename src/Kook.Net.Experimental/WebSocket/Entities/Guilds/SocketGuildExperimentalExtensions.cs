@@ -19,7 +19,7 @@ public static class SocketGuildExperimentalExtensions
     ///         usage, may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
     ///     </note>
     /// </remarks>
-    public static Task DeleteAsync(this SocketGuild guild, RequestOptions options = null)
+    public static Task DeleteAsync(this SocketGuild guild, RequestOptions? options = null)
         => ExperimentalGuildHelper.DeleteAsync(guild, guild.Kook, options);
 
     /// <summary>
@@ -38,6 +38,6 @@ public static class SocketGuildExperimentalExtensions
     ///     </note>
     /// </remarks>
     /// <exception cref="ArgumentNullException"><paramref name="func"/> is <c>null</c>.</exception>
-    public static Task ModifyAsync(this SocketGuild guild, Action<GuildProperties> func, RequestOptions options = null)
+    public static Task ModifyAsync(this SocketGuild guild, Action<GuildProperties> func, RequestOptions? options = null)
         => ExperimentalGuildHelper.ModifyAsync(guild, guild.Kook, func, options);
 }

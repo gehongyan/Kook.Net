@@ -114,11 +114,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     {
         Username = model.Username;
         IdentifyNumberValue = model.FullName.Length > 4
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
             && ushort.TryParse(model.FullName[^4..], out ushort val)
-#else
-            && ushort.TryParse(model.FullName.Substring(model.FullName.Length - 4), out ushort val)
-#endif
                 ? val
                 : null;
         Avatar = model.Avatar;
@@ -144,7 +140,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a rest DM channel where the user is the recipient.
     /// </returns>
-    public Task<RestDMChannel> CreateDMChannelAsync(RequestOptions options = null)
+    public Task<RestDMChannel> CreateDMChannelAsync(RequestOptions? options = null)
         => UserHelper.CreateDMChannelAsync(this, Kook, options);
 
     /// <summary>
@@ -155,7 +151,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     ///     A task that represents the asynchronous operation for getting the intimacy information. The task result
     ///     contains the intimacy information associated with this user.
     /// </returns>
-    public Task<RestIntimacy> GetIntimacyAsync(RequestOptions options = null)
+    public Task<RestIntimacy> GetIntimacyAsync(RequestOptions? options = null)
         => UserHelper.GetIntimacyAsync(this, Kook, options);
 
     /// <inheritdoc />

@@ -19,7 +19,7 @@ public static class RestVoiceChannelExperimentalExtensions
     ///         usage, may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
     ///     </note>
     /// </remarks>
-    public static Task SyncPermissionsAsync(this RestVoiceChannel channel, RequestOptions options = null)
+    public static Task SyncPermissionsAsync(this RestVoiceChannel channel, RequestOptions? options = null)
         => ExperimentalChannelHelper.SyncPermissionsAsync(channel, channel.Kook, options);
 
     /// <summary>
@@ -37,6 +37,6 @@ public static class RestVoiceChannelExperimentalExtensions
     ///         usage, may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
     ///     </note>
     /// </remarks>
-    public static Task DisconnectUserAsync(this RestVoiceChannel channel, IGuildUser user, RequestOptions options = null)
+    public static Task DisconnectUserAsync(this RestVoiceChannel channel, IGuildUser user, RequestOptions? options = null)
         => ExperimentalChannelHelper.DisconnectUserAsync(channel, channel.Kook, user, options);
 }

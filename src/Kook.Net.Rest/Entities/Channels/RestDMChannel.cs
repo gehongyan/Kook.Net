@@ -184,22 +184,22 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
         => ChannelHelper.SendDirectCardAsync(this, Kook, card, options, quote);
 
     /// <inheritdoc />
-    public Task<RestMessage> GetMessageAsync(Guid id, RequestOptions options = null)
+    public Task<RestMessage> GetMessageAsync(Guid id, RequestOptions? options = null)
         => ChannelHelper.GetDirectMessageAsync(this, Kook, id, options);
 
     /// <inheritdoc />
     public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch,
-        RequestOptions options = null)
+        RequestOptions? options = null)
         => ChannelHelper.GetDirectMessagesAsync(this, Kook, null, Direction.Before, limit, true, options);
 
     /// <inheritdoc />
     public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
         => ChannelHelper.GetDirectMessagesAsync(this, Kook, referenceMessageId, dir, limit, true, options);
 
     /// <inheritdoc />
     public IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
         => ChannelHelper.GetDirectMessagesAsync(this, Kook, referenceMessage.Id, dir, limit, true, options);
 
     #endregion

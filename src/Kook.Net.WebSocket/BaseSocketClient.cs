@@ -156,7 +156,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     /// <returns>
     ///     A task that represents the asynchronous download operation.
     /// </returns>
-    public abstract Task DownloadUsersAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null);
+    public abstract Task DownloadUsersAsync(IEnumerable<IGuild> guilds = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Downloads all voice states for the specified guilds.
@@ -165,7 +165,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     ///     The guilds to download the voice states for. If <c>null</c>, all available guilds will be downloaded.
     /// </param>
     /// <param name="options">The options to be used when sending the request.</param>
-    public abstract Task DownloadVoiceStatesAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null);
+    public abstract Task DownloadVoiceStatesAsync(IEnumerable<IGuild> guilds = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Downloads all boost subscriptions for the specified guilds.
@@ -176,7 +176,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     ///     <see cref="GuildPermission.ManageGuild"/> permission.
     /// </param>
     /// <param name="options">The options to be used when sending the request.</param>
-    public abstract Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild> guilds = null, RequestOptions options = null);
+    public abstract Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild> guilds = null, RequestOptions? options = null);
 
     /// <inheritdoc />
     Task<IChannel?> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options = null)

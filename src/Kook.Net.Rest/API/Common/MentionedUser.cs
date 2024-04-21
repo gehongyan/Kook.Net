@@ -8,11 +8,11 @@ internal class MentionedUser
     public ulong Id { get; set; }
 
     [JsonPropertyName("username")]
-    public string Username { get; set; }
+    public required string Username { get; set; }
 
     [JsonPropertyName("full_name")]
-    public string FullName { get; set; }
+    public required string FullName { get; set; }
 
     [JsonPropertyName("avatar")]
-    public string Avatar { get; set; }
+    public required string Avatar { get; set; }
 }

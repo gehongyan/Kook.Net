@@ -58,7 +58,7 @@ public class RestGame : RestEntity<int>, IGame
     }
 
     /// <inheritdoc cref="IGame.ModifyAsync(Action{GameProperties},RequestOptions)" />
-    public async Task<RestGame> ModifyAsync(Action<GameProperties> func, RequestOptions options = null) =>
+    public async Task<RestGame> ModifyAsync(Action<GameProperties> func, RequestOptions? options = null) =>
         await GameHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
 
     /// <inheritdoc />

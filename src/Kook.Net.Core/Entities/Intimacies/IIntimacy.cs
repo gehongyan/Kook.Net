@@ -59,5 +59,5 @@ public interface IIntimacy : IEntity<ulong>
     /// <param name="func">A delegate containing the properties to modify the <see cref="IIntimacy"/> with.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>A task that represents the asynchronous operation for updating the intimacy information.</returns>
-    Task UpdateAsync(Action<IntimacyProperties> func, RequestOptions options);
+    Task UpdateAsync(Action<IntimacyProperties> func, RequestOptions? options);
 }

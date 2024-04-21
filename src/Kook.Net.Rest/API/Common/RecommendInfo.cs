@@ -15,32 +15,32 @@ internal class RecommendInfo
     public ulong DefaultChannelId { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [JsonPropertyName("icon")]
-    public string Icon { get; set; }
+    public required string Icon { get; set; }
 
     [JsonPropertyName("banner")]
-    public string Banner { get; set; }
+    public required string Banner { get; set; }
 
     [JsonPropertyName("desc")]
-    public string Description { get; set; }
+    public required string Description { get; set; }
 
     [JsonPropertyName("status")]
     public int Status { get; set; }
 
     [JsonPropertyName("tag")]
-    public string Tag { get; set; }
+    public required string Tag { get; set; }
 
     [JsonPropertyName("features")]
     [JsonConverter(typeof(GuildFeaturesConverter))]
-    public GuildFeatures Features { get; set; }
+    public required GuildFeatures Features { get; set; }
 
     [JsonPropertyName("level")]
     public BoostLevel BoostLevel { get; set; }
 
     [JsonPropertyName("custom_id")]
-    public string CustomId { get; set; }
+    public required string CustomId { get; set; }
 
     [JsonPropertyName("is_official_partner")]
     [JsonConverter(typeof(NumberBooleanConverter))]
@@ -53,6 +53,5 @@ internal class RecommendInfo
     public int AuditStatus { get; set; }
 
     [JsonPropertyName("update_day_gap")]
-
     public int UpdateDayInterval { get; set; }
 }

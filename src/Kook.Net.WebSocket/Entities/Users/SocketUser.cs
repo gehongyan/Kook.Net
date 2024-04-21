@@ -203,15 +203,15 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     }
 
     /// <inheritdoc cref="IUser.CreateDMChannelAsync(RequestOptions)" />
-    public async Task<SocketDMChannel> CreateDMChannelAsync(RequestOptions options = null)
+    public async Task<SocketDMChannel> CreateDMChannelAsync(RequestOptions? options = null)
         => await SocketUserHelper.CreateDMChannelAsync(this, Kook, options).ConfigureAwait(false);
 
     /// <inheritdoc cref="IUser.GetIntimacyAsync(RequestOptions)" />
-    public Task<RestIntimacy> GetIntimacyAsync(RequestOptions options = null)
+    public Task<RestIntimacy> GetIntimacyAsync(RequestOptions? options = null)
         => UserHelper.GetIntimacyAsync(this, Kook, options);
 
     /// <inheritdoc cref="IUser.UpdateIntimacyAsync(Action{IntimacyProperties},RequestOptions)" />
-    public async Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options = null)
+    public async Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions? options = null)
         => await UserHelper.UpdateIntimacyAsync(this, Kook, func, options).ConfigureAwait(false);
 
     /// <inheritdoc />

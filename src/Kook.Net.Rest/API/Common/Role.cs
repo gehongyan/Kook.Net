@@ -9,7 +9,7 @@ internal class Role
     public uint Id { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [JsonPropertyName("color")]
     [JsonConverter(typeof(RawValueColorConverter))]

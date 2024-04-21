@@ -6,10 +6,10 @@ namespace Kook.API.Rest;
 internal class PagedResponseBase<TItem>
 {
     [JsonPropertyName("items")]
-    public TItem[] Items { get; set; }
+    public required TItem[] Items { get; set; }
 
     [JsonPropertyName("meta")]
-    public PageMeta Meta { get; set; }
+    public required PageMeta Meta { get; set; }
 
     [JsonPropertyName("sort")]
     [JsonConverter(typeof(PageSortInfoConverter))]

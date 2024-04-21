@@ -82,7 +82,7 @@ public class SocketInvite : SocketEntity<uint>, IInvite
         Code = model.UrlCode;
         Url = model.Url;
         GuildId = model.GuildId;
-        ChannelId = model.ChannelId;
+        ChannelId = model.ChannelId != 0 ? model.ChannelId : null;
         ExpiresAt = model.ExpiresAt;
         MaxAge = model.Duration;
         MaxUses = model.UsingTimes == -1 ? null : model.UsingTimes;

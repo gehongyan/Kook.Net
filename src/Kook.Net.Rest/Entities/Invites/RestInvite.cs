@@ -34,6 +34,9 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
     public string GuildName { get; private set; }
 
     /// <inheritdoc />
+    public DateTimeOffset CreatedAt { get; private set; }
+
+    /// <inheritdoc />
     public DateTimeOffset? ExpiresAt { get; private set; }
 
     /// <inheritdoc />
@@ -47,6 +50,9 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
 
     /// <inheritdoc />
     public int? RemainingUses { get; private set; }
+
+    /// <inheritdoc />
+    public int InvitedUsersCount { get; private set; }
 
     internal IChannel Channel { get; }
     internal IGuild Guild { get; }
@@ -70,16 +76,18 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
         Code = model.UrlCode;
         Url = model.Url;
         GuildId = model.GuildId;
-        ChannelId = model.ChannelId;
+        ChannelId = model.ChannelId != 0 ? model.ChannelId : null;
         GuildName = model.GuildName;
-        ChannelName = model.ChannelName;
+        ChannelName = model.ChannelId != 0 ? model.ChannelName : null;
         ChannelType = model.ChannelType == ChannelType.Category ? ChannelType.Unspecified : model.ChannelType;
         Inviter = model.Inviter is not null ? RestUser.Create(Kook, model.Inviter) : null;
+        CreatedAt = model.CreatedAt;
         ExpiresAt = model.ExpiresAt;
         MaxAge = model.Duration;
         MaxUses = model.UsingTimes == -1 ? null : model.UsingTimes;
         RemainingUses = model.RemainingTimes == -1 ? null : model.RemainingTimes;
         Uses = MaxUses - RemainingUses;
+        InvitedUsersCount = model.InviteesCount;
     }
 
     /// <inheritdoc />

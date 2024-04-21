@@ -10,7 +10,7 @@ internal class JsonRestRequest : RestRequest
 {
     public string Json { get; }
 
-    public JsonRestRequest(IRestClient client, HttpMethod method, string endpoint, string json, RequestOptions options)
+    public JsonRestRequest(IRestClient client, HttpMethod method, string endpoint, string json, RequestOptions? options)
         : base(client, method, endpoint, options)
     {
         Json = json;

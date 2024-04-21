@@ -6,8 +6,8 @@ internal class CreateGuildRoleParams
 {
     [JsonPropertyName("name")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     [JsonPropertyName("guild_id")]
-    public ulong GuildId { get; set; }
+    public required ulong GuildId { get; set; }
 }

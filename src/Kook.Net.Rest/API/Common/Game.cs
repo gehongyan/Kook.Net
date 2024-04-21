@@ -8,23 +8,23 @@ internal class Game
     public int Id { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [JsonPropertyName("type")]
     public GameType Type { get; set; }
 
     [JsonPropertyName("options")]
-    public string Options { get; set; }
+    public string? Options { get; set; }
 
     [JsonPropertyName("kmhook_admin")]
     public bool KmHookAdmin { get; set; }
 
+    [JsonPropertyName("icon")]
+    public required string Icon { get; set; }
+
     [JsonPropertyName("process_name")]
-    public string[] ProcessNames { get; set; }
+    public required string[] ProcessNames { get; set; }
 
     [JsonPropertyName("product_name")]
-    public string[] ProductNames { get; set; }
-
-    [JsonPropertyName("icon")]
-    public string Icon { get; set; }
+    public required string[] ProductNames { get; set; }
 }

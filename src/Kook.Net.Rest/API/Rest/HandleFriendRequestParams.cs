@@ -6,9 +6,9 @@ namespace Kook.API.Rest;
 internal class HandleFriendRequestParams
 {
     [JsonPropertyName("id")]
-    public ulong Id { get; set; }
+    public required ulong Id { get; set; }
 
     [JsonPropertyName("accept")]
     [JsonConverter(typeof(NumberBooleanConverter))]
-    public bool HandleResult { get; set; }
+    public required bool HandleResult { get; set; }
 }

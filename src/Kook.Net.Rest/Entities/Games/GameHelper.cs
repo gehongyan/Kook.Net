@@ -6,11 +6,11 @@ namespace Kook.Rest;
 internal static class GameHelper
 {
     public static async Task DeleteAsync(IGame game, BaseKookClient client,
-        RequestOptions options) =>
+        RequestOptions? options) =>
         await client.ApiClient.DeleteGameAsync(game.Id, options).ConfigureAwait(false);
 
     public static async Task<RestGame> ModifyAsync(IGame game, BaseKookClient client, Action<GameProperties> func,
-        RequestOptions options)
+        RequestOptions? options)
     {
         GameProperties properties = new() { Name = game.Name, IconUrl = game.Icon };
         func(properties);
