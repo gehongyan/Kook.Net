@@ -1,11 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Xml;
 using Kook.CardMarkup.Extensions;
 using Kook.CardMarkup.Models;
-
-#if NETSTANDARD2_1 || NET5_0_OR_GREATER
-using System.Diagnostics.CodeAnalysis;
-#endif
 
 namespace Kook.CardMarkup;
 
@@ -27,9 +24,9 @@ public static class CardMarkupSerializer
     public static async Task<IEnumerable<ICard>> DeserializeAsync(FileInfo file, CancellationToken token = default)
     {
 #if NETSTANDARD2_0 || NET462
-        using var fs = file.OpenRead();
+        using FileStream fs = file.OpenRead();
 #else
-        await using var fs = file.OpenRead();
+        await using FileStream fs = file.OpenRead();
 #endif
         return await DeserializeAsync(fs, token);
     }
@@ -44,7 +41,7 @@ public static class CardMarkupSerializer
     /// <returns><see cref="ICard"/> enumerable</returns>
     public static async Task<IEnumerable<ICard>> DeserializeAsync(string xmlText, CancellationToken token = default)
     {
-        using var xmlStream = new MemoryStream(Encoding.UTF8.GetBytes(xmlText));
+        using MemoryStream xmlStream = new(Encoding.UTF8.GetBytes(xmlText));
         return await DeserializeAsync(xmlStream, token);
     }
 
@@ -58,30 +55,28 @@ public static class CardMarkupSerializer
     /// <returns><see cref="ICard"/> enumerable</returns>
     public static async Task<IEnumerable<ICard>> DeserializeAsync(Stream xmlStream, CancellationToken token = default)
     {
-        using var xmlReader = XmlReader.Create(xmlStream, new XmlReaderSettings
+        using XmlReader xmlReader = XmlReader.Create(xmlStream, new XmlReaderSettings
         {
             Async = true,
             IgnoreWhitespace = true,
             IgnoreComments = true
         });
 
-        MarkupElement markupElement = null;
-        var stack = new Stack<MarkupElement>();
+        MarkupElement? markupElement = null;
+        Stack<MarkupElement> stack = [];
 
         while (await xmlReader.ReadAsync())
         {
-            var nodeType = xmlReader.NodeType;
+            XmlNodeType nodeType = xmlReader.NodeType;
 
             if (token.IsCancellationRequested)
-            {
                 throw new TaskCanceledException("The operation was canceled.");
-            }
 
             // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
             switch (nodeType)
             {
                 case XmlNodeType.Element:
-                    var attributes = new Dictionary<string, string>();
+                    Dictionary<string, string> attributes = new();
                     if (xmlReader.HasAttributes)
                     {
                         for (int i = 0; i < xmlReader.AttributeCount; i++)
@@ -93,7 +88,7 @@ public static class CardMarkupSerializer
                         xmlReader.MoveToElement();
                     }
 
-                    var e = new MarkupElement
+                    MarkupElement e = new()
                     {
                         Name = xmlReader.Name,
                         Attributes = attributes,
@@ -101,24 +96,16 @@ public static class CardMarkupSerializer
                     };
 
                     if (xmlReader.IsEmptyElement)
-                    {
                         stack.Peek().Children.Add(e);
-                    }
                     else
-                    {
                         stack.Push(e);
-                    }
                     break;
                 case XmlNodeType.EndElement:
-                    var element = stack.Pop();
+                    MarkupElement? element = stack.Pop();
                     if (stack.Count == 0)
-                    {
                         markupElement = element;
-                    }
                     else
-                    {
                         stack.Peek().Children.Add(element);
-                    }
                     break;
                 case XmlNodeType.Text:
                     stack.Peek().Text = xmlReader.Value;
@@ -126,7 +113,7 @@ public static class CardMarkupSerializer
             }
         }
 
-        return markupElement.ToCards();
+        return markupElement?.ToCards() ?? [];
     }
 
     #endregion
@@ -142,7 +129,7 @@ public static class CardMarkupSerializer
     /// <returns><see cref="ICard"/> enumerable</returns>
     public static IEnumerable<ICard> Deserialize(FileInfo file)
     {
-        using var fs = file.OpenRead();
+        using FileStream fs = file.OpenRead();
         return Deserialize(fs);
     }
 
@@ -155,7 +142,7 @@ public static class CardMarkupSerializer
     /// <returns><see cref="ICard"/> enumerable</returns>
     public static IEnumerable<ICard> Deserialize(string xmlText)
     {
-        using var xmlStream = new MemoryStream(Encoding.UTF8.GetBytes(xmlText));
+        using MemoryStream xmlStream = new(Encoding.UTF8.GetBytes(xmlText));
         return Deserialize(xmlStream);
     }
 
@@ -168,25 +155,25 @@ public static class CardMarkupSerializer
     /// <returns><see cref="ICard"/> enumerable</returns>
     public static IEnumerable<ICard> Deserialize(Stream xmlStream)
     {
-        using var xmlReader = XmlReader.Create(xmlStream, new XmlReaderSettings
+        using XmlReader xmlReader = XmlReader.Create(xmlStream, new XmlReaderSettings
         {
             Async = false,
             IgnoreWhitespace = true,
             IgnoreComments = true
         });
 
-        MarkupElement markupElement = null;
-        var stack = new Stack<MarkupElement>();
+        MarkupElement? markupElement = null;
+        Stack<MarkupElement> stack = [];
 
         while (xmlReader.Read())
         {
-            var nodeType = xmlReader.NodeType;
+            XmlNodeType nodeType = xmlReader.NodeType;
 
             // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
             switch (nodeType)
             {
                 case XmlNodeType.Element:
-                    var attributes = new Dictionary<string, string>();
+                    Dictionary<string, string> attributes = new();
                     if (xmlReader.HasAttributes)
                     {
                         for (int i = 0; i < xmlReader.AttributeCount; i++)
@@ -198,7 +185,7 @@ public static class CardMarkupSerializer
                         xmlReader.MoveToElement();
                     }
 
-                    var e = new MarkupElement
+                    MarkupElement e = new()
                     {
                         Name = xmlReader.Name,
                         Attributes = attributes,
@@ -206,24 +193,16 @@ public static class CardMarkupSerializer
                     };
 
                     if (xmlReader.IsEmptyElement)
-                    {
                         stack.Peek().Children.Add(e);
-                    }
                     else
-                    {
                         stack.Push(e);
-                    }
                     break;
                 case XmlNodeType.EndElement:
-                    var element = stack.Pop();
+                    MarkupElement? element = stack.Pop();
                     if (stack.Count == 0)
-                    {
                         markupElement = element;
-                    }
                     else
-                    {
                         stack.Peek().Children.Add(element);
-                    }
                     break;
                 case XmlNodeType.Text:
                     stack.Peek().Text = xmlReader.Value;
@@ -231,7 +210,7 @@ public static class CardMarkupSerializer
             }
         }
 
-        return markupElement.ToCards();
+        return markupElement?.ToCards() ?? [];
     }
 
     #endregion
@@ -246,11 +225,7 @@ public static class CardMarkupSerializer
     /// <param name="file">UTF-8 encoded XML file</param>
     /// <param name="cards"><see cref="ICard"/> enumerable, will be null if return value is false</param>
     /// <returns>True if deserialization is successful, otherwise false</returns>
-    public static bool TryDeserialize(FileInfo file,
-#if NETSTANDARD2_1 || NET5_0_OR_GREATER
-        [NotNullWhen(true)]
-#endif
-        out IEnumerable<ICard>? cards)
+    public static bool TryDeserialize(FileInfo file, [NotNullWhen(true)] out IEnumerable<ICard>? cards)
     {
         try
         {
@@ -270,11 +245,7 @@ public static class CardMarkupSerializer
     /// <param name="xmlText">UTF-8 encoded XML text</param>
     /// <param name="cards"><see cref="ICard"/> enumerable, will be null if return value is false</param>
     /// <returns>True if deserialization is successful, otherwise false</returns>
-    public static bool TryDeserialize(string xmlText,
-#if NETSTANDARD2_1 || NET5_0_OR_GREATER
-        [NotNullWhen(true)]
-#endif
-        out IEnumerable<ICard>? cards)
+    public static bool TryDeserialize(string xmlText, [NotNullWhen(true)] out IEnumerable<ICard>? cards)
     {
         try
         {
@@ -294,11 +265,7 @@ public static class CardMarkupSerializer
     /// <param name="xmlStream">UTF-8 encoded XML stream</param>
     /// <param name="cards"><see cref="ICard"/> enumerable, will be null if return value is false</param>
     /// <returns>True if deserialization is successful, otherwise false</returns>
-    public static bool TryDeserialize(Stream xmlStream,
-#if NETSTANDARD2_1 || NET5_0_OR_GREATER
-        [NotNullWhen(true)]
-#endif
-        out IEnumerable<ICard>? cards)
+    public static bool TryDeserialize(Stream xmlStream, [NotNullWhen(true)] out IEnumerable<ICard>? cards)
     {
         try
         {

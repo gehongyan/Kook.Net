@@ -7,6 +7,8 @@ namespace Kook.Net.Converters;
 
 internal class CardConverter : JsonConverter<CardBase>
 {
+    public static readonly CardConverter Instance = new();
+
     public override CardBase? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         JsonNode? jsonNode = JsonNode.Parse(ref reader);

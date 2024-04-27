@@ -4,7 +4,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     Attaches a summary to your command.
 /// </summary>
-[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Parameter)]
 public class SummaryAttribute : Attribute
 {
     /// <summary>
@@ -16,5 +16,8 @@ public class SummaryAttribute : Attribute
     ///     Initializes a new <see cref="SummaryAttribute" /> attribute with the specified summary.
     /// </summary>
     /// <param name="text"></param>
-    public SummaryAttribute(string text) => Text = text;
+    public SummaryAttribute(string text)
+    {
+        Text = text;
+    }
 }

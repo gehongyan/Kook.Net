@@ -5,9 +5,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     Provides a base class for a command module to inherit from.
 /// </summary>
-public abstract class ModuleBase : ModuleBase<ICommandContext>
-{
-}
+public abstract class ModuleBase : ModuleBase<ICommandContext>;
 
 /// <summary>
 ///     Provides a base class for a command module to inherit from.
@@ -23,7 +21,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// </summary>
     /// <seealso cref="T:Kook.Commands.ICommandContext" />
     /// <seealso cref="T:Kook.Commands.CommandContext" />
-    public T Context { get; private set; }
+    public T Context { get; private set; } = null!; // Set by SetContext
 
     /// <summary>
     ///     Sends a file to the source channel.
@@ -31,7 +29,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// <param name="path">
     ///     The file path of the file.
     /// </param>
-    /// <param name="fileName">
+    /// <param name="filename">
     ///     The name of the file.
     /// </param>
     /// <param name="type">The type of the attachment.</param>
@@ -42,10 +40,13 @@ public abstract class ModuleBase<T> : IModuleBase
     ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
     /// </param>
     /// <param name="options">The request options for this <c>async</c> request.</param>
-    protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(string path, string fileName = null,
-        AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
-        await Context.Channel.SendFileAsync(path, fileName, type, isQuote ? new Quote(Context.Message.Id) : null,
-            isEphemeral ? Context.User : null, options).ConfigureAwait(false);
+    protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(string path, string? filename = null,
+        AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false,
+        RequestOptions? options = null) =>
+        await Context.Channel.SendFileAsync(path, filename, type,
+                isQuote ? new MessageReference(Context.Message.Id) : null,
+                isEphemeral ? Context.User : null, options)
+            .ConfigureAwait(false);
 
     /// <summary>
     ///     Sends a file to the source channel.
@@ -53,7 +54,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// <param name="stream">
     ///     Stream of the file to be sent.
     /// </param>
-    /// <param name="fileName">
+    /// <param name="filename">
     ///     The name of the file.
     /// </param>
     /// <param name="type">The type of the attachment.</param>
@@ -64,10 +65,13 @@ public abstract class ModuleBase<T> : IModuleBase
     ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
     /// </param>
     /// <param name="options">The request options for this <c>async</c> request.</param>
-    protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(Stream stream, string fileName = null,
-        AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
-        await Context.Channel.SendFileAsync(stream, fileName, type, isQuote ? new Quote(Context.Message.Id) : null,
-            isEphemeral ? Context.User : null, options).ConfigureAwait(false);
+    protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(Stream stream, string filename,
+        AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false,
+        RequestOptions? options = null) =>
+        await Context.Channel.SendFileAsync(stream, filename, type,
+                isQuote ? new MessageReference(Context.Message.Id) : null,
+                isEphemeral ? Context.User : null, options)
+            .ConfigureAwait(false);
 
     /// <summary>
     ///     Sends a file to the source channel.
@@ -80,10 +84,12 @@ public abstract class ModuleBase<T> : IModuleBase
     ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
     /// </param>
     /// <param name="options">The request options for this <c>async</c> request.</param>
-    protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(FileAttachment attachment, bool isQuote = true,
-        bool isEphemeral = false, RequestOptions? options = null) =>
-        await Context.Channel.SendFileAsync(attachment, isQuote ? new Quote(Context.Message.Id) : null,
-            isEphemeral ? Context.User : null, options).ConfigureAwait(false);
+    protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(FileAttachment attachment,
+        bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
+        await Context.Channel.SendFileAsync(attachment,
+                isQuote ? new MessageReference(Context.Message.Id) : null,
+                isEphemeral ? Context.User : null, options)
+            .ConfigureAwait(false);
 
     /// <summary>
     ///     Sends a text message to the source channel.
@@ -100,8 +106,10 @@ public abstract class ModuleBase<T> : IModuleBase
     /// <param name="options">The request options for this <c>async</c> request.</param>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(string message, bool isQuote = true,
         bool isEphemeral = false, RequestOptions? options = null) =>
-        await Context.Channel.SendTextAsync(message, isQuote ? new Quote(Context.Message.Id) : null,
-            isEphemeral ? Context.User : null, options).ConfigureAwait(false);
+        await Context.Channel.SendTextAsync(message,
+                isQuote ? new MessageReference(Context.Message.Id) : null,
+                isEphemeral ? Context.User : null, options)
+            .ConfigureAwait(false);
 
     /// <summary>
     ///     Sends a card message to the source channel.
@@ -116,10 +124,12 @@ public abstract class ModuleBase<T> : IModuleBase
     ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
     /// </param>
     /// <param name="options">The request options for this <c>async</c> request.</param>
-    protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(IEnumerable<ICard> cards, bool isQuote = true,
-        bool isEphemeral = false, RequestOptions? options = null) =>
-        await Context.Channel.SendCardsAsync(cards, isQuote ? new Quote(Context.Message.Id) : null,
-            isEphemeral ? Context.User : null, options).ConfigureAwait(false);
+    protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(IEnumerable<ICard> cards,
+        bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
+        await Context.Channel.SendCardsAsync(cards,
+                isQuote ? new MessageReference(Context.Message.Id) : null,
+                isEphemeral ? Context.User : null, options)
+            .ConfigureAwait(false);
 
     /// <summary>
     ///     Sends a card message to the source channel.
@@ -135,10 +145,11 @@ public abstract class ModuleBase<T> : IModuleBase
     /// </param>
     /// <param name="options">The request options for this <c>async</c> request.</param>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyCardAsync(ICard card,
-        bool isQuote = true,
-        bool isEphemeral = false, RequestOptions? options = null) =>
-        await Context.Channel.SendCardAsync(card, isQuote ? new Quote(Context.Message.Id) : null,
-            isEphemeral ? Context.User : null, options).ConfigureAwait(false);
+        bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
+        await Context.Channel.SendCardAsync(card,
+                isQuote ? new MessageReference(Context.Message.Id) : null,
+                isEphemeral ? Context.User : null, options)
+            .ConfigureAwait(false);
 
     /// <summary>
     ///     The method to execute asynchronously before executing the command.
@@ -183,7 +194,7 @@ public abstract class ModuleBase<T> : IModuleBase
 
     void IModuleBase.SetContext(ICommandContext context)
     {
-        T newValue = context as T;
+        T? newValue = context as T;
         Context = newValue ?? throw new InvalidOperationException($"Invalid context type. Expected {typeof(T).Name}, got {context.GetType().Name}.");
     }
 
@@ -191,7 +202,9 @@ public abstract class ModuleBase<T> : IModuleBase
     void IModuleBase.BeforeExecute(CommandInfo command) => BeforeExecute(command);
     Task IModuleBase.AfterExecuteAsync(CommandInfo command) => AfterExecuteAsync(command);
     void IModuleBase.AfterExecute(CommandInfo command) => AfterExecute(command);
-    void IModuleBase.OnModuleBuilding(CommandService commandService, ModuleBuilder builder) => OnModuleBuilding(commandService, builder);
+
+    void IModuleBase.OnModuleBuilding(CommandService commandService, ModuleBuilder builder) =>
+        OnModuleBuilding(commandService, builder);
 
     #endregion
 }

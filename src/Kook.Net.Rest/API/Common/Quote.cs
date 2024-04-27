@@ -8,6 +8,10 @@ internal class Quote
     [JsonPropertyName("id")]
     public Guid QuotedMessageId { get; set; }
 
+    // TODO: To be investigated
+    [JsonPropertyName("rong_id")]
+    public Guid? RongId { get; set; }
+
     [JsonPropertyName("type")]
     public MessageType Type { get; set; }
 

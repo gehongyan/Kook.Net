@@ -10,7 +10,7 @@ namespace Kook.Audio;
 //TODO: Add audio reconnecting
 internal partial class AudioClient : IAudioClient
 {
-    private static readonly int ConnectionTimeoutMs = 30000; // 30 seconds
+    private const int ConnectionTimeoutMs = 30000; // 30 seconds
 
     private readonly Random _ssrcRandom;
 
@@ -18,7 +18,7 @@ internal partial class AudioClient : IAudioClient
     private readonly ConnectionManager _connection;
     private readonly SemaphoreSlim _stateLock;
 
-    private Task /*_heartbeatTask, _keepaliveTask, */_rtcpTask;
+    private Task? /*_heartbeatTask, _keepaliveTask, */_rtcpTask;
     private long _lastRtcpTime;
     private uint _sequence;
     private uint _ssrc;
@@ -49,7 +49,8 @@ internal partial class AudioClient : IAudioClient
         _audioLogger = Kook.LogManager.CreateLogger($"Audio #{clientId}");
 
         ApiClient = new KookVoiceAPIClient(guild.Id, Kook.WebSocketProvider, Kook.UdpSocketProvider);
-        ApiClient.SentGatewayMessage += async opCode => await _audioLogger.DebugAsync($"Sent {opCode}").ConfigureAwait(false);
+        ApiClient.SentGatewayMessage += async opCode =>
+            await _audioLogger.DebugAsync($"Sent {opCode}").ConfigureAwait(false);
         //ApiClient.SentData += async bytes => await _audioLogger.DebugAsync($"Sent {bytes} Bytes").ConfigureAwait(false);
         ApiClient.ReceivedEvent += ProcessMessageAsync;
         ApiClient.ReceivedPacket += ProcessPacketAsync;
@@ -64,16 +65,13 @@ internal partial class AudioClient : IAudioClient
         _sequence = 1000000;
 
         // LatencyUpdated += async (old, val) => await _audioLogger.DebugAsync($"Latency = {val} ms").ConfigureAwait(false);
-        UdpLatencyUpdated += async (old, val) => await _audioLogger.DebugAsync($"UDP Latency = {val} ms").ConfigureAwait(false);
+        UdpLatencyUpdated += async (old, val) =>
+            await _audioLogger.DebugAsync($"UDP Latency = {val} ms").ConfigureAwait(false);
     }
 
-    internal Task StartAsync()
-    {
-        return _connection.StartAsync();
-    }
+    internal Task StartAsync() => _connection.StartAsync();
 
-    public Task StopAsync()
-        => _connection.StopAsync();
+    public Task StopAsync() => _connection.StopAsync();
 
     private async Task OnConnectingAsync()
     {
@@ -121,32 +119,32 @@ internal partial class AudioClient : IAudioClient
     /// <inheritdoc />
     public AudioOutStream CreateOpusStream(int bufferMillis = 1000)
     {
-        var outputStream = new OutputStream(ApiClient); //Ignores header
-        var rtpWriter = new RtpWriteStream(outputStream, _ssrc); //Consumes header, passes
+        OutputStream outputStream = new(ApiClient);                                                                 //Ignores header
+        RtpWriteStream rtpWriter = new(outputStream, _ssrc);                                                        //Consumes header, passes
         return new BufferedWriteStream(rtpWriter, this, bufferMillis, _connection.CancellationToken, _audioLogger); //Generates header
     }
 
     /// <inheritdoc />
     public AudioOutStream CreateDirectOpusStream()
     {
-        var outputStream = new OutputStream(ApiClient); //Ignores header
-        return new RtpWriteStream(outputStream, _ssrc);  //Consumes header, passes
+        OutputStream outputStream = new(ApiClient);     //Ignores header
+        return new RtpWriteStream(outputStream, _ssrc); //Consumes header, passes
     }
 
     /// <inheritdoc />
     public AudioOutStream CreatePcmStream(AudioApplication application, int bitrate = 96 * 1024, int bufferMillis = 1000, int packetLoss = 30)
     {
-        var outputStream = new OutputStream(ApiClient);
-        var rtpWriter = new RtpWriteStream(outputStream, _ssrc);
-        var bufferedStream = new BufferedWriteStream(rtpWriter, this, bufferMillis, _connection.CancellationToken, _audioLogger); //Ignores header, generates header
+        OutputStream outputStream = new(ApiClient);
+        RtpWriteStream rtpWriter = new(outputStream, _ssrc);
+        BufferedWriteStream bufferedStream = new(rtpWriter, this, bufferMillis, _connection.CancellationToken, _audioLogger); //Ignores header, generates header
         return new OpusEncodeStream(bufferedStream, bitrate, application, packetLoss);
     }
 
     /// <inheritdoc />
     public AudioOutStream CreateDirectPcmStream(AudioApplication application, int bitrate = 96 * 1024, int packetLoss = 30)
     {
-        var outputStream = new OutputStream(ApiClient);
-        var rtpWriter = new RtpWriteStream(outputStream, _ssrc);
+        OutputStream outputStream = new(ApiClient);
+        RtpWriteStream rtpWriter = new(outputStream, _ssrc);
         return new OpusEncodeStream(rtpWriter, bitrate, application, packetLoss);
     }
 
@@ -164,85 +162,94 @@ internal partial class AudioClient : IAudioClient
             switch (type)
             {
                 case VoiceSocketFrameType.GetRouterRtpCapabilities:
-                    {
-                        await _audioLogger.DebugAsync("RouterRtpCapabilities Completed").ConfigureAwait(false);
-                        uint nextSequence = _sequence++;
-                        await ApiClient.SendJoinRequestAsync(nextSequence).ConfigureAwait(false);
-                    }
+                {
+                    await _audioLogger.DebugAsync("RouterRtpCapabilities Completed").ConfigureAwait(false);
+                    uint nextSequence = _sequence++;
+                    await ApiClient.SendJoinRequestAsync(nextSequence).ConfigureAwait(false);
+                }
                     break;
                 case VoiceSocketFrameType.Join:
-                    {
-                        await _audioLogger.DebugAsync("Join Completed").ConfigureAwait(false);
-                        uint nextSequence = _sequence++;
-                        await ApiClient.SendCreatePlainTransportRequestAsync(nextSequence)
-                            .ConfigureAwait(false);
-                    }
+                {
+                    await _audioLogger.DebugAsync("Join Completed").ConfigureAwait(false);
+                    uint nextSequence = _sequence++;
+                    await ApiClient.SendCreatePlainTransportRequestAsync(nextSequence).ConfigureAwait(false);
+                }
                     break;
                 case VoiceSocketFrameType.CreatePlainTransport:
+                {
+                    await _audioLogger.DebugAsync("CreatePlainTransport Completed").ConfigureAwait(false);
+                    string? json = payload.ToString();
+                    if (json is null
+                        || JsonSerializer.Deserialize<CreatePlainTransportResponse>(json) is not { } data)
                     {
-                        await _audioLogger.DebugAsync("CreatePlainTransport Completed").ConfigureAwait(false);
-                        CreatePlainTransportResponse data =
-                            JsonSerializer.Deserialize<CreatePlainTransportResponse>(payload.ToString());
-                        ApiClient.SetUdpEndpoint(data.Ip, data.Port);
-                        ApiClient.SetRtcpUdpEndpoint(data.Ip, data.RtcpPort);
-                        uint nextSequence = _sequence++;
-                        _ssrc = (uint)_ssrcRandom.Next(0, int.MaxValue);
-                        await ApiClient.SendProduceRequestAsync(nextSequence, Kook.CurrentUser.Id, data.Id, _ssrc)
-                            .ConfigureAwait(false);
+                        _connection.Error(new Exception($"Unable to parse CreatePlainTransportResponse: {json}"));
+                        break;
                     }
+                    ApiClient.SetUdpEndpoint(data.Ip, data.Port);
+                    ApiClient.SetRtcpUdpEndpoint(data.Ip, data.RtcpPort);
+                    uint nextSequence = _sequence++;
+                    _ssrc = (uint)_ssrcRandom.Next(0, int.MaxValue);
+                    if (Kook.CurrentUser is null)
+                    {
+                        _connection.CriticalError(new Exception("The client is not logged in"));
+                        break;
+                    }
+                    await ApiClient
+                        .SendProduceRequestAsync(nextSequence, Kook.CurrentUser.Id, data.Id, _ssrc)
+                        .ConfigureAwait(false);
+                }
                     break;
                 case VoiceSocketFrameType.Produce:
-                    {
-                        await _audioLogger.DebugAsync("Produce Completed").ConfigureAwait(false);
-                        _ = _connection.CompleteAsync();
-                        // int intervalMillis = KookSocketConfig.HeartbeatIntervalMilliseconds;
-                        // _heartbeatTask = RunHeartbeatAsync(intervalMillis, _connection.CancellationToken);
-                        // _keepaliveTask = RunKeepaliveAsync(_connection.CancellationToken);
-                        _rtcpTask = RunRtcpAsync(KookSocketConfig.RtcpIntervalMilliseconds,
-                            _connection.CancellationToken);
-                    }
+                {
+                    await _audioLogger.DebugAsync("Produce Completed").ConfigureAwait(false);
+                    _ = _connection.CompleteAsync();
+                    // int intervalMillis = KookSocketConfig.HeartbeatIntervalMilliseconds;
+                    // _heartbeatTask = RunHeartbeatAsync(intervalMillis, _connection.CancellationToken);
+                    // _keepaliveTask = RunKeepaliveAsync(_connection.CancellationToken);
+                    _rtcpTask = RunRtcpAsync(KookSocketConfig.RtcpIntervalMilliseconds, _connection.CancellationToken);
+                }
                     break;
                 case VoiceSocketFrameType.NewPeer:
-                    {
-                        if (payload is not JsonElement jsonElement
-                            || !jsonElement.TryGetProperty("id", out JsonElement idElement)
-                            || !ulong.TryParse(idElement.ToString(), out ulong id))
-                            break;
-                        await _peerConnectedEvent.InvokeAsync(id).ConfigureAwait(false);
-                        await _audioLogger.DebugAsync("Received NewPeer").ConfigureAwait(false);
-                    }
+                {
+                    if (payload is not JsonElement jsonElement
+                        || !jsonElement.TryGetProperty("id", out JsonElement idElement)
+                        || !ulong.TryParse(idElement.ToString(), out ulong id))
+                        break;
+                    await _peerConnectedEvent.InvokeAsync(id).ConfigureAwait(false);
+                    await _audioLogger.DebugAsync("Received NewPeer").ConfigureAwait(false);
+                }
                     break;
                 case VoiceSocketFrameType.PeerClosed:
-                    {
-                        if (payload is not JsonElement jsonElement)
-                            break;
-                        if (!jsonElement.TryGetProperty("peerId", out JsonElement idElement)
-                            || !ulong.TryParse(idElement.ToString(), out ulong id))
-                            break;
-                        if (!jsonElement.TryGetProperty("fromId", out JsonElement fromIdElement)
-                            || !ulong.TryParse(fromIdElement.ToString(), out ulong fromId)
-                            || fromId != ChannelId)
-                            break;
+                {
+                    if (payload is not JsonElement jsonElement)
+                        break;
+                    if (!jsonElement.TryGetProperty("peerId", out JsonElement idElement)
+                        || !ulong.TryParse(idElement.ToString(), out ulong id))
+                        break;
+                    if (!jsonElement.TryGetProperty("fromId", out JsonElement fromIdElement)
+                        || !ulong.TryParse(fromIdElement.ToString(), out ulong fromId)
+                        || fromId != ChannelId)
+                        break;
 
-                        await _peerDisconnectedEvent.InvokeAsync(id).ConfigureAwait(false);
-                        await _audioLogger.DebugAsync("Received PeerClosed").ConfigureAwait(false);
-                    }
+                    await _peerDisconnectedEvent.InvokeAsync(id).ConfigureAwait(false);
+                    await _audioLogger.DebugAsync("Received PeerClosed").ConfigureAwait(false);
+                }
                     break;
                 case VoiceSocketFrameType.ResumeHeadset:
                 case VoiceSocketFrameType.PauseHeadset:
                 case VoiceSocketFrameType.ConsumerResumed:
                 case VoiceSocketFrameType.ConsumerPaused:
                 case VoiceSocketFrameType.PeerPermissionChanged:
-                    {
-                        await _audioLogger.DebugAsync(type.ToString()).ConfigureAwait(false);
-                    }
+                {
+                    await _audioLogger.DebugAsync(type.ToString()).ConfigureAwait(false);
+                }
                     break;
                 case VoiceSocketFrameType.Disconnect:
-                    {
-                        await Guild.DisconnectAudioAsync().ConfigureAwait(false);
-                        await _clientDisconnectedEvent.InvokeAsync().ConfigureAwait(false);
-                        await _audioLogger.DebugAsync("Received Disconnect").ConfigureAwait(false);
-                    }
+                {
+                    await Guild.DisconnectAudioAsync().ConfigureAwait(false);
+                    await _clientDisconnectedEvent.InvokeAsync().ConfigureAwait(false);
+                    await _audioLogger.DebugAsync("Received Disconnect").ConfigureAwait(false);
+                }
                     break;
                 default:
                     await _audioLogger.WarningAsync($"Unknown VoiceSocketFrameType ({type})").ConfigureAwait(false);

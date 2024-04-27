@@ -53,7 +53,7 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     /// <returns>
     ///     An int that represents the number of columns of the paragraph.
     /// </returns>
-    public int ColumnCount { get; set; }
+    public int ColumnCount { get; set; } = MinColumnCount;
 
     /// <summary>
     ///     Gets or sets the fields of the paragraph.

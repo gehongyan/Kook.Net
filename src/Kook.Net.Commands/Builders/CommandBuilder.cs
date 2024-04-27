@@ -20,27 +20,27 @@ public class CommandBuilder
     /// <summary>
     ///     Gets or sets the callback that is invoked when this command is executed.
     /// </summary>
-    internal Func<ICommandContext, object[], IServiceProvider, CommandInfo, Task> Callback { get; set; }
+    internal Func<ICommandContext, object?[], IServiceProvider, CommandInfo, Task>? Callback { get; set; }
 
     /// <summary>
     ///     Gets or sets the name of this command.
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     ///     Gets or sets the summary of this command.
     /// </summary>
-    public string Summary { get; set; }
+    public string? Summary { get; set; }
 
     /// <summary>
     ///     Gets or sets the remarks of this command.
     /// </summary>
-    public string Remarks { get; set; }
+    public string? Remarks { get; set; }
 
     /// <summary>
     ///     Gets or sets the primary alias of this command.
     /// </summary>
-    public string PrimaryAlias { get; set; }
+    public string? PrimaryAlias { get; set; }
 
     /// <summary>
     ///     Gets or sets the run mode of this command.
@@ -88,11 +88,10 @@ public class CommandBuilder
     internal CommandBuilder(ModuleBuilder module)
     {
         Module = module;
-
-        _preconditions = new List<PreconditionAttribute>();
-        _parameters = new List<ParameterBuilder>();
-        _attributes = new List<Attribute>();
-        _aliases = new List<string>();
+        _preconditions = [];
+        _parameters = [];
+        _attributes = [];
+        _aliases = [];
     }
 
     #endregion
@@ -105,7 +104,8 @@ public class CommandBuilder
     /// <param name="module"> The module builder that this command builder belongs to. </param>
     /// <param name="primaryAlias"> The primary alias of this command. </param>
     /// <param name="callback"> The callback that is invoked when this command is executed. </param>
-    internal CommandBuilder(ModuleBuilder module, string primaryAlias, Func<ICommandContext, object[], IServiceProvider, CommandInfo, Task> callback)
+    internal CommandBuilder(ModuleBuilder module, string? primaryAlias,
+        Func<ICommandContext, object?[], IServiceProvider, CommandInfo, Task> callback)
         : this(module)
     {
         Kook.Preconditions.NotNull(primaryAlias, nameof(primaryAlias));
@@ -176,12 +176,13 @@ public class CommandBuilder
     /// </summary>
     /// <param name="aliases"> An array containing the aliases to add. </param>
     /// <returns> This command builder. </returns>
-    public CommandBuilder AddAliases(params string[] aliases)
+    public CommandBuilder AddAliases(params string?[] aliases)
     {
-        for (int i = 0; i < aliases.Length; i++)
+        foreach (string? x in aliases)
         {
-            string alias = aliases[i] ?? "";
-            if (!_aliases.Contains(alias)) _aliases.Add(alias);
+            string alias = x ?? string.Empty;
+            if (!_aliases.Contains(alias))
+                _aliases.Add(alias);
         }
 
         return this;
@@ -266,17 +267,21 @@ public class CommandBuilder
 
         if (_parameters.Count > 0)
         {
-            ParameterBuilder lastParam = _parameters[_parameters.Count - 1];
+            ParameterBuilder lastParam = _parameters[^1];
 
-            ParameterBuilder firstMultipleParam = _parameters.FirstOrDefault(x => x.IsMultiple);
+            ParameterBuilder? firstMultipleParam = _parameters.Find(x => x.IsMultiple);
             if (firstMultipleParam != null && firstMultipleParam != lastParam)
+            {
                 throw new InvalidOperationException(
                     $"Only the last parameter in a command may have the Multiple flag. Parameter: {firstMultipleParam.Name} in {PrimaryAlias}");
+            }
 
-            ParameterBuilder firstRemainderParam = _parameters.FirstOrDefault(x => x.IsRemainder);
+            ParameterBuilder? firstRemainderParam = _parameters.Find(x => x.IsRemainder);
             if (firstRemainderParam != null && firstRemainderParam != lastParam)
+            {
                 throw new InvalidOperationException(
                     $"Only the last parameter in a command may have the Remainder flag. Parameter: {firstRemainderParam.Name} in {PrimaryAlias}");
+            }
         }
 
         return new CommandInfo(this, info, service);

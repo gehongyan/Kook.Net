@@ -11,7 +11,7 @@ internal static class QuotationAliasUtils
     /// Used in the <see cref="CommandServiceConfig"/>.
     /// </summary>
     /// <seealso cref="CommandServiceConfig.QuotationMarkAliasMap"/>
-    internal static Dictionary<char, char> GetDefaultAliasMap =>
+    internal static Dictionary<char, char> DefaultAliasMap =>
         // Output of a gist provided by https://gist.github.com/ufcpp
         // https://gist.github.com/ufcpp/5b2cf9a9bf7d0b8743714a0b88f7edc5
         // This was not used for the implementation because of incompatibility with netstandard1.1

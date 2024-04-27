@@ -12,39 +12,40 @@ internal class CommandMapNode
     private readonly object _lockObj = new();
     private ImmutableArray<CommandInfo> _commands;
 
+    // ReSharper disable InconsistentlySynchronizedField
     public bool IsEmpty => _commands.Length == 0 && _nodes.Count == 0;
+    // ReSharper restore InconsistentlySynchronizedField
 
     public CommandMapNode(string name)
     {
         _name = name;
-        _nodes = new ConcurrentDictionary<string, CommandMapNode>();
-        _commands = ImmutableArray.Create<CommandInfo>();
+        _nodes = [];
+        _commands = [];
     }
 
     /// <exception cref="InvalidOperationException">Cannot add commands to the root node.</exception>
     public void AddCommand(CommandService service, string text, int index, CommandInfo command)
     {
         int nextSegment = NextSegment(text, index, service._separatorChar);
-        string name;
 
         lock (_lockObj)
         {
-            if (text == "")
+            if (string.IsNullOrEmpty(text))
             {
-                if (_name == "") throw new InvalidOperationException("Cannot add commands to the root node.");
-
+                if (string.IsNullOrEmpty(_name))
+                    throw new InvalidOperationException("Cannot add commands to the root node.");
                 _commands = _commands.Add(command);
             }
             else
             {
-                if (nextSegment == -1)
-                    name = text.Substring(index);
-                else
-                    name = text.Substring(index, nextSegment - index);
-
-                string fullName = _name == "" ? name : _name + service._separatorChar + name;
+                string name = nextSegment == -1
+                    ? text[index..]
+                    : text.Substring(index, nextSegment - index);
+                string fullName = _name == string.Empty
+                    ? name
+                    : _name + service._separatorChar + name;
                 CommandMapNode nextNode = _nodes.GetOrAdd(name, x => new CommandMapNode(fullName));
-                nextNode.AddCommand(service, nextSegment == -1 ? "" : text, nextSegment + 1, command);
+                nextNode.AddCommand(service, nextSegment == -1 ? string.Empty : text, nextSegment + 1, command);
             }
         }
     }
@@ -55,17 +56,14 @@ internal class CommandMapNode
 
         lock (_lockObj)
         {
-            if (text == "")
+            if (string.IsNullOrEmpty(text))
                 _commands = _commands.Remove(command);
             else
             {
-                string name;
-                if (nextSegment == -1)
-                    name = text.Substring(index);
-                else
-                    name = text.Substring(index, nextSegment - index);
-
-                if (_nodes.TryGetValue(name, out CommandMapNode nextNode))
+                string name = nextSegment == -1
+                    ? text[index..]
+                    : text.Substring(index, nextSegment - index);
+                if (_nodes.TryGetValue(name, out CommandMapNode? nextNode))
                 {
                     nextNode.RemoveCommand(service, nextSegment == -1 ? "" : text, nextSegment + 1, command);
                     if (nextNode.IsEmpty) _nodes.TryRemove(name, out nextNode);
@@ -81,19 +79,18 @@ internal class CommandMapNode
 
         if (visitChildren)
         {
-            string name;
-            CommandMapNode nextNode;
-
             //Search for next segment
             int nextSegment = NextSegment(text, index, service._separatorChar);
-            if (nextSegment == -1)
-                name = text.Substring(index);
-            else
-                name = text.Substring(index, nextSegment - index);
+            string name = nextSegment == -1
+                ? text[index..]
+                : text.Substring(index, nextSegment - index);
 
-            if (_nodes.TryGetValue(name, out nextNode))
-                foreach (CommandMatch cmd in nextNode.GetCommands(service, nextSegment == -1 ? "" : text, nextSegment + 1, true))
+            if (_nodes.TryGetValue(name, out CommandMapNode? nextNode))
+            {
+                IEnumerable<CommandMatch> matches = nextNode.GetCommands(service, nextSegment == -1 ? string.Empty : text, nextSegment + 1, true);
+                foreach (CommandMatch cmd in matches)
                     yield return cmd;
+            }
 
             //Check if this is the last command segment before args
             nextSegment = NextSegment(text, index, WhitespaceChars, service._separatorChar);
@@ -101,8 +98,10 @@ internal class CommandMapNode
             {
                 name = text.Substring(index, nextSegment - index);
                 if (_nodes.TryGetValue(name, out nextNode))
-                    foreach (CommandMatch cmd in nextNode.GetCommands(service, nextSegment == -1 ? "" : text, nextSegment + 1, false))
+                {
+                    foreach (CommandMatch cmd in nextNode.GetCommands(service, nextSegment == -1 ? string.Empty : text, nextSegment + 1, false))
                         yield return cmd;
+                }
             }
         }
     }
@@ -112,12 +111,12 @@ internal class CommandMapNode
     private static int NextSegment(string text, int startIndex, char[] separators, char except)
     {
         int lowest = int.MaxValue;
-        for (int i = 0; i < separators.Length; i++)
-            if (separators[i] != except)
-            {
-                int index = text.IndexOf(separators[i], startIndex);
-                if (index != -1 && index < lowest) lowest = index;
-            }
+        foreach (char x in separators.Where(x => x != except))
+        {
+            int index = text.IndexOf(x, startIndex);
+            if (index != -1 && index < lowest)
+                lowest = index;
+        }
 
         return lowest != int.MaxValue ? lowest : -1;
     }

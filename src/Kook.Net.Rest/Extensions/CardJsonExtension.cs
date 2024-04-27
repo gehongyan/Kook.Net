@@ -16,7 +16,7 @@ public static class CardJsonExtension
     {
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
         NumberHandling = JsonNumberHandling.AllowReadingFromString,
-        Converters = { new CardConverter(), new ModuleConverter(), new ElementConverter() }
+        Converters = { CardConverterFactory.Instance }
     });
 
     /// <summary>
@@ -129,7 +129,7 @@ public static class CardJsonExtension
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             NumberHandling = JsonNumberHandling.AllowReadingFromString,
             WriteIndented = writeIndented,
-            Converters = { new CardConverter(), new ModuleConverter(), new ElementConverter() },
+            Converters = { CardConverterFactory.Instance },
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
         return JsonSerializer.Serialize(card.ToModel(), options);

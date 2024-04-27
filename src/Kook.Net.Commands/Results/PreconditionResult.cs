@@ -12,7 +12,7 @@ public class PreconditionResult : IResult
     public CommandError? Error { get; }
 
     /// <inheritdoc/>
-    public string ErrorReason { get; }
+    public string? ErrorReason { get; }
 
     /// <inheritdoc/>
     public bool IsSuccess => !Error.HasValue;
@@ -23,7 +23,7 @@ public class PreconditionResult : IResult
     /// </summary>
     /// <param name="error">The type of failure.</param>
     /// <param name="errorReason">The reason of failure.</param>
-    protected PreconditionResult(CommandError? error, string errorReason)
+    protected PreconditionResult(CommandError? error, string? errorReason)
     {
         Error = error;
         ErrorReason = errorReason;
@@ -32,30 +32,26 @@ public class PreconditionResult : IResult
     /// <summary>
     ///     Returns a <see cref="PreconditionResult" /> with no errors.
     /// </summary>
-    public static PreconditionResult FromSuccess()
-        => new(null, null);
+    public static PreconditionResult FromSuccess() => new(null, null);
 
     /// <summary>
     ///     Returns a <see cref="PreconditionResult" /> with <see cref="CommandError.UnmetPrecondition" /> and the
     ///     specified reason.
     /// </summary>
     /// <param name="reason">The reason of failure.</param>
-    public static PreconditionResult FromError(string reason)
-        => new(CommandError.UnmetPrecondition, reason);
+    public static PreconditionResult FromError(string reason) => new(CommandError.UnmetPrecondition, reason);
 
     /// <summary>
     ///     Returns a <see cref="PreconditionResult" /> with an exception.
     /// </summary>
     /// <param name="ex"> The exception that occurred. </param>
-    public static PreconditionResult FromError(Exception ex)
-        => new(CommandError.Exception, ex.Message);
+    public static PreconditionResult FromError(Exception ex) => new(CommandError.Exception, ex.Message);
 
     /// <summary>
     ///     Returns a <see cref="PreconditionResult" /> with the specified <paramref name="result"/> type.
     /// </summary>
     /// <param name="result">The result of failure.</param>
-    public static PreconditionResult FromError(IResult result)
-        => new(result.Error, result.ErrorReason);
+    public static PreconditionResult FromError(IResult result) => new(result.Error, result.ErrorReason);
 
     /// <summary>
     /// Returns a string indicating whether the <see cref="PreconditionResult"/> is successful.

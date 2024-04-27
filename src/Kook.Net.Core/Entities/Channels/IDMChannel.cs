@@ -51,7 +51,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? fileName = null,
+    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null);
 
     /// <summary>
@@ -61,7 +61,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string? fileName = null,
+    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null);
 
     /// <summary>

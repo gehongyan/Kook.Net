@@ -29,16 +29,20 @@ internal class TimeSpanTypeReader : TypeReader
     /// <inheritdoc />
     public override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
     {
-        if (string.IsNullOrEmpty(input)) throw new ArgumentException($"{nameof(input)} must not be null or empty.", nameof(input));
+        if (string.IsNullOrEmpty(input))
+            throw new ArgumentException($"{nameof(input)} must not be null or empty.", nameof(input));
 
         bool isNegative = input[0] == '-'; // Char for CultureInfo.InvariantCulture.NumberFormat.NegativeSign
-        if (isNegative) input = input.Substring(1);
+        if (isNegative)
+            input = input[1..];
 
         if (TimeSpan.TryParseExact(input.ToLowerInvariant(), Formats, CultureInfo.InvariantCulture, out TimeSpan timeSpan))
+        {
             return isNegative
                 ? Task.FromResult(TypeReaderResult.FromSuccess(-timeSpan))
                 : Task.FromResult(TypeReaderResult.FromSuccess(timeSpan));
-        else
-            return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "Failed to parse TimeSpan"));
+        }
+
+        return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "Failed to parse TimeSpan"));
     }
 }

@@ -34,6 +34,10 @@ internal class DirectMessage
     [JsonPropertyName("author_id")]
     public ulong AuthorId { get; set; }
 
+    // TODO: required? MayBeNull
+    [JsonPropertyName("author")]
+    public required User Author { get; set; }
+
     [JsonPropertyName("image_name")]
     public required string ImageName { get; set; }
 

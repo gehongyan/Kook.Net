@@ -16,7 +16,7 @@ internal class PokeResourceConverter : JsonConverter<PokeResourceBase>
         return rawType switch
         {
             "ImageAnimation" => JsonSerializer.Deserialize<API.ImageAnimationPokeResource>(jsonNode.ToJsonString(), options),
-            _ => new API.NotImplementedPokeResource(rawType, jsonNode)
+            _ => new API.NotImplementedPokeResource(rawType, jsonNode) { Type = PokeResourceType.NotImplemented }
         };
     }
 

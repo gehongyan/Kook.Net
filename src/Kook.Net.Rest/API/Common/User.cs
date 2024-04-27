@@ -44,7 +44,7 @@ internal class User
     public UserTag? UserTag { get; set; }
 
     [JsonPropertyName("banner")]
-    public required string Banner { get; set; }
+    public string? Banner { get; set; }
 
     [JsonPropertyName("nameplate")]
     public Nameplate[]? Nameplates { get; set; }

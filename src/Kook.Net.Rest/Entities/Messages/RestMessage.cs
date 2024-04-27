@@ -1,5 +1,6 @@
 using Kook.API;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook.Rest;
 
@@ -8,8 +9,8 @@ namespace Kook.Rest;
 /// </summary>
 public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
 {
-    private ImmutableArray<RestReaction> _reactions = ImmutableArray.Create<RestReaction>();
-    private ImmutableArray<RestUser> _userMentions = ImmutableArray.Create<RestUser>();
+    private ImmutableArray<RestReaction> _reactions = [];
+    private ImmutableArray<RestUser> _userMentions = [];
 
     /// <inheritdoc />
     public MessageType Type { get; }
@@ -41,10 +42,10 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     public DateTimeOffset? EditedTimestamp { get; private set; }
 
     /// <inheritdoc />
-    public virtual bool? MentionedEveryone => false;
+    public virtual bool MentionedEveryone => false;
 
     /// <inheritdoc />
-    public virtual bool? MentionedHere => false;
+    public virtual bool MentionedHere => false;
 
     /// <summary>
     ///     Gets a collection of the <see cref="ICard"/>'s on the message.
@@ -73,7 +74,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     public virtual IReadOnlyCollection<ITag> Tags => ImmutableArray.Create<ITag>();
 
     /// <inheritdoc />
-    public virtual bool? IsPinned => null;
+    public virtual bool? IsPinned { get; internal set; }
 
     /// <summary>
     ///     Gets the <see cref="Content"/> of the message.
@@ -91,22 +92,22 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         Channel = channel;
         Author = author;
         Source = source;
+        Content = string.Empty;
+        Attachments = [];
     }
 
     internal static RestMessage Create(BaseKookClient kook, IMessageChannel channel, IUser author, Message model)
     {
-        if (model.Author.IsSystemUser ?? model.Author.Id == KookConfig.SystemMessageAuthorID)
-            return RestSystemMessage.Create(kook, channel, author, model);
-        else
-            return RestUserMessage.Create(kook, channel, author, model);
+        return MessageHelper.GetSource(model) is MessageSource.System
+            ? RestSystemMessage.Create(kook, channel, author, model)
+            : RestUserMessage.Create(kook, channel, author, model);
     }
 
     internal static RestMessage Create(BaseKookClient kook, IMessageChannel channel, IUser author, DirectMessage model)
     {
-        if (author.IsSystemUser ?? model.AuthorId == KookConfig.SystemMessageAuthorID)
-            return RestSystemMessage.Create(kook, channel, author, model);
-        else
-            return RestUserMessage.Create(kook, channel, author, model);
+        return MessageHelper.GetSource(author) is MessageSource.System
+            ? RestSystemMessage.Create(kook, channel, author, model)
+            : RestUserMessage.Create(kook, channel, author, model);
     }
 
     internal virtual void Update(Message model)
@@ -116,36 +117,10 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         Content = model.Content;
 
         if (model.Reactions is not null)
-        {
-            Reaction[] value = model.Reactions;
-            if (value.Length > 0)
-            {
-                ImmutableArray<RestReaction>.Builder reactions = ImmutableArray.CreateBuilder<RestReaction>(value.Length);
-                foreach (Reaction reaction in value) reactions.Add(RestReaction.Create(reaction));
-
-                _reactions = reactions.ToImmutable();
-            }
-            else
-                _reactions = ImmutableArray.Create<RestReaction>();
-        }
-        else
-            _reactions = ImmutableArray.Create<RestReaction>();
+            _reactions = [..model.Reactions.Select(RestReaction.Create)];
 
         if (model.MentionInfo?.MentionedUsers is not null)
-        {
-            MentionedUser[] value = model.MentionInfo.MentionedUsers;
-            if (value.Length > 0)
-            {
-                ImmutableArray<RestUser>.Builder newMentions = ImmutableArray.CreateBuilder<RestUser>(value.Length);
-                for (int i = 0; i < value.Length; i++)
-                {
-                    MentionedUser val = value[i];
-                    if (val != null) newMentions.Add(RestUser.Create(Kook, val));
-                }
-
-                _userMentions = newMentions.ToImmutable();
-            }
-        }
+            _userMentions = [..model.MentionInfo.MentionedUsers.Select(x => RestUser.Create(Kook, x))];
     }
 
     internal virtual void Update(DirectMessage model)
@@ -155,47 +130,24 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         Content = model.Content;
 
         if (model.Reactions is not null)
-        {
-            Reaction[] value = model.Reactions;
-            if (value.Length > 0)
-            {
-                ImmutableArray<RestReaction>.Builder reactions = ImmutableArray.CreateBuilder<RestReaction>(value.Length);
-                foreach (Reaction reaction in value) reactions.Add(RestReaction.Create(reaction));
-
-                _reactions = reactions.ToImmutable();
-            }
-            else
-                _reactions = ImmutableArray.Create<RestReaction>();
-        }
-        else
-            _reactions = ImmutableArray.Create<RestReaction>();
+            _reactions = [..model.Reactions.Select(RestReaction.Create)];
 
         if (model.MentionInfo?.MentionedUsers is not null)
-        {
-            MentionedUser[] value = model.MentionInfo.MentionedUsers;
-            if (value.Length > 0)
-            {
-                ImmutableArray<RestUser>.Builder newMentions = ImmutableArray.CreateBuilder<RestUser>(value.Length);
-                for (int i = 0; i < value.Length; i++)
-                {
-                    MentionedUser val = value[i];
-                    if (val != null) newMentions.Add(RestUser.Create(Kook, val));
-                }
-
-                _userMentions = newMentions.ToImmutable();
-            }
-        }
+            _userMentions = [..model.MentionInfo.MentionedUsers.Select(x => RestUser.Create(Kook, x))];
     }
 
     /// <inheritdoc />
-    public IReadOnlyDictionary<IEmote, ReactionMetadata> Reactions
-        => _reactions.ToDictionary(
+    public IReadOnlyDictionary<IEmote, ReactionMetadata> Reactions =>
+        _reactions.ToDictionary(
             x => x.Emote,
-            x => new ReactionMetadata { ReactionCount = x.Count, IsMe = x.Me });
+            x => new ReactionMetadata
+            {
+                ReactionCount = x.Count,
+                IsMe = x.Me
+            });
 
     /// <inheritdoc />
-    public Task DeleteAsync(RequestOptions? options = null)
-        => MessageHelper.DeleteAsync(this, Kook, options);
+    public Task DeleteAsync(RequestOptions? options = null) => MessageHelper.DeleteAsync(this, Kook, options);
 
     /// <inheritdoc />
     /// <exception cref="InvalidOperationException">
@@ -212,13 +164,14 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
 
         if (Channel is IDMChannel dmChannel)
         {
-            DirectMessage model = await Kook.ApiClient.GetDirectMessageAsync(Id, dmChannel.ChatCode, options)
+            DirectMessage model = await Kook.ApiClient
+                .GetDirectMessageAsync(Id, dmChannel.ChatCode, options)
                 .ConfigureAwait(false);
             Update(model);
             return;
         }
 
-        throw new InvalidOperationException("Unable to update a message that is neither a guild channel message nor a direct message.");
+        throw new NotSupportedException("The operation is not supported for this message type.");
     }
 
     /// <inheritdoc />
@@ -227,7 +180,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         {
             ITextChannel => MessageHelper.AddReactionAsync(this, emote, Kook, options),
             IDMChannel => MessageHelper.AddDirectMessageReactionAsync(this, emote, Kook, options),
-            _ => Task.CompletedTask
+            _ => throw new NotSupportedException("The operation is not supported for this message type.")
         };
 
     /// <inheritdoc />
@@ -236,7 +189,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         {
             ITextChannel => MessageHelper.RemoveReactionAsync(this, user.Id, emote, Kook, options),
             IDMChannel => MessageHelper.RemoveDirectMessageReactionAsync(this, user.Id, emote, Kook, options),
-            _ => Task.CompletedTask
+            _ => throw new NotSupportedException("The operation is not supported for this message type.")
         };
 
     /// <inheritdoc />
@@ -245,7 +198,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         {
             ITextChannel => MessageHelper.RemoveReactionAsync(this, userId, emote, Kook, options),
             IDMChannel => MessageHelper.RemoveDirectMessageReactionAsync(this, userId, emote, Kook, options),
-            _ => Task.CompletedTask
+            _ => throw new NotSupportedException("The operation is not supported for this message type.")
         };
 
     /// <inheritdoc />
@@ -254,7 +207,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         {
             ITextChannel => MessageHelper.GetReactionUsersAsync(this, emote, Kook, options),
             IDMChannel => MessageHelper.GetDirectMessageReactionUsersAsync(this, emote, Kook, options),
-            _ => Task.FromResult<IReadOnlyCollection<IUser>>(null)
+            _ => throw new NotSupportedException("The operation is not supported for this message type.")
         };
 
     #region IMessage

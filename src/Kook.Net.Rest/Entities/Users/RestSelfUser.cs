@@ -10,10 +10,10 @@ namespace Kook.Rest;
 public class RestSelfUser : RestUser, ISelfUser
 {
     /// <inheritdoc />
-    public string MobilePrefix { get; private set; }
+    public string? MobilePrefix { get; private set; }
 
     /// <inheritdoc />
-    public string Mobile { get; private set; }
+    public string? Mobile { get; private set; }
 
     /// <inheritdoc />
     public int InvitedCount { get; private set; }
@@ -24,6 +24,8 @@ public class RestSelfUser : RestUser, ISelfUser
     internal RestSelfUser(BaseKookClient kook, ulong id)
         : base(kook, id)
     {
+        MobilePrefix = string.Empty;
+        Mobile = string.Empty;
     }
 
     internal static RestSelfUser Create(BaseKookClient kook, Model model)
@@ -36,10 +38,9 @@ public class RestSelfUser : RestUser, ISelfUser
     internal void Update(Model model)
     {
         base.Update(model);
-
         MobilePrefix = model.MobilePrefix;
         Mobile = model.Mobile;
-        InvitedCount = model.InvitedCount ?? 0;
+        InvitedCount = model.InvitedCount;
         IsMobileVerified = model.MobileVerified;
     }
 
@@ -48,10 +49,14 @@ public class RestSelfUser : RestUser, ISelfUser
     public override async Task UpdateAsync(RequestOptions? options = null)
     {
         Model model = await Kook.ApiClient.GetSelfUserAsync(options).ConfigureAwait(false);
-        if (model.Id != Id) throw new InvalidOperationException("Unable to update this object using a different token.");
-
+        if (model.Id != Id)
+            throw new InvalidOperationException("Unable to update this object using a different token.");
         Update(model);
     }
+
+    private string DebuggerDisplay =>
+        $"{this.UsernameAndIdentifyNumber(Kook.FormatUsersInBidirectionalUnicode)} ({Id}{
+            (IsBot ?? false ? ", Bot" : "")}{(IsSystemUser ? ", System" : "")})";
 
     #region ISelfUser
 

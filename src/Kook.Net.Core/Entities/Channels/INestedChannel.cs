@@ -42,7 +42,7 @@ public interface INestedChannel : IGuildChannel
     ///     A task that represents the asynchronous get operation. The task result contains the category channel
     ///     representing the parent of this channel; <c>null</c> if none is set.
     /// </returns>
-    Task<ICategoryChannel> GetCategoryAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+    Task<ICategoryChannel?> GetCategoryAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 

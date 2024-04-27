@@ -23,6 +23,24 @@ internal static class CollectionExtensions
 
     public static IReadOnlyCollection<TValue> ToReadOnlyCollection<TValue>(this IEnumerable<TValue> query, Func<int> countFunc)
         => new CollectionWrapper<TValue>(query, countFunc);
+
+#if !NET6_0_OR_GREATER
+    public static TSource? MinBy<TSource, TKey>(
+        this IEnumerable<TSource> source,
+        Func<TSource, TKey> keySelector) =>
+        source.OrderBy(keySelector).FirstOrDefault();
+
+    public static TSource? MaxBy<TSource, TKey>(
+        this IEnumerable<TSource> source,
+        Func<TSource, TKey> keySelector) =>
+        source.OrderByDescending(keySelector).FirstOrDefault();
+
+    public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> source, int chunkSize) =>
+        source
+            .Select((x, i) => new { Index = i, Value = x })
+            .GroupBy(x => x.Index / chunkSize)
+            .Select(x => x.Select(v => v.Value));
+#endif
 }
 
 [DebuggerDisplay("{DebuggerDisplay,nq}")]

@@ -20,7 +20,7 @@ public class IntimacyProperties
     /// <summary>
     ///     The score to be set on the <see cref="IIntimacy" />.
     /// </summary>
-    public int Score { get; set; }
+    public  int Score { get; set; }
 
     /// <summary>
     ///     The ID of the image to be updated on the <see cref="IIntimacy" />.

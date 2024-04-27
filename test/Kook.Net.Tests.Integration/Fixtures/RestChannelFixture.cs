@@ -13,7 +13,8 @@ public class RestChannelFixture : RestGuildFixture
 
     public RestVoiceChannel VoiceChannel { get; private set; }
 
-    public RestChannelFixture() : base()
+    public RestChannelFixture()
+        : base()
     {
         RestTextChannel textChannel = Guild.CreateTextChannelAsync("TEST TEXT CHANNEL").GetAwaiter().GetResult();
         TextChannel = textChannel
@@ -31,5 +32,5 @@ public class RestChannelFixture : RestGuildFixture
     }
 
     /// <inheritdoc />
-    public override void Dispose() => DisposeAsync().GetAwaiter().GetResult();
+    public override void Dispose() => DisposeAsync().AsTask().GetAwaiter().GetResult();
 }

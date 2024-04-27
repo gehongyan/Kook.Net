@@ -31,7 +31,7 @@ csharp_new_line_between_query_expression_clauses = true
 csharp_indent_block_contents = true
 csharp_indent_braces = false
 csharp_indent_case_contents = true
-csharp_indent_case_contents_when_block = true
+csharp_indent_case_contents_when_block = false
 csharp_indent_switch_labels = true
 csharp_indent_labels = one_less_than_current
 
@@ -129,7 +129,7 @@ csharp_style_prefer_range_operator = true:suggestion
 csharp_style_pattern_local_over_anonymous_function = true:suggestion
 
 # Space preferences
-csharp_space_after_cast = true
+csharp_space_after_cast = false
 csharp_space_after_colon_in_inheritance_clause = true
 csharp_space_after_comma = true
 csharp_space_after_dot = false
@@ -175,7 +175,7 @@ resharper_arrange_constructor_or_destructor_body_highlighting = hint
 resharper_arrange_method_or_operator_body_highlighting = hint
 
 # Xml project files
-[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,nativeproj,locproj}]
+[*.{csproj,vbproj,fsproj,vcxproj,vcxproj.filters,proj,nativeproj,locproj}]
 indent_size = 2
 
 [*.{csproj,vbproj,proj,nativeproj,locproj}]

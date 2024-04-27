@@ -6,28 +6,28 @@ namespace Kook.API.Rest;
 internal class GuildMember : User
 {
     [JsonPropertyName("nickname")]
-    public required string Nickname { get; set; }
+    public string? Nickname { get; set; }
 
     [JsonPropertyName("mobile_verified")]
-    public bool MobileVerified { get; set; }
+    public bool? MobileVerified { get; set; }
 
     [JsonPropertyName("joined_at")]
-    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
-    public DateTimeOffset JoinedAt { get; set; }
+    [JsonConverter(typeof(NullableDateTimeOffsetUnixTimeMillisecondsConverter))]
+    public DateTimeOffset? JoinedAt { get; set; }
 
     [JsonPropertyName("active_time")]
-    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
-    public DateTimeOffset ActiveAt { get; set; }
+    [JsonConverter(typeof(NullableDateTimeOffsetUnixTimeMillisecondsConverter))]
+    public DateTimeOffset? ActiveAt { get; set; }
 
     [JsonPropertyName("hoist_info")]
     public HoistInfo? HoistInfo { get; set; }
 
     [JsonPropertyName("color")]
     [JsonConverter(typeof(RawValueColorConverter))]
-    public Color Color { get; set; }
+    public Color? Color { get; set; }
 
     [JsonPropertyName("roles")]
-    public required uint[] Roles { get; set; }
+    public uint[]? Roles { get; set; }
 
     [JsonPropertyName("is_master")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

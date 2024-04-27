@@ -123,7 +123,7 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     {
         if (Source == null)
             throw new ArgumentNullException(nameof(Source), "The source url cannot be null.");
-        if (!string.IsNullOrEmpty(Source))
+        if (string.IsNullOrEmpty(Source))
             throw new ArgumentException("The source url cannot be empty.", nameof(Source));
         UrlValidation.Validate(Source);
         if (Cover != null)

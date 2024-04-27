@@ -19,8 +19,8 @@ public static class RestGuildExperimentalExtensions
     ///         usage, may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
     ///     </note>
     /// </remarks>
-    public static Task DeleteAsync(this RestGuild guild, RequestOptions? options = null)
-        => ExperimentalGuildHelper.DeleteAsync(guild, guild.Kook, options);
+    public static Task DeleteAsync(this RestGuild guild, RequestOptions? options = null) =>
+        ExperimentalGuildHelper.DeleteAsync(guild, guild.Kook, options);
 
     /// <summary>
     ///     Modifies this guild.

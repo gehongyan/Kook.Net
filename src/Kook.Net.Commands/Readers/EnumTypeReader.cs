@@ -7,6 +7,7 @@ internal static class EnumTypeReader
 {
     public static TypeReader GetReader(Type type)
     {
+        if (!type.IsEnum) throw new ArgumentException("Type must be an enum.", nameof(type));
         Type baseType = Enum.GetUnderlyingType(type);
         ConstructorInfo constructor = typeof(EnumTypeReader<>).MakeGenericType(baseType).GetTypeInfo().DeclaredConstructors.First();
         return (TypeReader) constructor.Invoke([type, PrimitiveParsers.Get(baseType)]);
@@ -14,6 +15,7 @@ internal static class EnumTypeReader
 }
 
 internal class EnumTypeReader<T> : TypeReader
+    where T : struct, Enum
 {
     private readonly IReadOnlyDictionary<string, object> _enumsByName;
     private readonly IReadOnlyDictionary<T, object> _enumsByValue;
@@ -42,21 +44,17 @@ internal class EnumTypeReader<T> : TypeReader
     /// <inheritdoc />
     public override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
     {
-        object enumValue;
+        object? enumValue;
 
         if (_tryParse(input, out T baseValue))
         {
-            if (_enumsByValue.TryGetValue(baseValue, out enumValue))
-                return Task.FromResult(TypeReaderResult.FromSuccess(enumValue));
-            else
-                return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, $"Value is not a {_enumType.Name}."));
+            return Task.FromResult(_enumsByValue.TryGetValue(baseValue, out enumValue)
+                ? TypeReaderResult.FromSuccess(enumValue)
+                : TypeReaderResult.FromError(CommandError.ParseFailed, $"Value is not a {_enumType.Name}."));
         }
-        else
-        {
-            if (_enumsByName.TryGetValue(input.ToLower(), out enumValue))
-                return Task.FromResult(TypeReaderResult.FromSuccess(enumValue));
-            else
-                return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, $"Value is not a {_enumType.Name}."));
-        }
+
+        return Task.FromResult(_enumsByName.TryGetValue(input.ToLower(), out enumValue)
+            ? TypeReaderResult.FromSuccess(enumValue)
+            : TypeReaderResult.FromError(CommandError.ParseFailed, $"Value is not a {_enumType.Name}."));
     }
 }

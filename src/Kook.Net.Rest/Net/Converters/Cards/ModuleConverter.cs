@@ -7,6 +7,8 @@ namespace Kook.Net.Converters;
 
 internal class ModuleConverter : JsonConverter<ModuleBase>
 {
+    public static readonly ModuleConverter Instance = new();
+
     public override ModuleBase? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         JsonNode? jsonNode = JsonNode.Parse(ref reader);

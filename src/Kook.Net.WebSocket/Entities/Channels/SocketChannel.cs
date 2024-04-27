@@ -24,7 +24,7 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel, IUpdateable
     internal abstract void Update(ClientState state, Model model);
 
     /// <inheritdoc />
-    public virtual Task UpdateAsync(RequestOptions? options = null) => Task.Delay(0);
+    public abstract Task UpdateAsync(RequestOptions? options = null);
 
     #endregion
 
@@ -37,27 +37,27 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel, IUpdateable
     /// <returns>
     ///     A generic WebSocket-based user associated with the identifier.
     /// </returns>
-    public SocketUser GetUser(ulong id) => GetUserInternal(id);
+    public SocketUser? GetUser(ulong id) => GetUserInternal(id);
 
-    internal abstract SocketUser GetUserInternal(ulong id);
+    internal abstract SocketUser? GetUserInternal(ulong id);
     internal abstract IReadOnlyCollection<SocketUser> GetUsersInternal();
 
     #endregion
 
     private string DebuggerDisplay => $"Unknown ({Id}, Channel)";
-    internal SocketChannel Clone() => MemberwiseClone() as SocketChannel;
+    internal SocketChannel Clone() => (SocketChannel)MemberwiseClone();
 
     #region IChannel
 
     /// <inheritdoc />
-    string IChannel.Name => null;
+    string IChannel.Name => string.Empty;
 
     /// <inheritdoc />
-    Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
-        => Task.FromResult<IUser>(null); //Overridden
+    Task<IUser?> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options)
+        => Task.FromResult<IUser?>(null); //Overridden
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options = null)
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options)
         => AsyncEnumerable.Empty<IReadOnlyCollection<IUser>>(); //Overridden
 
     #endregion

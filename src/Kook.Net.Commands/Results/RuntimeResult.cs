@@ -29,7 +29,7 @@ public abstract class RuntimeResult : IResult
     public bool IsSuccess => !Error.HasValue;
 
     /// <inheritdoc/>
-    string IResult.ErrorReason => Reason;
+    string? IResult.ErrorReason => Reason;
 
     /// <inheritdoc />
     public override string ToString() => Reason ?? (IsSuccess ? "Successful" : "Unsuccessful");

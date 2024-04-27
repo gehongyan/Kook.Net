@@ -11,7 +11,7 @@ public struct SearchResult : IResult
     /// <summary>
     ///     Gets the text that was searched in.
     /// </summary>
-    public string Text { get; }
+    public string? Text { get; }
 
     /// <summary>
     ///     Gets the commands that were found.
@@ -22,12 +22,12 @@ public struct SearchResult : IResult
     public CommandError? Error { get; }
 
     /// <inheritdoc/>
-    public string ErrorReason { get; }
+    public string? ErrorReason { get; }
 
     /// <inheritdoc/>
     public bool IsSuccess => !Error.HasValue;
 
-    private SearchResult(string text, IReadOnlyList<CommandMatch> commands, CommandError? error, string errorReason)
+    private SearchResult(string? text, IReadOnlyList<CommandMatch> commands, CommandError? error, string? errorReason)
     {
         Text = text;
         Commands = commands;
@@ -40,8 +40,8 @@ public struct SearchResult : IResult
     /// </summary>
     /// <param name="text"> The text that was searched in. </param>
     /// <param name="commands"> The commands that were found. </param>
-    public static SearchResult FromSuccess(string text, IReadOnlyList<CommandMatch> commands)
-        => new(text, commands, null, null);
+    public static SearchResult FromSuccess(string text, IReadOnlyList<CommandMatch> commands) =>
+        new(text, commands, null, null);
 
     /// <summary>
     ///     Returns a <see cref="SearchResult" /> with a <see cref="CommandError"/>.
@@ -49,25 +49,22 @@ public struct SearchResult : IResult
     /// <param name="error"> The type of failure. </param>
     /// <param name="reason"> The reason of failure. </param>
     /// <returns></returns>
-    public static SearchResult FromError(CommandError error, string reason)
-        => new(null, null, error, reason);
+    public static SearchResult FromError(CommandError error, string reason) => new(null, [], error, reason);
 
     /// <summary>
     ///     Returns a <see cref="SearchResult" /> with an exception.
     /// </summary>
     /// <param name="ex"> The exception that occurred. </param>
-    public static SearchResult FromError(Exception ex)
-        => FromError(CommandError.Exception, ex.Message);
+    public static SearchResult FromError(Exception ex) => FromError(CommandError.Exception, ex.Message);
 
     /// <summary>
     ///     Returns a <see cref="SearchResult" /> with the specified <paramref name="result"/> type.
     /// </summary>
     /// <param name="result"> The result of failure. </param>
-    public static SearchResult FromError(IResult result)
-        => new(null, null, result.Error, result.ErrorReason);
+    public static SearchResult FromError(IResult result) => new(null, [], result.Error, result.ErrorReason);
 
     /// <inheritdoc />
     public override string ToString() => IsSuccess ? "Success" : $"{Error}: {ErrorReason}";
 
-    private string DebuggerDisplay => IsSuccess ? $"Success ({Commands.Count} Results)" : $"{Error}: {ErrorReason}";
+    private string DebuggerDisplay => IsSuccess ? $"Success ({Commands?.Count ?? 0} Results)" : $"{Error}: {ErrorReason}";
 }

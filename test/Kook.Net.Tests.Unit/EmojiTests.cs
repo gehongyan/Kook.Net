@@ -13,7 +13,7 @@ public class EmojiTests
     [InlineData(":+1:")]
     public void Test_Emoji_Parse(string input)
     {
-        Assert.True(Emoji.TryParse(input, out Emoji emoji));
+        Assert.True(Emoji.TryParse(input, out Emoji? emoji));
         Assert.NotNull(emoji);
         Assert.Equal(emoji.Name, emoji.Id);
     }
@@ -36,7 +36,7 @@ public class EmojiTests
     [InlineData("(emj)两颗骰子(emj)[0/24677/ofbqSypFUx0a00a0]", "两颗骰子", "0/24677/ofbqSypFUx0a00a0", TagMode.KMarkdown)]
     public void Test_Emote_Parse(string input, string name, string id, TagMode tagMode)
     {
-        Assert.True(Emote.TryParse(input, out Emote emote, tagMode));
+        Assert.True(Emote.TryParse(input, out Emote? emote, tagMode));
         Assert.NotNull(emote);
         Assert.Equal(name, emote.Name);
         Assert.Equal(id, emote.Id);

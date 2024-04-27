@@ -95,7 +95,7 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     {
         if (Source == null)
             throw new ArgumentNullException(nameof(Source), "The source url cannot be null or empty.");
-        if (!string.IsNullOrEmpty(Source))
+        if (string.IsNullOrEmpty(Source))
             throw new ArgumentException("The source url cannot be null or empty.", nameof(Source));
 
         UrlValidation.Validate(Source);

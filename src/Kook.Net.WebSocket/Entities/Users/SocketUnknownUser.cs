@@ -12,10 +12,10 @@ namespace Kook.WebSocket;
 public class SocketUnknownUser : SocketUser
 {
     /// <inheritdoc />
-    public override string Username { get; internal set; }
+    public override string Username { get; internal set; } = string.Empty;
 
     /// <inheritdoc />
-    public override ushort? IdentifyNumberValue { get; internal set; }
+    public override ushort IdentifyNumberValue { get; internal set; }
 
     /// <inheritdoc />
     public override bool? IsBot { get; internal set; }
@@ -30,30 +30,27 @@ public class SocketUnknownUser : SocketUser
     public override bool? HasAnnualBuff { get; internal set; }
 
     /// <inheritdoc />
-    public override string Avatar { get; internal set; }
+    public override string Avatar { get; internal set; } = string.Empty;
 
     /// <inheritdoc />
-    public override string BuffAvatar { get; internal set; }
+    public override string BuffAvatar { get; internal set; } = string.Empty;
 
     /// <inheritdoc />
-    public override string Banner { get; internal set; }
+    public override string? Banner { get; internal set; } = string.Empty;
 
     /// <inheritdoc />
     public override bool? IsDenoiseEnabled { get; internal set; }
 
     /// <inheritdoc />
-    public override UserTag UserTag { get; internal set; }
+    public override UserTag? UserTag { get; internal set; }
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<Nameplate> Nameplates { get; internal set; }
-
-    /// <inheritdoc />
-    public override bool? IsSystemUser { get; internal set; }
+    public override IReadOnlyCollection<Nameplate> Nameplates { get; internal set; } = [];
 
     /// <inheritdoc />
     internal override SocketPresence Presence
     {
-        get => new(null, null);
+        get => new();
         set { }
     }
 
@@ -72,6 +69,8 @@ public class SocketUnknownUser : SocketUser
         return entity;
     }
 
-    private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ?? false ? ", Bot" : "")}, Unknown)";
-    internal new SocketUnknownUser Clone() => MemberwiseClone() as SocketUnknownUser;
+    private string DebuggerDisplay =>
+        $"{this.UsernameAndIdentifyNumber(Kook.FormatUsersInBidirectionalUnicode)} ({Id}{
+            (IsBot ?? false ? ", Bot" : "")}, Unknown)";
+    internal new SocketUnknownUser Clone() => (SocketUnknownUser)MemberwiseClone();
 }

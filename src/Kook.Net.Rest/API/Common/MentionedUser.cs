@@ -8,7 +8,7 @@ internal class MentionedUser
     public ulong Id { get; set; }
 
     [JsonPropertyName("username")]
-    public required string Username { get; set; }
+    public required string DisplayName { get; set; }
 
     [JsonPropertyName("full_name")]
     public required string FullName { get; set; }

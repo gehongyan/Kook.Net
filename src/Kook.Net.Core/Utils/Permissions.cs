@@ -120,7 +120,7 @@ internal static class Permissions
     }*/
     public static ulong ResolveChannel(IGuild guild, IGuildUser user, IGuildChannel channel, ulong guildPermissions)
     {
-        ulong resolvedPermissions = 0;
+        ulong resolvedPermissions;
 
         ulong mask = ChannelPermissions.All(channel).RawValue;
         if (GetValue(guildPermissions, GuildPermission.Administrator)) //Includes owner
@@ -131,45 +131,56 @@ internal static class Permissions
             resolvedPermissions = guildPermissions;
 
             //Give/Take Everyone permissions
-            OverwritePermissions? perms = channel.GetPermissionOverwrite(guild.EveryoneRole);
-            if (perms != null) resolvedPermissions = (resolvedPermissions & ~perms.Value.DenyValue) | perms.Value.AllowValue;
-
-            //Give/Take Role permissions
-            ulong deniedPermissions = 0UL, allowedPermissions = 0UL;
-            foreach (uint roleId in user.RoleIds)
+            if (channel.GetPermissionOverwrite(guild.EveryoneRole) is {} everyoneRolePerms)
             {
-                IRole role;
-                if (roleId != guild.EveryoneRole.Id && (role = guild.GetRole(roleId)) != null)
-                {
-                    perms = channel.GetPermissionOverwrite(role);
-                    if (perms != null)
-                    {
-                        allowedPermissions |= perms.Value.AllowValue;
-                        deniedPermissions |= perms.Value.DenyValue;
-                    }
-                }
+                resolvedPermissions &= ~everyoneRolePerms.DenyValue;
+                resolvedPermissions |= everyoneRolePerms.AllowValue;
             }
 
-            resolvedPermissions = (resolvedPermissions & ~deniedPermissions) | allowedPermissions;
+            //Give/Take Role permissions
+            ulong deniedPermissions = 0UL;
+            ulong allowedPermissions = 0UL;
+            foreach (uint roleId in user.RoleIds)
+            {
+                if (roleId == guild.EveryoneRole.Id
+                    || guild.GetRole(roleId) is not { } role
+                    || channel.GetPermissionOverwrite(role) is not { } rolePerms)
+                    continue;
+                allowedPermissions |= rolePerms.AllowValue;
+                deniedPermissions |= rolePerms.DenyValue;
+            }
+
+            resolvedPermissions &= ~deniedPermissions;
+            resolvedPermissions |= allowedPermissions;
 
             //Give/Take User permissions
-            perms = channel.GetPermissionOverwrite(user);
-            if (perms != null) resolvedPermissions = (resolvedPermissions & ~perms.Value.DenyValue) | perms.Value.AllowValue;
+            if (channel.GetPermissionOverwrite(user) is { } userPerms)
+            {
+                resolvedPermissions &= ~userPerms.DenyValue;
+                resolvedPermissions |= userPerms.AllowValue;
+            }
 
             if (channel is ITextChannel)
             {
                 if (!GetValue(resolvedPermissions, ChannelPermission.ViewChannel))
                     //No read permission on a text channel removes all other permissions
                     resolvedPermissions = 0;
-                else if (!GetValue(resolvedPermissions, ChannelPermission.SendMessages))
+                else
                 {
                     //No send permissions on a text channel removes all send-related permissions
-                    resolvedPermissions &= ~(ulong)ChannelPermission.MentionEveryone;
-                    resolvedPermissions &= ~(ulong)ChannelPermission.AttachFiles;
+                    if (!GetValue(resolvedPermissions, ChannelPermission.SendMessages))
+                    {
+                        resolvedPermissions &= ~(ulong)ChannelPermission.MentionEveryone;
+                        resolvedPermissions &= ~(ulong)ChannelPermission.AttachFiles;
+                    }
+                    // Connect permission overrides passive voice connect permissions
+                    if (GetValue(resolvedPermissions, ChannelPermission.Connect))
+                        resolvedPermissions |= (ulong)ChannelPermission.PassiveConnect;
                 }
             }
 
-            resolvedPermissions &= mask; //Ensure we didn't get any permissions this channel doesn't support (from guildPerms, for example)
+            //Ensure we didn't get any permissions this channel doesn't support (from guildPerms, for example)
+            resolvedPermissions &= mask;
         }
 
         return resolvedPermissions;

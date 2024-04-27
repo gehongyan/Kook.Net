@@ -2,7 +2,7 @@ namespace Kook;
 
 internal static class RoleUtils
 {
-    public static int Compare(IRole left, IRole right)
+    public static int Compare(IRole? left, IRole? right)
     {
         if (left == null) return -1;
         if (right == null) return 1;

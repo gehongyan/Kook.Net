@@ -7,6 +7,8 @@ namespace Kook.Net.Converters;
 
 internal class ElementConverter : JsonConverter<ElementBase>
 {
+    public static readonly ElementConverter Instance = new();
+
     public override ElementBase? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         JsonNode? jsonNode = JsonNode.Parse(ref reader);

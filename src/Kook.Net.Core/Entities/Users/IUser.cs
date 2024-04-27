@@ -18,7 +18,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// <summary>
     ///     Gets the per-username unique ID for this user.
     /// </summary>
-    ushort? IdentifyNumberValue { get; }
+    ushort IdentifyNumberValue { get; }
 
     /// <summary>
     ///     Gets whether this user is a bot; <c>null</c> if unknown.
@@ -53,7 +53,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// <summary>
     ///     Gets the link to this user's banner.
     /// </summary>
-    string Banner { get; }
+    string? Banner { get; }
 
     /// <summary>
     ///     Gets whether this user enabled denoise feature; <c>null</c> if unknown.
@@ -63,7 +63,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// <summary>
     ///     Get the tag this user has.
     /// </summary>
-    UserTag UserTag { get; }
+    UserTag? UserTag { get; }
 
     /// <summary>
     ///     Gets the nameplates this user has.
@@ -73,7 +73,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// <summary>
     ///     Gets whether this user is a system user.
     /// </summary>
-    bool? IsSystemUser { get; }
+    bool IsSystemUser { get; }
 
     /// <summary>
     ///     Creates the direct message channel of this user.

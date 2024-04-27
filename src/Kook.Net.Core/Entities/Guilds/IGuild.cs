@@ -72,7 +72,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     An <see cref="IAudioClient"/> currently associated with this guild.
     /// </returns>
-    IAudioClient AudioClient { get; }
+    IAudioClient? AudioClient { get; }
 
     /// <summary>
     ///     Gets whether this guild is public.
@@ -198,7 +198,7 @@ public interface IGuild : IEntity<ulong>
     ///     A recommendation object that represents the recommendation information for this guild;
     ///     <c>null</c> if the guild does not have a recommendation.
     /// </returns>
-    IRecommendInfo RecommendInfo { get; }
+    IRecommendInfo? RecommendInfo { get; }
 
     #endregion
 
@@ -264,7 +264,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
     ///     contains the user information and the reason for the ban; <c>null</c> if the ban entry cannot be found.
     /// </returns>
-    Task<IBan> GetBanAsync(IUser user, RequestOptions? options = null);
+    Task<IBan?> GetBanAsync(IUser user, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a ban object for a banned user.
@@ -275,7 +275,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
     ///     contains the user information and the reason for the ban; <c>null</c> if the ban entry cannot be found.
     /// </returns>
-    Task<IBan> GetBanAsync(ulong userId, RequestOptions? options = null);
+    Task<IBan?> GetBanAsync(ulong userId, RequestOptions? options = null);
 
     /// <summary>
     ///     Bans the user from this guild and optionally prunes their recent messages.
@@ -348,7 +348,8 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the generic channel
     ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
-    Task<IGuildChannel> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+    Task<IGuildChannel?> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload,
+        RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a collection of all text channels in this guild.
@@ -371,7 +372,8 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the text channel
     ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
-    Task<ITextChannel> GetTextChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+    Task<ITextChannel?> GetTextChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload,
+        RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a collection of all voice channels in this guild.
@@ -394,7 +396,8 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the voice channel associated
     ///     with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
-    Task<IVoiceChannel> GetVoiceChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+    Task<IVoiceChannel?> GetVoiceChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload,
+        RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a collection of all category channels in this guild.
@@ -417,7 +420,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the default text channel for this guild;
     ///     <c>null</c> if none is found.
     /// </returns>
-    Task<ITextChannel> GetDefaultChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+    Task<ITextChannel?> GetDefaultChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the welcome text channel for this guild.
@@ -428,7 +431,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the welcome text channel for this guild;
     ///     <c>null</c> if none is found.
     /// </returns>
-    Task<ITextChannel> GetWelcomeChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+    Task<ITextChannel?> GetWelcomeChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Creates a new text channel in this guild.
@@ -515,7 +518,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A role that is associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
-    IRole GetRole(uint id);
+    IRole? GetRole(uint id);
 
     /// <summary>
     ///     Creates a new role with the provided name.
@@ -562,7 +565,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the guild user
     ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
-    Task<IGuildUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+    Task<IGuildUser?> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the current user for this guild.
@@ -573,7 +576,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the currently logged-in
     ///     user within this guild.
     /// </returns>
-    Task<IGuildUser> GetCurrentUserAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+    Task<IGuildUser?> GetCurrentUserAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the owner of this guild.
@@ -583,7 +586,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the owner of this guild.
     /// </returns>
-    Task<IGuildUser> GetOwnerAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+    Task<IGuildUser?> GetOwnerAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Downloads all users for this guild if the current list is incomplete.
@@ -664,7 +667,7 @@ public interface IGuild : IEntity<ulong>
     ///     A task that represents the asynchronous get operation. The task result contains the emote found with the
     ///     specified <paramref name="id"/>; <c>null</c> if none is found.
     /// </returns>
-    Task<GuildEmote> GetEmoteAsync(string id, RequestOptions? options = null);
+    Task<GuildEmote?> GetEmoteAsync(string id, RequestOptions? options = null);
 
     /// <summary>
     ///     Creates a new <see cref="GuildEmote"/> in this guild.

@@ -38,7 +38,7 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
 
     public async Task SetCancellationTokenAsync(CancellationToken cancellationToken)
     {
-        await _tokenLock.WaitAsync().ConfigureAwait(false);
+        await _tokenLock.WaitAsync(CancellationToken.None).ConfigureAwait(false);
         try
         {
             _parentToken = cancellationToken;
@@ -109,9 +109,9 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
         if (millis > 0)
         {
 #if DEBUG_LIMITS
-                Debug.WriteLine($"[{id}] Sleeping {millis} ms (Pre-emptive) [Global]");
+            Debug.WriteLine($"[{id}] Sleeping {millis} ms (Pre-emptive) [Global]");
 #endif
-            await Task.Delay(millis).ConfigureAwait(false);
+            await Task.Delay(millis, CancellationToken.None).ConfigureAwait(false);
         }
     }
 
@@ -188,7 +188,10 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
                     {
                         if (bucket.Id.IsHashBucket)
                         {
-                            foreach (BucketId redirectBucket in _buckets.Where(x => x.Value == bucket.Id).Select(x => (BucketId)x.Value))
+                            IEnumerable<BucketId> redirectBuckets = _buckets
+                                .Where(x => x.Value == bucket.Id)
+                                .Select(x => (BucketId)x.Value);
+                            foreach (BucketId redirectBucket in redirectBuckets)
                                 _buckets.TryRemove(redirectBucket, out _); //remove redirections if hash bucket
                         }
 
@@ -225,7 +228,7 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        if (!(_cancellationTokenSource is null))
+        if (_cancellationTokenSource is not null)
         {
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource.Dispose();

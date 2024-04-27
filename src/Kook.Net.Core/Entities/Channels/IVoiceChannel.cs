@@ -19,7 +19,7 @@ public interface IVoiceChannel : ITextChannel, IAudioChannel
     /// </summary>
     /// <returns>
     ///     An int representing the maximum number of users that are allowed to be connected to this
-    ///     channel at once; <c>null</c> if a limit is not set.
+    ///     channel at once; <c>0</c> if a limit is not set.
     /// </returns>
     int UserLimit { get; }
 

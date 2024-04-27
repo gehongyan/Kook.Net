@@ -310,8 +310,7 @@ internal static class EntityExtensions
             TimeSpan.FromSeconds(model.Duration), model.Title, model.Cover);
 
     public static CardEmbed ToEntity(this API.CardEmbed model) =>
-        new(new Card(model.Theme, model.Size, model.Color, [..model.Modules.Select(m => m.ToEntity())]));
-
+        new(new Card(model.Theme ?? CardTheme.Primary, model.Size ?? CardSize.Large, model.Color, [..model.Modules.Select(m => m.ToEntity())]));
 
     public static NotImplementedEmbed ToNotImplementedEntity(this API.NotImplementedEmbed model) =>
         new(model.RawType, model.RawJsonNode);

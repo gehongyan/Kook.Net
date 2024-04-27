@@ -2,11 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enabled</Nullable>
+    <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <RootNamespace>Kook.Net.Tests</RootNamespace>
+    <RootNamespace>Kook</RootNamespace>
     <LangVersion>default</LangVersion>
     <NoWarn>NU1803</NoWarn>
+    <Configurations>Debug;Release;Debug Rest;Debug Packets</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

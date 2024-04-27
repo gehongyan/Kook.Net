@@ -9,23 +9,33 @@ internal class MessageUpdateEvent
     public ulong ChannelId { get; set; }
 
     [JsonPropertyName("content")]
-    public string Content { get; set; }
+    public required string Content { get; set; }
 
     [JsonPropertyName("mention")]
-    public ulong[] Mention { get; set; }
+    public required ulong[] Mention { get; set; }
 
     [JsonPropertyName("mention_all")]
-    public bool MentionAll { get; set; }
+    public bool MentionedAll { get; set; }
 
     [JsonPropertyName("mention_here")]
-    public bool MentionHere { get; set; }
+    public bool MentionedHere { get; set; }
 
     [JsonPropertyName("mention_roles")]
-    public uint[] MentionRoles { get; set; }
+    public required uint[] MentionedRoles { get; set; }
 
     [JsonPropertyName("updated_at")]
     [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset UpdatedAt { get; set; }
+
+    [JsonPropertyName("kmarkdown")]
+    public required MentionInfo MentionInfo { get; set; }
+
+    [JsonPropertyName("quote")]
+    [JsonConverter(typeof(QuoteConverter))]
+    public Quote? Quote { get; set; }
+
+    [JsonPropertyName("attachments")]
+    public Attachment? Attachment { get; set; }
 
     [JsonPropertyName("msg_id")]
     public Guid MessageId { get; set; }

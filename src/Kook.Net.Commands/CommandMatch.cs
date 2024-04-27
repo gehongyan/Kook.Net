@@ -28,8 +28,9 @@ public struct CommandMatch
     /// <param name="context"> The context of the command. </param>
     /// <param name="services"> The services to use. </param>
     /// <returns> The result of the precondition check. </returns>
-    public Task<PreconditionResult> CheckPreconditionsAsync(ICommandContext context, IServiceProvider services = null)
-        => Command.CheckPreconditionsAsync(context, services);
+    public Task<PreconditionResult> CheckPreconditionsAsync(ICommandContext context,
+        IServiceProvider? services = null) =>
+        Command.CheckPreconditionsAsync(context, services);
 
     /// <summary>
     ///     Parses this command.
@@ -39,9 +40,9 @@ public struct CommandMatch
     /// <param name="preconditionResult"> The result of the precondition check. </param>
     /// <param name="services"> The services to use. </param>
     /// <returns> The result of the parse. </returns>
-    public Task<ParseResult> ParseAsync(ICommandContext context, SearchResult searchResult, PreconditionResult preconditionResult = null,
-        IServiceProvider services = null)
-        => Command.ParseAsync(context, Alias.Length, searchResult, preconditionResult, services);
+    public Task<ParseResult> ParseAsync(ICommandContext context, SearchResult searchResult,
+        PreconditionResult? preconditionResult = null, IServiceProvider? services = null) =>
+        Command.ParseAsync(context, Alias.Length, searchResult, preconditionResult, services);
 
     /// <summary>
     ///     Executes this command.
@@ -51,8 +52,9 @@ public struct CommandMatch
     /// <param name="paramList"> The parameters of the command. </param>
     /// <param name="services"> The services to use. </param>
     /// <returns> The result of the execution. </returns>
-    public Task<IResult> ExecuteAsync(ICommandContext context, IEnumerable<object> argList, IEnumerable<object> paramList, IServiceProvider services)
-        => Command.ExecuteAsync(context, argList, paramList, services);
+    public Task<IResult> ExecuteAsync(ICommandContext context, IEnumerable<object> argList,
+        IEnumerable<object> paramList, IServiceProvider services) =>
+        Command.ExecuteAsync(context, argList, paramList, services);
 
     /// <summary>
     ///     Executes this command.
@@ -61,6 +63,6 @@ public struct CommandMatch
     /// <param name="parseResult"> The result of the parse. </param>
     /// <param name="services"> The services to use. </param>
     /// <returns> The result of the execution. </returns>
-    public Task<IResult> ExecuteAsync(ICommandContext context, ParseResult parseResult, IServiceProvider services)
-        => Command.ExecuteAsync(context, parseResult, services);
+    public Task<IResult> ExecuteAsync(ICommandContext context, ParseResult parseResult, IServiceProvider services) =>
+        Command.ExecuteAsync(context, parseResult, services);
 }

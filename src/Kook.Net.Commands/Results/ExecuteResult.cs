@@ -11,18 +11,18 @@ public struct ExecuteResult : IResult
     /// <summary>
     ///     Gets the exception that may have occurred during the command execution.
     /// </summary>
-    public Exception Exception { get; }
+    public Exception? Exception { get; }
 
     /// <inheritdoc />
     public CommandError? Error { get; }
 
     /// <inheritdoc />
-    public string ErrorReason { get; }
+    public string? ErrorReason { get; }
 
     /// <inheritdoc />
     public bool IsSuccess => !Error.HasValue;
 
-    private ExecuteResult(Exception exception, CommandError? error, string errorReason)
+    private ExecuteResult(Exception? exception, CommandError? error, string? errorReason)
     {
         Exception = exception;
         Error = error;
@@ -35,8 +35,7 @@ public struct ExecuteResult : IResult
     /// <returns>
     ///     A <see cref="ExecuteResult" /> that does not contain any errors.
     /// </returns>
-    public static ExecuteResult FromSuccess()
-        => new(null, null, null);
+    public static ExecuteResult FromSuccess() => new(null, null, null);
 
     /// <summary>
     ///     Initializes a new <see cref="ExecuteResult" /> with a specified <see cref="CommandError" /> and its
@@ -47,8 +46,7 @@ public struct ExecuteResult : IResult
     /// <returns>
     ///     A <see cref="ExecuteResult" /> that contains a <see cref="CommandError" /> and reason.
     /// </returns>
-    public static ExecuteResult FromError(CommandError error, string reason)
-        => new(null, error, reason);
+    public static ExecuteResult FromError(CommandError error, string reason) => new(null, error, reason);
 
     /// <summary>
     ///     Initializes a new <see cref="ExecuteResult" /> with a specified exception, indicating an unsuccessful
@@ -60,8 +58,7 @@ public struct ExecuteResult : IResult
     ///     with a <see cref="CommandError" /> of type <c>Exception</c> as well as the exception message as the
     ///     reason.
     /// </returns>
-    public static ExecuteResult FromError(Exception ex)
-        => new(ex, CommandError.Exception, ex.Message);
+    public static ExecuteResult FromError(Exception? ex) => new(ex, CommandError.Exception, ex?.Message);
 
     /// <summary>
     ///     Initializes a new <see cref="ExecuteResult" /> with a specified result; this may or may not be an
@@ -72,8 +69,7 @@ public struct ExecuteResult : IResult
     /// <returns>
     ///     A <see cref="ExecuteResult"/> that inherits the <see cref="IResult"/> error type and reason.
     /// </returns>
-    public static ExecuteResult FromError(IResult result)
-        => new(null, result.Error, result.ErrorReason);
+    public static ExecuteResult FromError(IResult result) => new(null, result.Error, result.ErrorReason);
 
     /// <summary>
     ///     Gets a string that indicates the execution result.

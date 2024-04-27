@@ -10,8 +10,8 @@ namespace Kook.Rest;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestGame : RestEntity<int>, IGame
 {
-    private ImmutableArray<string> _productNames;
-    private ImmutableArray<string> _processNames;
+    private ImmutableArray<string> _productNames = [];
+    private ImmutableArray<string> _processNames = [];
 
     /// <inheritdoc />
     public string Name { get; private set; }
@@ -20,7 +20,7 @@ public class RestGame : RestEntity<int>, IGame
     public GameType GameType { get; private set; }
 
     /// <inheritdoc />
-    public string Options { get; private set; }
+    public string? Options { get; private set; }
 
     /// <inheritdoc />
     public bool RequireAdminPrivilege { get; private set; }
@@ -37,6 +37,7 @@ public class RestGame : RestEntity<int>, IGame
     internal RestGame(BaseKookClient kook, int id)
         : base(kook, id)
     {
+        Name = string.Empty;
     }
 
     internal static RestGame Create(BaseKookClient kook, Model model)
@@ -53,20 +54,20 @@ public class RestGame : RestEntity<int>, IGame
         Options = model.Options;
         RequireAdminPrivilege = model.KmHookAdmin;
         Icon = model.Icon;
-        _productNames = model.ProductNames.ToImmutableArray();
-        _processNames = model.ProcessNames.ToImmutableArray();
+        _productNames = [..model.ProductNames];
+        _processNames = [..model.ProcessNames];
     }
 
     /// <inheritdoc cref="IGame.ModifyAsync(Action{GameProperties},RequestOptions)" />
-    public async Task<RestGame> ModifyAsync(Action<GameProperties> func, RequestOptions? options = null) =>
-        await GameHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
+    public Task<RestGame> ModifyAsync(Action<GameProperties> func, RequestOptions? options = null) =>
+        GameHelper.ModifyAsync(this, Kook, func, options);
 
     /// <inheritdoc />
-    public async Task DeleteAsync(RequestOptions? options = null) => await GameHelper.DeleteAsync(this, Kook, options).ConfigureAwait(false);
+    public Task DeleteAsync(RequestOptions? options = null) => GameHelper.DeleteAsync(this, Kook, options);
 
     /// <inheritdoc />
-    async Task<IGame> IGame.ModifyAsync(Action<GameProperties> func, RequestOptions? options)
-        => await ModifyAsync(func, options);
+    async Task<IGame> IGame.ModifyAsync(Action<GameProperties> func, RequestOptions? options) =>
+        await ModifyAsync(func, options);
 
     private string DebuggerDisplay => $"{Name} ({Id}, {GameType.ToString()})";
 }

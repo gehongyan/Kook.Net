@@ -9,7 +9,6 @@ internal class Invite
     public uint Id { get; set; }
 
     [JsonPropertyName("channel_id")]
-    [JsonConverter(typeof(NullableUInt64Converter))]
     public ulong ChannelId { get; set; }
 
     [JsonPropertyName("guild_id")]

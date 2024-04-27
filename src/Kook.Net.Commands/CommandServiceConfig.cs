@@ -34,7 +34,7 @@ public class CommandServiceConfig
     /// <summary>
     /// Collection of aliases for matching pairs of string delimiters.
     /// The dictionary stores the opening delimiter as a key, and the matching closing delimiter as the value.
-    /// If no value is supplied <see cref="QuotationAliasUtils.GetDefaultAliasMap"/> will be used, which contains
+    /// If no value is supplied <see cref="QuotationAliasUtils.DefaultAliasMap"/> will be used, which contains
     /// many regional equivalents.
     /// Only values that are specified in this map will be used as string delimiters, so if " is removed then
     /// it won't be used.
@@ -50,7 +50,7 @@ public class CommandServiceConfig
     /// }
     /// </code>
     /// </example>
-    public Dictionary<char, char> QuotationMarkAliasMap { get; set; } = QuotationAliasUtils.GetDefaultAliasMap;
+    public Dictionary<char, char> QuotationMarkAliasMap { get; set; } = QuotationAliasUtils.DefaultAliasMap;
 
     /// <summary>
     ///     Gets or sets a value that indicates whether extra parameters should be ignored.

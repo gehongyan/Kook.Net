@@ -20,12 +20,12 @@ public class ModuleBuilderTests
         Assert.Equal(ModuleType.Header, builder.Type);
         Assert.Equal(ModuleType.Header, builder.Build().Type);
         Assert.Equal("text", builder.Text.Content);
-        Assert.Equal("text", builder.Build().Text.Content);
+        Assert.Equal("text", builder.Build().Text?.Content);
         builder = new HeaderModuleBuilder { Text = new PlainTextElementBuilder().WithContent("content") };
         Assert.Equal(ModuleType.Header, builder.Type);
         Assert.Equal(ModuleType.Header, builder.Build().Type);
         Assert.Equal("content", builder.Text.Content);
-        Assert.Equal("content", builder.Build().Text.Content);
+        Assert.Equal("content", builder.Build().Text?.Content);
     }
 
     [Fact]
@@ -36,7 +36,7 @@ public class ModuleBuilderTests
         Assert.IsType<PlainTextElementBuilder>(builder.Text);
         Assert.IsType<PlainTextElement>(builder.Build().Text);
         Assert.Equal("text", builder.Text.Content);
-        Assert.Equal("text", builder.Build().Text.Content);
+        Assert.Equal("text", builder.Build().Text?.Content);
     }
 
     [Fact]
@@ -54,24 +54,27 @@ public class ModuleBuilderTests
         {
             HeaderModuleBuilder builder = new HeaderModuleBuilder()
                 .WithText(new PlainTextElementBuilder().WithContent(text));
-            Assert.Equal(text, builder.Text.Content);
-            Assert.Equal(text, builder.Build().Text.Content);
+            Assert.Equal(text, builder.Text?.Content);
+            Assert.Equal(text, builder.Build().Text?.Content);
         }
     }
 
     [Fact]
     public void HeaderModuleBuilder_InvalidText()
     {
-        IEnumerable<string> GetInvalidContent()
+        IEnumerable<string?> GetInvalidContent()
         {
             yield return null;
             yield return new string('a', 101);
         }
 
-        foreach (string text in GetInvalidContent())
+        foreach (string? text in GetInvalidContent())
         {
             Assert.Throws<ArgumentException>(() => new HeaderModuleBuilder()
-                .WithText(b => b.WithContent(text)));
+                .WithText(b =>
+                {
+                    b.Content = text;
+                }).Build());
         }
     }
 
@@ -80,8 +83,8 @@ public class ModuleBuilderTests
     public void HeaderModuleBuilder_ImplicitConversion(string text)
     {
         HeaderModuleBuilder builder = text;
-        Assert.Equal(text, builder.Text.Content);
-        Assert.Equal(text, builder.Build().Text.Content);
+        Assert.Equal(text, builder.Text?.Content);
+        Assert.Equal(text, builder.Build().Text?.Content);
     }
 
     [Fact]
@@ -93,10 +96,10 @@ public class ModuleBuilderTests
             .WithAccessory(new ImageElementBuilder().WithSource(Icon));
         Assert.Equal(ModuleType.Section, builder.Type);
         Assert.Equal(ModuleType.Section, builder.Build().Type);
-        Assert.Equal("text", ((PlainTextElementBuilder)builder.Text).Content);
-        Assert.Equal("text", ((PlainTextElement)builder.Build().Text).Content);
-        Assert.Equal(Icon, ((ImageElementBuilder)builder.Accessory).Source);
-        Assert.Equal(Icon, ((ImageElement)builder.Build().Accessory).Source);
+        Assert.Equal("text", ((PlainTextElementBuilder?)builder.Text)?.Content);
+        Assert.Equal("text", ((PlainTextElement?)builder.Build().Text)?.Content);
+        Assert.Equal(Icon, ((ImageElementBuilder?)builder.Accessory)?.Source);
+        Assert.Equal(Icon, ((ImageElement?)builder.Build().Accessory)?.Source);
         builder = new SectionModuleBuilder
         {
             Mode = SectionAccessoryMode.Right,
@@ -137,20 +140,20 @@ public class ModuleBuilderTests
     public void SectionModuleBuilder_InvalidText()
     {
         SectionModuleBuilder builder = new();
-        Assert.Throws<ArgumentException>(() => builder.WithText<ImageElementBuilder>(b => b.WithSource(Icon)));
-        Assert.Throws<ArgumentException>(() => builder.WithText<ButtonElementBuilder>(b => b.WithText("button")));
-        Assert.Throws<ArgumentException>(() => builder = new SectionModuleBuilder { Text = new ImageElementBuilder().WithSource(Icon) });
-        Assert.Throws<ArgumentException>(() => builder = new SectionModuleBuilder { Text = new ButtonElementBuilder().WithText("button") });
+        Assert.Throws<ArgumentException>(() => builder.WithText<ImageElementBuilder>(b => b.WithSource(Icon)).Build());
+        Assert.Throws<ArgumentException>(() => builder.WithText<ButtonElementBuilder>(b => b.WithText("button")).Build());
+        Assert.Throws<ArgumentException>(() => new SectionModuleBuilder { Text = new ImageElementBuilder().WithSource(Icon) }.Build());
+        Assert.Throws<ArgumentException>(() => new SectionModuleBuilder { Text = new ButtonElementBuilder().WithText("button") }.Build());
     }
 
     [Fact]
     public void SectionModuleBuilder_InvalidAccessory()
     {
         SectionModuleBuilder builder = new();
-        Assert.Throws<ArgumentException>(() => builder.WithAccessory<PlainTextElementBuilder>(b => b.WithContent(Name)));
-        Assert.Throws<ArgumentException>(() => builder.WithAccessory<KMarkdownElementBuilder>(b => b.WithContent(Name)));
-        Assert.Throws<ArgumentException>(() => builder = new SectionModuleBuilder { Accessory = new PlainTextElementBuilder().WithContent(Name) });
-        Assert.Throws<ArgumentException>(() => builder = new SectionModuleBuilder { Accessory = new KMarkdownElementBuilder().WithContent(Name) });
+        Assert.Throws<ArgumentException>(() => builder.WithAccessory<PlainTextElementBuilder>(b => b.WithContent(Name)).Build());
+        Assert.Throws<ArgumentException>(() => builder.WithAccessory<KMarkdownElementBuilder>(b => b.WithContent(Name)).Build());
+        Assert.Throws<ArgumentException>(() => new SectionModuleBuilder { Accessory = new PlainTextElementBuilder().WithContent(Name) }.Build());
+        Assert.Throws<ArgumentException>(() => new SectionModuleBuilder { Accessory = new KMarkdownElementBuilder().WithContent(Name) }.Build());
     }
 
     [Fact]
@@ -193,7 +196,8 @@ public class ModuleBuilderTests
     public void ImageGroupBuilder_ValidElements()
     {
         ImageGroupModuleBuilder builder = new();
-        for (int i = 0; i < 9; i++) builder.AddElement(b => b.WithSource(Icon));
+        for (int i = 0; i < 9; i++)
+            builder.AddElement(b => b.WithSource(Icon));
 
         Assert.Equal(9, builder.Elements.Count);
         builder = new ImageGroupModuleBuilder { Elements = Enumerable.Repeat(new ImageElementBuilder().WithSource(Icon), 9).ToList() };
@@ -204,13 +208,14 @@ public class ModuleBuilderTests
     public void ImageGroupBuilder_InvalidElements()
     {
         ImageGroupModuleBuilder builder = new();
-        for (int i = 0; i < 9; i++) builder.AddElement(b => b.WithSource(Icon));
+        for (int i = 0; i < 9; i++)
+            builder.AddElement(b => b.WithSource(Icon));
 
-        Assert.Throws<ArgumentException>(() => builder.AddElement(b => b.WithSource(Icon)));
-        Assert.Throws<ArgumentException>(() => builder = new ImageGroupModuleBuilder
+        Assert.Throws<ArgumentException>(() => builder.AddElement(b => b.WithSource(Icon)).Build());
+        Assert.Throws<ArgumentException>(() => new ImageGroupModuleBuilder
         {
             Elements = Enumerable.Repeat(new ImageElementBuilder().WithSource(Icon), 10).ToList()
-        });
+        }.Build());
     }
 
     [Fact]
@@ -244,7 +249,8 @@ public class ModuleBuilderTests
     public void ContainerBuilder_ValidElements()
     {
         ContainerModuleBuilder builder = new();
-        for (int i = 0; i < 9; i++) builder.AddElement(b => b.WithSource(Icon));
+        for (int i = 0; i < 9; i++)
+            builder.AddElement(b => b.WithSource(Icon));
 
         Assert.Equal(9, builder.Elements.Count);
         builder = new ContainerModuleBuilder { Elements = Enumerable.Repeat(new ImageElementBuilder().WithSource(Icon), 9).ToList() };
@@ -255,13 +261,14 @@ public class ModuleBuilderTests
     public void ContainerBuilder_InvalidElements()
     {
         ContainerModuleBuilder builder = new();
-        for (int i = 0; i < 9; i++) builder.AddElement(b => b.WithSource(Icon));
+        for (int i = 0; i < 9; i++)
+            builder.AddElement(b => b.WithSource(Icon));
 
-        Assert.Throws<ArgumentException>(() => builder.AddElement(b => b.WithSource(Icon)));
-        Assert.Throws<ArgumentException>(() => builder = new ContainerModuleBuilder
+        Assert.Throws<ArgumentException>(() => builder.AddElement(b => b.WithSource(Icon)).Build());
+        Assert.Throws<ArgumentException>(() => new ContainerModuleBuilder
         {
             Elements = Enumerable.Repeat(new ImageElementBuilder().WithSource(Icon), 10).ToList()
-        });
+        }.Build());
     }
 
     [Fact]
@@ -271,12 +278,12 @@ public class ModuleBuilderTests
             .AddElement(b => b.WithText(Name));
         Assert.Equal(ModuleType.ActionGroup, builder.Type);
         Assert.Equal(ModuleType.ActionGroup, builder.Build().Type);
-        Assert.Equal(Name, ((PlainTextElementBuilder)builder.Elements[0].Text).Content);
+        Assert.Equal(Name, ((PlainTextElementBuilder?)builder.Elements[0].Text)?.Content);
         Assert.Equal(Name, ((PlainTextElement)builder.Build().Elements[0].Text).Content);
         builder = new ActionGroupModuleBuilder { Elements = [new ButtonElementBuilder().WithText(Name, true)] };
         Assert.Equal(ModuleType.ActionGroup, builder.Type);
         Assert.Equal(ModuleType.ActionGroup, builder.Build().Type);
-        Assert.Equal(Name, ((KMarkdownElementBuilder)builder.Elements[0].Text).Content);
+        Assert.Equal(Name, ((KMarkdownElementBuilder?)builder.Elements[0].Text)?.Content);
         Assert.Equal(Name, ((KMarkdownElement)builder.Build().Elements[0].Text).Content);
     }
 
@@ -287,7 +294,7 @@ public class ModuleBuilderTests
             .AddElement(b => b.WithText(Name));
         Assert.IsType<ButtonElementBuilder>(builder.Elements[0]);
         Assert.IsType<ButtonElement>(builder.Build().Elements[0]);
-        Assert.Equal(Name, ((PlainTextElementBuilder)builder.Elements[0].Text).Content);
+        Assert.Equal(Name, ((PlainTextElementBuilder?)builder.Elements[0].Text)?.Content);
         Assert.Equal(Name, ((PlainTextElement)builder.Build().Elements[0].Text).Content);
     }
 
@@ -308,11 +315,11 @@ public class ModuleBuilderTests
         ActionGroupModuleBuilder builder = new();
         for (int i = 0; i < 4; i++) builder.AddElement(b => b.WithText(Name));
 
-        Assert.Throws<ArgumentException>(() => builder.AddElement(b => b.WithText(Name)));
-        Assert.Throws<ArgumentException>(() => builder = new ActionGroupModuleBuilder
+        Assert.Throws<ArgumentException>(() => builder.AddElement(b => b.WithText(Name)).Build());
+        Assert.Throws<ArgumentException>(() => new ActionGroupModuleBuilder
         {
             Elements = Enumerable.Repeat(new ButtonElementBuilder().WithText(Name), 5).ToList()
-        });
+        }.Build());
     }
 
     [Fact]
@@ -360,15 +367,16 @@ public class ModuleBuilderTests
     public void ContextBuilder_InvalidElements()
     {
         ContextModuleBuilder builder = new();
-        Assert.Throws<ArgumentException>(() => builder.AddElement<ParagraphStructBuilder>(b => b.WithColumnCount(2)));
-        Assert.Throws<ArgumentException>(() => builder.AddElement<ButtonElementBuilder>(b => b.WithText("button")));
-        for (int i = 0; i < 10; i++) builder.AddElement<PlainTextElementBuilder>(b => b.WithContent(Name));
+        Assert.Throws<ArgumentException>(() => builder.AddElement<ParagraphStructBuilder>(b => b.WithColumnCount(2)).Build());
+        Assert.Throws<ArgumentException>(() => builder.AddElement<ButtonElementBuilder>(b => b.WithText("button")).Build());
+        for (int i = 0; i < 10; i++)
+            builder.AddElement<PlainTextElementBuilder>(b => b.WithContent(Name));
 
-        Assert.Throws<ArgumentException>(() => builder.AddElement<PlainTextElementBuilder>(b => b.WithContent(Name)));
-        Assert.Throws<ArgumentException>(() => builder = new ContextModuleBuilder
+        Assert.Throws<ArgumentException>(() => builder.AddElement<PlainTextElementBuilder>(b => b.WithContent(Name)).Build());
+        Assert.Throws<ArgumentException>(() => new ContextModuleBuilder
         {
             Elements = Enumerable.Repeat(new ButtonElementBuilder().WithText(Name) as IElementBuilder, 11).ToList()
-        });
+        }.Build());
     }
 
     [Fact]
@@ -512,19 +520,25 @@ public class ModuleBuilderTests
             .WithMode(CountdownMode.Day)
             .WithEndTime(DateTimeOffset.Now.AddDays(1));
         Assert.Equal(ModuleType.Countdown, builder.Type);
-        Assert.Equal(ModuleType.Countdown, builder.Build().Type);
+        CountdownModule module = builder.Build();
+        Assert.Equal(ModuleType.Countdown, module.Type);
         Assert.Equal(DateTimeOffset.Now.AddDays(1).DateTime, builder.EndTime.DateTime, TimeSpan.FromSeconds(1));
-        Assert.Equal(DateTimeOffset.Now.AddDays(1).DateTime, builder.Build().EndTime.DateTime, TimeSpan.FromSeconds(1));
+        Assert.Equal(DateTimeOffset.Now.AddDays(1).DateTime, module.EndTime.DateTime, TimeSpan.FromSeconds(1));
         builder = new CountdownModuleBuilder
         {
-            Mode = CountdownMode.Second, EndTime = DateTimeOffset.Now.AddHours(1), StartTime = DateTimeOffset.Now
+            Mode = CountdownMode.Second,
+            EndTime = DateTimeOffset.Now.AddHours(1),
+            StartTime = DateTimeOffset.Now
         };
+        module = builder.Build();
         Assert.Equal(ModuleType.Countdown, builder.Type);
-        Assert.Equal(ModuleType.Countdown, builder.Build().Type);
+        Assert.Equal(ModuleType.Countdown, module.Type);
         Assert.Equal(DateTimeOffset.Now.AddHours(1).DateTime, builder.EndTime.DateTime, TimeSpan.FromSeconds(1));
-        Assert.Equal(DateTimeOffset.Now.AddHours(1).DateTime, builder.Build().EndTime.DateTime, TimeSpan.FromSeconds(1));
+        Assert.Equal(DateTimeOffset.Now.AddHours(1).DateTime, module.EndTime.DateTime, TimeSpan.FromSeconds(1));
+        Assert.NotNull(builder.StartTime);
         Assert.Equal(DateTimeOffset.Now.DateTime, builder.StartTime.Value.DateTime, TimeSpan.FromSeconds(1));
-        Assert.Equal(DateTimeOffset.Now.DateTime, builder.Build().StartTime.Value.DateTime, TimeSpan.FromSeconds(1));
+        Assert.NotNull(module.StartTime);
+        Assert.Equal(DateTimeOffset.Now.DateTime, module.StartTime.Value.DateTime, TimeSpan.FromSeconds(1));
     }
 
     [Fact]
@@ -533,21 +547,26 @@ public class ModuleBuilderTests
         CountdownModuleBuilder builder = new CountdownModuleBuilder()
             .WithMode(CountdownMode.Day)
             .WithEndTime(DateTimeOffset.Now.AddDays(1));
+        CountdownModule module = builder.Build();
         Assert.Equal(DateTimeOffset.Now.AddDays(1).DateTime, builder.EndTime.DateTime, TimeSpan.FromSeconds(1));
-        Assert.Equal(DateTimeOffset.Now.AddDays(1).DateTime, builder.Build().EndTime.DateTime, TimeSpan.FromSeconds(1));
+        Assert.Equal(DateTimeOffset.Now.AddDays(1).DateTime, module.EndTime.DateTime, TimeSpan.FromSeconds(1));
         builder = new CountdownModuleBuilder()
             .WithMode(CountdownMode.Hour)
             .WithEndTime(DateTimeOffset.Now.AddHours(1));
+        module = builder.Build();
         Assert.Equal(DateTimeOffset.Now.AddHours(1).DateTime, builder.EndTime.DateTime, TimeSpan.FromSeconds(1));
-        Assert.Equal(DateTimeOffset.Now.AddHours(1).DateTime, builder.Build().EndTime.DateTime, TimeSpan.FromSeconds(1));
+        Assert.Equal(DateTimeOffset.Now.AddHours(1).DateTime, module.EndTime.DateTime, TimeSpan.FromSeconds(1));
         builder = new CountdownModuleBuilder()
             .WithMode(CountdownMode.Second)
             .WithEndTime(DateTimeOffset.Now.AddMinutes(1))
             .WithStartTime(DateTimeOffset.Now.AddMinutes(-1));
+        module = builder.Build();
         Assert.Equal(DateTimeOffset.Now.AddMinutes(1).DateTime, builder.EndTime.DateTime, TimeSpan.FromSeconds(1));
-        Assert.Equal(DateTimeOffset.Now.AddMinutes(1).DateTime, builder.Build().EndTime.DateTime, TimeSpan.FromSeconds(1));
+        Assert.Equal(DateTimeOffset.Now.AddMinutes(1).DateTime, module.EndTime.DateTime, TimeSpan.FromSeconds(1));
+        Assert.NotNull(builder.StartTime);
         Assert.Equal(DateTimeOffset.Now.AddMinutes(-1).DateTime, builder.StartTime.Value.DateTime, TimeSpan.FromSeconds(1));
-        Assert.Equal(DateTimeOffset.Now.AddMinutes(-1).DateTime, builder.Build().StartTime.Value.DateTime, TimeSpan.FromSeconds(1));
+        Assert.NotNull(module.StartTime);
+        Assert.Equal(DateTimeOffset.Now.AddMinutes(-1).DateTime, module.StartTime.Value.DateTime, TimeSpan.FromSeconds(1));
     }
 
     [Fact]
@@ -600,9 +619,6 @@ public class ModuleBuilderTests
     }
 
     [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData(" ")]
     [InlineData("123456")]
     [InlineData("text")]
     [InlineData("hUsYbZ")]

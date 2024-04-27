@@ -15,7 +15,7 @@ internal class VoiceSocketIncomeFrame
     public bool Okay { get; set; }
 
     [JsonPropertyName("data")]
-    public object Payload { get; set; }
+    public required object Payload { get; set; }
 
     [JsonPropertyName("notification")]
     public bool Notification { get; set; }

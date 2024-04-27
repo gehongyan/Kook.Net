@@ -87,7 +87,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
     /// </returns>
-    Task<IUser> GetCreatorAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+    Task<IUser?> GetCreatorAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 
@@ -203,7 +203,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     A task representing the asynchronous get operation. The task result contains a guild user object that
     ///     represents the user; <c>null</c> if none is found.
     /// </returns>
-    new Task<IGuildUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+    new Task<IGuildUser?> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 }

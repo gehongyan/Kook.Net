@@ -20,7 +20,7 @@ public class RestIntimacy : RestEntity<ulong>, IIntimacy
     public DateTimeOffset LastReadAt { get; internal set; }
 
     /// <inheritdoc />
-    public DateTimeOffset LastModifyAt { get; internal set; }
+    public DateTimeOffset? LastModifyAt { get; internal set; }
 
     /// <inheritdoc />
     public int Score { get; internal set; }
@@ -33,8 +33,12 @@ public class RestIntimacy : RestEntity<ulong>, IIntimacy
         await IntimacyHelper.UpdateAsync(this, Kook, func, options).ConfigureAwait(false);
 
     internal RestIntimacy(BaseKookClient kook, IUser user, ulong id)
-        : base(kook, id) =>
+        : base(kook, id)
+    {
+        _images = [];
         User = user;
+        SocialInfo = string.Empty;
+    }
 
     internal static RestIntimacy Create(BaseKookClient kook, IUser user, Model model)
     {
@@ -50,6 +54,6 @@ public class RestIntimacy : RestEntity<ulong>, IIntimacy
         LastReadAt = model.LastReadAt;
         LastModifyAt = model.LastModifyAt;
         Score = model.Score;
-        _images = model.Images.Select(i => new IntimacyImage(i.Id, i.Url)).ToImmutableArray();
+        _images = [..model.Images.Select(i => new IntimacyImage(i.Id, i.Url))];
     }
 }

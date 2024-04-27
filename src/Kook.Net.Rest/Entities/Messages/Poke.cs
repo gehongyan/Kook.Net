@@ -60,8 +60,12 @@ public class Poke : IPoke
         TimeSpan cooldown = TimeSpan.FromSeconds(model.Cooldown);
         PokeLabel label = PokeLabel.Create(model.LabelId, model.LabelName);
         PokeIcon icon = PokeIcon.Create(model.Icon, model.IconExpired);
-        PokeQuality quality = PokeQuality.Create(model.QualityId, model.Quality.Color,
-            new Dictionary<string, string>() { ["small"] = model.Quality.Small, ["big"] = model.Quality.Big });
+        Dictionary<string,string> resources = new()
+        {
+            ["small"] = model.Quality.Small,
+            ["big"] = model.Quality.Big
+        };
+        PokeQuality quality = PokeQuality.Create(model.QualityId, model.Quality.Color, resources);
         IPokeResource pokeResource = model.Resource.ToEntity();
         return new Poke(model.Id, model.Name, model.Description, cooldown, model.Categories, label, icon,
             quality, pokeResource, model.MessageScenarios);

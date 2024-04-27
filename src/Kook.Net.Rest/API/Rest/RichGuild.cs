@@ -11,8 +11,8 @@ internal class RichGuild : ExtendedGuild
     public required string Banner { get; set; }
 
     [JsonPropertyName("my_nickname")]
-    public required string CurrentUserNickname { get; set; }
+    public string? CurrentUserNickname { get; set; }
 
     [JsonPropertyName("my_roles")]
-    public required uint[] CurrentUserRoles { get; set; }
+    public uint[]? CurrentUserRoles { get; set; }
 }

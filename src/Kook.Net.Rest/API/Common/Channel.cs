@@ -45,7 +45,7 @@ internal class Channel
 
     // Text
     [JsonPropertyName("topic")]
-    public required string Topic { get; set; }
+    public string? Topic { get; set; }
 
     [JsonPropertyName("slow_mode")]
     public int SlowMode { get; set; }

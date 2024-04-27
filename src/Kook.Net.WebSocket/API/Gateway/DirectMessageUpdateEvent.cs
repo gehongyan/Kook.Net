@@ -16,11 +16,21 @@ internal class DirectMessageUpdateEvent
     public Guid MessageId { get; set; }
 
     [JsonPropertyName("content")]
-    public string Content { get; set; }
+    public required string Content { get; set; }
 
     [JsonPropertyName("updated_at")]
     [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset UpdatedAt { get; set; }
+
+    [JsonPropertyName("kmarkdown")]
+    public required MentionInfo MentionInfo { get; set; }
+
+    [JsonPropertyName("quote")]
+    [JsonConverter(typeof(QuoteConverter))]
+    public Quote? Quote { get; set; }
+
+    [JsonPropertyName("attachments")]
+    public Attachment? Attachment { get; set; }
 
     [JsonPropertyName("chat_code")]
     [JsonConverter(typeof(ChatCodeConverter))]

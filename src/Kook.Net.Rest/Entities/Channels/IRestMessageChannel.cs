@@ -32,7 +32,8 @@ public interface IRestMessageChannel : IMessageChannel
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
-    IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null);
+    IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a collection of messages in this channel.

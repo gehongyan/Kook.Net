@@ -144,16 +144,13 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
                 stream.Position = 0;
             }
 
-#pragma warning disable IDISP004
             return new StreamContent(stream);
-#pragma warning restore IDISP004
         }
 
-        foreach (var p in multipartParams ?? ImmutableDictionary<string, object>.Empty)
+        foreach (KeyValuePair<string, object> p in multipartParams ?? ImmutableDictionary<string, object>.Empty)
         {
             switch (p.Value)
             {
-#pragma warning disable IDISP004
                 case string stringValue:
                     { content.Add(new StringContent(stringValue, Encoding.UTF8, "text/plain"), p.Key); continue; }
                 case byte[] byteArrayValue:
@@ -162,14 +159,13 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
                     { content.Add(GetStreamContent(streamValue), p.Key); continue; }
                 case MultipartFile fileValue:
                     {
-                        var streamContent = GetStreamContent(fileValue.Stream);
-
+                        StreamContent streamContent = GetStreamContent(fileValue.Stream);
                         if (fileValue.ContentType != null)
                             streamContent.Headers.ContentType = new MediaTypeHeaderValue(fileValue.ContentType);
-
-                        content.Add(streamContent, p.Key, fileValue.Filename);
-#pragma warning restore IDISP004
-
+                        if (fileValue.Filename is not null)
+                            content.Add(streamContent, p.Key, fileValue.Filename);
+                        else
+                            content.Add(streamContent, p.Key);
                         continue;
                     }
                 default:

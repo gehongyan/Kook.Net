@@ -11,7 +11,7 @@ public class WebSocketClosedException : Exception
     /// <returns>
     ///     A close code from Kook. See https://developer.kookapp.cn/doc/websocket
     /// </returns>
-    public int CloseCode { get; }
+    public int? CloseCode { get; }
 
     /// <summary>
     ///     Gets the reason of the interruption.
@@ -22,7 +22,7 @@ public class WebSocketClosedException : Exception
     ///     Initializes a new instance of the <see cref="WebSocketClosedException" /> using a Kook close code
     ///     and an optional reason.
     /// </summary>
-    public WebSocketClosedException(int closeCode, string? reason = null)
+    public WebSocketClosedException(int? closeCode, string? reason = null)
         : base($"The server sent close {closeCode}{(reason != null ? $": \"{reason}\"" : "")}")
     {
         CloseCode = closeCode;

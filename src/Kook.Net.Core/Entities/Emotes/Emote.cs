@@ -55,7 +55,8 @@ public class Emote : IEmote
     /// </param>
     /// <param name="result">An emote.</param>
     /// <param name="tagMode"></param>
-    public static bool TryParse([NotNullWhen(true)] string? text, [NotNullWhen(true)] out Emote? result, TagMode tagMode)
+    public static bool TryParse([NotNullWhen(true)] string? text,
+        [NotNullWhen(true)] out Emote? result, TagMode tagMode)
     {
         result = null;
         if (text == null)

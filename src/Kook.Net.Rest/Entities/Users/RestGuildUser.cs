@@ -19,7 +19,7 @@ public class RestGuildUser : RestUser, IGuildUser
     public string DisplayName => Nickname ?? Username;
 
     /// <inheritdoc />
-    public string Nickname { get; private set; }
+    public string? Nickname { get; private set; }
 
     internal IGuild Guild { get; private set; }
 
@@ -27,16 +27,16 @@ public class RestGuildUser : RestUser, IGuildUser
     public ulong GuildId => Guild.Id;
 
     /// <inheritdoc />
-    public bool IsMobileVerified { get; private set; }
+    public bool? IsMobileVerified { get; private set; }
 
     /// <inheritdoc />
-    public DateTimeOffset JoinedAt { get; private set; }
+    public DateTimeOffset? JoinedAt { get; private set; }
 
     /// <inheritdoc />
-    public DateTimeOffset ActiveAt { get; private set; }
+    public DateTimeOffset? ActiveAt { get; private set; }
 
     /// <inheritdoc />
-    public Color Color { get; private set; }
+    public Color? Color { get; private set; }
 
     /// <inheritdoc />
     public bool? IsOwner { get; private set; }
@@ -47,8 +47,8 @@ public class RestGuildUser : RestUser, IGuildUser
     {
         get
         {
-            if (!Guild.Available) throw new InvalidOperationException("Resolving permissions requires the parent guild to be downloaded.");
-
+            if (!Guild.Available)
+                throw new InvalidOperationException("Resolving permissions requires the parent guild to be downloaded.");
             return new GuildPermissions(Permissions.ResolveGuild(Guild, this));
         }
     }
@@ -60,18 +60,27 @@ public class RestGuildUser : RestUser, IGuildUser
     public new string PlainTextMention => MentionUtils.PlainTextMentionUser(Nickname ?? Username, Id);
 
     internal RestGuildUser(BaseKookClient kook, IGuild guild, ulong id)
-        : base(kook, id) =>
+        : base(kook, id)
+    {
         Guild = guild;
+        _roleIds = [0];
+    }
 
     internal static RestGuildUser Create(BaseKookClient kook, IGuild guild, UserModel model)
     {
         RestGuildUser entity = new(kook, guild, model.Id);
         entity.Update(model);
-        entity.UpdateRoles(Array.Empty<uint>());
         return entity;
     }
 
     internal static RestGuildUser Create(BaseKookClient kook, IGuild guild, MemberModel model)
+    {
+        RestGuildUser entity = new(kook, guild, model.Id);
+        entity.Update(model);
+        return entity;
+    }
+
+    internal static RestGuildUser Create(BaseKookClient kook, IGuild guild, API.MentionedUser model)
     {
         RestGuildUser entity = new(kook, guild, model.Id);
         entity.Update(model);
@@ -89,16 +98,15 @@ public class RestGuildUser : RestUser, IGuildUser
         ActiveAt = model.ActiveAt;
         Color = model.Color;
         IsOwner = model.IsOwner;
-        UpdateRoles(model.Roles);
+        if (model.Roles != null)
+            _roleIds = [0, ..model.Roles];
     }
 
-    private void UpdateRoles(uint[] roleIds)
+    internal override void Update(API.MentionedUser model)
     {
-        ImmutableArray<uint>.Builder roles = ImmutableArray.CreateBuilder<uint>(roleIds.Length + 1);
-        roles.Add(0);
-        for (int i = 0; i < roleIds.Length; i++) roles.Add(roleIds[i]);
-
-        _roleIds = roles.ToImmutable();
+        base.Update(model);
+        if (DisplayName != Username)
+            Nickname = model.DisplayName;
     }
 
     /// <inheritdoc />
@@ -111,105 +119,103 @@ public class RestGuildUser : RestUser, IGuildUser
     /// <inheritdoc />
     public async Task ModifyNicknameAsync(string? name, RequestOptions? options = null)
     {
-        string nickname = await UserHelper.ModifyNicknameAsync(this, Kook, name, options);
+        string? nickname = await UserHelper.ModifyNicknameAsync(this, Kook, name, options);
         // The KOOK API will clear the nickname if the nickname is set to the same as the username at present.
-        if (nickname == Username) nickname = null;
-
-        Nickname = nickname;
+        Nickname = nickname == Username ? null : nickname;
     }
 
     /// <inheritdoc />
     public Task<IReadOnlyCollection<BoostSubscriptionMetadata>> GetBoostSubscriptionsAsync(
-        RequestOptions? options = null)
-        => UserHelper.GetBoostSubscriptionsAsync(this, Kook, options);
+        RequestOptions? options = null) =>
+        UserHelper.GetBoostSubscriptionsAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task KickAsync(RequestOptions? options = null)
-        => UserHelper.KickAsync(this, Kook, options);
-
-    /// <inheritdoc />
-    /// <note type="warning">
-    ///     This method will update the cached roles of this user.
-    ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
-    /// </note>
-    public Task AddRoleAsync(uint roleId, RequestOptions? options = null)
-        => AddRolesAsync(new[] { roleId }, options);
+    public Task KickAsync(RequestOptions? options = null) =>
+        UserHelper.KickAsync(this, Kook, options);
 
     /// <inheritdoc />
     /// <note type="warning">
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task AddRoleAsync(IRole role, RequestOptions? options = null)
-        => AddRoleAsync(role.Id, options);
+    public Task AddRoleAsync(uint roleId, RequestOptions? options = null) =>
+        AddRolesAsync(new[] { roleId }, options);
 
     /// <inheritdoc />
     /// <note type="warning">
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null)
-        => UserHelper.AddRolesAsync(this, Kook, roleIds, options);
+    public Task AddRoleAsync(IRole role, RequestOptions? options = null) =>
+        AddRoleAsync(role.Id, options);
 
     /// <inheritdoc />
     /// <note type="warning">
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null)
-        => AddRolesAsync(roles.Select(x => x.Id), options);
+    public Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null) =>
+        UserHelper.AddRolesAsync(this, Kook, roleIds, options);
 
     /// <inheritdoc />
     /// <note type="warning">
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRoleAsync(uint roleId, RequestOptions? options = null)
-        => RemoveRolesAsync(new[] { roleId }, options);
+    public Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null) =>
+        AddRolesAsync(roles.Select(x => x.Id), options);
 
     /// <inheritdoc />
     /// <note type="warning">
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRoleAsync(IRole role, RequestOptions? options = null)
-        => RemoveRoleAsync(role.Id, options);
+    public Task RemoveRoleAsync(uint roleId, RequestOptions? options = null) =>
+        RemoveRolesAsync(new[] { roleId }, options);
 
     /// <inheritdoc />
     /// <note type="warning">
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null)
-        => UserHelper.RemoveRolesAsync(this, Kook, roleIds, options);
+    public Task RemoveRoleAsync(IRole role, RequestOptions? options = null) =>
+        RemoveRoleAsync(role.Id, options);
 
     /// <inheritdoc />
     /// <note type="warning">
     ///     This method will update the cached roles of this user.
     ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null)
-        => RemoveRolesAsync(roles.Select(x => x.Id));
+    public Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null) =>
+        UserHelper.RemoveRolesAsync(this, Kook, roleIds, options);
 
     /// <inheritdoc />
-    public Task MuteAsync(RequestOptions? options = null)
-        => GuildHelper.MuteUserAsync(this, Kook, options);
+    /// <note type="warning">
+    ///     This method will update the cached roles of this user.
+    ///     To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
+    /// </note>
+    public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null) =>
+        RemoveRolesAsync(roles.Select(x => x.Id));
 
     /// <inheritdoc />
-    public Task DeafenAsync(RequestOptions? options = null)
-        => GuildHelper.DeafenUserAsync(this, Kook, options);
+    public Task MuteAsync(RequestOptions? options = null) =>
+        GuildHelper.MuteUserAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task UnmuteAsync(RequestOptions? options = null)
-        => GuildHelper.UnmuteUserAsync(this, Kook, options);
+    public Task DeafenAsync(RequestOptions? options = null) =>
+        GuildHelper.DeafenUserAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task UndeafenAsync(RequestOptions? options = null)
-        => GuildHelper.UndeafenUserAsync(this, Kook, options);
+    public Task UnmuteAsync(RequestOptions? options = null) =>
+        GuildHelper.UnmuteUserAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions? options = null)
-        => UserHelper.GetConnectedChannelAsync(this, Kook, options);
+    public Task UndeafenAsync(RequestOptions? options = null) =>
+        GuildHelper.UndeafenUserAsync(this, Kook, options);
+
+    /// <inheritdoc />
+    public Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions? options = null) =>
+        UserHelper.GetConnectedChannelAsync(this, Kook, options);
 
     /// <inheritdoc />
     /// <exception cref="InvalidOperationException">Resolving permissions requires the parent guild to be downloaded.</exception>
@@ -228,15 +234,7 @@ public class RestGuildUser : RestUser, IGuildUser
     #region IGuildUser
 
     /// <inheritdoc />
-    IGuild IGuildUser.Guild
-    {
-        get
-        {
-            if (Guild != null) return Guild;
-
-            throw new InvalidOperationException("Unable to return this entity's parent unless it was fetched through that object.");
-        }
-    }
+    IGuild IGuildUser.Guild => Guild;
 
     #endregion
 

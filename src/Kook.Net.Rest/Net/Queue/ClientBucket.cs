@@ -21,15 +21,16 @@ internal struct ClientBucket
             new ClientBucket(ClientBucketType.SendEdit, BucketId.Create(null, "<send_edit>", null), 10, 10)
         ];
 
-        ImmutableDictionary<ClientBucketType, ClientBucket>.Builder builder = ImmutableDictionary.CreateBuilder<ClientBucketType, ClientBucket>();
-        foreach (ClientBucket bucket in buckets) builder.Add(bucket.Type, bucket);
+        ImmutableDictionary<ClientBucketType, ClientBucket>.Builder typeBuilder =
+            ImmutableDictionary.CreateBuilder<ClientBucketType, ClientBucket>();
+        foreach (ClientBucket bucket in buckets)
+            typeBuilder.Add(bucket.Type, bucket);
+        DefsByType = typeBuilder.ToImmutable();
 
-        DefsByType = builder.ToImmutable();
-
-        ImmutableDictionary<BucketId, ClientBucket>.Builder builder2 = ImmutableDictionary.CreateBuilder<BucketId, ClientBucket>();
-        foreach (ClientBucket bucket in buckets) builder2.Add(bucket.Id, bucket);
-
-        DefsById = builder2.ToImmutable();
+        ImmutableDictionary<BucketId, ClientBucket>.Builder idBuilder =
+            ImmutableDictionary.CreateBuilder<BucketId, ClientBucket>();
+        foreach (ClientBucket bucket in buckets) idBuilder.Add(bucket.Id, bucket);
+        DefsById = idBuilder.ToImmutable();
     }
 
     public static ClientBucket Get(ClientBucketType type) => DefsByType[type];

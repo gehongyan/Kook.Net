@@ -8,7 +8,7 @@ internal class ModifyGuildParams
     public ulong GuildId { get; set; }
 
     [JsonPropertyName("region")]
-    public string RegionId { get; set; }
+    public string? RegionId { get; set; }
 
     [JsonPropertyName("default_channel_id")]
     public ulong? DefaultChannelId { get; set; }

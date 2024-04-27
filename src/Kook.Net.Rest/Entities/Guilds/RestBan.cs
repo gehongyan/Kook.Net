@@ -32,7 +32,8 @@ public class RestBan : IBan
         CreatedAt = createdAt;
     }
 
-    internal static RestBan Create(BaseKookClient client, Model model) => new(RestUser.Create(client, model.User), model.Reason, model.CreatedAt);
+    internal static RestBan Create(BaseKookClient client, Model model) =>
+        new(RestUser.Create(client, model.User), model.Reason, model.CreatedAt);
 
     /// <summary>
     ///     Gets the name of the banned user.

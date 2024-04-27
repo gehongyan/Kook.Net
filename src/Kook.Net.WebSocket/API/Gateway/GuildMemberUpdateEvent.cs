@@ -8,5 +8,5 @@ internal class GuildMemberUpdateEvent
     public ulong UserId { get; set; }
 
     [JsonPropertyName("nickname")]
-    public string Nickname { get; set; }
+    public required string Nickname { get; set; }
 }

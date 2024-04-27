@@ -8,8 +8,8 @@ namespace Kook;
 public class ElementBuilderTests
 {
     private const string Name = "Kook.Net";
-    private const string Icon = "https://kaiheila.net/logo.png";
-    private const string Url = "https://kaiheila.net/";
+    private const string Icon = "https://www.kookapp.cn//logo.png";
+    private const string Url = "https://www.kookapp.cn//";
 
     [Fact]
     public void PlainTextElementBuilder_Constructor()
@@ -51,13 +51,22 @@ public class ElementBuilderTests
     [Fact]
     public void PlainTextElementBuilder_InvalidContent()
     {
-        IEnumerable<string> GetInvalidContent()
+        IEnumerable<string?> GetInvalidContent()
         {
             yield return null;
             yield return new string('a', 2001);
         }
 
-        foreach (string content in GetInvalidContent()) Assert.Throws<ArgumentException>(() => new PlainTextElementBuilder().WithContent(content));
+        foreach (string? content in GetInvalidContent())
+        {
+            Assert.ThrowsAny<ArgumentException>(() =>
+            {
+                new PlainTextElementBuilder
+                {
+                    Content = content
+                }.Build();
+            });
+        }
     }
 
     [Theory]
@@ -107,13 +116,22 @@ public class ElementBuilderTests
     [Fact]
     public void KMarkdownElementBuilder_InvalidContent()
     {
-        IEnumerable<string> GetInvalidContent()
+        IEnumerable<string?> GetInvalidContent()
         {
             yield return null;
             yield return new string('a', 5001);
         }
 
-        foreach (string content in GetInvalidContent()) Assert.Throws<ArgumentException>(() => new KMarkdownElementBuilder().WithContent(content));
+        foreach (string? content in GetInvalidContent())
+        {
+            Assert.ThrowsAny<ArgumentException>(() =>
+            {
+                new KMarkdownElementBuilder
+                {
+                    Content = content
+                }.Build();
+            });
+        }
     }
 
     [Theory]
@@ -169,7 +187,7 @@ public class ElementBuilderTests
     [InlineData("abcdefghijklmnopqrst")]
     public void ImageElementBuilder_ValidAlternative(string alternative)
     {
-        ImageElementBuilder builder = new ImageElementBuilder().WithAlternative(alternative);
+        ImageElementBuilder builder = new ImageElementBuilder().WithSource("https://www.kookapp.cn/").WithAlternative(alternative);
         Assert.Equal(alternative, builder.Alternative);
         Assert.Equal(alternative, builder.Build().Alternative);
     }
@@ -178,24 +196,22 @@ public class ElementBuilderTests
     // 21 characters
     [InlineData("abcdefghijklmnopqrstu")]
     public void ImageElementBuilder_InvalidAlternative(string alternative) =>
-        Assert.Throws<ArgumentException>(() => new ImageElementBuilder().WithAlternative(alternative));
+        Assert.Throws<ArgumentException>(() => new ImageElementBuilder().WithSource("https://www.kookapp.cn/").WithAlternative(alternative).Build());
 
     [Fact]
     public void ImageElementBuilder_WithSize()
     {
         foreach (ImageSize size in (ImageSize[])Enum.GetValues(typeof(ImageSize)))
         {
-            ImageElementBuilder builder = new ImageElementBuilder().WithSize(size);
+            ImageElementBuilder builder = new ImageElementBuilder().WithSource("https://www.kookapp.cn/").WithSize(size);
             Assert.Equal(size, builder.Size);
             Assert.Equal(size, builder.Build().Size);
         }
     }
 
     [Theory]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData("http://kaiheila.net")]
-    [InlineData("https://kaiheila.net")]
+    [InlineData("http://www.kookapp.cn/")]
+    [InlineData("https://www.kookapp.cn/")]
     public void ImageElementBuilder_AcceptedUrl(string source)
     {
         ImageElementBuilder builder = new ImageElementBuilder().WithSource(source);
@@ -204,6 +220,8 @@ public class ElementBuilderTests
     }
 
     [Theory]
+    [InlineData(null)]
+    [InlineData("")]
     [InlineData(" ")]
     [InlineData("kaiheila.net")]
     [InlineData("steam://run/123456/")]
@@ -211,7 +229,7 @@ public class ElementBuilderTests
     {
         ImageElementBuilder builder = new ImageElementBuilder().WithSource(source);
         Assert.Equal(source, builder.Source);
-        Assert.Throws<InvalidOperationException>(() => builder.Build());
+        Assert.ThrowsAny<Exception>(() => builder.Build());
     }
 
     [Theory]
@@ -273,7 +291,7 @@ public class ElementBuilderTests
     {
         foreach (ButtonTheme theme in (ButtonTheme[])Enum.GetValues(typeof(ButtonTheme)))
         {
-            ButtonElementBuilder builder = new ButtonElementBuilder().WithTheme(theme);
+            ButtonElementBuilder builder = new ButtonElementBuilder().WithText("text").WithTheme(theme);
             Assert.Equal(theme, builder.Theme);
             Assert.Equal(theme, builder.Build().Theme);
         }
@@ -294,14 +312,15 @@ public class ElementBuilderTests
     [Theory]
     // 41 characters
     [InlineData("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNO")]
-    public void ButtonElementBuilder_InvalidText(string text) => Assert.Throws<ArgumentException>(() => new ButtonElementBuilder().WithText(text));
+    public void ButtonElementBuilder_InvalidText(string text) =>
+        Assert.Throws<ArgumentException>(() => new ButtonElementBuilder().WithText(text).Build());
 
     [Theory]
-    [InlineData("http://kaiheila.net")]
-    [InlineData("https://kaiheila.net")]
+    [InlineData("http://www.kookapp.cn/")]
+    [InlineData("https://www.kookapp.cn/")]
     public void ButtonElementBuilder_AcceptedUrl(string source)
     {
-        ButtonElementBuilder builder = new ButtonElementBuilder().WithClick(ButtonClickEventType.Link).WithValue(source);
+        ButtonElementBuilder builder = new ButtonElementBuilder().WithClick(ButtonClickEventType.Link).WithText("text").WithValue(source);
         Assert.Equal(ButtonClickEventType.Link, builder.Click);
         Assert.Equal(ButtonClickEventType.Link, builder.Build().Click);
         Assert.Equal(source, builder.Value);
@@ -368,16 +387,16 @@ public class ElementBuilderTests
     public void ParagraphStructBuilder_InvalidField()
     {
         ParagraphStructBuilder builder = new();
-        Assert.Throws<ArgumentException>(() => builder.AddField<ImageElementBuilder>(b => b.WithSource(Icon)));
-        Assert.Throws<ArgumentException>(() => builder.AddField<ButtonElementBuilder>(b => b.WithText("button")));
-        Assert.Throws<ArgumentException>(() => builder = new ParagraphStructBuilder
+        Assert.Throws<ArgumentException>(() => builder.AddField<ImageElementBuilder>(b => b.WithSource(Icon).Build()).Build());
+        Assert.Throws<ArgumentException>(() => builder.AddField<ButtonElementBuilder>(b => b.WithText("button")).Build());
+        Assert.Throws<ArgumentException>(() => new ParagraphStructBuilder
         {
             Fields = [new ImageElementBuilder().WithSource(Icon)]
-        });
-        Assert.Throws<ArgumentException>(() => builder = new ParagraphStructBuilder
+        }.Build());
+        Assert.Throws<ArgumentException>(() => new ParagraphStructBuilder
         {
             Fields = [new ButtonElementBuilder().WithText("button")]
-        });
+        }.Build());
     }
 
     [Theory]
@@ -386,5 +405,5 @@ public class ElementBuilderTests
     [InlineData(4)]
     [InlineData(32)]
     public void ParagraphStructBuilder_InvalidColumnCount(int columnCount) =>
-        Assert.Throws<ArgumentException>(() => new ParagraphStructBuilder().WithColumnCount(columnCount));
+        Assert.Throws<ArgumentOutOfRangeException>(() => new ParagraphStructBuilder().WithColumnCount(columnCount).Build());
 }

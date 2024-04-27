@@ -83,15 +83,15 @@ public static class MessageExtensions
     /// </summary>
     /// <param name="message">The message that is being replied on.</param>
     /// <param name="path">The file path of the file.</param>
-    /// <param name="fileName">The name of the file.</param>
+    /// <param name="filename">The name of the file.</param>
     /// <param name="type">The type of the file.</param>
     /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
     /// <param name="options">The options to be used when sending the request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
-        string path, string? fileName = null, AttachmentType type = AttachmentType.File, bool isQuote = false,
+        string path, string? filename = null, AttachmentType type = AttachmentType.File, bool isQuote = false,
         bool isEphemeral = false, RequestOptions? options = null) =>
-        await message.Channel.SendFileAsync(path, fileName, type,
+        await message.Channel.SendFileAsync(path, filename, type,
                 isQuote ? new MessageReference(message.Id) : null,
                 isEphemeral ? message.Author : null,
                 options)
@@ -102,15 +102,15 @@ public static class MessageExtensions
     /// </summary>
     /// <param name="message">The message that is being replied on.</param>
     /// <param name="stream">Stream of the file to be sent.</param>
-    /// <param name="fileName">The name of the file.</param>
+    /// <param name="filename">The name of the file.</param>
     /// <param name="type">The type of the file.</param>
     /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
     /// <param name="options">The options to be used when sending the request.</param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
-        Stream stream, string? fileName = null, AttachmentType type = AttachmentType.File, bool isQuote = false,
+        Stream stream, string filename, AttachmentType type = AttachmentType.File, bool isQuote = false,
         bool isEphemeral = false, RequestOptions? options = null) =>
-        await message.Channel.SendFileAsync(stream, fileName, type,
+        await message.Channel.SendFileAsync(stream, filename, type,
                 isQuote ? new MessageReference(message.Id) : null,
                 isEphemeral ? message.Author : null,
                 options)

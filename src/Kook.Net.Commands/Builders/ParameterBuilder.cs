@@ -25,12 +25,12 @@ public class ParameterBuilder
     /// <summary>
     ///     Gets the type of this parameter.
     /// </summary>
-    public Type ParameterType { get; internal set; }
+    public Type? ParameterType { get; internal set; }
 
     /// <summary>
     ///     Gets the type reader of this parameter.
     /// </summary>
-    public TypeReader TypeReader { get; set; }
+    public TypeReader? TypeReader { get; set; }
 
     /// <summary>
     ///     Gets or sets a value that indicates whether this parameter is an optional parameter or not.
@@ -50,12 +50,12 @@ public class ParameterBuilder
     /// <summary>
     ///     Gets or sets the default value of this parameter.
     /// </summary>
-    public object DefaultValue { get; set; }
+    public object? DefaultValue { get; set; }
 
     /// <summary>
     ///     Gets or sets the summary of this parameter.
     /// </summary>
-    public string Summary { get; set; }
+    public string? Summary { get; set; }
 
     /// <summary>
     ///     Gets a read-only collection containing the preconditions of this parameter.
@@ -79,7 +79,7 @@ public class ParameterBuilder
     {
         _preconditions = [];
         _attributes = [];
-
+        Name = string.Empty;
         Command = command;
     }
 
@@ -97,7 +97,6 @@ public class ParameterBuilder
         : this(command)
     {
         Kook.Preconditions.NotNull(name, nameof(name));
-
         Name = name;
         SetType(type);
     }
@@ -109,11 +108,10 @@ public class ParameterBuilder
     internal void SetType(Type type)
     {
         TypeReader = GetReader(type);
-
         if (type.GetTypeInfo().IsValueType)
             DefaultValue = Activator.CreateInstance(type);
-        else if (type.IsArray) DefaultValue = Array.CreateInstance(type.GetElementType(), 0);
-
+        else if (type.IsArray && type.GetElementType() is { } elementType)
+            DefaultValue = Array.CreateInstance(elementType, 0);
         ParameterType = type;
     }
 
@@ -123,19 +121,20 @@ public class ParameterBuilder
     /// <param name="type"> The type of this parameter. </param>
     /// <returns> The type reader of this parameter. </returns>
     /// <exception cref="InvalidOperationException"> The type for the command must be a class with a public parameterless constructor to use as a NamedArgumentType. </exception>
-    private TypeReader GetReader(Type type)
+    private TypeReader? GetReader(Type? type)
     {
+        if (type is null) return null;
         CommandService commands = Command.Module.Service;
         if (type.GetTypeInfo().GetCustomAttribute<NamedArgumentTypeAttribute>() != null)
         {
             IsRemainder = true;
-            TypeReader reader = commands.GetTypeReaders(type)?.FirstOrDefault().Value;
+            TypeReader? reader = commands.GetTypeReaders(type)?.FirstOrDefault().Value;
             if (reader == null)
             {
                 Type readerType;
                 try
                 {
-                    readerType = typeof(NamedArgumentTypeReader<>).MakeGenericType([type]);
+                    readerType = typeof(NamedArgumentTypeReader<>).MakeGenericType(type);
                 }
                 catch (ArgumentException ex)
                 {
@@ -144,19 +143,17 @@ public class ParameterBuilder
                         ex);
                 }
 
-                reader = (TypeReader)Activator.CreateInstance(readerType, [commands]);
-                commands.AddTypeReader(type, reader);
+                reader = (TypeReader?)Activator.CreateInstance(readerType, commands);
+                if (reader != null)
+                    commands.AddTypeReader(type, reader);
             }
 
             return reader;
         }
 
 
-        IDictionary<Type, TypeReader> readers = commands.GetTypeReaders(type);
-        if (readers != null)
-            return readers.FirstOrDefault().Value;
-        else
-            return commands.GetDefaultTypeReader(type);
+        IDictionary<Type, TypeReader>? readers = commands.GetTypeReaders(type);
+        return readers != null ? readers.FirstOrDefault().Value : commands.GetDefaultTypeReader(type);
     }
 
     /// <summary>
@@ -244,9 +241,8 @@ public class ParameterBuilder
     /// <exception cref="InvalidOperationException"> No type reader was found for this parameter, which must be specified. </exception>
     internal ParameterInfo Build(CommandInfo info)
     {
-        if ((TypeReader ??= GetReader(ParameterType)) == null)
-            throw new InvalidOperationException($"No type reader found for type {ParameterType.Name}, one must be specified");
-
+        if ((TypeReader ??= GetReader(ParameterType)) is null)
+            throw new InvalidOperationException($"No type reader found for type {ParameterType?.Name}, one must be specified");
         return new ParameterInfo(this, info, Command.Module.Service);
     }
 

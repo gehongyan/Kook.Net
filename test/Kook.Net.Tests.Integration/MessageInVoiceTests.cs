@@ -17,14 +17,12 @@ public class MessageInVoiceTests : IClassFixture<RestChannelFixture>
 {
     private readonly IGuild _guild;
     private readonly IVoiceChannel _channel;
-    private readonly IGuildUser _selfUser;
     private readonly ITestOutputHelper _output;
 
     public MessageInVoiceTests(RestChannelFixture channelFixture, ITestOutputHelper output)
     {
         _guild = channelFixture.Guild;
         _channel = channelFixture.VoiceChannel;
-        _selfUser = _guild.GetCurrentUserAsync().GetAwaiter().GetResult();
         _output = output;
         _output.WriteLine($"RestGuildFixture using guild: {_guild.Id}");
         // capture all console output
@@ -40,13 +38,15 @@ public class MessageInVoiceTests : IClassFixture<RestChannelFixture>
     [Fact]
     public async Task SendTextAsync()
     {
+        IGuildUser? selfUser = await _guild.GetCurrentUserAsync();
+        Assert.NotNull(selfUser);
         string kMarkdownSourceContent = @$"*TEST* **KMARKDOWN** ~~MESSAGE~~
 > NOTHING
 [INLINE LINK](https://kooknet.dev)
 (ins)UNDERLINE(ins)(spl)SPOLIER(spl)
 :maple_leaf:
 {_channel.KMarkdownMention}
-{_selfUser.KMarkdownMention}
+{selfUser.KMarkdownMention}
 {_guild.EveryoneRole.KMarkdownMention}
 (met)here(met)
 `INLINE CODE`
@@ -60,7 +60,7 @@ CODE BLOCK
 (ins)UNDERLINE(ins)(spl)SPOLIER(spl)
 🍁
 {_channel.KMarkdownMention}
-{_selfUser.KMarkdownMention}
+{selfUser.KMarkdownMention}
 {_guild.EveryoneRole.KMarkdownMention}
 (met)here(met)
 `INLINE CODE`
@@ -86,7 +86,7 @@ CODE BLOCK
         IUserMessage message = await cacheable.GetOrDownloadAsync();
         try
         {
-            IGuildUser selfUser = await _guild.GetCurrentUserAsync();
+            selfUser = await _guild.GetCurrentUserAsync();
             Assert.NotNull(selfUser);
             Assert.NotEqual(Guid.Empty, cacheable.Id);
             Assert.False(cacheable.HasValue);
@@ -99,13 +99,14 @@ CODE BLOCK
             Assert.Equal(4, message.Tags.Count);
             List<ITag> tags = message.Tags.ToList();
             Assert.Equal(_channel.Id, tags.Single(tag => tag.Type == TagType.ChannelMention).Key);
-            Assert.Equal(_selfUser.Id, tags.Single(tag => tag.Type == TagType.UserMention).Key);
+            Assert.Equal(selfUser.Id, tags.Single(tag => tag.Type == TagType.UserMention).Key);
             Assert.Equal(0, tags.Single(tag => tag.Type == TagType.EveryoneMention).Key);
             Assert.Equal(0, tags.Single(tag => tag.Type == TagType.HereMention).Key);
         }
         finally
         {
-            await message.DeleteAsync();
+            if (message != null)
+                await message.DeleteAsync();
         }
     }
 
@@ -139,7 +140,8 @@ CODE BLOCK
         }
         finally
         {
-            await message.DeleteAsync();
+            if (message != null)
+                await message.DeleteAsync();
         }
     }
 }

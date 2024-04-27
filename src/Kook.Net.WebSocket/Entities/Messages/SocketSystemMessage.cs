@@ -17,44 +17,44 @@ public class SocketSystemMessage : SocketMessage, ISystemMessage
     {
     }
 
-    internal static new SocketSystemMessage Create(KookSocketClient kook, ClientState state, SocketUser author, ISocketMessageChannel channel,
-        GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent)
+    internal static new SocketSystemMessage Create(KookSocketClient kook, ClientState state, SocketUser author,
+        ISocketMessageChannel channel, GatewayEvent<GatewayGroupMessageExtraData> gatewayEvent)
     {
         SocketSystemMessage entity = new(kook, gatewayEvent.MessageId, channel, author);
-        entity.Update(state, model, gatewayEvent);
+        entity.Update(state, gatewayEvent);
         return entity;
     }
 
-    internal static new SocketSystemMessage Create(KookSocketClient kook, ClientState state, SocketUser author, ISocketMessageChannel channel,
-        GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent)
+    internal static new SocketSystemMessage Create(KookSocketClient kook, ClientState state, SocketUser author,
+        ISocketMessageChannel channel, GatewayEvent<GatewayPersonMessageExtraData> gatewayEvent)
     {
         SocketSystemMessage entity = new(kook, gatewayEvent.MessageId, channel, author);
-        entity.Update(state, model, gatewayEvent);
+        entity.Update(state, gatewayEvent);
         return entity;
     }
 
-    internal static new SocketSystemMessage Create(KookSocketClient kook, ClientState state, SocketUser author, ISocketMessageChannel channel,
-        API.Message model)
+    internal static new SocketSystemMessage Create(KookSocketClient kook, ClientState state, SocketUser author,
+        ISocketMessageChannel channel, API.Message model)
     {
         SocketSystemMessage entity = new(kook, model.Id, channel, author);
         entity.Update(state, model);
         return entity;
     }
 
-    internal static new SocketSystemMessage Create(KookSocketClient kook, ClientState state, SocketUser author, ISocketMessageChannel channel,
-        API.DirectMessage model)
+    internal static new SocketSystemMessage Create(KookSocketClient kook, ClientState state, SocketUser author,
+        ISocketMessageChannel channel, API.DirectMessage model)
     {
         SocketSystemMessage entity = new(kook, model.Id, channel, author);
         entity.Update(state, model);
         return entity;
     }
 
-    internal override void Update(ClientState state, GatewayGroupMessageExtraData model, GatewayEvent gatewayEvent) =>
-        base.Update(state, model, gatewayEvent);
+    internal override void Update(ClientState state, GatewayEvent<GatewayGroupMessageExtraData> gatewayEvent) =>
+        base.Update(state, gatewayEvent);
 
     // TODO: SystemMessageType
-    internal override void Update(ClientState state, GatewayPersonMessageExtraData model, GatewayEvent gatewayEvent) =>
-        base.Update(state, model, gatewayEvent);
+    internal override void Update(ClientState state, GatewayEvent<GatewayPersonMessageExtraData> gatewayEvent) =>
+        base.Update(state, gatewayEvent);
 
     // TODO: SystemMessageType
     internal override void Update(ClientState state, API.Message model) => base.Update(state, model);
@@ -64,5 +64,6 @@ public class SocketSystemMessage : SocketMessage, ISystemMessage
 
     // TODO: SystemMessageType
     private string DebuggerDisplay => $"{Author}: {Content} ({Id}, {Type})";
-    internal new SocketSystemMessage Clone() => MemberwiseClone() as SocketSystemMessage;
+
+    internal new SocketSystemMessage Clone() => (SocketSystemMessage)MemberwiseClone();
 }

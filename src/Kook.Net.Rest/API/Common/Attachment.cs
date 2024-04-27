@@ -11,7 +11,7 @@ internal class Attachment
     public required string Url { get; set; }
 
     [JsonPropertyName("name")]
-    public required string Name { get; set; }
+    public string? Name { get; set; }
 
     [JsonPropertyName("file_type")]
     public string? FileType { get; set; }

@@ -11,7 +11,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     /// <summary>
     ///     Gets the configuration used by this client.
     /// </summary>
-    protected readonly KookSocketConfig _baseConfig;
+    protected readonly KookSocketConfig BaseConfig;
 
     /// <summary>
     ///     Gets the estimated round-trip latency, in milliseconds, to the gateway server.
@@ -27,12 +27,13 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     /// </summary>
     public abstract KookSocketRestClient Rest { get; }
 
-    internal new KookSocketApiClient ApiClient => base.ApiClient as KookSocketApiClient;
+    internal new KookSocketApiClient ApiClient => base.ApiClient as KookSocketApiClient
+        ?? throw new InvalidOperationException("The API client is not a WebSocket-based client.");
 
     /// <summary>
     ///     Gets the current logged-in user.
     /// </summary>
-    public new virtual ISelfUser? CurrentUser
+    public new virtual SocketSelfUser? CurrentUser
     {
         get => base.CurrentUser as SocketSelfUser;
         protected set => base.CurrentUser = value;
@@ -47,7 +48,10 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     public abstract IReadOnlyCollection<SocketGuild> Guilds { get; }
 
     internal BaseSocketClient(KookSocketConfig config, KookRestApiClient client)
-        : base(config, client) => _baseConfig = config;
+        : base(config, client)
+    {
+        BaseConfig = config;
+    }
 
     /// <summary>
     ///     Gets a generic user.
@@ -70,7 +74,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     /// <returns>
     ///     A generic WebSocket-based user; <c>null</c> when the user cannot be found.
     /// </returns>
-    public abstract SocketUser GetUser(ulong id);
+    public abstract SocketUser? GetUser(ulong id);
 
     /// <summary>
     ///     Gets a user.
@@ -94,7 +98,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     /// <returns>
     ///     A generic WebSocket-based user; <c>null</c> when the user cannot be found.
     /// </returns>
-    public abstract SocketUser GetUser(string username, string identifyNumber);
+    public abstract SocketUser? GetUser(string username, string identifyNumber);
 
     /// <summary>
     ///     Gets a channel.
@@ -104,7 +108,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     ///     A generic WebSocket-based channel object (voice, text, category, etc.) associated with the identifier;
     ///     <c>null</c> when the channel cannot be found.
     /// </returns>
-    public abstract SocketChannel GetChannel(ulong id);
+    public abstract SocketChannel? GetChannel(ulong id);
 
     /// <summary>
     ///     Gets a channel.
@@ -114,7 +118,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     ///     A generic WebSocket-based channel object (voice, text, category, etc.) associated with the identifier;
     ///     <c>null</c> when the channel cannot be found.
     /// </returns>
-    public abstract SocketDMChannel GetDMChannel(Guid chatCode);
+    public abstract SocketDMChannel? GetDMChannel(Guid chatCode);
 
     /// <summary>
     ///     Gets a channel.
@@ -124,7 +128,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     ///     A generic WebSocket-based channel object (voice, text, category, etc.) associated with the identifier;
     ///     <c>null</c> when the channel cannot be found.
     /// </returns>
-    public abstract SocketDMChannel GetDMChannel(ulong userId);
+    public abstract SocketDMChannel? GetDMChannel(ulong userId);
 
     /// <summary>
     ///     Gets a guild.
@@ -134,7 +138,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     ///     A WebSocket-based guild associated with the identifier; <c>null</c> when the guild cannot be
     ///     found.
     /// </returns>
-    public abstract SocketGuild GetGuild(ulong id);
+    public abstract SocketGuild? GetGuild(ulong id);
 
     /// <summary>
     ///     Starts the WebSocket connection.
@@ -156,7 +160,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     /// <returns>
     ///     A task that represents the asynchronous download operation.
     /// </returns>
-    public abstract Task DownloadUsersAsync(IEnumerable<IGuild> guilds = null, RequestOptions? options = null);
+    public abstract Task DownloadUsersAsync(IEnumerable<IGuild>? guilds = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Downloads all voice states for the specified guilds.
@@ -165,7 +169,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     ///     The guilds to download the voice states for. If <c>null</c>, all available guilds will be downloaded.
     /// </param>
     /// <param name="options">The options to be used when sending the request.</param>
-    public abstract Task DownloadVoiceStatesAsync(IEnumerable<IGuild> guilds = null, RequestOptions? options = null);
+    public abstract Task DownloadVoiceStatesAsync(IEnumerable<IGuild>? guilds = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Downloads all boost subscriptions for the specified guilds.
@@ -176,34 +180,36 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     ///     <see cref="GuildPermission.ManageGuild"/> permission.
     /// </param>
     /// <param name="options">The options to be used when sending the request.</param>
-    public abstract Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild> guilds = null, RequestOptions? options = null);
+    public abstract Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild>? guilds = null,
+        RequestOptions? options = null);
 
     /// <inheritdoc />
-    Task<IChannel?> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options = null)
-        => Task.FromResult<IChannel>(GetChannel(id));
+    Task<IChannel?> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options)
+        => Task.FromResult<IChannel?>(GetChannel(id));
 
     /// <inheritdoc />
-    Task<IDMChannel?> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions? options = null)
-        => Task.FromResult<IDMChannel>(GetDMChannel(chatCode));
+    Task<IDMChannel?> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions? options)
+        => Task.FromResult<IDMChannel?>(GetDMChannel(chatCode));
 
     /// <inheritdoc />
-    Task<IGuild?> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions? options = null)
-        => Task.FromResult<IGuild>(GetGuild(id));
+    Task<IGuild?> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IGuild?>(GetGuild(id));
 
     /// <inheritdoc />
-    Task<IReadOnlyCollection<IGuild>> IKookClient.GetGuildsAsync(CacheMode mode, RequestOptions? options = null)
-        => Task.FromResult<IReadOnlyCollection<IGuild>>(Guilds);
+    Task<IReadOnlyCollection<IGuild>> IKookClient.GetGuildsAsync(CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IReadOnlyCollection<IGuild>>(Guilds);
 
     /// <inheritdoc />
-    async Task<IUser?> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options = null)
+    async Task<IUser?> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options)
     {
-        SocketUser user = GetUser(id);
-        if (user is not null || mode == CacheMode.CacheOnly) return user;
-
+        if (GetUser(id) is { } user)
+            return user;
+        if (mode == CacheMode.CacheOnly)
+            return null;
         return await Rest.GetUserAsync(id, options).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
-    Task<IUser?> IKookClient.GetUserAsync(string username, string identifyNumber, RequestOptions? options)
-        => Task.FromResult<IUser>(GetUser(username, identifyNumber));
+    Task<IUser?> IKookClient.GetUserAsync(string username, string identifyNumber, RequestOptions? options) =>
+        Task.FromResult<IUser?>(GetUser(username, identifyNumber));
 }

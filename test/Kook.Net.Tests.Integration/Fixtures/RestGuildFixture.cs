@@ -16,7 +16,7 @@ public class RestGuildFixture : KookRestClientFixture
     {
         const string guildName = "KOOK NET INTEGRATION TEST";
         List<RestGuild> guilds = Client.GetGuildsAsync().GetAwaiter().GetResult()
-            .Where(x => x.OwnerId == Client.CurrentUser.Id)
+            .Where(x => x.OwnerId == Client.CurrentUser?.Id)
             .Where(x => x.Name == guildName)
             .ToList();
         RemoveUselessTestGuilds(guilds.Skip(1));
@@ -59,5 +59,5 @@ public class RestGuildFixture : KookRestClientFixture
     }
 
     /// <inheritdoc />
-    public override void Dispose() => DisposeAsync().GetAwaiter().GetResult();
+    public override void Dispose() => DisposeAsync().AsTask().GetAwaiter().GetResult();
 }

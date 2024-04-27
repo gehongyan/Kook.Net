@@ -5,8 +5,7 @@ namespace Kook.Rest;
 internal static class IntimacyHelper
 {
     public static async Task UpdateAsync(IIntimacy intimacy, BaseKookClient client,
-        Action<IntimacyProperties> func,
-        RequestOptions? options)
+        Action<IntimacyProperties> func, RequestOptions? options)
     {
         IntimacyProperties properties = new(intimacy.SocialInfo, intimacy.Score);
         func(properties);

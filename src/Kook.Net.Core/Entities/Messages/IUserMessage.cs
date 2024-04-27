@@ -11,7 +11,7 @@ public interface IUserMessage : IMessage
     /// <returns>
     ///     The message quote.
     /// </returns>
-    IQuote Quote { get; }
+    IQuote? Quote { get; }
 
     /// <summary>
     ///     Modifies this message.

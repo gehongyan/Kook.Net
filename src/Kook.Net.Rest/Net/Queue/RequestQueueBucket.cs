@@ -20,7 +20,7 @@ internal class RequestBucket
     private int _semaphore;
     private DateTimeOffset? _resetTick;
     private RequestBucket? _redirectBucket;
-    private JsonSerializerOptions _serializerOptions;
+    private readonly JsonSerializerOptions _serializerOptions;
 
     public BucketId Id { get; private set; }
     public int WindowCount { get; private set; }
@@ -30,7 +30,8 @@ internal class RequestBucket
     {
         _serializerOptions = new JsonSerializerOptions
         {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, NumberHandling = JsonNumberHandling.AllowReadingFromString
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
         _queue = queue;
         Id = id;
@@ -240,7 +241,7 @@ internal class RequestBucket
             }*/
             finally
             {
-                UpdateRateLimit(id, request, default(RateLimitInfo), false);
+                UpdateRateLimit(id, request, default, false);
 #if DEBUG_LIMITS
                 Debug.WriteLine($"[{id}] Stop");
 #endif
@@ -254,7 +255,7 @@ internal class RequestBucket
             Debug.WriteLine($"[{id}] Trigger Bucket");
 #endif
         await EnterAsync(id, request).ConfigureAwait(false);
-        UpdateRateLimit(id, request, default(RateLimitInfo), false);
+        UpdateRateLimit(id, request, default, false);
     }
 
     private async Task EnterAsync(int id, IRequest request)

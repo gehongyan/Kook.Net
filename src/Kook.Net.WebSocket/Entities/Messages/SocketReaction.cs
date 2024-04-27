@@ -1,3 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
+using Kook.API.Gateway;
+
 namespace Kook.WebSocket;
 
 /// <summary>
@@ -36,7 +39,7 @@ public class SocketReaction : IReaction
     /// <returns>
     ///     A user object where possible; a value is not always returned.
     /// </returns>
-    public IUser User { get; }
+    public IUser? User { get; internal set; }
 
     /// <summary>
     ///     Gets the ID of the message that has been reacted to.
@@ -52,7 +55,7 @@ public class SocketReaction : IReaction
     /// <returns>
     ///     A WebSocket-based message where possible; a value is not always returned.
     /// </returns>
-    public SocketUserMessage Message { get; }
+    public IMessage? Message { get; internal set; }
 
     /// <summary>
     ///     Gets the channel where the reaction takes place in.
@@ -65,7 +68,8 @@ public class SocketReaction : IReaction
     /// <inheritdoc />
     public IEmote Emote { get; }
 
-    internal SocketReaction(ISocketMessageChannel channel, Guid messageId, SocketUserMessage message, ulong userId, IUser user, IEmote emoji)
+    internal SocketReaction(ISocketMessageChannel channel, Guid messageId,
+        IMessage? message, ulong userId, IUser? user, IEmote emoji)
     {
         Channel = channel;
         MessageId = messageId;
@@ -75,40 +79,33 @@ public class SocketReaction : IReaction
         Emote = emoji;
     }
 
-    internal static SocketReaction Create(API.Gateway.Reaction model, ISocketMessageChannel channel, SocketUserMessage message, IUser user)
+    internal static SocketReaction Create(Reaction model, ISocketMessageChannel channel,
+        IMessage? message, IUser? user)
     {
-        IEmote emote;
-        if (Emoji.TryParse(model.Emoji.Id, out Emoji emoji))
-            emote = emoji;
-        else
-            emote = new Emote(model.Emoji.Id, model.Emoji.Name);
-
+        IEmote emote = Emoji.TryParse(model.Emoji.Id, out Emoji? emoji)
+            ? emoji
+            : new Emote(model.Emoji.Id, model.Emoji.Name);
         return new SocketReaction(channel, model.MessageId, message, model.UserId, user, emote);
     }
 
-    internal static SocketReaction Create(API.Gateway.PrivateReaction model, IDMChannel channel, SocketUserMessage message, IUser user)
+    internal static SocketReaction Create(PrivateReaction model, ISocketMessageChannel channel,
+        IMessage? message, IUser? user)
     {
-        IEmote emote;
-        if (Emoji.TryParse(model.Emoji.Id, out Emoji emoji))
-            emote = emoji;
-        else
-            emote = new Emote(model.Emoji.Id, model.Emoji.Name);
-
-        return new SocketReaction(channel as ISocketMessageChannel, model.MessageId, message, model.UserId, user, emote);
+        IEmote emote = Emoji.TryParse(model.Emoji.Id, out Emoji? emoji)
+            ? emoji
+            : new Emote(model.Emoji.Id, model.Emoji.Name);
+        return new SocketReaction(channel, model.MessageId, message, model.UserId, user, emote);
     }
 
     /// <inheritdoc />
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
     {
-        if (obj == null)
-            return false;
-        if (obj == this)
-            return true;
-
-        if (obj is not SocketReaction otherReaction)
-            return false;
-
-        return UserId == otherReaction.UserId && MessageId == otherReaction.MessageId && Emote.Equals(otherReaction.Emote);
+        if (obj == null) return false;
+        if (obj == this) return true;
+        if (obj is not SocketReaction otherReaction) return false;
+        return UserId == otherReaction.UserId
+            && MessageId == otherReaction.MessageId
+            && Emote.Equals(otherReaction.Emote);
     }
 
     /// <inheritdoc />
@@ -116,7 +113,7 @@ public class SocketReaction : IReaction
     {
         unchecked
         {
-            var hashCode = UserId.GetHashCode();
+            int hashCode = UserId.GetHashCode();
             hashCode = (hashCode * 397) ^ MessageId.GetHashCode();
             hashCode = (hashCode * 397) ^ Emote.GetHashCode();
             return hashCode;

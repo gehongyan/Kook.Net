@@ -26,7 +26,7 @@ internal sealed class MockedCategoryChannel : ICategoryChannel
 
     public Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions? options = null) => throw new NotImplementedException();
 
-    public Task<IUser> GetCreatorAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null) =>
+    public Task<IUser?> GetCreatorAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null) =>
         throw new NotImplementedException();
 
     public OverwritePermissions? GetPermissionOverwrite(IRole role) => throw new NotImplementedException();
@@ -50,11 +50,11 @@ internal sealed class MockedCategoryChannel : ICategoryChannel
     public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null) =>
         throw new NotImplementedException();
 
-    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options) => throw new NotImplementedException();
+    Task<IGuildUser?> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options) => throw new NotImplementedException();
 
     IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options) => GetUsersAsync(mode, options);
 
-    Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options) => throw new NotImplementedException();
+    Task<IUser?> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options) => throw new NotImplementedException();
 
     public Task DeleteAsync(RequestOptions? options = null) => throw new NotImplementedException();
 }

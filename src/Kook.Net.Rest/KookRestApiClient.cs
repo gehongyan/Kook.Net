@@ -61,7 +61,8 @@ internal class KookRestApiClient : IDisposable
         _serializerOptions = serializerOptions
             ?? new JsonSerializerOptions
             {
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, NumberHandling = JsonNumberHandling.AllowReadingFromString
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                NumberHandling = JsonNumberHandling.AllowReadingFromString
             };
         DefaultRatelimitCallback = defaultRatelimitCallback;
 
@@ -236,7 +237,7 @@ internal class KookRestApiClient : IDisposable
         await SendInternalAsync(method, endpoint, request).ConfigureAwait(false);
     }
 
-    internal async Task<TResponse?> SendAsync<TResponse>(HttpMethod method, Expression<Func<string>> endpointExpr,
+    internal async Task<TResponse> SendAsync<TResponse>(HttpMethod method, Expression<Func<string>> endpointExpr,
         BucketIds ids, ClientBucketType clientBucket = ClientBucketType.Unbucketed,
         bool bypassDeserialization = false, RequestOptions? options = null,
         [CallerMemberName] string? funcName = null)
@@ -244,7 +245,7 @@ internal class KookRestApiClient : IDisposable
         await SendAsync<TResponse>(method, GetEndpoint(endpointExpr),
             GetBucketId(method, ids, endpointExpr, funcName), clientBucket, bypassDeserialization, options);
 
-    internal async Task<TResponse?> SendAsync<TResponse, TArg1, TArg2>(HttpMethod method,
+    internal async Task<TResponse> SendAsync<TResponse, TArg1, TArg2>(HttpMethod method,
         Expression<Func<TArg1, TArg2, string>> endpointExpr, TArg1 arg1, TArg2 arg2,
         BucketIds ids, ClientBucketType clientBucket = ClientBucketType.Unbucketed,
         bool bypassDeserialization = false, RequestOptions? options = null,
@@ -253,7 +254,7 @@ internal class KookRestApiClient : IDisposable
         await SendAsync<TResponse>(method, GetEndpoint(endpointExpr, arg1, arg2),
             GetBucketId(method, ids, endpointExpr, arg1, arg2, funcName), clientBucket, bypassDeserialization, options);
 
-    public async Task<TResponse?> SendAsync<TResponse>(HttpMethod method, string endpoint,
+    public async Task<TResponse> SendAsync<TResponse>(HttpMethod method, string endpoint,
         BucketId? bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed,
         bool bypassDeserialization = false, RequestOptions? options = null)
         where TResponse : class
@@ -268,7 +269,7 @@ internal class KookRestApiClient : IDisposable
             : await DeserializeJsonAsync<TResponse>(response).ConfigureAwait(false);
     }
 
-    internal async Task<TResponse?> SendJsonAsync<TResponse>(HttpMethod method,
+    internal async Task<TResponse> SendJsonAsync<TResponse>(HttpMethod method,
         Expression<Func<string>> endpointExpr, object payload,
         BucketIds ids, ClientBucketType clientBucket = ClientBucketType.Unbucketed,
         bool bypassDeserialization = false, RequestOptions? options = null,
@@ -277,7 +278,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync<TResponse>(method, GetEndpoint(endpointExpr), payload,
             GetBucketId(method, ids, endpointExpr, funcName), clientBucket, bypassDeserialization, options);
 
-    public async Task<TResponse?> SendJsonAsync<TResponse>(HttpMethod method, string endpoint, object payload,
+    public async Task<TResponse> SendJsonAsync<TResponse>(HttpMethod method, string endpoint, object payload,
         BucketId? bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed,
         bool bypassDeserialization = false, RequestOptions? options = null)
         where TResponse : class
@@ -293,7 +294,7 @@ internal class KookRestApiClient : IDisposable
             : await DeserializeJsonAsync<TResponse>(response).ConfigureAwait(false);
     }
 
-    internal Task<TResponse?> SendMultipartAsync<TResponse>(HttpMethod method,
+    internal Task<TResponse> SendMultipartAsync<TResponse>(HttpMethod method,
         Expression<Func<string>> endpointExpr, IReadOnlyDictionary<string, object> multipartArgs,
         BucketIds ids, ClientBucketType clientBucket = ClientBucketType.Unbucketed,
         bool bypassDeserialization = false, RequestOptions? options = null,
@@ -302,7 +303,7 @@ internal class KookRestApiClient : IDisposable
         SendMultipartAsync<TResponse>(method, GetEndpoint(endpointExpr), multipartArgs,
             GetBucketId(method, ids, endpointExpr, funcName), clientBucket, bypassDeserialization, options);
 
-    public async Task<TResponse?> SendMultipartAsync<TResponse>(HttpMethod method,
+    public async Task<TResponse> SendMultipartAsync<TResponse>(HttpMethod method,
         string endpoint, IReadOnlyDictionary<string, object> multipartArgs,
         BucketId? bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed,
         bool bypassDeserialization = false, RequestOptions? options = null)
@@ -362,7 +363,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Guilds
 
-    public async Task<IReadOnlyCollection<RichGuild>?> ListGuildsAsync(RequestOptions? options = null)
+    public async Task<IReadOnlyCollection<RichGuild>>ListGuildsAsync(RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
 
@@ -382,7 +383,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task<ExtendedGuild?> GetGuildAsync(ulong guildId, RequestOptions? options = null)
+    public async Task<ExtendedGuild> GetGuildAsync(ulong guildId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
@@ -478,7 +479,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"guild/kickout", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task<GetGuildMuteDeafListResponse?> GetGuildMutedDeafenedUsersAsync(ulong guildId, RequestOptions? options = null)
+    public async Task<GetGuildMuteDeafListResponse> GetGuildMutedDeafenedUsersAsync(ulong guildId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
@@ -545,7 +546,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task<Channel?> GetGuildChannelAsync(ulong channelId, RequestOptions? options = null)
+    public async Task<Channel> GetGuildChannelAsync(ulong channelId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         options = RequestOptions.CreateOrClone(options);
@@ -557,7 +558,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<Channel?> CreateGuildChannelAsync(CreateGuildChannelParams args, RequestOptions? options = null)
+    public async Task<Channel> CreateGuildChannelAsync(CreateGuildChannelParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -571,7 +572,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<Channel?> ModifyGuildChannelAsync(ulong channelId, ModifyGuildChannelParams args, RequestOptions? options = null)
+    public async Task<Channel> ModifyGuildChannelAsync(ulong channelId, ModifyGuildChannelParams args, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         Preconditions.NotNull(args, nameof(args));
@@ -586,7 +587,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<Channel?> ModifyGuildChannelAsync(ulong channelId, ModifyTextChannelParams args, RequestOptions? options = null)
+    public async Task<Channel> ModifyGuildChannelAsync(ulong channelId, ModifyTextChannelParams args, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         Preconditions.NotNull(args, nameof(args));
@@ -602,7 +603,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<Channel?> ModifyGuildChannelAsync(ulong channelId, ModifyVoiceChannelParams args, RequestOptions? options = null)
+    public async Task<Channel> ModifyGuildChannelAsync(ulong channelId, ModifyVoiceChannelParams args, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         Preconditions.NotNull(args, nameof(args));
@@ -633,7 +634,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"channel/delete", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyCollection<User>?> GetConnectedUsersAsync(ulong channelId, RequestOptions? options = null)
+    public async Task<IReadOnlyCollection<User>>GetConnectedUsersAsync(ulong channelId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         options = RequestOptions.CreateOrClone(options);
@@ -658,7 +659,8 @@ internal class KookRestApiClient : IDisposable
 
     #region Channel Permissions
 
-    public async Task<GetChannelPermissionOverwritesResponse?> GetChannelPermissionOverwritesAsync(ulong channelId, RequestOptions? options = null)
+    public async Task<GetChannelPermissionOverwritesResponse> GetChannelPermissionOverwritesAsync(
+        ulong channelId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         options = RequestOptions.CreateOrClone(options);
@@ -669,7 +671,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<CreateOrModifyChannelPermissionOverwriteResponse?> CreateChannelPermissionOverwriteAsync(
+    public async Task<CreateOrModifyChannelPermissionOverwriteResponse> CreateChannelPermissionOverwriteAsync(
         CreateOrRemoveChannelPermissionOverwriteParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
@@ -683,7 +685,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<CreateOrModifyChannelPermissionOverwriteResponse?> ModifyChannelPermissionOverwriteAsync(
+    public async Task<CreateOrModifyChannelPermissionOverwriteResponse> ModifyChannelPermissionOverwriteAsync(
         ModifyChannelPermissionOverwriteParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
@@ -727,7 +729,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Messages
 
-    public async Task<IReadOnlyCollection<Message>?> QueryMessagesAsync(ulong channelId, Guid? referenceMessageId = null,
+    public async Task<IReadOnlyCollection<Message>>QueryMessagesAsync(ulong channelId, Guid? referenceMessageId = null,
         bool? queryPin = null, Direction dir = Direction.Unspecified, int count = 50, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
@@ -754,14 +756,14 @@ internal class KookRestApiClient : IDisposable
         };
         query += flag;
         query += $"&page_size={count}";
-        QueryMessagesResponse? queryMessagesResponse =
+        QueryMessagesResponse queryMessagesResponse =
             await SendAsync<QueryMessagesResponse>(HttpMethod.Get,
                     () => $"message/list{query}", ids, ClientBucketType.SendEdit, false, options)
                 .ConfigureAwait(false);
-        return queryMessagesResponse?.Items;
+        return queryMessagesResponse.Items;
     }
 
-    public async Task<Message?> GetMessageAsync(Guid messageId, RequestOptions? options = null)
+    public async Task<Message> GetMessageAsync(Guid messageId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(messageId, Guid.Empty, nameof(messageId));
         options = RequestOptions.CreateOrClone(options);
@@ -772,7 +774,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<CreateMessageResponse?> CreateMessageAsync(CreateMessageParams args, RequestOptions? options = null)
+    public async Task<CreateMessageResponse> CreateMessageAsync(CreateMessageParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
@@ -810,7 +812,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyCollection<ReactionUserResponse>?> GetReactionUsersAsync(Guid messageId, string emojiId, RequestOptions? options = null)
+    public async Task<IReadOnlyCollection<ReactionUserResponse>>GetReactionUsersAsync(Guid messageId, string emojiId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(messageId, Guid.Empty, nameof(messageId));
         options = RequestOptions.CreateOrClone(options);
@@ -880,7 +882,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task<UserChat?> GetUserChatAsync(Guid chatCode, RequestOptions? options = null)
+    public async Task<UserChat> GetUserChatAsync(Guid chatCode, RequestOptions? options = null)
     {
         Preconditions.NotEqual(chatCode, Guid.Empty, nameof(chatCode));
         options = RequestOptions.CreateOrClone(options);
@@ -891,7 +893,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<UserChat?> CreateUserChatAsync(CreateUserChatParams args, RequestOptions? options = null)
+    public async Task<UserChat> CreateUserChatAsync(CreateUserChatParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
@@ -917,7 +919,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Direct Messages
 
-    public async Task<IReadOnlyCollection<DirectMessage>?> QueryDirectMessagesAsync(
+    public async Task<IReadOnlyCollection<DirectMessage>>QueryDirectMessagesAsync(
         Guid? chatCode = null, ulong? userId = null,
         Guid? referenceMessageId = null, Direction dir = Direction.Unspecified,
         int count = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
@@ -953,14 +955,14 @@ internal class KookRestApiClient : IDisposable
             query += $"&flag={flag}";
 
         query += $"&page_size={count}";
-        QueryUserChatMessagesResponse? queryMessagesResponse =
+        QueryUserChatMessagesResponse queryMessagesResponse =
             await SendAsync<QueryUserChatMessagesResponse>(HttpMethod.Get,
                     () => $"direct-message/list{query}", ids, ClientBucketType.SendEdit, false, options)
                 .ConfigureAwait(false);
-        return queryMessagesResponse?.Items;
+        return queryMessagesResponse.Items;
     }
 
-    public async Task<DirectMessage?> GetDirectMessageAsync(Guid messageId, Guid chatCode,
+    public async Task<DirectMessage> GetDirectMessageAsync(Guid messageId, Guid chatCode,
         RequestOptions? options = null)
     {
         Preconditions.NotEqual(messageId, Guid.Empty, nameof(messageId));
@@ -974,7 +976,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<CreateDirectMessageResponse?> CreateDirectMessageAsync(CreateDirectMessageParams args, RequestOptions? options = null)
+    public async Task<CreateDirectMessageResponse> CreateDirectMessageAsync(CreateDirectMessageParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         if (!args.ChatCode.HasValue && !args.UserId.HasValue)
@@ -1016,7 +1018,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyCollection<ReactionUserResponse>?> GetDirectMessageReactionUsersAsync(Guid messageId,
+    public async Task<IReadOnlyCollection<ReactionUserResponse>>GetDirectMessageReactionUsersAsync(Guid messageId,
         string emojiId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(messageId, Guid.Empty, nameof(messageId));
@@ -1054,14 +1056,14 @@ internal class KookRestApiClient : IDisposable
 
     #region Gateway
 
-    public async Task<GetBotGatewayResponse?> GetBotGatewayAsync(bool isCompressed = true, RequestOptions? options = null)
+    public async Task<GetBotGatewayResponse> GetBotGatewayAsync(bool isCompressed = true, RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
         return await SendAsync<GetBotGatewayResponse>(HttpMethod.Get, () => $"gateway/index?compress={(isCompressed ? 1 : 0)}", new BucketIds(),
             options: options).ConfigureAwait(false);
     }
 
-    public async Task<GetVoiceGatewayResponse?> GetVoiceGatewayAsync(ulong channelId, RequestOptions? options = null)
+    public async Task<GetVoiceGatewayResponse> GetVoiceGatewayAsync(ulong channelId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         options = RequestOptions.CreateOrClone(options);
@@ -1073,7 +1075,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Users
 
-    public async Task<SelfUser?> GetSelfUserAsync(RequestOptions? options = null)
+    public async Task<SelfUser> GetSelfUserAsync(RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
 
@@ -1083,7 +1085,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<User?> GetUserAsync(ulong userId, RequestOptions? options = null)
+    public async Task<User> GetUserAsync(ulong userId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(userId, 0, nameof(userId));
         options = RequestOptions.CreateOrClone(options);
@@ -1094,7 +1096,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<GuildMember?> GetGuildMemberAsync(ulong guildId, ulong userId, RequestOptions? options = null)
+    public async Task<GuildMember> GetGuildMemberAsync(ulong guildId, ulong userId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(userId, 0, nameof(userId));
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
@@ -1120,7 +1122,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Friends
 
-    public async Task<GetFriendStatesResponse?> GetFriendStatesAsync(FriendState? friendState, RequestOptions? options = null)
+    public async Task<GetFriendStatesResponse> GetFriendStatesAsync(FriendState? friendState, RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
 
@@ -1209,7 +1211,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Assets
 
-    public async Task<CreateAssetResponse?> CreateAssetAsync(CreateAssetParams args, RequestOptions? options = null)
+    public async Task<CreateAssetResponse> CreateAssetAsync(CreateAssetParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         options = RequestOptions.CreateOrClone(options);
@@ -1236,7 +1238,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task<Role?> CreateGuildRoleAsync(CreateGuildRoleParams args, RequestOptions? options = null)
+    public async Task<Role> CreateGuildRoleAsync(CreateGuildRoleParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -1248,7 +1250,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<Role?> ModifyGuildRoleAsync(ModifyGuildRoleParams args, RequestOptions? options = null)
+    public async Task<Role> ModifyGuildRoleAsync(ModifyGuildRoleParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -1272,7 +1274,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<AddOrRemoveRoleResponse?> AddRoleAsync(AddOrRemoveRoleParams args, RequestOptions? options = null)
+    public async Task<AddOrRemoveRoleResponse> AddRoleAsync(AddOrRemoveRoleParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -1284,7 +1286,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<AddOrRemoveRoleResponse?> RemoveRoleAsync(AddOrRemoveRoleParams args, RequestOptions? options = null)
+    public async Task<AddOrRemoveRoleResponse> RemoveRoleAsync(AddOrRemoveRoleParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
@@ -1300,7 +1302,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Intimacy
 
-    public async Task<Intimacy?> GetIntimacyAsync(ulong userId, RequestOptions? options = null)
+    public async Task<Intimacy> GetIntimacyAsync(ulong userId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(userId, 0, nameof(userId));
         options = RequestOptions.CreateOrClone(options);
@@ -1342,7 +1344,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task<Emoji?> CreateGuildEmoteAsync(CreateGuildEmoteParams args, RequestOptions? options = null)
+    public async Task<Emoji> CreateGuildEmoteAsync(CreateGuildEmoteParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         if (args.Name is not null)
@@ -1414,7 +1416,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task<CreateGuildInviteResponse?> CreateGuildInviteAsync(CreateGuildInviteParams args, RequestOptions? options = null)
+    public async Task<CreateGuildInviteResponse> CreateGuildInviteAsync(CreateGuildInviteParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         if (args.GuildId is null && args.ChannelId is null)
@@ -1453,7 +1455,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Guild Bans
 
-    public async Task<IReadOnlyCollection<Ban>?> GetGuildBansAsync(ulong guildId, RequestOptions? options = null)
+    public async Task<IReadOnlyCollection<Ban>>GetGuildBansAsync(ulong guildId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
@@ -1499,7 +1501,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Badges
 
-    public async Task<Stream?> GetGuildBadgeAsync(ulong guildId, BadgeStyle style = BadgeStyle.GuildName, RequestOptions? options = null)
+    public async Task<Stream> GetGuildBadgeAsync(ulong guildId, BadgeStyle style = BadgeStyle.GuildName, RequestOptions? options = null)
     {
         Preconditions.NotEqual(guildId, 0, nameof(guildId));
         options = RequestOptions.CreateOrClone(options);
@@ -1515,8 +1517,8 @@ internal class KookRestApiClient : IDisposable
 
     #region Games
 
-    public IAsyncEnumerable<IReadOnlyCollection<Game>> GetGamesAsync(GameCreationSource? source, int limit = KookConfig.MaxItemsPerBatchByDefault,
-        int fromPage = 1, RequestOptions? options = null)
+    public IAsyncEnumerable<IReadOnlyCollection<Game>> GetGamesAsync(GameCreationSource? source,
+        int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
 
@@ -1526,7 +1528,7 @@ internal class KookRestApiClient : IDisposable
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public async Task<Game?> CreateGameAsync(CreateGameParams args, RequestOptions? options = null)
+    public async Task<Game> CreateGameAsync(CreateGameParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotNullOrWhitespace(args.Name, nameof(args.Name));
@@ -1538,7 +1540,7 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<Game?> ModifyGameAsync(ModifyGameParams args, RequestOptions? options = null)
+    public async Task<Game> ModifyGameAsync(ModifyGameParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.GreaterThan(args.Id, 0, nameof(args.Id));
@@ -1619,16 +1621,18 @@ internal class KookRestApiClient : IDisposable
     protected static double ToMilliseconds(Stopwatch stopwatch) =>
         Math.Round((double)stopwatch.ElapsedTicks / Stopwatch.Frequency * 1000.0, 2);
 
-    protected string SerializeJson(object payload) =>
-        payload is null
-            ? string.Empty
-            : JsonSerializer.Serialize(payload, _serializerOptions);
+    [return: NotNullIfNotNull(nameof(payload))]
+    protected string? SerializeJson(object? payload) =>
+        payload is null ? null : JsonSerializer.Serialize(payload, _serializerOptions);
 
-    protected async Task<T?> DeserializeJsonAsync<T>(Stream jsonStream)
+    protected async Task<T> DeserializeJsonAsync<T>(Stream jsonStream)
     {
         try
         {
-            return await JsonSerializer.DeserializeAsync<T>(jsonStream, _serializerOptions).ConfigureAwait(false);
+            T? jsonObject = await JsonSerializer.DeserializeAsync<T>(jsonStream, _serializerOptions).ConfigureAwait(false);
+            if (jsonObject is null)
+                throw new JsonException($"Failed to deserialize JSON to type {typeof(T).FullName}");
+            return jsonObject;
         }
         catch (JsonException ex)
         {

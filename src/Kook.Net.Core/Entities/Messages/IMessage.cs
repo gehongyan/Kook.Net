@@ -92,7 +92,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     /// <returns>
     ///     <c>true</c> if this message mentioned everyone; otherwise <c>false</c>.
     /// </returns>
-    bool? MentionedEveryone { get; }
+    bool MentionedEveryone { get; }
 
     /// <summary>
     ///     Gets the value that indicates whether this message mentioned online users.
@@ -100,7 +100,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     /// <returns>
     ///     <c>true</c> if this message mentioned online users; otherwise <c>false</c>.
     /// </returns>
-    bool? MentionedHere { get; }
+    bool MentionedHere { get; }
 
     /// <summary>
     ///     Gets all tags included in this message's content.

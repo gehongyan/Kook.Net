@@ -6,11 +6,8 @@ namespace Kook;
 ///     Represents a quoted message.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class Quote : IQuote, IEntity<string>
+public class Quote : IQuote
 {
-    /// <inheritdoc />
-    public string Id { get; }
-
     /// <inheritdoc />
     public Guid QuotedMessageId { get; }
 
@@ -41,9 +38,8 @@ public class Quote : IQuote, IEntity<string>
     /// </summary>
     public IUser Author { get; }
 
-    internal Quote(string id, Guid quotedMessageId, MessageType type, string content, DateTimeOffset createAt, IUser author)
+    internal Quote(Guid quotedMessageId, MessageType type, string content, DateTimeOffset createAt, IUser author)
     {
-        Id = id;
         QuotedMessageId = quotedMessageId;
         Type = type;
         Content = content;
@@ -51,8 +47,9 @@ public class Quote : IQuote, IEntity<string>
         Author = author;
     }
 
-    internal static Quote Create(string id, Guid quotedMessageId, MessageType type, string content, DateTimeOffset createAt, IUser author) =>
-        new(id, quotedMessageId, type, content, createAt, author);
+    internal static Quote Create(Guid quotedMessageId, MessageType type,
+        string content, DateTimeOffset createAt, IUser author) =>
+        new(quotedMessageId, type, content, createAt, author);
 
-    private string DebuggerDisplay => $"{Author}: {Content} ({Id})";
+    private string DebuggerDisplay => $"{Author}: {Content} {QuotedMessageId:P}";
 }

@@ -8,21 +8,13 @@ namespace Kook;
 public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICardBuilder>
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="CardBuilder"/> class.
-    /// </summary>
-    public CardBuilder()
-    {
-        Modules = [];
-    }
-
-    /// <summary>
     ///     Initializes a new instance of the <see cref="CardBuilder"/> class with the specified parameters.
     /// </summary>
     /// <param name="theme"> The theme of the card.</param>
     /// <param name="color"> The color displayed along the left side of the card.</param>
     /// <param name="size"> The size of the card.</param>
     /// <param name="modules"> The modules in the card.</param>
-    public CardBuilder(CardTheme theme, Color? color = null, CardSize size = CardSize.Large, IList<IModuleBuilder>? modules = null)
+    public CardBuilder(CardTheme theme = CardTheme.Primary, Color? color = null, CardSize size = CardSize.Large, IList<IModuleBuilder>? modules = null)
     {
         Theme = theme;
         Color = color;

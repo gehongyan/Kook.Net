@@ -13,5 +13,5 @@ internal class GuildMemberOnlineEvent
     public DateTimeOffset OnlineAt { get; set; }
 
     [JsonPropertyName("guilds")]
-    public ulong[] CommonGuilds { get; set; }
+    public required ulong[] CommonGuilds { get; set; }
 }

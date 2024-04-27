@@ -70,7 +70,7 @@ public class RtpWriteStream : AudioOutStream
         Buffer.BlockCopy(buffer, offset, _buffer, 12, count);
 
         _next.WriteHeader(_nextSeq, _nextTimestamp, false);
-        return _next.WriteAsync(_buffer, 0, count + 12);
+        return _next.WriteAsync(_buffer, 0, count + 12, cancellationToken);
     }
 
     /// <inheritdoc />

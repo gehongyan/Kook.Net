@@ -20,15 +20,17 @@ internal struct GatewayBucket
             new GatewayBucket(GatewayBucketType.Unbucketed, BucketId.Create(null, "<gateway-unbucketed>", null), 117, 60)
         ];
 
-        ImmutableDictionary<GatewayBucketType, GatewayBucket>.Builder builder = ImmutableDictionary.CreateBuilder<GatewayBucketType, GatewayBucket>();
-        foreach (GatewayBucket bucket in buckets) builder.Add(bucket.Type, bucket);
+        ImmutableDictionary<GatewayBucketType, GatewayBucket>.Builder typeBuilder =
+            ImmutableDictionary.CreateBuilder<GatewayBucketType, GatewayBucket>();
+        foreach (GatewayBucket bucket in buckets)
+            typeBuilder.Add(bucket.Type, bucket);
+        DefsByType = typeBuilder.ToImmutable();
 
-        DefsByType = builder.ToImmutable();
-
-        ImmutableDictionary<BucketId, GatewayBucket>.Builder builder2 = ImmutableDictionary.CreateBuilder<BucketId, GatewayBucket>();
-        foreach (GatewayBucket bucket in buckets) builder2.Add(bucket.Id, bucket);
-
-        DefsById = builder2.ToImmutable();
+        ImmutableDictionary<BucketId, GatewayBucket>.Builder idBuilder =
+            ImmutableDictionary.CreateBuilder<BucketId, GatewayBucket>();
+        foreach (GatewayBucket bucket in buckets)
+            idBuilder.Add(bucket.Id, bucket);
+        DefsById = idBuilder.ToImmutable();
     }
 
     public static GatewayBucket Get(GatewayBucketType type) => DefsByType[type];

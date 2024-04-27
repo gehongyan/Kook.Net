@@ -9,7 +9,8 @@ internal class RecommendInfo
     public ulong GuildId { get; set; }
 
     [JsonPropertyName("open_id")]
-    public uint OpenId { get; set; }
+    [JsonConverter(typeof(NullableUInt32Converter))]
+    public uint? OpenId { get; set; }
 
     [JsonPropertyName("default_channel_id")]
     public ulong DefaultChannelId { get; set; }

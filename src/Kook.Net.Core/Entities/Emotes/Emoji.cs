@@ -46,7 +46,8 @@ public class Emoji : IEmote
     /// <summary> Tries to parse an <see cref="Emoji"/> from its raw format. </summary>
     /// <param name="text">The raw encoding of an emoji. For example: <code>:heart: or ❤</code></param>
     /// <param name="result">An emoji.</param>
-    public static bool TryParse([NotNullWhen(true)] string? text, [NotNullWhen(true)] out Emoji? result)
+    public static bool TryParse([NotNullWhen(true)] string? text,
+        [NotNullWhen(true)] out Emoji? result)
     {
         result = null;
         if (text is null || string.IsNullOrWhiteSpace(text))

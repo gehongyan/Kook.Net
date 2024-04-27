@@ -5,11 +5,11 @@ namespace Kook.API.Voice;
 internal class CreatePlainTransportParams
 {
     [JsonPropertyName("comedia")]
-    public bool Comedia { get; set; }
+    public required bool Comedia { get; set; }
 
     [JsonPropertyName("rtcpMux")]
-    public bool RtcpMultiplexing { get; set; }
+    public required bool RtcpMultiplexing { get; set; }
 
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public required string Type { get; set; }
 }

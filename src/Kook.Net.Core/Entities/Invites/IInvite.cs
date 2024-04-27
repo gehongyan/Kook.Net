@@ -56,7 +56,7 @@ public interface IInvite : IEntity<uint>, IDeletable
     /// <returns>
     ///     A string containing the name of the channel that the invite points to.
     /// </returns>
-    string ChannelName { get; }
+    string? ChannelName { get; }
 
     /// <summary>
     ///     Gets the guild this invite is linked to.

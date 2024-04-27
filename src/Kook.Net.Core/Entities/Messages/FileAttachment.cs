@@ -38,14 +38,14 @@ public struct FileAttachment : IDisposable
     ///     Creates a file attachment from a stream.
     /// </summary>
     /// <param name="stream">The stream to create the attachment from.</param>
-    /// <param name="fileName">The name of the attachment.</param>
+    /// <param name="filename">The name of the attachment.</param>
     /// <param name="type">The type of the attachment.</param>
-    public FileAttachment(Stream stream, string fileName, AttachmentType type = AttachmentType.File)
+    public FileAttachment(Stream stream, string filename, AttachmentType type = AttachmentType.File)
     {
         _isDisposed = false;
         Mode = CreateAttachmentMode.Stream;
         Type = type;
-        FileName = fileName;
+        FileName = filename;
         Stream = stream;
         try
         {
@@ -67,7 +67,7 @@ public struct FileAttachment : IDisposable
     ///     <see cref="File.OpenRead"/>.
     /// </remarks>
     /// <param name="path">The path to the file.</param>
-    /// <param name="fileName">The name of the attachment.</param>
+    /// <param name="filename">The name of the attachment.</param>
     /// <param name="type">The type of the attachment.</param>
     /// <exception cref="System.ArgumentException">
     ///     <paramref name="path" /> is a zero-length string, contains only white space, or contains one or
@@ -96,13 +96,13 @@ public struct FileAttachment : IDisposable
     /// <exception cref="IOException">
     ///     An I/O error occurred while opening the file.
     /// </exception>
-    public FileAttachment(string path, string? fileName = null, AttachmentType type = AttachmentType.File)
+    public FileAttachment(string path, string? filename = null, AttachmentType type = AttachmentType.File)
     {
         _isDisposed = false;
         Mode = CreateAttachmentMode.FilePath;
         Type = type;
         Stream = File.OpenRead(path);
-        FileName = fileName ?? Path.GetFileName(path);
+        FileName = filename ?? Path.GetFileName(path);
         Uri = null;
     }
 
@@ -115,18 +115,18 @@ public struct FileAttachment : IDisposable
     ///     Under this circumstance, please create asset in advance.
     /// </remarks>
     /// <param name="uri">The URI of the file.</param>
-    /// <param name="fileName">The name of the attachment.</param>
+    /// <param name="filename">The name of the attachment.</param>
     /// <param name="type">The type of the attachment.</param>
     /// <exception cref="InvalidOperationException">The URI provided is not an asset on the KOOK OSS.</exception>
     /// <exception cref="ArgumentException">The URI provided is blank.</exception>
     /// <seealso cref="UrlValidation.ValidateKookAssetUrl"/>
-    public FileAttachment(Uri uri, string fileName, AttachmentType type = AttachmentType.File)
+    public FileAttachment(Uri uri, string filename, AttachmentType type = AttachmentType.File)
     {
         _isDisposed = false;
         Mode = CreateAttachmentMode.AssetUri;
         Type = type;
         Stream = null;
-        FileName = fileName;
+        FileName = filename;
         Uri = uri;
     }
 

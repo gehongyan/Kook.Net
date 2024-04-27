@@ -32,11 +32,11 @@ public readonly struct Cacheable<TEntity, TId>
     ///     This value is not guaranteed to be set; in cases where the entity cannot be pulled from cache, it is
     ///     <c>null</c>.
     /// </remarks>
-    public TEntity Value { get; }
+    public TEntity? Value { get; }
 
-    private Func<Task<TEntity>> DownloadFunc { get; }
+    private Func<Task<TEntity?>> DownloadFunc { get; }
 
-    internal Cacheable(TEntity value, TId id, bool hasValue, Func<Task<TEntity>> downloadFunc)
+    internal Cacheable(TEntity? value, TId id, bool hasValue, Func<Task<TEntity?>> downloadFunc)
     {
         Value = value;
         Id = id;
@@ -50,10 +50,10 @@ public readonly struct Cacheable<TEntity, TId>
     /// <exception cref="Kook.Net.HttpException">Thrown when used from a user account.</exception>
     /// <exception cref="NullReferenceException">Thrown when the entity is deleted.</exception>
     /// <returns>
-    ///     A task that represents the asynchronous download operation. The task result contains the downloaded
-    ///     entity.
+    ///     A task that represents the asynchronous download operation. The task result contains
+    ///     the downloaded entity.
     /// </returns>
-    public async Task<TEntity> DownloadAsync() => await DownloadFunc().ConfigureAwait(false);
+    public async Task<TEntity?> DownloadAsync() => await DownloadFunc().ConfigureAwait(false);
 
     /// <summary>
     ///     Returns the cached entity if it exists; otherwise downloads it.
@@ -64,7 +64,7 @@ public readonly struct Cacheable<TEntity, TId>
     ///     A task that represents the asynchronous operation that attempts to get the entity via cache or to
     ///     download the entity. The task result contains the downloaded entity.
     /// </returns>
-    public async Task<TEntity> GetOrDownloadAsync() => HasValue ? Value : await DownloadAsync().ConfigureAwait(false);
+    public async Task<TEntity?> GetOrDownloadAsync() => HasValue ? Value : await DownloadAsync().ConfigureAwait(false);
 
 #if DEBUG
     private string DebuggerDisplay => HasValue && Value != null

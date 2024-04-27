@@ -13,7 +13,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     A string representing the nickname of the user; <c>null</c> if none is set.
     /// </returns>
-    string Nickname { get; }
+    string? Nickname { get; }
 
     /// <summary>
     ///     Gets the displayed name for this user.
@@ -59,7 +59,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     <c>true</c> if the mobile number has been verified; <c>false</c> otherwise.
     /// </returns>
-    bool IsMobileVerified { get; }
+    bool? IsMobileVerified { get; }
 
     /// <summary>
     ///     Gets when this user joined the guild.
@@ -67,7 +67,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     The time of which the user has joined the guild.
     /// </returns>
-    DateTimeOffset JoinedAt { get; }
+    DateTimeOffset? JoinedAt { get; }
 
     /// <summary>
     ///     Gets when this user was activated.
@@ -75,7 +75,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns>
     ///     The time of which the user was activated.
     /// </returns>
-    DateTimeOffset ActiveAt { get; }
+    DateTimeOffset? ActiveAt { get; }
 
     /// <summary>
     ///     Gets the color the user's displayed name is being displayed in.
@@ -93,7 +93,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///         a gradient.
     ///     </note>
     /// </remarks>
-    Color Color { get; }
+    Color? Color { get; }
 
     /// <summary>
     ///     Gets whether this user owns the current guild.

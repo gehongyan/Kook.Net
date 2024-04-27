@@ -14,7 +14,7 @@ public interface IMessageChannel : IChannel
     ///     This method sends a file as if you are uploading a file directly from your Kook client.
     /// </remarks>
     /// <param name="path">The file path of the file.</param>
-    /// <param name="fileName">The name of the file.</param>
+    /// <param name="filename">The name of the file.</param>
     /// <param name="type">The type of the file.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
@@ -23,7 +23,7 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? fileName = null,
+    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, IUser? ephemeralUser = null,
         RequestOptions? options = null);
 
@@ -34,7 +34,7 @@ public interface IMessageChannel : IChannel
     ///     This method sends a file as if you are uploading a file directly from your Kook client.
     /// </remarks>
     /// <param name="stream">The stream of the file.</param>
-    /// <param name="fileName">The name of the file.</param>
+    /// <param name="filename">The name of the file.</param>
     /// <param name="type">The type of the file.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
@@ -43,7 +43,7 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string? fileName,
+    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, IUser? ephemeralUser = null,
         RequestOptions? options = null);
 
@@ -116,7 +116,7 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous get operation for retrieving the message. The task result contains
     ///     the retrieved message; <c>null</c> if no message is found with the specified identifier.
     /// </returns>
-    Task<IMessage> GetMessageAsync(Guid id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+    Task<IMessage?> GetMessageAsync(Guid id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 

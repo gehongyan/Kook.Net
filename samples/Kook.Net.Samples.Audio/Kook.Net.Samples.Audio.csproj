@@ -4,11 +4,13 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enabled</Nullable>
+    <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <LangVersion>latestmajor</LangVersion>
     <RootNamespace>Kook.Net.Samples.Audio</RootNamespace>
     <NoWarn>NU1803</NoWarn>
+    <Configurations>Debug;Release;Debug Rest;Debug Packets</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
