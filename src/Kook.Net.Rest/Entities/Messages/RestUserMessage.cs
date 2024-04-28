@@ -111,7 +111,11 @@ public class RestUserMessage : RestMessage, IUserMessage
         if (model.Quote is { } quote)
         {
             IUser refMsgAuthor = MessageHelper.GetAuthor(Kook, guild, model.Quote.Author);
-            Quote = global::Kook.Quote.Create(quote.QuotedMessageId, quote.Type, quote.Content, quote.CreateAt, refMsgAuthor);
+            Guid? quotedMessageId = quote.RongId ?? quote.QuotedMessageId;
+            if (quotedMessageId == Guid.Empty)
+                Quote = null;
+            else if (quotedMessageId.HasValue)
+                Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, refMsgAuthor);
         }
 
         if (model.Attachment is { } attachment)
@@ -142,7 +146,11 @@ public class RestUserMessage : RestMessage, IUserMessage
         if (model.Quote is { } quote)
         {
             IUser refMsgAuthor = MessageHelper.GetAuthor(Kook, null, model.Quote.Author);
-            Quote = global::Kook.Quote.Create(quote.QuotedMessageId, quote.Type, quote.Content, quote.CreateAt, refMsgAuthor);
+            Guid? quotedMessageId = quote.RongId ?? quote.QuotedMessageId;
+            if (quotedMessageId == Guid.Empty)
+                Quote = null;
+            else if (quotedMessageId.HasValue)
+                Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, refMsgAuthor);
         }
 
         if (model.Attachment is { } attachment)

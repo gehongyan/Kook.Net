@@ -76,6 +76,11 @@ internal class ClientState
     internal SocketGlobalUser GetOrAddUser(ulong id, Func<ulong, SocketGlobalUser> userFactory) =>
         _users.GetOrAdd(id, userFactory);
 
+    internal SocketGlobalUser AddOrUpdateUser(ulong id,
+        Func<ulong, SocketGlobalUser> addFactory,
+        Func<ulong, SocketGlobalUser, SocketGlobalUser> updateFactory) =>
+        _users.AddOrUpdate(id, addFactory, updateFactory);
+
     internal SocketGlobalUser? RemoveUser(ulong id) =>
         _users.TryRemove(id, out SocketGlobalUser? user) ? user : null;
 

@@ -909,13 +909,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     public GuildEmote? GetEmote(string id) =>
         _emotes.TryGetValue(id, out GuildEmote? emote) ? emote : null;
 
-    internal GuildEmote AddEmote(GuildEmojiEvent model)
-    {
-        GuildEmote emote = model.ToEntity(Id);
-        _emotes.TryAdd(model.Id, emote);
-        return emote;
-    }
-
     internal GuildEmote AddOrUpdateEmote(GuildEmojiEvent model)
     {
         GuildEmote emote = model.ToEntity(Id);
@@ -1126,8 +1119,11 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     bool IGuild.Available => true;
 
     /// <inheritdoc />
-    public void Dispose()
+    void IDisposable.Dispose()
     {
+        DisconnectAudioAsync().GetAwaiter().GetResult();
+        _audioLock?.Dispose();
+        _audioClient?.Dispose();
     }
 
     /// <inheritdoc />

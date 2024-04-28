@@ -6,7 +6,8 @@ namespace Kook.API;
 internal class Quote
 {
     [JsonPropertyName("id")]
-    public Guid QuotedMessageId { get; set; }
+    [JsonConverter(typeof(NullableGuidConverter))]
+    public Guid? QuotedMessageId { get; set; }
 
     // TODO: To be investigated
     [JsonPropertyName("rong_id")]

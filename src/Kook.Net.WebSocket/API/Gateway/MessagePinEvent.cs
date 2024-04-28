@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Kook.API.Gateway;
 
-internal class UnpinnedMessageEvent
+internal class MessagePinEvent
 {
     [JsonPropertyName("channel_id")]
     public ulong ChannelId { get; set; }

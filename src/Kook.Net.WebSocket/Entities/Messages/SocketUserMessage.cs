@@ -114,15 +114,17 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
         GatewayGroupMessageExtraData model = gatewayEvent.ExtraData;
         Content = gatewayEvent.Content;
-        RawContent = model.KMarkdownInfo.RawContent;
+        RawContent = model.KMarkdownInfo?.RawContent ?? gatewayEvent.Content;
         _isMentioningEveryone = model.MentionedAll;
         _isMentioningHere = model.MentionedHere;
 
         Guild = (Channel as SocketGuildChannel)?.Guild;
         if (Guild is not null)
         {
-            _roleMentions = [..model.MentionedRoles.Select(x => Guild.GetRole(x) ?? new SocketRole(Guild, x))];
-            _channelMentions = [..model.MentionedChannels.Select(x => Guild.GetChannel(x) ?? new SocketGuildChannel(Kook, x, Guild))];
+            if (model.MentionedRoles is { } roles)
+                _roleMentions = [..roles.Select(x => Guild.GetRole(x) ?? new SocketRole(Guild, x))];
+            if (model.MentionedChannels is { } channels)
+                _channelMentions = [..channels.Select(x => Guild.GetChannel(x) ?? new SocketGuildChannel(Kook, x, Guild))];
         }
 
         _tags = model.Type switch
@@ -137,7 +139,11 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             IUser author = Guild?.GetUser(model.Quote.Author.Id)
                 ?? Guild?.AddOrUpdateUser(model.Quote.Author)
                 ?? state.GetOrAddUser(model.Quote.Author.Id, _ => SocketGlobalUser.Create(Kook, state, model.Quote.Author)) as IUser;
-            Quote = global::Kook.Quote.Create(quote.QuotedMessageId, quote.Type, quote.Content, quote.CreateAt, author);
+            Guid? quotedMessageId = quote.RongId ?? quote.QuotedMessageId;
+            if (quotedMessageId == Guid.Empty)
+                Quote = null;
+            else if (quotedMessageId.HasValue)
+                Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, author);
         }
 
         if (model.Attachment is { } attachment)
@@ -161,7 +167,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
         GatewayPersonMessageExtraData model = gatewayEvent.ExtraData;
         Content = gatewayEvent.Content;
-        RawContent = model.KMarkdownInfo.RawContent;
+        RawContent = model.KMarkdownInfo.RawContent ?? gatewayEvent.Content;
         _attachments = [];
 
         if (model.Quote is { } quote)
@@ -169,7 +175,11 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             IUser author = Guild?.GetUser(model.Quote.Author.Id)
                 ?? Guild?.AddOrUpdateUser(model.Quote.Author)
                 ?? state.GetOrAddUser(model.Quote.Author.Id, _ => SocketGlobalUser.Create(Kook, state, model.Quote.Author)) as IUser;
-            Quote = global::Kook.Quote.Create(quote.QuotedMessageId, quote.Type, quote.Content, quote.CreateAt, author);
+            Guid? quotedMessageId = quote.RongId ?? quote.QuotedMessageId;
+            if (quotedMessageId == Guid.Empty)
+                Quote = null;
+            else if (quotedMessageId.HasValue)
+                Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, author);
         }
 
         if (model.Attachment is { } attachment)
@@ -215,7 +225,11 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             IUser author = Guild?.GetUser(model.Quote.Author.Id)
                 ?? Guild?.AddOrUpdateUser(model.Quote.Author)
                 ?? state.GetOrAddUser(model.Quote.Author.Id, _ => SocketGlobalUser.Create(Kook, state, model.Quote.Author)) as IUser;
-            Quote = global::Kook.Quote.Create(quote.QuotedMessageId, quote.Type, quote.Content, quote.CreateAt, author);
+            Guid? quotedMessageId = quote.RongId ?? quote.QuotedMessageId;
+            if (quotedMessageId == Guid.Empty)
+                Quote = null;
+            else if (quotedMessageId.HasValue)
+                Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, author);
         }
 
         if (model.Attachment is { } attachment)
@@ -252,7 +266,11 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             IUser author = Guild?.GetUser(model.Quote.Author.Id)
                 ?? Guild?.AddOrUpdateUser(model.Quote.Author)
                 ?? state.GetOrAddUser(model.Quote.Author.Id, _ => SocketGlobalUser.Create(Kook, state, model.Quote.Author)) as IUser;
-            Quote = global::Kook.Quote.Create(quote.QuotedMessageId, quote.Type, quote.Content, quote.CreateAt, author);
+            Guid? quotedMessageId = quote.RongId ?? quote.QuotedMessageId;
+            if (quotedMessageId == Guid.Empty)
+                Quote = null;
+            else if (quotedMessageId.HasValue)
+                Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, author);
         }
 
         if (model.Attachment is { } attachment)
@@ -298,7 +316,11 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             IUser author = Guild?.GetUser(model.Quote.Author.Id)
                 ?? Guild?.AddOrUpdateUser(model.Quote.Author)
                 ?? state.GetOrAddUser(model.Quote.Author.Id, _ => SocketGlobalUser.Create(Kook, state, model.Quote.Author)) as IUser;
-            Quote = global::Kook.Quote.Create(quote.QuotedMessageId, quote.Type, quote.Content, quote.CreateAt, author);
+            Guid? quotedMessageId = quote.RongId ?? quote.QuotedMessageId;
+            if (quotedMessageId == Guid.Empty)
+                Quote = null;
+            else if (quotedMessageId.HasValue)
+                Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, author);
         }
 
         if (model.Attachment is { } attachment)
@@ -332,7 +354,11 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             IUser author = Guild?.GetUser(model.Quote.Author.Id)
                 ?? Guild?.AddOrUpdateUser(model.Quote.Author)
                 ?? state.GetOrAddUser(model.Quote.Author.Id, _ => SocketGlobalUser.Create(Kook, state, model.Quote.Author)) as IUser;
-            Quote = global::Kook.Quote.Create(quote.QuotedMessageId, quote.Type, quote.Content, quote.CreateAt, author);
+            Guid? quotedMessageId = quote.RongId ?? quote.QuotedMessageId;
+            if (quotedMessageId == Guid.Empty)
+                Quote = null;
+            else if (quotedMessageId.HasValue)
+                Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, author);
         }
 
         if (model.Attachment is { } attachment)

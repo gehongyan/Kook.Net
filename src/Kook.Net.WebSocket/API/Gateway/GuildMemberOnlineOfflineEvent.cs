@@ -3,14 +3,14 @@ using System.Text.Json.Serialization;
 
 namespace Kook.API.Gateway;
 
-internal class GuildMemberOnlineEvent
+internal class GuildMemberOnlineOfflineEvent
 {
     [JsonPropertyName("user_id")]
     public ulong UserId { get; set; }
 
     [JsonPropertyName("event_time")]
     [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
-    public DateTimeOffset OnlineAt { get; set; }
+    public DateTimeOffset EventTime { get; set; }
 
     [JsonPropertyName("guilds")]
     public required ulong[] CommonGuilds { get; set; }

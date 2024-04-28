@@ -185,11 +185,7 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         using CancellationTokenSource cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancellationToken, cancellationToken);
 #if DEBUG_REST
         Debug.WriteLine($"[REST] [{id}] {request.Method} {request.RequestUri} {request.Content?.Headers.ContentType?.MediaType}");
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-        if (request.Content?.Headers.ContentType?.MediaType == MediaTypeNames.Application.Json)
-#else
         if (request.Content?.Headers.ContentType?.MediaType == "application/json")
-#endif
             Debug.WriteLine($"[REST] {await request.Content.ReadAsStringAsync().ConfigureAwait(false)}");
 #endif
         cancellationToken = cancellationTokenSource.Token;
@@ -206,11 +202,7 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 
 #if DEBUG_REST
         Debug.WriteLine($"[REST] [{id}] {response.StatusCode} {response.ReasonPhrase}");
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-        if (response.Content?.Headers.ContentType?.MediaType == MediaTypeNames.Application.Json)
-#else
         if (response.Content?.Headers.ContentType?.MediaType == "application/json")
-#endif
             Debug.WriteLine($"[REST] [{id}] {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
 #endif
         return new RestResponse(response.StatusCode, headers, stream, response.Content?.Headers.ContentType);

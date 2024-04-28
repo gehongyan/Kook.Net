@@ -63,12 +63,12 @@ public class SocketReaction : IReaction
     /// <returns>
     ///     A WebSocket-based message channel.
     /// </returns>
-    public ISocketMessageChannel Channel { get; }
+    public ISocketMessageChannel? Channel { get; }
 
     /// <inheritdoc />
     public IEmote Emote { get; }
 
-    internal SocketReaction(ISocketMessageChannel channel, Guid messageId,
+    internal SocketReaction(ISocketMessageChannel? channel, Guid messageId,
         IMessage? message, ulong userId, IUser? user, IEmote emoji)
     {
         Channel = channel;
@@ -79,7 +79,7 @@ public class SocketReaction : IReaction
         Emote = emoji;
     }
 
-    internal static SocketReaction Create(Reaction model, ISocketMessageChannel channel,
+    internal static SocketReaction Create(Reaction model, ISocketMessageChannel? channel,
         IMessage? message, IUser? user)
     {
         IEmote emote = Emoji.TryParse(model.Emoji.Id, out Emoji? emoji)
@@ -88,7 +88,7 @@ public class SocketReaction : IReaction
         return new SocketReaction(channel, model.MessageId, message, model.UserId, user, emote);
     }
 
-    internal static SocketReaction Create(PrivateReaction model, ISocketMessageChannel channel,
+    internal static SocketReaction Create(PrivateReaction model, ISocketMessageChannel? channel,
         IMessage? message, IUser? user)
     {
         IEmote emote = Emoji.TryParse(model.Emoji.Id, out Emoji? emoji)

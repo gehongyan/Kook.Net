@@ -63,7 +63,8 @@ internal class RequestBucket
         {
             await _queue.EnterGlobalAsync(id, request).ConfigureAwait(false);
             await EnterAsync(id, request).ConfigureAwait(false);
-            if (_redirectBucket != null) return await _redirectBucket.SendAsync(request);
+            if (_redirectBucket != null)
+                return await _redirectBucket.SendAsync(request);
 
 #if DEBUG_LIMITS
             Debug.WriteLine($"[{id}] Sending...");
@@ -172,7 +173,8 @@ internal class RequestBucket
 #if DEBUG_LIMITS
                 Debug.WriteLine($"[{id}] Timeout");
 #endif
-                if ((request.Options.RetryMode & RetryMode.RetryTimeouts) == 0) throw;
+                if ((request.Options.RetryMode & RetryMode.RetryTimeouts) == 0)
+                    throw;
 
                 await Task.Delay(500).ConfigureAwait(false);
                 continue; //Retry
@@ -223,7 +225,8 @@ internal class RequestBucket
 #if DEBUG_LIMITS
                 Debug.WriteLine($"[{id}] Timeout");
 #endif
-                if ((request.Options.RetryMode & RetryMode.RetryTimeouts) == 0) throw;
+                if ((request.Options.RetryMode & RetryMode.RetryTimeouts) == 0)
+                    throw;
 
                 await Task.Delay(500).ConfigureAwait(false);
                 continue; //Retry
@@ -537,6 +540,7 @@ internal class RequestBucket
 
     private void ThrowRetryLimit(IRequest request)
     {
-        if ((request.Options.RetryMode & RetryMode.RetryRatelimit) == 0) throw new RateLimitedException(request);
+        if ((request.Options.RetryMode & RetryMode.RetryRatelimit) == 0)
+            throw new RateLimitedException(request);
     }
 }
