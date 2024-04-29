@@ -6,8 +6,8 @@ internal static class ReflectionUtils
 {
     private static readonly TypeInfo ObjectTypeInfo = typeof(object).GetTypeInfo();
 
-    internal static T CreateObject<T>(TypeInfo typeInfo, CommandService commands, IServiceProvider services)
-        => CreateBuilder<T>(typeInfo, commands)(services);
+    internal static T CreateObject<T>(TypeInfo typeInfo, CommandService commands, IServiceProvider services) =>
+        CreateBuilder<T>(typeInfo, commands)(services);
 
     internal static Func<IServiceProvider, T> CreateBuilder<T>(TypeInfo typeInfo, CommandService commands)
     {

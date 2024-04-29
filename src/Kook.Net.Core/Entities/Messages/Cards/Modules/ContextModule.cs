@@ -32,28 +32,28 @@ public class ContextModule : IModule, IEquatable<ContextModule>, IEquatable<IMod
     ///     Determines whether the specified <see cref="ContextModule"/> is equal to the current <see cref="ContextModule"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ContextModule"/> is equal to the current <see cref="ContextModule"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ContextModule left, ContextModule right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(ContextModule left, ContextModule right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ContextModule"/> is not equal to the current <see cref="ContextModule"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ContextModule"/> is not equal to the current <see cref="ContextModule"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ContextModule left, ContextModule right)
-        => !(left == right);
+    public static bool operator !=(ContextModule left, ContextModule right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="ContextModule"/> is equal to the current <see cref="ContextModule"/>.</summary>
     /// <remarks>If the object passes is an <see cref="ContextModule"/>, <see cref="Equals(ContextModule)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="ContextModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ContextModule"/> is equal to the current <see cref="ContextModule"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is ContextModule contextModule && Equals(contextModule);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is ContextModule contextModule && Equals(contextModule);
 
     /// <summary>Determines whether the specified <see cref="ContextModule"/> is equal to the current <see cref="ContextModule"/>.</summary>
     /// <param name="contextModule">The <see cref="ContextModule"/> to compare with the current <see cref="ContextModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ContextModule"/> is equal to the current <see cref="ContextModule"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals([NotNullWhen(true)] ContextModule? contextModule)
-        => GetHashCode() == contextModule?.GetHashCode();
+    public bool Equals([NotNullWhen(true)] ContextModule? contextModule) =>
+        GetHashCode() == contextModule?.GetHashCode();
 
     /// <inheritdoc />
     public override int GetHashCode()

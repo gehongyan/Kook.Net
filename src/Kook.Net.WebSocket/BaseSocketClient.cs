@@ -184,12 +184,12 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
         RequestOptions? options = null);
 
     /// <inheritdoc />
-    Task<IChannel?> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IChannel?>(GetChannel(id));
+    Task<IChannel?> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IChannel?>(GetChannel(id));
 
     /// <inheritdoc />
-    Task<IDMChannel?> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IDMChannel?>(GetDMChannel(chatCode));
+    Task<IDMChannel?> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IDMChannel?>(GetDMChannel(chatCode));
 
     /// <inheritdoc />
     Task<IGuild?> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions? options) =>

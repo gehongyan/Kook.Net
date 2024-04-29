@@ -111,22 +111,22 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>, 
     ///     Determines whether the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(FileModuleBuilder? left, FileModuleBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(FileModuleBuilder? left, FileModuleBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="FileModuleBuilder"/> is not equal to the current <see cref="FileModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="FileModuleBuilder"/> is not equal to the current <see cref="FileModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(FileModuleBuilder? left, FileModuleBuilder? right)
-        => !(left == right);
+    public static bool operator !=(FileModuleBuilder? left, FileModuleBuilder? right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="FileModuleBuilder"/>, <see cref="Equals(FileModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="FileModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is FileModuleBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is FileModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>.</summary>
     /// <param name="fileModuleBuilder">The <see cref="FileModuleBuilder"/> to compare with the current <see cref="FileModuleBuilder"/>.</param>

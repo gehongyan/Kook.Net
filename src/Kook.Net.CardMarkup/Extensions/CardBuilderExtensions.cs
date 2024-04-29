@@ -65,7 +65,7 @@ internal static class CardBuilderExtensions
 
     private static SectionModuleBuilder ToSectionModule(this MarkupElement element)
     {
-        SectionAccessoryMode mode = element.Attributes.GetSectionAccessoryMode();
+        SectionAccessoryMode? mode = element.Attributes.GetSectionAccessoryMode();
 
         MarkupElement textXmlElement = element.Children.First(x => x.Name == "text");
         MarkupElement? accessoryXmlElement = element.Children.Find(x => x.Name == "accessory");

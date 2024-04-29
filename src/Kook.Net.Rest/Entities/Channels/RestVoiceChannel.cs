@@ -127,8 +127,8 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
     #region IGuildChannel
 
     /// <inheritdoc />
-    Task<IGuildUser?> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IGuildUser?>(null);
+    Task<IGuildUser?> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IGuildUser?>(null);
 
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(

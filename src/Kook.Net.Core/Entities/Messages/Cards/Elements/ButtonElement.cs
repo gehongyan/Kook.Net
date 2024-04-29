@@ -65,8 +65,8 @@ public class ButtonElement : IElement, IEquatable<ButtonElement>, IEquatable<IEl
     /// <returns>
     ///     <c>true</c> if the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>; otherwise, <c>false</c>.
     /// </returns>
-    public static bool operator ==(ButtonElement? left, ButtonElement? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(ButtonElement? left, ButtonElement? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ButtonElement"/> is not equal to the current <see cref="ButtonElement"/>.
@@ -74,21 +74,21 @@ public class ButtonElement : IElement, IEquatable<ButtonElement>, IEquatable<IEl
     /// <returns>
     ///     <c>true</c> if the specified <see cref="ButtonElement"/> is not equal to the current <see cref="ButtonElement"/>; otherwise, <c>false</c>.
     /// </returns>
-    public static bool operator !=(ButtonElement? left, ButtonElement? right)
-        => !(left == right);
+    public static bool operator !=(ButtonElement? left, ButtonElement? right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>.</summary>
     /// <remarks>If the object passes is an <see cref="ButtonElement"/>, <see cref="Equals(ButtonElement)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="ButtonElement"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is ButtonElement buttonElement && Equals(buttonElement);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is ButtonElement buttonElement && Equals(buttonElement);
 
     /// <summary>Determines whether the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>.</summary>
     /// <param name="buttonElement">The <see cref="ButtonElement"/> to compare with the current <see cref="ButtonElement"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals([NotNullWhen(true)] ButtonElement? buttonElement)
-        => GetHashCode() == buttonElement?.GetHashCode();
+    public bool Equals([NotNullWhen(true)] ButtonElement? buttonElement) =>
+        GetHashCode() == buttonElement?.GetHashCode();
 
     /// <inheritdoc />
     public override int GetHashCode()

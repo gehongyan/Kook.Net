@@ -78,8 +78,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     /// <returns>
     ///     A collection of DM channels that have been opened in this session.
     /// </returns>
-    public IReadOnlyCollection<SocketDMChannel> DMChannels
-        => State.DMChannels.Where(x => x is not null).ToImmutableArray();
+    public IReadOnlyCollection<SocketDMChannel> DMChannels =>
+        State.DMChannels.Where(x => x is not null).ToImmutableArray();
 
     /// <summary>
     ///     Initializes a new REST/WebSocket-based Kook client.
@@ -149,8 +149,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         };
     }
 
-    private static KookSocketApiClient CreateApiClient(KookSocketConfig config)
-        => new(config.RestClientProvider, config.WebSocketProvider, KookConfig.UserAgent,
+    private static KookSocketApiClient CreateApiClient(KookSocketConfig config) =>
+        new(config.RestClientProvider, config.WebSocketProvider, KookConfig.UserAgent,
             config.AcceptLanguage, config.GatewayHost, defaultRatelimitCallback: config.DefaultRatelimitCallback);
 
     internal override void Dispose(bool disposing)
@@ -472,7 +472,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                         case MessageType.Poke:
                         {
                             await _gatewayLogger
-                                .DebugAsync($"Received Message ({(MessageType)typeValue}, {channelType})")
+                                .DebugAsync($"Received Message ({channelType}, {(MessageType)typeValue})")
                                 .ConfigureAwait(false);
 
                             switch (channelType)
@@ -775,12 +775,12 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                 long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
                 //Did server respond to our last heartbeat, or are we still receiving messages (long load?)
-                if (_heartbeatTimes.IsEmpty && now - _lastMessageTime > intervalMillis + 1000.0 / 64)
-                    if (ConnectionState == ConnectionState.Connected && (_guildDownloadTask?.IsCompleted ?? true))
-                    {
-                        _connection.Error(new GatewayReconnectException("Server missed last heartbeat"));
-                        return;
-                    }
+                if (_heartbeatTimes.IsEmpty && now - _lastMessageTime > intervalMillis + 1000.0 / 64
+                    && ConnectionState == ConnectionState.Connected && (_guildDownloadTask?.IsCompleted ?? true))
+                {
+                    _connection.Error(new GatewayReconnectException("Server missed last heartbeat"));
+                    return;
+                }
 
                 _heartbeatTimes.Enqueue(now);
                 try

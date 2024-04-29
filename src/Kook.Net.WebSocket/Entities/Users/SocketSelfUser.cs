@@ -8,7 +8,7 @@ namespace Kook.WebSocket;
 ///     Represents the logged-in WebSocket-based user.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class SocketSelfUser : SocketUser, ISelfUser
+public class SocketSelfUser : SocketUser, ISelfUser, IUpdateable
 {
     internal override SocketGlobalUser GlobalUser { get; }
 
@@ -141,6 +141,17 @@ public class SocketSelfUser : SocketUser, ISelfUser
         hasChanged |= ValueHelper.SetIfChanged(() => InvitedCount, x => InvitedCount = x, model.InvitedCount);
         return hasChanged;
     }
+
+    /// <summary>
+    ///     Fetches the users data from the REST API to update this object,
+    ///     especially the <see cref="Username"/> property.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous reloading operation.
+    /// </returns>
+    public Task UpdateAsync(RequestOptions? options = null) =>
+        SocketUserHelper.UpdateAsync(this, Kook, options);
 
     private string DebuggerDisplay =>
         $"{this.UsernameAndIdentifyNumber(Kook.FormatUsersInBidirectionalUnicode)} ({Id}{

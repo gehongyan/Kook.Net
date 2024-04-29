@@ -4,8 +4,8 @@ public class PictureService
 {
     private readonly HttpClient _http;
 
-    public PictureService(HttpClient http)
-        => _http = http;
+    public PictureService(HttpClient http) =>
+        _http = http;
 
     public async Task<Stream> GetCatPictureAsync()
     {

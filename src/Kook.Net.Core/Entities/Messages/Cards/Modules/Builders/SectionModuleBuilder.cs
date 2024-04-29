@@ -27,8 +27,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     ///     an <see cref="ImageElementBuilder"/> nor <see cref="ButtonElementBuilder"/>.
     /// </exception>
     public SectionModuleBuilder(IElementBuilder? text,
-        SectionAccessoryMode mode = SectionAccessoryMode.Unspecified,
-        IElementBuilder? accessory = null)
+        SectionAccessoryMode? mode = null, IElementBuilder? accessory = null)
     {
         Text = text;
         Mode = mode;
@@ -45,8 +44,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     ///     an <see cref="ImageElementBuilder"/> nor <see cref="ButtonElementBuilder"/>.
     /// </exception>
     public SectionModuleBuilder(string? text, bool isKMarkdown = false,
-        SectionAccessoryMode mode = SectionAccessoryMode.Unspecified,
-        IElementBuilder? accessory = null)
+        SectionAccessoryMode? mode = null, IElementBuilder? accessory = null)
     {
         WithText(text, isKMarkdown);
         Mode = mode;
@@ -60,7 +58,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     ///     A <see cref="SectionAccessoryMode"/> representing
     ///     how the <see cref="Accessory"/> is positioned relative to the <see cref="Text"/>.
     /// </returns>
-    public SectionAccessoryMode Mode { get; set; } = SectionAccessoryMode.Unspecified;
+    public SectionAccessoryMode? Mode { get; set; }
 
     /// <summary>
     ///     Gets or sets the text of the section.
@@ -278,22 +276,22 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     ///     Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(SectionModuleBuilder? left, SectionModuleBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(SectionModuleBuilder? left, SectionModuleBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="SectionModuleBuilder"/> is not equal to the current <see cref="SectionModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="SectionModuleBuilder"/> is not equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(SectionModuleBuilder? left, SectionModuleBuilder? right)
-        => !(left == right);
+    public static bool operator !=(SectionModuleBuilder? left, SectionModuleBuilder? right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="SectionModuleBuilder"/>, <see cref="Equals(SectionModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="SectionModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is SectionModuleBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is SectionModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.</summary>
     /// <param name="sectionModuleBuilder">The <see cref="SectionModuleBuilder"/> to compare with the current <see cref="SectionModuleBuilder"/>.</param>

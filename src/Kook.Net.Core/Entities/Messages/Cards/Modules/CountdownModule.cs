@@ -52,8 +52,8 @@ public class CountdownModule : IModule, IEquatable<CountdownModule>, IEquatable<
     /// <returns>
     ///     <c>true</c> if the specified <see cref="CountdownModule"/> is equal to the current <see cref="CountdownModule"/>; otherwise, <c>false</c>.
     /// </returns>
-    public static bool operator ==(CountdownModule left, CountdownModule right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(CountdownModule left, CountdownModule right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="CountdownModule"/> is not equal to the current <see cref="CountdownModule"/>.
@@ -61,25 +61,25 @@ public class CountdownModule : IModule, IEquatable<CountdownModule>, IEquatable<
     /// <returns>
     ///     <c>true</c> if the specified <see cref="CountdownModule"/> is not equal to the current <see cref="CountdownModule"/>; otherwise, <c>false</c>.
     /// </returns>
-    public static bool operator !=(CountdownModule left, CountdownModule right)
-        => !(left == right);
+    public static bool operator !=(CountdownModule left, CountdownModule right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="CountdownModule"/> is equal to the current <see cref="CountdownModule"/>.</summary>
     /// <remarks>If the object passes is an <see cref="CountdownModule"/>, <see cref="Equals(CountdownModule)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="CountdownModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="CountdownModule"/> is equal to the current <see cref="CountdownModule"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is CountdownModule countdownModule && Equals(countdownModule);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is CountdownModule countdownModule && Equals(countdownModule);
 
     /// <summary>Determines whether the specified <see cref="CountdownModule"/> is equal to the current <see cref="CountdownModule"/>.</summary>
     /// <param name="countdownModule">The <see cref="CountdownModule"/> to compare with the current <see cref="CountdownModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="CountdownModule"/> is equal to the current <see cref="CountdownModule"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals([NotNullWhen(true)] CountdownModule? countdownModule)
-        => GetHashCode() == countdownModule?.GetHashCode();
+    public bool Equals([NotNullWhen(true)] CountdownModule? countdownModule) =>
+        GetHashCode() == countdownModule?.GetHashCode();
 
     /// <inheritdoc />
-    public override int GetHashCode()
-        => (Type, EndTime, StartTime, Mode).GetHashCode();
+    public override int GetHashCode() =>
+        (Type, EndTime, StartTime, Mode).GetHashCode();
 
     bool IEquatable<IModule>.Equals([NotNullWhen(true)] IModule? module) =>
         Equals(module as CountdownModule);

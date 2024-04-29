@@ -34,8 +34,8 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
 
     /// <inheritdoc />
     /// <seealso cref="SocketVoiceChannel.ConnectedUsers"/>
-    public override IReadOnlyCollection<SocketGuildUser> Users
-        => Guild.Users.Where(x => Permissions.GetValue(
+    public override IReadOnlyCollection<SocketGuildUser> Users =>
+        Guild.Users.Where(x => Permissions.GetValue(
             Permissions.ResolveChannel(Guild, x, this, Permissions.ResolveGuild(Guild, x)),
             ChannelPermission.ViewChannel)).ToImmutableArray();
 
@@ -55,8 +55,8 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     /// <returns>
     ///     A read-only collection of users that are currently connected to this voice channel.
     /// </returns>
-    public IReadOnlyCollection<SocketGuildUser> ConnectedUsers
-        => Guild.Users.Where(x => x.VoiceChannel?.Id == Id).ToImmutableArray();
+    public IReadOnlyCollection<SocketGuildUser> ConnectedUsers =>
+        Guild.Users.Where(x => x.VoiceChannel?.Id == Id).ToImmutableArray();
 
     internal SocketVoiceChannel(KookSocketClient kook, ulong id, SocketGuild guild)
         : base(kook, id, guild)

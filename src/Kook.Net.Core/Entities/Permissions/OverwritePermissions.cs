@@ -17,15 +17,15 @@ public struct OverwritePermissions
     ///     Gets a <see cref="OverwritePermissions" /> that grants all permissions for the given channel.
     /// </summary>
     /// <exception cref="ArgumentException">Unknown channel type.</exception>
-    public static OverwritePermissions AllowAll(IChannel channel)
-        => new(ChannelPermissions.All(channel).RawValue, 0);
+    public static OverwritePermissions AllowAll(IChannel channel) =>
+        new(ChannelPermissions.All(channel).RawValue, 0);
 
     /// <summary>
     ///     Gets a <see cref="OverwritePermissions" /> that denies all permissions for the given channel.
     /// </summary>
     /// <exception cref="ArgumentException">Unknown channel type.</exception>
-    public static OverwritePermissions DenyAll(IChannel channel)
-        => new(0, ChannelPermissions.All(channel).RawValue);
+    public static OverwritePermissions DenyAll(IChannel channel) =>
+        new(0, ChannelPermissions.All(channel).RawValue);
 
     /// <summary>
     ///     Gets a packed value representing all the allowed permissions in this <see cref="OverwritePermissions"/>.
@@ -198,8 +198,8 @@ public struct OverwritePermissions
         PermValue? deafenMembers = null,
         PermValue? muteMembers = null,
         PermValue? playSoundtrack = null,
-        PermValue? shareScreen = null)
-        => new(AllowValue, DenyValue, createInvites, manageChannels, manageRoles, viewChannel,
+        PermValue? shareScreen = null) =>
+        new(AllowValue, DenyValue, createInvites, manageChannels, manageRoles, viewChannel,
             sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone, addReactions,
             passiveConnect, useVoiceActivity, speak, deafenMembers, muteMembers, playSoundtrack, shareScreen);
 

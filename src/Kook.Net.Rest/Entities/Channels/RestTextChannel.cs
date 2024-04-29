@@ -162,12 +162,12 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     ///     A task that represents the asynchronous get operation. The task result contains the category channel
     ///     representing the parent of this channel; <c>null</c> if none is set.
     /// </returns>
-    public Task<ICategoryChannel?> GetCategoryAsync(RequestOptions? options = null)
-        => ChannelHelper.GetCategoryAsync(this, Kook, options);
+    public Task<ICategoryChannel?> GetCategoryAsync(RequestOptions? options = null) =>
+        ChannelHelper.GetCategoryAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task SyncPermissionsAsync(RequestOptions? options = null)
-        => ChannelHelper.SyncPermissionsAsync(this, Kook, options);
+    public Task SyncPermissionsAsync(RequestOptions? options = null) =>
+        ChannelHelper.SyncPermissionsAsync(this, Kook, options);
 
     #endregion
 

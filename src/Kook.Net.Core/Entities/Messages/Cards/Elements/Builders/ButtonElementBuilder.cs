@@ -262,23 +262,23 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     ///     Determines whether the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ButtonElementBuilder? left, ButtonElementBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(ButtonElementBuilder? left, ButtonElementBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ButtonElementBuilder"/> is not equal to the current <see cref="ButtonElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ButtonElementBuilder"/> is not equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ButtonElementBuilder? left, ButtonElementBuilder? right)
-        => !(left == right);
+    public static bool operator !=(ButtonElementBuilder? left, ButtonElementBuilder? right) =>
+        !(left == right);
 
     /// <summary>
     ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="ButtonElementBuilder"/>.
     /// </summary>
     /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="ButtonElementBuilder"/>. </param>
     /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>. </returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is ButtonElementBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is ButtonElementBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>.</summary>
     /// <param name="buttonElementBuilder">The <see cref="ButtonElementBuilder"/> to compare with the current <see cref="ButtonElementBuilder"/>.</param>

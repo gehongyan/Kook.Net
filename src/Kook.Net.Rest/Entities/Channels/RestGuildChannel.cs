@@ -303,12 +303,12 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     #region IChannel
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options)
-        => AsyncEnumerable.Empty<IReadOnlyCollection<IUser>>(); //Overridden in Text/Voice
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options) =>
+        AsyncEnumerable.Empty<IReadOnlyCollection<IUser>>(); //Overridden in Text/Voice
 
     /// <inheritdoc />
-    Task<IUser?> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IUser?>(null); //Overridden in Text/Voice
+    Task<IUser?> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IUser?>(null); //Overridden in Text/Voice
 
     #endregion
 }

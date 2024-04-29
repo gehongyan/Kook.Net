@@ -4,8 +4,8 @@ internal static class EntityExtensions
 {
     #region Emotes
 
-    public static GuildEmote ToEntity(this API.Emoji model, ulong guildId)
-        => new(model.Id,
+    public static GuildEmote ToEntity(this API.Emoji model, ulong guildId) =>
+        new(model.Id,
             model.Name,
             model.Type == EmojiType.Animated,
             guildId,
@@ -123,7 +123,7 @@ internal static class EntityExtensions
         new(model.Text?.ToEntity());
 
     public static SectionModule ToEntity(this API.SectionModule model) =>
-        new(model.Mode ?? SectionAccessoryMode.Unspecified, model.Text?.ToEntity(), model.Accessory?.ToEntity());
+        new(model.Mode, model.Text?.ToEntity(), model.Accessory?.ToEntity());
 
     public static ImageGroupModule ToEntity(this API.ImageGroupModule model) =>
         new([..model.Elements.Select(e => e.ToEntity())]);

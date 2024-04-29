@@ -404,10 +404,10 @@ public partial class KookSocketClient
     /// </remarks>
     private async Task HandleDeletedChannel(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
-        if (DeserializePayload<Channel>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (GetChannel(data.Id) is not { } channel)
+        if (DeserializePayload<ChannelDeleteEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+        if (GetChannel(data.ChannelId) is not { } channel)
         {
-            await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.Id, gatewayEvent).ConfigureAwait(false);
+            await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.ChannelId, gatewayEvent).ConfigureAwait(false);
             return;
         }
 
@@ -471,7 +471,7 @@ public partial class KookSocketClient
         SocketUserMessage? cachedMsg = channel.GetCachedMessage(data.MessageId) as SocketUserMessage;
         SocketMessage? before = cachedMsg?.Clone();
         if (cachedMsg is not null)
-            cachedMsg.IsPinned = true;
+            cachedMsg.IsPinned = false;
 
         Cacheable<IMessage, Guid> cacheableBefore = new(before, data.MessageId, before is not null,
             () => Task.FromResult<IMessage?>(null));
@@ -482,6 +482,8 @@ public partial class KookSocketClient
     }
 
     #endregion
+
+    #region Direct Messages
 
     /// <remarks>
     ///     "PERSON", "updated_private_message"
@@ -599,6 +601,10 @@ public partial class KookSocketClient
         await TimedInvokeAsync(_directReactionRemovedEvent, nameof(DirectReactionRemoved),
             cacheableMsg, cacheableChannel, cacheableUser, reaction).ConfigureAwait(false);
     }
+
+    #endregion
+
+    #region Guild Members
 
     /// <remarks>
     ///     "GROUP", "joined_guild"
@@ -737,6 +743,10 @@ public partial class KookSocketClient
             users, data.EventTime).ConfigureAwait(false);
     }
 
+    #endregion
+
+    #region Guild Roles
+
     /// <remarks>
     ///     "GROUP", "added_role"
     /// </remarks>
@@ -798,6 +808,10 @@ public partial class KookSocketClient
         await TimedInvokeAsync(_roleUpdatedEvent, nameof(RoleUpdated), before, role).ConfigureAwait(false);
     }
 
+    #endregion
+
+    #region Guild Emojis
+
     /// <remarks>
     ///     "GROUP", "added_emoji"
     /// </remarks>
@@ -853,6 +867,10 @@ public partial class KookSocketClient
             ?? new GuildEmote(data.Id, data.Name, data.Type is EmojiType.Animated, guild.Id, null);
         await TimedInvokeAsync(_emoteDeletedEvent, nameof(EmoteDeleted), emote, guild).ConfigureAwait(false);
     }
+
+    #endregion
+
+    #region Guilds
 
     /// <remarks>
     ///     "GROUP", "updated_guild"
@@ -916,7 +934,7 @@ public partial class KookSocketClient
             .ToImmutableArray();
 
         await TimedInvokeAsync(_userBannedEvent, nameof(UserBanned),
-                bannedUsers, cacheableOperatorUser, guild, data.Reason).ConfigureAwait(false);
+            bannedUsers, cacheableOperatorUser, guild, data.Reason).ConfigureAwait(false);
     }
 
     /// <remarks>
@@ -942,6 +960,10 @@ public partial class KookSocketClient
         await TimedInvokeAsync(_userUnbannedEvent, nameof(UserUnbanned),
             bannedUsers, cacheableOperatorUser, guild).ConfigureAwait(false);
     }
+
+    #endregion
+
+    #region Users
 
     /// <remarks>
     ///     "GROUP", "joined_channel"
@@ -1082,10 +1104,10 @@ public partial class KookSocketClient
     /// </remarks>
     private async Task HandleSelfExitedGuild(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
-        if (DeserializePayload<SelfGuildEvent>(gatewayEvent.ExtraData.Body) is null) return;
-        if (State.RemoveGuild(gatewayEvent.TargetId) is not { } guild)
+        if (DeserializePayload<SelfGuildEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+        if (State.RemoveGuild(data.GuildId) is not { } guild)
         {
-            await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+            await UnknownGuildAsync(gatewayEvent.ExtraData.Type, data.GuildId, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
@@ -1094,6 +1116,10 @@ public partial class KookSocketClient
         await TimedInvokeAsync(_leftGuildEvent, nameof(LeftGuild), guild).ConfigureAwait(false);
         ((IDisposable)guild).Dispose();
     }
+
+    #endregion
+
+    #region Interactions
 
     /// <remarks>
     ///     "PERSON", "message_btn_click"
@@ -1144,6 +1170,8 @@ public partial class KookSocketClient
                 data.Value, cacheableUser, cacheableMessage, channel).ConfigureAwait(false);
         }
     }
+
+    #endregion
 
     #region Cacheable
 

@@ -251,8 +251,8 @@ public struct GuildPermissions
         bool? muteMembers = null,
         bool? manageNicknames = null,
         bool? playSoundtrack = null,
-        bool? shareScreen = null)
-        => new(RawValue, administrator, manageGuild, viewAuditLog, createInvites, manageInvites,
+        bool? shareScreen = null) =>
+        new(RawValue, administrator, manageGuild, viewAuditLog, createInvites, manageInvites,
             manageChannels, kickMembers, banMembers, manageEmojis, changeNickname, manageRoles, viewChannel,
             sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone, addReactions,
             followReactions, passiveConnect, onlyPushToTalk, useVoiceActivity, speak, deafenMembers, muteMembers,

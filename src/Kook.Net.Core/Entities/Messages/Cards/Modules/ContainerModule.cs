@@ -32,28 +32,28 @@ public class ContainerModule : IModule, IEquatable<ContainerModule>, IEquatable<
     ///     Determines whether the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ContainerModule left, ContainerModule right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(ContainerModule left, ContainerModule right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ContainerModule"/> is not equal to the current <see cref="ContainerModule"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ContainerModule"/> is not equal to the current <see cref="ContainerModule"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ContainerModule left, ContainerModule right)
-        => !(left == right);
+    public static bool operator !=(ContainerModule left, ContainerModule right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>.</summary>
     /// <remarks>If the object passes is an <see cref="ContainerModule"/>, <see cref="Equals(ContainerModule)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="ContainerModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is ContainerModule containerModule && Equals(containerModule);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is ContainerModule containerModule && Equals(containerModule);
 
     /// <summary>Determines whether the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>.</summary>
     /// <param name="containerModule">The <see cref="ContainerModule"/> to compare with the current <see cref="ContainerModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals([NotNullWhen(true)] ContainerModule? containerModule)
-        => GetHashCode() == containerModule?.GetHashCode();
+    public bool Equals([NotNullWhen(true)] ContainerModule? containerModule) =>
+        GetHashCode() == containerModule?.GetHashCode();
 
     /// <inheritdoc />
     public override int GetHashCode()

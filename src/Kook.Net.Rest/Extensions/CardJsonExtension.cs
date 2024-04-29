@@ -110,8 +110,8 @@ public static class CardJsonExtension
     /// <param name="builder">The builder to format as Json <c>string</c>.</param>
     /// <param name="writeIndented">Whether to write the json with indents.</param>
     /// <returns>A Json <c>string</c> containing the data from the <paramref name="builder"/>.</returns>
-    public static string ToJsonString(this ICardBuilder builder, bool writeIndented = true)
-        => ToJsonString(builder.Build(), writeIndented);
+    public static string ToJsonString(this ICardBuilder builder, bool writeIndented = true) =>
+        ToJsonString(builder.Build(), writeIndented);
 
     /// <summary>
     ///     Gets a Json formatted <c>string</c> from an <see cref="Card"/>.

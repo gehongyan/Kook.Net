@@ -136,23 +136,23 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     ///     Determines whether the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public static bool operator ==(PlainTextElementBuilder? left, PlainTextElementBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(PlainTextElementBuilder? left, PlainTextElementBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="PlainTextElementBuilder"/> is not equal to the current <see cref="PlainTextElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is not equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public static bool operator !=(PlainTextElementBuilder? left, PlainTextElementBuilder? right)
-        => !(left == right);
+    public static bool operator !=(PlainTextElementBuilder? left, PlainTextElementBuilder? right) =>
+        !(left == right);
 
     /// <summary>
     ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="PlainTextElementBuilder"/>.
     /// </summary>
     /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="PlainTextElementBuilder"/>.</param>
     /// <returns></returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is PlainTextElementBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is PlainTextElementBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>.</summary>
     /// <param name="plainTextElementBuilder">The <see cref="PlainTextElementBuilder"/> to compare with the current <see cref="PlainTextElementBuilder"/>.</param>

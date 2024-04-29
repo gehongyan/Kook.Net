@@ -187,8 +187,8 @@ public struct ChannelPermissions
         bool? deafenMembers = null,
         bool? muteMembers = null,
         bool? playSoundtrack = null,
-        bool? shareScreen = null)
-        => new(RawValue,
+        bool? shareScreen = null) =>
+        new(RawValue,
             createInvites,
             manageChannels,
             manageRoles,

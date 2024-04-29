@@ -121,8 +121,8 @@ public sealed class ArgumentType
 
 public sealed class CustomTypeReader : TypeReader
 {
-    public override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
-        => Task.FromResult(TypeReaderResult.FromSuccess(input));
+    public override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services) =>
+        Task.FromResult(TypeReaderResult.FromSuccess(input));
 }
 
 public sealed class TestModule : ModuleBase

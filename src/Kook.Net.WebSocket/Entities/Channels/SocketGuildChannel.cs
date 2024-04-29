@@ -315,8 +315,8 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
     /// </returns>
-    Task<IUser?> IGuildChannel.GetCreatorAsync(CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IUser?>(Creator);
+    Task<IUser?> IGuildChannel.GetCreatorAsync(CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IUser?>(Creator);
 
     #endregion
 

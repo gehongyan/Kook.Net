@@ -139,22 +139,22 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     ///     Determines whether the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(AudioModuleBuilder? left, AudioModuleBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(AudioModuleBuilder? left, AudioModuleBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="AudioModuleBuilder"/> is not equal to the current <see cref="AudioModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="AudioModuleBuilder"/> is not equal to the current <see cref="AudioModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(AudioModuleBuilder? left, AudioModuleBuilder? right)
-        => !(left == right);
+    public static bool operator !=(AudioModuleBuilder? left, AudioModuleBuilder? right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="AudioModuleBuilder"/>, <see cref="Equals(AudioModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="AudioModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is AudioModuleBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is AudioModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="AudioModuleBuilder"/> is equal to the current <see cref="AudioModuleBuilder"/>.</summary>
     /// <param name="audioModuleBuilder">The <see cref="AudioModuleBuilder"/> to compare with the current <see cref="AudioModuleBuilder"/>.</param>

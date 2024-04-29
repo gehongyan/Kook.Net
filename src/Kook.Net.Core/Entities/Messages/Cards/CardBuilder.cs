@@ -158,8 +158,8 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     /// <returns>
     ///     <c>true</c> if the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.
     /// </returns>
-    public static bool operator ==(CardBuilder? left, CardBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(CardBuilder? left, CardBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="CardBuilder"/> is not equal to the current <see cref="CardBuilder"/>.
@@ -167,16 +167,16 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     /// <returns>
     ///     <c>true</c> if the specified <see cref="CardBuilder"/> is not equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.
     /// </returns>
-    public static bool operator !=(CardBuilder? left, CardBuilder? right)
-        => !(left == right);
+    public static bool operator !=(CardBuilder? left, CardBuilder? right) =>
+        !(left == right);
 
     /// <summary>
     ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="CardBuilder"/>.
     /// </summary>
     /// <param name="obj"> The object to compare with the current <see cref="CardBuilder"/>.</param>
     /// <returns> <c>true</c> if the specified object is equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is CardBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is CardBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>.</summary>
     /// <param name="cardBuilder">The <see cref="CardBuilder"/> to compare with the current <see cref="CardBuilder"/>.</param>

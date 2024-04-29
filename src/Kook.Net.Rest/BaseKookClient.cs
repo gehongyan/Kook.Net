@@ -226,52 +226,52 @@ public abstract class BaseKookClient : IKookClient
     ISelfUser? IKookClient.CurrentUser => CurrentUser;
 
     /// <inheritdoc />
-    Task<IGuild?> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IGuild?>(null);
+    Task<IGuild?> IKookClient.GetGuildAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IGuild?>(null);
 
     /// <inheritdoc />
-    Task<IReadOnlyCollection<IGuild>> IKookClient.GetGuildsAsync(CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IReadOnlyCollection<IGuild>>(ImmutableArray.Create<IGuild>());
+    Task<IReadOnlyCollection<IGuild>> IKookClient.GetGuildsAsync(CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IReadOnlyCollection<IGuild>>(ImmutableArray.Create<IGuild>());
 
     /// <inheritdoc />
-    Task<IChannel?> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IChannel?>(null);
+    Task<IChannel?> IKookClient.GetChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IChannel?>(null);
 
     /// <inheritdoc />
-    Task<IDMChannel?> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IDMChannel?>(null);
+    Task<IDMChannel?> IKookClient.GetDMChannelAsync(Guid chatCode, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IDMChannel?>(null);
 
     /// <inheritdoc />
-    Task<IReadOnlyCollection<IDMChannel>> IKookClient.GetDMChannelsAsync(CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IReadOnlyCollection<IDMChannel>>(ImmutableArray.Create<IDMChannel>());
+    Task<IReadOnlyCollection<IDMChannel>> IKookClient.GetDMChannelsAsync(CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IReadOnlyCollection<IDMChannel>>(ImmutableArray.Create<IDMChannel>());
 
     /// <inheritdoc />
-    Task<IUser?> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IUser?>(null);
+    Task<IUser?> IKookClient.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IUser?>(null);
 
     /// <inheritdoc />
-    Task<IUser?> IKookClient.GetUserAsync(string username, string identifyNumber, RequestOptions? options)
-        => Task.FromResult<IUser?>(null);
+    Task<IUser?> IKookClient.GetUserAsync(string username, string identifyNumber, RequestOptions? options) =>
+        Task.FromResult<IUser?>(null);
 
     /// <inheritdoc />
-    Task<IReadOnlyCollection<IUser>> IKookClient.GetFriendsAsync(CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IReadOnlyCollection<IUser>>(ImmutableArray.Create<IUser>());
+    Task<IReadOnlyCollection<IUser>> IKookClient.GetFriendsAsync(CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IReadOnlyCollection<IUser>>(ImmutableArray.Create<IUser>());
 
     /// <inheritdoc />
-    Task<IReadOnlyCollection<IFriendRequest>> IKookClient.GetFriendRequestsAsync(CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IReadOnlyCollection<IFriendRequest>>(ImmutableArray.Create<IFriendRequest>());
+    Task<IReadOnlyCollection<IFriendRequest>> IKookClient.GetFriendRequestsAsync(CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IReadOnlyCollection<IFriendRequest>>(ImmutableArray.Create<IFriendRequest>());
 
     /// <inheritdoc />
-    Task<IReadOnlyCollection<IUser>> IKookClient.GetBlockedUsersAsync(CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IReadOnlyCollection<IUser>>(ImmutableArray.Create<IUser>());
+    Task<IReadOnlyCollection<IUser>> IKookClient.GetBlockedUsersAsync(CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IReadOnlyCollection<IUser>>(ImmutableArray.Create<IUser>());
 
     /// <inheritdoc />
-    Task IKookClient.StartAsync()
-        => Task.Delay(0);
+    Task IKookClient.StartAsync() =>
+        Task.Delay(0);
 
     /// <inheritdoc />
-    Task IKookClient.StopAsync()
-        => Task.Delay(0);
+    Task IKookClient.StopAsync() =>
+        Task.Delay(0);
 
     #endregion
 }

@@ -196,23 +196,23 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     ///     Determines whether the specified <see cref="ImageElementBuilder"/> is equal to the current <see cref="ImageElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ImageElementBuilder"/> is equal to the current <see cref="ImageElementBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ImageElementBuilder? left, ImageElementBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(ImageElementBuilder? left, ImageElementBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ImageElementBuilder"/> is not equal to the current <see cref="ImageElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ImageElementBuilder"/> is not equal to the current <see cref="ImageElementBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ImageElementBuilder? left, ImageElementBuilder? right)
-        => !(left == right);
+    public static bool operator !=(ImageElementBuilder? left, ImageElementBuilder? right) =>
+        !(left == right);
 
     /// <summary>
     ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="ImageElementBuilder"/>.
     /// </summary>
     /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="ImageElementBuilder"/>. </param>
     /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="ImageElementBuilder"/>; otherwise, <c>false</c>. </returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is ImageElementBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is ImageElementBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="ImageElementBuilder"/> is equal to the current <see cref="ImageElementBuilder"/>.</summary>
     /// <param name="imageElementBuilder">The <see cref="ImageElementBuilder"/> to compare with the current <see cref="ImageElementBuilder"/>.</param>

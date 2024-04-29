@@ -46,28 +46,28 @@ public class ParagraphStruct : IElement, IEquatable<ParagraphStruct>, IEquatable
     ///     Determines whether the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ParagraphStruct? left, ParagraphStruct? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(ParagraphStruct? left, ParagraphStruct? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ParagraphStruct"/> is not equal to the current <see cref="ParagraphStruct"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ParagraphStruct"/> is not equal to the current <see cref="ParagraphStruct"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ParagraphStruct? left, ParagraphStruct? right)
-        => !(left == right);
+    public static bool operator !=(ParagraphStruct? left, ParagraphStruct? right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>.</summary>
     /// <remarks>If the object passes is an <see cref="ParagraphStruct"/>, <see cref="Equals(ParagraphStruct)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="ParagraphStruct"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is ParagraphStruct paragraphStruct && Equals(paragraphStruct);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is ParagraphStruct paragraphStruct && Equals(paragraphStruct);
 
     /// <summary>Determines whether the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>.</summary>
     /// <param name="paragraphStruct">The <see cref="ParagraphStruct"/> to compare with the current <see cref="ParagraphStruct"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals([NotNullWhen(true)] ParagraphStruct? paragraphStruct)
-        => GetHashCode() == paragraphStruct?.GetHashCode();
+    public bool Equals([NotNullWhen(true)] ParagraphStruct? paragraphStruct) =>
+        GetHashCode() == paragraphStruct?.GetHashCode();
 
     /// <inheritdoc />
     public override int GetHashCode()

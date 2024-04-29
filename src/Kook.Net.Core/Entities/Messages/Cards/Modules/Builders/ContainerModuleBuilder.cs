@@ -109,22 +109,22 @@ public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModule
     ///     Determines whether the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ContainerModuleBuilder? left, ContainerModuleBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(ContainerModuleBuilder? left, ContainerModuleBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ContainerModuleBuilder"/> is not equal to the current <see cref="ContainerModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ContainerModuleBuilder"/> is not equal to the current <see cref="ContainerModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ContainerModuleBuilder? left, ContainerModuleBuilder? right)
-        => !(left == right);
+    public static bool operator !=(ContainerModuleBuilder? left, ContainerModuleBuilder? right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="ContainerModuleBuilder"/>, <see cref="Equals(ContainerModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="ContainerModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is ContainerModuleBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is ContainerModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>.</summary>
     /// <param name="containerModuleBuilder">The <see cref="ContainerModuleBuilder"/> to compare with the current <see cref="ContainerModuleBuilder"/>.</param>

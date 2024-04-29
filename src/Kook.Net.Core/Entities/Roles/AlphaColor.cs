@@ -169,35 +169,35 @@ public readonly struct AlphaColor
     ///     Determines whether the specified <see cref="AlphaColor" /> is equal to this instance.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="AlphaColor" /> is equal to this instance; otherwise, <c>false</c> . </returns>
-    public static bool operator ==(AlphaColor lhs, AlphaColor rhs)
-        => lhs.RawValue == rhs.RawValue;
+    public static bool operator ==(AlphaColor lhs, AlphaColor rhs) =>
+        lhs.RawValue == rhs.RawValue;
 
     /// <summary>
     ///     Determines whether the specified <see cref="AlphaColor" /> is not equal to this instance.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="AlphaColor" /> is not equal to this instance; otherwise, <c>false</c> . </returns>
-    public static bool operator !=(AlphaColor lhs, AlphaColor rhs)
-        => lhs.RawValue != rhs.RawValue;
+    public static bool operator !=(AlphaColor lhs, AlphaColor rhs) =>
+        lhs.RawValue != rhs.RawValue;
 
     /// <summary>
     ///     Converts the given raw value of <see cref="uint"/> to a <see cref="AlphaColor"/>.
     /// </summary>
     /// <param name="rawValue"> The raw value of the color. </param>
     /// <returns> The <see cref="AlphaColor"/> that represents the given raw value. </returns>
-    public static implicit operator AlphaColor(ulong rawValue)
-        => new(rawValue);
+    public static implicit operator AlphaColor(ulong rawValue) =>
+        new(rawValue);
 
     /// <summary>
     ///     Converts the given <see cref="AlphaColor"/> to its raw value of <see cref="uint"/>.
     /// </summary>
     /// <param name="color"> The <see cref="AlphaColor"/> to convert. </param>
     /// <returns> The raw value of the given <see cref="AlphaColor"/>. </returns>
-    public static implicit operator ulong(AlphaColor color)
-        => color.RawValue;
+    public static implicit operator ulong(AlphaColor color) =>
+        color.RawValue;
 
     /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is AlphaColor c && RawValue == c.RawValue;
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is AlphaColor c && RawValue == c.RawValue;
 
     /// <inheritdoc />
     public override int GetHashCode() => RawValue.GetHashCode();
@@ -207,8 +207,8 @@ public readonly struct AlphaColor
     /// </summary>
     /// <param name="color"> The Kook.Net-defined <see cref="Color"/> to convert. </param>
     /// <returns> The Kook.Net-defined <see cref="AlphaColor"/> that represents the given Kook.Net-defined <see cref="Color"/>. </returns>
-    public static implicit operator AlphaColor(Color color)
-        => new(((ulong)color.RawValue << 8) | 0xFF);
+    public static implicit operator AlphaColor(Color color) =>
+        new(((ulong)color.RawValue << 8) | 0xFF);
 
     /// <summary>
     ///     Converts the given Kook.Net-defined <see cref="AlphaColor"/> to a Kook.Net-defined <see cref="Color"/>.
@@ -227,16 +227,16 @@ public readonly struct AlphaColor
     /// </summary>
     /// <param name="color"> The Kook.Net-defined <see cref="AlphaColor"/> to convert. </param>
     /// <returns> The .NET standard <see cref="StandardColor"/> that represents the given Kook.Net-defined <see cref="AlphaColor"/>. </returns>
-    public static implicit operator StandardColor(AlphaColor color)
-        => StandardColor.FromArgb(color.A, color.R, color.G, color.B);
+    public static implicit operator StandardColor(AlphaColor color) =>
+        StandardColor.FromArgb(color.A, color.R, color.G, color.B);
 
     /// <summary>
     ///     Converts the given .NET standard <see cref="StandardColor"/> to a Kook.Net-defined <see cref="AlphaColor"/>.
     /// </summary>
     /// <param name="color"> The .NET standard <see cref="StandardColor"/> to convert. </param>
     /// <returns> The Kook.Net-defined <see cref="AlphaColor"/> that represents the given .NET standard <see cref="StandardColor"/>. </returns>
-    public static explicit operator AlphaColor(StandardColor color)
-        => new(color.R, color.G, color.B, color.A);
+    public static explicit operator AlphaColor(StandardColor color) =>
+        new(color.R, color.G, color.B, color.A);
 
     /// <summary>
     ///     Gets the hexadecimal representation of the color (e.g. <c>#000cccff</c>).

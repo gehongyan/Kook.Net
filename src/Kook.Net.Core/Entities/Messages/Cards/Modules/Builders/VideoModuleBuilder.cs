@@ -111,22 +111,22 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     ///     Determines whether the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(VideoModuleBuilder? left, VideoModuleBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(VideoModuleBuilder? left, VideoModuleBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="VideoModuleBuilder"/> is not equal to the current <see cref="VideoModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="VideoModuleBuilder"/> is not equal to the current <see cref="VideoModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(VideoModuleBuilder? left, VideoModuleBuilder? right)
-        => !(left == right);
+    public static bool operator !=(VideoModuleBuilder? left, VideoModuleBuilder? right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="VideoModuleBuilder"/>, <see cref="Equals(VideoModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="VideoModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is VideoModuleBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is VideoModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="VideoModuleBuilder"/> is equal to the current <see cref="VideoModuleBuilder"/>.</summary>
     /// <param name="videoModuleBuilder">The <see cref="VideoModuleBuilder"/> to compare with the current <see cref="VideoModuleBuilder"/>.</param>

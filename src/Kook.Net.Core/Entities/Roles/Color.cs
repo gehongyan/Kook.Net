@@ -222,35 +222,35 @@ public readonly struct Color
     ///     Determines whether the specified <see cref="Color" /> is equal to this instance.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="Color" /> is equal to this instance; otherwise, <c>false</c> . </returns>
-    public static bool operator ==(Color lhs, Color rhs)
-        => lhs.RawValue == rhs.RawValue;
+    public static bool operator ==(Color lhs, Color rhs) =>
+        lhs.RawValue == rhs.RawValue;
 
     /// <summary>
     ///     Determines whether the specified <see cref="Color" /> is not equal to this instance.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="Color" /> is not equal to this instance; otherwise, <c>false</c> . </returns>
-    public static bool operator !=(Color lhs, Color rhs)
-        => lhs.RawValue != rhs.RawValue;
+    public static bool operator !=(Color lhs, Color rhs) =>
+        lhs.RawValue != rhs.RawValue;
 
     /// <summary>
     ///     Converts the given raw value of <see cref="uint"/> to a <see cref="Color"/>.
     /// </summary>
     /// <param name="rawValue"> The raw value of the color. </param>
     /// <returns> The <see cref="Color"/> that represents the given raw value. </returns>
-    public static implicit operator Color(uint rawValue)
-        => new(rawValue);
+    public static implicit operator Color(uint rawValue) =>
+        new(rawValue);
 
     /// <summary>
     ///     Converts the given <see cref="Color"/> to its raw value of <see cref="uint"/>.
     /// </summary>
     /// <param name="color"> The <see cref="Color"/> to convert. </param>
     /// <returns> The raw value of the given <see cref="Color"/>. </returns>
-    public static implicit operator uint(Color color)
-        => color.RawValue;
+    public static implicit operator uint(Color color) =>
+        color.RawValue;
 
     /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is Color c && RawValue == c.RawValue;
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is Color c && RawValue == c.RawValue;
 
     /// <inheritdoc />
     public override int GetHashCode() => RawValue.GetHashCode();
@@ -260,16 +260,16 @@ public readonly struct Color
     /// </summary>
     /// <param name="color"> The Kook.Net-defined <see cref="Color"/> to convert. </param>
     /// <returns> The .NET standard <see cref="StandardColor"/> that represents the given Kook.Net-defined <see cref="Color"/>. </returns>
-    public static implicit operator StandardColor(Color color)
-        => StandardColor.FromArgb((int)color.RawValue);
+    public static implicit operator StandardColor(Color color) =>
+        StandardColor.FromArgb((int)color.RawValue);
 
     /// <summary>
     ///     Converts the given .NET standard <see cref="StandardColor"/> to a Kook.Net-defined <see cref="Color"/>.
     /// </summary>
     /// <param name="color"> The .NET standard <see cref="StandardColor"/> to convert. </param>
     /// <returns> The Kook.Net-defined <see cref="Color"/> that represents the given .NET standard <see cref="StandardColor"/>. </returns>
-    public static explicit operator Color(StandardColor color)
-        => new(((uint)color.ToArgb() << 8) >> 8);
+    public static explicit operator Color(StandardColor color) =>
+        new(((uint)color.ToArgb() << 8) >> 8);
 
     /// <summary>
     ///     Gets the hexadecimal representation of the color (e.g. <c>#000ccc</c>).

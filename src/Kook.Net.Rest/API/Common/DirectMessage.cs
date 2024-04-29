@@ -18,6 +18,7 @@ internal class DirectMessage
     public required EmbedBase[] Embeds { get; set; }
 
     [JsonPropertyName("attachments")]
+    [JsonConverter(typeof(SafeAttachmentConverter))]
     public Attachment? Attachment { get; set; }
 
     [JsonPropertyName("create_at")]
@@ -34,9 +35,8 @@ internal class DirectMessage
     [JsonPropertyName("author_id")]
     public ulong AuthorId { get; set; }
 
-    // TODO: required? MayBeNull
     [JsonPropertyName("author")]
-    public required User Author { get; set; }
+    public User? Author { get; set; }
 
     [JsonPropertyName("image_name")]
     public required string ImageName { get; set; }

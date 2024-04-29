@@ -83,7 +83,7 @@ csharp
 CODE BLOCK
 ";
         Cacheable<IUserMessage, Guid> cacheable = await _channel.SendTextAsync(kMarkdownSourceContent);
-        IUserMessage message = await cacheable.GetOrDownloadAsync();
+        IUserMessage? message = await cacheable.GetOrDownloadAsync();
         try
         {
             selfUser = await _guild.GetCurrentUserAsync();
@@ -113,9 +113,9 @@ CODE BLOCK
     [Fact]
     public async Task ReactionsAsync()
     {
-        IGuildUser currentUser = await _guild.GetCurrentUserAsync();
+        IGuildUser? currentUser = await _guild.GetCurrentUserAsync();
         Cacheable<IUserMessage, Guid> cacheable = await _channel.SendTextAsync("TEST MESSAGE");
-        RestMessage message = await cacheable.GetOrDownloadAsync() as RestMessage;
+        RestMessage? message = await cacheable.GetOrDownloadAsync() as RestMessage;
         try
         {
             Assert.NotNull(message);

@@ -122,7 +122,7 @@ public class CardXmlTests
         Assert.Equal("SECTION_ACCESSORY_BUTTON", (((ButtonElement)((SectionModule)full.Modules[1]).Accessory)?.Text as PlainTextElement)?.Content);
 
         Assert.IsType<SectionModule>(full.Modules[2]);
-        Assert.Equal(SectionAccessoryMode.Unspecified, ((SectionModule)full.Modules[2])?.Mode);
+        Assert.Equal(null, ((SectionModule)full.Modules[2])?.Mode);
         Assert.Equal("SECTION_KMARKDOWN", (((SectionModule)full.Modules[2]).Text as KMarkdownElement)?.Content);
         Assert.Equal("https://SECTION_MOCK/IMAGE.jpg", (((SectionModule)full.Modules[2]).Accessory as ImageElement)?.Source);
         Assert.Equal(ImageSize.Small, ((ImageElement)((SectionModule)full.Modules[2]).Accessory).Size);

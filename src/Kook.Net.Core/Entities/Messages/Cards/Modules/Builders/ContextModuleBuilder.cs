@@ -149,22 +149,22 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     ///     Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ContextModuleBuilder? left, ContextModuleBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(ContextModuleBuilder? left, ContextModuleBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ContextModuleBuilder"/> is not equal to the current <see cref="ContextModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ContextModuleBuilder"/> is not equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ContextModuleBuilder? left, ContextModuleBuilder? right)
-        => !(left == right);
+    public static bool operator !=(ContextModuleBuilder? left, ContextModuleBuilder? right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="ContextModuleBuilder"/>, <see cref="Equals(ContextModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="ContextModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is ContextModuleBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is ContextModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.</summary>
     /// <param name="contextModuleBuilder">The <see cref="ContextModuleBuilder"/> to compare with the current <see cref="ContextModuleBuilder"/>.</param>

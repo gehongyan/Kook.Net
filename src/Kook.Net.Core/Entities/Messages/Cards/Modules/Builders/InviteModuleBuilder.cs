@@ -91,22 +91,22 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
     ///     Determines whether the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(InviteModuleBuilder? left, InviteModuleBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(InviteModuleBuilder? left, InviteModuleBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="InviteModuleBuilder"/> is not equal to the current <see cref="InviteModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="InviteModuleBuilder"/> is not equal to the current <see cref="InviteModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(InviteModuleBuilder? left, InviteModuleBuilder? right)
-        => !(left == right);
+    public static bool operator !=(InviteModuleBuilder? left, InviteModuleBuilder? right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="InviteModuleBuilder"/>, <see cref="Equals(InviteModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="InviteModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is InviteModuleBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is InviteModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>.</summary>
     /// <param name="inviteModuleBuilder">The <see cref="InviteModuleBuilder"/> to compare with the current <see cref="InviteModuleBuilder"/>.</param>

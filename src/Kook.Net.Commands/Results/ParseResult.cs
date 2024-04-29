@@ -80,8 +80,8 @@ public struct ParseResult : IResult
     /// <param name="error"> The error that occurred. </param>
     /// <param name="reason"> The reason for the error. </param>
     /// <returns> The parsing result. </returns>
-    public static ParseResult FromError(CommandError error, string reason)
-        => new([], [], error, reason, null);
+    public static ParseResult FromError(CommandError error, string reason) =>
+        new([], [], error, reason, null);
 
     /// <summary>
     ///     Creates a failed parsing result.

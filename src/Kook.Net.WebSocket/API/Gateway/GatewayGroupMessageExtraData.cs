@@ -40,5 +40,6 @@ internal class GatewayGroupMessageExtraData
     public Quote? Quote { get; set; }
 
     [JsonPropertyName("attachments")]
+    [JsonConverter(typeof(SafeAttachmentConverter))]
     public Attachment? Attachment { get; set; }
 }

@@ -193,23 +193,23 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     ///     Determines whether the specified <see cref="ParagraphStructBuilder"/> is equal to the current <see cref="ParagraphStructBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ParagraphStructBuilder"/> is equal to the current <see cref="ParagraphStructBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ParagraphStructBuilder? left, ParagraphStructBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(ParagraphStructBuilder? left, ParagraphStructBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ParagraphStructBuilder"/> is not equal to the current <see cref="ParagraphStructBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ParagraphStructBuilder"/> is not equal to the current <see cref="ParagraphStructBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ParagraphStructBuilder? left, ParagraphStructBuilder? right)
-        => !(left == right);
+    public static bool operator !=(ParagraphStructBuilder? left, ParagraphStructBuilder? right) =>
+        !(left == right);
 
     /// <summary>
     ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="ParagraphStructBuilder"/>.
     /// </summary>
     /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="ParagraphStructBuilder"/>. </param>
     /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="ParagraphStructBuilder"/>; otherwise, <c>false</c>. </returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is ParagraphStructBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is ParagraphStructBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="ParagraphStructBuilder"/> is equal to the current <see cref="ParagraphStructBuilder"/>.</summary>
     /// <param name="paragraphStructBuilder">The <see cref="ParagraphStructBuilder"/> to compare with the current <see cref="ParagraphStructBuilder"/>.</param>

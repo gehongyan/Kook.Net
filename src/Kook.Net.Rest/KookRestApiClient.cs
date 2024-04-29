@@ -1658,8 +1658,8 @@ internal class KookRestApiClient : IDisposable
             ChannelId = channelId;
         }
 
-        internal object?[] ToArray()
-            => [HttpMethod, GuildId, ChannelId];
+        internal object?[] ToArray() =>
+            [HttpMethod, GuildId, ChannelId];
 
         internal Dictionary<string, string> ToMajorParametersDictionary()
         {

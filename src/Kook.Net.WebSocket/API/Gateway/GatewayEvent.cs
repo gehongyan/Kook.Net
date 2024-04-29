@@ -13,6 +13,7 @@ internal class GatewayEvent<T>
     public MessageType Type { get; set; }
 
     [JsonPropertyName("target_id")]
+    [JsonConverter(typeof(SafeUInt64Converter))]
     public ulong TargetId { get; set; }
 
     [JsonPropertyName("author_id")]

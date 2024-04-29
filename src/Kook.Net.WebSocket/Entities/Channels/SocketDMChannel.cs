@@ -416,12 +416,12 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     string IChannel.Name => $"@{Recipient}";
 
     /// <inheritdoc />
-    Task<IUser?> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options)
-        => Task.FromResult<IUser?>(GetUser(id));
+    Task<IUser?> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IUser?>(GetUser(id));
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options)
-        => ImmutableArray.Create<IReadOnlyCollection<IUser>>(Users).ToAsyncEnumerable();
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options) =>
+        ImmutableArray.Create<IReadOnlyCollection<IUser>>(Users).ToAsyncEnumerable();
 
     #endregion
 

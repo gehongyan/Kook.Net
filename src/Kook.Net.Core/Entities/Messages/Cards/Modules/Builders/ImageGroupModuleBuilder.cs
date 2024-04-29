@@ -124,22 +124,22 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
     ///     Determines whether the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ImageGroupModuleBuilder? left, ImageGroupModuleBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(ImageGroupModuleBuilder? left, ImageGroupModuleBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ImageGroupModuleBuilder"/> is not equal to the current <see cref="ImageGroupModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ImageGroupModuleBuilder"/> is not equal to the current <see cref="ImageGroupModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ImageGroupModuleBuilder? left, ImageGroupModuleBuilder? right)
-        => !(left == right);
+    public static bool operator !=(ImageGroupModuleBuilder? left, ImageGroupModuleBuilder? right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="ImageGroupModuleBuilder"/>, <see cref="Equals(ImageGroupModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="ImageGroupModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is ImageGroupModuleBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is ImageGroupModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>.</summary>
     /// <param name="imageGroupModuleBuilder">The <see cref="ImageGroupModuleBuilder"/> to compare with the current <see cref="ImageGroupModuleBuilder"/>.</param>

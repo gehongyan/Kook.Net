@@ -49,16 +49,16 @@ public readonly struct GuildFeatures
     /// </summary>
     /// <param name="feature">The feature(s) to check for.</param>
     /// <returns><c>true</c> if this guild has the provided feature(s), otherwise <c>false</c>.</returns>
-    public bool HasFeature(GuildFeature feature)
-        => Value.HasFlag(feature);
+    public bool HasFeature(GuildFeature feature) =>
+        Value.HasFlag(feature);
 
     /// <summary>
     ///     Returns whether or not this guild has a feature.
     /// </summary>
     /// <param name="feature">The feature to check for.</param>
     /// <returns><c>true</c> if this guild has the provided feature, otherwise <c>false</c>.</returns>
-    public bool HasFeature(string feature)
-        => RawValues.Contains(feature);
+    public bool HasFeature(string feature) =>
+        RawValues.Contains(feature);
 
     internal void EnsureFeature(GuildFeature feature)
     {

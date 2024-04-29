@@ -142,8 +142,8 @@ public static class TokenUtils
     /// <returns>
     ///     <c>true</c> if the token contains a whitespace or newline character.
     /// </returns>
-    internal static bool CheckContainsIllegalCharacters(string token)
-        => token.IndexOfAny(IllegalTokenCharacters) != -1;
+    internal static bool CheckContainsIllegalCharacters(string token) =>
+        token.IndexOfAny(IllegalTokenCharacters) != -1;
 
     /// <summary>
     ///     Checks the validity of the supplied token of a specific type.

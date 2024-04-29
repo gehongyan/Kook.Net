@@ -9,7 +9,7 @@
     <LangVersion>latestmajor</LangVersion>
     <RootNamespace>Kook.Net.Samples.SimpleBot</RootNamespace>
     <NoWarn>NU1803</NoWarn>
-    <Configurations>Debug;Release;Debug Rest;Debug Packets</Configurations>
+    <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 

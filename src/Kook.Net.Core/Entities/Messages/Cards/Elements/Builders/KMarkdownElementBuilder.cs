@@ -103,23 +103,23 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     ///     Determines whether the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public static bool operator ==(KMarkdownElementBuilder? left, KMarkdownElementBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(KMarkdownElementBuilder? left, KMarkdownElementBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="KMarkdownElementBuilder"/> is not equal to the current <see cref="KMarkdownElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="KMarkdownElementBuilder"/> is not equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public static bool operator !=(KMarkdownElementBuilder? left, KMarkdownElementBuilder? right)
-        => !(left == right);
+    public static bool operator !=(KMarkdownElementBuilder? left, KMarkdownElementBuilder? right) =>
+        !(left == right);
 
     /// <summary>
     ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="KMarkdownElementBuilder"/>.
     /// </summary>
     /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="KMarkdownElementBuilder"/>.</param>
     /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is KMarkdownElementBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is KMarkdownElementBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>.</summary>
     /// <param name="kMarkdownElementBuilder">The <see cref="KMarkdownElementBuilder"/> to compare with the current <see cref="KMarkdownElementBuilder"/>.</param>

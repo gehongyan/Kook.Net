@@ -7,12 +7,12 @@ internal static class Permissions
     public const int MaxBits = 29;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static PermValue GetValue(ulong allow, ulong deny, ChannelPermission flag)
-        => GetValue(allow, deny, (ulong)flag);
+    public static PermValue GetValue(ulong allow, ulong deny, ChannelPermission flag) =>
+        GetValue(allow, deny, (ulong)flag);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static PermValue GetValue(ulong allow, ulong deny, GuildPermission flag)
-        => GetValue(allow, deny, (ulong)flag);
+    public static PermValue GetValue(ulong allow, ulong deny, GuildPermission flag) =>
+        GetValue(allow, deny, (ulong)flag);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PermValue GetValue(ulong allow, ulong deny, ulong flag)
@@ -25,23 +25,23 @@ internal static class Permissions
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool GetValue(ulong value, ChannelPermission flag)
-        => GetValue(value, (ulong)flag);
+    public static bool GetValue(ulong value, ChannelPermission flag) =>
+        GetValue(value, (ulong)flag);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static bool GetValue(ulong value, GuildPermission flag)
-        => GetValue(value, (ulong)flag);
+    public static bool GetValue(ulong value, GuildPermission flag) =>
+        GetValue(value, (ulong)flag);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static bool GetValue(ulong value, ulong flag) => HasFlag(value, flag);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SetValue(ref ulong rawValue, bool? value, ChannelPermission flag)
-        => SetValue(ref rawValue, value, (ulong)flag);
+    public static void SetValue(ref ulong rawValue, bool? value, ChannelPermission flag) =>
+        SetValue(ref rawValue, value, (ulong)flag);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SetValue(ref ulong rawValue, bool? value, GuildPermission flag)
-        => SetValue(ref rawValue, value, (ulong)flag);
+    public static void SetValue(ref ulong rawValue, bool? value, GuildPermission flag) =>
+        SetValue(ref rawValue, value, (ulong)flag);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SetValue(ref ulong rawValue, bool? value, ulong flag)
@@ -56,12 +56,12 @@ internal static class Permissions
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SetValue(ref ulong allow, ref ulong deny, PermValue? value, ChannelPermission flag)
-        => SetValue(ref allow, ref deny, value, (ulong)flag);
+    public static void SetValue(ref ulong allow, ref ulong deny, PermValue? value, ChannelPermission flag) =>
+        SetValue(ref allow, ref deny, value, (ulong)flag);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void SetValue(ref ulong allow, ref ulong deny, PermValue? value, GuildPermission flag)
-        => SetValue(ref allow, ref deny, value, (ulong)flag);
+    public static void SetValue(ref ulong allow, ref ulong deny, PermValue? value, GuildPermission flag) =>
+        SetValue(ref allow, ref deny, value, (ulong)flag);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void SetValue(ref ulong allow, ref ulong deny, PermValue? value, ulong flag)

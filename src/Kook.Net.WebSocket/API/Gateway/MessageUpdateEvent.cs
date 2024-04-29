@@ -35,6 +35,7 @@ internal class MessageUpdateEvent
     public Quote? Quote { get; set; }
 
     [JsonPropertyName("attachments")]
+    [JsonConverter(typeof(SafeAttachmentConverter))]
     public Attachment? Attachment { get; set; }
 
     [JsonPropertyName("msg_id")]

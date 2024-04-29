@@ -85,6 +85,12 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     {
         bool hasChanges = false;
         hasChanges |= ValueHelper.SetIfChanged(() => Username, x => Username = x, model.Username);
+        if (hasChanges)
+        {
+            foreach (SocketGuildUser current in state.Guilds.Select(x => x.CurrentUser).OfType<SocketGuildUser>())
+                current.UpdateNickname();
+        }
+
         hasChanges |= ValueHelper.SetIfChanged(() => Avatar, x => Avatar = x, model.Avatar);
         return hasChanges;
     }
@@ -93,9 +99,7 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     {
         bool hasChanges = false;
         hasChanges |= ValueHelper.SetIfChanged(() => Username, x => Username = x, model.Username);
-        hasChanges |= ValueHelper.SetIfChanged(
-            () => IdentifyNumberValue,
-            x => IdentifyNumberValue = x,
+        hasChanges |= ValueHelper.SetIfChanged(() => IdentifyNumberValue, x => IdentifyNumberValue = x,
             ushort.Parse(model.IdentifyNumber, NumberStyles.None, CultureInfo.InvariantCulture));
         hasChanges |= ValueHelper.SetIfChanged(() => IsBot, x => IsBot = x, model.Bot);
         hasChanges |= ValueHelper.SetIfChanged(() => IsBanned, x => IsBanned = x, model.Status == 10);
@@ -169,16 +173,16 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     #region IUser
 
     /// <inheritdoc />
-    async Task<IDMChannel> IUser.CreateDMChannelAsync(RequestOptions? options)
-        => await CreateDMChannelAsync(options).ConfigureAwait(false);
+    async Task<IDMChannel> IUser.CreateDMChannelAsync(RequestOptions? options) =>
+        await CreateDMChannelAsync(options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task<IIntimacy> IUser.GetIntimacyAsync(RequestOptions? options)
-        => await GetIntimacyAsync(options).ConfigureAwait(false);
+    async Task<IIntimacy> IUser.GetIntimacyAsync(RequestOptions? options) =>
+        await GetIntimacyAsync(options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task IUser.UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions? options)
-        => await UpdateIntimacyAsync(func, options).ConfigureAwait(false);
+    async Task IUser.UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions? options) =>
+        await UpdateIntimacyAsync(func, options).ConfigureAwait(false);
 
     #endregion
 }

@@ -20,6 +20,12 @@ internal static class SocketUserHelper
         user.Update(client.State, member);
     }
 
+    public static async Task UpdateAsync(SocketSelfUser user, KookSocketClient client, RequestOptions? options)
+    {
+        SelfUser selfUser = await client.ApiClient.GetSelfUserAsync(options).ConfigureAwait(false);
+        user.Update(client.State, selfUser);
+    }
+
     public static async Task<SocketDMChannel> CreateDMChannelAsync(SocketUser user, KookSocketClient client, RequestOptions? options)
     {
         UserChat userChat = await client.ApiClient.CreateUserChatAsync(user.Id, options).ConfigureAwait(false);

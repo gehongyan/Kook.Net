@@ -9,7 +9,7 @@
     <LangVersion>latestmajor</LangVersion>
     <RootNamespace>Kook.Net.Samples.CardMarkup</RootNamespace>
     <NoWarn>NU1803</NoWarn>
-    <Configurations>Debug;Release;Debug Rest;Debug Packets</Configurations>
+    <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fluid.Core" Version="2.6.0" />
+    <PackageReference Include="Fluid.Core" Version="2.9.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
   </ItemGroup>
 

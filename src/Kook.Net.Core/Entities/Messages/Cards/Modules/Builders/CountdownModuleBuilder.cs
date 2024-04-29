@@ -145,22 +145,22 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     ///     Determines whether the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(CountdownModuleBuilder? left, CountdownModuleBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(CountdownModuleBuilder? left, CountdownModuleBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="CountdownModuleBuilder"/> is not equal to the current <see cref="CountdownModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is not equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(CountdownModuleBuilder? left, CountdownModuleBuilder? right)
-        => !(left == right);
+    public static bool operator !=(CountdownModuleBuilder? left, CountdownModuleBuilder? right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="CountdownModuleBuilder"/>, <see cref="Equals(CountdownModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="CountdownModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is CountdownModuleBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is CountdownModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>.</summary>
     /// <param name="countdownModuleBuilder">The <see cref="CountdownModuleBuilder"/> to compare with the current <see cref="CountdownModuleBuilder"/>.</param>

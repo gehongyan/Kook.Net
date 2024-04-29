@@ -30,6 +30,7 @@ internal class Message
     public required EmbedBase[] Embeds { get; set; }
 
     [JsonPropertyName("attachments")]
+    [JsonConverter(typeof(SafeAttachmentConverter))]
     public Attachment? Attachment { get; set; }
 
     [JsonPropertyName("create_at")]

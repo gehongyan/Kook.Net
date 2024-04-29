@@ -143,22 +143,22 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     ///     Determines whether the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(HeaderModuleBuilder? left, HeaderModuleBuilder? right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(HeaderModuleBuilder? left, HeaderModuleBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="HeaderModuleBuilder"/> is not equal to the current <see cref="HeaderModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="HeaderModuleBuilder"/> is not equal to the current <see cref="HeaderModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(HeaderModuleBuilder? left, HeaderModuleBuilder? right)
-        => !(left == right);
+    public static bool operator !=(HeaderModuleBuilder? left, HeaderModuleBuilder? right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="HeaderModuleBuilder"/>, <see cref="Equals(HeaderModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="HeaderModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)] object? obj)
-        => obj is HeaderModuleBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is HeaderModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>.</summary>
     /// <param name="headerModuleBuilder">The <see cref="HeaderModuleBuilder"/> to compare with the current <see cref="HeaderModuleBuilder"/>.</param>
