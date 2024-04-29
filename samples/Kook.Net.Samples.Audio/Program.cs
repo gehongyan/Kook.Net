@@ -12,7 +12,7 @@ using Kook.WebSocket;
 // 您可以在以下位置找到使用命令框架的文档：
 // - https://kooknet.dev/guides/text_commands/intro.html
 
-HostApplicationBuilder builder = new();
+HostApplicationBuilder builder = Host.CreateEmptyApplicationBuilder(null);
 builder.Services.AddSingleton(_ => new KookSocketClient(new KookSocketConfig
 {
     LogLevel = LogSeverity.Debug,
@@ -23,8 +23,7 @@ builder.Services.AddSingleton(_ => new CommandService(new CommandServiceConfig
 {
     DefaultRunMode = RunMode.Async
 }));
-builder.Services.AddSingleton<CommandHandlingService>();
-builder.Services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<CommandHandlingService>());
+builder.Services.AddHostedService<CommandHandlingService>();
 builder.Services.AddSingleton<MusicService>();
 builder.Services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<MusicService>());
 builder.Services.AddHttpClient<MusicModule>("Music");

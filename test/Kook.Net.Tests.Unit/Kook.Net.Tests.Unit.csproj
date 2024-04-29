@@ -1,39 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <IsPackable>false</IsPackable>
-    <RootNamespace>Kook</RootNamespace>
-    <LangVersion>default</LangVersion>
-    <NoWarn>NU1803</NoWarn>
-    <Configurations>Debug;Release</Configurations>
-    <Platforms>AnyCPU</Platforms>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="NSubstitute" Version="5.1.0" />
-    <PackageReference Include="xunit" Version="2.8.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" $([System.Text.RegularExpressions.Regex]::IsMatch($(TargetFramework), '^net\d\.\d$')) ">
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="6.0.2">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Kook.Net.CardMarkup\Kook.Net.CardMarkup.csproj" />
-    <ProjectReference Include="..\..\src\Kook.Net.Commands\Kook.Net.Commands.csproj"/>
-    <ProjectReference Include="..\..\src\Kook.Net.Core\Kook.Net.Core.csproj"/>
-    <ProjectReference Include="..\..\src\Kook.Net.Rest\Kook.Net.Rest.csproj"/>
-    <ProjectReference Include="..\..\src\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj"/>
-  </ItemGroup>
+  <Import Project="../../Kook.Net.Test.targets" />
 
 </Project>

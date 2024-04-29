@@ -25,7 +25,6 @@
     <WarningLevel>6</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DefineConstants>DEBUG_PACKETS</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup>
