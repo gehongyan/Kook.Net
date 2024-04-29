@@ -5,41 +5,41 @@ namespace Kook.API;
 internal class Poke
 {
     [JsonPropertyName("id")]
-    public uint Id { get; set; }
+    public required uint Id { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [JsonPropertyName("desc")]
-    public string Description { get; set; }
+    public required string Description { get; set; }
 
     [JsonPropertyName("cd")]
-    public int Cooldown { get; set; }
+    public required int Cooldown { get; set; }
 
     [JsonPropertyName("categories")]
-    public string[] Categories { get; set; }
+    public required string[] Categories { get; set; }
 
     [JsonPropertyName("label")]
-    public uint LabelId { get; set; }
+    public required uint LabelId { get; set; }
 
     [JsonPropertyName("label_name")]
-    public string LabelName { get; set; }
+    public required string LabelName { get; set; }
 
     [JsonPropertyName("quality")]
-    public uint QualityId { get; set; }
+    public required uint QualityId { get; set; }
 
     [JsonPropertyName("icon")]
-    public string Icon { get; set; }
+    public required string Icon { get; set; }
 
     [JsonPropertyName("icon_expired")]
-    public string IconExpired { get; set; }
+    public required string IconExpired { get; set; }
 
     [JsonPropertyName("quality_resource")]
-    public PokeQualityResource Quality { get; set; }
+    public required PokeQualityResource Quality { get; set; }
 
     [JsonPropertyName("resources")]
-    public PokeResourceBase Resource { get; set; }
+    public required PokeResourceBase Resource { get; set; }
 
     [JsonPropertyName("msg_scenarios")]
-    public Dictionary<string, string> MessageScenarios { get; set; }
+    public required Dictionary<string, string> MessageScenarios { get; set; }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
@@ -7,9 +8,12 @@ namespace Kook;
 ///     Represents a container module that can be used in an <see cref="ICard"/>.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class ContainerModule : IModule, IEquatable<ContainerModule>
+public class ContainerModule : IModule, IEquatable<ContainerModule>, IEquatable<IModule>
 {
-    internal ContainerModule(ImmutableArray<ImageElement> elements) => Elements = elements;
+    internal ContainerModule(ImmutableArray<ImageElement> elements)
+    {
+        Elements = elements;
+    }
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Container;
@@ -28,28 +32,28 @@ public class ContainerModule : IModule, IEquatable<ContainerModule>
     ///     Determines whether the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ContainerModule left, ContainerModule right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(ContainerModule left, ContainerModule right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ContainerModule"/> is not equal to the current <see cref="ContainerModule"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ContainerModule"/> is not equal to the current <see cref="ContainerModule"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ContainerModule left, ContainerModule right)
-        => !(left == right);
+    public static bool operator !=(ContainerModule left, ContainerModule right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>.</summary>
     /// <remarks>If the object passes is an <see cref="ContainerModule"/>, <see cref="Equals(ContainerModule)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="ContainerModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
-        => obj is ContainerModule containerModule && Equals(containerModule);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is ContainerModule containerModule && Equals(containerModule);
 
     /// <summary>Determines whether the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>.</summary>
     /// <param name="containerModule">The <see cref="ContainerModule"/> to compare with the current <see cref="ContainerModule"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(ContainerModule containerModule)
-        => GetHashCode() == containerModule?.GetHashCode();
+    public bool Equals([NotNullWhen(true)] ContainerModule? containerModule) =>
+        GetHashCode() == containerModule?.GetHashCode();
 
     /// <inheritdoc />
     public override int GetHashCode()
@@ -58,9 +62,12 @@ public class ContainerModule : IModule, IEquatable<ContainerModule>
         {
             int hash = (int)2166136261;
             hash = (hash * 16777619) ^ Type.GetHashCode();
-            foreach (ImageElement element in Elements) hash = (hash * 16777619) ^ element.GetHashCode();
-
+            foreach (ImageElement element in Elements)
+                hash = (hash * 16777619) ^ element.GetHashCode();
             return hash;
         }
     }
+
+    bool IEquatable<IModule>.Equals([NotNullWhen(true)] IModule? module) =>
+        Equals(module as ContainerModule);
 }

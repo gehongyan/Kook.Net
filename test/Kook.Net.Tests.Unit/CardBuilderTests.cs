@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Xunit;
 
 namespace Kook;
@@ -30,14 +29,14 @@ public class CardBuilderTests
         Assert.Equal(CardSize.Small, builder.Build().Size);
         Assert.Equal(Color.Blue, builder.Color);
         Assert.Equal(Color.Blue, builder.Build().Color);
-        Assert.Equal("text", ((KMarkdownElementBuilder)((SectionModuleBuilder)builder.Modules[0]).Text).Content);
-        Assert.Equal("text", ((KMarkdownElement)((SectionModule)builder.Build().Modules[0]).Text).Content);
+        Assert.Equal("text", ((KMarkdownElementBuilder?)((SectionModuleBuilder)builder.Modules[0]).Text)?.Content);
+        Assert.Equal("text", ((KMarkdownElement?)((SectionModule)builder.Build().Modules[0]).Text)?.Content);
         builder = new CardBuilder
         {
             Theme = CardTheme.Danger,
             Size = CardSize.Large,
             Color = Color.Red,
-            Modules = new List<IModuleBuilder> { new SectionModuleBuilder { Text = new PlainTextElementBuilder { Content = "content" } } }
+            Modules = [new SectionModuleBuilder { Text = new PlainTextElementBuilder { Content = "content" } }]
         };
         Assert.Equal(CardTheme.Danger, builder.Theme);
         Assert.Equal(CardTheme.Danger, builder.Build().Theme);
@@ -45,8 +44,8 @@ public class CardBuilderTests
         Assert.Equal(CardSize.Large, builder.Build().Size);
         Assert.Equal(Color.Red, builder.Color);
         Assert.Equal(Color.Red, builder.Build().Color);
-        Assert.Equal("content", ((PlainTextElementBuilder)((SectionModuleBuilder)builder.Modules[0]).Text).Content);
-        Assert.Equal("content", ((PlainTextElement)((SectionModule)builder.Build().Modules[0]).Text).Content);
+        Assert.Equal("content", ((PlainTextElementBuilder?)((SectionModuleBuilder)builder.Modules[0]).Text)?.Content);
+        Assert.Equal("content", ((PlainTextElement?)((SectionModule)builder.Build().Modules[0]).Text)?.Content);
     }
 
     /// <summary>
@@ -64,14 +63,14 @@ public class CardBuilderTests
     }
 
     /// <summary>
-    ///     Tests the behavior of <see cref="CardBuilder.WithColor(Color)"/>.
+    ///     Tests the behavior of <see cref="M:Kook.CardBuilder.WithColor(System.Nullable{Kook.Color})"/>.
     /// </summary>
     [Fact]
     public void WithColor()
     {
         CardBuilder builder = new CardBuilder().WithColor(Color.Red);
-        Assert.Equal(Color.Red.RawValue, builder.Color.Value.RawValue);
-        Assert.Equal(Color.Red.RawValue, builder.Build().Color.Value.RawValue);
+        Assert.Equal(Color.Red.RawValue, builder.Color?.RawValue);
+        Assert.Equal(Color.Red.RawValue, builder.Build().Color?.RawValue);
     }
 
     /// <summary>

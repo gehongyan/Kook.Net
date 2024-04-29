@@ -19,7 +19,7 @@ public class CommandException : Exception
     /// <param name="command">The command information.</param>
     /// <param name="context">The context of the command.</param>
     /// <param name="ex">The exception that interrupted the command execution.</param>
-    public CommandException(CommandInfo command, ICommandContext context, Exception ex)
+    public CommandException(CommandInfo command, ICommandContext context, Exception? ex)
         : base($"Error occurred executing {command.GetLogText(context)}.", ex)
     {
         Command = command;

@@ -110,12 +110,12 @@ public class OpusEncodeStream : AudioOutStream
     }*/
 
     /// <inheritdoc />
-    public override Task FlushAsync(CancellationToken cancellationToken)
-        => _next.FlushAsync(cancellationToken);
+    public override Task FlushAsync(CancellationToken cancellationToken) =>
+        _next.FlushAsync(cancellationToken);
 
     /// <inheritdoc />
-    public override Task ClearAsync(CancellationToken cancellationToken)
-        => _next.ClearAsync(cancellationToken);
+    public override Task ClearAsync(CancellationToken cancellationToken) =>
+        _next.ClearAsync(cancellationToken);
 
     /// <inheritdoc />
     protected override void Dispose(bool disposing)

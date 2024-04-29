@@ -9,19 +9,19 @@ internal class GuildEvent
     public ulong GuildId { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [JsonPropertyName("user_id")]
-    public ulong UserId { get; set; }
+    public ulong UserId { get; set; } // TODO: 服务器拥有者更新
 
     [JsonPropertyName("icon")]
-    public string Icon { get; set; }
+    public required string Icon { get; set; }
 
     [JsonPropertyName("notify_type")]
     public NotifyType NotifyType { get; set; }
 
     [JsonPropertyName("region")]
-    public string Region { get; set; }
+    public required string Region { get; set; }
 
     [JsonPropertyName("enable_open")]
     [JsonConverter(typeof(NumberBooleanConverter))]
@@ -38,13 +38,13 @@ internal class GuildEvent
     public ulong WelcomeChannelId { get; set; }
 
     [JsonPropertyName("banner")]
-    public string Banner { get; set; }
+    public required string Banner { get; set; } // TODO: 服务器横幅更新
 
     [JsonPropertyName("banner_status")]
     public int BannerStatus { get; set; }
 
     [JsonPropertyName("custom_id")]
-    public string CustomId { get; set; }
+    public required string CustomId { get; set; }
 
     [JsonPropertyName("boost_num")]
     public int BoostSubscriptionCount { get; set; }
@@ -57,4 +57,7 @@ internal class GuildEvent
 
     [JsonPropertyName("status")]
     public int Status { get; set; }
+
+    [JsonPropertyName("auto_delete_time")]
+    public string? AutoDeleteTime { get; set; }
 }

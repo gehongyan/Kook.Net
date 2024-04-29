@@ -16,6 +16,7 @@ namespace Kook.API;
 
 internal class KookSocketApiClient : KookRestApiClient
 {
+    private static readonly JsonElement EmptyJsonElement = JsonDocument.Parse("{}").RootElement;
     public event Func<GatewaySocketFrameType, Task> SentGatewayMessage
     {
         add => _sentGatewayMessageEvent.Add(value);
@@ -24,13 +25,13 @@ internal class KookSocketApiClient : KookRestApiClient
 
     private readonly AsyncEvent<Func<GatewaySocketFrameType, Task>> _sentGatewayMessageEvent = new();
 
-    public event Func<GatewaySocketFrameType, int?, object, Task> ReceivedGatewayEvent
+    public event Func<GatewaySocketFrameType, int?, JsonElement, Task> ReceivedGatewayEvent
     {
         add => _receivedGatewayEvent.Add(value);
         remove => _receivedGatewayEvent.Remove(value);
     }
 
-    private readonly AsyncEvent<Func<GatewaySocketFrameType, int?, object, Task>> _receivedGatewayEvent = new();
+    private readonly AsyncEvent<Func<GatewaySocketFrameType, int?, JsonElement, Task>> _receivedGatewayEvent = new();
 
     public event Func<Exception, Task> Disconnected
     {
@@ -41,21 +42,33 @@ internal class KookSocketApiClient : KookRestApiClient
     private readonly AsyncEvent<Func<Exception, Task>> _disconnectedEvent = new();
 
     private readonly bool _isExplicitUrl;
-    private CancellationTokenSource _connectCancellationToken;
-    private string _gatewayUrl;
+    private CancellationTokenSource? _connectCancellationToken;
+    private string? _gatewayUrl;
     private Guid? _sessionId;
     private int _lastSeq;
+
+#if DEBUG_PACKETS
+    private readonly JsonSerializerOptions _debugJsonSerializerOptions = new()
+    {
+        WriteIndented = true,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    };
+#endif
+
     public ConnectionState ConnectionState { get; private set; }
     internal IWebSocketClient WebSocketClient { get; }
 
-    public KookSocketApiClient(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider, string userAgent, string acceptLanguage,
-        string url = null, RetryMode defaultRetryMode = RetryMode.AlwaysRetry, JsonSerializerOptions serializerOptions = null,
-        Func<IRateLimitInfo, Task> defaultRatelimitCallback = null)
-        : base(restClientProvider, userAgent, acceptLanguage, defaultRetryMode, serializerOptions, defaultRatelimitCallback)
+    public KookSocketApiClient(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider,
+        string userAgent, string acceptLanguage, string? url = null,
+        RetryMode defaultRetryMode = RetryMode.AlwaysRetry,
+        JsonSerializerOptions? serializerOptions = null,
+        Func<IRateLimitInfo, Task>? defaultRatelimitCallback = null)
+        : base(restClientProvider, userAgent, acceptLanguage,
+            defaultRetryMode, serializerOptions, defaultRatelimitCallback)
     {
         _gatewayUrl = url;
-        if (url != null) _isExplicitUrl = true;
-
+        if (url != null)
+            _isExplicitUrl = true;
         WebSocketClient = webSocketProvider();
         WebSocketClient.SetKeepAliveInterval(TimeSpan.Zero);
         WebSocketClient.TextMessage += OnTextMessage;
@@ -65,7 +78,6 @@ internal class KookSocketApiClient : KookRestApiClient
 #if DEBUG_PACKETS
             Debug.WriteLine(ex);
 #endif
-
             await DisconnectAsync().ConfigureAwait(false);
             await _disconnectedEvent.InvokeAsync(ex).ConfigureAwait(false);
         };
@@ -89,47 +101,47 @@ internal class KookSocketApiClient : KookRestApiClient
         await decompressor.CopyToAsync(decompressed);
         decompressed.Position = 0;
 
-        GatewaySocketFrame gatewaySocketFrame = JsonSerializer.Deserialize<GatewaySocketFrame>(decompressed, _serializerOptions);
+        GatewaySocketFrame? gatewaySocketFrame = JsonSerializer
+            .Deserialize<GatewaySocketFrame>(decompressed, _serializerOptions);
         if (gatewaySocketFrame is not null)
         {
 #if DEBUG_PACKETS
             string raw = Encoding.Default.GetString(decompressed.ToArray()).TrimEnd('\n');
-            string parsed = JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            }).TrimEnd('\n');
+            string parsed = JsonSerializer
+                .Serialize(gatewaySocketFrame.Payload, _debugJsonSerializerOptions)
+                .TrimEnd('\n');
             Debug.WriteLine($"""
                 <- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence}
                 [Raw] {raw}
                 [Parsed] {parsed}
                 """);
 #endif
-            await _receivedGatewayEvent.InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, gatewaySocketFrame.Payload)
+            JsonElement payloadElement = gatewaySocketFrame.Payload as JsonElement? ?? EmptyJsonElement;
+            await _receivedGatewayEvent
+                .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement)
                 .ConfigureAwait(false);
         }
     }
 
     private async Task OnTextMessage(string message)
     {
-        GatewaySocketFrame gatewaySocketFrame = JsonSerializer.Deserialize<GatewaySocketFrame>(message, _serializerOptions);
-        if (gatewaySocketFrame is not null)
-        {
+        GatewaySocketFrame? gatewaySocketFrame = JsonSerializer.Deserialize<GatewaySocketFrame>(message, _serializerOptions);
+        if (gatewaySocketFrame is null)
+            return;
 #if DEBUG_PACKETS
-            string parsed = JsonSerializer.Serialize(gatewaySocketFrame.Payload, new JsonSerializerOptions
-            {
-                WriteIndented = true,
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-            }).TrimEnd('\n');
-            Debug.WriteLine($"""
-                <- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence}
-                [Raw] {message}
-                [Parsed] {parsed}
-                """);
+        string parsed = JsonSerializer
+            .Serialize(gatewaySocketFrame.Payload, _debugJsonSerializerOptions)
+            .TrimEnd('\n');
+        Debug.WriteLine($"""
+            <- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence}
+            [Raw] {message}
+            [Parsed] {parsed}
+            """);
 #endif
-            await _receivedGatewayEvent.InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, gatewaySocketFrame.Payload)
-                .ConfigureAwait(false);
-        }
+        JsonElement payloadElement = gatewaySocketFrame.Payload as JsonElement? ?? EmptyJsonElement;
+        await _receivedGatewayEvent
+            .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement)
+            .ConfigureAwait(false);
     }
 
     internal override void Dispose(bool disposing)
@@ -165,31 +177,30 @@ internal class KookSocketApiClient : KookRestApiClient
 
     internal override async Task ConnectInternalAsync()
     {
-        if (LoginState != LoginState.LoggedIn) throw new InvalidOperationException("The client must be logged in before connecting.");
-
-        if (WebSocketClient == null) throw new NotSupportedException("This client is not configured with WebSocket support.");
-
+        if (LoginState != LoginState.LoggedIn)
+            throw new InvalidOperationException("The client must be logged in before connecting.");
+        if (WebSocketClient == null)
+            throw new NotSupportedException("This client is not configured with WebSocket support.");
         RequestQueue.ClearGatewayBuckets();
-
         ConnectionState = ConnectionState.Connecting;
-
         try
         {
             _connectCancellationToken?.Dispose();
             _connectCancellationToken = new CancellationTokenSource();
-            WebSocketClient?.SetCancellationToken(_connectCancellationToken.Token);
+            WebSocketClient.SetCancellationToken(_connectCancellationToken.Token);
 
-            if (!_isExplicitUrl)
+            if (!_isExplicitUrl || _gatewayUrl == null)
             {
                 GetBotGatewayResponse botGatewayResponse = await GetBotGatewayAsync().ConfigureAwait(false);
-                _gatewayUrl = $"{botGatewayResponse.Url}{(_sessionId is null ? string.Empty : $"&resume=1&sn={_lastSeq}&session_id={_sessionId}")}";
+                string resumeQuery = _sessionId is not null
+                    ? $"&resume=1&sn={_lastSeq}&session_id={_sessionId}"
+                    : string.Empty;
+                _gatewayUrl = $"{botGatewayResponse.Url}{resumeQuery}";
             }
-
 #if DEBUG_PACKETS
             Debug.WriteLine("Connecting to gateway: " + _gatewayUrl);
 #endif
-
-            await WebSocketClient!.ConnectAsync(_gatewayUrl).ConfigureAwait(false);
+            await WebSocketClient.ConnectAsync(_gatewayUrl).ConfigureAwait(false);
             ConnectionState = ConnectionState.Connected;
         }
         catch (Exception)
@@ -201,7 +212,7 @@ internal class KookSocketApiClient : KookRestApiClient
         }
     }
 
-    public async Task DisconnectAsync(Exception ex = null)
+    public async Task DisconnectAsync(Exception? ex = null)
     {
         await _stateLock.WaitAsync().ConfigureAwait(false);
         try
@@ -214,12 +225,12 @@ internal class KookSocketApiClient : KookRestApiClient
         }
     }
 
-    internal override async Task DisconnectInternalAsync(Exception ex = null)
+    internal override async Task DisconnectInternalAsync(Exception? ex = null)
     {
-        if (WebSocketClient == null) throw new NotSupportedException("This client is not configured with WebSocket support.");
-
-        if (ConnectionState == ConnectionState.Disconnected) return;
-
+        if (WebSocketClient == null)
+            throw new NotSupportedException("This client is not configured with WebSocket support.");
+        if (ConnectionState == ConnectionState.Disconnected)
+            return;
         ConnectionState = ConnectionState.Disconnecting;
 
         if (ex is GatewayReconnectException)
@@ -239,40 +250,47 @@ internal class KookSocketApiClient : KookRestApiClient
         ConnectionState = ConnectionState.Disconnected;
     }
 
-    public async Task SendHeartbeatAsync(int lastSeq, RequestOptions options = null)
+    public async Task SendHeartbeatAsync(int lastSeq, RequestOptions? options = null)
     {
-        options = RequestOptions.CreateOrClone(options);
-        await SendGatewayAsync(GatewaySocketFrameType.Ping, sequence: lastSeq, options: options).ConfigureAwait(false);
+        RequestOptions requestOptions = RequestOptions.CreateOrClone(options);
+        await SendGatewayAsync(GatewaySocketFrameType.Ping, null, lastSeq, requestOptions)
+            .ConfigureAwait(false);
     }
 
-    public async Task SendResumeAsync(int lastSeq, RequestOptions options = null)
+    public async Task SendResumeAsync(int lastSeq, RequestOptions? options = null)
     {
-        options = RequestOptions.CreateOrClone(options);
-        await SendGatewayAsync(GatewaySocketFrameType.Resume, sequence: lastSeq, options: options).ConfigureAwait(false);
+        RequestOptions requestOptions = RequestOptions.CreateOrClone(options);
+        await SendGatewayAsync(GatewaySocketFrameType.Resume, null, lastSeq, requestOptions)
+            .ConfigureAwait(false);
     }
 
-    public Task SendGatewayAsync(GatewaySocketFrameType gatewaySocketFrameType, object payload = null, int? sequence = null,
-        RequestOptions options = null)
-        => SendGatewayInternalAsync(gatewaySocketFrameType, options, payload, sequence);
+    public Task SendGatewayAsync(GatewaySocketFrameType gatewaySocketFrameType,
+        object? payload, int? sequence, RequestOptions options) =>
+        SendGatewayInternalAsync(gatewaySocketFrameType, payload, sequence, options);
 
-    private async Task SendGatewayInternalAsync(GatewaySocketFrameType gatewaySocketFrameType, RequestOptions options, object payload = null,
-        int? sequence = null)
+    private async Task SendGatewayInternalAsync(GatewaySocketFrameType gatewaySocketFrameType,
+        object? payload, int? sequence, RequestOptions options)
     {
         CheckState();
-
-        payload = new GatewaySocketFrame { Type = gatewaySocketFrameType, Payload = payload, Sequence = sequence };
-        byte[] bytes = Encoding.UTF8.GetBytes(SerializeJson(payload));
+        payload = new GatewaySocketFrame
+        {
+            Type = gatewaySocketFrameType,
+            Payload = payload,
+            Sequence = sequence
+        };
+        string json = SerializeJson(payload);
+        byte[] bytes = Encoding.UTF8.GetBytes(json);
 
         options.IsGatewayBucket = true;
-        if (options.BucketId == null) options.BucketId = GatewayBucket.Get(GatewayBucketType.Unbucketed).Id;
-
+        options.BucketId ??= GatewayBucket.Get(GatewayBucketType.Unbucketed).Id;
+        bool ignoreLimit = gatewaySocketFrameType == GatewaySocketFrameType.Ping;
         await RequestQueue
-            .SendAsync(new WebSocketRequest(WebSocketClient, bytes, true, gatewaySocketFrameType == GatewaySocketFrameType.Ping, options))
+            .SendAsync(new WebSocketRequest(WebSocketClient, bytes, true, ignoreLimit, options))
             .ConfigureAwait(false);
         await _sentGatewayMessageEvent.InvokeAsync(gatewaySocketFrameType).ConfigureAwait(false);
 
 #if DEBUG_PACKETS
-        string payloadString = JsonSerializer.Serialize(payload, new JsonSerializerOptions {WriteIndented = true, Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping});
+        string payloadString = JsonSerializer.Serialize(payload, _debugJsonSerializerOptions);
         Debug.WriteLine($"-> [{gatewaySocketFrameType}] : #{sequence} \n{payloadString}".TrimEnd('\n'));
 #endif
     }

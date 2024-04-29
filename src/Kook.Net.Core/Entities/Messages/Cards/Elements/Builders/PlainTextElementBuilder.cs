@@ -1,12 +1,12 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Kook;
 
 /// <summary>
 ///     An element builder to build a <see cref="PlainTextElement"/>.
 /// </summary>
-public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElementBuilder>
+public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElementBuilder>, IEquatable<IElementBuilder>
 {
-    private string _content;
-
     /// <summary>
     ///     Gets the maximum plain text length allowed by Kook.
     /// </summary>
@@ -20,6 +20,7 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// </summary>
     public PlainTextElementBuilder()
     {
+        Content = string.Empty;
     }
 
     /// <summary>
@@ -27,10 +28,10 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// </summary>
     /// <param name="content"> The content of the <see cref="PlainTextElement"/>.</param>
     /// <param name="emoji"> A boolean value that indicates whether the shortcuts should be translated into emojis.</param>
-    public PlainTextElementBuilder(string content, bool emoji = true)
+    public PlainTextElementBuilder(string? content, bool emoji = true)
     {
-        WithContent(content);
-        WithEmoji(emoji);
+        Content = content;
+        Emoji = emoji;
     }
 
     /// <summary>
@@ -47,27 +48,7 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <returns>
     ///     The content of the <see cref="PlainTextElement"/>.
     /// </returns>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The <paramref name="value"/> cannot be null.
-    /// </exception>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="value"/> is greater than <see cref="MaxPlainTextLength"/>.
-    /// </exception>
-    public string Content
-    {
-        get => _content;
-        set
-        {
-            if (value is null) throw new ArgumentException("The content cannot be null.", nameof(value));
-
-            if (value.Length > MaxPlainTextLength)
-                throw new ArgumentException(
-                    $"Plain text length must be less than or equal to {MaxPlainTextLength}.",
-                    nameof(Content));
-
-            _content = value;
-        }
-    }
+    public string? Content { get; set; }
 
     /// <summary>
     ///     Gets whether the shortcuts should be translated into emojis.
@@ -86,12 +67,6 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <returns>
     ///     The current builder.
     /// </returns>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The <paramref name="content"/> cannot be null.
-    /// </exception>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="content"/> is greater than <see cref="MaxPlainTextLength"/>.
-    /// </exception>
     public PlainTextElementBuilder WithContent(string content)
     {
         Content = content;
@@ -121,8 +96,25 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <returns>
     ///     A <see cref="PlainTextElement"/> represents the built element object.
     /// </returns>
+    /// <exception cref="ArgumentNullException">
+    ///     The <see cref="Content"/> is null.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     The length of the <see cref="Content"/> is greater than <see cref="MaxPlainTextLength"/>.
+    /// </exception>
+    [MemberNotNull(nameof(Content))]
     public PlainTextElement Build()
-        => new(Content, Emoji);
+    {
+        if (Content == null)
+            throw new ArgumentNullException(nameof(Content), $"The {nameof(Content)} cannot be null.");
+
+        if (Content.Length > MaxPlainTextLength)
+            throw new ArgumentException(
+                $"Plain text length must be less than or equal to {MaxPlainTextLength}.",
+                nameof(Content));
+
+        return new PlainTextElement(Content, Emoji);
+    }
 
     /// <summary>
     ///     Initialized a new instance of the <see cref="PlainTextElementBuilder"/> class
@@ -134,44 +126,38 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <returns>
     ///     A <see cref="PlainTextElementBuilder"/> object that is initialized with the specified content.
     /// </returns>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The <paramref name="content"/> cannot be null.
-    /// </exception>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="content"/> is greater than <see cref="MaxPlainTextLength"/>.
-    /// </exception>
-    public static implicit operator PlainTextElementBuilder(string content) =>
-        new PlainTextElementBuilder().WithContent(content);
+    public static implicit operator PlainTextElementBuilder(string content) => new(content);
 
     /// <inheritdoc />
+    [MemberNotNull(nameof(Content))]
     IElement IElementBuilder.Build() => Build();
 
     /// <summary>
     ///     Determines whether the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public static bool operator ==(PlainTextElementBuilder left, PlainTextElementBuilder right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(PlainTextElementBuilder? left, PlainTextElementBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="PlainTextElementBuilder"/> is not equal to the current <see cref="PlainTextElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is not equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public static bool operator !=(PlainTextElementBuilder left, PlainTextElementBuilder right)
-        => !(left == right);
+    public static bool operator !=(PlainTextElementBuilder? left, PlainTextElementBuilder? right) =>
+        !(left == right);
 
     /// <summary>
     ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="PlainTextElementBuilder"/>.
     /// </summary>
     /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="PlainTextElementBuilder"/>.</param>
     /// <returns></returns>
-    public override bool Equals(object obj)
-        => obj is PlainTextElementBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is PlainTextElementBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>.</summary>
     /// <param name="plainTextElementBuilder">The <see cref="PlainTextElementBuilder"/> to compare with the current <see cref="PlainTextElementBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(PlainTextElementBuilder plainTextElementBuilder)
+    public bool Equals([NotNullWhen(true)] PlainTextElementBuilder? plainTextElementBuilder)
     {
         if (plainTextElementBuilder is null) return false;
 
@@ -182,4 +168,7 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
 
     /// <inheritdoc />
     public override int GetHashCode() => base.GetHashCode();
+
+    bool IEquatable<IElementBuilder>.Equals([NotNullWhen(true)] IElementBuilder? elementBuilder) =>
+        Equals(elementBuilder as PlainTextElementBuilder);
 }

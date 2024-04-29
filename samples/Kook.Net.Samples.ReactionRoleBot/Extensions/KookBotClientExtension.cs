@@ -7,26 +7,20 @@ namespace Kook.Net.Samples.ReactionRoleBot.Extensions;
 
 public partial class KookBotClientExtension : IHostedService
 {
-    private readonly IServiceProvider _service;
     private readonly KookBotConfigurations _kookBotConfigurations;
     private readonly KookSocketClient _kookSocketClient;
     private readonly ILogger _logger;
-    private readonly IHttpClientFactory _httpClientFactory;
 
     public KookBotClientExtension(
-        IServiceProvider service,
         KookBotConfigurations kookBotConfigurations,
         KookSocketClient kookSocketClient,
-        ILogger logger, IHttpClientFactory httpClientFactory)
+        ILogger logger)
     {
-        _service = service;
         _kookBotConfigurations = kookBotConfigurations;
         _kookSocketClient = kookSocketClient;
         _logger = logger;
-        _httpClientFactory = httpClientFactory;
 
         _kookSocketClient.Log += LogHandler;
-        // _kookSocketClient.Ready += SendReactionCard;
         _kookSocketClient.ReactionAdded += ProcessReactionRoleAdd;
         _kookSocketClient.ReactionRemoved += ProcessReactionRoleRemove;
     }

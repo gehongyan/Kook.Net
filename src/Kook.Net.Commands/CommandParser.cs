@@ -15,7 +15,7 @@ internal static class CommandParser
     public static async Task<ParseResult> ParseArgsAsync(CommandInfo command, ICommandContext context, bool ignoreExtraArgs,
         IServiceProvider services, string input, int startPos, IReadOnlyDictionary<char, char> aliasMap)
     {
-        ParameterInfo curParam = null;
+        ParameterInfo? curParam = null;
         StringBuilder argBuilder = new(input.Length);
         int endPos = input.Length;
         ParserPart curPart = ParserPart.None;
@@ -60,20 +60,19 @@ internal static class CommandParser
             }
 
             //If this character is escaped, skip it
-            if (isEscaping)
-                if (curPos != endPos)
-                {
-                    // if this character matches the quotation mark of the end of the string
-                    // means that it should be escaped
-                    // but if is not, then there is no reason to escape it then
-                    if (c != matchQuote)
-                        // if no reason to escape the next character, then re-add \ to the arg
-                        argBuilder.Append('\\');
+            if (isEscaping && curPos != endPos)
+            {
+                // if this character matches the quotation mark of the end of the string
+                // means that it should be escaped
+                // but if is not, then there is no reason to escape it then
+                if (c != matchQuote)
+                    // if no reason to escape the next character, then re-add \ to the arg
+                    argBuilder.Append('\\');
 
-                    argBuilder.Append(c);
-                    isEscaping = false;
-                    continue;
-                }
+                argBuilder.Append(c);
+                isEscaping = false;
+                continue;
+            }
 
             //Are we escaping the next character?
             if (c == '\\' && (curParam == null || !curParam.IsRemainder))
@@ -111,7 +110,7 @@ internal static class CommandParser
             }
 
             //Has this parameter ended yet?
-            string argString = null;
+            string? argString = null;
             if (curPart == ParserPart.Parameter)
             {
                 if (curPos == endPos || char.IsWhiteSpace(c))
@@ -139,8 +138,7 @@ internal static class CommandParser
                 {
                     if (command.IgnoreExtraArgs)
                         break;
-                    else
-                        return ParseResult.FromError(CommandError.BadArgCount, "The input text has too many parameters.");
+                    return ParseResult.FromError(CommandError.BadArgCount, "The input text has too many parameters.");
                 }
 
                 TypeReaderResult typeReaderResult = await curParam.ParseAsync(context, argString, services).ConfigureAwait(false);
@@ -150,13 +148,11 @@ internal static class CommandParser
                 if (curParam.IsMultiple)
                 {
                     paramList.Add(typeReaderResult);
-
                     curPart = ParserPart.None;
                 }
                 else
                 {
                     argList.Add(typeReaderResult);
-
                     curParam = null;
                     curPart = ParserPart.None;
                 }
@@ -165,26 +161,30 @@ internal static class CommandParser
             }
         }
 
-        if (curParam != null && curParam.IsRemainder)
+        if (curParam is { IsRemainder: true })
         {
-            TypeReaderResult typeReaderResult = await curParam.ParseAsync(context, argBuilder.ToString(), services).ConfigureAwait(false);
-            if (!typeReaderResult.IsSuccess) return ParseResult.FromError(typeReaderResult, curParam);
+            TypeReaderResult typeReaderResult = await curParam
+                .ParseAsync(context, argBuilder.ToString(), services)
+                .ConfigureAwait(false);
+            if (!typeReaderResult.IsSuccess)
+                return ParseResult.FromError(typeReaderResult, curParam);
 
             argList.Add(typeReaderResult);
         }
 
-        if (isEscaping) return ParseResult.FromError(CommandError.ParseFailed, "Input text may not end on an incomplete escape.");
-
-        if (curPart == ParserPart.QuotedParameter) return ParseResult.FromError(CommandError.ParseFailed, "A quoted parameter is incomplete.");
+        if (isEscaping)
+            return ParseResult.FromError(CommandError.ParseFailed, "Input text may not end on an incomplete escape.");
+        if (curPart == ParserPart.QuotedParameter)
+            return ParseResult.FromError(CommandError.ParseFailed, "A quoted parameter is incomplete.");
 
         //Add missing optionals
         for (int i = argList.Count; i < command.Parameters.Count; i++)
         {
             ParameterInfo param = command.Parameters[i];
-            if (param.IsMultiple) continue;
-
-            if (!param.IsOptional) return ParseResult.FromError(CommandError.BadArgCount, "The input text has too few parameters.");
-
+            if (param.IsMultiple)
+                continue;
+            if (!param.IsOptional)
+                return ParseResult.FromError(CommandError.BadArgCount, "The input text has too few parameters.");
             argList.Add(TypeReaderResult.FromSuccess(param.DefaultValue));
         }
 

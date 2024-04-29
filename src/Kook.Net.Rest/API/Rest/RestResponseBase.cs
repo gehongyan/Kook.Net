@@ -8,8 +8,8 @@ internal class RestResponseBase
     public KookErrorCode Code { get; set; }
 
     [JsonPropertyName("message")]
-    public string Message { get; set; }
+    public required string Message { get; set; }
 
     [JsonPropertyName("data")]
-    public object Data { get; set; }
+    public required object Data { get; set; }
 }

@@ -7,5 +7,5 @@ internal class CardBase : ICard
 {
     [JsonPropertyName("type")]
     [JsonConverter(typeof(CardTypeConverter))]
-    public CardType Type { get; set; }
+    public required CardType Type { get; set; }
 }

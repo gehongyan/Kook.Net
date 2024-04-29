@@ -3,7 +3,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     Sets priority of commands.
 /// </summary>
-[AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+[AttributeUsage(AttributeTargets.Method)]
 public class PriorityAttribute : Attribute
 {
     /// <summary>
@@ -14,5 +14,8 @@ public class PriorityAttribute : Attribute
     /// <summary>
     ///     Initializes a new <see cref="PriorityAttribute" /> attribute with the given priority.
     /// </summary>
-    public PriorityAttribute(int priority) => Priority = priority;
+    public PriorityAttribute(int priority)
+    {
+        Priority = priority;
+    }
 }

@@ -7,7 +7,7 @@ internal class FriendStateConverter : JsonConverter<FriendState>
 {
     public override FriendState Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string provider = reader.GetString();
+        string? provider = reader.GetString();
         return provider switch
         {
             "request" => FriendState.Pending,

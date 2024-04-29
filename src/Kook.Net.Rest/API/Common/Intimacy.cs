@@ -6,24 +6,24 @@ namespace Kook.API;
 internal class Intimacy
 {
     [JsonPropertyName("img_url")]
-    public string ImageUrl { get; set; }
+    public required string ImageUrl { get; set; }
 
     [JsonPropertyName("social_info")]
-    public string SocialInfo { get; set; }
+    public required string SocialInfo { get; set; }
 
     [JsonPropertyName("last_read")]
     [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset LastReadAt { get; set; }
 
     [JsonPropertyName("last_modify")]
-    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
-    public DateTimeOffset LastModifyAt { get; set; }
+    [JsonConverter(typeof(NullableDateTimeOffsetUnixTimeMillisecondsConverter))]
+    public DateTimeOffset? LastModifyAt { get; set; }
 
     [JsonPropertyName("score")]
     public int Score { get; set; }
 
     [JsonPropertyName("img_list")]
-    public IntimacyImage[] Images { get; set; }
+    public required IntimacyImage[] Images { get; set; }
 }
 
 internal class IntimacyImage
@@ -32,5 +32,5 @@ internal class IntimacyImage
     public uint Id { get; set; }
 
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public required string Url { get; set; }
 }

@@ -5,5 +5,5 @@ namespace Kook.API.Rest;
 internal class CreateGuildInviteResponse
 {
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public required string Url { get; set; }
 }

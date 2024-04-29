@@ -8,8 +8,8 @@ internal class GuildBanEvent
     public ulong OperatorUserId { get; set; }
 
     [JsonPropertyName("remark")]
-    public string Reason { get; set; }
+    public string? Reason { get; set; }
 
     [JsonPropertyName("user_id")]
-    public ulong[] UserIds { get; set; }
+    public required ulong[] UserIds { get; set; }
 }

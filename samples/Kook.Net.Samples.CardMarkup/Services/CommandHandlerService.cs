@@ -23,33 +23,24 @@ public class CommandHandlerService
 
     public async Task InitializeAsync()
     {
-        await _commandService.AddModulesAsync(Assembly.GetEntryAssembly(), _serviceProvider);
+        if (Assembly.GetEntryAssembly() is not { } assembly) return;
+        await _commandService.AddModulesAsync(assembly, _serviceProvider);
     }
 
     private async Task MessageReceivedAsync(SocketMessage rawMessage, SocketUser user, ISocketMessageChannel channel)
     {
-        if (rawMessage is not SocketUserMessage { Source: MessageSource.User } message)
-        {
-            return;
-        }
+        if (rawMessage is not SocketUserMessage { Source: MessageSource.User } message) return;
 
         int argPos = 0;
-        if (!message.HasCharPrefix('!', ref argPos))
-        {
-            return;
-        }
+        if (!message.HasCharPrefix('!', ref argPos)) return;
 
         SocketCommandContext context = new(_socketClient, message);
         await _commandService.ExecuteAsync(context, argPos, _serviceProvider);
     }
 
-    private static async Task CommandExecutedAsync(CommandInfo command, ICommandContext context, IResult result)
+    private static async Task CommandExecutedAsync(CommandInfo? command, ICommandContext context, IResult result)
     {
-        if (result.IsSuccess)
-        {
-            return;
-        }
-
+        if (result.IsSuccess) return;
         await context.Channel.SendTextAsync($"error: {result}");
     }
 }

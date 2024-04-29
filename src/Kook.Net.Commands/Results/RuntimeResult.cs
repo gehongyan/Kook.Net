@@ -5,7 +5,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     Represents the runtime result of a command execution.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public abstract class RuntimeResult : IResult
 {
     /// <summary>
@@ -29,7 +29,7 @@ public abstract class RuntimeResult : IResult
     public bool IsSuccess => !Error.HasValue;
 
     /// <inheritdoc/>
-    string IResult.ErrorReason => Reason;
+    string? IResult.ErrorReason => Reason;
 
     /// <inheritdoc />
     public override string ToString() => Reason ?? (IsSuccess ? "Successful" : "Unsuccessful");

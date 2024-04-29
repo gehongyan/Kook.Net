@@ -34,7 +34,7 @@ public class KookSocketConfig : KookRestConfig
     ///     Gets or sets the WebSocket host to connect to. If <c>null</c>, the client will use the
     ///     /gateway endpoint.
     /// </summary>
-    public string GatewayHost { get; set; } = null;
+    public string? GatewayHost { get; set; }
 
     /// <summary>
     ///     Gets or sets the time, in milliseconds, to wait for a connection to complete before aborting.
@@ -132,7 +132,6 @@ public class KookSocketConfig : KookRestConfig
     public int MaxWaitBetweenGuildAvailablesBeforeReady
     {
         get => _maxWaitForGuildAvailable;
-
         set
         {
             Preconditions.AtLeast(value, 0, nameof(MaxWaitBetweenGuildAvailablesBeforeReady));
@@ -178,5 +177,5 @@ public class KookSocketConfig : KookRestConfig
         UdpSocketProvider = DefaultUdpSocketProvider.Instance;
     }
 
-    internal KookSocketConfig Clone() => MemberwiseClone() as KookSocketConfig;
+    internal KookSocketConfig Clone() => (KookSocketConfig)MemberwiseClone();
 }

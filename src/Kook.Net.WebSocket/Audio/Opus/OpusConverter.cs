@@ -42,12 +42,12 @@ internal abstract class OpusConverter : IDisposable
     /// </summary>
     public const int FrameBytes = FrameSamplesPerChannel * SampleBytes;
 
-    protected bool _isDisposed = false;
+    protected bool IsDisposed = false;
 
     protected virtual void Dispose(bool disposing)
     {
-        if (!_isDisposed)
-            _isDisposed = true;
+        if (!IsDisposed)
+            IsDisposed = true;
     }
 
     ~OpusConverter()

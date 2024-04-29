@@ -6,7 +6,7 @@ namespace Kook.Net.Converters;
 internal class QuoteConverter : JsonConverter<API.Quote>
 {
     /// <inheritdoc />
-    public override API.Quote Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+    public override API.Quote? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
         reader.TokenType switch
         {
             JsonTokenType.Null or JsonTokenType.String => null,

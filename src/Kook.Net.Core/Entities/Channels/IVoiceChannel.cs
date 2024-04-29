@@ -19,9 +19,9 @@ public interface IVoiceChannel : ITextChannel, IAudioChannel
     /// </summary>
     /// <returns>
     ///     An int representing the maximum number of users that are allowed to be connected to this
-    ///     channel at once; <c>null</c> if a limit is not set.
+    ///     channel at once; <c>0</c> if a limit is not set.
     /// </returns>
-    int? UserLimit { get; }
+    int UserLimit { get; }
 
     /// <summary>
     ///     Gets whether this voice channel is locked by a password.
@@ -40,7 +40,7 @@ public interface IVoiceChannel : ITextChannel, IAudioChannel
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
     /// <seealso cref="ModifyVoiceChannelProperties"/>
-    Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null);
+    Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the users connected to this voice channel.
@@ -51,5 +51,5 @@ public interface IVoiceChannel : ITextChannel, IAudioChannel
     ///     A task that represents the asynchronous get operation. The task result contains a collection of
     ///     <see cref="IGuildUser"/>s that are connected to this voice channel.
     /// </returns>
-    Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 }

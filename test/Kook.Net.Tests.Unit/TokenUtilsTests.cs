@@ -20,11 +20,11 @@ public class TokenUtilsTests
     [InlineData(" ")]
     [InlineData("    ")]
     [InlineData("\t")]
-    public void NullOrWhitespaceToken(string token)
+    public void NullOrWhitespaceToken(string? token)
     {
         // an ArgumentNullException should be thrown, regardless of the TokenType
         foreach (TokenType tokenType in (TokenType[])Enum.GetValues(typeof(TokenType)))
-            Assert.Throws<ArgumentNullException>(() => TokenUtils.ValidateToken(tokenType, token));
+            Assert.Throws<ArgumentNullException>(() => TokenUtils.ValidateToken(tokenType, token!));
     }
 
     /// <summary>
@@ -102,7 +102,8 @@ public class TokenUtilsTests
     // should not throw an unexpected exception
     [InlineData("", false)]
     [InlineData(null, false)]
-    public void CheckBotTokenValidity(string token, bool expected) => Assert.Equal(expected, TokenUtils.CheckBotTokenValidity(token));
+    public void CheckBotTokenValidity(string? token, bool expected) =>
+        Assert.Equal(expected, TokenUtils.CheckBotTokenValidity(token!));
 
     [Theory]
     // cannot pass a ulong? as a param in InlineData, so have to have a separate param
@@ -114,9 +115,9 @@ public class TokenUtilsTests
     [InlineData(" ", true, 0)]
     [InlineData(null, true, 0)]
     [InlineData("these chars aren't allowed @U#)*@#!)*", true, 0)]
-    public void DecodeBase64UserId(string encodedUserId, bool isNull, ulong expectedUserId)
+    public void DecodeBase64UserId(string? encodedUserId, bool isNull, ulong expectedUserId)
     {
-        ulong? result = TokenUtils.DecodeBase64UserId(encodedUserId);
+        ulong? result = TokenUtils.DecodeBase64UserId(encodedUserId!);
         if (isNull)
             Assert.Null(result);
         else

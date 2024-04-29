@@ -6,11 +6,11 @@ namespace Kook.API.Rest;
 internal class ModifyGuildChannelParams
 {
     [JsonPropertyName("channel_id")]
-    public ulong ChannelId { get; set; }
+    public required ulong ChannelId { get; set; }
 
     [JsonPropertyName("name")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     [JsonPropertyName("level")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

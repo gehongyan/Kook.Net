@@ -8,7 +8,7 @@ public interface IUdpSocket : IDisposable
     /// <summary>
     ///     Fired when a datagram is received.
     /// </summary>
-    event Func<byte[], int, int, Task> ReceivedDatagram;
+    event Func<byte[], int, int, Task>? ReceivedDatagram;
 
     /// <summary>
     ///     Gets the port of the socket.

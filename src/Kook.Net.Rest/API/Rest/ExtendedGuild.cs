@@ -7,7 +7,7 @@ internal class ExtendedGuild : Guild
 {
     [JsonPropertyName("features")]
     [JsonConverter(typeof(GuildFeaturesConverter))]
-    public GuildFeatures Features { get; set; }
+    public required GuildFeatures Features { get; set; }
 
     [JsonPropertyName("boost_num")]
     public int BoostSubscriptionCount { get; set; }
@@ -22,8 +22,8 @@ internal class ExtendedGuild : Guild
     public int Status { get; set; }
 
     [JsonPropertyName("auto_delete_time")]
-    public string AutoDeleteTime { get; set; }
+    public string? AutoDeleteTime { get; set; }
 
     [JsonPropertyName("recommend_info")]
-    public RecommendInfo RecommendInfo { get; set; }
+    public RecommendInfo? RecommendInfo { get; set; }
 }

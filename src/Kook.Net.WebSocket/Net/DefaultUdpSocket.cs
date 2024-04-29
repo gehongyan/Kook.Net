@@ -5,14 +5,15 @@ namespace Kook.Net.Udp;
 
 internal class DefaultUdpSocket : IUdpSocket, IDisposable
 {
-    public event Func<byte[], int, int, Task> ReceivedDatagram;
+    public event Func<byte[], int, int, Task>? ReceivedDatagram;
 
     private readonly SemaphoreSlim _lock;
-    private UdpClient _udp;
-    private IPEndPoint _destination;
-    private CancellationTokenSource _stopCancellationTokenSource, _cancellationTokenSource;
+    private UdpClient? _udp;
+    private IPEndPoint? _destination;
+    private CancellationTokenSource _stopCancellationTokenSource;
+    private CancellationTokenSource? _cancellationTokenSource;
     private CancellationToken _cancellationToken, _parentToken;
-    private Task _task;
+    private Task? _task;
     private bool _isDisposed;
 
     public ushort Port => (ushort)((_udp?.Client.LocalEndPoint as IPEndPoint)?.Port ?? 0);
@@ -44,7 +45,7 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
 
     public async Task StartAsync()
     {
-        await _lock.WaitAsync().ConfigureAwait(false);
+        await _lock.WaitAsync(CancellationToken.None).ConfigureAwait(false);
         try
         {
             await StartInternalAsync(_cancellationToken).ConfigureAwait(false);
@@ -74,7 +75,7 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
 
     public async Task StopAsync()
     {
-        await _lock.WaitAsync().ConfigureAwait(false);
+        await _lock.WaitAsync(CancellationToken.None).ConfigureAwait(false);
         try
         {
             await StopInternalAsync().ConfigureAwait(false);
@@ -134,6 +135,8 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
             data = newData;
         }
 
+        if (_udp is null)
+            throw new InvalidOperationException("Socket is not started.");
         await _udp.SendAsync(data, count, _destination).ConfigureAwait(false);
     }
 
@@ -142,6 +145,8 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
         Task closeTask = Task.Delay(-1, cancellationToken);
         while (!cancellationToken.IsCancellationRequested)
         {
+            if (_udp is null)
+                throw new InvalidOperationException("Socket is not started.");
             Task<UdpReceiveResult> receiveTask = _udp.ReceiveAsync();
 
             _ = receiveTask.ContinueWith((receiveResult) =>

@@ -7,7 +7,7 @@ internal class ModuleTypeConverter : JsonConverter<ModuleType>
 {
     public override ModuleType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string type = reader.GetString();
+        string? type = reader.GetString();
         return type switch
         {
             "header" => ModuleType.Header,

@@ -92,7 +92,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     /// <returns>
     ///     <c>true</c> if this message mentioned everyone; otherwise <c>false</c>.
     /// </returns>
-    bool? MentionedEveryone { get; }
+    bool MentionedEveryone { get; }
 
     /// <summary>
     ///     Gets the value that indicates whether this message mentioned online users.
@@ -100,7 +100,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     /// <returns>
     ///     <c>true</c> if this message mentioned online users; otherwise <c>false</c>.
     /// </returns>
-    bool? MentionedHere { get; }
+    bool MentionedHere { get; }
 
     /// <summary>
     ///     Gets all tags included in this message's content.
@@ -157,7 +157,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     ///     A task that represents the asynchronous operation for adding a reaction to this message.
     /// </returns>
     /// <seealso cref="IEmote"/>
-    Task AddReactionAsync(IEmote emote, RequestOptions options = null);
+    Task AddReactionAsync(IEmote emote, RequestOptions? options = null);
 
     /// <summary>
     ///     Removes a reaction from message.
@@ -169,7 +169,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     ///     A task that represents the asynchronous operation for removing a reaction to this message.
     /// </returns>
     /// <seealso cref="IEmote"/>
-    Task RemoveReactionAsync(IEmote emote, IUser user, RequestOptions options = null);
+    Task RemoveReactionAsync(IEmote emote, IUser user, RequestOptions? options = null);
 
     /// <summary>
     ///     Removes a reaction from message.
@@ -181,7 +181,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     ///     A task that represents the asynchronous operation for removing a reaction to this message.
     /// </returns>
     /// <seealso cref="IEmote"/>
-    Task RemoveReactionAsync(IEmote emote, ulong userId, RequestOptions options = null);
+    Task RemoveReactionAsync(IEmote emote, ulong userId, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets all users that reacted to a message with a given emote.
@@ -191,7 +191,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     /// <returns>
     ///      Collection of users.
     /// </returns>
-    Task<IReadOnlyCollection<IUser>> GetReactionUsersAsync(IEmote emote, RequestOptions options = null);
+    Task<IReadOnlyCollection<IUser>> GetReactionUsersAsync(IEmote emote, RequestOptions? options = null);
 
     #endregion
 }

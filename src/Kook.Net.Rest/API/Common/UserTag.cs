@@ -14,5 +14,5 @@ internal class UserTag
     public AlphaColor BackgroundColor { get; set; }
 
     [JsonPropertyName("text")]
-    public string Text { get; set; }
+    public required string Text { get; set; }
 }

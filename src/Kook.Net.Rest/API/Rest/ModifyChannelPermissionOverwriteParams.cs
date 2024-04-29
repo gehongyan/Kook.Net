@@ -6,14 +6,14 @@ namespace Kook.API.Rest;
 internal class ModifyChannelPermissionOverwriteParams
 {
     [JsonPropertyName("channel_id")]
-    public ulong ChannelId { get; set; }
+    public required ulong ChannelId { get; set; }
 
     [JsonPropertyName("type")]
     [JsonConverter(typeof(PermissionOverwriteTargetTypeConverter))]
     public PermissionOverwriteTargetType TargetType { get; set; }
 
     [JsonPropertyName("value")]
-    public ulong TargetId { get; set; }
+    public required ulong TargetId { get; set; }
 
     [JsonPropertyName("allow")]
     [JsonConverter(typeof(NullableUInt64Converter))]
@@ -24,14 +24,4 @@ internal class ModifyChannelPermissionOverwriteParams
     [JsonConverter(typeof(NullableUInt64Converter))]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ulong? Deny { get; set; }
-
-    public ModifyChannelPermissionOverwriteParams(ulong channelId, PermissionOverwriteTargetType targetType, ulong targetId, ulong? allow,
-        ulong? deny)
-    {
-        ChannelId = channelId;
-        TargetType = targetType;
-        TargetId = targetId;
-        Allow = allow;
-        Deny = deny;
-    }
 }

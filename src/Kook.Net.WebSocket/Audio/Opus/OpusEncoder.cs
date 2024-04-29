@@ -59,20 +59,25 @@ internal unsafe class OpusEncoder : OpusConverter
     {
         int result = 0;
         fixed (byte* inPtr = input)
-        fixed (byte* outPtr = output)
-            result = Encode(_ptr, inPtr + inputOffset, FrameSamplesPerChannel, outPtr + outputOffset,
-                output.Length - outputOffset);
+        {
+            fixed (byte* outPtr = output)
+            {
+                result = Encode(_ptr,
+                    inPtr + inputOffset,
+                    FrameSamplesPerChannel, outPtr + outputOffset,
+                    output.Length - outputOffset);
+            }
+        }
+
         CheckError(result);
         return result;
     }
 
     protected override void Dispose(bool disposing)
     {
-        if (!_isDisposed)
-        {
-            if (_ptr != IntPtr.Zero)
-                DestroyEncoder(_ptr);
-            base.Dispose(disposing);
-        }
+        if (IsDisposed) return;
+        if (_ptr != IntPtr.Zero)
+            DestroyEncoder(_ptr);
+        base.Dispose(disposing);
     }
 }

@@ -15,7 +15,7 @@ internal class RestRequest : IRequest
     public TaskCompletionSource<Stream> Promise { get; }
     public RequestOptions Options { get; }
 
-    public RestRequest(IRestClient client, HttpMethod method, string endpoint, RequestOptions options)
+    public RestRequest(IRestClient client, HttpMethod method, string endpoint, RequestOptions? options)
     {
         Preconditions.NotNull(options, nameof(options));
 
@@ -28,5 +28,6 @@ internal class RestRequest : IRequest
     }
 
     public virtual async Task<RestResponse> SendAsync() =>
-        await Client.SendAsync(Method, Endpoint, Options.CancellationToken, Options.AuditLogReason, Options.RequestHeaders).ConfigureAwait(false);
+        await Client.SendAsync(Method, Endpoint, Options.CancellationToken, Options.AuditLogReason, Options.RequestHeaders)
+            .ConfigureAwait(false);
 }

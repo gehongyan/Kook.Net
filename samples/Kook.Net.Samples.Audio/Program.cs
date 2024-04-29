@@ -3,6 +3,8 @@ using Kook.Commands;
 using Kook.Net.Samples.Audio.Modules;
 using Kook.Net.Samples.Audio.Services;
 using Kook.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 // 这是一个使用 Kook.Net 的文本命令框架的简单示例
 
@@ -12,7 +14,7 @@ using Kook.WebSocket;
 // 您可以在以下位置找到使用命令框架的文档：
 // - https://kooknet.dev/guides/text_commands/intro.html
 
-HostApplicationBuilder builder = new();
+HostApplicationBuilder builder = Host.CreateEmptyApplicationBuilder(null);
 builder.Services.AddSingleton(_ => new KookSocketClient(new KookSocketConfig
 {
     LogLevel = LogSeverity.Debug,
@@ -23,8 +25,7 @@ builder.Services.AddSingleton(_ => new CommandService(new CommandServiceConfig
 {
     DefaultRunMode = RunMode.Async
 }));
-builder.Services.AddSingleton<CommandHandlingService>();
-builder.Services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<CommandHandlingService>());
+builder.Services.AddHostedService<CommandHandlingService>();
 builder.Services.AddSingleton<MusicService>();
 builder.Services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<MusicService>());
 builder.Services.AddHttpClient<MusicModule>("Music");

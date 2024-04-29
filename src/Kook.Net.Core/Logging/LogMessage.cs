@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     Provides a message object used for logging purposes.
 /// </summary>
-public struct LogMessage
+public readonly struct LogMessage
 {
     /// <summary>
     ///     Gets the severity of the log entry.
@@ -29,7 +29,7 @@ public struct LogMessage
     /// <returns>
     ///     A string containing the message of this log entry.
     /// </returns>
-    public string Message { get; }
+    public string? Message { get; }
 
     /// <summary>
     ///     Gets the exception of this log entry.
@@ -37,7 +37,7 @@ public struct LogMessage
     /// <returns>
     ///     A <see cref="Kook.LogMessage.Exception" /> object associated with an incident; otherwise <c>null</c>.
     /// </returns>
-    public Exception Exception { get; }
+    public Exception? Exception { get; }
 
     /// <summary>
     ///     Initializes a new <see cref="LogMessage"/> struct with the severity, source, message of the event, and
@@ -47,7 +47,7 @@ public struct LogMessage
     /// <param name="source">The source of the event.</param>
     /// <param name="message">The message of the event.</param>
     /// <param name="exception">The exception of the event.</param>
-    public LogMessage(LogSeverity severity, string source, string message, Exception exception = null)
+    public LogMessage(LogSeverity severity, string source, string? message, Exception? exception = null)
     {
         Severity = severity;
         Source = source;
@@ -70,15 +70,20 @@ public struct LogMessage
     /// <param name="timestampKind"> The kind of timestamp to use. </param>
     /// <param name="padSource"> The amount of padding to use for the source. </param>
     /// <returns> A string representation of this log message. </returns>
-    public string ToString(StringBuilder builder = null, bool fullException = true, bool prependTimestamp = true,
+    public string ToString(StringBuilder? builder = null, bool fullException = true, bool prependTimestamp = true,
         DateTimeKind timestampKind = DateTimeKind.Local, int? padSource = 11)
     {
-        string sourceName = Source;
-        string message = Message;
-        string exMessage = fullException ? Exception?.ToString() : Exception?.Message;
+        string? exMessage = fullException ? Exception?.ToString() : Exception?.Message;
 
         int maxLength =
-            1 + (prependTimestamp ? 8 : 0) + 1 + (padSource ?? (sourceName?.Length ?? 0)) + 1 + (message?.Length ?? 0) + (exMessage?.Length ?? 0) + 3;
+            1
+            + (prependTimestamp ? 8 : 0)
+            + 1
+            + (padSource ?? (Source?.Length ?? 0))
+            + 1
+            + (Message?.Length ?? 0)
+            + (exMessage?.Length ?? 0)
+            + 3;
 
         if (builder == null)
             builder = new StringBuilder(maxLength);
@@ -90,42 +95,37 @@ public struct LogMessage
 
         if (prependTimestamp)
         {
-            DateTime now;
-            if (timestampKind == DateTimeKind.Utc)
-                now = DateTime.UtcNow;
-            else
-                now = DateTime.Now;
+            DateTime now = timestampKind == DateTimeKind.Utc
+                ? DateTime.UtcNow
+                : DateTime.Now;
 
-            string format = "HH:mm:ss";
-            builder.Append(now.ToString(format));
+            builder.Append(now.ToString("HH:mm:ss"));
             builder.Append(' ');
         }
 
-        if (sourceName != null)
+        if (Source != null)
         {
             if (padSource.HasValue)
             {
-                if (sourceName.Length < padSource.Value)
+                if (Source.Length < padSource.Value)
                 {
-                    builder.Append(sourceName);
-                    builder.Append(' ', padSource.Value - sourceName.Length);
+                    builder.Append(Source);
+                    builder.Append(' ', padSource.Value - Source.Length);
                 }
-                else if (sourceName.Length > padSource.Value)
-                    builder.Append(sourceName.Substring(0, padSource.Value));
+                else if (Source.Length > padSource.Value)
+                    builder.Append(Source[..padSource.Value]);
                 else
-                    builder.Append(sourceName);
+                    builder.Append(Source);
             }
 
             builder.Append(' ');
         }
 
-        if (!string.IsNullOrEmpty(Message))
-            for (int i = 0; i < message.Length; i++)
-            {
-                //Strip control chars
-                char c = message[i];
-                if (!char.IsControl(c)) builder.Append(c);
-            }
+        if (Message != null && !string.IsNullOrEmpty(Message))
+        {
+            foreach (char c in Message.Where(c => !char.IsControl(c)))
+                builder.Append(c);
+        }
 
         if (exMessage != null)
         {

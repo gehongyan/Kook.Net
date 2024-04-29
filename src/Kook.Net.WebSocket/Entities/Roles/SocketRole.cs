@@ -9,7 +9,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based role to be given to a guild user.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketRole : SocketEntity<uint>, IRole
 {
     #region SocketRole
@@ -23,7 +23,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     public SocketGuild Guild { get; }
 
     /// <inheritdoc />
-    public RoleType? Type { get; private set; }
+    public RoleType Type { get; private set; }
 
     /// <inheritdoc />
     public string Name { get; private set; }
@@ -64,8 +64,11 @@ public class SocketRole : SocketEntity<uint>, IRole
     public string PlainTextMention => IsEveryone ? "@全体成员" : MentionUtils.PlainTextMentionRole(Id);
 
     internal SocketRole(SocketGuild guild, uint id)
-        : base(guild.Kook, id) =>
+        : base(guild.Kook, id)
+    {
+        Name = string.Empty;
         Guild = guild;
+    }
 
     internal static SocketRole Create(SocketGuild guild, ClientState state, Model model)
     {
@@ -88,12 +91,12 @@ public class SocketRole : SocketEntity<uint>, IRole
     }
 
     /// <inheritdoc />
-    public Task ModifyAsync(Action<RoleProperties> func, RequestOptions options = null)
-        => RoleHelper.ModifyAsync(this, Kook, func, options);
+    public Task ModifyAsync(Action<RoleProperties> func, RequestOptions? options = null) =>
+        RoleHelper.ModifyAsync(this, Kook, func, options);
 
     /// <inheritdoc />
-    public Task DeleteAsync(RequestOptions options = null)
-        => RoleHelper.DeleteAsync(this, Kook, options);
+    public Task DeleteAsync(RequestOptions? options = null) =>
+        RoleHelper.DeleteAsync(this, Kook, options);
 
     /// <summary>
     ///     Gets a collection of users with this role.
@@ -108,36 +111,30 @@ public class SocketRole : SocketEntity<uint>, IRole
     ///     the data via REST and update the guild users cache, otherwise it will
     ///     return the cached data.
     /// </remarks>
-    public async IAsyncEnumerable<IReadOnlyCollection<SocketGuildUser>> GetUsersAsync(RequestOptions options = null)
+    public async IAsyncEnumerable<IReadOnlyCollection<SocketGuildUser>> GetUsersAsync(RequestOptions? options = null)
     {
         // From SocketGuild.Users
         if (Guild.HasAllMembers is true)
         {
             IEnumerable<IReadOnlyCollection<SocketGuildUser>> userCollections = Guild.Users
                 .Where(u => u.Roles.Contains(this))
-#if NET6_0_OR_GREATER
                 .Chunk(KookConfig.MaxUsersPerBatch)
-#else
-                .Select((x, i) => new { Index = i, Value = x })
-                .GroupBy(x => x.Index / KookConfig.MaxUsersPerBatch)
-                .Select(x => x.Select(v => v.Value))
-#endif
-                .Select(c => c.ToImmutableArray() as IReadOnlyCollection<SocketGuildUser>);
-            foreach (IReadOnlyCollection<SocketGuildUser> users in userCollections) yield return users;
-
+                .Select(c => c.ToImmutableList());
+            foreach (IReadOnlyCollection<SocketGuildUser> users in userCollections)
+                yield return users;
             yield break;
         }
 
         // Update SocketGuild.Users by fetching from REST API
-        void Func(SearchGuildMemberProperties p) => p.RoleId = Id;
-        IAsyncEnumerable<IReadOnlyCollection<GuildMember>> restUserCollections = Kook.ApiClient
-            .GetGuildMembersAsync(Guild.Id, Func, KookConfig.MaxUsersPerBatch, 1, options);
+        IAsyncEnumerable<IReadOnlyCollection<GuildMember>> restUserCollections = Kook
+            .ApiClient
+            .GetGuildMembersAsync(Guild.Id, x => x.RoleId = Id, KookConfig.MaxUsersPerBatch, 1, options);
         await foreach (IReadOnlyCollection<GuildMember> restUsers in restUserCollections)
-            yield return restUsers.Select(restUser => Guild.AddOrUpdateUser(restUser)).ToList();
+            yield return [..restUsers.Select(restUser => Guild.AddOrUpdateUser(restUser))];
     }
 
     /// <inheritdoc />
-    public int CompareTo(IRole role) => RoleUtils.Compare(this, role);
+    public int CompareTo(IRole? role) => RoleUtils.Compare(this, role);
 
     #endregion
 
@@ -150,7 +147,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     public override string ToString() => Name;
 
     private string DebuggerDisplay => $"{Name} ({Id})";
-    internal SocketRole Clone() => MemberwiseClone() as SocketRole;
+    internal SocketRole Clone() => (SocketRole)MemberwiseClone();
 
     #region IRole
 
@@ -158,13 +155,10 @@ public class SocketRole : SocketEntity<uint>, IRole
     IGuild IRole.Guild => Guild;
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IRole.GetUsersAsync(CacheMode mode, RequestOptions options)
-    {
-        if (mode == CacheMode.AllowDownload)
-            return GetUsersAsync(options);
-        else
-            return AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
-    }
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IRole.GetUsersAsync(CacheMode mode, RequestOptions? options) =>
+        mode == CacheMode.AllowDownload
+            ? GetUsersAsync(options)
+            : AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
 
     #endregion
 }

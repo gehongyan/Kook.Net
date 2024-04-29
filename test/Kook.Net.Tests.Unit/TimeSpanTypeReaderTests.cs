@@ -43,29 +43,30 @@ public class TimeSpanTypeReaderTests
     public async Task TestTimeSpanParse(string input, bool isNegative)
     {
         TimeSpanTypeReader reader = new();
-        TypeReaderResult result = await reader.ReadAsync(null, input, null);
+        TypeReaderResult result = await reader.ReadAsync(null!, input, null);
         Assert.True(result.IsSuccess);
 
-        TimeSpan actual = (TimeSpan)result.BestMatch;
+        TimeSpan? actual = (TimeSpan?)result.BestMatch;
+        Assert.NotNull(actual);
         Assert.True(actual != TimeSpan.Zero);
 
         if (isNegative)
         {
             Assert.True(actual < TimeSpan.Zero);
 
-            Assert.True(actual.Seconds == 0 || actual.Seconds == -1);
-            Assert.True(actual.Minutes == 0 || actual.Minutes == -2);
-            Assert.True(actual.Hours == 0 || actual.Hours == -3);
-            Assert.True(actual.Days == 0 || actual.Days == -4);
+            Assert.True(actual.Value.Seconds is 0 or -1);
+            Assert.True(actual.Value.Minutes is 0 or -2);
+            Assert.True(actual.Value.Hours is 0 or -3);
+            Assert.True(actual.Value.Days is 0 or -4);
         }
         else
         {
             Assert.True(actual > TimeSpan.Zero);
 
-            Assert.True(actual.Seconds == 0 || actual.Seconds == 1);
-            Assert.True(actual.Minutes == 0 || actual.Minutes == 2);
-            Assert.True(actual.Hours == 0 || actual.Hours == 3);
-            Assert.True(actual.Days == 0 || actual.Days == 4);
+            Assert.True(actual.Value.Seconds is 0 or 1);
+            Assert.True(actual.Value.Minutes is 0 or 2);
+            Assert.True(actual.Value.Hours is 0 or 3);
+            Assert.True(actual.Value.Days is 0 or 4);
         }
     }
 }

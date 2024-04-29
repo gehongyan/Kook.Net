@@ -49,7 +49,7 @@ public abstract class AudioStream : Stream
     /// </summary>
     /// <param name="cancellationToken"> The cancellation token to be used. </param>
     /// <returns> A task that represents an asynchronous clear operation. </returns>
-    public virtual Task ClearAsync(CancellationToken cancellationToken) { return Task.Delay(0); }
+    public virtual Task ClearAsync(CancellationToken cancellationToken) => Task.Delay(0);
 
     /// <inheritdoc />
     /// <exception cref="NotSupportedException">Reading stream length is not supported.</exception>

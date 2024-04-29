@@ -6,28 +6,28 @@ namespace Kook.API.Rest;
 internal class GuildMember : User
 {
     [JsonPropertyName("nickname")]
-    public string Nickname { get; set; }
+    public string? Nickname { get; set; }
 
     [JsonPropertyName("mobile_verified")]
-    public bool MobileVerified { get; set; }
+    public bool? MobileVerified { get; set; }
 
     [JsonPropertyName("joined_at")]
-    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
-    public DateTimeOffset JoinedAt { get; set; }
+    [JsonConverter(typeof(NullableDateTimeOffsetUnixTimeMillisecondsConverter))]
+    public DateTimeOffset? JoinedAt { get; set; }
 
     [JsonPropertyName("active_time")]
-    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
-    public DateTimeOffset ActiveAt { get; set; }
+    [JsonConverter(typeof(NullableDateTimeOffsetUnixTimeMillisecondsConverter))]
+    public DateTimeOffset? ActiveAt { get; set; }
 
     [JsonPropertyName("hoist_info")]
-    public HoistInfo HoistInfo { get; set; }
+    public HoistInfo? HoistInfo { get; set; }
 
     [JsonPropertyName("color")]
     [JsonConverter(typeof(RawValueColorConverter))]
-    public Color Color { get; set; }
+    public Color? Color { get; set; }
 
     [JsonPropertyName("roles")]
-    public uint[] Roles { get; set; }
+    public uint[]? Roles { get; set; }
 
     [JsonPropertyName("is_master")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
@@ -35,10 +35,10 @@ internal class GuildMember : User
 
     [JsonPropertyName("desc")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     [JsonPropertyName("abbr")]
-    public string Abbreviation { get; set; }
+    public string? Abbreviation { get; set; }
 }
 
 internal class HoistInfo
@@ -47,7 +47,7 @@ internal class HoistInfo
     public uint RoleId { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [JsonPropertyName("color")]
     public uint Color { get; set; }

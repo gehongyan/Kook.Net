@@ -5,10 +5,10 @@ namespace Kook.API;
 internal class VoiceRegion
 {
     [JsonPropertyName("id")]
-    public string Id { get; set; }
+    public required string Id { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [JsonPropertyName("crowding")]
     public int Crowding { get; set; }

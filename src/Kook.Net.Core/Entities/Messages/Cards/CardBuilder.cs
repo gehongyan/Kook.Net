@@ -1,17 +1,12 @@
-using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
 /// <summary>
 ///     Represents a builder class for creating a <see cref="Card"/>.
 /// </summary>
-public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
+public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICardBuilder>
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="CardBuilder"/> class.
-    /// </summary>
-    public CardBuilder() => Modules = new List<IModuleBuilder>();
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="CardBuilder"/> class with the specified parameters.
     /// </summary>
@@ -19,12 +14,12 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     /// <param name="color"> The color displayed along the left side of the card.</param>
     /// <param name="size"> The size of the card.</param>
     /// <param name="modules"> The modules in the card.</param>
-    public CardBuilder(CardTheme theme, Color? color = null, CardSize size = CardSize.Large, List<IModuleBuilder> modules = null)
+    public CardBuilder(CardTheme theme = CardTheme.Primary, Color? color = null, CardSize size = CardSize.Large, IList<IModuleBuilder>? modules = null)
     {
-        WithTheme(theme);
-        if (color.HasValue) WithColor(color.Value);
-        WithSize(size);
-        Modules = modules ?? new List<IModuleBuilder>();
+        Theme = theme;
+        Color = color;
+        Size = size;
+        Modules = modules ?? [];
     }
 
     /// <summary>
@@ -57,15 +52,15 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     /// <returns>
     ///     A <see cref="CardSize"/> value that represents the size of the card.
     /// </returns>
-    public CardSize Size { get; set; }
+    public CardSize Size { get; set; } = CardSize.Large;
 
     /// <summary>
     ///     Gets or sets the modules in the card.
     /// </summary>
     /// <returns>
-    ///     A <see cref="List{IModuleBuilder}"/> containing the modules in the card.
+    ///     An <see cref="IList{IModuleBuilder}"/> containing the modules in the card.
     /// </returns>
-    public List<IModuleBuilder> Modules { get; set; }
+    public IList<IModuleBuilder> Modules { get; set; }
 
     /// <summary>
     ///     Sets the theme of the card.
@@ -91,7 +86,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public CardBuilder WithColor(Color color)
+    public CardBuilder WithColor(Color? color)
     {
         Color = color;
         return this;
@@ -136,7 +131,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public CardBuilder AddModule<T>(Action<T> action = null)
+    public CardBuilder AddModule<T>(Action<T>? action = null)
         where T : IModuleBuilder, new()
     {
         T module = new();
@@ -152,7 +147,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     ///     A <see cref="KMarkdownElement"/> represents the built element object.
     /// </returns>
     public Card Build() =>
-        new(Theme, Size, Color, Modules.Select(m => m.Build()).ToImmutableArray());
+        new(Theme, Size, Color, [..Modules.Select(m => m.Build())]);
 
     /// <inheritdoc />
     ICard ICardBuilder.Build() => Build();
@@ -163,8 +158,8 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     /// <returns>
     ///     <c>true</c> if the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.
     /// </returns>
-    public static bool operator ==(CardBuilder left, CardBuilder right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(CardBuilder? left, CardBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="CardBuilder"/> is not equal to the current <see cref="CardBuilder"/>.
@@ -172,29 +167,32 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
     /// <returns>
     ///     <c>true</c> if the specified <see cref="CardBuilder"/> is not equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.
     /// </returns>
-    public static bool operator !=(CardBuilder left, CardBuilder right)
-        => !(left == right);
+    public static bool operator !=(CardBuilder? left, CardBuilder? right) =>
+        !(left == right);
 
     /// <summary>
     ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="CardBuilder"/>.
     /// </summary>
     /// <param name="obj"> The object to compare with the current <see cref="CardBuilder"/>.</param>
     /// <returns> <c>true</c> if the specified object is equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
-        => obj is CardBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is CardBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>.</summary>
     /// <param name="cardBuilder">The <see cref="CardBuilder"/> to compare with the current <see cref="CardBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(CardBuilder cardBuilder)
+    public bool Equals([NotNullWhen(true)] CardBuilder? cardBuilder)
     {
-        if (cardBuilder is null) return false;
+        if (cardBuilder is null)
+            return false;
 
-        if (Modules.Count != cardBuilder.Modules.Count) return false;
+        if (Modules.Count != cardBuilder.Modules.Count)
+            return false;
 
-        for (int i = 0; i < Modules.Count; i++)
-            if (Modules[i] != cardBuilder.Modules[i])
-                return false;
+        if (Modules
+            .Zip(cardBuilder.Modules, (x, y) => (x, y))
+            .Any(pair => pair.x != pair.y))
+            return false;
 
         return Type == cardBuilder.Type
             && Theme == cardBuilder.Theme
@@ -204,4 +202,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>
 
     /// <inheritdoc />
     public override int GetHashCode() => base.GetHashCode();
+
+    bool IEquatable<ICardBuilder>.Equals([NotNullWhen(true)] ICardBuilder? cardBuilder) =>
+        Equals(cardBuilder as CardBuilder);
 }

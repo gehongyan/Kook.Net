@@ -4,7 +4,7 @@ using Model = Kook.API.Attachment;
 namespace Kook;
 
 /// <inheritdoc cref="IAttachment"/>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Attachment : IAttachment
 {
     /// <inheritdoc />
@@ -14,13 +14,13 @@ public class Attachment : IAttachment
     public string Url { get; }
 
     /// <inheritdoc />
-    public string Filename { get; }
+    public string? Filename { get; }
 
     /// <inheritdoc />
     public int? Size { get; }
 
     /// <inheritdoc />
-    public string FileType { get; }
+    public string? FileType { get; }
 
     /// <inheritdoc />
     public TimeSpan? Duration { get; }
@@ -31,7 +31,8 @@ public class Attachment : IAttachment
     /// <inheritdoc />
     public int? Height { get; }
 
-    internal Attachment(AttachmentType type, string url, string filename, int? size, string fileType, TimeSpan? duration, int? width, int? height)
+    internal Attachment(AttachmentType type, string url, string? filename,
+        int? size = null, string? fileType = null, TimeSpan? duration = null, int? width = null, int? height = null)
     {
         Type = type;
         Url = url;
@@ -55,7 +56,8 @@ public class Attachment : IAttachment
         TimeSpan? duration = model.Duration.HasValue
             ? TimeSpan.FromSeconds(model.Duration.Value)
             : null;
-        return new Attachment(type, model.Url, model.Name, model.Size, model.FileType, duration, model.Width, model.Height);
+        return new Attachment(type, model.Url, model.Name,
+            model.Size, model.FileType, duration, model.Width, model.Height);
     }
 
     /// <summary>
@@ -64,7 +66,7 @@ public class Attachment : IAttachment
     /// <returns>
     ///     A string containing the filename of this attachment.
     /// </returns>
-    public override string ToString() => Filename;
+    public override string? ToString() => Filename;
 
     private string DebuggerDisplay => $"{Filename}{(Size.HasValue ? $" ({Size} bytes)" : "")}";
 }

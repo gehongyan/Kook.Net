@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
@@ -14,8 +15,6 @@ public class Emoji : IEmote
     /// <inheritdoc />
     public string Id => Name;
 
-    // TODO: HTML codepoints
-
     /// <summary>
     ///     Gets the Unicode representation of this emoji.
     /// </summary>
@@ -28,43 +27,45 @@ public class Emoji : IEmote
     ///     Initializes a new <see cref="Emoji"/> class with the provided Unicode.
     /// </summary>
     /// <param name="unicode">The pure UTF-8 encoding of an emoji.</param>
-    public Emoji(string unicode) => Name = TryParseAsUnicodePoint(unicode, out string name) ? name : unicode;
+    public Emoji(string unicode)
+    {
+        Name = TryParseAsUnicodePoint(unicode, out string? name) ? name : unicode;
+    }
 
     /// <summary>
     ///     Determines whether the specified emoji is equal to the current one.
     /// </summary>
     /// <param name="obj">The object to compare with the current object.</param>
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
     {
         if (obj == null) return false;
-
         if (obj == this) return true;
-
         return obj is Emoji otherEmoji && string.Equals(Name, otherEmoji.Name);
     }
 
     /// <summary> Tries to parse an <see cref="Emoji"/> from its raw format. </summary>
     /// <param name="text">The raw encoding of an emoji. For example: <code>:heart: or ❤</code></param>
     /// <param name="result">An emoji.</param>
-    public static bool TryParse(string text, out Emoji result)
+    public static bool TryParse([NotNullWhen(true)] string? text,
+        [NotNullWhen(true)] out Emoji? result)
     {
         result = null;
-        if (string.IsNullOrWhiteSpace(text)) return false;
-
-        if (NamesAndUnicodes.ContainsKey(text)) result = new Emoji(NamesAndUnicodes[text]);
-
-        if (Unicodes.Contains(text)) result = new Emoji(text);
-
+        if (text is null || string.IsNullOrWhiteSpace(text))
+            return false;
+        if (NamesAndUnicodes.TryGetValue(text, out string? nameUnicode))
+            result = new Emoji(nameUnicode);
+        if (Unicodes.Contains(text))
+            result = new Emoji(text);
         return result != null;
     }
 
     /// <summary> Parse an <see cref="Emoji"/> from its raw format.</summary>
     /// <param name="emojiStr">The raw encoding of an emoji. For example: <c>:heart: or ❤</c></param>
     /// <exception cref="FormatException">String is not emoji or unicode!</exception>
-    public static Emoji Parse(string emojiStr)
+    public static Emoji Parse([NotNull] string? emojiStr)
     {
-        if (!TryParse(emojiStr, out Emoji emoji)) throw new FormatException("String is not emoji name or unicode.");
-
+        if (!TryParse(emojiStr, out Emoji? emoji))
+            throw new FormatException("String is not emoji name or unicode.");
         return emoji;
     }
 
@@ -72,15 +73,11 @@ public class Emoji : IEmote
     ///     Try parsing an <see cref="Emoji"/> from its unicode point format.
     ///     For example: <c>[#128187;]</c> -> <c>💻</c>
     /// </summary>
-    internal bool TryParseAsUnicodePoint(string unicodePoint, out string name)
+    internal static bool TryParseAsUnicodePoint(string unicodePoint, [NotNullWhen(true)] out string? name)
     {
         name = null;
         if (!unicodePoint.StartsWith("[#") || !unicodePoint.EndsWith(";]")) return false;
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
         if (!int.TryParse(unicodePoint[2..^2], out int codePoint)) return false;
-#else
-        if (!int.TryParse(unicodePoint.Substring(2, unicodePoint.Length - 4), out int codePoint)) return false;
-#endif
         name = char.ConvertFromUtf32(codePoint);
         return true;
     }
@@ -1806,7 +1803,7 @@ public class Emoji : IEmote
         [":wales:"] = "\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc77\udb40\udc6c\udb40\udc73\udb40\udc7f"
     };
 
-    private static IReadOnlyCollection<string> _unicodes;
+    private static IReadOnlyCollection<string>? _unicodes;
 
     private static IReadOnlyCollection<string> Unicodes
     {
@@ -1817,7 +1814,7 @@ public class Emoji : IEmote
         }
     }
 
-    private static IReadOnlyDictionary<string, ReadOnlyCollection<string>> _unicodesAndNames;
+    private static IReadOnlyDictionary<string, ReadOnlyCollection<string>>? _unicodesAndNames;
 
     private static IReadOnlyDictionary<string, ReadOnlyCollection<string>> UnicodesAndNames
     {

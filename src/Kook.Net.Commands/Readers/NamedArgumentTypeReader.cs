@@ -7,13 +7,17 @@ namespace Kook.Commands;
 internal sealed class NamedArgumentTypeReader<T> : TypeReader
     where T : class, new()
 {
-    private static readonly IReadOnlyDictionary<string, PropertyInfo> _tProps = typeof(T).GetTypeInfo().DeclaredProperties
+    private static readonly IReadOnlyDictionary<string, PropertyInfo> _tProps = typeof(T).GetTypeInfo()
+        .DeclaredProperties
         .Where(p => p.SetMethod != null && p.SetMethod.IsPublic && !p.SetMethod.IsStatic)
         .ToImmutableDictionary(p => p.Name, StringComparer.OrdinalIgnoreCase);
 
     private readonly CommandService _commands;
 
-    public NamedArgumentTypeReader(CommandService commands) => _commands = commands;
+    public NamedArgumentTypeReader(CommandService commands)
+    {
+        _commands = commands;
+    }
 
     public override async Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
     {
@@ -22,26 +26,30 @@ internal sealed class NamedArgumentTypeReader<T> : TypeReader
         int beginRead = 0, currentRead = 0;
 
         while (state != ReadState.End)
+        {
             try
             {
-                PropertyInfo prop = Read(out string arg);
-                object propVal = await ReadArgumentAsync(prop, arg).ConfigureAwait(false);
-                if (propVal != null)
-                    prop.SetMethod.Invoke(result, new[] { propVal });
+                PropertyInfo? prop = Read(out string arg);
+                object? propVal = await ReadArgumentAsync(prop, arg).ConfigureAwait(false);
+                if (prop?.SetMethod is not null && propVal != null)
+                    prop.SetMethod.Invoke(result, [propVal]);
                 else
+                {
                     return TypeReaderResult.FromError(CommandError.ParseFailed,
-                        $"Could not parse the argument for the parameter '{prop.Name}' as type '{prop.PropertyType}'.");
+                        $"Could not parse the argument for the parameter '{prop?.Name}' as type '{prop?.PropertyType}'.");
+                }
             }
             catch (Exception ex)
             {
                 return TypeReaderResult.FromError(ex);
             }
+        }
 
         return TypeReaderResult.FromSuccess(result);
 
-        PropertyInfo Read(out string arg)
+        PropertyInfo? Read(out string arg)
         {
-            string currentParam = null;
+            string? currentParam = null;
             char match = '\0';
 
             for (; currentRead < input.Length; currentRead++)
@@ -52,53 +60,40 @@ internal sealed class NamedArgumentTypeReader<T> : TypeReader
                     case ReadState.LookingForParameter:
                         if (char.IsWhiteSpace(currentChar))
                             continue;
-                        else
-                        {
-                            beginRead = currentRead;
-                            state = ReadState.InParameter;
-                        }
-
+                        beginRead = currentRead;
+                        state = ReadState.InParameter;
                         break;
                     case ReadState.InParameter:
                         if (currentChar != ':')
                             continue;
-                        else
-                        {
-                            currentParam = input.Substring(beginRead, currentRead - beginRead);
-                            state = ReadState.LookingForArgument;
-                        }
-
+                        currentParam = input.Substring(beginRead, currentRead - beginRead);
+                        state = ReadState.LookingForArgument;
                         break;
                     case ReadState.LookingForArgument:
                         if (char.IsWhiteSpace(currentChar))
                             continue;
-                        else
-                        {
-                            beginRead = currentRead;
-                            state = QuotationAliasUtils.GetDefaultAliasMap.TryGetValue(currentChar, out match)
-                                ? ReadState.InQuotedArgument
-                                : ReadState.InArgument;
-                        }
-
+                        beginRead = currentRead;
+                        state = QuotationAliasUtils.DefaultAliasMap.TryGetValue(currentChar, out match)
+                            ? ReadState.InQuotedArgument
+                            : ReadState.InArgument;
                         break;
                     case ReadState.InArgument:
                         if (!char.IsWhiteSpace(currentChar))
                             continue;
-                        else
-                            return GetPropAndValue(out arg);
+                        return GetPropAndValue(out arg);
                     case ReadState.InQuotedArgument:
                         if (currentChar != match)
                             continue;
-                        else
-                            return GetPropAndValue(out arg);
+                        return GetPropAndValue(out arg);
                 }
             }
 
-            if (currentParam == null) throw new InvalidOperationException("No parameter name was read.");
+            if (currentParam == null)
+                throw new InvalidOperationException("No parameter name was read.");
 
             return GetPropAndValue(out arg);
 
-            PropertyInfo GetPropAndValue(out string argv)
+            PropertyInfo? GetPropAndValue(out string argv)
             {
                 bool quoted = state == ReadState.InQuotedArgument;
                 state = currentRead == (quoted ? input.Length - 1 : input.Length)
@@ -113,12 +108,14 @@ internal sealed class NamedArgumentTypeReader<T> : TypeReader
                 else
                     argv = input.Substring(beginRead, currentRead - beginRead);
 
+                if (currentParam == null) return null;
                 return _tProps[currentParam];
             }
         }
 
-        async Task<object> ReadArgumentAsync(PropertyInfo prop, string arg)
+        async Task<object?> ReadArgumentAsync(PropertyInfo? prop, string arg)
         {
+            if (prop is null) return null;
             Type elemType = prop.PropertyType;
             bool isCollection = false;
             if (elemType.GetTypeInfo().IsGenericType && elemType.GetGenericTypeDefinition() == typeof(IEnumerable<>))
@@ -127,44 +124,44 @@ internal sealed class NamedArgumentTypeReader<T> : TypeReader
                 isCollection = true;
             }
 
-            OverrideTypeReaderAttribute overridden = prop.GetCustomAttribute<OverrideTypeReaderAttribute>();
-            TypeReader reader = overridden != null
+            OverrideTypeReaderAttribute? overridden = prop.GetCustomAttribute<OverrideTypeReaderAttribute>();
+            TypeReader? reader = overridden != null
                 ? ModuleClassBuilder.GetTypeReader(_commands, elemType, overridden.TypeReader, services)
                 : _commands.GetDefaultTypeReader(elemType)
-                ?? _commands.GetTypeReaders(elemType).FirstOrDefault().Value;
+                ?? _commands.GetTypeReaders(elemType)?.FirstOrDefault().Value;
 
             if (reader != null)
             {
                 if (isCollection)
                 {
                     MethodInfo method = _readMultipleMethod.MakeGenericMethod(elemType);
-                    Task<IEnumerable> task = (Task<IEnumerable>)method.Invoke(null, new object[] { reader, context, arg.Split(','), services });
-                    return await task.ConfigureAwait(false);
+                    Task<IEnumerable>? task = (Task<IEnumerable>?)method.Invoke(null, [reader, context, arg.Split(','), services]);
+                    if (task is not null)
+                        return await task.ConfigureAwait(false);
                 }
-                else
-                    return await ReadSingle(reader, context, arg, services).ConfigureAwait(false);
+
+                return await ReadSingle(reader, context, arg, services).ConfigureAwait(false);
             }
 
             return null;
         }
     }
 
-    private static async Task<object> ReadSingle(TypeReader reader, ICommandContext context, string arg, IServiceProvider services)
+    private static async Task<object?> ReadSingle(TypeReader reader, ICommandContext context, string arg, IServiceProvider services)
     {
         TypeReaderResult readResult = await reader.ReadAsync(context, arg, services).ConfigureAwait(false);
-        return readResult.IsSuccess
-            ? readResult.BestMatch
-            : null;
+        return readResult.IsSuccess ? readResult.BestMatch : null;
     }
 
     private static async Task<IEnumerable> ReadMultiple<TObj>(TypeReader reader, ICommandContext context, IEnumerable<string> args,
         IServiceProvider services)
     {
-        List<TObj> objs = new();
+        List<TObj> objs = [];
         foreach (string arg in args)
         {
-            object read = await ReadSingle(reader, context, arg.Trim(), services).ConfigureAwait(false);
-            if (read != null) objs.Add((TObj)read);
+            object? read = await ReadSingle(reader, context, arg.Trim(), services).ConfigureAwait(false);
+            if (read != null)
+                objs.Add((TObj)read);
         }
 
         return objs.ToImmutableArray();

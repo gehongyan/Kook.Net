@@ -13,7 +13,7 @@ public interface ICommandContext
     /// <summary>
     ///     Gets the <see cref="IGuild" /> that the command is executed in.
     /// </summary>
-    IGuild Guild { get; }
+    IGuild? Guild { get; }
 
     /// <summary>
     ///     Gets the <see cref="IMessageChannel" /> that the command is executed in.

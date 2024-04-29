@@ -32,7 +32,7 @@ public interface ITextChannel : INestedChannel, IMentionable, IMessageChannel
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
     /// <seealso cref="ModifyTextChannelProperties"/>
-    Task ModifyAsync(Action<ModifyTextChannelProperties> func, RequestOptions options = null);
+    Task ModifyAsync(Action<ModifyTextChannelProperties> func, RequestOptions? options = null);
 
     #endregion
 
@@ -44,5 +44,5 @@ public interface ITextChannel : INestedChannel, IMentionable, IMessageChannel
     ///     A task that represents the asynchronous get operation for retrieving pinned messages in this channel.
     ///     The task result contains a collection of messages found in the pinned messages.
     /// </returns>
-    Task<IReadOnlyCollection<IMessage>> GetPinnedMessagesAsync(RequestOptions options = null);
+    Task<IReadOnlyCollection<IMessage>> GetPinnedMessagesAsync(RequestOptions? options = null);
 }

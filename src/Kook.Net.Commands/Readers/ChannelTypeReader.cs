@@ -40,14 +40,16 @@ public class ChannelTypeReader<T> : TypeReader
             foreach (IGuildChannel channel in channels.Where(x => string.Equals(input, x.Name, StringComparison.OrdinalIgnoreCase)))
                 AddResult(results, channel as T, channel.Name == input ? 0.80f : 0.70f);
 
-            if (results.Count > 0) return TypeReaderResult.FromSuccess(results.Values.ToReadOnlyCollection());
+            if (results.Count > 0)
+                return TypeReaderResult.FromSuccess(results.Values.ToReadOnlyCollection());
         }
 
         return TypeReaderResult.FromError(CommandError.ObjectNotFound, "Channel not found.");
     }
 
-    private void AddResult(Dictionary<ulong, TypeReaderValue> results, T channel, float score)
+    private void AddResult(Dictionary<ulong, TypeReaderValue> results, T? channel, float score)
     {
-        if (channel != null && !results.ContainsKey(channel.Id)) results.Add(channel.Id, new TypeReaderValue(channel, score));
+        if (channel != null && !results.ContainsKey(channel.Id))
+            results.Add(channel.Id, new TypeReaderValue(channel, score));
     }
 }

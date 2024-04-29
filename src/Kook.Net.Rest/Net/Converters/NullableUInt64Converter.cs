@@ -5,9 +5,14 @@ namespace Kook.Net.Converters;
 
 internal class NullableUInt64Converter : JsonConverter<ulong?>
 {
+    /// <inheritdoc />
+    public override bool HandleNull => true;
+
     public override ulong? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string value = reader.GetString();
+        if (reader.TokenType == JsonTokenType.Null)
+            return null;
+        string? value = reader.GetString();
         return !string.IsNullOrWhiteSpace(value) && ulong.TryParse(value, out ulong result)
             ? result
             : null;

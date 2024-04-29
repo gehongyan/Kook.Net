@@ -1,6 +1,7 @@
 using System.Reflection;
 using Kook.Commands;
 using Kook.WebSocket;
+using Microsoft.Extensions.Hosting;
 
 namespace Kook.Net.Samples.Audio.Services;
 
@@ -24,9 +25,12 @@ public class CommandHandlingService : IHostedService
         _kook.DirectMessageReceived += MessageReceivedAsync;
     }
 
-    public async Task InitializeAsync() =>
+    public async Task InitializeAsync()
+    {
         // Register modules that are public and inherit ModuleBase<T>.
-        await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+        if (Assembly.GetEntryAssembly() is not { } entryAssembly) return;
+        await _commands.AddModulesAsync(entryAssembly, _services);
+    }
 
     public async Task MessageReceivedAsync(SocketMessage rawMessage, SocketUser user, ISocketMessageChannel channel)
     {
@@ -50,7 +54,7 @@ public class CommandHandlingService : IHostedService
         // we will handle the result in CommandExecutedAsync,
     }
 
-    public async Task CommandExecutedAsync(CommandInfo command, ICommandContext context, Commands.IResult result)
+    public async Task CommandExecutedAsync(CommandInfo? command, ICommandContext context, Commands.IResult result)
     {
         // command is unspecified when there was a search failure (command not found); we don't care about these errors
         if (command is null) return;

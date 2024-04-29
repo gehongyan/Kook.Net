@@ -2,11 +2,15 @@ using System.Collections.Concurrent;
 using Kook.API.Voice;
 using Kook.Net.Udp;
 using Kook.Net.WebSockets;
-using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.Compression;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+
+#if DEBUG_AUDIO
+using System.Diagnostics;
+#endif
 
 namespace Kook.Audio;
 
@@ -76,8 +80,9 @@ internal class KookVoiceAPIClient : IDisposable
     private readonly ConcurrentDictionary<uint, VoiceSocketFrameType> _sequenceFrames;
     private readonly JsonSerializerOptions _serializerOptions;
     private readonly SemaphoreSlim _connectionLock;
-    private readonly IUdpSocket _udp, _rtcpUdp;
-    private CancellationTokenSource _connectCancellationToken;
+    private readonly IUdpSocket _udp;
+    private readonly IUdpSocket _rtcpUdp;
+    private CancellationTokenSource? _connectCancellationToken;
     private bool _isDisposed;
 
     public ulong GuildId { get; }
@@ -89,7 +94,7 @@ internal class KookVoiceAPIClient : IDisposable
     public ushort RtcpUdpPort => _rtcpUdp.Port;
 
     internal KookVoiceAPIClient(ulong guildId, WebSocketProvider webSocketProvider,
-        UdpSocketProvider udpSocketProvider, JsonSerializerOptions serializerOptions = null)
+        UdpSocketProvider udpSocketProvider, JsonSerializerOptions? serializerOptions = null)
     {
         GuildId = guildId;
         _sequenceFrames = new ConcurrentDictionary<uint, VoiceSocketFrameType>();
@@ -122,26 +127,22 @@ internal class KookVoiceAPIClient : IDisposable
         WebSocketClient = webSocketProvider();
         WebSocketClient.BinaryMessage += (data, index, count) =>
         {
-            using (MemoryStream compressed = new(data, index + 2, count - 2))
-            using (MemoryStream decompressed = new())
+            using MemoryStream compressed = new(data, index + 2, count - 2);
+            using MemoryStream decompressed = new();
+            using (DeflateStream zlib = new(compressed, CompressionMode.Decompress))
             {
-                using (DeflateStream zlib = new(compressed, CompressionMode.Decompress))
-                {
-                    zlib.CopyTo(decompressed);
-                }
-
-                decompressed.Position = 0;
-                using (StreamReader reader = new(decompressed))
-                {
-                    string json = reader.ReadToEnd();
-                    VoiceSocketIncomeFrame msg = JsonSerializer.Deserialize<VoiceSocketIncomeFrame>(json, serializerOptions);
-                    return ProcessVoiceSocketFrame(msg);
-                }
+                zlib.CopyTo(decompressed);
             }
+
+            decompressed.Position = 0;
+            using StreamReader reader = new(decompressed);
+            string json = reader.ReadToEnd();
+            VoiceSocketIncomeFrame? msg = JsonSerializer.Deserialize<VoiceSocketIncomeFrame>(json, serializerOptions);
+            return ProcessVoiceSocketFrame(msg);
         };
         WebSocketClient.TextMessage += text =>
         {
-            VoiceSocketIncomeFrame msg = JsonSerializer.Deserialize<VoiceSocketIncomeFrame>(text, serializerOptions);
+            VoiceSocketIncomeFrame? msg = JsonSerializer.Deserialize<VoiceSocketIncomeFrame>(text, serializerOptions);
             return ProcessVoiceSocketFrame(msg);
         };
         WebSocketClient.Closed += async ex =>
@@ -158,30 +159,30 @@ internal class KookVoiceAPIClient : IDisposable
             };
     }
 
-    private Task ProcessVoiceSocketFrame(VoiceSocketIncomeFrame msg)
+    private Task ProcessVoiceSocketFrame(VoiceSocketIncomeFrame? msg)
     {
         switch (msg)
         {
             case { Response: true } when _sequenceFrames.TryRemove(msg.Id, out VoiceSocketFrameType type):
-                {
+            {
 #if DEBUG_AUDIO
-                    Debug.WriteLine($"""
-                                     <- [#{msg.Id}] [{type}] : [OK] {msg.Okay}
-                                     [Payload] {msg.Payload}
-                                     """);
+                Debug.WriteLine($"""
+                    <- [#{msg.Id}] [{type}] : [OK] {msg.Okay}
+                    [Payload] {msg.Payload}
+                    """);
 #endif
-                    return _receivedEvent.InvokeAsync(type, msg.Okay, msg.Payload);
-                }
+                return _receivedEvent.InvokeAsync(type, msg.Okay, msg.Payload);
+            }
             case { Notification: true }:
-                {
+            {
 #if DEBUG_AUDIO
-                    Debug.WriteLine($"""
-                                     <- [Notification] [{msg.Method}]
-                                     [Data] {msg.Payload}
-                                     """);
+                Debug.WriteLine($"""
+                    <- [Notification] [{msg.Method}]
+                    [Data] {msg.Payload}
+                    """);
 #endif
-                    return _receivedEvent.InvokeAsync(msg.Method, true, msg.Payload);
-                }
+                return _receivedEvent.InvokeAsync(msg.Method, true, msg.Payload);
+            }
         }
 
         return Task.CompletedTask;
@@ -189,33 +190,37 @@ internal class KookVoiceAPIClient : IDisposable
 
     private void Dispose(bool disposing)
     {
-        if (!_isDisposed)
+        if (_isDisposed) return;
+        if (disposing)
         {
-            if (disposing)
-            {
-                _connectCancellationToken?.Dispose();
-                _udp?.Dispose();
-                _rtcpUdp?.Dispose();
-                WebSocketClient?.Dispose();
-                _connectionLock?.Dispose();
-            }
-
-            _isDisposed = true;
+            _connectCancellationToken?.Dispose();
+            _udp?.Dispose();
+            _rtcpUdp?.Dispose();
+            WebSocketClient?.Dispose();
+            _connectionLock?.Dispose();
         }
+
+        _isDisposed = true;
     }
 
     public void Dispose() => Dispose(true);
 
-    public async Task SendAsync(VoiceSocketFrameType type, uint sequence, object payload, RequestOptions options = null)
+    public async Task SendAsync(VoiceSocketFrameType type,
+        uint sequence, object payload, RequestOptions? options = null)
     {
-        object frame = new VoiceSocketRequestFrame { Type = type, Id = sequence, Request = true, Payload = payload };
+        VoiceSocketRequestFrame frame = new()
+        {
+            Type = type,
+            Id = sequence,
+            Request = true,
+            Payload = payload
+        };
         string json = SerializeJson(frame);
-
 #if DEBUG_AUDIO
         Debug.WriteLine($"""
-                         -> [#{sequence}]
-                         [Payload] {json}
-                         """);
+            -> [#{sequence}]
+            [Payload] {json}
+            """);
 #endif
         byte[] bytes = System.Text.Encoding.UTF8.GetBytes(json);
         _sequenceFrames[sequence] = type;
@@ -238,46 +243,66 @@ internal class KookVoiceAPIClient : IDisposable
 
     #region WebSocket
 
-    public async Task SendGetRouterRtpCapabilitiesRequestAsync(uint sequence, RequestOptions options = null) =>
+    public async Task SendGetRouterRtpCapabilitiesRequestAsync(uint sequence, RequestOptions? options = null) =>
         await SendAsync(VoiceSocketFrameType.GetRouterRtpCapabilities, sequence, new object(), options)
             .ConfigureAwait(false);
 
-    public async Task SendJoinRequestAsync(uint sequence, RequestOptions options = null) =>
-        await SendAsync(VoiceSocketFrameType.Join, sequence, new JoinParams { DisplayName = string.Empty }, options).ConfigureAwait(false);
+    public async Task SendJoinRequestAsync(uint sequence, RequestOptions? options = null)
+    {
+        JoinParams args = new JoinParams { DisplayName = string.Empty };
+        await SendAsync(VoiceSocketFrameType.Join, sequence, args, options).ConfigureAwait(false);
+    }
 
-    public async Task SendCreatePlainTransportRequestAsync(uint sequence, RequestOptions options = null) =>
-        await SendAsync(VoiceSocketFrameType.CreatePlainTransport, sequence,
-            new CreatePlainTransportParams { Comedia = true, RtcpMultiplexing = false, Type = "plain" }, options).ConfigureAwait(false);
+    public async Task SendCreatePlainTransportRequestAsync(uint sequence, RequestOptions? options = null)
+    {
+        CreatePlainTransportParams args = new()
+        {
+            Comedia = true,
+            RtcpMultiplexing = false,
+            Type = "plain"
+        };
+        await SendAsync(VoiceSocketFrameType.CreatePlainTransport, sequence, args, options).ConfigureAwait(false);
+    }
 
     public async Task SendProduceRequestAsync(uint sequence, ulong peerId, Guid transportId, uint ssrc,
-        RequestOptions options = null) =>
-        await SendAsync(VoiceSocketFrameType.Produce,
-            sequence,
-            new ProduceParams
+        RequestOptions? options = null)
+    {
+        ProduceParams args = new()
+        {
+            AppData = new object(),
+            Kind = "audio",
+            PeerId = peerId.ToString(),
+            RtpParameters = new RtpParameters
             {
-                AppData = new object(),
-                Kind = "audio",
-                PeerId = peerId.ToString(),
-                RtpParameters = new RtpParameters
-                {
-                    Codecs =
-                    [
-                        new CodecParams
+                Codecs =
+                [
+                    new CodecParams
+                    {
+                        Channels = 2,
+                        ClockRate = 48000,
+                        MimeType = "audio/opus",
+                        Parameters = new Parameters
                         {
-                            Channels = 2,
-                            ClockRate = 48000,
-                            MimeType = "audio/opus",
-                            Parameters = new Parameters { SenderProduceStereo = 1 },
-                            PayloadType = 100
-                        }
-                    ],
-                    Encodings = [new EncodingParams { Ssrc = ssrc }]
-                },
-                TransportId = transportId
-            }, options).ConfigureAwait(false);
+                            SenderProduceStereo = 1
+                        },
+                        PayloadType = 100
+                    }
+                ],
+                Encodings =
+                [
+                    new EncodingParams
+                    {
+                        Ssrc = ssrc
+                    }
+                ]
+            },
+            TransportId = transportId
+        };
+        await SendAsync(VoiceSocketFrameType.Produce, sequence, args, options).ConfigureAwait(false);
+    }
 
     public async Task SendRtcpAsync(uint ssrc, uint rtpTimestamp, uint sentPackets, uint sentOctets,
-        RequestOptions options = null)
+        RequestOptions? options = null)
     {
         byte[] packet = new byte[28];
         // 10.. .... = Version: RFC 1889 Version (2)
@@ -414,14 +439,9 @@ internal class KookVoiceAPIClient : IDisposable
 
     #region Helpers
 
-    private static double ToMilliseconds(Stopwatch stopwatch) => Math.Round((double)stopwatch.ElapsedTicks / (double)Stopwatch.Frequency * 1000.0, 2);
-
-    private string SerializeJson(object payload) =>
-        payload is null
-            ? string.Empty
-            : JsonSerializer.Serialize(payload, _serializerOptions);
-
-    private T DeserializeJson<T>(Stream jsonStream) => JsonSerializer.Deserialize<T>(jsonStream, _serializerOptions);
+    [return: NotNullIfNotNull(nameof(payload))]
+    private string? SerializeJson(object? payload) =>
+        payload is null ? null : JsonSerializer.Serialize(payload, _serializerOptions);
 
     #endregion
 }

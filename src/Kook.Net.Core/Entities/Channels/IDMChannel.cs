@@ -38,7 +38,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     /// <returns>
     ///     A task that represents the asynchronous close operation.
     /// </returns>
-    Task CloseAsync(RequestOptions options = null);
+    Task CloseAsync(RequestOptions? options = null);
 
     #endregion
 
@@ -51,8 +51,8 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null,
-        AttachmentType type = AttachmentType.File, IQuote quote = null, RequestOptions options = null);
+    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
+        AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Sends a file to this message channel.
@@ -61,8 +61,8 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName = null,
-        AttachmentType type = AttachmentType.File, IQuote quote = null, RequestOptions options = null);
+    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
+        AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Sends a file to this message channel.
@@ -71,8 +71,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
-        IQuote quote = null, RequestOptions options = null);
+    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment, IQuote? quote = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Sends a text message to this message channel.
@@ -81,8 +80,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote quote = null,
-        RequestOptions options = null);
+    Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote? quote = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Sends a card message to this message channel.
@@ -91,8 +89,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
-        IQuote quote = null, RequestOptions options = null);
+    Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, IQuote? quote = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Sends a card message to this message channel.
@@ -101,8 +98,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
-        IQuote quote = null, RequestOptions options = null);
+    Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards, IQuote? quote = null, RequestOptions? options = null);
 
     #endregion
 }

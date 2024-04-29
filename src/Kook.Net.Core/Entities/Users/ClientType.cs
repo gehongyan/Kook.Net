@@ -18,5 +18,6 @@ public enum ClientType
     /// <summary>
     ///     The user is active using the iOS application.
     /// </summary>
+    // ReSharper disable once InconsistentNaming
     iOS
 }

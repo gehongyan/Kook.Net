@@ -5,11 +5,11 @@ namespace Kook.API;
 internal class AudioModule : ModuleBase
 {
     [JsonPropertyName("src")]
-    public string Source { get; set; }
+    public required string Source { get; set; }
 
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
     [JsonPropertyName("cover")]
-    public string Cover { get; set; }
+    public string? Cover { get; set; }
 }

@@ -1,7 +1,7 @@
 namespace Kook;
 
 /// <summary>
-///     A meta data containing boost subscription information.
+///     A metadata containing boost subscription information.
 /// </summary>
 public class BoostSubscriptionMetadata
 {

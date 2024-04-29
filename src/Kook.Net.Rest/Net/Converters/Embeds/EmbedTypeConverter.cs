@@ -7,12 +7,13 @@ internal class EmbedTypeConverter : JsonConverter<EmbedType>
 {
     public override EmbedType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string type = reader.GetString();
+        string? type = reader.GetString();
         return type switch
         {
             "link" => EmbedType.Link,
             "image" => EmbedType.Image,
             "bili-video" => EmbedType.BilibiliVideo,
+            "card" => EmbedType.Card,
             _ => EmbedType.NotImplemented
         };
     }
@@ -23,6 +24,7 @@ internal class EmbedTypeConverter : JsonConverter<EmbedType>
             EmbedType.Link => "link",
             EmbedType.Image => "image",
             EmbedType.BilibiliVideo => "bili-video",
+            EmbedType.Card => "card",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
 }

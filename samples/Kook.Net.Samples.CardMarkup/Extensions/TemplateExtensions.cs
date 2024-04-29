@@ -4,8 +4,6 @@ using Kook.CardMarkup;
 using Kook.Net.Samples.CardMarkup.Models;
 using Kook.Net.Samples.CardMarkup.Models.Template;
 
-// ReSharper disable SuggestVarOrType_BuiltInTypes
-
 namespace Kook.Net.Samples.CardMarkup.Extensions;
 
 public static class TemplateExtensions
@@ -14,55 +12,43 @@ public static class TemplateExtensions
 
     public static async Task<IEnumerable<ICard>?> RenderVoteAsync(this Vote vote)
     {
-        if (!await LoadVoteTemplateAsync())
-        {
-            return null;
-        }
+        if (!await LoadVoteTemplateAsync()) return null;
 
-        var templateOptions = new TemplateOptions();
+        TemplateOptions templateOptions = new();
         templateOptions.MemberAccessStrategy.Register<Vote>();
         templateOptions.MemberAccessStrategy.Register<Game>();
         templateOptions.MemberAccessStrategy.Register<User>();
 
-        var context = new TemplateContext(vote, templateOptions);
-        var result = await _voteTemplate!.RenderAsync(context, HtmlEncoder.Default);
-        if (result is null)
-        {
-            return null;
-        }
+        TemplateContext context = new(vote, templateOptions);
+        string result = await _voteTemplate.RenderAsync(context, HtmlEncoder.Default);
+        if (string.IsNullOrWhiteSpace(result)) return null;
 
         return await CardMarkupSerializer.DeserializeAsync(result);
     }
 
-    public static async Task<IEnumerable<ICard>?> RenderBigCard()
+    public static async Task<IEnumerable<ICard>> RenderBigCard()
     {
-        var source = await File.ReadAllTextAsync("Cards/big-card.xml");
-        var cards = await CardMarkupSerializer.DeserializeAsync(source);
+        string source = await File.ReadAllTextAsync("Cards/big-card.xml");
+        IEnumerable<ICard> cards = await CardMarkupSerializer.DeserializeAsync(source);
         return cards;
     }
 
-    public static async Task<IEnumerable<ICard>?> RenderMultipleCards()
+    public static async Task<IEnumerable<ICard>> RenderMultipleCards()
     {
-        var source = await File.ReadAllTextAsync("Cards/multiple-cards.xml");
-        var cards = await CardMarkupSerializer.DeserializeAsync(source);
+        string source = await File.ReadAllTextAsync("Cards/multiple-cards.xml");
+        IEnumerable<ICard> cards = await CardMarkupSerializer.DeserializeAsync(source);
         return cards;
     }
 
     private static async Task<bool> LoadVoteTemplateAsync()
     {
-        if (_voteTemplate is not null)
-        {
-            return true;
-        }
+        if (_voteTemplate is not null) return true;
 
-        var source = await File.ReadAllTextAsync("Cards/vote.xml.liquid");
-        var parser = new FluidParser();
-        var result = parser.TryParse(source, out var template);
+        string source = await File.ReadAllTextAsync("Cards/vote.xml.liquid");
+        FluidParser parser = new();
+        bool result = parser.TryParse(source, out IFluidTemplate? template);
 
-        if (!result)
-        {
-            return false;
-        }
+        if (!result) return false;
 
         _voteTemplate = template;
         return true;

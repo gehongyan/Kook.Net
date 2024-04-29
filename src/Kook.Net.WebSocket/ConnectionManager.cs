@@ -27,17 +27,20 @@ internal class ConnectionManager : IDisposable
     private readonly Func<Task> _onConnecting;
     private readonly Func<Exception, Task> _onDisconnecting;
 
-    private TaskCompletionSource<bool> _connectionPromise, _readyPromise;
-    private CancellationTokenSource _combinedCancellationToken, _reconnectCancellationToken, _connectionCancellationToken;
-    private Task _task;
+    private TaskCompletionSource<bool>? _connectionPromise;
+    private TaskCompletionSource<bool>? _readyPromise;
+    private CancellationTokenSource? _combinedCancellationToken;
+    private CancellationTokenSource? _reconnectCancellationToken;
+    private CancellationTokenSource? _connectionCancellationToken;
 
     private bool _isDisposed;
 
     public ConnectionState State { get; private set; }
     public CancellationToken CancellationToken { get; private set; }
 
-    internal ConnectionManager(SemaphoreSlim stateLock, Logger logger, int connectionTimeout,
-        Func<Task> onConnecting, Func<Exception, Task> onDisconnecting, Action<Func<Exception, Task>> clientDisconnectHandler)
+    internal ConnectionManager(SemaphoreSlim stateLock, Logger logger,
+        int connectionTimeout, Func<Task> onConnecting,
+        Func<Exception, Task> onDisconnecting, Action<Func<Exception, Task>> clientDisconnectHandler)
     {
         _stateLock = stateLock;
         _logger = logger;
@@ -49,7 +52,7 @@ internal class ConnectionManager : IDisposable
         {
             if (ex != null)
             {
-                WebSocketClosedException ex2 = ex as WebSocketClosedException;
+                WebSocketClosedException? ex2 = ex as WebSocketClosedException;
                 if (ex2?.CloseCode == 4006)
                     CriticalError(new Exception("WebSocket session expired", ex));
                 else if (ex2?.CloseCode == 4014)
@@ -60,19 +63,20 @@ internal class ConnectionManager : IDisposable
             else
                 Error(new Exception("WebSocket connection was closed"));
 
-            return Task.Delay(0);
+            return Task.CompletedTask;
         });
     }
 
     public virtual async Task StartAsync()
     {
-        if (State != ConnectionState.Disconnected) throw new InvalidOperationException("Cannot start an already running client.");
+        if (State != ConnectionState.Disconnected)
+            throw new InvalidOperationException("Cannot start an already running client.");
 
         await AcquireConnectionLock().ConfigureAwait(false);
         CancellationTokenSource reconnectCancellationToken = new();
         _reconnectCancellationToken?.Dispose();
         _reconnectCancellationToken = reconnectCancellationToken;
-        _task = Task.Run(async () =>
+        _ = Task.Run(async () =>
         {
             try
             {
@@ -84,7 +88,10 @@ internal class ConnectionManager : IDisposable
                     {
                         await ConnectAsync(reconnectCancellationToken).ConfigureAwait(false);
                         nextReconnectDelay = 1000; //Reset delay
-                        await _connectionPromise.Task.ConfigureAwait(false);
+                        if (_connectionPromise is null)
+                            await _logger.ErrorAsync("The connection promise was null after connecting").ConfigureAwait(false);
+                        else
+                            await _connectionPromise.Task.ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -106,7 +113,8 @@ internal class ConnectionManager : IDisposable
                         //Wait before reconnecting
                         await Task.Delay(nextReconnectDelay, reconnectCancellationToken.Token).ConfigureAwait(false);
                         nextReconnectDelay = nextReconnectDelay * 2 + jitter.Next(-250, 250);
-                        if (nextReconnectDelay > 60000) nextReconnectDelay = 60000;
+                        if (nextReconnectDelay > 60000)
+                            nextReconnectDelay = 60000;
                     }
                 }
             }
@@ -114,7 +122,7 @@ internal class ConnectionManager : IDisposable
             {
                 _stateLock.Release();
             }
-        });
+        }, CancellationToken.None);
     }
 
     public virtual Task StopAsync()
@@ -128,7 +136,8 @@ internal class ConnectionManager : IDisposable
         _connectionCancellationToken?.Dispose();
         _combinedCancellationToken?.Dispose();
         _connectionCancellationToken = new CancellationTokenSource();
-        _combinedCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(_connectionCancellationToken.Token, reconnectCancellationToken.Token);
+        _combinedCancellationToken = CancellationTokenSource
+            .CreateLinkedTokenSource(_connectionCancellationToken.Token, reconnectCancellationToken.Token);
         CancellationToken = _combinedCancellationToken.Token;
 
         _connectionPromise = new TaskCompletionSource<bool>();
@@ -142,7 +151,7 @@ internal class ConnectionManager : IDisposable
 
             //Abort connection on timeout
             CancellationToken cancellationToken = CancellationToken;
-            Task _ = Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 try
                 {
@@ -153,7 +162,7 @@ internal class ConnectionManager : IDisposable
                 {
                     Console.WriteLine(e.Message);
                 }
-            });
+            }, CancellationToken.None);
 
             await _onConnecting().ConfigureAwait(false);
 
@@ -183,13 +192,21 @@ internal class ConnectionManager : IDisposable
         await _logger.InfoAsync("Disconnected").ConfigureAwait(false);
     }
 
-    public Task CompleteAsync()
+    public async Task CompleteAsync()
     {
-        _readyPromise.TrySetResult(true);
-        return Task.CompletedTask;
+        if (_readyPromise is null)
+            await _logger.ErrorAsync("The ready promise was null when trying to complete the connection");
+        else
+            _readyPromise.TrySetResult(true);
     }
 
-    public async Task WaitAsync() => await _readyPromise.Task.ConfigureAwait(false);
+    public async Task WaitAsync()
+    {
+        if (_readyPromise is null)
+            await _logger.ErrorAsync("The ready promise was null when trying to complete the connection");
+        else
+            await _readyPromise.Task.ConfigureAwait(false);
+    }
 
     public void Cancel()
     {
@@ -201,8 +218,8 @@ internal class ConnectionManager : IDisposable
 
     public void Error(Exception ex)
     {
-        _readyPromise.TrySetException(ex);
-        _connectionPromise.TrySetException(ex);
+        _readyPromise?.TrySetException(ex);
+        _connectionPromise?.TrySetException(ex);
         _connectionCancellationToken?.Cancel();
     }
 
@@ -214,8 +231,8 @@ internal class ConnectionManager : IDisposable
 
     public void Reconnect()
     {
-        _readyPromise.TrySetCanceled();
-        _connectionPromise.TrySetCanceled();
+        _readyPromise?.TrySetCanceled();
+        _connectionPromise?.TrySetCanceled();
         _connectionCancellationToken?.Cancel();
     }
 
@@ -224,23 +241,22 @@ internal class ConnectionManager : IDisposable
         while (true)
         {
             await StopAsync().ConfigureAwait(false);
-            if (await _stateLock.WaitAsync(0).ConfigureAwait(false)) break;
+            if (await _stateLock.WaitAsync(0, CancellationToken.None).ConfigureAwait(false))
+                break;
         }
     }
 
     protected virtual void Dispose(bool disposing)
     {
-        if (!_isDisposed)
+        if (_isDisposed) return;
+        if (disposing)
         {
-            if (disposing)
-            {
-                _combinedCancellationToken?.Dispose();
-                _reconnectCancellationToken?.Dispose();
-                _connectionCancellationToken?.Dispose();
-            }
-
-            _isDisposed = true;
+            _combinedCancellationToken?.Dispose();
+            _reconnectCancellationToken?.Dispose();
+            _connectionCancellationToken?.Dispose();
         }
+
+        _isDisposed = true;
     }
 
     public void Dispose() => Dispose(true);

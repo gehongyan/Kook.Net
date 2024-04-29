@@ -8,5 +8,5 @@ internal class GatewayReconnectPayload
     public KookErrorCode Code { get; set; }
 
     [JsonPropertyName("err")]
-    public string Message { get; set; }
+    public string? Message { get; set; }
 }

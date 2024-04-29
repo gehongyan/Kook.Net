@@ -14,20 +14,26 @@ public class KookRestClientFixture : IDisposable, IAsyncDisposable
 
     public KookRestClientFixture()
     {
-        string token = Environment.GetEnvironmentVariable("KOOK_NET_TEST_TOKEN");
-        if (string.IsNullOrWhiteSpace(token)) throw new Exception("The KOOK_NET_TEST_TOKEN environment variable was not provided.");
+        string? token = Environment.GetEnvironmentVariable("KOOK_NET_TEST_TOKEN");
+        if (string.IsNullOrWhiteSpace(token))
+            throw new Exception("The KOOK_NET_TEST_TOKEN environment variable was not provided.");
 
-        Client = new KookRestClient(new KookRestConfig() { LogLevel = LogSeverity.Debug, DefaultRetryMode = RetryMode.AlwaysRetry });
+        Client = new KookRestClient(new KookRestConfig
+        {
+            LogLevel = LogSeverity.Debug,
+            DefaultRetryMode = RetryMode.AlwaysRetry
+        });
         Client.LoginAsync(TokenType.Bot, token).GetAwaiter().GetResult();
     }
 
     /// <inheritdoc />
     public virtual async ValueTask DisposeAsync()
     {
+        GC.SuppressFinalize(this);
         await Client.LogoutAsync();
         Client.Dispose();
     }
 
     /// <inheritdoc />
-    public virtual void Dispose() => DisposeAsync().GetAwaiter().GetResult();
+    public virtual void Dispose() => DisposeAsync().AsTask().GetAwaiter().GetResult();
 }

@@ -14,5 +14,5 @@ internal class Reaction
     public ulong UserId { get; set; }
 
     [JsonPropertyName("emoji")]
-    public Emoji Emoji { get; set; }
+    public required Emoji Emoji { get; set; }
 }

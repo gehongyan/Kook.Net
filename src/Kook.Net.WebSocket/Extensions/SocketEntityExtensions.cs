@@ -2,8 +2,8 @@ namespace Kook.WebSocket;
 
 internal static class SocketEntityExtensions
 {
-    public static GuildEmote ToEntity(this API.Gateway.GuildEmojiEvent model, ulong guildId)
-        => new(model.Id,
+    public static GuildEmote ToEntity(this API.Gateway.GuildEmojiEvent model, ulong guildId) =>
+        new(model.Id,
             model.Name,
             model.Type == EmojiType.Animated,
             guildId,

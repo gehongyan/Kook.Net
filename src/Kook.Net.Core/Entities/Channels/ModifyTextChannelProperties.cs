@@ -13,7 +13,7 @@ public class ModifyTextChannelProperties : ModifyGuildChannelProperties
     ///     Setting this value to any string other than <c>null</c> or <see cref="string.Empty"/> will set the
     ///     channel topic or description to the desired value.
     /// </remarks>
-    public string Topic { get; set; }
+    public string? Topic { get; set; }
 
     /// <summary>
     ///     Gets or sets the slow-mode ratelimit in seconds for this channel.
@@ -23,7 +23,7 @@ public class ModifyTextChannelProperties : ModifyGuildChannelProperties
     ///     <see cref="Kook.SlowModeInterval.None"/> will disable slow-mode for this channel;
     ///     if this value is set to <c>null</c>, the slow-mode interval will not be modified.
     ///     <note>
-    ///         Users with <see cref="Kook.ChannelPermission.ManageMessages"/> or 
+    ///         Users with <see cref="Kook.ChannelPermission.ManageMessages"/> or
     ///         <see cref="ChannelPermission.ManageChannels"/> will be exempt from slow-mode.
     ///     </note>
     /// </remarks>

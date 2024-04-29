@@ -103,7 +103,7 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
     public async Task ModifyChannelCategories()
     {
         // util method for checking if a category is set
-        async Task CheckAsync(INestedChannel channel, ICategoryChannel cat)
+        async Task CheckAsync(INestedChannel channel, ICategoryChannel? cat)
         {
             // check that the category is not set
             if (cat == null)
@@ -115,7 +115,7 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
             {
                 Assert.NotNull(channel.CategoryId);
                 Assert.Equal(cat.Id, channel.CategoryId);
-                ICategoryChannel getCat = await channel.GetCategoryAsync();
+                ICategoryChannel? getCat = await channel.GetCategoryAsync();
                 Assert.NotNull(getCat);
                 Assert.Equal(cat.Id, getCat.Id);
             }
@@ -168,11 +168,11 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
     public async Task MiscAsync()
     {
         ICategoryChannel category = await _guild.CreateCategoryChannelAsync("CATEGORY");
-        RestTextChannel channel = await _guild.CreateTextChannelAsync("TEXT",
+        RestTextChannel? channel = await _guild.CreateTextChannelAsync("TEXT",
             p => p.CategoryId = category.Id) as RestTextChannel;
         try
         {
-            IGuildUser selfUser = await _guild.GetCurrentUserAsync();
+            IGuildUser? selfUser = await _guild.GetCurrentUserAsync();
             IRole role = await _guild.CreateRoleAsync("TEST ROLE");
             Assert.NotNull(category);
             Assert.NotNull(channel);
@@ -230,7 +230,8 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
         }
         finally
         {
-            await channel.DeleteAsync();
+            if (channel is not null)
+                await channel.DeleteAsync();
             await category.DeleteAsync();
         }
     }

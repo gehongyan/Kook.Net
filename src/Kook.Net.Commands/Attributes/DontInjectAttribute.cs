@@ -22,7 +22,5 @@ namespace Kook.Commands;
 ///     }
 ///     </code>
 /// </example>
-[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-public class DontInjectAttribute : Attribute
-{
-}
+[AttributeUsage(AttributeTargets.Property)]
+public class DontInjectAttribute : Attribute;

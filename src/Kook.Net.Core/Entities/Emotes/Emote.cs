@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace Kook;
@@ -38,35 +39,12 @@ public class Emote : IEmote
     }
 
     /// <inheritdoc />
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
     {
         if (obj == null) return false;
-
         if (obj == this) return true;
-
         if (obj is not Emote otherEmote) return false;
-
         return Id == otherEmote.Id;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode()
-        => Id.GetHashCode();
-
-    /// <summary> Parses an <see cref="Emote"/> from its raw format. </summary>
-    /// <param name="text">
-    ///     The raw encoding of an emote; for example,
-    ///     [:emotename:1991895624896587/hbCFVWhu923k03k] when <paramref name="tagMode"/> is <c>TagMode.PlainText</c>,
-    ///     or (emj)emotename(emj)[1991895624896587/hbCFVWhu923k03k] when <paramref name="tagMode"/> is <c>TagMode.KMarkdown</c>.
-    /// </param>
-    /// <param name="tagMode"></param>
-    /// <returns>An emote.</returns>
-    /// <exception cref="ArgumentException">Invalid emote format.</exception>
-    public static Emote Parse(string text, TagMode tagMode)
-    {
-        if (TryParse(text, out Emote result, tagMode)) return result;
-
-        throw new ArgumentException("Invalid emote format.", nameof(text));
     }
 
     /// <summary> Tries to parse an <see cref="Emote"/> from its raw format. </summary>
@@ -77,27 +55,42 @@ public class Emote : IEmote
     /// </param>
     /// <param name="result">An emote.</param>
     /// <param name="tagMode"></param>
-    public static bool TryParse(string text, out Emote result, TagMode tagMode)
+    public static bool TryParse([NotNullWhen(true)] string? text,
+        [NotNullWhen(true)] out Emote? result, TagMode tagMode)
     {
         result = null;
-
-        if (text == null) return false;
-
+        if (text == null)
+            return false;
         Match match = tagMode switch
         {
             TagMode.PlainText => PlainTextEmojiRegex.Match(text),
             TagMode.KMarkdown => KMarkdownEmojiRegex.Match(text),
             _ => throw new ArgumentOutOfRangeException(nameof(tagMode), tagMode, null)
         };
-
-        if (match.Success)
-        {
-            result = new Emote(match.Groups["id"].Value, match.Groups["name"].Value);
-            return true;
-        }
-
-        return false;
+        if (!match.Success)
+            return false;
+        result = new Emote(match.Groups["id"].Value, match.Groups["name"].Value);
+        return true;
     }
+
+    /// <summary> Parses an <see cref="Emote"/> from its raw format. </summary>
+    /// <param name="text">
+    ///     The raw encoding of an emote; for example,
+    ///     [:emotename:1991895624896587/hbCFVWhu923k03k] when <paramref name="tagMode"/> is <c>TagMode.PlainText</c>,
+    ///     or (emj)emotename(emj)[1991895624896587/hbCFVWhu923k03k] when <paramref name="tagMode"/> is <c>TagMode.KMarkdown</c>.
+    /// </param>
+    /// <param name="tagMode"></param>
+    /// <returns>An emote.</returns>
+    /// <exception cref="ArgumentException">Invalid emote format.</exception>
+    public static Emote Parse([NotNull] string? text, TagMode tagMode)
+    {
+        if (TryParse(text, out Emote? result, tagMode))
+            return result;
+        throw new ArgumentException("Invalid emote format.", nameof(text));
+    }
+
+    /// <inheritdoc />
+    public override int GetHashCode() => Id.GetHashCode();
 
     /// <summary>
     ///     Gets a string representation of the emote in KMarkdown format.

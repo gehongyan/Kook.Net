@@ -13,7 +13,7 @@ internal class FriendState
     private Kook.FriendState State { get; set; }
 
     [JsonPropertyName("friend_info")]
-    public User User { get; set; }
+    public required User User { get; set; }
 
     [JsonPropertyName("own")]
     public bool Own { get; set; }

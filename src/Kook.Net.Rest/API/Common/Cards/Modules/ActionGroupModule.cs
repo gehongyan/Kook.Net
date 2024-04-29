@@ -5,5 +5,5 @@ namespace Kook.API;
 internal class ActionGroupModule : ModuleBase
 {
     [JsonPropertyName("elements")]
-    public ButtonElement[] Elements { get; set; }
+    public required ButtonElement[] Elements { get; set; }
 }

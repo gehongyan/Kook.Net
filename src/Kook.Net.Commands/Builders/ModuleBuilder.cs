@@ -9,7 +9,7 @@ public class ModuleBuilder
 {
     #region ModuleBuilder
 
-    private string _group;
+    private string? _group;
     private readonly List<CommandBuilder> _commands;
     private readonly List<ModuleBuilder> _submodules;
     private readonly List<PreconditionAttribute> _preconditions;
@@ -24,32 +24,33 @@ public class ModuleBuilder
     /// <summary>
     ///     Gets the parent module builder that this module builder belongs to.
     /// </summary>
-    public ModuleBuilder Parent { get; }
+    public ModuleBuilder? Parent { get; }
 
     /// <summary>
     ///     Gets or sets the name of this module.
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     ///     Gets or sets the summary of this module.
     /// </summary>
-    public string Summary { get; set; }
+    public string? Summary { get; set; }
 
     /// <summary>
     ///     Gets or sets the remarks of this module.
     /// </summary>
-    public string Remarks { get; set; }
+    public string? Remarks { get; set; }
 
     /// <summary>
     ///     Gets or sets the group of this module.
     /// </summary>
-    public string Group
+    public string? Group
     {
         get => _group;
         set
         {
-            _aliases.Remove(_group);
+            if (_group is not null)
+                _aliases.Remove(_group);
             _group = value;
             AddAliases(value);
         }
@@ -78,9 +79,9 @@ public class ModuleBuilder
     /// <summary>
     ///     Gets a read-only list of aliases that this module builder contains.
     /// </summary>
-    public IReadOnlyList<string> Aliases => _aliases;
+    public IReadOnlyList<string?> Aliases => _aliases;
 
-    internal TypeInfo TypeInfo { get; set; }
+    internal TypeInfo? TypeInfo { get; set; }
 
     #endregion
 
@@ -91,16 +92,16 @@ public class ModuleBuilder
     /// </summary>
     /// <param name="service"> The command service that this module builder belongs to. </param>
     /// <param name="parent"> The parent module builder that this module builder belongs to. </param>
-    internal ModuleBuilder(CommandService service, ModuleBuilder parent)
+    internal ModuleBuilder(CommandService service, ModuleBuilder? parent)
     {
         Service = service;
         Parent = parent;
 
-        _commands = new List<CommandBuilder>();
-        _submodules = new List<ModuleBuilder>();
-        _preconditions = new List<PreconditionAttribute>();
-        _attributes = new List<Attribute>();
-        _aliases = new List<string>();
+        _commands = [];
+        _submodules = [];
+        _preconditions = [];
+        _attributes = [];
+        _aliases = [];
     }
 
     #endregion
@@ -113,12 +114,11 @@ public class ModuleBuilder
     /// <param name="service"> The command service that this module builder belongs to. </param>
     /// <param name="parent"> The parent module builder that this module builder belongs to. </param>
     /// <param name="primaryAlias"> The primary alias of this module. </param>
-    internal ModuleBuilder(CommandService service, ModuleBuilder parent, string primaryAlias)
+    internal ModuleBuilder(CommandService service, ModuleBuilder? parent, string primaryAlias)
         : this(service, parent)
     {
         Kook.Preconditions.NotNull(primaryAlias, nameof(primaryAlias));
-
-        _aliases = new List<string> { primaryAlias };
+        _aliases = [primaryAlias];
     }
 
     /// <summary>
@@ -159,12 +159,13 @@ public class ModuleBuilder
     /// </summary>
     /// <param name="aliases"> An array of aliases to add to this module. </param>
     /// <returns> This module builder. </returns>
-    public ModuleBuilder AddAliases(params string[] aliases)
+    public ModuleBuilder AddAliases(params string?[] aliases)
     {
-        for (int i = 0; i < aliases.Length; i++)
+        foreach (string? x in aliases)
         {
-            string alias = aliases[i] ?? "";
-            if (!_aliases.Contains(alias)) _aliases.Add(alias);
+            string alias = x ?? string.Empty;
+            if (!_aliases.Contains(alias))
+                _aliases.Add(alias);
         }
 
         return this;
@@ -199,7 +200,8 @@ public class ModuleBuilder
     /// <param name="callback"> The callback of this command. </param>
     /// <param name="createFunc"> The function delegate that creates this command. </param>
     /// <returns> This module builder. </returns>
-    public ModuleBuilder AddCommand(string primaryAlias, Func<ICommandContext, object[], IServiceProvider, CommandInfo, Task> callback,
+    public ModuleBuilder AddCommand(string primaryAlias,
+        Func<ICommandContext, object?[], IServiceProvider, CommandInfo, Task> callback,
         Action<CommandBuilder> createFunc)
     {
         CommandBuilder builder = new(this, primaryAlias, callback);
@@ -255,12 +257,12 @@ public class ModuleBuilder
     /// <param name="services"> The service provider that this module builder belongs to. </param>
     /// <param name="parent"> The parent module that this module builder belongs to. </param>
     /// <returns> The built module. </returns>
-    private ModuleInfo BuildImpl(CommandService service, IServiceProvider services, ModuleInfo parent = null)
+    private ModuleInfo BuildImpl(CommandService service, IServiceProvider services, ModuleInfo? parent = null)
     {
         //Default name to first alias
-        if (Name == null) Name = _aliases[0];
+        Name ??= _aliases[0];
 
-        if (TypeInfo != null && !TypeInfo.IsAbstract)
+        if (TypeInfo is { IsAbstract: false })
         {
             IModuleBase moduleInstance = ReflectionUtils.CreateObject<IModuleBase>(TypeInfo, service, services);
             moduleInstance.OnModuleBuilding(service, this);

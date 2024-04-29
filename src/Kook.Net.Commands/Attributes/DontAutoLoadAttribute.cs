@@ -8,7 +8,5 @@ namespace Kook.Commands;
 ///     automatically (e.g. the <see cref="CommandService.AddModulesAsync" /> method). If a non-public module marked
 ///     with this attribute is attempted to be loaded manually, the loading process will also fail.
 /// </remarks>
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
-public class DontAutoLoadAttribute : Attribute
-{
-}
+[AttributeUsage(AttributeTargets.Class)]
+public class DontAutoLoadAttribute : Attribute;

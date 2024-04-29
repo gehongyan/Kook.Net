@@ -20,8 +20,8 @@ public static class KookRestClientExperimentalExtensions
     ///         usage, may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
     ///     </note>
     /// </remarks>
-    public static Task<IReadOnlyCollection<RestVoiceRegion>> GetVoiceRegionsAsync(this KookRestClient client, RequestOptions options = null)
-        => ExperimentalClientHelper.GetVoiceRegionsAsync(client, options);
+    public static Task<IReadOnlyCollection<RestVoiceRegion>> GetVoiceRegionsAsync(this KookRestClient client, RequestOptions? options = null) =>
+        ExperimentalClientHelper.GetVoiceRegionsAsync(client, options);
 
     /// <summary>
     ///     Gets a voice region.
@@ -39,8 +39,8 @@ public static class KookRestClientExperimentalExtensions
     ///         usage, may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
     ///     </note>
     /// </remarks>
-    public static Task<RestVoiceRegion> GetVoiceRegionAsync(this KookRestClient client, string id, RequestOptions options = null)
-        => ExperimentalClientHelper.GetVoiceRegionAsync(client, id, options);
+    public static Task<RestVoiceRegion?> GetVoiceRegionAsync(this KookRestClient client, string id, RequestOptions? options = null) =>
+        ExperimentalClientHelper.GetVoiceRegionAsync(client, id, options);
 
     /// <summary>
     ///     Creates a guild for the logged-in user.
@@ -61,11 +61,13 @@ public static class KookRestClientExperimentalExtensions
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the created guild.
     /// </returns>
-    public static async Task<RestGuild> CreateGuildAsync(this KookRestClient client,
-        string name, IVoiceRegion region = null, Stream icon = null, int? templateId = null, RequestOptions options = null)
+    public static async Task<RestGuild> CreateGuildAsync(this KookRestClient client, string name,
+        IVoiceRegion? region = null, Stream? icon = null, int? templateId = null, RequestOptions? options = null)
     {
-        RestGuild guild = await ExperimentalClientHelper.CreateGuildAsync(client, name, region, icon, templateId, options);
-        await guild.UpdateAsync();
+        RestGuild guild = await ExperimentalClientHelper
+            .CreateGuildAsync(client, name, region, icon, templateId, options)
+            .ConfigureAwait(false);
+        await guild.UpdateAsync().ConfigureAwait(false);
         return guild;
     }
 
@@ -79,8 +81,8 @@ public static class KookRestClientExperimentalExtensions
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of guilds where the current user has the <see cref="GuildPermission.Administrator"/> permission.
     /// </returns>
-    public static Task<IReadOnlyCollection<RestGuild>> GetAdminGuildsAsync(this KookRestClient client, RequestOptions options = null)
-        => ExperimentalClientHelper.GetAdminGuildsAsync(client, options);
+    public static Task<IReadOnlyCollection<RestGuild>> GetAdminGuildsAsync(this KookRestClient client, RequestOptions? options = null) =>
+        ExperimentalClientHelper.GetAdminGuildsAsync(client, options);
 
     /// <summary>
     ///     Validates a card.
@@ -91,8 +93,8 @@ public static class KookRestClientExperimentalExtensions
     /// <returns>
     ///     A task that represents the asynchronous validation operation.
     /// </returns>
-    public static Task ValidateCardAsync(this KookRestClient client, ICard card, RequestOptions options = null)
-        => ValidateCardsAsync(client, new[] { card }, options);
+    public static Task ValidateCardAsync(this KookRestClient client, ICard card, RequestOptions? options = null) =>
+        ValidateCardsAsync(client, [card], options);
 
     /// <summary>
     ///     Validates a collection of cards.
@@ -103,8 +105,8 @@ public static class KookRestClientExperimentalExtensions
     /// <returns>
     ///     A task that represents the asynchronous validation operation.
     /// </returns>
-    public static Task ValidateCardsAsync(this KookRestClient client, IEnumerable<ICard> cards, RequestOptions options = null)
-        => ExperimentalClientHelper.ValidateCardsAsync(client, cards, options);
+    public static Task ValidateCardsAsync(this KookRestClient client, IEnumerable<ICard> cards, RequestOptions? options = null) =>
+        ExperimentalClientHelper.ValidateCardsAsync(client, cards, options);
 
     /// <summary>
     ///     Validates a collection of cards.
@@ -115,6 +117,6 @@ public static class KookRestClientExperimentalExtensions
     /// <returns>
     ///     A task that represents the asynchronous validation operation.
     /// </returns>
-    public static Task ValidateCardsAsync(this KookRestClient client, string cardsJson, RequestOptions options = null)
-        => ExperimentalClientHelper.ValidateCardsAsync(client, cardsJson, options);
+    public static Task ValidateCardsAsync(this KookRestClient client, string cardsJson, RequestOptions? options = null) =>
+        ExperimentalClientHelper.ValidateCardsAsync(client, cardsJson, options);
 }

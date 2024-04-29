@@ -7,7 +7,7 @@ internal class ButtonClickEventTypeConverter : JsonConverter<ButtonClickEventTyp
 {
     public override ButtonClickEventType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string type = reader.GetString();
+        string? type = reader.GetString();
         return type switch
         {
             "" => ButtonClickEventType.None,

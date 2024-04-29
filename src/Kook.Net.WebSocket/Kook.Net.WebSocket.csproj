@@ -7,15 +7,11 @@
     <IsPackable>true</IsPackable>
     <PackageId>Kook.Net.WebSocket</PackageId>
     <Description>The WebSocket API implementation for Kook.Net.</Description>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DefineConstants>TRACE_PACKETS</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>DEBUG_PACKETS</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

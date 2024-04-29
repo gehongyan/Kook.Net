@@ -13,12 +13,4 @@ public interface IEmbed
     ///     A <see cref="EmbedType"/> that represents the type of this embed.
     /// </returns>
     EmbedType Type { get; }
-
-    /// <summary>
-    ///     Gets the URL of this embed.
-    /// </summary>
-    /// <returns>
-    ///     A <c>string</c> that represents the URL of this embed.
-    /// </returns>
-    string Url { get; }
 }

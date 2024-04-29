@@ -5,7 +5,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     Represents the REST user's presence status. This may include their online status and their activity.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestPresence : IPresence
 {
     /// <inheritdoc />
@@ -31,10 +31,10 @@ public class RestPresence : IPresence
         return entity;
     }
 
-    internal void Update(bool? isOnline, string activeClient)
+    internal void Update(bool? isOnline, string? activeClient)
     {
-        if (isOnline.HasValue) IsOnline = isOnline;
-
+        if (isOnline.HasValue)
+            IsOnline = isOnline;
         ActiveClient = ConvertClientType(activeClient);
     }
 
@@ -47,16 +47,21 @@ public class RestPresence : IPresence
     /// <returns>
     ///     A <see cref="ClientType"/> that this user is active.
     /// </returns>
-    private static ClientType? ConvertClientType(string clientType)
+    private static ClientType? ConvertClientType(string? clientType)
     {
-        if (string.IsNullOrWhiteSpace(clientType)) return null;
-
-        if (Enum.TryParse(clientType, true, out ClientType type)) return type;
-
+        if (string.IsNullOrWhiteSpace(clientType))
+            return null;
+        if (Enum.TryParse(clientType, true, out ClientType type))
+            return type;
         return null;
     }
 
-    private string DebuggerDisplay => $"{IsOnline switch { true => "Online", false => "Offline", _ => "Unknown Status" }}, {ActiveClient.ToString()}";
+    private string DebuggerDisplay => $"{IsOnline switch
+        {
+            true => "Online",
+            false => "Offline",
+            _ => "Unknown Status"
+        }}, {ActiveClient.ToString()}";
 
-    internal RestPresence Clone() => MemberwiseClone() as RestPresence;
+    internal RestPresence Clone() => (RestPresence)MemberwiseClone();
 }

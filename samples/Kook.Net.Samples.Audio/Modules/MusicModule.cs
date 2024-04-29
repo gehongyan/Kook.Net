@@ -1,3 +1,4 @@
+using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Kook.Audio;
@@ -38,13 +39,19 @@ public class MusicModule : ModuleBase<SocketCommandContext>
         }
 
         SocketVoiceChannel voiceChannel = voiceChannels.First();
-        if (voiceChannel.ConnectedUsers.Contains(Context.Guild.CurrentUser))
+        if (voiceChannel.ConnectedUsers.Contains(Context.Guild?.CurrentUser))
         {
             await ReplyTextAsync("I'm already connected to this voice channel.");
             return;
         }
 
-        IAudioClient audioClient = await voiceChannel.ConnectAsync();
+        IAudioClient? audioClient = await voiceChannel.ConnectAsync();
+        if (audioClient is null)
+        {
+            await ReplyTextAsync("Failed to connect to the voice channel.");
+            return;
+        }
+
         _musicService.SetAudioClient(Context.Channel, audioClient);
         await ReplyTextAsync($"Connected to {voiceChannel.Name}.");
     }
@@ -53,7 +60,7 @@ public class MusicModule : ModuleBase<SocketCommandContext>
     [RequireContext(ContextType.Guild)]
     public async Task LeaveAsync()
     {
-        if (Context.Guild.AudioClient?.ConnectionState != ConnectionState.Connected)
+        if (Context.Guild?.AudioClient?.ConnectionState != ConnectionState.Connected)
         {
             await ReplyTextAsync("I'm not connected to a voice channel.");
             return;
@@ -123,14 +130,14 @@ public class MusicModule : ModuleBase<SocketCommandContext>
     [RequireContext(ContextType.Guild)]
     public async Task AddAsync([Remainder] string url)
     {
-        if (Context.Guild.AudioClient?.ConnectionState != ConnectionState.Connected)
+        if (Context.Guild?.AudioClient?.ConnectionState != ConnectionState.Connected)
         {
             await ReplyTextAsync("I'm not connected to a voice channel.");
             return;
         }
 
         string rawContent = markdownRegex.Replace(url, "$1");
-        Uri parsed = await ConvertUriAsync(rawContent);
+        Uri? parsed = await ConvertUriAsync(rawContent);
         if (parsed is null)
         {
             await ReplyTextAsync("Invalid URL.");
@@ -145,7 +152,7 @@ public class MusicModule : ModuleBase<SocketCommandContext>
     [RequireContext(ContextType.Guild)]
     public async Task SkipAsync()
     {
-        if (Context.Guild.AudioClient?.ConnectionState != ConnectionState.Connected)
+        if (Context.Guild?.AudioClient?.ConnectionState != ConnectionState.Connected)
         {
             await ReplyTextAsync("I'm not connected to a voice channel.");
             return;
@@ -159,7 +166,7 @@ public class MusicModule : ModuleBase<SocketCommandContext>
     [RequireContext(ContextType.Guild)]
     public async Task ListAsync()
     {
-        if (Context.Guild.AudioClient?.ConnectionState != ConnectionState.Connected)
+        if (Context.Guild?.AudioClient?.ConnectionState != ConnectionState.Connected)
         {
             await ReplyTextAsync("I'm not connected to a voice channel.");
             return;
@@ -171,7 +178,7 @@ public class MusicModule : ModuleBase<SocketCommandContext>
     private static readonly Regex neteaseSongPageRegex = new(@"^https://music.163.com/#/song\?id=(?<id>\d+)$", RegexOptions.Compiled);
     private static readonly Regex neteaseSongDirectRegex = new(@"^https://music.163.com/song/media/outer/url\?id=(?<id>\d+).mp3$", RegexOptions.Compiled);
     private static readonly Regex qqSongPageRegex = new(@"^https://y.qq.com/n/ryqq/songDetail/(?<id>\w+)$", RegexOptions.Compiled);
-    private async Task<Uri> ConvertUriAsync(string url)
+    private async Task<Uri?> ConvertUriAsync(string url)
     {
         // 网易云音乐歌曲页面
         Match match = neteaseSongPageRegex.Match(url);
@@ -195,8 +202,9 @@ public class MusicModule : ModuleBase<SocketCommandContext>
         {
             string id = match.Groups["id"].Value;
             HttpClient httpClient = _httpClientFactory.CreateClient("Music");
-            JsonDocument response = await httpClient.GetFromJsonAsync<JsonDocument>(
+            JsonDocument? response = await httpClient.GetFromJsonAsync<JsonDocument>(
                 $$$"""https://u.y.qq.com/cgi-bin/musicu.fcg?g_tk=5381&loginUin=0&hostUin=0&format=json&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq.json&needNewCode=0&data={"req":{"module":"CDN.SrfCdnDispatchServer","method":"GetCdnDispatch","param":{"guid":"8348972662","calltype":0,"userip":""}},"req_0":{"module":"vkey.GetVkeyServer","method":"CgiGetVkey","param":{"guid":"8348972662","songmid":["{{{id}}}"],"songtype":[1],"uin":"0","loginflag":1,"platform":"20"}},"comm":{"uin":0,"format":"json","ct":24,"cv":0}}""");
+            if (response is null) return null;
             List<string> sips = response.RootElement
                 .GetProperty("req").GetProperty("data").GetProperty("sip")
                 .EnumerateArray()

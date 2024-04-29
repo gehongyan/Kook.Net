@@ -77,7 +77,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <returns>
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
-    Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions options = null);
+    Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the creator of this channel.
@@ -87,7 +87,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
     /// </returns>
-    Task<IUser> GetCreatorAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IUser?> GetCreatorAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 
@@ -119,7 +119,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
-    Task RemovePermissionOverwriteAsync(IRole role, RequestOptions options = null);
+    Task RemovePermissionOverwriteAsync(IRole role, RequestOptions? options = null);
 
     /// <summary>
     ///     Removes the permission overwrite for the given user, if one exists.
@@ -129,7 +129,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
-    Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions options = null);
+    Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null);
 
     /// <summary>
     ///     Adds the permission overwrite for the given role.
@@ -140,7 +140,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     A task representing the asynchronous permission operation for adding the specified permissions to the
     ///     channel.
     /// </returns>
-    Task AddPermissionOverwriteAsync(IRole role, RequestOptions options = null);
+    Task AddPermissionOverwriteAsync(IRole role, RequestOptions? options = null);
 
     /// <summary>
     ///     Adds the permission overwrite for the given user.
@@ -150,7 +150,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <returns>
     ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
     /// </returns>
-    Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions options = null);
+    Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null);
 
     /// <summary>
     ///     Updates the permission overwrite for the given role.
@@ -162,7 +162,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     A task representing the asynchronous permission operation for adding the specified permissions to the
     ///     channel.
     /// </returns>
-    Task ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null);
+    Task ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options = null);
 
     /// <summary>
     ///     Updates the permission overwrite for the given user.
@@ -173,7 +173,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <returns>
     ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
     /// </returns>
-    Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions options = null);
+    Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options = null);
 
     #endregion
 
@@ -191,7 +191,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <returns>
     ///     Paged collection of users.
     /// </returns>
-    new IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    new IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a user in this channel.
@@ -203,7 +203,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     A task representing the asynchronous get operation. The task result contains a guild user object that
     ///     represents the user; <c>null</c> if none is found.
     /// </returns>
-    new Task<IGuildUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    new Task<IGuildUser?> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 }
