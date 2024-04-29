@@ -7,17 +7,17 @@ public class KookBotConfigurations
     /// <summary>
     ///     Token
     /// </summary>
-    public string Token { get; init; }
+    public string Token { get; init; } = string.Empty;
 
     /// <summary>
     ///     频道ID列表
     /// </summary>
-    public KookChannels Channels { get; init; }
+    public KookChannels Channels { get; init; } = null!;
 
     /// <summary>
     ///     角色ID列表
     /// </summary>
-    public KookRoles Roles { get; init; }
+    public KookRoles Roles { get; init; } = null!;
 
     /// <summary>
     ///     KOOK Bot运行环境

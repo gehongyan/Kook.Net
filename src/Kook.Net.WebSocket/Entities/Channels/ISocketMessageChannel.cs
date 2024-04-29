@@ -32,7 +32,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///     A WebSocket-based message object; <c>null</c> if it does not exist in the cache or if caching is not
     ///     enabled.
     /// </returns>
-    SocketMessage GetCachedMessage(Guid id);
+    SocketMessage? GetCachedMessage(Guid id);
 
     /// <summary>
     ///     Gets the last N cached messages from this message channel.

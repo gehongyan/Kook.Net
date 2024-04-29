@@ -12,7 +12,7 @@ public class RoleProperties
     /// <remarks>
     ///     This value may not be set if the role is an @everyone role.
     /// </remarks>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     ///     Gets or sets the color of the role.
@@ -23,7 +23,7 @@ public class RoleProperties
     public Color? Color { get; set; }
 
     /// <summary>
-    ///     Gets or sets whether or not this role should be displayed independently in the user list.
+    ///     Gets or sets whether this role should be displayed independently in the user list.
     /// </summary>
     /// <remarks>
     ///     This value may not be set if the role is an @everyone role.

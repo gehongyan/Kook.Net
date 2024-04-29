@@ -7,5 +7,5 @@ internal class ModuleBase : IModule
 {
     [JsonPropertyName("type")]
     [JsonConverter(typeof(ModuleTypeConverter))]
-    public ModuleType Type { get; set; }
+    public required ModuleType Type { get; set; }
 }

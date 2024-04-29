@@ -9,14 +9,14 @@ namespace Kook.Net.Queue;
 
 internal class RequestQueue : IDisposable, IAsyncDisposable
 {
-    public event Func<BucketId, RateLimitInfo?, string, Task> RateLimitTriggered;
+    public event Func<BucketId, RateLimitInfo?, string?, Task>? RateLimitTriggered;
 
     private readonly ConcurrentDictionary<BucketId, object> _buckets;
     private readonly SemaphoreSlim _tokenLock;
     private readonly CancellationTokenSource _cancellationTokenSource; //Dispose token
     private CancellationTokenSource _clearToken;
     private CancellationToken _parentToken;
-    private CancellationTokenSource _requestCancellationTokenSource;
+    private CancellationTokenSource? _requestCancellationTokenSource;
     private CancellationToken _requestCancellationToken; //Parent token + Clear token
     private DateTimeOffset _waitUntil;
 
@@ -38,7 +38,7 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
 
     public async Task SetCancellationTokenAsync(CancellationToken cancellationToken)
     {
-        await _tokenLock.WaitAsync().ConfigureAwait(false);
+        await _tokenLock.WaitAsync(CancellationToken.None).ConfigureAwait(false);
         try
         {
             _parentToken = cancellationToken;
@@ -54,7 +54,7 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
 
     public async Task ClearAsync()
     {
-        await _tokenLock.WaitAsync().ConfigureAwait(false);
+        await _tokenLock.WaitAsync(CancellationToken.None).ConfigureAwait(false);
         try
         {
             _clearToken?.Cancel();
@@ -72,7 +72,7 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
 
     public async Task<Stream> SendAsync(RestRequest request)
     {
-        CancellationTokenSource createdTokenSource = null;
+        CancellationTokenSource? createdTokenSource = null;
         if (request.Options.CancellationToken.CanBeCanceled)
         {
             createdTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_requestCancellationToken, request.Options.CancellationToken);
@@ -89,7 +89,7 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
 
     public async Task SendAsync(WebSocketRequest request)
     {
-        CancellationTokenSource createdTokenSource = null;
+        CancellationTokenSource? createdTokenSource = null;
         if (request.Options.CancellationToken.CanBeCanceled)
         {
             createdTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_requestCancellationToken, request.Options.CancellationToken);
@@ -109,9 +109,9 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
         if (millis > 0)
         {
 #if DEBUG_LIMITS
-                Debug.WriteLine($"[{id}] Sleeping {millis} ms (Pre-emptive) [Global]");
+            Debug.WriteLine($"[{id}] Sleeping {millis} ms (Pre-emptive) [Global]");
 #endif
-            await Task.Delay(millis).ConfigureAwait(false);
+            await Task.Delay(millis, CancellationToken.None).ConfigureAwait(false);
         }
     }
 
@@ -121,21 +121,25 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
     internal async Task EnterGlobalAsync(int id, WebSocketRequest request)
     {
         //If this is a global request (unbucketed), it'll be dealt in EnterAsync
-        GatewayBucket requestBucket = GatewayBucket.Get(request.Options.BucketId);
+        BucketId? bucketId = request.Options.BucketId;
+        if (bucketId is null) return;
+        GatewayBucket requestBucket = GatewayBucket.Get(bucketId);
         if (requestBucket.Type == GatewayBucketType.Unbucketed) return;
 
         //It's not a global request, so need to remove one from global (per-session)
         GatewayBucket globalBucketType = GatewayBucket.Get(GatewayBucketType.Unbucketed);
         RequestOptions options = RequestOptions.CreateOrClone(request.Options);
         options.BucketId = globalBucketType.Id;
-        WebSocketRequest globalRequest = new(null, null, false, false, options);
+        WebSocketRequest globalRequest = new(null, [], false, false, options);
         RequestBucket globalBucket = GetOrCreateBucket(options, globalRequest);
         await globalBucket.TriggerAsync(id, globalRequest);
     }
 
     private RequestBucket GetOrCreateBucket(RequestOptions options, IRequest request)
     {
-        BucketId bucketId = options.BucketId;
+        BucketId? bucketId = options.BucketId;
+        if (bucketId is null)
+            throw new InvalidOperationException("BucketId is not set.");
         object obj = _buckets.GetOrAdd(bucketId, x => new RequestBucket(this, request, x));
         if (obj is BucketId hashBucket)
         {
@@ -146,10 +150,13 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
         return (RequestBucket)obj;
     }
 
-    internal async Task RaiseRateLimitTriggered(BucketId bucketId, RateLimitInfo? info, string endpoint) =>
-        await RateLimitTriggered(bucketId, info, endpoint).ConfigureAwait(false);
+    internal async Task RaiseRateLimitTriggered(BucketId bucketId, RateLimitInfo? info, string? endpoint)
+    {
+        if (RateLimitTriggered is null) return;
+        await RateLimitTriggered.Invoke(bucketId, info, endpoint).ConfigureAwait(false);
+    }
 
-    internal (RequestBucket, BucketId) UpdateBucketHash(BucketId id, string kookHash)
+    internal (RequestBucket?, BucketId?) UpdateBucketHash(BucketId id, string kookHash)
     {
         if (!id.IsHashBucket)
         {
@@ -180,8 +187,13 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
                     if ((now - bucket.LastAttemptAt).TotalMinutes > 1.0)
                     {
                         if (bucket.Id.IsHashBucket)
-                            foreach (BucketId redirectBucket in _buckets.Where(x => x.Value == bucket.Id).Select(x => (BucketId)x.Value))
+                        {
+                            IEnumerable<BucketId> redirectBuckets = _buckets
+                                .Where(x => x.Value == bucket.Id)
+                                .Select(x => (BucketId)x.Value);
+                            foreach (BucketId redirectBucket in redirectBuckets)
                                 _buckets.TryRemove(redirectBucket, out _); //remove redirections if hash bucket
+                        }
 
                         _buckets.TryRemove(bucket.Id, out _);
                     }
@@ -216,7 +228,7 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        if (!(_cancellationTokenSource is null))
+        if (_cancellationTokenSource is not null)
         {
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource.Dispose();

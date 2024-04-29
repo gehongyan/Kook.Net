@@ -7,7 +7,7 @@ internal class ImageSizeConverter : JsonConverter<ImageSize>
 {
     public override ImageSize Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string size = reader.GetString();
+        string? size = reader.GetString();
         return size switch
         {
             "sm" => ImageSize.Small,

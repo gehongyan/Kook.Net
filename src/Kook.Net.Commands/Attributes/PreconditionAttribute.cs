@@ -4,7 +4,7 @@ namespace Kook.Commands;
 ///     Requires the module or class to pass the specified precondition before execution can begin.
 /// </summary>
 /// <seealso cref="ParameterPreconditionAttribute"/>
-[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
 public abstract class PreconditionAttribute : Attribute
 {
     /// <summary>
@@ -15,7 +15,7 @@ public abstract class PreconditionAttribute : Attribute
     ///     be successful (A || B). Specifying <see cref="Group" /> = <c>null</c> or not at all will
     ///     require *all* preconditions to pass, just like normal (A &amp;&amp; B).
     /// </remarks>
-    public string Group { get; set; } = null;
+    public string? Group { get; set; }
 
     /// <summary>
     /// When overridden in a derived class, uses the supplied string
@@ -23,7 +23,7 @@ public abstract class PreconditionAttribute : Attribute
     /// Setting this for a class that doesn't override
     /// this property is a no-op.
     /// </summary>
-    public virtual string ErrorMessage
+    public virtual string? ErrorMessage
     {
         get => null;
         set { }

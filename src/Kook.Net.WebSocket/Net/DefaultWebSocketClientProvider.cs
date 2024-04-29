@@ -18,7 +18,7 @@ public static class DefaultWebSocketProvider
     /// <param name="proxy"> The proxy to use. </param>
     /// <returns> A delegate that creates a new <see cref="DefaultWebSocketClient"/> instance. </returns>
     /// <exception cref="PlatformNotSupportedException">The default WebSocketProvider is not supported on this platform.</exception>
-    public static WebSocketProvider Create(IWebProxy proxy = null) =>
+    public static WebSocketProvider Create(IWebProxy? proxy = null) =>
         () =>
         {
             try

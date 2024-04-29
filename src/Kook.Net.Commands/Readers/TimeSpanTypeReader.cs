@@ -8,7 +8,7 @@ internal class TimeSpanTypeReader : TypeReader
     /// TimeSpan try parse formats.
     /// </summary>
     private static readonly string[] Formats =
-    {
+    [
         "%d'd'%h'h'%m'm'%s's'", // 4d3h2m1s
         "%d'd'%h'h'%m'm'",      // 4d3h2m
         "%d'd'%h'h'%s's'",      // 4d3h  1s
@@ -24,21 +24,25 @@ internal class TimeSpanTypeReader : TypeReader
         "%m'm'%s's'",           //     2m1s
         "%m'm'",                //     2m
         "%s's'"                 //       1s
-    };
+    ];
 
     /// <inheritdoc />
     public override Task<TypeReaderResult> ReadAsync(ICommandContext context, string input, IServiceProvider services)
     {
-        if (string.IsNullOrEmpty(input)) throw new ArgumentException($"{nameof(input)} must not be null or empty.", nameof(input));
+        if (string.IsNullOrEmpty(input))
+            throw new ArgumentException($"{nameof(input)} must not be null or empty.", nameof(input));
 
         bool isNegative = input[0] == '-'; // Char for CultureInfo.InvariantCulture.NumberFormat.NegativeSign
-        if (isNegative) input = input.Substring(1);
+        if (isNegative)
+            input = input[1..];
 
         if (TimeSpan.TryParseExact(input.ToLowerInvariant(), Formats, CultureInfo.InvariantCulture, out TimeSpan timeSpan))
+        {
             return isNegative
                 ? Task.FromResult(TypeReaderResult.FromSuccess(-timeSpan))
                 : Task.FromResult(TypeReaderResult.FromSuccess(timeSpan));
-        else
-            return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "Failed to parse TimeSpan"));
+        }
+
+        return Task.FromResult(TypeReaderResult.FromError(CommandError.ParseFailed, "Failed to parse TimeSpan"));
     }
 }

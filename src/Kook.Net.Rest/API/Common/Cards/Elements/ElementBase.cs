@@ -7,5 +7,5 @@ internal class ElementBase : IElement
 {
     [JsonPropertyName("type")]
     [JsonConverter(typeof(ElementTypeConverter))]
-    public ElementType Type { get; set; }
+    public required ElementType Type { get; set; }
 }

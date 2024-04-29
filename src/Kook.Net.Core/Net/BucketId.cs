@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 #if NET462
 using System.Net.Http;
 #endif
@@ -7,17 +8,17 @@ namespace Kook.Net;
 /// <summary>
 ///     Represents a ratelimit bucket.
 /// </summary>
-public class BucketId : IEquatable<BucketId>
+public sealed class BucketId : IEquatable<BucketId>
 {
     /// <summary>
     ///     Gets the http method used to make the request if available.
     /// </summary>
-    public HttpMethod HttpMethod { get; }
+    public HttpMethod? HttpMethod { get; }
 
     /// <summary>
     ///     Gets the endpoint that is going to be requested if available.
     /// </summary>
-    public string Endpoint { get; }
+    public string? Endpoint { get; }
 
     /// <summary>
     ///     Gets the major parameters of the route.
@@ -30,14 +31,14 @@ public class BucketId : IEquatable<BucketId>
     /// <remarks>
     ///     The hash is provided by Kook to group ratelimits.
     /// </remarks>
-    public string BucketHash { get; }
+    public string? BucketHash { get; }
 
     /// <summary>
     ///     Gets if this bucket is a hash type.
     /// </summary>
     public bool IsHashBucket => BucketHash != null;
 
-    private BucketId(HttpMethod httpMethod, string endpoint, IEnumerable<KeyValuePair<string, string>> majorParameters, string bucketHash)
+    private BucketId(HttpMethod? httpMethod, string? endpoint, IEnumerable<KeyValuePair<string, string>> majorParameters, string? bucketHash)
     {
         HttpMethod = httpMethod;
         Endpoint = endpoint;
@@ -56,7 +57,7 @@ public class BucketId : IEquatable<BucketId>
     ///     A <see cref="BucketId"/> based on the <see cref="HttpMethod"/>
     ///     and the <see cref="Endpoint"/> with the provided data.
     /// </returns>
-    public static BucketId Create(HttpMethod httpMethod, string endpoint, Dictionary<string, string> majorParams)
+    public static BucketId Create(HttpMethod? httpMethod, string? endpoint, Dictionary<string, string>? majorParams)
     {
         Preconditions.NotNullOrWhitespace(endpoint, nameof(endpoint));
         majorParams ??= new Dictionary<string, string>();
@@ -86,8 +87,9 @@ public class BucketId : IEquatable<BucketId>
     /// <returns>
     ///     A string that defines this bucket as a hash based one.
     /// </returns>
-    public string GetBucketHash()
-        => IsHashBucket ? $"{BucketHash}:{string.Join("/", MajorParameters.Select(x => x.Value))}" : null;
+    public string? GetBucketHash() => IsHashBucket
+        ? $"{BucketHash}:{string.Join("/", MajorParameters.Select(x => x.Value))}"
+        : null;
 
     /// <summary>
     ///     Gets the string that will define this bucket as an endpoint based one.
@@ -95,30 +97,33 @@ public class BucketId : IEquatable<BucketId>
     /// <returns>
     ///     A string that defines this bucket as an endpoint based one.
     /// </returns>
-    public string GetUniqueEndpoint()
-        => HttpMethod != null ? $"{HttpMethod} {Endpoint}" : Endpoint;
+    public string? GetUniqueEndpoint() => HttpMethod != null ? $"{HttpMethod} {Endpoint}" : Endpoint;
 
     /// <inheritdoc />
-    public override bool Equals(object obj)
-        => Equals(obj as BucketId);
+    public override int GetHashCode() => IsHashBucket
+        ? (BucketHash, string.Join("/", MajorParameters.Select(x => x.Value))).GetHashCode()
+        : (HttpMethod, Endpoint).GetHashCode();
 
     /// <inheritdoc />
-    public override int GetHashCode()
-        => IsHashBucket ? (BucketHash, string.Join("/", MajorParameters.Select(x => x.Value))).GetHashCode() : (HttpMethod, Endpoint).GetHashCode();
+    public override string? ToString() => GetBucketHash() ?? GetUniqueEndpoint();
 
     /// <inheritdoc />
-    public override string ToString()
-        => GetBucketHash() ?? GetUniqueEndpoint();
-
-    /// <inheritdoc />
-    public bool Equals(BucketId other)
+    public override bool Equals([NotNullWhen(true)] object? obj)
     {
-        if (other is null) return false;
+        if (obj is not BucketId bucketId)
+            return false;
+        return Equals(bucketId);
+    }
 
-        if (ReferenceEquals(this, other)) return true;
-
-        if (GetType() != other.GetType()) return false;
-
+    /// <inheritdoc />
+    public bool Equals(BucketId? other)
+    {
+        if (other is null)
+            return false;
+        if (ReferenceEquals(this, other))
+            return true;
+        if (GetType() != other.GetType())
+            return false;
         return ToString() == other.ToString();
     }
 }

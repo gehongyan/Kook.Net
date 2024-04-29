@@ -7,14 +7,16 @@ namespace Kook.Net.Converters;
 
 internal class PokeResourceConverter : JsonConverter<PokeResourceBase>
 {
-    public override PokeResourceBase Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override PokeResourceBase? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        JsonNode jsonNode = JsonNode.Parse(ref reader);
-        string rawType = jsonNode["type"].GetValue<string>();
+        JsonNode? jsonNode = JsonNode.Parse(ref reader);
+        if (jsonNode == null) return null;
+        string? rawType = jsonNode["type"]?.GetValue<string>();
+        if (rawType == null) return null;
         return rawType switch
         {
             "ImageAnimation" => JsonSerializer.Deserialize<API.ImageAnimationPokeResource>(jsonNode.ToJsonString(), options),
-            _ => new API.NotImplementedPokeResource(rawType, jsonNode)
+            _ => new API.NotImplementedPokeResource(rawType, jsonNode) { Type = PokeResourceType.NotImplemented }
         };
     }
 

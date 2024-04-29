@@ -25,9 +25,12 @@ public class CommandHandlingService
         _kook.DirectMessageReceived += MessageReceivedAsync;
     }
 
-    public async Task InitializeAsync() =>
+    public async Task InitializeAsync()
+    {
+        if (Assembly.GetEntryAssembly() is not { } assembly) return;
         // Register modules that are public and inherit ModuleBase<T>.
-        await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+        await _commands.AddModulesAsync(assembly, _services);
+    }
 
     public async Task MessageReceivedAsync(SocketMessage rawMessage, SocketUser user, ISocketMessageChannel channel)
     {
@@ -51,13 +54,15 @@ public class CommandHandlingService
         // we will handle the result in CommandExecutedAsync,
     }
 
-    public async Task CommandExecutedAsync(CommandInfo command, ICommandContext context, IResult result)
+    public async Task CommandExecutedAsync(CommandInfo? command, ICommandContext context, IResult result)
     {
         // command is unspecified when there was a search failure (command not found); we don't care about these errors
-        if (command is null) return;
+        if (command is null)
+            return;
 
         // the command was successful, we don't care about this result, unless we want to log that a command succeeded.
-        if (result.IsSuccess) return;
+        if (result.IsSuccess)
+            return;
 
         // the command failed, let's notify the user that something happened.
         await context.Channel.SendTextAsync($"error: {result}");

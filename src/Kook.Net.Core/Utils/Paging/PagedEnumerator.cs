@@ -10,7 +10,7 @@ internal class PagedAsyncEnumerable<T> : IAsyncEnumerable<IReadOnlyCollection<T>
     private readonly Func<PageInfo, IReadOnlyCollection<T>, bool> _nextPage;
 
     public PagedAsyncEnumerable(int pageSize, Func<PageInfo, CancellationToken, Task<IReadOnlyCollection<T>>> getPage,
-        Func<PageInfo, IReadOnlyCollection<T>, bool> nextPage = null,
+        Func<PageInfo, IReadOnlyCollection<T>, bool>? nextPage,
         Guid? start = null, int? count = null)
     {
         PageSize = pageSize;
@@ -18,7 +18,7 @@ internal class PagedAsyncEnumerable<T> : IAsyncEnumerable<IReadOnlyCollection<T>
         _count = count;
 
         _getPage = getPage;
-        _nextPage = nextPage;
+        _nextPage = nextPage ?? ((_, _) => false);
     }
 
     public IAsyncEnumerator<IReadOnlyCollection<T>> GetAsyncEnumerator(CancellationToken cancellationToken = new()) =>
@@ -34,6 +34,7 @@ internal class PagedAsyncEnumerable<T> : IAsyncEnumerable<IReadOnlyCollection<T>
 
         public Enumerator(PagedAsyncEnumerable<T> source, CancellationToken token)
         {
+            Current = [];
             _source = source;
             _token = token;
             _info = new PageInfo(source._start, source._count, source.PageSize);
@@ -61,17 +62,16 @@ internal class PagedAsyncEnumerable<T> : IAsyncEnumerable<IReadOnlyCollection<T>
 
             _info.PageSize = _info.Remaining != null ? Math.Min(_info.Remaining.Value, _source.PageSize) : _source.PageSize;
 
-            if (_info.Remaining != 0)
-                if (!_source._nextPage(_info, data))
-                    _info.Remaining = 0;
+            if (_info.Remaining != 0 && !_source._nextPage(_info, data))
+                _info.Remaining = 0;
 
             return true;
         }
 
         public ValueTask DisposeAsync()
         {
-            Current = null;
-            return default(ValueTask);
+            Current = [];
+            return default;
         }
     }
 }

@@ -29,7 +29,7 @@ public class MessageHelperTests
         "` (met)all(met) (met)here(met) (met)1896684851(met) (rol)1896684851(rol) (chn)1896684851(chn) (emj)test(emj)[1990044438283387/aIVQrtPv4z10b10b] `")]
     public void ParseTagsInCode(string testData)
     {
-        ImmutableArray<ITag> result = MessageHelper.ParseTags(testData, null, null, null, TagMode.KMarkdown);
+        ImmutableArray<ITag> result = MessageHelper.ParseTags(testData, null, null, [], TagMode.KMarkdown);
         Assert.Empty(result);
     }
 
@@ -43,7 +43,7 @@ public class MessageHelperTests
     [InlineData("``` code ``` (met)here(met) ``` more ```")]
     public void ParseTagsAroundCode(string testData)
     {
-        ImmutableArray<ITag> result = MessageHelper.ParseTags(testData, null, null, null, TagMode.KMarkdown);
+        ImmutableArray<ITag> result = MessageHelper.ParseTags(testData, null, null, [], TagMode.KMarkdown);
         Assert.NotEmpty(result);
     }
 
@@ -53,7 +53,7 @@ public class MessageHelperTests
     [InlineData(@"hey\`\`\`(met)all(met)\`\`\`!!")]
     public void IgnoreEscapedCodeBlocks(string testData)
     {
-        ImmutableArray<ITag> result = MessageHelper.ParseTags(testData, null, null, null, TagMode.KMarkdown);
+        ImmutableArray<ITag> result = MessageHelper.ParseTags(testData, null, null, [], TagMode.KMarkdown);
         Assert.NotEmpty(result);
     }
 
@@ -68,7 +68,7 @@ public class MessageHelperTests
     [InlineData("<>(rol)1896684851(rol)")]
     public void ParseRole(string roleTag)
     {
-        ImmutableArray<ITag> result = MessageHelper.ParseTags(roleTag, null, null, null, TagMode.KMarkdown);
+        ImmutableArray<ITag> result = MessageHelper.ParseTags(roleTag, null, null, [], TagMode.KMarkdown);
         Assert.Contains(result, x => x.Type == TagType.RoleMention);
     }
 
@@ -79,7 +79,7 @@ public class MessageHelperTests
     [InlineData("<>(chn)1896684851(chn)")]
     public void ParseChannel(string channelTag)
     {
-        ImmutableArray<ITag> result = MessageHelper.ParseTags(channelTag, null, null, null, TagMode.KMarkdown);
+        ImmutableArray<ITag> result = MessageHelper.ParseTags(channelTag, null, null, [], TagMode.KMarkdown);
         Assert.Contains(result, x => x.Type == TagType.ChannelMention);
     }
 
@@ -91,7 +91,7 @@ public class MessageHelperTests
     [InlineData("(emj)一颗骰子(emj)[0/24677/OaRgXkJ8gB0a00a0]")]
     public void ParseEmoji(string emoji)
     {
-        ImmutableArray<ITag> result = MessageHelper.ParseTags(emoji, null, null, null, TagMode.KMarkdown);
+        ImmutableArray<ITag> result = MessageHelper.ParseTags(emoji, null, null, [], TagMode.KMarkdown);
         Assert.Contains(result, x => x.Type == TagType.Emoji);
     }
 
@@ -101,7 +101,7 @@ public class MessageHelperTests
     [InlineData("**(met)all(met)**")]
     public void ParseEveryone(string everyone)
     {
-        ImmutableArray<ITag> result = MessageHelper.ParseTags(everyone, null, null, null, TagMode.KMarkdown);
+        ImmutableArray<ITag> result = MessageHelper.ParseTags(everyone, null, null, [], TagMode.KMarkdown);
         Assert.Contains(result, x => x.Type == TagType.EveryoneMention);
     }
 
@@ -111,7 +111,7 @@ public class MessageHelperTests
     [InlineData("**(met)here(met)**")]
     public void ParseHere(string here)
     {
-        ImmutableArray<ITag> result = MessageHelper.ParseTags(here, null, null, null, TagMode.KMarkdown);
+        ImmutableArray<ITag> result = MessageHelper.ParseTags(here, null, null, [], TagMode.KMarkdown);
         Assert.Contains(result, x => x.Type == TagType.HereMention);
     }
 }

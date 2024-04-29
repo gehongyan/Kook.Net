@@ -5,10 +5,17 @@ namespace Kook.Net.Converters;
 
 internal class NullableChatCodeConverter : JsonConverter<Guid?>
 {
-    public override Guid? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
-        Guid.TryParse(reader.GetString() ?? string.Empty, out Guid guid)
+    /// <inheritdoc />
+    public override bool HandleNull => true;
+
+    public override Guid? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        if (reader.TokenType == JsonTokenType.Null)
+            return null;
+        return Guid.TryParse(reader.GetString(), out Guid guid)
             ? guid
             : null;
+    }
 
     public override void Write(Utf8JsonWriter writer, Guid? value, JsonSerializerOptions options)
     {

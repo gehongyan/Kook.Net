@@ -8,13 +8,16 @@ internal static class ExperimentalChannelHelper
     #region Permissions
 
     /// <exception cref="InvalidOperationException">This channel does not have a parent channel.</exception>
-    public static async Task SyncPermissionsAsync(INestedChannel channel, BaseKookClient client,
-        RequestOptions options)
+    public static async Task SyncPermissionsAsync(INestedChannel channel, BaseKookClient client, RequestOptions? options)
     {
-        ICategoryChannel category = await ChannelHelper.GetCategoryAsync(channel, client, options).ConfigureAwait(false);
-        if (category == null) throw new InvalidOperationException("This channel does not have a parent channel.");
+        ICategoryChannel? category = await ChannelHelper.GetCategoryAsync(channel, client, options).ConfigureAwait(false);
+        if (category == null)
+            throw new InvalidOperationException("This channel does not have a parent channel.");
 
-        SyncChannelPermissionsParams args = new(channel.Id);
+        SyncChannelPermissionsParams args = new()
+        {
+            ChannelId = channel.Id
+        };
         await client.ApiClient.SyncChannelPermissionsAsync(args, options).ConfigureAwait(false);
     }
 
@@ -22,7 +25,7 @@ internal static class ExperimentalChannelHelper
 
     #region Voice
 
-    public static async Task DisconnectUserAsync(IVoiceChannel channel, BaseKookClient client, IGuildUser user, RequestOptions options)
+    public static async Task DisconnectUserAsync(IVoiceChannel channel, BaseKookClient client, IGuildUser user, RequestOptions? options)
     {
         DisconnectUserParams args = new() { UserId = user.Id, ChannelId = channel.Id };
         await client.ApiClient.DisconnectUserAsync(args, options).ConfigureAwait(false);

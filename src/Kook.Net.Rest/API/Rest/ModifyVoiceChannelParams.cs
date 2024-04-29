@@ -15,7 +15,7 @@ internal class ModifyVoiceChannelParams : ModifyTextChannelParams
 
     [JsonPropertyName("password")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string Password { get; set; }
+    public string? Password { get; set; }
 
     // 为 0 时表示同步，因此命名为 OverwriteVoiceRegion
     [JsonPropertyName("sync_guild_region")]
@@ -25,5 +25,5 @@ internal class ModifyVoiceChannelParams : ModifyTextChannelParams
 
     [JsonPropertyName("region")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string VoiceRegion { get; set; }
+    public string? VoiceRegion { get; set; }
 }

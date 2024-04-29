@@ -11,7 +11,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based guild user.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
 {
     #region SocketGuildUser
@@ -29,19 +29,19 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     public string DisplayName => Nickname ?? Username;
 
     /// <inheritdoc />
-    public string Nickname { get; private set; }
+    public string? Nickname { get; private set; }
 
     /// <inheritdoc />
-    public bool IsMobileVerified { get; private set; }
+    public bool? IsMobileVerified { get; private set; }
 
     /// <inheritdoc />
-    public DateTimeOffset JoinedAt { get; private set; }
+    public DateTimeOffset? JoinedAt { get; private set; }
 
     /// <inheritdoc />
-    public DateTimeOffset ActiveAt { get; private set; }
+    public DateTimeOffset? ActiveAt { get; private set; }
 
     /// <inheritdoc />
-    public Color Color { get; private set; }
+    public Color? Color { get; private set; }
 
     /// <inheritdoc />
     public bool? IsOwner { get; private set; }
@@ -64,7 +64,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     }
 
     /// <inheritdoc />
-    public override ushort? IdentifyNumberValue
+    public override ushort IdentifyNumberValue
     {
         get => GlobalUser.IdentifyNumberValue;
         internal set => GlobalUser.IdentifyNumberValue = value;
@@ -85,7 +85,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     }
 
     /// <inheritdoc />
-    public override string Banner
+    public override string? Banner
     {
         get => GlobalUser.Banner;
         internal set => GlobalUser.Banner = value;
@@ -120,7 +120,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     }
 
     /// <inheritdoc />
-    public override UserTag UserTag
+    public override UserTag? UserTag
     {
         get => GlobalUser.UserTag;
         internal set => GlobalUser.UserTag = value;
@@ -134,23 +134,20 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     }
 
     /// <inheritdoc />
-    public override bool? IsSystemUser
-    {
-        get => GlobalUser.IsSystemUser;
-        internal set => GlobalUser.IsSystemUser = value;
-    }
-
-    /// <inheritdoc />
     public GuildPermissions GuildPermissions => new(Permissions.ResolveGuild(Guild, this));
 
     /// <inheritdoc />
-    internal override SocketPresence Presence { get; set; }
+    internal override SocketPresence Presence
+    {
+        get => GlobalUser.Presence;
+        set => GlobalUser.Presence = value;
+    }
 
     /// <inheritdoc />
-    public bool? IsDeafened => VoiceState?.IsDeafened ?? false;
+    public bool? IsDeafened => VoiceState?.IsDeafened;
 
     /// <inheritdoc />
-    public bool? IsMuted => VoiceState?.IsMuted ?? false;
+    public bool? IsMuted => VoiceState?.IsMuted;
 
     /// <summary>
     ///     Gets a collection of all boost subscriptions of this user for this guild.
@@ -175,11 +172,11 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// </remarks>
     /// <seealso cref="SocketGuild.DownloadBoostSubscriptionsAsync"/>
     /// <seealso cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/>
-    public IReadOnlyCollection<BoostSubscriptionMetadata> BoostSubscriptions =>
-        Guild.BoostSubscriptions?
+    public IReadOnlyCollection<BoostSubscriptionMetadata> BoostSubscriptions => Guild.BoostSubscriptions?
             .Where(x => x.Key.Id == Id)
             .SelectMany(x => x.Value)
-            .ToImmutableArray();
+            .ToImmutableArray()
+        ?? [];
 
     /// <summary>
     ///     Returns a collection of roles that the user possesses.
@@ -191,8 +188,10 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///         it is recommended to call <see cref="UpdateAsync"/> before this property is used.
     ///     </note>
     /// </remarks>
-    public IReadOnlyCollection<SocketRole> Roles
-        => _roleIds.Select(id => Guild.GetRole(id)).Where(x => x != null).ToReadOnlyCollection(() => _roleIds.Length);
+    public IReadOnlyCollection<SocketRole> Roles => _roleIds
+        .Select(x => Guild.GetRole(x) ?? new SocketRole(Guild, x))
+        .Where(x => x != null)
+        .ToImmutableArray();
 
     /// <summary>
     ///     Returns the voice channel the user is in, or <c>null</c> if none or unknown.
@@ -204,7 +203,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///         or <see cref="GetConnectedVoiceChannelsAsync"/>.
     ///     </note>
     /// </summary>
-    public SocketVoiceChannel VoiceChannel => VoiceState?.VoiceChannel;
+    public SocketVoiceChannel? VoiceChannel => VoiceState?.VoiceChannel;
 
     /// <summary>
     ///     Gets the voice status of the user if any.
@@ -218,6 +217,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     internal SocketGuildUser(SocketGuild guild, SocketGlobalUser globalUser)
         : base(guild.Kook, globalUser.Id)
     {
+        _roleIds = [];
         Guild = guild;
         GlobalUser = globalUser;
     }
@@ -227,7 +227,6 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         SocketGuildUser entity = new(guild, guild.Kook.GetOrCreateUser(state, model));
         entity.Update(state, model);
         entity.UpdatePresence(model.Online, model.OperatingSystem);
-        entity.UpdateRoles(Array.Empty<uint>());
         return entity;
     }
 
@@ -241,6 +240,8 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
 
     internal static SocketGuildUser Create(SocketGuild guild, ClientState state, RichGuild model)
     {
+        if (guild.Kook.CurrentUser is null)
+            throw new InvalidOperationException("The current user is not set well via login.");
         SocketGuildUser entity = new(guild, guild.Kook.CurrentUser.GlobalUser);
         entity.Update(state, model);
         return entity;
@@ -257,58 +258,48 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         ActiveAt = model.ActiveAt;
         Color = model.Color;
         IsOwner = model.IsOwner;
-        UpdateRoles(model.Roles);
+        if (model.Roles is not null)
+            UpdateRoles(model.Roles);
     }
 
     internal void Update(ClientState state, RichGuild guildModel)
     {
         Nickname = guildModel.CurrentUserNickname == Username ? null : guildModel.CurrentUserNickname;
-        UpdateRoles(guildModel.CurrentUserRoles);
+        if (guildModel.CurrentUserRoles is not null)
+            UpdateRoles(guildModel.CurrentUserRoles);
     }
 
-    internal void Update(ClientState state, GuildMemberUpdateEvent model) => Nickname = model.Nickname;
-
-    internal override void UpdatePresence(bool? isOnline)
+    /// <summary>
+    ///     Updates the nickname of this user.
+    /// </summary>
+    internal void UpdateNickname()
     {
-        base.UpdatePresence(isOnline);
-        GlobalUser.UpdatePresence(isOnline);
+        if (Nickname == Username)
+            Nickname = null;
     }
 
-    internal override void UpdatePresence(bool? isOnline, string activeClient)
+    internal void Update(ClientState state, GuildMemberUpdateEvent model)
     {
-        base.UpdatePresence(isOnline, activeClient);
-        GlobalUser.UpdatePresence(isOnline, activeClient);
+        Nickname = model.Nickname == Username ? null : model.Nickname;
     }
 
     private void UpdateRoles(uint[] roleIds)
     {
-        ImmutableArray<uint>.Builder roles = ImmutableArray.CreateBuilder<uint>(roleIds.Length + 1);
-        roles.Add(0);
-        for (int i = 0; i < roleIds.Length; i++) roles.Add(roleIds[i]);
-
-        _roleIds = roles.ToImmutable();
+        _roleIds = [..roleIds];
     }
 
     /// <inheritdoc />
-    public Task ModifyNicknameAsync(string name, RequestOptions options = null)
-        => UserHelper.ModifyNicknameAsync(this, Kook, name, options);
+    public Task ModifyNicknameAsync(string? name, RequestOptions? options = null) =>
+        UserHelper.ModifyNicknameAsync(this, Kook, name, options);
 
     /// <inheritdoc />
-    public Task<IReadOnlyCollection<BoostSubscriptionMetadata>> GetBoostSubscriptionsAsync(RequestOptions options = null)
-        => UserHelper.GetBoostSubscriptionsAsync(this, Kook, options);
+    public Task<IReadOnlyCollection<BoostSubscriptionMetadata>> GetBoostSubscriptionsAsync(
+        RequestOptions? options = null) =>
+        UserHelper.GetBoostSubscriptionsAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task KickAsync(RequestOptions options = null)
-        => UserHelper.KickAsync(this, Kook, options);
-
-    /// <inheritdoc />
-    /// <note type="warning">
-    ///     Due to the lack of events which should be raised when a role is added to a user,
-    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
-    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
-    /// </note>
-    public Task AddRoleAsync(uint roleId, RequestOptions options = null)
-        => AddRolesAsync(new[] { roleId }, options);
+    public Task KickAsync(RequestOptions? options = null) =>
+        UserHelper.KickAsync(this, Kook, options);
 
     /// <inheritdoc />
     /// <note type="warning">
@@ -316,8 +307,8 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task AddRoleAsync(IRole role, RequestOptions options = null)
-        => AddRoleAsync(role.Id, options);
+    public Task AddRoleAsync(uint roleId, RequestOptions? options = null) =>
+        AddRolesAsync(new[] { roleId }, options);
 
     /// <inheritdoc />
     /// <note type="warning">
@@ -325,8 +316,8 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null)
-        => UserHelper.AddRolesAsync(this, Kook, roleIds, options);
+    public Task AddRoleAsync(IRole role, RequestOptions? options = null) =>
+        AddRoleAsync(role.Id, options);
 
     /// <inheritdoc />
     /// <note type="warning">
@@ -334,8 +325,17 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null)
-        => AddRolesAsync(roles.Select(x => x.Id), options);
+    public Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null) =>
+        UserHelper.AddRolesAsync(this, Kook, roleIds, options);
+
+    /// <inheritdoc />
+    /// <note type="warning">
+    ///     Due to the lack of events which should be raised when a role is added to a user,
+    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
+    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
+    /// </note>
+    public Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null) =>
+        AddRolesAsync(roles.Select(x => x.Id), options);
 
     /// <inheritdoc />
     /// <note type="warning">
@@ -343,8 +343,8 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRoleAsync(uint roleId, RequestOptions options = null)
-        => RemoveRolesAsync(new[] { roleId }, options);
+    public Task RemoveRoleAsync(uint roleId, RequestOptions? options = null) =>
+        RemoveRolesAsync(new[] { roleId }, options);
 
     /// <inheritdoc />
     /// <note type="warning">
@@ -352,8 +352,8 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRoleAsync(IRole role, RequestOptions options = null)
-        => RemoveRoleAsync(role.Id, options);
+    public Task RemoveRoleAsync(IRole role, RequestOptions? options = null) =>
+        RemoveRoleAsync(role.Id, options);
 
     /// <inheritdoc />
     /// <note type="warning">
@@ -361,8 +361,8 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions options = null)
-        => UserHelper.RemoveRolesAsync(this, Kook, roleIds, options);
+    public Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null) =>
+        UserHelper.RemoveRolesAsync(this, Kook, roleIds, options);
 
     /// <inheritdoc />
     /// <note type="warning">
@@ -370,32 +370,32 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
-    public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions options = null)
-        => RemoveRolesAsync(roles.Select(x => x.Id));
+    public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null) =>
+        RemoveRolesAsync(roles.Select(x => x.Id));
 
     /// <inheritdoc />
-    public Task MuteAsync(RequestOptions options = null)
-        => GuildHelper.MuteUserAsync(this, Kook, options);
+    public Task MuteAsync(RequestOptions? options = null) =>
+        GuildHelper.MuteUserAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task DeafenAsync(RequestOptions options = null)
-        => GuildHelper.DeafenUserAsync(this, Kook, options);
+    public Task DeafenAsync(RequestOptions? options = null) =>
+        GuildHelper.DeafenUserAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task UnmuteAsync(RequestOptions options = null)
-        => GuildHelper.UnmuteUserAsync(this, Kook, options);
+    public Task UnmuteAsync(RequestOptions? options = null) =>
+        GuildHelper.UnmuteUserAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task UndeafenAsync(RequestOptions options = null)
-        => GuildHelper.UndeafenUserAsync(this, Kook, options);
+    public Task UndeafenAsync(RequestOptions? options = null) =>
+        GuildHelper.UndeafenUserAsync(this, Kook, options);
 
     /// <inheritdoc cref="IGuildUser.GetConnectedVoiceChannelsAsync"/>
-    public async Task<IReadOnlyCollection<SocketVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions options = null)
+    public async Task<IReadOnlyCollection<SocketVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions? options = null)
     {
         IReadOnlyCollection<SocketVoiceChannel> channels =
             await SocketUserHelper.GetConnectedChannelsAsync(this, Kook, options).ConfigureAwait(false);
-        foreach (SocketVoiceChannel channel in channels) channel.Guild.AddOrUpdateVoiceState(Id, channel.Id);
-
+        foreach (SocketVoiceChannel channel in channels)
+            channel.Guild.AddOrUpdateVoiceState(Id, channel.Id);
         return channels;
     }
 
@@ -407,12 +407,12 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// <returns>
     ///     A task that represents the asynchronous reloading operation.
     /// </returns>
-    public Task UpdateAsync(RequestOptions options = null)
-        => SocketUserHelper.UpdateAsync(this, Kook, options);
+    public Task UpdateAsync(RequestOptions? options = null) =>
+        SocketUserHelper.UpdateAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public ChannelPermissions GetPermissions(IGuildChannel channel)
-        => new(Permissions.ResolveChannel(Guild, this, channel, GuildPermissions.RawValue));
+    public ChannelPermissions GetPermissions(IGuildChannel channel) =>
+        new(Permissions.ResolveChannel(Guild, this, channel, GuildPermissions.RawValue));
 
     #endregion
 
@@ -428,18 +428,21 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     IReadOnlyCollection<uint> IGuildUser.RoleIds => _roleIds;
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IVoiceChannel>> IGuildUser.GetConnectedVoiceChannelsAsync(RequestOptions options)
-        => await GetConnectedVoiceChannelsAsync(options).ConfigureAwait(false);
+    async Task<IReadOnlyCollection<IVoiceChannel>> IGuildUser.GetConnectedVoiceChannelsAsync(RequestOptions? options) =>
+        await GetConnectedVoiceChannelsAsync(options).ConfigureAwait(false);
 
     #endregion
 
     #region IVoiceState
 
     /// <inheritdoc />
-    IVoiceChannel IVoiceState.VoiceChannel => VoiceChannel;
+    IVoiceChannel? IVoiceState.VoiceChannel => VoiceChannel;
 
     #endregion
 
-    private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ?? false ? ", Bot" : "")}, Guild)";
-    internal new SocketGuildUser Clone() => MemberwiseClone() as SocketGuildUser;
+    private string DebuggerDisplay =>
+        $"{this.UsernameAndIdentifyNumber(Kook.FormatUsersInBidirectionalUnicode)} ({Id}{
+            (IsBot ?? false ? ", Bot" : "")}, Guild)";
+
+    internal new SocketGuildUser Clone() => (SocketGuildUser)MemberwiseClone();
 }

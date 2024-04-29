@@ -27,7 +27,7 @@ public interface IAttachment
     /// <returns>
     ///     A <c>string</c> containing the full filename of this attachment.
     /// </returns>
-    string Filename { get; }
+    string? Filename { get; }
 
     /// <summary>
     ///     Gets the file size of the attachment.
@@ -45,7 +45,7 @@ public interface IAttachment
     ///     A <c>string</c> representing the file type of the attachment;
     ///     <c>null</c> if the file type is unknown or not applicable.
     /// </returns>
-    string FileType { get; }
+    string? FileType { get; }
 
     /// <summary>
     ///     Gets the duration of the attachment.

@@ -35,6 +35,15 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "SolutionItems", "{55F21D65-BA1A-4A4B-B370-FD2CA0204EB2}"
 	ProjectSection(SolutionItems) = preProject
 		Kook.Net.targets = Kook.Net.targets
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		global.json = global.json
+		CHANGELOG.md = CHANGELOG.md
+		LICENSE = LICENSE
+		README.md = README.md
+		THIRD-PARTY-NOTICES.txt = THIRD-PARTY-NOTICES.txt
+		Kook.Net.Test.targets = Kook.Net.Test.targets
+		Kook.Net.Sample.targets = Kook.Net.Sample.targets
 	EndProjectSection
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Kook.Net.Samples.VisualBasic", "samples\Kook.Net.Samples.VisualBasic\Kook.Net.Samples.VisualBasic.vbproj", "{43C91115-7D09-4A28-95CD-380C3B00EAE0}"

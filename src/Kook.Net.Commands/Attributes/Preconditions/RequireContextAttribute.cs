@@ -20,7 +20,7 @@ public enum ContextType
 /// <summary>
 ///     Requires the command to be invoked in a specified context (e.g. in guild, DM).
 /// </summary>
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 public class RequireContextAttribute : PreconditionAttribute
 {
     /// <summary>
@@ -29,7 +29,7 @@ public class RequireContextAttribute : PreconditionAttribute
     public ContextType Contexts { get; }
 
     /// <inheritdoc />
-    public override string ErrorMessage { get; set; }
+    public override string? ErrorMessage { get; set; }
 
     /// <summary> Requires the command to be invoked in the specified context. </summary>
     /// <param name="contexts">The type of context the command can be invoked in. Multiple contexts can be specified by ORing the contexts together.</param>
@@ -43,20 +43,23 @@ public class RequireContextAttribute : PreconditionAttribute
     ///     }
     /// </code>
     /// </example>
-    public RequireContextAttribute(ContextType contexts) => Contexts = contexts;
+    public RequireContextAttribute(ContextType contexts)
+    {
+        Contexts = contexts;
+    }
 
     /// <inheritdoc />
     public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
     {
         bool isValid = false;
+        if ((Contexts & ContextType.Guild) != 0)
+            isValid = context.Channel is IGuildChannel;
+        if ((Contexts & ContextType.DM) != 0)
+            isValid = isValid || context.Channel is IDMChannel;
 
-        if ((Contexts & ContextType.Guild) != 0) isValid = context.Channel is IGuildChannel;
-
-        if ((Contexts & ContextType.DM) != 0) isValid = isValid || context.Channel is IDMChannel;
-
-        if (isValid)
-            return Task.FromResult(PreconditionResult.FromSuccess());
-        else
-            return Task.FromResult(PreconditionResult.FromError(ErrorMessage ?? $"Invalid context for command; accepted contexts: {Contexts}."));
+        PreconditionResult preconditionResult = isValid
+            ? PreconditionResult.FromSuccess()
+            : PreconditionResult.FromError(ErrorMessage ?? $"Invalid context for command; accepted contexts: {Contexts}.");
+        return Task.FromResult(preconditionResult);
     }
 }

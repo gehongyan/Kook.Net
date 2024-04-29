@@ -78,10 +78,10 @@ public class MentionUtilsTests
     [Fact]
     public void ParseUser_Null()
     {
-        Assert.Throws<ArgumentNullException>(() => MentionUtils.ParseUser(null, TagMode.PlainText));
-        Assert.Throws<ArgumentNullException>(() => MentionUtils.ParseUser(null, TagMode.KMarkdown));
-        Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseUser(null, out _, TagMode.PlainText));
-        Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseUser(null, out _, TagMode.KMarkdown));
+        Assert.Throws<ArgumentNullException>(() => MentionUtils.ParseUser(null!, TagMode.PlainText));
+        Assert.Throws<ArgumentNullException>(() => MentionUtils.ParseUser(null!, TagMode.KMarkdown));
+        Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseUser(null!, out _, TagMode.PlainText));
+        Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseUser(null!, out _, TagMode.KMarkdown));
     }
 
     [Theory]
@@ -114,10 +114,10 @@ public class MentionUtilsTests
     [Fact]
     public void ParseChannel_Null()
     {
-        Assert.Throws<ArgumentNullException>(() => MentionUtils.ParseChannel(null, TagMode.PlainText));
-        Assert.Throws<ArgumentNullException>(() => MentionUtils.ParseChannel(null, TagMode.KMarkdown));
-        Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseChannel(null, out _, TagMode.PlainText));
-        Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseChannel(null, out _, TagMode.KMarkdown));
+        Assert.Throws<ArgumentNullException>(() => MentionUtils.ParseChannel(null!, TagMode.PlainText));
+        Assert.Throws<ArgumentNullException>(() => MentionUtils.ParseChannel(null!, TagMode.KMarkdown));
+        Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseChannel(null!, out _, TagMode.PlainText));
+        Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseChannel(null!, out _, TagMode.KMarkdown));
     }
 
     [Theory]
@@ -150,9 +150,9 @@ public class MentionUtilsTests
     [Fact]
     public void ParseRole_Null()
     {
-        Assert.Throws<ArgumentNullException>(() => MentionUtils.ParseRole(null, TagMode.PlainText));
-        Assert.Throws<ArgumentNullException>(() => MentionUtils.ParseRole(null, TagMode.KMarkdown));
-        Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseRole(null, out _, TagMode.PlainText));
-        Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseRole(null, out _, TagMode.KMarkdown));
+        Assert.Throws<ArgumentNullException>(() => MentionUtils.ParseRole(null!, TagMode.PlainText));
+        Assert.Throws<ArgumentNullException>(() => MentionUtils.ParseRole(null!, TagMode.KMarkdown));
+        Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseRole(null!, out _, TagMode.PlainText));
+        Assert.Throws<ArgumentNullException>(() => MentionUtils.TryParseRole(null!, out _, TagMode.KMarkdown));
     }
 }

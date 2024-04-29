@@ -8,16 +8,17 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based category channel.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
 {
     #region SocketCategoryChannel
 
     /// <inheritdoc />
-    public override IReadOnlyCollection<SocketGuildUser> Users
-        => Guild.Users.Where(x => Permissions.GetValue(
+    public override IReadOnlyCollection<SocketGuildUser> Users => Guild.Users
+        .Where(x => Permissions.GetValue(
             Permissions.ResolveChannel(Guild, x, this, Permissions.ResolveGuild(Guild, x)),
-            ChannelPermission.ViewChannel)).ToImmutableArray();
+            ChannelPermission.ViewChannel))
+        .ToImmutableArray();
 
     /// <summary>
     ///     Gets the child channels of this category.
@@ -26,12 +27,14 @@ public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
     ///     A read-only collection of <see cref="SocketGuildChannel" /> whose
     ///     <see cref="Kook.INestedChannel.CategoryId" /> matches the identifier of this category channel.
     /// </returns>
-    public IReadOnlyCollection<SocketGuildChannel> Channels
-        => Guild.Channels.Where(x => x is INestedChannel nestedChannel && nestedChannel.CategoryId == Id).ToImmutableArray();
+    public IReadOnlyCollection<SocketGuildChannel> Channels =>
+        [..Guild.Channels.Where(x => x is INestedChannel nestedChannel && nestedChannel.CategoryId == Id)];
 
     internal SocketCategoryChannel(KookSocketClient kook, ulong id, SocketGuild guild)
-        : base(kook, id, guild) =>
+        : base(kook, id, guild)
+    {
         Type = ChannelType.Category;
+    }
 
     internal static new SocketCategoryChannel Create(SocketGuild guild, ClientState state, Model model)
     {
@@ -45,39 +48,35 @@ public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
     #region Users
 
     /// <inheritdoc />
-    public override SocketGuildUser GetUser(ulong id)
+    public override SocketGuildUser? GetUser(ulong id)
     {
-        SocketGuildUser user = Guild.GetUser(id);
-        if (user != null)
-        {
-            ulong guildPerms = Permissions.ResolveGuild(Guild, user);
-            ulong channelPerms = Permissions.ResolveChannel(Guild, user, this, guildPerms);
-            if (Permissions.GetValue(channelPerms, ChannelPermission.ViewChannel)) return user;
-        }
-
-        return null;
+        if (Guild.GetUser(id) is not { } user) return null;
+        ulong guildPerms = Permissions.ResolveGuild(Guild, user);
+        ulong channelPerms = Permissions.ResolveChannel(Guild, user, this, guildPerms);
+        return Permissions.GetValue(channelPerms, ChannelPermission.ViewChannel) ? user : null;
     }
 
     #endregion
 
     private string DebuggerDisplay => $"{Name} ({Id}, Category)";
-    internal new SocketCategoryChannel Clone() => MemberwiseClone() as SocketCategoryChannel;
+    internal new SocketCategoryChannel Clone() => (SocketCategoryChannel)MemberwiseClone();
 
     #region IGuildChannel
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode,
-        RequestOptions options) =>
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(
+        CacheMode mode, RequestOptions? options) =>
         mode == CacheMode.AllowDownload
             ? ChannelHelper.GetUsersAsync(this, Guild, Kook, KookConfig.MaxUsersPerBatch, 1, options)
             : ImmutableArray.Create<IReadOnlyCollection<IGuildUser>>(Users).ToAsyncEnumerable();
 
     /// <inheritdoc />
-    async Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    async Task<IGuildUser?> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options)
     {
-        SocketGuildUser user = GetUser(id);
-        if (user is not null || mode == CacheMode.CacheOnly) return user;
-
+        if (GetUser(id) is { } user)
+            return user;
+        if (mode == CacheMode.CacheOnly)
+            return null;
         return await ChannelHelper.GetUserAsync(this, Guild, Kook, id, options).ConfigureAwait(false);
     }
 
@@ -86,17 +85,18 @@ public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
     #region IChannel
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options) =>
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options) =>
         mode == CacheMode.AllowDownload
             ? ChannelHelper.GetUsersAsync(this, Guild, Kook, KookConfig.MaxUsersPerBatch, 1, options)
             : ImmutableArray.Create<IReadOnlyCollection<IGuildUser>>(Users).ToAsyncEnumerable();
 
     /// <inheritdoc />
-    async Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
+    async Task<IUser?> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options)
     {
-        SocketGuildUser user = GetUser(id);
-        if (user is not null || mode == CacheMode.CacheOnly) return user;
-
+        if (GetUser(id) is { } user)
+            return user;
+        if (mode == CacheMode.CacheOnly)
+            return null;
         return await ChannelHelper.GetUserAsync(this, Guild, Kook, id, options).ConfigureAwait(false);
     }
 

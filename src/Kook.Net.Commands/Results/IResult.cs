@@ -20,7 +20,7 @@ public interface IResult
     /// <returns>
     ///     A string containing the error reason.
     /// </returns>
-    string ErrorReason { get; }
+    string? ErrorReason { get; }
 
     /// <summary>
     ///     Indicates whether the operation was successful or not.

@@ -15,7 +15,7 @@ public interface IKookClient : IDisposable
     /// <summary>
     ///     Gets the currently logged-in user.
     /// </summary>
-    ISelfUser CurrentUser { get; }
+    ISelfUser? CurrentUser { get; }
 
     /// <summary>
     ///     Gets the token type of the logged-in user.
@@ -59,7 +59,7 @@ public interface IKookClient : IDisposable
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
     ///     with the identifier; <c>null</c> when the channel cannot be found.
     /// </returns>
-    Task<IChannel> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IChannel?> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a direct message channel.
@@ -71,7 +71,7 @@ public interface IKookClient : IDisposable
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of direct-message channels that the user currently partakes in.
     /// </returns>
-    Task<IDMChannel> GetDMChannelAsync(Guid chatCode, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IDMChannel?> GetDMChannelAsync(Guid chatCode, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a collection of direct message channels opened in this session.
@@ -89,7 +89,7 @@ public interface IKookClient : IDisposable
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of direct-message channels that the user currently partakes in.
     /// </returns>
-    Task<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 
@@ -105,7 +105,7 @@ public interface IKookClient : IDisposable
     ///     A task that represents the asynchronous get operation. The task result contains the guild associated
     ///     with the identifier; <c>null</c> when the guild cannot be found.
     /// </returns>
-    Task<IGuild> GetGuildAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IGuild?> GetGuildAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a collection of guilds that the user is currently in.
@@ -116,7 +116,7 @@ public interface IKookClient : IDisposable
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of guilds that the current user is in.
     /// </returns>
-    Task<IReadOnlyCollection<IGuild>> GetGuildsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IReadOnlyCollection<IGuild>> GetGuildsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 
@@ -132,7 +132,7 @@ public interface IKookClient : IDisposable
     ///     A task that represents the asynchronous get operation. The task result contains the user associated with
     ///     the identifier; <c>null</c> if the user is not found.
     /// </returns>
-    Task<IUser> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IUser?> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a user.
@@ -144,7 +144,7 @@ public interface IKookClient : IDisposable
     ///     A task that represents the asynchronous get operation. The task result contains the user associated with
     ///     the name and the identifyNumber; <c>null</c> if the user is not found.
     /// </returns>
-    Task<IUser> GetUserAsync(string username, string identifyNumber, RequestOptions options = null);
+    Task<IUser?> GetUserAsync(string username, string identifyNumber, RequestOptions? options = null);
 
     #endregion
 
@@ -159,7 +159,7 @@ public interface IKookClient : IDisposable
     ///     A task that represents the asynchronous get operation. The task result contains a collection of users
     ///     that are friends with the current user.
     /// </returns>
-    Task<IReadOnlyCollection<IUser>> GetFriendsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IReadOnlyCollection<IUser>> GetFriendsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets friend requests.
@@ -170,7 +170,7 @@ public interface IKookClient : IDisposable
     ///     A task that represents the asynchronous get operation. The task result contains a collection of users
     ///     that requested to be friends with the current user.
     /// </returns>
-    Task<IReadOnlyCollection<IFriendRequest>> GetFriendRequestsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IReadOnlyCollection<IFriendRequest>> GetFriendRequestsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets blocked users.
@@ -181,7 +181,7 @@ public interface IKookClient : IDisposable
     ///     A task that represents the asynchronous get operation. The task result contains a collection of users
     ///     that are blocked by the current user.
     /// </returns>
-    Task<IReadOnlyCollection<IUser>> GetBlockedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IReadOnlyCollection<IUser>> GetBlockedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 }

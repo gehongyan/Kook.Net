@@ -5,11 +5,8 @@ namespace Kook.API.Rest;
 
 internal class BeginActivityParams
 {
-    public BeginActivityParams(ActivityType activityType) => ActivityType = activityType;
-
-    [JsonInclude]
     [JsonPropertyName("data_type")]
-    public ActivityType ActivityType { get; private set; }
+    public required ActivityType ActivityType { get; set; }
 
     // Game
     [JsonPropertyName("id")]
@@ -21,8 +18,8 @@ internal class BeginActivityParams
     public MusicProvider MusicProvider { get; set; }
 
     [JsonPropertyName("singer")]
-    public string Signer { get; set; }
+    public string? Signer { get; set; }
 
     [JsonPropertyName("music_name")]
-    public string MusicName { get; set; }
+    public string? MusicName { get; set; }
 }

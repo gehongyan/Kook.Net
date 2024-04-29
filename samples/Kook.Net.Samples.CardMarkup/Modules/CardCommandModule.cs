@@ -10,7 +10,7 @@ public class CardCommandModule : ModuleBase<SocketCommandContext>
     [Command("vote")]
     public async Task SendTestVoteCard()
     {
-        var allUsers = new List<User>
+        List<User> allUsers = new List<User>
         {
             new() { Avatar = "https://img.kaiheila.cn/avatars/2020-09/ov2wQ8r2qZ0dc07i.gif/icon" },
             new() { Avatar = "https://img.kaiheila.cn/avatars/2020-11/LjtEMkmH3U0hs0hs.jpg/icon" },
@@ -23,7 +23,7 @@ public class CardCommandModule : ModuleBase<SocketCommandContext>
             new() { Avatar = "https://img.kaiheila.cn/avatars/2020-06/SbFPjoBb5202s02s.jpg/icon" }
         };
 
-        var model = new Vote
+        Vote model = new Vote
         {
             Title = "朋友们，今晚开黑玩什么游戏？",
             Games =
@@ -49,11 +49,12 @@ public class CardCommandModule : ModuleBase<SocketCommandContext>
             ]
         };
 
-        var cards = await model.RenderVoteAsync();
+        IEnumerable<ICard>? cards = await model.RenderVoteAsync();
 
         if (cards is null)
         {
             await ReplyTextAsync("Failed to render cards, check the logs.");
+            return;
         }
 
         await ReplyCardsAsync(cards);
@@ -62,14 +63,14 @@ public class CardCommandModule : ModuleBase<SocketCommandContext>
     [Command("big-card")]
     public async Task SendBigCard()
     {
-        var cards = await TemplateExtensions.RenderBigCard();
+        IEnumerable<ICard> cards = await TemplateExtensions.RenderBigCard();
         await ReplyCardsAsync(cards);
     }
 
     [Command("multiple")]
     public async Task SendMultipleCards()
     {
-        var cards = await TemplateExtensions.RenderMultipleCards();
+        IEnumerable<ICard> cards = await TemplateExtensions.RenderMultipleCards();
         await ReplyCardsAsync(cards);
     }
 }

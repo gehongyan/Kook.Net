@@ -7,7 +7,7 @@ internal class CardThemeConverter : JsonConverter<CardTheme>
 {
     public override CardTheme Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string theme = reader.GetString();
+        string? theme = reader.GetString();
         return theme switch
         {
             "primary" => CardTheme.Primary,

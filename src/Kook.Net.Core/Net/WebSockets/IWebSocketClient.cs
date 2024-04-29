@@ -8,17 +8,17 @@ public interface IWebSocketClient : IDisposable
     /// <summary>
     ///     Fired when a binary message is received.
     /// </summary>
-    event Func<byte[], int, int, Task> BinaryMessage;
+    event Func<byte[], int, int, Task>? BinaryMessage;
 
     /// <summary>
     ///     Fired when a text message is received.
     /// </summary>
-    event Func<string, Task> TextMessage;
+    event Func<string, Task>? TextMessage;
 
     /// <summary>
     ///     Fired when the WebSocket connection is closed.
     /// </summary>
-    event Func<Exception, Task> Closed;
+    event Func<Exception, Task>? Closed;
 
     /// <summary>
     ///     Sets a header to be sent with the future requests.

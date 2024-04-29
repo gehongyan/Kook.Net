@@ -8,7 +8,7 @@ internal class CreatePlainTransportResponse
     public Guid Id { get; set; }
 
     [JsonPropertyName("ip")]
-    public string Ip { get; set; }
+    public required string Ip { get; set; }
 
     [JsonPropertyName("port")]
     public int Port { get; set; }

@@ -5,5 +5,5 @@ namespace Kook.API;
 internal class ImageGroupModule : ModuleBase
 {
     [JsonPropertyName("elements")]
-    public ImageElement[] Elements { get; set; }
+    public required ImageElement[] Elements { get; set; }
 }

@@ -1,7 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
     <VersionPrefix>0.7.0</VersionPrefix>
     <IsPackable>false</IsPackable>
     <IsTrimmable>false</IsTrimmable>
@@ -26,6 +26,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+
   <PropertyGroup>
     <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
@@ -38,6 +39,7 @@
   <ItemGroup>
     <None Include="../../README.md" Pack="true" PackagePath="\"/>
     <None Include="../../LICENSE" Pack="true" PackagePath="\"/>
+    <None Include="../../THIRD-PARTY-NOTICES.txt" Pack="true" PackagePath="\"/>
     <None Include="../../docs/logo/Logo_Small.png" Pack="true" PackagePath=""/>
   </ItemGroup>
 </Project>

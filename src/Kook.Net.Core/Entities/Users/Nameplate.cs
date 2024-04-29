@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
 /// <summary>
 ///     Representing a nameplate an <see cref="IUser"/> can have.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Nameplate : IEquatable<Nameplate>
 {
     /// <summary>
@@ -51,11 +52,12 @@ public class Nameplate : IEquatable<Nameplate>
     #region IEquatable
 
     /// <inheritdoc />
-    public bool Equals(Nameplate other)
+    public bool Equals([NotNullWhen(true)] Nameplate? other)
     {
-        if (ReferenceEquals(null, other)) return false;
-
-        if (ReferenceEquals(this, other)) return true;
+        if (ReferenceEquals(null, other))
+            return false;
+        if (ReferenceEquals(this, other))
+            return true;
 
         return Name == other.Name
             && Type == other.Type
@@ -64,13 +66,14 @@ public class Nameplate : IEquatable<Nameplate>
     }
 
     /// <inheritdoc />
-    public override bool Equals(object obj)
+    public override bool Equals([NotNullWhen(true)] object? obj)
     {
-        if (ReferenceEquals(null, obj)) return false;
-
-        if (ReferenceEquals(this, obj)) return true;
-
-        if (obj.GetType() != GetType()) return false;
+        if (ReferenceEquals(null, obj))
+            return false;
+        if (ReferenceEquals(this, obj))
+            return true;
+        if (obj.GetType() != GetType())
+            return false;
 
         return Equals((Nameplate)obj);
     }

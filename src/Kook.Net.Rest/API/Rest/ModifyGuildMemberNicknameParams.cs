@@ -6,11 +6,11 @@ namespace Kook.API.Rest;
 internal class ModifyGuildMemberNicknameParams
 {
     [JsonPropertyName("guild_id")]
-    public ulong GuildId { get; set; }
+    public required ulong GuildId { get; set; }
 
     [JsonPropertyName("nickname")]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-    public string Nickname { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? Nickname { get; set; }
 
     [JsonPropertyName("user_id")]
     [JsonConverter(typeof(NullableUInt64Converter))]

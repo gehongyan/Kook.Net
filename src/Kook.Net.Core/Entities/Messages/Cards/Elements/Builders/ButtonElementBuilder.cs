@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Kook.Utils;
 
 namespace Kook;
@@ -5,10 +6,8 @@ namespace Kook;
 /// <summary>
 ///     An element builder to build a <see cref="ButtonElement"/>.
 /// </summary>
-public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBuilder>
+public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBuilder>, IEquatable<IElementBuilder>
 {
-    private IElementBuilder _text;
-
     /// <summary>
     ///     Gets the maximum button text length allowed by Kook.
     /// </summary>
@@ -29,13 +28,12 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     /// <param name="value"> The value of the button.</param>
     /// <param name="click"> The type of the click event.</param>
     public ButtonElementBuilder(string text, ButtonTheme theme = ButtonTheme.Primary,
-        string value = null,
-        ButtonClickEventType click = ButtonClickEventType.None)
+        string? value = null, ButtonClickEventType click = ButtonClickEventType.None)
     {
-        WithText(text);
-        WithTheme(theme);
-        WithValue(value);
-        WithClick(click);
+        Text = new PlainTextElementBuilder(text);
+        Theme = theme;
+        Value = value;
+        Click = click;
     }
 
     /// <summary>
@@ -64,7 +62,7 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     ///     If the <see cref="Click"/> is set to <see cref="ButtonClickEventType.ReturnValue"/>,
     ///     the value of the property will be returned when the button is clicked.
     /// </remarks>
-    public string Value { get; set; }
+    public string? Value { get; set; }
 
     /// <summary>
     ///     Gets or sets the type of the click event.
@@ -80,38 +78,10 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     /// <returns>
     ///     An <see cref="IElementBuilder"/> that represents the text of the button.
     /// </returns>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The <paramref name="value"/> is neither a <see cref="PlainTextElementBuilder"/> nor a <see cref="KMarkdownElementBuilder"/>.
-    /// </exception>
     /// <remarks>
     ///     This property only takes a <see cref="PlainTextElementBuilder"/> or a <see cref="KMarkdownElementBuilder"/>.
     /// </remarks>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The length of <paramref name="value"/> is greater than <see cref="MaxButtonTextLength"/>.
-    /// </exception>
-    public IElementBuilder Text
-    {
-        get => _text;
-        set
-        {
-            string text = value switch
-            {
-                PlainTextElementBuilder plainText => plainText.Content,
-                KMarkdownElementBuilder kMarkdown => kMarkdown.Content,
-                _ => throw new ArgumentException(
-                    $"The text of a button must be a {nameof(PlainTextElementBuilder)} or a {nameof(KMarkdownElementBuilder)}.",
-                    nameof(value))
-            };
-            if (string.IsNullOrEmpty(text)) throw new ArgumentException("The content cannot be null or empty.", nameof(value));
-
-            if (text.Length > MaxButtonTextLength)
-                throw new ArgumentException(
-                    $"The length of button text must be less than or equal to {MaxButtonTextLength}.",
-                    nameof(value));
-
-            _text = value;
-        }
-    }
+    public IElementBuilder? Text { get; set; }
 
     /// <summary>
     ///     Sets the theme of a <see cref="ButtonElement"/>.
@@ -133,7 +103,7 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public ButtonElementBuilder WithValue(string value)
+    public ButtonElementBuilder WithValue(string? value)
     {
         Value = value;
         return this;
@@ -195,11 +165,11 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public ButtonElementBuilder WithText<T>(Action<T> action = null)
+    public ButtonElementBuilder WithText<T>(Action<T> action)
         where T : IElementBuilder, new()
     {
         T text = new();
-        action?.Invoke(text);
+        action.Invoke(text);
         Text = text;
         return this;
     }
@@ -222,8 +192,8 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     {
         Text = isKMarkdown switch
         {
-            false => new PlainTextElementBuilder().WithContent(text),
-            true => new KMarkdownElementBuilder().WithContent(text)
+            false => new PlainTextElementBuilder(text),
+            true => new KMarkdownElementBuilder(text)
         };
         return this;
     }
@@ -234,45 +204,89 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     /// <returns>
     ///     A <see cref="ButtonElement"/> represents the built element object.
     /// </returns>
+    /// <exception cref="ArgumentException">
+    ///     The <see cref="Text"/> is neither a <see cref="PlainTextElementBuilder"/> nor a <see cref="KMarkdownElementBuilder"/>.
+    /// </exception>
+    /// <exception cref="ArgumentNullException">
+    ///     The <see cref="Text"/> is null.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     The <see cref="Text"/> is empty.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     The length of <see cref="Text"/> is greater than <see cref="MaxButtonTextLength"/>.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     The <see cref="Value"/> of a button with a link event type is null or empty.
+    /// </exception>
+    [MemberNotNull(nameof(Text))]
     public ButtonElement Build()
     {
-        if (Click == ButtonClickEventType.Link && !UrlValidation.Validate(Value))
-            throw new ArgumentException("The value of a button with a link event type cannot be null or empty.", nameof(Value));
+        string? text = Text switch
+        {
+            PlainTextElementBuilder plainText => plainText.Content,
+            KMarkdownElementBuilder kMarkdown => kMarkdown.Content,
+            _ => throw new ArgumentException(
+                $"The text of a button must be a {nameof(PlainTextElementBuilder)} or a {nameof(KMarkdownElementBuilder)}.",
+                nameof(Text))
+        };
 
-        return new ButtonElement(Theme, Value, Click, Text?.Build());
+        if (text is null)
+            throw new ArgumentNullException(nameof(Text), "The text of a button cannot be null.");
+
+        if (string.IsNullOrEmpty(text))
+            throw new ArgumentException("The text of a button cannot be empty.", nameof(Text));
+
+        if (text.Length > MaxButtonTextLength)
+        {
+            throw new ArgumentException(
+                $"The length of button text must be less than or equal to {MaxButtonTextLength}.",
+                nameof(Text));
+        }
+
+        if (Click == ButtonClickEventType.Link)
+        {
+            if (Value is null || string.IsNullOrEmpty(Value))
+                throw new ArgumentException("The value of a button with a link event type cannot be null or empty.", nameof(Value));
+            UrlValidation.Validate(Value);
+        }
+
+        return new ButtonElement(Theme, Value, Click, Text.Build());
     }
 
     /// <inheritdoc />
+    [MemberNotNull(nameof(Text))]
     IElement IElementBuilder.Build() => Build();
 
     /// <summary>
     ///     Determines whether the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(ButtonElementBuilder left, ButtonElementBuilder right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(ButtonElementBuilder? left, ButtonElementBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="ButtonElementBuilder"/> is not equal to the current <see cref="ButtonElementBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="ButtonElementBuilder"/> is not equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(ButtonElementBuilder left, ButtonElementBuilder right)
-        => !(left == right);
+    public static bool operator !=(ButtonElementBuilder? left, ButtonElementBuilder? right) =>
+        !(left == right);
 
     /// <summary>
     ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="ButtonElementBuilder"/>.
     /// </summary>
     /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="ButtonElementBuilder"/>. </param>
     /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>. </returns>
-    public override bool Equals(object obj)
-        => obj is ButtonElementBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is ButtonElementBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>.</summary>
     /// <param name="buttonElementBuilder">The <see cref="ButtonElementBuilder"/> to compare with the current <see cref="ButtonElementBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(ButtonElementBuilder buttonElementBuilder)
+    public bool Equals([NotNullWhen(true)] ButtonElementBuilder? buttonElementBuilder)
     {
-        if (buttonElementBuilder is null) return false;
+        if (buttonElementBuilder is null)
+            return false;
 
         return Type == buttonElementBuilder.Type
             && Theme == buttonElementBuilder.Theme
@@ -283,4 +297,7 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
 
     /// <inheritdoc />
     public override int GetHashCode() => base.GetHashCode();
+
+    bool IEquatable<IElementBuilder>.Equals([NotNullWhen(true)] IElementBuilder? elementBuilder) =>
+        Equals(elementBuilder as ButtonElementBuilder);
 }

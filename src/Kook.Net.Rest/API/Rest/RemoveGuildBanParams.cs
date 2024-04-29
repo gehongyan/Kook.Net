@@ -5,8 +5,8 @@ namespace Kook.API.Rest;
 internal class RemoveGuildBanParams
 {
     [JsonPropertyName("guild_id")]
-    public ulong GuildId { get; set; }
+    public required ulong GuildId { get; set; }
 
     [JsonPropertyName("target_id")]
-    public ulong UserId { get; set; }
+    public required ulong UserId { get; set; }
 }

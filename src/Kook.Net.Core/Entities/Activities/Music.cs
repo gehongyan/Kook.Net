@@ -13,10 +13,10 @@ public class Music
     /// <summary>
     ///     Gets or sets the music ID.
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     /// <summary>
     ///     Gets or sets the singer.
     /// </summary>
-    public string Singer { get; set; }
+    public string? Singer { get; set; }
 }

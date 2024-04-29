@@ -18,5 +18,5 @@ public interface IUpdateable
     ///         and replace the current object's properties with the new data.
     ///     </note>
     /// </remarks>
-    Task UpdateAsync(RequestOptions options = null);
+    Task UpdateAsync(RequestOptions? options = null);
 }

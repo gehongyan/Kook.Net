@@ -5,8 +5,8 @@ namespace Kook.API.Rest;
 internal class DeleteGuildRoleParams
 {
     [JsonPropertyName("guild_id")]
-    public ulong GuildId { get; set; }
+    public required ulong GuildId { get; set; }
 
     [JsonPropertyName("role_id")]
-    public uint Id { get; set; }
+    public required uint Id { get; set; }
 }

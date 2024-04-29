@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     An image-based emote that is attached to a guild.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class GuildEmote : Emote
 {
     internal GuildEmote(string id, string name, bool? animated, ulong guildId, ulong? creatorId)
@@ -42,5 +42,5 @@ public class GuildEmote : Emote
     /// </returns>
     public override string ToString() => $"(emj){Name}(emj)[{Id}]";
 
-    internal GuildEmote Clone() => MemberwiseClone() as GuildEmote;
+    internal GuildEmote Clone() => (GuildEmote) MemberwiseClone();
 }

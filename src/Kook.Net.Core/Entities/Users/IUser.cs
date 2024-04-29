@@ -18,7 +18,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// <summary>
     ///     Gets the per-username unique ID for this user.
     /// </summary>
-    ushort? IdentifyNumberValue { get; }
+    ushort IdentifyNumberValue { get; }
 
     /// <summary>
     ///     Gets whether this user is a bot; <c>null</c> if unknown.
@@ -53,7 +53,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// <summary>
     ///     Gets the link to this user's banner.
     /// </summary>
-    string Banner { get; }
+    string? Banner { get; }
 
     /// <summary>
     ///     Gets whether this user enabled denoise feature; <c>null</c> if unknown.
@@ -63,7 +63,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// <summary>
     ///     Get the tag this user has.
     /// </summary>
-    UserTag UserTag { get; }
+    UserTag? UserTag { get; }
 
     /// <summary>
     ///     Gets the nameplates this user has.
@@ -73,7 +73,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// <summary>
     ///     Gets whether this user is a system user.
     /// </summary>
-    bool? IsSystemUser { get; }
+    bool IsSystemUser { get; }
 
     /// <summary>
     ///     Creates the direct message channel of this user.
@@ -93,7 +93,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     ///     A task that represents the asynchronous operation for getting or creating a DM channel. The task result
     ///     contains the DM channel associated with this user.
     /// </returns>
-    Task<IDMChannel> CreateDMChannelAsync(RequestOptions options = null);
+    Task<IDMChannel> CreateDMChannelAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the intimacy information with this user.
@@ -103,7 +103,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     ///     A task that represents the asynchronous operation for getting the intimacy information. The task result
     ///     contains the intimacy information associated with this user.
     /// </returns>
-    Task<IIntimacy> GetIntimacyAsync(RequestOptions options = null);
+    Task<IIntimacy> GetIntimacyAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Updates the intimacy information with this user.
@@ -111,33 +111,33 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// <param name="func">A delegate containing the properties to modify the <see cref="IIntimacy"/> with.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>A task that represents the asynchronous operation for updating the intimacy information.</returns>
-    Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options = null);
+    Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the friend state with this user.
     /// </summary>
     /// <param name="options"> The options to be used when sending the request. </param>
     /// <returns> A task that represents the asynchronous operation for getting the friend state. </returns>
-    Task BlockAsync(RequestOptions options = null);
+    Task BlockAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the friend state with this user.
     /// </summary>
     /// <param name="options"> The options to be used when sending the request. </param>
     /// <returns> A task that represents the asynchronous operation for getting the friend state. </returns>
-    Task UnblockAsync(RequestOptions options = null);
+    Task UnblockAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Sends a friend request to this user.
     /// </summary>
     /// <param name="options"> The options to be used when sending the request. </param>
     /// <returns> A task that represents the asynchronous operation for sending the friend request. </returns>
-    Task RequestFriendAsync(RequestOptions options = null);
+    Task RequestFriendAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the friend state with this user.
     /// </summary>
     /// <param name="options"> The options to be used when sending the request. </param>
     /// <returns> A task that represents the asynchronous operation for getting the friend state. </returns>
-    Task RemoveFriendAsync(RequestOptions options = null);
+    Task RemoveFriendAsync(RequestOptions? options = null);
 }

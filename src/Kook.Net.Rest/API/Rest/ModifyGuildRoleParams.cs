@@ -6,14 +6,14 @@ namespace Kook.API.Rest;
 internal class ModifyGuildRoleParams
 {
     [JsonPropertyName("guild_id")]
-    public ulong GuildId { get; set; }
+    public required ulong GuildId { get; set; }
 
     [JsonPropertyName("role_id")]
-    public uint RoleId { get; set; }
+    public required uint RoleId { get; set; }
 
     [JsonPropertyName("name")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     [JsonPropertyName("color")]
     [JsonConverter(typeof(RawValueColorConverter))]

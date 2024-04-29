@@ -21,14 +21,5 @@ internal class UserChat
     public int UnreadCount { get; set; }
 
     [JsonPropertyName("target_info")]
-    public User Recipient { get; set; }
-
-    [JsonPropertyName("is_friend")]
-    public bool? IsFriend { get; set; }
-
-    [JsonPropertyName("is_blocked")]
-    public bool? IsBlocked { get; set; }
-
-    [JsonPropertyName("is_target_blocked")]
-    public bool? IsTargetBlocked { get; set; }
+    public required User Recipient { get; set; }
 }

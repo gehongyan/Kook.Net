@@ -81,15 +81,14 @@ internal static class ParserExtensions
         };
     }
 
-    public static SectionAccessoryMode GetSectionAccessoryMode(this Dictionary<string, string> dictionary)
+    public static SectionAccessoryMode? GetSectionAccessoryMode(this Dictionary<string, string> dictionary)
     {
         string theme = dictionary.GetValueOrDefault("mode", "unspecified");
         return theme switch
         {
-            "unspecified" => SectionAccessoryMode.Unspecified,
             "left" => SectionAccessoryMode.Left,
             "right" => SectionAccessoryMode.Right,
-            _ => SectionAccessoryMode.Unspecified
+            _ => null
         };
     }
 

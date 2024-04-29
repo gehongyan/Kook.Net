@@ -9,14 +9,14 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based user.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public abstract class SocketUser : SocketEntity<ulong>, IUser
 {
     /// <inheritdoc />
     public abstract string Username { get; internal set; }
 
     /// <inheritdoc />
-    public abstract ushort? IdentifyNumberValue { get; internal set; }
+    public abstract ushort IdentifyNumberValue { get; internal set; }
 
     /// <inheritdoc />
     public abstract bool? IsBot { get; internal set; }
@@ -37,25 +37,26 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     public abstract string BuffAvatar { get; internal set; }
 
     /// <inheritdoc />
-    public abstract string Banner { get; internal set; }
+    public abstract string? Banner { get; internal set; }
 
     /// <inheritdoc />
     public abstract bool? IsDenoiseEnabled { get; internal set; }
 
     /// <inheritdoc />
-    public abstract UserTag UserTag { get; internal set; }
+    public abstract UserTag? UserTag { get; internal set; }
 
     /// <inheritdoc />
     public abstract IReadOnlyCollection<Nameplate> Nameplates { get; internal set; }
 
     /// <inheritdoc />
-    public abstract bool? IsSystemUser { get; internal set; }
+    public bool IsSystemUser { get; internal set; }
 
     internal abstract SocketGlobalUser GlobalUser { get; }
+
     internal abstract SocketPresence Presence { get; set; }
 
     /// <inheritdoc />
-    public string IdentifyNumber => IdentifyNumberValue?.ToString("D4");
+    public string IdentifyNumber => IdentifyNumberValue.ToString("D4");
 
     /// <inheritdoc />
     public string KMarkdownMention => MentionUtils.KMarkdownMentionUser(Id);
@@ -77,157 +78,82 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     protected SocketUser(KookSocketClient kook, ulong id)
         : base(kook, id)
     {
+        IsSystemUser = Id == KookConfig.SystemMessageAuthorID;
     }
 
     internal virtual bool Update(ClientState state, API.Gateway.UserUpdateEvent model)
     {
         bool hasChanges = false;
-
-        if (model.Username != Username)
+        hasChanges |= ValueHelper.SetIfChanged(() => Username, x => Username = x, model.Username);
+        if (hasChanges)
         {
-            Username = model.Username;
-            hasChanges = true;
+            foreach (SocketGuildUser current in state.Guilds.Select(x => x.CurrentUser).OfType<SocketGuildUser>())
+                current.UpdateNickname();
         }
 
-        if (model.Avatar != Avatar)
-        {
-            Avatar = model.Avatar;
-            hasChanges = true;
-        }
-
+        hasChanges |= ValueHelper.SetIfChanged(() => Avatar, x => Avatar = x, model.Avatar);
         return hasChanges;
     }
 
     internal virtual bool Update(ClientState state, Model model)
     {
         bool hasChanges = false;
-
-        if (model.Username != Username)
-        {
-            Username = model.Username;
-            hasChanges = true;
-        }
-
-        if (model.IdentifyNumber != IdentifyNumber)
-        {
-            ushort newVal = ushort.Parse(model.IdentifyNumber, NumberStyles.None, CultureInfo.InvariantCulture);
-            if (newVal != IdentifyNumberValue)
-            {
-                IdentifyNumberValue = newVal;
-                hasChanges = true;
-            }
-        }
-
-        if (model.Bot != IsBot)
-        {
-            IsBot = model.Bot;
-            hasChanges = true;
-        }
-
-        if (model.Status == 10 != IsBanned)
-        {
-            IsBanned = model.Status == 10;
-            hasChanges = true;
-        }
-
-        if (model.HasBuff != HasBuff)
-        {
-            HasBuff = model.HasBuff;
-            hasChanges = true;
-        }
-
-        if (model.HasAnnualBuff != HasAnnualBuff)
-        {
-            HasAnnualBuff = model.HasAnnualBuff;
-            hasChanges = true;
-        }
-
-        if (model.Avatar != Avatar)
-        {
-            Avatar = model.Avatar;
-            hasChanges = true;
-        }
-
-        if (model.BuffAvatar != BuffAvatar)
-        {
-            BuffAvatar = model.BuffAvatar;
-            hasChanges = true;
-        }
-
-        if (model.Banner != Banner)
-        {
-            Banner = model.Banner;
-            hasChanges = true;
-        }
-
-        if (model.IsDenoiseEnabled != IsDenoiseEnabled)
-        {
-            IsDenoiseEnabled = model.IsDenoiseEnabled;
-            hasChanges = true;
-        }
-
-        UserTag userTag = model.UserTag.ToEntity();
-        if (model.UserTag is not null && !userTag.Equals(UserTag))
-        {
-            UserTag = userTag;
-            hasChanges = true;
-        }
-
-        IReadOnlyCollection<Nameplate> nameplates = model.Nameplates?.Select(x => x.ToEntity())
-            .ToImmutableList() ?? ImmutableList<Nameplate>.Empty;
-        if (Nameplates is null || !nameplates.SequenceEqual(Nameplates))
-        {
-            Nameplates = nameplates;
-            hasChanges = true;
-        }
-
-        if (model.IsSystemUser != IsSystemUser)
-        {
-            IsSystemUser = model.IsSystemUser;
-            hasChanges = true;
-        }
-
+        hasChanges |= ValueHelper.SetIfChanged(() => Username, x => Username = x, model.Username);
+        hasChanges |= ValueHelper.SetIfChanged(() => IdentifyNumberValue, x => IdentifyNumberValue = x,
+            ushort.Parse(model.IdentifyNumber, NumberStyles.None, CultureInfo.InvariantCulture));
+        hasChanges |= ValueHelper.SetIfChanged(() => IsBot, x => IsBot = x, model.Bot);
+        hasChanges |= ValueHelper.SetIfChanged(() => IsBanned, x => IsBanned = x, model.Status == 10);
+        hasChanges |= ValueHelper.SetIfChanged(() => HasBuff, x => HasBuff = x, model.HasBuff);
+        hasChanges |= ValueHelper.SetIfChanged(() => HasAnnualBuff, x => HasAnnualBuff = x, model.HasAnnualBuff);
+        hasChanges |= ValueHelper.SetIfChanged(() => Avatar, x => Avatar = x, model.Avatar);
+        hasChanges |= ValueHelper.SetIfChanged(() => BuffAvatar, x => BuffAvatar = x, model.BuffAvatar);
+        hasChanges |= ValueHelper.SetIfChanged(() => Banner, x => Banner = x, model.Banner);
+        hasChanges |= ValueHelper.SetIfChanged(() => IsDenoiseEnabled, x => IsDenoiseEnabled = x, model.IsDenoiseEnabled);
+        hasChanges |= ValueHelper.SetIfChanged(() => UserTag, x => UserTag = x, model.UserTag?.ToEntity());
+        hasChanges |= ValueHelper.SetIfChanged(() => Nameplates, x => Nameplates = x,
+            model.Nameplates?.Select(x => x.ToEntity()).ToImmutableList() ?? [],
+            (x, y) => x.SequenceEqual(y));
+        if (model.IsSystemUser.HasValue)
+            hasChanges |= ValueHelper.SetIfChanged(() => IsSystemUser, x => IsSystemUser = x, model.IsSystemUser.Value);
         return hasChanges;
     }
 
     internal virtual void UpdatePresence(bool? isOnline)
     {
-        Presence ??= new SocketPresence();
         Presence.Update(isOnline);
     }
 
-    internal virtual void UpdatePresence(bool? isOnline, string activeClient)
+    internal virtual void UpdatePresence(bool? isOnline, string? activeClient)
     {
-        Presence ??= new SocketPresence();
         Presence.Update(isOnline, activeClient);
     }
 
     /// <inheritdoc cref="IUser.CreateDMChannelAsync(RequestOptions)" />
-    public async Task<SocketDMChannel> CreateDMChannelAsync(RequestOptions options = null)
-        => await SocketUserHelper.CreateDMChannelAsync(this, Kook, options).ConfigureAwait(false);
+    public async Task<SocketDMChannel> CreateDMChannelAsync(RequestOptions? options = null) =>
+        await SocketUserHelper.CreateDMChannelAsync(this, Kook, options).ConfigureAwait(false);
 
     /// <inheritdoc cref="IUser.GetIntimacyAsync(RequestOptions)" />
-    public Task<RestIntimacy> GetIntimacyAsync(RequestOptions options = null)
-        => UserHelper.GetIntimacyAsync(this, Kook, options);
+    public Task<RestIntimacy> GetIntimacyAsync(RequestOptions? options = null) =>
+        UserHelper.GetIntimacyAsync(this, Kook, options);
 
     /// <inheritdoc cref="IUser.UpdateIntimacyAsync(Action{IntimacyProperties},RequestOptions)" />
-    public async Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options = null)
-        => await UserHelper.UpdateIntimacyAsync(this, Kook, func, options).ConfigureAwait(false);
+    public async Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions? options = null) =>
+        await UserHelper.UpdateIntimacyAsync(this, Kook, func, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public Task BlockAsync(RequestOptions options = null) =>
+    public Task BlockAsync(RequestOptions? options = null) =>
         UserHelper.BlockAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task UnblockAsync(RequestOptions options = null) =>
+    public Task UnblockAsync(RequestOptions? options = null) =>
         UserHelper.UnblockAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task RequestFriendAsync(RequestOptions options = null) =>
+    public Task RequestFriendAsync(RequestOptions? options = null) =>
         UserHelper.RequestFriendAsync(this, Kook, options);
 
     /// <inheritdoc />
-    public Task RemoveFriendAsync(RequestOptions options = null) =>
+    public Task RemoveFriendAsync(RequestOptions? options = null) =>
         UserHelper.RemoveFriendAsync(this, Kook, options);
 
     /// <summary>
@@ -239,23 +165,24 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     public override string ToString() => Format.UsernameAndIdentifyNumber(this, Kook.FormatUsersInBidirectionalUnicode);
 
     private string DebuggerDisplay =>
-        $"{Format.UsernameAndIdentifyNumber(this, Kook.FormatUsersInBidirectionalUnicode)} ({Id}{(IsBot ?? false ? ", Bot" : "")})";
+        $"{Format.UsernameAndIdentifyNumber(this, Kook.FormatUsersInBidirectionalUnicode)} ({Id}{
+            (IsBot ?? false ? ", Bot" : "")})";
 
-    internal SocketUser Clone() => MemberwiseClone() as SocketUser;
+    internal SocketUser Clone() => (SocketUser)MemberwiseClone();
 
     #region IUser
 
     /// <inheritdoc />
-    async Task<IDMChannel> IUser.CreateDMChannelAsync(RequestOptions options)
-        => await CreateDMChannelAsync(options).ConfigureAwait(false);
+    async Task<IDMChannel> IUser.CreateDMChannelAsync(RequestOptions? options) =>
+        await CreateDMChannelAsync(options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task<IIntimacy> IUser.GetIntimacyAsync(RequestOptions options)
-        => await GetIntimacyAsync(options).ConfigureAwait(false);
+    async Task<IIntimacy> IUser.GetIntimacyAsync(RequestOptions? options) =>
+        await GetIntimacyAsync(options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    async Task IUser.UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions options)
-        => await UpdateIntimacyAsync(func, options).ConfigureAwait(false);
+    async Task IUser.UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions? options) =>
+        await UpdateIntimacyAsync(func, options).ConfigureAwait(false);
 
     #endregion
 }

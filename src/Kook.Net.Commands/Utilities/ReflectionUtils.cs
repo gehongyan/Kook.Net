@@ -6,8 +6,8 @@ internal static class ReflectionUtils
 {
     private static readonly TypeInfo ObjectTypeInfo = typeof(object).GetTypeInfo();
 
-    internal static T CreateObject<T>(TypeInfo typeInfo, CommandService commands, IServiceProvider services = null)
-        => CreateBuilder<T>(typeInfo, commands)(services);
+    internal static T CreateObject<T>(TypeInfo typeInfo, CommandService commands, IServiceProvider services) =>
+        CreateBuilder<T>(typeInfo, commands)(services);
 
     internal static Func<IServiceProvider, T> CreateBuilder<T>(TypeInfo typeInfo, CommandService commands)
     {
@@ -15,15 +15,14 @@ internal static class ReflectionUtils
         System.Reflection.ParameterInfo[] parameters = constructor.GetParameters();
         PropertyInfo[] properties = GetProperties(typeInfo);
 
-        return (services) =>
+        return services =>
         {
-            object[] args = new object[parameters.Length];
-            for (int i = 0; i < parameters.Length; i++) args[i] = GetMember(commands, services, parameters[i].ParameterType, typeInfo);
+            object[] args = parameters
+                .Select(x => GetMember(commands, services, x.ParameterType, typeInfo))
+                .ToArray();
 
             T obj = InvokeConstructor<T>(constructor, args, typeInfo);
-
             foreach (PropertyInfo property in properties) property.SetValue(obj, GetMember(commands, services, property.PropertyType, typeInfo));
-
             return obj;
         };
     }
@@ -43,26 +42,26 @@ internal static class ReflectionUtils
     private static ConstructorInfo GetConstructor(TypeInfo ownerType)
     {
         ConstructorInfo[] constructors = ownerType.DeclaredConstructors.Where(x => !x.IsStatic).ToArray();
-        if (constructors.Length == 0)
-            throw new InvalidOperationException($"No constructor found for \"{ownerType.FullName}\".");
-        else if (constructors.Length > 1) throw new InvalidOperationException($"Multiple constructors found for \"{ownerType.FullName}\".");
-
-        return constructors[0];
+        return constructors.Length switch
+        {
+            0 => throw new InvalidOperationException($"No constructor found for \"{ownerType.FullName}\"."),
+            > 1 => throw new InvalidOperationException($"Multiple constructors found for \"{ownerType.FullName}\"."),
+            _ => constructors[0]
+        };
     }
 
-    private static PropertyInfo[] GetProperties(TypeInfo ownerType)
+    private static PropertyInfo[] GetProperties(TypeInfo? ownerType)
     {
-        List<PropertyInfo> result = new();
+        List<PropertyInfo> result = [];
         while (ownerType != ObjectTypeInfo)
         {
-            foreach (PropertyInfo prop in ownerType.DeclaredProperties)
+            foreach (PropertyInfo prop in ownerType?.DeclaredProperties ?? [])
             {
-                if (prop.SetMethod?.IsStatic == false
-                    && prop.SetMethod?.IsPublic == true
-                    && prop.GetCustomAttribute<DontInjectAttribute>() == null) result.Add(prop);
+                if (prop.SetMethod is { IsStatic: false, IsPublic: true }
+                    && prop.GetCustomAttribute<DontInjectAttribute>() == null)
+                    result.Add(prop);
             }
-
-            ownerType = ownerType.BaseType.GetTypeInfo();
+            ownerType = ownerType?.BaseType?.GetTypeInfo();
         }
 
         return result.ToArray();
@@ -71,12 +70,9 @@ internal static class ReflectionUtils
     private static object GetMember(CommandService commands, IServiceProvider services, Type memberType, TypeInfo ownerType)
     {
         if (memberType == typeof(CommandService)) return commands;
-
         if (memberType == typeof(IServiceProvider) || memberType == services.GetType()) return services;
-
-        object service = services.GetService(memberType);
+        object? service = services.GetService(memberType);
         if (service != null) return service;
-
         throw new InvalidOperationException($"Failed to create \"{ownerType.FullName}\", dependency \"{memberType.Name}\" was not found.");
     }
 }

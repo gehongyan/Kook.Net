@@ -20,7 +20,7 @@ public interface IAudioChannel : IChannel
     ///         This property may be empty if the voice channel is created before this feature was released.
     ///     </note>
     /// </remarks>
-    string VoiceRegion { get; }
+    string? VoiceRegion { get; }
 
     /// <summary>
     ///     Gets the server url that clients should connect to to join this voice channel.
@@ -28,7 +28,7 @@ public interface IAudioChannel : IChannel
     /// <returns>
     ///     A string representing the url that clients should connect to to join this voice channel.
     /// </returns>
-    string ServerUrl { get; }
+    string? ServerUrl { get; }
 
     // /// <param name="selfDeaf">Determines whether the client should deaf itself upon connection.</param>
     // /// <param name="selfMute">Determines whether the client should mute itself upon connection.</param>
@@ -41,7 +41,8 @@ public interface IAudioChannel : IChannel
     ///     A task representing the asynchronous connection operation. The task result contains the
     ///     <see cref="IAudioClient"/> responsible for the connection.
     /// </returns>
-    Task<IAudioClient> ConnectAsync(/*bool selfDeaf = false, bool selfMute = false, */bool external = false, bool disconnect = true);
+    Task<IAudioClient?> ConnectAsync( /*bool selfDeaf = false, bool selfMute = false, */
+        bool external = false, bool disconnect = true);
 
     /// <summary>
     ///     Disconnects from this audio channel.

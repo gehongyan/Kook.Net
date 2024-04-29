@@ -23,7 +23,7 @@ using Microsoft.Extensions.Hosting;
 // 示例文件 Cards/multiple-cards.xml 在一个卡片消息中定义了多个卡片
 //  使用 !multiple 命令在 Kook 中发送此卡片消息
 
-var builder = Host.CreateApplicationBuilder(args);
+HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
 
 builder.Configuration.AddInMemoryCollection(new[]
 {
@@ -40,7 +40,7 @@ builder.Services.AddSingleton<KookSocketConfig>(_ => new KookSocketConfig
 });
 builder.Services.AddSingleton<KookSocketClient>(sp =>
 {
-    var config = sp.GetRequiredService<KookSocketConfig>();
+    KookSocketConfig config = sp.GetRequiredService<KookSocketConfig>();
     return new KookSocketClient(config);
 });
 builder.Services.AddSingleton<CommandService>();
@@ -48,6 +48,6 @@ builder.Services.AddSingleton<CommandHandlerService>();
 builder.Services.AddSingleton<HttpClient>();
 builder.Services.AddHostedService<KookSocketService>();
 
-var app = builder.Build();
+IHost app = builder.Build();
 
 app.Run();

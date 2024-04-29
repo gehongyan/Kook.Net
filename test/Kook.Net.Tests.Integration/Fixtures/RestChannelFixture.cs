@@ -31,5 +31,5 @@ public class RestChannelFixture : RestGuildFixture
     }
 
     /// <inheritdoc />
-    public override void Dispose() => DisposeAsync().GetAwaiter().GetResult();
+    public override void Dispose() => DisposeAsync().AsTask().GetAwaiter().GetResult();
 }

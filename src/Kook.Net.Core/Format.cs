@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -8,7 +9,7 @@ namespace Kook;
 /// </summary>
 public static class Format
 {
-    private static readonly string[] SensitiveCharacters = { "\\", "*", "~", "`", ":", "-", "]", ")", ">" };
+    private static readonly string[] SensitiveCharacters = ["\\", "*", "~", "`", ":", "-", "]", ")", ">"];
 
     /// <summary> Returns a markdown-formatted string with bold formatting. </summary>
     /// <param name="text">The text to format.</param>
@@ -18,7 +19,7 @@ public static class Format
     ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
     ///     <c>*</c> with <c>\*</c>.
     /// </remarks>
-    public static string Bold(this string text, bool sanitize = true) =>
+    public static string Bold(this string? text, bool sanitize = true) =>
         $"**{(sanitize ? text.Sanitize("*") : text)}**";
 
     /// <summary> Returns a markdown-formatted string with italics formatting. </summary>
@@ -29,7 +30,7 @@ public static class Format
     ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
     ///     <c>*</c> with <c>\*</c>.
     /// </remarks>
-    public static string Italics(this string text, bool sanitize = true) =>
+    public static string Italics(this string? text, bool sanitize = true) =>
         $"*{(sanitize ? text.Sanitize("*") : text)}*";
 
     /// <summary> Returns a markdown-formatted string with bold italics formatting. </summary>
@@ -40,7 +41,7 @@ public static class Format
     ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
     ///     <c>*</c> with <c>\*</c>.
     /// </remarks>
-    public static string BoldItalics(this string text, bool sanitize = true) =>
+    public static string BoldItalics(this string? text, bool sanitize = true) =>
         $"***{(sanitize ? text.Sanitize("*") : text)}***";
 
     /// <summary> Returns a markdown-formatted string with strike-through formatting. </summary>
@@ -51,7 +52,7 @@ public static class Format
     ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
     ///     <c>~</c> with <c>\~</c>.
     /// </remarks>
-    public static string Strikethrough(this string text, bool sanitize = true) =>
+    public static string Strikethrough(this string? text, bool sanitize = true) =>
         $"~~{(sanitize ? text.Sanitize("~") : text)}~~";
 
     /// <summary> Returns a markdown-formatted string colored with the specified <see cref="TextTheme"/>. </summary>
@@ -68,7 +69,7 @@ public static class Format
     ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
     ///     <c>(</c> and <c>)</c> with <c>\(</c> and <c>\)</c>.
     /// </remarks>
-    public static string Colorize(this string text, TextTheme theme, bool sanitize = true) =>
+    public static string Colorize(this string? text, TextTheme theme, bool sanitize = true) =>
         $"(font){(sanitize ? text.Sanitize("(", ")") : text)}(font)[{theme.ToString().ToLowerInvariant()}]";
 
     /// <summary> Returns a markdown-formatted URL. </summary>
@@ -81,12 +82,13 @@ public static class Format
     ///     <c>[</c> and <c>]</c> with <c>\[</c> and <c>\]</c>, and the URL by replacing all occurrences of
     ///     <c>(</c> and <c>)</c> with <c>\(</c> and <c>\)</c>.
     /// </remarks>
-    public static string Url(this string text, string url, bool sanitize = true) =>
+    public static string Url(this string? text, string url, bool sanitize = true) =>
         $"[{(sanitize ? text.Sanitize("[", "]") : text)}]({(sanitize ? url.Sanitize("(", ")") : url)})";
 
 
     /// <inheritdoc cref="Url(string,string,bool)" />
-    public static string Url(this string text, Uri url, bool sanitize = true) => text.Url(url.ToString(), sanitize);
+    public static string Url(this string? text, Uri url, bool sanitize = true) =>
+        text.Url(url.ToString(), sanitize);
 
     /// <summary> Sanitizes the string, safely escaping any Markdown sequences. </summary>
     /// <param name="text">The text to sanitize.</param>
@@ -96,14 +98,12 @@ public static class Format
     ///     If no sensitive characters are specified, the default sensitive characters are used.
     ///     The default sensitive characters are: <c>\</c>, <c>*</c>, <c>~</c>, <c>`</c>, <c>:</c>, <c>-</c>, <c>]</c>, <c>)</c>, <c>&gt;</c>.
     /// </remarks>
-    public static string Sanitize(this string text, params string[] sensitiveCharacters)
+    [return: NotNullIfNotNull(nameof(text))]
+    public static string? Sanitize(this string? text, params string[] sensitiveCharacters)
     {
         if (text is null) return null;
-
-        if (sensitiveCharacters is not { Length: > 0 })
-            return SensitiveCharacters.Aggregate(text,
-                (current, unsafeChar) => current.Replace(unsafeChar, $"\\{unsafeChar}"));
-        return sensitiveCharacters.Aggregate(text,
+        string[] sensitiveChars = sensitiveCharacters.Length > 0 ? sensitiveCharacters : SensitiveCharacters;
+        return sensitiveChars.Aggregate(text,
             (current, unsafeChar) => current.Replace(unsafeChar, $"\\{unsafeChar}"));
     }
 
@@ -133,17 +133,19 @@ public static class Format
     ///     </para>
     /// </remarks>
     /// <seealso cref="BlockQuote"/>
-    public static string Quote(this string text, bool sanitize = true)
+    [return: NotNullIfNotNull(nameof(text))]
+    public static string? Quote(this string? text, bool sanitize = true)
     {
-        string escaped = sanitize ? text.Sanitize(">") : text;
+        string? escaped = sanitize ? text.Sanitize(">") : text;
 
         // do not modify null or whitespace text
         // whitespace does not get quoted properly
-        if (string.IsNullOrWhiteSpace(escaped)) return escaped;
+        if (escaped is null || string.IsNullOrWhiteSpace(escaped))
+            return escaped;
 
         StringBuilder result = new();
 
-        string lineEnding = null;
+        string? lineEnding = null;
         int textLength = escaped.Length;
         for (int i = 0; i < textLength; i++)
         {
@@ -241,7 +243,7 @@ public static class Format
     ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
     ///     <c>(</c> and <c>)</c> with <c>\(</c> and <c>\)</c>.
     /// </remarks>
-    public static string Underline(this string text, bool sanitize = true) =>
+    public static string Underline(this string? text, bool sanitize = true) =>
         $"(ins){(sanitize ? text.Sanitize("(", ")") : text)}(ins)";
 
     /// <summary> Returns a string with spoiler formatting. </summary>
@@ -252,7 +254,7 @@ public static class Format
     ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
     ///     <c>(</c> and <c>)</c> with <c>\(</c> and <c>\)</c>.
     /// </remarks>
-    public static string Spoiler(this string text, bool sanitize = true) =>
+    public static string Spoiler(this string? text, bool sanitize = true) =>
         $"(spl){(sanitize ? text.Sanitize("(", ")") : text)}(spl)";
 
     /// <summary> Returns a markdown-formatted string with inline code or code block formatting. </summary>
@@ -264,9 +266,11 @@ public static class Format
     ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
     ///     <c>`</c> with <c>\`</c>.
     /// </remarks>
-    public static string Code(this string text, string language = null, bool sanitize = true)
+    public static string Code(this string? text, string? language = null, bool sanitize = true)
     {
-        string newLine = null;
+        if (text is null) return "`\u200d`";
+
+        string? newLine = null;
         int length = text.Length;
         for (int i = 0; i < length; i++)
             if (text[i] is '\r' or '\n')
@@ -292,9 +296,10 @@ public static class Format
     ///     Set <paramref name="sanitize"/> to <c>true</c> will sanitize the text by replacing all occurrences of
     ///     <c>`</c> with <c>\`</c>.
     /// </remarks>
-    public static string CodeBlock(this string text, string language = null, bool sanitize = true)
+    public static string CodeBlock(this string? text, string? language = null, bool sanitize = true)
     {
-        string newLine = null;
+        if (text is null) return "```\n\n```";
+        string? newLine = null;
         int length = text.Length;
         for (int i = 0; i < length; i++)
             if (text[i] is '\r' or '\n')
@@ -333,8 +338,10 @@ public static class Format
     ///     </para>
     /// </remarks>
     /// <seealso cref="Quote"/>
-    public static string BlockQuote(this string text, bool sanitize = true)
+    public static string BlockQuote(this string? text, bool sanitize = true)
     {
+        if (text is null) return "> \u200d";
+
         string escaped = sanitize ? text.Sanitize(">") : text;
 
         // do not modify null or whitespace text
@@ -362,13 +369,9 @@ public static class Format
     /// </summary>
     /// <param name="text">The to remove markdown from.</param>
     /// <returns>Gets the unformatted text.</returns>
-    public static string StripMarkDown(this string text)
-    {
+    public static string StripMarkDown(this string text) =>
         // Remove KOOK supported markdown
-        string newText = Regex.Replace(text, @"(\*|\(ins\)|\(spl\)|`|~|>|\\)", "");
-
-        return newText;
-    }
+        Regex.Replace(text, @"(\*|\(ins\)|\(spl\)|`|~|>|\\)", "", RegexOptions.Compiled);
 
     /// <summary>
     ///     Formats a user's username + identify number while maintaining bidirectional unicode

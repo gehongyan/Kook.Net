@@ -4,7 +4,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     Attaches remarks to your commands.
 /// </summary>
-[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
 public class RemarksAttribute : Attribute
 {
     /// <summary>
@@ -16,5 +16,8 @@ public class RemarksAttribute : Attribute
     ///     Initializes a new <see cref="RemarksAttribute" /> attribute with the specified remarks.
     /// </summary>
     /// <param name="text"></param>
-    public RemarksAttribute(string text) => Text = text;
+    public RemarksAttribute(string text)
+    {
+        Text = text;
+    }
 }

@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     Represents a container for a series of overwrite permissions.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct OverwritePermissions
 {
     /// <summary>
@@ -17,15 +17,15 @@ public struct OverwritePermissions
     ///     Gets a <see cref="OverwritePermissions" /> that grants all permissions for the given channel.
     /// </summary>
     /// <exception cref="ArgumentException">Unknown channel type.</exception>
-    public static OverwritePermissions AllowAll(IChannel channel)
-        => new(ChannelPermissions.All(channel).RawValue, 0);
+    public static OverwritePermissions AllowAll(IChannel channel) =>
+        new(ChannelPermissions.All(channel).RawValue, 0);
 
     /// <summary>
     ///     Gets a <see cref="OverwritePermissions" /> that denies all permissions for the given channel.
     /// </summary>
     /// <exception cref="ArgumentException">Unknown channel type.</exception>
-    public static OverwritePermissions DenyAll(IChannel channel)
-        => new(0, ChannelPermissions.All(channel).RawValue);
+    public static OverwritePermissions DenyAll(IChannel channel) =>
+        new(0, ChannelPermissions.All(channel).RawValue);
 
     /// <summary>
     ///     Gets a packed value representing all the allowed permissions in this <see cref="OverwritePermissions"/>.
@@ -198,8 +198,8 @@ public struct OverwritePermissions
         PermValue? deafenMembers = null,
         PermValue? muteMembers = null,
         PermValue? playSoundtrack = null,
-        PermValue? shareScreen = null)
-        => new(AllowValue, DenyValue, createInvites, manageChannels, manageRoles, viewChannel,
+        PermValue? shareScreen = null) =>
+        new(AllowValue, DenyValue, createInvites, manageChannels, manageRoles, viewChannel,
             sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone, addReactions,
             passiveConnect, useVoiceActivity, speak, deafenMembers, muteMembers, playSoundtrack, shareScreen);
 
@@ -209,12 +209,13 @@ public struct OverwritePermissions
     /// <returns>A <see cref="List{T}"/> of all allowed <see cref="ChannelPermission"/> flags. If none, the list will be empty.</returns>
     public List<ChannelPermission> ToAllowList()
     {
-        List<ChannelPermission> perms = new();
+        List<ChannelPermission> perms = [];
         for (byte i = 0; i < Permissions.MaxBits; i++)
         {
             // first operand must be long or ulong to shift >31 bits
             ulong flag = (ulong)1 << i;
-            if ((AllowValue & flag) != 0) perms.Add((ChannelPermission)flag);
+            if ((AllowValue & flag) != 0)
+                perms.Add((ChannelPermission)flag);
         }
 
         return perms;
@@ -230,7 +231,8 @@ public struct OverwritePermissions
         for (byte i = 0; i < Permissions.MaxBits; i++)
         {
             ulong flag = (ulong)1 << i;
-            if ((DenyValue & flag) != 0) perms.Add((ChannelPermission)flag);
+            if ((DenyValue & flag) != 0)
+                perms.Add((ChannelPermission)flag);
         }
 
         return perms;

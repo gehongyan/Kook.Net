@@ -9,12 +9,12 @@ namespace Kook.Net.Samples.TextCommands.Modules;
 public class PublicModule : ModuleBase<SocketCommandContext>
 {
     // Dependency Injection will fill this value in for us
-    public PictureService PictureService { get; set; }
+    public required PictureService PictureService { get; set; }
 
     [Command("ping")]
     [Alias("pong", "hello")]
-    public Task PingAsync()
-        => ReplyTextAsync("pong!");
+    public Task PingAsync() =>
+        ReplyTextAsync("pong!");
 
     [Command("cat")]
     public async Task CatAsync()
@@ -28,15 +28,15 @@ public class PublicModule : ModuleBase<SocketCommandContext>
 
     // Get info on a user, or the user who invoked the command if one is not specified
     [Command("userinfo")]
-    public async Task UserInfoAsync(IUser user = null)
+    public async Task UserInfoAsync(IUser? user = null)
     {
         user ??= Context.User;
-
-        await ReplyTextAsync(user.ToString());
+        await ReplyTextAsync(user.ToString() ?? user.Username);
     }
 
     [Command("say")]
-    public async Task Emoji(string text) => await Context.Message.AddReactionAsync(new Emoji("\uD83D\uDC4C"));
+    public async Task Emoji(string text) =>
+        await Context.Message.AddReactionAsync(new Emoji("\uD83D\uDC4C"));
 
     // Ban a user
     [Command("ban")]
@@ -45,7 +45,7 @@ public class PublicModule : ModuleBase<SocketCommandContext>
     [RequireUserPermission(GuildPermission.BanMembers)]
     // make sure the bot itself can ban
     [RequireBotPermission(GuildPermission.BanMembers)]
-    public async Task BanUserAsync(IGuildUser user, [Remainder] string reason = null)
+    public async Task BanUserAsync(IGuildUser user, [Remainder] string? reason = null)
     {
         await user.Guild.AddBanAsync(user, reason: reason);
         await ReplyTextAsync("ok!");
@@ -53,36 +53,37 @@ public class PublicModule : ModuleBase<SocketCommandContext>
 
     // [Remainder] takes the rest of the command's arguments as one argument, rather than splitting every space
     [Command("echo")]
-    public Task EchoAsync([Remainder] string text)
+    public Task EchoAsync([Remainder] string text) =>
         // Insert a ZWSP before the text to prevent triggering other bots!
-        => ReplyTextAsync('\u200B' + text);
+        ReplyTextAsync('\u200B' + text);
 
     // 'params' will parse space-separated elements into a list
     [Command("list")]
-    public Task ListAsync(params string[] objects)
-        => ReplyTextAsync("You listed: " + string.Join("; ", objects));
+    public Task ListAsync(params string[] objects) =>
+        ReplyTextAsync($"You listed: {string.Join("; ", objects)}");
 
     // Setting a custom ErrorMessage property will help clarify the precondition error
     [Command("guild_only")]
-    [RequireContext(ContextType.Guild, ErrorMessage = "Sorry, this command must be ran from within a server, not a DM!")]
-    public Task GuildOnlyCommand()
-        => ReplyTextAsync("Nothing to see here!");
+    [RequireContext(ContextType.Guild,
+        ErrorMessage = "Sorry, this command must be ran from within a server, not a DM!")]
+    public Task GuildOnlyCommand() =>
+        ReplyTextAsync("Nothing to see here!");
 
     [Command("per")]
     public async Task ModifyCategoryPermissions()
     {
-        SocketUser contextUser = Context.User;
-        await ((IGuildChannel)Context.Channel).AddPermissionOverwriteAsync((IGuildUser)Context.User);
-        await ((SocketChannel)Context.Channel).UpdateAsync();
-        await Context.Guild.GetChannel(Context.Channel.Id).ModifyPermissionOverwriteAsync((IGuildUser)Context.User,
-            permissions => permissions.Modify(viewChannel: PermValue.Allow, sendMessages: PermValue.Deny, attachFiles: PermValue.Allow));
-    }
-
-    [Command("create")]
-    public async Task CreateChannel()
-    {
-        IReadOnlyCollection<SocketRole> onlyCollection = ((SocketGuildUser)Context.User).Roles;
-        RestGuildUser guildUserAsync = await Context.Client.Rest.GetGuildUserAsync(7557797319758285, 1253960922);
-        IReadOnlyCollection<uint> readOnlyCollection = guildUserAsync.RoleIds;
+        if (Context.Guild is not { } guild) return;
+        if (Context.Channel is not IGuildChannel guildChannel) return;
+        await guildChannel.AddPermissionOverwriteAsync((IGuildUser)Context.User);
+        if (guildChannel is SocketChannel socketChannel)
+            await socketChannel.UpdateAsync();
+        if (guild.GetChannel(Context.Channel.Id) is { } socketGuildChannel)
+        {
+            await socketGuildChannel.ModifyPermissionOverwriteAsync((IGuildUser)Context.User,
+                permissions => permissions.Modify(
+                    viewChannel: PermValue.Allow,
+                    sendMessages: PermValue.Deny,
+                    attachFiles: PermValue.Allow));
+        }
     }
 }

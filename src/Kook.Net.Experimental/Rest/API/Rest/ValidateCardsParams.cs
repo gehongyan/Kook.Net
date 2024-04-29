@@ -6,7 +6,7 @@ namespace Kook.API.Rest;
 internal class ValidateCardsParams
 {
     [JsonPropertyName("content")]
-    public string Content { get; set; }
+    public required string Content { get; set; }
 
     public static implicit operator ValidateCardsParams(string content) => new() {Content = content};
 

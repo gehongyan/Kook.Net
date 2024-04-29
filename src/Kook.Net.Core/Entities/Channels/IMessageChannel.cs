@@ -14,7 +14,7 @@ public interface IMessageChannel : IChannel
     ///     This method sends a file as if you are uploading a file directly from your Kook client.
     /// </remarks>
     /// <param name="path">The file path of the file.</param>
-    /// <param name="fileName">The name of the file.</param>
+    /// <param name="filename">The name of the file.</param>
     /// <param name="type">The type of the file.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
@@ -23,9 +23,9 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string fileName = null,
-        AttachmentType type = AttachmentType.File, IQuote quote = null, IUser ephemeralUser = null,
-        RequestOptions options = null);
+    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
+        AttachmentType type = AttachmentType.File, IQuote? quote = null, IUser? ephemeralUser = null,
+        RequestOptions? options = null);
 
     /// <summary>
     ///     Sends a file to this message channel.
@@ -34,7 +34,7 @@ public interface IMessageChannel : IChannel
     ///     This method sends a file as if you are uploading a file directly from your Kook client.
     /// </remarks>
     /// <param name="stream">The stream of the file.</param>
-    /// <param name="fileName">The name of the file.</param>
+    /// <param name="filename">The name of the file.</param>
     /// <param name="type">The type of the file.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
@@ -43,9 +43,9 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string fileName,
-        AttachmentType type = AttachmentType.File, IQuote quote = null, IUser ephemeralUser = null,
-        RequestOptions options = null);
+    Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
+        AttachmentType type = AttachmentType.File, IQuote? quote = null, IUser? ephemeralUser = null,
+        RequestOptions? options = null);
 
     /// <summary>
     ///     Sends a file to this message channel.
@@ -62,7 +62,7 @@ public interface IMessageChannel : IChannel
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
-        IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null);
+        IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Sends a text message to this message channel.
@@ -75,8 +75,8 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote quote = null,
-        IUser ephemeralUser = null, RequestOptions options = null);
+    Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote? quote = null,
+        IUser? ephemeralUser = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Sends a card message to this message channel.
@@ -90,7 +90,7 @@ public interface IMessageChannel : IChannel
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
-        IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null);
+        IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Sends a card message to this message channel.
@@ -104,7 +104,7 @@ public interface IMessageChannel : IChannel
     ///     contains the identifier and timestamp of the sent message.
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
-        IQuote quote = null, IUser ephemeralUser = null, RequestOptions options = null);
+        IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a message from this message channel.
@@ -116,7 +116,7 @@ public interface IMessageChannel : IChannel
     ///     A task that represents an asynchronous get operation for retrieving the message. The task result contains
     ///     the retrieved message; <c>null</c> if no message is found with the specified identifier.
     /// </returns>
-    Task<IMessage> GetMessageAsync(Guid id, CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<IMessage?> GetMessageAsync(Guid id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 
@@ -144,13 +144,13 @@ public interface IMessageChannel : IChannel
     /// </remarks>
     /// <param name="limit">The numbers of message to be gotten from.</param>
     /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from
-    /// cache.</param>
+    ///     cache.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
     IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch,
-        CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+        CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a collection of messages in this channel.
@@ -177,14 +177,14 @@ public interface IMessageChannel : IChannel
     /// <param name="dir">The direction of the messages to be gotten from.</param>
     /// <param name="limit">The numbers of message to be gotten from.</param>
     /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from
-    /// cache.</param>
+    ///     cache.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
     IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
         int limit = KookConfig.MaxMessagesPerBatch,
-        CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+        CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets a collection of messages in this channel.
@@ -211,14 +211,14 @@ public interface IMessageChannel : IChannel
     /// <param name="dir">The direction of the messages to be gotten from.</param>
     /// <param name="limit">The numbers of message to be gotten from.</param>
     /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from
-    /// cache.</param>
+    ///     cache.</param>
     /// <param name="options">The options to be used when sending the request.</param>
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
     IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
         int limit = KookConfig.MaxMessagesPerBatch,
-        CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+        CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 
@@ -232,7 +232,7 @@ public interface IMessageChannel : IChannel
     /// <returns>
     ///     A task that represents the asynchronous removal operation.
     /// </returns>
-    Task DeleteMessageAsync(Guid messageId, RequestOptions options = null);
+    Task DeleteMessageAsync(Guid messageId, RequestOptions? options = null);
 
     /// <summary> Deletes a message based on the provided message in this channel. </summary>
     /// <param name="message">The message that would be removed.</param>
@@ -240,7 +240,7 @@ public interface IMessageChannel : IChannel
     /// <returns>
     ///     A task that represents the asynchronous removal operation.
     /// </returns>
-    Task DeleteMessageAsync(IMessage message, RequestOptions options = null);
+    Task DeleteMessageAsync(IMessage message, RequestOptions? options = null);
 
     #endregion
 
@@ -259,7 +259,7 @@ public interface IMessageChannel : IChannel
     /// <returns>
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
-    Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions options = null);
+    Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions? options = null);
 
     #endregion
 }

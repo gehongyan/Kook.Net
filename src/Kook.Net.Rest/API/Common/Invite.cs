@@ -9,32 +9,31 @@ internal class Invite
     public uint Id { get; set; }
 
     [JsonPropertyName("channel_id")]
-    [JsonConverter(typeof(NullableUInt64Converter))]
-    public ulong? ChannelId { get; set; }
+    public ulong ChannelId { get; set; }
 
     [JsonPropertyName("guild_id")]
     public ulong GuildId { get; set; }
 
     [JsonPropertyName("guild_name")]
-    public string GuildName { get; set; }
+    public required string GuildName { get; set; }
 
     [JsonPropertyName("channel_name")]
-    public string ChannelName { get; set; }
+    public string? ChannelName { get; set; }
 
     [JsonPropertyName("type")]
     public ChannelType ChannelType { get; set; }
 
     [JsonPropertyName("url_code")]
-    public string UrlCode { get; set; }
+    public required string UrlCode { get; set; }
 
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public required string Url { get; set; }
 
     [JsonPropertyName("user")]
-    public User Inviter { get; set; }
+    public required User Inviter { get; set; }
 
     [JsonPropertyName("expire_time")]
-    [JsonConverter(typeof(NullableDateTimeOffsetConverter))]
+    [JsonConverter(typeof(NullableDateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset? ExpiresAt { get; set; }
 
     [JsonPropertyName("remaining_times")]
@@ -46,4 +45,11 @@ internal class Invite
     [JsonPropertyName("duration")]
     [JsonConverter(typeof(NullableTimeSpanConverter))]
     public TimeSpan? Duration { get; set; }
+
+    [JsonPropertyName("invitees_count")]
+    public int InviteesCount { get; set; }
+
+    [JsonPropertyName("created_at")]
+    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
+    public DateTimeOffset CreatedAt { get; set; }
 }

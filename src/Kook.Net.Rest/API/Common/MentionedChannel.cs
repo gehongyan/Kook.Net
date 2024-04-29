@@ -11,5 +11,5 @@ internal class MentionedChannel
     public ulong GuildId { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 }

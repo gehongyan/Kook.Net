@@ -29,7 +29,7 @@ public class ModifyVoiceChannelProperties : ModifyTextChannelProperties
     /// <summary>
     ///     Gets or sets the password of the channel, or empty string to clear the password; <c>null</c> if not set.
     /// </summary>
-    public string Password { get; set; }
+    public string? Password { get; set; }
 
     /// <summary>
     ///     Gets or sets a value that indicates whether the voice region of the channel is overwritten;
@@ -40,5 +40,5 @@ public class ModifyVoiceChannelProperties : ModifyTextChannelProperties
     /// <summary>
     ///     Gets or sets the voice region of the channel; <c>null</c> if not set.
     /// </summary>
-    public string VoiceRegion { get; set; }
+    public string? VoiceRegion { get; set; }
 }

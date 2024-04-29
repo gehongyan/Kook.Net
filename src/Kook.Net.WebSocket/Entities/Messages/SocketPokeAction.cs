@@ -19,11 +19,12 @@ public class SocketPokeAction : IPokeAction
     internal SocketPokeAction(SocketUser @operator, IEnumerable<SocketUser> targets, Poke poke)
     {
         Operator = @operator;
-        Targets = targets as IReadOnlyCollection<SocketUser>;
+        Targets = [..targets];
         Poke = poke;
     }
 
-    internal static SocketPokeAction Create(KookSocketClient kook, SocketUser @operator, IEnumerable<SocketUser> targets, API.Poke poke)
+    internal static SocketPokeAction Create(KookSocketClient kook,
+        SocketUser @operator, IEnumerable<SocketUser> targets, API.Poke poke)
     {
         Poke restPoke = Poke.Create(poke);
         return new SocketPokeAction(@operator, targets, restPoke);

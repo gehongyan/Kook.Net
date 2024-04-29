@@ -8,8 +8,8 @@ internal class UserUpdateEvent
     public ulong UserId { get; set; }
 
     [JsonPropertyName("username")]
-    public string Username { get; set; }
+    public required string Username { get; set; }
 
     [JsonPropertyName("avatar")]
-    public string Avatar { get; set; }
+    public required string Avatar { get; set; }
 }

@@ -25,7 +25,7 @@ namespace Kook.Commands;
 ///     }
 ///     </code>
 /// </example>
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 public class RequireUserAttribute : PreconditionAttribute
 {
     private readonly ulong _userId;
@@ -34,10 +34,13 @@ public class RequireUserAttribute : PreconditionAttribute
     ///     Initializes a new <see cref="RequireUserAttribute" /> attribute with the specified user identifier.
     /// </summary>
     /// <param name="userId"> The identifier of the user. </param>
-    public RequireUserAttribute(ulong userId) => _userId = userId;
+    public RequireUserAttribute(ulong userId)
+    {
+        _userId = userId;
+    }
 
     /// <inheritdoc />
-    public override string ErrorMessage { get; set; }
+    public override string? ErrorMessage { get; set; }
 
     /// <inheritdoc />
     public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services) =>

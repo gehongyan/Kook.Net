@@ -124,9 +124,8 @@ async Task MessageReceivedAsync(SocketMessage message,
     SocketTextChannel channel)
 {
     // Bot 永远不应该响应自己的消息
-    if (author.Id == client.CurrentUser.Id)
+    if (author.Id == client.CurrentUser?.Id)
         return;
-
 
     if (message.Content == "!ping")
     {
@@ -156,7 +155,7 @@ async Task MessageButtonClickedAsync(string value,
     // 检查按钮的值是否为之前的代码中设置的值
     if (value == "unique-id")
     {
-        IMessage messageEntity = await message.GetOrDownloadAsync();
+        IMessage? messageEntity = await message.GetOrDownloadAsync();
         if (messageEntity is IUserMessage userMessage)
             await userMessage.ReplyTextAsync("按钮被点击了！", isQuote: true);
     }

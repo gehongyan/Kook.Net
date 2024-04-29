@@ -6,15 +6,21 @@ namespace Kook.Net.Converters;
 internal class NullableGradientColorConverter : JsonConverter<GradientColor?>
 {
     /// <inheritdoc />
+    public override bool HandleNull => true;
+
+    /// <inheritdoc />
     public override GradientColor? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
+        if (reader.TokenType == JsonTokenType.Null)
+            return null;
+
         if (reader.TokenType == JsonTokenType.StartObject)
         {
             reader.Read();
             if (reader.TokenType != JsonTokenType.PropertyName)
                 throw new JsonException($"{nameof(NullableGradientColorConverter)} expects property name token, but got {reader.TokenType}");
 
-            string propertyName = reader.GetString();
+            string? propertyName = reader.GetString();
             if (propertyName != "color_list")
                 throw new JsonException($"{nameof(NullableGradientColorConverter)} expects property name 'color_list', but got {propertyName}");
 

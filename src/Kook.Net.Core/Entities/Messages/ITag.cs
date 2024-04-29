@@ -29,5 +29,5 @@ public interface ITag
     /// <summary>
     ///     Gets the value of the tag.
     /// </summary>
-    object Value { get; }
+    object? Value { get; }
 }

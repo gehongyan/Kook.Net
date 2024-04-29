@@ -7,8 +7,8 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents the logged-in WebSocket-based user.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-public class SocketSelfUser : SocketUser, ISelfUser
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
+public class SocketSelfUser : SocketUser, ISelfUser, IUpdateable
 {
     internal override SocketGlobalUser GlobalUser { get; }
 
@@ -27,7 +27,7 @@ public class SocketSelfUser : SocketUser, ISelfUser
     }
 
     /// <inheritdoc />
-    public override ushort? IdentifyNumberValue
+    public override ushort IdentifyNumberValue
     {
         get => GlobalUser.IdentifyNumberValue;
         internal set => GlobalUser.IdentifyNumberValue = value;
@@ -48,7 +48,7 @@ public class SocketSelfUser : SocketUser, ISelfUser
     }
 
     /// <inheritdoc />
-    public override string Banner
+    public override string? Banner
     {
         get => GlobalUser.Banner;
         internal set => GlobalUser.Banner = value;
@@ -83,7 +83,7 @@ public class SocketSelfUser : SocketUser, ISelfUser
     }
 
     /// <inheritdoc />
-    public override UserTag UserTag
+    public override UserTag? UserTag
     {
         get => GlobalUser.UserTag;
         internal set => GlobalUser.UserTag = value;
@@ -97,13 +97,6 @@ public class SocketSelfUser : SocketUser, ISelfUser
     }
 
     /// <inheritdoc />
-    public override bool? IsSystemUser
-    {
-        get => GlobalUser.IsSystemUser;
-        internal set => GlobalUser.IsSystemUser = value;
-    }
-
-    /// <inheritdoc />
     internal override SocketPresence Presence
     {
         get => GlobalUser.Presence;
@@ -111,10 +104,10 @@ public class SocketSelfUser : SocketUser, ISelfUser
     }
 
     /// <inheritdoc />
-    public string MobilePrefix { get; internal set; }
+    public string? MobilePrefix { get; internal set; }
 
     /// <inheritdoc />
-    public string Mobile { get; internal set; }
+    public string? Mobile { get; internal set; }
 
     /// <inheritdoc />
     public int InvitedCount { get; internal set; }
@@ -123,8 +116,12 @@ public class SocketSelfUser : SocketUser, ISelfUser
     public bool IsMobileVerified { get; internal set; }
 
     internal SocketSelfUser(KookSocketClient kook, SocketGlobalUser globalUser)
-        : base(kook, globalUser.Id) =>
+        : base(kook, globalUser.Id)
+    {
         GlobalUser = globalUser;
+        MobilePrefix = string.Empty;
+        Mobile = string.Empty;
+    }
 
     internal static SocketSelfUser Create(KookSocketClient kook, ClientState state, Model model)
     {
@@ -136,51 +133,44 @@ public class SocketSelfUser : SocketUser, ISelfUser
 
     internal bool Update(ClientState state, Model model)
     {
-        bool hasGlobalChanges = base.Update(state, model);
+        bool hasChanged = base.Update(state, model);
         UpdatePresence(model.Online, model.OperatingSystem);
-        if (model.MobilePrefix != MobilePrefix)
-        {
-            MobilePrefix = model.MobilePrefix;
-            hasGlobalChanges = true;
-        }
-
-        if (model.Mobile != Mobile)
-        {
-            Mobile = model.Mobile;
-            hasGlobalChanges = true;
-        }
-
-        if (model.InvitedCount != InvitedCount)
-        {
-            InvitedCount = model.InvitedCount ?? 0;
-            hasGlobalChanges = true;
-        }
-
-        if (model.MobileVerified != IsMobileVerified)
-        {
-            IsMobileVerified = model.MobileVerified;
-            hasGlobalChanges = true;
-        }
-
-        return hasGlobalChanges;
+        hasChanged |= ValueHelper.SetIfChanged(() => MobilePrefix, x => MobilePrefix = x, model.MobilePrefix);
+        hasChanged |= ValueHelper.SetIfChanged(() => Mobile, x => Mobile = x, model.Mobile);
+        hasChanged |= ValueHelper.SetIfChanged(() => IsMobileVerified, x => IsMobileVerified = x, model.MobileVerified);
+        hasChanged |= ValueHelper.SetIfChanged(() => InvitedCount, x => InvitedCount = x, model.InvitedCount);
+        return hasChanged;
     }
 
-    private string DebuggerDisplay => $"{Username}#{IdentifyNumber} ({Id}{(IsBot ?? false ? ", Bot" : "")}, Self)";
-    internal new SocketSelfUser Clone() => MemberwiseClone() as SocketSelfUser;
+    /// <summary>
+    ///     Fetches the users data from the REST API to update this object,
+    ///     especially the <see cref="Username"/> property.
+    /// </summary>
+    /// <param name="options">The options to be used when sending the request.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous reloading operation.
+    /// </returns>
+    public Task UpdateAsync(RequestOptions? options = null) =>
+        SocketUserHelper.UpdateAsync(this, Kook, options);
+
+    private string DebuggerDisplay =>
+        $"{this.UsernameAndIdentifyNumber(Kook.FormatUsersInBidirectionalUnicode)} ({Id}{
+            (IsBot ?? false ? ", Bot" : "")}, Self)";
+    internal new SocketSelfUser Clone() => (SocketSelfUser)MemberwiseClone();
 
     #region ISelfUser
 
     /// <inheritdoc />
-    public async Task StartPlayingAsync(IGame game, RequestOptions options = null)
-        => await UserHelper.StartPlayingAsync(this, Kook, game, options).ConfigureAwait(false);
+    public async Task StartPlayingAsync(IGame game, RequestOptions? options = null) =>
+        await UserHelper.StartPlayingAsync(this, Kook, game, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public async Task StartPlayingAsync(Music music, RequestOptions options = null)
-        => await UserHelper.StartPlayingAsync(this, Kook, music, options).ConfigureAwait(false);
+    public async Task StartPlayingAsync(Music music, RequestOptions? options = null) =>
+        await UserHelper.StartPlayingAsync(this, Kook, music, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public async Task StopPlayingAsync(ActivityType type, RequestOptions options = null)
-        => await UserHelper.StopPlayingAsync(this, Kook, type, options).ConfigureAwait(false);
+    public async Task StopPlayingAsync(ActivityType type, RequestOptions? options = null) =>
+        await UserHelper.StopPlayingAsync(this, Kook, type, options).ConfigureAwait(false);
 
     #endregion
 }

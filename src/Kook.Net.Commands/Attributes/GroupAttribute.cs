@@ -3,20 +3,26 @@ namespace Kook.Commands;
 /// <summary>
 ///     Marks the module as a command group.
 /// </summary>
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+[AttributeUsage(AttributeTargets.Class)]
 public class GroupAttribute : Attribute
 {
     /// <summary>
     ///     Gets the prefix set for the module.
     /// </summary>
-    public string Prefix { get; }
+    public string? Prefix { get; }
 
     /// <inheritdoc />
-    public GroupAttribute() => Prefix = null;
+    public GroupAttribute()
+    {
+        Prefix = null;
+    }
 
     /// <summary>
     ///     Initializes a new <see cref="GroupAttribute" /> with the provided prefix.
     /// </summary>
     /// <param name="prefix">The prefix of the module group.</param>
-    public GroupAttribute(string prefix) => Prefix = prefix;
+    public GroupAttribute(string prefix)
+    {
+        Prefix = prefix;
+    }
 }

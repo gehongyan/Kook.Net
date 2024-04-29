@@ -10,17 +10,16 @@ public static class CardExtensions
     /// <summary>
     ///     Converts the <see cref="IElement"/> to a <see cref="IElementBuilder"/> with the same properties.
     /// </summary>
-    public static IElementBuilder ToBuilder(this IElement element)
+    public static IElementBuilder ToBuilder(this IElement entity)
     {
-        if (element is null) return null;
-        return element.Type switch
+        return entity switch
         {
-            ElementType.PlainText => (element as PlainTextElement).ToBuilder(),
-            ElementType.KMarkdown => (element as KMarkdownElement).ToBuilder(),
-            ElementType.Image => (element as ImageElement).ToBuilder(),
-            ElementType.Button => (element as ButtonElement).ToBuilder(),
-            ElementType.Paragraph => (element as ParagraphStruct).ToBuilder(),
-            _ => throw new ArgumentOutOfRangeException(nameof(element))
+            PlainTextElement { Type: ElementType.PlainText } plainTextElement => plainTextElement.ToBuilder(),
+            KMarkdownElement { Type: ElementType.KMarkdown } kMarkdownElement => kMarkdownElement.ToBuilder(),
+            ImageElement { Type: ElementType.Image } imageElement => imageElement.ToBuilder(),
+            ButtonElement { Type: ElementType.Button } buttonElement => buttonElement.ToBuilder(),
+            ParagraphStruct { Type: ElementType.Paragraph } paragraphStruct => paragraphStruct.ToBuilder(),
+            _ => throw new ArgumentOutOfRangeException(nameof(entity))
         };
     }
 
@@ -29,8 +28,11 @@ public static class CardExtensions
     /// </summary>
     public static PlainTextElementBuilder ToBuilder(this PlainTextElement entity)
     {
-        if (entity is null) return null;
-        return new PlainTextElementBuilder { Content = entity.Content, Emoji = entity.Emoji };
+        return new PlainTextElementBuilder
+        {
+            Content = entity.Content,
+            Emoji = entity.Emoji ?? true
+        };
     }
 
     /// <summary>
@@ -38,19 +40,20 @@ public static class CardExtensions
     /// </summary>
     public static KMarkdownElementBuilder ToBuilder(this KMarkdownElement entity)
     {
-        if (entity is null) return null;
         return new KMarkdownElementBuilder { Content = entity.Content };
     }
 
     /// <summary>
-    ///     Converts the <see cref="ImageElement"/> to a <see cref="ImageElementBuilder"/> with the same properties.
+    ///     Converts the <see cref="ImageElement"/> to an <see cref="ImageElementBuilder"/> with the same properties.
     /// </summary>
     public static ImageElementBuilder ToBuilder(this ImageElement entity)
     {
-        if (entity is null) return null;
         return new ImageElementBuilder
         {
-            Source = entity.Source, Alternative = entity.Alternative, Size = entity.Size, Circle = entity.Circle
+            Source = entity.Source,
+            Alternative = entity.Alternative,
+            Size = entity.Size,
+            Circle = entity.Circle
         };
     }
 
@@ -59,10 +62,12 @@ public static class CardExtensions
     /// </summary>
     public static ButtonElementBuilder ToBuilder(this ButtonElement entity)
     {
-        if (entity is null) return null;
         return new ButtonElementBuilder
         {
-            Theme = entity.Theme, Click = entity.Click, Value = entity.Value, Text = entity.Text.ToBuilder()
+            Theme = entity.Theme ?? ButtonTheme.Primary,
+            Click = entity.Click ?? ButtonClickEventType.None,
+            Value = entity.Value,
+            Text = entity.Text.ToBuilder()
         };
     }
 
@@ -71,10 +76,10 @@ public static class CardExtensions
     /// </summary>
     public static ParagraphStructBuilder ToBuilder(this ParagraphStruct entity)
     {
-        if (entity is null) return null;
         return new ParagraphStructBuilder
         {
-            ColumnCount = entity.ColumnCount, Fields = entity.Fields.Select(x => x.ToBuilder()).ToList()
+            ColumnCount = entity.ColumnCount ?? 1,
+            Fields = entity.Fields.Select(x => x.ToBuilder()).ToList()
         };
     }
 
@@ -87,21 +92,20 @@ public static class CardExtensions
     /// </summary>
     public static IModuleBuilder ToBuilder(this IModule entity)
     {
-        if (entity is null) return null;
-        return entity.Type switch
+        return entity switch
         {
-            ModuleType.Header => (entity as HeaderModule).ToBuilder(),
-            ModuleType.Section => (entity as SectionModule).ToBuilder(),
-            ModuleType.ImageGroup => (entity as ImageGroupModule).ToBuilder(),
-            ModuleType.Container => (entity as ContainerModule).ToBuilder(),
-            ModuleType.ActionGroup => (entity as ActionGroupModule).ToBuilder(),
-            ModuleType.Context => (entity as ContextModule).ToBuilder(),
-            ModuleType.Divider => (entity as DividerModule).ToBuilder(),
-            ModuleType.File => (entity as FileModule).ToBuilder(),
-            ModuleType.Audio => (entity as AudioModule).ToBuilder(),
-            ModuleType.Video => (entity as VideoModule).ToBuilder(),
-            ModuleType.Countdown => (entity as CountdownModule).ToBuilder(),
-            ModuleType.Invite => (entity as InviteModule).ToBuilder(),
+            HeaderModule { Type: ModuleType.Header } headerModule => headerModule.ToBuilder(),
+            SectionModule { Type: ModuleType.Section } sectionModule => sectionModule.ToBuilder(),
+            ImageGroupModule { Type: ModuleType.ImageGroup } imageGroupModule => imageGroupModule.ToBuilder(),
+            ContainerModule { Type: ModuleType.Container } containerModule => containerModule.ToBuilder(),
+            ActionGroupModule { Type: ModuleType.ActionGroup } actionGroupModule => actionGroupModule.ToBuilder(),
+            ContextModule { Type: ModuleType.Context } contextModule => contextModule.ToBuilder(),
+            DividerModule { Type: ModuleType.Divider } dividerModule => dividerModule.ToBuilder(),
+            FileModule { Type: ModuleType.File } fileModule => fileModule.ToBuilder(),
+            AudioModule { Type: ModuleType.Audio } audioModule => audioModule.ToBuilder(),
+            VideoModule { Type: ModuleType.Video } videoModule => videoModule.ToBuilder(),
+            CountdownModule { Type: ModuleType.Countdown } countdownModule => countdownModule.ToBuilder(),
+            InviteModule { Type: ModuleType.Invite } inviteModule => inviteModule.ToBuilder(),
             _ => throw new ArgumentOutOfRangeException(nameof(entity))
         };
     }
@@ -111,8 +115,10 @@ public static class CardExtensions
     /// </summary>
     public static HeaderModuleBuilder ToBuilder(this HeaderModule entity)
     {
-        if (entity is null) return null;
-        return new HeaderModuleBuilder { Text = entity.Text.ToBuilder() };
+        return new HeaderModuleBuilder
+        {
+            Text = entity.Text?.ToBuilder()
+        };
     }
 
     /// <summary>
@@ -120,12 +126,11 @@ public static class CardExtensions
     /// </summary>
     public static SectionModuleBuilder ToBuilder(this SectionModule entity)
     {
-        if (entity is null) return null;
         return new SectionModuleBuilder
         {
             Mode = entity.Mode,
-            Text = entity.Text.ToBuilder(),
-            Accessory = entity.Accessory.ToBuilder()
+            Text = entity.Text?.ToBuilder(),
+            Accessory = entity.Accessory?.ToBuilder()
         };
     }
 
@@ -134,8 +139,10 @@ public static class CardExtensions
     /// </summary>
     public static ImageGroupModuleBuilder ToBuilder(this ImageGroupModule entity)
     {
-        if (entity is null) return null;
-        return new ImageGroupModuleBuilder { Elements = entity.Elements.Select(x => x.ToBuilder()).ToList() };
+        return new ImageGroupModuleBuilder
+        {
+            Elements = entity.Elements.Select(x => x.ToBuilder()).ToList()
+        };
     }
 
     /// <summary>
@@ -143,8 +150,10 @@ public static class CardExtensions
     /// </summary>
     public static ContainerModuleBuilder ToBuilder(this ContainerModule entity)
     {
-        if (entity is null) return null;
-        return new ContainerModuleBuilder { Elements = entity.Elements.Select(x => x.ToBuilder()).ToList() };
+        return new ContainerModuleBuilder
+        {
+            Elements = entity.Elements.Select(x => x.ToBuilder()).ToList()
+        };
     }
 
     /// <summary>
@@ -152,8 +161,10 @@ public static class CardExtensions
     /// </summary>
     public static ActionGroupModuleBuilder ToBuilder(this ActionGroupModule entity)
     {
-        if (entity is null) return null;
-        return new ActionGroupModuleBuilder { Elements = entity.Elements.Select(x => x.ToBuilder()).ToList() };
+        return new ActionGroupModuleBuilder
+        {
+            Elements = entity.Elements.Select(x => x.ToBuilder()).ToList()
+        };
     }
 
     /// <summary>
@@ -161,16 +172,17 @@ public static class CardExtensions
     /// </summary>
     public static ContextModuleBuilder ToBuilder(this ContextModule entity)
     {
-        if (entity is null) return null;
-        return new ContextModuleBuilder { Elements = entity.Elements.Select(e => e.ToBuilder()).ToList() };
+        return new ContextModuleBuilder
+        {
+            Elements = entity.Elements.Select(e => e.ToBuilder()).ToList()
+        };
     }
 
     /// <summary>
     ///     Converts the <see cref="DividerModule"/> to a <see cref="DividerModuleBuilder"/> with the same properties.
     /// </summary>
-    public static DividerModuleBuilder ToBuilder(this DividerModule entity)
+    public static DividerModuleBuilder ToBuilder(this DividerModule _)
     {
-        if (entity is null) return null;
         return new DividerModuleBuilder();
     }
 
@@ -179,17 +191,24 @@ public static class CardExtensions
     /// </summary>
     public static FileModuleBuilder ToBuilder(this FileModule entity)
     {
-        if (entity is null) return null;
-        return new FileModuleBuilder { Source = entity.Source, Title = entity.Title };
+        return new FileModuleBuilder
+        {
+            Source = entity.Source,
+            Title = entity.Title
+        };
     }
 
     /// <summary>
-    ///     Converts the <see cref="AudioModule"/> to a <see cref="AudioModuleBuilder"/> with the same properties.
+    ///     Converts the <see cref="AudioModule"/> to an <see cref="AudioModuleBuilder"/> with the same properties.
     /// </summary>
     public static AudioModuleBuilder ToBuilder(this AudioModule entity)
     {
-        if (entity is null) return null;
-        return new AudioModuleBuilder { Source = entity.Source, Title = entity.Title, Cover = entity.Cover };
+        return new AudioModuleBuilder
+        {
+            Source = entity.Source,
+            Title = entity.Title,
+            Cover = entity.Cover
+        };
     }
 
     /// <summary>
@@ -197,8 +216,11 @@ public static class CardExtensions
     /// </summary>
     public static VideoModuleBuilder ToBuilder(this VideoModule entity)
     {
-        if (entity is null) return null;
-        return new VideoModuleBuilder { Source = entity.Source, Title = entity.Title };
+        return new VideoModuleBuilder
+        {
+            Source = entity.Source,
+            Title = entity.Title
+        };
     }
 
     /// <summary>
@@ -206,20 +228,23 @@ public static class CardExtensions
     /// </summary>
     public static CountdownModuleBuilder ToBuilder(this CountdownModule entity)
     {
-        if (entity is null) return null;
         return new CountdownModuleBuilder
         {
-            Mode = entity.Mode, EndTime = entity.EndTime, StartTime = entity.StartTime
+            Mode = entity.Mode,
+            EndTime = entity.EndTime,
+            StartTime = entity.StartTime
         };
     }
 
     /// <summary>
-    ///     Converts the <see cref="InviteModule"/> to a <see cref="InviteModuleBuilder"/> with the same properties.
+    ///     Converts the <see cref="InviteModule"/> to an <see cref="InviteModuleBuilder"/> with the same properties.
     /// </summary>
     public static InviteModuleBuilder ToBuilder(this InviteModule entity)
     {
-        if (entity is null) return null;
-        return new InviteModuleBuilder { Code = entity.Code };
+        return new InviteModuleBuilder
+        {
+            Code = entity.Code
+        };
     }
 
     #endregion
@@ -227,32 +252,28 @@ public static class CardExtensions
     #region Cards
 
     /// <summary>
-    ///     Converts the <see cref="ICard"/> to a <see cref="ICardBuilder"/> with the same properties.
+    ///     Converts the <see cref="ICard"/> to an <see cref="ICardBuilder"/> with the same properties.
     /// </summary>
-    public static ICardBuilder ToBuilder(this ICard builder)
+    public static ICardBuilder ToBuilder(this ICard entity)
     {
-        if (builder is null) return null;
-
-        return builder.Type switch
+        return entity switch
         {
-            CardType.Card => (builder as Card).ToBuilder(),
-            _ => throw new ArgumentOutOfRangeException(nameof(builder))
+            Card { Type: CardType.Card } card => card.ToBuilder(),
+            _ => throw new ArgumentOutOfRangeException(nameof(entity))
         };
     }
 
     /// <summary>
     ///     Converts the <see cref="Card"/> to a <see cref="CardBuilder"/> with the same properties.
     /// </summary>
-    public static CardBuilder ToBuilder(this Card builder)
+    public static CardBuilder ToBuilder(this Card entity)
     {
-        if (builder is null) return null;
-
         return new CardBuilder
         {
-            Theme = builder.Theme,
-            Size = builder.Size,
-            Color = builder.Color,
-            Modules = builder.Modules.Select(m => m.ToBuilder()).ToList()
+            Theme = entity.Theme,
+            Size = entity.Size,
+            Color = entity.Color,
+            Modules = entity.Modules.Select(m => m.ToBuilder()).ToList()
         };
     }
 

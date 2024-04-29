@@ -4,22 +4,24 @@ namespace Kook.API.Rest;
 
 internal class CreateGuildEmoteParams
 {
-    public string Name { get; set; }
-    public ulong GuildId { get; set; }
-    public Stream File { get; set; }
+    public string? Name { get; set; }
+    public required ulong GuildId { get; set; }
+    public required Stream File { get; set; }
 
     public IReadOnlyDictionary<string, object> ToDictionary()
     {
-        Dictionary<string, object> d = new() { ["guild_id"] = GuildId };
+        Dictionary<string, object> dic = new()
+        {
+            ["guild_id"] = GuildId
+        };
+        if (Name is not null)
+            dic["name"] = $"{Name}";
 
-        if (Name is not null) d["name"] = $"{Name}";
+        string contentType = File is FileStream fileStream
+            ? $"image/{Path.GetExtension(fileStream.Name)}"
+            : "image/png";
+        dic["emoji"] = new MultipartFile(File, Name ?? "image", contentType.Replace(".", ""));
 
-        string contentType = "image/png";
-
-        if (File is FileStream fileStream) contentType = $"image/{Path.GetExtension(fileStream.Name)}";
-
-        d["emoji"] = new MultipartFile(File, Name ?? "image", contentType.Replace(".", ""));
-
-        return d;
+        return dic;
     }
 }

@@ -4,10 +4,9 @@ namespace Kook.API;
 
 internal class NotImplementedEmbed : EmbedBase
 {
-    internal NotImplementedEmbed(string rawType, string url, JsonNode rawJsonNode)
+    internal NotImplementedEmbed(string rawType, JsonNode rawJsonNode)
     {
         RawType = rawType;
-        Url = url;
         RawJsonNode = rawJsonNode;
     }
 

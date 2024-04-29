@@ -17,8 +17,7 @@ public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
     internal static RestChannel Create(BaseKookClient kook, Model model) =>
         model.Type switch
         {
-            ChannelType.Text or ChannelType.Voice
-                => RestGuildChannel.Create(kook, new RestGuild(kook, model.GuildId), model),
+            ChannelType.Text or ChannelType.Voice => RestGuildChannel.Create(kook, new RestGuild(kook, model.GuildId), model),
             ChannelType.Category => RestCategoryChannel.Create(kook, new RestGuild(kook, model.GuildId), model),
             _ => new RestChannel(kook, model.Id)
         };
@@ -26,8 +25,7 @@ public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
     internal static RestChannel Create(BaseKookClient kook, Model model, IGuild guild) =>
         model.Type switch
         {
-            ChannelType.Text or ChannelType.Voice
-                => RestGuildChannel.Create(kook, guild, model),
+            ChannelType.Text or ChannelType.Voice => RestGuildChannel.Create(kook, guild, model),
             ChannelType.Category => RestCategoryChannel.Create(kook, guild, model),
             _ => new RestChannel(kook, model.Id)
         };
@@ -37,22 +35,22 @@ public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
     }
 
     /// <inheritdoc />
-    public virtual Task UpdateAsync(RequestOptions options = null) => Task.Delay(0);
+    public virtual Task UpdateAsync(RequestOptions? options = null) => Task.Delay(0);
 
     #endregion
 
     #region IChannel
 
     /// <inheritdoc />
-    string IChannel.Name => null;
+    string IChannel.Name => string.Empty;
 
     /// <inheritdoc />
-    Task<IUser> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
-        => Task.FromResult<IUser>(null); //Overridden
+    Task<IUser?> IChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IUser?>(null); //Overridden
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions options)
-        => AsyncEnumerable.Empty<IReadOnlyCollection<IUser>>(); //Overridden
+    IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options) =>
+        AsyncEnumerable.Empty<IReadOnlyCollection<IUser>>(); //Overridden
 
     #endregion
 }

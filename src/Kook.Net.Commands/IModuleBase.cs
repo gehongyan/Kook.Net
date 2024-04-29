@@ -26,7 +26,7 @@ public interface IModuleBase
     void BeforeExecute(CommandInfo command);
 
     /// <summary>
-    ///     Executed after a command is ran in this module base.
+    ///     Executed after a command is run in this module base.
     /// </summary>
     /// <param name="command">The command that ran.</param>
     void AfterExecute(CommandInfo command);

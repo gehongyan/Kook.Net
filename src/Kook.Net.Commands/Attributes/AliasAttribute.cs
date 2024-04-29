@@ -20,7 +20,7 @@ namespace Kook.Commands;
 ///     }
 ///     </code>
 /// </example>
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class AliasAttribute : Attribute
 {
     /// <summary>
@@ -31,5 +31,8 @@ public class AliasAttribute : Attribute
     /// <summary>
     ///     Creates a new <see cref="AliasAttribute" /> with the given aliases.
     /// </summary>
-    public AliasAttribute(params string[] aliases) => Aliases = aliases;
+    public AliasAttribute(params string[] aliases)
+    {
+        Aliases = aliases;
+    }
 }

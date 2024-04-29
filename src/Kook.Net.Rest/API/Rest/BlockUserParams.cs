@@ -5,5 +5,5 @@ namespace Kook.API.Rest;
 internal class BlockUserParams
 {
     [JsonPropertyName("user_id")]
-    public ulong UserId { get; set; }
+    public required ulong UserId { get; set; }
 }
