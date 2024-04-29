@@ -12,9 +12,14 @@ public struct ImageEmbed : IEmbed
     }
 
     /// <inheritdoc />
-    public EmbedType Type => EmbedType.Link;
+    public EmbedType Type => EmbedType.Image;
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     Gets the URL of this embed.
+    /// </summary>
+    /// <returns>
+    ///     A <c>string</c> that represents the URL of this embed.
+    /// </returns>
     public string Url { get; internal set; }
 
     /// <summary>

@@ -27,7 +27,7 @@ public class HttpException : Exception
     /// <summary>
     ///     Gets the reason of the exception.
     /// </summary>
-    public string Reason { get; }
+    public string? Reason { get; }
 
     /// <summary>
     ///     Gets the request object used to send the request.
@@ -47,8 +47,8 @@ public class HttpException : Exception
     /// <param name="kookCode"> The Kook status code returned. </param>
     /// <param name="reason"> The reason behind the exception. </param>
     /// <param name="errors"> A collection of json errors describing what went wrong with the request. </param>
-    public HttpException(HttpStatusCode httpCode, IRequest request, KookErrorCode? kookCode = null, string reason = null,
-        KookJsonError[] errors = null)
+    public HttpException(HttpStatusCode httpCode, IRequest request, KookErrorCode? kookCode = null, string? reason = null,
+        KookJsonError[]? errors = null)
         : base(CreateMessage(httpCode, (int?)kookCode, reason))
     {
         HttpCode = httpCode;
@@ -58,24 +58,13 @@ public class HttpException : Exception
         Errors = errors?.ToImmutableArray() ?? ImmutableArray<KookJsonError>.Empty;
     }
 
-    private static string CreateMessage(HttpStatusCode httpCode, int? kookCode = null, string reason = null)
+    private static string CreateMessage(HttpStatusCode httpCode, int? kookCode = null, string? reason = null)
     {
-        string msg;
-        if (kookCode != null && kookCode != 0)
-        {
-            if (reason != null)
-                msg = $"The server responded with error {(int)kookCode}: {reason}";
-            else
-                msg = $"The server responded with error {(int)kookCode}: {httpCode}";
-        }
-        else
-        {
-            if (reason != null)
-                msg = $"The server responded with error {(int)httpCode}: {reason}";
-            else
-                msg = $"The server responded with error {(int)httpCode}: {httpCode}";
-        }
-
-        return msg;
+        int closeCode = kookCode.HasValue && kookCode != 0
+            ? kookCode.Value
+            : (int) httpCode;
+        return reason != null
+            ? $"The server responded with error {closeCode}: {reason}"
+            : $"The server responded with error {closeCode}: {httpCode}";
     }
 }

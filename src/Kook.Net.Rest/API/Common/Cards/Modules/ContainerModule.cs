@@ -5,5 +5,5 @@ namespace Kook.API;
 internal class ContainerModule : ModuleBase
 {
     [JsonPropertyName("elements")]
-    public ImageElement[] Elements { get; set; }
+    public required ImageElement[] Elements { get; set; }
 }

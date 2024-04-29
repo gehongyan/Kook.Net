@@ -1,3 +1,5 @@
+using Kook.Rest;
+
 namespace Kook.WebSocket;
 
 public abstract partial class BaseSocketClient
@@ -170,13 +172,13 @@ public abstract partial class BaseSocketClient
     ///         information.
     ///     </note>
     /// </remarks>
-    public event Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task> DirectReactionAdded
+    public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task> DirectReactionAdded
     {
         add => _directReactionAddedEvent.Add(value);
         remove => _directReactionAddedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task>> _directReactionAddedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<SocketDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task>> _directReactionAddedEvent = new();
 
     /// <summary> Fired when a reaction is removed from a message. </summary>
     /// <remarks>
@@ -209,13 +211,13 @@ public abstract partial class BaseSocketClient
     ///         information.
     ///     </note>
     /// </remarks>
-    public event Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task> DirectReactionRemoved
+    public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task> DirectReactionRemoved
     {
         add => _directReactionRemovedEvent.Add(value);
         remove => _directReactionRemovedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task>> _directReactionRemovedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<SocketDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task>> _directReactionRemovedEvent = new();
 
     #endregion
 
@@ -311,13 +313,13 @@ public abstract partial class BaseSocketClient
     ///         <see cref="SocketTextChannel"/> parameter.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, SocketTextChannel, Task> MessageUpdated
+    public event Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, SocketTextChannel, Task> MessageUpdated
     {
         add => _messageUpdatedEvent.Add(value);
         remove => _messageUpdatedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, SocketTextChannel, Task>> _messageUpdatedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, SocketTextChannel, Task>> _messageUpdatedEvent = new();
 
     /// <summary> Fired when a message is pinned. </summary>
     /// <remarks>
@@ -354,13 +356,13 @@ public abstract partial class BaseSocketClient
     ///         is preserved in the <see cref="ulong"/>.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task> MessagePinned
+    public event Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task> MessagePinned
     {
         add => _messagePinnedEvent.Add(value);
         remove => _messagePinnedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task>> _messagePinnedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task>> _messagePinnedEvent = new();
 
     /// <summary> Fired when a message is unpinned. </summary>
     /// <remarks>
@@ -397,13 +399,13 @@ public abstract partial class BaseSocketClient
     ///         is preserved in the <see cref="ulong"/>.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task> MessageUnpinned
+    public event Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task> MessageUnpinned
     {
         add => _messageUnpinnedEvent.Add(value);
         remove => _messageUnpinnedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<SocketMessage, Guid>, Cacheable<SocketMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task>> _messageUnpinnedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task>> _messageUnpinnedEvent = new();
 
     #endregion
 
@@ -510,13 +512,13 @@ public abstract partial class BaseSocketClient
     ///         otherwise, the direct message channel has not been created yet, and the <see cref="Guid"/> as chat code will be preserved.
     ///     </para>
     /// </remarks>
-    public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketMessage, Guid>, Cacheable<SocketUser, ulong>, Cacheable<SocketDMChannel, Guid>, Task> DirectMessageUpdated
+    public event Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, Cacheable<SocketUser, ulong>, Cacheable<SocketDMChannel, Guid>, Task> DirectMessageUpdated
     {
         add => _directMessageUpdatedEvent.Add(value);
         remove => _directMessageUpdatedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<SocketMessage, Guid>, Cacheable<SocketUser, ulong>, Cacheable<SocketDMChannel, Guid>, Task>> _directMessageUpdatedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, Cacheable<SocketUser, ulong>, Cacheable<SocketDMChannel, Guid>, Task>> _directMessageUpdatedEvent = new();
 
     #endregion
 
@@ -539,13 +541,13 @@ public abstract partial class BaseSocketClient
     ///         The time at which the user joined the guild will be passed into the <see cref="DateTimeOffset"/> parameter.
     ///     </para>
     /// </remarks>
-    public event Func<SocketGuildUser, DateTimeOffset, Task> UserJoined
+    public event Func<Cacheable<SocketGuildUser, ulong>, DateTimeOffset, Task> UserJoined
     {
         add => _userJoinedEvent.Add(value);
         remove => _userJoinedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<SocketGuildUser, DateTimeOffset, Task>> _userJoinedEvent = new();
+    internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, DateTimeOffset, Task>> _userJoinedEvent = new();
 
     /// <summary> Fired when a user leaves a guild. </summary>
     /// <remarks>
@@ -594,7 +596,7 @@ public abstract partial class BaseSocketClient
     ///     </para>
     ///     <para>
     ///         The users who operated the bans is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketUser"/> when the user
+    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the user
     ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
     ///         is preserved in the <see cref="ulong"/>.
     ///     </para>
@@ -606,13 +608,13 @@ public abstract partial class BaseSocketClient
     ///         The reason of the ban is passed into the event handler parameter as <c>string</c>.
     ///     </para>
     /// </remarks>
-    public event Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketUser, ulong>, SocketGuild, string, Task> UserBanned
+    public event Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketGuildUser, ulong>, SocketGuild, string?, Task> UserBanned
     {
         add => _userBannedEvent.Add(value);
         remove => _userBannedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketUser, ulong>, SocketGuild, string, Task>> _userBannedEvent = new();
+    internal readonly AsyncEvent<Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketGuildUser, ulong>, SocketGuild, string?, Task>> _userBannedEvent = new();
 
     /// <summary> Fired when a user is unbanned from a guild. </summary>
     /// <remarks>
@@ -634,7 +636,7 @@ public abstract partial class BaseSocketClient
     ///     </para>
     ///     <para>
     ///         The users who operated the unbans is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketUser"/> when the user
+    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the user
     ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
     ///         is preserved in the <see cref="ulong"/>.
     ///     </para>
@@ -643,13 +645,13 @@ public abstract partial class BaseSocketClient
     ///         <see cref="SocketGuild"/>.
     ///     </para>
     /// </remarks>
-    public event Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketUser, ulong>, SocketGuild, Task> UserUnbanned
+    public event Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketGuildUser, ulong>, SocketGuild, Task> UserUnbanned
     {
         add => _userUnbannedEvent.Add(value);
         remove => _userUnbannedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketUser, ulong>, SocketGuild, Task>> _userUnbannedEvent = new();
+    internal readonly AsyncEvent<Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketGuildUser, ulong>, SocketGuild, Task>> _userUnbannedEvent = new();
 
     /// <summary> Fired when a user is updated. </summary>
     /// <remarks>
@@ -997,13 +999,13 @@ public abstract partial class BaseSocketClient
     ///         <see cref="SocketGuild"/>.
     ///     </para>
     /// </remarks>
-    public event Func<GuildEmote, GuildEmote, SocketGuild, Task> EmoteUpdated
+    public event Func<GuildEmote?, GuildEmote, SocketGuild, Task> EmoteUpdated
     {
         add => _emoteUpdatedEvent.Add(value);
         remove => _emoteUpdatedEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<GuildEmote, GuildEmote, SocketGuild, Task>> _emoteUpdatedEvent = new();
+    internal readonly AsyncEvent<Func<GuildEmote?, GuildEmote, SocketGuild, Task>> _emoteUpdatedEvent = new();
 
     #endregion
 

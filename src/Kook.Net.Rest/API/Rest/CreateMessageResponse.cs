@@ -13,5 +13,5 @@ internal class CreateMessageResponse
     public DateTimeOffset MessageTimestamp { get; set; }
 
     [JsonPropertyName("nonce")]
-    public string Nonce { get; set; }
+    public string? Nonce { get; set; }
 }

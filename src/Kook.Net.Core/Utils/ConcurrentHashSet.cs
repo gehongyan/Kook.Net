@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
@@ -8,22 +9,23 @@ namespace Kook;
 //Copyright (c) .NET Foundation and Contributors
 internal static class ConcurrentHashSet
 {
-    private const int PROCESSOR_COUNT_REFRESH_INTERVAL_MS = 30000;
-    private static volatile int s_processorCount;
-    private static volatile int s_lastProcessorCountRefreshTicks;
+    private const int ProcessorCountRefreshIntervalMs = 30000;
+    private static volatile int ProcessorCount;
+    private static volatile int LastProcessorCountRefreshTicks;
 
     public static int DefaultConcurrencyLevel
     {
         get
         {
             int now = Environment.TickCount;
-            if (s_processorCount == 0 || now - s_lastProcessorCountRefreshTicks >= PROCESSOR_COUNT_REFRESH_INTERVAL_MS)
+            if (ProcessorCount == 0
+                || now - LastProcessorCountRefreshTicks >= ProcessorCountRefreshIntervalMs)
             {
-                s_processorCount = Environment.ProcessorCount;
-                s_lastProcessorCountRefreshTicks = now;
+                ProcessorCount = Environment.ProcessorCount;
+                LastProcessorCountRefreshTicks = now;
             }
 
-            return s_processorCount;
+            return ProcessorCount;
         }
     }
 }
@@ -88,13 +90,11 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
         get
         {
             int count = 0;
-
             int acquiredLocks = 0;
             try
             {
                 AcquireAllLocks(ref acquiredLocks);
-
-                for (int i = 0; i < _tables._countPerLock.Length; i++) count += _tables._countPerLock[i];
+                count += _tables._countPerLock.Sum();
             }
             finally
             {
@@ -114,10 +114,8 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             {
                 // Acquire all locks
                 AcquireAllLocks(ref acquiredLocks);
-
-                for (int i = 0; i < _tables._countPerLock.Length; i++)
-                    if (_tables._countPerLock[i] != 0)
-                        return false;
+                if (Array.Exists(_tables._countPerLock, c => c != 0))
+                    return false;
             }
             finally
             {
@@ -136,11 +134,11 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             try
             {
                 AcquireAllLocks(ref locksAcquired);
-                List<T> values = new();
+                List<T> values = [];
 
-                for (int i = 0; i < _tables._buckets.Length; i++)
+                foreach (Node node in _tables._buckets)
                 {
-                    Node current = _tables._buckets[i];
+                    Node current = node;
                     while (current != null)
                     {
                         values.Add(current._value);
@@ -181,7 +179,8 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
     public ConcurrentHashSet(IEnumerable<T> collection, IEqualityComparer<T> comparer)
         : this(comparer)
     {
-        if (collection == null) throw new ArgumentNullException(nameof(collection));
+        if (collection == null)
+            throw new ArgumentNullException(nameof(collection));
 
         InitializeFromCollection(collection);
     }
@@ -192,9 +191,11 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
     public ConcurrentHashSet(int concurrencyLevel, IEnumerable<T> collection, IEqualityComparer<T> comparer)
         : this(concurrencyLevel, DefaultCapacity, false, comparer)
     {
-        if (collection == null) throw new ArgumentNullException(nameof(collection));
+        if (collection == null)
+            throw new ArgumentNullException(nameof(collection));
 
-        if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+        if (comparer == null)
+            throw new ArgumentNullException(nameof(comparer));
 
         InitializeFromCollection(collection);
     }
@@ -206,16 +207,21 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
 
     internal ConcurrentHashSet(int concurrencyLevel, int capacity, bool growLockArray, IEqualityComparer<T> comparer)
     {
-        if (concurrencyLevel < 1) throw new ArgumentOutOfRangeException(nameof(concurrencyLevel));
+        if (concurrencyLevel < 1)
+            throw new ArgumentOutOfRangeException(nameof(concurrencyLevel));
 
-        if (capacity < 0) throw new ArgumentOutOfRangeException(nameof(capacity));
+        if (capacity < 0)
+            throw new ArgumentOutOfRangeException(nameof(capacity));
 
-        if (comparer == null) throw new ArgumentNullException(nameof(comparer));
+        if (comparer == null)
+            throw new ArgumentNullException(nameof(comparer));
 
-        if (capacity < concurrencyLevel) capacity = concurrencyLevel;
+        if (capacity < concurrencyLevel)
+            capacity = concurrencyLevel;
 
         object[] locks = new object[concurrencyLevel];
-        for (int i = 0; i < locks.Length; i++) locks[i] = new object();
+        for (int i = 0; i < locks.Length; i++)
+            locks[i] = new object();
 
         int[] countPerLock = new int[locks.Length];
         Node[] buckets = new Node[capacity];
@@ -230,18 +236,22 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
     {
         foreach (T value in collection)
         {
-            if (value == null) throw new ArgumentNullException("key");
+            if (value == null)
+                throw new ArgumentNullException("key");
 
-            if (!TryAddInternal(value, _comparer.GetHashCode(value), false)) throw new ArgumentException();
+            if (!TryAddInternal(value, _comparer.GetHashCode(value), false))
+                throw new ArgumentException();
         }
 
-        if (_budget == 0) _budget = _tables._buckets.Length / _tables._locks.Length;
+        if (_budget == 0)
+            _budget = _tables._buckets.Length / _tables._locks.Length;
     }
 
     /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c></exception>
     public bool ContainsKey(T value)
     {
-        if (value == null) throw new ArgumentNullException("key");
+        if (value == null)
+            throw new ArgumentNullException("key");
 
         return ContainsKeyInternal(value, _comparer.GetHashCode(value));
     }
@@ -249,15 +259,12 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
     private bool ContainsKeyInternal(T value, int hashcode)
     {
         Tables tables = _tables;
-
         int bucketNo = GetBucket(hashcode, tables._buckets.Length);
-
         Node n = Volatile.Read(ref tables._buckets[bucketNo]);
-
         while (n != null)
         {
-            if (hashcode == n._hashcode && _comparer.Equals(n._value, value)) return true;
-
+            if (hashcode == n._hashcode && _comparer.Equals(n._value, value))
+                return true;
             n = n._next;
         }
 
@@ -267,7 +274,8 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
     /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c></exception>
     public bool TryAdd(T value)
     {
-        if (value == null) throw new ArgumentNullException("key");
+        if (value == null)
+            throw new ArgumentNullException("key");
 
         return TryAddInternal(value, _comparer.GetHashCode(value), true);
     }
@@ -283,14 +291,17 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             bool lockTaken = false;
             try
             {
-                if (acquireLock) Monitor.Enter(tables._locks[lockNo], ref lockTaken);
+                if (acquireLock)
+                    Monitor.Enter(tables._locks[lockNo], ref lockTaken);
 
-                if (tables != _tables) continue;
+                if (tables != _tables)
+                    continue;
 
-                Node prev = null;
+                Node? prev = null;
                 for (Node node = tables._buckets[bucketNo]; node != null; node = node._next)
                 {
-                    if (hashcode == node._hashcode && _comparer.Equals(node._value, value)) return false;
+                    if (hashcode == node._hashcode && _comparer.Equals(node._value, value))
+                        return false;
 
                     prev = node;
                 }
@@ -305,10 +316,12 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             }
             finally
             {
-                if (lockTaken) Monitor.Exit(tables._locks[lockNo]);
+                if (lockTaken)
+                    Monitor.Exit(tables._locks[lockNo]);
             }
 
-            if (resizeDesired) GrowTable(tables);
+            if (resizeDesired)
+                GrowTable(tables);
 
             return true;
         }
@@ -317,12 +330,13 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
     /// <exception cref="ArgumentNullException"><paramref name="value"/> is <c>null</c></exception>
     public bool TryRemove(T value)
     {
-        if (value == null) throw new ArgumentNullException("key");
+        if (value == null)
+            throw new ArgumentNullException("key");
 
         return TryRemoveInternal(value);
     }
 
-    private bool TryRemoveInternal(T value)
+    private bool TryRemoveInternal([DisallowNull] T value)
     {
         int hashcode = _comparer.GetHashCode(value);
         while (true)
@@ -334,7 +348,7 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             {
                 if (tables != _tables) continue;
 
-                Node prev = null;
+                Node? prev = null;
                 for (Node curr = tables._buckets[bucketNo]; curr != null; curr = curr._next)
                 {
                     if (hashcode == curr._hashcode && _comparer.Equals(curr._value, value))
@@ -353,7 +367,7 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
                 }
             }
 
-            value = default(T);
+            value = default!;
             return false;
         }
     }
@@ -400,15 +414,18 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
         try
         {
             AcquireLocks(0, 1, ref locksAcquired);
-            if (tables != _tables) return;
+            if (tables != _tables)
+                return;
 
             long approxCount = 0;
-            for (int i = 0; i < tables._countPerLock.Length; i++) approxCount += tables._countPerLock[i];
+            foreach (int x in tables._countPerLock)
+                approxCount += x;
 
             if (approxCount < tables._buckets.Length / 4)
             {
                 _budget = 2 * _budget;
-                if (_budget < 0) _budget = int.MaxValue;
+                if (_budget < 0)
+                    _budget = int.MaxValue;
 
                 return;
             }
@@ -420,9 +437,11 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
                 checked
                 {
                     newLength = tables._buckets.Length * 2 + 1;
-                    while (newLength % 3 == 0 || newLength % 5 == 0 || newLength % 7 == 0) newLength += 2;
+                    while (newLength % 3 == 0 || newLength % 5 == 0 || newLength % 7 == 0)
+                        newLength += 2;
 
-                    if (newLength > MaxArrayLength) maximizeTableSize = true;
+                    if (newLength > MaxArrayLength)
+                        maximizeTableSize = true;
                 }
             }
             catch (OverflowException)
@@ -444,7 +463,8 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             {
                 newLocks = new object[tables._locks.Length * 2];
                 Array.Copy(tables._locks, 0, newLocks, 0, tables._locks.Length);
-                for (int i = tables._locks.Length; i < newLocks.Length; i++) newLocks[i] = new object();
+                for (int i = tables._locks.Length; i < newLocks.Length; i++)
+                    newLocks[i] = new object();
             }
 
             Node[] newBuckets = new Node[newLength];
@@ -497,7 +517,8 @@ internal class ConcurrentHashSet<T> : IReadOnlyCollection<T>
             }
             finally
             {
-                if (lockTaken) locksAcquired++;
+                if (lockTaken)
+                    locksAcquired++;
             }
         }
     }

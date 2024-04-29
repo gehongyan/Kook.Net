@@ -3,13 +3,13 @@ namespace Kook.Commands;
 /// <summary>
 ///     Marks the execution information for a command.
 /// </summary>
-[AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+[AttributeUsage(AttributeTargets.Method)]
 public class CommandAttribute : Attribute
 {
     /// <summary>
     ///     Gets the text that has been set to be recognized as a command.
     /// </summary>
-    public string Text { get; }
+    public string? Text { get; }
 
     /// <summary>
     ///     Specifies the <see cref="RunMode" /> of the command. This affects how the command is executed.
@@ -27,7 +27,7 @@ public class CommandAttribute : Attribute
     /// <remarks>
     ///     <see cref="Summary"/> overrides the value of this property if present.
     /// </remarks>
-    public string Summary { get; set; }
+    public string? Summary { get; set; }
 
     /// <summary>
     ///     Marks the aliases for a command.
@@ -35,7 +35,7 @@ public class CommandAttribute : Attribute
     /// <remarks>
     ///     <see cref="AliasAttribute"/> extends the base value of this if present.
     /// </remarks>
-    public string[] Aliases { get; set; }
+    public string[]? Aliases { get; set; }
 
     /// <summary>
     ///     Attaches remarks to your commands.
@@ -43,16 +43,21 @@ public class CommandAttribute : Attribute
     /// <remarks>
     ///     <see cref="RemainderAttribute"/> overrides the value of this property if present.
     /// </remarks>
-    public string Remarks { get; set; }
+    public string? Remarks { get; set; }
 
     /// <inheritdoc />
-    public CommandAttribute() => Text = null;
+    public CommandAttribute()
+    {
+    }
 
     /// <summary>
     ///     Initializes a new <see cref="CommandAttribute" /> attribute with the specified name.
     /// </summary>
     /// <param name="text">The name of the command.</param>
-    public CommandAttribute(string text) => Text = text;
+    public CommandAttribute(string text)
+    {
+        Text = text;
+    }
 
     /// <summary>
     ///     Initializes a new <see cref="CommandAttribute" /> attribute with the specified name
@@ -64,7 +69,7 @@ public class CommandAttribute : Attribute
     /// <param name="aliases"> The aliases of the command. </param>
     /// <param name="remarks"> The remarks of the command. </param>
     public CommandAttribute(string text, bool ignoreExtraArgs,
-        string summary = default, string[] aliases = default, string remarks = default)
+        string? summary = null, string[]? aliases = null, string? remarks = null)
     {
         Text = text;
         IgnoreExtraArgs = ignoreExtraArgs;

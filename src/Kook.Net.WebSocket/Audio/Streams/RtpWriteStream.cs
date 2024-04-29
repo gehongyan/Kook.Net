@@ -70,16 +70,16 @@ public class RtpWriteStream : AudioOutStream
         Buffer.BlockCopy(buffer, offset, _buffer, 12, count);
 
         _next.WriteHeader(_nextSeq, _nextTimestamp, false);
-        return _next.WriteAsync(_buffer, 0, count + 12);
+        return _next.WriteAsync(_buffer, 0, count + 12, cancellationToken);
     }
 
     /// <inheritdoc />
-    public override Task FlushAsync(CancellationToken cancellationToken)
-        => _next.FlushAsync(cancellationToken);
+    public override Task FlushAsync(CancellationToken cancellationToken) =>
+        _next.FlushAsync(cancellationToken);
 
     /// <inheritdoc />
-    public override Task ClearAsync(CancellationToken cancellationToken)
-        => _next.ClearAsync(cancellationToken);
+    public override Task ClearAsync(CancellationToken cancellationToken) =>
+        _next.ClearAsync(cancellationToken);
 
     /// <inheritdoc />
     protected override void Dispose(bool disposing)

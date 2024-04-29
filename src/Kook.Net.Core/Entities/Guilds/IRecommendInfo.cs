@@ -16,7 +16,7 @@ public interface IRecommendInfo
     /// <summary>
     ///     Gets the open ID for the recommended guild.
     /// </summary>
-    uint OpenId { get; }
+    uint? OpenId { get; }
 
     /// <summary>
     ///     Gets the default channel ID of the recommended guild.

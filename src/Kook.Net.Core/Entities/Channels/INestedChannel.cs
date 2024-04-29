@@ -31,7 +31,7 @@ public interface INestedChannel : IGuildChannel
     /// <returns>
     ///     A task that represents the asynchronous operation for syncing channel permissions with its parent's.
     /// </returns>
-    Task SyncPermissionsAsync(RequestOptions options = null);
+    Task SyncPermissionsAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the parent (category) channel of this channel.
@@ -42,7 +42,7 @@ public interface INestedChannel : IGuildChannel
     ///     A task that represents the asynchronous get operation. The task result contains the category channel
     ///     representing the parent of this channel; <c>null</c> if none is set.
     /// </returns>
-    Task<ICategoryChannel> GetCategoryAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions options = null);
+    Task<ICategoryChannel?> GetCategoryAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 
@@ -56,7 +56,7 @@ public interface INestedChannel : IGuildChannel
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     invite, each representing information for an invite found within this guild.
     /// </returns>
-    Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions options = null);
+    Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Creates a new invite to this channel.
@@ -68,8 +68,9 @@ public interface INestedChannel : IGuildChannel
     ///     A task that represents the asynchronous invite creation operation. The task result contains an invite
     ///     metadata object containing information for the created invite.
     /// </returns>
-    Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited,
-        RequestOptions options = null);
+    Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800,
+        InviteMaxUses maxUses = InviteMaxUses.Unlimited,
+        RequestOptions? options = null);
 
     /// <summary>
     ///     Creates a new invite to this channel.
@@ -81,7 +82,7 @@ public interface INestedChannel : IGuildChannel
     ///     A task that represents the asynchronous invite creation operation. The task result contains an invite
     ///     metadata object containing information for the created invite.
     /// </returns>
-    Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null, RequestOptions options = null);
+    Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null, RequestOptions? options = null);
 
     #endregion
 }

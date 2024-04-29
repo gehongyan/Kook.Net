@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     Represents a tag found in <see cref="IMessage"/>.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Tag<T> : ITag
 {
     /// <inheritdoc />
@@ -28,9 +28,9 @@ public class Tag<T> : ITag
     ///     this property returns the same entity as <see cref="IGuild.EveryoneRole"/> for convenience.
     ///     because there is no actual entities representing a group of online users.
     /// </remarks>
-    public T Value { get; }
+    public T? Value { get; }
 
-    internal Tag(TagType type, int index, int length, dynamic key, T value)
+    internal Tag(TagType type, int index, int length, dynamic key, T? value)
     {
         Type = type;
         Index = index;
@@ -45,5 +45,5 @@ public class Tag<T> : ITag
     public override string ToString() => DebuggerDisplay;
 
     /// <inheritdoc />
-    object ITag.Value => Value;
+    object? ITag.Value => Value;
 }

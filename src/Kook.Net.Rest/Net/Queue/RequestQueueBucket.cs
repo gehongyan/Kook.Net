@@ -19,8 +19,8 @@ internal class RequestBucket
     private readonly RequestQueue _queue;
     private int _semaphore;
     private DateTimeOffset? _resetTick;
-    private RequestBucket _redirectBucket;
-    private JsonSerializerOptions _serializerOptions;
+    private RequestBucket? _redirectBucket;
+    private readonly JsonSerializerOptions _serializerOptions;
 
     public BucketId Id { get; private set; }
     public int WindowCount { get; private set; }
@@ -30,16 +30,17 @@ internal class RequestBucket
     {
         _serializerOptions = new JsonSerializerOptions
         {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, NumberHandling = JsonNumberHandling.AllowReadingFromString
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
         _queue = queue;
         Id = id;
 
         _lock = new object();
 
-        if (request.Options.IsClientBucket)
+        if (request.Options.IsClientBucket && request.Options.BucketId != null)
             WindowCount = ClientBucket.Get(request.Options.BucketId).WindowCount;
-        else if (request.Options.IsGatewayBucket)
+        else if (request.Options.IsGatewayBucket && request.Options.BucketId != null)
             WindowCount = GatewayBucket.Get(request.Options.BucketId).WindowCount;
         else
             WindowCount = 1; //Only allow one request until we get a header back
@@ -55,17 +56,18 @@ internal class RequestBucket
     {
         int id = Interlocked.Increment(ref nextId);
 #if DEBUG_LIMITS
-            Debug.WriteLine($"[{id}] Start");
+        Debug.WriteLine($"[{id}] Start");
 #endif
         LastAttemptAt = DateTimeOffset.UtcNow;
         while (true)
         {
             await _queue.EnterGlobalAsync(id, request).ConfigureAwait(false);
             await EnterAsync(id, request).ConfigureAwait(false);
-            if (_redirectBucket != null) return await _redirectBucket.SendAsync(request);
+            if (_redirectBucket != null)
+                return await _redirectBucket.SendAsync(request);
 
 #if DEBUG_LIMITS
-                Debug.WriteLine($"[{id}] Sending...");
+            Debug.WriteLine($"[{id}] Sending...");
 #endif
             RestResponse response = default;
             RateLimitInfo info = default;
@@ -83,14 +85,14 @@ internal class RequestBucket
                             if (info.IsGlobal)
                             {
 #if DEBUG_LIMITS
-                                    Debug.WriteLine($"[{id}] (!) 429 [Global]");
+                                Debug.WriteLine($"[{id}] (!) 429 [Global]");
 #endif
                                 _queue.PauseGlobal(info);
                             }
                             else
                             {
 #if DEBUG_LIMITS
-                                    Debug.WriteLine($"[{id}] (!) 429");
+                                Debug.WriteLine($"[{id}] (!) 429");
 #endif
                             }
 
@@ -98,14 +100,14 @@ internal class RequestBucket
                             continue;                   //Retry
                         case HttpStatusCode.BadGateway: //502
 #if DEBUG_LIMITS
-                                Debug.WriteLine($"[{id}] (!) 502");
+                            Debug.WriteLine($"[{id}] (!) 502");
 #endif
                             if ((request.Options.RetryMode & RetryMode.Retry502) == 0)
                                 throw new HttpException(HttpStatusCode.BadGateway, request, null);
 
                             continue; //Retry
                         default:
-                            API.Rest.RestResponseBase responseBase = null;
+                            API.Rest.RestResponseBase? responseBase = null;
                             if (response.Stream != null)
                                 try
                                 {
@@ -123,47 +125,45 @@ internal class RequestBucket
                                 responseBase?.Code,
                                 responseBase?.Message,
                                 responseBase?.Data is not null
-                                    ? new KookJsonError[]
-                                    {
+                                    ?
+                                    [
                                         new("root",
-                                            new KookError[] { new(((int)responseBase.Code).ToString(), responseBase.Message) }
+                                            [new(((int)responseBase.Code).ToString(), responseBase.Message)]
                                         )
-                                    }
+                                    ]
                                     : null
                             );
                     }
                 else
                 {
 #if DEBUG_LIMITS
-                        Debug.WriteLine($"[{id}] Success");
+                    Debug.WriteLine($"[{id}] Success");
 #endif
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-                        if (response.MediaTypeHeader.MediaType == MediaTypeNames.Application.Json)
-#else
-                    if (response.MediaTypeHeader.MediaType == "application/json")
-#endif
+                    if (response.MediaTypeHeader?.MediaType == "application/json")
                     {
-                        API.Rest.RestResponseBase responseBase =
+                        API.Rest.RestResponseBase? responseBase =
                             await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream, _serializerOptions);
                         if (responseBase?.Code > (KookErrorCode)0)
+                        {
                             throw new HttpException(
                                 response.StatusCode,
                                 request,
                                 responseBase.Code,
                                 responseBase.Message,
                                 responseBase.Data is not null
-                                    ? new KookJsonError[]
-                                    {
-                                        new("root",
-                                            new KookError[] { new(((int)responseBase.Code).ToString(), responseBase.Message) }
+                                    ?
+                                    [
+                                        new KookJsonError("root",
+                                            [new KookError(((int)responseBase.Code).ToString(), responseBase.Message)]
                                         )
-                                    }
+                                    ]
                                     : null
                             );
+                        }
 
                         return new MemoryStream(Encoding.UTF8.GetBytes(responseBase?.Data.ToString() ?? string.Empty));
                     }
-                    else if (response.MediaTypeHeader.MediaType == "image/svg+xml")
+                    else if (response.MediaTypeHeader?.MediaType == "image/svg+xml")
                         return response.Stream;
                 }
             }
@@ -171,9 +171,10 @@ internal class RequestBucket
             catch (TimeoutException)
             {
 #if DEBUG_LIMITS
-                    Debug.WriteLine($"[{id}] Timeout");
+                Debug.WriteLine($"[{id}] Timeout");
 #endif
-                if ((request.Options.RetryMode & RetryMode.RetryTimeouts) == 0) throw;
+                if ((request.Options.RetryMode & RetryMode.RetryTimeouts) == 0)
+                    throw;
 
                 await Task.Delay(500).ConfigureAwait(false);
                 continue; //Retry
@@ -193,7 +194,7 @@ internal class RequestBucket
             {
                 UpdateRateLimit(id, request, info, response.StatusCode == (HttpStatusCode)429);
 #if DEBUG_LIMITS
-                    Debug.WriteLine($"[{id}] Stop");
+                Debug.WriteLine($"[{id}] Stop");
 #endif
             }
         }
@@ -203,7 +204,7 @@ internal class RequestBucket
     {
         int id = Interlocked.Increment(ref nextId);
 #if DEBUG_LIMITS
-            Debug.WriteLine($"[{id}] Start");
+        Debug.WriteLine($"[{id}] Start");
 #endif
         LastAttemptAt = DateTimeOffset.UtcNow;
         while (true)
@@ -212,7 +213,7 @@ internal class RequestBucket
             await EnterAsync(id, request).ConfigureAwait(false);
 
 #if DEBUG_LIMITS
-                Debug.WriteLine($"[{id}] Sending...");
+            Debug.WriteLine($"[{id}] Sending...");
 #endif
             try
             {
@@ -222,9 +223,10 @@ internal class RequestBucket
             catch (TimeoutException)
             {
 #if DEBUG_LIMITS
-                    Debug.WriteLine($"[{id}] Timeout");
+                Debug.WriteLine($"[{id}] Timeout");
 #endif
-                if ((request.Options.RetryMode & RetryMode.RetryTimeouts) == 0) throw;
+                if ((request.Options.RetryMode & RetryMode.RetryTimeouts) == 0)
+                    throw;
 
                 await Task.Delay(500).ConfigureAwait(false);
                 continue; //Retry
@@ -242,9 +244,9 @@ internal class RequestBucket
             }*/
             finally
             {
-                UpdateRateLimit(id, request, default(RateLimitInfo), false);
+                UpdateRateLimit(id, request, default, false);
 #if DEBUG_LIMITS
-                    Debug.WriteLine($"[{id}] Stop");
+                Debug.WriteLine($"[{id}] Stop");
 #endif
             }
         }
@@ -256,7 +258,7 @@ internal class RequestBucket
             Debug.WriteLine($"[{id}] Trigger Bucket");
 #endif
         await EnterAsync(id, request).ConfigureAwait(false);
-        UpdateRateLimit(id, request, default(RateLimitInfo), false);
+        UpdateRateLimit(id, request, default, false);
     }
 
     private async Task EnterAsync(int id, IRequest request)
@@ -273,8 +275,7 @@ internal class RequestBucket
             {
                 if (!isRateLimited)
                     throw new TimeoutException();
-                else
-                    ThrowRetryLimit(request);
+                ThrowRetryLimit(request);
             }
 
             lock (_lock)
@@ -312,7 +313,7 @@ internal class RequestBucket
                     if (ignoreRatelimit)
                     {
 #if DEBUG_LIMITS
-                            Debug.WriteLine($"[{id}] Ignoring ratelimit");
+                        Debug.WriteLine($"[{id}] Ignoring ratelimit");
 #endif
                         break;
                     }
@@ -322,19 +323,21 @@ internal class RequestBucket
 
                 if (resetAt.HasValue && resetAt > DateTimeOffset.UtcNow)
                 {
-                    if (resetAt > timeoutAt) ThrowRetryLimit(request);
+                    if (resetAt > timeoutAt)
+                        ThrowRetryLimit(request);
 
                     int millis = (int)Math.Ceiling((resetAt.Value - DateTimeOffset.UtcNow).TotalMilliseconds);
 #if DEBUG_LIMITS
-                        Debug.WriteLine($"[{id}] Sleeping {millis} ms (Pre-emptive)");
+                    Debug.WriteLine($"[{id}] Sleeping {millis} ms (Pre-emptive)");
 #endif
                     if (millis > 0) await Task.Delay(millis, request.Options.CancellationToken).ConfigureAwait(false);
                 }
                 else
                 {
-                    if ((timeoutAt.Value - DateTimeOffset.UtcNow).TotalMilliseconds < MinimumSleepTimeMs) ThrowRetryLimit(request);
+                    if ((timeoutAt - DateTimeOffset.UtcNow)?.TotalMilliseconds < MinimumSleepTimeMs)
+                        ThrowRetryLimit(request);
 #if DEBUG_LIMITS
-                        Debug.WriteLine($"[{id}] Sleeping {MinimumSleepTimeMs}* ms (Pre-emptive)");
+                    Debug.WriteLine($"[{id}] Sleeping {MinimumSleepTimeMs}* ms (Pre-emptive)");
 #endif
                     await Task.Delay(MinimumSleepTimeMs, request.Options.CancellationToken).ConfigureAwait(false);
                 }
@@ -351,19 +354,20 @@ internal class RequestBucket
 
     private void UpdateRateLimit(int id, IRequest request, RateLimitInfo info, bool is429, bool redirected = false)
     {
-        if (WindowCount == 0) return;
+        if (WindowCount == 0)
+            return;
 
         lock (_lock)
         {
 #if DEBUG_LIMITS
-                Debug.WriteLine($"[{id}] Raw RateLimitInto: IsGlobal: {info.IsGlobal}, Limit: {info.Limit}, Remaining: {info.Remaining}, ResetAfter: {info.ResetAfter?.TotalSeconds}");
+            Debug.WriteLine($"[{id}] Raw RateLimitInto: IsGlobal: {info.IsGlobal}, Limit: {info.Limit}, Remaining: {info.Remaining}, ResetAfter: {info.ResetAfter?.TotalSeconds}");
 #endif
             if (redirected)
             {
                 // we might still hit a real ratelimit if all tickets were already taken, can't do much about it since we didn't know they were the same
                 Interlocked.Decrement(ref _semaphore);
 #if DEBUG_LIMITS
-                    Debug.WriteLine($"[{id}] Decrease Semaphore");
+                Debug.WriteLine($"[{id}] Decrease Semaphore");
 #endif
             }
 
@@ -371,14 +375,14 @@ internal class RequestBucket
 
             if (info.Bucket != null && !redirected)
             {
-                (RequestBucket, BucketId) hashBucket = _queue.UpdateBucketHash(Id, info.Bucket);
-                if (!(hashBucket.Item1 is null) && !(hashBucket.Item2 is null))
+                (RequestBucket?, BucketId?) hashBucket = _queue.UpdateBucketHash(Id, info.Bucket);
+                if (hashBucket.Item1 is not null && hashBucket.Item2 is not null)
                 {
                     if (hashBucket.Item1 == this) //this bucket got promoted to a hash queue
                     {
                         Id = hashBucket.Item2;
 #if DEBUG_LIMITS
-                            Debug.WriteLine($"[{id}] Promoted to Hash Bucket ({hashBucket.Item2})");
+                        Debug.WriteLine($"[{id}] Promoted to Hash Bucket ({hashBucket.Item2})");
 #endif
                     }
                     else
@@ -388,7 +392,7 @@ internal class RequestBucket
                         // update the hash bucket ratelimit
                         _redirectBucket.UpdateRateLimit(id, request, info, is429, true);
 #if DEBUG_LIMITS
-                            Debug.WriteLine($"[{id}] Redirected to {_redirectBucket.Id}");
+                        Debug.WriteLine($"[{id}] Redirected to {_redirectBucket.Id}");
 #endif
                         return;
                     }
@@ -399,7 +403,7 @@ internal class RequestBucket
             {
                 WindowCount = info.Limit.Value;
 #if DEBUG_LIMITS
-                    Debug.WriteLine($"[{id}] Updated Limit to {WindowCount}");
+                Debug.WriteLine($"[{id}] Updated Limit to {WindowCount}");
 #endif
             }
 
@@ -407,7 +411,7 @@ internal class RequestBucket
             {
                 _semaphore = info.Remaining.Value;
 #if DEBUG_LIMITS
-                    Debug.WriteLine($"[{id}] Updated Semaphore (Remaining) to {_semaphore}");
+                Debug.WriteLine($"[{id}] Updated Semaphore (Remaining) to {_semaphore}");
 #endif
             }
 
@@ -479,7 +483,7 @@ internal class RequestBucket
 #if DEBUG_LIMITS
                     Debug.WriteLine($"[{id}] Reset in {(int)Math.Ceiling((resetTick - DateTimeOffset.UtcNow).Value.TotalMilliseconds)} ms");
 #endif
-                    Task _ = QueueReset(id, (int)Math.Ceiling((_resetTick.Value - DateTimeOffset.UtcNow).TotalMilliseconds), request);
+                    _ = QueueReset(id, (int)Math.Ceiling((_resetTick.Value - DateTimeOffset.UtcNow).TotalMilliseconds), request);
                 }
 
                 return;
@@ -497,24 +501,26 @@ internal class RequestBucket
             if (!hasQueuedReset || resetTick > _resetTick)
             {
                 _resetTick = resetTick;
-                LastAttemptAt = resetTick.Value; //Make sure we don't destroy this until after its been reset
+                LastAttemptAt = resetTick.Value; //Make sure we don't destroy this until after it's been reset
 #if DEBUG_LIMITS
-                    Debug.WriteLine($"[{id}] Reset in {(int)Math.Ceiling((resetTick - DateTimeOffset.UtcNow).Value.TotalMilliseconds)} ms");
+                Debug.WriteLine($"[{id}] Reset in {(int)Math.Ceiling((resetTick - DateTimeOffset.UtcNow).Value.TotalMilliseconds)} ms");
 #endif
 
                 if (!hasQueuedReset)
-                {
-                    Task _ = QueueReset(id, (int)Math.Ceiling((_resetTick.Value - DateTimeOffset.UtcNow).TotalMilliseconds), request);
-                }
+                    _ = QueueReset(id, (int)Math.Ceiling((_resetTick.Value - DateTimeOffset.UtcNow).TotalMilliseconds), request);
             }
         }
     }
 
     private async Task QueueReset(int id, int millis, IRequest request)
     {
+        if (_resetTick == null)
+            return;
+
         while (true)
         {
-            if (millis > 0) await Task.Delay(millis).ConfigureAwait(false);
+            if (millis > 0)
+                await Task.Delay(millis).ConfigureAwait(false);
 
             lock (_lock)
             {
@@ -522,7 +528,7 @@ internal class RequestBucket
                 if (millis <= 0) //Make sure we haven't gotten a more accurate reset time
                 {
 #if DEBUG_LIMITS
-                        Debug.WriteLine($"[{id}] * Reset *");
+                    Debug.WriteLine($"[{id}] * Reset *");
 #endif
                     _semaphore = WindowCount;
                     _resetTick = null;
@@ -534,6 +540,7 @@ internal class RequestBucket
 
     private void ThrowRetryLimit(IRequest request)
     {
-        if ((request.Options.RetryMode & RetryMode.RetryRatelimit) == 0) throw new RateLimitedException(request);
+        if ((request.Options.RetryMode & RetryMode.RetryRatelimit) == 0)
+            throw new RateLimitedException(request);
     }
 }

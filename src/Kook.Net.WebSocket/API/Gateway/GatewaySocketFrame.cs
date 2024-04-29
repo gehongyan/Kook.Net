@@ -6,7 +6,6 @@ namespace Kook.API.Gateway;
 internal class GatewaySocketFrame
 {
     [JsonPropertyName("s")]
-    [JsonConverter(typeof(GatewaySocketFrameTypeConverter))]
     public GatewaySocketFrameType Type { get; set; }
 
     [JsonPropertyName("sn")]
@@ -14,5 +13,5 @@ internal class GatewaySocketFrame
 
     [JsonPropertyName("d")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public object Payload { get; set; }
+    public object? Payload { get; set; }
 }

@@ -9,22 +9,22 @@ internal class Guild
     public ulong Id { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [JsonPropertyName("topic")]
-    public string Topic { get; set; }
+    public required string Topic { get; set; }
 
     [JsonPropertyName("user_id")]
     public ulong OwnerId { get; set; }
 
     [JsonPropertyName("icon")]
-    public string Icon { get; set; }
+    public required string Icon { get; set; }
 
     [JsonPropertyName("notify_type")]
     public NotifyType NotifyType { get; set; }
 
     [JsonPropertyName("region")]
-    public string Region { get; set; }
+    public required string Region { get; set; }
 
     [JsonPropertyName("enable_open")]
     [JsonConverter(typeof(NumberBooleanConverter))]
@@ -44,8 +44,8 @@ internal class Guild
     public ulong WelcomeChannelId { get; set; }
 
     [JsonPropertyName("roles")]
-    public Role[] Roles { get; set; }
+    public Role[]? Roles { get; set; }
 
     [JsonPropertyName("channels")]
-    public Channel[] Channels { get; set; }
+    public Channel[]? Channels { get; set; }
 }

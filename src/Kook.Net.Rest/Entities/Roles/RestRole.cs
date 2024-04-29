@@ -6,7 +6,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     Represents a REST-based role.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestRole : RestEntity<uint>, IRole
 {
     #region RestRole
@@ -20,7 +20,7 @@ public class RestRole : RestEntity<uint>, IRole
     internal IGuild Guild { get; }
 
     /// <inheritdoc />
-    public RoleType? Type { get; private set; }
+    public RoleType Type { get; private set; }
 
     /// <inheritdoc />
     public Color Color { get; private set; }
@@ -61,8 +61,11 @@ public class RestRole : RestEntity<uint>, IRole
     public string PlainTextMention => IsEveryone ? "@全体成员" : MentionUtils.PlainTextMentionRole(Id);
 
     internal RestRole(BaseKookClient kook, IGuild guild, uint id)
-        : base(kook, id) =>
+        : base(kook, id)
+    {
         Guild = guild;
+        Name = string.Empty;
+    }
 
     internal static RestRole Create(BaseKookClient kook, IGuild guild, Model model)
     {
@@ -78,56 +81,46 @@ public class RestRole : RestEntity<uint>, IRole
         Color = model.Color;
         ColorType = model.ColorType;
         GradientColor = model.GradientColor;
+        Position = model.Position;
         IsHoisted = model.Hoist;
         IsMentionable = model.Mentionable;
-        Position = model.Position;
         Permissions = new GuildPermissions(model.Permissions);
     }
 
     /// <inheritdoc />
-    public async Task ModifyAsync(Action<RoleProperties> func, RequestOptions options = null)
+    public async Task ModifyAsync(Action<RoleProperties> func, RequestOptions? options = null)
     {
         Model model = await RoleHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
         Update(model);
     }
 
     /// <inheritdoc />
-    public Task DeleteAsync(RequestOptions options = null)
-        => RoleHelper.DeleteAsync(this, Kook, options);
+    public Task DeleteAsync(RequestOptions? options = null) =>
+        RoleHelper.DeleteAsync(this, Kook, options);
 
-    /// <inheritdoc cref="IRole.GetUsersAsync(CacheMode,RequestOptions)"/>
-    public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions options = null)
-    {
-        void Func(SearchGuildMemberProperties p) => p.RoleId = Id;
-        return GuildHelper.SearchUsersAsync(Guild, Kook, Func, KookConfig.MaxUsersPerBatch, options);
-    }
+    /// <summary>
+    ///     Gets a collection of users that have this role.
+    /// </summary>
+    /// <param name="options"> The options to be used when fetching the users. </param>
+    /// <returns> An asynchronous enumerable that contains a collection of users that have this role. </returns>
+    public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions? options = null) =>
+        GuildHelper.SearchUsersAsync(Guild, Kook, x => x.RoleId = Id, KookConfig.MaxUsersPerBatch, options);
 
     /// <inheritdoc />
-    public int CompareTo(IRole role) => RoleUtils.Compare(this, role);
+    public int CompareTo(IRole? role) => RoleUtils.Compare(this, role);
 
     #endregion
 
     #region IRole
 
     /// <inheritdoc />
-    IGuild IRole.Guild
-    {
-        get
-        {
-            if (Guild != null) return Guild;
-
-            throw new InvalidOperationException("Unable to return this entity's parent unless it was fetched through that object.");
-        }
-    }
+    IGuild IRole.Guild => Guild;
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IRole.GetUsersAsync(CacheMode mode, RequestOptions options)
-    {
-        if (mode == CacheMode.AllowDownload)
-            return GetUsersAsync(options);
-        else
-            return AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
-    }
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IRole.GetUsersAsync(CacheMode mode, RequestOptions? options) =>
+        mode == CacheMode.AllowDownload
+            ? GetUsersAsync(options)
+            : AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
 
     #endregion
 

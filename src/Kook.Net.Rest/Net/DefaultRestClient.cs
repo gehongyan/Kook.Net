@@ -70,7 +70,7 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 
     public void Dispose() => Dispose(true);
 
-    public void SetHeader(string key, string value)
+    public void SetHeader(string key, string? value)
     {
         _client.DefaultRequestHeaders.Remove(key);
         if (value != null) _client.DefaultRequestHeaders.Add(key, value);
@@ -78,8 +78,9 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 
     public void SetCancellationToken(CancellationToken cancellationToken) => _cancellationToken = cancellationToken;
 
-    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancellationToken, string reason = null,
-        IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
+    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, CancellationToken cancellationToken,
+        string? reason = null,
+        IEnumerable<KeyValuePair<string, IEnumerable<string>>>? requestHeaders = null)
     {
         string uri = Path.Combine(_baseUrl, endpoint);
         using (HttpRequestMessage restRequest = new(method, uri))
@@ -94,8 +95,9 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         }
     }
 
-    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json, CancellationToken cancellationToken, string reason = null,
-        IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
+    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json,
+        CancellationToken cancellationToken, string? reason = null,
+        IEnumerable<KeyValuePair<string, IEnumerable<string>>>? requestHeaders = null)
     {
         string uri = Path.Combine(_baseUrl, endpoint);
         using HttpRequestMessage restRequest = new(method, uri);
@@ -104,18 +106,15 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         if (requestHeaders != null)
             foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
                 restRequest.Headers.Add(header.Key, header.Value);
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-        restRequest.Content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
-#else
         restRequest.Content = new StringContent(json, Encoding.UTF8, "application/json");
-#endif
         return await SendInternalAsync(restRequest, cancellationToken).ConfigureAwait(false);
     }
 
     /// <exception cref="InvalidOperationException">Unsupported param type.</exception>
-    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartParams,
-        CancellationToken cancellationToken, string reason = null,
-        IEnumerable<KeyValuePair<string, IEnumerable<string>>> requestHeaders = null)
+    public async Task<RestResponse> SendAsync(HttpMethod method, string endpoint,
+        IReadOnlyDictionary<string, object> multipartParams,
+        CancellationToken cancellationToken, string? reason = null,
+        IEnumerable<KeyValuePair<string, IEnumerable<string>>>? requestHeaders = null)
     {
         string uri = Path.Combine(_baseUrl, endpoint);
 
@@ -145,16 +144,13 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
                 stream.Position = 0;
             }
 
-#pragma warning disable IDISP004
             return new StreamContent(stream);
-#pragma warning restore IDISP004
         }
 
-        foreach (var p in multipartParams ?? ImmutableDictionary<string, object>.Empty)
+        foreach (KeyValuePair<string, object> p in multipartParams ?? ImmutableDictionary<string, object>.Empty)
         {
             switch (p.Value)
             {
-#pragma warning disable IDISP004
                 case string stringValue:
                     { content.Add(new StringContent(stringValue, Encoding.UTF8, "text/plain"), p.Key); continue; }
                 case byte[] byteArrayValue:
@@ -163,14 +159,13 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
                     { content.Add(GetStreamContent(streamValue), p.Key); continue; }
                 case MultipartFile fileValue:
                     {
-                        var streamContent = GetStreamContent(fileValue.Stream);
-
+                        StreamContent streamContent = GetStreamContent(fileValue.Stream);
                         if (fileValue.ContentType != null)
                             streamContent.Headers.ContentType = new MediaTypeHeaderValue(fileValue.ContentType);
-
-                        content.Add(streamContent, p.Key, fileValue.Filename);
-#pragma warning restore IDISP004
-
+                        if (fileValue.Filename is not null)
+                            content.Add(streamContent, p.Key, fileValue.Filename);
+                        else
+                            content.Add(streamContent, p.Key);
                         continue;
                     }
                 default:
@@ -190,27 +185,24 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         using CancellationTokenSource cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(_cancellationToken, cancellationToken);
 #if DEBUG_REST
         Debug.WriteLine($"[REST] [{id}] {request.Method} {request.RequestUri} {request.Content?.Headers.ContentType?.MediaType}");
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-        if (request.Content?.Headers.ContentType?.MediaType == MediaTypeNames.Application.Json)
-#else
         if (request.Content?.Headers.ContentType?.MediaType == "application/json")
-#endif
             Debug.WriteLine($"[REST] {await request.Content.ReadAsStringAsync().ConfigureAwait(false)}");
 #endif
         cancellationToken = cancellationTokenSource.Token;
         HttpResponseMessage response = await _client.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
-        Dictionary<string, string> headers =
-            response.Headers.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault(), StringComparer.OrdinalIgnoreCase);
+        Dictionary<string, string?> headers = [];
+        foreach (KeyValuePair<string, IEnumerable<string>> kvp in response.Headers)
+        {
+            string? value = kvp.Value.FirstOrDefault();
+            headers[kvp.Key] = value;
+        }
+        // ReSharper disable once MethodSupportsCancellation
         Stream stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
 #if DEBUG_REST
         Debug.WriteLine($"[REST] [{id}] {response.StatusCode} {response.ReasonPhrase}");
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-        if (response.Content?.Headers.ContentType?.MediaType == MediaTypeNames.Application.Json)
-#else
         if (response.Content?.Headers.ContentType?.MediaType == "application/json")
-#endif
             Debug.WriteLine($"[REST] [{id}] {await response.Content.ReadAsStringAsync().ConfigureAwait(false)}");
 #endif
         return new RestResponse(response.StatusCode, headers, stream, response.Content?.Headers.ContentType);

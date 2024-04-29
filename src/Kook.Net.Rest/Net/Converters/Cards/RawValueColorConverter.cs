@@ -11,5 +11,6 @@ internal class RawValueColorConverter : JsonConverter<Color>
         return new Color(rawValue);
     }
 
-    public override void Write(Utf8JsonWriter writer, Color value, JsonSerializerOptions options) => writer.WriteNumberValue(value.RawValue);
+    public override void Write(Utf8JsonWriter writer, Color value, JsonSerializerOptions options) =>
+        writer.WriteNumberValue(value.RawValue);
 }

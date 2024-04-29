@@ -5,11 +5,11 @@ namespace Kook.API.Rest;
 internal class GetFriendStatesResponse
 {
     [JsonPropertyName("request")]
-    public FriendState[] FriendRequests { get; set; }
+    public required FriendState[] FriendRequests { get; set; }
 
     [JsonPropertyName("friend")]
-    public FriendState[] Friends { get; set; }
+    public required FriendState[] Friends { get; set; }
 
     [JsonPropertyName("blocked")]
-    public FriendState[] BlockedUsers { get; set; }
+    public required FriendState[] BlockedUsers { get; set; }
 }

@@ -9,7 +9,7 @@ internal class Role
     public uint Id { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [JsonPropertyName("color")]
     [JsonConverter(typeof(RawValueColorConverter))]
@@ -37,5 +37,5 @@ internal class Role
     public ulong Permissions { get; set; }
 
     [JsonPropertyName("type")]
-    public RoleType? Type { get; set; }
+    public RoleType Type { get; set; }
 }

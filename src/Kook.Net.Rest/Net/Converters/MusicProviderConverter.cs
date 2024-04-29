@@ -7,7 +7,7 @@ internal class MusicProviderConverter : JsonConverter<MusicProvider>
 {
     public override MusicProvider Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string provider = reader.GetString();
+        string? provider = reader.GetString();
         return provider switch
         {
             "cloudmusic" => MusicProvider.NetEaseCloudMusic,

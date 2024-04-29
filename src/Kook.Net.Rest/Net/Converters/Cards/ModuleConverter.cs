@@ -7,10 +7,12 @@ namespace Kook.Net.Converters;
 
 internal class ModuleConverter : JsonConverter<ModuleBase>
 {
-    public override ModuleBase Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public static readonly ModuleConverter Instance = new();
+
+    public override ModuleBase? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        JsonNode jsonNode = JsonNode.Parse(ref reader);
-        return jsonNode["type"].GetValue<string>() switch
+        JsonNode? jsonNode = JsonNode.Parse(ref reader);
+        return jsonNode?["type"]?.GetValue<string>() switch
         {
             "header" => JsonSerializer.Deserialize<API.HeaderModule>(jsonNode.ToJsonString(), options),
             "section" => JsonSerializer.Deserialize<API.SectionModule>(jsonNode.ToJsonString(), options),

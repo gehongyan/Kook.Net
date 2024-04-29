@@ -5,5 +5,5 @@ namespace Kook.API.Voice;
 internal class JoinParams
 {
     [JsonPropertyName("displayName")]
-    public string DisplayName { get; set; }
+    public required string DisplayName { get; set; }
 }

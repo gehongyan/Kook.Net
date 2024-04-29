@@ -1,5 +1,6 @@
 ﻿using Kook.Commands;
 using Kook.WebSocket;
+using Microsoft.Extensions.Hosting;
 
 namespace Kook.Net.Samples.Audio.Services;
 
@@ -24,7 +25,8 @@ public class KookClientService : IHostedService
     /// <inheritdoc />
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        string token = Environment.GetEnvironmentVariable("KookDebugToken", EnvironmentVariableTarget.User);
+        string token = Environment.GetEnvironmentVariable("KookDebugToken", EnvironmentVariableTarget.User)
+            ?? throw new ArgumentNullException("KookDebugToken");
         await _socketClient.LoginAsync(TokenType.Bot, token);
         await _socketClient.StartAsync();
     }

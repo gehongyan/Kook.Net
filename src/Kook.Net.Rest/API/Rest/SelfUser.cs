@@ -8,11 +8,11 @@ internal class SelfUser : User
     public bool MobileVerified { get; set; }
 
     [JsonPropertyName("MobilePrefix")]
-    public string MobilePrefix { get; set; }
+    public string? MobilePrefix { get; set; }
 
     [JsonPropertyName("Mobile")]
-    public string Mobile { get; set; }
+    public string? Mobile { get; set; }
 
     [JsonPropertyName("InvitedCount")]
-    public int? InvitedCount { get; set; }
+    public int InvitedCount { get; set; }
 }

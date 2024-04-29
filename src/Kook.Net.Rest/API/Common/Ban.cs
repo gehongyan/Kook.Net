@@ -6,15 +6,15 @@ namespace Kook.API;
 internal class Ban
 {
     [JsonPropertyName("user_id")]
-    public ulong UserId { get; set; }
+    public required ulong UserId { get; set; }
 
     [JsonPropertyName("created_time")]
     [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
-    public DateTimeOffset CreatedAt { get; set; }
+    public required DateTimeOffset CreatedAt { get; set; }
 
     [JsonPropertyName("remark")]
-    public string Reason { get; set; }
+    public required string Reason { get; set; }
 
     [JsonPropertyName("user")]
-    public User User { get; set; }
+    public required User User { get; set; }
 }

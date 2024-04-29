@@ -1,0 +1,16 @@
+name: Kook.Net on Pull Request
+
+on:
+  pull_request:
+    branches: [ master, dev ]
+
+jobs:
+  build_and_test:
+    name: Build and Test
+    strategy:
+      matrix:
+        target: [ windows-latest, ubuntu-latest, macOS-latest ]
+    uses: ./.github/workflows/build-test.yml
+    with:
+      target: ${{ matrix.target }}
+      dotnet-version: 8.0.x

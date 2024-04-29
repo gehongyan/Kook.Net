@@ -25,7 +25,7 @@ namespace Kook.Commands;
 ///         => ReplyAsync(time);
 ///     </code>
 /// </example>
-[AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+[AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property)]
 public sealed class OverrideTypeReaderAttribute : Attribute
 {
     private static readonly TypeInfo TypeReaderTypeInfo = typeof(TypeReader).GetTypeInfo();
@@ -42,7 +42,6 @@ public sealed class OverrideTypeReaderAttribute : Attribute
     {
         if (!TypeReaderTypeInfo.IsAssignableFrom(overridenTypeReader.GetTypeInfo()))
             throw new ArgumentException($"{nameof(overridenTypeReader)} must inherit from {nameof(TypeReader)}.");
-
         TypeReader = overridenTypeReader;
     }
 }

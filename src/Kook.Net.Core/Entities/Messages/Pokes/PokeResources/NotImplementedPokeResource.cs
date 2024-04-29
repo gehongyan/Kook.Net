@@ -50,14 +50,15 @@ public struct NotImplementedPokeResource : IPokeResource
     /// <returns>
     ///     A <typeparamref name="T"/> representing the resolved embed.
     /// </returns>
-    public T Resolve<T>(JsonSerializerOptions options = null)
+    public T? Resolve<T>(JsonSerializerOptions? options = null)
         where T : IPokeResource
     {
         options ??= new JsonSerializerOptions
         {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, NumberHandling = JsonNumberHandling.AllowReadingFromString
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
-        T pokeResource = JsonNode.Deserialize<T>(options);
+        T? pokeResource = JsonNode.Deserialize<T>(options);
         return pokeResource;
     }
 

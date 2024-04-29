@@ -22,6 +22,6 @@ public static class SocketVoiceChannelExperimentalExtensions
     ///         usage, may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
     ///     </note>
     /// </remarks>
-    public static Task DisconnectUserAsync(this SocketVoiceChannel channel, IGuildUser user, RequestOptions options = null)
-        => ExperimentalChannelHelper.DisconnectUserAsync(channel, channel.Kook, user, options);
+    public static Task DisconnectUserAsync(this SocketVoiceChannel channel, IGuildUser user, RequestOptions? options = null) =>
+        ExperimentalChannelHelper.DisconnectUserAsync(channel, channel.Kook, user, options);
 }

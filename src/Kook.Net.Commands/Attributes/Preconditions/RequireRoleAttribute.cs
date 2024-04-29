@@ -11,26 +11,32 @@ namespace Kook.Commands;
 /// </remarks>
 public class RequireRoleAttribute : PreconditionAttribute
 {
-    private readonly string _roleName;
+    private readonly string? _roleName;
     private readonly uint? _roleId;
 
     /// <summary>
     ///     Gets or sets the error message if the precondition
-    ///     fails due to being run outside of a Guild channel.
+    ///     fails due to being run outside a Guild channel.
     /// </summary>
-    public string NotAGuildErrorMessage { get; set; }
+    public string? NotAGuildErrorMessage { get; set; }
 
     /// <summary>
     ///     Requires that the user invoking the command to have a specific Role.
     /// </summary>
     /// <param name="roleId">Id of the role that the user must have.</param>
-    public RequireRoleAttribute(uint roleId) => _roleId = roleId;
+    public RequireRoleAttribute(uint roleId)
+    {
+        _roleId = roleId;
+    }
 
     /// <summary>
     ///     Requires that the user invoking the command to have a specific Role.
     /// </summary>
     /// <param name="roleName">Name of the role that the user must have.</param>
-    public RequireRoleAttribute(string roleName) => _roleName = roleName;
+    public RequireRoleAttribute(string roleName)
+    {
+        _roleName = roleName;
+    }
 
     /// <inheritdoc />
     public override Task<PreconditionResult> CheckPermissionsAsync(ICommandContext context, CommandInfo command, IServiceProvider services)
@@ -42,12 +48,15 @@ public class RequireRoleAttribute : PreconditionAttribute
         {
             return Task.FromResult(guildUser.RoleIds.Contains(_roleId.Value)
                 ? PreconditionResult.FromSuccess()
-                : PreconditionResult.FromError(ErrorMessage ?? $"User requires guild role {context.Guild.GetRole(_roleId.Value).Name}."));
+                : PreconditionResult.FromError(ErrorMessage ?? $"User requires guild role {guildUser.Guild.GetRole(_roleId.Value)?.Name}."));
         }
 
         if (!string.IsNullOrEmpty(_roleName))
         {
-            IEnumerable<string> roleNames = guildUser.RoleIds.Select(x => guildUser.Guild.GetRole(x).Name);
+            IEnumerable<string> roleNames = guildUser.RoleIds
+                .Select(x => guildUser.Guild.GetRole(x))
+                .OfType<IRole>()
+                .Select(x => x.Name);
             return Task.FromResult(roleNames.Contains(_roleName)
                 ? PreconditionResult.FromSuccess()
                 : PreconditionResult.FromError(ErrorMessage ?? $"User requires guild role {_roleName}."));

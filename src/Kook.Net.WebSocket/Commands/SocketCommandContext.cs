@@ -17,7 +17,7 @@ public class SocketCommandContext : ICommandContext
     /// <summary>
     ///     Gets the <see cref="SocketGuild" /> that the command is executed in.
     /// </summary>
-    public SocketGuild Guild { get; }
+    public SocketGuild? Guild { get; }
 
     /// <summary>
     ///     Gets the <see cref="ISocketMessageChannel" /> that the command is executed in.
@@ -61,7 +61,7 @@ public class SocketCommandContext : ICommandContext
     IKookClient ICommandContext.Client => Client;
 
     /// <inheritdoc/>
-    IGuild ICommandContext.Guild => Guild;
+    IGuild? ICommandContext.Guild => Guild;
 
     /// <inheritdoc/>
     IMessageChannel ICommandContext.Channel => Channel;

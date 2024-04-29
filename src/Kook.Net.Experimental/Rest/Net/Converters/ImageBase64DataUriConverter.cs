@@ -10,8 +10,9 @@ internal class ImageBase64DataUriConverter : JsonConverter<Image?>
 
     public override Image? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string raw = reader.GetString();
-        if (string.IsNullOrWhiteSpace(raw)) return null;
+        string? raw = reader.GetString();
+        if (string.IsNullOrWhiteSpace(raw))
+            return null;
 
         Match match = Regex.Match(raw, @"^data:image/(\w+?-)?(?<type>\w+?);base64,(?<data>.+)$");
         string type = match.Groups["type"].Value;
@@ -37,7 +38,7 @@ internal class ImageBase64DataUriConverter : JsonConverter<Image?>
         }
 
         string base64 = Convert.ToBase64String(bytes);
-        string extension = !string.IsNullOrWhiteSpace(value?.FileExtension)
+        string? extension = !string.IsNullOrWhiteSpace(value.Value.FileExtension)
             ? value.Value.FileExtension
             : "png";
         writer.WriteStringValue($"data:image/{extension};base64,{base64}");

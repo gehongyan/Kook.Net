@@ -7,7 +7,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based invite to a guild.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketInvite : SocketEntity<uint>, IInvite
 {
     /// <inheritdoc />
@@ -26,30 +26,26 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     /// </summary>
     public SocketGuild Guild { get; }
 
-    /// <summary>
-    ///     Gets the time at which this invite will expire.
-    /// </summary>
+    /// <inheritdoc />
+    public DateTimeOffset CreatedAt { get; private set; }
+
+    /// <inheritdoc />
     public DateTimeOffset? ExpiresAt { get; private set; }
 
-    /// <summary>
-    ///     Gets the time span until the invite expires.
-    /// </summary>
+    /// <inheritdoc />
     public TimeSpan? MaxAge { get; private set; }
 
-    /// <summary>
-    ///     Gets the max number of uses this invite may have.
-    /// </summary>
+    /// <inheritdoc />
     public int? MaxUses { get; private set; }
 
-    /// <summary>
-    ///     Gets the number of times this invite has been used.
-    /// </summary>
+    /// <inheritdoc />
     public int? Uses { get; private set; }
 
-    /// <summary>
-    ///     Gets the number of times this invite still remains.
-    /// </summary>
+    /// <inheritdoc />
     public int? RemainingUses { get; private set; }
+
+    /// <inheritdoc />
+    public int InvitedUsersCount { get; private set; }
 
     /// <summary>
     ///     Gets the user that created this invite if available.
@@ -62,15 +58,19 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     /// <inheritdoc />
     public string Url { get; private set; }
 
-    internal SocketInvite(KookSocketClient kook, SocketGuild guild, SocketGuildChannel channel, SocketGuildUser inviter, uint id)
+    internal SocketInvite(KookSocketClient kook, SocketGuild guild,
+        SocketGuildChannel channel, SocketGuildUser inviter, uint id)
         : base(kook, id)
     {
         Guild = guild;
         Channel = channel;
         Inviter = inviter;
+        Code = string.Empty;
+        Url = string.Empty;
     }
 
-    internal static SocketInvite Create(KookSocketClient kook, SocketGuild guild, SocketGuildChannel channel, SocketGuildUser inviter, Model model)
+    internal static SocketInvite Create(KookSocketClient kook, SocketGuild guild,
+        SocketGuildChannel channel, SocketGuildUser inviter, Model model)
     {
         SocketInvite entity = new(kook, guild, channel, inviter, model.Id);
         entity.Update(model);
@@ -82,17 +82,19 @@ public class SocketInvite : SocketEntity<uint>, IInvite
         Code = model.UrlCode;
         Url = model.Url;
         GuildId = model.GuildId;
-        ChannelId = model.ChannelId;
+        ChannelId = model.ChannelId != 0 ? model.ChannelId : null;
+        CreatedAt = model.CreatedAt;
         ExpiresAt = model.ExpiresAt;
         MaxAge = model.Duration;
         MaxUses = model.UsingTimes == -1 ? null : model.UsingTimes;
         RemainingUses = model.RemainingTimes == -1 ? null : model.RemainingTimes;
         Uses = MaxUses - RemainingUses;
+        InvitedUsersCount = model.InviteesCount;
     }
 
     /// <inheritdoc />
-    public Task DeleteAsync(RequestOptions options = null)
-        => InviteHelper.DeleteAsync(this, Kook, options);
+    public Task DeleteAsync(RequestOptions? options = null) =>
+        InviteHelper.DeleteAsync(this, Kook, options);
 
     /// <summary>
     ///     Gets the URL of the invite.
@@ -114,14 +116,13 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     IUser IInvite.Inviter => Inviter;
 
     /// <inheritdoc />
-    ChannelType IInvite.ChannelType =>
-        Channel switch
-        {
-            IVoiceChannel voiceChannel => ChannelType.Voice,
-            ICategoryChannel categoryChannel => ChannelType.Category,
-            ITextChannel textChannel => ChannelType.Text,
-            _ => throw new InvalidOperationException("Invalid channel type.")
-        };
+    ChannelType IInvite.ChannelType => Channel switch
+    {
+        IVoiceChannel => ChannelType.Voice,
+        ICategoryChannel => ChannelType.Category,
+        ITextChannel => ChannelType.Text,
+        _ => throw new InvalidOperationException("Invalid channel type.")
+    };
 
     /// <inheritdoc />
     string IInvite.ChannelName => Channel.Name;

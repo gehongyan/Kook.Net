@@ -6,29 +6,28 @@ internal static class CardBuilderExtensions
 {
     public static IEnumerable<ICard> ToCards(this MarkupElement element)
     {
-        var cards = new List<ICard>();
+        List<ICard> cards = [];
 
         // Unwrap card-message element
-        var cardElements = element.Children;
-        foreach (var e in cardElements)
+        List<MarkupElement> cardElements = element.Children;
+        foreach (MarkupElement e in cardElements)
         {
             // Get Modules
-            var modules = e.Children[0].Children.Select(ToModule);
+            IEnumerable<IModuleBuilder> modules = e.Children[0].Children.Select(ToModule);
 
             // Create Card
-            var color = e.Attributes.GetColor();
-            var theme = e.Attributes.GetCardTheme();
-            var size = e.Attributes.GetCardSize();
+            Color? color = e.Attributes.GetColor();
+            CardTheme theme = e.Attributes.GetCardTheme();
+            CardSize size = e.Attributes.GetCardSize();
 
-            var builder = new CardBuilder()
+            CardBuilder builder = new CardBuilder()
                 .WithTheme(theme)
                 .WithSize(size);
             if (color.HasValue)
-            {
                 builder.WithColor(color.Value);
-            }
 
-            builder.Modules.AddRange(modules);
+            foreach (IModuleBuilder module in modules)
+                builder.Modules.Add(module);
 
             cards.Add(builder.Build());
         }
@@ -60,26 +59,26 @@ internal static class CardBuilderExtensions
 
     private static HeaderModuleBuilder ToHeaderModule(this MarkupElement element)
     {
-        var text = element.Children[0].ToPlainTextElement();
+        PlainTextElementBuilder text = element.Children[0].ToPlainTextElement();
         return new HeaderModuleBuilder(text);
     }
 
     private static SectionModuleBuilder ToSectionModule(this MarkupElement element)
     {
-        var mode = element.Attributes.GetSectionAccessoryMode();
+        SectionAccessoryMode? mode = element.Attributes.GetSectionAccessoryMode();
 
-        var textXmlElement = element.Children.First(x => x.Name == "text");
-        var accessoryXmlElement = element.Children.FirstOrDefault(x => x.Name == "accessory");
+        MarkupElement textXmlElement = element.Children.First(x => x.Name == "text");
+        MarkupElement? accessoryXmlElement = element.Children.Find(x => x.Name == "accessory");
 
-        var text = textXmlElement.Children[0].ToElement();
-        var accessory = accessoryXmlElement?.Children[0].ToElement();
+        IElementBuilder text = textXmlElement.Children[0].ToElement();
+        IElementBuilder? accessory = accessoryXmlElement?.Children[0].ToElement();
 
         return new SectionModuleBuilder(text, mode, accessory);
     }
 
     private static ImageGroupModuleBuilder ToImagesModule(this MarkupElement element)
     {
-        var images = element.Children
+        List<ImageElementBuilder> images = element.Children
             .Select(ToImageElement)
             .ToList();
 
@@ -88,7 +87,7 @@ internal static class CardBuilderExtensions
 
     private static ContainerModuleBuilder ToContainerModule(this MarkupElement element)
     {
-        var images = element.Children
+        List<ImageElementBuilder> images = element.Children
             .Select(ToImageElement)
             .ToList();
 
@@ -97,7 +96,7 @@ internal static class CardBuilderExtensions
 
     private static ActionGroupModuleBuilder ToActionsModule(this MarkupElement element)
     {
-        var actions = element.Children
+        List<ButtonElementBuilder> actions = element.Children
             .Select(ToButtonElement)
             .ToList();
 
@@ -106,7 +105,7 @@ internal static class CardBuilderExtensions
 
     private static ContextModuleBuilder ToContextModule(this MarkupElement element)
     {
-        var elements = element.Children
+        List<IElementBuilder> elements = element.Children
             .Select(ToElement)
             .ToList();
 
@@ -148,9 +147,9 @@ internal static class CardBuilderExtensions
     {
         long? start = element.Attributes.GetLong("start", true);
         long end = element.Attributes.GetLong("end")!.Value;
-        var mode = element.Attributes.GetCountdownMode();
+        CountdownMode mode = element.Attributes.GetCountdownMode();
 
-        var endDt = DateTimeOffset.FromUnixTimeMilliseconds(end);
+        DateTimeOffset endDt = DateTimeOffset.FromUnixTimeMilliseconds(end);
         DateTimeOffset? startDt = start.HasValue ? DateTimeOffset.FromUnixTimeMilliseconds(start.Value) : null;
 
         return new CountdownModuleBuilder(mode, endDt, startDt);
@@ -182,12 +181,12 @@ internal static class CardBuilderExtensions
     private static PlainTextElementBuilder ToPlainTextElement(this MarkupElement element)
     {
         bool emoji = element.Attributes.GetBoolean("emoji", true);
-        return new PlainTextElementBuilder(element.Text.ParseText(), emoji);
+        return new PlainTextElementBuilder(element.Text?.ParseText(), emoji);
     }
 
     private static KMarkdownElementBuilder ToKMarkdownElement(this MarkupElement element)
     {
-        return new KMarkdownElementBuilder(element.Text.ParseText());
+        return new KMarkdownElementBuilder(element.Text?.ParseText());
     }
 
     private static ImageElementBuilder ToImageElement(this MarkupElement element)
@@ -195,16 +194,16 @@ internal static class CardBuilderExtensions
         string src = element.Attributes.GetString("src");
         string alt = element.Attributes.GetString("alt", true);
         bool circle = element.Attributes.GetBoolean("circle", false);
-        var size = element.Attributes.GetImageSize();
+        ImageSize size = element.Attributes.GetImageSize();
 
         return new ImageElementBuilder(src, alt, size, circle);
     }
 
     private static ButtonElementBuilder ToButtonElement(this MarkupElement element)
     {
-        var textElement = element.Children[0].ToElement();
-        var theme = element.Attributes.GetButtonTheme();
-        var click = element.Attributes.GetButtonClickEventType();
+        IElementBuilder textElement = element.Children[0].ToElement();
+        ButtonTheme theme = element.Attributes.GetButtonTheme();
+        ButtonClickEventType click = element.Attributes.GetButtonClickEventType();
         string value = element.Attributes.GetString("value", true);
 
         return new ButtonElementBuilder { Text = textElement, Theme = theme, Click = click, Value = value };
@@ -217,7 +216,7 @@ internal static class CardBuilderExtensions
     private static ParagraphStructBuilder ToParagraphStruct(this MarkupElement element)
     {
         int cols = element.Attributes.GetInt("cols", 1);
-        var elements = element.Children
+        List<IElementBuilder> elements = element.Children
             .Select(ToElement)
             .ToList();
 
@@ -230,7 +229,7 @@ internal static class CardBuilderExtensions
 
     private static string ParseText(this string text)
     {
-        var multiLine = text
+        IEnumerable<string> multiLine = text
             .Split(["\r\n", "\r", "\n"], StringSplitOptions.None)
             .Where(x => !string.IsNullOrEmpty(x))
             .Select(x => x.Trim());

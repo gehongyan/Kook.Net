@@ -20,7 +20,6 @@ public class BufferedWriteStream : AudioOutStream
     private readonly AudioStream _next;
     private readonly CancellationTokenSource _disposeTokenSource, _cancellationTokenSource;
     private readonly CancellationToken _cancellationToken;
-    private readonly Task _task;
     private readonly ConcurrentQueue<Frame> _queuedFrames;
     private readonly ConcurrentQueue<byte[]> _bufferPool;
     private readonly SemaphoreSlim _queueLock;
@@ -29,7 +28,8 @@ public class BufferedWriteStream : AudioOutStream
     private bool _isPreloaded;
     // private int _silenceFrames;
 
-    internal BufferedWriteStream(AudioStream next, AudioClient client, int bufferMillis, CancellationToken cancellationToken, Logger logger, int maxFrameSize = 1500)
+    internal BufferedWriteStream(AudioStream next, AudioClient client, int bufferMillis,
+        CancellationToken cancellationToken, Logger logger, int maxFrameSize = 1500)
     {
         //maxFrameSize = 1275 was too limiting at 128kbps,2ch,60ms
         _next = next;
@@ -48,7 +48,7 @@ public class BufferedWriteStream : AudioOutStream
         _queueLock = new SemaphoreSlim(_queueLength, _queueLength);
         // _silenceFrames = MaxSilenceFrames;
 
-        _task = Run();
+        _ = Run();
     }
 
     /// <inheritdoc />
@@ -139,7 +139,7 @@ public class BufferedWriteStream : AudioOutStream
     /// <inheritdoc />
     public override async Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
     {
-        CancellationTokenSource writeCancellationToken = null;
+        CancellationTokenSource? writeCancellationToken = null;
         if (cancellationToken.CanBeCanceled)
         {
             writeCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, _cancellationToken);
@@ -149,14 +149,12 @@ public class BufferedWriteStream : AudioOutStream
             cancellationToken = _cancellationToken;
 
         await _queueLock.WaitAsync(-1, cancellationToken).ConfigureAwait(false);
-        if (!_bufferPool.TryDequeue(out byte[] dstBuffer))
+        if (!_bufferPool.TryDequeue(out byte[]? dstBuffer))
         {
 #if DEBUG
             _ = _logger?.DebugAsync("Buffer overflow"); //Should never happen because of the queueLock
 #endif
-#pragma warning disable IDISP016
             writeCancellationToken?.Dispose();
-#pragma warning restore IDISP016
             return;
         }
         Buffer.BlockCopy(buffer, offset, dstBuffer, 0, count);
@@ -177,7 +175,7 @@ public class BufferedWriteStream : AudioOutStream
         while (true)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (_queuedFrames.Count == 0)
+            if (_queuedFrames.IsEmpty)
                 return;
             await Task.Delay(250, cancellationToken).ConfigureAwait(false);
         }

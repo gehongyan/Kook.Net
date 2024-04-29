@@ -19,6 +19,6 @@ public static class RestTextChannelExperimentalExtensions
     ///         usage, may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
     ///     </note>
     /// </remarks>
-    public static Task SyncPermissionsAsync(this RestTextChannel channel, RequestOptions options = null)
-        => ExperimentalChannelHelper.SyncPermissionsAsync(channel, channel.Kook, options);
+    public static Task SyncPermissionsAsync(this RestTextChannel channel, RequestOptions? options = null) =>
+        ExperimentalChannelHelper.SyncPermissionsAsync(channel, channel.Kook, options);
 }

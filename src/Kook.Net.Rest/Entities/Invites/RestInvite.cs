@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Model = Kook.API.Invite;
 
 namespace Kook.Rest;
@@ -6,7 +7,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     Represents a REST-based invite.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
 {
     /// <inheritdoc />
@@ -25,13 +26,16 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
     public ulong? ChannelId { get; private set; }
 
     /// <inheritdoc />
-    public string ChannelName { get; private set; }
+    public string? ChannelName { get; private set; }
 
     /// <inheritdoc />
     public ulong? GuildId { get; private set; }
 
     /// <inheritdoc />
     public string GuildName { get; private set; }
+
+    /// <inheritdoc />
+    public DateTimeOffset CreatedAt { get; private set; }
 
     /// <inheritdoc />
     public DateTimeOffset? ExpiresAt { get; private set; }
@@ -48,51 +52,61 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
     /// <inheritdoc />
     public int? RemainingUses { get; private set; }
 
+    /// <inheritdoc />
+    public int InvitedUsersCount { get; private set; }
+
     internal IChannel Channel { get; }
     internal IGuild Guild { get; }
 
-    internal RestInvite(BaseKookClient kook, IGuild guild, IChannel channel, uint id)
-        : base(kook, id)
+    internal RestInvite(BaseKookClient kook, IGuild guild, IChannel channel, Model model)
+        : base(kook, model.Id)
     {
         Guild = guild;
         Channel = channel;
+        Update(model);
     }
 
-    internal static RestInvite Create(BaseKookClient kook, IGuild guild, IChannel channel, Model model)
-    {
-        RestInvite entity = new(kook, guild, channel, model.Id);
-        entity.Update(model);
-        return entity;
-    }
+    internal static RestInvite Create(BaseKookClient kook, IGuild guild, IChannel channel, Model model) =>
+        new(kook, guild, channel, model);
 
+    [MemberNotNull(
+        nameof(Code),
+        nameof(Url),
+        nameof(Inviter),
+        nameof(GuildName))]
     internal void Update(Model model)
     {
         Code = model.UrlCode;
         Url = model.Url;
         GuildId = model.GuildId;
-        ChannelId = model.ChannelId;
+        ChannelId = model.ChannelId != 0 ? model.ChannelId : null;
         GuildName = model.GuildName;
-        ChannelName = model.ChannelName;
+        ChannelName = model.ChannelId != 0 ? model.ChannelName : null;
         ChannelType = model.ChannelType == ChannelType.Category ? ChannelType.Unspecified : model.ChannelType;
-        Inviter = model.Inviter is not null ? RestUser.Create(Kook, model.Inviter) : null;
+        Inviter = RestUser.Create(Kook, model.Inviter);
+        CreatedAt = model.CreatedAt;
         ExpiresAt = model.ExpiresAt;
         MaxAge = model.Duration;
         MaxUses = model.UsingTimes == -1 ? null : model.UsingTimes;
         RemainingUses = model.RemainingTimes == -1 ? null : model.RemainingTimes;
         Uses = MaxUses - RemainingUses;
+        InvitedUsersCount = model.InviteesCount;
     }
 
     /// <inheritdoc />
-    public async Task UpdateAsync(RequestOptions options = null)
+    public async Task UpdateAsync(RequestOptions? options = null)
     {
-        IEnumerable<Model> model =
-            await Kook.ApiClient.GetGuildInvitesAsync(GuildId, ChannelId, options: options).FlattenAsync().ConfigureAwait(false);
-        Update(model.SingleOrDefault(i => i.UrlCode == Code));
+        IEnumerable<Model> model = await Kook.ApiClient
+            .GetGuildInvitesAsync(GuildId, ChannelId, options: options)
+            .FlattenAsync().ConfigureAwait(false);
+        if (model.SingleOrDefault(i => i.UrlCode == Code) is not { } updateModel)
+            throw new InvalidOperationException("Cannot fetch the invite from the API.");
+        Update(updateModel);
     }
 
     /// <inheritdoc />
-    public Task DeleteAsync(RequestOptions options = null)
-        => InviteHelper.DeleteAsync(this, Kook, options);
+    public Task DeleteAsync(RequestOptions? options = null) =>
+        InviteHelper.DeleteAsync(this, Kook, options);
 
     /// <summary>
     ///     Gets the URL of the invite.
@@ -105,26 +119,8 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
     private string DebuggerDisplay => $"{Url} ({GuildName} / {ChannelName ?? "Channel not specified"})";
 
     /// <inheritdoc />
-    IGuild IInvite.Guild
-    {
-        get
-        {
-            if (Guild != null) return Guild;
-
-            if (Channel is IGuildChannel guildChannel) return guildChannel.Guild; //If it fails, it'll still return this exception
-
-            throw new InvalidOperationException("Unable to return this entity's parent unless it was fetched through that object.");
-        }
-    }
+    IGuild IInvite.Guild => Guild;
 
     /// <inheritdoc />
-    IChannel IInvite.Channel
-    {
-        get
-        {
-            if (Channel != null) return Channel;
-
-            throw new InvalidOperationException("Unable to return this entity's parent unless it was fetched through that object.");
-        }
-    }
+    IChannel IInvite.Channel => Channel;
 }

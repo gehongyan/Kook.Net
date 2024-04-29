@@ -5,7 +5,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents the WebSocket user's presence status. This may include their online status and their activity.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketPresence : IPresence
 {
     /// <inheritdoc />
@@ -18,12 +18,6 @@ public class SocketPresence : IPresence
     {
     }
 
-    internal SocketPresence(bool? isOnline, ClientType? activeClient)
-    {
-        IsOnline = isOnline;
-        ActiveClient = activeClient;
-    }
-
     internal static SocketPresence Create(bool? isOnline, string activeClient)
     {
         SocketPresence entity = new();
@@ -33,15 +27,15 @@ public class SocketPresence : IPresence
 
     internal void Update(bool? isOnline)
     {
-        if (isOnline.HasValue) IsOnline = isOnline;
+        if (isOnline.HasValue)
+            IsOnline = isOnline;
     }
 
-    internal void Update(bool? isOnline, string activeClient)
+    internal void Update(bool? isOnline, string? activeClient)
     {
-        if (isOnline.HasValue) IsOnline = isOnline;
-
-        if (!string.IsNullOrWhiteSpace(activeClient))
-            ActiveClient = ConvertClientType(activeClient);
+        if (isOnline.HasValue)
+            IsOnline = isOnline;
+        ActiveClient = ConvertClientType(activeClient);
     }
 
     /// <summary>
@@ -53,16 +47,21 @@ public class SocketPresence : IPresence
     /// <returns>
     ///     A <see cref="ClientType"/> that this user is active.
     /// </returns>
-    private static ClientType? ConvertClientType(string clientType)
+    private static ClientType? ConvertClientType(string? clientType)
     {
-        if (string.IsNullOrWhiteSpace(clientType)) return null;
-
-        if (Enum.TryParse(clientType, true, out ClientType type)) return type;
-
+        if (string.IsNullOrWhiteSpace(clientType))
+            return null;
+        if (Enum.TryParse(clientType, true, out ClientType type))
+            return type;
         return null;
     }
 
-    private string DebuggerDisplay => $"{IsOnline switch { true => "Online", false => "Offline", _ => "Unknown Status" }}, {ActiveClient.ToString()}";
+    private string DebuggerDisplay => $"{IsOnline switch
+    {
+        true => "Online",
+        false => "Offline",
+        _ => "Unknown Status"
+    }}, {ActiveClient.ToString()}";
 
-    internal SocketPresence Clone() => MemberwiseClone() as SocketPresence;
+    internal SocketPresence Clone() => (SocketPresence)MemberwiseClone();
 }

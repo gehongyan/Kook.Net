@@ -7,16 +7,19 @@ namespace Kook.Net.Converters;
 
 internal class EmbedConverter : JsonConverter<EmbedBase>
 {
-    public override EmbedBase Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override EmbedBase? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        JsonNode jsonNode = JsonNode.Parse(ref reader);
-        string rawType = jsonNode["type"].GetValue<string>();
+        JsonNode? jsonNode = JsonNode.Parse(ref reader);
+        if (jsonNode == null) return null;
+        string? rawType = jsonNode["type"]?.GetValue<string>();
+        if (rawType == null) return null;
         return rawType switch
         {
             "link" => JsonSerializer.Deserialize<API.LinkEmbed>(jsonNode.ToJsonString(), options),
             "image" => JsonSerializer.Deserialize<API.ImageEmbed>(jsonNode.ToJsonString(), options),
             "bili-video" => JsonSerializer.Deserialize<API.BilibiliVideoEmbed>(jsonNode.ToJsonString(), options),
-            _ => new API.NotImplementedEmbed(rawType, jsonNode["url"].GetValue<string>(), jsonNode)
+            "card" => JsonSerializer.Deserialize<API.CardEmbed>(jsonNode.ToJsonString(), options),
+            _ => new API.NotImplementedEmbed(rawType, jsonNode)
         };
     }
 
@@ -32,6 +35,9 @@ internal class EmbedConverter : JsonConverter<EmbedBase>
                 break;
             case EmbedType.BilibiliVideo:
                 writer.WriteRawValue(JsonSerializer.Serialize(value as API.BilibiliVideoEmbed, options));
+                break;
+            case EmbedType.Card:
+                writer.WriteRawValue(JsonSerializer.Serialize(value as API.CardEmbed, options));
                 break;
             default:
                 writer.WriteRawValue((value as API.NotImplementedEmbed)!.RawJsonNode.ToString());

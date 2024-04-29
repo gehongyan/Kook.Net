@@ -16,7 +16,8 @@ public static class DefaultUdpSocketProvider
         }
         catch (PlatformNotSupportedException ex)
         {
-            throw new PlatformNotSupportedException("The default UdpSocketProvider is not supported on this platform.", ex);
+            throw new PlatformNotSupportedException(
+                "The default UdpSocketProvider is not supported on this platform.", ex);
         }
     };
 }

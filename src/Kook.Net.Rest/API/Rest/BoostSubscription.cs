@@ -20,5 +20,5 @@ internal class BoostSubscription
     public DateTimeOffset EndTime { get; set; }
 
     [JsonPropertyName("user")]
-    public User User { get; set; }
+    public required User User { get; set; }
 }

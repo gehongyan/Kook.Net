@@ -30,5 +30,5 @@ public interface IVoiceState
     ///     A generic voice channel object representing the voice channel that the user is currently in; <c>null</c>
     ///     if none.
     /// </returns>
-    IVoiceChannel VoiceChannel { get; }
+    IVoiceChannel? VoiceChannel { get; }
 }

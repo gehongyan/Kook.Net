@@ -7,7 +7,7 @@ internal class Card : CardBase
 {
     [JsonPropertyName("theme")]
     [JsonConverter(typeof(CardThemeConverter))]
-    public CardTheme Theme { get; set; }
+    public CardTheme? Theme { get; set; }
 
     [JsonPropertyName("color")]
     [JsonConverter(typeof(HexColorConverter))]
@@ -16,8 +16,8 @@ internal class Card : CardBase
 
     [JsonPropertyName("size")]
     [JsonConverter(typeof(CardSizeConverter))]
-    public CardSize Size { get; set; }
+    public CardSize? Size { get; set; }
 
     [JsonPropertyName("modules")]
-    public ModuleBase[] Modules { get; set; }
+    public required ModuleBase[] Modules { get; set; }
 }

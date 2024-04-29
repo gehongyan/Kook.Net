@@ -12,19 +12,14 @@ namespace Kook;
 public class GuildProperties
 {
     /// <summary>
-    ///     Gets or sets the identifier of the guild to modify.
-    /// </summary>
-    public ulong GuildId { get; set; }
-
-    /// <summary>
     ///     Gets or sets the region for the guild's voice connections.
     /// </summary>
-    public IVoiceRegion Region { get; set; }
+    public IVoiceRegion? Region { get; set; }
 
     /// <summary>
     ///     Gets or sets the ID of the region for the guild's voice connections.
     /// </summary>
-    public string RegionId { get; set; }
+    public string? RegionId { get; set; }
 
     /// <summary>
     ///     Gets or sets the ID of the default channel.
@@ -42,7 +37,7 @@ public class GuildProperties
     ///     An <see cref="ITextChannel"/> which is the default channel; <c>null</c> if nothing changes.
     ///     To clear the manually assigned default channel, set <see cref="DefaultChannelId"/> to <c>0</c> instead.
     /// </returns>
-    public ITextChannel DefaultChannel { get; set; }
+    public ITextChannel? DefaultChannel { get; set; }
 
     /// <summary>
     ///     Gets or sets the ID of welcome channel.
@@ -60,7 +55,7 @@ public class GuildProperties
     ///     An <see cref="ITextChannel"/> where welcome messages are sent; <c>null</c> if nothing changes.
     ///     To clear the welcome channel, set <see cref="WelcomeChannelId"/> to <c>0</c> instead.
     /// </returns>
-    public ITextChannel WelcomeChannel { get; set; }
+    public ITextChannel? WelcomeChannel { get; set; }
 
     /// <summary>
     ///     Gets or sets whether the guild is open.
@@ -85,5 +80,5 @@ public class GuildProperties
     ///     <c>null</c> if nothing changes; To clear the widget channel,
     ///     set <see cref="WidgetChannelId"/> to <c>0</c> instead.
     /// </returns>
-    public ITextChannel WidgetChannel { get; set; }
+    public ITextChannel? WidgetChannel { get; set; }
 }

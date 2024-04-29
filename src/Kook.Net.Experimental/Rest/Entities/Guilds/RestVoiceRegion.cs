@@ -27,6 +27,7 @@ public class RestVoiceRegion : RestEntity<string>, IVoiceRegion
     internal RestVoiceRegion(BaseKookClient kook, string id)
         : base(kook, id)
     {
+        Name = string.Empty;
     }
 
     internal static RestVoiceRegion Create(BaseKookClient kook, Model model)

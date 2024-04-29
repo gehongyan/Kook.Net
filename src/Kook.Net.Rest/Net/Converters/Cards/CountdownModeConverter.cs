@@ -7,7 +7,7 @@ internal class CountdownModeConverter : JsonConverter<CountdownMode>
 {
     public override CountdownMode Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string mode = reader.GetString();
+        string? mode = reader.GetString();
         return mode switch
         {
             "day" => CountdownMode.Day,

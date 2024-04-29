@@ -1,6 +1,6 @@
 <img src="./docs/logo/Logo_Labeled.png" alt="logo" height="160"/>
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/gehongyan/Kook.Net/push-or-pr.yml?branch=master)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/gehongyan/Kook.Net/push.yml?branch=master)
 ![GitHub Top Language](https://img.shields.io/github/languages/top/gehongyan/Kook.Net)
 [![Nuget Version](https://img.shields.io/nuget/v/Kook.Net)](https://www.nuget.org/packages/Kook.Net)
 [![Nuget](https://img.shields.io/nuget/dt/Kook.Net?color=%230099ff)](https://www.nuget.org/packages/Kook.Net)

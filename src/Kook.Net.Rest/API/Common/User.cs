@@ -8,16 +8,16 @@ internal class User
     public ulong Id { get; set; }
 
     [JsonPropertyName("username")]
-    public string Username { get; set; }
+    public required string Username { get; set; }
 
     [JsonPropertyName("identify_num")]
-    public string IdentifyNumber { get; set; }
+    public required string IdentifyNumber { get; set; }
 
     [JsonPropertyName("online")]
     public bool Online { get; set; }
 
     [JsonPropertyName("os")]
-    public string OperatingSystem { get; set; }
+    public string? OperatingSystem { get; set; }
 
     [JsonPropertyName("bot")]
     public bool? Bot { get; set; }
@@ -26,10 +26,10 @@ internal class User
     public int? Status { get; set; }
 
     [JsonPropertyName("avatar")]
-    public string Avatar { get; set; }
+    public required string Avatar { get; set; }
 
     [JsonPropertyName("vip_avatar")]
-    public string BuffAvatar { get; set; }
+    public required string BuffAvatar { get; set; }
 
     [JsonPropertyName("is_vip")]
     public bool? HasBuff { get; set; }
@@ -41,13 +41,13 @@ internal class User
     public bool? IsDenoiseEnabled { get; set; }
 
     [JsonPropertyName("tag_info")]
-    public UserTag UserTag { get; set; }
+    public UserTag? UserTag { get; set; }
 
     [JsonPropertyName("banner")]
-    public string Banner { get; set; }
+    public string? Banner { get; set; }
 
     [JsonPropertyName("nameplate")]
-    public Nameplate[] Nameplates { get; set; }
+    public Nameplate[]? Nameplates { get; set; }
 
     [JsonPropertyName("is_sys")]
     public bool? IsSystemUser { get; set; }

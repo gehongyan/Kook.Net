@@ -12,50 +12,54 @@ internal class Message
     public MessageType Type { get; set; }
 
     [JsonPropertyName("content")]
-    public string Content { get; set; }
+    public required string Content { get; set; }
 
     [JsonPropertyName("mention")]
-    public ulong[] MentionedUsers { get; set; }
+    public ulong[]? MentionedUsers { get; set; }
 
     [JsonPropertyName("mention_all")]
     public bool MentionedAll { get; set; }
 
     [JsonPropertyName("mention_roles")]
-    public uint[] MentionedRoles { get; set; }
+    public required uint[] MentionedRoles { get; set; }
 
     [JsonPropertyName("mention_here")]
     public bool MentionedHere { get; set; }
 
     [JsonPropertyName("embeds")]
-    public EmbedBase[] Embeds { get; set; }
+    public required EmbedBase[] Embeds { get; set; }
 
-    [JsonPropertyName("attachment")]
-    public Attachment Attachment { get; set; }
+    [JsonPropertyName("attachments")]
+    [JsonConverter(typeof(SafeAttachmentConverter))]
+    public Attachment? Attachment { get; set; }
 
     [JsonPropertyName("create_at")]
     [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
     public DateTimeOffset CreateAt { get; set; }
 
     [JsonPropertyName("updated_at")]
-    [JsonConverter(typeof(DateTimeOffsetUnixTimeMillisecondsConverter))]
-    public DateTimeOffset UpdateAt { get; set; }
+    [JsonConverter(typeof(NullableDateTimeOffsetUnixTimeMillisecondsConverter))]
+    public DateTimeOffset? UpdateAt { get; set; }
 
     [JsonPropertyName("reactions")]
-    public Reaction[] Reactions { get; set; }
+    public required Reaction[] Reactions { get; set; }
 
     [JsonPropertyName("author")]
-    public User Author { get; set; }
+    public required User Author { get; set; }
 
     [JsonPropertyName("image_name")]
-    public string ImageName { get; set; }
+    public required string ImageName { get; set; }
 
     [JsonPropertyName("read_status")]
     public bool ReadStatus { get; set; }
 
     [JsonPropertyName("quote")]
     [JsonConverter(typeof(QuoteConverter))]
-    public Quote Quote { get; set; }
+    public Quote? Quote { get; set; }
 
     [JsonPropertyName("mention_info")]
-    public MentionInfo MentionInfo { get; set; }
+    public GuildMentionInfo? MentionInfo { get; set; }
+
+    [JsonPropertyName("editable")]
+    public bool? Editable { get; set; }
 }

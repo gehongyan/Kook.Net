@@ -5,7 +5,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     Contains information for the parsing result from the command service's parser.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct ParseResult : IResult
 {
     /// <summary>
@@ -22,7 +22,7 @@ public struct ParseResult : IResult
     public CommandError? Error { get; }
 
     /// <inheritdoc/>
-    public string ErrorReason { get; }
+    public string? ErrorReason { get; }
 
     /// <summary>
     ///     Provides information about the parameter that caused the parsing error.
@@ -31,13 +31,13 @@ public struct ParseResult : IResult
     ///     A <see cref="ParameterInfo" /> indicating the parameter info of the error that may have occurred during parsing;
     ///     <c>null</c> if the parsing was successful or the parsing error is not specific to a single parameter.
     /// </returns>
-    public ParameterInfo ErrorParameter { get; }
+    public ParameterInfo? ErrorParameter { get; }
 
     /// <inheritdoc/>
     public bool IsSuccess => !Error.HasValue;
 
-    private ParseResult(IReadOnlyList<TypeReaderResult> argValues, IReadOnlyList<TypeReaderResult> paramValues, CommandError? error,
-        string errorReason, ParameterInfo errorParamInfo)
+    private ParseResult(IReadOnlyList<TypeReaderResult> argValues, IReadOnlyList<TypeReaderResult> paramValues,
+        CommandError? error, string? errorReason, ParameterInfo? errorParamInfo)
     {
         ArgValues = argValues;
         ParamValues = paramValues;
@@ -54,14 +54,10 @@ public struct ParseResult : IResult
     /// <returns> The parsing result. </returns>
     public static ParseResult FromSuccess(IReadOnlyList<TypeReaderResult> argValues, IReadOnlyList<TypeReaderResult> paramValues)
     {
-        for (int i = 0; i < argValues.Count; i++)
-            if (argValues[i].Values.Count > 1)
-                return new ParseResult(argValues, paramValues, CommandError.MultipleMatches, "Multiple matches found.", null);
-
-        for (int i = 0; i < paramValues.Count; i++)
-            if (paramValues[i].Values.Count > 1)
-                return new ParseResult(argValues, paramValues, CommandError.MultipleMatches, "Multiple matches found.", null);
-
+        if (argValues.Any(x => x.Values.Count > 1))
+            return new ParseResult(argValues, paramValues, CommandError.MultipleMatches, "Multiple matches found.", null);
+        if (paramValues.Any(t => t.Values.Count > 1))
+            return new ParseResult(argValues, paramValues, CommandError.MultipleMatches, "Multiple matches found.", null);
         return new ParseResult(argValues, paramValues, null, null, null);
     }
 
@@ -73,16 +69,8 @@ public struct ParseResult : IResult
     /// <returns> The parsing result. </returns>
     public static ParseResult FromSuccess(IReadOnlyList<TypeReaderValue> argValues, IReadOnlyList<TypeReaderValue> paramValues)
     {
-        TypeReaderResult[] argList = new TypeReaderResult[argValues.Count];
-        for (int i = 0; i < argValues.Count; i++) argList[i] = TypeReaderResult.FromSuccess(argValues[i]);
-
-        TypeReaderResult[] paramList = null;
-        if (paramValues != null)
-        {
-            paramList = new TypeReaderResult[paramValues.Count];
-            for (int i = 0; i < paramValues.Count; i++) paramList[i] = TypeReaderResult.FromSuccess(paramValues[i]);
-        }
-
+        TypeReaderResult[] argList = [..argValues.Select(TypeReaderResult.FromSuccess)];
+        TypeReaderResult[] paramList = [..paramValues.Select(TypeReaderResult.FromSuccess)];
         return new ParseResult(argList, paramList, null, null, null);
     }
 
@@ -92,8 +80,8 @@ public struct ParseResult : IResult
     /// <param name="error"> The error that occurred. </param>
     /// <param name="reason"> The reason for the error. </param>
     /// <returns> The parsing result. </returns>
-    public static ParseResult FromError(CommandError error, string reason)
-        => new(null, null, error, reason, null);
+    public static ParseResult FromError(CommandError error, string reason) =>
+        new([], [], error, reason, null);
 
     /// <summary>
     ///     Creates a failed parsing result.
@@ -102,24 +90,22 @@ public struct ParseResult : IResult
     /// <param name="reason"> The reason for the error. </param>
     /// <param name="parameterInfo"> The parameter info of the error that may have occurred during parsing. </param>
     /// <returns> The parsing result. </returns>
-    public static ParseResult FromError(CommandError error, string reason, ParameterInfo parameterInfo)
-        => new(null, null, error, reason, parameterInfo);
+    public static ParseResult FromError(CommandError error, string reason, ParameterInfo parameterInfo) =>
+        new([], [], error, reason, parameterInfo);
 
     /// <summary>
     ///     Creates a failed parsing result.
     /// </summary>
     /// <param name="ex"> The exception that occurred. </param>
     /// <returns> The parsing result. </returns>
-    public static ParseResult FromError(Exception ex)
-        => FromError(CommandError.Exception, ex.Message);
+    public static ParseResult FromError(Exception ex) => FromError(CommandError.Exception, ex.Message);
 
     /// <summary>
     ///     Creates a failed parsing result.
     /// </summary>
     /// <param name="result"> The result that contains the error. </param>
     /// <returns> The parsing result. </returns>
-    public static ParseResult FromError(IResult result)
-        => new(null, null, result.Error, result.ErrorReason, null);
+    public static ParseResult FromError(IResult result) => new([], [], result.Error, result.ErrorReason, null);
 
     /// <summary>
     ///     Creates a failed parsing result.
@@ -127,8 +113,8 @@ public struct ParseResult : IResult
     /// <param name="result"> The result that contains the error. </param>
     /// <param name="parameterInfo"> The parameter info of the error that may have occurred during parsing. </param>
     /// <returns> The parsing result. </returns>
-    public static ParseResult FromError(IResult result, ParameterInfo parameterInfo)
-        => new(null, null, result.Error, result.ErrorReason, parameterInfo);
+    public static ParseResult FromError(IResult result, ParameterInfo parameterInfo) =>
+        new([], [], result.Error, result.ErrorReason, parameterInfo);
 
     /// <inheritdoc />
     public override string ToString() => IsSuccess ? "Success" : $"{Error}: {ErrorReason}";

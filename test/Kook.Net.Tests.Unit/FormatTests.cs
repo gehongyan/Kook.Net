@@ -12,17 +12,17 @@ public class FormatTests
     [InlineData(@"~text~", @"\~text\~")]
     [InlineData(@"`text`", @"\`text\`")]
     [InlineData(@"> text", @"\> text")]
-    public void Sanitize(string input, string expected) => Assert.Equal(expected, Format.Sanitize(input));
+    public void Sanitize(string input, string expected) => Assert.Equal(expected, input.Sanitize());
 
     [Fact]
     public void Code()
     {
         // no language
-        Assert.Equal("`test`", Format.Code("test"));
-        Assert.Equal("```\nanother\none\n```", Format.Code("another\none"));
+        Assert.Equal("`test`", "test".Code());
+        Assert.Equal("```\nanother\none\n```", "another\none".Code());
         // language specified
-        Assert.Equal("```cs\ntest\n```", Format.Code("test", "cs"));
-        Assert.Equal("```cs\nanother\none\n```", Format.Code("another\none", "cs"));
+        Assert.Equal("```cs\ntest\n```", "test".Code("cs"));
+        Assert.Equal("```cs\nanother\none\n```", "another\none".Code("cs"));
     }
 
     [Fact]
@@ -36,10 +36,10 @@ public class FormatTests
     // should work with CR or CRLF
     [InlineData("inb4\ngreentext", "> inb4\ngreentext\n")]
     [InlineData("inb4\r\ngreentext", "> inb4\r\ngreentext\r\n")]
-    public void Quote(string input, string expected) => Assert.Equal(expected, Format.Quote(input));
+    public void Quote(string input, string expected) => Assert.Equal(expected, input.Quote());
 
     [Theory]
-    [InlineData(null, null)]
+    [InlineData(null, "> \u200d")]
     [InlineData("", "")]
     [InlineData("\n", "\n")]
     [InlineData("foo\n\nbar", "> foo\n\u200d\nbar")]
@@ -51,7 +51,7 @@ public class FormatTests
     [InlineData("inb4\r\rgreentext", "> inb4\r\u200d\rgreentext")]
     [InlineData("inb4\r\ngreentext", "> inb4\r\ngreentext")]
     [InlineData("inb4\r\n\r\ngreentext", "> inb4\r\n\u200d\r\ngreentext")]
-    public void BlockQuote(string input, string expected) => Assert.Equal(expected, Format.BlockQuote(input));
+    public void BlockQuote(string? input, string expected) => Assert.Equal(expected, input.BlockQuote());
 
     [Theory]
     [InlineData("", "")]
@@ -66,7 +66,7 @@ public class FormatTests
         "berries and Cream, I'm a little lad who loves berries and cream")]
     public void StripMarkdown(string input, string expected)
     {
-        string test = Format.StripMarkDown(input);
+        string test = input.StripMarkDown();
         Assert.Equal(expected, test);
     }
 }

@@ -15,11 +15,7 @@ internal class VoiceSocketFrameTypeConverter : JsonConverter<VoiceSocketFrameTyp
     {
         string method = value.ToString();
         method = method.Length > 1
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
             ? method[..1].ToLower() + method[1..]
-#else
-            ? method.Substring(0, 1).ToLower() + method.Substring(1)
-#endif
             : method.ToLower();
         writer.WriteStringValue(method);
     }

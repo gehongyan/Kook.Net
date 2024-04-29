@@ -67,7 +67,7 @@ public class RoleTests : IClassFixture<RestGuildFixture>
         IRole role = await _guild.CreateRoleAsync("TEST ROLE");
         try
         {
-            RestGuildUser selfUser = await _guild.GetCurrentUserAsync() as RestGuildUser;
+            RestGuildUser? selfUser = await _guild.GetCurrentUserAsync() as RestGuildUser;
             Assert.NotNull(role);
             Assert.NotNull(selfUser);
             // check that the bot can add the role

@@ -8,7 +8,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     Represents a REST-based voice channel in a guild.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChannel
 {
     #region RestVoiceChannel
@@ -17,16 +17,16 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
     public VoiceQuality? VoiceQuality { get; private set; }
 
     /// <inheritdoc />
-    public int? UserLimit { get; private set; }
+    public int UserLimit { get; private set; }
 
     /// <inheritdoc />
-    public string ServerUrl { get; private set; }
+    public string? ServerUrl { get; private set; }
 
     /// <inheritdoc />
     public bool? IsVoiceRegionOverwritten { get; private set; }
 
     /// <inheritdoc />
-    public string VoiceRegion { get; private set; }
+    public string? VoiceRegion { get; private set; }
 
     /// <inheritdoc />
     public bool HasPassword { get; private set; }
@@ -57,19 +57,25 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
     }
 
     /// <inheritdoc />
-    public async Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null)
+    public async Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions? options = null)
     {
         Model model = await ChannelHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
         Update(model);
     }
 
+    /// <inheritdoc />
+    public override Task UpdateAsync(RequestOptions? options = null) =>
+        ChannelHelper.UpdateAsync(this, Kook, options);
+
     /// <summary>
     ///     Gets the users connected to this voice channel.
     /// </summary>
     /// <param name="options"> The options to be used when sending the request. </param>
-    /// <returns> A task that represents the asynchronous get operation. The task result contains a collection of users. </returns>
-    public async Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(RequestOptions options)
-        => await ChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false);
+    /// <returns>
+    ///     A task that represents the asynchronous get operation. The task result contains a collection of users.
+    /// </returns>
+    public async Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(RequestOptions? options) =>
+        await ChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false);
 
     #endregion
 
@@ -79,26 +85,28 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
 
     /// <inheritdoc />
     /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
-    public override IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch,
-        RequestOptions options = null)
-        => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
+    public override IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
+        throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
     /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
-    public override IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
-        => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
+    public override IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(
+        Guid referenceMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch,
+        RequestOptions? options = null) =>
+        throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
     /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
-    public override IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
-        => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
+    public override IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(
+        IMessage referenceMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch,
+        RequestOptions? options = null) =>
+        throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
     /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
-    public override Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions options = null)
-        => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
+    public override Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions? options = null) =>
+        throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     #endregion
 
@@ -106,7 +114,8 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
 
     /// <inheritdoc />
     /// <exception cref="NotSupportedException">Connecting to a REST-based channel is not supported.</exception>
-    Task<IAudioClient> IAudioChannel.ConnectAsync(/*bool selfDeaf, bool selfMute, */bool external, bool disconnect) =>
+    Task<IAudioClient?> IAudioChannel.ConnectAsync( /*bool selfDeaf, bool selfMute, */
+        bool external, bool disconnect) =>
         throw new NotSupportedException();
 
     /// <inheritdoc />
@@ -118,11 +127,12 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
     #region IGuildChannel
 
     /// <inheritdoc />
-    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
-        => Task.FromResult<IGuildUser>(null);
+    Task<IGuildUser?> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IGuildUser?>(null);
 
     /// <inheritdoc />
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options) =>
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(
+        CacheMode mode, RequestOptions? options) =>
         AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
 
     #endregion
@@ -130,25 +140,20 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
     #region INestedChannel
 
     /// <inheritdoc />
-    async Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
-    {
-        if (CategoryId.HasValue && mode == CacheMode.AllowDownload)
-            return await Guild.GetChannelAsync(CategoryId.Value, mode, options).ConfigureAwait(false) as ICategoryChannel;
-
-        return null;
-    }
+    async Task<ICategoryChannel?> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions? options) =>
+        CategoryId.HasValue && mode == CacheMode.AllowDownload
+            ? await Guild.GetChannelAsync(CategoryId.Value, mode, options).ConfigureAwait(false) as ICategoryChannel
+            : null;
 
     #endregion
 
     #region IVoiceChannel
 
-    async Task<IReadOnlyCollection<IUser>> IVoiceChannel.GetConnectedUsersAsync(CacheMode mode, RequestOptions options)
-    {
-        if (mode is CacheMode.AllowDownload)
-            return await ChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false);
-        else
-            return ImmutableArray.Create<IUser>();
-    }
+    async Task<IReadOnlyCollection<IUser>> IVoiceChannel.GetConnectedUsersAsync(
+        CacheMode mode, RequestOptions? options) =>
+        mode is CacheMode.AllowDownload
+            ? await ChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false)
+            : ImmutableArray.Create<IUser>();
 
     #endregion
 }

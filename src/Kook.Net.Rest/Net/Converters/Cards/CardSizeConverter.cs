@@ -7,7 +7,7 @@ internal class CardSizeConverter : JsonConverter<CardSize>
 {
     public override CardSize Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        string size = reader.GetString();
+        string? size = reader.GetString();
         return size switch
         {
             "sm" => CardSize.Small,

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using StandardColor = System.Drawing.Color;
 
 namespace Kook;
@@ -6,8 +7,8 @@ namespace Kook;
 /// <summary>
 ///     Represents a <see cref="Color"/> with an alpha channel.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
-public struct AlphaColor
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
+public readonly struct AlphaColor
 {
     /// <summary> Gets the max decimal value of an color with an alpha channel. </summary>
     public const ulong MaxDecimalValue = 0xFFFFFFFF;
@@ -111,16 +112,16 @@ public struct AlphaColor
     /// <exception cref="ArgumentOutOfRangeException">The argument value is not between 0 to 255.</exception>
     public AlphaColor(int r, int g, int b, int a)
     {
-        if (r < 0 || r > 255)
+        if (r is < 0 or > 255)
             throw new ArgumentOutOfRangeException(nameof(r), "Value must be within [0,255].");
 
-        if (g < 0 || g > 255)
+        if (g is < 0 or > 255)
             throw new ArgumentOutOfRangeException(nameof(g), "Value must be within [0,255].");
 
-        if (b < 0 || b > 255)
+        if (b is < 0 or > 255)
             throw new ArgumentOutOfRangeException(nameof(b), "Value must be within [0,255].");
 
-        if (a < 0 || a > 255)
+        if (a is < 0 or > 255)
             throw new ArgumentOutOfRangeException(nameof(a), "Value must be within [0,255].");
 
         RawValue = ((ulong)(uint)r << 24)
@@ -146,16 +147,16 @@ public struct AlphaColor
     /// <exception cref="ArgumentOutOfRangeException">The argument value is not between 0 to 1.</exception>
     public AlphaColor(float r, float g, float b, float a)
     {
-        if (r < 0.0f || r > 1.0f)
+        if (r is < 0.0f or > 1.0f)
             throw new ArgumentOutOfRangeException(nameof(r), "Value must be within [0,1].");
 
-        if (g < 0.0f || g > 1.0f)
+        if (g is < 0.0f or > 1.0f)
             throw new ArgumentOutOfRangeException(nameof(g), "Value must be within [0,1].");
 
-        if (b < 0.0f || b > 1.0f)
+        if (b is < 0.0f or > 1.0f)
             throw new ArgumentOutOfRangeException(nameof(b), "Value must be within [0,1].");
 
-        if (a < 0.0f || a > 1.0f)
+        if (a is < 0.0f or > 1.0f)
             throw new ArgumentOutOfRangeException(nameof(a), "Value must be within [0,1].");
 
         RawValue = ((uint)(r * 255.0f) << 24)
@@ -168,35 +169,35 @@ public struct AlphaColor
     ///     Determines whether the specified <see cref="AlphaColor" /> is equal to this instance.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="AlphaColor" /> is equal to this instance; otherwise, <c>false</c> . </returns>
-    public static bool operator ==(AlphaColor lhs, AlphaColor rhs)
-        => lhs.RawValue == rhs.RawValue;
+    public static bool operator ==(AlphaColor lhs, AlphaColor rhs) =>
+        lhs.RawValue == rhs.RawValue;
 
     /// <summary>
     ///     Determines whether the specified <see cref="AlphaColor" /> is not equal to this instance.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="AlphaColor" /> is not equal to this instance; otherwise, <c>false</c> . </returns>
-    public static bool operator !=(AlphaColor lhs, AlphaColor rhs)
-        => lhs.RawValue != rhs.RawValue;
+    public static bool operator !=(AlphaColor lhs, AlphaColor rhs) =>
+        lhs.RawValue != rhs.RawValue;
 
     /// <summary>
     ///     Converts the given raw value of <see cref="uint"/> to a <see cref="AlphaColor"/>.
     /// </summary>
     /// <param name="rawValue"> The raw value of the color. </param>
     /// <returns> The <see cref="AlphaColor"/> that represents the given raw value. </returns>
-    public static implicit operator AlphaColor(ulong rawValue)
-        => new(rawValue);
+    public static implicit operator AlphaColor(ulong rawValue) =>
+        new(rawValue);
 
     /// <summary>
     ///     Converts the given <see cref="AlphaColor"/> to its raw value of <see cref="uint"/>.
     /// </summary>
     /// <param name="color"> The <see cref="AlphaColor"/> to convert. </param>
     /// <returns> The raw value of the given <see cref="AlphaColor"/>. </returns>
-    public static implicit operator ulong(AlphaColor color)
-        => color.RawValue;
+    public static implicit operator ulong(AlphaColor color) =>
+        color.RawValue;
 
     /// <inheritdoc />
-    public override bool Equals(object obj)
-        => obj is AlphaColor c && RawValue == c.RawValue;
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is AlphaColor c && RawValue == c.RawValue;
 
     /// <inheritdoc />
     public override int GetHashCode() => RawValue.GetHashCode();
@@ -206,8 +207,8 @@ public struct AlphaColor
     /// </summary>
     /// <param name="color"> The Kook.Net-defined <see cref="Color"/> to convert. </param>
     /// <returns> The Kook.Net-defined <see cref="AlphaColor"/> that represents the given Kook.Net-defined <see cref="Color"/>. </returns>
-    public static implicit operator AlphaColor(Color color)
-        => new(((ulong)color.RawValue << 8) | 0xFF);
+    public static implicit operator AlphaColor(Color color) =>
+        new(((ulong)color.RawValue << 8) | 0xFF);
 
     /// <summary>
     ///     Converts the given Kook.Net-defined <see cref="AlphaColor"/> to a Kook.Net-defined <see cref="Color"/>.
@@ -226,16 +227,16 @@ public struct AlphaColor
     /// </summary>
     /// <param name="color"> The Kook.Net-defined <see cref="AlphaColor"/> to convert. </param>
     /// <returns> The .NET standard <see cref="StandardColor"/> that represents the given Kook.Net-defined <see cref="AlphaColor"/>. </returns>
-    public static implicit operator StandardColor(AlphaColor color)
-        => StandardColor.FromArgb(color.A, color.R, color.G, color.B);
+    public static implicit operator StandardColor(AlphaColor color) =>
+        StandardColor.FromArgb(color.A, color.R, color.G, color.B);
 
     /// <summary>
     ///     Converts the given .NET standard <see cref="StandardColor"/> to a Kook.Net-defined <see cref="AlphaColor"/>.
     /// </summary>
     /// <param name="color"> The .NET standard <see cref="StandardColor"/> to convert. </param>
     /// <returns> The Kook.Net-defined <see cref="AlphaColor"/> that represents the given .NET standard <see cref="StandardColor"/>. </returns>
-    public static explicit operator AlphaColor(StandardColor color)
-        => new(color.R, color.G, color.B, color.A);
+    public static explicit operator AlphaColor(StandardColor color) =>
+        new(color.R, color.G, color.B, color.A);
 
     /// <summary>
     ///     Gets the hexadecimal representation of the color (e.g. <c>#000cccff</c>).

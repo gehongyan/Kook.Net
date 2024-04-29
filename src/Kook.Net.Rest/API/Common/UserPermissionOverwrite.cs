@@ -5,7 +5,7 @@ namespace Kook.API;
 internal class UserPermissionOverwrite
 {
     [JsonPropertyName("user")]
-    public User User { get; set; }
+    public required User User { get; set; }
 
     [JsonPropertyName("allow")]
     public ulong Allow { get; set; }

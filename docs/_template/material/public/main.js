@@ -20,6 +20,9 @@
     {
         // Ugly hack to improve toc filter.
         let target = document.getElementById("toc");
+
+        if(!target) return;
+
         let config = { attributes: false, childList: true, subtree: true };
         let observer = new MutationObserver((list) =>
         {

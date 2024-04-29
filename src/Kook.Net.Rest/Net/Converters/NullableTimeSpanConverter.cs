@@ -5,10 +5,16 @@ namespace Kook.Net.Converters;
 
 internal class NullableTimeSpanConverter : JsonConverter<TimeSpan?>
 {
+    /// <inheritdoc />
+    public override bool HandleNull => true;
+
     public override TimeSpan? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
+        if (reader.TokenType == JsonTokenType.Null)
+            return null;
         ulong tick = reader.GetUInt64();
-        if (tick == 0) return null;
+        if (tick == 0)
+            return null;
 
         return TimeSpan.FromSeconds(tick);
     }

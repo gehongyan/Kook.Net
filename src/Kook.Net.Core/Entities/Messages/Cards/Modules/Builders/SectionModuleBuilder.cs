@@ -1,13 +1,12 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Kook;
 
 /// <summary>
 ///     Represents a section module builder for creating a <see cref="SectionModule"/>.
 /// </summary>
-public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuilder>
+public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuilder>, IEquatable<IModuleBuilder>
 {
-    private IElementBuilder _text;
-    private IElementBuilder _accessory;
-
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Section;
 
@@ -27,11 +26,11 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     ///     and <see cref="ParagraphStructBuilder"/>; or the <paramref name="accessory"/> is neither
     ///     an <see cref="ImageElementBuilder"/> nor <see cref="ButtonElementBuilder"/>.
     /// </exception>
-    public SectionModuleBuilder(IElementBuilder text,
-        SectionAccessoryMode mode = SectionAccessoryMode.Unspecified, IElementBuilder accessory = null)
+    public SectionModuleBuilder(IElementBuilder? text,
+        SectionAccessoryMode? mode = null, IElementBuilder? accessory = null)
     {
         Text = text;
-        WithMode(mode);
+        Mode = mode;
         Accessory = accessory;
     }
 
@@ -44,11 +43,11 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     ///     and <see cref="ParagraphStructBuilder"/>; or the <paramref name="accessory"/> is neither
     ///     an <see cref="ImageElementBuilder"/> nor <see cref="ButtonElementBuilder"/>.
     /// </exception>
-    public SectionModuleBuilder(string text, bool isKMarkdown = false,
-        SectionAccessoryMode mode = SectionAccessoryMode.Unspecified, IElementBuilder accessory = null)
+    public SectionModuleBuilder(string? text, bool isKMarkdown = false,
+        SectionAccessoryMode? mode = null, IElementBuilder? accessory = null)
     {
         WithText(text, isKMarkdown);
-        WithMode(mode);
+        Mode = mode;
         Accessory = accessory;
     }
 
@@ -59,7 +58,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     ///     A <see cref="SectionAccessoryMode"/> representing
     ///     how the <see cref="Accessory"/> is positioned relative to the <see cref="Text"/>.
     /// </returns>
-    public SectionAccessoryMode Mode { get; set; }
+    public SectionAccessoryMode? Mode { get; set; }
 
     /// <summary>
     ///     Gets or sets the text of the section.
@@ -71,22 +70,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     ///     The <paramref name="value"/> is not any form of text element,
     ///     including <see cref="PlainTextElementBuilder"/>, <see cref="KMarkdownElementBuilder"/>, and <see cref="ParagraphStructBuilder"/>.
     /// </exception>
-    public IElementBuilder Text
-    {
-        get => _text;
-        set
-        {
-            if (value is not null
-                && value.Type != ElementType.PlainText
-                && value.Type != ElementType.KMarkdown
-                && value.Type != ElementType.Paragraph)
-                throw new ArgumentException(
-                    "Section text must be a PlainText element, a KMarkdown element or a Paragraph struct.",
-                    nameof(value));
-
-            _text = value;
-        }
-    }
+    public IElementBuilder? Text { get; set; }
 
     /// <summary>
     ///     Gets or sets the accessory of the section.
@@ -98,19 +82,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     ///     The <paramref name="value"/> is neither an <see cref="ImageElementBuilder"/>
     ///     nor <see cref="ButtonElementBuilder"/>.
     /// </exception>
-    public IElementBuilder Accessory
-    {
-        get => _accessory;
-        set
-        {
-            if (value is not null && value.Type != ElementType.Image && value.Type != ElementType.Button)
-                throw new ArgumentException(
-                    $"Section text must be an {nameof(ImageElementBuilder)} or a {nameof(ButtonElement)}.",
-                    nameof(value));
-
-            _accessory = value;
-        }
-    }
+    public IElementBuilder? Accessory { get; set; }
 
     /// <summary>
     ///     Sets the text of the section.
@@ -154,12 +126,12 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public SectionModuleBuilder WithText(string text, bool isKMarkdown = false)
+    public SectionModuleBuilder WithText(string? text, bool isKMarkdown = false)
     {
         Text = isKMarkdown switch
         {
-            false => new PlainTextElementBuilder().WithContent(text),
-            true => new KMarkdownElementBuilder().WithContent(text)
+            false => new PlainTextElementBuilder(text),
+            true => new KMarkdownElementBuilder(text)
         };
         return this;
     }
@@ -188,7 +160,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public SectionModuleBuilder WithText<T>(Action<T> action = null)
+    public SectionModuleBuilder WithText<T>(Action<T>? action = null)
         where T : IElementBuilder, new()
     {
         T text = new();
@@ -236,7 +208,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public SectionModuleBuilder WithAccessory<T>(Action<T> action = null)
+    public SectionModuleBuilder WithAccessory<T>(Action<T>? action = null)
         where T : IElementBuilder, new()
     {
         T accessory = new();
@@ -266,12 +238,31 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <returns>
     ///     A <see cref="SectionModule"/> representing the built section module object.
     /// </returns>
+    /// <exception cref="ArgumentException">
+    ///     The <see cref="Text"/> is not any form of text element,
+    ///     including <see cref="PlainTextElementBuilder"/>, <see cref="KMarkdownElementBuilder"/>,
+    ///     and <see cref="ParagraphStructBuilder"/>.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    ///     The <see cref="Accessory"/> is neither an <see cref="ImageElementBuilder"/>
+    ///     nor <see cref="ButtonElementBuilder"/>.
+    /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///     The <see cref="ButtonElement"/> was not positioned to the right of the <see cref="Text"/>,
+    ///     The <see cref="ButtonElement"/> was not positioned to the left of the <see cref="Text"/>,
     ///     which is not allowed.
     /// </exception>
     public SectionModule Build()
     {
+        if (Text is not (null or PlainTextElementBuilder or KMarkdownElementBuilder or ParagraphStructBuilder))
+            throw new ArgumentException(
+                "Section text must be a PlainText element, a KMarkdown element or a Paragraph struct if set.",
+                nameof(Text));
+
+        if (Accessory is not (null or ImageElementBuilder or ButtonElementBuilder))
+            throw new ArgumentException(
+                "Section accessory must be an Image element or a Button element if set.",
+                nameof(Accessory));
+
         if (Mode != SectionAccessoryMode.Right && Accessory is ButtonElementBuilder)
             throw new InvalidOperationException("Button must be placed on the right");
 
@@ -285,27 +276,27 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     ///     Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator ==(SectionModuleBuilder left, SectionModuleBuilder right)
-        => left?.Equals(right) ?? right is null;
+    public static bool operator ==(SectionModuleBuilder? left, SectionModuleBuilder? right) =>
+        left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     Determines whether the specified <see cref="SectionModuleBuilder"/> is not equal to the current <see cref="SectionModuleBuilder"/>.
     /// </summary>
     /// <returns> <c>true</c> if the specified <see cref="SectionModuleBuilder"/> is not equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>. </returns>
-    public static bool operator !=(SectionModuleBuilder left, SectionModuleBuilder right)
-        => !(left == right);
+    public static bool operator !=(SectionModuleBuilder? left, SectionModuleBuilder? right) =>
+        !(left == right);
 
     /// <summary>Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.</summary>
     /// <remarks>If the object passes is an <see cref="SectionModuleBuilder"/>, <see cref="Equals(SectionModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
     /// <param name="obj">The object to compare with the current <see cref="SectionModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals(object obj)
-        => obj is SectionModuleBuilder builder && Equals(builder);
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
+        obj is SectionModuleBuilder builder && Equals(builder);
 
     /// <summary>Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.</summary>
     /// <param name="sectionModuleBuilder">The <see cref="SectionModuleBuilder"/> to compare with the current <see cref="SectionModuleBuilder"/>.</param>
     /// <returns><c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>.</returns>
-    public bool Equals(SectionModuleBuilder sectionModuleBuilder)
+    public bool Equals([NotNullWhen(true)] SectionModuleBuilder? sectionModuleBuilder)
     {
         if (sectionModuleBuilder is null) return false;
 
@@ -317,4 +308,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
 
     /// <inheritdoc />
     public override int GetHashCode() => base.GetHashCode();
+
+    bool IEquatable<IModuleBuilder>.Equals([NotNullWhen(true)] IModuleBuilder? moduleBuilder) =>
+        Equals(moduleBuilder as SectionModuleBuilder);
 }

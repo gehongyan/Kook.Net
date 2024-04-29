@@ -5,5 +5,5 @@ namespace Kook.API.Rest;
 internal class QueryUserChatMessagesResponse
 {
     [JsonPropertyName("items")]
-    public DirectMessage[] Items { get; set; }
+    public required DirectMessage[] Items { get; set; }
 }

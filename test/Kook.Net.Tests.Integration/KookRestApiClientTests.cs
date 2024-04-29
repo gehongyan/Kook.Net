@@ -15,16 +15,12 @@ public class KookRestApiClientTests : IClassFixture<RestGuildFixture>, IAsyncDis
 {
     private readonly KookRestApiClient _apiClient;
 
-    public KookRestApiClientTests(RestGuildFixture guildFixture) => _apiClient = guildFixture.Client.ApiClient;
-
-    public ValueTask DisposeAsync()
+    public KookRestApiClientTests(RestGuildFixture guildFixture)
     {
-#if NET5_0_OR_GREATER
-        return ValueTask.CompletedTask;
-#else
-        return new ValueTask(Task.CompletedTask);
-#endif
+        _apiClient = guildFixture.Client.ApiClient;
     }
+
+    public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 
     [Fact]
     public async Task CreateAsset_WithMaximumSize_DontThrowsException()
@@ -32,7 +28,10 @@ public class KookRestApiClientTests : IClassFixture<RestGuildFixture>, IAsyncDis
         ulong fileSize = (ulong)(30 * Math.Pow(2, 20));
         using MemoryStream stream = new(new byte[fileSize]);
         CreateAssetResponse response =
-            await _apiClient.CreateAssetAsync(new CreateAssetParams { File = stream, FileName = "test.file" });
+            await _apiClient.CreateAssetAsync(new CreateAssetParams
+            {
+                File = stream, FileName = "test.file"
+            });
         response.Url.Should().NotBeNullOrWhiteSpace();
     }
 
@@ -43,7 +42,10 @@ public class KookRestApiClientTests : IClassFixture<RestGuildFixture>, IAsyncDis
         {
             ulong fileSize = (ulong)(30 * Math.Pow(2, 20)) + 1;
             using MemoryStream stream = new(new byte[fileSize]);
-            await _apiClient.CreateAssetAsync(new CreateAssetParams { File = stream, FileName = "test.file" });
+            await _apiClient.CreateAssetAsync(new CreateAssetParams
+            {
+                File = stream, FileName = "test.file"
+            });
         };
 
         await upload.Should().ThrowExactlyAsync<HttpException>()

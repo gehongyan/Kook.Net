@@ -5,12 +5,15 @@ namespace Kook.Net.Converters;
 
 internal class NullableVoiceQualityConverter : JsonConverter<VoiceQuality?>
 {
+    /// <inheritdoc />
+    public override bool HandleNull => true;
+
     public override VoiceQuality? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         switch (reader.TokenType)
         {
             case JsonTokenType.String:
-                string str = reader.GetString();
+                string? str = reader.GetString();
                 return int.TryParse(str, out int result)
                     ? (VoiceQuality?)result
                     : null;

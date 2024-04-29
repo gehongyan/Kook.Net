@@ -35,7 +35,8 @@ public class GuildTests : IClassFixture<RestGuildFixture>
     [Fact]
     public async Task GetUsersAsync()
     {
-        IGuildUser currentUser = await _guild.GetCurrentUserAsync();
+        IGuildUser? currentUser = await _guild.GetCurrentUserAsync();
+        Assert.NotNull(currentUser);
 
         IReadOnlyCollection<IGuildUser> users = await _guild.GetUsersAsync();
         users.Should().ContainSingle(x => x.Id == currentUser.Id);
@@ -50,25 +51,24 @@ public class GuildTests : IClassFixture<RestGuildFixture>
             .Excluding(x => x.IsDenoiseEnabled)
             .Excluding(x => x.IsOwner)
             .Excluding(x => x.IsSystemUser)
-            // Due to different domain names
-            .Excluding(x => x.Avatar)
-            .Excluding(x => x.BuffAvatar)
+            .Excluding(x => x.Color)
         );
     }
 
     [Fact]
     public async Task ModifyNicknameAsync()
     {
-        IGuildUser currentUser = await _guild.GetCurrentUserAsync();
+        IGuildUser? currentUser = await _guild.GetCurrentUserAsync();
+        Assert.NotNull(currentUser);
 
         await currentUser.ModifyNicknameAsync("UPDATED NICKNAME");
         currentUser.Nickname.Should().Be("UPDATED NICKNAME");
-        (await _guild.GetCurrentUserAsync()).Nickname.Should().Be("UPDATED NICKNAME");
+        (await _guild.GetCurrentUserAsync())?.Nickname.Should().Be("UPDATED NICKNAME");
 
         await currentUser.ModifyNicknameAsync(null);
         currentUser.Nickname.Should().BeNullOrEmpty();
-        (await _guild.GetCurrentUserAsync()).Nickname.Should().BeNullOrEmpty();
+        (await _guild.GetCurrentUserAsync())?.Nickname.Should().BeNullOrEmpty();
         currentUser.DisplayName.Should().Be(currentUser.Username);
-        (await _guild.GetCurrentUserAsync()).DisplayName.Should().Be(currentUser.Username);
+        (await _guild.GetCurrentUserAsync())?.DisplayName.Should().Be(currentUser.Username);
     }
 }

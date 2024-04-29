@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Model = Kook.API.RecommendInfo;
 
 namespace Kook.Rest;
@@ -11,7 +12,7 @@ public class RecommendInfo : IRecommendInfo
     public ulong GuildId { get; private set; }
 
     /// <inheritdoc />
-    public uint OpenId { get; private set; }
+    public uint? OpenId { get; private set; }
 
     /// <inheritdoc />
     public ulong DefaultChannelId { get; private set; }
@@ -57,6 +58,12 @@ public class RecommendInfo : IRecommendInfo
 
     internal RecommendInfo()
     {
+        Name = string.Empty;
+        Icon = string.Empty;
+        Banner = string.Empty;
+        Description = string.Empty;
+        Tag = string.Empty;
+        CustomId = string.Empty;
     }
 
     internal static RecommendInfo Create(Model model)
@@ -66,6 +73,15 @@ public class RecommendInfo : IRecommendInfo
         return entity;
     }
 
+    [MemberNotNull(
+        nameof(Name),
+        nameof(Icon),
+        nameof(Banner),
+        nameof(Description),
+        nameof(Tag),
+        nameof(Features),
+        nameof(CustomId)
+    )]
     internal void Update(Model model)
     {
         // Update properties from model

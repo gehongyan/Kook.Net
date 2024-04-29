@@ -9,7 +9,7 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     Represents a WebSocket-based voice channel in a guild.
 /// </summary>
-[DebuggerDisplay(@"{DebuggerDisplay,nq}")]
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudioChannel
 {
     #region SocketVoiceChannel
@@ -18,24 +18,24 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     public VoiceQuality? VoiceQuality { get; private set; }
 
     /// <inheritdoc />
-    public int? UserLimit { get; private set; }
+    public int UserLimit { get; private set; }
 
     /// <inheritdoc />
-    public string ServerUrl { get; private set; }
+    public string? ServerUrl { get; private set; }
 
     /// <inheritdoc />
     public bool? IsVoiceRegionOverwritten { get; private set; }
 
     /// <inheritdoc />
-    public string VoiceRegion { get; private set; }
+    public string? VoiceRegion { get; private set; }
 
     /// <inheritdoc />
     public bool HasPassword { get; private set; }
 
     /// <inheritdoc />
     /// <seealso cref="SocketVoiceChannel.ConnectedUsers"/>
-    public override IReadOnlyCollection<SocketGuildUser> Users
-        => Guild.Users.Where(x => Permissions.GetValue(
+    public override IReadOnlyCollection<SocketGuildUser> Users =>
+        Guild.Users.Where(x => Permissions.GetValue(
             Permissions.ResolveChannel(Guild, x, this, Permissions.ResolveGuild(Guild, x)),
             ChannelPermission.ViewChannel)).ToImmutableArray();
 
@@ -55,8 +55,8 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     /// <returns>
     ///     A read-only collection of users that are currently connected to this voice channel.
     /// </returns>
-    public IReadOnlyCollection<SocketGuildUser> ConnectedUsers
-        => Guild.Users.Where(x => x.VoiceChannel?.Id == Id).ToImmutableArray();
+    public IReadOnlyCollection<SocketGuildUser> ConnectedUsers =>
+        Guild.Users.Where(x => x.VoiceChannel?.Id == Id).ToImmutableArray();
 
     internal SocketVoiceChannel(KookSocketClient kook, ulong id, SocketGuild guild)
         : base(kook, id, guild)
@@ -76,7 +76,7 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     {
         base.Update(state, model);
         VoiceQuality = model.VoiceQuality;
-        UserLimit = model.UserLimit ?? 0;
+        UserLimit = model.UserLimit;
         ServerUrl = model.ServerUrl;
         VoiceRegion = model.VoiceRegion;
         HasPassword = model.HasPassword;
@@ -84,17 +84,15 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     }
 
     /// <inheritdoc />
-    public override SocketGuildUser GetUser(ulong id)
+    public override SocketGuildUser? GetUser(ulong id)
     {
-        SocketGuildUser user = Guild.GetUser(id);
-        if (user?.VoiceChannel?.Id == Id)
-            return user;
-        return null;
+        SocketGuildUser? user = Guild.GetUser(id);
+        return user?.VoiceChannel?.Id == Id ? user : null;
     }
 
     /// <inheritdoc />
-    public Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions options = null)
-        => ChannelHelper.ModifyAsync(this, Kook, func, options);
+    public Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions? options = null) =>
+        ChannelHelper.ModifyAsync(this, Kook, func, options);
 
     /// <summary>
     ///     Gets a collection of users that are currently connected to this voice channel.
@@ -105,14 +103,11 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of users
     ///     that are currently connected to this voice channel.
     /// </returns>
-    public async Task<IReadOnlyCollection<SocketGuildUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload,
-        RequestOptions options = null)
-    {
-        if (mode is CacheMode.AllowDownload)
-            return await SocketChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false);
-        else
-            return ConnectedUsers;
-    }
+    public async Task<IReadOnlyCollection<SocketGuildUser>> GetConnectedUsersAsync(
+        CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null) =>
+        mode is CacheMode.AllowDownload
+            ? await SocketChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false)
+            : ConnectedUsers;
 
     #endregion
 
@@ -121,25 +116,25 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     /// <inheritdoc />
     /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
     public override IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
-        => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
+        throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
     /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
     public override IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
-        => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
+        throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
     /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
     public override IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
-        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions options = null)
-        => throw new NotSupportedException("Getting messages from a voice channel is not supported.");
+        int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
+        throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
     /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
-    Task<IReadOnlyCollection<IMessage>> ITextChannel.GetPinnedMessagesAsync(RequestOptions options)
-        => Task.FromException<IReadOnlyCollection<IMessage>>(
+    Task<IReadOnlyCollection<IMessage>> ITextChannel.GetPinnedMessagesAsync(RequestOptions? options) =>
+        Task.FromException<IReadOnlyCollection<IMessage>>(
             new NotSupportedException("Getting messages from a voice channel is not supported."));
 
     #endregion
@@ -147,35 +142,37 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     #region IVoiceChannel
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IUser>> IVoiceChannel.GetConnectedUsersAsync(CacheMode mode, RequestOptions options)
-        => await GetConnectedUsersAsync(mode, options).ConfigureAwait(false);
+    async Task<IReadOnlyCollection<IUser>> IVoiceChannel.GetConnectedUsersAsync(
+        CacheMode mode, RequestOptions? options) =>
+        await GetConnectedUsersAsync(mode, options).ConfigureAwait(false);
 
     #endregion
 
     private string DebuggerDisplay => $"{Name} ({Id}, Voice)";
-    internal new SocketVoiceChannel Clone() => MemberwiseClone() as SocketVoiceChannel;
+    internal new SocketVoiceChannel Clone() => (SocketVoiceChannel)MemberwiseClone();
 
     #region IAudioChannel
 
     /// <inheritdoc />
-    public Task<IAudioClient> ConnectAsync(/*bool selfDeaf = false, bool selfMute = false, */bool external = false, bool disconnect = true)
-        => Guild.ConnectAudioAsync(Id, /*selfDeaf, selfMute, */external, disconnect);
+    public Task<IAudioClient?> ConnectAsync( /*bool selfDeaf = false, bool selfMute = false, */
+        bool external = false, bool disconnect = true) =>
+        Guild.ConnectAudioAsync(Id, /*selfDeaf, selfMute, */external, disconnect);
 
     /// <inheritdoc />
-    public Task DisconnectAsync()
-        => Guild.DisconnectAudioAsync();
+    public Task DisconnectAsync() => Guild.DisconnectAudioAsync();
 
     #endregion
 
     #region IGuildChannel
 
     /// <inheritdoc />
-    Task<IGuildUser> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions options)
-        => Task.FromResult<IGuildUser>(GetUser(id));
+    Task<IGuildUser?> IGuildChannel.GetUserAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IGuildUser?>(GetUser(id));
 
     /// <inheritdoc />
     /// <seealso cref="IVoiceChannel.GetConnectedUsersAsync"/>
-    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(CacheMode mode, RequestOptions options) =>
+    IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(
+        CacheMode mode, RequestOptions? options) =>
         mode == CacheMode.AllowDownload
             ? ChannelHelper.GetUsersAsync(this, Guild, Kook, KookConfig.MaxUsersPerBatch, 1, options)
             : ImmutableArray.Create<IReadOnlyCollection<IGuildUser>>(Users).ToAsyncEnumerable();
@@ -185,8 +182,8 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     #region INestedChannel
 
     /// <inheritdoc />
-    Task<ICategoryChannel> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions options)
-        => Task.FromResult(Category);
+    Task<ICategoryChannel?> INestedChannel.GetCategoryAsync(CacheMode mode, RequestOptions? options) =>
+        Task.FromResult(Category);
 
     #endregion
 }
