@@ -110,24 +110,24 @@ public class CardXmlTests
         Assert.Equal(13, full.Modules.Length);
 
         Assert.IsType<HeaderModule>(full.Modules[0]);
-        Assert.Equal("SECTION_HEADER", ((HeaderModule)full.Modules[0]).Text.Content);
+        Assert.Equal("SECTION_HEADER", ((HeaderModule?)full.Modules[0])?.Text?.Content);
 
         Assert.IsType<SectionModule>(full.Modules[1]);
         Assert.Equal(SectionAccessoryMode.Right, ((SectionModule)full.Modules[1])?.Mode);
         Assert.False((((SectionModule)full.Modules[1]).Text as PlainTextElement)?.Emoji);
         Assert.Equal("SECTION_PLAIN", (((SectionModule)full.Modules[1]).Text as PlainTextElement)?.Content);
         Assert.Equal(ButtonTheme.Secondary, (((SectionModule)full.Modules[1]).Accessory as ButtonElement)?.Theme);
-        Assert.Equal(ButtonClickEventType.ReturnValue, ((ButtonElement)((SectionModule)full.Modules[1]).Accessory).Click);
-        Assert.Equal("SECTION_ACCESSORY_BUTTON_VALUE", ((ButtonElement)((SectionModule)full.Modules[1]).Accessory).Value);
-        Assert.Equal("SECTION_ACCESSORY_BUTTON", (((ButtonElement)((SectionModule)full.Modules[1]).Accessory)?.Text as PlainTextElement)?.Content);
+        Assert.Equal(ButtonClickEventType.ReturnValue, ((ButtonElement?)((SectionModule)full.Modules[1])?.Accessory)?.Click);
+        Assert.Equal("SECTION_ACCESSORY_BUTTON_VALUE", ((ButtonElement?)((SectionModule)full.Modules[1])?.Accessory)?.Value);
+        Assert.Equal("SECTION_ACCESSORY_BUTTON", (((ButtonElement?)((SectionModule)full.Modules[1])?.Accessory)?.Text as PlainTextElement)?.Content);
 
         Assert.IsType<SectionModule>(full.Modules[2]);
-        Assert.Equal(null, ((SectionModule)full.Modules[2])?.Mode);
+        Assert.Null(((SectionModule)full.Modules[2])?.Mode);
         Assert.Equal("SECTION_KMARKDOWN", (((SectionModule)full.Modules[2]).Text as KMarkdownElement)?.Content);
         Assert.Equal("https://SECTION_MOCK/IMAGE.jpg", (((SectionModule)full.Modules[2]).Accessory as ImageElement)?.Source);
-        Assert.Equal(ImageSize.Small, ((ImageElement)((SectionModule)full.Modules[2]).Accessory).Size);
-        Assert.Equal("IMAGE_ALT", ((ImageElement)((SectionModule)full.Modules[2]).Accessory).Alternative);
-        Assert.True(((ImageElement)((SectionModule)full.Modules[2]).Accessory).Circle);
+        Assert.Equal(ImageSize.Small, ((ImageElement?)((SectionModule)full.Modules[2]).Accessory)?.Size);
+        Assert.Equal("IMAGE_ALT", ((ImageElement?)((SectionModule)full.Modules[2]).Accessory)?.Alternative);
+        Assert.True(((ImageElement?)((SectionModule)full.Modules[2]).Accessory)?.Circle);
 
         Assert.IsType<ImageGroupModule>(full.Modules[3]);
         Assert.Equal(3, ((ImageGroupModule)full.Modules[3])?.Elements.Length);

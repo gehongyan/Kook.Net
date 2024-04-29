@@ -54,7 +54,7 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>, 
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public FileModuleBuilder WithSource(string source)
+    public FileModuleBuilder WithSource(string? source)
     {
         Source = source;
         return this;

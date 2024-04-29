@@ -54,7 +54,7 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public VideoModuleBuilder WithSource(string source)
+    public VideoModuleBuilder WithSource(string? source)
     {
         Source = source;
         return this;

@@ -109,9 +109,9 @@ public class ModuleBuilderTests
         Assert.Equal(ModuleType.Section, builder.Type);
         Assert.Equal(ModuleType.Section, builder.Build().Type);
         Assert.Equal("content", ((KMarkdownElementBuilder)builder.Text).Content);
-        Assert.Equal("content", ((KMarkdownElement)builder.Build().Text).Content);
-        Assert.Equal("button", ((KMarkdownElementBuilder)((ButtonElementBuilder)builder.Accessory).Text).Content);
-        Assert.Equal("button", ((KMarkdownElement)((ButtonElement)builder.Build().Accessory).Text).Content);
+        Assert.Equal("content", ((KMarkdownElement?)builder.Build().Text)?.Content);
+        Assert.Equal("button", ((KMarkdownElementBuilder?)((ButtonElementBuilder)builder.Accessory).Text)?.Content);
+        Assert.Equal("button", ((KMarkdownElement?)((ButtonElement?)builder.Build().Accessory)?.Text)?.Content);
     }
 
     [Fact]
@@ -122,7 +122,7 @@ public class ModuleBuilderTests
         Assert.IsType<PlainTextElementBuilder>(builder.Text);
         Assert.IsType<PlainTextElement>(builder.Build().Text);
         Assert.Equal("text", ((PlainTextElementBuilder)builder.Text).Content);
-        Assert.Equal("text", ((PlainTextElement)builder.Build().Text).Content);
+        Assert.Equal("text", ((PlainTextElement?)builder.Build().Text)?.Content);
     }
 
     [Fact]
@@ -133,7 +133,7 @@ public class ModuleBuilderTests
         Assert.IsType<ImageElementBuilder>(builder.Accessory);
         Assert.IsType<ImageElement>(builder.Build().Accessory);
         Assert.Equal(Icon, ((ImageElementBuilder)builder.Accessory).Source);
-        Assert.Equal(Icon, ((ImageElement)builder.Build().Accessory).Source);
+        Assert.Equal(Icon, ((ImageElement?)builder.Build().Accessory)?.Source);
     }
 
     [Fact]
@@ -414,9 +414,9 @@ public class ModuleBuilderTests
     [InlineData(" ")]
     [InlineData("kaiheila.net")]
     [InlineData("steam://run/123456/")]
-    public void FileModuleBuilder_InvalidUrl(string source)
+    public void FileModuleBuilder_InvalidUrl(string? source)
     {
-        FileModuleBuilder builder = new FileModuleBuilder().WithSource(source);
+        FileModuleBuilder builder = new FileModuleBuilder().WithSource(source!);
         Assert.Equal(source, builder.Source);
         Assert.ThrowsAny<Exception>(() => builder.Build());
     }
@@ -448,9 +448,9 @@ public class ModuleBuilderTests
     [InlineData(" ")]
     [InlineData("kaiheila.net")]
     [InlineData("steam://run/123456/")]
-    public void VideoModuleBuilder_InvalidUrl(string source)
+    public void VideoModuleBuilder_InvalidUrl(string? source)
     {
-        VideoModuleBuilder builder = new VideoModuleBuilder().WithSource(source);
+        VideoModuleBuilder builder = new VideoModuleBuilder().WithSource(source!);
         Assert.Equal(source, builder.Source);
         Assert.ThrowsAny<Exception>(() => builder.Build());
     }
@@ -487,7 +487,7 @@ public class ModuleBuilderTests
     [InlineData(" ")]
     [InlineData("kaiheila.net")]
     [InlineData("steam://run/123456/")]
-    public void AudioModuleBuilder_InvalidSource(string source)
+    public void AudioModuleBuilder_InvalidSource(string? source)
     {
         AudioModuleBuilder builder = new AudioModuleBuilder().WithSource(Url).WithCover(Icon);
         Assert.Equal(Url, builder.Source);

@@ -198,7 +198,7 @@ public static class CardMarkupSerializer
                         stack.Push(e);
                     break;
                 case XmlNodeType.EndElement:
-                    MarkupElement? element = stack.Pop();
+                    MarkupElement element = stack.Pop();
                     if (stack.Count == 0)
                         markupElement = element;
                     else

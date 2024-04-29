@@ -15,7 +15,7 @@ internal class Message
     public required string Content { get; set; }
 
     [JsonPropertyName("mention")]
-    public required ulong[] MentionedUsers { get; set; }
+    public ulong[]? MentionedUsers { get; set; }
 
     [JsonPropertyName("mention_all")]
     public bool MentionedAll { get; set; }

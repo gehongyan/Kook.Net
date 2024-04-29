@@ -51,7 +51,7 @@ public class FormatTests
     [InlineData("inb4\r\rgreentext", "> inb4\r\u200d\rgreentext")]
     [InlineData("inb4\r\ngreentext", "> inb4\r\ngreentext")]
     [InlineData("inb4\r\n\r\ngreentext", "> inb4\r\n\u200d\r\ngreentext")]
-    public void BlockQuote(string input, string expected) => Assert.Equal(expected, input.BlockQuote());
+    public void BlockQuote(string? input, string expected) => Assert.Equal(expected, input.BlockQuote());
 
     [Theory]
     [InlineData("", "")]

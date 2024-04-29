@@ -25,8 +25,8 @@ public class UrlValidationTests
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public void UrlValidation_EmptyUrl(string url) =>
-        Assert.Throws<UriFormatException>(() => UrlValidation.Validate(url));
+    public void UrlValidation_EmptyUrl(string? url) =>
+        Assert.Throws<UriFormatException>(() => UrlValidation.Validate(url!));
 
 
     [Theory]
@@ -46,7 +46,7 @@ public class UrlValidationTests
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public void UrlValidation_EmptyAssetUrl(string url) => Assert.False(UrlValidation.ValidateKookAssetUrl(url));
+    public void UrlValidation_EmptyAssetUrl(string? url) => Assert.False(UrlValidation.ValidateKookAssetUrl(url!));
 
     [Theory]
     [InlineData(" ")]

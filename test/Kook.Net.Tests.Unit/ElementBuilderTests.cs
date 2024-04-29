@@ -8,8 +8,7 @@ namespace Kook;
 public class ElementBuilderTests
 {
     private const string Name = "Kook.Net";
-    private const string Icon = "https://www.kookapp.cn//logo.png";
-    private const string Url = "https://www.kookapp.cn//";
+    private const string Icon = "https://www.kookapp.cn/logo.png";
 
     [Fact]
     public void PlainTextElementBuilder_Constructor()
@@ -161,7 +160,6 @@ public class ElementBuilderTests
         Assert.Equal(Name, builder.Build().Alternative);
         Assert.Equal(ImageSize.Small, builder.Size);
         Assert.Equal(ImageSize.Small, builder.Build().Size);
-        ;
         Assert.Equal(true, builder.Circle);
         Assert.Equal(true, builder.Build().Circle);
         builder = new ImageElementBuilder { Source = Icon, Alternative = Name, Size = ImageSize.Large, Circle = false };
@@ -173,7 +171,6 @@ public class ElementBuilderTests
         Assert.Equal(Name, builder.Build().Alternative);
         Assert.Equal(ImageSize.Large, builder.Size);
         Assert.Equal(ImageSize.Large, builder.Build().Size);
-        ;
         Assert.Equal(false, builder.Circle);
         Assert.Equal(false, builder.Build().Circle);
     }
@@ -185,7 +182,7 @@ public class ElementBuilderTests
     [InlineData("alternative")]
     // 20 characters
     [InlineData("abcdefghijklmnopqrst")]
-    public void ImageElementBuilder_ValidAlternative(string alternative)
+    public void ImageElementBuilder_ValidAlternative(string? alternative)
     {
         ImageElementBuilder builder = new ImageElementBuilder().WithSource("https://www.kookapp.cn/").WithAlternative(alternative);
         Assert.Equal(alternative, builder.Alternative);
@@ -225,9 +222,9 @@ public class ElementBuilderTests
     [InlineData(" ")]
     [InlineData("kaiheila.net")]
     [InlineData("steam://run/123456/")]
-    public void ImageElementBuilder_InvalidUrl(string source)
+    public void ImageElementBuilder_InvalidUrl(string? source)
     {
-        ImageElementBuilder builder = new ImageElementBuilder().WithSource(source);
+        ImageElementBuilder builder = new ImageElementBuilder().WithSource(source!);
         Assert.Equal(source, builder.Source);
         Assert.ThrowsAny<Exception>(() => builder.Build());
     }
@@ -305,7 +302,7 @@ public class ElementBuilderTests
     public void ButtonElementBuilder_ValidText(string text)
     {
         ButtonElementBuilder builder = new ButtonElementBuilder().WithText(text);
-        Assert.Equal(text, ((PlainTextElementBuilder)builder.Text).Content);
+        Assert.Equal(text, ((PlainTextElementBuilder?)builder.Text)?.Content);
         Assert.Equal(text, ((PlainTextElement)builder.Build().Text).Content);
     }
 
@@ -333,7 +330,7 @@ public class ElementBuilderTests
     [InlineData(" ")]
     [InlineData("kaiheila.net")]
     [InlineData("steam://run/123456/")]
-    public void ButtonElementBuilder_InvalidUrl(string source)
+    public void ButtonElementBuilder_InvalidUrl(string? source)
     {
         ButtonElementBuilder builder = new ButtonElementBuilder().WithClick(ButtonClickEventType.Link).WithValue(source);
         Assert.Equal(ButtonClickEventType.Link, builder.Click);

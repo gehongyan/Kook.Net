@@ -2,25 +2,20 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using Kook.Audio;
 using Kook.WebSocket;
+using Microsoft.Extensions.Hosting;
 
 namespace Kook.Net.Samples.Audio.Services;
 
 public class MusicService : IHostedService
 {
-    private readonly BlockingCollection<Uri> _musicQueue;
-    private Uri _currentSong;
-    private ISocketMessageChannel _sourceChannel;
-    private IAudioClient _audioClient;
-    private Process _ffmpeg;
-
-    public MusicService()
-    {
-        _musicQueue = new BlockingCollection<Uri>();
-    }
+    private readonly BlockingCollection<Uri> _musicQueue = [];
+    private ISocketMessageChannel? _sourceChannel;
+    private IAudioClient? _audioClient;
+    private Process? _ffmpeg;
 
     public IEnumerable<Uri> Queue => _musicQueue;
 
-    public Uri CurrentPlaying => _currentSong;
+    public Uri? CurrentPlaying { get; private set; }
 
     public void SetAudioClient(ISocketMessageChannel sourceChannel, IAudioClient audioClient)
     {
@@ -40,7 +35,7 @@ public class MusicService : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        while (_musicQueue.TryTake(out Uri source, Timeout.Infinite, cancellationToken))
+        while (_musicQueue.TryTake(out Uri? source, Timeout.Infinite, cancellationToken))
             await PlayAsync(source, cancellationToken);
     }
 
@@ -54,11 +49,12 @@ public class MusicService : IHostedService
 
     private async Task PlayAsync(Uri source, CancellationToken cancellationToken)
     {
-        if (_audioClient?.ConnectionState != ConnectionState.Connected)
+        if (_audioClient?.ConnectionState != ConnectionState.Connected
+            || _sourceChannel is null)
             return;
-        _currentSong = source;
+        CurrentPlaying = source;
         _ = _sourceChannel.SendTextAsync($"Now playing {source}");
-        using Process ffmpeg = Process.Start(new ProcessStartInfo
+        using Process? ffmpeg = Process.Start(new ProcessStartInfo
         {
             FileName = "ffmpeg",
             Arguments = $"""-hide_banner -loglevel panic -i "{source}" -ac 2 -f s16le -ar 48000 pipe:1""",
@@ -67,8 +63,8 @@ public class MusicService : IHostedService
         });
         _ffmpeg = ffmpeg;
         if (ffmpeg is null) return;
-        await using var output = ffmpeg.StandardOutput.BaseStream;
-        await using var kook = _audioClient.CreatePcmStream(AudioApplication.Voice);
+        await using Stream output = ffmpeg.StandardOutput.BaseStream;
+        await using AudioOutStream kook = _audioClient.CreatePcmStream(AudioApplication.Voice);
         try
         {
             await output.CopyToAsync(kook, cancellationToken);

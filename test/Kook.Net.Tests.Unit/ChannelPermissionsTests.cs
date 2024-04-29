@@ -39,8 +39,6 @@ public class ChannelPermissionsTests
             yield return ChannelPermissions.Voice.RawValue;
         }
 
-        ;
-
         foreach (ulong rawValue in GetTestValues())
         {
             ChannelPermissions p = new(rawValue);

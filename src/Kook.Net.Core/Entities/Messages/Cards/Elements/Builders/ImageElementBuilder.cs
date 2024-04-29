@@ -87,7 +87,7 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     /// <returns>
     ///     The current builder.
     /// </returns>
-    public ImageElementBuilder WithSource(string source)
+    public ImageElementBuilder WithSource(string? source)
     {
         Source = source;
         return this;

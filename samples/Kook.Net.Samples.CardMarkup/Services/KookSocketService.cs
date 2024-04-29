@@ -2,8 +2,6 @@ using Kook.WebSocket;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-// ReSharper disable SuggestVarOrType_BuiltInTypes
-
 namespace Kook.Net.Samples.CardMarkup.Services;
 
 public class KookSocketService : IHostedService
@@ -40,7 +38,8 @@ public class KookSocketService : IHostedService
             await Task.CompletedTask;
         };
 
-        var token = Environment.GetEnvironmentVariable("KookDebugToken");
+        string token = Environment.GetEnvironmentVariable("KookDebugToken")
+            ?? throw new ArgumentNullException("KookDebugToken");
         await _socketClient.LoginAsync(TokenType.Bot, token);
 
         await _socketClient.StartAsync();

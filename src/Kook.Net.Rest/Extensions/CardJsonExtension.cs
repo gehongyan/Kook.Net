@@ -81,10 +81,11 @@ public static class CardJsonExtension
     /// <param name="json">The json string to parse.</param>
     /// <returns>An <see cref="ICardBuilder"/> with populated values from the passed <paramref name="json"/>.</returns>
     /// <exception cref="InvalidOperationException">Thrown if the string passed is not valid json.</exception>
-    public static ICardBuilder? ParseSingle(string json)
+    public static ICardBuilder ParseSingle(string json)
     {
-        CardBase? model = JsonSerializer.Deserialize<CardBase>(json, _options.Value);
-        return model?.ToEntity().ToBuilder();
+        CardBase model = JsonSerializer.Deserialize<CardBase>(json, _options.Value)
+            ?? throw new JsonException("Unable to parse json into card.");
+        return model.ToEntity().ToBuilder();
     }
 
     /// <summary>
@@ -95,10 +96,9 @@ public static class CardJsonExtension
     /// <exception cref="InvalidOperationException">Thrown if the string passed is not valid json.</exception>
     public static IEnumerable<ICardBuilder> ParseMany(string json)
     {
-        IEnumerable<CardBase>? models = JsonSerializer.Deserialize<IEnumerable<CardBase>>(json, _options.Value);
-        return models is not null
-            ? models.Select(x => x.ToEntity().ToBuilder())
-            : Enumerable.Empty<ICardBuilder>();
+        IEnumerable<CardBase> models = JsonSerializer.Deserialize<IEnumerable<CardBase>>(json, _options.Value)
+            ?? throw new JsonException("Unable to parse json into cards.");
+        return models.Select(x => x.ToEntity().ToBuilder());
     }
 
     /// <summary>

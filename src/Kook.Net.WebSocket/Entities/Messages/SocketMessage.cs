@@ -156,11 +156,13 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         Timestamp = gatewayEvent.MessageTimestamp;
         Content = gatewayEvent.Content;
 
-        _userMentions = gatewayEvent.ExtraData.MentionedUsers
-            .Select(x =>
-                Channel.GetUserAsync(x, CacheMode.CacheOnly).GetAwaiter().GetResult() as SocketUser
-                ?? SocketUnknownUser.Create(Kook, state, x))
-            .ToImmutableArray();
+        if (gatewayEvent.ExtraData.MentionedUsers is { } users)
+        {
+            _userMentions = users.Select(x =>
+                    Channel.GetUserAsync(x, CacheMode.CacheOnly).GetAwaiter().GetResult() as SocketUser
+                    ?? SocketUnknownUser.Create(Kook, state, x))
+                .ToImmutableArray();
+        }
     }
 
     internal virtual void Update(ClientState state, GatewayEvent<GatewayPersonMessageExtraData> gatewayEvent)
@@ -169,11 +171,13 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         Timestamp = gatewayEvent.MessageTimestamp;
         Content = gatewayEvent.Content;
 
-        _userMentions = gatewayEvent.ExtraData.MentionedUsers
-            .Select(x =>
-                Channel.GetUserAsync(x, CacheMode.CacheOnly).GetAwaiter().GetResult() as SocketUser
-                ?? SocketUnknownUser.Create(Kook, state, x))
-            .ToImmutableArray();
+        if (gatewayEvent.ExtraData.MentionedUsers is { } users)
+        {
+            _userMentions = users.Select(x =>
+                    Channel.GetUserAsync(x, CacheMode.CacheOnly).GetAwaiter().GetResult() as SocketUser
+                    ?? SocketUnknownUser.Create(Kook, state, x))
+                .ToImmutableArray();
+        }
     }
 
     internal static SocketMessage Create(KookSocketClient kook, ClientState state,
@@ -195,11 +199,13 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         EditedTimestamp = model.UpdateAt;
         Content = model.Content;
 
-        _userMentions = model.MentionedUsers
-            .Select(x =>
-                Channel.GetUserAsync(x, CacheMode.CacheOnly).GetAwaiter().GetResult() as SocketUser
-                ?? SocketUnknownUser.Create(Kook, state, x))
-            .ToImmutableArray();
+        if (model.MentionedUsers is { } users)
+        {
+            _userMentions = users.Select(x =>
+                    Channel.GetUserAsync(x, CacheMode.CacheOnly).GetAwaiter().GetResult() as SocketUser
+                    ?? SocketUnknownUser.Create(Kook, state, x))
+                .ToImmutableArray();
+        }
     }
 
     internal virtual void Update(ClientState state, API.DirectMessage model)
@@ -215,11 +221,13 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         EditedTimestamp = model.UpdatedAt;
         Content = model.Content;
 
-        _userMentions = model.Mention
-            .Select(x =>
-                Channel.GetUserAsync(x, CacheMode.CacheOnly).GetAwaiter().GetResult() as SocketUser
-                ?? SocketUnknownUser.Create(Kook, state, x))
-            .ToImmutableArray();
+        if (model.MentionedUsers is { } users)
+        {
+            _userMentions = users.Select(x =>
+                    Channel.GetUserAsync(x, CacheMode.CacheOnly).GetAwaiter().GetResult() as SocketUser
+                    ?? SocketUnknownUser.Create(Kook, state, x))
+                .ToImmutableArray();
+        }
     }
 
     internal virtual void Update(ClientState state, DirectMessageUpdateEvent model)

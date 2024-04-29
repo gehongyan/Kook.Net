@@ -16,7 +16,7 @@ internal class GatewayPersonMessageExtraData
     public required User Author { get; set; }
 
     [JsonPropertyName("mention")]
-    public required ulong[] MentionedUsers { get; set; }
+    public ulong[]? MentionedUsers { get; set; }
 
     [JsonPropertyName("quote")]
     [JsonConverter(typeof(QuoteConverter))]

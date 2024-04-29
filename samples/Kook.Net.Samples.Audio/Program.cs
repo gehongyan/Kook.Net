@@ -3,6 +3,8 @@ using Kook.Commands;
 using Kook.Net.Samples.Audio.Modules;
 using Kook.Net.Samples.Audio.Services;
 using Kook.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 // 这是一个使用 Kook.Net 的文本命令框架的简单示例
 

@@ -12,7 +12,7 @@ public sealed class TypeReaderTests
     public async Task TestNamedArgumentReader()
     {
         using CommandService commands = new();
-        ModuleInfo module = await commands.AddModuleAsync<TestModule>(null);
+        ModuleInfo module = await commands.AddModuleAsync<TestModule>(null!);
 
         Assert.NotNull(module);
         Assert.NotEmpty(module.Commands);
@@ -25,10 +25,10 @@ public sealed class TypeReaderTests
         Assert.NotNull(param);
         Assert.True(param.IsRemainder);
 
-        TypeReaderResult result = await param.ParseAsync(null, "bar: hello foo: 42");
+        TypeReaderResult result = await param.ParseAsync(null!, "bar: hello foo: 42");
         Assert.True(result.IsSuccess);
 
-        ArgumentType m = result.BestMatch as ArgumentType;
+        ArgumentType? m = result.BestMatch as ArgumentType;
         Assert.NotNull(m);
         Assert.Equal(42, m.Foo);
         Assert.Equal("hello", m.Bar);
@@ -38,7 +38,7 @@ public sealed class TypeReaderTests
     public async Task TestQuotedArgumentValue()
     {
         using CommandService commands = new();
-        ModuleInfo module = await commands.AddModuleAsync<TestModule>(null);
+        ModuleInfo module = await commands.AddModuleAsync<TestModule>(null!);
 
         Assert.NotNull(module);
         Assert.NotEmpty(module.Commands);
@@ -51,10 +51,10 @@ public sealed class TypeReaderTests
         Assert.NotNull(param);
         Assert.True(param.IsRemainder);
 
-        TypeReaderResult result = await param.ParseAsync(null, "foo: 42 bar: 《hello》");
+        TypeReaderResult result = await param.ParseAsync(null!, "foo: 42 bar: 《hello》");
         Assert.True(result.IsSuccess);
 
-        ArgumentType m = result.BestMatch as ArgumentType;
+        ArgumentType? m = result.BestMatch as ArgumentType;
         Assert.NotNull(m);
         Assert.Equal(42, m.Foo);
         Assert.Equal("hello", m.Bar);
@@ -64,7 +64,7 @@ public sealed class TypeReaderTests
     public async Task TestNonPatternInput()
     {
         using CommandService commands = new();
-        ModuleInfo module = await commands.AddModuleAsync<TestModule>(null);
+        ModuleInfo module = await commands.AddModuleAsync<TestModule>(null!);
 
         Assert.NotNull(module);
         Assert.NotEmpty(module.Commands);
@@ -77,7 +77,7 @@ public sealed class TypeReaderTests
         Assert.NotNull(param);
         Assert.True(param.IsRemainder);
 
-        TypeReaderResult result = await param.ParseAsync(null, "foobar");
+        TypeReaderResult result = await param.ParseAsync(null!, "foobar");
         Assert.False(result.IsSuccess);
         Assert.Equal(CommandError.Exception, result.Error);
     }
@@ -86,7 +86,7 @@ public sealed class TypeReaderTests
     public async Task TestMultiple()
     {
         using CommandService commands = new();
-        ModuleInfo module = await commands.AddModuleAsync<TestModule>(null);
+        ModuleInfo module = await commands.AddModuleAsync<TestModule>(null!);
 
         Assert.NotNull(module);
         Assert.NotEmpty(module.Commands);
@@ -99,10 +99,10 @@ public sealed class TypeReaderTests
         Assert.NotNull(param);
         Assert.True(param.IsRemainder);
 
-        TypeReaderResult result = await param.ParseAsync(null, "manyints: \"1, 2, 3, 4, 5, 6, 7\"");
+        TypeReaderResult result = await param.ParseAsync(null!, "manyints: \"1, 2, 3, 4, 5, 6, 7\"");
         Assert.True(result.IsSuccess);
 
-        ArgumentType m = result.BestMatch as ArgumentType;
+        ArgumentType? m = result.BestMatch as ArgumentType;
         Assert.NotNull(m);
         Assert.Equal(new[] { 1, 2, 3, 4, 5, 6, 7 }, m.ManyInts);
     }
@@ -111,12 +111,12 @@ public sealed class TypeReaderTests
 [NamedArgumentType]
 public sealed class ArgumentType
 {
-    public int Foo { get; set; }
+    public required int Foo { get; set; }
 
     [OverrideTypeReader(typeof(CustomTypeReader))]
-    public string Bar { get; set; }
+    public required string Bar { get; set; }
 
-    public IEnumerable<int> ManyInts { get; set; }
+    public required IEnumerable<int> ManyInts { get; set; }
 }
 
 public sealed class CustomTypeReader : TypeReader
