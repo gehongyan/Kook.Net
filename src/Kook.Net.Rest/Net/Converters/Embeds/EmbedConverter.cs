@@ -18,6 +18,7 @@ internal class EmbedConverter : JsonConverter<EmbedBase>
             "link" => JsonSerializer.Deserialize<API.LinkEmbed>(jsonNode.ToJsonString(), options),
             "image" => JsonSerializer.Deserialize<API.ImageEmbed>(jsonNode.ToJsonString(), options),
             "bili-video" => JsonSerializer.Deserialize<API.BilibiliVideoEmbed>(jsonNode.ToJsonString(), options),
+            "card" => JsonSerializer.Deserialize<API.CardEmbed>(jsonNode.ToJsonString(), options),
             _ => new API.NotImplementedEmbed(rawType, jsonNode)
         };
     }
@@ -34,6 +35,9 @@ internal class EmbedConverter : JsonConverter<EmbedBase>
                 break;
             case EmbedType.BilibiliVideo:
                 writer.WriteRawValue(JsonSerializer.Serialize(value as API.BilibiliVideoEmbed, options));
+                break;
+            case EmbedType.Card:
+                writer.WriteRawValue(JsonSerializer.Serialize(value as API.CardEmbed, options));
                 break;
             default:
                 writer.WriteRawValue((value as API.NotImplementedEmbed)!.RawJsonNode.ToString());

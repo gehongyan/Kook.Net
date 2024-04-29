@@ -175,7 +175,7 @@ public class BufferedWriteStream : AudioOutStream
         while (true)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (_queuedFrames.Count == 0)
+            if (_queuedFrames.IsEmpty)
                 return;
             await Task.Delay(250, cancellationToken).ConfigureAwait(false);
         }

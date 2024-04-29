@@ -14,8 +14,8 @@ public class RestUserMessage : RestMessage, IUserMessage
     private bool _isMentioningHere;
     private ImmutableArray<Attachment> _attachments = [];
     private ImmutableArray<ICard> _cards = [];
-    private ImmutableArray<IEmbed> _embeds;
-    private ImmutableArray<RestPokeAction> _pokes;
+    private ImmutableArray<IEmbed> _embeds = [];
+    private ImmutableArray<RestPokeAction> _pokes = [];
     private ImmutableArray<uint> _roleMentionIds = [];
     private ImmutableArray<RestRole> _roleMentions = [];
     private ImmutableArray<RestGuildChannel> _channelMentions = [];

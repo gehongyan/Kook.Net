@@ -195,7 +195,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
 
     private string DebuggerDisplay =>
         $"{this.UsernameAndIdentifyNumber(Kook.FormatUsersInBidirectionalUnicode)} ({Id}{
-            (IsBot ?? false ? ", Bot" : "")}, Self)";
+            (IsBot ?? false ? ", Bot" : "")})";
 
     #region IUser
 

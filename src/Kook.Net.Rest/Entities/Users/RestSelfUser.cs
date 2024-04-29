@@ -56,7 +56,7 @@ public class RestSelfUser : RestUser, ISelfUser
 
     private string DebuggerDisplay =>
         $"{this.UsernameAndIdentifyNumber(Kook.FormatUsersInBidirectionalUnicode)} ({Id}{
-            (IsBot ?? false ? ", Bot" : "")}{(IsSystemUser ? ", System" : "")})";
+            (IsBot ?? false ? ", Bot" : "")}, Self)";
 
     #region ISelfUser
 

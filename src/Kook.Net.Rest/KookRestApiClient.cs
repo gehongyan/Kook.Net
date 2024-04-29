@@ -14,6 +14,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Kook.API.Rest;
 using Kook.Net;
+using Kook.Net.Converters;
 using Kook.Net.Queue;
 using Kook.Net.Rest;
 
@@ -62,7 +63,8 @@ internal class KookRestApiClient : IDisposable
             ?? new JsonSerializerOptions
             {
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                NumberHandling = JsonNumberHandling.AllowReadingFromString
+                NumberHandling = JsonNumberHandling.AllowReadingFromString,
+                Converters = { new CardConverterFactory() }
             };
         DefaultRatelimitCallback = defaultRatelimitCallback;
 

@@ -17,7 +17,7 @@ public struct BilibiliVideoEmbed : IEmbed
     }
 
     /// <inheritdoc />
-    public EmbedType Type => EmbedType.Link;
+    public EmbedType Type => EmbedType.BilibiliVideo;
 
     /// <summary>
     ///     Gets the URL of this embed.

@@ -334,7 +334,7 @@ internal static class EntityExtensions
 
     public static ImageAnimationPokeResource ToEntity(this API.ImageAnimationPokeResource model) =>
         new(new Dictionary<string, string> { ["webp"] = model.WebP, ["pag"] = model.PAG, ["gif"] = model.GIF },
-            TimeSpan.FromMilliseconds(model.Duration), model.Width, model.Height, model.Percent / 100D);
+            TimeSpan.FromMilliseconds(model.Duration), model.Width, model.Height, model.Percent / 100M);
 
     #endregion
 
