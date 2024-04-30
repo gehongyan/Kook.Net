@@ -11,7 +11,7 @@ namespace Kook;
 ///     Tests users in guilds
 /// </summary>
 [CollectionDefinition(nameof(GuildTests), DisableParallelization = true)]
-[Trait("Category", "Integration")]
+[Trait("Category", "Integration.Rest")]
 public class GuildTests : IClassFixture<RestGuildFixture>
 {
     private readonly IGuild _guild;

@@ -10,14 +10,14 @@ using Xunit;
 namespace Kook;
 
 [CollectionDefinition(nameof(KookRestApiClientTests), DisableParallelization = true)]
-[Trait("Category", "Integration")]
-public class KookRestApiClientTests : IClassFixture<RestGuildFixture>, IAsyncDisposable
+[Trait("Category", "Integration.Rest")]
+public class KookRestApiClientTests : IClassFixture<KookRestClientFixture>, IAsyncDisposable
 {
     private readonly KookRestApiClient _apiClient;
 
-    public KookRestApiClientTests(RestGuildFixture guildFixture)
+    public KookRestApiClientTests(KookRestClientFixture clientFixture)
     {
-        _apiClient = guildFixture.Client.ApiClient;
+        _apiClient = clientFixture.Client.ApiClient;
     }
 
     public ValueTask DisposeAsync() => ValueTask.CompletedTask;
@@ -30,7 +30,8 @@ public class KookRestApiClientTests : IClassFixture<RestGuildFixture>, IAsyncDis
         CreateAssetResponse response =
             await _apiClient.CreateAssetAsync(new CreateAssetParams
             {
-                File = stream, FileName = "test.file"
+                File = stream,
+                FileName = "test.file"
             });
         response.Url.Should().NotBeNullOrWhiteSpace();
     }
@@ -44,7 +45,8 @@ public class KookRestApiClientTests : IClassFixture<RestGuildFixture>, IAsyncDis
             using MemoryStream stream = new(new byte[fileSize]);
             await _apiClient.CreateAssetAsync(new CreateAssetParams
             {
-                File = stream, FileName = "test.file"
+                File = stream,
+                FileName = "test.file"
             });
         };
 

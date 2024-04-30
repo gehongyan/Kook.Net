@@ -11,18 +11,18 @@ namespace Kook;
 /// <summary>
 ///     Tests that channels can be created and modified.
 /// </summary>
-[CollectionDefinition(nameof(MessageInTextTests), DisableParallelization = true)]
-[Trait("Category", "Integration")]
-public class MessageInTextTests : IClassFixture<RestChannelFixture>
+[CollectionDefinition(nameof(MessageInVoiceTests), DisableParallelization = true)]
+[Trait("Category", "Integration.Rest")]
+public class MessageInVoiceTests : IClassFixture<RestChannelFixture>
 {
     private readonly IGuild _guild;
-    private readonly ITextChannel _channel;
+    private readonly IVoiceChannel _channel;
     private readonly ITestOutputHelper _output;
 
-    public MessageInTextTests(RestChannelFixture channelFixture, ITestOutputHelper output)
+    public MessageInVoiceTests(RestChannelFixture channelFixture, ITestOutputHelper output)
     {
         _guild = channelFixture.Guild;
-        _channel = channelFixture.TextChannel;
+        _channel = channelFixture.VoiceChannel;
         _output = output;
         _output.WriteLine($"RestGuildFixture using guild: {_guild.Id}");
         // capture all console output

@@ -46,6 +46,14 @@ public class CardXmlTests
                          circle="true"/>
                 </accessory>
               </section>
+              <section>
+                <text>
+                  <paragraph cols='2'>
+                    <kmarkdown>SECTION_PARAGRAPH_KMARKDOWN</kmarkdown>
+                    <plain>SECTION_PARAGRAPH_PLAINTEXT</plain>
+                  </paragraph>
+                </text>
+              </section>
               <images>
                 <image src="https://IMAGE_MOCK/IMAGE_1.jpg"/>
                 <image src="https://IMAGE_MOCK/IMAGE_2.jpg"/>
@@ -107,7 +115,7 @@ public class CardXmlTests
         Assert.Equal(CardTheme.Success, full.Theme);
         Assert.Equal(new Color(0xABCDEF), full.Color);
         Assert.Equal(CardSize.Large, full.Size);
-        Assert.Equal(13, full.Modules.Length);
+        Assert.Equal(14, full.Modules.Length);
 
         Assert.IsType<HeaderModule>(full.Modules[0]);
         Assert.Equal("SECTION_HEADER", ((HeaderModule?)full.Modules[0])?.Text?.Content);
@@ -129,52 +137,58 @@ public class CardXmlTests
         Assert.Equal("IMAGE_ALT", ((ImageElement?)((SectionModule)full.Modules[2]).Accessory)?.Alternative);
         Assert.True(((ImageElement?)((SectionModule)full.Modules[2]).Accessory)?.Circle);
 
-        Assert.IsType<ImageGroupModule>(full.Modules[3]);
-        Assert.Equal(3, ((ImageGroupModule)full.Modules[3])?.Elements.Length);
-        Assert.Equal("https://IMAGE_MOCK/IMAGE_1.jpg", ((ImageGroupModule)full.Modules[3]).Elements[0].Source);
-        Assert.Equal("https://IMAGE_MOCK/IMAGE_2.jpg", ((ImageGroupModule)full.Modules[3]).Elements[1].Source);
-        Assert.Equal("https://IMAGE_MOCK/IMAGE_3.jpg", ((ImageGroupModule)full.Modules[3]).Elements[2].Source);
+        Assert.IsType<SectionModule>(full.Modules[3]);
+        Assert.IsType<ParagraphStruct>(((SectionModule?)full.Modules[3])?.Text);
+        Assert.Equal(2, ((ParagraphStruct?)((SectionModule)full.Modules[3]).Text)?.Fields.Length);
+        Assert.Equal("SECTION_PARAGRAPH_KMARKDOWN", (((ParagraphStruct?)((SectionModule)full.Modules[3]).Text)?.Fields[0] as KMarkdownElement)?.Content);
+        Assert.Equal("SECTION_PARAGRAPH_PLAINTEXT", (((ParagraphStruct?)((SectionModule)full.Modules[3]).Text)?.Fields[1] as PlainTextElement)?.Content);
 
-        Assert.IsType<ContainerModule>(full.Modules[4]);
-        Assert.Equal(3, ((ContainerModule)full.Modules[4])?.Elements.Length);
-        Assert.Equal("https://CONTAINER_MOCK/IMAGE_1.jpg", ((ContainerModule)full.Modules[4]).Elements[0].Source);
-        Assert.Equal("https://CONTAINER_MOCK/IMAGE_2.jpg", ((ContainerModule)full.Modules[4]).Elements[1].Source);
-        Assert.Equal("https://CONTAINER_MOCK/IMAGE_3.jpg", ((ContainerModule)full.Modules[4]).Elements[2].Source);
+        Assert.IsType<ImageGroupModule>(full.Modules[4]);
+        Assert.Equal(3, ((ImageGroupModule)full.Modules[4])?.Elements.Length);
+        Assert.Equal("https://IMAGE_MOCK/IMAGE_1.jpg", ((ImageGroupModule)full.Modules[4]).Elements[0].Source);
+        Assert.Equal("https://IMAGE_MOCK/IMAGE_2.jpg", ((ImageGroupModule)full.Modules[4]).Elements[1].Source);
+        Assert.Equal("https://IMAGE_MOCK/IMAGE_3.jpg", ((ImageGroupModule)full.Modules[4]).Elements[2].Source);
 
-        Assert.IsType<ActionGroupModule>(full.Modules[5]);
-        Assert.Equal(3, ((ActionGroupModule)full.Modules[5])?.Elements.Length);
-        Assert.Equal("ACTIONS_BUTTON_1", (((ActionGroupModule)full.Modules[5]).Elements[0].Text as PlainTextElement)?.Content);
-        Assert.Equal("ACTIONS_BUTTON_2", (((ActionGroupModule)full.Modules[5]).Elements[1].Text as PlainTextElement)?.Content);
-        Assert.Equal("ACTIONS_BUTTON_3", (((ActionGroupModule)full.Modules[5]).Elements[2].Text as PlainTextElement)?.Content);
+        Assert.IsType<ContainerModule>(full.Modules[5]);
+        Assert.Equal(3, ((ContainerModule)full.Modules[5])?.Elements.Length);
+        Assert.Equal("https://CONTAINER_MOCK/IMAGE_1.jpg", ((ContainerModule)full.Modules[5]).Elements[0].Source);
+        Assert.Equal("https://CONTAINER_MOCK/IMAGE_2.jpg", ((ContainerModule)full.Modules[5]).Elements[1].Source);
+        Assert.Equal("https://CONTAINER_MOCK/IMAGE_3.jpg", ((ContainerModule)full.Modules[5]).Elements[2].Source);
 
-        Assert.IsType<ContextModule>(full.Modules[6]);
-        Assert.Equal(3, ((ContextModule)full.Modules[6])?.Elements.Length);
-        Assert.Equal("https://CONTEXT_MOCK/IMAGE.jpg", (((ContextModule)full.Modules[6]).Elements[0] as ImageElement)?.Source);
-        Assert.Equal("CONTEXT_PLAIN", (((ContextModule)full.Modules[6]).Elements[1] as PlainTextElement)?.Content);
-        Assert.Equal("CONTEXT_KMARKDOWN", (((ContextModule)full.Modules[6]).Elements[2] as KMarkdownElement)?.Content);
+        Assert.IsType<ActionGroupModule>(full.Modules[6]);
+        Assert.Equal(3, ((ActionGroupModule)full.Modules[6])?.Elements.Length);
+        Assert.Equal("ACTIONS_BUTTON_1", (((ActionGroupModule)full.Modules[6]).Elements[0].Text as PlainTextElement)?.Content);
+        Assert.Equal("ACTIONS_BUTTON_2", (((ActionGroupModule)full.Modules[6]).Elements[1].Text as PlainTextElement)?.Content);
+        Assert.Equal("ACTIONS_BUTTON_3", (((ActionGroupModule)full.Modules[6]).Elements[2].Text as PlainTextElement)?.Content);
 
-        Assert.IsType<DividerModule>(full.Modules[7]);
+        Assert.IsType<ContextModule>(full.Modules[7]);
+        Assert.Equal(3, ((ContextModule)full.Modules[7])?.Elements.Length);
+        Assert.Equal("https://CONTEXT_MOCK/IMAGE.jpg", (((ContextModule)full.Modules[7]).Elements[0] as ImageElement)?.Source);
+        Assert.Equal("CONTEXT_PLAIN", (((ContextModule)full.Modules[7]).Elements[1] as PlainTextElement)?.Content);
+        Assert.Equal("CONTEXT_KMARKDOWN", (((ContextModule)full.Modules[7]).Elements[2] as KMarkdownElement)?.Content);
 
-        Assert.IsType<FileModule>(full.Modules[8]);
-        Assert.Equal("https://FILE_MOCK/FILE.zip", ((FileModule)full.Modules[8]).Source);
-        Assert.Equal("FILE_TITLE", ((FileModule)full.Modules[8]).Title);
+        Assert.IsType<DividerModule>(full.Modules[8]);
 
-        Assert.IsType<VideoModule>(full.Modules[9]);
-        Assert.Equal("https://VIDEO_MOCK/VIDEO.mp4", ((VideoModule)full.Modules[9]).Source);
-        Assert.Equal("VIDEO_TITLE", ((VideoModule)full.Modules[9]).Title);
+        Assert.IsType<FileModule>(full.Modules[9]);
+        Assert.Equal("https://FILE_MOCK/FILE.zip", ((FileModule)full.Modules[9]).Source);
+        Assert.Equal("FILE_TITLE", ((FileModule)full.Modules[9]).Title);
 
-        Assert.IsType<AudioModule>(full.Modules[10]);
-        Assert.Equal("https://AUDIO_MOCK/AUDIO.aac", ((AudioModule)full.Modules[10]).Source);
-        Assert.Equal("AUDIO_TITLE", ((AudioModule)full.Modules[10]).Title);
-        Assert.Equal("https://AUDIO_MOCK/AUDIO.jpg", ((AudioModule)full.Modules[10]).Cover);
+        Assert.IsType<VideoModule>(full.Modules[10]);
+        Assert.Equal("https://VIDEO_MOCK/VIDEO.mp4", ((VideoModule)full.Modules[10]).Source);
+        Assert.Equal("VIDEO_TITLE", ((VideoModule)full.Modules[10]).Title);
 
-        Assert.IsType<CountdownModule>(full.Modules[11]);
-        Assert.Equal(DateTimeOffset.FromUnixTimeMilliseconds(4080251224000), ((CountdownModule)full.Modules[11]).EndTime);
-        Assert.Equal(DateTimeOffset.FromUnixTimeMilliseconds(4077572824000), ((CountdownModule)full.Modules[11]).StartTime);
-        Assert.Equal(CountdownMode.Second, ((CountdownModule)full.Modules[11]).Mode);
+        Assert.IsType<AudioModule>(full.Modules[11]);
+        Assert.Equal("https://AUDIO_MOCK/AUDIO.aac", ((AudioModule)full.Modules[11]).Source);
+        Assert.Equal("AUDIO_TITLE", ((AudioModule)full.Modules[11]).Title);
+        Assert.Equal("https://AUDIO_MOCK/AUDIO.jpg", ((AudioModule)full.Modules[11]).Cover);
 
-        Assert.IsType<InviteModule>(full.Modules[12]);
-        Assert.Equal("EvxnOb", ((InviteModule)full.Modules[12]).Code);
+        Assert.IsType<CountdownModule>(full.Modules[12]);
+        Assert.Equal(DateTimeOffset.FromUnixTimeMilliseconds(4080251224000), ((CountdownModule)full.Modules[12]).EndTime);
+        Assert.Equal(DateTimeOffset.FromUnixTimeMilliseconds(4077572824000), ((CountdownModule)full.Modules[12]).StartTime);
+        Assert.Equal(CountdownMode.Second, ((CountdownModule)full.Modules[12]).Mode);
+
+        Assert.IsType<InviteModule>(full.Modules[13]);
+        Assert.Equal("EvxnOb", ((InviteModule)full.Modules[13]).Code);
 
         Assert.Single(simple.Modules);
         Assert.IsType<DividerModule>(simple.Modules[0]);

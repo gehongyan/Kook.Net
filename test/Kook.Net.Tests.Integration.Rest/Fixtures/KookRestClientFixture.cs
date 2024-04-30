@@ -1,5 +1,6 @@
 using Kook.Rest;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Kook;
@@ -14,6 +15,12 @@ public class KookRestClientFixture : IDisposable, IAsyncDisposable
 
     public KookRestClientFixture()
     {
+        InitializeAsync().GetAwaiter().GetResult();
+    }
+
+    [MemberNotNull(nameof(Client))]
+    private async Task InitializeAsync()
+    {
         string? token = Environment.GetEnvironmentVariable("KOOK_NET_TEST_TOKEN");
         if (string.IsNullOrWhiteSpace(token))
             throw new Exception("The KOOK_NET_TEST_TOKEN environment variable was not provided.");
@@ -23,7 +30,7 @@ public class KookRestClientFixture : IDisposable, IAsyncDisposable
             LogLevel = LogSeverity.Debug,
             DefaultRetryMode = RetryMode.AlwaysRetry
         });
-        Client.LoginAsync(TokenType.Bot, token).GetAwaiter().GetResult();
+        await Client.LoginAsync(TokenType.Bot, token);
     }
 
     /// <inheritdoc />

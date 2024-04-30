@@ -1,5 +1,6 @@
 using Kook.Rest;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Kook;
@@ -13,14 +14,18 @@ public class RestChannelFixture : RestGuildFixture
 
     public RestVoiceChannel VoiceChannel { get; private set; }
 
-    public RestChannelFixture() : base()
+    public RestChannelFixture()
     {
-        RestTextChannel textChannel = Guild.CreateTextChannelAsync("TEST TEXT CHANNEL").GetAwaiter().GetResult();
-        TextChannel = textChannel
+        InitializeAsync().GetAwaiter().GetResult();
+    }
+
+    [MemberNotNull(nameof(TextChannel), nameof(VoiceChannel))]
+    private async Task InitializeAsync()
+    {
+        TextChannel = await Guild.CreateTextChannelAsync("TEST TEXT CHANNEL")
             ?? throw new Exception("Test text channel cannot be created for test.");
-        RestVoiceChannel voiceChannel = Guild.CreateVoiceChannelAsync("TEST VOICE CHANNEL").GetAwaiter().GetResult();
-        VoiceChannel = voiceChannel
-            ?? throw new Exception("Test text channel cannot be created for test.");
+        VoiceChannel = await Guild.CreateVoiceChannelAsync("TEST VOICE CHANNEL")
+            ?? throw new Exception("Test voice channel cannot be created for test.");
     }
 
     public override async ValueTask DisposeAsync()

@@ -449,16 +449,11 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
         if (model.Channels is not null)
         {
-            int channelCount = model.Channels.Length
-                + model.Channels.Sum(x => x.Channels?.Length ?? 0);
-            ConcurrentDictionary<ulong, SocketGuildChannel> channels = new(
-                ConcurrentHashSet.DefaultConcurrencyLevel,
-                (int)(channelCount * 1.05));
             foreach (ChannelModel channelModel in model.Channels)
             {
                 SocketGuildChannel channel = SocketGuildChannel.Create(this, state, channelModel);
                 state.AddChannel(channel);
-                channels.TryAdd(channel.Id, channel);
+                _channels.TryAdd(channel.Id, channel);
                 if (channelModel.Channels is not { Length: > 0 }) continue;
                 foreach (ChannelModel nestedChannelModel in channelModel.Channels)
                 {

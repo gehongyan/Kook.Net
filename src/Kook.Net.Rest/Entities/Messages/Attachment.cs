@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Model = Kook.API.Attachment;
 
-namespace Kook;
+namespace Kook.Rest;
 
 /// <inheritdoc cref="IAttachment"/>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]

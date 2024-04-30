@@ -40,4 +40,4 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal --filter Category!=Integration --blame-hang-timeout 15min
+        run: dotnet test --no-build --verbosity normal --filter Category!~Integration --blame-hang-timeout 15min

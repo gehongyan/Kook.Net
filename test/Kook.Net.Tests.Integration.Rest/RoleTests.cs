@@ -11,7 +11,7 @@ namespace Kook;
 ///     Tests that channels can be created and modified.
 /// </summary>
 [CollectionDefinition(nameof(RoleTests), DisableParallelization = true)]
-[Trait("Category", "Integration")]
+[Trait("Category", "Integration.Rest")]
 public class RoleTests : IClassFixture<RestGuildFixture>
 {
     private readonly IGuild _guild;
