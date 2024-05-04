@@ -310,8 +310,16 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <param name="filename"> The name of the file. </param>
     /// <param name="options"> The options to be used when sending the request. </param>
     /// <returns> The asset resource URI of the uploaded file. </returns>
-    public Task<string> CreateAssetAsync(string path, string filename, RequestOptions? options = null) =>
-        ClientHelper.CreateAssetAsync(this, File.OpenRead(path), filename, options);
+    public async Task<string> CreateAssetAsync(string path, string? filename = null, RequestOptions? options = null)
+    {
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+        await using FileStream fileStream = File.OpenRead(path);
+#else
+        using FileStream fileStream = File.OpenRead(path);
+#endif
+        return await ClientHelper.CreateAssetAsync(this, fileStream, filename ?? Path.GetFileName(path), options)
+            .ConfigureAwait(false);
+    }
 
     /// <summary>
     ///     Creates an asset from a stream.
