@@ -217,6 +217,7 @@ public class MessageTests : IClassFixture<SocketChannelFixture>, IAsyncDisposabl
 
         // Clean up
         _client.MessageReceived -= ClientOnMessageReceived;
+        _client.MessageUpdated -= ClientOnMessageUpdated;
         return;
 
         Task ClientOnMessageReceived(SocketMessage message, SocketGuildUser author, SocketTextChannel channel)

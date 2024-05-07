@@ -39,6 +39,7 @@ public class UrlValidationTests
     [Theory]
     [InlineData("http://img.kaiheila.cn/assets/2021-01/7kr4FkWpLV0ku0ku.jpeg")]
     [InlineData("https://img.kookapp.cn/assets/2021-01/7kr4FkWpLV0ku0ku.jpeg")]
+    [InlineData("https://img.kookapp.cn/assets/2021-01/7kr4FkWpLV0ku0ku")]
     [InlineData("http://kaiheila.oss-cn-beijing.aliyuncs.com/assets/2021-01/7kr4FkWpLV0ku0ku.jpeg")]
     [InlineData("https://img.kookapp.cn/attachments/2022-08/19/GHUrXywopm1hc0u0.png")]
     public void UrlValidation_ValidAssetUrl(string url) => Assert.True(UrlValidation.ValidateKookAssetUrl(url));
@@ -54,7 +55,6 @@ public class UrlValidationTests
     [InlineData("steam://run/123456/")]
     [InlineData("https://img.kookapp.cn/attachments/2022-08/19/")]
     [InlineData("img.kaiheila.cn/assets/2021-01/7kr4FkWpLV0ku0ku.jpeg")]
-    [InlineData("https://img.kaiheila.cn/assets/2021-01/7kr4FkWpLV0ku0ku")]
     [InlineData("https://kaiheila.net/guides/getting_started/images/install/install-vs-dependencies.png")]
     public void UrlValidation_InvalidAssetUrl(string url) => Assert.Throws<InvalidOperationException>(() => UrlValidation.ValidateKookAssetUrl(url));
 }
