@@ -9,4 +9,10 @@ internal class FileModule : ModuleBase
 
     [JsonPropertyName("title")]
     public string? Title { get; set; }
+
+    [JsonPropertyName("size")]
+    public int? Size { get; set; }
+
+    [JsonPropertyName("canDownload")]
+    public bool? CanDownload { get; set; }
 }

@@ -141,7 +141,7 @@ internal static class EntityExtensions
         new();
 
     public static FileModule ToEntity(this API.FileModule model) =>
-        new(model.Source, model.Title);
+        new(model.Source, model.Title, model.Size);
 
     public static AudioModule ToEntity(this API.AudioModule model) =>
         new(model.Source, model.Title, model.Cover);

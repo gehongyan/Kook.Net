@@ -9,7 +9,7 @@ namespace Kook;
 
 public class SocketGuildFixture : KookSocketClientFixture
 {
-    private readonly TaskCompletionSource<SocketGuild> _joined = new();
+    private readonly TaskCompletionSource<SocketGuild> _joinedPromise = new();
 
     public SocketGuild Guild { get; private set; }
 
@@ -41,7 +41,7 @@ public class SocketGuildFixture : KookSocketClientFixture
         {
             Client.JoinedGuild += OnJoinedGuild;
             await Client.CreateGuildAsync(guildName);
-            Guild = await _joined.Task;
+            Guild = await _joinedPromise.Task.WithTimeout();
             Client.JoinedGuild -= OnJoinedGuild;
         }
 
@@ -51,7 +51,7 @@ public class SocketGuildFixture : KookSocketClientFixture
 
     private Task OnJoinedGuild(SocketGuild guild)
     {
-        _joined.SetResult(guild);
+        _joinedPromise.SetResult(guild);
         return Task.CompletedTask;
     }
 

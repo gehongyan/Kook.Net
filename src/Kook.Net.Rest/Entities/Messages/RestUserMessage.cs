@@ -117,6 +117,8 @@ public class RestUserMessage : RestMessage, IUserMessage
             else if (quotedMessageId.HasValue)
                 Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, refMsgAuthor);
         }
+        else
+            Quote = null;
 
         if (model.Attachment is { } attachment)
             _attachments = [.._attachments, Attachment.Create(attachment)];
@@ -152,6 +154,8 @@ public class RestUserMessage : RestMessage, IUserMessage
             else if (quotedMessageId.HasValue)
                 Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, refMsgAuthor);
         }
+        else
+            Quote = null;
 
         if (model.Attachment is { } attachment)
             _attachments = [.._attachments, Attachment.Create(attachment)];

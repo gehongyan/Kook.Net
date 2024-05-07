@@ -145,6 +145,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             else if (quotedMessageId.HasValue)
                 Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, author);
         }
+        else
+            Quote = null;
 
         if (model.Attachment is { } attachment)
             _attachments = [.._attachments, Attachment.Create(attachment)];
@@ -181,6 +183,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             else if (quotedMessageId.HasValue)
                 Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, author);
         }
+        else
+            Quote = null;
 
         if (model.Attachment is { } attachment)
             _attachments = [.._attachments, Attachment.Create(attachment)];
@@ -231,6 +235,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             else if (quotedMessageId.HasValue)
                 Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, author);
         }
+        else
+            Quote = null;
 
         if (model.Attachment is { } attachment)
             _attachments = [.._attachments, Attachment.Create(attachment)];
@@ -272,6 +278,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             else if (quotedMessageId.HasValue)
                 Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, author);
         }
+        else
+            Quote = null;
 
         if (model.Attachment is { } attachment)
             _attachments = [.._attachments, Attachment.Create(attachment)];
@@ -322,6 +330,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             else if (quotedMessageId.HasValue)
                 Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, author);
         }
+        else
+            Quote = null;
 
         if (model.Attachment is { } attachment)
             _attachments = [.._attachments, Attachment.Create(attachment)];
@@ -360,6 +370,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             else if (quotedMessageId.HasValue)
                 Quote = global::Kook.Quote.Create(quotedMessageId.Value, quote.Type, quote.Content, quote.CreateAt, author);
         }
+        else
+            Quote = null;
 
         if (model.Attachment is { } attachment)
             _attachments = [.._attachments, Attachment.Create(attachment)];

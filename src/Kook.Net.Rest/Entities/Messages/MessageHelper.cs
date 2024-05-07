@@ -297,7 +297,7 @@ internal static class MessageHelper
             switch (module)
             {
                 case FileModule fileModule:
-                    Attachment file = new(AttachmentType.File, fileModule.Source, fileModule.Title);
+                    Attachment file = new(AttachmentType.File, fileModule.Source, fileModule.Title, fileModule.Size);
                     attachments.Add(file);
                     break;
                 case AudioModule audioModule:

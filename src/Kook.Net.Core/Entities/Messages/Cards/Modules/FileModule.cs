@@ -9,10 +9,11 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class FileModule : IMediaModule, IEquatable<FileModule>, IEquatable<IModule>
 {
-    internal FileModule(string source, string? title)
+    internal FileModule(string source, string? title, int? size = null)
     {
         Source = source;
         Title = title;
+        Size = size;
     }
 
     /// <inheritdoc />
@@ -23,6 +24,11 @@ public class FileModule : IMediaModule, IEquatable<FileModule>, IEquatable<IModu
 
     /// <inheritdoc />
     public string? Title { get; }
+
+    /// <summary>
+    ///     The size of the file in bytes.
+    /// </summary>
+    public int? Size { get; }
 
     private string DebuggerDisplay => $"{Type}: {Title}";
 

@@ -7,7 +7,7 @@ namespace Kook;
 
 public class KookSocketClientFixture : IDisposable, IAsyncDisposable
 {
-    private readonly TaskCompletionSource _ready = new();
+    private readonly TaskCompletionSource _readyPromise = new();
 
     public KookSocketClient Client { get; private set; }
 
@@ -27,20 +27,21 @@ public class KookSocketClientFixture : IDisposable, IAsyncDisposable
         {
             LogLevel = LogSeverity.Debug,
             DefaultRetryMode = RetryMode.AlwaysRetry,
-            AlwaysDownloadUsers = false,
-            AlwaysDownloadBoostSubscriptions = false,
-            AlwaysDownloadVoiceStates = false
+            AlwaysDownloadUsers = true,
+            AlwaysDownloadBoostSubscriptions = true,
+            AlwaysDownloadVoiceStates = true,
+            MessageCacheSize = 100
         });
         Client.Ready += ClientOnReady;
         await Client.LoginAsync(TokenType.Bot, token);
         await Client.StartAsync();
-        await _ready.Task;
+        await _readyPromise.Task.WithTimeout();
         Client.Ready -= ClientOnReady;
     }
 
     private Task ClientOnReady()
     {
-        _ready.SetResult();
+        _readyPromise.SetResult();
         return Task.CompletedTask;
     }
 

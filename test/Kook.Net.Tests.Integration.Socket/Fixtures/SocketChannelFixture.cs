@@ -9,8 +9,8 @@ public class SocketChannelFixture : SocketGuildFixture
     private const string TextChannelName = "TEST TEXT CHANNEL";
     private const string VoiceChannelName = "TEST VOICE CHANNEL";
 
-    private readonly TaskCompletionSource<SocketTextChannel> _textChannelCreated = new();
-    private readonly TaskCompletionSource<SocketVoiceChannel> _voiceChannelCreated = new();
+    private readonly TaskCompletionSource<SocketTextChannel> _textChannelPromise = new();
+    private readonly TaskCompletionSource<SocketVoiceChannel> _voiceChannelPromise = new();
 
     public SocketTextChannel TextChannel { get; private set; }
 
@@ -27,17 +27,17 @@ public class SocketChannelFixture : SocketGuildFixture
         Client.ChannelCreated += OnChannelCreated;
         await Guild.CreateTextChannelAsync(TextChannelName);
         await Guild.CreateVoiceChannelAsync(VoiceChannelName);
-        TextChannel = await _textChannelCreated.Task;
-        VoiceChannel = await _voiceChannelCreated.Task;
+        TextChannel = await _textChannelPromise.Task.WithTimeout();
+        VoiceChannel = await _voiceChannelPromise.Task.WithTimeout();
         Client.ChannelCreated -= OnChannelCreated;
     }
 
     private Task OnChannelCreated(SocketChannel arg)
     {
         if (arg is SocketVoiceChannel { Name: VoiceChannelName } voiceChannel)
-            _voiceChannelCreated.SetResult(voiceChannel);
+            _voiceChannelPromise.SetResult(voiceChannel);
         else if (arg is SocketTextChannel { Name: TextChannelName } textChannel)
-            _textChannelCreated.SetResult(textChannel);
+            _textChannelPromise.SetResult(textChannel);
         return Task.CompletedTask;
     }
 
