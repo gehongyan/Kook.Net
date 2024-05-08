@@ -2,11 +2,6 @@ name: Kook.Net Packages
 
 on:
   workflow_call:
-    inputs:
-      dotnet-version:
-        description: '.NET version'
-        required: true
-        type: string
     secrets:
       NUGET_API_KEY:
         description: 'NuGet API Key'
@@ -26,7 +21,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ inputs.dotnet-version }}
+          global-json-file: global.json
 
       - name: Cache Dependencies
         uses: actions/cache@v4
