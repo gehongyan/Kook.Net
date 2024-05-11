@@ -1,0 +1,94 @@
+﻿using System;
+using System.Threading.Tasks;
+using Kook.WebSocket;
+using Xunit;
+using Xunit.Abstractions;
+
+namespace Kook;
+
+[CollectionDefinition(nameof(MessageTests), DisableParallelization = true)]
+[Trait("Category", "Integration.Socket")]
+public class ReactionTests : IClassFixture<SocketChannelFixture>, IAsyncDisposable
+{
+    private readonly ITestOutputHelper _output;
+    private readonly KookSocketClient _client;
+    private readonly SocketTextChannel _textChannel;
+
+    public ReactionTests(SocketChannelFixture channelFixture, ITestOutputHelper output)
+    {
+        _output = output;
+        _textChannel = channelFixture.TextChannel;
+        _client = channelFixture.Client;
+        _client.Log += LogAsync;
+    }
+
+    private Task LogAsync(LogMessage message)
+    {
+        _output.WriteLine(message.ToString());
+        return Task.CompletedTask;
+    }
+
+    [Fact]
+    public async Task AddEmojiReaction()
+    {
+        // Send a text message
+        const string content = "TEXT CONTENT";
+        Cacheable<IUserMessage, Guid> cacheableUserMessage = await _textChannel.SendTextAsync(content);
+        IUserMessage? userMessage = await cacheableUserMessage.GetOrDownloadAsync();
+        Assert.NotNull(userMessage);
+        Guid messageId = cacheableUserMessage.Id;
+
+        // Add a reaction to the message
+        TaskCompletionSource<IMessage> messagePromise = new();
+        TaskCompletionSource<SocketTextChannel> channelPromise = new();
+        TaskCompletionSource<SocketGuildUser> operatorPromise = new();
+        TaskCompletionSource<SocketReaction> reactionPromise = new();
+        _client.ReactionAdded += ReactionAdded;
+
+        // The reaction and its related message, channel, and operator should match
+        await userMessage.AddReactionAsync(new Emoji("👍"));
+        IMessage message = await messagePromise.Task;
+        SocketTextChannel channel = await channelPromise.Task;
+        SocketGuildUser operatorUser = await operatorPromise.Task;
+        SocketReaction reaction = await reactionPromise.Task;
+        Assert.Equal(messageId, message.Id);
+        Assert.Same(_textChannel, channel);
+        Assert.NotNull(_client.CurrentUser);
+        Assert.Equal(_client.CurrentUser.Id, operatorUser.Id);
+        Assert.Equal("👍", reaction.Emote.Name);
+        Assert.Equal("👍", reaction.Emote.Id);
+        Assert.Equal(operatorUser.Id, reaction.UserId);
+        Assert.Same(operatorUser, reaction.User);
+        Assert.Equal(messageId, reaction.MessageId);
+        Assert.Same(message, reaction.Message);
+        Assert.NotNull(reaction.Channel);
+        Assert.Equal(channel.Id, reaction.Channel.Id);
+        Assert.Same(channel, reaction.Channel);
+
+        // Clean up
+        _client.ReactionAdded -= ReactionAdded;
+        return;
+
+        async Task ReactionAdded(Cacheable<IMessage, Guid> cacheableMessage,
+            SocketTextChannel socketTextChannel,
+            Cacheable<SocketGuildUser, ulong> cacheableOperator,
+            SocketReaction socketReaction)
+        {
+            IMessage? downloadedMessage = await cacheableMessage.GetOrDownloadAsync();
+            Assert.NotNull(downloadedMessage);
+            messagePromise.SetResult(downloadedMessage);
+            channelPromise.SetResult(socketTextChannel);
+            SocketGuildUser? downloadedUser = await cacheableOperator.GetOrDownloadAsync();
+            Assert.NotNull(downloadedUser);
+            operatorPromise.SetResult(downloadedUser);
+            reactionPromise.SetResult(socketReaction);
+        }
+    }
+
+    /// <inheritdoc />
+    public ValueTask DisposeAsync()
+    {
+        _client.Log -= LogAsync;
+        return ValueTask.CompletedTask;
+    }
+}

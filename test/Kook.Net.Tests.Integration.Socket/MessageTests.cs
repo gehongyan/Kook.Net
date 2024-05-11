@@ -65,7 +65,7 @@ public class MessageTests : IClassFixture<SocketChannelFixture>, IAsyncDisposabl
         _client.MessageReceived -= ClientOnMessageReceived;
         return;
 
-        Task ClientOnMessageReceived(SocketMessage message, SocketGuildUser author, SocketTextChannel channel)
+        Task ClientOnMessageReceived(SocketMessage message, SocketGuildUser author, SocketTextChannel socketTextChannel)
         {
             socketMessagePromise.SetResult();
             return Task.CompletedTask;
@@ -247,13 +247,13 @@ public class MessageTests : IClassFixture<SocketChannelFixture>, IAsyncDisposabl
         // Send a text message
         const string content = "TEXT CONTENT";
         const string modifiedContent = "TEXT CONTENT MODIFIED";
-        TaskCompletionSource<IMessage> beforePromise = new();
-        TaskCompletionSource<IMessage> afterPromise = new();
-        TaskCompletionSource<SocketTextChannel> channelPromise = new();
         Cacheable<IUserMessage, Guid> cacheableMessage = await _textChannel.SendTextAsync(content);
         Guid messageId = cacheableMessage.Id;
 
         // Modify the message
+        TaskCompletionSource<IMessage> beforePromise = new();
+        TaskCompletionSource<IMessage> afterPromise = new();
+        TaskCompletionSource<SocketTextChannel> channelPromise = new();
         _client.MessageUpdated += ClientOnMessageUpdated;
         IUserMessage? message = await cacheableMessage.GetOrDownloadAsync();
         Assert.NotNull(message);
@@ -270,6 +270,8 @@ public class MessageTests : IClassFixture<SocketChannelFixture>, IAsyncDisposabl
         Assert.Equal(content, messageBefore.Content);
         Assert.Equal(messageId, messageAfter.Id);
         Assert.Equal(modifiedContent, messageAfter.Content);
+        Assert.Null(messageBefore.EditedTimestamp);
+        Assert.NotNull(messageAfter.EditedTimestamp);
         Assert.Equal(messageBefore.Channel.Id, messageAfter.Channel.Id);
         Assert.NotSame(messageBefore, messageAfter);
         Assert.Same(_textChannel, channel);
@@ -287,6 +289,44 @@ public class MessageTests : IClassFixture<SocketChannelFixture>, IAsyncDisposabl
             IMessage? messageValueAfter = await cacheableAfter.GetOrDownloadAsync();
             Assert.NotNull(messageValueAfter);
             afterPromise.SetResult(messageValueAfter);
+            channelPromise.SetResult(socketTextChannel);
+        }
+    }
+
+    [Fact]
+    public async Task DeleteMessageAsync()
+    {
+        // Send a text message
+        const string content = "TEXT CONTENT";
+        Cacheable<IUserMessage, Guid> cacheableMessage = await _textChannel.SendTextAsync(content);
+        Guid messageId = cacheableMessage.Id;
+
+        // Delete the message
+        TaskCompletionSource<IMessage> deletedPromise = new();
+        TaskCompletionSource<SocketTextChannel> channelPromise = new();
+        _client.MessageDeleted += ClientOnMessageDeleted;
+        IUserMessage? message = await cacheableMessage.GetOrDownloadAsync();
+        Assert.NotNull(message);
+        await message.DeleteAsync();
+
+        // The message content modification should be received
+        IMessage messageDeleted = await deletedPromise.Task.WithTimeout();
+        SocketTextChannel channel = await channelPromise.Task.WithTimeout();
+        Assert.Equal(messageId, messageDeleted.Id);
+        Assert.Equal(content, messageDeleted.Content);
+        Assert.Equal(messageDeleted.Channel.Id, message.Channel.Id);
+        Assert.Same(_textChannel, channel);
+
+        // Clean up
+        _client.MessageDeleted -= ClientOnMessageDeleted;
+        return;
+
+        async Task ClientOnMessageDeleted(Cacheable<IMessage, Guid> cacheableDeleted,
+            SocketTextChannel socketTextChannel)
+        {
+            IMessage? messageValueBefore = await cacheableDeleted.GetOrDownloadAsync();
+            Assert.NotNull(messageValueBefore);
+            deletedPromise.SetResult(messageValueBefore);
             channelPromise.SetResult(socketTextChannel);
         }
     }
