@@ -159,7 +159,7 @@ internal partial class AudioClient : IAudioClient
 
         try
         {
-            switch (type)
+            switch (type.Value)
             {
                 case VoiceSocketFrameType.GetRouterRtpCapabilities:
                 {
@@ -240,6 +240,9 @@ internal partial class AudioClient : IAudioClient
                 case VoiceSocketFrameType.ConsumerResumed:
                 case VoiceSocketFrameType.ConsumerPaused:
                 case VoiceSocketFrameType.PeerPermissionChanged:
+                case VoiceSocketFrameType.Atmosphere:
+                case VoiceSocketFrameType.StartAccompaniment:
+                case VoiceSocketFrameType.StopAccompaniment:
                 {
                     await _audioLogger.DebugAsync(type.ToString()).ConfigureAwait(false);
                 }

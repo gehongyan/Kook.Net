@@ -249,7 +249,7 @@ internal class KookVoiceAPIClient : IDisposable
 
     public async Task SendJoinRequestAsync(uint sequence, RequestOptions? options = null)
     {
-        JoinParams args = new JoinParams { DisplayName = string.Empty };
+        JoinParams args = new() { DisplayName = string.Empty };
         await SendAsync(VoiceSocketFrameType.Join, sequence, args, options).ConfigureAwait(false);
     }
 
