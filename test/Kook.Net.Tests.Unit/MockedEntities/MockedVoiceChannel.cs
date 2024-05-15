@@ -70,7 +70,7 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
 
     public bool? IsPermissionSynced => throw new NotImplementedException();
 
-    public ulong CreatorId => throw new NotImplementedException();
+    public ulong? CreatorId => throw new NotImplementedException();
 
     /// <inheritdoc />
     public Task SyncPermissionsAsync(RequestOptions? options = null) => throw new NotImplementedException();

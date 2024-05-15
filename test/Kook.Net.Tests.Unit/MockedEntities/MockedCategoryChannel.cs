@@ -18,7 +18,7 @@ internal sealed class MockedCategoryChannel : ICategoryChannel
 
     public ChannelType Type => throw new NotImplementedException();
 
-    public ulong CreatorId => throw new NotImplementedException();
+    public ulong? CreatorId => throw new NotImplementedException();
 
     public IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites => throw new NotImplementedException();
 

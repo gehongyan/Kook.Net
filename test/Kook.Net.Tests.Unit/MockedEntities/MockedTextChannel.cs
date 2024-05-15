@@ -70,7 +70,7 @@ internal sealed class MockedTextChannel : ITextChannel
 
     public bool? IsPermissionSynced => throw new NotImplementedException();
 
-    public ulong CreatorId => throw new NotImplementedException();
+    public ulong? CreatorId => throw new NotImplementedException();
 
     /// <inheritdoc />
     public Task SyncPermissionsAsync(RequestOptions? options = null) =>

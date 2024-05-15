@@ -29,8 +29,10 @@ public class ReactionTests : IClassFixture<SocketChannelFixture>, IAsyncDisposab
     }
 
     [Fact]
-    public async Task AddEmojiReaction()
+    public async Task AddRemoveEmojiReaction()
     {
+        Assert.NotNull(_client.CurrentUser);
+
         // Send a text message
         const string content = "TEXT CONTENT";
         Cacheable<IUserMessage, Guid> cacheableUserMessage = await _textChannel.SendTextAsync(content);
@@ -39,37 +41,44 @@ public class ReactionTests : IClassFixture<SocketChannelFixture>, IAsyncDisposab
         Guid messageId = cacheableUserMessage.Id;
 
         // Add a reaction to the message
+        Emoji emoji = new("👍");
         TaskCompletionSource<IMessage> messagePromise = new();
         TaskCompletionSource<SocketTextChannel> channelPromise = new();
         TaskCompletionSource<SocketGuildUser> operatorPromise = new();
         TaskCompletionSource<SocketReaction> reactionPromise = new();
-        _client.ReactionAdded += ReactionAdded;
+        IMessage? message = null;
+        SocketTextChannel? channel = null;
+        SocketGuildUser? operatorUser = null;
+        SocketReaction? reaction = null;
+        _client.ReactionAdded += ReactionEventHandler;
 
         // The reaction and its related message, channel, and operator should match
-        await userMessage.AddReactionAsync(new Emoji("👍"));
-        IMessage message = await messagePromise.Task;
-        SocketTextChannel channel = await channelPromise.Task;
-        SocketGuildUser operatorUser = await operatorPromise.Task;
-        SocketReaction reaction = await reactionPromise.Task;
-        Assert.Equal(messageId, message.Id);
-        Assert.Same(_textChannel, channel);
-        Assert.NotNull(_client.CurrentUser);
-        Assert.Equal(_client.CurrentUser.Id, operatorUser.Id);
-        Assert.Equal("👍", reaction.Emote.Name);
-        Assert.Equal("👍", reaction.Emote.Id);
-        Assert.Equal(operatorUser.Id, reaction.UserId);
-        Assert.Same(operatorUser, reaction.User);
-        Assert.Equal(messageId, reaction.MessageId);
-        Assert.Same(message, reaction.Message);
-        Assert.NotNull(reaction.Channel);
-        Assert.Equal(channel.Id, reaction.Channel.Id);
-        Assert.Same(channel, reaction.Channel);
+        await userMessage.AddReactionAsync(emoji);
+        await WaitForPromises();
+        _client.ReactionAdded -= ReactionEventHandler;
+        AssertValues();
 
-        // Clean up
-        _client.ReactionAdded -= ReactionAdded;
+        // Reset values for removing assertions
+        messagePromise = new TaskCompletionSource<IMessage>();
+        channelPromise = new TaskCompletionSource<SocketTextChannel>();
+        operatorPromise = new TaskCompletionSource<SocketGuildUser>();
+        reactionPromise = new TaskCompletionSource<SocketReaction>();
+        message = null;
+        channel = null;
+        operatorUser = null;
+        reaction = null;
+        _client.ReactionRemoved += ReactionEventHandler;
+
+        // The reaction and its related message, channel, and operator should match
+        await userMessage.RemoveReactionAsync(emoji, _client.CurrentUser);
+        await WaitForPromises();
+        _client.ReactionRemoved -= ReactionEventHandler;
+        AssertValues();
+
         return;
 
-        async Task ReactionAdded(Cacheable<IMessage, Guid> cacheableMessage,
+        // ReSharper disable AccessToModifiedClosure
+        async Task ReactionEventHandler(Cacheable<IMessage, Guid> cacheableMessage,
             SocketTextChannel socketTextChannel,
             Cacheable<SocketGuildUser, ulong> cacheableOperator,
             SocketReaction socketReaction)
@@ -82,6 +91,36 @@ public class ReactionTests : IClassFixture<SocketChannelFixture>, IAsyncDisposab
             Assert.NotNull(downloadedUser);
             operatorPromise.SetResult(downloadedUser);
             reactionPromise.SetResult(socketReaction);
+        }
+
+        async Task WaitForPromises()
+        {
+            message = await messagePromise.Task;
+            channel = await channelPromise.Task;
+            operatorUser = await operatorPromise.Task;
+            reaction = await reactionPromise.Task;
+        }
+        // ReSharper restore AccessToModifiedClosure
+
+        void AssertValues()
+        {
+            Assert.NotNull(message);
+            Assert.NotNull(channel);
+            Assert.NotNull(operatorUser);
+            Assert.NotNull(reaction);
+            Assert.Equal(messageId, message.Id);
+            Assert.Same(_textChannel, channel);
+            Assert.NotNull(_client.CurrentUser);
+            Assert.Equal(_client.CurrentUser.Id, operatorUser.Id);
+            Assert.Equal("👍", reaction.Emote.Name);
+            Assert.Equal("👍", reaction.Emote.Id);
+            Assert.Equal(operatorUser.Id, reaction.UserId);
+            Assert.Same(operatorUser, reaction.User);
+            Assert.Equal(messageId, reaction.MessageId);
+            Assert.Same(message, reaction.Message);
+            Assert.NotNull(reaction.Channel);
+            Assert.Equal(channel.Id, reaction.Channel.Id);
+            Assert.Same(channel, reaction.Channel);
         }
     }
 
