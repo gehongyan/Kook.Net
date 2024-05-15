@@ -34,7 +34,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     public ChannelType Type { get; internal set; }
 
     /// <inheritdoc />
-    public ulong CreatorId { get; private set; }
+    public ulong? CreatorId { get; private set; }
 
     /// <summary>
     ///     Gets the creator of this channel.
@@ -47,7 +47,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
     /// </returns>
-    public SocketGuildUser? Creator => GetUser(CreatorId);
+    public SocketGuildUser? Creator => CreatorId.HasValue ? GetUser(CreatorId.Value) : null;
 
     /// <inheritdoc />
     public IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites => _rolePermissionOverwrites;
@@ -87,7 +87,8 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     {
         Name = model.Name;
         Position = model.Position;
-        CreatorId = model.CreatorId;
+        if (model.CreatorId.HasValue)
+            CreatorId = model.CreatorId.Value;
 
         _rolePermissionOverwrites = [..model.RolePermissionOverwrites.Select(x => x.ToEntity())];
         _userPermissionOverwrites = [..model.UserPermissionOverwrites.Select(x => x.ToEntity(Kook, state))];

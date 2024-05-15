@@ -12,7 +12,7 @@ internal class Channel
     public required string Name { get; set; }
 
     [JsonPropertyName("user_id")]
-    public ulong CreatorId { get; set; }
+    public ulong? CreatorId { get; set; }
 
     [JsonPropertyName("guild_id")]
     public ulong GuildId { get; set; }
@@ -28,6 +28,7 @@ internal class Channel
     public int? Position { get; set; }
 
     [JsonPropertyName("type")]
+    [JsonConverter(typeof(ChannelTypeConverter))]
     public ChannelType Type { get; set; }
 
     [JsonPropertyName("permission_overwrites")]

@@ -41,7 +41,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     public ulong GuildId => Guild.Id;
 
     /// <inheritdoc />
-    public ulong CreatorId { get; private set; }
+    public ulong? CreatorId { get; private set; }
 
     internal RestGuildChannel(BaseKookClient kook, IGuild guild, ulong id)
         : base(kook, id)
@@ -106,8 +106,12 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
     /// </returns>
-    public Task<RestUser> GetCreatorAsync(RequestOptions? options = null) =>
-        ClientHelper.GetUserAsync(Kook, CreatorId, options);
+    public async Task<RestUser?> GetCreatorAsync(RequestOptions? options = null)
+    {
+        if (CreatorId.HasValue)
+            return await ClientHelper.GetUserAsync(Kook, CreatorId.Value, options).ConfigureAwait(false);
+        return null;
+    }
 
     /// <inheritdoc />
     public Task DeleteAsync(RequestOptions? options = null) =>

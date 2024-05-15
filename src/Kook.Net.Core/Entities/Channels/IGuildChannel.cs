@@ -47,7 +47,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <returns>
     ///     A <c>ulong</c> representing the identifier of the user who created this channel.
     /// </returns>
-    ulong CreatorId { get; }
+    ulong? CreatorId { get; }
 
     /// <summary>
     ///     Gets a collection of permission overwrites for roles for this channel.
