@@ -12,16 +12,15 @@ public class SocketChannelFixture : SocketGuildFixture
     private readonly TaskCompletionSource<SocketTextChannel> _textChannelPromise = new();
     private readonly TaskCompletionSource<SocketVoiceChannel> _voiceChannelPromise = new();
 
-    public SocketTextChannel TextChannel { get; private set; }
+    public SocketTextChannel TextChannel { get; private set; } = null!;
 
-    public SocketVoiceChannel VoiceChannel { get; private set; }
+    public SocketVoiceChannel VoiceChannel { get; private set; } = null!;
 
     public SocketChannelFixture()
     {
         InitializeAsync().GetAwaiter().GetResult();
     }
 
-    [MemberNotNull(nameof(TextChannel), nameof(VoiceChannel))]
     private async Task InitializeAsync()
     {
         Client.ChannelCreated += OnChannelCreated;

@@ -11,14 +11,13 @@ namespace Kook;
 /// </summary>
 public class RestGuildFixture : KookRestClientFixture
 {
-    public RestGuild Guild { get; private set; }
+    public RestGuild Guild { get; private set; } = null!;
 
     public RestGuildFixture()
     {
         InitializeAsync().GetAwaiter().GetResult();
     }
 
-    [MemberNotNull(nameof(Guild))]
     private async Task InitializeAsync()
     {
         const string guildName = "KOOK NET INTEGRATION TEST";
@@ -31,9 +30,9 @@ public class RestGuildFixture : KookRestClientFixture
         if (guilds.Find(x => x.OwnerId == Client.CurrentUser?.Id) is { } guild)
             Guild = guild;
         // If there is a guild with the same name, and the bot has admin permissions, use it
-        else if (guilds.FirstOrDefault() is { } existingGuild
-                 && (await existingGuild.GetCurrentUserAsync())?.GuildPermissions.Has(GuildPermission.Administrator) is true)
-            Guild = existingGuild;
+        else if (guilds.Count > 0
+                 && (await guilds[0].GetCurrentUserAsync())?.GuildPermissions.Has(GuildPermission.Administrator) is true)
+            Guild = guilds[0];
         // Otherwise, create a new guild
         else
             Guild = await Client.CreateGuildAsync(guildName);

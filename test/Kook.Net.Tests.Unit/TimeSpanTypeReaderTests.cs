@@ -43,7 +43,7 @@ public class TimeSpanTypeReaderTests
     public async Task TestTimeSpanParse(string input, bool isNegative)
     {
         TimeSpanTypeReader reader = new();
-        TypeReaderResult result = await reader.ReadAsync(null!, input, null);
+        TypeReaderResult result = await reader.ReadAsync(null!, input, null!);
         Assert.True(result.IsSuccess);
 
         TimeSpan? actual = (TimeSpan?)result.BestMatch;

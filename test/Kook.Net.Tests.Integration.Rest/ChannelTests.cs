@@ -184,8 +184,8 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
 
             // check that the creator is myself
             Assert.Equal(selfUser.Id, channel.CreatorId);
-            IUser creator = await channel.GetCreatorAsync();
-            Assert.Equal(selfUser.Id, creator.Id);
+            IUser? creator = await channel.GetCreatorAsync();
+            Assert.Equal(selfUser.Id, creator?.Id);
 
             // check permission overwrites
             await channel.AddPermissionOverwriteAsync(selfUser);

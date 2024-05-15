@@ -10,22 +10,19 @@ namespace Kook;
 /// </summary>
 public class RestChannelFixture : RestGuildFixture
 {
-    public RestTextChannel TextChannel { get; private set; }
+    public RestTextChannel TextChannel { get; private set; } = null!;
 
-    public RestVoiceChannel VoiceChannel { get; private set; }
+    public RestVoiceChannel VoiceChannel { get; private set; } = null!;
 
     public RestChannelFixture()
     {
         InitializeAsync().GetAwaiter().GetResult();
     }
 
-    [MemberNotNull(nameof(TextChannel), nameof(VoiceChannel))]
     private async Task InitializeAsync()
     {
-        TextChannel = await Guild.CreateTextChannelAsync("TEST TEXT CHANNEL")
-            ?? throw new Exception("Test text channel cannot be created for test.");
-        VoiceChannel = await Guild.CreateVoiceChannelAsync("TEST VOICE CHANNEL")
-            ?? throw new Exception("Test voice channel cannot be created for test.");
+        TextChannel = await Guild.CreateTextChannelAsync("TEST TEXT CHANNEL");
+        VoiceChannel = await Guild.CreateVoiceChannelAsync("TEST VOICE CHANNEL");
     }
 
     public override async ValueTask DisposeAsync()

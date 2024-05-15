@@ -11,14 +11,13 @@ public class SocketGuildFixture : KookSocketClientFixture
 {
     private readonly TaskCompletionSource<SocketGuild> _joinedPromise = new();
 
-    public SocketGuild Guild { get; private set; }
+    public SocketGuild Guild { get; private set; } = null!;
 
     public SocketGuildFixture()
     {
         InitializeAsync().GetAwaiter().GetResult();
     }
 
-    [MemberNotNull(nameof(Guild))]
     private async Task InitializeAsync()
     {
         const string guildName = "KOOK NET INTEGRATION TEST";

@@ -148,7 +148,7 @@ public class ChannelPermissionsTests
     /// </summary>
     [Fact]
     public void ChannelTypeResolution_Null() =>
-        Assert.Throws<ArgumentException>(() => { ChannelPermissions.All(null); });
+        Assert.Throws<ArgumentException>(() => { ChannelPermissions.All(null!); });
 
     /// <summary>
     ///     Tests that <see cref="ChannelPermissions.All(IChannel)"/> for an <see cref="ITextChannel"/> will return a value
