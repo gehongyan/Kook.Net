@@ -19,7 +19,7 @@ KookSocketConfig config = new()
     MessageCacheSize = 100,
     LogLevel = LogSeverity.Debug,
     AutoUpdateChannelPositions = true,
-    AutoUpdateGuildRoles = true
+    AutoUpdateRolePositions = true
 };
 
 // 在使用完 Kook.Net 的客户端后，建议在应用程序的生命周期结束时进行 Dispose 操作

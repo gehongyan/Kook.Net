@@ -171,7 +171,7 @@ public class KookSocketConfig : KookRestConfig
     /// <summary>
     ///     Gets or sets whether to update guild role positions via API when <see cref="BaseSocketClient.GuildUpdated"/> fires.
     /// </summary>
-    public bool AutoUpdateGuildRoles { get; set; } = false;
+    public bool AutoUpdateRolePositions { get; set; } = false;
 
     /// <summary>
     ///     Gets or sets whether to update guild channels via API when gateway publishes sort_channel events.

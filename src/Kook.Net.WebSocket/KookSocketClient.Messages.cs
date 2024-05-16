@@ -955,7 +955,7 @@ public partial class KookSocketClient
                 || before.BufferBoostSubscriptionCount != guild.BufferBoostSubscriptionCount))
             await guild.DownloadBoostSubscriptionsAsync().ConfigureAwait(false);
 
-        if (BaseConfig.AutoUpdateGuildRoles)
+        if (BaseConfig.AutoUpdateRolePositions)
         {
             IEnumerable<Role> models = await ApiClient.GetGuildRolesAsync(guild.Id)
                 .FlattenAsync()
