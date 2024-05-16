@@ -53,7 +53,7 @@ internal class Channel
 
     // Voice
     [JsonPropertyName("limit_amount")]
-    public int UserLimit { get; set; }
+    public int? UserLimit { get; set; }
 
     [JsonPropertyName("voice_quality")]
     [JsonConverter(typeof(NullableVoiceQualityConverter))]

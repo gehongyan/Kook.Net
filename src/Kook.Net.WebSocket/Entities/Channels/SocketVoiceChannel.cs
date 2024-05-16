@@ -76,7 +76,7 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     {
         base.Update(state, model);
         VoiceQuality = model.VoiceQuality;
-        UserLimit = model.UserLimit;
+        UserLimit = model.UserLimit ?? 0;
         ServerUrl = model.ServerUrl;
         VoiceRegion = model.VoiceRegion;
         HasPassword = model.HasPassword;

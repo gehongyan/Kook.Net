@@ -441,7 +441,12 @@ public partial class KookSocketClient
         foreach (Channel model in models)
         {
             existingChannelIds.Add(model.Id);
-            if (guild.GetChannel(model.Id) is not { } guildChannel) continue;
+            if (guild.GetChannel(model.Id) is not { } guildChannel)
+            {
+                await UnknownChannelAsync(gatewayEvent.ExtraData.Type, model.Id, gatewayEvent).ConfigureAwait(false);
+                continue;
+            }
+
             SocketGuildChannel before = guildChannel.Clone();
             guildChannel.Update(State, model);
             if (before.Position != guildChannel.Position)
@@ -477,6 +482,80 @@ public partial class KookSocketClient
         State.RemoveChannel(channel.Id);
 
         await TimedInvokeAsync(_channelDestroyedEvent, nameof(ChannelDestroyed), channel).ConfigureAwait(false);
+    }
+
+    /// <remarks>
+    ///     "GROUP", "batch_added_channel"
+    /// </remarks>
+    private async Task HandleBatchAddChannel(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
+    {
+        if (DeserializePayload<Channel[]>(gatewayEvent.ExtraData.Body) is not { } data) return;
+        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        {
+            await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent).ConfigureAwait(false);
+            return;
+        }
+
+        foreach (Channel model in data)
+        {
+            SocketChannel channel = guild.AddChannel(State, model);
+            await TimedInvokeAsync(_channelCreatedEvent, nameof(ChannelCreated), channel).ConfigureAwait(false);
+        }
+    }
+
+    /// <remarks>
+    ///     "GROUP", "batch_updated_channel"
+    /// </remarks>
+    private async Task HandleBatchUpdateChannel(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
+    {
+        if (DeserializePayload<ChannelBatchUpdateEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        {
+            await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent).ConfigureAwait(false);
+            return;
+        }
+
+        if (data.AddedChannel is { } addedChannel)
+        {
+            SocketChannel channel = guild.AddChannel(State, addedChannel);
+            await TimedInvokeAsync(_channelCreatedEvent, nameof(ChannelCreated), channel).ConfigureAwait(false);
+        }
+
+        foreach (Channel updatedChannel in data.UpdatedChannels)
+        {
+            if (GetChannel(updatedChannel.Id) is not { } channel)
+            {
+                await UnknownChannelAsync(gatewayEvent.ExtraData.Type, updatedChannel.Id, gatewayEvent).ConfigureAwait(false);
+                return;
+            }
+            SocketChannel before = channel.Clone();
+            channel.Update(State, updatedChannel);
+            await TimedInvokeAsync(_channelUpdatedEvent, nameof(ChannelUpdated), before, channel).ConfigureAwait(false);
+        }
+    }
+
+    /// <remarks>
+    ///     "GROUP", "batch_deleted_channel"
+    /// </remarks>
+    private async Task HandleBatchDeleteChannel(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
+    {
+
+        if (DeserializePayload<ChannelBatchDeleteEventItem[]>(gatewayEvent.ExtraData.Body) is not { } data) return;
+        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        {
+            await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent).ConfigureAwait(false);
+            return;
+        }
+
+        foreach (ChannelBatchDeleteEventItem model in data)
+        {
+            if (guild.RemoveChannel(State, model.Id) is not { } channel)
+            {
+                await UnknownChannelAsync(gatewayEvent.ExtraData.Type, model.Id, gatewayEvent).ConfigureAwait(false);
+                return;
+            }
+            await TimedInvokeAsync(_channelDestroyedEvent, nameof(ChannelDestroyed), channel).ConfigureAwait(false);
+        }
     }
 
     /// <remarks>
@@ -963,7 +1042,13 @@ public partial class KookSocketClient
             foreach (Role model in models)
             {
                 SocketRole? role = guild.GetRole(model.Id);
-                if (role is null) continue;
+                if (role is null)
+                {
+                    await UnknownRoleAsync(gatewayEvent.ExtraData.Type, model.Id, guild.Id, gatewayEvent)
+                        .ConfigureAwait(false);
+                    continue;
+                }
+
                 SocketRole roleBefore = role.Clone();
                 role.Update(State, model);
                 if (roleBefore.Position != role.Position)

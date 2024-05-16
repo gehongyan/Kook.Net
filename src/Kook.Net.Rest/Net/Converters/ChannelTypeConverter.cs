@@ -3,10 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Kook.Net.Converters;
 
-/// <summary>
-///
-/// </summary>
-public class ChannelTypeConverter : JsonConverter<ChannelType>
+internal class ChannelTypeConverter : JsonConverter<ChannelType>
 {
     /// <inheritdoc />
     public override ChannelType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

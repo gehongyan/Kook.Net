@@ -49,7 +49,7 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
     {
         base.Update(model);
         VoiceQuality = model.VoiceQuality;
-        UserLimit = model.UserLimit;
+        UserLimit = model.UserLimit ?? 0;
         ServerUrl = model.ServerUrl;
         IsVoiceRegionOverwritten = model.OverwriteVoiceRegion;
         VoiceRegion = model.VoiceRegion;

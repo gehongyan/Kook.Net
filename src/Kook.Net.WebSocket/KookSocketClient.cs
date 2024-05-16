@@ -569,6 +569,18 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                 case ("GROUP", "deleted_channel"):
                                     await HandleDeletedChannel(gatewayEvent).ConfigureAwait(false);
                                     break;
+                                // 批量创建频道
+                                case ("GROUP", "batch_added_channel"):
+                                    await HandleBatchAddChannel(gatewayEvent).ConfigureAwait(false);
+                                    break;
+                                // 批量操作频道
+                                case ("GROUP", "batch_updated_channel"):
+                                    await HandleBatchUpdateChannel(gatewayEvent).ConfigureAwait(false);
+                                    break;
+                                // 批量删除频道
+                                case ("GROUP", "batch_deleted_channel"):
+                                    await HandleBatchDeleteChannel(gatewayEvent).ConfigureAwait(false);
+                                    break;
                                 // 新的频道置顶消息
                                 case ("GROUP", "pinned_message"):
                                     await HandlePinnedMessage(gatewayEvent).ConfigureAwait(false);
