@@ -344,6 +344,13 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
         if (Type == MessageType.Poke && model.MentionInfo is { Pokes: { } pokes })
             _pokes = [..pokes.Select(x => SocketPokeAction.Create(Kook, Author, MentionedUsers, x))];
+
+        _embeds = [];
+    }
+
+    internal override void Update(ClientState state, EmbedsAppendEvent model)
+    {
+        _embeds = [..model.Embeds.Select(x => x.ToEntity())];
     }
 
     internal override void Update(ClientState state, DirectMessageUpdateEvent model)

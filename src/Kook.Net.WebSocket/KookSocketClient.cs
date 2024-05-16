@@ -545,6 +545,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                 case ("GROUP", "updated_message"):
                                     await HandleUpdatedMessage(gatewayEvent).ConfigureAwait(false);
                                     break;
+                                // 频道消息附加 Embeds
+                                case ("GROUP", "embeds_append"):
+                                    await HandleEmbedsAppend(gatewayEvent).ConfigureAwait(false);
+                                    break;
                                 // 频道消息被删除
                                 case ("GROUP", "deleted_message"):
                                     await HandleDeletedMessage(gatewayEvent).ConfigureAwait(false);
@@ -553,9 +557,13 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                 case ("GROUP", "added_channel"):
                                     await HandleAddedChannel(gatewayEvent).ConfigureAwait(false);
                                     break;
-                                // 修改频道信息
+                                // 修改频道信息 & 修改语音频道服务器区域
                                 case ("GROUP", "updated_channel"):
+                                case ("GROUP", "updated_server_type"):
                                     await HandleUpdatedChannel(gatewayEvent).ConfigureAwait(false);
+                                    break;
+                                case ("GROUP", "sort_channel"):
+                                    await HandleSortChannel(gatewayEvent).ConfigureAwait(false);
                                     break;
                                 // 删除频道
                                 case ("GROUP", "deleted_channel"):

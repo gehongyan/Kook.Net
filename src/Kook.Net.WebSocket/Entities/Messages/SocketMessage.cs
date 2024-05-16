@@ -230,6 +230,10 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         }
     }
 
+    internal virtual void Update(ClientState state, EmbedsAppendEvent model)
+    {
+    }
+
     internal virtual void Update(ClientState state, DirectMessageUpdateEvent model)
     {
         EditedTimestamp = model.UpdatedAt;

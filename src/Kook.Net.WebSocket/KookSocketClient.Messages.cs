@@ -347,6 +347,30 @@ public partial class KookSocketClient
     }
 
     /// <remarks>
+    ///     "GROUP", "embeds_append"
+    /// </remarks>
+    private async Task HandleEmbedsAppend(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
+    {
+        if (DeserializePayload<EmbedsAppendEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+        if (GetChannel(data.ChannelId) is not SocketTextChannel channel)
+        {
+            await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.ChannelId, gatewayEvent).ConfigureAwait(false);
+            return;
+        }
+
+        SocketMessage? cachedMsg = channel.GetCachedMessage(data.MessageId);
+        SocketMessage? before = cachedMsg?.Clone();
+        cachedMsg?.Update(State, data);
+        Cacheable<IMessage, Guid> cacheableBefore = new(before, data.MessageId, cachedMsg is not null,
+            () => Task.FromResult<IMessage?>(null));
+        Cacheable<IMessage, Guid> cacheableAfter = new(cachedMsg, data.MessageId, cachedMsg is not null,
+            async () => await channel.GetMessageAsync(data.MessageId).ConfigureAwait(false) as SocketMessage);
+
+        await TimedInvokeAsync(_messageUpdatedEvent, nameof(MessageUpdated),
+            cacheableBefore, cacheableAfter, channel).ConfigureAwait(false);
+    }
+
+    /// <remarks>
     ///     "GROUP", "deleted_message"
     /// </remarks>
     private async Task HandleDeletedMessage(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
@@ -397,6 +421,32 @@ public partial class KookSocketClient
         SocketChannel before = channel.Clone();
         channel.Update(State, data);
         await TimedInvokeAsync(_channelUpdatedEvent, nameof(ChannelUpdated), before, channel).ConfigureAwait(false);
+    }
+
+    /// <remarks>
+    ///     "GROUP", "sort_channel"
+    /// </remarks>
+    private async Task HandleSortChannel(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
+    {
+        if (DeserializePayload<ChannelSortEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        {
+            await UnknownGuildAsync(gatewayEvent.ExtraData.Type, data.GuildId, gatewayEvent).ConfigureAwait(false);
+            return;
+        }
+
+        IEnumerable<Channel> models = await ApiClient.GetGuildChannelsAsync(guild.Id).FlattenAsync();
+        foreach (Channel model in models)
+        {
+            if (guild.GetChannel(model.Id) is not { } guildChannel) continue;
+            SocketGuildChannel before = guildChannel.Clone();
+            guildChannel.Update(State, model);
+            if (before.Position != guildChannel.Position)
+            {
+                await TimedInvokeAsync(_channelUpdatedEvent, nameof(ChannelUpdated), before, guildChannel)
+                    .ConfigureAwait(false);
+            }
+        }
     }
 
     /// <remarks>

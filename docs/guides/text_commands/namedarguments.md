@@ -44,7 +44,7 @@ public async Task Act(int requiredArg, NamableArguments namedArgs)
 > [!IMPORTANT]
 > 一个命令**只能**有用一个被 [NamedArgumentTypeAttribute]
 > 特性标注的可选参数容器类，且**必须**位于参数列表的末位。
-> 被该特性标注的类会在解析参数是自动应用 [RemainderAttribute] 特性的效果。
+> 被该特性标注的类会在解析参数时自动应用 [RemainderAttribute] 特性的效果。
 
 [RemainderAttribute]: xref:Kook.Commands.RemainderAttribute
 
