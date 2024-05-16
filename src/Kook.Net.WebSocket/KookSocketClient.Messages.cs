@@ -428,6 +428,7 @@ public partial class KookSocketClient
     /// </remarks>
     private async Task HandleSortChannel(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
+        if (!BaseConfig.AutoUpdateChannelPositions) return;
         if (DeserializePayload<ChannelSortEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
         if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
@@ -436,8 +437,10 @@ public partial class KookSocketClient
         }
 
         IEnumerable<Channel> models = await ApiClient.GetGuildChannelsAsync(guild.Id).FlattenAsync();
+        List<ulong> existingChannelIds = [];
         foreach (Channel model in models)
         {
+            existingChannelIds.Add(model.Id);
             if (guild.GetChannel(model.Id) is not { } guildChannel) continue;
             SocketGuildChannel before = guildChannel.Clone();
             guildChannel.Update(State, model);
@@ -446,6 +449,16 @@ public partial class KookSocketClient
                 await TimedInvokeAsync(_channelUpdatedEvent, nameof(ChannelUpdated), before, guildChannel)
                     .ConfigureAwait(false);
             }
+        }
+
+        IEnumerable<SocketGuildChannel> missingChannels = guild.Channels
+            .Where(x => !existingChannelIds.Contains(x.Id))
+            .Select(x => guild.RemoveChannel(State, x.Id))
+            .OfType<SocketGuildChannel>();
+        foreach (SocketGuildChannel missingChannel in missingChannels)
+        {
+            await TimedInvokeAsync(_channelDestroyedEvent, nameof(ChannelDestroyed), missingChannel)
+                .ConfigureAwait(false);
         }
     }
 
@@ -941,6 +954,25 @@ public partial class KookSocketClient
             && (before.BoostSubscriptionCount != guild.BoostSubscriptionCount
                 || before.BufferBoostSubscriptionCount != guild.BufferBoostSubscriptionCount))
             await guild.DownloadBoostSubscriptionsAsync().ConfigureAwait(false);
+
+        if (BaseConfig.AutoUpdateGuildRoles)
+        {
+            IEnumerable<Role> models = await ApiClient.GetGuildRolesAsync(guild.Id)
+                .FlattenAsync()
+                .ConfigureAwait(false);
+            foreach (Role model in models)
+            {
+                SocketRole? role = guild.GetRole(model.Id);
+                if (role is null) continue;
+                SocketRole roleBefore = role.Clone();
+                role.Update(State, model);
+                if (roleBefore.Position != role.Position)
+                {
+                    await TimedInvokeAsync(_roleUpdatedEvent, nameof(RoleUpdated), roleBefore, role)
+                        .ConfigureAwait(false);
+                }
+            }
+        }
 
         await TimedInvokeAsync(_guildUpdatedEvent, nameof(GuildUpdated), before, guild).ConfigureAwait(false);
     }

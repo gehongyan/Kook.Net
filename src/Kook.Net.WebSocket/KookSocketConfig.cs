@@ -169,6 +169,16 @@ public class KookSocketConfig : KookRestConfig
     private int _joinedGuildDataFetchingRetryDelay = 500;
 
     /// <summary>
+    ///     Gets or sets whether to update guild role positions via API when <see cref="BaseSocketClient.GuildUpdated"/> fires.
+    /// </summary>
+    public bool AutoUpdateGuildRoles { get; set; } = false;
+
+    /// <summary>
+    ///     Gets or sets whether to update guild channels via API when gateway publishes sort_channel events.
+    /// </summary>
+    public bool AutoUpdateChannelPositions { get; set; } = false;
+
+    /// <summary>
     ///     Initializes a new instance of the <see cref="KookSocketConfig"/> class.
     /// </summary>
     public KookSocketConfig()
