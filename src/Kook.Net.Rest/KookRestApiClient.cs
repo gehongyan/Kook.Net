@@ -1236,7 +1236,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         return SendPagedAsync<Role>(HttpMethod.Get,
-            (pageSize, page) => $"guild-role/list?guild={guildId}&page_size={pageSize}&page={page}",
+            (pageSize, page) => $"guild-role/list?guild_id={guildId}&page_size={pageSize}&page={page}",
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
