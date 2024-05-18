@@ -167,7 +167,7 @@ internal class KookVoiceAPIClient : IDisposable
             {
 #if DEBUG_AUDIO
                 Debug.WriteLine($"""
-                    <- [#{msg.Id}] [{type}] : [OK] {msg.Okay}
+                    [{DateTimeOffset.Now:HH:mm:ss}] <- [#{msg.Id}] [{type}] : [OK] {msg.Okay}
                     [Payload] {msg.Payload}
                     """);
 #endif
@@ -177,7 +177,7 @@ internal class KookVoiceAPIClient : IDisposable
             {
 #if DEBUG_AUDIO
                 Debug.WriteLine($"""
-                    <- [Notification] [{msg.Method}]
+                    [{DateTimeOffset.Now:HH:mm:ss}] <- [Notification] [{msg.Method}]
                     [Data] {msg.Payload}
                     """);
 #endif

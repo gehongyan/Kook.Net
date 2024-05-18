@@ -111,7 +111,7 @@ internal class KookSocketApiClient : KookRestApiClient
                 .Serialize(gatewaySocketFrame.Payload, _debugJsonSerializerOptions)
                 .TrimEnd('\n');
             Debug.WriteLine($"""
-                <- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence}
+                [{DateTimeOffset.Now:HH:mm:ss}] <- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence}
                 [Raw] {raw}
                 [Parsed] {parsed}
                 """);
