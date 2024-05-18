@@ -8,18 +8,18 @@ namespace Kook;
 
 [CollectionDefinition(nameof(MessageTests), DisableParallelization = true)]
 [Trait("Category", "Integration.Socket")]
-public class ReactionTests : IClassFixture<SocketChannelFixture>, IAsyncDisposable
+public class ReactionTests : IClassFixture<SocketChannelFixture>, IClassFixture<ReactionTestFixture>
 {
     private readonly ITestOutputHelper _output;
     private readonly KookSocketClient _client;
     private readonly SocketTextChannel _textChannel;
 
-    public ReactionTests(SocketChannelFixture channelFixture, ITestOutputHelper output)
+    public ReactionTests(SocketChannelFixture channelFixture, ReactionTestFixture reactionFixture, ITestOutputHelper output)
     {
         _output = output;
         _textChannel = channelFixture.TextChannel;
         _client = channelFixture.Client;
-        _client.Log += LogAsync;
+        reactionFixture.EnsureLogger(_client, LogAsync);
     }
 
     private Task LogAsync(LogMessage message)
@@ -123,11 +123,25 @@ public class ReactionTests : IClassFixture<SocketChannelFixture>, IAsyncDisposab
             Assert.Same(channel, reaction.Channel);
         }
     }
+}
+
+public class ReactionTestFixture : IAsyncDisposable
+{
+    private Action? _loggerDisposer;
+
+    private bool _loggerSubscribed;
+
+    public void EnsureLogger(KookSocketClient client, Func<LogMessage, Task> logAction)
+    {
+        if (_loggerSubscribed) return;
+        client.Log += logAction;
+        _loggerDisposer += () => client.Log -= logAction;
+        _loggerSubscribed = true;
+    }
 
     /// <inheritdoc />
-    public ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
-        _client.Log -= LogAsync;
-        return ValueTask.CompletedTask;
+        _loggerDisposer?.Invoke();
     }
 }

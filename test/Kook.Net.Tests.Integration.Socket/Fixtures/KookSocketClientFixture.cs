@@ -30,7 +30,9 @@ public class KookSocketClientFixture : IDisposable, IAsyncDisposable
             AlwaysDownloadUsers = true,
             AlwaysDownloadBoostSubscriptions = true,
             AlwaysDownloadVoiceStates = true,
-            MessageCacheSize = 100
+            MessageCacheSize = 100,
+            AutoUpdateChannelPositions = true,
+            AutoUpdateRolePositions = true
         });
         Client.Ready += ClientOnReady;
         await Client.LoginAsync(TokenType.Bot, token);

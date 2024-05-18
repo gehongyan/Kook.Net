@@ -7,6 +7,9 @@ namespace Kook;
 
 public class PriorityOrderer : ITestCaseOrderer
 {
+    public const string TypeName = "Kook.PriorityOrderer";
+    public const string AssemblyName = "Kook.Net.Tests.Integration.Socket";
+
     public IEnumerable<TTestCase> OrderTestCases<TTestCase>(
         IEnumerable<TTestCase> testCases) where TTestCase : ITestCase
     {

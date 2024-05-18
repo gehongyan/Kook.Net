@@ -7,12 +7,10 @@ using Xunit.Abstractions;
 
 namespace Kook;
 
-[TestCaseOrderer(
-    ordererTypeName: "Kook.PriorityOrderer",
-    ordererAssemblyName: "Kook.Net.Tests.Integration.Socket")]
+[TestCaseOrderer(PriorityOrderer.TypeName, PriorityOrderer.AssemblyName)]
 [CollectionDefinition(nameof(MessageTests), DisableParallelization = true)]
 [Trait("Category", "Integration.Socket")]
-public class ChannelTests : IClassFixture<SocketGuildFixture>, IClassFixture<ChannelTestFixture>, IAsyncDisposable
+public class ChannelTests : IClassFixture<SocketGuildFixture>, IClassFixture<ChannelTestFixture>
 {
     private readonly ChannelTestFixture _channelFixture;
     private readonly ITestOutputHelper _output;
@@ -25,7 +23,7 @@ public class ChannelTests : IClassFixture<SocketGuildFixture>, IClassFixture<Cha
         _output = output;
         _guild = guildFixture.Guild;
         _client = guildFixture.Client;
-        _client.Log += LogAsync;
+        channelFixture.EnsureLogger(_client, LogAsync);
     }
 
     private Task LogAsync(LogMessage message)
@@ -390,23 +388,35 @@ public class ChannelTests : IClassFixture<SocketGuildFixture>, IClassFixture<Cha
         }
     }
 
-    /// <inheritdoc />
-    public async ValueTask DisposeAsync()
-    {
-        _client.Log -= LogAsync;
-        if (_channelFixture.TextChannel is { } textChannel)
-            await textChannel.DeleteAsync();
-        if (_channelFixture.VoiceChannel is { } voiceChannel)
-            await voiceChannel.DeleteAsync();
-        if (_channelFixture.Category is { } category)
-            await category.DeleteAsync();
-    }
 }
 
-public class ChannelTestFixture
+public class ChannelTestFixture : IAsyncDisposable
 {
+    private Action? _loggerDisposer;
+
+    private bool _loggerSubscribed;
     public SocketCategoryChannel? Category { get; set; }
     public SocketCategoryChannel? AnotherCategory { get; set; }
     public SocketTextChannel? TextChannel { get; set; }
     public SocketVoiceChannel? VoiceChannel { get; set; }
+
+    public void EnsureLogger(KookSocketClient client, Func<LogMessage, Task> logAction)
+    {
+        if (_loggerSubscribed) return;
+        client.Log += logAction;
+        _loggerDisposer += () => client.Log -= logAction;
+        _loggerSubscribed = true;
+    }
+
+    /// <inheritdoc />
+    public async ValueTask DisposeAsync()
+    {
+        if (TextChannel is not null)
+            await TextChannel.DeleteAsync();
+        if (VoiceChannel is not null)
+            await VoiceChannel.DeleteAsync();
+        if (Category is not null)
+            await Category.DeleteAsync();
+        _loggerDisposer?.Invoke();
+    }
 }
