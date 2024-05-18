@@ -183,6 +183,23 @@ internal class KookVoiceAPIClient : IDisposable
 #endif
                 return _receivedEvent.InvokeAsync(msg.Method, true, msg.Payload);
             }
+            case not null:
+            {
+#if DEBUG_AUDIO
+                Debug.WriteLine($"""
+                    [{DateTimeOffset.Now:HH:mm:ss}] <- [Unknown] [{msg.Method}]
+                    [Data] {msg.Payload}
+                    """);
+#endif
+                return _receivedEvent.InvokeAsync(msg.Method, true, msg.Payload);
+            }
+            default:
+            {
+#if DEBUG_AUDIO
+                Debug.WriteLine($"[{DateTimeOffset.Now:HH:mm:ss}] <- [Empty]");
+#endif
+                break;
+            }
         }
 
         return Task.CompletedTask;
