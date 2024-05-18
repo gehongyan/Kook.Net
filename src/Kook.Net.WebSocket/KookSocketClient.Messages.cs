@@ -1200,6 +1200,40 @@ public partial class KookSocketClient
     }
 
     /// <remarks>
+    ///     "GROUP", "live_status_changed"
+    /// </remarks>
+    private async Task HandleLiveStatusChanged(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
+    {
+        if (DeserializePayload<LiveStatusChangeEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        {
+            await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+        if (GetChannel(data.Channel.Id) is not SocketVoiceChannel channel)
+        {
+            await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.Channel.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+        SocketGuildUser? user = guild.GetUser(data.User.Id);
+        Cacheable<SocketGuildUser, ulong> cacheableUser = GetCacheableSocketGuildUser(user, data.User.Id, guild);
+        guild.AddOrUpdateVoiceState(data.User.Id, channel, data.User.LiveStreamStatus);
+
+        if (data.User.LiveStreamStatus.InLive)
+        {
+            await TimedInvokeAsync(_livestreamBeganEvent, nameof(LivestreamBegan),
+                cacheableUser, channel).ConfigureAwait(false);
+        }
+        else
+        {
+            await TimedInvokeAsync(_livestreamEndedEvent, nameof(LivestreamEnded),
+                cacheableUser, channel).ConfigureAwait(false);
+        }
+    }
+
+    /// <remarks>
     ///     "PERSON", "user_updated"
     /// </remarks>
     private async Task HandleUserUpdated(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)

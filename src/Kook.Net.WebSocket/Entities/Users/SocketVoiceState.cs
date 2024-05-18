@@ -11,7 +11,14 @@ public struct SocketVoiceState : IVoiceState
     /// <summary>
     ///     Initializes a default <see cref="SocketVoiceState"/> with everything set to <c>null</c> or <c>false</c>.
     /// </summary>
-    public static readonly SocketVoiceState Default = new(null, null, null);
+    public static SocketVoiceState Default => new();
+
+    /// <summary>
+    ///     Initializes a new <see cref="SocketVoiceState"/> with the specified voice channel.
+    /// </summary>
+    public SocketVoiceState()
+    {
+    }
 
     /// <summary>
     ///     Initializes a new <see cref="SocketVoiceState"/> with the specified voice channel.
@@ -37,7 +44,15 @@ public struct SocketVoiceState : IVoiceState
     /// <inheritdoc />
     public bool? IsDeafened { get; private set; }
 
-    internal void Update(SocketVoiceChannel? voiceChannel) => VoiceChannel = voiceChannel;
+    /// <summary>
+    ///     Gets the live stream status of the user.
+    /// </summary>
+    public LiveStreamStatus? LiveStreamStatus { get; private set; }
+
+    internal void Update(SocketVoiceChannel? voiceChannel)
+    {
+        VoiceChannel = voiceChannel;
+    }
 
     internal void Update(bool? isMuted, bool? isDeafened)
     {
@@ -45,6 +60,12 @@ public struct SocketVoiceState : IVoiceState
             IsMuted = isMuted.Value;
         if (isDeafened.HasValue)
             IsDeafened = isDeafened.Value;
+    }
+
+    internal void Update(SocketVoiceChannel? voiceChannel, API.Gateway.LiveInfo model)
+    {
+        LiveStreamStatus?.Update(voiceChannel, model);
+        LiveStreamStatus ??= LiveStreamStatus.Create(voiceChannel, model);
     }
 
     /// <summary>

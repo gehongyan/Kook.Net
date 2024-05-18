@@ -861,6 +861,68 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task>> _userDisconnectedEvent = new();
 
+    /// <summary>
+    ///     Fired when a user started a livestream in a voice channel.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         This event is fired when a user started a livestream in a voice channel. The event handler must return a
+    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/> and a <see cref="SocketVoiceChannel"/>
+    ///         as its parameters.
+    ///     </para>
+    ///     <para>
+    ///         The user that started the livestream is passed into the event handler parameter as
+    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the user
+    ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
+    ///         is preserved in the <see cref="ulong"/>.
+    ///     </para>
+    ///     <para>
+    ///         The voice channel where the livestream is started is passed into the event handler parameter as
+    ///         <see cref="SocketVoiceChannel"/>.
+    ///     </para>
+    ///     <para>
+    ///         To retrieve the details of the livestream status, see <see cref="SocketGuildUser.LiveStreamStatus"/>.
+    ///     </para>
+    /// </remarks>
+    public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, Task> LivestreamBegan
+    {
+        add => _livestreamBeganEvent.Add(value);
+        remove => _livestreamBeganEvent.Remove(value);
+    }
+
+    internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, Task>> _livestreamBeganEvent = new();
+
+    /// <summary>
+    ///     Fired when a user stopped a livestream in a voice channel.
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///         This event is fired when a user stopped a livestream in a voice channel. The event handler must return a
+    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/> and a <see cref="SocketVoiceChannel"/>
+    ///         as its parameters.
+    ///     </para>
+    ///     <para>
+    ///         The user that stopped the livestream is passed into the event handler parameter as
+    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the user
+    ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
+    ///         is preserved in the <see cref="ulong"/>.
+    ///     </para>
+    ///     <para>
+    ///         The voice channel where the livestream is stopped is passed into the event handler parameter as
+    ///         <see cref="SocketVoiceChannel"/>.
+    ///     </para>
+    ///     <para>
+    ///         To retrieve the details of the livestream status, see <see cref="SocketGuildUser.LiveStreamStatus"/>.
+    ///     </para>
+    /// </remarks>
+    public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, Task> LivestreamEnded
+    {
+        add => _livestreamEndedEvent.Add(value);
+        remove => _livestreamEndedEvent.Remove(value);
+    }
+
+    internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, Task>> _livestreamEndedEvent = new();
+
     #endregion
 
     #region Roles

@@ -976,6 +976,15 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         return socketState;
     }
 
+    internal SocketVoiceState AddOrUpdateVoiceState(ulong userId, SocketVoiceChannel voiceChannel, LiveInfo liveInfo)
+    {
+        SocketVoiceState socketState = GetVoiceState(userId) ?? SocketVoiceState.Default;
+        socketState.Update(liveInfo.InLive ? voiceChannel : null, liveInfo);
+        socketState.Update(voiceChannel);
+        _voiceStates[userId] = socketState;
+        return socketState;
+    }
+
     internal SocketVoiceState? GetVoiceState(ulong id) =>
         _voiceStates.TryGetValue(id, out SocketVoiceState voiceState) ? voiceState : null;
 

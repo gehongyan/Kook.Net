@@ -703,6 +703,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                 case ("GROUP", "exited_channel"):
                                     await HandleExitedChannel(gatewayEvent).ConfigureAwait(false);
                                     break;
+                                // 用户直播状态更新
+                                case ("GROUP", "live_status_changed"):
+                                    await HandleLiveStatusChanged(gatewayEvent).ConfigureAwait(false);
+                                    break;
                                 // 用户信息更新
                                 case ("PERSON", "user_updated"):
                                     await HandleUserUpdated(gatewayEvent).ConfigureAwait(false);

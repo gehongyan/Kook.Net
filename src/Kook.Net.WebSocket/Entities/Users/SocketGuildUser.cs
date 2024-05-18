@@ -150,6 +150,11 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     public bool? IsMuted => VoiceState?.IsMuted;
 
     /// <summary>
+    ///     Gets the live stream status of the user.
+    /// </summary>
+    public LiveStreamStatus? LiveStreamStatus => VoiceState?.LiveStreamStatus;
+
+    /// <summary>
     ///     Gets a collection of all boost subscriptions of this user for this guild.
     /// </summary>
     /// <returns>
