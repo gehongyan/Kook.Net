@@ -1036,9 +1036,20 @@ public partial class KookSocketClient
 
         if (BaseConfig.AutoUpdateRolePositions)
         {
-            IEnumerable<Role> models = await ApiClient.GetGuildRolesAsync(guild.Id)
-                .FlattenAsync()
-                .ConfigureAwait(false);
+            IEnumerable<Role> models;
+            if (guild.CurrentUser?.GuildPermissions.Has(GuildPermission.ManageRoles) is true)
+            {
+                models = await ApiClient.GetGuildRolesAsync(guild.Id)
+                    .FlattenAsync()
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                ExtendedGuild guildModel = await ApiClient.GetGuildAsync(guild.Id)
+                    .ConfigureAwait(false);
+                models = guildModel.Roles ?? [];
+            }
+
             foreach (Role model in models)
             {
                 SocketRole? role = guild.GetRole(model.Id);
