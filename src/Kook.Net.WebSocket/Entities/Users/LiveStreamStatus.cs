@@ -7,7 +7,7 @@ namespace Kook.WebSocket;
 ///     Represents the status of a live stream.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class LiveStreamStatus
+public struct LiveStreamStatus
 {
     /// <summary>
     ///     Gets the voice channel that the user is currently in; or <c>null</c> if none.
@@ -69,7 +69,10 @@ public class LiveStreamStatus
     /// </summary>
     public int Mode { get; private set; }
 
-    private LiveStreamStatus()
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="LiveStreamStatus"/> structure.
+    /// </summary>
+    public LiveStreamStatus()
     {
     }
 

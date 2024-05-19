@@ -65,7 +65,7 @@ public struct SocketVoiceState : IVoiceState
     internal void Update(SocketVoiceChannel? voiceChannel, API.Gateway.LiveInfo model)
     {
         LiveStreamStatus?.Update(voiceChannel, model);
-        LiveStreamStatus ??= LiveStreamStatus.Create(voiceChannel, model);
+        LiveStreamStatus ??= Kook.WebSocket.LiveStreamStatus.Create(voiceChannel, model);
     }
 
     /// <summary>
@@ -90,6 +90,8 @@ public struct SocketVoiceState : IVoiceState
                 false => "Undeafened",
                 _ => "Unknown"
             }})";
+
+    internal SocketVoiceState Clone() => this;
 
     /// <inheritdoc />
     IVoiceChannel? IVoiceState.VoiceChannel => VoiceChannel;

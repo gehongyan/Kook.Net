@@ -712,6 +712,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                 case ("GROUP", "live_status_changed"):
                                     await HandleLiveStatusChanged(gatewayEvent).ConfigureAwait(false);
                                     break;
+                                // 用户被添加服务器闭麦/静音
+                                case ("GROUP", "add_guild_mute"):
+                                    await HandleAddGuildMute(gatewayEvent).ConfigureAwait(false);
+                                    break;
+                                // 用户被删除服务器闭麦/静音
+                                case ("GROUP", "delete_guild_mute"):
+                                    await HandleDeleteGuildMute(gatewayEvent).ConfigureAwait(false);
+                                    break;
                                 // 用户信息更新
                                 case ("PERSON", "user_updated"):
                                     await HandleUserUpdated(gatewayEvent).ConfigureAwait(false);

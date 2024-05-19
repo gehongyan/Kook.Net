@@ -1186,10 +1186,13 @@ public partial class KookSocketClient
 
         SocketGuildUser? user = guild.GetUser(data.UserId);
         Cacheable<SocketGuildUser, ulong> cacheableUser = GetCacheableSocketGuildUser(user, data.UserId, guild);
-        guild.AddOrUpdateVoiceState(data.UserId, channel.Id);
+        SocketVoiceState before = guild.GetVoiceState(data.UserId)?.Clone() ?? SocketVoiceState.Default;
+        SocketVoiceState after = guild.AddOrUpdateVoiceState(data.UserId, channel.Id);
 
         await TimedInvokeAsync(_userConnectedEvent, nameof(UserConnected),
             cacheableUser, channel, data.At).ConfigureAwait(false);
+        await TimedInvokeAsync(_userVoiceStateUpdatedEvent, nameof(UserVoiceStateUpdated),
+            cacheableUser, before, after).ConfigureAwait(false);
     }
 
     /// <remarks>
@@ -1214,10 +1217,13 @@ public partial class KookSocketClient
 
         SocketGuildUser? user = guild.GetUser(data.UserId);
         Cacheable<SocketGuildUser, ulong> cacheableUser = GetCacheableSocketGuildUser(user, data.UserId, guild);
-        guild.AddOrUpdateVoiceState(data.UserId, null);
+        SocketVoiceState before = guild.GetVoiceState(data.UserId)?.Clone() ?? SocketVoiceState.Default;
+        SocketVoiceState after = guild.AddOrUpdateVoiceState(data.UserId, null);
 
         await TimedInvokeAsync(_userDisconnectedEvent, nameof(UserDisconnected),
             cacheableUser, channel, data.At).ConfigureAwait(false);
+        await TimedInvokeAsync(_userVoiceStateUpdatedEvent, nameof(UserVoiceStateUpdated),
+            cacheableUser, before, after).ConfigureAwait(false);
     }
 
     /// <remarks>
@@ -1238,6 +1244,10 @@ public partial class KookSocketClient
                 .ConfigureAwait(false);
             return;
         }
+
+        SocketVoiceState before = guild.GetVoiceState(data.User.Id)?.Clone() ?? SocketVoiceState.Default;
+        SocketVoiceState after = guild.AddOrUpdateVoiceState(data.User.Id, channel, data.User.LiveStreamStatus);
+
         SocketGuildUser? user = guild.GetUser(data.User.Id);
         Cacheable<SocketGuildUser, ulong> cacheableUser = GetCacheableSocketGuildUser(user, data.User.Id, guild);
         guild.AddOrUpdateVoiceState(data.User.Id, channel, data.User.LiveStreamStatus);
@@ -1252,6 +1262,59 @@ public partial class KookSocketClient
             await TimedInvokeAsync(_livestreamEndedEvent, nameof(LivestreamEnded),
                 cacheableUser, channel).ConfigureAwait(false);
         }
+
+        await TimedInvokeAsync(_userVoiceStateUpdatedEvent, nameof(UserVoiceStateUpdated),
+            cacheableUser, before, after).ConfigureAwait(false);
+    }
+
+    private async Task HandleAddGuildMute(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
+    {
+        if (DeserializePayload<GuildMuteDeafEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+        if (State.GetGuild(data.GuildId) is not { } guild)
+        {
+            await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        SocketGuildUser? user = guild.GetUser(data.UserId);
+        Cacheable<SocketGuildUser, ulong> cacheableUser = GetCacheableSocketGuildUser(user, data.UserId, guild);
+        SocketVoiceState before = guild.GetVoiceState(data.UserId)?.Clone() ?? SocketVoiceState.Default;
+        (bool? isMuted, bool? isDeafened) = data.Type switch
+        {
+            MuteOrDeafType.Mute => (true, null),
+            MuteOrDeafType.Deaf => (null, true),
+            _ => ((bool?)null, (bool?)null)
+        };
+        SocketVoiceState after = guild.AddOrUpdateVoiceState(data.UserId, isMuted, isDeafened);
+
+        await TimedInvokeAsync(_userVoiceStateUpdatedEvent, nameof(UserVoiceStateUpdated),
+            cacheableUser, before, after).ConfigureAwait(false);
+    }
+
+    private async Task HandleDeleteGuildMute(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
+    {
+        if (DeserializePayload<GuildMuteDeafEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+        if (State.GetGuild(data.GuildId) is not { } guild)
+        {
+            await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        SocketGuildUser? user = guild.GetUser(data.UserId);
+        Cacheable<SocketGuildUser, ulong> cacheableUser = GetCacheableSocketGuildUser(user, data.UserId, guild);
+        SocketVoiceState before = guild.GetVoiceState(data.UserId)?.Clone() ?? SocketVoiceState.Default;
+        (bool? isMuted, bool? isDeafened) = data.Type switch
+        {
+            MuteOrDeafType.Mute => (false, null),
+            MuteOrDeafType.Deaf => (null, false),
+            _ => ((bool?)null, (bool?)null)
+        };
+        SocketVoiceState after = guild.AddOrUpdateVoiceState(data.UserId, isMuted, isDeafened);
+
+        await TimedInvokeAsync(_userVoiceStateUpdatedEvent, nameof(UserVoiceStateUpdated),
+            cacheableUser, before, after).ConfigureAwait(false);
     }
 
     /// <remarks>

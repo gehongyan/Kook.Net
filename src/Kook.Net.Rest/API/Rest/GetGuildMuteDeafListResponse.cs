@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Kook.Net.Converters;
 
 namespace Kook.API.Rest;
 
@@ -14,6 +15,7 @@ internal class GetGuildMuteDeafListResponse
 internal class MuteOrDeafDetail
 {
     [JsonPropertyName("type")]
+    [JsonConverter(typeof(MuteOrDeafTypeConverter))]
     public MuteOrDeafType Type { get; set; }
 
     [JsonPropertyName("user_ids")]

@@ -795,6 +795,22 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<IReadOnlyCollection<Cacheable<SocketGuildUser, ulong>>, DateTimeOffset, Task>> _guildMemberOfflineEvent = new();
 
+    /// <summary>
+    ///     Fired when a user's voice state is updated.
+    /// </summary>
+    /// <returns>
+    ///     A <see cref="Task"/> representing the result of the asynchronous operation.
+    ///     The task result contains the updated <see cref="SocketGuildUser"/>, the previous <see cref="SocketVoiceState"/>,
+    ///     and the current <see cref="SocketVoiceState"/>.
+    /// </returns>
+    public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceState, SocketVoiceState, Task> UserVoiceStateUpdated
+    {
+        add => _userVoiceStateUpdatedEvent.Add(value);
+        remove => _userVoiceStateUpdatedEvent.Remove(value);
+    }
+
+    internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceState, SocketVoiceState, Task>> _userVoiceStateUpdatedEvent = new();
+
     #endregion
 
     #region Voices
