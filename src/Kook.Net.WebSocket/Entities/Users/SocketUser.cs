@@ -87,7 +87,7 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
         hasChanges |= ValueHelper.SetIfChanged(() => Username, x => Username = x, model.Username);
         if (hasChanges)
         {
-            foreach (SocketGuildUser current in state.Guilds.Select(x => x.CurrentUser).OfType<SocketGuildUser>())
+            foreach (SocketGuildUser current in state.Guilds.Select(x => x.GetUser(Id)).OfType<SocketGuildUser>())
                 current.UpdateNickname();
         }
 
