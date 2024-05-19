@@ -294,7 +294,9 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         hasChanges |= ValueHelper.SetIfChanged(
             () => Nickname,
             x => Nickname = x,
-            model.CurrentUserNickname == Username ? null : model.CurrentUserNickname);
+            model.CurrentUserNickname == Username || string.IsNullOrWhiteSpace(model.CurrentUserNickname)
+                ? null
+                : model.CurrentUserNickname);
         return hasChanges;
     }
 
