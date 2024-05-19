@@ -158,11 +158,20 @@ Public Class Program
         AddHandler _client.GuildMemberOffline, Function(users, time)
             Return Task.CompletedTask
         End Function
+        AddHandler _client.UserVoiceStateUpdated, Function(user, before, after)
+            Return Task.CompletedTask
+        End Function
 
         AddHandler _client.UserConnected, Function(user, channel, time)
             Return Task.CompletedTask
         End Function
         AddHandler _client.UserDisconnected, Function(user, channel, time)
+            Return Task.CompletedTask
+        End Function
+        AddHandler _client.LivestreamBegan, Function(user, channel)
+            Return Task.CompletedTask
+        End Function
+        AddHandler _client.LivestreamEnded, Function(user, channel)
             Return Task.CompletedTask
         End Function
 

@@ -74,9 +74,12 @@ client.CurrentUserUpdated += (before, after) => Task.CompletedTask;
 client.GuildMemberUpdated += (before, after) => Task.CompletedTask;
 client.GuildMemberOnline += (users, time) => Task.CompletedTask;
 client.GuildMemberOffline += (users, time) => Task.CompletedTask;
+client.UserVoiceStateUpdated += (user, before, after) => Task.CompletedTask;
 
 client.UserConnected += (user, channel, time) => Task.CompletedTask;
 client.UserDisconnected += (user, channel, time) => Task.CompletedTask;
+client.LivestreamBegan += (user, channel) => Task.CompletedTask;
+client.LivestreamEnded += (user, channel) => Task.CompletedTask;
 
 client.RoleCreated += role => Task.CompletedTask;
 client.RoleDeleted += role => Task.CompletedTask;
