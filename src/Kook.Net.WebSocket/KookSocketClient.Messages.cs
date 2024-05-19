@@ -1073,6 +1073,27 @@ public partial class KookSocketClient
         await TimedInvokeAsync(_guildUpdatedEvent, nameof(GuildUpdated), before, guild).ConfigureAwait(false);
     }
 
+    private async Task HandleUpdatedGuildSelf(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
+    {
+        if (DeserializePayload<GuildUpdateSelfEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+        if (State.GetGuild(data.GuildId) is not { } guild)
+        {
+            await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        SocketGuildUser? user = guild.CurrentUser;
+        SocketGuildUser? before = user?.Clone();
+        user?.Update(State, data);
+        Cacheable<SocketGuildUser, ulong> cacheableBefore = new(before, gatewayEvent.TargetId, before is not null,
+            () => Task.FromResult<SocketGuildUser?>(null));
+        Cacheable<SocketGuildUser, ulong> cacheableAfter = GetCacheableSocketGuildUser(user, gatewayEvent.TargetId, guild);
+
+        await TimedInvokeAsync(_guildMemberUpdatedEvent, nameof(GuildMemberUpdated),
+            cacheableBefore, cacheableAfter).ConfigureAwait(false);
+    }
+
     /// <remarks>
     ///     "GROUP", "deleted_guild"
     /// </remarks>

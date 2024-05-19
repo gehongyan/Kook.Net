@@ -678,6 +678,9 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                                 case ("GROUP", "updated_guild"):
                                     await HandleUpdatedGuild(gatewayEvent).ConfigureAwait(false);
                                     break;
+                                case ("PERSON", "updated_guild"):
+                                    await HandleUpdatedGuildSelf(gatewayEvent).ConfigureAwait(false);
+                                    break;
                                 // 服务器删除
                                 case ("GROUP", "deleted_guild"):
                                     await HandleDeletedGuild(gatewayEvent).ConfigureAwait(false);

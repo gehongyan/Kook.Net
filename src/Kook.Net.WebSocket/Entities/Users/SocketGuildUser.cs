@@ -288,6 +288,16 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         Nickname = model.Nickname == Username ? null : model.Nickname;
     }
 
+    internal bool Update(ClientState state, GuildUpdateSelfEvent model)
+    {
+        bool hasChanges = false;
+        hasChanges |= ValueHelper.SetIfChanged(
+            () => Nickname,
+            x => Nickname = x,
+            model.CurrentUserNickname == Username ? null : model.CurrentUserNickname);
+        return hasChanges;
+    }
+
     private void UpdateRoles(uint[] roleIds)
     {
         _roleIds = [..roleIds];
