@@ -8,14 +8,8 @@ internal class GuildFeaturesConverter : JsonConverter<GuildFeatures>
     public override GuildFeatures Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         IList<string> rawValues = JsonSerializer.Deserialize<IList<string>>(ref reader, options) ?? [];
-        GuildFeature features = GuildFeature.None;
-
-        foreach (string item in rawValues)
-        {
-            if (Enum.TryParse(item, true, out GuildFeature result))
-                features |= result;
-        }
-
+        GuildFeature features = rawValues.Aggregate(GuildFeature.None,
+            (current, item) => current | ApiStringToFeature(item));
         return new GuildFeatures(features, rawValues);
     }
 
@@ -37,6 +31,25 @@ internal class GuildFeaturesConverter : JsonConverter<GuildFeatures>
         writer.WriteEndArray();
     }
 
-    private static string FeatureToApiString(GuildFeature feature) =>
-        feature.ToString().ToLower();
+    private static GuildFeature ApiStringToFeature(string apiString)
+    {
+        return apiString switch
+        {
+            "official" => GuildFeature.Official,
+            "partner" => GuildFeature.Partner,
+            "ka" => GuildFeature.KeyAccount,
+            _ => GuildFeature.None
+        };
+    }
+
+    private static string FeatureToApiString(GuildFeature feature)
+    {
+        return feature switch
+        {
+            GuildFeature.Official => "official",
+            GuildFeature.Partner => "partner",
+            GuildFeature.KeyAccount => "ka",
+            _ => feature.ToString().ToLowerInvariant()
+        };
+    }
 }
