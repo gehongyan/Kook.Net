@@ -355,6 +355,11 @@ internal static class EntityExtensions
         return RecommendInfo.Create(model);
     }
 
+    public static GuildCertification ToEntity(this API.GuildCertification model)
+    {
+        return GuildCertification.Create(model.Type, model.Title, model.Picture, model.Description);
+    }
+
     #endregion
 
     #region User Tags

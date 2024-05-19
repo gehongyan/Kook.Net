@@ -80,6 +80,11 @@ public interface IRecommendInfo
     GuildFeatures Features { get; }
 
     /// <summary>
+    ///     Gets the certifications of the recommended guild.
+    /// </summary>
+    IReadOnlyCollection<GuildCertification>? Certifications { get; }
+
+    /// <summary>
     ///     Gets the boost level of the recommended guild.
     /// </summary>
     /// <returns>

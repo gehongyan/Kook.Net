@@ -37,6 +37,9 @@ internal class RecommendInfo
     [JsonConverter(typeof(GuildFeaturesConverter))]
     public required GuildFeatures Features { get; set; }
 
+    [JsonPropertyName("certifications")]
+    public GuildCertification[]? Certifications { get; set; }
+
     [JsonPropertyName("level")]
     public BoostLevel BoostLevel { get; set; }
 

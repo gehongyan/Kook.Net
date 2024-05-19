@@ -39,6 +39,9 @@ public class RecommendInfo : IRecommendInfo
     public GuildFeatures Features { get; private set; }
 
     /// <inheritdoc />
+    public IReadOnlyCollection<GuildCertification>? Certifications { get; private set; }
+
+    /// <inheritdoc />
     public BoostLevel BoostLevel { get; private set; }
 
     /// <inheritdoc />
@@ -95,6 +98,9 @@ public class RecommendInfo : IRecommendInfo
         Status = model.Status;
         Tag = model.Tag;
         Features = model.Features;
+        Certifications = model.Certifications is not null
+            ? [..model.Certifications.Select(x => x.ToEntity())]
+            : null;
         BoostLevel = model.BoostLevel;
         CustomId = model.CustomId;
         IsOfficialPartner = model.IsOfficialPartner;
