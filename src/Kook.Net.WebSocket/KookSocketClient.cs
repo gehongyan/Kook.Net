@@ -9,6 +9,7 @@ using Kook.API.Gateway;
 using Kook.API.Rest;
 using Kook.Logging;
 using Kook.Net;
+using Kook.Net.Converters;
 using Kook.Net.Udp;
 using Kook.Net.WebSockets;
 using Kook.Rest;
@@ -120,7 +121,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         _serializerOptions = new JsonSerializerOptions
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            NumberHandling = JsonNumberHandling.AllowReadingFromString
+            NumberHandling = JsonNumberHandling.AllowReadingFromString,
+            Converters = { CardConverterFactory.Instance }
         };
 
         ApiClient.SentGatewayMessage += async socketFrameType =>

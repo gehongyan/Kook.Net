@@ -64,7 +64,7 @@ internal class KookRestApiClient : IDisposable
             {
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                 NumberHandling = JsonNumberHandling.AllowReadingFromString,
-                Converters = { new CardConverterFactory() }
+                Converters = { CardConverterFactory.Instance }
             };
         DefaultRatelimitCallback = defaultRatelimitCallback;
 
