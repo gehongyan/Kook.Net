@@ -169,7 +169,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
         GatewayPersonMessageExtraData model = gatewayEvent.ExtraData;
         Content = gatewayEvent.Content;
-        RawContent = model.KMarkdownInfo.RawContent ?? gatewayEvent.Content;
+        RawContent = model.KMarkdownInfo?.RawContent ?? gatewayEvent.Content;
         _attachments = [];
 
         if (model.Quote is { } quote)
@@ -198,7 +198,6 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         if (Type == MessageType.Poke && model.KMarkdownInfo is { Pokes: { } pokes })
             _pokes = [..pokes.Select(x => SocketPokeAction.Create(Kook, Author, MentionedUsers, x))];
     }
-
 
     internal override void Update(ClientState state, API.Message model)
     {

@@ -27,5 +27,5 @@ internal class GatewayPersonMessageExtraData
     public Attachment? Attachment { get; set; }
 
     [JsonPropertyName("kmarkdown")]
-    public required KMarkdownInfo KMarkdownInfo { get; set; }
+    public KMarkdownInfo? KMarkdownInfo { get; set; }
 }
