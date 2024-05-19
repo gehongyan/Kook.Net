@@ -480,6 +480,23 @@ public partial class KookSocketClient
         }
 
         State.RemoveChannel(channel.Id);
+        if (channel is SocketVoiceChannel voiceChannel)
+        {
+            IEnumerable<Cacheable<SocketGuildUser, ulong>> connectedUsers = voiceChannel.Guild.VoiceStates
+                .Where(x => x.Value.VoiceChannel?.Id == voiceChannel.Id)
+                .Select(x => x.Key)
+                .Select(x => GetCacheableSocketGuildUser(voiceChannel.Guild.GetUser(x), x, voiceChannel.Guild));
+            foreach (Cacheable<SocketGuildUser, ulong> user in connectedUsers)
+            {
+                SocketVoiceState after = voiceChannel.Guild.RemoveVoiceState(user.Id) ?? SocketVoiceState.Default;
+                SocketVoiceState before = after.Clone();
+                after.Update(null);
+                await TimedInvokeAsync(_userDisconnectedEvent, nameof(UserDisconnected),
+                    user, voiceChannel, gatewayEvent.MessageTimestamp).ConfigureAwait(false);
+                await TimedInvokeAsync(_userVoiceStateUpdatedEvent, nameof(UserVoiceStateUpdated),
+                    user, before, after).ConfigureAwait(false);
+            }
+        }
 
         await TimedInvokeAsync(_channelDestroyedEvent, nameof(ChannelDestroyed), channel).ConfigureAwait(false);
     }

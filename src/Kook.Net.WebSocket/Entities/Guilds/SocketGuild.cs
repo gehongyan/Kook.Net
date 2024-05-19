@@ -145,6 +145,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     public IAudioClient? AudioClient => _audioClient;
 
+    internal IReadOnlyDictionary<ulong, SocketVoiceState> VoiceStates => _voiceStates;
+
     /// <inheritdoc/>
     public ulong MaxUploadLimit => GuildHelper.GetUploadLimit(this);
 
