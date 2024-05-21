@@ -285,7 +285,9 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
 
     internal void Update(ClientState state, GuildMemberUpdateEvent model)
     {
-        Nickname = model.Nickname == Username ? null : model.Nickname;
+        Nickname = model.Nickname == Username || string.IsNullOrWhiteSpace(model.Nickname)
+            ? null
+            : model.Nickname;
     }
 
     internal bool Update(ClientState state, GuildUpdateSelfEvent model)

@@ -1103,6 +1103,8 @@ public partial class KookSocketClient
         SocketGuildUser? user = guild.CurrentUser;
         SocketGuildUser? before = user?.Clone();
         user?.Update(State, data);
+        if (before is not null && user is not null && before.Nickname == user.Nickname)
+            return;
         Cacheable<SocketGuildUser, ulong> cacheableBefore = new(before, gatewayEvent.TargetId, before is not null,
             () => Task.FromResult<SocketGuildUser?>(null));
         Cacheable<SocketGuildUser, ulong> cacheableAfter = GetCacheableSocketGuildUser(user, gatewayEvent.TargetId, guild);
