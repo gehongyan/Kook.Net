@@ -168,12 +168,12 @@ Public Class Program
         AddHandler _client.UserDisconnected, Function(user, channel, time)
             Return Task.CompletedTask
         End Function
-        AddHandler _client.LivestreamBegan, Function(user, channel)
-            Return Task.CompletedTask
-        End Function
-        AddHandler _client.LivestreamEnded, Function(user, channel)
-            Return Task.CompletedTask
-        End Function
+'        AddHandler _client.LivestreamBegan, Function(user, channel)
+'            Return Task.CompletedTask
+'        End Function
+'        AddHandler _client.LivestreamEnded, Function(user, channel)
+'            Return Task.CompletedTask
+'        End Function
 
         AddHandler _client.RoleCreated, Function(role)
             Return Task.CompletedTask

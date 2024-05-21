@@ -137,8 +137,8 @@ client.add_UserVoiceStateUpdated (fun user before after -> Task.CompletedTask)
 
 client.add_UserConnected (fun user channel time -> Task.CompletedTask)
 client.add_UserDisconnected (fun user channel time -> Task.CompletedTask)
-client.add_LivestreamBegan (fun user channel -> Task.CompletedTask)
-client.add_LivestreamEnded (fun user channel -> Task.CompletedTask)
+// client.add_LivestreamBegan (fun user channel -> Task.CompletedTask)
+// client.add_LivestreamEnded (fun user channel -> Task.CompletedTask)
 
 client.add_RoleCreated (fun role -> Task.CompletedTask)
 client.add_RoleDeleted (fun role -> Task.CompletedTask)

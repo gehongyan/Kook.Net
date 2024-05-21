@@ -78,8 +78,8 @@ client.UserVoiceStateUpdated += (user, before, after) => Task.CompletedTask;
 
 client.UserConnected += (user, channel, time) => Task.CompletedTask;
 client.UserDisconnected += (user, channel, time) => Task.CompletedTask;
-client.LivestreamBegan += (user, channel) => Task.CompletedTask;
-client.LivestreamEnded += (user, channel) => Task.CompletedTask;
+// client.LivestreamBegan += (user, channel) => Task.CompletedTask;
+// client.LivestreamEnded += (user, channel) => Task.CompletedTask;
 
 client.RoleCreated += role => Task.CompletedTask;
 client.RoleDeleted += role => Task.CompletedTask;

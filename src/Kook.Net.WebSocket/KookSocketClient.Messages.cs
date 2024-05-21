@@ -1271,16 +1271,16 @@ public partial class KookSocketClient
         Cacheable<SocketGuildUser, ulong> cacheableUser = GetCacheableSocketGuildUser(user, data.User.Id, guild);
         guild.AddOrUpdateVoiceState(data.User.Id, channel, data.User.LiveStreamStatus);
 
-        if (data.User.LiveStreamStatus.InLive)
-        {
-            await TimedInvokeAsync(_livestreamBeganEvent, nameof(LivestreamBegan),
-                cacheableUser, channel).ConfigureAwait(false);
-        }
-        else
-        {
-            await TimedInvokeAsync(_livestreamEndedEvent, nameof(LivestreamEnded),
-                cacheableUser, channel).ConfigureAwait(false);
-        }
+        // if (data.User.LiveStreamStatus.InLive)
+        // {
+        //     await TimedInvokeAsync(_livestreamBeganEvent, nameof(LivestreamBegan),
+        //         cacheableUser, channel).ConfigureAwait(false);
+        // }
+        // else
+        // {
+        //     await TimedInvokeAsync(_livestreamEndedEvent, nameof(LivestreamEnded),
+        //         cacheableUser, channel).ConfigureAwait(false);
+        // }
 
         await TimedInvokeAsync(_userVoiceStateUpdatedEvent, nameof(UserVoiceStateUpdated),
             cacheableUser, before, after).ConfigureAwait(false);
