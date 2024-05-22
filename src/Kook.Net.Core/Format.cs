@@ -364,14 +364,18 @@ public static class Format
         return result.ToString();
     }
 
+    /// <inheritdoc cref="M:Kook.Format.StripMarkdown(System.String)" />
+    [Obsolete("Use StripMarkdown instead.")]
+    public static string StripMarkDown(this string text) => StripMarkdown(text);
+
     /// <summary>
     /// Remove Kook supported markdown from text.
     /// </summary>
     /// <param name="text">The to remove markdown from.</param>
     /// <returns>Gets the unformatted text.</returns>
-    public static string StripMarkDown(this string text) =>
+    public static string StripMarkdown(this string text) =>
         // Remove KOOK supported markdown
-        Regex.Replace(text, @"(\*|\(ins\)|\(spl\)|`|~|>|\\)", "", RegexOptions.Compiled);
+        Regex.Replace(text, @"\*|\(ins\)|\(spl\)|`|~|>|\\|-{2,}", "", RegexOptions.Compiled);
 
     /// <summary>
     ///     Formats a user's username + identify number while maintaining bidirectional unicode

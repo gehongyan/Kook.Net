@@ -335,7 +335,7 @@ internal static class MessageHelper
         string newContent = MentionUtils.Resolve(message, 0,
             TagHandling.FullName, TagHandling.FullName, TagHandling.FullName,
             TagHandling.FullName, TagHandling.FullName);
-        return newContent.StripMarkDown();
+        return newContent.StripMarkdown();
     }
 
     public static ImmutableArray<ITag> ParseTags(string text, IMessageChannel? channel, IGuild? guild,

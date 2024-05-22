@@ -60,13 +60,14 @@ public class FormatTests
     [InlineData(">>uwu", "uwu")]
     [InlineData("```uwu```", "uwu")]
     [InlineData("~uwu~", "uwu")]
+    [InlineData("uwu\n---\nuwu", "uwu\n\nuwu")]
     [InlineData("(ins)uwu(ins)", "uwu")]
     [InlineData("(spl)uwu(spl)", "uwu")]
     [InlineData("berries and *Cream**, I'm a little lad who loves berries and cream",
         "berries and Cream, I'm a little lad who loves berries and cream")]
     public void StripMarkdown(string input, string expected)
     {
-        string test = input.StripMarkDown();
+        string test = input.StripMarkdown();
         Assert.Equal(expected, test);
     }
 }
