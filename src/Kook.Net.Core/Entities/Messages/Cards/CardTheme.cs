@@ -38,5 +38,10 @@ public enum CardTheme : uint
     /// <summary>
     ///     The card shows like a dark message.
     /// </summary>
-    None
+    None,
+
+    /// <summary>
+    ///     The card is a text graphic mixed message.
+    /// </summary>
+    Invisible
 }

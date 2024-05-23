@@ -18,6 +18,9 @@ internal class Card : CardBase
     [JsonConverter(typeof(CardSizeConverter))]
     public CardSize? Size { get; set; }
 
+    [JsonPropertyName("expand")]
+    public bool? Expand { get; set; }
+
     [JsonPropertyName("modules")]
     public required ModuleBase[] Modules { get; set; }
 }

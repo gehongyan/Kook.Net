@@ -17,6 +17,7 @@ internal class CardThemeConverter : JsonConverter<CardTheme>
             "info" => CardTheme.Info,
             "secondary" => CardTheme.Secondary,
             "none" => CardTheme.None,
+            "invisible" => CardTheme.Invisible,
             _ => throw new ArgumentOutOfRangeException(nameof(CardTheme))
         };
     }
@@ -31,6 +32,7 @@ internal class CardThemeConverter : JsonConverter<CardTheme>
             CardTheme.Info => "info",
             CardTheme.Secondary => "secondary",
             CardTheme.None => "none",
+            CardTheme.Invisible => "invisible",
             _ => throw new ArgumentOutOfRangeException(nameof(value), value, null)
         });
 }

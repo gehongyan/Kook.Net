@@ -146,8 +146,16 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     /// <returns>
     ///     A <see cref="KMarkdownElement"/> represents the built element object.
     /// </returns>
-    public Card Build() =>
-        new(Theme, Size, Color, [..Modules.Select(m => m.Build())]);
+    /// <exception cref="InvalidOperationException">
+    ///     The theme of the card cannot be invisible, which is reserved for text graphics mixed messages.
+    /// </exception>
+    public Card Build()
+    {
+        if (Theme is CardTheme.Invisible)
+            throw new InvalidOperationException(
+                "The theme of the card cannot be invisible, which is reserved for text graphics mixed messages.");
+        return new Card(Theme, Size, Color, [..Modules.Select(m => m.Build())]);
+    }
 
     /// <inheritdoc />
     ICard ICardBuilder.Build() => Build();

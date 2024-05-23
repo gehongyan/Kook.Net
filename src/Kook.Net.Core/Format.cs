@@ -371,7 +371,7 @@ public static class Format
     /// <summary>
     /// Remove Kook supported markdown from text.
     /// </summary>
-    /// <param name="text">The to remove markdown from.</param>
+    /// <param name="text">The text to remove markdown from.</param>
     /// <returns>Gets the unformatted text.</returns>
     public static string StripMarkdown(this string text) =>
         // Remove KOOK supported markdown
