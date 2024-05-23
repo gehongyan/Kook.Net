@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Xunit;
 
 namespace Kook;
@@ -54,12 +55,15 @@ public class CardBuilderTests
     [Fact]
     public void WithTheme()
     {
-        foreach (CardTheme theme in (CardTheme[])Enum.GetValues(typeof(CardTheme)))
+        foreach (CardTheme theme in Enum.GetValues<CardTheme>().Except([CardTheme.Invisible]))
         {
             CardBuilder builder = new CardBuilder().WithTheme(theme);
             Assert.Equal(theme, builder.Theme);
             Assert.Equal(theme, builder.Build().Theme);
         }
+
+        CardBuilder invisibleThemeCard = new CardBuilder().WithTheme(CardTheme.Invisible);
+        Assert.Throws<InvalidOperationException>(() => invisibleThemeCard.Build());
     }
 
     /// <summary>
