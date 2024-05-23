@@ -140,8 +140,9 @@ public class ReactionTestFixture : IAsyncDisposable
     }
 
     /// <inheritdoc />
-    public async ValueTask DisposeAsync()
+    public ValueTask DisposeAsync()
     {
         _loggerDisposer?.Invoke();
+        return ValueTask.CompletedTask;
     }
 }
