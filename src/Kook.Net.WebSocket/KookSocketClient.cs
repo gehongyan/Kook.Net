@@ -35,8 +35,9 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     private int _retryCount;
     private Task? _heartbeatTask;
     private Task? _guildDownloadTask;
-    private int _unavailableGuildCount;
-    private long _lastGuildAvailableTime, _lastMessageTime;
+    // private int _unavailableGuildCount;
+    // private long _lastGuildAvailableTime;
+    private long _lastMessageTime;
     private int _nextAudioId;
 
     private bool _isDisposed;
@@ -57,6 +58,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     internal ClientState State { get; private set; }
     internal UdpSocketProvider UdpSocketProvider { get; private set; }
     internal WebSocketProvider WebSocketProvider { get; private set; }
+    internal uint LargeNumberOfGuildsThreshold { get; private set; }
+    internal StartupCacheFetchMode StartupCacheFetchMode { get; private set; }
     internal bool AlwaysDownloadUsers { get; private set; }
     internal bool AlwaysDownloadVoiceStates { get; private set; }
     internal bool AlwaysDownloadBoostSubscriptions { get; private set; }
@@ -103,6 +106,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         MessageCacheSize = config.MessageCacheSize;
         UdpSocketProvider = config.UdpSocketProvider;
         WebSocketProvider = config.WebSocketProvider;
+        LargeNumberOfGuildsThreshold = config.LargeNumberOfGuildsThreshold;
+        StartupCacheFetchMode = config.StartupCacheFetchMode;
         AlwaysDownloadUsers = config.AlwaysDownloadUsers;
         AlwaysDownloadVoiceStates = config.AlwaysDownloadVoiceStates;
         AlwaysDownloadBoostSubscriptions = config.AlwaysDownloadBoostSubscriptions;
@@ -137,17 +142,18 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
         GuildAvailable += g =>
         {
-            if (_guildDownloadTask?.IsCompleted == true
+            if (_guildDownloadTask?.IsCompleted is true
                 && ConnectionState == ConnectionState.Connected)
             {
-                if (AlwaysDownloadUsers && g.HasAllMembers is not true) _ = g.DownloadUsersAsync();
-
-                if (AlwaysDownloadVoiceStates) _ = g.DownloadVoiceStatesAsync();
-
-                if (AlwaysDownloadBoostSubscriptions) _ = g.DownloadBoostSubscriptionsAsync();
+                if (AlwaysDownloadUsers && g.HasAllMembers is not true)
+                    _ = g.DownloadUsersAsync();
+                if (AlwaysDownloadVoiceStates)
+                    _ = g.DownloadVoiceStatesAsync();
+                if (AlwaysDownloadBoostSubscriptions)
+                    _ = g.DownloadBoostSubscriptionsAsync();
             }
 
-            return Task.Delay(0);
+            return Task.CompletedTask;
         };
     }
 
@@ -341,6 +347,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     {
         foreach (SocketGuild socketGuild in guilds)
         {
+            if (options?.CancellationToken.IsCancellationRequested is true) return;
             IEnumerable<GuildMember> guildMembers = await ApiClient
                 .GetGuildMembersAsync(socketGuild.Id, options: options)
                 .FlattenAsync()
@@ -372,6 +379,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         {
             foreach (ulong channelId in socketGuild.VoiceChannels.Select(x => x.Id))
             {
+                if (options?.CancellationToken.IsCancellationRequested is true) return;
                 IReadOnlyCollection<User> users = await ApiClient
                     .GetConnectedUsersAsync(channelId, options)
                     .ConfigureAwait(false);
@@ -416,6 +424,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     {
         foreach (SocketGuild socketGuild in guilds)
         {
+            if (options?.CancellationToken.IsCancellationRequested is true) return;
             IEnumerable<BoostSubscription> subscriptions = await ApiClient
                 .GetGuildBoostSubscriptionsAsync(socketGuild.Id, options: options)
                 .FlattenAsync()
@@ -844,28 +853,6 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         }
     }
 
-    private async Task WaitForGuildsAsync(CancellationToken cancellationToken, Logger logger)
-    {
-        //Wait for GUILD_AVAILABLEs
-        try
-        {
-            await logger.DebugAsync("GuildDownloader Started").ConfigureAwait(false);
-            while (_unavailableGuildCount != 0
-                   && DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - _lastGuildAvailableTime < BaseConfig.MaxWaitBetweenGuildAvailablesBeforeReady)
-                await Task.Delay(500, cancellationToken).ConfigureAwait(false);
-
-            await logger.DebugAsync("GuildDownloader Stopped").ConfigureAwait(false);
-        }
-        catch (OperationCanceledException)
-        {
-            await logger.DebugAsync("GuildDownloader Stopped").ConfigureAwait(false);
-        }
-        catch (Exception ex)
-        {
-            await logger.ErrorAsync("GuildDownloader Errored", ex).ConfigureAwait(false);
-        }
-    }
-
     internal SocketGuild AddGuild(ExtendedGuild model, ClientState state)
     {
         SocketGuild guild = SocketGuild.Create(this, state, model);
@@ -1066,6 +1053,12 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     {
         string details = $"{evnt} Role={roleId} Guild={guildId}";
         await _gatewayLogger.WarningAsync($"Unknown Role ({details}). Payload: {SerializePayload(payload)}").ConfigureAwait(false);
+    }
+
+    private async Task UnavailableGuildAsync(string evnt, ulong guildId, object payload)
+    {
+        string details = $"{evnt} Guild={guildId}";
+        await _gatewayLogger.WarningAsync($"Unable to perform action on an unavailable guild ({details}). Payload: {SerializePayload(payload)}").ConfigureAwait(false);
     }
 
     private async Task UnknownGuildAsync(string evnt, ulong guildId, object payload)

@@ -58,6 +58,11 @@ public class KookSocketConfig : KookRestConfig
     public int? HandlerTimeout { get; set; } = 3000;
 
     /// <summary>
+    ///     Get or set the threshold quantity considered as joining a large number of servers.
+    /// </summary>
+    public uint LargeNumberOfGuildsThreshold { get; set; } = 50;
+
+    /// <summary>
     ///     Gets or sets the number of messages per channel that should be kept in cache. Setting this to zero
     ///     disables the message cache entirely.
     /// </summary>
@@ -72,6 +77,11 @@ public class KookSocketConfig : KookRestConfig
     ///     Gets or sets the provider used to generate new UDP sockets.
     /// </summary>
     public UdpSocketProvider UdpSocketProvider { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the startup mode of the socket client.
+    /// </summary>
+    public StartupCacheFetchMode StartupCacheFetchMode { get; set; } = StartupCacheFetchMode.Auto;
 
     /// <summary>
     ///     Gets or sets whether or not all users should be downloaded as guilds come available.
@@ -115,31 +125,6 @@ public class KookSocketConfig : KookRestConfig
     ///     </note>
     /// </remarks>
     public bool AlwaysDownloadBoostSubscriptions { get; set; } = false;
-
-    /// <summary>
-    ///     Gets or sets the maximum wait time in milliseconds between GUILD_AVAILABLE events before firing READY.
-    ///     If zero, READY will fire as soon as it is received and all guilds will be unavailable.
-    /// </summary>
-    /// <remarks>
-    ///     <para>This property is measured in milliseconds; negative values will throw an exception.</para>
-    ///     <para>If a guild is not received before READY, it will be unavailable.</para>
-    /// </remarks>
-    /// <returns>
-    ///     An int representing the maximum wait time in milliseconds between GUILD_AVAILABLE events
-    ///     before firing READY.
-    /// </returns>
-    /// <exception cref="System.ArgumentException">Value must be at least 0.</exception>
-    public int MaxWaitBetweenGuildAvailablesBeforeReady
-    {
-        get => _maxWaitForGuildAvailable;
-        set
-        {
-            Preconditions.AtLeast(value, 0, nameof(MaxWaitBetweenGuildAvailablesBeforeReady));
-            _maxWaitForGuildAvailable = value;
-        }
-    }
-
-    private int _maxWaitForGuildAvailable = 10000;
 
     /// <summary>
     ///     Gets or sets the maximum number of times to retry fetching joined guild data.

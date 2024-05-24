@@ -6,6 +6,12 @@ namespace Kook.WebSocket;
 
 internal static class SocketGuildHelper
 {
+    public static async Task StartupUpdateAsync(SocketGuild guild, KookSocketClient client, RequestOptions? options)
+    {
+        ExtendedGuild extendedGuild = await client.ApiClient.GetGuildAsync(guild.Id, options).ConfigureAwait(false);
+        guild.Update(client.State, extendedGuild);
+    }
+
     public static async Task UpdateAsync(SocketGuild guild, KookSocketClient client, RequestOptions? options)
     {
         ExtendedGuild extendedGuild = await client.ApiClient.GetGuildAsync(guild.Id, options).ConfigureAwait(false);

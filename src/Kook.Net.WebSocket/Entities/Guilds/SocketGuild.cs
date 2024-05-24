@@ -445,7 +445,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
             DefaultChannelId = null;
         WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
 
-        IsAvailable = true;
+        // Only when both roles and channels are not null will the guild be considered available.
+        IsAvailable = model.Roles is not null && model.Channels is not null;
 
         if (model.Roles is { Length: > 0})
         {

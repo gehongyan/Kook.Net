@@ -97,7 +97,7 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
             // ignored
         }
 
-        if (!isDisposing) await (_task ?? Task.Delay(0)).ConfigureAwait(false);
+        if (!isDisposing) await (_task ?? Task.CompletedTask).ConfigureAwait(false);
 
         if (_udp != null)
         {

@@ -6,7 +6,6 @@ using Kook.API.Gateway;
 using Kook.API.Rest;
 using Kook.Net;
 using Kook.Rest;
-using Reaction = Kook.API.Gateway.Reaction;
 
 namespace Kook.WebSocket;
 
@@ -49,95 +48,174 @@ public partial class KookSocketClient
         try
         {
             List<Guild> guilds = (await ApiClient.GetGuildsAsync().FlattenAsync().ConfigureAwait(false)).ToList();
+            if (StartupCacheFetchMode is StartupCacheFetchMode.Auto)
+            {
+                StartupCacheFetchMode = guilds.Count >= LargeNumberOfGuildsThreshold
+                    ? StartupCacheFetchMode.Lazy
+                    : StartupCacheFetchMode.Asynchronous;
+            }
+
             ClientState state = new(guilds.Count, 0);
-            _unavailableGuildCount = 0;
             foreach (Guild guild in guilds)
             {
-                ExtendedGuild extendedModel = await ApiClient.GetGuildAsync(guild.Id).ConfigureAwait(false);
-                SocketGuild socketGuild = AddGuild(extendedModel, state);
-                if (!socketGuild.IsAvailable)
-                    _unavailableGuildCount++;
-                else
-                    await GuildAvailableAsync(socketGuild).ConfigureAwait(false);
+                SocketGuild socketGuild = AddGuild(guild, state);
+                if (StartupCacheFetchMode is StartupCacheFetchMode.Lazy)
+                {
+                    if (socketGuild.IsAvailable)
+                        await GuildAvailableAsync(socketGuild).ConfigureAwait(false);
+                    else
+                        await GuildUnavailableAsync(socketGuild).ConfigureAwait(false);
+                }
             }
 
             State = state;
+
+            if (StartupCacheFetchMode is StartupCacheFetchMode.Synchronous
+                && state.Guilds.Count > LargeNumberOfGuildsThreshold)
+            {
+                await _gatewayLogger
+                    .WarningAsync($"The client is in synchronous startup mode and has joined {state.Guilds.Count} guilds. "
+                        + "This may cause the client to take a long time to start up with blocking the gateway, "
+                        + "which may result in a timeout or socket disconnection. "
+                        + "Consider using asynchronous mode or lazy mode.").ConfigureAwait(false);
+            }
+
+            _guildDownloadTask = StartupCacheFetchMode is not StartupCacheFetchMode.Lazy
+                ? DownloadGuildDataAsync(state.Guilds, _connection.CancellationToken)
+                : Task.CompletedTask;
+            _ = _connection.CompleteAsync();
+
+            if (StartupCacheFetchMode is StartupCacheFetchMode.Synchronous)
+                await _guildDownloadTask.ConfigureAwait(false);
+
+            await TimedInvokeAsync(_readyEvent, nameof(Ready)).ConfigureAwait(false);
+            await _gatewayLogger.InfoAsync("Ready").ConfigureAwait(false);
         }
         catch (Exception ex)
         {
             _connection.CriticalError(new Exception("Processing Guilds failed", ex));
             return;
         }
+    }
 
-        _lastGuildAvailableTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        _guildDownloadTask = WaitForGuildsAsync(_connection.CancellationToken, _gatewayLogger)
-            .ContinueWith(async task =>
+    private async Task DownloadGuildDataAsync(IEnumerable<SocketGuild> socketGuilds, CancellationToken cancellationToken)
+    {
+        try
+        {
+            // _unavailableGuildCount = 0;
+
+            await _gatewayLogger.DebugAsync("GuildDownloader Started").ConfigureAwait(false);
+
+            foreach (SocketGuild socketGuild in socketGuilds)
             {
-                if (task.IsFaulted)
-                {
-                    Exception exception = task.Exception
-                        ?? new Exception("Waiting for guilds failed without an exception");
-                    _connection.Error(exception);
-                    return;
-                }
+                if (cancellationToken.IsCancellationRequested)
+                    break;
 
-                if (_connection.CancellationToken.IsCancellationRequested) return;
-
-                // Download user list if enabled
-                if (BaseConfig.AlwaysDownloadUsers)
+                if (!socketGuild.IsAvailable)
                 {
-                    _ = Task.Run(async () =>
+                    await SocketGuildHelper.StartupUpdateAsync(socketGuild, this, new RequestOptions
                     {
-                        try
-                        {
-                            await DownloadUsersAsync(Guilds.Where(x => x.IsAvailable && x.HasAllMembers is not true));
-                        }
-                        catch (Exception ex)
-                        {
-                            await _gatewayLogger.WarningAsync("Downloading users failed", ex).ConfigureAwait(false);
-                        }
-                    });
+                        CancellationToken = cancellationToken
+                    }).ConfigureAwait(false);
                 }
 
-                if (BaseConfig.AlwaysDownloadVoiceStates)
+                if (socketGuild.IsAvailable)
+                    await GuildAvailableAsync(socketGuild).ConfigureAwait(false);
+                else
+                    await GuildUnavailableAsync(socketGuild).ConfigureAwait(false);
+            }
+
+            await _gatewayLogger.DebugAsync("GuildDownloader Stopped").ConfigureAwait(false);
+
+            // Download user list if enabled
+            if (BaseConfig.AlwaysDownloadUsers)
+            {
+                _ = Task.Run(async () =>
                 {
-                    _ = Task.Run(async () =>
+                    try
                     {
-                        try
+                        IEnumerable<SocketGuild> availableGuilds = Guilds
+                            .Where(x => x.IsAvailable && x.HasAllMembers is not true);
+                        await DownloadUsersAsync(availableGuilds, new RequestOptions
                         {
-                            await DownloadVoiceStatesAsync(Guilds.Where(x => x.IsAvailable));
-                        }
-                        catch (Exception ex)
-                        {
-                            await _gatewayLogger
-                                .WarningAsync("Downloading voice states failed", ex)
-                                .ConfigureAwait(false);
-                        }
-                    });
-                }
+                            CancellationToken = cancellationToken
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        await _gatewayLogger.WarningAsync("Downloading users failed", ex).ConfigureAwait(false);
+                    }
+                }, cancellationToken);
+            }
 
-                if (BaseConfig.AlwaysDownloadBoostSubscriptions)
+            if (BaseConfig.AlwaysDownloadVoiceStates)
+            {
+                _ = Task.Run(async () =>
                 {
-                    _ = Task.Run(async () =>
+                    try
                     {
-                        try
+                        IEnumerable<SocketGuild> availableGuilds = Guilds.Where(x => x.IsAvailable);
+                        await DownloadVoiceStatesAsync(availableGuilds, new RequestOptions
                         {
-                            await DownloadBoostSubscriptionsAsync(Guilds.Where(x => x.IsAvailable));
-                        }
-                        catch (Exception ex)
+                            CancellationToken = cancellationToken
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        await _gatewayLogger
+                            .WarningAsync("Downloading voice states failed", ex)
+                            .ConfigureAwait(false);
+                    }
+                }, cancellationToken);
+            }
+
+            if (BaseConfig.AlwaysDownloadBoostSubscriptions)
+            {
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        IEnumerable<SocketGuild> availableGuilds = Guilds.Where(x => x.IsAvailable);
+                        await DownloadBoostSubscriptionsAsync(availableGuilds, new RequestOptions
                         {
-                            await _gatewayLogger
-                                .WarningAsync("Downloading boost subscriptions failed", ex)
-                                .ConfigureAwait(false);
-                        }
-                    });
-                }
+                            CancellationToken = cancellationToken
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        await _gatewayLogger
+                            .WarningAsync("Downloading boost subscriptions failed", ex)
+                            .ConfigureAwait(false);
+                    }
+                }, cancellationToken);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            await _gatewayLogger.DebugAsync("GuildDownloader Stopped").ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            await _gatewayLogger.ErrorAsync("GuildDownloader Errored", ex).ConfigureAwait(false);
+        }
+    }
 
-                await TimedInvokeAsync(_readyEvent, nameof(Ready)).ConfigureAwait(false);
-                await _gatewayLogger.InfoAsync("Ready").ConfigureAwait(false);
-            });
+    private async Task ProcessGuildDataFetchingAsync(Task task)
+    {
+        // _lastGuildAvailableTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        if (task.IsFaulted)
+        {
+            Exception exception = task.Exception
+                ?? new Exception("Waiting for guilds failed without an exception");
+            _connection.Error(exception);
+            return;
+        }
 
-        _ = _connection.CompleteAsync();
+        if (_connection.CancellationToken.IsCancellationRequested) return;
+
+
+        await TimedInvokeAsync(_readyEvent, nameof(Ready)).ConfigureAwait(false);
+        await _gatewayLogger.InfoAsync("Ready").ConfigureAwait(false);
     }
 
     private async Task HandlePongAsync()
@@ -201,6 +279,15 @@ public partial class KookSocketClient
                 .ConfigureAwait(false);
             return;
         }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         if (guild.GetTextChannel(gatewayEvent.TargetId) is not { } channel)
         {
             await UnknownChannelAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
@@ -245,7 +332,24 @@ public partial class KookSocketClient
     /// </remarks>
     private async Task HandleAddedReaction(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
-        if (DeserializePayload<Reaction>(gatewayEvent.ExtraData.Body) is not { } data) return;
+        if (DeserializePayload<API.Gateway.Reaction>(gatewayEvent.ExtraData.Body) is not { } data) return;
+
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
+        {
+            await UnknownGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         if (GetChannel(data.ChannelId) is not SocketTextChannel channel)
         {
             await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.ChannelId, gatewayEvent.ExtraData.Body)
@@ -287,7 +391,24 @@ public partial class KookSocketClient
     /// </remarks>
     private async Task HandleDeletedReaction(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
-        if (DeserializePayload<Reaction>(gatewayEvent.ExtraData.Body) is not { } data) return;
+        if (DeserializePayload<API.Gateway.Reaction>(gatewayEvent.ExtraData.Body) is not { } data) return;
+
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
+        {
+            await UnknownGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         if (GetChannel(data.ChannelId) is not SocketTextChannel channel)
         {
             await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.ChannelId, gatewayEvent).ConfigureAwait(false);
@@ -329,6 +450,23 @@ public partial class KookSocketClient
     private async Task HandleUpdatedMessage(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<MessageUpdateEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
+        {
+            await UnknownGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         if (GetChannel(data.ChannelId) is not SocketTextChannel channel)
         {
             await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.ChannelId, gatewayEvent).ConfigureAwait(false);
@@ -353,6 +491,23 @@ public partial class KookSocketClient
     private async Task HandleEmbedsAppend(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<EmbedsAppendEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
+        {
+            await UnknownGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         if (GetChannel(data.ChannelId) is not SocketTextChannel channel)
         {
             await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.ChannelId, gatewayEvent).ConfigureAwait(false);
@@ -377,6 +532,23 @@ public partial class KookSocketClient
     private async Task HandleDeletedMessage(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<MessageDeleteEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
+        {
+            await UnknownGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         if (GetChannel(data.ChannelId) is not SocketTextChannel channel)
         {
             await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.ChannelId, gatewayEvent).ConfigureAwait(false);
@@ -396,9 +568,18 @@ public partial class KookSocketClient
     private async Task HandleAddedChannel(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<Channel>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, data.GuildId, gatewayEvent).ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
             return;
         }
 
@@ -413,6 +594,21 @@ public partial class KookSocketClient
     private async Task HandleUpdatedChannel(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<Channel>(gatewayEvent.ExtraData.Body) is not { } data) return;
+
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
+        {
+            await UnknownGuildAsync(gatewayEvent.ExtraData.Type, data.GuildId, gatewayEvent).ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         if (GetChannel(data.Id) is not { } channel)
         {
             await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.Id, gatewayEvent).ConfigureAwait(false);
@@ -431,9 +627,18 @@ public partial class KookSocketClient
     {
         if (!BaseConfig.AutoUpdateChannelPositions) return;
         if (DeserializePayload<ChannelSortEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, data.GuildId, gatewayEvent).ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
             return;
         }
 
@@ -474,6 +679,23 @@ public partial class KookSocketClient
     private async Task HandleDeletedChannel(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<ChannelDeleteEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
+        {
+            await UnknownGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         if (GetChannel(data.ChannelId) is not { } channel)
         {
             await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.ChannelId, gatewayEvent).ConfigureAwait(false);
@@ -508,9 +730,18 @@ public partial class KookSocketClient
     private async Task HandleBatchAddChannel(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<Channel[]>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent).ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
             return;
         }
 
@@ -527,9 +758,17 @@ public partial class KookSocketClient
     private async Task HandleBatchUpdateChannel(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<ChannelBatchUpdateEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent).ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
             return;
         }
 
@@ -557,11 +796,18 @@ public partial class KookSocketClient
     /// </remarks>
     private async Task HandleBatchDeleteChannel(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
-
         if (DeserializePayload<ChannelBatchDeleteEventItem[]>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent).ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
             return;
         }
 
@@ -582,13 +828,29 @@ public partial class KookSocketClient
     private async Task HandlePinnedMessage(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<MessagePinEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
+        {
+            await UnknownGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         if (GetChannel(data.ChannelId) is not SocketTextChannel channel)
         {
             await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.ChannelId, gatewayEvent).ConfigureAwait(false);
             return;
         }
 
-        SocketGuild guild = channel.Guild;
         SocketGuildUser? operatorUser = guild.GetUser(data.OperatorUserId);
         Cacheable<SocketGuildUser, ulong> cacheableOperatorUser =
             new(operatorUser, data.OperatorUserId, operatorUser is not null,
@@ -618,13 +880,29 @@ public partial class KookSocketClient
     private async Task HandleUnpinnedMessage(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<MessagePinEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
+
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
+        {
+            await UnknownGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         if (GetChannel(data.ChannelId) is not SocketTextChannel channel)
         {
             await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.ChannelId, gatewayEvent).ConfigureAwait(false);
             return;
         }
 
-        SocketGuild guild = channel.Guild;
         SocketGuildUser? operatorUser = guild.GetUser(data.OperatorUserId);
         Cacheable<SocketGuildUser, ulong> cacheableOperatorUser =
             GetCacheableSocketGuildUser(operatorUser, data.OperatorUserId, guild);
@@ -772,12 +1050,21 @@ public partial class KookSocketClient
     private async Task HandleJoinedGuild(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<GuildMemberAddEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         SocketGuildUser? user = AlwaysDownloadUsers ? await DownloadUserAsync() : null;
         Cacheable<SocketGuildUser, ulong> cacheableUser = new(user, data.UserId, user is not null, DownloadUserAsync);
         guild.MemberCount++;
@@ -800,12 +1087,21 @@ public partial class KookSocketClient
     private async Task HandleExitedGuild(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<GuildMemberRemoveEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         SocketUser? user = guild.RemoveUser(data.UserId) ?? State.GetUser(data.UserId) as SocketUser;
         guild.MemberCount--;
         GetCacheableSocketUser(user, data.UserId);
@@ -821,9 +1117,17 @@ public partial class KookSocketClient
     private async Task HandleUpdatedGuildMember(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<GuildMemberUpdateEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
@@ -848,9 +1152,17 @@ public partial class KookSocketClient
         List<Cacheable<SocketGuildUser, ulong>> users = [];
         foreach (ulong guildId in data.CommonGuilds)
         {
-            if (State.GetGuild(guildId) is not { } guild)
+            if (GetGuild(guildId) is not { } guild)
             {
                 await UnknownGuildAsync(gatewayEvent.ExtraData.Type, guildId, gatewayEvent).ConfigureAwait(false);
+                return;
+            }
+
+            if (!await EnsureGuildAvailableAsync(guild))
+            {
+                await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                        guild.Id, gatewayEvent)
+                    .ConfigureAwait(false);
                 return;
             }
 
@@ -880,9 +1192,17 @@ public partial class KookSocketClient
         List<Cacheable<SocketGuildUser, ulong>> users = [];
         foreach (ulong guildId in data.CommonGuilds)
         {
-            if (State.GetGuild(guildId) is not { } guild)
+            if (GetGuild(guildId) is not { } guild)
             {
                 await UnknownGuildAsync(gatewayEvent.ExtraData.Type, guildId, gatewayEvent).ConfigureAwait(false);
+                return;
+            }
+
+            if (!await EnsureGuildAvailableAsync(guild))
+            {
+                await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                        guild.Id, gatewayEvent)
+                    .ConfigureAwait(false);
                 return;
             }
 
@@ -913,9 +1233,17 @@ public partial class KookSocketClient
     private async Task HandleAddedRole(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<Role>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
@@ -930,9 +1258,17 @@ public partial class KookSocketClient
     private async Task HandleDeletedRole(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<Role>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
@@ -947,9 +1283,17 @@ public partial class KookSocketClient
     private async Task HandleUpdatedRole(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<Role>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
@@ -978,9 +1322,17 @@ public partial class KookSocketClient
     private async Task HandleAddedRmoji(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<GuildEmojiEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
@@ -996,9 +1348,17 @@ public partial class KookSocketClient
     private async Task HandleUpdatedEmoji(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<GuildEmojiEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
@@ -1016,9 +1376,17 @@ public partial class KookSocketClient
     private async Task HandleDeletedEmoji(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<GuildEmojiEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
@@ -1038,7 +1406,7 @@ public partial class KookSocketClient
     private async Task HandleUpdatedGuild(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<GuildEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
                 .ConfigureAwait(false);
@@ -1046,6 +1414,15 @@ public partial class KookSocketClient
         }
 
         SocketGuild before = guild.Clone();
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         guild.Update(State, data);
         if (AlwaysDownloadBoostSubscriptions
             && (before.BoostSubscriptionCount != guild.BoostSubscriptionCount
@@ -1094,7 +1471,7 @@ public partial class KookSocketClient
     private async Task HandleUpdatedGuildSelf(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<GuildUpdateSelfEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(data.GuildId) is not { } guild)
+        if (GetGuild(data.GuildId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
                 .ConfigureAwait(false);
@@ -1103,6 +1480,15 @@ public partial class KookSocketClient
 
         SocketGuildUser? user = guild.CurrentUser;
         SocketGuildUser? before = user?.Clone();
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         user?.Update(State, data);
         if (before is not null && user is not null && before.Nickname == user.Nickname)
             return;
@@ -1120,14 +1506,15 @@ public partial class KookSocketClient
     private async Task HandleDeletedGuild(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<GuildEvent>(gatewayEvent.ExtraData.Body) is null) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (State.RemoveGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
 
-        await GuildUnavailableAsync(guild).ConfigureAwait(false);
+        if (guild.IsAvailable)
+            await GuildUnavailableAsync(guild).ConfigureAwait(false);
         await TimedInvokeAsync(_leftGuildEvent, nameof(LeftGuild), guild).ConfigureAwait(false);
         ((IDisposable)guild).Dispose();
     }
@@ -1138,9 +1525,17 @@ public partial class KookSocketClient
     private async Task HandleAddedBlockList(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<GuildBanEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
@@ -1162,9 +1557,17 @@ public partial class KookSocketClient
     private async Task HandleDeletedBlockList(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<GuildBanEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
@@ -1190,9 +1593,17 @@ public partial class KookSocketClient
     private async Task HandleJoinedChannel(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<UserVoiceEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
@@ -1221,9 +1632,17 @@ public partial class KookSocketClient
     private async Task HandleExitedChannel(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<UserVoiceEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
@@ -1252,12 +1671,21 @@ public partial class KookSocketClient
     private async Task HandleLiveStatusChanged(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<LiveStatusChangeEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(gatewayEvent.TargetId) is not { } guild)
+        if (GetGuild(gatewayEvent.TargetId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
         if (GetChannel(data.Channel.Id) is not SocketVoiceChannel channel)
         {
             await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.Channel.Id, gatewayEvent)
@@ -1290,9 +1718,17 @@ public partial class KookSocketClient
     private async Task HandleAddGuildMute(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<GuildMuteDeafEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(data.GuildId) is not { } guild)
+        if (GetGuild(data.GuildId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
@@ -1315,9 +1751,17 @@ public partial class KookSocketClient
     private async Task HandleDeleteGuildMute(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<GuildMuteDeafEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
-        if (State.GetGuild(data.GuildId) is not { } guild)
+        if (GetGuild(data.GuildId) is not { } guild)
         {
             await UnknownGuildAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!await EnsureGuildAvailableAsync(guild))
+        {
+            await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                    guild.Id, gatewayEvent)
                 .ConfigureAwait(false);
             return;
         }
@@ -1411,7 +1855,10 @@ public partial class KookSocketClient
             SocketGuild guild = AddGuild(model, State);
             guild.Update(State, model);
             await TimedInvokeAsync(_joinedGuildEvent, nameof(JoinedGuild), guild).ConfigureAwait(false);
-            await GuildAvailableAsync(guild).ConfigureAwait(false);
+            if (guild.IsAvailable)
+                await GuildAvailableAsync(guild).ConfigureAwait(false);
+            else
+                await GuildUnavailableAsync(guild).ConfigureAwait(false);
         }, TaskContinuationOptions.OnlyOnRanToCompletion);
     }
 
@@ -1452,6 +1899,14 @@ public partial class KookSocketClient
                 return;
             }
 
+            if (!await EnsureGuildAvailableAsync(guild))
+            {
+                await UnavailableGuildAsync($"{gatewayEvent.Type.ToString()}: {gatewayEvent.ExtraData.Type}",
+                        guild.Id, gatewayEvent)
+                    .ConfigureAwait(false);
+                return;
+            }
+
             if (guild.GetTextChannel(data.ChannelId) is not { } channel)
             {
                 await UnknownChannelAsync(gatewayEvent.ExtraData.Type, gatewayEvent.TargetId, gatewayEvent)
@@ -1485,6 +1940,80 @@ public partial class KookSocketClient
             await TimedInvokeAsync(_directMessageButtonClickedEvent, nameof(DirectMessageButtonClicked),
                 data.Value, cacheableUser, cacheableMessage, channel).ConfigureAwait(false);
         }
+    }
+
+    #endregion
+
+    #region Ensure Guild Available
+
+    private async Task<bool> EnsureGuildAvailableAsync(SocketGuild guild)
+    {
+        if (guild.IsAvailable) return true;
+        if (StartupCacheFetchMode is StartupCacheFetchMode.Synchronous) return false;
+
+        await guild.UpdateAsync();
+        if (guild.IsAvailable)
+            await GuildAvailableAsync(guild).ConfigureAwait(false);
+
+        if (BaseConfig.AlwaysDownloadUsers && guild is { IsAvailable: true, HasAllMembers: not true })
+        {
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await DownloadUsersAsync([guild], new RequestOptions
+                    {
+                        CancellationToken = _connection.CancellationToken
+                    });
+                }
+                catch (Exception ex)
+                {
+                    await _gatewayLogger.WarningAsync("Downloading users failed", ex).ConfigureAwait(false);
+                }
+            }, _connection.CancellationToken);
+        }
+
+        if (BaseConfig.AlwaysDownloadVoiceStates && guild.IsAvailable)
+        {
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await DownloadVoiceStatesAsync([guild], new RequestOptions
+                    {
+                        CancellationToken = _connection.CancellationToken
+                    });
+                }
+                catch (Exception ex)
+                {
+                    await _gatewayLogger
+                        .WarningAsync("Downloading voice states failed", ex)
+                        .ConfigureAwait(false);
+                }
+            }, _connection.CancellationToken);
+        }
+
+        if (BaseConfig.AlwaysDownloadBoostSubscriptions && guild.IsAvailable)
+        {
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await DownloadBoostSubscriptionsAsync([guild], new RequestOptions
+                    {
+                        CancellationToken = _connection.CancellationToken
+                    });
+                }
+                catch (Exception ex)
+                {
+                    await _gatewayLogger
+                        .WarningAsync("Downloading boost subscriptions failed", ex)
+                        .ConfigureAwait(false);
+                }
+            }, _connection.CancellationToken);
+        }
+
+        return guild.IsAvailable;
     }
 
     #endregion

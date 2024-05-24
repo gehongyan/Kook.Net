@@ -181,7 +181,7 @@ internal class KookRestApiClient : IDisposable
         LoginState = LoginState.LoggedOut;
     }
 
-    internal virtual Task ConnectInternalAsync() => Task.Delay(0);
+    internal virtual Task ConnectInternalAsync() => Task.CompletedTask;
     internal virtual Task DisconnectInternalAsync(Exception? ex = null) => Task.CompletedTask;
 
     #endregion

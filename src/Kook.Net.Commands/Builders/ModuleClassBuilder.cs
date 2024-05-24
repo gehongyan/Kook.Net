@@ -203,7 +203,7 @@ internal static class ModuleClassBuilder
                 // ReSharper disable once MethodHasAsyncOverload
                 instance.BeforeExecute(cmd);
 
-                Task task = method.Invoke(instance, args) as Task ?? Task.Delay(0);
+                Task task = method.Invoke(instance, args) as Task ?? Task.CompletedTask;
                 if (task is Task<RuntimeResult> resultTask)
                     return await resultTask.ConfigureAwait(false);
                 else

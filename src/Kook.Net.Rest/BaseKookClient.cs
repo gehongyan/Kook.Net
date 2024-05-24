@@ -267,11 +267,11 @@ public abstract class BaseKookClient : IKookClient
 
     /// <inheritdoc />
     Task IKookClient.StartAsync() =>
-        Task.Delay(0);
+        Task.CompletedTask;
 
     /// <inheritdoc />
     Task IKookClient.StopAsync() =>
-        Task.Delay(0);
+        Task.CompletedTask;
 
     #endregion
 }
