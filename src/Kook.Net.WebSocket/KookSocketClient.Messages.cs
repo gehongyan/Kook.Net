@@ -48,12 +48,13 @@ public partial class KookSocketClient
         // Download guild data
         try
         {
-            IReadOnlyCollection<RichGuild> guilds = await ApiClient.ListGuildsAsync().ConfigureAwait(false);
+            List<Guild> guilds = (await ApiClient.GetGuildsAsync().FlattenAsync().ConfigureAwait(false)).ToList();
             ClientState state = new(guilds.Count, 0);
             _unavailableGuildCount = 0;
-            foreach (RichGuild guild in guilds)
+            foreach (Guild guild in guilds)
             {
-                SocketGuild socketGuild = AddGuild(guild, state);
+                ExtendedGuild extendedModel = await ApiClient.GetGuildAsync(guild.Id).ConfigureAwait(false);
+                SocketGuild socketGuild = AddGuild(extendedModel, state);
                 if (!socketGuild.IsAvailable)
                     _unavailableGuildCount++;
                 else

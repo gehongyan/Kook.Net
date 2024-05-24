@@ -347,6 +347,13 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         Region = string.Empty;
     }
 
+    internal static SocketGuild Create(KookSocketClient client, ClientState state, ExtendedModel model)
+    {
+        SocketGuild entity = new(client, model.Id);
+        entity.Update(state, model);
+        return entity;
+    }
+
     internal static SocketGuild Create(KookSocketClient client, ClientState state, Model model)
     {
         SocketGuild entity = new(client, model.Id);

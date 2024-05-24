@@ -866,6 +866,13 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         }
     }
 
+    internal SocketGuild AddGuild(ExtendedGuild model, ClientState state)
+    {
+        SocketGuild guild = SocketGuild.Create(this, state, model);
+        state.AddGuild(guild);
+        return guild;
+    }
+
     internal SocketGuild AddGuild(Guild model, ClientState state)
     {
         SocketGuild guild = SocketGuild.Create(this, state, model);
