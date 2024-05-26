@@ -58,6 +58,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     internal ClientState State { get; private set; }
     internal UdpSocketProvider UdpSocketProvider { get; private set; }
     internal WebSocketProvider WebSocketProvider { get; private set; }
+    internal uint SmallNumberOfGuildsThreshold { get; private set; }
     internal uint LargeNumberOfGuildsThreshold { get; private set; }
     internal StartupCacheFetchMode StartupCacheFetchMode { get; private set; }
     internal bool AlwaysDownloadUsers { get; private set; }
@@ -106,6 +107,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         MessageCacheSize = config.MessageCacheSize;
         UdpSocketProvider = config.UdpSocketProvider;
         WebSocketProvider = config.WebSocketProvider;
+        SmallNumberOfGuildsThreshold = config.SmallNumberOfGuildsThreshold;
         LargeNumberOfGuildsThreshold = config.LargeNumberOfGuildsThreshold;
         StartupCacheFetchMode = config.StartupCacheFetchMode;
         AlwaysDownloadUsers = config.AlwaysDownloadUsers;

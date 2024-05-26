@@ -58,7 +58,12 @@ public class KookSocketConfig : KookRestConfig
     public int? HandlerTimeout { get; set; } = 3000;
 
     /// <summary>
-    ///     Get or set the threshold quantity considered as joining a large number of servers.
+    ///     Gets or sets the threshold quantity considered as joining a small number of guilds.
+    /// </summary>
+    public uint SmallNumberOfGuildsThreshold { get; set; } = 5;
+
+    /// <summary>
+    ///     Get or set the threshold quantity considered as joining a large number of guilds.
     /// </summary>
     public uint LargeNumberOfGuildsThreshold { get; set; } = 50;
 

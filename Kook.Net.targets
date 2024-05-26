@@ -8,6 +8,7 @@
     <IsAotCompatible>false</IsAotCompatible>
     <VersionSuffix>beta4</VersionSuffix>
     <LangVersion>latest</LangVersion>
+    <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageVersion>$(Version)</PackageVersion>
     <Authors>gehongyan</Authors>
