@@ -38,6 +38,30 @@ public class Quote : IQuote
     /// </summary>
     public IUser Author { get; }
 
+    /// <summary>
+    ///     Gets an empty quote whose quoted message is null.
+    /// </summary>
+    /// <remarks>
+    ///     Used to delete a quote when modifying a message.
+    /// </remarks>
+    [Obsolete("Use MessageReference.Empty instead.")]
+    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+    public static MessageReference Empty => new(Guid.Empty);
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Quote"/> class.
+    /// </summary>
+    /// <param name="quotedMessageId">
+    ///     The quoted message identifier.
+    /// </param>
+    [Obsolete("Use MessageReference instead.")]
+    public Quote(Guid quotedMessageId)
+    {
+        QuotedMessageId = quotedMessageId;
+        Content = string.Empty;
+        Author = null!;
+    }
+
     internal Quote(Guid quotedMessageId, MessageType type, string content, DateTimeOffset createAt, IUser author)
     {
         QuotedMessageId = quotedMessageId;
