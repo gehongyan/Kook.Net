@@ -48,6 +48,7 @@ public partial class KookSocketClient
         try
         {
             List<Guild> guilds = (await ApiClient.GetGuildsAsync().FlattenAsync().ConfigureAwait(false)).ToList();
+            StartupCacheFetchMode = BaseConfig.StartupCacheFetchMode;
             if (StartupCacheFetchMode is StartupCacheFetchMode.Auto)
             {
                 if (guilds.Count >= LargeNumberOfGuildsThreshold)

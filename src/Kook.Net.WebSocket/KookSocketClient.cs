@@ -109,6 +109,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         WebSocketProvider = config.WebSocketProvider;
         SmallNumberOfGuildsThreshold = config.SmallNumberOfGuildsThreshold;
         LargeNumberOfGuildsThreshold = config.LargeNumberOfGuildsThreshold;
+        // StartupCacheFetchMode will be set to the current config value whenever the socket client starts up
         StartupCacheFetchMode = config.StartupCacheFetchMode;
         AlwaysDownloadUsers = config.AlwaysDownloadUsers;
         AlwaysDownloadVoiceStates = config.AlwaysDownloadVoiceStates;
