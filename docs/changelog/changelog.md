@@ -5,6 +5,88 @@ title: 变更日志
 
 # 变更日志
 
+## v0.8.0 [2024-05-28]
+
+### 更新路线
+
+由于 KOOK API 变更，Bot 用户现已无法在启动时通过 `/guild/index`
+接口一次性获取全部所需的服务器基础信息，而是需要通过 `/guild/view` 接口遍历各个服务器，这会导致加入过多服务器的 Bot
+会在启动时消耗过长时间，并大量发起 API 请求。因此，当前版本引入 `KookSocketConfig.StartupCacheFetchMode` 配置项，用于定义
+Bot 启动时加载服务器所需基础数据的方式。
+
+- `Synchronous`：同步模式。客户端启动时获取到服务器的简单列表后，会先通过 API
+  遍历获取所需服务器的基础数据，全部获取完成后再触发 `Ready` 事件。
+- `Asynchronous`：异步模式。客户端启动时在获取到服务器的简单列表后立即触发 `Ready` 事件，再在启动后台任务拉取所有服务器的基础数据。
+- `Lazy`：懒模式。客户端启动时在获取到服务器的简单列表后立即触发 `Ready` 事件，不主动拉取服务器基础数据，当网关下发涉及到服务器的事件时，
+  会对未获取基础数据的服务器对象通过 API 获取信息。
+- `Auto`：自动模式，默认值。客户端的启动模式根据 Bot
+  所加入的服务器数量自动判断，当服务器数量达到 `LargeNumberOfGuildsThreshold`（默认为 50）时为 `Lazy`
+  ，否则若达到 `SmallNumberOfGuildsThreshold`（默认为 5）时为 `Asynchronous`，否则为 `Synchronous`。该判断将在每次 Bot 连接
+  WebSocket 时进行。
+
+在未使用 `Synchronous` 模式时，在 `Ready`
+事件之后，未经事件主动访问缓存的服务器实体时，可能会获取到未完整包含服务器基础数据的缓存实体，`IsAvailable`
+属性指示该服务器实体是否已经通过 API 完整缓存基础数据。在这种情况下，请主动调用 `UpdateAsync` 方法来通过 API 更新缓存服务器实体。
+上述的服务器基础数据主要指服务器的频道、角色、频道权限覆盖、当前用户在服务器内的昵称等信息。
+
+已针对整个框架的代码添加了空引用静态分析诊断的特性，有关可为空引用类型的 C#
+概念，请参阅 [可为空引用类型 - C# | Microsoft Learn]。更新至当前版本后，所有可能为空的类型都会被标记为可为空引用类型，
+这可能会导致一些代码在编译时产生警告，这些警告应该被视为潜在的空引用异常，应该根据实际情况进行修复。
+
+另外，`IQuote` 新增了一个实现 `MessageReference`，这仅包含要被引用的消息 ID，用于在用户代码调用 API 时传入。原有创建 `Quote`
+的用户代码应尽快迁移至 `MessageReference`。
+
+`fileName` 已重命名为 `filename`；事件参数 `Cacheable<SocketMessage, Guid>`
+变更为 `Cacheable<IMessage, Guid>`；`SectionAccessoryMode.Unspecified` 现已由 `null` 代替；`Format.StripMarkDown`
+被重命名为 `StripMarkdown`；`SendFileAsync` 中接收 `Steam` 类型的重载中的 `filename`
+参数现在为必选参数。请注意这些变更可能会导致编译错误，应根据实际情况进行修复。
+
+### 新增
+
+- `KookSocketConfig` 新增 `StartupCacheFetchMode`、`LargeNumberOfGuildsThreshold` 及 `SmallNumberOfGuildsThreshold`
+  配置项，用于自定义 Bot 的 Socket 客户端在启动时通过 API 获取缓存所需服务器基础数据的方式
+- `KookSocketConfig` 上新增两个配置项 `AutoUpdateRolePositions` 与 `AutoUpdateChannelPositions`，默认为 `false`
+  。当启用时，会在相关事件下发时自动通过 API 获取数据，以维护缓存中的角色排序信息与频道排序信息。
+- `Embed` 添加了 `CardEmbed`
+- 卡片实体与构造器现在实现了 `IEquatable<T>`
+- SocketSelfUser 现在实现了 `IUpdateable`
+- 添加了 `IGuild.RecommendInfo.Certifications`
+- `IQuote` 新增新的实现 `MessageReference`，这仅包含要被引用的消息 ID，用于在用户代码调用 API 时传入
+-
+添加了对事件类型 `embeds_append`、`sort_channel`、`updated_server_type`、`batch_added_channel`、`batch_updated_channel`、
+`batch_deleted_channel`、`live_status_changed`、`PERSON` 类型的 `updated_guild`、`add_guild_mute`、`delete_guild_mute`、
+`unread_count_changed` 的支持，但暂时无法确认这些事件是否会实际下发。
+
+### 修复
+
+- 修复私聊消息的作者不正确的问题
+- 修复 `SocketUserMessage.Quote.Author` 可能为空的问题
+- 修复消息中引用不存在的实体时，Tags 缺失对应值的问题
+- 修复语音客户端未能正确处理未定义事件导致推流崩溃的问题
+- 修复解析新引入的图文混排消息失败的问题
+- 修正用户昵称更新行为不正确的问题
+
+### 变更
+
+- 启用可为空引用类型特性，有关可为空引用类型的 C# 概念，请参阅 [可为空引用类型 - C# | Microsoft Learn]
+- 卡片构造器的各种验证已推迟到调用 `Build` 时进行
+- 卡片内涉及到列表的属性的类型已变更为 `IList<T>`
+- `Quote.Empty` 及其公开构造函数已标记 `Obsolete` 特性，应使用 `MessageReference`
+- `fileName` 已重命名为 `filename`
+- `SendFileAsync` 中接收 `Steam` 类型的重载中的 `filename` 参数现在为必选参数
+- `BaseSocketClient._baseConfig` 重命名为 `BaseConfig`
+- 事件参数 `Cacheable<SocketMessage, Guid>` 变更为 `Cacheable<IMessage, Guid>`，以解决下载实体失败的问题
+- `SectionAccessoryMode.Unspecified` 现已移除，请使用 `null` 代替
+- `Format.StripMarkDown` 被重命名为 `StripMarkdown`，原方法已标记 `Obsolete`
+- Format.StripMarkdown 现在会移除连字符 `-`
+
+### 其它
+
+- 在 .NET 7 及以前的目标框架上添加了对 `PolySharp` 的引用，以支持一些新特性在旧框架上的实现
+- 新增部分 Socket 事件的集成测试
+
+[可为空引用类型 - C# | Microsoft Learn]: https://learn.microsoft.com/zh-cn/dotnet/csharp/nullable-references
+
 ## v0.7.0 [2024-04-02]
 
 ### 更新路线

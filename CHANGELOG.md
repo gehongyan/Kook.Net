@@ -2,6 +2,101 @@
 
 ---
 
+## v0.8.0 [2024-05-28]
+
+### Update Roadmap
+
+Due to changes in the KOOK API, Bot users can no longer obtain all the necessary basic guild information at startup
+through the `/guild/index` interface. Instead, it is now required to traverse each guild via the `/guild/view`
+interface. This change can result in a significantly longer startup time and a large number of API requests for Bots
+that have joined many guilds. Therefore, the current version introduces the `KookSocketConfig.StartupCacheFetchMode`
+configuration item, which defines how the Bot loads the basic guild data needed at startup.
+
+- `Synchronous`: In synchronous mode, after obtaining a simple list of guilds at client startup, the client fetches the
+  basic data of each guild through the API before triggering the `Ready` event.
+- `Asynchronous`: In asynchronous mode, after obtaining a simple list of guilds at client startup, the `Ready` event is
+  triggered immediately, and a background task is started to fetch all the basic guild data.
+- `Lazy`: In lazy mode, after obtaining a simple list of guilds at client startup, the `Ready` event is triggered
+  immediately without proactively fetching the basic guild data. When events involving the guild are received from the
+  gateway, the guild's basic data will be fetched through the API if it has not already been obtained.
+- `Auto`: In automatic mode, the default setting, the client's startup mode is automatically determined based on the
+  number of guilds the Bot has joined. If the number of guilds reaches `LargeNumberOfGuildsThreshold` (default is 50),
+  it will be `Lazy`; if it reaches `SmallNumberOfGuildsThreshold` (default is 5), it will be `Asynchronous`; otherwise,
+  it will be `Synchronous`. This determination is made each time the Bot connects to the WebSocket.
+
+When not using `Synchronous` mode, after the `Ready` event, accessing cached guild entities might result in entities
+that do not fully contain basic guild data. The `IsAvailable` property indicates whether the guild entity has fully
+cached basic data through the API. In such cases, please proactively call the `UpdateAsync` method to update the cached
+guild entity through the API. The basic guild data mentioned above mainly includes the guild's channels, roles,
+channel permission overrides, and the current user's nickname within guilds.
+
+The entire framework code has been updated to support nullable reference static analysis diagnostics. For the concept of
+nullable reference types in C#, please refer to [Nullable reference types - C# | Microsoft Learn]. After updating to the
+current version, all values that may be null will be marked as nullable types. This may cause some code to generate
+warnings during compilation, which should be treated as potential null reference exceptions and fixed accordingly.
+
+Additionally, `IQuote` has a new implementation `MessageReference`, which only contains the ID of the message to be
+referenced and is used when calling the API in user code. Existing user code that creates `Quote` should migrate
+to `MessageReference` as soon as possible.
+
+`fileName` has been renamed to `filename`; the event parameter `Cacheable<SocketMessage, Guid>` has been changed
+to `Cacheable<IMessage, Guid>`; `SectionAccessoryMode.Unspecified` is now replaced by `null`; `Format.StripMarkDown` has
+been renamed to `StripMarkdown`; and the `filename` parameter in the `SendFileAsync` overload that accepts the `Stream`
+type is now mandatory. Please note that these changes may cause compilation errors and should be fixed accordingly.
+
+### Additions
+
+- `KookSocketConfig` adds the `StartupCacheFetchMode`, `LargeNumberOfGuildsThreshold`,
+  and `SmallNumberOfGuildsThreshold` configuration items to customize how the Bot's Socket client fetches the basic
+  guild data needed at startup via the API.
+- Two new configuration properties `AutoUpdateRolePositions` and `AutoUpdateChannelPositions` have been added
+  to `KookSocketConfig`, defaulting to `false`. When enabled, the client will automatically fetch data via the API upon
+  receiving related events to maintain the cached role and channel sorting information.
+- `Embed` adds `CardEmbed`.
+- Card entities and builders now implement `IEquatable<T>`.
+- `SocketSelfUser` now implements `IUpdateable`.
+- Added `IGuild.RecommendInfo.Certifications`.
+- `IQuote` has a new implementation `MessageReference`, which only contains the ID of the message to be referenced and
+  is used when calling the API in user code.
+- Support for the event types `embeds_append`, `sort_channel`, `updated_server_type`, `batch_added_channel`,
+  `batch_updated_channel`, `batch_deleted_channel`, `live_status_changed`, `PERSON` typed `updated_guild`,
+  `add_guild_mute`, `delete_guild_mute`, `unread_count_changed` has been added, but it is not yet confirmed
+  whether these events will actually be dispatched.
+
+### Fixes
+
+- Fixed the issue where the author of private messages was incorrect.
+- Fixed the issue where `SocketUserMessage.Quote.Author` could be null.
+- Fixed the issue where Tags were missing corresponding values when referencing nonexistent entities in messages.
+- Fixed the issue where the voice client failed to handle undefined events, causing stream crashes.
+- Fixed the issue where parsing newly introduced mixed media messages failed.
+- Corrected the behavior of updating user nicknames.
+
+### Changes
+
+- Enabled nullable reference types feature. For the concept of nullable reference types in C#, please refer
+  to [Nullable reference types - C# | Microsoft Learn].
+- Various validations for the card builder are now deferred to the `Build` call.
+- The types of properties involving lists in cards have been changed to `IList<T>`.
+- `Quote.Empty` and its public constructor have been marked as `Obsolete`, and `MessageReference` should be used
+  instead.
+- `fileName` has been renamed to `filename`.
+- The `filename` parameter in the `SendFileAsync` overload that accepts the `Stream` type is now mandatory.
+- `BaseSocketClient._baseConfig` has been renamed to `BaseConfig`.
+- The event parameter `Cacheable<SocketMessage, Guid>` has been changed to `Cacheable<IMessage, Guid>` to address the
+  issue of entity download failure.
+- `SectionAccessoryMode.Unspecified` has been removed; please use `null` instead.
+- `Format.StripMarkDown` has been renamed to `StripMarkdown`, and the original method has been marked as `Obsolete`.
+- `Format.StripMarkdown` now removes hyphens `-`.
+
+### Others
+
+- Added a reference to `PolySharp` on .NET 7 and earlier target frameworks to support the implementation of some new
+  features on older frameworks.
+- Added integration tests for some Socket events.
+
+[Nullable reference types - C# | Microsoft Learn]: https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references
+
 ## v0.7.0 [2024-04-02]
 
 ### Update Roadmap
