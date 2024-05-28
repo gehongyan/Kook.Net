@@ -7,8 +7,8 @@
 ### Update Roadmap
 
 Due to changes in the KOOK API, Bot users can no longer obtain all the necessary basic guild information at startup
-through the `/guild/index` interface. Instead, it is now required to traverse each guild via the `/guild/view`
-interface. This change can result in a significantly longer startup time and a large number of API requests for Bots
+through the `/guild/index` API. Instead, it is now required to traverse each guild via the `/guild/view`
+API. This change can result in a significantly longer startup time and a large number of API requests for Bots
 that have joined many guilds. Therefore, the current version introduces the `KookSocketConfig.StartupCacheFetchMode`
 configuration item, which defines how the Bot loads the basic guild data needed at startup.
 
