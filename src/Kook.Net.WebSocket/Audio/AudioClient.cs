@@ -249,9 +249,9 @@ internal partial class AudioClient : IAudioClient
                     break;
                 case VoiceSocketFrameType.Disconnect:
                 {
-                    await Guild.DisconnectAudioAsync().ConfigureAwait(false);
-                    await _clientDisconnectedEvent.InvokeAsync().ConfigureAwait(false);
                     await _audioLogger.DebugAsync("Received Disconnect").ConfigureAwait(false);
+                    await _clientDisconnectedEvent.InvokeAsync().ConfigureAwait(false);
+                    await Guild.DisconnectAudioAsync().ConfigureAwait(false);
                 }
                     break;
                 default:
