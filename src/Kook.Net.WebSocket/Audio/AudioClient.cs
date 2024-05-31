@@ -212,10 +212,10 @@ internal partial class AudioClient : IAudioClient
                 case VoiceSocketFrameType.NewPeer:
                 {
                     if (payload is not JsonElement jsonElement
-                        || !jsonElement.TryGetProperty("id", out JsonElement idElement)
-                        || !ulong.TryParse(idElement.ToString(), out ulong id))
+                        || !jsonElement.TryGetProperty("id", out JsonElement peerIdElement)
+                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
                         break;
-                    await _peerConnectedEvent.InvokeAsync(id).ConfigureAwait(false);
+                    await _peerConnectedEvent.InvokeAsync(peerId).ConfigureAwait(false);
                     await _audioLogger.DebugAsync("Received NewPeer").ConfigureAwait(false);
                 }
                     break;
@@ -223,28 +223,158 @@ internal partial class AudioClient : IAudioClient
                 {
                     if (payload is not JsonElement jsonElement)
                         break;
-                    if (!jsonElement.TryGetProperty("peerId", out JsonElement idElement)
-                        || !ulong.TryParse(idElement.ToString(), out ulong id))
+                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
+                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
                         break;
                     if (!jsonElement.TryGetProperty("fromId", out JsonElement fromIdElement)
                         || !ulong.TryParse(fromIdElement.ToString(), out ulong fromId)
                         || fromId != ChannelId)
                         break;
 
-                    await _peerDisconnectedEvent.InvokeAsync(id).ConfigureAwait(false);
+                    await _peerDisconnectedEvent.InvokeAsync(peerId).ConfigureAwait(false);
                     await _audioLogger.DebugAsync("Received PeerClosed").ConfigureAwait(false);
                 }
                     break;
                 case VoiceSocketFrameType.ResumeHeadset:
+                {
+                    if (payload is not JsonElement jsonElement)
+                        break;
+                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
+                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
+                        break;
+
+                    await _headsetResumedEvent.InvokeAsync(peerId).ConfigureAwait(false);
+                    await _audioLogger.DebugAsync("Received ResumeHeadset").ConfigureAwait(false);
+                }
+                    break;
                 case VoiceSocketFrameType.PauseHeadset:
+                {
+                    if (payload is not JsonElement jsonElement)
+                        break;
+                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
+                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
+                        break;
+
+                    await _headsetPausedEvent.InvokeAsync(peerId).ConfigureAwait(false);
+                    await _audioLogger.DebugAsync("Received PauseHeadset").ConfigureAwait(false);
+                }
+                    break;
                 case VoiceSocketFrameType.ConsumerResumed:
+                {
+                    if (payload is not JsonElement jsonElement)
+                        break;
+                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
+                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
+                        break;
+
+                    await _consumerResumedEvent.InvokeAsync(peerId).ConfigureAwait(false);
+                    await _audioLogger.DebugAsync("Received ConsumerResumed").ConfigureAwait(false);
+                }
+                    break;
                 case VoiceSocketFrameType.ConsumerPaused:
+                {
+                    if (payload is not JsonElement jsonElement)
+                        break;
+                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
+                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
+                        break;
+
+                    await _consumerPausedEvent.InvokeAsync(peerId).ConfigureAwait(false);
+                    await _audioLogger.DebugAsync("Received ConsumerPaused").ConfigureAwait(false);
+                }
+                    break;
                 case VoiceSocketFrameType.PeerPermissionChanged:
+                {
+                    if (payload is not JsonElement jsonElement)
+                        break;
+                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
+                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
+                        break;
+                    if (!jsonElement.TryGetProperty("roomId", out JsonElement roomIdElement)
+                        || !ulong.TryParse(roomIdElement.ToString(), out ulong roomId)
+                        || roomId != ChannelId)
+                        break;
+                    if (!jsonElement.TryGetProperty("isServerMute", out JsonElement isServerMuteElement)
+                        || isServerMuteElement.ValueKind is not (JsonValueKind.True or JsonValueKind.False))
+                        break;
+                    if (!jsonElement.TryGetProperty("isServerMuteHeadset", out JsonElement isServerMuteHeadsetElement)
+                        || isServerMuteHeadsetElement.ValueKind is not (JsonValueKind.True or JsonValueKind.False))
+                        break;
+                    if (!jsonElement.TryGetProperty("permissionFreeMic", out JsonElement permissionFreeMicElement)
+                        || permissionFreeMicElement.ValueKind is not (JsonValueKind.True or JsonValueKind.False))
+                        break;
+                    if (!jsonElement.TryGetProperty("permissionLink", out JsonElement permissionLinkElement)
+                        || permissionLinkElement.ValueKind is not (JsonValueKind.True or JsonValueKind.False))
+                        break;
+                    if (!jsonElement.TryGetProperty("permissionSay", out JsonElement permissionSayElement)
+                        || permissionSayElement.ValueKind is not (JsonValueKind.True or JsonValueKind.False))
+                        break;
+                    if (!jsonElement.TryGetProperty("permissionVoiceManage", out JsonElement permissionVoiceManageElement)
+                        || permissionVoiceManageElement.ValueKind is not (JsonValueKind.True or JsonValueKind.False))
+                        break;
+                    PeerPermissionInfo peerPermissionInfo = new()
+                    {
+                        MutedByGuild = isServerMuteElement.GetBoolean(),
+                        DeafenedByGuild = isServerMuteHeadsetElement.GetBoolean(),
+                        CanUseVoiceActivity = permissionFreeMicElement.GetBoolean(),
+                        CanConnect = permissionLinkElement.GetBoolean(),
+                        CanSpeak = permissionSayElement.GetBoolean(),
+                        CanManageVoice = permissionVoiceManageElement.GetBoolean()
+                    };
+
+                    await _peerPermissionChangedEvent.InvokeAsync(peerId, peerPermissionInfo).ConfigureAwait(false);
+                    await _audioLogger.DebugAsync("Received PeerPermissionChanged").ConfigureAwait(false);
+                }
+                    break;
                 case VoiceSocketFrameType.Atmosphere:
+                {
+                    if (payload is not JsonElement jsonElement)
+                        break;
+                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
+                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
+                        break;
+                    if (!jsonElement.TryGetProperty("itemId", out JsonElement itemIdElement)
+                        || !int.TryParse(itemIdElement.ToString(), out int itemId))
+                        break;
+
+                    await _atmospherePlayedEvent.InvokeAsync(peerId, itemId).ConfigureAwait(false);
+                    await _audioLogger.DebugAsync("Received Atmosphere").ConfigureAwait(false);
+                }
+                    break;
                 case VoiceSocketFrameType.StartAccompaniment:
+                {
+                    if (payload is not JsonElement jsonElement)
+                        break;
+                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
+                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
+                        break;
+                    if (!jsonElement.TryGetProperty("data", out JsonElement dataElement))
+                        break;
+                    if (!dataElement.TryGetProperty("music_name", out JsonElement musicNameElement)
+                        || !dataElement.TryGetProperty("music_software", out JsonElement musicSoftwareElement)
+                        || !dataElement.TryGetProperty("singer", out JsonElement singerElement))
+                        break;
+                    SoundtrackInfo soundtrackInfo = new()
+                    {
+                        Software = musicSoftwareElement.ToString(),
+                        Music = musicNameElement.ToString(),
+                        Singer = singerElement.ToString()
+                    };
+
+                    await _soundtrackStartedEvent.InvokeAsync(peerId, soundtrackInfo).ConfigureAwait(false);
+                    await _audioLogger.DebugAsync("Received StartAccompaniment").ConfigureAwait(false);
+                }
+                    break;
                 case VoiceSocketFrameType.StopAccompaniment:
                 {
-                    await _audioLogger.DebugAsync(type.ToString()).ConfigureAwait(false);
+                    if (payload is not JsonElement jsonElement)
+                        break;
+                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
+                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
+                        break;
+
+                    await _soundtrackStoppedEvent.InvokeAsync(peerId).ConfigureAwait(false);
+                    await _audioLogger.DebugAsync("Received StopAccompaniment").ConfigureAwait(false);
                 }
                     break;
                 case VoiceSocketFrameType.Disconnect:

@@ -39,8 +39,8 @@ internal class ConnectionManager : IDisposable
     public CancellationToken CancellationToken { get; private set; }
 
     internal ConnectionManager(SemaphoreSlim stateLock, Logger logger,
-        int connectionTimeout, Func<Task> onConnecting,
-        Func<Exception, Task> onDisconnecting, Action<Func<Exception, Task>> clientDisconnectHandler)
+        int connectionTimeout, Func<Task> onConnecting, Func<Exception, Task> onDisconnecting,
+        Action<Func<Exception, Task>> clientDisconnectHandler)
     {
         _stateLock = stateLock;
         _logger = logger;
