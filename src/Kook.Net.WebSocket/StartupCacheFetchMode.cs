@@ -9,10 +9,13 @@ public enum StartupCacheFetchMode
     ///     Automatically selects the best mode based on the number of guilds.
     /// </summary>
     /// <remarks>
-    ///     If the number of guilds is greater than or equal to the value of
+    ///     If the number of guilds reaches value of
     ///     <see cref="P:Kook.WebSocket.KookSocketConfig.LargeNumberOfGuildsThreshold"/>,
-    ///     the mode will be <see cref="F:Kook.WebSocket.StartupCacheFetchMode.Lazy"/>.
-    ///     Otherwise, the mode will be <see cref="F:Kook.WebSocket.StartupCacheFetchMode.Asynchronous"/>.
+    ///     the mode will be <see cref="F:Kook.WebSocket.StartupCacheFetchMode.Lazy"/>;
+    ///     otherwise, if that reaches value of
+    ///     <see cref="P:Kook.WebSocket.KookSocketConfig.SmallNumberOfGuildsThreshold"/>,
+    ///     the mode will be <see cref="F:Kook.WebSocket.StartupCacheFetchMode.Synchronous"/>;
+    ///     otherwise, the mode will be <see cref="F:Kook.WebSocket.StartupCacheFetchMode.Synchronous"/>.
     /// </remarks>
     /// <seealso cref="P:Kook.WebSocket.KookSocketConfig.LargeNumberOfGuildsThreshold"/>.
     Auto,
