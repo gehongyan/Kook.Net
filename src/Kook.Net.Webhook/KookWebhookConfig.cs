@@ -1,4 +1,5 @@
-﻿using Kook.WebSocket;
+﻿using Kook.Net.Webhooks;
+using Kook.WebSocket;
 
 namespace Kook.Webhook;
 
@@ -33,7 +34,25 @@ public class KookWebhookConfig : KookSocketConfig
     public bool ValidateToken { get; set; } = true;
 
     /// <summary>
+    ///     Gets or sets the route endpoint for the webhook.
+    /// </summary>
+    public string RouteEndpoint { get; set; } = "kook";
+
+    /// <summary>
     ///     Gets or sets a function that is called when the webhook client is being configured.
     /// </summary>
     public Action<IServiceProvider, KookWebhookClient>? ConfigureKookClient { get; set; }
+
+    /// <summary>
+    ///     Gets or sets the provider used to generate new UDP sockets.
+    /// </summary>
+    public WebhookProvider WebhookProvider { get; set; }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="KookWebhookConfig"/> class.
+    /// </summary>
+    public KookWebhookConfig()
+    {
+        WebhookProvider = DefaultWebhookProvider.Instance;
+    }
 }

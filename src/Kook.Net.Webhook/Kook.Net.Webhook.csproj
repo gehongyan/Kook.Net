@@ -3,19 +3,15 @@
   <Import Project="../../Kook.Net.targets"/>
 
   <PropertyGroup>
+    <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
     <RootNamespace>Kook.Webhook</RootNamespace>
     <IsPackable>false</IsPackable>
     <PackageId>Kook.Net.Webhook</PackageId>
     <Description>The Webhook API implementation for Kook.Net.</Description>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework.Contains(`.`))' And '!$(TargetFramework.StartsWith(`netstandard`))' ">
+  <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '!$(TargetFramework.Contains(`.`))' Or '$(TargetFramework.StartsWith(`netstandard`))' ">
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

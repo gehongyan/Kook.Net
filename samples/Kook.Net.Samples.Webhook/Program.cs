@@ -2,16 +2,13 @@ using Kook;
 using Kook.Webhook;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 builder.Services.AddKookWebhookClient(config =>
 {
     config.TokenType = TokenType.Bot;
     config.Token = default;
     config.VerifyToken = default;
     config.EncryptKey = default;
+    config.RouteEndpoint = "kook";
     config.LogLevel = LogSeverity.Debug;
     config.ConfigureKookClient += (serviceProvider, client) =>
     {
@@ -39,18 +36,5 @@ builder.Services.AddKookWebhookClient(config =>
 });
 
 WebApplication app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-// app.UseHttpsRedirection();
-
-app.UseRouting();
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
-
+app.UseKookEndpoint();
 app.Run();

@@ -1,6 +1,9 @@
-﻿using Kook.WebSocket;
+﻿using Kook.Net.Webhooks;
+using Kook.WebSocket;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace Kook.Webhook;
 
@@ -20,9 +23,26 @@ public static class KookWebhookClientExtension
         services.Configure(configure);
         services.AddSingleton<KookWebhookClient>();
         services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<KookWebhookClient>());
-#if NET5_0_OR_GREATER
         services.AddControllers();
-#endif
         return services;
+    }
+
+    /// <summary>
+    ///     Adds a KOOK webhook endpoint to the specified <see cref="IApplicationBuilder" />.
+    /// </summary>
+    /// <param name="builder"> The <see cref="IApplicationBuilder" /> to add the KOOK webhook endpoint to. </param>
+    /// <param name="route"> The route to add the KOOK webhook endpoint to. </param>
+    /// <returns> A reference to this instance after the operation has completed. </returns>
+    public static WebApplication UseKookEndpoint(this WebApplication builder, string? route = null)
+    {
+        builder.UseRouting();
+        KookWebhookClient kookWebhookClient = builder.Services.GetRequiredService<KookWebhookClient>();
+        if (kookWebhookClient.ApiClient.WebhookClient is not IAspNetWebhookClient aspNetWebhookClient)
+            throw new InvalidOperationException("The Kook webhook client is not an AspNetWebhookClient.");
+        string kookRoute = route
+            ?? builder.Services.GetRequiredService<IOptions<KookWebhookConfig>>().Value.RouteEndpoint;
+        builder.MapPost(kookRoute, async httpContext =>
+            await aspNetWebhookClient.HandleRequestAsync(httpContext));
+        return builder;
     }
 }

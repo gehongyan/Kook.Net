@@ -1,10 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using Kook.API;
-using Kook.API.Gateway;
-using Kook.API.Webhook;
+﻿using Kook.API;
 using Kook.Logging;
 using Kook.WebSocket;
 using Microsoft.Extensions.Hosting;
@@ -22,15 +16,7 @@ public class KookWebhookClient : KookSocketClient, IHostedService
 
     private readonly TokenType? _tokenType;
     private readonly string? _token;
-    private readonly string? _verifyToken;
-    private readonly string? _encryptKey;
     private readonly bool _validateToken;
-
-    private static readonly JsonSerializerOptions SerializerOptions = new()
-    {
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-        NumberHandling = JsonNumberHandling.AllowReadingFromString
-    };
 
     /// <summary>
     ///     Initializes a new REST/WebSocket-based Kook client with the provided configuration.
@@ -38,29 +24,44 @@ public class KookWebhookClient : KookSocketClient, IHostedService
     /// <param name="serviceProvider"> The service provider to be used with the client. </param>
     /// <param name="config">The configuration to be used with the client.</param>
     public KookWebhookClient(IServiceProvider serviceProvider, IOptions<KookWebhookConfig> config)
-        : base(config.Value, CreateApiClient(config.Value))
+        : this(serviceProvider, config, CreateApiClient(config.Value))
+    {
+    }
+
+    internal KookWebhookClient(IServiceProvider serviceProvider, IOptions<KookWebhookConfig> config,
+        KookWebhookApiClient client)
+        : base(config.Value, client)
     {
         _connectionState = ConnectionState.Disconnected;
         _tokenType = config.Value.TokenType;
         _token = config.Value.Token;
-        _encryptKey = config.Value.EncryptKey;
-        _verifyToken = config.Value.VerifyToken;
         _validateToken = config.Value.ValidateToken;
         _webhookLogger = LogManager.CreateLogger("Webhook");
+        ApiClient.WebhookChallenge += async challenge =>
+            await _webhookLogger.DebugAsync($"Received Webhook challenge: {challenge}");
         config.Value.ConfigureKookClient?.Invoke(serviceProvider, this);
     }
 
-    private static KookWebhookApiClient CreateApiClient(KookSocketConfig config) =>
-        new(config.RestClientProvider, config.WebSocketProvider, KookConfig.UserAgent,
-            config.AcceptLanguage, config.GatewayHost, defaultRatelimitCallback: config.DefaultRatelimitCallback);
-
-    internal string EncryptKey => _encryptKey ?? throw new InvalidOperationException("Encryption key is required.");
+    private static KookWebhookApiClient CreateApiClient(KookWebhookConfig config)
+    {
+        if (config.EncryptKey is null)
+            throw new InvalidOperationException("Encryption key is required.");
+        if (config.VerifyToken is null)
+            throw new InvalidOperationException("Verify token is required.");
+        return new KookWebhookApiClient(config.RestClientProvider, config.WebSocketProvider, config.WebhookProvider,
+            config.EncryptKey, config.VerifyToken, KookConfig.UserAgent, config.AcceptLanguage,
+            defaultRatelimitCallback: config.DefaultRatelimitCallback);
+    }
 
     /// <inheritdoc />
     public override ConnectionState ConnectionState => _connectionState;
 
+    internal new KookWebhookApiClient ApiClient => base.ApiClient as KookWebhookApiClient
+        ?? throw new InvalidOperationException("The API client is not a Webhook-based client.");
+
     /// <inheritdoc />
-    public override Task StartAsync() => throw new NotSupportedException("Webhook client does not support starting manually.");
+    public override Task StartAsync() =>
+        throw new NotSupportedException("Webhook client does not support starting manually.");
 
     /// <inheritdoc />
     public override Task StopAsync() => Task.CompletedTask;
@@ -72,10 +73,6 @@ public class KookWebhookClient : KookSocketClient, IHostedService
             throw new InvalidOperationException("Token type is required to log in.");
         if (_token is null)
             throw new InvalidOperationException("Token is required to log in.");
-        if (_verifyToken is null)
-            throw new InvalidOperationException("Verify token is required to verify webhook requests.");
-        if (_encryptKey is null)
-            throw new InvalidOperationException("Encryption key is required to decrypt webhook payloads.");
         await LoginAsync(_tokenType.Value, _token, _validateToken);
         _connectionState = ConnectionState.Connecting;
         await FetchRequiredDataAsync();
@@ -105,48 +102,5 @@ public class KookWebhookClient : KookSocketClient, IHostedService
         CurrentUser = null;
         LoginState = LoginState.LoggedOut;
         await _loggedOutEvent.InvokeAsync().ConfigureAwait(false);
-    }
-
-    internal bool TryParseWebhookChallenge(GatewaySocketFrameType gatewaySocketFrameType, JsonElement payload,
-        [NotNullWhen(true)] out string? challenge)
-    {
-        if (gatewaySocketFrameType != GatewaySocketFrameType.Event
-            || !payload.TryGetProperty("type", out JsonElement typeProperty)
-            || !typeProperty.TryGetInt32(out int typeValue)
-            || typeValue != 255
-            || !payload.TryGetProperty("channel_type", out JsonElement channelTypeProperty)
-            || channelTypeProperty.GetString() != "WEBHOOK_CHALLENGE")
-        {
-            challenge = null;
-            return false;
-        }
-
-        if (!payload.TryGetProperty("verify_token", out JsonElement verifyTokenProperty)
-            || verifyTokenProperty.GetString() is not { Length: > 0 } verifyTokenValue)
-            throw new InvalidOperationException("Webhook challenge is missing the verify token.");
-        if (verifyTokenValue != _verifyToken)
-            throw new InvalidOperationException("Webhook challenge verify token does not match.");
-
-        if (!payload.TryGetProperty("challenge", out JsonElement challengeProperty)
-            || challengeProperty.GetString() is not { Length: > 0 } challengeValue)
-            throw new InvalidOperationException("Webhook challenge is missing the challenge.");
-
-        challenge = challengeValue;
-        return true;
-    }
-
-    internal new async Task<string?> ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType,
-        int? sequence, JsonElement payload)
-    {
-        if (TryParseWebhookChallenge(gatewaySocketFrameType, payload, out string? challenge))
-        {
-            await _webhookLogger
-                .DebugAsync($"Received webhook challenge: {challenge}")
-                .ConfigureAwait(false);
-            return JsonSerializer.Serialize(new GatewayChallengeFrame { Challenge = challenge }, SerializerOptions);
-        }
-
-        await base.ProcessMessageAsync(gatewaySocketFrameType, sequence, payload);
-        return null;
     }
 }

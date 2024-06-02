@@ -11,9 +11,4 @@
     <ProjectReference Include="..\..\src\Kook.Net\Kook.Net.csproj"/>
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.1"/>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-  </ItemGroup>
-
 </Project>

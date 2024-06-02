@@ -15,6 +15,9 @@
     <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj"/>
     <ProjectReference Include="..\Kook.Net.Rest\Kook.Net.Rest.csproj"/>
     <ProjectReference Include="..\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj"/>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework.Contains(`.`))' And '!$(TargetFramework.StartsWith(`netstandard`))' ">
     <ProjectReference Include="..\Kook.Net.Webhook\Kook.Net.Webhook.csproj"/>
   </ItemGroup>
 
