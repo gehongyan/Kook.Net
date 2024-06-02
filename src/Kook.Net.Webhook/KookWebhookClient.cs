@@ -1,4 +1,6 @@
-﻿using Kook.API;
+﻿using System.Text.Json;
+using Kook.API;
+using Kook.API.Gateway;
 using Kook.Logging;
 using Kook.WebSocket;
 using Microsoft.Extensions.Hosting;
@@ -16,6 +18,7 @@ public class KookWebhookClient : KookSocketClient, IHostedService
 
     private readonly TokenType? _tokenType;
     private readonly string? _token;
+    private readonly string? _verifyToken;
     private readonly bool _validateToken;
 
     /// <summary>
@@ -35,11 +38,17 @@ public class KookWebhookClient : KookSocketClient, IHostedService
         _connectionState = ConnectionState.Disconnected;
         _tokenType = config.Value.TokenType;
         _token = config.Value.Token;
+        _verifyToken = config.Value.VerifyToken;
         _validateToken = config.Value.ValidateToken;
         _webhookLogger = LogManager.CreateLogger("Webhook");
-        ApiClient.WebhookChallenge += async challenge =>
-            await _webhookLogger.DebugAsync($"Received Webhook challenge: {challenge}");
+        ApiClient.WebhookChallenge += OnWebhookChallengeAsync;
         config.Value.ConfigureKookClient?.Invoke(serviceProvider, this);
+    }
+
+    private async Task OnWebhookChallengeAsync(string challenge)
+    {
+        await _webhookLogger.DebugAsync($"Received Webhook challenge: {challenge}");
+        await StartAsyncInternal();
     }
 
     private static KookWebhookApiClient CreateApiClient(KookWebhookConfig config)
@@ -59,6 +68,35 @@ public class KookWebhookClient : KookSocketClient, IHostedService
     internal new KookWebhookApiClient ApiClient => base.ApiClient as KookWebhookApiClient
         ?? throw new InvalidOperationException("The API client is not a Webhook-based client.");
 
+    /// <summary>
+    ///     Gets the configuration used by this client.
+    /// </summary>
+    internal new KookWebhookConfig BaseConfig => base.BaseConfig as KookWebhookConfig
+        ?? throw new InvalidOperationException("The base configuration is not a Webhook-based configuration.");
+
+    /// <inheritdoc />
+    internal override async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType, int? sequence, JsonElement payload)
+    {
+        if (gatewaySocketFrameType is GatewaySocketFrameType.Event)
+        {
+            if (!payload.TryGetProperty("verify_token", out JsonElement verifyTokenProperty)
+                || verifyTokenProperty.GetString() is not { Length: > 0 } verifyTokenValue)
+            {
+                await _webhookLogger.WarningAsync(
+                        $"Webhook payload is missing the verify token. Payload: {payload}")
+                    .ConfigureAwait(false);
+            }
+            else if (verifyTokenValue != _verifyToken)
+            {
+                await _webhookLogger.WarningAsync(
+                        $"Webhook payload verify token does not match the expected value. Payload: {payload}")
+                    .ConfigureAwait(false);
+            }
+        }
+
+        await base.ProcessMessageAsync(gatewaySocketFrameType, sequence, payload).ConfigureAwait(false);
+    }
+
     /// <inheritdoc />
     public override Task StartAsync() =>
         throw new NotSupportedException("Webhook client does not support starting manually.");
@@ -73,7 +111,15 @@ public class KookWebhookClient : KookSocketClient, IHostedService
             throw new InvalidOperationException("Token type is required to log in.");
         if (_token is null)
             throw new InvalidOperationException("Token is required to log in.");
+        if (_verifyToken is null)
+            throw new InvalidOperationException("Verify token is required to verify the webhook payloads.");
         await LoginAsync(_tokenType.Value, _token, _validateToken);
+        if (!BaseConfig.StartupWaitForChallenge)
+            await StartAsyncInternal();
+    }
+
+    private async Task StartAsyncInternal()
+    {
         _connectionState = ConnectionState.Connecting;
         await FetchRequiredDataAsync();
         _connectionState = ConnectionState.Connected;

@@ -44,6 +44,11 @@ public class KookWebhookConfig : KookSocketConfig
     public Action<IServiceProvider, KookWebhookClient>? ConfigureKookClient { get; set; }
 
     /// <summary>
+    ///     Gets or sets a value indicating whether the client should wait for a webhook challenge before connecting.
+    /// </summary>
+    public bool StartupWaitForChallenge { get; set; } = false;
+
+    /// <summary>
     ///     Gets or sets the provider used to generate new UDP sockets.
     /// </summary>
     public WebhookProvider WebhookProvider { get; set; }
