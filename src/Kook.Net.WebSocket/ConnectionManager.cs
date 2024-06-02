@@ -192,19 +192,15 @@ internal class ConnectionManager : IDisposable
         await _logger.InfoAsync("Disconnected").ConfigureAwait(false);
     }
 
-    public async Task CompleteAsync()
+    public Task CompleteAsync()
     {
-        if (_readyPromise is null)
-            await _logger.ErrorAsync("The ready promise was null when trying to complete the connection");
-        else
-            _readyPromise.TrySetResult(true);
+        _readyPromise?.TrySetResult(true);
+        return Task.CompletedTask;
     }
 
     public async Task WaitAsync()
     {
-        if (_readyPromise is null)
-            await _logger.ErrorAsync("The ready promise was null when trying to complete the connection");
-        else
+        if (_readyPromise is not null)
             await _readyPromise.Task.ConfigureAwait(false);
     }
 

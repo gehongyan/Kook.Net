@@ -277,7 +277,8 @@ internal class DefaultWebSocketClient : IWebSocketClient, IDisposable
                         if (TextMessage is not null)
                             await TextMessage(text).ConfigureAwait(false);
                     }
-                    else if (BinaryMessage is not null) await BinaryMessage(result, 0, resultCount).ConfigureAwait(false);
+                    else if (BinaryMessage is not null)
+                        await BinaryMessage(result, 0, resultCount).ConfigureAwait(false);
                 }
             }
         }

@@ -101,7 +101,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     {
     }
 
-    private KookSocketClient(KookSocketConfig config, KookSocketApiClient client)
+    internal KookSocketClient(KookSocketConfig config, KookSocketApiClient client)
         : base(config, client)
     {
         MessageCacheSize = config.MessageCacheSize;
@@ -438,7 +438,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
     #region ProcessMessageAsync
 
-    private async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType, int? sequence, JsonElement payload)
+    /// <summary>
+    ///     Processes a message received from the gateway.
+    /// </summary>
+    /// <param name="gatewaySocketFrameType"> The type of the gateway socket frame. </param>
+    /// <param name="sequence"> The sequence number of the message. </param>
+    /// <param name="payload"> The payload of the message. </param>
+    /// <exception cref="InvalidOperationException"> Unknown event type. </exception>
+    internal virtual async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType, int? sequence, JsonElement payload)
     {
         if (sequence.HasValue)
         {
