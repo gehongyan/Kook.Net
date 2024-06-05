@@ -262,7 +262,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         JoinedAt = model.JoinedAt;
         ActiveAt = model.ActiveAt;
         Color = model.Color;
-        IsOwner = model.IsOwner;
+        IsOwner = model.IsOwner ?? Guild.OwnerId == Id;
         if (model.Roles is not null)
             UpdateRoles(model.Roles);
     }

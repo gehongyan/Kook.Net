@@ -105,7 +105,8 @@ internal static class Permissions
             resolvedPermissions = GuildPermissions.All.RawValue; //Owners always have all permissions
         else
         {
-            foreach (uint roleId in user.RoleIds) resolvedPermissions |= guild.GetRole(roleId)?.Permissions.RawValue ?? 0;
+            foreach (uint roleId in user.RoleIds)
+                resolvedPermissions |= guild.GetRole(roleId)?.Permissions.RawValue ?? 0;
 
             if (GetValue(resolvedPermissions, GuildPermission.Administrator))
                 resolvedPermissions = GuildPermissions.All.RawValue; //Administrators always have all permissions

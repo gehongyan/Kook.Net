@@ -97,7 +97,7 @@ public class RestGuildUser : RestUser, IGuildUser
         JoinedAt = model.JoinedAt;
         ActiveAt = model.ActiveAt;
         Color = model.Color;
-        IsOwner = model.IsOwner;
+        IsOwner = model.IsOwner ?? Guild.OwnerId == Id;
         if (model.Roles != null)
             _roleIds = [0, ..model.Roles];
     }
