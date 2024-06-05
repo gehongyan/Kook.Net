@@ -34,9 +34,17 @@ public class PublicModule : ModuleBase<SocketCommandContext>
         await ReplyTextAsync(user.ToString() ?? user.Username);
     }
 
-    [Command("say")]
-    public async Task Emoji(string text) =>
+    [Command("emoji")]
+    public async Task Emoji([Remainder] string? _) =>
         await Context.Message.AddReactionAsync(new Emoji("\uD83D\uDC4C"));
+
+    [Command("image")]
+    public async Task Image(Uri image)
+    {
+        if (Context.Message.MayBeTextGraphicMixedMessage()
+            && image.IsAbsoluteUri)
+            await ReplyFileAsync(new FileAttachment(image, "image.png", AttachmentType.Image));
+    }
 
     // Ban a user
     [Command("ban")]

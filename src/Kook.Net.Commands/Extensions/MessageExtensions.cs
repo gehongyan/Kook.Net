@@ -1,3 +1,6 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
+
 namespace Kook.Commands;
 
 /// <summary>
@@ -16,7 +19,29 @@ public static class MessageExtensions
     /// </returns>
     public static bool HasCharPrefix(this IUserMessage msg, char c, ref int argPos)
     {
-        string text = msg.Content;
+        string text;
+        if (msg.MayBeTextGraphicMixedMessage())
+        {
+            IModule? module = msg.Cards
+                .OfType<Card>()
+                .SelectMany(x => x.Modules)
+                .FirstOrDefault();
+            if (module is not SectionModule sectionModule) return false;
+            switch (sectionModule.Text)
+            {
+                case KMarkdownElement kMarkdownElement:
+                    text = kMarkdownElement.Content;
+                    break;
+                case PlainTextElement plainTextElement:
+                    text = plainTextElement.Content;
+                    break;
+                default:
+                    return false;
+            }
+        }
+        else
+            text = msg.Content;
+
         if (!string.IsNullOrEmpty(text) && text[0] == c)
         {
             argPos = 1;
@@ -32,7 +57,29 @@ public static class MessageExtensions
     public static bool HasStringPrefix(this IUserMessage msg, string str,
         ref int argPos, StringComparison comparisonType = StringComparison.Ordinal)
     {
-        string text = msg.Content;
+        string text;
+        if (msg.MayBeTextGraphicMixedMessage())
+        {
+            IModule? module = msg.Cards
+                .OfType<Card>()
+                .SelectMany(x => x.Modules)
+                .FirstOrDefault();
+            if (module is not SectionModule sectionModule) return false;
+            switch (sectionModule.Text)
+            {
+                case KMarkdownElement kMarkdownElement:
+                    text = kMarkdownElement.Content;
+                    break;
+                case PlainTextElement plainTextElement:
+                    text = plainTextElement.Content;
+                    break;
+                default:
+                    return false;
+            }
+        }
+        else
+            text = msg.Content;
+
         if (!string.IsNullOrEmpty(text) && text.StartsWith(str, comparisonType))
         {
             argPos = str.Length;
@@ -47,9 +94,39 @@ public static class MessageExtensions
     /// </summary>
     public static bool HasMentionPrefix(this IUserMessage msg, IUser user, ref int argPos)
     {
-        if (msg.Type == MessageType.Text)
+        string text;
+        MessageType type;
+        if (msg.MayBeTextGraphicMixedMessage())
         {
-            string text = msg.Content;
+            IModule? module = msg.Cards
+                .OfType<Card>()
+                .SelectMany(x => x.Modules)
+                .FirstOrDefault();
+            if (module is not SectionModule sectionModule) return false;
+            switch (sectionModule.Text)
+            {
+                case KMarkdownElement kMarkdownElement:
+                    text = kMarkdownElement.Content;
+                    type = MessageType.KMarkdown;
+                    break;
+                case PlainTextElement plainTextElement:
+                    text = plainTextElement.Content;
+                    type = MessageType.Text;
+                    break;
+                default:
+                    return false;
+            }
+        }
+        else if (msg.Type is MessageType.Text or MessageType.KMarkdown)
+        {
+            text = msg.Content;
+            type = msg.Type;
+        }
+        else
+            return false;
+
+        if (type == MessageType.Text)
+        {
             if (string.IsNullOrEmpty(text) || text.Length <= 6 || text[0] != '@')
                 return false;
 
@@ -69,10 +146,12 @@ public static class MessageExtensions
                 argPos = endPos + 2;
                 return true;
             }
+
+            return false;
         }
-        else if (msg.Type == MessageType.KMarkdown)
+
+        if (type == MessageType.KMarkdown)
         {
-            string text = msg.Content;
             if (string.IsNullOrEmpty(text) || text.Length <= 10 || text[..5] != "(met)")
                 return false;
 
@@ -92,8 +171,65 @@ public static class MessageExtensions
                 argPos = endPos + 2;
                 return true;
             }
+
+            return false;
         }
 
         return false;
     }
+
+    /// <summary>
+    ///     Tries to expand the content of the card into a single string.
+    /// </summary>
+    /// <param name="msg"> The message to expand the content of. </param>
+    /// <param name="expandedContent"> The expanded content of the card. </param>
+    /// <returns> <c>true</c> if the content was successfully expanded; otherwise, <c>false</c>. </returns>
+    public static bool TryExpandCardContent(this IUserMessage msg,
+        [NotNullWhen(true)] out string? expandedContent)
+    {
+        if (!msg.MayBeTextGraphicMixedMessage())
+        {
+            expandedContent = null;
+            return false;
+        }
+
+        string result = string.Join(" ", EnumerateCardModuleContents(msg.Cards));
+        if (string.IsNullOrWhiteSpace(result))
+        {
+            expandedContent = null;
+            return false;
+        }
+
+        expandedContent = result;
+        return true;
+    }
+
+    /// <summary>
+    ///     Gets whether the message may be a text-graphic mixed message.
+    /// </summary>
+    /// <param name="msg"> The message to check against. </param>
+    /// <returns> <c>true</c> if the message may be a text-graphic mixed message; otherwise, <c>false</c>. </returns>
+    public static bool MayBeTextGraphicMixedMessage(this IUserMessage msg)
+    {
+        if (msg.Cards.Count != 1) return false;
+        if (msg.Cards.First() is not Card card) return false;
+        if (card.Theme != CardTheme.Invisible) return false;
+        if (card.Modules.Length == 0) return false;
+        return card.Modules.All(x => x is
+            SectionModule { Text: PlainTextElement or KMarkdownElement }
+            or ContainerModule { Elements: [not null] });
+    }
+
+    private static IEnumerable<string> EnumerateCardModuleContents(IEnumerable<ICard> cards) => cards
+        .OfType<Card>()
+        .SelectMany(x => x.Modules)
+        .Select(x => x switch
+        {
+            SectionModule { Text: PlainTextElement or KMarkdownElement } sectionModule =>
+                sectionModule.Text.ToString(),
+            ContainerModule { Elements: [{ } element] } => element.Source,
+            _ => null
+        })
+        .OfType<string>()
+        .Where(x => !string.IsNullOrWhiteSpace(x));
 }

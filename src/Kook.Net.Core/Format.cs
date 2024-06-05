@@ -85,7 +85,6 @@ public static class Format
     public static string Url(this string? text, string url, bool sanitize = true) =>
         $"[{(sanitize ? text.Sanitize("[", "]") : text)}]({(sanitize ? url.Sanitize("(", ")") : url)})";
 
-
     /// <inheritdoc cref="Url(string,string,bool)" />
     public static string Url(this string? text, Uri url, bool sanitize = true) =>
         text.Url(url.ToString(), sanitize);
