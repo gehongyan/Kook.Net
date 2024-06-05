@@ -179,4 +179,20 @@ public static class MessageExtensions
                 isEphemeral ? message.Author : null,
                 options)
             .ConfigureAwait(false);
+
+    /// <summary>
+    ///     Gets whether the message may be a text image mixed message.
+    /// </summary>
+    /// <param name="msg"> The message to check against. </param>
+    /// <returns> <c>true</c> if the message may be a text image mixed message; otherwise, <c>false</c>. </returns>
+    public static bool MaybeTextImageMixedMessage(this IUserMessage msg)
+    {
+        if (msg.Cards.Count != 1) return false;
+        if (msg.Cards.First() is not Card card) return false;
+        if (card.Theme != CardTheme.Invisible) return false;
+        if (card.Modules.Length == 0) return false;
+        return card.Modules.All(x => x is
+            SectionModule { Text: PlainTextElement or KMarkdownElement }
+            or ContainerModule { Elements: [not null] });
+    }
 }

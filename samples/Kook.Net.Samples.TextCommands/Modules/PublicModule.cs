@@ -41,7 +41,7 @@ public class PublicModule : ModuleBase<SocketCommandContext>
     [Command("image")]
     public async Task Image(Uri image)
     {
-        if (Context.Message.MayBeTextGraphicMixedMessage()
+        if (Context.Message.MaybeTextImageMixedMessage()
             && image.IsAbsoluteUri)
             await ReplyFileAsync(new FileAttachment(image, "image.png", AttachmentType.Image));
     }

@@ -20,7 +20,7 @@ public static class MessageExtensions
     public static bool HasCharPrefix(this IUserMessage msg, char c, ref int argPos)
     {
         string text;
-        if (msg.MayBeTextGraphicMixedMessage())
+        if (msg.MaybeTextImageMixedMessage())
         {
             IModule? module = msg.Cards
                 .OfType<Card>()
@@ -58,7 +58,7 @@ public static class MessageExtensions
         ref int argPos, StringComparison comparisonType = StringComparison.Ordinal)
     {
         string text;
-        if (msg.MayBeTextGraphicMixedMessage())
+        if (msg.MaybeTextImageMixedMessage())
         {
             IModule? module = msg.Cards
                 .OfType<Card>()
@@ -96,7 +96,7 @@ public static class MessageExtensions
     {
         string text;
         MessageType type;
-        if (msg.MayBeTextGraphicMixedMessage())
+        if (msg.MaybeTextImageMixedMessage())
         {
             IModule? module = msg.Cards
                 .OfType<Card>()
@@ -187,7 +187,7 @@ public static class MessageExtensions
     public static bool TryExpandCardContent(this IUserMessage msg,
         [NotNullWhen(true)] out string? expandedContent)
     {
-        if (!msg.MayBeTextGraphicMixedMessage())
+        if (!msg.MaybeTextImageMixedMessage())
         {
             expandedContent = null;
             return false;
@@ -202,22 +202,6 @@ public static class MessageExtensions
 
         expandedContent = result;
         return true;
-    }
-
-    /// <summary>
-    ///     Gets whether the message may be a text-graphic mixed message.
-    /// </summary>
-    /// <param name="msg"> The message to check against. </param>
-    /// <returns> <c>true</c> if the message may be a text-graphic mixed message; otherwise, <c>false</c>. </returns>
-    public static bool MayBeTextGraphicMixedMessage(this IUserMessage msg)
-    {
-        if (msg.Cards.Count != 1) return false;
-        if (msg.Cards.First() is not Card card) return false;
-        if (card.Theme != CardTheme.Invisible) return false;
-        if (card.Modules.Length == 0) return false;
-        return card.Modules.All(x => x is
-            SectionModule { Text: PlainTextElement or KMarkdownElement }
-            or ContainerModule { Elements: [not null] });
     }
 
     private static IEnumerable<string> EnumerateCardModuleContents(IEnumerable<ICard> cards) => cards
