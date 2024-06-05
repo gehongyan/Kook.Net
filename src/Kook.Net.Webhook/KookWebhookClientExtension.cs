@@ -35,7 +35,6 @@ public static class KookWebhookClientExtension
     /// <returns> A reference to this instance after the operation has completed. </returns>
     public static WebApplication UseKookEndpoint(this WebApplication builder, string? route = null)
     {
-        builder.UseRouting();
         KookWebhookClient kookWebhookClient = builder.Services.GetRequiredService<KookWebhookClient>();
         if (kookWebhookClient.ApiClient.WebhookClient is not IAspNetWebhookClient aspNetWebhookClient)
             throw new InvalidOperationException("The Kook webhook client is not an AspNetWebhookClient.");

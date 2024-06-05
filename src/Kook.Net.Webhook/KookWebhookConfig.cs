@@ -46,7 +46,7 @@ public class KookWebhookConfig : KookSocketConfig
     /// <summary>
     ///     Gets or sets a value indicating whether the client should wait for a webhook challenge before connecting.
     /// </summary>
-    public bool StartupWaitForChallenge { get; set; } = false;
+    public bool StartupWaitForChallenge { get; set; }
 
     /// <summary>
     ///     Gets or sets the provider used to generate new UDP sockets.
