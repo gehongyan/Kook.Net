@@ -8,7 +8,7 @@ internal static class PrimitiveParsers
 {
     private static readonly Lazy<IReadOnlyDictionary<Type, Delegate>> Parsers = new(CreateParsers);
 
-    public static IEnumerable<Type> SupportedTypes = Parsers.Value.Keys;
+    public static readonly IEnumerable<Type> SupportedTypes = Parsers.Value.Keys;
 
     private static IReadOnlyDictionary<Type, Delegate> CreateParsers()
     {
@@ -27,7 +27,10 @@ internal static class PrimitiveParsers
         parserBuilder[typeof(decimal)] = (TryParseDelegate<decimal>)decimal.TryParse;
         parserBuilder[typeof(DateTime)] = (TryParseDelegate<DateTime>)DateTime.TryParse;
         parserBuilder[typeof(DateTimeOffset)] = (TryParseDelegate<DateTimeOffset>)DateTimeOffset.TryParse;
-        //parserBuilder[typeof(TimeSpan)] = (TryParseDelegate<TimeSpan>)TimeSpan.TryParse;
+#if NET6_0_OR_GREATER
+        parserBuilder[typeof(DateOnly)] = (TryParseDelegate<DateOnly>)DateOnly.TryParse;
+        parserBuilder[typeof(TimeOnly)] = (TryParseDelegate<TimeOnly>)TimeOnly.TryParse;
+#endif
         parserBuilder[typeof(char)] = (TryParseDelegate<char>)char.TryParse;
         return parserBuilder.ToImmutable();
     }
