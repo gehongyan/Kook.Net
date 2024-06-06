@@ -11,7 +11,7 @@ builder.Services.AddKookWebhookClient(config =>
     config.EncryptKey = default;
     config.RouteEndpoint = "kook";
     config.LogLevel = LogSeverity.Debug;
-    config.ConfigureKookClient += (serviceProvider, client) =>
+    config.ConfigureKookClient = (serviceProvider, client) =>
     {
         client.Log += message =>
         {

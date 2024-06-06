@@ -2,7 +2,6 @@
 using Kook.API;
 using Kook.API.Gateway;
 using Kook.Logging;
-using Kook.Net.Webhooks;
 using Kook.WebSocket;
 
 namespace Kook.Webhook;
@@ -15,33 +14,24 @@ public abstract class KookWebhookClient : KookSocketClient
     private readonly Logger _webhookLogger;
     private ConnectionState _connectionState;
 
-    private readonly TokenType? _tokenType;
-    private readonly string? _token;
     private readonly string? _verifyToken;
-    private readonly bool _validateToken;
 
     /// <summary>
     ///     Initializes a new REST/WebSocket-based Kook client with the provided configuration.
     /// </summary>
-    /// <param name="serviceProvider"> The service provider to be used with the client. </param>
     /// <param name="config">The configuration to be used with the client.</param>
-    protected KookWebhookClient(IServiceProvider serviceProvider, KookWebhookConfig config)
-        : this(serviceProvider, config, CreateApiClient(serviceProvider, config))
+    protected KookWebhookClient(KookWebhookConfig config)
+        : this(config, CreateApiClient(config))
     {
     }
 
-    private protected KookWebhookClient(IServiceProvider serviceProvider, KookWebhookConfig config,
-        KookWebhookApiClient client)
+    private protected KookWebhookClient(KookWebhookConfig config, KookWebhookApiClient client)
         : base(config, client)
     {
         _connectionState = ConnectionState.Disconnected;
-        _tokenType = config.TokenType;
-        _token = config.Token;
         _verifyToken = config.VerifyToken;
-        _validateToken = config.ValidateToken;
         _webhookLogger = LogManager.CreateLogger("Webhook");
         ApiClient.WebhookChallenge += OnWebhookChallengeAsync;
-        config.ConfigureKookClient?.Invoke(serviceProvider, this);
     }
 
     private async Task OnWebhookChallengeAsync(string challenge)
@@ -50,16 +40,15 @@ public abstract class KookWebhookClient : KookSocketClient
         await StartAsyncInternal();
     }
 
-    private static KookWebhookApiClient CreateApiClient(IServiceProvider serviceProvider, KookWebhookConfig config)
+    internal static KookWebhookApiClient CreateApiClient(KookWebhookConfig config)
     {
         if (config.EncryptKey is null)
             throw new InvalidOperationException("Encryption key is required.");
         if (config.VerifyToken is null)
             throw new InvalidOperationException("Verify token is required.");
-        WebhookProvider webhookProvider = config.WebhookProvider
-            ?? serviceProvider.GetService(typeof(WebhookProvider)) as WebhookProvider
-            ?? throw new InvalidOperationException("Webhook provider is required.");
-        return new KookWebhookApiClient(config.RestClientProvider, config.WebSocketProvider, webhookProvider,
+        if (config.WebhookProvider is null)
+            throw new InvalidOperationException("Webhook provider is required.");
+        return new KookWebhookApiClient(config.RestClientProvider, config.WebSocketProvider, config.WebhookProvider,
             config.EncryptKey, config.VerifyToken, KookConfig.UserAgent, config.AcceptLanguage,
             defaultRatelimitCallback: config.DefaultRatelimitCallback);
     }
@@ -102,13 +91,6 @@ public abstract class KookWebhookClient : KookSocketClient
     /// <inheritdoc />
     public override async Task StartAsync()
     {
-        if (!_tokenType.HasValue)
-            throw new InvalidOperationException("Token type is required to log in.");
-        if (_token is null)
-            throw new InvalidOperationException("Token is required to log in.");
-        if (_verifyToken is null)
-            throw new InvalidOperationException("Verify token is required to verify the webhook payloads.");
-        await LoginAsync(_tokenType.Value, _token, _validateToken);
         if (!BaseConfig.StartupWaitForChallenge)
             await StartAsyncInternal();
     }

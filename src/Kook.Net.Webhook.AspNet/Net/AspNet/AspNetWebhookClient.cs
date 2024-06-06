@@ -7,30 +7,33 @@ internal class AspNetWebhookClient : IAspNetWebhookClient
 {
     private bool _isDisposed;
 
+    /// <inheritdoc />
     public event Func<byte[], int, int, Task<string?>>? BinaryMessage;
+
+    /// <inheritdoc />
     public event Func<string, Task<string?>>? TextMessage;
 
-    /// <summary>
-    ///     Handles a Kook webhook request.
-    /// </summary>
+    /// <inheritdoc />
     public async Task HandleRequestAsync(HttpContext httpContext)
     {
-        using StreamReader streamReader = new(httpContext.Request.Body);
+        string? messageResponse;
         if (httpContext.Request.Query.TryGetValue("compress", out StringValues compressValues)
             && compressValues.Any(x => x?.StartsWith('0') is true))
         {
+            using StreamReader streamReader = new(httpContext.Request.Body);
             string requestBody = await streamReader.ReadToEndAsync();
-            string? textMessageResponse = await HandleTextMessageAsync(requestBody);
-            if (textMessageResponse is not null)
-                await httpContext.Response.WriteAsync(textMessageResponse);
+            messageResponse = await HandleTextMessageAsync(requestBody);
+        }
+        else
+        {
+            using MemoryStream stream = new();
+            await httpContext.Request.Body.CopyToAsync(stream);
+            byte[] bytes = stream.ToArray();
+            messageResponse = await HandleBinaryMessageAsync(bytes, 0, bytes.Length);
         }
 
-        using MemoryStream stream = new();
-        await httpContext.Request.Body.CopyToAsync(stream);
-        byte[] bytes = stream.ToArray();
-        string? binaryMessageResponse = await HandleBinaryMessageAsync(bytes, 0, bytes.Length);
-        if (binaryMessageResponse is not null)
-            await httpContext.Response.WriteAsync(binaryMessageResponse);
+        if (messageResponse is not null)
+            await httpContext.Response.WriteAsync(messageResponse);
     }
 
     /// <inheritdoc />
