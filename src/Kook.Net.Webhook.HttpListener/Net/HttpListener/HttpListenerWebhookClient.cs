@@ -6,31 +6,22 @@ internal class HttpListenerWebhookClient : IHttpListenerWebhookClient
 {
     private bool _isDisposed;
 
+    private readonly System.Net.HttpListener _httpListener;
+
     public event Func<byte[], int, int, Task<string?>>? BinaryMessage;
     public event Func<string, Task<string?>>? TextMessage;
 
-    /// <summary>
-    ///     Fired when a log message is sent.
-    /// </summary>
-    public event Func<LogMessage, Task> Log
-    {
-        add => _logEvent.Add(value);
-        remove => _logEvent.Remove(value);
-    }
-
-    internal readonly AsyncEvent<Func<LogMessage, Task>> _logEvent = new();
-
     public HttpListenerWebhookClient()
     {
-        System.Net.HttpListener httpListener = new();
-        httpListener.Prefixes.Add("http://localhost:5043/");
-        httpListener.Prefixes.Add("http://127.0.0.1:5043/");
-        httpListener.Start();
+        _httpListener = new System.Net.HttpListener();
+        _httpListener.Prefixes.Add("http://localhost:5043/");
+        _httpListener.Prefixes.Add("http://127.0.0.1:5043/");
+        _httpListener.Start();
         _ = Task.Run(async () =>
         {
             while (true)
             {
-                HttpListenerContext context = await httpListener.GetContextAsync();
+                HttpListenerContext context = await _httpListener.GetContextAsync();
                 await HandleRequestAsync(context);
             }
         }, CancellationToken.None);
@@ -66,10 +57,8 @@ internal class HttpListenerWebhookClient : IHttpListenerWebhookClient
                 context.Response.OutputStream.Close();
             }
         }
-        catch (Exception e)
+        catch
         {
-            LogMessage logMessage = new(LogSeverity.Error, "Webhook", "An error occurred while handling a webhook request.", e);
-            await _logEvent.InvokeAsync(logMessage);
             context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             context.Response.OutputStream.Close();
         }
@@ -88,6 +77,8 @@ internal class HttpListenerWebhookClient : IHttpListenerWebhookClient
         if (_isDisposed) return;
         if (disposing)
         {
+            _httpListener.Stop();
+            _httpListener.Close();
         }
         _isDisposed = true;
     }
