@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 
-namespace Kook.Net.Webhooks;
+namespace Kook.Net.Webhooks.AspNet;
 
-internal class AspNetWebhookClient : IAspNetWebhookClient, IDisposable
+internal class AspNetWebhookClient : IAspNetWebhookClient
 {
     private bool _isDisposed;
 

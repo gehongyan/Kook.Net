@@ -2,16 +2,15 @@
 using Kook.API;
 using Kook.API.Gateway;
 using Kook.Logging;
+using Kook.Net.Webhooks;
 using Kook.WebSocket;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 
 namespace Kook.Webhook;
 
 /// <summary>
 ///     Represents a KOOK webhook client.
 /// </summary>
-public class KookWebhookClient : KookSocketClient, IHostedService
+public abstract class KookWebhookClient : KookSocketClient
 {
     private readonly Logger _webhookLogger;
     private ConnectionState _connectionState;
@@ -26,23 +25,23 @@ public class KookWebhookClient : KookSocketClient, IHostedService
     /// </summary>
     /// <param name="serviceProvider"> The service provider to be used with the client. </param>
     /// <param name="config">The configuration to be used with the client.</param>
-    public KookWebhookClient(IServiceProvider serviceProvider, IOptions<KookWebhookConfig> config)
-        : this(serviceProvider, config, CreateApiClient(config.Value))
+    protected KookWebhookClient(IServiceProvider serviceProvider, KookWebhookConfig config)
+        : this(serviceProvider, config, CreateApiClient(serviceProvider, config))
     {
     }
 
-    internal KookWebhookClient(IServiceProvider serviceProvider, IOptions<KookWebhookConfig> config,
+    private protected KookWebhookClient(IServiceProvider serviceProvider, KookWebhookConfig config,
         KookWebhookApiClient client)
-        : base(config.Value, client)
+        : base(config, client)
     {
         _connectionState = ConnectionState.Disconnected;
-        _tokenType = config.Value.TokenType;
-        _token = config.Value.Token;
-        _verifyToken = config.Value.VerifyToken;
-        _validateToken = config.Value.ValidateToken;
+        _tokenType = config.TokenType;
+        _token = config.Token;
+        _verifyToken = config.VerifyToken;
+        _validateToken = config.ValidateToken;
         _webhookLogger = LogManager.CreateLogger("Webhook");
         ApiClient.WebhookChallenge += OnWebhookChallengeAsync;
-        config.Value.ConfigureKookClient?.Invoke(serviceProvider, this);
+        config.ConfigureKookClient?.Invoke(serviceProvider, this);
     }
 
     private async Task OnWebhookChallengeAsync(string challenge)
@@ -51,13 +50,16 @@ public class KookWebhookClient : KookSocketClient, IHostedService
         await StartAsyncInternal();
     }
 
-    private static KookWebhookApiClient CreateApiClient(KookWebhookConfig config)
+    private static KookWebhookApiClient CreateApiClient(IServiceProvider serviceProvider, KookWebhookConfig config)
     {
         if (config.EncryptKey is null)
             throw new InvalidOperationException("Encryption key is required.");
         if (config.VerifyToken is null)
             throw new InvalidOperationException("Verify token is required.");
-        return new KookWebhookApiClient(config.RestClientProvider, config.WebSocketProvider, config.WebhookProvider,
+        WebhookProvider webhookProvider = config.WebhookProvider
+            ?? serviceProvider.GetService(typeof(WebhookProvider)) as WebhookProvider
+            ?? throw new InvalidOperationException("Webhook provider is required.");
+        return new KookWebhookApiClient(config.RestClientProvider, config.WebSocketProvider, webhookProvider,
             config.EncryptKey, config.VerifyToken, KookConfig.UserAgent, config.AcceptLanguage,
             defaultRatelimitCallback: config.DefaultRatelimitCallback);
     }
@@ -98,14 +100,7 @@ public class KookWebhookClient : KookSocketClient, IHostedService
     }
 
     /// <inheritdoc />
-    public override Task StartAsync() =>
-        throw new NotSupportedException("Webhook client does not support starting manually.");
-
-    /// <inheritdoc />
-    public override Task StopAsync() => Task.CompletedTask;
-
-    /// <inheritdoc />
-    public async Task StartAsync(CancellationToken cancellationToken)
+    public override async Task StartAsync()
     {
         if (!_tokenType.HasValue)
             throw new InvalidOperationException("Token type is required to log in.");
@@ -126,7 +121,7 @@ public class KookWebhookClient : KookSocketClient, IHostedService
     }
 
     /// <inheritdoc />
-    public async Task StopAsync(CancellationToken cancellationToken)
+    public override async Task StopAsync()
     {
         _connectionState = ConnectionState.Disconnecting;
         await LogoutAsync();

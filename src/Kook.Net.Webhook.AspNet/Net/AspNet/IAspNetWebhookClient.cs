@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Kook.Net.Webhooks;
+namespace Kook.Net.Webhooks.AspNet;
 
 internal interface IAspNetWebhookClient : IWebhookClient
 {

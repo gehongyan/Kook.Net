@@ -1,5 +1,6 @@
 using Kook;
 using Kook.Webhook;
+using Kook.Webhook.AspNet;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddKookWebhookClient(config =>
@@ -37,4 +38,4 @@ builder.Services.AddKookWebhookClient(config =>
 
 WebApplication app = builder.Build();
 app.UseKookEndpoint();
-app.Run();
+await app.RunAsync();

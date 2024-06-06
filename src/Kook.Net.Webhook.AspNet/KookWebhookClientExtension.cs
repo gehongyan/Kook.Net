@@ -1,11 +1,13 @@
 ﻿using Kook.Net.Webhooks;
+using Kook.Net.Webhooks.AspNet;
+using Kook.Rest;
 using Kook.WebSocket;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
-namespace Kook.Webhook;
+namespace Kook.Webhook.AspNet;
 
 /// <summary>
 ///     Provides extension methods for Kook webhook client.
@@ -21,8 +23,14 @@ public static class KookWebhookClientExtension
     public static IServiceCollection AddKookWebhookClient(this IServiceCollection services, Action<KookWebhookConfig> configure)
     {
         services.Configure(configure);
-        services.AddSingleton<KookWebhookClient>();
-        services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<KookWebhookClient>());
+        services.AddSingleton<KookAspNetWebhookClient>();
+        services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<KookAspNetWebhookClient>());
+        services.AddSingleton<IKookClient, KookAspNetWebhookClient>(provider => provider.GetRequiredService<KookAspNetWebhookClient>());
+        services.AddSingleton<BaseKookClient, KookAspNetWebhookClient>(provider => provider.GetRequiredService<KookAspNetWebhookClient>());
+        services.AddSingleton<BaseSocketClient, KookAspNetWebhookClient>(provider => provider.GetRequiredService<KookAspNetWebhookClient>());
+        services.AddSingleton<KookSocketClient, KookAspNetWebhookClient>(provider => provider.GetRequiredService<KookAspNetWebhookClient>());
+        services.AddSingleton<KookWebhookClient, KookAspNetWebhookClient>(provider => provider.GetRequiredService<KookAspNetWebhookClient>());
+        services.AddSingleton<WebhookProvider>(_ => DefaultAspNetWebhookProvider.Instance);
         services.AddControllers();
         return services;
     }

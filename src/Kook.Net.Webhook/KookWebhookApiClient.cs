@@ -52,15 +52,27 @@ internal class KookWebhookApiClient : KookSocketApiClient
 
     private async Task<string?> OnBinaryMessage(byte[] data, int index, int count)
     {
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
         await using MemoryStream decompressed = new();
+#else
+        using MemoryStream decompressed = new();
+#endif
         using MemoryStream compressed = data[0] == 0x78
             ? new MemoryStream(data, index + 2, count - 2)
             : new MemoryStream(data, index, count);
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
         await using DeflateStream decompressor = new(compressed, CompressionMode.Decompress);
+#else
+        using DeflateStream decompressor = new(compressed, CompressionMode.Decompress);
+#endif
         await decompressor.CopyToAsync(decompressed);
         decompressed.Position = 0;
 
+#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
+        GatewayEncryptedFrame? gatewayEncryptedFrame = await JsonSerializer.DeserializeAsync<GatewayEncryptedFrame>(decompressed, _serializerOptions);
+#else
         GatewayEncryptedFrame? gatewayEncryptedFrame = JsonSerializer.Deserialize<GatewayEncryptedFrame>(decompressed, _serializerOptions);
+#endif
         if (gatewayEncryptedFrame is null)
             return null;
         string decryptedFrame = Decrypt(gatewayEncryptedFrame.Encrypted, _encryptKey);

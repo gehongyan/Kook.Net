@@ -1,9 +1,9 @@
-namespace Kook.Net.Webhooks;
+namespace Kook.Net.Webhooks.AspNet;
 
 /// <summary>
 ///     Represents a default <see cref="WebhookProvider"/> that creates <see cref="AspNetWebhookClient"/> instances.
 /// </summary>
-public static class DefaultWebhookProvider
+public static class DefaultAspNetWebhookProvider
 {
     /// <summary>
     ///     A delegate that creates a default <see cref="WebhookProvider"/> instance.

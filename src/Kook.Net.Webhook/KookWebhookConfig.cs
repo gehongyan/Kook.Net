@@ -51,13 +51,5 @@ public class KookWebhookConfig : KookSocketConfig
     /// <summary>
     ///     Gets or sets the provider used to generate new UDP sockets.
     /// </summary>
-    public WebhookProvider WebhookProvider { get; set; }
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="KookWebhookConfig"/> class.
-    /// </summary>
-    public KookWebhookConfig()
-    {
-        WebhookProvider = DefaultWebhookProvider.Instance;
-    }
+    public WebhookProvider? WebhookProvider { get; set; }
 }
