@@ -40,14 +40,12 @@ public abstract class KookWebhookClient : KookSocketClient
         await StartAsyncInternal();
     }
 
-    internal static KookWebhookApiClient CreateApiClient(KookWebhookConfig config)
+    private static KookWebhookApiClient CreateApiClient(KookWebhookConfig config)
     {
         if (config.EncryptKey is null)
             throw new InvalidOperationException("Encryption key is required.");
         if (config.VerifyToken is null)
             throw new InvalidOperationException("Verify token is required.");
-        if (config.WebhookProvider is null)
-            throw new InvalidOperationException("Webhook provider is required.");
         return new KookWebhookApiClient(config.RestClientProvider, config.WebSocketProvider, config.WebhookProvider,
             config.EncryptKey, config.VerifyToken, KookConfig.UserAgent, config.AcceptLanguage,
             defaultRatelimitCallback: config.DefaultRatelimitCallback);

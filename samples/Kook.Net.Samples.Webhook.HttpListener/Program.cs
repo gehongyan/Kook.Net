@@ -5,7 +5,12 @@ KookHttpListenerWebhookConfig config = new()
 {
     VerifyToken = default,
     EncryptKey = default,
-    LogLevel = LogSeverity.Debug
+    LogLevel = LogSeverity.Debug,
+    UriPrefixes =
+    [
+        "http://localhost:5043/",
+        "http://127.0.0.1:5043/"
+    ]
 };
 KookHttpListenerWebhookClient client = new(config);
 client.Log += message =>

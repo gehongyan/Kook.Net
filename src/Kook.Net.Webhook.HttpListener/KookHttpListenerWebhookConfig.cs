@@ -14,4 +14,9 @@ public class KookHttpListenerWebhookConfig : KookWebhookConfig
         : base(DefaultHttpListenerWebhookProvider.Instance)
     {
     }
+
+    /// <summary>
+    ///     Gets or sets the URI prefixes to listen for incoming webhook requests.
+    /// </summary>
+    public IReadOnlyCollection<string>? UriPrefixes { get; set; }
 }

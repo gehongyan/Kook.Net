@@ -48,6 +48,13 @@ internal class KookWebhookApiClient : KookSocketApiClient
         WebhookClient = webhookProvider();
         WebhookClient.BinaryMessage += OnBinaryMessage;
         WebhookClient.TextMessage += OnTextMessage;
+        WebhookClient.Closed += async ex =>
+        {
+#if DEBUG_PACKETS
+            Debug.WriteLine(ex);
+#endif
+            await DisconnectAsync().ConfigureAwait(false);
+        };
     }
 
     private async Task<string?> OnBinaryMessage(byte[] data, int index, int count)

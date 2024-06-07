@@ -30,7 +30,7 @@ public static class KookWebhookClientExtension
         services.AddSingleton<BaseSocketClient, KookAspNetWebhookClient>(provider => provider.GetRequiredService<KookAspNetWebhookClient>());
         services.AddSingleton<KookSocketClient, KookAspNetWebhookClient>(provider => provider.GetRequiredService<KookAspNetWebhookClient>());
         services.AddSingleton<KookWebhookClient, KookAspNetWebhookClient>(provider => provider.GetRequiredService<KookAspNetWebhookClient>());
-        services.AddSingleton<WebhookProvider>(_ => DefaultAspNetWebhookProvider.Instance);
+        services.AddSingleton<WebhookProvider>(provider => provider.GetRequiredService<IOptions<KookAspNetWebhookConfig>>().Value.WebhookProvider);
         services.AddControllers();
         return services;
     }

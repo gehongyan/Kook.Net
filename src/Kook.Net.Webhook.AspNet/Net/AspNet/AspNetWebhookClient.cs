@@ -14,6 +14,9 @@ internal class AspNetWebhookClient : IAspNetWebhookClient
     public event Func<string, Task<string?>>? TextMessage;
 
     /// <inheritdoc />
+    public event Func<Exception, Task>? Closed;
+
+    /// <inheritdoc />
     public async Task HandleRequestAsync(HttpContext httpContext)
     {
         string? messageResponse;
@@ -43,6 +46,8 @@ internal class AspNetWebhookClient : IAspNetWebhookClient
     /// <inheritdoc />
     public Task<string?> HandleBinaryMessageAsync(byte[] data, int index, int count) =>
         BinaryMessage is not null ? BinaryMessage(data, index, count) : Task.FromResult<string?>(null);
+
+    internal void OnClosed(Exception ex) => Closed?.Invoke(ex);
 
     private void Dispose(bool disposing)
     {

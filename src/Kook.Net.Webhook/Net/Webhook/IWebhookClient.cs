@@ -16,6 +16,11 @@ public interface IWebhookClient : IDisposable
     event Func<string, Task<string?>>? TextMessage;
 
     /// <summary>
+    ///     Fired when the HttpListener is closed.
+    /// </summary>
+    event Func<Exception, Task>? Closed;
+
+    /// <summary>
     ///     Handles a text message.
     /// </summary>
     /// <param name="requestBody"> The request body. </param>

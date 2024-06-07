@@ -39,7 +39,7 @@ internal class KookSocketApiClient : KookRestApiClient
         remove => _disconnectedEvent.Remove(value);
     }
 
-    private readonly AsyncEvent<Func<Exception, Task>> _disconnectedEvent = new();
+    internal readonly AsyncEvent<Func<Exception, Task>> _disconnectedEvent = new();
 
     private readonly bool _isExplicitUrl;
     private CancellationTokenSource? _connectCancellationToken;
