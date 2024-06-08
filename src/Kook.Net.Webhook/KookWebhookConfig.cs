@@ -35,5 +35,6 @@ public abstract class KookWebhookConfig : KookSocketConfig
     protected KookWebhookConfig(WebhookProvider webhookProvider)
     {
         WebhookProvider = webhookProvider;
+        HandlerTimeout = 1000;
     }
 }
