@@ -11,10 +11,11 @@ namespace Kook.Webhook;
 /// </summary>
 public abstract class KookWebhookClient : KookSocketClient
 {
-    private readonly Logger _webhookLogger;
     private ConnectionState _connectionState;
 
     private readonly string? _verifyToken;
+
+    private protected Logger WebhookLogger { get; }
 
     /// <summary>
     ///     Initializes a new REST/WebSocket-based Kook client with the provided configuration.
@@ -30,13 +31,13 @@ public abstract class KookWebhookClient : KookSocketClient
     {
         _connectionState = ConnectionState.Disconnected;
         _verifyToken = config.VerifyToken;
-        _webhookLogger = LogManager.CreateLogger("Webhook");
+        WebhookLogger = LogManager.CreateLogger("Webhook");
         ApiClient.WebhookChallenge += OnWebhookChallengeAsync;
     }
 
     private async Task OnWebhookChallengeAsync(string challenge)
     {
-        await _webhookLogger.DebugAsync($"Received Webhook challenge: {challenge}");
+        await WebhookLogger.DebugAsync($"Received Webhook challenge: {challenge}");
         await StartAsyncInternal();
     }
 
@@ -71,13 +72,13 @@ public abstract class KookWebhookClient : KookSocketClient
             if (!payload.TryGetProperty("verify_token", out JsonElement verifyTokenProperty)
                 || verifyTokenProperty.GetString() is not { Length: > 0 } verifyTokenValue)
             {
-                await _webhookLogger.WarningAsync(
+                await WebhookLogger.WarningAsync(
                         $"Webhook payload is missing the verify token. Payload: {payload}")
                     .ConfigureAwait(false);
             }
             else if (verifyTokenValue != _verifyToken)
             {
-                await _webhookLogger.WarningAsync(
+                await WebhookLogger.WarningAsync(
                         $"Webhook payload verify token does not match the expected value. Payload: {payload}")
                     .ConfigureAwait(false);
             }

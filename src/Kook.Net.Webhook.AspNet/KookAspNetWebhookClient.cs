@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Kook.Net.Webhooks.AspNet;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace Kook.Webhook.AspNet;
@@ -52,5 +53,7 @@ public class KookAspNetWebhookClient : KookWebhookClient, IHostedService
     {
         await base.StopAsync();
         await LogoutAsync();
+        if (ApiClient.WebhookClient is AspNetWebhookClient aspNetWebhookClient)
+            aspNetWebhookClient.OnClosed(new OperationCanceledException("The hosted service has been stopped."));
     }
 }
