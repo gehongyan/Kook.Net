@@ -22,6 +22,10 @@ public class KookHttpListenerWebhookConfig : KookWebhookConfig
 
     /// <summary>
     ///     Gets or sets the interval to wait before restarting the HTTP listener after it has been closed.
+    ///     The same value to <c>Timeout.InfiniteTimeSpan</c> represents that the client will not restart with
+    ///     leaving the application running. Other negative values will cause the client to exit the application.
+    ///     The zero value will cause the client to restart immediately. Any positive value will cause the client
+    ///     to restart after the specified interval.
     /// </summary>
     public TimeSpan AutoRestartInterval { get; set; } = TimeSpan.FromSeconds(5);
 }

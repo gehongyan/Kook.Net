@@ -34,9 +34,16 @@ public class KookHttpListenerWebhookClient : KookWebhookClient
         httpListenerWebhookClient.Closed += async ex =>
         {
             await WebhookLogger.ErrorAsync("The HTTP listener has been closed.", ex);
-            if (BaseConfig.AutoRestartInterval < TimeSpan.Zero)
+
+            if (BaseConfig.AutoRestartInterval == Timeout.InfiniteTimeSpan)
             {
                 await WebhookLogger.ErrorAsync("Shutting down the KOOK webhook client.");
+                return;
+            }
+
+            if (BaseConfig.AutoRestartInterval < TimeSpan.Zero)
+            {
+                await WebhookLogger.ErrorAsync("Shutting down the KOOK webhook client and exiting the application.");
                 Environment.Exit(1);
                 return;
             }
