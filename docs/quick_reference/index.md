@@ -9,7 +9,10 @@ title: 快速参考指南
 
 [KOOK 开发者平台]: https://developer.kookapp.cn/
 
-- @Guides.QuickReference.Startup
+- 登录与启动
+  - @Guides.QuickReference.Startup.Rest
+  - @Guides.QuickReference.Startup.WebSocket
+  - @Guides.QuickReference.Startup.Webhook
 - HTTP 接口
   - @Guides.QuickReference.Http.Guild
   - @Guides.QuickReference.Http.Channel

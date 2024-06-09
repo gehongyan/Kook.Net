@@ -1,7 +1,13 @@
 - name: 快速参考指南
   topicUid: Guides.QuickReference
 - name: 登录与启动
-  topicUid: Guides.QuickReference.Startup
+  items:
+    - name: Rest 客户端
+      topicUid: Guides.QuickReference.Startup.Rest
+    - name: WebSocket 客户端
+      topicUid: Guides.QuickReference.Startup.WebSocket
+    - name: Webhook 服务端
+      topicUid: Guides.QuickReference.Startup.Webhook
 - name: HTTP 接口
   items:
     - name: 服务器相关接口

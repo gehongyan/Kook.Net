@@ -19,6 +19,16 @@ title: 示例项目
 该示例项目演示了如何通过订阅到 Kook.Net 中的多个事件，来完成不同的操作。
 当用户在指定的消息上添加或撤销回应时，Bot 会为该用户添加或撤销服务器的角色。
 
+## Webhook
+
+### [Kook.Net.Samples.Webhook.AspNet](https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.Webhook.AspNet)
+
+该示例项目演示了如何使用 ASP.NET Core 来创建一个 Webhook 服务，以接收来自 Kook.Net 的事件。
+
+### [Kook.Net.Samples.Webhook.HttpListener](https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.Webhook.HttpListener)
+
+该示例项目演示了如何使用 HttpListener 来创建一个 Webhook 服务，以接收来自 Kook.Net 的事件。
+
 ## 文本命令框架
 
 ### [Kook.Net.Samples.TextCommands](https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.TextCommands)

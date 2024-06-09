@@ -19,13 +19,13 @@ POST `/api/v3/asset/create`
 ```csharp
 Stream stream = null; // 文件流
 string path = null; // 文件路径
-string fileName = null; // 文件名
+string filename = null; // 文件名
 
 // API 请求
-string assertUri = await _socketClient.Rest.CreateAssetAsync(stream, fileName);
-string assertUri = await _socketClient.Rest.CreateAssetAsync(path, fileName);
-string assertUri = await _restClient.CreateAssetAsync(stream, fileName);
-string assertUri = await _restClient.CreateAssetAsync(path, fileName);
+string assertUri = await _socketClient.Rest.CreateAssetAsync(stream, filename);
+string assertUri = await _socketClient.Rest.CreateAssetAsync(path, filename);
+string assertUri = await _restClient.CreateAssetAsync(stream, filename);
+string assertUri = await _restClient.CreateAssetAsync(path, filename);
 ```
 
 
