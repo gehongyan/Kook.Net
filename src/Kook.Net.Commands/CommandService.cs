@@ -132,6 +132,8 @@ public class CommandService : IDisposable
         TimeSpanTypeReader tsreader = new();
         _defaultTypeReaders[typeof(TimeSpan)] = tsreader;
         _defaultTypeReaders[typeof(TimeSpan?)] = NullableTypeReader.Create(typeof(TimeSpan), tsreader);
+        UriTypeReader uriReader = new();
+        _defaultTypeReaders[typeof(Uri)] = uriReader;
 
         _defaultTypeReaders[typeof(string)] =
             new PrimitiveTypeReader<string>((string x, out string y) =>
@@ -570,8 +572,13 @@ public class CommandService : IDisposable
     ///     command execution.
     /// </returns>
     public Task<IResult> ExecuteAsync(ICommandContext context, int argPos, IServiceProvider services,
-        MultiMatchHandling multiMatchHandling = MultiMatchHandling.Exception) =>
-        ExecuteAsync(context, context.Message.Content.Substring(argPos), services, multiMatchHandling);
+        MultiMatchHandling multiMatchHandling = MultiMatchHandling.Exception)
+    {
+        string input = context.Message.TryExpandCardContent(out string? expandedContent)
+            ? expandedContent[argPos..]
+            : context.Message.Content[argPos..];
+        return ExecuteAsync(context, input, services, multiMatchHandling);
+    }
 
     /// <summary>
     ///     Executes the command.
