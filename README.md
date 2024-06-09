@@ -29,6 +29,9 @@
 - [.NET Standard 2.0](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-0)
 - [.NET Framework 4.6.2](https://dotnet.microsoft.com/download/dotnet-framework/net462)
 
+> [!TIP]
+> Targets other than .NET 8.0 have not been fully tested.
+
 ---
 
 ## Installation
@@ -49,6 +52,12 @@ Individual components of the main package can be installed separately.
   [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Rest)
 - Kook.Net.WebSocket: [NuGet](https://www.nuget.org/packages/Kook.Net.WebSocket/),
   [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.WebSocket)
+- Kook.Net.Webhook: [NuGet](https://www.nuget.org/packages/Kook.Net.Webhook/),
+  [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Webhook)
+- Kook.Net.Webhook.AspNet: [NuGet](https://www.nuget.org/packages/Kook.Net.Webhook.AspNet/),
+  [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Webhook.AspNet)
+- Kook.Net.Webhook.HttpListener: [NuGet](https://www.nuget.org/packages/Kook.Net.Webhook.HttpListener/),
+  [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Webhook.HttpListener)
 - Kook.Net.Commands: [NuGet](https://www.nuget.org/packages/Kook.Net.Commands/),
   [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Commands)
 - Kook.Net.CardMarkup: [NuGet](https://www.nuget.org/packages/Kook.Net.CardMarkup/),
@@ -56,8 +65,9 @@ Individual components of the main package can be installed separately.
 
 ### Experimental Packages
 
-Experimental packages provide implementations of non-official released APIs, which are not listed on official documentation,
-may violate the developer rules or policies, not guaranteed to be stable, and may be changed or removed in the future.
+Experimental packages offer implementations of APIs that haven't been officially released or documented. They may
+violate developer rules or policies, lack stability guarantees, and are subject to potential changes or removal in the
+future.
 
 - Kook.Net.Experimental: [NuGet](https://www.nuget.org/packages/Kook.Net.Experimental/),
   [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Experimental)

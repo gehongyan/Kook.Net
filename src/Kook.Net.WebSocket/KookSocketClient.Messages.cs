@@ -13,21 +13,8 @@ public partial class KookSocketClient
 {
     #region Gateway
 
-    private async Task HandleGatewayHelloAsync(JsonElement payload)
+    internal async Task FetchRequiredDataAsync()
     {
-        if (DeserializePayload<GatewayHelloPayload>(payload) is not { } gatewayHelloPayload) return;
-        await _gatewayLogger.DebugAsync("Received Hello").ConfigureAwait(false);
-        try
-        {
-            _sessionId = gatewayHelloPayload.SessionId;
-            _heartbeatTask = RunHeartbeatAsync(_connection.CancellationToken);
-        }
-        catch (Exception ex)
-        {
-            _connection.CriticalError(new Exception("Processing Hello failed", ex));
-            return;
-        }
-
         // Get current user
         try
         {
@@ -100,6 +87,24 @@ public partial class KookSocketClient
             _connection.CriticalError(new Exception("Processing Guilds failed", ex));
             return;
         }
+    }
+
+    private async Task HandleGatewayHelloAsync(JsonElement payload)
+    {
+        if (DeserializePayload<GatewayHelloPayload>(payload) is not { } gatewayHelloPayload) return;
+        await _gatewayLogger.DebugAsync("Received Hello").ConfigureAwait(false);
+        try
+        {
+            _sessionId = gatewayHelloPayload.SessionId;
+            _heartbeatTask = RunHeartbeatAsync(_connection.CancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _connection.CriticalError(new Exception("Processing Hello failed", ex));
+            return;
+        }
+
+        await FetchRequiredDataAsync();
     }
 
     private async Task DownloadGuildDataAsync(IEnumerable<SocketGuild> socketGuilds, CancellationToken cancellationToken)

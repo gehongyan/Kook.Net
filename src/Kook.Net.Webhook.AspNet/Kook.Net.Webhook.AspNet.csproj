@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../Kook.Net.targets"/>
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
+    <RootNamespace>Kook.Webhook.AspNet</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <PackageId>Kook.Net.Webhook.AspNet</PackageId>
+    <Description>The Webhook API implementation for Kook.Net using ASP.NET Core.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kook.Net.Webhook\Kook.Net.Webhook.csproj" />
+  </ItemGroup>
+
+</Project>

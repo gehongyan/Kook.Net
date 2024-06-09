@@ -16,14 +16,14 @@ namespace Kook.API;
 
 internal class KookSocketApiClient : KookRestApiClient
 {
-    private static readonly JsonElement EmptyJsonElement = JsonDocument.Parse("{}").RootElement;
+    protected static readonly JsonElement EmptyJsonElement = JsonDocument.Parse("{}").RootElement;
     public event Func<GatewaySocketFrameType, Task> SentGatewayMessage
     {
         add => _sentGatewayMessageEvent.Add(value);
         remove => _sentGatewayMessageEvent.Remove(value);
     }
 
-    private readonly AsyncEvent<Func<GatewaySocketFrameType, Task>> _sentGatewayMessageEvent = new();
+    internal readonly AsyncEvent<Func<GatewaySocketFrameType, Task>> _sentGatewayMessageEvent = new();
 
     public event Func<GatewaySocketFrameType, int?, JsonElement, Task> ReceivedGatewayEvent
     {
@@ -31,7 +31,7 @@ internal class KookSocketApiClient : KookRestApiClient
         remove => _receivedGatewayEvent.Remove(value);
     }
 
-    private readonly AsyncEvent<Func<GatewaySocketFrameType, int?, JsonElement, Task>> _receivedGatewayEvent = new();
+    internal readonly AsyncEvent<Func<GatewaySocketFrameType, int?, JsonElement, Task>> _receivedGatewayEvent = new();
 
     public event Func<Exception, Task> Disconnected
     {
@@ -58,7 +58,8 @@ internal class KookSocketApiClient : KookRestApiClient
     public ConnectionState ConnectionState { get; private set; }
     internal IWebSocketClient WebSocketClient { get; }
 
-    public KookSocketApiClient(RestClientProvider restClientProvider, WebSocketProvider webSocketProvider,
+    public KookSocketApiClient(RestClientProvider restClientProvider,
+        WebSocketProvider webSocketProvider,
         string userAgent, string acceptLanguage, string? url = null,
         RetryMode defaultRetryMode = RetryMode.AlwaysRetry,
         JsonSerializerOptions? serializerOptions = null,

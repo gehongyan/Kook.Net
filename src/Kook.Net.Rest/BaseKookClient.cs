@@ -34,7 +34,7 @@ public abstract class BaseKookClient : IKookClient
         remove => _loggedInEvent.Remove(value);
     }
 
-    private readonly AsyncEvent<Func<Task>> _loggedInEvent = new();
+    internal readonly AsyncEvent<Func<Task>> _loggedInEvent = new();
 
     /// <summary>
     ///     Fired when the client has logged out.
@@ -45,7 +45,7 @@ public abstract class BaseKookClient : IKookClient
         remove => _loggedOutEvent.Remove(value);
     }
 
-    private readonly AsyncEvent<Func<Task>> _loggedOutEvent = new();
+    internal readonly AsyncEvent<Func<Task>> _loggedOutEvent = new();
 
     /// <summary>
     ///     Fired when a REST request is sent to the API. First parameter is the HTTP method,
@@ -70,7 +70,7 @@ public abstract class BaseKookClient : IKookClient
     /// <summary>
     ///     Gets the login state of the client.
     /// </summary>
-    public LoginState LoginState { get; private set; }
+    public LoginState LoginState { get; protected set; }
 
     /// <summary>
     ///     Gets the logged-in user.

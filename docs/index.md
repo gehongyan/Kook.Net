@@ -27,6 +27,9 @@ Kook.Net 是一个对 [KOOK（原开黑啦）API] 进行功能封装的类库，
 - [.NET Standard 2.0](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-0)
 - [.NET Framework 4.6.2](https://dotnet.microsoft.com/download/dotnet-framework/net462)
 
+> [!TIP]
+> 除 .NET 8.0 外的其他目标框架未经完全测试。
+
 [KOOK（原开黑啦）API]: https://developer.kookapp.cn/doc
 
 ## 我应该从哪里开始？

@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../Kook.Net.targets"/>
+
+  <PropertyGroup>
+    <RootNamespace>Kook.Webhook</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <PackageId>Kook.Net.Webhook</PackageId>
+    <Description>The Webhook API implementation for Kook.Net.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj"/>
+    <ProjectReference Include="..\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj"/>
+  </ItemGroup>
+
+</Project>
