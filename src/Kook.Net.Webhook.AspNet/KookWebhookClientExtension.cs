@@ -20,7 +20,7 @@ public static class KookWebhookClientExtension
     /// <param name="services"> The <see cref="IServiceCollection" /> to add the KOOK webhook client to. </param>
     /// <param name="configure"> The <see cref="KookSocketConfig" /> to configure the KOOK webhook client with. </param>
     /// <returns> The <see cref="IServiceCollection" /> so that additional calls can be chained. </returns>
-    public static IServiceCollection AddKookWebhookClient(this IServiceCollection services, Action<KookAspNetWebhookConfig> configure)
+    public static IServiceCollection AddKookAspNetWebhookClient(this IServiceCollection services, Action<KookAspNetWebhookConfig> configure)
     {
         services.Configure(configure);
         services.AddSingleton<KookAspNetWebhookClient>();

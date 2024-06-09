@@ -3,7 +3,7 @@ using Kook.Webhook;
 using Kook.Webhook.AspNet;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-builder.Services.AddKookWebhookClient(config =>
+builder.Services.AddKookAspNetWebhookClient(config =>
 {
     config.TokenType = TokenType.Bot;
     config.Token = default;
