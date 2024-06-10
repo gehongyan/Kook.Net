@@ -1,3 +1,4 @@
+using Kook.Net.Queue;
 using Kook.Net.Udp;
 using Kook.Net.WebSockets;
 using Kook.Rest;
@@ -169,12 +170,18 @@ public class KookSocketConfig : KookRestConfig
     public bool AutoUpdateChannelPositions { get; set; } = false;
 
     /// <summary>
+    ///     Gets or sets the provider used to generate new message queues.
+    /// </summary>
+    public MessageQueueProvider MessageQueueProvider { get; set; }
+
+    /// <summary>
     ///     Initializes a new instance of the <see cref="KookSocketConfig"/> class.
     /// </summary>
     public KookSocketConfig()
     {
         WebSocketProvider = DefaultWebSocketProvider.Instance;
         UdpSocketProvider = DefaultUdpSocketProvider.Instance;
+        MessageQueueProvider = InMemoryMessageQueueProvider.Instance;
     }
 
     internal KookSocketConfig Clone() => (KookSocketConfig)MemberwiseClone();

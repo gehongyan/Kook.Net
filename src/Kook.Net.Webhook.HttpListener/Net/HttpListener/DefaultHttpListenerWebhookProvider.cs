@@ -24,7 +24,7 @@ public static class DefaultHttpListenerWebhookProvider
             }
             catch (PlatformNotSupportedException ex)
             {
-                throw new PlatformNotSupportedException("The default WebhookProvider is not supported on this platform.", ex);
+                throw new PlatformNotSupportedException("The default DefaultHttpListenerWebhookProvider is not supported on this platform.", ex);
             }
         };
 }

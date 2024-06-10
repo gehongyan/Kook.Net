@@ -10,6 +10,7 @@ using Kook.API.Rest;
 using Kook.Logging;
 using Kook.Net;
 using Kook.Net.Converters;
+using Kook.Net.Queue;
 using Kook.Net.Udp;
 using Kook.Net.WebSockets;
 using Kook.Rest;
@@ -23,6 +24,9 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 {
     #region KookSocketClient
 
+    private const string MessageTypeGroup = "GROUP";
+    private const string MessageTypePerson = "PERSON";
+
     private readonly JsonSerializerOptions _serializerOptions;
 
     private readonly ConcurrentQueue<long> _heartbeatTimes;
@@ -35,11 +39,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     private int _retryCount;
     private Task? _heartbeatTask;
     private Task? _guildDownloadTask;
-    // private int _unavailableGuildCount;
-    // private long _lastGuildAvailableTime;
     private long _lastMessageTime;
     private int _nextAudioId;
 
+    private CancellationTokenSource? _queueCancellationTokenSource;
     private bool _isDisposed;
 
     /// <inheritdoc />
@@ -58,6 +61,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     internal ClientState State { get; private set; }
     internal UdpSocketProvider UdpSocketProvider { get; private set; }
     internal WebSocketProvider WebSocketProvider { get; private set; }
+    internal IMessageQueue MessageQueue { get; private set; }
     internal uint SmallNumberOfGuildsThreshold { get; private set; }
     internal uint LargeNumberOfGuildsThreshold { get; private set; }
     internal StartupCacheFetchMode StartupCacheFetchMode { get; private set; }
@@ -107,6 +111,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         MessageCacheSize = config.MessageCacheSize;
         UdpSocketProvider = config.UdpSocketProvider;
         WebSocketProvider = config.WebSocketProvider;
+        MessageQueue = config.MessageQueueProvider();
         SmallNumberOfGuildsThreshold = config.SmallNumberOfGuildsThreshold;
         LargeNumberOfGuildsThreshold = config.LargeNumberOfGuildsThreshold;
         // StartupCacheFetchMode will be set to the current config value whenever the socket client starts up
@@ -461,327 +466,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             switch (gatewaySocketFrameType)
             {
                 case GatewaySocketFrameType.Event:
-                {
-                    if (!payload.TryGetProperty("type", out JsonElement typeProperty)
-                        || !typeProperty.TryGetInt32(out int typeValue)
-                        || !Enum.IsDefined(typeof(MessageType), typeValue))
-                    {
-                        await _gatewayLogger
-                            .WarningAsync($"Unknown Event Type. Payload: {SerializePayload(payload)}")
-                            .ConfigureAwait(false);
-                        break;
-                    }
-
-                    if (!payload.TryGetProperty("channel_type", out JsonElement channelTypeProperty)
-                        || channelTypeProperty.GetString() is not { } channelType)
-                    {
-                        await _gatewayLogger
-                            .WarningAsync($"Unknown Channel Type. Payload: {SerializePayload(payload)}")
-                            .ConfigureAwait(false);
-                        break;
-                    }
-
-                    switch ((MessageType)typeValue)
-                    {
-                        case MessageType.Text:
-                        case MessageType.Image:
-                        case MessageType.Video:
-                        case MessageType.File:
-                        case MessageType.Audio:
-                        case MessageType.KMarkdown:
-                        case MessageType.Card:
-                        case MessageType.Poke:
-                        {
-                            await _gatewayLogger
-                                .DebugAsync($"Received Message ({channelType}, {(MessageType)typeValue})")
-                                .ConfigureAwait(false);
-
-                            switch (channelType)
-                            {
-                                case "GROUP":
-                                {
-                                    GatewayEvent<GatewayGroupMessageExtraData>? gatewayEvent =
-                                        payload.Deserialize<GatewayEvent<GatewayGroupMessageExtraData>>(_serializerOptions);
-                                    if (gatewayEvent is null)
-                                    {
-                                        await _gatewayLogger
-                                            .WarningAsync($"Unable to deserialize System Group Message. Payload: {SerializePayload(payload)}")
-                                            .ConfigureAwait(false);
-                                        break;
-                                    }
-                                    await HandleGroupMessage(gatewayEvent).ConfigureAwait(false);
-                                }
-                                    break;
-                                case "PERSON":
-                                {
-                                    GatewayEvent<GatewayPersonMessageExtraData>? gatewayEvent =
-                                        payload.Deserialize<GatewayEvent<GatewayPersonMessageExtraData>>(_serializerOptions);
-                                    if (gatewayEvent is null)
-                                    {
-                                        await _gatewayLogger
-                                            .WarningAsync($"Unable to deserialize System Person Message. Payload: {SerializePayload(payload)}")
-                                            .ConfigureAwait(false);
-                                        break;
-                                    }
-                                    await HandlePersonMessage(gatewayEvent).ConfigureAwait(false);
-                                }
-                                    break;
-                                default:
-                                {
-                                    await _gatewayLogger
-                                        .WarningAsync($"Unknown Channel Type ({channelType}). Payload: {SerializePayload(payload)}")
-                                        .ConfigureAwait(false);
-                                }
-                                    break;
-                            }
-                        }
-                            break;
-                        case MessageType.System:
-                        {
-                            GatewayEvent<GatewaySystemEventExtraData>? gatewayEvent =
-                                payload.Deserialize<GatewayEvent<GatewaySystemEventExtraData>>(_serializerOptions);
-                            if (gatewayEvent is not { ExtraData: { } extraData })
-                            {
-                                await _gatewayLogger
-                                    .WarningAsync($"Unable to deserialize System Event. Payload: {SerializePayload(payload)}")
-                                    .ConfigureAwait(false);
-                                break;
-                            }
-                            await _gatewayLogger
-                                .DebugAsync($"Received Event ({channelType}, {extraData.Type})")
-                                .ConfigureAwait(false);
-                            switch (channelType, extraData.Type)
-                            {
-                                #region Channels
-
-                                // 频道内用户添加 reaction
-                                case ("GROUP", "added_reaction"):
-                                    await HandleAddedReaction(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 频道内用户取消 reaction
-                                case ("GROUP", "deleted_reaction"):
-                                    await HandleDeletedReaction(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 频道消息更新
-                                case ("GROUP", "updated_message"):
-                                    await HandleUpdatedMessage(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 频道消息附加 Embeds
-                                case ("GROUP", "embeds_append"):
-                                    await HandleEmbedsAppend(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 频道消息被删除
-                                case ("GROUP", "deleted_message"):
-                                    await HandleDeletedMessage(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 新增频道
-                                case ("GROUP", "added_channel"):
-                                    await HandleAddedChannel(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 修改频道信息 & 修改语音频道服务器区域
-                                case ("GROUP", "updated_channel"):
-                                case ("GROUP", "updated_server_type"):
-                                    await HandleUpdatedChannel(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                case ("GROUP", "sort_channel"):
-                                    await HandleSortChannel(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 删除频道
-                                case ("GROUP", "deleted_channel"):
-                                    await HandleDeletedChannel(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 批量创建频道
-                                case ("GROUP", "batch_added_channel"):
-                                    await HandleBatchAddChannel(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 批量操作频道
-                                case ("GROUP", "batch_updated_channel"):
-                                    await HandleBatchUpdateChannel(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 批量删除频道
-                                case ("GROUP", "batch_deleted_channel"):
-                                    await HandleBatchDeleteChannel(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 新的频道置顶消息
-                                case ("GROUP", "pinned_message"):
-                                    await HandlePinnedMessage(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 取消频道置顶消息
-                                case ("GROUP", "unpinned_message"):
-                                    await HandleUnpinnedMessage(gatewayEvent).ConfigureAwait(false);
-                                    break;
-
-                                #endregion
-
-                                #region Direct Messages
-
-                                // 私聊消息更新
-                                case ("PERSON", "updated_private_message"):
-                                    await HandleUpdatedPrivateMessage(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 私聊消息被删除
-                                case ("PERSON", "deleted_private_message"):
-                                    await HandleDeletedPrivateMessage(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 私聊内用户添加 reaction
-                                case ("PERSON", "private_added_reaction"):
-                                    await HandlePrivateAddedReaction(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 私聊内用户取消 reaction
-                                case ("PERSON", "private_deleted_reaction"):
-                                    await HandlePrivateDeletedReaction(gatewayEvent).ConfigureAwait(false);
-                                    break;
-
-                                #endregion
-
-                                #region Guild Members
-
-                                // 新成员加入服务器
-                                case ("GROUP", "joined_guild"):
-                                    await HandleJoinedGuild(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 服务器成员退出
-                                case ("GROUP", "exited_guild"):
-                                    await HandleExitedGuild(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 服务器成员信息更新
-                                case ("GROUP", "updated_guild_member"):
-                                    await HandleUpdatedGuildMember(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 服务器成员上线
-                                case ("PERSON", "guild_member_online"):
-                                    await HandleGuildMemberOnline(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 服务器成员下线
-                                case ("PERSON", "guild_member_offline"):
-                                    await HandleGuildMemberOffline(gatewayEvent).ConfigureAwait(false);
-                                    break;
-
-                                #endregion
-
-                                #region Guild Roles
-
-                                // 服务器角色增加
-                                case ("GROUP", "added_role"):
-                                    await HandleAddedRole(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 服务器角色删除
-                                case ("GROUP", "deleted_role"):
-                                    await HandleDeletedRole(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 服务器角色更新
-                                case ("GROUP", "updated_role"):
-                                    await HandleUpdatedRole(gatewayEvent).ConfigureAwait(false);
-                                    break;
-
-                                #endregion
-
-                                #region Guild Emojis
-
-                                // 服务器表情新增
-                                case ("GROUP", "added_emoji"):
-                                    await HandleAddedRmoji(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 服务器表情更新
-                                case ("GROUP", "updated_emoji"):
-                                    await HandleUpdatedEmoji(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 服务器表情删除
-                                case ("GROUP", "deleted_emoji"):
-                                    await HandleDeletedEmoji(gatewayEvent).ConfigureAwait(false);
-                                    break;
-
-                                #endregion
-
-                                #region Guilds
-
-                                // 服务器信息更新
-                                case ("GROUP", "updated_guild"):
-                                    await HandleUpdatedGuild(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                case ("PERSON", "updated_guild"):
-                                    await HandleUpdatedGuildSelf(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 服务器删除
-                                case ("GROUP", "deleted_guild"):
-                                    await HandleDeletedGuild(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 服务器封禁用户
-                                case ("GROUP", "added_block_list"):
-                                    await HandleAddedBlockList(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 服务器取消封禁用户
-                                case ("GROUP", "deleted_block_list"):
-                                    await HandleDeletedBlockList(gatewayEvent).ConfigureAwait(false);
-                                    break;
-
-                                #endregion
-
-                                #region Users
-
-                                // 用户加入语音频道
-                                case ("GROUP", "joined_channel"):
-                                    await HandleJoinedChannel(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 用户退出语音频道
-                                case ("GROUP", "exited_channel"):
-                                    await HandleExitedChannel(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 用户直播状态更新
-                                case ("GROUP", "live_status_changed"):
-                                    await HandleLiveStatusChanged(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 用户被添加服务器闭麦/静音
-                                case ("GROUP", "add_guild_mute"):
-                                    await HandleAddGuildMute(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 用户被删除服务器闭麦/静音
-                                case ("GROUP", "delete_guild_mute"):
-                                    await HandleDeleteGuildMute(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 用户信息更新
-                                case ("PERSON", "user_updated"):
-                                    await HandleUserUpdated(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 自己新加入服务器
-                                case ("PERSON", "self_joined_guild"):
-                                    await HandleSelfJoinedGuild(gatewayEvent).ConfigureAwait(false);
-                                    break;
-                                // 自己退出服务器
-                                case ("PERSON", "self_exited_guild"):
-                                    await HandleSelfExitedGuild(gatewayEvent).ConfigureAwait(false);
-                                    break;
-
-                                #endregion
-
-                                #region Interactions
-
-                                case ("PERSON", "message_btn_click"):
-                                    await HandleMessageButtonClick(gatewayEvent).ConfigureAwait(false);
-                                    break;
-
-                                #endregion
-
-                                default:
-                                {
-                                    await _gatewayLogger
-                                        .WarningAsync($"Unknown SystemEventType ({channelType}, {extraData.Type}). Payload: {SerializePayload(payload)}")
-                                        .ConfigureAwait(false);
-                                }
-                                    break;
-                            }
-                        }
-                            break;
-                        default:
-                        {
-                            await _gatewayLogger
-                                .WarningAsync($"Unknown Event Type ({typeValue}). Payload: {SerializePayload(payload)}")
-                                .ConfigureAwait(false);
-                        }
-                            break;
-                    }
-
-                }
+                    await MessageQueue.EnqueueAsync(payload, sequence ?? _lastSeq).ConfigureAwait(false);
                     break;
                 case GatewaySocketFrameType.Hello:
                     await HandleGatewayHelloAsync(payload).ConfigureAwait(false);
@@ -812,13 +497,368 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         }
     }
 
+    private async Task ProcessGatewayEventAsync(JsonElement payload)
+    {
+        await Task.Delay(TimeSpan.FromSeconds(1));
+        if (!payload.TryGetProperty("type", out JsonElement typeProperty)
+            || !typeProperty.TryGetInt32(out int typeValue)
+            || !Enum.IsDefined(typeof(MessageType), typeValue))
+        {
+            await _gatewayLogger
+                .WarningAsync($"Unknown Event Type. Payload: {SerializePayload(payload)}")
+                .ConfigureAwait(false);
+            return;
+        }
+
+        if (!payload.TryGetProperty("channel_type", out JsonElement channelTypeProperty)
+            || channelTypeProperty.GetString() is not { } channelType)
+        {
+            await _gatewayLogger
+                .WarningAsync($"Unknown Channel Type. Payload: {SerializePayload(payload)}")
+                .ConfigureAwait(false);
+            return;
+        }
+
+        switch ((MessageType)typeValue)
+        {
+            case MessageType.Text:
+            case MessageType.Image:
+            case MessageType.Video:
+            case MessageType.File:
+            case MessageType.Audio:
+            case MessageType.KMarkdown:
+            case MessageType.Card:
+            case MessageType.Poke:
+            {
+                await _gatewayLogger
+                    .DebugAsync($"Received Message ({channelType}, {(MessageType)typeValue})")
+                    .ConfigureAwait(false);
+
+                switch (channelType)
+                {
+                    case MessageTypeGroup:
+                    {
+                        GatewayEvent<GatewayGroupMessageExtraData>? gatewayEvent =
+                            payload.Deserialize<GatewayEvent<GatewayGroupMessageExtraData>>(_serializerOptions);
+                        if (gatewayEvent is null)
+                        {
+                            await _gatewayLogger
+                                .WarningAsync($"Unable to deserialize System Group Message. Payload: {SerializePayload(payload)}")
+                                .ConfigureAwait(false);
+                            break;
+                        }
+                        await HandleGroupMessage(gatewayEvent).ConfigureAwait(false);
+                    }
+                        break;
+                    case MessageTypePerson:
+                    {
+                        GatewayEvent<GatewayPersonMessageExtraData>? gatewayEvent =
+                            payload.Deserialize<GatewayEvent<GatewayPersonMessageExtraData>>(_serializerOptions);
+                        if (gatewayEvent is null)
+                        {
+                            await _gatewayLogger
+                                .WarningAsync($"Unable to deserialize System Person Message. Payload: {SerializePayload(payload)}")
+                                .ConfigureAwait(false);
+                            break;
+                        }
+                        await HandlePersonMessage(gatewayEvent).ConfigureAwait(false);
+                    }
+                        break;
+                    default:
+                    {
+                        await _gatewayLogger
+                            .WarningAsync($"Unknown Channel Type ({channelType}). Payload: {SerializePayload(payload)}")
+                            .ConfigureAwait(false);
+                    }
+                        break;
+                }
+            }
+                break;
+            case MessageType.System:
+            {
+                GatewayEvent<GatewaySystemEventExtraData>? gatewayEvent =
+                    payload.Deserialize<GatewayEvent<GatewaySystemEventExtraData>>(_serializerOptions);
+                if (gatewayEvent is not { ExtraData: { } extraData })
+                {
+                    await _gatewayLogger
+                        .WarningAsync($"Unable to deserialize System Event. Payload: {SerializePayload(payload)}")
+                        .ConfigureAwait(false);
+                    break;
+                }
+                await _gatewayLogger
+                    .DebugAsync($"Received Event ({channelType}, {extraData.Type})")
+                    .ConfigureAwait(false);
+                switch (channelType, extraData.Type)
+                {
+                    #region Channels
+
+                    // 频道内用户添加 reaction
+                    case (MessageTypeGroup, "added_reaction"):
+                        await HandleAddedReaction(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 频道内用户取消 reaction
+                    case (MessageTypeGroup, "deleted_reaction"):
+                        await HandleDeletedReaction(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 频道消息更新
+                    case (MessageTypeGroup, "updated_message"):
+                        await HandleUpdatedMessage(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 频道消息附加 Embeds
+                    case (MessageTypeGroup, "embeds_append"):
+                        await HandleEmbedsAppend(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 频道消息被删除
+                    case (MessageTypeGroup, "deleted_message"):
+                        await HandleDeletedMessage(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 新增频道
+                    case (MessageTypeGroup, "added_channel"):
+                        await HandleAddedChannel(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 修改频道信息 & 修改语音频道服务器区域
+                    case (MessageTypeGroup, "updated_channel"):
+                    case (MessageTypeGroup, "updated_server_type"):
+                        await HandleUpdatedChannel(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    case (MessageTypeGroup, "sort_channel"):
+                        await HandleSortChannel(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 删除频道
+                    case (MessageTypeGroup, "deleted_channel"):
+                        await HandleDeletedChannel(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 批量创建频道
+                    case (MessageTypeGroup, "batch_added_channel"):
+                        await HandleBatchAddChannel(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 批量操作频道
+                    case (MessageTypeGroup, "batch_updated_channel"):
+                        await HandleBatchUpdateChannel(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 批量删除频道
+                    case (MessageTypeGroup, "batch_deleted_channel"):
+                        await HandleBatchDeleteChannel(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 新的频道置顶消息
+                    case (MessageTypeGroup, "pinned_message"):
+                        await HandlePinnedMessage(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 取消频道置顶消息
+                    case (MessageTypeGroup, "unpinned_message"):
+                        await HandleUnpinnedMessage(gatewayEvent).ConfigureAwait(false);
+                        break;
+
+                    #endregion
+
+                    #region Direct Messages
+
+                    // 私聊消息更新
+                    case (MessageTypePerson, "updated_private_message"):
+                        await HandleUpdatedPrivateMessage(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 私聊消息被删除
+                    case (MessageTypePerson, "deleted_private_message"):
+                        await HandleDeletedPrivateMessage(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 私聊内用户添加 reaction
+                    case (MessageTypePerson, "private_added_reaction"):
+                        await HandlePrivateAddedReaction(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 私聊内用户取消 reaction
+                    case (MessageTypePerson, "private_deleted_reaction"):
+                        await HandlePrivateDeletedReaction(gatewayEvent).ConfigureAwait(false);
+                        break;
+
+                    #endregion
+
+                    #region Guild Members
+
+                    // 新成员加入服务器
+                    case (MessageTypeGroup, "joined_guild"):
+                        await HandleJoinedGuild(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 服务器成员退出
+                    case (MessageTypeGroup, "exited_guild"):
+                        await HandleExitedGuild(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 服务器成员信息更新
+                    case (MessageTypeGroup, "updated_guild_member"):
+                        await HandleUpdatedGuildMember(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 服务器成员上线
+                    case (MessageTypePerson, "guild_member_online"):
+                        await HandleGuildMemberOnline(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 服务器成员下线
+                    case (MessageTypePerson, "guild_member_offline"):
+                        await HandleGuildMemberOffline(gatewayEvent).ConfigureAwait(false);
+                        break;
+
+                    #endregion
+
+                    #region Guild Roles
+
+                    // 服务器角色增加
+                    case (MessageTypeGroup, "added_role"):
+                        await HandleAddedRole(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 服务器角色删除
+                    case (MessageTypeGroup, "deleted_role"):
+                        await HandleDeletedRole(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 服务器角色更新
+                    case (MessageTypeGroup, "updated_role"):
+                        await HandleUpdatedRole(gatewayEvent).ConfigureAwait(false);
+                        break;
+
+                    #endregion
+
+                    #region Guild Emojis
+
+                    // 服务器表情新增
+                    case (MessageTypeGroup, "added_emoji"):
+                        await HandleAddedRmoji(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 服务器表情更新
+                    case (MessageTypeGroup, "updated_emoji"):
+                        await HandleUpdatedEmoji(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 服务器表情删除
+                    case (MessageTypeGroup, "deleted_emoji"):
+                        await HandleDeletedEmoji(gatewayEvent).ConfigureAwait(false);
+                        break;
+
+                    #endregion
+
+                    #region Guilds
+
+                    // 服务器信息更新
+                    case (MessageTypeGroup, "updated_guild"):
+                        await HandleUpdatedGuild(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    case (MessageTypePerson, "updated_guild"):
+                        await HandleUpdatedGuildSelf(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 服务器删除
+                    case (MessageTypeGroup, "deleted_guild"):
+                        await HandleDeletedGuild(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 服务器封禁用户
+                    case (MessageTypeGroup, "added_block_list"):
+                        await HandleAddedBlockList(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 服务器取消封禁用户
+                    case (MessageTypeGroup, "deleted_block_list"):
+                        await HandleDeletedBlockList(gatewayEvent).ConfigureAwait(false);
+                        break;
+
+                    #endregion
+
+                    #region Users
+
+                    // 用户加入语音频道
+                    case (MessageTypeGroup, "joined_channel"):
+                        await HandleJoinedChannel(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 用户退出语音频道
+                    case (MessageTypeGroup, "exited_channel"):
+                        await HandleExitedChannel(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 用户直播状态更新
+                    case (MessageTypeGroup, "live_status_changed"):
+                        await HandleLiveStatusChanged(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 用户被添加服务器闭麦/静音
+                    case (MessageTypeGroup, "add_guild_mute"):
+                        await HandleAddGuildMute(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 用户被删除服务器闭麦/静音
+                    case (MessageTypeGroup, "delete_guild_mute"):
+                        await HandleDeleteGuildMute(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 用户信息更新
+                    case (MessageTypePerson, "user_updated"):
+                        await HandleUserUpdated(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 自己新加入服务器
+                    case (MessageTypePerson, "self_joined_guild"):
+                        await HandleSelfJoinedGuild(gatewayEvent).ConfigureAwait(false);
+                        break;
+                    // 自己退出服务器
+                    case (MessageTypePerson, "self_exited_guild"):
+                        await HandleSelfExitedGuild(gatewayEvent).ConfigureAwait(false);
+                        break;
+
+                    #endregion
+
+                    #region Interactions
+
+                    case (MessageTypePerson, "message_btn_click"):
+                        await HandleMessageButtonClick(gatewayEvent).ConfigureAwait(false);
+                        break;
+
+                    #endregion
+
+                    default:
+                    {
+                        await _gatewayLogger
+                            .WarningAsync($"Unknown SystemEventType ({channelType}, {extraData.Type}). Payload: {SerializePayload(payload)}")
+                            .ConfigureAwait(false);
+                    }
+                        break;
+                }
+            }
+                break;
+            default:
+            {
+                await _gatewayLogger
+                    .WarningAsync($"Unknown Event Type ({typeValue}). Payload: {SerializePayload(payload)}")
+                    .ConfigureAwait(false);
+            }
+                break;
+        }
+
+    }
+
     #endregion
 
-    /// <inheritdoc />
-    public override async Task StartAsync() => await _connection.StartAsync().ConfigureAwait(false);
+    internal void StartMessageQueue()
+    {
+        _queueCancellationTokenSource?.Dispose();
+        _queueCancellationTokenSource = new CancellationTokenSource();
+        Task.Run(async () =>
+        {
+            while (!_queueCancellationTokenSource.Token.IsCancellationRequested)
+            {
+                JsonElement gatewayEvent = await MessageQueue
+                    .DequeueAsync(_queueCancellationTokenSource.Token)
+                    .ConfigureAwait(false);
+                await ProcessGatewayEventAsync(gatewayEvent).ConfigureAwait(false);
+            }
+        }, _queueCancellationTokenSource.Token);
+    }
+
+    internal void StopMessageQueue()
+    {
+        _queueCancellationTokenSource?.Cancel();
+        _queueCancellationTokenSource?.Dispose();
+        _queueCancellationTokenSource = null;
+    }
 
     /// <inheritdoc />
-    public override async Task StopAsync() => await _connection.StopAsync().ConfigureAwait(false);
+    public override async Task StartAsync()
+    {
+        StartMessageQueue();
+        await _connection.StartAsync().ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    public override async Task StopAsync()
+    {
+        await _connection.StopAsync().ConfigureAwait(false);
+        StopMessageQueue();
+    }
 
     private async Task RunHeartbeatAsync(CancellationToken cancellationToken)
     {
