@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../Kook.Net.Sample.targets" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Kook.Net.MessageQueue.MassTransit\Kook.Net.MessageQueue.MassTransit.csproj" />
+  </ItemGroup>
+
+</Project>

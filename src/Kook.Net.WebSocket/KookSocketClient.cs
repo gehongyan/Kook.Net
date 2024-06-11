@@ -42,7 +42,6 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     private long _lastMessageTime;
     private int _nextAudioId;
 
-    private CancellationTokenSource? _queueCancellationTokenSource;
     private bool _isDisposed;
 
     /// <inheritdoc />
@@ -61,7 +60,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     internal ClientState State { get; private set; }
     internal UdpSocketProvider UdpSocketProvider { get; private set; }
     internal WebSocketProvider WebSocketProvider { get; private set; }
-    internal IMessageQueue MessageQueue { get; private set; }
+    internal BaseMessageQueue MessageQueue { get; private set; }
     internal uint SmallNumberOfGuildsThreshold { get; private set; }
     internal uint LargeNumberOfGuildsThreshold { get; private set; }
     internal StartupCacheFetchMode StartupCacheFetchMode { get; private set; }
@@ -111,7 +110,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         MessageCacheSize = config.MessageCacheSize;
         UdpSocketProvider = config.UdpSocketProvider;
         WebSocketProvider = config.WebSocketProvider;
-        MessageQueue = config.MessageQueueProvider();
+        MessageQueue = config.MessageQueueProvider(ProcessGatewayEventAsync);
         SmallNumberOfGuildsThreshold = config.SmallNumberOfGuildsThreshold;
         LargeNumberOfGuildsThreshold = config.LargeNumberOfGuildsThreshold;
         // StartupCacheFetchMode will be set to the current config value whenever the socket client starts up
@@ -497,7 +496,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         }
     }
 
-    private async Task ProcessGatewayEventAsync(JsonElement payload)
+    internal async Task ProcessGatewayEventAsync(JsonElement payload)
     {
         await Task.Delay(TimeSpan.FromSeconds(1));
         if (!payload.TryGetProperty("type", out JsonElement typeProperty)
@@ -823,33 +822,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
     #endregion
 
-    internal void StartMessageQueue()
-    {
-        _queueCancellationTokenSource?.Dispose();
-        _queueCancellationTokenSource = new CancellationTokenSource();
-        Task.Run(async () =>
-        {
-            while (!_queueCancellationTokenSource.Token.IsCancellationRequested)
-            {
-                JsonElement gatewayEvent = await MessageQueue
-                    .DequeueAsync(_queueCancellationTokenSource.Token)
-                    .ConfigureAwait(false);
-                await ProcessGatewayEventAsync(gatewayEvent).ConfigureAwait(false);
-            }
-        }, _queueCancellationTokenSource.Token);
-    }
-
-    internal void StopMessageQueue()
-    {
-        _queueCancellationTokenSource?.Cancel();
-        _queueCancellationTokenSource?.Dispose();
-        _queueCancellationTokenSource = null;
-    }
-
     /// <inheritdoc />
     public override async Task StartAsync()
     {
-        StartMessageQueue();
+        await MessageQueue.StartAsync();
         await _connection.StartAsync().ConfigureAwait(false);
     }
 
@@ -857,7 +833,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     public override async Task StopAsync()
     {
         await _connection.StopAsync().ConfigureAwait(false);
-        StopMessageQueue();
+        await MessageQueue.StopAsync();
     }
 
     private async Task RunHeartbeatAsync(CancellationToken cancellationToken)

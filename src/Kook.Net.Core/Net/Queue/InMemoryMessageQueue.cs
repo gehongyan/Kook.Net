@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
 
-namespace Kook.Net.Queue;
+namespace Kook.Net.Queue.InMemory;
 
-internal class InMemoryMessageQueue : IMessageQueue
+internal class InMemoryMessageQueue : BaseMessageQueue
 {
 #if NET6_0_OR_GREATER
     private readonly PriorityQueue<JsonElement, int> _queue;
@@ -10,9 +10,10 @@ internal class InMemoryMessageQueue : IMessageQueue
     private readonly Queue<JsonElement> _queue;
 #endif
     private readonly SemaphoreSlim _semaphore;
-    private CancellationTokenSource? _dequeueCancellationToken;
+    private CancellationTokenSource? _dequeueCancellationTokenSource;
 
-    internal InMemoryMessageQueue()
+    internal InMemoryMessageQueue(Func<JsonElement, Task> eventHandler)
+        : base(eventHandler)
     {
         _semaphore = new SemaphoreSlim(1, 1);
 #if NET6_0_OR_GREATER
@@ -22,7 +23,34 @@ internal class InMemoryMessageQueue : IMessageQueue
 #endif
     }
 
-    public async Task EnqueueAsync(JsonElement payload, int sequence, CancellationToken cancellationToken = default)
+    /// <inheritdoc />
+    public override Task StartAsync(CancellationToken cancellationToken = default)
+    {
+        _dequeueCancellationTokenSource?.Dispose();
+        _dequeueCancellationTokenSource = new CancellationTokenSource();
+        Task.Run(async () =>
+        {
+            while (!_dequeueCancellationTokenSource.Token.IsCancellationRequested)
+            {
+                JsonElement gatewayEvent = await DequeueAsync(_dequeueCancellationTokenSource.Token)
+                    .ConfigureAwait(false);
+                await EventHandler(gatewayEvent).ConfigureAwait(false);
+            }
+        }, _dequeueCancellationTokenSource.Token);
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public override Task StopAsync(CancellationToken cancellationToken = default)
+    {
+        _dequeueCancellationTokenSource?.Cancel();
+        _dequeueCancellationTokenSource?.Dispose();
+        _dequeueCancellationTokenSource = null;
+        return Task.CompletedTask;
+    }
+
+    public override async Task EnqueueAsync(JsonElement payload, int sequence,
+        CancellationToken cancellationToken = default)
     {
         await _semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
@@ -32,9 +60,9 @@ internal class InMemoryMessageQueue : IMessageQueue
 #else
             _queue.Enqueue(payload);
 #endif
-            _dequeueCancellationToken?.Cancel();
-            _dequeueCancellationToken?.Dispose();
-            _dequeueCancellationToken = null;
+            _dequeueCancellationTokenSource?.Cancel();
+            _dequeueCancellationTokenSource?.Dispose();
+            _dequeueCancellationTokenSource = null;
         }
         finally
         {
@@ -42,14 +70,14 @@ internal class InMemoryMessageQueue : IMessageQueue
         }
     }
 
-    public async Task<JsonElement> DequeueAsync(CancellationToken cancellationToken = default)
+    private async Task<JsonElement> DequeueAsync(CancellationToken cancellationToken = default)
     {
         await _semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
             if (_queue.Count > 0)
                 return _queue.Dequeue();
-            _dequeueCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            _dequeueCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         }
         finally
         {
@@ -58,7 +86,7 @@ internal class InMemoryMessageQueue : IMessageQueue
 
         try
         {
-            await Task.Delay(Timeout.InfiniteTimeSpan, _dequeueCancellationToken.Token).ConfigureAwait(false);
+            await Task.Delay(Timeout.InfiniteTimeSpan, _dequeueCancellationTokenSource.Token).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {

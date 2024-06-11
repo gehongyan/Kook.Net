@@ -91,7 +91,7 @@ public abstract class KookWebhookClient : KookSocketClient
     public override async Task StartAsync()
     {
         _connectionState = ConnectionState.Connecting;
-        StartMessageQueue();
+        await MessageQueue.StartAsync();
         if (!BaseConfig.StartupWaitForChallenge)
             await StartAsyncInternal();
     }
@@ -107,7 +107,7 @@ public abstract class KookWebhookClient : KookSocketClient
     {
         _connectionState = ConnectionState.Disconnecting;
         await LogoutAsync();
-        StopMessageQueue();
+        await MessageQueue.StopAsync();
         _connectionState = ConnectionState.Disconnected;
     }
 

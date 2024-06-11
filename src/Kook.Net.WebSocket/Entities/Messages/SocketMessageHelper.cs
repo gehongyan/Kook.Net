@@ -1,6 +1,5 @@
 using Kook.API;
 using Kook.API.Gateway;
-using Kook.Rest;
 
 namespace Kook.WebSocket;
 

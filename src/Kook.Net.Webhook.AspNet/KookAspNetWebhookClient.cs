@@ -9,18 +9,13 @@ namespace Kook.Webhook.AspNet;
 /// </summary>
 public class KookAspNetWebhookClient : KookWebhookClient, IHostedService
 {
-    private readonly KookAspNetWebhookConfig _config;
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="KookAspNetWebhookClient" /> class.
     /// </summary>
-    /// <param name="serviceProvider"> The <see cref="IServiceProvider" /> to resolve services from. </param>
     /// <param name="config"> The <see cref="IOptions{TOptions}" /> to configure the KOOK webhook client with. </param>
-    public KookAspNetWebhookClient(IServiceProvider serviceProvider, IOptions<KookAspNetWebhookConfig> config)
+    public KookAspNetWebhookClient(IOptions<KookAspNetWebhookConfig> config)
         : base(config.Value)
     {
-        _config = config.Value;
-        config.Value.ConfigureKookClient?.Invoke(serviceProvider, this);
     }
 
     /// <summary>
@@ -40,11 +35,11 @@ public class KookAspNetWebhookClient : KookWebhookClient, IHostedService
     /// <inheritdoc />
     async Task IHostedService.StartAsync(CancellationToken cancellationToken)
     {
-        if (!_config.TokenType.HasValue)
+        if (!BaseConfig.TokenType.HasValue)
             throw new InvalidOperationException("The KOOK webhook client token type is not available.");
-        if (_config.Token is null)
+        if (BaseConfig.Token is null)
             throw new InvalidOperationException("The KOOK webhook client token is not available.");
-        await LoginAsync(_config.TokenType.Value, _config.Token, _config.ValidateToken);
+        await LoginAsync(BaseConfig.TokenType.Value, BaseConfig.Token, BaseConfig.ValidateToken);
         await base.StartAsync();
     }
 

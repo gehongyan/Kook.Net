@@ -1,4 +1,6 @@
-﻿namespace Kook.Net.Queue;
+﻿using System.Text.Json;
+
+namespace Kook.Net.Queue.InMemory;
 
 /// <summary>
 ///     Represents a delegate that provides a new <see cref="IMessageQueue"/> instance of <see cref="InMemoryMessageQueue"/>.
@@ -8,11 +10,11 @@ public static class InMemoryMessageQueueProvider
     /// <summary>
     ///     A delegate that creates a default <see cref="MessageQueueProvider"/> instance.
     /// </summary>
-    public static readonly MessageQueueProvider Instance = () =>
+    public static readonly MessageQueueProvider Instance = eventHandler =>
     {
         try
         {
-            return new InMemoryMessageQueue();
+            return new InMemoryMessageQueue(eventHandler);
         }
         catch (PlatformNotSupportedException ex)
         {

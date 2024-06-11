@@ -1,5 +1,4 @@
-﻿using Kook.API;
-using Kook.Net.Webhooks.HttpListener;
+﻿using Kook.Net.Webhooks.HttpListener;
 
 namespace Kook.Webhook.HttpListener;
 
