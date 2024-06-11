@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <Import Project="../../Kook.Net.Sample.targets" />
+
+  <ItemGroup>
+    <PackageReference Include="AspNet.Security.OAuth.Kook" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Kook.Net.Experimental\Kook.Net.Experimental.csproj" />
+  </ItemGroup>
+
+</Project>

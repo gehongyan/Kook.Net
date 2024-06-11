@@ -41,7 +41,7 @@ public class SocketSelfUser : SocketUser, ISelfUser, IUpdateable
     }
 
     /// <inheritdoc />
-    public override string BuffAvatar
+    public override string? BuffAvatar
     {
         get => GlobalUser.BuffAvatar;
         internal set => GlobalUser.BuffAvatar = value;

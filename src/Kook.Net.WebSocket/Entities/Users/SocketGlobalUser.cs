@@ -31,7 +31,7 @@ internal sealed class SocketGlobalUser : SocketUser
     public override string Avatar { get; internal set; }
 
     /// <inheritdoc />
-    public override string BuffAvatar { get; internal set; }
+    public override string? BuffAvatar { get; internal set; }
 
     /// <inheritdoc />
     public override string? Banner { get; internal set; }
@@ -56,7 +56,6 @@ internal sealed class SocketGlobalUser : SocketUser
     {
         Username = string.Empty;
         Avatar = string.Empty;
-        BuffAvatar = string.Empty;
         Banner = string.Empty;
         Nameplates = [];
         Presence = new SocketPresence();

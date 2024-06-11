@@ -34,7 +34,7 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     public abstract string Avatar { get; internal set; }
 
     /// <inheritdoc />
-    public abstract string BuffAvatar { get; internal set; }
+    public abstract string? BuffAvatar { get; internal set; }
 
     /// <inheritdoc />
     public abstract string? Banner { get; internal set; }

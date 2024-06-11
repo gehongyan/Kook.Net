@@ -48,7 +48,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// <summary>
     ///     Gets the link to this user's BUFF avatar.
     /// </summary>
-    string BuffAvatar { get; }
+    string? BuffAvatar { get; }
 
     /// <summary>
     ///     Gets the link to this user's banner.

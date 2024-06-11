@@ -37,7 +37,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     public string Avatar { get; internal set; }
 
     /// <inheritdoc />
-    public string BuffAvatar { get; internal set; }
+    public string? BuffAvatar { get; internal set; }
 
     /// <inheritdoc />
     public string? Banner { get; internal set; }
@@ -76,7 +76,6 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     {
         Username = string.Empty;
         Avatar = string.Empty;
-        BuffAvatar = string.Empty;
         Banner = string.Empty;
         Nameplates = [];
         Presence = new RestPresence();
