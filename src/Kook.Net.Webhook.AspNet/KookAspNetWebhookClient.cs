@@ -12,9 +12,18 @@ public class KookAspNetWebhookClient : KookWebhookClient, IHostedService
     /// <summary>
     ///     Initializes a new instance of the <see cref="KookAspNetWebhookClient" /> class.
     /// </summary>
-    /// <param name="config"> The <see cref="IOptions{TOptions}" /> to configure the KOOK webhook client with. </param>
-    public KookAspNetWebhookClient(IOptions<KookAspNetWebhookConfig> config)
+    /// <param name="config"> The <see cref="IOptions{TOptions}" /> to configure the KOOK ASP.NET webhook client with. </param>
+    internal KookAspNetWebhookClient(IOptions<KookAspNetWebhookConfig> config)
         : base(config.Value)
+    {
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="KookAspNetWebhookClient" /> class.
+    /// </summary>
+    /// <param name="config"> The <see cref="IOptions{TOptions}" /> to configure the KOOK ASP.NET webhook client with. </param>
+    internal KookAspNetWebhookClient(KookAspNetWebhookConfig config)
+        : base(config)
     {
     }
 

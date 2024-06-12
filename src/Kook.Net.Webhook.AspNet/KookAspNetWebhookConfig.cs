@@ -25,7 +25,7 @@ public class KookAspNetWebhookConfig : KookWebhookConfig
     /// <summary>
     ///     Gets or sets the route endpoint for the webhook.
     /// </summary>
-    public string RouteEndpoint { get; set; } = "kook";
+    public string RoutePattern { get; set; } = "kook";
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="KookAspNetWebhookConfig"/> class.
