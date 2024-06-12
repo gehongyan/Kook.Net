@@ -1,4 +1,4 @@
-﻿using Kook.Net.DependencyInjection;
+﻿using Kook.Net.Extensions.DependencyInjection;
 using Kook.Net.Webhooks.AspNet;
 using Kook.WebSocket;
 using Microsoft.AspNetCore.Builder;

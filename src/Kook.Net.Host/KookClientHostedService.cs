@@ -1,7 +1,7 @@
 ﻿using Kook.Rest;
 using Microsoft.Extensions.Hosting;
 
-namespace Kook.Net.DependencyInjection;
+namespace Kook.Net.Host;
 
 internal class KookClientHostedService<T> : IHostedService
     where T : IKookClient

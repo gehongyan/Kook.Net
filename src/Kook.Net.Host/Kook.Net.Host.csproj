@@ -4,10 +4,10 @@
 
   <PropertyGroup>
     <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
-    <RootNamespace>Kook.Net.Extensions.DependencyInjection</RootNamespace>
+    <RootNamespace>Kook.Net.Host</RootNamespace>
     <IsPackable>false</IsPackable>
-    <PackageId>Kook.Net.Extensions.DependencyInjection</PackageId>
-    <Description>The dependency injection implementations using Microsoft.Extensions.DependencyInjection. </Description>
+    <PackageId>Kook.Net.Host</PackageId>
+    <Description>Provides extensions for hosting Kook.Net applications. </Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kook.Net\Kook.Net.csproj" />
+    <ProjectReference Include="..\Kook.Net.Extensions.DependencyInjection\Kook.Net.Extensions.DependencyInjection.csproj" />
   </ItemGroup>
 
 </Project>

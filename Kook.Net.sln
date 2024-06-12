@@ -76,6 +76,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kook.Net.Samples.MessageQue
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kook.Net.Extensions.DependencyInjection", "src\Kook.Net.Extensions.DependencyInjection\Kook.Net.Extensions.DependencyInjection.csproj", "{7D3A6FFF-1055-44AD-AD7B-81D44706A984}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kook.Net.Host", "src\Kook.Net.Host\Kook.Net.Host.csproj", "{876A01D6-06EC-42A0-B6B6-2D336C8E1043}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -186,6 +188,10 @@ Global
 		{7D3A6FFF-1055-44AD-AD7B-81D44706A984}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D3A6FFF-1055-44AD-AD7B-81D44706A984}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D3A6FFF-1055-44AD-AD7B-81D44706A984}.Release|Any CPU.Build.0 = Release|Any CPU
+		{876A01D6-06EC-42A0-B6B6-2D336C8E1043}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{876A01D6-06EC-42A0-B6B6-2D336C8E1043}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{876A01D6-06EC-42A0-B6B6-2D336C8E1043}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{876A01D6-06EC-42A0-B6B6-2D336C8E1043}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{57F76D67-0E55-4609-A61C-3A4C3073CA0E} = {58B166AB-82DD-472F-AC70-9318DA4F881E}
@@ -212,5 +218,6 @@ Global
 		{2E73C29A-BF51-46C6-B1AB-B3F007B620D2} = {B51E68C1-B6FC-49A3-B04D-57BB0C19B192}
 		{211C1521-9A8E-414A-B703-0B5BE0D347FA} = {8DE556F9-829D-48D3-A41C-FA57207CAE72}
 		{7D3A6FFF-1055-44AD-AD7B-81D44706A984} = {B51E68C1-B6FC-49A3-B04D-57BB0C19B192}
+		{876A01D6-06EC-42A0-B6B6-2D336C8E1043} = {B51E68C1-B6FC-49A3-B04D-57BB0C19B192}
 	EndGlobalSection
 EndGlobal
