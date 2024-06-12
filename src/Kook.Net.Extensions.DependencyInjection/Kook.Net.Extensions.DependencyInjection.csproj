@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kook.Net\Kook.Net.csproj" />
+    <ProjectReference Include="..\Kook.Net.Webhook\Kook.Net.Webhook.csproj" />
   </ItemGroup>
 
 </Project>
