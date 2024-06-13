@@ -2,10 +2,9 @@
 using Kook.Webhook;
 using Kook.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
-namespace Kook.Net.Extensions.DependencyInjection;
+namespace Kook.Net.DependencyInjection.Microsoft;
 
 /// <summary>
 ///     Provides extension methods for Kook.Net to add clients using the <see cref="IServiceCollection"/>.

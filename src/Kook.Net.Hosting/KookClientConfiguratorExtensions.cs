@@ -1,4 +1,4 @@
-﻿using Kook.Net.Extensions.DependencyInjection;
+﻿using Kook.Net.DependencyInjection.Microsoft;
 using Kook.Rest;
 using Kook.Webhook;
 using Kook.WebSocket;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 namespace Kook.Net.Hosting;
 
 /// <summary>
-///     Provides extension methods for <see cref="IKookClientConfigurator{TClient, TConfig}"/> to configure hosted clients.
+///     Provides extension methods for <see cref="IKookClientConfigurator{TClient,TConfig}"/> to configure hosted clients.
 /// </summary>
 public static class KookClientConfiguratorExtensions
 {

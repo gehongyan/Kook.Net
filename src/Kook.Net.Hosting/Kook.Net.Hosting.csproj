@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kook.Net.Extensions.DependencyInjection\Kook.Net.Extensions.DependencyInjection.csproj" />
+    <ProjectReference Include="..\Kook.Net.DependencyInjection.Microsoft\Kook.Net.DependencyInjection.Microsoft.csproj" />
   </ItemGroup>
 
 </Project>

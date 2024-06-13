@@ -1,4 +1,4 @@
-﻿using Kook.Net.Extensions.DependencyInjection;
+﻿using Kook.Net.DependencyInjection.Microsoft;
 using Kook.WebSocket;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;

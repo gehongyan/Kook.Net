@@ -1,7 +1,7 @@
 ﻿using Kook.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Kook.Net.Extensions.DependencyInjection;
+namespace Kook.Net.DependencyInjection.Microsoft;
 
 /// <summary>
 ///     Represents a configurator for a Kook socket client.

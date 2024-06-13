@@ -4,9 +4,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
-    <RootNamespace>Kook.Net.Extensions.DependencyInjection</RootNamespace>
+    <RootNamespace>Kook.Net.DependencyInjection.Microsoft</RootNamespace>
     <IsPackable>false</IsPackable>
-    <PackageId>Kook.Net.Extensions.DependencyInjection</PackageId>
+    <PackageId>Kook.Net.DependencyInjection.Microsoft</PackageId>
     <Description>The dependency injection implementations using Microsoft.Extensions.DependencyInjection. </Description>
   </PropertyGroup>
 

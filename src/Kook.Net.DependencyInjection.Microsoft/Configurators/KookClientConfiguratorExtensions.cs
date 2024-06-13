@@ -1,7 +1,7 @@
 ﻿using Kook.Net.Queue;
 using Kook.WebSocket;
 
-namespace Kook.Net.Extensions.DependencyInjection;
+namespace Kook.Net.DependencyInjection.Microsoft;
 
 /// <summary>
 ///     Provides extension methods for <see cref="IKookClientConfigurator{TClient, TConfig}"/> to configure Kook clients.

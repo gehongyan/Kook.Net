@@ -1,4 +1,4 @@
-﻿namespace Kook.Net.Extensions.DependencyInjection;
+﻿namespace Kook.Net.DependencyInjection.Microsoft;
 
 /// <summary>
 ///     Represents a generic completer for a Kook client configurator.

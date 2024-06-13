@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Kook.Net.Extensions.DependencyInjection;
+using Kook.Net.DependencyInjection.Microsoft;
 using Kook.Net.Webhooks.AspNet;
 using Kook.WebSocket;
 using Microsoft.AspNetCore.Builder;

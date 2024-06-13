@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Kook.Net.Extensions.DependencyInjection;
+namespace Kook.Net.DependencyInjection.Microsoft;
 
 /// <summary>
 ///     Provides extension methods for <see cref="IServiceCollection"/> to add Kook clients and services.

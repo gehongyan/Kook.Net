@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Kook.Net.Extensions.DependencyInjection;
+namespace Kook.Net.DependencyInjection.Microsoft;
 
 /// <summary>
 ///     Represents a configurator for a Kook webhook client.

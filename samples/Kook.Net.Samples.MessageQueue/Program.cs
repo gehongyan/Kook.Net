@@ -1,5 +1,5 @@
 using Kook;
-using Kook.Net.Extensions.DependencyInjection;
+using Kook.Net.DependencyInjection.Microsoft;
 using Kook.Net.Hosting;
 using Kook.Net.Queue.MassTransit;
 using Kook.Net.Samples.MessageQueue.MassTransit;

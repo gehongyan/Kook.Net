@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Kook.Net.Extensions.DependencyInjection;
+namespace Kook.Net.DependencyInjection.Microsoft;
 
-/// <inheritdoc cref="T:Kook.Net.Extensions.DependencyInjection.IKookClientConfigurator`2" />
+/// <inheritdoc cref="T:Kook.Net.DependencyInjection.Microsoft.IKookClientConfigurator`2" />
 public abstract class KookClientConfigurator<TClient, TConfig>
     : IKookClientConfigurator<TClient, TConfig>, IKookClientConfiguratorCompleter
     where TClient : IKookClient
