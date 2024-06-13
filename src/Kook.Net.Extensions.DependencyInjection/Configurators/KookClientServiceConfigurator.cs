@@ -36,8 +36,8 @@ public class KookClientServiceConfigurator : IKookClientServiceConfigurator
     }
 
     /// <inheritdoc />
-    public IKookClientConfigurator<KookWebhookClient, KookWebhookConfig> UseWebhookClient<TClient, TConfig>(
-        Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<KookWebhookConfig> configure)
+    public IKookClientConfigurator<TClient, TConfig> UseWebhookClient<TClient, TConfig>(
+        Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<TConfig> configure)
         where TClient : KookWebhookClient
         where TConfig : KookWebhookConfig
     {

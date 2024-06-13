@@ -32,8 +32,8 @@ public interface IKookClientServiceConfigurator : IKookClientConfiguratorComplet
     /// <typeparam name="TClient"> The type of the client. </typeparam>
     /// <typeparam name="TConfig"> The type of the configuration. </typeparam>
     /// <returns> The configurator. </returns>
-    IKookClientConfigurator<KookWebhookClient, KookWebhookConfig> UseWebhookClient<TClient, TConfig>(
-        Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<KookWebhookConfig> configure)
+    IKookClientConfigurator<TClient, TConfig> UseWebhookClient<TClient, TConfig>(
+        Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<TConfig> configure)
         where TClient : KookWebhookClient
         where TConfig : KookWebhookConfig;
 }

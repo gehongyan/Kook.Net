@@ -9,12 +9,12 @@ namespace Kook.Net.Extensions.DependencyInjection;
 /// </summary>
 /// <typeparam name="TClient"> The type of the client. </typeparam>
 /// <typeparam name="TConfig"> The type of the configuration. </typeparam>
-public class KookWebhookClientConfigurator<TClient, TConfig> : KookClientConfigurator<KookWebhookClient, KookWebhookConfig>
+public class KookWebhookClientConfigurator<TClient, TConfig> : KookClientConfigurator<TClient, TConfig>
     where TClient : KookWebhookClient
     where TConfig : KookWebhookConfig
 {
     internal KookWebhookClientConfigurator(IServiceCollection services,
-        Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<KookWebhookConfig> configure)
+        Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<TConfig> configure)
         : base(services, configure)
     {
         AppendService(service => service.AddKookWebhookClient(clientFactory, configure));
