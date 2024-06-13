@@ -31,6 +31,11 @@ public class KookClientSubscriptionService : IHostedService
             }, message.Exception, "Kook.Webhook: {Message}", message.Message);
             return Task.CompletedTask;
         };
+        _kookWebhookClient.MessageReceived += (message, author, channel) =>
+        {
+            _logger.LogInformation("Message received: {Message}", message);
+            return Task.CompletedTask;
+        };
         _kookWebhookClient.Ready += () =>
         {
             _logger.LogInformation("Ready!");

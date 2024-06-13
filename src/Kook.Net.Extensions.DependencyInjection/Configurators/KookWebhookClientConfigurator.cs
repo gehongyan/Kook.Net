@@ -19,4 +19,10 @@ public class KookWebhookClientConfigurator<TClient, TConfig> : KookClientConfigu
     {
         AppendService(service => service.AddKookWebhookClient(clientFactory, configure));
     }
+
+    internal KookWebhookClientConfigurator(IServiceCollection services, Action<TConfig> configure)
+        : base(services, configure)
+    {
+        AppendService(service => service.AddKookWebhookClient((provider, _) => provider.GetRequiredService<TClient>(), configure));
+    }
 }

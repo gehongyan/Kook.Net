@@ -193,8 +193,10 @@ public static class KookClientHostExtensions
         where TConfig : KookWebhookConfig
     {
         services.AddKookWebhookClient(clientFactory, configure);
-        services.AddHostedService(provider => provider.GetRequiredService<TClient>() as IHostedService
-            ?? new KookClientHostedService<TClient>(provider.GetRequiredService<TClient>(),
+        if (typeof(TClient).IsAssignableTo(typeof(IHostedService)))
+            services.AddSingleton(typeof(IHostedService), provider => provider.GetRequiredService<TClient>());
+        else
+            services.AddHostedService(provider => new KookClientHostedService<TClient>(provider.GetRequiredService<TClient>(),
                 tokenType(provider), token(provider), validateToken?.Invoke(provider) ?? true));
         return services;
     }
@@ -219,8 +221,10 @@ public static class KookClientHostExtensions
         where TConfig : KookWebhookConfig
     {
         services.AddKookWebhookClient(clientFactory, config);
-        services.AddHostedService(provider => provider.GetRequiredService<TClient>() as IHostedService
-            ?? new KookClientHostedService<TClient>(provider.GetRequiredService<TClient>(),
+        if (typeof(TClient).IsAssignableTo(typeof(IHostedService)))
+            services.AddSingleton(typeof(IHostedService), provider => provider.GetRequiredService<TClient>());
+        else
+            services.AddHostedService(provider => new KookClientHostedService<TClient>(provider.GetRequiredService<TClient>(),
                 tokenType(provider), token(provider), validateToken?.Invoke(provider) ?? true));
         return services;
     }
@@ -244,8 +248,11 @@ public static class KookClientHostExtensions
         where TConfig : KookWebhookConfig
     {
         services.AddKookWebhookClient(clientFactory, configure);
-        services.AddHostedService(provider => provider.GetRequiredService<TClient>() as IHostedService
-            ?? new KookClientHostedService<TClient>(provider.GetRequiredService<TClient>(), tokenType, token, validateToken));
+        if (typeof(TClient).IsAssignableTo(typeof(IHostedService)))
+            services.AddSingleton(typeof(IHostedService), provider => provider.GetRequiredService<TClient>());
+        else
+            services.AddHostedService(provider => new KookClientHostedService<TClient>(provider.GetRequiredService<TClient>(),
+                tokenType, token, validateToken));
         return services;
     }
 
@@ -268,8 +275,11 @@ public static class KookClientHostExtensions
         where TConfig : KookWebhookConfig
     {
         services.AddKookWebhookClient(clientFactory, config);
-        services.AddHostedService(provider => provider.GetRequiredService<TClient>() as IHostedService
-            ?? new KookClientHostedService<TClient>(provider.GetRequiredService<TClient>(), tokenType, token, validateToken));
+        if (typeof(TClient).IsAssignableTo(typeof(IHostedService)))
+            services.AddSingleton(typeof(IHostedService), provider => provider.GetRequiredService<TClient>());
+        else
+            services.AddHostedService(provider => new KookClientHostedService<TClient>(provider.GetRequiredService<TClient>(),
+                tokenType, token, validateToken));
         return services;
     }
 }

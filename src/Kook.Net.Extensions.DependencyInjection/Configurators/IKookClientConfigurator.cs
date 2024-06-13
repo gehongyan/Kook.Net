@@ -14,7 +14,7 @@ public interface IKookClientConfigurator<TClient, TConfig>
     /// <summary>
     ///     Gets the service collection to append services.
     /// </summary>
-    IServiceCollection ServiceCollection { get;}
+    IServiceCollection ServiceCollection { get; }
 
     /// <summary>
     ///     Appends a configuration action, which is executed on the created configuration instance.

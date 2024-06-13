@@ -498,7 +498,6 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
     internal async Task ProcessGatewayEventAsync(JsonElement payload)
     {
-        await Task.Delay(TimeSpan.FromSeconds(1));
         if (!payload.TryGetProperty("type", out JsonElement typeProperty)
             || !typeProperty.TryGetInt32(out int typeValue)
             || !Enum.IsDefined(typeof(MessageType), typeValue))

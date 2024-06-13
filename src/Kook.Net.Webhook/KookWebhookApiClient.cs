@@ -117,8 +117,6 @@ internal class KookWebhookApiClient : KookSocketApiClient
             return JsonSerializer.Serialize(new GatewayChallengeFrame { Challenge = challenge }, SerializerOptions);
         }
 
-
-
         await _receivedGatewayEvent
             .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement)
             .ConfigureAwait(false);

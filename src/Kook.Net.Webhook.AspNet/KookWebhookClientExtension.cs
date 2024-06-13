@@ -1,7 +1,9 @@
-﻿using Kook.Net.Extensions.DependencyInjection;
+﻿using System.Diagnostics.CodeAnalysis;
+using Kook.Net.Extensions.DependencyInjection;
 using Kook.Net.Webhooks.AspNet;
 using Kook.WebSocket;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -63,12 +65,62 @@ public static class KookWebhookClientExtension
     }
 
     /// <summary>
+    ///     Configures the KOOK service to use the ASP.NET webhook client.
+    /// </summary>
+    /// <param name="configurator"> The KOOK service configurator. </param>
+    /// <param name="configure"> The configuration action. </param>
+    /// <returns> The KOOK service configurator. </returns>
+    public static IKookClientConfigurator<KookAspNetWebhookClient, KookAspNetWebhookConfig> UseAspNetWebhookClient
+        (this IKookClientServiceConfigurator configurator, Action<KookAspNetWebhookConfig> configure)
+    {
+        IKookClientConfigurator<KookAspNetWebhookClient, KookAspNetWebhookConfig> serviceConfigurator =
+            configurator.UseWebhookClient<KookAspNetWebhookClient, KookAspNetWebhookConfig>(
+                (_, config) => new KookAspNetWebhookClient(config), configure);
+        serviceConfigurator.AppendService(service =>
+            service.AddSingleton<IHostedService>(provider => provider.GetRequiredService<KookAspNetWebhookClient>()));
+        serviceConfigurator.AppendService(service => service.AddControllers());
+        return serviceConfigurator;
+    }
+
+    /// <summary>
+    ///     Configures the KOOK service to use the ASP.NET webhook client.
+    /// </summary>
+    /// <param name="configurator"> The KOOK service configurator. </param>
+    /// <param name="tokenType"> The token type. </param>
+    /// <param name="token"> The token. </param>
+    /// <param name="validateToken"> The value indicating whether to validate the token. </param>
+    /// <returns> The KOOK service configurator. </returns>
+    [DoesNotReturn]
+    [Obsolete("The KookAspNetWebhookClient itself is a hosted service, configure the token in the KookAspNetWebhookConfig.")]
+    public static IKookClientConfigurator<KookAspNetWebhookClient, KookAspNetWebhookConfig> UseHostedClient(
+        this IKookClientConfigurator<KookAspNetWebhookClient, KookAspNetWebhookConfig> configurator,
+        TokenType tokenType, string token, bool validateToken = true) =>
+        throw new InvalidOperationException("The KookAspNetWebhookClient itself is a hosted service, configure the token in the KookAspNetWebhookConfig.");
+
+    /// <summary>
+    ///     Configures the KOOK service to use the ASP.NET webhook client.
+    /// </summary>
+    /// <param name="configurator"> The KOOK service configurator. </param>
+    /// <param name="tokenType"> The token type. </param>
+    /// <param name="token"> The token. </param>
+    /// <param name="validateToken"> The value indicating whether to validate the token. </param>
+    /// <returns> The KOOK service configurator. </returns>
+    [DoesNotReturn]
+    [Obsolete("The KookAspNetWebhookClient itself is a hosted service, configure the token in the KookAspNetWebhookConfig.")]
+    public static IKookClientConfigurator<KookAspNetWebhookClient, KookAspNetWebhookConfig> UseHostedClient(
+        this IKookClientConfigurator<KookAspNetWebhookClient, KookAspNetWebhookConfig> configurator,
+        Func<IServiceProvider, TokenType> tokenType, Func<IServiceProvider, string> token,
+        Func<IServiceProvider, bool>? validateToken = null) =>
+        throw new InvalidOperationException("The KookAspNetWebhookClient itself is a hosted service, configure the token in the KookAspNetWebhookConfig.");
+
+    /// <summary>
     ///     Adds a KOOK webhook endpoint to the specified <see cref="IApplicationBuilder" />.
     /// </summary>
     /// <param name="builder"> The <see cref="IApplicationBuilder" /> to add the KOOK webhook endpoint to. </param>
     /// <param name="routePattern"> The route pattern to use for the KOOK webhook endpoint. </param>
     /// <returns> A reference to this instance after the operation has completed. </returns>
-    public static WebApplication UseKookEndpoint(this WebApplication builder, string? routePattern = null)
+    public static T UseKookEndpoint<T>(this T builder, string? routePattern = null)
+        where T: IHost, IEndpointRouteBuilder
     {
         KookAspNetWebhookClient? kookWebhookClient = builder.Services.GetService<KookAspNetWebhookClient>();
         if (kookWebhookClient is null)

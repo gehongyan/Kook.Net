@@ -191,7 +191,7 @@ public static class KookClientDependencyInjectionExtensions
         return services;
     }
 
-    private static void AddKookWebhookClient<TClient>(this IServiceCollection services)
+    internal static void AddKookWebhookClient<TClient>(this IServiceCollection services)
         where TClient: KookWebhookClient
     {
         services.AddSingleton<IKookClient, TClient>(provider => provider.GetRequiredService<TClient>());
