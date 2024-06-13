@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using MassTransit;
+﻿using MassTransit;
 
 namespace Kook.Net.Queue.MassTransit;
 

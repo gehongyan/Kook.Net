@@ -9,7 +9,7 @@ builder.Services.AddKookAspNetWebhookClient(config =>
     config.Token = default;
     config.VerifyToken = default;
     config.EncryptKey = default;
-    config.RouteEndpoint = "kook";
+    config.RoutePattern = "kook";
     config.LogLevel = LogSeverity.Debug;
 });
 builder.Services.AddHostedService<KookClientSubscriptionService>();

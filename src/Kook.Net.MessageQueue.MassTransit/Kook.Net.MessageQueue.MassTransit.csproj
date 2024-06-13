@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kook.Net.Extensions.DependencyInjection\Kook.Net.Extensions.DependencyInjection.csproj" />
     <ProjectReference Include="..\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj" />
   </ItemGroup>
 

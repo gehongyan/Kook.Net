@@ -3,6 +3,7 @@
   <Import Project="../../Kook.Net.Sample.targets" />
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Kook.Net.Host\Kook.Net.Host.csproj" />
     <ProjectReference Include="..\..\src\Kook.Net.MessageQueue.MassTransit\Kook.Net.MessageQueue.MassTransit.csproj" />
   </ItemGroup>
 
