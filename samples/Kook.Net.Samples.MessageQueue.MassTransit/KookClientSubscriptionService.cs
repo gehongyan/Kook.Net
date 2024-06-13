@@ -7,18 +7,18 @@ namespace Kook.Net.Samples.MessageQueue.MassTransit;
 public class KookClientSubscriptionService : IHostedService
 {
     private readonly ILogger<KookClientSubscriptionService> _logger;
-    private readonly KookSocketClient _kookSocketClient;
+    private readonly KookSocketClient _kookClient;
 
-    public KookClientSubscriptionService(ILogger<KookClientSubscriptionService> logger, KookSocketClient kookSocketClient)
+    public KookClientSubscriptionService(ILogger<KookClientSubscriptionService> logger, KookSocketClient kookClient)
     {
         _logger = logger;
-        _kookSocketClient = kookSocketClient;
+        _kookClient = kookClient;
         SubscribeToEvents();
     }
 
     private void SubscribeToEvents()
     {
-        _kookSocketClient.Log += message =>
+        _kookClient.Log += message =>
         {
             _logger.Log(message.Severity switch
             {
@@ -29,15 +29,15 @@ public class KookClientSubscriptionService : IHostedService
                 LogSeverity.Verbose => LogLevel.Debug,
                 LogSeverity.Debug => LogLevel.Trace,
                 _ => throw new ArgumentOutOfRangeException(nameof(message.Severity), message.Severity, null)
-            }, message.Exception, "Kook.Webhook: {Message}", message.Message);
+            }, message.Exception, "Kook: {Message}", message.Message);
             return Task.CompletedTask;
         };
-        _kookSocketClient.MessageReceived += (message, author, channel) =>
+        _kookClient.MessageReceived += (message, author, channel) =>
         {
             _logger.LogInformation("Message received: {Message}", message);
             return Task.CompletedTask;
         };
-        _kookSocketClient.Ready += () =>
+        _kookClient.Ready += () =>
         {
             _logger.LogInformation("Ready!");
             return Task.CompletedTask;

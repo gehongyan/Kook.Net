@@ -27,11 +27,15 @@ internal class KookClientHostedService<T> : IHostedService
     /// <inheritdoc />
     async Task IHostedService.StartAsync(CancellationToken cancellationToken)
     {
-        if (_kookClient is BaseKookClient baseKookClient
-            && _tokenType.HasValue
-            && !string.IsNullOrWhiteSpace(_token)
-            && _validateToken.HasValue)
+        if (_kookClient is BaseKookClient baseKookClient)
+        {
+            if (!_tokenType.HasValue
+                || string.IsNullOrWhiteSpace(_token)
+                || !_validateToken.HasValue)
+                throw new InvalidOperationException("Token type, token, and validate token must be specified.");
             await baseKookClient.LoginAsync(_tokenType.Value, _token, _validateToken.Value);
+        }
+
         await _kookClient.StartAsync();
     }
 
