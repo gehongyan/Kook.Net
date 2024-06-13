@@ -1,6 +1,6 @@
 using Kook;
 using Kook.Net.Extensions.DependencyInjection;
-using Kook.Net.Host;
+using Kook.Net.Hosting;
 using Kook.Net.Queue.MassTransit;
 using Kook.Net.Samples.MessageQueue.MassTransit;
 using Kook.Webhook.AspNet;

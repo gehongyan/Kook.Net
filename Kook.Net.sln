@@ -76,7 +76,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kook.Net.Samples.MessageQue
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kook.Net.Extensions.DependencyInjection", "src\Kook.Net.Extensions.DependencyInjection\Kook.Net.Extensions.DependencyInjection.csproj", "{7D3A6FFF-1055-44AD-AD7B-81D44706A984}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kook.Net.Host", "src\Kook.Net.Host\Kook.Net.Host.csproj", "{876A01D6-06EC-42A0-B6B6-2D336C8E1043}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kook.Net.Hosting", "src\Kook.Net.Hosting\Kook.Net.Hosting.csproj", "{876A01D6-06EC-42A0-B6B6-2D336C8E1043}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kook.Net.MessageQueue.InMemory", "src\Kook.Net.MessageQueue.InMemory\Kook.Net.MessageQueue.InMemory.csproj", "{4F5162ED-5FBA-42D4-9510-9E40637473DE}"
 EndProject

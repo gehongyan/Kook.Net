@@ -4,9 +4,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
-    <RootNamespace>Kook.Net.Host</RootNamespace>
+    <RootNamespace>Kook.Net.Hosting</RootNamespace>
     <IsPackable>false</IsPackable>
-    <PackageId>Kook.Net.Host</PackageId>
+    <PackageId>Kook.Net.Hosting</PackageId>
     <Description>Provides extensions for hosting Kook.Net applications. </Description>
   </PropertyGroup>
 

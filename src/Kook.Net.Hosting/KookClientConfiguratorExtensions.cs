@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
-namespace Kook.Net.Host;
+namespace Kook.Net.Hosting;
 
 /// <summary>
 ///     Provides extension methods for <see cref="IKookClientConfigurator{TClient, TConfig}"/> to configure hosted clients.
