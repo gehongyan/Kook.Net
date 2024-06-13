@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Kook.Net.Samples.MessageQueue.MassTransit</RootNamespace>
+  </PropertyGroup>
+
+  <Import Project="../../Kook.Net.Sample.targets" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Kook.Net.Host\Kook.Net.Host.csproj" />
+    <ProjectReference Include="..\..\src\Kook.Net.MessageQueue.InMemory\Kook.Net.MessageQueue.InMemory.csproj" />
+    <ProjectReference Include="..\..\src\Kook.Net.MessageQueue.MassTransit\Kook.Net.MessageQueue.MassTransit.csproj" />
+    <ProjectReference Include="..\..\src\Kook.Net.Webhook.AspNet\Kook.Net.Webhook.AspNet.csproj" />
+    <ProjectReference Include="..\..\src\Kook.Net.Webhook.HttpListener\Kook.Net.Webhook.HttpListener.csproj" />
+  </ItemGroup>
+
+</Project>

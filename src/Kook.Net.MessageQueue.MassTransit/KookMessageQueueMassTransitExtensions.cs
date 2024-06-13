@@ -53,8 +53,8 @@ public static class KookMassTransitMessageQueueExtensions
         where TClient : BaseSocketClient
         where TConfig : KookSocketConfig
     {
-        configurator.AppendConfigure((provider, config) =>
-            config.MessageQueueProvider = DefaultMassTransitMessageQueueProvider.Create(provider.GetRequiredService<IBus>()));
+        configurator.UseMessageQueue(provider =>
+            DefaultMassTransitMessageQueueProvider.Create(provider.GetRequiredService<IBus>()));
         return configurator;
     }
 }

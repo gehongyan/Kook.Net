@@ -36,6 +36,8 @@ if (mode is "Webhook")
                 });
                 x.AddLogging(b => b.AddConsole());
             });
+            // To use in-memory message queue, invoke:
+            // .UseMessageQueue(SynchronousImmediateMessageQueueProvider.Instance);
     });
     builder.Services.AddHostedService<KookClientSubscriptionService>();
     WebApplication app = builder.Build();

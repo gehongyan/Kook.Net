@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace Kook.Net.Queue.InMemory;
+﻿namespace Kook.Net.Queue.InMemory;
 
 /// <summary>
 ///     Represents a delegate that provides a new <see cref="IMessageQueue"/> instance of <see cref="InMemoryMessageQueue"/>.
@@ -23,4 +21,3 @@ public static class InMemoryMessageQueueProvider
         }
     };
 }
-

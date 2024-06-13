@@ -1,5 +1,5 @@
 using Kook.Net.Queue;
-using Kook.Net.Queue.InMemory;
+using Kook.Net.Queue.SynchronousImmediate;
 using Kook.Net.Udp;
 using Kook.Net.WebSockets;
 using Kook.Rest;
@@ -182,7 +182,7 @@ public class KookSocketConfig : KookRestConfig
     {
         WebSocketProvider = DefaultWebSocketProvider.Instance;
         UdpSocketProvider = DefaultUdpSocketProvider.Instance;
-        MessageQueueProvider = InMemoryMessageQueueProvider.Instance;
+        MessageQueueProvider = SynchronousImmediateMessageQueueProvider.Instance;
     }
 
     internal KookSocketConfig Clone() => (KookSocketConfig)MemberwiseClone();
