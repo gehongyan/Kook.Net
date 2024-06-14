@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../Kook.Net.targets"/>
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
+    <RootNamespace>Kook.Net.DependencyInjection.Microsoft</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <PackageId>Kook.Net.DependencyInjection.Microsoft</PackageId>
+    <Description>The dependency injection implementations using Microsoft.Extensions.DependencyInjection. </Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kook.Net\Kook.Net.csproj" />
+  </ItemGroup>
+
+</Project>

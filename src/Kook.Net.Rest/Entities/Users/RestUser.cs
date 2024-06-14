@@ -1,6 +1,4 @@
-using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Globalization;
 using Model = Kook.API.User;
 
 namespace Kook.Rest;

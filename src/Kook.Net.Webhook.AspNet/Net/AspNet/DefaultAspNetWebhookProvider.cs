@@ -24,7 +24,7 @@ public static class DefaultAspNetWebhookProvider
             }
             catch (PlatformNotSupportedException ex)
             {
-                throw new PlatformNotSupportedException("The default WebhookProvider is not supported on this platform.", ex);
+                throw new PlatformNotSupportedException("The default DefaultAspNetWebhookProvider is not supported on this platform.", ex);
             }
         };
 }

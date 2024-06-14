@@ -29,6 +29,11 @@ public abstract class KookWebhookConfig : KookSocketConfig
     public WebhookProvider WebhookProvider { get; set; }
 
     /// <summary>
+    ///     Gets or sets whether the client should log out when disconnected.
+    /// </summary>
+    public bool LogoutWhenDisconnected { get; set; } = false;
+
+    /// <summary>
     ///     Initializes a new instance of the <see cref="KookWebhookConfig"/> class.
     /// </summary>
     /// <param name="webhookProvider"> The provider used to generate new UDP sockets. </param>

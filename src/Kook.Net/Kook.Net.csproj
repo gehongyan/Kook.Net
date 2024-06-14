@@ -10,17 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kook.Net.CardMarkup\Kook.Net.CardMarkup.csproj"/>
     <ProjectReference Include="..\Kook.Net.Commands\Kook.Net.Commands.csproj"/>
     <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj"/>
     <ProjectReference Include="..\Kook.Net.Rest\Kook.Net.Rest.csproj"/>
-    <ProjectReference Include="..\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj"/>
     <ProjectReference Include="..\Kook.Net.Webhook\Kook.Net.Webhook.csproj"/>
-    <ProjectReference Include="..\Kook.Net.Webhook.HttpListener\Kook.Net.Webhook.HttpListener.csproj"/>
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework.Contains(`.`))' And '!$(TargetFramework.StartsWith(`netstandard`))' ">
-    <ProjectReference Include="..\Kook.Net.Webhook.AspNet\Kook.Net.Webhook.AspNet.csproj"/>
+    <ProjectReference Include="..\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj"/>
   </ItemGroup>
 
 </Project>

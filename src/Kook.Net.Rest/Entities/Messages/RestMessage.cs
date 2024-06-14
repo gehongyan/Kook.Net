@@ -1,6 +1,5 @@
 using Kook.API;
 using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Kook.Rest;
 

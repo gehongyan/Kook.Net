@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 
@@ -37,6 +38,8 @@ internal class AspNetWebhookClient : IAspNetWebhookClient
 
         if (messageResponse is not null)
             await httpContext.Response.WriteAsync(messageResponse);
+        else
+            httpContext.Response.StatusCode = (int)HttpStatusCode.NoContent;
     }
 
     /// <inheritdoc />

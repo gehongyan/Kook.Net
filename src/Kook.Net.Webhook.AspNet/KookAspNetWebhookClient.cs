@@ -9,18 +9,22 @@ namespace Kook.Webhook.AspNet;
 /// </summary>
 public class KookAspNetWebhookClient : KookWebhookClient, IHostedService
 {
-    private readonly KookAspNetWebhookConfig _config;
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="KookAspNetWebhookClient" /> class.
+    /// </summary>
+    /// <param name="config"> The <see cref="IOptions{TOptions}" /> to configure the KOOK ASP.NET webhook client with. </param>
+    internal KookAspNetWebhookClient(IOptions<KookAspNetWebhookConfig> config)
+        : base(config.Value)
+    {
+    }
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="KookAspNetWebhookClient" /> class.
     /// </summary>
-    /// <param name="serviceProvider"> The <see cref="IServiceProvider" /> to resolve services from. </param>
-    /// <param name="config"> The <see cref="IOptions{TOptions}" /> to configure the KOOK webhook client with. </param>
-    public KookAspNetWebhookClient(IServiceProvider serviceProvider, IOptions<KookAspNetWebhookConfig> config)
-        : base(config.Value)
+    /// <param name="config"> The <see cref="IOptions{TOptions}" /> to configure the KOOK ASP.NET webhook client with. </param>
+    internal KookAspNetWebhookClient(KookAspNetWebhookConfig config)
+        : base(config)
     {
-        _config = config.Value;
-        config.Value.ConfigureKookClient?.Invoke(serviceProvider, this);
     }
 
     /// <summary>
@@ -40,18 +44,19 @@ public class KookAspNetWebhookClient : KookWebhookClient, IHostedService
     /// <inheritdoc />
     async Task IHostedService.StartAsync(CancellationToken cancellationToken)
     {
-        if (!_config.TokenType.HasValue)
+        if (!BaseConfig.TokenType.HasValue)
             throw new InvalidOperationException("The KOOK webhook client token type is not available.");
-        if (_config.Token is null)
+        if (BaseConfig.Token is null)
             throw new InvalidOperationException("The KOOK webhook client token is not available.");
-        await LoginAsync(_config.TokenType.Value, _config.Token, _config.ValidateToken);
+        await LoginAsync(BaseConfig.TokenType.Value, BaseConfig.Token, BaseConfig.ValidateToken);
         await base.StartAsync();
     }
 
     /// <inheritdoc />
     async Task IHostedService.StopAsync(CancellationToken cancellationToken)
     {
-        await base.StopAsync();
+        if (BaseConfig.LogoutWhenDisconnected)
+            await base.StopAsync();
         await LogoutAsync();
         if (ApiClient.WebhookClient is AspNetWebhookClient aspNetWebhookClient)
             aspNetWebhookClient.OnClosed(new OperationCanceledException("The hosted service has been stopped."));

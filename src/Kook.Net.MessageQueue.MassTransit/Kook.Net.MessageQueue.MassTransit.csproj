@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../Kook.Net.targets"/>
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
+    <RootNamespace>Kook.Net.Queue.MassTransit</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <PackageId>Kook.Net.MessageQueue.MassTransit</PackageId>
+    <Description>The MassTransit message queue implementation for Kook.Net message queue.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kook.Net.DependencyInjection.Microsoft\Kook.Net.DependencyInjection.Microsoft.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.2.2" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.3.1" />
+  </ItemGroup>
+
+</Project>
