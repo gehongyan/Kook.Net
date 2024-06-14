@@ -106,7 +106,8 @@ public abstract class KookWebhookClient : KookSocketClient
     public override async Task StopAsync()
     {
         _connectionState = ConnectionState.Disconnecting;
-        await LogoutAsync();
+        if (BaseConfig.LogoutWhenDisconnected)
+            await LogoutAsync();
         await MessageQueue.StopAsync();
         _connectionState = ConnectionState.Disconnected;
     }

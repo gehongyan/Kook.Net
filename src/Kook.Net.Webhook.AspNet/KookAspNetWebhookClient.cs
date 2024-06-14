@@ -55,7 +55,8 @@ public class KookAspNetWebhookClient : KookWebhookClient, IHostedService
     /// <inheritdoc />
     async Task IHostedService.StopAsync(CancellationToken cancellationToken)
     {
-        await base.StopAsync();
+        if (BaseConfig.LogoutWhenDisconnected)
+            await base.StopAsync();
         await LogoutAsync();
         if (ApiClient.WebhookClient is AspNetWebhookClient aspNetWebhookClient)
             aspNetWebhookClient.OnClosed(new OperationCanceledException("The hosted service has been stopped."));
