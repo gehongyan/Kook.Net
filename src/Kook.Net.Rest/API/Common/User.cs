@@ -29,7 +29,7 @@ internal class User
     public required string Avatar { get; set; }
 
     [JsonPropertyName("vip_avatar")]
-    public required string BuffAvatar { get; set; }
+    public string? BuffAvatar { get; set; }
 
     [JsonPropertyName("is_vip")]
     public bool? HasBuff { get; set; }

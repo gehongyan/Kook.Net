@@ -43,22 +43,28 @@ title: 示例项目
 
 ## 语音
 
-### [Kook.Net.Samples.Audio](https://github.com/gehongyan/Kook.Net/tree/dev/samples/Kook.Net.Samples.Audio)
+### [Kook.Net.Samples.Audio](https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.Audio)
 
 该示例项目演示了如何使用 Kook.Net 中的语音功能，来构建一个点歌 Bot。
 
+## OAuth
+
+### [Kook.Net.Samples.OAuth](https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.OAuth)
+
+该示例项目演示了如何使用 AspNet.Security.OAuth.Providers 库来添加 OAuth 认证功能，以及如何使用 Kook.Net 获取所认证用户的信息。
+
 ## 语言变体
 
-### [Kook.Net.Samples.FSharp](https://github.com/gehongyan/Kook.Net/tree/dev/samples/Kook.Net.Samples.FSharp)
+### [Kook.Net.Samples.FSharp](https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.FSharp)
 
 该示例项目演示了如何使用 F# 构建基于 Kook.Net 的 Bot 的方法。
 
-### [Kook.Net.Samples.VisualBasic](https://github.com/gehongyan/Kook.Net/tree/dev/samples/Kook.Net.Samples.VisualBasic)
+### [Kook.Net.Samples.VisualBasic](https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.VisualBasic)
 
 该示例项目演示了如何使用 Visual Basic 构建基于 Kook.Net 的 Bot 的方法。
 
 ## 部署
 
-### [Kook.Net.Samples.Docker](https://github.com/gehongyan/Kook.Net/tree/dev/samples/Kook.Net.Samples.Docker)
+### [Kook.Net.Samples.Docker](https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.Docker)
 
 该示例项目演示了如何编写 Dockerfile 来创建封装 Bot 能力的镜像。

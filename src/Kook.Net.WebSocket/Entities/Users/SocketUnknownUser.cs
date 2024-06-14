@@ -33,7 +33,7 @@ public class SocketUnknownUser : SocketUser
     public override string Avatar { get; internal set; } = string.Empty;
 
     /// <inheritdoc />
-    public override string BuffAvatar { get; internal set; } = string.Empty;
+    public override string? BuffAvatar { get; internal set; } = string.Empty;
 
     /// <inheritdoc />
     public override string? Banner { get; internal set; } = string.Empty;
