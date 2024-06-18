@@ -64,12 +64,12 @@ internal abstract class OpusConverter : IDisposable
     protected static void CheckError(int result)
     {
         if (result < 0)
-            throw new Exception($"Opus Error: {(OpusError)result}");
+            throw new InvalidDataException($"Opus Error: {(OpusError)result}");
     }
 
     protected static void CheckError(OpusError error)
     {
         if ((int)error < 0)
-            throw new Exception($"Opus Error: {error}");
+            throw new InvalidDataException($"Opus Error: {error}");
     }
 }

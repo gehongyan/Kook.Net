@@ -21,7 +21,7 @@ public class KookSocketClientFixture : IDisposable, IAsyncDisposable
     {
         string? token = Environment.GetEnvironmentVariable("KOOK_NET_TEST_TOKEN");
         if (string.IsNullOrWhiteSpace(token))
-            throw new Exception("The KOOK_NET_TEST_TOKEN environment variable was not provided.");
+            throw new InvalidOperationException("The KOOK_NET_TEST_TOKEN environment variable was not provided.");
 
         Client = new KookSocketClient(new KookSocketConfig
         {
