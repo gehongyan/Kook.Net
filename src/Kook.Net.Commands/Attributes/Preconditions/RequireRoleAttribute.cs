@@ -9,6 +9,7 @@ namespace Kook.Commands;
 ///     message "Command can only be run by the specified user." For example, you can pass the guild manager role
 ///     to restrict the command to the guild managers to be able to use it.
 /// </remarks>
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 public class RequireRoleAttribute : PreconditionAttribute
 {
     private readonly string? _roleName;
