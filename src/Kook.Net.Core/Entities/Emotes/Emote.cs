@@ -36,8 +36,6 @@ public class Emote : IEmote
     /// </summary>
     public Emote(string id, string name, bool? animated = null)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("A custom emote must have a name", nameof(name));
         Id = id;
         Name = name;
         Animated = animated;
