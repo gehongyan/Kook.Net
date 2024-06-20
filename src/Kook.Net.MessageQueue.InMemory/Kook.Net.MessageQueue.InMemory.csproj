@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <RootNamespace>Kook.Net.Queue.InMemory</RootNamespace>
-    <IsPackable>false</IsPackable>
+    <IsPackable>true</IsPackable>
     <PackageId>Kook.Net.MessageQueue.InMemory</PackageId>
     <Description>The in-memory message queue implementation for Kook.Net message queue.</Description>
   </PropertyGroup>

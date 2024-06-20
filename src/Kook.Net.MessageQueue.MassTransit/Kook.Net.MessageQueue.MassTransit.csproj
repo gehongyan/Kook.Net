@@ -5,7 +5,7 @@
   <PropertyGroup>
     <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
     <RootNamespace>Kook.Net.Queue.MassTransit</RootNamespace>
-    <IsPackable>false</IsPackable>
+    <IsPackable>true</IsPackable>
     <PackageId>Kook.Net.MessageQueue.MassTransit</PackageId>
     <Description>The MassTransit message queue implementation for Kook.Net message queue.</Description>
   </PropertyGroup>

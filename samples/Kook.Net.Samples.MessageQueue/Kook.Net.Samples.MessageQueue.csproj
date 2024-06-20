@@ -1,9 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <RootNamespace>Kook.Net.Samples.MessageQueue.MassTransit</RootNamespace>
-  </PropertyGroup>
-
   <Import Project="../../Kook.Net.Sample.targets" />
 
   <ItemGroup>

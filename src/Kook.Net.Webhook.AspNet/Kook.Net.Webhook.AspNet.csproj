@@ -5,7 +5,7 @@
   <PropertyGroup>
     <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
     <RootNamespace>Kook.Webhook.AspNet</RootNamespace>
-    <IsPackable>false</IsPackable>
+    <IsPackable>true</IsPackable>
     <PackageId>Kook.Net.Webhook.AspNet</PackageId>
     <Description>The Webhook API implementation for Kook.Net using ASP.NET Core.</Description>
   </PropertyGroup>

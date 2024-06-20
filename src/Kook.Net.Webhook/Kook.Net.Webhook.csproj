@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <RootNamespace>Kook.Webhook</RootNamespace>
-    <IsPackable>false</IsPackable>
+    <IsPackable>true</IsPackable>
     <PackageId>Kook.Net.Webhook</PackageId>
     <Description>The Webhook API implementation for Kook.Net.</Description>
   </PropertyGroup>
