@@ -42,7 +42,7 @@ Documents are available on [kooknet.dev](https://kooknet.dev). (Simplified Chine
 
 ### Main Package
 
-The main package will provide all implementations of official APIs.
+The main package provides all implementations of official APIs.
 
 - Kook.Net: [NuGet](https://www.nuget.org/packages/Kook.Net/), [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net)
 
