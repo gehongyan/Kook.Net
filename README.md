@@ -10,13 +10,17 @@
 
 ---
 
+**English** | [简体中文](./README.zh-CN.md)
+
+---
+
 **Kook.Net** is an unofficial C# .NET implementation for [KOOK (KaiHeiLa formerly) API](https://developer.kookapp.cn/doc/intro).
 
 ---
 
 ## Documentation
 
-- [Simplified Chinese](https://kooknet.dev)
+Documents are available on [kooknet.dev](https://kooknet.dev). (Simplified Chinese available only)
 
 ---
 
@@ -38,7 +42,7 @@
 
 ### Main Package
 
-Installing the main package will provide all implementations of official APIs.
+The main package will provide all implementations of official APIs.
 
 - Kook.Net: [NuGet](https://www.nuget.org/packages/Kook.Net/), [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net)
 
@@ -112,4 +116,5 @@ Special thanks to [Discord.Net](https://github.com/discord-net/Discord.Net) for 
 </p>
 
 Special thanks to [JetBrains](https://www.jetbrains.com) for providing free licenses for their awesome tools -
-[Rider](https://www.jetbrains.com/rider/) and [ReSharper](https://www.jetbrains.com/resharper/).
+[Rider](https://www.jetbrains.com/rider/) and [ReSharper](https://www.jetbrains.com/resharper/) -
+to develop Kook.Net.
