@@ -36,32 +36,45 @@
 
 ## Installation
 
-### Main Packages
+### Main Package
 
-Installing main packages will provide all implementations of official APIs.
+Installing the main package will provide all implementations of official APIs.
 
-- Kook.Net: [NuGet](https://www.nuget.org/packages/Kook.Net/), [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net)
+- Kook.Net: [NuGet](https://www.nuget.org/packages/Kook.Net/), [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net)
 
 ### Individual Packages
 
-Individual components of the main package can be installed separately.
+Individual components of the main package can be installed separately. These packages are included in the main package.
 
 - Kook.Net.Core: [NuGet](https://www.nuget.org/packages/Kook.Net.Core/),
-  [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Core)
+  [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Core)
 - Kook.Net.Rest: [NuGet](https://www.nuget.org/packages/Kook.Net.Rest/),
-  [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Rest)
+  [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Rest)
 - Kook.Net.WebSocket: [NuGet](https://www.nuget.org/packages/Kook.Net.WebSocket/),
-  [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.WebSocket)
+  [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.WebSocket)
 - Kook.Net.Webhook: [NuGet](https://www.nuget.org/packages/Kook.Net.Webhook/),
-  [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Webhook)
-- Kook.Net.Webhook.AspNet: [NuGet](https://www.nuget.org/packages/Kook.Net.Webhook.AspNet/),
-  [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Webhook.AspNet)
-- Kook.Net.Webhook.HttpListener: [NuGet](https://www.nuget.org/packages/Kook.Net.Webhook.HttpListener/),
-  [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Webhook.HttpListener)
+  [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Webhook)
 - Kook.Net.Commands: [NuGet](https://www.nuget.org/packages/Kook.Net.Commands/),
-  [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Commands)
+  [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Commands)
+
+### Extension Packages
+
+Extension packages provide additional features or implementations that are not included in the main package.
+
 - Kook.Net.CardMarkup: [NuGet](https://www.nuget.org/packages/Kook.Net.CardMarkup/),
-  [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.CardMarkup)
+  [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.CardMarkup)
+- Kook.Net.Webhook.AspNet: [NuGet](https://www.nuget.org/packages/Kook.Net.Webhook.AspNet/),
+  [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Webhook.AspNet)
+- Kook.Net.Webhook.HttpListener: [NuGet](https://www.nuget.org/packages/Kook.Net.Webhook.HttpListener/),
+  [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Webhook.HttpListener)
+- Kook.Net.MessageQueue.InMemory: [NuGet](https://www.nuget.org/packages/Kook.Net.MessageQueue.InMemory/),
+  [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.MessageQueue.InMemory/)
+- Kook.Net.MessageQueue.MassTransit: [NuGet](https://www.nuget.org/packages/Kook.Net.MessageQueue.MassTransit/),
+  [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.MessageQueue.MassTransit/)
+- Kook.Net.DependencyInjection.Microsoft: [NuGet](https://www.nuget.org/packages/Kook.Net.DependencyInjection.Microsoft/),
+  [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.DependencyInjection.Microsoft/)
+- Kook.Net.Hosting: [NuGet](https://www.nuget.org/packages/Kook.Net.Hosting/),
+  [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Hosting/)
 
 ### Experimental Packages
 
@@ -70,7 +83,7 @@ violate developer rules or policies, lack stability guarantees, and are subject 
 future.
 
 - Kook.Net.Experimental: [NuGet](https://www.nuget.org/packages/Kook.Net.Experimental/),
-  [Github Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Experimental)
+  [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Experimental)
 
 ---
 
