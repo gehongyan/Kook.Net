@@ -264,14 +264,14 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         Color = model.Color;
         IsOwner = model.IsOwner ?? Guild.OwnerId == Id;
         if (model.Roles is not null)
-            UpdateRoles(model.Roles);
+            _roleIds = [..model.Roles];
     }
 
     internal void Update(ClientState state, RichGuild guildModel)
     {
         Nickname = guildModel.CurrentUserNickname == Username ? null : guildModel.CurrentUserNickname;
         if (guildModel.CurrentUserRoles is not null)
-            UpdateRoles(guildModel.CurrentUserRoles);
+            _roleIds = [..guildModel.CurrentUserRoles];
     }
 
     /// <summary>
@@ -302,9 +302,14 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         return hasChanges;
     }
 
-    private void UpdateRoles(uint[] roleIds)
+    internal void AddRole(uint roleId)
     {
-        _roleIds = [..roleIds];
+        _roleIds = [.._roleIds, roleId];
+    }
+
+    internal void RemoveRole(uint roleId)
+    {
+        _roleIds = _roleIds.Remove(roleId);
     }
 
     /// <inheritdoc />
@@ -345,7 +350,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
     public Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null) =>
-        UserHelper.AddRolesAsync(this, Kook, roleIds, options);
+        SocketUserHelper.AddRolesAsync(this, Kook, roleIds, options);
 
     /// <inheritdoc />
     /// <note type="warning">
@@ -381,7 +386,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
     /// </note>
     public Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null) =>
-        UserHelper.RemoveRolesAsync(this, Kook, roleIds, options);
+        SocketUserHelper.RemoveRolesAsync(this, Kook, roleIds, options);
 
     /// <inheritdoc />
     /// <note type="warning">

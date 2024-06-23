@@ -42,7 +42,7 @@ internal static class UserHelper
         RestDMChannel.Create(client, await client.ApiClient
             .CreateUserChatAsync(user.Id, options).ConfigureAwait(false));
 
-    public static async Task AddRolesAsync(IGuildUser user, BaseKookClient client,
+    public static async Task AddRolesAsync(RestGuildUser user, BaseKookClient client,
         IEnumerable<uint> roleIds, RequestOptions? options)
     {
         IEnumerable<AddOrRemoveRoleParams> args = roleIds
@@ -53,10 +53,13 @@ internal static class UserHelper
                 RoleId = x, UserId = user.Id
             });
         foreach (AddOrRemoveRoleParams arg in args)
+        {
             await client.ApiClient.AddRoleAsync(arg, options).ConfigureAwait(false);
+            user.AddRole(arg.RoleId);
+        }
     }
 
-    public static async Task RemoveRolesAsync(IGuildUser user, BaseKookClient client,
+    public static async Task RemoveRolesAsync(RestGuildUser user, BaseKookClient client,
         IEnumerable<uint> roleIds, RequestOptions? options)
     {
         IEnumerable<AddOrRemoveRoleParams> args = roleIds
@@ -67,7 +70,10 @@ internal static class UserHelper
                 RoleId = x, UserId = user.Id
             });
         foreach (AddOrRemoveRoleParams arg in args)
+        {
             await client.ApiClient.RemoveRoleAsync(arg, options).ConfigureAwait(false);
+            user.RemoveRole(arg.RoleId);
+        }
     }
 
     public static async Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedChannelAsync(

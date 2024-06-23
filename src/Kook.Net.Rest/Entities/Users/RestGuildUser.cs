@@ -109,6 +109,16 @@ public class RestGuildUser : RestUser, IGuildUser
             Nickname = model.DisplayName;
     }
 
+    internal void AddRole(uint roleId)
+    {
+        _roleIds = [.._roleIds, roleId];
+    }
+
+    internal void RemoveRole(uint roleId)
+    {
+        _roleIds = _roleIds.Remove(roleId);
+    }
+
     /// <inheritdoc />
     public override async Task UpdateAsync(RequestOptions? options = null)
     {
