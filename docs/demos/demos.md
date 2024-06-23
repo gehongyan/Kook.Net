@@ -41,6 +41,12 @@ title: 示例项目
 
 该示例项目显示了如何使用 Kook.Net 中的 XML 卡片消息功能，使用 XML 标记语言来构建卡片消息，以及配合使用 Liquid 模版引擎，使用 `Fluid.Core` 库来在运行时通过模版构建卡片消息。
 
+## 消息队列
+
+### [Kook.Net.Samples.MessageQueue]((https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.MessageQueue)
+
+该示例项目演示了如何使用 Kook.Net 所提供的消息队列扩展，利用消息队列来实现 KOOK 网关事件的异步处理。
+
 ## 语音
 
 ### [Kook.Net.Samples.Audio](https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.Audio)

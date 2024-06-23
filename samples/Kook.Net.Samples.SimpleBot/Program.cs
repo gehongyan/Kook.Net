@@ -140,7 +140,6 @@ async Task MessageReceivedAsync(SocketMessage message,
     if (author.Id == client.CurrentUser?.Id)
         return;
 
-
     if (message.Content == "!ping")
     {
         // 创建一个 CardBuilder，卡片将会包含一个文本模块和一个按钮模块
