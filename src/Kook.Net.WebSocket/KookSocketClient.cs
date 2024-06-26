@@ -30,14 +30,13 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     private readonly JsonSerializerOptions _serializerOptions;
 
     private readonly ConcurrentQueue<long> _heartbeatTimes;
-    private readonly ConnectionManager _connection;
     private readonly Logger _gatewayLogger;
     private readonly SemaphoreSlim _stateLock;
 
     private Guid? _sessionId;
     private int _lastSeq;
     private int _retryCount;
-    private Task? _heartbeatTask;
+    internal Task? _heartbeatTask;
     private Task? _guildDownloadTask;
     private long _lastMessageTime;
     private int _nextAudioId;
@@ -47,8 +46,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     /// <inheritdoc />
     public override KookSocketRestClient Rest { get; }
 
+    internal virtual ConnectionManager Connection { get; }
+
     /// <inheritdoc />
-    public override ConnectionState ConnectionState => _connection.State;
+    public override ConnectionState ConnectionState => Connection.State;
 
     /// <inheritdoc />
     public override int Latency { get; protected set; }
@@ -125,10 +126,11 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
         _stateLock = new SemaphoreSlim(1, 1);
         _gatewayLogger = LogManager.CreateLogger("Gateway");
-        _connection = new ConnectionManager(_stateLock, _gatewayLogger, config.ConnectionTimeout,
+        ConnectionManager connectionManager = new(_stateLock, _gatewayLogger, config.ConnectionTimeout,
             OnConnectingAsync, OnDisconnectingAsync, x => ApiClient.Disconnected += x);
-        _connection.Connected += () => TimedInvokeAsync(_connectedEvent, nameof(Connected));
-        _connection.Disconnected += (ex, _) => TimedInvokeAsync(_disconnectedEvent, nameof(Disconnected), ex);
+        connectionManager.Connected += () => TimedInvokeAsync(_connectedEvent, nameof(Connected));
+        connectionManager.Disconnected += (ex, _) => TimedInvokeAsync(_disconnectedEvent, nameof(Disconnected), ex);
+        Connection = connectionManager;
 
         _serializerOptions = new JsonSerializerOptions
         {
@@ -174,7 +176,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         {
             if (disposing)
             {
-                StopAsync().GetAwaiter().GetResult();
+                try
+                {
+                    StopAsync().GetAwaiter().GetResult();
+                }
+                catch (NotSupportedException)
+                {
+                    // ignored
+                }
                 ApiClient?.Dispose();
                 _stateLock?.Dispose();
             }
@@ -209,16 +218,16 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         catch (HttpException ex)
         {
             if (ex.HttpCode == HttpStatusCode.Unauthorized)
-                _connection.CriticalError(ex);
+                Connection.CriticalError(ex);
             else
-                _connection.Error(ex);
+                Connection.Error(ex);
         }
         catch
         {
             // ignored
         }
 
-        await _connection.WaitAsync().ConfigureAwait(false);
+        await Connection.WaitAsync().ConfigureAwait(false);
     }
 
     private async Task OnDisconnectingAsync(Exception ex)
@@ -237,13 +246,18 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             // flush the queue
         }
 
-        _lastMessageTime = 0;
+        ResetCounter();
 
         //Raise virtual GUILD_UNAVAILABLEs
         await _gatewayLogger.DebugAsync("Raising virtual GuildUnavailables").ConfigureAwait(false);
         foreach (SocketGuild guild in State.Guilds)
             if (guild.IsAvailable)
                 await GuildUnavailableAsync(guild).ConfigureAwait(false);
+    }
+
+    private protected void ResetCounter()
+    {
+        _lastMessageTime = 0;
     }
 
     /// <inheritdoc />
@@ -825,19 +839,19 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     public override async Task StartAsync()
     {
         await MessageQueue.StartAsync();
-        await _connection.StartAsync().ConfigureAwait(false);
+        await Connection.StartAsync().ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public override async Task StopAsync()
     {
-        await _connection.StopAsync().ConfigureAwait(false);
+        await Connection.StopAsync().ConfigureAwait(false);
         await MessageQueue.StopAsync();
     }
 
     private async Task RunHeartbeatAsync(CancellationToken cancellationToken)
     {
-        int intervalMillis = KookSocketConfig.HeartbeatIntervalMilliseconds;
+        int intervalMillis = BaseConfig.HeartbeatIntervalMilliseconds;
         try
         {
             await _gatewayLogger.DebugAsync("Heartbeat Started").ConfigureAwait(false);
@@ -849,7 +863,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                 if (_heartbeatTimes.IsEmpty && now - _lastMessageTime > intervalMillis + 1000.0 / 64
                     && ConnectionState == ConnectionState.Connected && (_guildDownloadTask?.IsCompleted ?? true))
                 {
-                    _connection.Error(new GatewayReconnectException("Server missed last heartbeat"));
+                    Connection.Error(new GatewayReconnectException("Server missed last heartbeat"));
                     return;
                 }
 
@@ -928,14 +942,14 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         await TimedInvokeAsync(_guildAvailableEvent, nameof(GuildAvailable), guild).ConfigureAwait(false);
     }
 
-    private async Task GuildUnavailableAsync(SocketGuild guild)
+    internal async Task GuildUnavailableAsync(SocketGuild guild)
     {
         if (!guild.IsConnected) return;
         guild.IsConnected = false;
         await TimedInvokeAsync(_guildUnavailableEvent, nameof(GuildUnavailable), guild).ConfigureAwait(false);
     }
 
-    private async Task TimedInvokeAsync(AsyncEvent<Func<Task>> eventHandler, string name)
+    internal async Task TimedInvokeAsync(AsyncEvent<Func<Task>> eventHandler, string name)
     {
         if (!eventHandler.HasSubscribers) return;
         if (HandlerTimeout.HasValue)
@@ -944,7 +958,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             await eventHandler.InvokeAsync().ConfigureAwait(false);
     }
 
-    private async Task TimedInvokeAsync<T>(AsyncEvent<Func<T, Task>> eventHandler, string name, T arg)
+    internal async Task TimedInvokeAsync<T>(AsyncEvent<Func<T, Task>> eventHandler, string name, T arg)
     {
         if (!eventHandler.HasSubscribers) return;
         if (HandlerTimeout.HasValue)
@@ -953,7 +967,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             await eventHandler.InvokeAsync(arg).ConfigureAwait(false);
     }
 
-    private async Task TimedInvokeAsync<T1, T2>(AsyncEvent<Func<T1, T2, Task>> eventHandler, string name, T1 arg1,
+    internal async Task TimedInvokeAsync<T1, T2>(AsyncEvent<Func<T1, T2, Task>> eventHandler, string name, T1 arg1,
         T2 arg2)
     {
         if (!eventHandler.HasSubscribers) return;
@@ -963,7 +977,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             await eventHandler.InvokeAsync(arg1, arg2).ConfigureAwait(false);
     }
 
-    private async Task TimedInvokeAsync<T1, T2, T3>(AsyncEvent<Func<T1, T2, T3, Task>> eventHandler, string name,
+    internal async Task TimedInvokeAsync<T1, T2, T3>(AsyncEvent<Func<T1, T2, T3, Task>> eventHandler, string name,
         T1 arg1, T2 arg2, T3 arg3)
     {
         if (!eventHandler.HasSubscribers) return;
@@ -973,7 +987,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             await eventHandler.InvokeAsync(arg1, arg2, arg3).ConfigureAwait(false);
     }
 
-    private async Task TimedInvokeAsync<T1, T2, T3, T4>(AsyncEvent<Func<T1, T2, T3, T4, Task>> eventHandler,
+    internal async Task TimedInvokeAsync<T1, T2, T3, T4>(AsyncEvent<Func<T1, T2, T3, T4, Task>> eventHandler,
         string name, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
     {
         if (!eventHandler.HasSubscribers) return;
@@ -983,7 +997,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             await eventHandler.InvokeAsync(arg1, arg2, arg3, arg4).ConfigureAwait(false);
     }
 
-    private async Task TimedInvokeAsync<T1, T2, T3, T4, T5>(AsyncEvent<Func<T1, T2, T3, T4, T5, Task>> eventHandler,
+    internal async Task TimedInvokeAsync<T1, T2, T3, T4, T5>(AsyncEvent<Func<T1, T2, T3, T4, T5, Task>> eventHandler,
         string name, T1 arg1, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
     {
         if (!eventHandler.HasSubscribers) return;

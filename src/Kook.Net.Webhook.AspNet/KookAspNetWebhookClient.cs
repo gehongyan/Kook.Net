@@ -39,7 +39,7 @@ public class KookAspNetWebhookClient : KookWebhookClient, IHostedService
 
     /// <inheritdoc />
     public override Task StopAsync() =>
-        throw new NotSupportedException("Webhook client does not support starting manually.");
+        throw new NotSupportedException("Webhook client does not support stopping manually.");
 
     /// <inheritdoc />
     async Task IHostedService.StartAsync(CancellationToken cancellationToken)
@@ -55,9 +55,7 @@ public class KookAspNetWebhookClient : KookWebhookClient, IHostedService
     /// <inheritdoc />
     async Task IHostedService.StopAsync(CancellationToken cancellationToken)
     {
-        if (BaseConfig.LogoutWhenDisconnected)
-            await base.StopAsync();
-        await LogoutAsync();
+        await base.StopAsync();
         if (ApiClient.WebhookClient is AspNetWebhookClient aspNetWebhookClient)
             aspNetWebhookClient.OnClosed(new OperationCanceledException("The hosted service has been stopped."));
     }

@@ -27,7 +27,7 @@ public partial class KookSocketClient
         }
         catch (Exception ex)
         {
-            _connection.CriticalError(new Exception("Processing SelfUser failed", ex));
+            Connection.CriticalError(new Exception("Processing SelfUser failed", ex));
             return;
         }
 
@@ -72,9 +72,9 @@ public partial class KookSocketClient
             }
 
             _guildDownloadTask = StartupCacheFetchMode is not StartupCacheFetchMode.Lazy
-                ? DownloadGuildDataAsync(state.Guilds, _connection.CancellationToken)
+                ? DownloadGuildDataAsync(state.Guilds, Connection.CancellationToken)
                 : Task.CompletedTask;
-            _ = _connection.CompleteAsync();
+            _ = Connection.CompleteAsync();
 
             if (StartupCacheFetchMode is StartupCacheFetchMode.Synchronous)
                 await _guildDownloadTask.ConfigureAwait(false);
@@ -84,7 +84,7 @@ public partial class KookSocketClient
         }
         catch (Exception ex)
         {
-            _connection.CriticalError(new Exception("Processing Guilds failed", ex));
+            Connection.CriticalError(new Exception("Processing Guilds failed", ex));
             return;
         }
     }
@@ -96,11 +96,11 @@ public partial class KookSocketClient
         try
         {
             _sessionId = gatewayHelloPayload.SessionId;
-            _heartbeatTask = RunHeartbeatAsync(_connection.CancellationToken);
+            _heartbeatTask = RunHeartbeatAsync(Connection.CancellationToken);
         }
         catch (Exception ex)
         {
-            _connection.CriticalError(new Exception("Processing Hello failed", ex));
+            Connection.CriticalError(new Exception("Processing Hello failed", ex));
             return;
         }
 
@@ -216,11 +216,11 @@ public partial class KookSocketClient
         {
             Exception exception = task.Exception
                 ?? new Exception("Waiting for guilds failed without an exception");
-            _connection.Error(exception);
+            Connection.Error(exception);
             return;
         }
 
-        if (_connection.CancellationToken.IsCancellationRequested) return;
+        if (Connection.CancellationToken.IsCancellationRequested) return;
 
 
         await TimedInvokeAsync(_readyEvent, nameof(Ready)).ConfigureAwait(false);
@@ -257,13 +257,13 @@ public partial class KookSocketClient
             ? $": {reconnectPayload.Message}"
             : ".";
         GatewayReconnectException exception = new($"Server requested a reconnect, resuming session failed{reason}");
-        _connection.Error(exception);
+        Connection.Error(exception);
     }
 
     private async Task HandleResumeAckAsync()
     {
         await _gatewayLogger.DebugAsync("Received ResumeAck").ConfigureAwait(false);
-        _ = _connection.CompleteAsync();
+        _ = Connection.CompleteAsync();
 
         //Notify the client that these guilds are available again
         foreach (SocketGuild guild in State.Guilds)
@@ -1972,14 +1972,14 @@ public partial class KookSocketClient
                 {
                     await DownloadUsersAsync([guild], new RequestOptions
                     {
-                        CancellationToken = _connection.CancellationToken
+                        CancellationToken = Connection.CancellationToken
                     });
                 }
                 catch (Exception ex)
                 {
                     await _gatewayLogger.WarningAsync("Downloading users failed", ex).ConfigureAwait(false);
                 }
-            }, _connection.CancellationToken);
+            }, Connection.CancellationToken);
         }
 
         if (BaseConfig.AlwaysDownloadVoiceStates && guild.IsAvailable)
@@ -1990,7 +1990,7 @@ public partial class KookSocketClient
                 {
                     await DownloadVoiceStatesAsync([guild], new RequestOptions
                     {
-                        CancellationToken = _connection.CancellationToken
+                        CancellationToken = Connection.CancellationToken
                     });
                 }
                 catch (Exception ex)
@@ -1999,7 +1999,7 @@ public partial class KookSocketClient
                         .WarningAsync("Downloading voice states failed", ex)
                         .ConfigureAwait(false);
                 }
-            }, _connection.CancellationToken);
+            }, Connection.CancellationToken);
         }
 
         if (BaseConfig.AlwaysDownloadBoostSubscriptions && guild.IsAvailable)
@@ -2010,7 +2010,7 @@ public partial class KookSocketClient
                 {
                     await DownloadBoostSubscriptionsAsync([guild], new RequestOptions
                     {
-                        CancellationToken = _connection.CancellationToken
+                        CancellationToken = Connection.CancellationToken
                     });
                 }
                 catch (Exception ex)
@@ -2019,7 +2019,7 @@ public partial class KookSocketClient
                         .WarningAsync("Downloading boost subscriptions failed", ex)
                         .ConfigureAwait(false);
                 }
-            }, _connection.CancellationToken);
+            }, Connection.CancellationToken);
         }
 
         return guild.IsAvailable;

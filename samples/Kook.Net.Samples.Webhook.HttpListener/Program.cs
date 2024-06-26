@@ -23,7 +23,7 @@ client.Ready += () =>
     Console.WriteLine("Ready!");
     return Task.CompletedTask;
 };
-client.MessageReceived += (message, a, c) =>
+client.MessageReceived += (message, author, channel) =>
 {
     Console.WriteLine($"Message: {message.Content}");
     return Task.CompletedTask;

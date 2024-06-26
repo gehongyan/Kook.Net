@@ -1110,6 +1110,16 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
+    public async Task GoOnlineAsync(RequestOptions? options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        await SendAsync(HttpMethod.Post,
+                () => $"user/online", ids, ClientBucketType.SendEdit, options)
+            .ConfigureAwait(false);
+    }
+
     public async Task GoOfflineAsync(RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
@@ -1117,6 +1127,16 @@ internal class KookRestApiClient : IDisposable
         BucketIds ids = new();
         await SendAsync(HttpMethod.Post,
                 () => $"user/offline", ids, ClientBucketType.SendEdit, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<SelfOnlineStatusResponse> GetSelfOnlineStatusAsync(RequestOptions? options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        return await SendAsync<SelfOnlineStatusResponse>(HttpMethod.Get,
+                () => $"user/get-online-status", ids, ClientBucketType.SendEdit, false, options)
             .ConfigureAwait(false);
     }
 

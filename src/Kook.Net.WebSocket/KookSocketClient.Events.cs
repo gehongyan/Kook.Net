@@ -11,7 +11,7 @@ public partial class KookSocketClient
         remove => _connectedEvent.Remove(value);
     }
 
-    private readonly AsyncEvent<Func<Task>> _connectedEvent = new();
+    internal readonly AsyncEvent<Func<Task>> _connectedEvent = new();
 
     /// <summary> Fired when disconnected to the Kook gateway. </summary>
     public event Func<Exception, Task> Disconnected
@@ -20,7 +20,7 @@ public partial class KookSocketClient
         remove => _disconnectedEvent.Remove(value);
     }
 
-    private readonly AsyncEvent<Func<Exception, Task>> _disconnectedEvent = new();
+    internal readonly AsyncEvent<Func<Exception, Task>> _disconnectedEvent = new();
 
     /// <summary>
     ///     Fired when guild data has finished downloading.

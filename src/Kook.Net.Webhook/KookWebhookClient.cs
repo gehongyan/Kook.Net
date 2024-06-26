@@ -1,7 +1,10 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 using Kook.API;
 using Kook.API.Gateway;
+using Kook.API.Rest;
 using Kook.Logging;
+using Kook.Net;
 using Kook.WebSocket;
 
 namespace Kook.Webhook;
@@ -11,9 +14,11 @@ namespace Kook.Webhook;
 /// </summary>
 public abstract class KookWebhookClient : KookSocketClient
 {
-    private ConnectionState _connectionState;
-
     private readonly string? _verifyToken;
+
+    private readonly SemaphoreSlim _stateLock;
+
+    private bool _isDisposed;
 
     private protected Logger WebhookLogger { get; }
 
@@ -29,16 +34,88 @@ public abstract class KookWebhookClient : KookSocketClient
     private protected KookWebhookClient(KookWebhookConfig config, KookWebhookApiClient client)
         : base(config, client)
     {
-        _connectionState = ConnectionState.Disconnected;
         _verifyToken = config.VerifyToken;
         WebhookLogger = LogManager.CreateLogger("Webhook");
         ApiClient.WebhookChallenge += OnWebhookChallengeAsync;
+
+        _stateLock = new SemaphoreSlim(1, 1);
+        ConnectionManager connectionManager = new(_stateLock, WebhookLogger, config.ConnectionTimeout,
+            OnConnectingAsync, OnDisconnectingAsync, x => ApiClient.Disconnected += x);
+        connectionManager.Connected += () => TimedInvokeAsync(_connectedEvent, nameof(Connected));
+        connectionManager.Disconnected += (ex, _) => TimedInvokeAsync(_disconnectedEvent, nameof(Disconnected), ex);
+        Connection = connectionManager;
+    }
+
+    internal override ConnectionManager Connection { get; }
+
+    internal new KookWebhookApiClient ApiClient => base.ApiClient as KookWebhookApiClient
+        ?? throw new InvalidOperationException("The API client is not a Webhook-based client.");
+
+    /// <summary>
+    ///     Gets the configuration used by this client.
+    /// </summary>
+    internal new KookWebhookConfig BaseConfig => base.BaseConfig as KookWebhookConfig
+        ?? throw new InvalidOperationException("The base configuration is not a Webhook-based configuration.");
+
+    private async Task OnConnectingAsync()
+    {
+        try
+        {
+            await WebhookLogger.DebugAsync("Connecting ApiClient.");
+            SelfOnlineStatusResponse selfOnlineStatus = await ApiClient.GetSelfOnlineStatusAsync();
+            if (selfOnlineStatus.OnlineOperatingSystems.Any(x => !"Webhook".Equals(x, StringComparison.OrdinalIgnoreCase)))
+            {
+                Connection.CriticalError(new InvalidOperationException(
+                    $"The client is already online on mode: {string.Join(", ", selfOnlineStatus.OnlineOperatingSystems)}."));
+                return;
+            }
+
+            if (!selfOnlineStatus.IsOnline)
+            {
+                await WebhookLogger.WarningAsync("The client is not online, attempting to log in.");
+                await ApiClient.GoOnlineAsync();
+                await WebhookLogger.InfoAsync("The client has logged in again.");
+            }
+
+            _heartbeatTask = RunHeartbeatAsync(Connection.CancellationToken);
+            await FetchRequiredDataAsync();
+        }
+        catch (HttpException ex)
+        {
+            if (ex.HttpCode == HttpStatusCode.Unauthorized)
+                Connection.CriticalError(ex);
+            else
+                Connection.Error(ex);
+        }
+        catch
+        {
+            // ignored
+        }
+    }
+
+    private async Task OnDisconnectingAsync(Exception ex)
+    {
+        await WebhookLogger.DebugAsync("Disconnecting ApiClient.");
+
+        //Wait for tasks to complete
+        await WebhookLogger.DebugAsync("Waiting for heartbeater").ConfigureAwait(false);
+        Task? heartbeatTask = _heartbeatTask;
+        if (heartbeatTask != null)
+            await heartbeatTask.ConfigureAwait(false);
+        _heartbeatTask = null;
+
+        ResetCounter();
+
+        //Raise virtual GUILD_UNAVAILABLEs
+        await WebhookLogger.DebugAsync("Raising virtual GuildUnavailables").ConfigureAwait(false);
+        foreach (SocketGuild guild in State.Guilds)
+            if (guild.IsAvailable)
+                await GuildUnavailableAsync(guild).ConfigureAwait(false);
     }
 
     private async Task OnWebhookChallengeAsync(string challenge)
     {
         await WebhookLogger.DebugAsync($"Received Webhook challenge: {challenge}");
-        await StartAsyncInternal();
     }
 
     private static KookWebhookApiClient CreateApiClient(KookWebhookConfig config)
@@ -52,17 +129,29 @@ public abstract class KookWebhookClient : KookSocketClient
             defaultRatelimitCallback: config.DefaultRatelimitCallback);
     }
 
-    /// <inheritdoc />
-    public override ConnectionState ConnectionState => _connectionState;
+    internal override void Dispose(bool disposing)
+    {
+        if (!_isDisposed)
+        {
+            if (disposing)
+            {
+                try
+                {
+                    StopAsync().GetAwaiter().GetResult();
+                }
+                catch (NotSupportedException)
+                {
+                    // ignored
+                }
+                ApiClient?.Dispose();
+                _stateLock?.Dispose();
+            }
 
-    internal new KookWebhookApiClient ApiClient => base.ApiClient as KookWebhookApiClient
-        ?? throw new InvalidOperationException("The API client is not a Webhook-based client.");
+            _isDisposed = true;
+        }
 
-    /// <summary>
-    ///     Gets the configuration used by this client.
-    /// </summary>
-    internal new KookWebhookConfig BaseConfig => base.BaseConfig as KookWebhookConfig
-        ?? throw new InvalidOperationException("The base configuration is not a Webhook-based configuration.");
+        base.Dispose(disposing);
+    }
 
     /// <inheritdoc />
     internal override async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType, int? sequence, JsonElement payload)
@@ -87,45 +176,43 @@ public abstract class KookWebhookClient : KookSocketClient
         await base.ProcessMessageAsync(gatewaySocketFrameType, sequence, payload).ConfigureAwait(false);
     }
 
-    /// <inheritdoc />
-    public override async Task StartAsync()
+    private async Task RunHeartbeatAsync(CancellationToken cancellationToken)
     {
-        _connectionState = ConnectionState.Connecting;
-        await MessageQueue.StartAsync();
-        if (!BaseConfig.StartupWaitForChallenge)
-            await StartAsyncInternal();
-    }
-
-    private async Task StartAsyncInternal()
-    {
-        await FetchRequiredDataAsync();
-        _connectionState = ConnectionState.Connected;
-    }
-
-    /// <inheritdoc />
-    public override async Task StopAsync()
-    {
-        _connectionState = ConnectionState.Disconnecting;
-        if (BaseConfig.LogoutWhenDisconnected)
-            await LogoutAsync();
-        await MessageQueue.StopAsync();
-        _connectionState = ConnectionState.Disconnected;
-    }
-
-    /// <inheritdoc />
-    internal override async Task LogoutInternalAsync()
-    {
-        await ApiClient.GoOfflineAsync(new RequestOptions
+        int intervalMillis = BaseConfig.HeartbeatIntervalMilliseconds;
+        try
         {
-            IgnoreState = true
-        });
-        if (LoginState == LoginState.LoggedOut)
-            return;
-        LoginState = LoginState.LoggingOut;
-        await ApiClient.LogoutAsync().ConfigureAwait(false);
-        await OnLogoutAsync().ConfigureAwait(false);
-        CurrentUser = null;
-        LoginState = LoginState.LoggedOut;
-        await _loggedOutEvent.InvokeAsync().ConfigureAwait(false);
+            await WebhookLogger.DebugAsync("Heartbeat Started").ConfigureAwait(false);
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                await Task.Delay(intervalMillis, cancellationToken).ConfigureAwait(false);
+
+                try
+                {
+                    SelfOnlineStatusResponse selfOnlineStatus = await ApiClient.GetSelfOnlineStatusAsync();
+                    if (selfOnlineStatus.OnlineOperatingSystems.Any(x => !"Webhook".Equals(x, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        Connection.CriticalError(new InvalidOperationException(
+                            $"The client is already online on mode: {string.Join(", ", selfOnlineStatus.OnlineOperatingSystems)}."));
+                    }
+
+                    if (!selfOnlineStatus.IsOnline)
+                    {
+                        Connection.Reconnect();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    await WebhookLogger.WarningAsync("Heartbeat Errored", ex).ConfigureAwait(false);
+                }
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            await WebhookLogger.DebugAsync("Heartbeat Stopped").ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            await WebhookLogger.ErrorAsync("Heartbeat Errored", ex).ConfigureAwait(false);
+        }
     }
 }

@@ -46,7 +46,7 @@ public class KookSocketConfig : KookRestConfig
     /// <summary>
     ///     Gets the heartbeat interval of WebSocket connection in milliseconds.
     /// </summary>
-    public const int HeartbeatIntervalMilliseconds = 30000;
+    public int HeartbeatIntervalMilliseconds { get; internal set; } = 30000;
 
     /// <summary>
     ///     Gets the RTCP interval of RTP connection in milliseconds.
