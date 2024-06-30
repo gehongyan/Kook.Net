@@ -3,47 +3,47 @@ using Kook.WebSocket;
 namespace Kook.Commands;
 
 /// <summary>
-///     Represents a WebSocket-based context of a command. This may include the client, guild, channel, user, and message.
+///     表示一个基于 WebSocket 客户端的命令的上下文。这可能包括客户端、公会、频道、用户和消息。
 /// </summary>
 public class SocketCommandContext : ICommandContext
 {
     #region SocketCommandContext
 
     /// <summary>
-    ///     Gets the <see cref="KookSocketClient" /> that the command is executed with.
+    ///     获取命令执行时所使用的 <see cref="IKookClient" />。
     /// </summary>
     public KookSocketClient Client { get; }
 
     /// <summary>
-    ///     Gets the <see cref="SocketGuild" /> that the command is executed in.
+    ///     获取命令执行所在的 <see cref="SocketGuild" />。
     /// </summary>
     public SocketGuild? Guild { get; }
 
     /// <summary>
-    ///     Gets the <see cref="ISocketMessageChannel" /> that the command is executed in.
+    ///     获取命令执行所在的 <see cref="ISocketMessageChannel" />。
     /// </summary>
     public ISocketMessageChannel Channel { get; }
 
     /// <summary>
-    ///     Gets the <see cref="SocketUser" /> who executed the command.
+    ///     获取执行命令的 <see cref="SocketUser" />。
     /// </summary>
     public SocketUser User { get; }
 
     /// <summary>
-    ///     Gets the <see cref="SocketUserMessage" /> that the command is interpreted from.
+    ///     获取命令解析的源 <see cref="SocketUserMessage" />。
     /// </summary>
     public SocketUserMessage Message { get; }
 
     /// <summary>
-    ///     Indicates whether the channel that the command is executed in is a private channel.
+    ///     指示命令执行所在的频道是否为 <see cref="IPrivateChannel"/> 私聊频道。
     /// </summary>
     public bool IsPrivate => Channel is IPrivateChannel;
 
     /// <summary>
-    ///     Initializes a new <see cref="SocketCommandContext" /> class with the provided client and message.
+    ///     使用提供的客户端和消息初始化一个 <see cref="SocketCommandContext" /> 类的新实例。
     /// </summary>
-    /// <param name="client">The underlying client.</param>
-    /// <param name="msg">The underlying message.</param>
+    /// <param name="client"> 底层客户端。 </param>
+    /// <param name="msg"> 底层消息。 </param>
     public SocketCommandContext(KookSocketClient client, SocketUserMessage msg)
     {
         Client = client;

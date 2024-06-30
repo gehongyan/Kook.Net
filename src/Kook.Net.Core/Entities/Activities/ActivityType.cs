@@ -1,17 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the type of activities.
+///     表示活动的类型。
 /// </summary>
 public enum ActivityType
 {
     /// <summary>
-    ///     Specifies that the activity is a game.
+    ///     游戏。
     /// </summary>
     Game = 1,
 
     /// <summary>
-    ///     Specifies that the activity is music.
+    ///     音乐。
     /// </summary>
     Music = 2
 }

@@ -1,18 +1,18 @@
 namespace Kook;
 
 /// <summary>
-///     Properties that are used to modify an <see cref="IGame" /> with the specified changes.
+///     用于修改 <see cref="IGame" /> 的属性，以应用指定的更改。
 /// </summary>
 /// <seealso cref="IGame.ModifyAsync"/>
 public class GameProperties
 {
     /// <summary>
-    ///     Gets or sets the name of the game.
+    ///     获取或设置游戏的名称。
     /// </summary>
     public required string Name { get; set; }
 
     /// <summary>
-    ///     Gets or sets the icon URL of the game.
+    ///     获取或设置游戏的图标 URL。
     /// </summary>
     public string? IconUrl { get; set; }
 }

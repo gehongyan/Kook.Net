@@ -1,32 +1,32 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     Represents a context of a command. This may include the client, guild, channel, user, and message.
+///     表示命令的上下文。这可能包括客户端、公会、频道、用户和消息。
 /// </summary>
 public interface ICommandContext
 {
     /// <summary>
-    ///     Gets the <see cref="IKookClient" /> that the command is executed with.
+    ///     获取命令执行时所使用的 <see cref="IKookClient" />。
     /// </summary>
     IKookClient Client { get; }
 
     /// <summary>
-    ///     Gets the <see cref="IGuild" /> that the command is executed in.
+    ///     获取命令执行所在的 <see cref="IGuild" />。
     /// </summary>
     IGuild? Guild { get; }
 
     /// <summary>
-    ///     Gets the <see cref="IMessageChannel" /> that the command is executed in.
+    ///     获取命令执行所在的 <see cref="IMessageChannel" />。
     /// </summary>
     IMessageChannel Channel { get; }
 
     /// <summary>
-    ///     Gets the <see cref="IUser" /> who executed the command.
+    ///     获取执行命令的 <see cref="IUser" />。
     /// </summary>
     IUser User { get; }
 
     /// <summary>
-    ///     Gets the <see cref="IUserMessage" /> that the command is interpreted from.
+    ///     获取命令解析的源 <see cref="IUserMessage" />。
     /// </summary>
     IUserMessage Message { get; }
 }
