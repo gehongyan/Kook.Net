@@ -675,7 +675,8 @@ public class CommandService : IDisposable
         IReadOnlyList<CommandMatch> commands = matches.Commands;
         Dictionary<CommandMatch, PreconditionResult> preconditionResults = new();
 
-        foreach (CommandMatch command in commands) preconditionResults[command] = await command.CheckPreconditionsAsync(context, provider);
+        foreach (CommandMatch command in commands)
+            preconditionResults[command] = await command.CheckPreconditionsAsync(context, provider);
 
         KeyValuePair<CommandMatch, PreconditionResult>[] successfulPreconditions = preconditionResults
             .Where(x => x.Value.IsSuccess)
