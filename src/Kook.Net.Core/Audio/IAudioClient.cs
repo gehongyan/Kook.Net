@@ -41,6 +41,46 @@ public interface IAudioClient : IDisposable
     event Func<ulong, Task> PeerDisconnected;
 
     /// <summary>
+    ///     Occurs when a peer's headset has been resumed.
+    /// </summary>
+    event Func<ulong, Task> HeadsetResumed;
+
+    /// <summary>
+    ///     Occurs when a peer's headset has been paused.
+    /// </summary>
+    event Func<ulong, Task> HeadsetPaused;
+
+    /// <summary>
+    ///     Occurs when a peer's consumer has been resumed.
+    /// </summary>
+    event Func<ulong, Task> ConsumerResumed;
+
+    /// <summary>
+    ///     Occurs when a peer's consumer has been paused.
+    /// </summary>
+    event Func<ulong, Task> ConsumerPaused;
+
+    /// <summary>
+    ///     Occurs when a peer's permission has been changed.
+    /// </summary>
+    event Func<ulong, PeerPermissionInfo, Task> PeerPermissionChanged;
+
+    /// <summary>
+    ///     Occurs when a peer has started playing an atmosphere.
+    /// </summary>
+    event Func<ulong, int, Task> AtmospherePlayed;
+
+    /// <summary>
+    ///     Occurs when a peer has started playing a soundtrack.
+    /// </summary>
+    event Func<ulong, SoundtrackInfo, Task> SoundtrackStarted;
+
+    /// <summary>
+    ///     Occurs when a peer has stopped playing a soundtrack.
+    /// </summary>
+    event Func<ulong, Task> SoundtrackStopped;
+
+    /// <summary>
     ///     当此语音客户端从语音服务器断开连接时引发。
     /// </summary>
     event Func<Task> ClientDisconnected;
