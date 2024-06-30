@@ -1,22 +1,22 @@
 namespace Kook.Audio;
 
 /// <summary>
-///     Represents the application type of the audio.
+///     表示音频应用程序的应用场景。
 /// </summary>
 public enum AudioApplication
 {
     /// <summary>
-    ///     The audio is intended for voice communication.
+    ///     用于语音。
     /// </summary>
     Voice,
 
     /// <summary>
-    ///     The audio is intended for music.
+    ///     用于音乐。
     /// </summary>
     Music,
 
     /// <summary>
-    ///     The audio is intended for mixed usage.
+    ///     同时用于语音和音乐。
     /// </summary>
     Mixed
 }

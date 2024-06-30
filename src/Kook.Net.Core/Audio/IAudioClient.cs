@@ -1,100 +1,100 @@
 namespace Kook.Audio;
 
 /// <summary>
-///     Represents a generic audio client.
+///     表示一个通用的音频客户端。
 /// </summary>
 public interface IAudioClient : IDisposable
 {
     /// <summary>
-    ///     Occurs when the client has connected to the voice server.
+    ///     当客户端成功连接到语音服务器时引发。
     /// </summary>
     event Func<Task> Connected;
 
     /// <summary>
-    ///     Occurs when the client has disconnected from the voice server.
-    ///     The first <see cref="Exception"/> parameter is the exception that caused the disconnection.
+    ///     当客户端从语音服务器断开连接时引发。 <br />
+    ///     <see cref="Exception"/> 参数是导致连接断开的异常。
     /// </summary>
     event Func<Exception, Task> Disconnected;
 
     // /// <summary>
-    // ///     Occurs when the latency of the voice WebSocket server has been updated.
+    // ///     当语音 WebSocket 服务器的延迟更新时引发。
     // /// </summary>
     // event Func<int, int, Task> LatencyUpdated;
 
     /// <summary>
-    ///     Occurs when the latency of the voice UDP server has been updated.
-    ///     The first <see cref="int"/> parameter is the latency in milliseconds before the update.
-    ///     The second <see cref="int"/> parameter is the current updated latency in milliseconds.
+    ///     当语音 UDP 服务器的延迟已更新时引发。 <br />
+    ///     第一个 <see cref="int"/> 参数是更新前的延迟（毫秒）。 <br />
+    ///     第二个 <see cref="int"/> 参数是当前更新后的延迟（毫秒）。
     /// </summary>
     event Func<int, int, Task> UdpLatencyUpdated;
 
     /// <summary>
-    ///     Occurs when a peer has connected to the voice server.
-    ///     The <see cref="ulong"/> parameter is the connected peer's user ID.
+    ///     当其他语音客户端连接到当前语音服务器时引发。
+    ///     <see cref="ulong"/> 参数是所连接的语音客户端用户的 ID。
     /// </summary>
     event Func<ulong, Task> PeerConnected;
 
     /// <summary>
-    ///     Occurs when a peer has disconnected from the voice server.
-    ///     The <see cref="ulong"/> parameter is the disconnected peer's user ID.
+    ///     当其他语音客户端从当前语音服务器断开连接时引发。
+    ///     <see cref="ulong"/> 参数是断开连接的语音客户端用户的 ID。
     /// </summary>
     event Func<ulong, Task> PeerDisconnected;
 
     /// <summary>
-    ///     Occurs when the client has been disconnected from the voice server.
+    ///     当此语音客户端从语音服务器断开连接时引发。
     /// </summary>
     event Func<Task> ClientDisconnected;
 
     /// <summary>
-    ///     Gets the current connection state of this client.
+    ///     获取此客户端当前的连接状态。
     /// </summary>
     ConnectionState ConnectionState { get; }
 
     // /// <summary>
-    // ///     Gets the estimated round-trip latency, in milliseconds, to the voice WebSocket server.
+    // ///     获取到语音 WebSocket 服务器的往返时间估计值，单位为毫秒。
     // /// </summary>
     // int Latency { get; }
 
     /// <summary>
-    ///     Gets the estimated round-trip latency, in milliseconds, to the voice UDP server.
+    ///     获取到语音 UDP 服务器的往返时间估计值，单位为毫秒。
     /// </summary>
     int UdpLatency { get; }
 
     /// <summary>
-    ///     Stops the client from sending audio.
+    ///     停止该语音客户端发送音频。
     /// </summary>
-    /// <returns> A task representing the asynchronous operation. </returns>
+    /// <returns> 一个停止操作的异步任务。 </returns>
     Task StopAsync();
 
     /// <summary>
-    ///     Creates a new audio stream from the Opus codec.
+    ///     使用 Opus 编解码器创建一个新的音频流。
     /// </summary>
-    /// <param name="bufferMillis"> The buffer size, in milliseconds, of the audio stream. </param>
-    /// <returns> A new Opus audio stream. </returns>
+    /// <param name="bufferMillis"> 音频流的缓冲区大小，单位为毫秒。 </param>
+    /// <returns> 一个新的 Opus 音频流。 </returns>
     AudioOutStream CreateOpusStream(int bufferMillis = 1000);
 
     /// <summary>
-    ///     Creates a new audio stream from the Opus codec without buffering.
+    ///     使用 Opus 编解码器创建一个新的音频流，不设置缓冲区。
     /// </summary>
-    /// <returns> A new Opus audio stream. </returns>
+    /// <returns> 一个新的 Opus 音频流。 </returns>
     AudioOutStream CreateDirectOpusStream();
 
     /// <summary>
-    ///     Creates a new audio stream from the PCM codec.
+    ///     使用 PCM 编解码器创建一个新的音频流。
     /// </summary>
-    /// <param name="application"> The audio application to use. </param>
-    /// <param name="bitrate"> The bitrate of the audio stream. </param>
-    /// <param name="bufferMillis"> The buffer size, in milliseconds, of the audio stream. </param>
-    /// <param name="packetLoss"> The packet loss percentage of the audio stream. </param>
-    /// <returns> A new PCM audio stream. </returns>
+    /// <param name="application"> 音频应用程序的应用场景。 </param>
+    /// <param name="bitrate"> 音频流的比特率，单位为比特每秒，默认值为 96 kbps。 </param>
+    /// <param name="bufferMillis"> 音频流的缓冲区大小，单位为毫秒。 </param>
+    /// <param name="packetLoss"> 音频流的丢包率，单位为百分比，默认值为 30%。 </param>
+    /// <returns> 一个新的 PCM 音频流。 </returns>
     AudioOutStream CreatePcmStream(AudioApplication application, int bitrate = 96 * 1024, int bufferMillis = 1000, int packetLoss = 30);
 
     /// <summary>
-    ///     Creates a new audio stream from the PCM codec without buffering.
+    ///     使用 PCM 编解码器创建一个新的音频流，不设置缓冲区。
     /// </summary>
-    /// <param name="application"> The audio application to use. </param>
-    /// <param name="bitrate"> The bitrate of the audio stream. </param>
-    /// <param name="packetLoss"> The packet loss percentage of the audio stream. </param>
-    /// <returns> A new PCM audio stream. </returns>
+    /// <param name="application"> 音频应用程序的应用场景。 </param>
+    /// <param name="bitrate"> 音频流的比特率，单位为比特每秒，默认值为 96 kbps。 </param>
+    /// <param name="packetLoss"> 音频流的丢包率，单位为百分比，默认值为 30%。 </param>
+    /// <returns> 一个新的 PCM 音频流。 </returns>
     AudioOutStream CreateDirectPcmStream(AudioApplication application, int bitrate = 96 * 1024, int packetLoss = 30);
 }
