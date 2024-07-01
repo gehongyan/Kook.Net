@@ -1,6 +1,6 @@
 namespace Kook;
 
 /// <summary>
-///     Properties that are used to create an <see cref="IGuildChannel" /> with the specified properties.
+///     提供用于创建 <see cref="T:Kook.IGuildChannel" /> 的属性。
 /// </summary>
 public class CreateGuildChannelProperties;

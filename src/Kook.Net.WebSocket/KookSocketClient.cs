@@ -276,7 +276,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     Gets a generic channel from the cache or does a rest request if unavailable.
     /// </summary>
     /// <param name="id">The identifier of the channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
     ///     with the identifier; <c>null</c> when the channel cannot be found.
@@ -291,7 +291,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     Gets a direct message channel from the cache or does a rest request if unavailable.
     /// </summary>
     /// <param name="chatCode">The identifier of the channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
     ///     with the identifier; <c>null</c> when the channel cannot be found.
@@ -302,7 +302,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     /// <summary>
     ///     Gets a collection of direct message channels from the cache or does a rest request if unavailable.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
     ///     with the identifier; <c>null</c> when the channel cannot be found.
@@ -314,7 +314,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     Gets a user from the cache or does a rest request if unavailable.
     /// </summary>
     /// <param name="id">The identifier of the user (e.g. `168693960628371456`).</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the user associated with
     ///     the identifier; <c>null</c> if the user is not found.
@@ -354,7 +354,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     /// <param name="guilds">
     ///     The guilds to download the users for. If <c>null</c>, all available guilds will be downloaded.
     /// </param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     public override async Task DownloadUsersAsync(IEnumerable<IGuild>? guilds = null, RequestOptions? options = null)
     {
         if (ConnectionState != ConnectionState.Connected) return;
@@ -383,7 +383,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     /// <param name="guilds">
     ///     The guilds to download the voice states for. If <c>null</c>, all available guilds will be downloaded.
     /// </param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     public override async Task DownloadVoiceStatesAsync(IEnumerable<IGuild>? guilds = null,
         RequestOptions? options = null)
     {
@@ -430,7 +430,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///     To download all boost subscriptions, the current user must has the
     ///     <see cref="GuildPermission.ManageGuild"/> permission.
     /// </param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     public override async Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild>? guilds = null,
         RequestOptions? options = null)
     {

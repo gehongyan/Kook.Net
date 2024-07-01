@@ -427,7 +427,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     Fetches the users data from the REST API to update this object,
     ///     especially the <see cref="Roles"/> property.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous reloading operation.
     /// </returns>

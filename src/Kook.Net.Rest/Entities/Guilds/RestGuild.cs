@@ -305,7 +305,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets a collection of all users banned in this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     ban objects that this guild currently possesses, with each object containing the user banned and reason
@@ -318,7 +318,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     Gets a ban object for a banned user.
     /// </summary>
     /// <param name="user">The banned user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
     ///     contains the user information and the reason for the ban; <c>null</c> if the ban entry cannot be found.
@@ -330,7 +330,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     Gets a ban object for a banned user.
     /// </summary>
     /// <param name="userId">The identifier for the banned user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
     ///     contains the user information and the reason for the ban; <c>null</c> if the ban entry cannot be found.
@@ -385,7 +385,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     Creates a new role with the provided name.
     /// </summary>
     /// <param name="name">The new name for the role.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     role.
@@ -407,7 +407,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <remarks>
     ///     This method retrieves all users found within this guild.
     /// </remarks>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
     ///     users found within this guild.
@@ -422,7 +422,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     This method retrieves a user found within this guild.
     /// </remarks>
     /// <param name="id">The identifier of the user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the guild user
     ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
@@ -433,7 +433,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets the current user for this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the currently logged-in
     ///     user within this guild.
@@ -448,7 +448,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets the owner of this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the owner of this guild.
     /// </returns>
@@ -464,7 +464,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </remarks>
     /// <param name="func">A delegate containing the properties to search users with.</param>
     /// <param name="limit">The maximum number of users to be gotten.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
     ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/> at <paramref name="func"/>.
@@ -481,7 +481,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets a collection of all channels in this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     generic channels found within this guild.
@@ -493,7 +493,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     Gets a channel in this guild.
     /// </summary>
     /// <param name="id">The identifier for the channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the generic channel
     ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
@@ -505,7 +505,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     Gets a text channel in this guild.
     /// </summary>
     /// <param name="id">The identifier for the text channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the text channel
     ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
@@ -521,7 +521,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets a collection of all text channels in this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     message channels found within this guild.
@@ -538,7 +538,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     Gets a voice channel in this guild.
     /// </summary>
     /// <param name="id">The identifier for the voice channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the voice channel associated
     ///     with the specified <paramref name="id"/>; <c>null</c> if none is found.
@@ -554,7 +554,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets a collection of all voice channels in this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     voice channels found within this guild.
@@ -571,7 +571,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     Gets a category channel in this guild.
     /// </summary>
     /// <param name="id">The identifier for the category channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the category channel associated
     ///     with the specified <paramref name="id"/>; <c>null</c> if none is found.
@@ -587,7 +587,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets a collection of all category channels in this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     category channels found within this guild.
@@ -603,7 +603,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets the default text channel in this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the default text channel of this guild;
     ///     <c>null</c> if none is found.
@@ -620,7 +620,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets the welcome text channel in this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the welcome text channel of this guild;
     ///     <c>null</c> if none is found.
@@ -639,7 +639,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </summary>
     /// <param name="name">The new name for the text channel.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     text channel.
@@ -653,7 +653,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </summary>
     /// <param name="name">The name of the new channel.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentNullException"><paramref name="name" /> is <c>null</c>.</exception>
     /// <returns>
     ///     The created voice channel.
@@ -667,7 +667,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </summary>
     /// <param name="name">The name of the new channel.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentNullException"><paramref name="name" /> is <c>null</c>.</exception>
     /// <returns>
     ///     The created category channel.

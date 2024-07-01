@@ -9,7 +9,7 @@ public static class KookRestClientExperimentalExtensions
     ///     Gets a collection of the available voice regions.
     /// </summary>
     /// <param name="client">The KOOK rest client instance.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     with all of the available voice regions in this session.
@@ -28,7 +28,7 @@ public static class KookRestClientExperimentalExtensions
     /// </summary>
     /// <param name="client">The KOOK rest client instance.</param>
     /// <param name="id">The identifier of the voice region (e.g. <c>eu-central</c> ).</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the voice region
     ///     associated with the identifier; <c>null</c> if the voice region is not found.
@@ -57,7 +57,7 @@ public static class KookRestClientExperimentalExtensions
     /// <param name="region">The voice region to create the guild with.</param>
     /// <param name="icon">The icon of the new guild.</param>
     /// <param name="templateId">The identifier of the guild template to be used to create the new guild.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the created guild.
     /// </returns>
@@ -76,7 +76,7 @@ public static class KookRestClientExperimentalExtensions
     ///     <see cref="GuildPermission.Administrator"/> permission.
     /// </summary>
     /// <param name="client">The KOOK rest client instance.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of guilds where the current user has the <see cref="GuildPermission.Administrator"/> permission.
@@ -89,7 +89,7 @@ public static class KookRestClientExperimentalExtensions
     /// </summary>
     /// <param name="client">The KOOK rest client instance.</param>
     /// <param name="card">The card to be validated.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous validation operation.
     /// </returns>
@@ -101,7 +101,7 @@ public static class KookRestClientExperimentalExtensions
     /// </summary>
     /// <param name="client">The KOOK rest client instance.</param>
     /// <param name="cards">The cards to be validated.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous validation operation.
     /// </returns>
@@ -113,7 +113,7 @@ public static class KookRestClientExperimentalExtensions
     /// </summary>
     /// <param name="client">The KOOK rest client instance.</param>
     /// <param name="cardsJson">The JSON representation of the cards to be validated.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous validation operation.
     /// </returns>

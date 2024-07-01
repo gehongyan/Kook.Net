@@ -53,8 +53,8 @@ public interface IKookClient : IDisposable
     ///     Gets a generic channel.
     /// </summary>
     /// <param name="id">The identifier of the channel.</param>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
     ///     with the identifier; <c>null</c> when the channel cannot be found.
@@ -65,8 +65,8 @@ public interface IKookClient : IDisposable
     ///     Gets a direct message channel.
     /// </summary>
     /// <param name="chatCode">The identifier of the channel.</param>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of direct-message channels that the user currently partakes in.
@@ -83,8 +83,8 @@ public interface IKookClient : IDisposable
     ///         have just started the client, this may return an empty collection.
     ///     </note>
     /// </remarks>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of direct-message channels that the user currently partakes in.
@@ -99,8 +99,8 @@ public interface IKookClient : IDisposable
     ///     Gets a guild.
     /// </summary>
     /// <param name="id">The guild identifier.</param>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the guild associated
     ///     with the identifier; <c>null</c> when the guild cannot be found.
@@ -110,8 +110,8 @@ public interface IKookClient : IDisposable
     /// <summary>
     ///     Gets a collection of guilds that the user is currently in.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of guilds that the current user is in.
@@ -126,8 +126,8 @@ public interface IKookClient : IDisposable
     ///     Gets a user.
     /// </summary>
     /// <param name="id">The identifier of the user.</param>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the user associated with
     ///     the identifier; <c>null</c> if the user is not found.
@@ -139,7 +139,7 @@ public interface IKookClient : IDisposable
     /// </summary>
     /// <param name="username">The name of the user (e.g. `Still`).</param>
     /// <param name="identifyNumber">The identify value of the user (e.g. `2876`).</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the user associated with
     ///     the name and the identifyNumber; <c>null</c> if the user is not found.
@@ -153,8 +153,8 @@ public interface IKookClient : IDisposable
     /// <summary>
     ///     Gets friends.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of users
     ///     that are friends with the current user.
@@ -164,8 +164,8 @@ public interface IKookClient : IDisposable
     /// <summary>
     ///     Gets friend requests.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of users
     ///     that requested to be friends with the current user.
@@ -175,8 +175,8 @@ public interface IKookClient : IDisposable
     /// <summary>
     ///     Gets blocked users.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of users
     ///     that are blocked by the current user.

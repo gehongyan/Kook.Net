@@ -8,7 +8,7 @@ public interface IUpdateable
     /// <summary>
     ///     Updates this object's properties with its current state.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous reloading operation.
     /// </returns>

@@ -38,7 +38,7 @@ public static class MessageExtensions
     /// </example>
     /// <param name="msg">The message to add reactions to.</param>
     /// <param name="reactions">An array of reactions to add to the message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous operation for adding a reaction to this message.
     /// </returns>
@@ -65,7 +65,7 @@ public static class MessageExtensions
     /// <param name="msg">The message to remove reactions from.</param>
     /// <param name="user">The user who removed the reaction.</param>
     /// <param name="reactions">An array of reactions to remove from the message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous operation for removing a reaction to this message.
     /// </returns>
@@ -87,7 +87,7 @@ public static class MessageExtensions
     /// <param name="type">The type of the file.</param>
     /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
         string path, string? filename = null, AttachmentType type = AttachmentType.File, bool isQuote = false,
         bool isEphemeral = false, RequestOptions? options = null) =>
@@ -106,7 +106,7 @@ public static class MessageExtensions
     /// <param name="type">The type of the file.</param>
     /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
         Stream stream, string filename, AttachmentType type = AttachmentType.File, bool isQuote = false,
         bool isEphemeral = false, RequestOptions? options = null) =>
@@ -123,7 +123,7 @@ public static class MessageExtensions
     /// <param name="attachment">The attachment containing the file.</param>
     /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
         FileAttachment attachment, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendFileAsync(attachment,
@@ -139,7 +139,7 @@ public static class MessageExtensions
     /// <param name="content">Contents of the message.</param>
     /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
-    /// <param name="options">The request options for this <c>async</c> request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(this IUserMessage message,
         string content, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendTextAsync(content,
@@ -155,7 +155,7 @@ public static class MessageExtensions
     /// <param name="cards">The cards to be sent.</param>
     /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
-    /// <param name="options">The request options for this <c>async</c> request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(this IUserMessage message,
         IEnumerable<ICard> cards, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendCardsAsync(cards,
@@ -171,7 +171,7 @@ public static class MessageExtensions
     /// <param name="card">The card to be sent.</param>
     /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
-    /// <param name="options">The request options for this <c>async</c> request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardAsync(this IUserMessage message,
         ICard card, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendCardAsync(card,

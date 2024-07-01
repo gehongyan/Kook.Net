@@ -70,7 +70,7 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
     /// <summary>
     ///     Gets the users connected to this voice channel.
     /// </summary>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of users.
     /// </returns>

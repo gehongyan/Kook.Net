@@ -27,7 +27,7 @@ public interface ITextChannel : INestedChannel, IMentionable, IMessageChannel
     ///     Modifies this text channel.
     /// </summary>
     /// <param name="func">The delegate containing the properties to modify the channel with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
@@ -39,7 +39,7 @@ public interface ITextChannel : INestedChannel, IMentionable, IMessageChannel
     /// <summary>
     ///     Gets a collection of pinned messages in this channel.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation for retrieving pinned messages in this channel.
     ///     The task result contains a collection of messages found in the pinned messages.

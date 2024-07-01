@@ -82,7 +82,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     Gets a guild.
     /// </summary>
     /// <param name="id">The guild identifier.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the guild associated
     ///     with the identifier; <c>null</c> when the guild cannot be found.
@@ -93,7 +93,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <summary>
     ///     Gets a collection of guilds that the user is currently in.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of guilds that the current user is in.
@@ -109,7 +109,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     Gets a generic channel.
     /// </summary>
     /// <param name="id">The identifier of the channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the channel associated
     ///     with the identifier; <c>null</c> when the channel cannot be found.
@@ -121,7 +121,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     Gets a direct message channel.
     /// </summary>
     /// <param name="chatCode">The identifier of the channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of direct-message channels that the user currently partakes in.
@@ -139,7 +139,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///         have just started the client, this may return an empty collection.
     ///     </note>
     /// </remarks>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of direct-message channels that the user currently partakes in.
@@ -183,7 +183,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     Gets a user.
     /// </summary>
     /// <param name="id"> The identifier of the user (e.g. `168693960628371456`). </param>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the user associated with
     ///     the identifier; <c>null</c> if the user is not found.
@@ -196,7 +196,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// </summary>
     /// <param name="guildId"> The identifier of the guild where the user is located. </param>
     /// <param name="id"> The identifier of the user (e.g. `168693960628371456`). </param>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the user from a guild
     ///     associated with the identifier; <c>null</c> if the user is not found in the guild.
@@ -211,7 +211,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <summary>
     ///     Gets friends.
     /// </summary>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of users
     ///     that are friends with the current user.
@@ -222,7 +222,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <summary>
     ///     Gets friend requests.
     /// </summary>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of
     ///     friend requests that the current user has received.
@@ -233,7 +233,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <summary>
     ///     Gets blocked users.
     /// </summary>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of users
     ///     that are blocked by the current user.
@@ -250,7 +250,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// </summary>
     /// <param name="messageId"> The identifier of the message. </param>
     /// <param name="emote"> The emoji used to react to the message. </param>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous operation for adding a reaction to the message.
     /// </returns>
@@ -264,7 +264,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <param name="messageId"> The identifier of the message. </param>
     /// <param name="userId"> The identifier of the user who added the reaction. </param>
     /// <param name="emote"> The emoji used to remove from the message. </param>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous operation for removing a reaction from the message.
     /// </returns>
@@ -277,7 +277,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// </summary>
     /// <param name="messageId"> The identifier of the direct message. </param>
     /// <param name="emote"> The emoji used to react to the message. </param>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous operation for adding a reaction to the direct message.
     /// </returns>
@@ -291,7 +291,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <param name="messageId"> The identifier of the direct message. </param>
     /// <param name="userId"> The identifier of the user who added the reaction. </param>
     /// <param name="emote"> The emoji used to remove from the message. </param>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous operation for removing a reaction from the direct message.
     /// </returns>
@@ -308,7 +308,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// </summary>
     /// <param name="path"> The path to the file. </param>
     /// <param name="filename"> The name of the file. </param>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> The asset resource URI of the uploaded file. </returns>
     public async Task<string> CreateAssetAsync(string path, string? filename = null, RequestOptions? options = null)
     {
@@ -326,7 +326,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// </summary>
     /// <param name="stream"> The stream to the file. </param>
     /// <param name="filename"> The name of the file. </param>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> The asset resource URI of the uploaded file. </returns>
     public Task<string> CreateAssetAsync(Stream stream, string filename, RequestOptions? options = null) =>
         ClientHelper.CreateAssetAsync(this, stream, filename, options);
@@ -342,7 +342,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     ///     Specifies whether to return games information created by the current user or
     ///     by the system by default; <c>null</c> to return all games information.
     /// </param>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> A collection of games information. </returns>
     public IAsyncEnumerable<IReadOnlyCollection<RestGame>> GetGamesAsync(
         GameCreationSource? source = null, RequestOptions? options = null) =>
@@ -354,7 +354,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <param name="name"> The name of the game. </param>
     /// <param name="processName"> The process name of the game. </param>
     /// <param name="iconUrl"> The icon URI of the game. </param>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns></returns>
     public Task<RestGame> CreateGameAsync(string name,
         string? processName = null, string? iconUrl = null, RequestOptions? options = null) =>

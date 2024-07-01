@@ -22,7 +22,7 @@ public static class BaseSocketClientExperimentalExtensions
     /// <param name="region">The voice region to create the guild with.</param>
     /// <param name="icon">The icon of the new guild.</param>
     /// <param name="templateId">The identifier of the guild template to be used to create the new guild.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the created guild.
     /// </returns>

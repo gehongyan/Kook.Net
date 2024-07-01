@@ -213,7 +213,7 @@ public interface IGuild : IEntity<ulong>
     ///         If the user is the owner of this guild, use <see cref="IDeletable.DeleteAsync"/> instead.
     ///     </note>
     /// </remarks>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous leave operation.
     /// </returns>
@@ -222,7 +222,7 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets all subscriptions for this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous retrieval operation. The task result contains
     ///     a collection of <see cref="BoostSubscriptionMetadata"/>, each representing the subscriptions information.
@@ -232,7 +232,7 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets subscriptions which are not expired for this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous retrieval operation. The task result contains
     ///     a collection of <see cref="BoostSubscriptionMetadata"/> which are not expired,
@@ -247,7 +247,7 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets a collection of all users banned in this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     ban objects that this guild currently possesses, with each object containing the user banned and reason
@@ -259,7 +259,7 @@ public interface IGuild : IEntity<ulong>
     ///     Gets a ban object for a banned user.
     /// </summary>
     /// <param name="user">The banned user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
     ///     contains the user information and the reason for the ban; <c>null</c> if the ban entry cannot be found.
@@ -270,7 +270,7 @@ public interface IGuild : IEntity<ulong>
     ///     Gets a ban object for a banned user.
     /// </summary>
     /// <param name="userId">The identifier for the banned user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
     ///     contains the user information and the reason for the ban; <c>null</c> if the ban entry cannot be found.
@@ -283,7 +283,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="user">The user to ban.</param>
     /// <param name="pruneDays">The number of days to remove messages from this user for, and this number must be between [0, 7].</param>
     /// <param name="reason">The reason of the ban to be written in the audit log.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentException"><paramref name="pruneDays"/> is not between 0 to 7.</exception>
     /// <returns>
     ///     A task that represents the asynchronous add operation for the ban.
@@ -296,7 +296,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="userId">The identifier of the user to ban.</param>
     /// <param name="pruneDays">The number of days to remove messages from this user for, and this number must be between [0, 7].</param>
     /// <param name="reason">The reason of the ban to be written in the audit log.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentException"><paramref name="pruneDays"/> is not between 0 to 7.</exception>
     /// <returns>
     ///     A task that represents the asynchronous add operation for the ban.
@@ -307,7 +307,7 @@ public interface IGuild : IEntity<ulong>
     ///     Unbans the user if they are currently banned.
     /// </summary>
     /// <param name="user">The user to be unbanned.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous removal operation for the ban.
     /// </returns>
@@ -317,7 +317,7 @@ public interface IGuild : IEntity<ulong>
     ///     Unbans the user if they are currently banned.
     /// </summary>
     /// <param name="userId">The identifier of the user to be unbanned.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous removal operation for the ban.
     /// </returns>
@@ -330,8 +330,8 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets a collection of all channels in this guild.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     generic channels found within this guild.
@@ -342,8 +342,8 @@ public interface IGuild : IEntity<ulong>
     ///     Gets a channel in this guild.
     /// </summary>
     /// <param name="id">The identifier for the channel.</param>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the generic channel
     ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
@@ -354,8 +354,8 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets a collection of all text channels in this guild.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     message channels found within this guild.
@@ -366,8 +366,8 @@ public interface IGuild : IEntity<ulong>
     ///     Gets a text channel in this guild.
     /// </summary>
     /// <param name="id">The identifier for the text channel.</param>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the text channel
     ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
@@ -378,8 +378,8 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets a collection of all voice channels in this guild.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     voice channels found within this guild.
@@ -390,8 +390,8 @@ public interface IGuild : IEntity<ulong>
     ///     Gets a voice channel in this guild.
     /// </summary>
     /// <param name="id">The identifier for the voice channel.</param>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the voice channel associated
     ///     with the specified <paramref name="id"/>; <c>null</c> if none is found.
@@ -402,8 +402,8 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets a collection of all category channels in this guild.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     category channels found within this guild.
@@ -414,8 +414,8 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets the default text channel for this guild.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the default text channel for this guild;
     ///     <c>null</c> if none is found.
@@ -425,8 +425,8 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets the welcome text channel for this guild.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the welcome text channel for this guild;
     ///     <c>null</c> if none is found.
@@ -438,7 +438,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="name">The new name for the text channel.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     text channel.
@@ -450,7 +450,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="name">The new name for the voice channel.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     voice channel.
@@ -462,7 +462,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="name">The new name for the category.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     category channel.
@@ -476,7 +476,7 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets a collection of all invites in this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     ///     invite, each representing information for an invite found within this guild.
@@ -488,7 +488,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="maxAge">The time until the invite expires. Set to <c>InviteMaxAge.NeverExpires</c> to never expire.</param>
     /// <param name="maxUses">The max amount of times this invite may be used. Set to <c>InviteMaxUses.Unlimited</c> to have unlimited uses.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous invite creation operation. The task result contains an invite
     ///     metadata object containing information for the created invite.
@@ -500,7 +500,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="maxAge">The time (in seconds) until the invite expires. Set to <c>null</c> to never expire.</param>
     /// <param name="maxUses">The max amount of times this invite may be used. Set to <c>null</c> to have unlimited uses.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous invite creation operation. The task result contains an invite
     ///     metadata object containing information for the created invite.
@@ -524,7 +524,7 @@ public interface IGuild : IEntity<ulong>
     ///     Creates a new role with the provided name.
     /// </summary>
     /// <param name="name">The new name for the role.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created role.
     /// </returns>
@@ -540,8 +540,8 @@ public interface IGuild : IEntity<ulong>
     /// <remarks>
     ///     This method retrieves all users found within this guild.
     /// </remarks>
-    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
     ///     users found within this guild.
@@ -559,8 +559,8 @@ public interface IGuild : IEntity<ulong>
     ///     </note>
     /// </remarks>
     /// <param name="id">The identifier of the user.</param>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the guild user
     ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
@@ -570,8 +570,8 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets the current user for this guild.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the currently logged-in
     ///     user within this guild.
@@ -581,8 +581,8 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets the owner of this guild.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the owner of this guild.
     /// </returns>
@@ -594,7 +594,7 @@ public interface IGuild : IEntity<ulong>
     /// <remarks>
     ///     This method downloads all users found within this guild through the Gateway and caches them.
     /// </remarks>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous download operation.
     /// </returns>
@@ -606,7 +606,7 @@ public interface IGuild : IEntity<ulong>
     /// <remarks>
     ///     This method downloads all voice states for this guild through the Gateway and caches them.
     /// </remarks>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous download operation.
     /// </returns>
@@ -620,7 +620,7 @@ public interface IGuild : IEntity<ulong>
     ///     To download all boost subscriptions, the current user must has the
     ///     <see cref="GuildPermission.ManageGuild"/> permission.
     /// </remarks>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous download operation.
     /// </returns>
@@ -635,8 +635,8 @@ public interface IGuild : IEntity<ulong>
     /// </remarks>
     /// <param name="func">A delegate containing the properties to search users with.</param>
     /// <param name="limit">The maximum number of users to be gotten.</param>
-    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
     ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/> at <paramref name="func"/>.
@@ -651,7 +651,7 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Gets a collection of emotes from this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
     ///     of emotes found within the guild.
@@ -662,7 +662,7 @@ public interface IGuild : IEntity<ulong>
     ///     Gets a specific emote from this guild.
     /// </summary>
     /// <param name="id">The identifier for the guild emote.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the emote found with the
     ///     specified <paramref name="id"/>; <c>null</c> if none is found.
@@ -674,7 +674,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="name">The name of the guild emote.</param>
     /// <param name="image">The image of the new emote.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the created emote.
     /// </returns>
@@ -685,7 +685,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="emote">The emote to be modified.</param>
     /// <param name="name"> The new name of the emote.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous modification operation. The task result contains the modified
     ///     emote.
@@ -696,7 +696,7 @@ public interface IGuild : IEntity<ulong>
     ///     Deletes an existing <see cref="GuildEmote"/> from this guild.
     /// </summary>
     /// <param name="emote">The emote to delete.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous removal operation.
     /// </returns>
@@ -711,7 +711,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="users">The users to move.</param>
     /// <param name="targetChannel">the channel where the user gets moved to.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>A task that represents the asynchronous operation for moving a user.</returns>
     Task MoveUsersAsync(IEnumerable<IGuildUser> users, IVoiceChannel targetChannel, RequestOptions? options = null);
 
@@ -723,7 +723,7 @@ public interface IGuild : IEntity<ulong>
     ///     Gets a badge which is associated with this guild.
     /// </summary>
     /// <param name="style">The <see cref="BadgeStyle"/> that specifies the style of the badge.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the stream of the badge
     ///     associated with this guild.

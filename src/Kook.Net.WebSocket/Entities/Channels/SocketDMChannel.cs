@@ -79,7 +79,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     Gets the message associated with the given <paramref name="id"/>.
     /// </summary>
     /// <param name="id">TThe ID of the message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     The message gotten from either the cache or the download, or <c>null</c> if none is found.
     /// </returns>
@@ -94,7 +94,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
     /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
@@ -112,7 +112,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <param name="referenceMessageId">The ID of the starting message to get the messages from.</param>
     /// <param name="dir">The direction of the messages to be gotten from.</param>
     /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
@@ -130,7 +130,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <param name="referenceMessage">The starting message to get the messages from.</param>
     /// <param name="dir">The direction of the messages to be gotten from.</param>
     /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
@@ -159,7 +159,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <param name="filename">The name of the file.</param>
     /// <param name="type">The type of the file.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -178,7 +178,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <param name="filename">The name of the file.</param>
     /// <param name="type">The type of the file.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -195,7 +195,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// </remarks>
     /// <param name="attachment">The attachment containing the file.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -209,7 +209,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// </summary>
     /// <param name="text">The message to be sent.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -223,7 +223,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// </summary>
     /// <param name="cards">The cards to be sent.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -237,7 +237,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// </summary>
     /// <param name="card">The card to be sent.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.

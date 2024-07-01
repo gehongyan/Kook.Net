@@ -101,7 +101,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     /// <summary>
     ///     Gets a collection of users with this role.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     Paged collection of users with this role.
     /// </returns>

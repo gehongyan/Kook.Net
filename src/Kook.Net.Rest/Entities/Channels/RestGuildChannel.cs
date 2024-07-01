@@ -102,7 +102,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     ///     you will need to get the user through
     ///     <see cref="IGuild.GetUserAsync(ulong,CacheMode,RequestOptions)"/>."/>
     /// </remarks>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
     /// </returns>
@@ -148,7 +148,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     ///     Adds the permission overwrite for the given user.
     /// </summary>
     /// <param name="user">The user to add the overwrite to.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
     /// </returns>
@@ -164,7 +164,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     ///     Adds the permission overwrite for the given role.
     /// </summary>
     /// <param name="role">The role to add the overwrite to.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
     /// </returns>
@@ -180,7 +180,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     ///     Removes the permission overwrite for the given user, if one exists.
     /// </summary>
     /// <param name="user">The user to remove the overwrite from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
@@ -194,7 +194,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     ///     Removes the permission overwrite for the given role, if one exists.
     /// </summary>
     /// <param name="role">The role to remove the overwrite from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
@@ -209,7 +209,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// </summary>
     /// <param name="user">The user to modify the overwrite for.</param>
     /// <param name="func">A delegate containing the values to modify the permission overwrite with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>
@@ -227,7 +227,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// </summary>
     /// <param name="role">The role to remove the overwrite for.</param>
     /// <param name="func">A delegate containing the values to modify the permission overwrite with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
     /// </returns>

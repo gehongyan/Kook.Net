@@ -133,7 +133,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <summary>
     ///     Kicks this user from this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous kick operation.
     /// </returns>
@@ -152,7 +152,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     </note>
     /// </remarks>
     /// <param name="name">The nickname to modify the user with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
@@ -161,7 +161,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <summary>
     ///     Gets all subscriptions of this user for this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous retrieval operation. The task result contains
     ///     a collection of <see cref="BoostSubscriptionMetadata"/>, each representing the subscription information.
@@ -176,7 +176,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     Adds the specified role to this user in the guild.
     /// </summary>
     /// <param name="roleId">The role to be added to the user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous role addition operation.
     /// </returns>
@@ -186,7 +186,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     Adds the specified role to this user in the guild.
     /// </summary>
     /// <param name="role">The role to be added to the user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous role addition operation.
     /// </returns>
@@ -196,7 +196,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     Adds the specified <paramref name="roleIds"/> to this user in the guild.
     /// </summary>
     /// <param name="roleIds">The roles to be added to the user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous role addition operation.
     /// </returns>
@@ -206,7 +206,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     Adds the specified <paramref name="roles"/> to this user in the guild.
     /// </summary>
     /// <param name="roles">The roles to be added to the user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous role addition operation.
     /// </returns>
@@ -216,7 +216,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     Removes the specified <paramref name="roleId"/> from this user in the guild.
     /// </summary>
     /// <param name="roleId">The role to be removed from the user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous role removal operation.
     /// </returns>
@@ -226,7 +226,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     Removes the specified <paramref name="role"/> from this user in the guild.
     /// </summary>
     /// <param name="role">The role to be removed from the user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous role removal operation.
     /// </returns>
@@ -236,7 +236,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     Removes the specified <paramref name="roleIds"/> from this user in the guild.
     /// </summary>
     /// <param name="roleIds">The roles to be removed from the user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous role removal operation.
     /// </returns>
@@ -246,7 +246,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     Removes the specified <paramref name="roles"/> from this user in the guild.
     /// </summary>
     /// <param name="roles">The roles to be removed from the user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous role removal operation.
     /// </returns>
@@ -259,7 +259,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <summary>
     ///     Mute this user in this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous muting operation.
     /// </returns>
@@ -268,7 +268,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <summary>
     ///     Deafen this user in this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous deafening operation.
     /// </returns>
@@ -277,7 +277,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <summary>
     ///     Unmute this user in this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous unmuting operation.
     /// </returns>
@@ -286,7 +286,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <summary>
     ///     Undeafen this user in this guild.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous undeafening operation.
     /// </returns>
@@ -295,7 +295,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <summary>
     ///     Gets a collection of voice channels a user.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of
     ///     voice channels the user is connected to.

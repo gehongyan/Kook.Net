@@ -88,7 +88,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     ///          Kook.
     ///     </note>
     /// </remarks>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous operation for getting or creating a DM channel. The task result
     ///     contains the DM channel associated with this user.
@@ -98,7 +98,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// <summary>
     ///     Gets the intimacy information with this user.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous operation for getting the intimacy information. The task result
     ///     contains the intimacy information associated with this user.
@@ -109,35 +109,35 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     ///     Updates the intimacy information with this user.
     /// </summary>
     /// <param name="func">A delegate containing the properties to modify the <see cref="IIntimacy"/> with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>A task that represents the asynchronous operation for updating the intimacy information.</returns>
     Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the friend state with this user.
     /// </summary>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> A task that represents the asynchronous operation for getting the friend state. </returns>
     Task BlockAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the friend state with this user.
     /// </summary>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> A task that represents the asynchronous operation for getting the friend state. </returns>
     Task UnblockAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Sends a friend request to this user.
     /// </summary>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> A task that represents the asynchronous operation for sending the friend request. </returns>
     Task RequestFriendAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Gets the friend state with this user.
     /// </summary>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> A task that represents the asynchronous operation for getting the friend state. </returns>
     Task RemoveFriendAsync(RequestOptions? options = null);
 }

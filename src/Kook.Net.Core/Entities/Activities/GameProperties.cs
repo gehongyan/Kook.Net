@@ -3,7 +3,7 @@ namespace Kook;
 /// <summary>
 ///     用于修改 <see cref="IGame" /> 的属性，以应用指定的更改。
 /// </summary>
-/// <seealso cref="IGame.ModifyAsync"/>
+/// <seealso cref="M:Kook.IGame.ModifyAsync(System.Action{Kook.GameProperties},Kook.RequestOptions)"/>
 public class GameProperties
 {
     /// <summary>

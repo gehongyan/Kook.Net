@@ -13,7 +13,7 @@ public interface IRestMessageChannel : IMessageChannel
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
     /// <param name="id">The identifier of the message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous get operation for retrieving the message. The task result contains
     ///     the retrieved message; <c>null</c> if no message is found with the specified identifier.
@@ -28,7 +28,7 @@ public interface IRestMessageChannel : IMessageChannel
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
     /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
@@ -45,7 +45,7 @@ public interface IRestMessageChannel : IMessageChannel
     /// <param name="referenceMessageId">The ID of the starting message to get the messages from.</param>
     /// <param name="dir">The direction of the messages to be gotten from.</param>
     /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
@@ -62,7 +62,7 @@ public interface IRestMessageChannel : IMessageChannel
     /// <param name="referenceMessage">The starting message to get the messages from.</param>
     /// <param name="dir">The direction of the messages to be gotten from.</param>
     /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>

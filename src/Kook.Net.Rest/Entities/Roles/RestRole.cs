@@ -101,7 +101,7 @@ public class RestRole : RestEntity<uint>, IRole
     /// <summary>
     ///     Gets a collection of users that have this role.
     /// </summary>
-    /// <param name="options"> The options to be used when fetching the users. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> An asynchronous enumerable that contains a collection of users that have this role. </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions? options = null) =>
         GuildHelper.SearchUsersAsync(Guild, Kook, x => x.RoleId = Id, KookConfig.MaxUsersPerBatch, options);

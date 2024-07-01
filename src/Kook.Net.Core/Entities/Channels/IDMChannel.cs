@@ -1,42 +1,33 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic direct-message channel.
+///     表示一个通用的私聊频道。
 /// </summary>
 public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
 {
     #region General
 
     /// <summary>
-    ///     Gets the unique identifier of this direct-message channel.
+    ///     获取此私聊频道的唯一标识符。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="Guid"/> that represents this direct-message channel's unique identifier.
-    /// </returns>
     new Guid Id { get; }
 
     /// <summary>
-    ///     Gets the chat code of the direct-message channel.
+    ///     获取此私聊频道的聊天代码。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="Guid"/> that represents the chat code of the direct-message channel.
-    /// </returns>
     Guid ChatCode { get; }
 
     /// <summary>
-    ///     Gets the recipient of all messages in this channel.
+    ///     获取参与到此私聊频道的另外一位用户。
     /// </summary>
-    /// <returns>
-    ///     A user object that represents the other user in this channel.
-    /// </returns>
     IUser Recipient { get; }
 
     /// <summary>
-    ///     Closes this private channel, removing it from your channel list.
+    ///     关闭此私聊频道，将其从您的频道列表中移除。
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous close operation.
+    ///     一个表示异步关闭操作的任务。
     /// </returns>
     Task CloseAsync(RequestOptions? options = null);
 
@@ -45,58 +36,65 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     #region Send Messages
 
     /// <summary>
-    ///     Sends a file to this message channel.
+    ///     发送文件到此消息频道。
     /// </summary>
+    /// <param name="path"> 文件的路径。 </param>
+    /// <param name="filename"> 文件的名称。 </param>
+    /// <param name="type"> 文件的媒体类型。 </param>
+    /// <param name="quote"> 消息引用，用户回复消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
+    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null);
 
     /// <summary>
-    ///     Sends a file to this message channel.
+    ///     发送文件到此消息频道。
     /// </summary>
+    /// <param name="stream"> 文件的流。 </param>
+    /// <param name="filename"> 文件的名称。 </param>
+    /// <param name="type"> 文件的媒体类型。 </param>
+    /// <param name="quote"> 消息引用，用户回复消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
+    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null);
 
     /// <summary>
-    ///     Sends a file to this message channel.
+    ///     发送文件到此消息频道。
     /// </summary>
+    /// <param name="attachment"> 文件的附件信息。 </param>
+    /// <param name="quote"> 消息引用，用户回复消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
+    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment, IQuote? quote = null, RequestOptions? options = null);
 
     /// <summary>
-    ///     Sends a text message to this message channel.
+    ///     发送文本消息到此消息频道。
     /// </summary>
     /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
+    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote? quote = null, RequestOptions? options = null);
 
     /// <summary>
-    ///     Sends a card message to this message channel.
+    ///     发送卡片消息到此消息频道。
     /// </summary>
     /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
+    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card, IQuote? quote = null, RequestOptions? options = null);
 
     /// <summary>
-    ///     Sends a card message to this message channel.
+    ///     发送卡片消息到此消息频道。
     /// </summary>
     /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
+    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards, IQuote? quote = null, RequestOptions? options = null);
 

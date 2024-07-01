@@ -13,14 +13,14 @@ public interface IFriendRequest : IEntity<ulong>
     /// <summary>
     ///     Accepts this friend request.
     /// </summary>
-    /// <param name="options"> The options to use when accepting this friend request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> A task that represents the asynchronous accept operation. </returns>
     Task AcceptAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     Declines this friend request.
     /// </summary>
-    /// <param name="options"> The options to use when declining this friend request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> A task that represents the asynchronous decline operation. </returns>
     Task DeclineAsync(RequestOptions? options = null);
 }

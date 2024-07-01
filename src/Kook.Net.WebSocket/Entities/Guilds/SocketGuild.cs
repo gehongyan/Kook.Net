@@ -603,7 +603,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <param name="name">The new name for the text channel.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     text channel.
@@ -617,7 +617,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <param name="name">The new name for the voice channel.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
@@ -632,7 +632,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <param name="name">The new name for the category.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
@@ -683,7 +683,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     // /// <summary>
     // ///     Gets a collection of all invites in this guild.
     // /// </summary>
-    // /// <param name="options">The options to be used when sending the request.</param>
+    // /// <param name="options"> 发送请求时要使用的选项。 </param>
     // /// <returns>
     // ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     // ///     invite metadata, each representing information for an invite found within this guild.
@@ -709,7 +709,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     Creates a new role with the provided name.
     /// </summary>
     /// <param name="name">The new name for the role.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
@@ -847,7 +847,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     <para>This method retrieves all users found within this guild through REST.</para>
     ///     <para>Users returned by this method are not cached.</para>
     /// </remarks>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
     ///     users found within this guild.
@@ -880,7 +880,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </remarks>
     /// <param name="func">A delegate containing the properties to search users with.</param>
     /// <param name="limit">The maximum number of users to be gotten.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
     ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/>

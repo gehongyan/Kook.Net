@@ -18,7 +18,7 @@ public interface IMessageChannel : IChannel
     /// <param name="type">The type of the file.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -38,7 +38,7 @@ public interface IMessageChannel : IChannel
     /// <param name="type">The type of the file.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -56,7 +56,7 @@ public interface IMessageChannel : IChannel
     /// <param name="attachment">The attachment containing the file.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -70,7 +70,7 @@ public interface IMessageChannel : IChannel
     /// <param name="text">The message to be sent.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -84,7 +84,7 @@ public interface IMessageChannel : IChannel
     /// <param name="card">The card to be sent.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -98,7 +98,7 @@ public interface IMessageChannel : IChannel
     /// <param name="cards">The cards to be sent.</param>
     /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
     /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous send operation for delivering the message. The task result
     ///     contains the identifier and timestamp of the sent message.
@@ -110,8 +110,8 @@ public interface IMessageChannel : IChannel
     ///     Gets a message from this message channel.
     /// </summary>
     /// <param name="id">The identifier of the message.</param>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents an asynchronous get operation for retrieving the message. The task result contains
     ///     the retrieved message; <c>null</c> if no message is found with the specified identifier.
@@ -143,9 +143,8 @@ public interface IMessageChannel : IChannel
     ///     of flattening.
     /// </remarks>
     /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from
-    ///     cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
@@ -176,9 +175,8 @@ public interface IMessageChannel : IChannel
     /// <param name="referenceMessageId">The ID of the starting message to get the messages from.</param>
     /// <param name="dir">The direction of the messages to be gotten from.</param>
     /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from
-    ///     cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
@@ -210,9 +208,8 @@ public interface IMessageChannel : IChannel
     /// <param name="referenceMessage">The starting message to get the messages from.</param>
     /// <param name="dir">The direction of the messages to be gotten from.</param>
     /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from
-    ///     cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     Paged collection of messages.
     /// </returns>
@@ -228,7 +225,7 @@ public interface IMessageChannel : IChannel
     ///     Deletes a message.
     /// </summary>
     /// <param name="messageId">The identifier of the message that would be removed.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous removal operation.
     /// </returns>
@@ -236,7 +233,7 @@ public interface IMessageChannel : IChannel
 
     /// <summary> Deletes a message based on the provided message in this channel. </summary>
     /// <param name="message">The message that would be removed.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous removal operation.
     /// </returns>
@@ -255,7 +252,7 @@ public interface IMessageChannel : IChannel
     /// </remarks>
     /// <param name="messageId">The identifier of the message that would be changed.</param>
     /// <param name="func">A delegate containing the properties to modify the message with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
