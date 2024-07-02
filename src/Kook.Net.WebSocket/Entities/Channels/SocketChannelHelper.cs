@@ -10,7 +10,8 @@ internal static class SocketChannelHelper
         KookSocketClient kook, MessageCache? messages,
         Guid? referenceMessageId, Direction dir, int limit, CacheMode mode, RequestOptions? options)
     {
-        if (dir == Direction.After && referenceMessageId == null) return AsyncEnumerable.Empty<IReadOnlyCollection<IMessage>>();
+        if (dir == Direction.After && referenceMessageId == null)
+            return AsyncEnumerable.Empty<IReadOnlyCollection<IMessage>>();
 
         IReadOnlyCollection<SocketMessage> cachedMessages = GetCachedMessages(channel, kook, messages, referenceMessageId, dir, limit);
         IAsyncEnumerable<IReadOnlyCollection<IMessage>> result =

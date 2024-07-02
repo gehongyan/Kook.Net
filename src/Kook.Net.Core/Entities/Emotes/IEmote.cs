@@ -1,15 +1,12 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a general container for any type of emote in a message.
+///     表示一个通用的表情符号。
 /// </summary>
 public interface IEmote : IEntity<string>
 {
     /// <summary>
-    ///     Gets the display name or Unicode representation of this emote.
+    ///     获取此表情符号的显示名称或 Unicode 表示。
     /// </summary>
-    /// <returns>
-    ///     A string representing the display name or the Unicode representation (e.g. <c>🤔</c>) of this emote.
-    /// </returns>
     string Name { get; }
 }

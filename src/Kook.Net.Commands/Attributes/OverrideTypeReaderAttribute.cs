@@ -10,6 +10,7 @@ namespace Kook.Commands;
 ///     desired type in the command. This is useful when one wishes to use a particular
 ///     <see cref="Kook.Commands.TypeReader"/> without affecting other commands that are using the same target
 ///     type.
+///     <br />
 ///     <note type="warning">
 ///         If the given type reader does not inherit from <see cref="Kook.Commands.TypeReader"/>, an
 ///         <see cref="ArgumentException"/> will be thrown.

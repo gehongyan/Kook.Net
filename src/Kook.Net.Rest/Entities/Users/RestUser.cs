@@ -142,7 +142,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     /// <summary>
     ///     Creates a direct message channel to this user.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a rest DM channel where the user is the recipient.
     /// </returns>
@@ -152,7 +152,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     /// <summary>
     ///     Gets the intimacy information with this user.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous operation for getting the intimacy information. The task result
     ///     contains the intimacy information associated with this user.

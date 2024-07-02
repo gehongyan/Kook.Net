@@ -68,7 +68,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     ///     Gets a user in this channel.
     /// </summary>
     /// <param name="id">The identifier of the user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="InvalidOperationException">
     /// Resolving permissions requires the parent guild to be downloaded.
     /// </exception>
@@ -82,7 +82,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     /// <summary>
     ///     Gets a collection of users that are able to view the channel.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="InvalidOperationException">
     /// Resolving permissions requires the parent guild to be downloaded.
     /// </exception>
@@ -157,7 +157,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     /// <summary>
     ///     Gets the parent (category) channel of this channel.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains the category channel
     ///     representing the parent of this channel; <c>null</c> if none is set.

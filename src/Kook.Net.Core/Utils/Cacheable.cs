@@ -4,7 +4,7 @@ using System.Reflection;
 namespace Kook;
 
 /// <summary>
-///     Represents a cached entity.
+///     表示一个可延迟加载的缓存实体。
 /// </summary>
 /// <typeparam name="TEntity">The type of entity that is cached.</typeparam>
 /// <typeparam name="TId">The type of this entity's ID.</typeparam>

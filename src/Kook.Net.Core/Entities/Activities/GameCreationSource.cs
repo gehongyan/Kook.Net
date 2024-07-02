@@ -1,17 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Represents the creation source of a game.
+///     表示游戏信息的创建来源。
 /// </summary>
 public enum GameCreationSource
 {
     /// <summary>
-    ///     Represents that the game was created by the current user.
+    ///     由当前用户创建。
     /// </summary>
     SelfUser = 1,
 
     /// <summary>
-    ///     Represents that the game was created by the system by default.
+    ///     由系统默认创建。
     /// </summary>
     System = 2
 }

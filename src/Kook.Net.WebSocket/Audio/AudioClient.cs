@@ -8,6 +8,9 @@ using Kook.Audio.Streams;
 namespace Kook.Audio;
 
 //TODO: Add audio reconnecting
+/// <summary>
+///     表示一个音频客户端。
+/// </summary>
 internal partial class AudioClient : IAudioClient
 {
     private const int ConnectionTimeoutMs = 30000; // 30 seconds
@@ -40,7 +43,9 @@ internal partial class AudioClient : IAudioClient
 
     public ConnectionState ConnectionState => _connection.State;
 
-    /// <summary> Creates a new REST/WebSocket kook client. </summary>
+    /// <summary>
+    ///     初始化一个 <see cref="AudioClient"/> 类的新实例。
+    /// </summary>
     internal AudioClient(SocketGuild guild, int clientId, ulong channelId)
     {
         Guild = guild;

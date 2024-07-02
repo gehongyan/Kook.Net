@@ -9,7 +9,7 @@ public static class RestTextChannelExperimentalExtensions
     ///     Syncs the permissions of this nested channel with its parent's.
     /// </summary>
     /// <param name="channel">The nested channel whose permissions will be synced.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous operation for syncing channel permissions with its parent's.
     /// </returns>

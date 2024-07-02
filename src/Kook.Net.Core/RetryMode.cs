@@ -1,23 +1,39 @@
 namespace Kook;
 
-/// <summary> Specifies how a request should act in the case of an error. </summary>
+/// <summary>
+///     表示请求在发生错误时应如何处理。
+/// </summary>
 [Flags]
 public enum RetryMode
 {
-    /// <summary> If a request fails, an exception is thrown immediately. </summary>
+    /// <summary>
+    ///     如果请求失败，将立即引发异常。
+    /// </summary>
     AlwaysFail = 0x0,
 
-    /// <summary> Retry if a request timed out. </summary>
+    /// <summary>
+    ///     如果请求超时，则重试。
+    /// </summary>
     RetryTimeouts = 0x1,
 
-    // /// <summary> Retry if a request failed due to a network error. </summary>
-    //RetryErrors = 0x2,
-    /// <summary> Retry if a request failed due to a rate-limit. </summary>
+    // /// <summary>
+    // ///     如果请求因网络错误而失败，则重试。
+    // /// </summary>
+    // RetryErrors = 0x2,
+
+    /// <summary>
+    ///     如果请求因速率限制而失败，则重试。
+    /// </summary>
     RetryRatelimit = 0x4,
 
-    /// <summary> Retry if a request failed due to an HTTP error 502. </summary>
+    /// <summary>
+    ///     如果请求因 HTTP 状态码 502 而失败，则重试。
+    /// </summary>
+    /// <seealso cref="F:System.Net.HttpStatusCode.BadGateway"/>
     Retry502 = 0x8,
 
-    /// <summary> Continuously retry a request until it times out, its cancel token is triggered, or the server responds with a non-502 error. </summary>
+    /// <summary>
+    ///     总是重试失败的请求，直到超时、取消令牌被触发或服务器响应非 502 错误。
+    /// </summary>
     AlwaysRetry = RetryTimeouts | /*RetryErrors |*/ RetryRatelimit | Retry502
 }

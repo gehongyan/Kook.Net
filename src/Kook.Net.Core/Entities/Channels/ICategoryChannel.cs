@@ -1,6 +1,6 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic category channel.
+///     表示一个通用的分组频道。
 /// </summary>
 public interface ICategoryChannel : IGuildChannel;

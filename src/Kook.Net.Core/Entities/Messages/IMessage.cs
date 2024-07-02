@@ -152,7 +152,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     ///     Adds a reaction to this message.
     /// </summary>
     /// <param name="emote">The emoji used to react to this message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous operation for adding a reaction to this message.
     /// </returns>
@@ -164,7 +164,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     /// </summary>
     /// <param name="emote">The emoji used to react to this message.</param>
     /// <param name="user">The user that added the emoji.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous operation for removing a reaction to this message.
     /// </returns>
@@ -176,7 +176,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     /// </summary>
     /// <param name="emote">The emoji used to react to this message.</param>
     /// <param name="userId">The ID of the user that added the emoji.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous operation for removing a reaction to this message.
     /// </returns>
@@ -187,7 +187,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     ///     Gets all users that reacted to a message with a given emote.
     /// </summary>
     /// <param name="emote">The emoji that represents the reaction that you wish to get.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///      Collection of users.
     /// </returns>

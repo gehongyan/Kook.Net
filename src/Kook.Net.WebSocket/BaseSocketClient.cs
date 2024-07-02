@@ -64,6 +64,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     ///         (i.e. guild with 100+ members) actively. To download users on startup and to see more information
     ///         about this subject, see <see cref="Kook.WebSocket.KookSocketConfig.AlwaysDownloadUsers" />.
     ///     </note>
+    ///     <br />
     ///     <note>
     ///         This method does not attempt to fetch users that the logged-in user does not have access to (i.e.
     ///         users who don't share mutual guild(s) with the current user). If you wish to get a user that you do
@@ -86,6 +87,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     ///         (i.e. guild with 100+ members) actively. To download users on startup and to see more information
     ///         about this subject, see <see cref="Kook.WebSocket.KookSocketConfig.AlwaysDownloadUsers" />.
     ///     </note>
+    ///     <br />
     ///     <note>
     ///         This method does not attempt to fetch users that the logged-in user does not have access to (i.e.
     ///         users who don't share mutual guild(s) with the current user). If you wish to get a user that you do
@@ -156,7 +158,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     ///     Attempts to download users into the user cache for the selected guilds.
     /// </summary>
     /// <param name="guilds">The guilds to download the members from.</param>
-    /// <param name="options"> The options to be used when sending the request. </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous download operation.
     /// </returns>
@@ -168,7 +170,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     /// <param name="guilds">
     ///     The guilds to download the voice states for. If <c>null</c>, all available guilds will be downloaded.
     /// </param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     public abstract Task DownloadVoiceStatesAsync(IEnumerable<IGuild>? guilds = null, RequestOptions? options = null);
 
     /// <summary>
@@ -179,7 +181,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     ///     To download all boost subscriptions, the current user must has the
     ///     <see cref="GuildPermission.ManageGuild"/> permission.
     /// </param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     public abstract Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild>? guilds = null,
         RequestOptions? options = null);
 

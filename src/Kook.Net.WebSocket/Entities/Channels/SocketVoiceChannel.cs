@@ -97,8 +97,8 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     /// <summary>
     ///     Gets a collection of users that are currently connected to this voice channel.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of users
     ///     that are currently connected to this voice channel.

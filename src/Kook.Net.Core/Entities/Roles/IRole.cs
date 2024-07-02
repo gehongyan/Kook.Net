@@ -94,7 +94,7 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     ///     method and what properties are available, please refer to <see cref="RoleProperties"/>.
     /// </remarks>
     /// <param name="func">A delegate containing the properties to modify the role with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous modification operation.
     /// </returns>
@@ -103,8 +103,8 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     /// <summary>
     ///     Gets a collection of users with this role.
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     Paged collection of users with this role.
     /// </returns>

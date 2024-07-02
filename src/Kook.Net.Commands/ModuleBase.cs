@@ -39,7 +39,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// <param name="isEphemeral">
     ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
     /// </param>
-    /// <param name="options">The request options for this <c>async</c> request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false,
         RequestOptions? options = null) =>
@@ -64,7 +64,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// <param name="isEphemeral">
     ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
     /// </param>
-    /// <param name="options">The request options for this <c>async</c> request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false,
         RequestOptions? options = null) =>
@@ -76,14 +76,14 @@ public abstract class ModuleBase<T> : IModuleBase
     /// <summary>
     ///     Sends a file to the source channel.
     /// </summary>
-    /// <param name="attachment">The attachment containing the file.</param>
+    /// <param name="attachment"> 文件的附件信息。 </param>
     /// <param name="isQuote">
     ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
     /// </param>
     /// <param name="isEphemeral">
     ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
     /// </param>
-    /// <param name="options">The request options for this <c>async</c> request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(FileAttachment attachment,
         bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendFileAsync(attachment,
@@ -103,7 +103,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// <param name="isEphemeral">
     ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
     /// </param>
-    /// <param name="options">The request options for this <c>async</c> request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(string message, bool isQuote = true,
         bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendTextAsync(message,
@@ -115,7 +115,7 @@ public abstract class ModuleBase<T> : IModuleBase
     ///     Sends a card message to the source channel.
     /// </summary>
     /// <param name="cards">
-    ///     The cards to be sent.
+    ///      要发送的卡片。
     /// </param>
     /// <param name="isQuote">
     ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
@@ -123,7 +123,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// <param name="isEphemeral">
     ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
     /// </param>
-    /// <param name="options">The request options for this <c>async</c> request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(IEnumerable<ICard> cards,
         bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendCardsAsync(cards,
@@ -135,7 +135,7 @@ public abstract class ModuleBase<T> : IModuleBase
     ///     Sends a card message to the source channel.
     /// </summary>
     /// <param name="card">
-    ///     The card to be sent.
+    ///      要发送的卡片。
     /// </param>
     /// <param name="isQuote">
     ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
@@ -143,7 +143,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// <param name="isEphemeral">
     ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
     /// </param>
-    /// <param name="options">The request options for this <c>async</c> request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyCardAsync(ICard card,
         bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendCardAsync(card,

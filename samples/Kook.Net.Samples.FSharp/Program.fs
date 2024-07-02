@@ -7,7 +7,7 @@ open Kook.WebSocket
 // 这是一个使用 Kook.Net 的 F# 简单示例
 // Kook.Net 的所有文档均以 C# 编写，但是 Kook.Net 也支持 F#
 
-// 如果要编写带有命令的机器人，我们建议使用 Kook.Net.Commands 框架
+// 如果要编写带有命令的 Bot，我们建议使用 Kook.Net.Commands 框架
 // 而不是像在这个示例中一样自己处理它们。
 
 // 您可以在以下位置找到使用命令框架的示例：

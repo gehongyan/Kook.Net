@@ -1,14 +1,14 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic entity that has a unique identifier.
+///     表示一个具有唯一标识符的通用实体。
 /// </summary>
-/// <typeparam name="TId"> The type of the unique identifier. </typeparam>
+/// <typeparam name="TId"> 唯一标识符的类型。 </typeparam>
 public interface IEntity<TId>
     where TId : IEquatable<TId>
 {
     /// <summary>
-    ///     Gets the unique identifier for this object.
+    ///     获取此实体的唯一标识符。
     /// </summary>
     TId Id { get; }
 }

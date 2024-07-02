@@ -1,22 +1,22 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the source of the Kook message.
+///     表示消息的来源。
 /// </summary>
 public enum MessageSource
 {
     /// <summary>
-    ///     The message is sent by the system.
+    ///     系统消息。
     /// </summary>
     System,
 
     /// <summary>
-    ///     The message is sent by a user.
+    ///     消息由用户发送。
     /// </summary>
     User,
 
     /// <summary>
-    ///     The message is sent by a bot.
+    ///     消息由 Bot 发送。
     /// </summary>
     Bot
 }

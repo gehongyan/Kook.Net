@@ -284,7 +284,7 @@ public class CommandService : IDisposable
     /// </summary>
     /// <param name="module">The <see cref="ModuleInfo" /> to be removed from the service.</param>
     /// <returns>
-    ///     A task that represents the asynchronous removal operation. The task result contains a value that
+    ///     一个表示异步删除操作的任务。 The task result contains a value that
     ///     indicates whether the <paramref name="module"/> is successfully removed.
     /// </returns>
     public async Task<bool> RemoveModuleAsync(ModuleInfo module)
@@ -305,7 +305,7 @@ public class CommandService : IDisposable
     /// </summary>
     /// <typeparam name="T">The <see cref="Type"/> of the module.</typeparam>
     /// <returns>
-    ///     A task that represents the asynchronous removal operation. The task result contains a value that
+    ///     一个表示异步删除操作的任务。 The task result contains a value that
     ///     indicates whether the module is successfully removed.
     /// </returns>
     public Task<bool> RemoveModuleAsync<T>() => RemoveModuleAsync(typeof(T));
@@ -315,7 +315,7 @@ public class CommandService : IDisposable
     /// </summary>
     /// <param name="type">The <see cref="Type"/> of the module.</param>
     /// <returns>
-    ///     A task that represents the asynchronous removal operation. The task result contains a value that
+    ///     一个表示异步删除操作的任务。 The task result contains a value that
     ///     indicates whether the module is successfully removed.
     /// </returns>
     public async Task<bool> RemoveModuleAsync(Type type)

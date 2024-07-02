@@ -1,22 +1,22 @@
 ﻿namespace Kook.Audio;
 
 /// <summary>
-///     Represents the information of a soundtrack.
+///     表示计算机音频共享信息。
 /// </summary>
 public readonly struct SoundtrackInfo
 {
     /// <summary>
-    ///     Gets the name of the software from which the soundtrack audio originates
+    ///     获取计算机音频来源的应用程序名称。
     /// </summary>
     public string? Software { get; init; }
 
     /// <summary>
-    ///     Gets the name of the music soundtrack
+    ///     获取计算机音频共享的音乐名称。
     /// </summary>
     public string? Music { get; init; }
 
     /// <summary>
-    ///     Gets the singer of the music soundtrack
+    ///     获取计算机音频共享的音乐的歌手名称。
     /// </summary>
     public string? Singer { get; init; }
 }

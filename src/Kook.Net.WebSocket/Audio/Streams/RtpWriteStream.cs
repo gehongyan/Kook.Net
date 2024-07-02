@@ -1,6 +1,8 @@
 namespace Kook.Audio.Streams;
 
-///<summary> Wraps data in a RTP frame </summary>
+/// <summary>
+///     表示一个 RTP 帧写入流。
+/// </summary>
 public class RtpWriteStream : AudioOutStream
 {
     private readonly AudioStream _next;
@@ -11,11 +13,11 @@ public class RtpWriteStream : AudioOutStream
     private bool _hasHeader;
 
     /// <summary>
-    ///     Creates a new instance of <see cref="RtpWriteStream"/>.
+    ///     初始化一个 <see cref="RtpWriteStream"/> 类的新实例。
     /// </summary>
-    /// <param name="next"> The next stream in the chain. </param>
-    /// <param name="ssrc"> The SSRC of the RTP connection. </param>
-    /// <param name="bufferSize"> The buffer size to use. </param>
+    /// <param name="next"> 要写入 RTP 帧数据的音频流，是音频流写入链中的下一个音频流对象。 </param>
+    /// <param name="ssrc"> RTP 连接的同步源标识符。 </param>
+    /// <param name="bufferSize"> RTP 帧缓冲区的大小，默认为 4000 字节。 </param>
     public RtpWriteStream(AudioStream next, uint ssrc, int bufferSize = 4000)
     {
         _next = next;

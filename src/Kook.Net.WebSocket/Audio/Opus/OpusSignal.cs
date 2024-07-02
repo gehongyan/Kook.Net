@@ -1,7 +1,7 @@
 namespace Kook.Audio;
 
 /// <summary>
-///     Represents the signal type for Opus.
+///     表示 Opus 信号类型。
 /// </summary>
 internal enum OpusSignal
 {
@@ -9,7 +9,7 @@ internal enum OpusSignal
     ///     <c>OPUS_SIGNAL_AUTO</c>
     /// </summary>
     /// <remarks>
-    ///     Signal type is automatically detected.
+    ///     自动检测信号类型。
     /// </remarks>
     Auto = -1000,
 
@@ -17,7 +17,7 @@ internal enum OpusSignal
     ///     <c>OPUS_SIGNAL_VOICE</c>
     /// </summary>
     /// <remarks>
-    ///     Signal being encoded is voice.
+    ///     被编码的信号是语音。
     /// </remarks>
     Voice = 3001,
 
@@ -25,7 +25,7 @@ internal enum OpusSignal
     ///     <c>OPUS_SIGNAL_MUSIC</c>
     /// </summary>
     /// <remarks>
-    ///     Signal being encoded is music.
+    ///     被编码的信号是音乐。
     /// </remarks>
-    Music = 3002,
+    Music = 3002
 }

@@ -1,6 +1,6 @@
 namespace Kook;
 
 /// <summary>
-///     A user's activity status.
+///     表示一个通用的用户活动。
 /// </summary>
 public interface IActivity;

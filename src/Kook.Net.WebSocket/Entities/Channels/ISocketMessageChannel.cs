@@ -22,6 +22,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///         this method will always return <c>null</c>. Please refer to
     ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> for more details.
     ///     </note>
+    ///     <br />
     ///     <para>
     ///         This method retrieves the message from the local WebSocket cache and does not send any additional
     ///         request to Kook. This message may be a message that has been deleted.
@@ -43,6 +44,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///         this method will always return an empty collection. Please refer to
     ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> for more details.
     ///     </note>
+    ///     <br />
     ///     <para>
     ///         This method retrieves the message(s) from the local WebSocket cache and does not send any additional
     ///         request to Kook. This read-only collection may include messages that have been deleted. The
@@ -65,6 +67,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///         this method will always return an empty collection. Please refer to
     ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> for more details.
     ///     </note>
+    ///     <br />
     ///     <para>
     ///         This method retrieves the message(s) from the local WebSocket cache and does not send any additional
     ///         request to Kook. This read-only collection may include messages that have been deleted. The
@@ -89,6 +92,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///         this method will always return an empty collection. Please refer to
     ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> for more details.
     ///     </note>
+    ///     <br />
     ///     <para>
     ///         This method retrieves the message(s) from the local WebSocket cache and does not send any additional
     ///         request to Kook. This read-only collection may include messages that have been deleted. The

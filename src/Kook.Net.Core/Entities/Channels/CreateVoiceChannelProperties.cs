@@ -1,18 +1,18 @@
 namespace Kook;
 
 /// <summary>
-///     Provides properties that are used to create an <see cref="IVoiceChannel"/> with the specified properties.
+///     提供用于创建 <see cref="T:Kook.IVoiceChannel"/> 的属性。
 /// </summary>
-/// <seealso cref="IGuild.CreateVoiceChannelAsync(string, System.Action{CreateVoiceChannelProperties}, RequestOptions)"/>
+/// <seealso cref="M:Kook.IGuild.CreateVoiceChannelAsync(System.String,System.Action{Kook.CreateVoiceChannelProperties},Kook.RequestOptions)"/>
 public class CreateVoiceChannelProperties : CreateTextChannelProperties
 {
     /// <summary>
-    ///     Gets or sets the voice quality that the clients in this voice channel are requested to use.
+    ///     获取或设置要求语音频道中的客户端使用的语音质量。
     /// </summary>
     public VoiceQuality? VoiceQuality { get; set; }
 
     /// <summary>
-    ///     Gets or sets the maximum number of users that can be present in a channel, or <c>null</c> if none.
+    ///     获取或设置允许同时连接到此频道的最大用户数；<c>null</c> 表示不限制。
     /// </summary>
     public int? UserLimit { get; set; }
 }

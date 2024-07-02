@@ -1,82 +1,82 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a set of json error codes received by Kook.
+///     表示从 KOOK 接收到的错误代码。
 /// </summary>
 public enum KookErrorCode
 {
     /// <summary>
-    ///     The operation was successful.
+    ///     操作成功。
     /// </summary>
     Success = 0,
 
     /// <summary>
-    ///     The operation failed due to an unspecified error.
+    ///     操作失败，原因未通过错误代码明确。
     /// </summary>
     GeneralError = 40000,
 
     #region Hello
 
     /// <summary>
-    ///     The operation failed due to an missing argument.
+    ///     操作由于缺少参数而失败。
     /// </summary>
     MissingArgument = 40100,
 
     /// <summary>
-    ///     The operation failed due to an invalid authentication token.
+    ///     操作由于无效的身份验证令牌而失败。
     /// </summary>
     InvalidAuthenticationToken = 40101,
 
     /// <summary>
-    ///     The operation failed because the authentication token verification failed.
+    ///     操作由于身份验证令牌验证失败而失败。
     /// </summary>
     TokenVerificationFailed = 40102,
 
     /// <summary>
-    ///     The operation failed because the authentication token has expired.
+    ///     操作由于身份验证令牌已过期而失败。
     /// </summary>
     TokenExpired = 40103,
 
     #endregion
 
     /// <summary>
-    ///     The operation failed because the request was too large.
+    ///     操作由于请求传输的实体过大而失败。
     /// </summary>
     RequestEntityTooLarge = 40014,
 
     #region Reconnect
 
     /// <summary>
-    ///     The KOOK gateway requested a reconnect due to missing resume arguments.
+    ///     KOOK 网关由于缺少恢复参数而要求重新连接。
     /// </summary>
     MissingResumeArgument = 40106,
 
     /// <summary>
-    ///     The KOOK gateway requested a reconnect because the session has expired.
+    ///     KOOK 网关由于会话已过期而要求重新连接。
     /// </summary>
     SessionExpired = 40107,
 
     /// <summary>
-    ///     The KOOK gateway requested a reconnect due to an invalid sequence number.
+    ///     KOOK 网关由于无效的消息序号而要求重新连接。
     /// </summary>
     InvalidSequenceNumber = 40108,
 
     #endregion
 
     /// <summary>
-    ///     The operation failed due to missing permissions.
+    ///     操作由于缺少权限而失败。
     /// </summary>
     MissingPermissions = 40300,
 
     #region Friends
 
     /// <summary>
-    ///     The operation failed because the user has become a friend of the current user.
+    ///     操作由于用户已是当前用户的好友而失败。
     /// </summary>
     HasBeenFriend = 42007,
 
     /// <summary>
-    ///     The operation failed because the current user has requested to be friends with the user too fast.
+    ///     操作由于当前用户请求与用户成为好友过于频繁而失败。
     /// </summary>
     RequestFriendTooFast = 42008,
 

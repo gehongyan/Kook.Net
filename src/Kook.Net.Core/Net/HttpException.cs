@@ -55,7 +55,7 @@ public class HttpException : Exception
         Request = request;
         KookCode = kookCode;
         Reason = reason;
-        Errors = errors?.ToImmutableArray() ?? ImmutableArray<KookJsonError>.Empty;
+        Errors = errors?.ToImmutableArray() ?? [];
     }
 
     private static string CreateMessage(HttpStatusCode httpCode, int? kookCode = null, string? reason = null)
