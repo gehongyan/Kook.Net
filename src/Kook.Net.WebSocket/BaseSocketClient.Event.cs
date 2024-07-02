@@ -264,6 +264,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the message cannot be retrieved by Kook
     ///             after the message has been deleted.
     ///         </note>
+    ///         <br />
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the deleted message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the message is preserved in the
@@ -295,6 +296,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original message cannot be retrieved by
     ///             Kook after the message has been updated.
     ///         </note>
+    ///         <br />
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the message is preserved in the
@@ -332,6 +334,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original message cannot be retrieved by
     ///             Kook after the message has been updated.
     ///         </note>
+    ///         <br />
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the message is preserved in the
@@ -375,6 +378,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original message cannot be retrieved by
     ///             Kook after the message has been updated.
     ///         </note>
+    ///         <br />
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the message is preserved in the
@@ -454,6 +458,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original direct message cannot be retrieved by Kook
     ///             after the message has been deleted.
     ///         </note>
+    ///         <br />
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the deleted direct message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the direct message is preserved in the
@@ -493,6 +498,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original direct message cannot be retrieved by Kook
     ///             after the message has been updated.
     ///         </note>
+    ///         <br />
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the updated direct message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the direct message is preserved in the
@@ -527,6 +533,7 @@ public abstract partial class BaseSocketClient
     ///     <note type="warning">
     ///         It is reported that this event will not be fired if a guild contains more than 2000 members.
     ///     </note>
+    ///     <br />
     ///     <para>
     ///         This event is fired when a user joins a guild. The event handler must return a
     ///         <see cref="Task"/> and accept a <see cref="SocketGuildUser"/> and a <see cref="DateTimeOffset"/>
@@ -552,6 +559,7 @@ public abstract partial class BaseSocketClient
     ///     <note type="warning">
     ///         It is reported that this event will not be fired if a guild contains more than 2000 members.
     ///     </note>
+    ///     <br />
     ///     <para>
     ///         This event is fired when a user leaves a guild. The event handler must return a
     ///         <see cref="Task"/> and accept a <see cref="SocketGuildUser"/> and a <see cref="DateTimeOffset"/>
@@ -587,6 +595,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original user cannot be retrieved by
     ///             Kook after the user has been banned.
     ///         </note>
+    ///         <br />
     ///         The users that are banned are passed into the event handler parameter as
     ///         <see cref="IReadOnlyCollection{T}"/>, where <c>T</c> is <see cref="Cacheable{TEntity,TId}"/>,
     ///         each of which contains a <see cref="SocketUser"/> when the user presents in the cache; otherwise,
@@ -627,6 +636,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original user cannot be retrieved by
     ///             Kook after the user has been unbanned.
     ///         </note>
+    ///         <br />
     ///         The users that are unbanned are passed into the event handler parameter as
     ///         <see cref="IReadOnlyCollection{T}"/>, where <c>T</c> is <see cref="Cacheable{TEntity,TId}"/>,
     ///         each of which contains a <see cref="SocketUser"/> when the user presents in the cache; otherwise,
@@ -664,6 +674,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original user cannot be retrieved by
     ///             Kook after the user has been updated.
     ///         </note>
+    ///         <br />
     ///         The user that is updated is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketUser"/> when the user
     ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
@@ -721,6 +732,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original guild member cannot be retrieved by
     ///             Kook after the guild member has been updated.
     ///         </note>
+    ///         <br />
     ///         The guild member that is updated is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the guild member
     ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
@@ -1118,6 +1130,7 @@ public abstract partial class BaseSocketClient
     ///             waiting for completion of the task in this asynchronous event, the object
     ///             passed to it will be disposed.
     ///         </note>
+    ///         <br />
     ///         The guild where the account leaves is passed into the event handler parameter as
     ///         <see cref="SocketGuild"/>.
     ///     </para>

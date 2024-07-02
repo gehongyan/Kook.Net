@@ -2,46 +2,46 @@ namespace Kook;
 
 /// <summary>
 ///     Represents a generic Kook client.
+///     表示一个通用的 KOOK 客户端。
 /// </summary>
 public interface IKookClient : IDisposable
 {
     #region General
 
     /// <summary>
-    ///     Gets the current state of connection.
+    ///     获取当前连接的状态。
     /// </summary>
     ConnectionState ConnectionState { get; }
 
     /// <summary>
-    ///     Gets the currently logged-in user.
+    ///     获取当前已登录的用户；如果没有用户登录，则为 <c>null</c>。
     /// </summary>
     ISelfUser? CurrentUser { get; }
 
     /// <summary>
-    ///     Gets the token type of the logged-in user.
+    ///     获取已登录用户的令牌类型。
     /// </summary>
     TokenType TokenType { get; }
 
     /// <summary>
-    ///     Starts the connection between Kook and the client..
+    ///     启动客户端与 KOOK 之间的连接。
     /// </summary>
     /// <remarks>
-    ///     This method will initialize the connection between the client and Kook.
+    ///     当前方法会初始化客户端与 KOOK 之间的连接。 <br />
     ///     <note type="important">
-    ///         This method will immediately return after it is called, as it will initialize the connection on
-    ///         another thread.
+    ///         此方法会在调用后立即返回，因为它会在另一个线程上初始化连接。
     ///     </note>
     /// </remarks>
     /// <returns>
-    ///     A task that represents the asynchronous start operation.
+    ///     一个表示异步启动操作的任务。
     /// </returns>
     Task StartAsync();
 
     /// <summary>
-    ///     Stops the connection between Kook and the client.
+    ///     停止客户端与 KOOK 之间的连接。
     /// </summary>
     /// <returns>
-    ///     A task that represents the asynchronous stop operation.
+    ///     一个表示异步停止操作的任务。
     /// </returns>
     Task StopAsync();
 
@@ -50,44 +50,39 @@ public interface IKookClient : IDisposable
     #region Channels
 
     /// <summary>
-    ///     Gets a generic channel.
+    ///     获取一个通用频道。
     /// </summary>
-    /// <param name="id">The identifier of the channel.</param>
+    /// <param name="id"> 频道的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the channel associated
-    ///     with the identifier; <c>null</c> when the channel cannot be found.
+    ///     一个表示异步获取操作的任务。任务的结果是具有指定 ID 的频道；若指定 ID 的频道不存在，则为 <c>null</c>。
     /// </returns>
     Task<IChannel?> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a direct message channel.
+    ///     获取一个私聊频道。
     /// </summary>
-    /// <param name="chatCode">The identifier of the channel.</param>
+    /// <param name="chatCode"> 私聊频道的聊天代码。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
-    ///     of direct-message channels that the user currently partakes in.
+    ///     一个表示异步获取操作的任务。任务的结果是具有指定聊天代码的私聊频道；若指定聊天代码的私聊频道不存在，则为 <c>null</c>。
     /// </returns>
     Task<IDMChannel?> GetDMChannelAsync(Guid chatCode, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a collection of direct message channels opened in this session.
+    ///     获取当前会话中已创建的所有私聊频道。
     /// </summary>
     /// <remarks>
-    ///     This method returns a collection of currently opened direct message channels.
     ///     <note type="warning">
-    ///         This method will not return previously opened DM channels outside of the current session! If you
-    ///         have just started the client, this may return an empty collection.
+    ///         此方法不会返回当前会话之外已创建的私聊频道。如果客户端刚刚启动，这可能会返回一个空集合。
     ///     </note>
     /// </remarks>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
-    ///     of direct-message channels that the user currently partakes in.
+    ///     一个表示异步获取操作的任务。任务的结果是当前会话中已创建的所有私聊频道。
     /// </returns>
     Task<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
@@ -96,25 +91,23 @@ public interface IKookClient : IDisposable
     #region Guilds
 
     /// <summary>
-    ///     Gets a guild.
+    ///     获取一个服务器。
     /// </summary>
-    /// <param name="id">The guild identifier.</param>
+    /// <param name="id"> 服务器的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the guild associated
-    ///     with the identifier; <c>null</c> when the guild cannot be found.
+    ///     一个表示异步获取操作的任务。任务的结果是具有指定 ID 的服务器；若指定 ID 的服务器不存在，则为 <c>null</c>。
     /// </returns>
     Task<IGuild?> GetGuildAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a collection of guilds that the user is currently in.
+    ///     获取当前用户所在的所有服务器。
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
-    ///     of guilds that the current user is in.
+    ///     一个表示异步获取操作的任务。任务的结果是当前用户所在的所有服务器。
     /// </returns>
     Task<IReadOnlyCollection<IGuild>> GetGuildsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
@@ -123,26 +116,24 @@ public interface IKookClient : IDisposable
     #region Users
 
     /// <summary>
-    ///     Gets a user.
+    ///     获取一个用户。
     /// </summary>
-    /// <param name="id">The identifier of the user.</param>
+    /// <param name="id"> 用户的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the user associated with
-    ///     the identifier; <c>null</c> if the user is not found.
+    ///     一个表示异步获取操作的任务。任务的结果是具有指定 ID 的用户；若指定 ID 的用户不存在，则为 <c>null</c>。
     /// </returns>
     Task<IUser?> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a user.
+    ///     获取一个用户。
     /// </summary>
-    /// <param name="username">The name of the user (e.g. `Still`).</param>
-    /// <param name="identifyNumber">The identify value of the user (e.g. `2876`).</param>
+    /// <param name="username"> 用户的名称。 </param>
+    /// <param name="identifyNumber"> 用户的识别号。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the user associated with
-    ///     the name and the identifyNumber; <c>null</c> if the user is not found.
+    ///     一个表示异步获取操作的任务。任务的结果是具有指定的名称和识别号的用户；如果未找到该用户，则为 <c>null</c>。
     /// </returns>
     Task<IUser?> GetUserAsync(string username, string identifyNumber, RequestOptions? options = null);
 
@@ -151,35 +142,32 @@ public interface IKookClient : IDisposable
     #region Friends
 
     /// <summary>
-    ///     Gets friends.
+    ///     获取所有好友。
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a collection of users
-    ///     that are friends with the current user.
+    ///     一个表示异步获取操作的任务。任务的结果是所有与当前用户是好友的用户。
     /// </returns>
     Task<IReadOnlyCollection<IUser>> GetFriendsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets friend requests.
+    ///     获取所有好友请求。
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a collection of users
-    ///     that requested to be friends with the current user.
+    ///     一个表示异步获取操作的任务。任务的结果是所有请求与当前用户成为好友的用户。
     /// </returns>
     Task<IReadOnlyCollection<IFriendRequest>> GetFriendRequestsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets blocked users.
+    ///     获取所有被当前用户屏蔽的用户。
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a collection of users
-    ///     that are blocked by the current user.
+    ///     一个表示异步获取操作的任务。任务的结果是所有被当前用户屏蔽的用户。
     /// </returns>
     Task<IReadOnlyCollection<IUser>> GetBlockedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 

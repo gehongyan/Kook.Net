@@ -24,6 +24,7 @@ public interface IChannel : IEntity<ulong>
     ///         返回的集合是一个异步可枚举对象；调用 <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/>
     ///         可以异步枚举所有分页，并将其合并为一个集合。
     ///     </note>
+    ///     <br />
     ///     此方法将尝试获取所有能够查看该频道或当前在该频道中的用户。此方法会根据 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/>
     ///     将请求拆分。换句话说，如果有 3000 名用户，而 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/> 的常量为
     ///     <c>50</c>，则请求将被拆分为 60 个单独请求，因此异步枚举器会异步枚举返回 60 个响应。<see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/>

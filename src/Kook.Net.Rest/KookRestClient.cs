@@ -134,6 +134,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// </summary>
     /// <remarks>
     ///     This method returns a collection of currently opened direct message channels.
+    ///     <br />
     ///     <note type="warning">
     ///         This method will not return previously opened DM channels outside of the current session! If you
     ///         have just started the client, this may return an empty collection.
@@ -248,7 +249,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <summary>
     ///     Adds a reaction to a message.
     /// </summary>
-    /// <param name="messageId"> The identifier of the message. </param>
+    /// <param name="messageId"> 消息的 ID。 </param>
     /// <param name="emote"> The emoji used to react to the message. </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
@@ -261,7 +262,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <summary>
     ///     Removes a reaction from a message.
     /// </summary>
-    /// <param name="messageId"> The identifier of the message. </param>
+    /// <param name="messageId"> 消息的 ID。 </param>
     /// <param name="userId"> The identifier of the user who added the reaction. </param>
     /// <param name="emote"> The emoji used to remove from the message. </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
@@ -306,8 +307,8 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <summary>
     ///     Creates an asset from a file path.
     /// </summary>
-    /// <param name="path"> The path to the file. </param>
-    /// <param name="filename"> The name of the file. </param>
+    /// <param name="path"> 文件的路径。 </param>
+    /// <param name="filename"> 文件名。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> The asset resource URI of the uploaded file. </returns>
     public async Task<string> CreateAssetAsync(string path, string? filename = null, RequestOptions? options = null)
@@ -324,8 +325,8 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <summary>
     ///     Creates an asset from a stream.
     /// </summary>
-    /// <param name="stream"> The stream to the file. </param>
-    /// <param name="filename"> The name of the file. </param>
+    /// <param name="stream"> 文件的流。 </param>
+    /// <param name="filename"> 文件名。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> The asset resource URI of the uploaded file. </returns>
     public Task<string> CreateAssetAsync(Stream stream, string filename, RequestOptions? options = null) =>

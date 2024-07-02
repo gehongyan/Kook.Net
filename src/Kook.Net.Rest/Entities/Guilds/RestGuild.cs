@@ -142,7 +142,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     An array of objects representing the features of this guild.
     /// </returns>
     /// <remarks>
-    ///      <note type="important">
+    ///     <note type="important">
     ///         What this property represents is not well investigated.
     ///     </note>
     /// </remarks>

@@ -46,18 +46,14 @@ public interface IGuildChannel : IChannel, IDeletable
     IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites { get; }
 
     /// <summary>
-    ///     更改此服务器频道。
+    ///     修改此服务器频道。
     /// </summary>
-    /// <remarks>
-    ///     This method modifies the current guild channel with the specified properties. To see an example of this
-    ///     method and what properties are available, please refer to <see cref="ModifyGuildChannelProperties"/>.
-    ///     此方法使用指定的属性更改当前服务器频道。要查看可用的属性，请参阅 <see cref="ModifyGuildChannelProperties"/>。
-    /// </remarks>
-    /// <param name="func">T 一个包含要修改服务器频道属性的委托。</param>
+    /// <param name="func">T 一个包含修改服务器频道属性的委托。</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     一个表示服务器频道属性修改操作的异步任务。
     /// </returns>
+    /// <seealso cref="T:Kook.ModifyGuildChannelProperties"/>
     Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions? options = null);
 
     /// <summary>
@@ -136,7 +132,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     更新给定角色的权限覆盖配置。
     /// </summary>
     /// <param name="role"> 要更新权限覆盖配置的角色。 </param>
-    /// <param name="func"> 一个包含要修改权限覆盖配置的委托。 </param>
+    /// <param name="func"> 一个包含修改权限覆盖配置的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     一个表示异步更新频道内角色权限覆盖配置操作的任务。
@@ -147,7 +143,7 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     更新给定用户的权限覆盖配置。
     /// </summary>
     /// <param name="user"> 要更新权限覆盖配置的用户。 </param>
-    /// <param name="func"> 一个包含要修改权限覆盖配置的委托。 </param>
+    /// <param name="func"> 一个包含修改权限覆盖配置的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     一个表示异步更新频道内用户权限覆盖配置操作的任务。

@@ -8,6 +8,7 @@ namespace Kook;
 ///         The text themes of KMarkdown are currently only supported in card messages.
 ///         KMarkdown messages theming is not supported yet.
 ///     </note>
+///     <br />
 ///     <note type="warning">
 ///         The color of the text themes vary on different platforms. It is recommended to
 ///         test your card messages on different platforms to ensure that the text themes

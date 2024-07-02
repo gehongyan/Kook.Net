@@ -3,53 +3,47 @@ using Kook.Net;
 namespace Kook;
 
 /// <summary>
-///     Represents options that should be used when sending a request.
+///     表示发送请求时要使用的选项。
 /// </summary>
 public class RequestOptions
 {
     /// <summary>
-    ///     Creates a new <see cref="RequestOptions" /> class with its default settings.
+    ///     使用默认设置创建一个新的 <see cref="RequestOptions" /> 类的实例。
     /// </summary>
     public static RequestOptions Default => new();
 
     /// <summary>
-    ///     Gets or sets the maximum time to wait for this request to complete.
+    ///     获取或设置等待此请求完成的最大时间，以毫秒为单位。
     /// </summary>
     /// <remarks>
-    ///     Gets or set the max time, in milliseconds, to wait for this request to complete. If
-    ///     <c>null</c>, a request will not time out. If a rate limit has been triggered for this request's bucket
-    ///     and will not be unpaused in time, this request will fail immediately.
+    ///     获取或设置等待此请求完成的最大时间，以毫秒为单位。如果为 <c>null</c>，则请求不会超时。
+    ///     如果此请求的桶触发了速率限制并且在超时前不会恢复，此请求将立即失败。
     /// </remarks>
-    /// <returns>
-    ///     An int in milliseconds for when the request times out.
-    /// </returns>
     public int? Timeout { get; set; }
 
     /// <summary>
-    ///     Gets or sets the cancellation token for this request.
+    ///     获取或设置此请求的取消令牌。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="System.Threading.CancellationToken"/> for this request.
-    /// </returns>
     public CancellationToken CancellationToken { get; set; } = CancellationToken.None;
 
     /// <summary>
-    ///     Gets or sets the retry behavior when the request fails.
+    ///     获取或设置请求失败时的重试行为；如果为 <c>null</c>，则使用配置的默认的重试行为。
     /// </summary>
+    /// <seealso cref="P:Kook.KookConfig.DefaultRetryMode"/>
     public RetryMode? RetryMode { get; set; }
 
     /// <summary>
-    ///     Gets or sets the reason for this action in the guild's audit log.
+    ///     获取或设置要写入到服务器审计日志中的操作原因。
     /// </summary>
     /// <remarks>
-    ///     Gets or sets the reason that will be written to the guild's audit log if applicable. This may not apply
-    ///     to all actions.
+    ///     默认的 API 客户端不支持设置此属性。
     /// </remarks>
     public string? AuditLogReason { get; set; }
 
     /// <summary>
-    ///     Gets or sets the callback to execute regarding ratelimits for this request.
+    ///     获取或设置此请求触发速率限制时要执行的回调委托。
     /// </summary>
+    /// <seealso cref="P:Kook.KookConfig.DefaultRatelimitCallback"/>
     public Func<IRateLimitInfo, Task>? RatelimitCallback { get; set; }
 
     internal bool IgnoreState { get; set; }
@@ -71,18 +65,17 @@ public class RequestOptions
     }
 
     /// <summary>
-    ///     Initializes a new <see cref="RequestOptions" /> class with the default request timeout set in
-    ///     <see cref="KookConfig"/>.
+    ///     使用默认设置创建一个新的 <see cref="RequestOptions" /> 类的实例。
     /// </summary>
+    /// <remarks>
+    ///     默认的请求超时时间是 <see cref="F:Kook.KookConfig.DefaultRequestTimeout"/>。
+    /// </remarks>
     public RequestOptions()
     {
         Timeout = KookConfig.DefaultRequestTimeout;
         RequestHeaders = new Dictionary<string, IEnumerable<string>>();
     }
 
-    /// <summary>
-    ///     Memberwise clones this <see cref="RequestOptions"/> object.
-    /// </summary>
-    /// <returns> A cloned <see cref="RequestOptions"/> object. </returns>
+    /// <inheritdoc cref="M:System.Object.MemberwiseClone" />
     public RequestOptions Clone() => (RequestOptions) MemberwiseClone();
 }

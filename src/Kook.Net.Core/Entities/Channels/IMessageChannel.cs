@@ -1,217 +1,193 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a channel that can send and receive messages.
+///     表示一个通用的消息频道，可以用来发送和接收消息。
 /// </summary>
 public interface IMessageChannel : IChannel
 {
     #region Send Messages
 
     /// <summary>
-    ///     Sends a file to this message channel.
+    ///     发送文件到此消息频道。
     /// </summary>
-    /// <remarks>
-    ///     This method sends a file as if you are uploading a file directly from your Kook client.
-    /// </remarks>
-    /// <param name="path">The file path of the file.</param>
-    /// <param name="filename">The name of the file.</param>
-    /// <param name="type">The type of the file.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="path"> 文件的路径。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 文件的媒体类型。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="ephemeralUser"> 临时消息的接收者。留空可以让所有人看到该消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
+    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, IUser? ephemeralUser = null,
         RequestOptions? options = null);
 
     /// <summary>
-    ///     Sends a file to this message channel.
+    ///     发送文件到此消息频道。
     /// </summary>
-    /// <remarks>
-    ///     This method sends a file as if you are uploading a file directly from your Kook client.
-    /// </remarks>
-    /// <param name="stream">The stream of the file.</param>
-    /// <param name="filename">The name of the file.</param>
-    /// <param name="type">The type of the file.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="stream"> 文件的流。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 文件的媒体类型。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="ephemeralUser"> 临时消息的接收者。留空可以让所有人看到该消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
+    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, IUser? ephemeralUser = null,
         RequestOptions? options = null);
 
     /// <summary>
-    ///     Sends a file to this message channel.
+    ///     发送文件到此消息频道。
     /// </summary>
-    /// <remarks>
-    ///     This method sends a file as if you are uploading a file directly from your Kook client.
-    /// </remarks>
-    /// <param name="attachment">The attachment containing the file.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="attachment"> 文件的附件信息。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="ephemeralUser"> 临时消息的接收者。留空可以让所有人看到该消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
+    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null);
 
     /// <summary>
-    ///     Sends a text message to this message channel.
+    ///     发送文本消息到此消息频道。
     /// </summary>
-    /// <param name="text">The message to be sent.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="text"> 要发送的文本。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="ephemeralUser"> 临时消息的接收者。留空可以让所有人看到该消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
+    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote? quote = null,
         IUser? ephemeralUser = null, RequestOptions? options = null);
 
     /// <summary>
-    ///     Sends a card message to this message channel.
+    ///     发送卡片消息到此消息频道。
     /// </summary>
-    /// <param name="card">The card to be sent.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="card"> 要发送的卡片。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="ephemeralUser"> 临时消息的接收者。留空可以让所有人看到该消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
+    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null);
 
     /// <summary>
-    ///     Sends a card message to this message channel.
+    ///     发送卡片消息到此消息频道。
     /// </summary>
-    /// <param name="cards">The cards to be sent.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="ephemeralUser">The user only who can see the message. Leave null to let everyone see the message.</param>
+    /// <param name="cards"> 要发送的卡片。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="ephemeralUser"> 临时消息的接收者。留空可以让所有人看到该消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
+    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
     /// </returns>
     Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null);
-
-    /// <summary>
-    ///     Gets a message from this message channel.
-    /// </summary>
-    /// <param name="id">The identifier of the message.</param>
-    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
-    /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents an asynchronous get operation for retrieving the message. The task result contains
-    ///     the retrieved message; <c>null</c> if no message is found with the specified identifier.
-    /// </returns>
-    Task<IMessage?> GetMessageAsync(Guid id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
 
     #region Get Messages
 
     /// <summary>
-    ///     Gets the last N messages from this message channel.
+    ///     从此消息频道获取一条消息。
     /// </summary>
-    /// <remarks>
-    ///     <note type="important">
-    ///         The returned collection is an asynchronous enumerable object; one must call
-    ///         <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/> to access the individual messages as a
-    ///         collection.
-    ///     </note>
-    ///     <note type="warning">
-    ///         Do not fetch too many messages at once! This may cause unwanted preemptive rate limit or even actual
-    ///         rate limit, causing your bot to freeze!
-    ///     </note>
-    ///     This method will attempt to fetch the number of messages specified under <paramref name="limit"/>. The
-    ///     library will attempt to split up the requests according to your <paramref name="limit"/> and
-    ///     <see cref="KookConfig.MaxMessagesPerBatch"/>. In other words, should the user request 500 messages,
-    ///     and the <see cref="Kook.KookConfig.MaxMessagesPerBatch"/> constant is <c>100</c>, the request will
-    ///     be split into 5 individual requests; thus returning 5 individual asynchronous responses, hence the need
-    ///     of flattening.
-    /// </remarks>
-    /// <param name="limit">The numbers of message to be gotten from.</param>
+    /// <param name="id"> 消息的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     Paged collection of messages.
+    ///     一个表示异步获取操作的额任务。任务结果包含检索到的消息；如果未找到具有指定 ID 的消息，则返回 <c>null</c>。
+    /// </returns>
+    Task<IMessage?> GetMessageAsync(Guid id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+
+    /// <summary>
+    ///     获取此消息频道中的最新的一些消息。
+    /// </summary>
+    /// <remarks>
+    ///     <note type="important">
+    ///         返回的集合是一个异步可枚举对象；调用 <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/>
+    ///         可以异步枚举所有分页，并将其合并为一个集合。
+    ///     </note>
+    ///     <br />
+    ///     <note type="warning">
+    ///         请勿一次性获取过多消息，这可能会导致抢占式速率限制，甚至触发实际的速率限制，从而导致 Bot 服务暂停。
+    ///     </note>
+    ///     <br />
+    ///     此方法将尝试获取此频道最新的 <paramref name="limit"/> 条消息。此方法会根据 <see cref="F:Kook.KookConfig.MaxMessagesPerBatch"/>
+    ///     将请求拆分。换句话说，如果要获取 500 条消息，而 <see cref="F:Kook.KookConfig.MaxMessagesPerBatch"/> 的常量为
+    ///     <c>50</c>，则请求将被拆分为 10 个单独请求，因此异步枚举器会异步枚举返回 10 个响应。<see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/>
+    ///     方法可以展开这 10 个响应返回的集合，并将其合并为一个集合。
+    /// </remarks>
+    /// <param name="limit"> 要获取的消息数量。 </param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns>
+    ///     分页的消息集合的异步可枚举对象。
     /// </returns>
     IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(int limit = KookConfig.MaxMessagesPerBatch,
         CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a collection of messages in this channel.
+    ///     获取此消息频道中的一些消息。
     /// </summary>
     /// <remarks>
     ///     <note type="important">
-    ///         The returned collection is an asynchronous enumerable object; one must call
-    ///         <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/> to access the individual messages as a
-    ///         collection.
+    ///         返回的集合是一个异步可枚举对象；调用 <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/>
+    ///         可以异步枚举所有分页，并将其合并为一个集合。
     ///     </note>
+    ///     <br />
     ///     <note type="warning">
-    ///         Do not fetch too many messages at once! This may cause unwanted preemptive rate limit or even actual
-    ///         rate limit, causing your bot to freeze!
+    ///         请勿一次性获取过多消息，这可能会导致抢占式速率限制，甚至触发实际的速率限制，从而导致 Bot 服务暂停。
     ///     </note>
-    ///     This method will attempt to fetch the number of messages specified under <paramref name="limit"/> around
-    ///     the message <paramref name="referenceMessageId"/> depending on the <paramref name="dir"/>. The library will
-    ///     attempt to split up the requests according to your <paramref name="limit"/> and
-    ///     <see cref="KookConfig.MaxMessagesPerBatch"/>. In other words, should the user request 500 messages,
-    ///     and the <see cref="Kook.KookConfig.MaxMessagesPerBatch"/> constant is <c>100</c>, the request will
-    ///     be split into 5 individual requests; thus returning 5 individual asynchronous responses, hence the need
-    ///     of flattening.
+    ///     <br />
+    ///     此方法将尝试获取此频道最新的 <paramref name="limit"/> 条消息。此方法会根据 <see cref="F:Kook.KookConfig.MaxMessagesPerBatch"/>
+    ///     将请求拆分。换句话说，如果要获取 500 条消息，而 <see cref="F:Kook.KookConfig.MaxMessagesPerBatch"/> 的常量为
+    ///     <c>50</c>，则请求将被拆分为 10 个单独请求，因此异步枚举器会异步枚举返回 10 个响应。<see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/>
+    ///     方法可以展开这 10 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
-    /// <param name="referenceMessageId">The ID of the starting message to get the messages from.</param>
-    /// <param name="dir">The direction of the messages to be gotten from.</param>
-    /// <param name="limit">The numbers of message to be gotten from.</param>
+    /// <param name="referenceMessageId"> 要开始获取消息的参考位置的消息的 ID。 </param>
+    /// <param name="dir"> 要以参考位置为基准，获取消息的方向。 </param>
+    /// <param name="limit"> 要获取的消息数量。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     Paged collection of messages.
+    ///     分页的消息集合的异步可枚举对象。
     /// </returns>
     IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
         int limit = KookConfig.MaxMessagesPerBatch,
         CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a collection of messages in this channel.
+    ///     获取此消息频道中的一些消息。
     /// </summary>
     /// <remarks>
     ///     <note type="important">
-    ///         The returned collection is an asynchronous enumerable object; one must call
-    ///         <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/> to access the individual messages as a
-    ///         collection.
+    ///         返回的集合是一个异步可枚举对象；调用 <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/>
+    ///         可以异步枚举所有分页，并将其合并为一个集合。
     ///     </note>
+    ///     <br />
     ///     <note type="warning">
-    ///         Do not fetch too many messages at once! This may cause unwanted preemptive rate limit or even actual
-    ///         rate limit, causing your bot to freeze!
+    ///         请勿一次性获取过多消息，这可能会导致抢占式速率限制，甚至触发实际的速率限制，从而导致 Bot 服务暂停。
     ///     </note>
-    ///     This method will attempt to fetch the number of messages specified under <paramref name="limit"/> around
-    ///     the message <paramref name="referenceMessage"/> depending on the <paramref name="dir"/>. The library will
-    ///     attempt to split up the requests according to your <paramref name="limit"/> and
-    ///     <see cref="KookConfig.MaxMessagesPerBatch"/>. In other words, should the user request 500 messages,
-    ///     and the <see cref="Kook.KookConfig.MaxMessagesPerBatch"/> constant is <c>100</c>, the request will
-    ///     be split into 5 individual requests; thus returning 5 individual asynchronous responses, hence the need
-    ///     of flattening.
+    ///     <br />
+    ///     此方法将尝试获取此频道最新的 <paramref name="limit"/> 条消息。此方法会根据 <see cref="F:Kook.KookConfig.MaxMessagesPerBatch"/>
+    ///     将请求拆分。换句话说，如果要获取 500 条消息，而 <see cref="F:Kook.KookConfig.MaxMessagesPerBatch"/> 的常量为
+    ///     <c>50</c>，则请求将被拆分为 10 个单独请求，因此异步枚举器会异步枚举返回 10 个响应。<see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/>
+    ///     方法可以展开这 10 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
-    /// <param name="referenceMessage">The starting message to get the messages from.</param>
-    /// <param name="dir">The direction of the messages to be gotten from.</param>
-    /// <param name="limit">The numbers of message to be gotten from.</param>
+    /// <param name="referenceMessage"> 要开始获取消息的参考位置的消息。 </param>
+    /// <param name="dir"> 要以参考位置为基准，获取消息的方向。 </param>
+    /// <param name="limit"> 要获取的消息数量。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     Paged collection of messages.
+    ///     分页的消息集合的异步可枚举对象。
     /// </returns>
     IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
         int limit = KookConfig.MaxMessagesPerBatch,
@@ -222,20 +198,20 @@ public interface IMessageChannel : IChannel
     #region Delete Messages
 
     /// <summary>
-    ///     Deletes a message.
+    ///     删除一条消息。
     /// </summary>
-    /// <param name="messageId">The identifier of the message that would be removed.</param>
+    /// <param name="messageId"> 要删除的消息的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous removal operation.
+    ///     一个表示异步删除操作的任务。
     /// </returns>
     Task DeleteMessageAsync(Guid messageId, RequestOptions? options = null);
 
-    /// <summary> Deletes a message based on the provided message in this channel. </summary>
-    /// <param name="message">The message that would be removed.</param>
+    /// <summary> 删除一条消息. </summary>
+    /// <param name="message"> 要删除的消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous removal operation.
+    ///     一个表示异步删除操作的任务。
     /// </returns>
     Task DeleteMessageAsync(IMessage message, RequestOptions? options = null);
 
@@ -244,18 +220,15 @@ public interface IMessageChannel : IChannel
     #region Modify Messages
 
     /// <summary>
-    ///     Modifies a message.
+    ///     修改一条消息。
     /// </summary>
-    /// <remarks>
-    ///     This method modifies this message with the specified properties. To see an example of this
-    ///     method and what properties are available, please refer to <see cref="MessageProperties"/>.
-    /// </remarks>
-    /// <param name="messageId">The identifier of the message that would be changed.</param>
-    /// <param name="func">A delegate containing the properties to modify the message with.</param>
+    /// <param name="messageId"> 要修改的消息的 ID。 </param>
+    /// <param name="func"> 一个包含修改消息属性的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous modification operation.
+    ///     一个表示异步修改操作的任务。
     /// </returns>
+    /// <seealso cref="T:Kook.MessageProperties"/>
     Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions? options = null);
 
     #endregion

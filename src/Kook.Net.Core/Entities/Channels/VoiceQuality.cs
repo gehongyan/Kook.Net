@@ -1,54 +1,54 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the voice quality of an <see cref="IVoiceChannel"/>.
+///     表示 <see cref="T:Kook.IVoiceChannel"/> 的语音质量。
 /// </summary>
 public enum VoiceQuality
 {
     /// <summary>
-    ///     Equivalent to approximately 18 kbps.
+    ///     等效于约 18 kbps。
     /// </summary>
     _18kbps = 1,
 
     /// <summary>
-    ///     Equivalent to approximately is 48 kbps.
+    ///     等效于约 48 kbps。
     /// </summary>
     _48kbps = 2,
 
     /// <summary>
-    ///     Equivalent to approximately is 96 kbps.
+    ///     等效于约 96 kbps。
     /// </summary>
     _96kbps = 3,
 
     /// <summary>
-    ///     Equivalent to approximately 128 kbps.
+    ///     等效于约 128 kbps。
     /// </summary>
     /// <remarks>
-    ///     This quality needs the boost level to reach LV1. 
+    ///     此质量需要服务器助力等级达到 <see cref="F:Kook.BoostLevel.Level1"/>。
     /// </remarks>
     _128kbps = 4,
 
     /// <summary>
-    ///     Equivalent to approximately 192 kbps.
+    ///     等效于约 192 kbps。
     /// </summary>
     /// <remarks>
-    ///     This quality needs the boost level to reach LV2. 
+    ///     此质量需要服务器助力等级达到 <see cref="F:Kook.BoostLevel.Level2"/>。
     /// </remarks>
     _192kbps = 5,
 
     /// <summary>
-    ///     Equivalent to approximately 256 kbps.
+    ///     等效于约 256 kbps。
     /// </summary>
     /// <remarks>
-    ///     This quality needs the boost level to reach LV3. 
+    ///     此质量需要服务器助力等级达到 <see cref="F:Kook.BoostLevel.Level3"/>。
     /// </remarks>
     _256kbps = 6,
 
     /// <summary>
-    ///     Equivalent to approximately 320 kbps.
+    ///     等效于约 320 kbps。
     /// </summary>
     /// <remarks>
-    ///     This quality needs the boost level to reach LV5. 
+    ///     此质量需要服务器助力等级达到 <see cref="F:Kook.BoostLevel.Level5"/>。
     /// </remarks>
     _320kbps = 7
 }

@@ -107,11 +107,10 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     ///     This method follows the same behavior as described in <see cref="IMessageChannel.GetMessageAsync"/>.
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
-    /// <param name="id">The identifier of the message.</param>
+    /// <param name="id"> 消息的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents an asynchronous get operation for retrieving the message. The task result contains
-    ///     the retrieved message; <c>null</c> if no message is found with the specified identifier.
+    ///     一个表示异步获取操作的额任务。任务结果包含检索到的消息；如果未找到具有指定 ID 的消息，则返回 <c>null</c>。
     /// </returns>
     public async Task<IMessage> GetMessageAsync(Guid id, RequestOptions? options = null)
     {
@@ -127,10 +126,10 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     ///     <see cref="IMessageChannel.GetMessagesAsync(int, CacheMode, RequestOptions)"/>.
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
-    /// <param name="limit">The numbers of message to be gotten from.</param>
+    /// <param name="limit"> 要获取的消息数量。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     Paged collection of messages.
+    ///     分页的消息集合的异步可枚举对象。
     /// </returns>
     public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(
         int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
@@ -145,12 +144,12 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     ///     <see cref="IMessageChannel.GetMessagesAsync(Guid, Direction, int, CacheMode, RequestOptions)"/>.
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
-    /// <param name="referenceMessageId">The ID of the starting message to get the messages from.</param>
-    /// <param name="dir">The direction of the messages to be gotten from.</param>
-    /// <param name="limit">The numbers of message to be gotten from.</param>
+    /// <param name="referenceMessageId"> 要开始获取消息的参考位置的消息的 ID。 </param>
+    /// <param name="dir"> 要以参考位置为基准，获取消息的方向。 </param>
+    /// <param name="limit"> 要获取的消息数量。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     Paged collection of messages.
+    ///     分页的消息集合的异步可枚举对象。
     /// </returns>
     public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
@@ -165,12 +164,12 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     ///     <see cref="IMessageChannel.GetMessagesAsync(IMessage, Direction, int, CacheMode, RequestOptions)"/>.
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
-    /// <param name="referenceMessage">The starting message to get the messages from.</param>
-    /// <param name="dir">The direction of the messages to be gotten from.</param>
-    /// <param name="limit">The numbers of message to be gotten from.</param>
+    /// <param name="referenceMessage"> 要开始获取消息的参考位置的消息。 </param>
+    /// <param name="dir"> 要以参考位置为基准，获取消息的方向。 </param>
+    /// <param name="limit"> 要获取的消息数量。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     Paged collection of messages.
+    ///     分页的消息集合的异步可枚举对象。
     /// </returns>
     public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>

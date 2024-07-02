@@ -13,7 +13,7 @@ public interface IAudioChannel : IChannel
     bool? IsVoiceRegionOverwritten { get; }
 
     /// <summary>
-    ///     获取此音频频道所设置的语音区域。
+    ///     获取此音频频道所设置的语音服务器区域。
     /// </summary>
     /// <remarks>
     ///     <note type="warning">

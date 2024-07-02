@@ -82,9 +82,9 @@ public static class MessageExtensions
     ///     Sends an inline reply of file that references a message.
     /// </summary>
     /// <param name="message">The message that is being replied on.</param>
-    /// <param name="path">The file path of the file.</param>
-    /// <param name="filename">The name of the file.</param>
-    /// <param name="type">The type of the file.</param>
+    /// <param name="path"> 文件的路径。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 文件的媒体类型。 </param>
     /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
@@ -101,9 +101,9 @@ public static class MessageExtensions
     ///     Sends an inline reply of file that references a message.
     /// </summary>
     /// <param name="message">The message that is being replied on.</param>
-    /// <param name="stream">Stream of the file to be sent.</param>
-    /// <param name="filename">The name of the file.</param>
-    /// <param name="type">The type of the file.</param>
+    /// <param name="stream"> 文件的流。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 文件的媒体类型。 </param>
     /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
@@ -120,7 +120,7 @@ public static class MessageExtensions
     ///     Sends an inline reply of file that references a message.
     /// </summary>
     /// <param name="message">The message that is being replied on.</param>
-    /// <param name="attachment">The attachment containing the file.</param>
+    /// <param name="attachment"> 文件的附件信息。 </param>
     /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
     /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
@@ -152,7 +152,7 @@ public static class MessageExtensions
     ///     Sends a card message to the source channel.
     /// </summary>
     /// <param name="message">The message that is being replied on.</param>
-    /// <param name="cards">The cards to be sent.</param>
+    /// <param name="cards"> 要发送的卡片。 </param>
     /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
@@ -168,7 +168,7 @@ public static class MessageExtensions
     ///     Sends a card message to the source channel.
     /// </summary>
     /// <param name="message">The message that is being replied on.</param>
-    /// <param name="card">The card to be sent.</param>
+    /// <param name="card"> 要发送的卡片。 </param>
     /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
     /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>

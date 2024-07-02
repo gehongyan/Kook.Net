@@ -1,48 +1,48 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic channel in a guild that can send and receive messages.
+///     表示服务器中一个通用的文字频道，可以发送和接收消息。
 /// </summary>
 public interface ITextChannel : INestedChannel, IMentionable, IMessageChannel
 {
     #region General
 
     /// <summary>
-    ///     Gets the current topic for this text channel.
+    ///     获取此文字频道的说明。
     /// </summary>
-    /// <returns>
-    ///     A string representing the topic set in the channel; <c>null</c> if none is set.
-    /// </returns>
     string Topic { get; }
 
     /// <summary>
-    ///     Gets the current slow-mode delay for this channel.
+    ///     获取此频道当前设置的慢速模式延迟。
     /// </summary>
+    /// <remarks>
+    ///     拥有 <see cref="F:Kook.ChannelPermission.ManageMessages"/> 或
+    ///     <see cref="F:Kook.ChannelPermission.ManageChannels"/> 权限的用户不受慢速模式延迟的限制。
+    /// </remarks>
     /// <returns>
-    ///     An int representing the time in seconds required before the user can send another message; 0 if disabled.
+    ///     一个 <c>int</c>，表示用户在可以发送另一条消息之前需要等待的时间（以秒为单位）；如果未启用，则为 <c>0</c>。
     /// </returns>
     int SlowModeInterval { get; }
 
     /// <summary>
-    ///     Modifies this text channel.
+    ///     修改此文字频道。
     /// </summary>
-    /// <param name="func">The delegate containing the properties to modify the channel with.</param>
+    /// <param name="func"> 一个包含修改文字频道属性的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous modification operation.
+    ///     一个表示异步修改操作的任务。
     /// </returns>
-    /// <seealso cref="ModifyTextChannelProperties"/>
+    /// <seealso cref="T:Kook.ModifyTextChannelProperties"/>
     Task ModifyAsync(Action<ModifyTextChannelProperties> func, RequestOptions? options = null);
 
     #endregion
 
     /// <summary>
-    ///     Gets a collection of pinned messages in this channel.
+    ///     获取此频道中的所有置顶消息。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation for retrieving pinned messages in this channel.
-    ///     The task result contains a collection of messages found in the pinned messages.
+    ///     一个表示异步获取操作的任务。任务的结果包含此频道中找到的所有置顶消息。
     /// </returns>
     Task<IReadOnlyCollection<IMessage>> GetPinnedMessagesAsync(RequestOptions? options = null);
 }

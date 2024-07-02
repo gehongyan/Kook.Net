@@ -76,7 +76,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// <summary>
     ///     Sends a file to the source channel.
     /// </summary>
-    /// <param name="attachment">The attachment containing the file.</param>
+    /// <param name="attachment"> 文件的附件信息。 </param>
     /// <param name="isQuote">
     ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
     /// </param>
@@ -115,7 +115,7 @@ public abstract class ModuleBase<T> : IModuleBase
     ///     Sends a card message to the source channel.
     /// </summary>
     /// <param name="cards">
-    ///     The cards to be sent.
+    ///      要发送的卡片。
     /// </param>
     /// <param name="isQuote">
     ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
@@ -135,7 +135,7 @@ public abstract class ModuleBase<T> : IModuleBase
     ///     Sends a card message to the source channel.
     /// </summary>
     /// <param name="card">
-    ///     The card to be sent.
+    ///      要发送的卡片。
     /// </param>
     /// <param name="isQuote">
     ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.

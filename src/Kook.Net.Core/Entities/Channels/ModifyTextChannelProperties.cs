@@ -1,30 +1,29 @@
 namespace Kook;
 
 /// <summary>
-///     Provides properties that are used to modify an <see cref="ITextChannel"/> with the specified properties.
+///     提供用于修改 <see cref="T:Kook.ITextChannel"/> 的属性。
 /// </summary>
-/// <seealso cref="ITextChannel.ModifyAsync(System.Action{ModifyTextChannelProperties}, RequestOptions)"/>
+/// <seealso cref="M:Kook.ITextChannel.ModifyAsync(System.Action{Kook.ModifyTextChannelProperties},Kook.RequestOptions)"/>
 public class ModifyTextChannelProperties : ModifyGuildChannelProperties
 {
     /// <summary>
-    ///     Gets or sets the topic of the channel.
+    ///     获取或设置要设置到此频道的说明。
     /// </summary>
     /// <remarks>
-    ///     Setting this value to any string other than <c>null</c> or <see cref="string.Empty"/> will set the
-    ///     channel topic or description to the desired value.
+    ///     如果此值为 <c>null</c>，则频道的说明不会被修改；如果此值为 <see cref="F:System.String.Empty"/>，则频道的说明将被清空；
+    ///     设置为其他值将会修改频道的说明。
     /// </remarks>
     public string? Topic { get; set; }
 
     /// <summary>
-    ///     Gets or sets the slow-mode ratelimit in seconds for this channel.
+    ///     获取或设置此要设置到此频道的慢速模式延迟。
     /// </summary>
     /// <remarks>
-    ///     Setting this value will require each user to wait before sending another message; setting this value to
-    ///     <see cref="Kook.SlowModeInterval.None"/> will disable slow-mode for this channel;
-    ///     if this value is set to <c>null</c>, the slow-mode interval will not be modified.
+    ///     设置此值将要求每个用户在发送另一条消息之前等待指定的时间间隔；设置为 <see cref="F:Kook.SlowModeInterval.None"/>
+    ///     将会为此频道禁用慢速模式；如果此值为 <c>null</c>，则慢速模式延迟不会被修改。
     ///     <note>
-    ///         Users with <see cref="Kook.ChannelPermission.ManageMessages"/> or
-    ///         <see cref="ChannelPermission.ManageChannels"/> will be exempt from slow-mode.
+    ///         拥有 <see cref="F:Kook.ChannelPermission.ManageMessages"/> 或
+    ///         <see cref="F:Kook.ChannelPermission.ManageChannels"/> 权限的用户不受慢速模式延迟的限制。
     ///     </note>
     /// </remarks>
     public SlowModeInterval? SlowModeInterval { get; set; }

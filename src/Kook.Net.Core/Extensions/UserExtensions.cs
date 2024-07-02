@@ -7,10 +7,10 @@ public static class UserExtensions
     ///     Sends a file via DM.
     /// </summary>
     /// <param name="user">The user to send the DM to.</param>
-    /// <param name="path">The file path of the file.</param>
-    /// <param name="filename">The name of the file.</param>
-    /// <param name="type">The type of the file.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="path"> 文件的路径。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 文件的媒体类型。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(this IUser user,
         string path, string? filename = null, AttachmentType type = AttachmentType.File, IQuote? quote = null,
@@ -24,10 +24,10 @@ public static class UserExtensions
     ///     Sends a file via DM.
     /// </summary>
     /// <param name="user">The user to send the DM to.</param>
-    /// <param name="stream">The stream of the file.</param>
-    /// <param name="filename">The name of the file.</param>
-    /// <param name="type">The type of the file.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="stream"> 文件的流。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 文件的媒体类型。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(this IUser user,
         Stream stream, string filename, AttachmentType type = AttachmentType.File, IQuote? quote = null,
@@ -41,8 +41,8 @@ public static class UserExtensions
     ///     Sends a file via DM.
     /// </summary>
     /// <param name="user">The user to send the DM to.</param>
-    /// <param name="attachment">The attachment containing the file.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="attachment"> 文件的附件信息。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(this IUser user,
         FileAttachment attachment, IQuote? quote = null, RequestOptions? options = null)
@@ -56,7 +56,7 @@ public static class UserExtensions
     /// </summary>
     /// <param name="user">The user to send the DM to.</param>
     /// <param name="content">The KMarkdown content to be sent.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> SendTextAsync(this IUser user,
         string content, IQuote? quote = null, RequestOptions? options = null)
@@ -69,8 +69,8 @@ public static class UserExtensions
     ///     Sends a card message message via DM.
     /// </summary>
     /// <param name="user">The user to send the DM to.</param>
-    /// <param name="cards">The cards to be sent.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="cards"> 要发送的卡片。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(this IUser user,
         IEnumerable<ICard> cards, IQuote? quote = null, RequestOptions? options = null)
@@ -83,8 +83,8 @@ public static class UserExtensions
     ///     Sends a card message message via DM.
     /// </summary>
     /// <param name="user">The user to send the DM to.</param>
-    /// <param name="card">The card to be sent.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
+    /// <param name="card"> 要发送的卡片。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> SendCardAsync(this IUser user,
         ICard card, IQuote? quote = null, RequestOptions? options = null)

@@ -46,7 +46,7 @@ public struct Image : IDisposable
     ///     This file path is NOT validated and is passed directly into a
     ///     <see cref="File.OpenRead"/>.
     /// </remarks>
-    /// <param name="path">The path to the file.</param>
+    /// <param name="path"> 文件的路径。 </param>
     /// <exception cref="System.ArgumentException">
     /// <paramref name="path" /> is a zero-length string, contains only white space, or contains one or more invalid
     /// characters as defined by <see cref="Path.GetInvalidPathChars"/>.

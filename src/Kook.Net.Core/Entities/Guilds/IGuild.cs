@@ -486,8 +486,8 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Creates a new invite to this channel.
     /// </summary>
-    /// <param name="maxAge">The time until the invite expires. Set to <c>InviteMaxAge.NeverExpires</c> to never expire.</param>
-    /// <param name="maxUses">The max amount of times this invite may be used. Set to <c>InviteMaxUses.Unlimited</c> to have unlimited uses.</param>
+    /// <param name="maxAge"> 邀请链接的有效时长，<see cref="F:Kook.InviteMaxAge.NeverExpires"/> 表示永不过期。 </param>
+    /// <param name="maxUses"> 邀请链接的可用人次，<see cref="F:Kook.InviteMaxUses.Unlimited"/> 表示无限制。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous invite creation operation. The task result contains an invite
@@ -498,8 +498,8 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     Creates a new invite to this channel.
     /// </summary>
-    /// <param name="maxAge">The time (in seconds) until the invite expires. Set to <c>null</c> to never expire.</param>
-    /// <param name="maxUses">The max amount of times this invite may be used. Set to <c>null</c> to have unlimited uses.</param>
+    /// <param name="maxAge"> 邀请链接的有效时长，<c>null</c> 表示永不过期。 </param>
+    /// <param name="maxUses">邀请链接的可用人次，<c>null</c> 表示无限制。</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous invite creation operation. The task result contains an invite
@@ -698,7 +698,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="emote">The emote to delete.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous removal operation.
+    ///     一个表示异步删除操作的任务。
     /// </returns>
     Task DeleteEmoteAsync(GuildEmote emote, RequestOptions? options = null);
 

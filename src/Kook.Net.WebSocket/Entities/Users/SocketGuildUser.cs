@@ -200,6 +200,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
 
     /// <summary>
     ///     Returns the voice channel the user is in, or <c>null</c> if none or unknown.
+    ///     <br />
     ///     <note type="warning">
     ///         If a user connects to a voice channel before the bot has connected to the gateway,
     ///         this property will be <c>null</c> until <see cref="SocketGuild.DownloadVoiceStatesAsync"/>

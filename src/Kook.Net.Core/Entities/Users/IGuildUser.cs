@@ -144,6 +144,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// </summary>
     /// <remarks>
     ///     This method modifies the nickname of current guild user.
+    ///     <br />
     ///     <note type="warning">
     ///         The KOOK API will clear the nickname if the nickname is set to
     ///         the same as the username at present. Hence either setting the nickname

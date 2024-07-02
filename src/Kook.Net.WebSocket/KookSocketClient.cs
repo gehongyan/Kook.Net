@@ -79,6 +79,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     /// </summary>
     /// <remarks>
     ///     This method returns a collection of currently opened direct message channels.
+    ///     <br />
     ///     <note type="warning">
     ///         This method will not return previously opened DM channels outside of the current session! If you
     ///         have just started the client, this may return an empty collection.

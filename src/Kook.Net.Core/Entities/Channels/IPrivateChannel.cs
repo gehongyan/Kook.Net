@@ -1,15 +1,12 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic channel that is private to selected recipients.
+///     表示一个私有频道，只有特定的用户可以访问。
 /// </summary>
 public interface IPrivateChannel : IChannel
 {
     /// <summary>
-    ///     Gets the users that can access this channel.
+    ///     获取可以访问此频道的素有用户。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of users that can access this channel.
-    /// </returns>
     IReadOnlyCollection<IUser> Recipients { get; }
 }

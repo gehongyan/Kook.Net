@@ -38,7 +38,7 @@ public struct FileAttachment : IDisposable
     ///     Creates a file attachment from a stream.
     /// </summary>
     /// <param name="stream">The stream to create the attachment from.</param>
-    /// <param name="filename">The name of the attachment.</param>
+    /// <param name="filename"> 文件名。 </param>
     /// <param name="type">The type of the attachment.</param>
     public FileAttachment(Stream stream, string filename, AttachmentType type = AttachmentType.File)
     {
@@ -66,8 +66,8 @@ public struct FileAttachment : IDisposable
     ///     This file path is NOT validated and is passed directly into a
     ///     <see cref="File.OpenRead"/>.
     /// </remarks>
-    /// <param name="path">The path to the file.</param>
-    /// <param name="filename">The name of the attachment.</param>
+    /// <param name="path"> 文件的路径。 </param>
+    /// <param name="filename"> 文件名。 </param>
     /// <param name="type">The type of the attachment.</param>
     /// <exception cref="System.ArgumentException">
     ///     <paramref name="path" /> is a zero-length string, contains only white space, or contains one or
@@ -115,7 +115,7 @@ public struct FileAttachment : IDisposable
     ///     Under this circumstance, please create asset in advance.
     /// </remarks>
     /// <param name="uri">The URI of the file.</param>
-    /// <param name="filename">The name of the attachment.</param>
+    /// <param name="filename"> 文件名。 </param>
     /// <param name="type">The type of the attachment.</param>
     /// <exception cref="InvalidOperationException">The URI provided is not an asset on the KOOK OSS.</exception>
     /// <exception cref="ArgumentException">The URI provided is blank.</exception>

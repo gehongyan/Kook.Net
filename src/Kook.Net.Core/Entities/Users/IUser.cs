@@ -80,6 +80,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// </summary>
     /// <remarks>
     ///     This method is used to obtain or create a channel used to send a direct message.
+    ///     <br />
     ///     <note type="warning">
     ///          In event that the current user cannot send a message to the target user, a channel can and will
     ///          still be created by Kook. However, attempting to send a message will yield a

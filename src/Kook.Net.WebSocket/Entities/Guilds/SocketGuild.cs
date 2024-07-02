@@ -101,6 +101,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <remarks>
     ///     This property retrieves the number of members returned by Kook.
+    ///     <br />
     ///     <note type="tip">
     ///     <para>
     ///         Due to how this property is returned by Kook instead of relying on the WebSocket cache, the
@@ -112,6 +113,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///         between that and this property.
     ///     </para>
     ///     </note>
+    ///     <br />
     ///     <note type="warning">
     ///         Only when <see cref="KookSocketConfig.AlwaysDownloadUsers"/> is set to <c>true</c>
     ///         will this property be populated upon startup. Otherwise, this property will be <c>null</c>,
