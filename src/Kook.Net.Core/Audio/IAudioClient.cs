@@ -11,9 +11,14 @@ public interface IAudioClient : IDisposable
     event Func<Task> Connected;
 
     /// <summary>
-    ///     当客户端从语音服务器断开连接时引发。 <br />
-    ///     <see cref="Exception"/> 参数是导致连接断开的异常。
+    ///     当客户端从语音服务器断开连接时引发。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.Exception"/> 参数是导致连接断开的异常。 </item>
+    ///     </list>
+    /// </remarks>
     event Func<Exception, Task> Disconnected;
 
     // /// <summary>
@@ -22,72 +27,127 @@ public interface IAudioClient : IDisposable
     // event Func<int, int, Task> LatencyUpdated;
 
     /// <summary>
-    ///     当语音 UDP 服务器的延迟已更新时引发。 <br />
-    ///     第一个 <see cref="int"/> 参数是更新前的延迟（毫秒）。 <br />
-    ///     第二个 <see cref="int"/> 参数是当前更新后的延迟（毫秒）。
+    ///     当语音 UDP 服务器的延迟已更新时引发。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.Int32"/> 参数是更新前的延迟（毫秒）。 </item>
+    ///     <item> <see cref="T:System.Int32"/> 参数是当前更新后的延迟（毫秒）。 </item>
+    ///     </list>
+    /// </remarks>
     event Func<int, int, Task> UdpLatencyUpdated;
 
     /// <summary>
-    ///     当其他语音客户端连接到当前语音服务器时引发。 <br />
-    ///     <see cref="ulong"/> 参数是所连接的语音客户端用户的 ID。
+    ///     当其他语音客户端连接到当前语音服务器时引发。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.UInt64"/> 参数是连接到语音服务器的语音客户端用户的 ID。 </item>
+    ///     </list>
+    /// </remarks>
     event Func<ulong, Task> PeerConnected;
 
     /// <summary>
-    ///     当其他语音客户端从当前语音服务器断开连接时引发。 <br />
-    ///     <see cref="ulong"/> 参数是断开连接的语音客户端用户的 ID。
+    ///     当其他语音客户端从当前语音服务器断开连接时引发。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.UInt64"/> 参数是断开连接的语音客户端用户的 ID。 </item>
+    ///     </list>
+    /// </remarks>
     event Func<ulong, Task> PeerDisconnected;
 
     /// <summary>
-    ///     当其他语音客户端已恢复发送语音数据时引发，通常是闭麦状态解除操作。 <br />
-    ///     <see cref="ulong"/> 参数是恢复发送语音数据的语音客户端用户的 ID。
+    ///     当其他语音客户端已恢复发送语音数据时引发，通常是闭麦状态解除操作。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.UInt64"/> 参数是恢复发送语音数据的语音客户端用户的 ID。 </item>
+    ///     </list>
+    /// </remarks>
     event Func<ulong, Task> HeadsetResumed;
 
     /// <summary>
-    ///     当其他语音客户端已暂停发送语音数据时引发，通常是闭麦操作。 <br />
-    ///     <see cref="ulong"/> 参数是暂停发送语音数据的语音客户端用户的 ID。
+    ///     当其他语音客户端已暂停发送语音数据时引发，通常是闭麦操作。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.UInt64"/> 参数是暂停发送语音数据的语音客户端用户的 ID。 </item>
+    ///     </list>
+    /// </remarks>
     event Func<ulong, Task> HeadsetPaused;
 
     /// <summary>
-    ///     当其他语音客户端已恢复接收语音数据时引发，通常是静音状态解除操作。 <br />
-    ///     <see cref="ulong"/> 参数是恢复接收语音数据的语音客户端用户的 ID。
+    ///     当其他语音客户端已恢复接收语音数据时引发，通常是静音状态解除操作。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.UInt64"/> 参数是恢复接收语音数据的语音客户端用户的 ID。 </item>
+    ///     </list>
+    /// </remarks>
     event Func<ulong, Task> ConsumerResumed;
 
     /// <summary>
-    ///     当其他语音客户端已暂停接收语音数据时引发，通常是静音操作。 <br />
-    ///     <see cref="ulong"/> 参数是暂停接收语音数据的语音客户端用户的 ID。
+    ///     当其他语音客户端已暂停接收语音数据时引发，通常是静音操作。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.UInt64"/> 参数是暂停接收语音数据的语音客户端用户的 ID。 </item>
+    ///     </list>
+    /// </remarks>
     event Func<ulong, Task> ConsumerPaused;
 
     /// <summary>
-    ///     当其他语音客户端的权限发生变化时引发。 <br />
-    ///     第一个 <see cref="ulong"/> 参数是权限发生变化的语音客户端用户的 ID。 <br />
-    ///     第二个 <see cref="PeerPermissionInfo"/> 参数是变更后的权限信息。
+    ///     当其他语音客户端的权限发生变化时引发。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.UInt64"/> 参数是权限发生变化的语音客户端用户的 ID。 </item>
+    ///     <item> <see cref="T:Kook.Audio.PeerPermissionInfo"/> 参数是变更后的权限信息。 </item>
+    ///     </list>
+    /// </remarks>
     event Func<ulong, PeerPermissionInfo, Task> PeerPermissionChanged;
 
     /// <summary>
-    ///     当其他语音客户端播放了一个氛围音效时引发。 <br />
-    ///     第一个 <see cref="ulong"/> 参数是播放氛围音效的语音客户端用户的 ID。 <br />
-    ///     第二个 <see cref="int"/> 参数是氛围音效的 ID。
+    ///     当其他语音客户端播放了一个氛围音效时引发。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.UInt64"/> 参数是播放氛围音效的语音客户端用户的 ID。 </item>
+    ///     <item> <see cref="T:Kook.Audio.PeerPermissionInfo"/> 参数是氛围音效的 ID。 </item>
+    ///     </list>
+    /// </remarks>
     event Func<ulong, int, Task> AtmospherePlayed;
 
     /// <summary>
-    ///     当其他语音客户端开始了共享来自计算机其它应用程序的实时音频时引发。 <br />
-    ///     <see cref="ulong"/> 参数是开始共享计算机应用程序音频的语音客户端用户的 ID。
+    ///     当其他语音客户端开始了共享来自计算机其它应用程序的实时音频时引发。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.UInt64"/> 参数是开始共享计算机应用程序音频的语音客户端用户的 ID。 </item>
+    ///     </list>
+    /// </remarks>
     event Func<ulong, SoundtrackInfo, Task> SoundtrackStarted;
 
     /// <summary>
-    ///     当其他语音客户端停止了共享来自计算机其它应用程序的实时音频时引发。 <br />
-    ///     <see cref="ulong"/> 参数是停止共享计算机应用程序音频的语音客端用户的 ID。
+    ///     当其他语音客户端停止了共享来自计算机其它应用程序的实时音频时引发。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.UInt64"/> 参数是停止共享计算机应用程序音频的语音客户端用户的 ID。 </item>
+    ///     </list>
+    /// </remarks>
     event Func<ulong, Task> SoundtrackStopped;
 
     /// <summary>

@@ -5,60 +5,60 @@ using System.Net.Http;
 namespace Kook.Net.Rest;
 
 /// <summary>
-///     Represents a generic REST-based client.
+///     表示一个通用的基于 RESTful API 的客户端。
 /// </summary>
 public interface IRestClient : IDisposable
 {
     /// <summary>
-    ///     Sets the HTTP header of this client for all requests.
+    ///     设置此客户端的 HTTP 头部，这将应用于所有请求。
     /// </summary>
-    /// <param name="key">The field name of the header.</param>
-    /// <param name="value">The value of the header.</param>
+    /// <param name="key"> HTTP 头部的键。 </param>
+    /// <param name="value"> HTTP 头部的值。 </param>
     void SetHeader(string key, string? value);
 
     /// <summary>
-    ///     Sets the cancellation token for this client.
+    ///     设置此客户端的取消令牌。
     /// </summary>
-    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <param name="cancellationToken"> 取消令牌。 </param>
     void SetCancellationToken(CancellationToken cancellationToken);
 
     /// <summary>
-    ///     Sends a REST request.
+    ///     发送一个 RESTful API 请求。
     /// </summary>
-    /// <param name="method">The method used to send this request (see <see cref="HttpMethod"/>).</param>
-    /// <param name="endpoint">The endpoint to send this request to.</param>
-    /// <param name="cancellationToken">The cancellation token used to cancel the task.</param>
-    /// <param name="reason">The audit log reason.</param>
-    /// <param name="requestHeaders">Additional headers to be sent with the request.</param>
-    /// <returns> A task that represents an asynchronous send operation. The task result contains the REST response of the request. </returns>
+    /// <param name="method"> 用于发送此请求的方法。 </param>
+    /// <param name="endpoint"> 要发送此请求的端点。 </param>
+    /// <param name="cancellationToken"> 用于取消任务的取消令牌。 </param>
+    /// <param name="reason"> 用于审计日志的操作原因。 </param>
+    /// <param name="requestHeaders"> 要随请求一起发送的附加标头。 </param>
+    /// <returns> 表示一个异步发送操作的任务。任务的结果包含请求的响应。 </returns>
     Task<RestResponse> SendAsync(HttpMethod method, string endpoint,
         CancellationToken cancellationToken, string? reason = null,
         IEnumerable<KeyValuePair<string, IEnumerable<string>>>? requestHeaders = null);
 
     /// <summary>
-    ///     Sends a REST request with a JSON body.
+    ///     发送一个带有 JSON 请求体的 RESTful API 请求。
     /// </summary>
-    /// <param name="method">The method used to send this request (see <see cref="HttpMethod"/>).</param>
-    /// <param name="endpoint">The endpoint to send this request to.</param>
-    /// <param name="json">The JSON body of the request.</param>
-    /// <param name="cancellationToken">The cancellation token used to cancel the task.</param>
-    /// <param name="reason">The audit log reason.</param>
-    /// <param name="requestHeaders">Additional headers to be sent with the request.</param>
-    /// <returns> A task that represents an asynchronous send operation. The task result contains the REST response of the request. </returns>
+    /// <param name="method"> 用于发送此请求的方法。 </param>
+    /// <param name="endpoint"> 要发送此请求的端点。 </param>
+    /// <param name="json"> 要发送的 JSON 请求体。 </param>
+    /// <param name="cancellationToken"> 用于取消任务的取消令牌。 </param>
+    /// <param name="reason"> 用于审计日志的操作原因。 </param>
+    /// <param name="requestHeaders"> 要随请求一起发送的附加标头。 </param>
+    /// <returns> 表示一个异步发送操作的任务。任务的结果包含请求的响应。 </returns>
     Task<RestResponse> SendAsync(HttpMethod method, string endpoint, string json,
         CancellationToken cancellationToken, string? reason = null,
         IEnumerable<KeyValuePair<string, IEnumerable<string>>>? requestHeaders = null);
 
     /// <summary>
-    ///     Sends a REST request with multipart parameters.
+    ///     发送一个带有多部分数据参数的 RESTful API 请求。
     /// </summary>
-    /// <param name="method">The method used to send this request (see <see cref="HttpMethod"/>).</param>
-    /// <param name="endpoint">The endpoint to send this request to.</param>
-    /// <param name="multipartParams">The multipart parameters.</param>
-    /// <param name="cancellationToken">The cancellation token used to cancel the task.</param>
-    /// <param name="reason">The audit log reason.</param>
-    /// <param name="requestHeaders">Additional headers to be sent with the request.</param>
-    /// <returns> A task that represents an asynchronous send operation. The task result contains the REST response of the request. </returns>
+    /// <param name="method"> 用于发送此请求的方法。 </param>
+    /// <param name="endpoint"> 要发送此请求的端点。 </param>
+    /// <param name="multipartParams"> 要发送的多部分数据参数。 </param>
+    /// <param name="cancellationToken"> 用于取消任务的取消令牌。 </param>
+    /// <param name="reason"> 用于审计日志的操作原因。 </param>
+    /// <param name="requestHeaders"> 要随请求一起发送的附加标头。 </param>
+    /// <returns> 表示一个异步发送操作的任务。任务的结果包含请求的响应。 </returns>
     Task<RestResponse> SendAsync(HttpMethod method, string endpoint, IReadOnlyDictionary<string, object> multipartParams,
         CancellationToken cancellationToken, string? reason = null,
         IEnumerable<KeyValuePair<string, IEnumerable<string>>>? requestHeaders = null);

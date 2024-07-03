@@ -119,7 +119,7 @@ public interface IRecommendInfo
     ///     Gets the number of days need to be waited before the recommendation information can be modified again.
     /// </summary>
     /// <returns>
-    ///     An <see cref="int"/> representing the number of days need to be waited before the recommendation information can be modified again.
+    ///     An <see cref="T:System.Int32"/> representing the number of days need to be waited before the recommendation information can be modified again.
     /// </returns>
     int DaysBeforeModify { get; }
 }

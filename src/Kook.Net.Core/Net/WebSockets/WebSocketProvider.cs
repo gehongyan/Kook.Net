@@ -1,6 +1,6 @@
 namespace Kook.Net.WebSockets;
 
 /// <summary>
-///     Represents a delegate that provides a new <see cref="IWebSocketClient"/> instance.
+///     表示一个用于创建 <see cref="IWebSocketClient"/> 实例的委托。
 /// </summary>
 public delegate IWebSocketClient WebSocketProvider();

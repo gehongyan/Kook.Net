@@ -6,8 +6,8 @@ namespace Kook;
 /// <summary>
 ///     表示一个可延迟加载的缓存实体。
 /// </summary>
-/// <typeparam name="TEntity">The type of entity that is cached.</typeparam>
-/// <typeparam name="TId">The type of this entity's ID.</typeparam>
+/// <typeparam name="TEntity"> 可延迟加载的缓存实体的类型。 </typeparam>
+/// <typeparam name="TId"> 可延迟加载的缓存实体的 ID 的类型。 </typeparam>
 #if DEBUG
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 #endif
@@ -16,21 +16,20 @@ public readonly struct Cacheable<TEntity, TId>
     where TId : IEquatable<TId>
 {
     /// <summary>
-    ///     Gets whether this entity is cached.
+    ///     获取此实体是否已缓存。
     /// </summary>
     public bool HasValue { get; }
 
     /// <summary>
-    ///     Gets the ID of this entity.
+    ///     获取此实体的唯一标识符。
     /// </summary>
     public TId Id { get; }
 
     /// <summary>
-    ///     Gets the entity if it could be pulled from cache.
+    ///     如果可以从缓存中获取实体，则获取该实体。
     /// </summary>
     /// <remarks>
-    ///     This value is not guaranteed to be set; in cases where the entity cannot be pulled from cache, it is
-    ///     <c>null</c>.
+    ///     此属性不保证非空；在无法从缓存中拉取实体的情况下，它此属性返回 <c>null</c>。
     /// </remarks>
     public TEntity? Value { get; }
 
@@ -45,24 +44,20 @@ public readonly struct Cacheable<TEntity, TId>
     }
 
     /// <summary>
-    ///     Downloads this entity to cache.
+    ///     将此实体下载到缓存中。
     /// </summary>
-    /// <exception cref="Kook.Net.HttpException">Thrown when used from a user account.</exception>
-    /// <exception cref="NullReferenceException">Thrown when the entity is deleted.</exception>
     /// <returns>
-    ///     A task that represents the asynchronous download operation. The task result contains
-    ///     the downloaded entity.
+    ///     一个表示异步下载操作的任务。任务结果包含下载的实体；如果无法通过 API 请求下载实体，或下载的实体无法转换为
+    ///     <typeparamref name="TEntity" />，则为 <c>null</c>。
     /// </returns>
     public async Task<TEntity?> DownloadAsync() => await DownloadFunc().ConfigureAwait(false);
 
     /// <summary>
-    ///     Returns the cached entity if it exists; otherwise downloads it.
+    ///     如果实体已存在于缓存中，则返回该实体；否则下载该实体并返回。
     /// </summary>
-    /// <exception cref="Kook.Net.HttpException">Thrown when used from a user account.</exception>
-    /// <exception cref="NullReferenceException">Thrown when the entity is deleted and is not in cache.</exception>
     /// <returns>
-    ///     A task that represents the asynchronous operation that attempts to get the entity via cache or to
-    ///     download the entity. The task result contains the downloaded entity.
+    ///     一个表示异步获取或下载操作的任务。任务结果包含所获取或下载的实体；如果无法通过 API 请求下载实体，或下载的实体无法转换为
+    ///     <typeparamref name="TEntity" />，则为 <c>null</c>。
     /// </returns>
     public async Task<TEntity?> GetOrDownloadAsync() => HasValue ? Value : await DownloadAsync().ConfigureAwait(false);
 
@@ -74,12 +69,12 @@ public readonly struct Cacheable<TEntity, TId>
 }
 
 /// <summary>
-///     Represents a cached entity that can be downloaded.
+///     表示一个可延迟加载的缓存实体。
 /// </summary>
-/// <typeparam name="TCachedEntity"> The type of entity that is cached. </typeparam>
-/// <typeparam name="TDownloadableEntity"> The type of entity that can be downloaded. </typeparam>
-/// <typeparam name="TRelationship"> The common type of <typeparamref name="TCachedEntity" /> and <typeparamref name="TDownloadableEntity" />. </typeparam>
-/// <typeparam name="TId"> The type of the corresponding entity's ID. </typeparam>
+/// <typeparam name="TCachedEntity"> 可延迟加载的缓存实体的类型。 </typeparam>
+/// <typeparam name="TDownloadableEntity"> 可从 API 请求下载的实体的类型。 </typeparam>
+/// <typeparam name="TRelationship"> 由 <typeparamref name="TCachedEntity" /> 和 <typeparamref name="TDownloadableEntity" /> 共同继承或实现的类型。 </typeparam>
+/// <typeparam name="TId"> 可延迟加载的缓存实体的 ID 的类型。 </typeparam>
 #if DEBUG
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 #endif
@@ -89,21 +84,20 @@ public readonly struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationsh
     where TId : IEquatable<TId>
 {
     /// <summary>
-    ///     Gets whether this entity is cached.
+    ///     获取此实体是否已缓存。
     /// </summary>
     public bool HasValue { get; }
 
     /// <summary>
-    ///     Gets the ID of this entity.
+    ///     获取此实体的唯一标识符。
     /// </summary>
     public TId Id { get; }
 
     /// <summary>
-    ///     Gets the entity if it could be pulled from cache.
+    ///     如果可以从缓存中获取实体，则获取该实体。
     /// </summary>
     /// <remarks>
-    ///     This value is not guaranteed to be set; in cases where the entity cannot be pulled from cache, it is
-    ///     <c>null</c>.
+    ///     此属性不保证非空；在无法从缓存中拉取实体的情况下，它此属性返回 <c>null</c>。
     /// </remarks>
     public TCachedEntity? Value { get; }
 
@@ -118,24 +112,20 @@ public readonly struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationsh
     }
 
     /// <summary>
-    ///     Downloads this entity.
+    ///     将此实体下载到缓存中。
     /// </summary>
-    /// <exception cref="Kook.Net.HttpException">Thrown when used from a user account.</exception>
-    /// <exception cref="NullReferenceException">Thrown when the entity is deleted.</exception>
     /// <returns>
-    ///     A task that represents the asynchronous download operation. The task result contains the downloaded
-    ///     entity.
+    ///     一个表示异步下载操作的任务。任务结果包含下载的实体；如果无法通过 API 请求下载实体，或下载的实体无法转换为
+    ///     <typeparamref name="TDownloadableEntity" />，则为 <c>null</c>。
     /// </returns>
     public async Task<TDownloadableEntity?> DownloadAsync() => await DownloadFunc().ConfigureAwait(false);
 
     /// <summary>
-    ///     Returns the cached entity if it exists; otherwise downloads it.
+    ///     如果实体已存在于缓存中，则返回该实体；否则下载该实体并返回。
     /// </summary>
-    /// <exception cref="Kook.Net.HttpException">Thrown when used from a user account.</exception>
-    /// <exception cref="NullReferenceException">Thrown when the entity is deleted and is not in cache.</exception>
     /// <returns>
-    ///     A task that represents the asynchronous operation that attempts to get the entity via cache or to
-    ///     download the entity. The task result contains the downloaded entity.
+    ///     一个表示异步获取或下载操作的任务。任务结果包含所获取或下载的实体；如果无法通过 API 请求下载实体，或下载的实体无法转换为
+    ///     <typeparamref name="TDownloadableEntity" />，则为 <c>null</c>。
     /// </returns>
     public async Task<TRelationship?> GetOrDownloadAsync() => HasValue ? Value : await DownloadAsync().ConfigureAwait(false);
 

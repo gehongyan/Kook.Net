@@ -157,7 +157,7 @@ public interface IGuild : IEntity<ulong>
     ///     Gets the max bitrate for voice channels in this guild.
     /// </summary>
     /// <returns>
-    ///     A <see cref="int"/> representing the maximum bitrate value allowed by Kook in this guild.
+    ///     A <see cref="T:System.Int32"/> representing the maximum bitrate value allowed by Kook in this guild.
     /// </returns>
     int MaxBitrate { get; }
 

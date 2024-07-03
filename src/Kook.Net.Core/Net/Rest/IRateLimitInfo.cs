@@ -1,52 +1,53 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic ratelimit info.
+///     表示一个通用的限速信息。
 /// </summary>
 public interface IRateLimitInfo
 {
     /// <summary>
-    ///     Gets whether this ratelimit info is global.
+    ///     获取此限速信息是否为全局限速。
     /// </summary>
     bool IsGlobal { get; }
 
     /// <summary>
-    ///     Gets the number of requests that can be made.
+    ///     获取在更新时限内可以进行的请求数量。
     /// </summary>
     int? Limit { get; }
 
     /// <summary>
     ///     Gets the number of remaining requests that can be made.
+    ///     获取目前可以立即进行的请求数量。
     /// </summary>
     int? Remaining { get; }
 
     // /// <summary>
-    // ///     Gets the total time (in seconds) of when the current rate limit bucket will reset. Can have decimals to match previous millisecond ratelimit precision.
+    // ///     获取当前限速桶将在何时重置的总时间（以秒为单位）。
     // /// </summary>
     // int? RetryAfter { get; }
 
     // /// <summary>
-    // ///     Gets the <see cref="DateTimeOffset"/> at which the rate limit resets.
+    // ///     获取此限速重置的绝对时间。
     // /// </summary>
     // DateTimeOffset? Reset { get; }
 
     /// <summary>
-    ///     Gets the absolute time when this ratelimit resets.
+    ///     获取相对于此刻此限速重置的相对时间间隔。
     /// </summary>
     TimeSpan? ResetAfter { get; }
 
     /// <summary>
-    ///     Gets a unique string denoting the rate limit being encountered (non-inclusive of major parameters in the route path).
+    ///     获取一个唯一的字符串，表示所遇到的限速桶（不包括路由路径中的主要参数）。
     /// </summary>
     string? Bucket { get; }
 
     /// <summary>
-    ///     Gets the amount of lag for the request. This is used to denote the precise time of when the ratelimit expires.
+    ///     获取请求的延迟，用于支持计算限速重置的精确时间。
     /// </summary>
     TimeSpan? Lag { get; }
 
     /// <summary>
-    ///     Gets the endpoint that this ratelimit info came from.
+    ///     获取此限速信息所属的终结点。
     /// </summary>
     string Endpoint { get; }
 }

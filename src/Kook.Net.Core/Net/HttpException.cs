@@ -4,51 +4,46 @@ using System.Net;
 namespace Kook.Net;
 
 /// <summary>
-///     The exception that is thrown if an error occurs while processing an Kook HTTP request.
+///     当处理 KOOK HTTP 请求时发生错误时引发的异常。
 /// </summary>
 public class HttpException : Exception
 {
     /// <summary>
-    ///     Gets the HTTP status code returned by Kook.
+    ///     获取 KOOK 返回的 HTTP 状态码。
     /// </summary>
-    /// <returns>
-    ///     An HTTP status code from Kook.
-    /// </returns>
     public HttpStatusCode HttpCode { get; }
 
     /// <summary>
-    ///     Gets the JSON error code returned by Kook.
+    ///     获取由 KOOK 返回的 JSON 负载中的错误代码；也有可能是表示操作成功的代码；
+    ///     如果无法从响应中解析出错误代码，则为 <see langword="null"/>。
     /// </summary>
-    /// <returns>
-    ///     A JSON error code from Kook, or <c>null</c> if none.
-    /// </returns>
     public KookErrorCode? KookCode { get; }
 
     /// <summary>
-    ///     Gets the reason of the exception.
+    ///     获取异常的原因；也有可能是表示操作成功的消息；如果无法从响应中解析出原因，则为 <see langword="null"/>。
     /// </summary>
     public string? Reason { get; }
 
     /// <summary>
-    ///     Gets the request object used to send the request.
+    ///     获取用于发送请求的请求对象。
     /// </summary>
     public IRequest Request { get; }
 
     /// <summary>
-    ///     Gets a collection of json errors describing what went wrong with the request.
+    ///     获取描述请求失败原因的 JSON 错误集合。
     /// </summary>
     public IReadOnlyCollection<KookJsonError> Errors { get; }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="HttpException" /> class.
+    ///     初始化一个 <see cref="HttpException"/> 类的新实例。
     /// </summary>
-    /// <param name="httpCode"> The HTTP status code returned. </param>
-    /// <param name="request"> The request that was sent prior to the exception. </param>
-    /// <param name="kookCode"> The Kook status code returned. </param>
-    /// <param name="reason"> The reason behind the exception. </param>
-    /// <param name="errors"> A collection of json errors describing what went wrong with the request. </param>
-    public HttpException(HttpStatusCode httpCode, IRequest request, KookErrorCode? kookCode = null, string? reason = null,
-        KookJsonError[]? errors = null)
+    /// <param name="httpCode"> 返回的 HTTP 状态码。 </param>
+    /// <param name="request"> 引发异常前发送的请求。 </param>
+    /// <param name="kookCode"> 由 KOOK 返回的 JSON 负载中解析出的状态码。 </param>
+    /// <param name="reason"> 引发异常的原因。 </param>
+    /// <param name="errors"> 描述请求错误的 JSON 错误集合。 </param>
+    public HttpException(HttpStatusCode httpCode, IRequest request,
+        KookErrorCode? kookCode = null, string? reason = null, KookJsonError[]? errors = null)
         : base(CreateMessage(httpCode, (int?)kookCode, reason))
     {
         HttpCode = httpCode;

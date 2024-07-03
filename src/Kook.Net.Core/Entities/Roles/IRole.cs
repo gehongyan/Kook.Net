@@ -58,7 +58,7 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     ///     Gets this role's position relative to other roles in the same guild.
     /// </summary>
     /// <returns>
-    ///     An <see cref="int"/> representing the position of the role in the role list of the guild.
+    ///     An <see cref="T:System.Int32"/> representing the position of the role in the role list of the guild.
     /// </returns>
     int Position { get; }
 

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 namespace Kook;
 
 /// <summary>
-///     Provides a series of helper methods for parsing mentions.
+///     提供一组用于生成与解析提及标签的辅助方法。
 /// </summary>
 public static class MentionUtils
 {
@@ -42,40 +42,40 @@ public static class MentionUtils
     internal static string KMarkdownMentionUser(string id) => $"(met){id}(met)";
 
     /// <summary>
-    ///     Returns a KMarkdown formatted mention string based on the user ID.
+    ///     返回基于用户 ID 的 KMarkdown 格式化用户提及字符串。
     /// </summary>
     /// <returns>
-    ///     A user mention string formatted to KMarkdown.
+    ///     格式化为 KMarkdown 的用户提及字符串。
     /// </returns>
     public static string KMarkdownMentionUser(ulong id) => KMarkdownMentionUser(id.ToString());
 
     internal static string KMarkdownMentionChannel(string id) => $"(chn){id}(chn)";
 
     /// <summary>
-    ///     Returns a KMarkdown formatted mention string based on the channel ID.
+    ///     返回基于频道 ID 的 KMarkdown 格式化频道提及字符串。
     /// </summary>
     /// <returns>
-    ///     A channel mention string formatted to KMarkdown.
+    ///     格式化为 KMarkdown 的频道提及字符串。
     /// </returns>
     public static string KMarkdownMentionChannel(ulong id) => KMarkdownMentionChannel(id.ToString());
 
     internal static string KMarkdownMentionRole(string id) => $"(rol){id}(rol)";
 
     /// <summary>
-    ///     Returns a KMarkdown formatted mention string based on the role ID.
+    ///     返回基于角色 ID 的 KMarkdown 格式化角色提及字符串。
     /// </summary>
     /// <returns>
-    ///     A role mention string formatted to KMarkdown.
+    ///     格式化为 KMarkdown 的角色提及字符串。
     /// </returns>
     public static string KMarkdownMentionRole(uint id) => KMarkdownMentionRole(id.ToString());
 
     internal static string PlainTextMentionUser(string username, string id) => $"@{username}#{id}";
 
     /// <summary>
-    ///     Returns a plain text formatted mention string based on the user ID.
+    ///     返回基于用户名称与用户 ID 的纯文本格式化用户提及字符串。
     /// </summary>
     /// <returns>
-    ///     A user mention string formatted to plain text.
+    ///     格式化为纯文本的用户提及字符串。
     /// </returns>
     public static string PlainTextMentionUser(string username, ulong id) =>
         PlainTextMentionUser(username, id.ToString());
@@ -83,29 +83,31 @@ public static class MentionUtils
     internal static string PlainTextMentionChannel(string id) => $"#channel:{id};";
 
     /// <summary>
-    ///     Returns a plain text formatted mention string based on the channel ID.
+    ///     返回基于频道 ID 的纯文本格式化频道提及字符串。
     /// </summary>
     /// <returns>
-    ///     A channel mention string formatted to plain text.
+    ///     格式化为纯文本的频道提及字符串。
     /// </returns>
     public static string PlainTextMentionChannel(ulong id) => PlainTextMentionChannel(id.ToString());
 
     internal static string PlainTextMentionRole(string id) => $"@role:{id};";
 
     /// <summary>
-    ///     Returns a plain text formatted mention string based on the role ID.
+    ///     返回基于角色 ID 的纯文本格式化角色提及字符串。
     /// </summary>
     /// <returns>
-    ///     A role mention string formatted to plain text.
+    ///     格式化为纯文本的角色提及字符串。
     /// </returns>
     public static string PlainTextMentionRole(uint id) => PlainTextMentionRole(id.ToString());
 
     /// <summary>
-    ///     Parses a provided user mention string.
+    ///     将指定的用户提及字符串解析为用户 ID。
     /// </summary>
-    /// <param name="text">The user mention.</param>
-    /// <param name="tagMode"></param>
-    /// <exception cref="ArgumentException">Invalid mention format.</exception>
+    /// <param name="text"> 要解析的用户提及字符串。 </param>
+    /// <param name="tagMode"> 提及标签的语法模式。 </param>
+    /// <returns> 解析的用户 ID。 </returns>
+    /// <exception cref="ArgumentException"> 无效的用户提及字符串格式。 </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="tagMode"/> 不是有效的标签语法模式。 </exception>
     public static ulong ParseUser(string text, TagMode tagMode)
     {
         if (TryParseUser(text, out ulong id, tagMode))
@@ -115,11 +117,13 @@ public static class MentionUtils
     }
 
     /// <summary>
-    ///     Tries to parse a provided user mention string.
+    ///     尝试解析指定的用户提及字符串。
     /// </summary>
-    /// <param name="text">The user mention.</param>
-    /// <param name="userId">The UserId of the user.</param>
-    /// <param name="tagMode">Parse as PlainText or KMarkdown.</param>
+    /// <param name="text">T 要解析的用户提及字符串。</param>
+    /// <param name="userId"> 如果解析成功，则为用户 ID；否则为 <c>0</c>。</param>
+    /// <param name="tagMode"> 提及标签的语法模式。 </param>
+    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。</returns>
+    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="tagMode"/> 不是有效的标签语法模式。 </exception>
     public static bool TryParseUser(string text, out ulong userId, TagMode tagMode)
     {
         Match match = tagMode switch
@@ -139,9 +143,13 @@ public static class MentionUtils
 
 
     /// <summary>
-    ///     Parses a provided channel mention string.
+    ///     解析指定的频道提及字符串。
     /// </summary>
-    /// <exception cref="ArgumentException">Invalid mention format.</exception>
+    /// <param name="text"> 要解析的频道提及字符串。 </param>
+    /// <param name="tagMode"> 提及标签的语法模式。 </param>
+    /// <returns> 解析的频道 ID。 </returns>
+    /// <exception cref="ArgumentException"> 无效的频道提及字符串格式。 </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="tagMode"/> 不是有效的标签语法模式。 </exception>
     public static ulong ParseChannel(string text, TagMode tagMode)
     {
         if (TryParseChannel(text, out ulong id, tagMode))
@@ -151,8 +159,13 @@ public static class MentionUtils
     }
 
     /// <summary>
-    ///     Tries to parse a provided channel mention string.
+    ///     尝试解析指定的频道提及字符串。
     /// </summary>
+    /// <param name="text">T 要解析的频道提及字符串。</param>
+    /// <param name="channelId"> 如果解析成功，则为频道 ID；否则为 <c>0</c>。</param>
+    /// <param name="tagMode"> 提及标签的语法模式。 </param>
+    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。</returns>
+    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="tagMode"/> 不是有效的标签语法模式。 </exception>
     public static bool TryParseChannel(string text, out ulong channelId, TagMode tagMode)
     {
         Match match = tagMode switch
@@ -171,9 +184,13 @@ public static class MentionUtils
     }
 
     /// <summary>
-    ///     Parses a provided role mention string.
+    ///     解析指定的角色提及字符串。
     /// </summary>
-    /// <exception cref="ArgumentException">Invalid mention format.</exception>
+    /// <param name="text"> 要解析的角色提及字符串。 </param>
+    /// <param name="tagMode"> 提及标签的语法模式。 </param>
+    /// <returns> 解析的角色 ID。 </returns>
+    /// <exception cref="ArgumentException"> 无效的角色提及字符串格式。 </exception>
+    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="tagMode"/> 不是有效的标签语法模式。 </exception>
     public static ulong ParseRole(string text, TagMode tagMode)
     {
         if (TryParseRole(text, out uint id, tagMode)) return id;
@@ -182,8 +199,13 @@ public static class MentionUtils
     }
 
     /// <summary>
-    ///     Tries to parse a provided role mention string.
+    ///     尝试解析指定的角色提及字符串。
     /// </summary>
+    /// <param name="text">T 要解析的角色提及字符串。</param>
+    /// <param name="roleId"> 如果解析成功，则为角色 ID；否则为 <c>0</c>。</param>
+    /// <param name="tagMode"> 提及标签的语法模式。 </param>
+    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。</returns>
+    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="tagMode"/> 不是有效的标签语法模式。 </exception>
     public static bool TryParseRole(string text, out uint roleId, TagMode tagMode)
     {
         Match match = tagMode switch
