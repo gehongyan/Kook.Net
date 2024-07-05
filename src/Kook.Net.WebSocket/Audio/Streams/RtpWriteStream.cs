@@ -15,9 +15,12 @@ public class RtpWriteStream : AudioOutStream
     /// </summary>
     /// <param name="next"> The next stream in the chain. </param>
     /// <param name="ssrc"> The SSRC of the RTP connection. </param>
+    /// <param name="payloadType"> The payload type to use. </param>
     /// <param name="bufferSize"> The buffer size to use. </param>
-    public RtpWriteStream(AudioStream next, uint ssrc, int bufferSize = 4000)
+    public RtpWriteStream(AudioStream next, uint ssrc, byte payloadType, int bufferSize = 4000)
     {
+        if ((payloadType & 0x80) != 0)
+            throw new ArgumentOutOfRangeException(nameof(payloadType), "Payload type must be less than 128");
         _next = next;
         _buffer = new byte[bufferSize];
         _header = new byte[24];
@@ -27,8 +30,8 @@ public class RtpWriteStream : AudioOutStream
         // .... 0000 = Contributing source identifiers count: 0
         _header[0] = 0x80;
         // 1... .... = Marker: True
-        // .110 0100 = Payload type: DynamicRTP-Type-100 (100)
-        _header[1] = 0xe4;
+        // .xxx xxxx = Payload type
+        _header[1] = (byte)(0x80 | payloadType);
         // Synchronization Source identifier
         _header[8] = (byte)(ssrc >> 24);
         _header[9] = (byte)(ssrc >> 16);

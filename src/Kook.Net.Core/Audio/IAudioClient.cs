@@ -29,63 +29,6 @@ public interface IAudioClient : IDisposable
     event Func<int, int, Task> UdpLatencyUpdated;
 
     /// <summary>
-    ///     Occurs when a peer has connected to the voice server.
-    ///     The <see cref="ulong"/> parameter is the connected peer's user ID.
-    /// </summary>
-    event Func<ulong, Task> PeerConnected;
-
-    /// <summary>
-    ///     Occurs when a peer has disconnected from the voice server.
-    ///     The <see cref="ulong"/> parameter is the disconnected peer's user ID.
-    /// </summary>
-    event Func<ulong, Task> PeerDisconnected;
-
-    /// <summary>
-    ///     Occurs when a peer's headset has been resumed.
-    /// </summary>
-    event Func<ulong, Task> HeadsetResumed;
-
-    /// <summary>
-    ///     Occurs when a peer's headset has been paused.
-    /// </summary>
-    event Func<ulong, Task> HeadsetPaused;
-
-    /// <summary>
-    ///     Occurs when a peer's consumer has been resumed.
-    /// </summary>
-    event Func<ulong, Task> ConsumerResumed;
-
-    /// <summary>
-    ///     Occurs when a peer's consumer has been paused.
-    /// </summary>
-    event Func<ulong, Task> ConsumerPaused;
-
-    /// <summary>
-    ///     Occurs when a peer's permission has been changed.
-    /// </summary>
-    event Func<ulong, PeerPermissionInfo, Task> PeerPermissionChanged;
-
-    /// <summary>
-    ///     Occurs when a peer has started playing an atmosphere.
-    /// </summary>
-    event Func<ulong, int, Task> AtmospherePlayed;
-
-    /// <summary>
-    ///     Occurs when a peer has started playing a soundtrack.
-    /// </summary>
-    event Func<ulong, SoundtrackInfo, Task> SoundtrackStarted;
-
-    /// <summary>
-    ///     Occurs when a peer has stopped playing a soundtrack.
-    /// </summary>
-    event Func<ulong, Task> SoundtrackStopped;
-
-    /// <summary>
-    ///     Occurs when the client has been disconnected from the voice server.
-    /// </summary>
-    event Func<Task> ClientDisconnected;
-
-    /// <summary>
     ///     Gets the current connection state of this client.
     /// </summary>
     ConnectionState ConnectionState { get; }
@@ -123,18 +66,18 @@ public interface IAudioClient : IDisposable
     ///     Creates a new audio stream from the PCM codec.
     /// </summary>
     /// <param name="application"> The audio application to use. </param>
-    /// <param name="bitrate"> The bitrate of the audio stream. </param>
+    /// <param name="bitrate"> The bitrate of the audio stream; leave null to use the bitrate requested from KOOK. </param>
     /// <param name="bufferMillis"> The buffer size, in milliseconds, of the audio stream. </param>
     /// <param name="packetLoss"> The packet loss percentage of the audio stream. </param>
     /// <returns> A new PCM audio stream. </returns>
-    AudioOutStream CreatePcmStream(AudioApplication application, int bitrate = 96 * 1024, int bufferMillis = 1000, int packetLoss = 30);
+    AudioOutStream CreatePcmStream(AudioApplication application, int? bitrate = null, int bufferMillis = 1000, int packetLoss = 30);
 
     /// <summary>
     ///     Creates a new audio stream from the PCM codec without buffering.
     /// </summary>
     /// <param name="application"> The audio application to use. </param>
-    /// <param name="bitrate"> The bitrate of the audio stream. </param>
+    /// <param name="bitrate"> The bitrate of the audio stream; leave null to use the bitrate requested from KOOK. </param>
     /// <param name="packetLoss"> The packet loss percentage of the audio stream. </param>
     /// <returns> A new PCM audio stream. </returns>
-    AudioOutStream CreateDirectPcmStream(AudioApplication application, int bitrate = 96 * 1024, int packetLoss = 30);
+    AudioOutStream CreateDirectPcmStream(AudioApplication application, int? bitrate = null, int packetLoss = 30);
 }

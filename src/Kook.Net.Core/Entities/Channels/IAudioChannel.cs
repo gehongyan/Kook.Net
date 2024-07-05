@@ -37,12 +37,13 @@ public interface IAudioChannel : IChannel
     /// </summary>
     /// <param name="external">Determines whether the audio client is an external one or not.</param>
     /// <param name="disconnect">Determines whether the client should send a disconnect call before connecting to a new voice channel.</param>
+    /// <param name="password">The password to use when connecting to the audio channel.</param>
     /// <returns>
     ///     A task representing the asynchronous connection operation. The task result contains the
     ///     <see cref="IAudioClient"/> responsible for the connection.
     /// </returns>
     Task<IAudioClient?> ConnectAsync( /*bool selfDeaf = false, bool selfMute = false, */
-        bool external = false, bool disconnect = true);
+        bool external = false, bool disconnect = true, string? password = null);
 
     /// <summary>
     ///     Disconnects from this audio channel.

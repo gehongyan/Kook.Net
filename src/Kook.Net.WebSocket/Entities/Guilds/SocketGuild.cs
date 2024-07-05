@@ -1006,7 +1006,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     #region Audio
 
     internal async Task<IAudioClient?> ConnectAudioAsync(ulong channelId,
-        /*bool selfDeaf, bool selfMute, */bool external, bool disconnect)
+        /*bool selfDeaf, bool selfMute, */bool external, bool disconnect, string? password)
     {
         TaskCompletionSource<AudioClient?> promise;
         await _audioLock.WaitAsync().ConfigureAwait(false);
@@ -1026,7 +1026,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
             if (_audioClient is null)
             {
-                AudioClient audioClient = new(this, Kook.GetAudioId(), channelId);
+                AudioClient audioClient = new(this, Kook.GetAudioId(), channelId, password);
                 audioClient.Disconnected += async ex =>
                 {
                     if (!promise.Task.IsCompleted)

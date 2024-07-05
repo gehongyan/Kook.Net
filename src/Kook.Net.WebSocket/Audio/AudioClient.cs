@@ -1,7 +1,5 @@
-using Kook.API.Voice;
 using Kook.Logging;
 using Kook.WebSocket;
-using System.Text.Json;
 using Kook.API.Rest;
 using Kook.Audio.Streams;
 
@@ -14,14 +12,16 @@ internal partial class AudioClient : IAudioClient
 
     private readonly Random _ssrcRandom;
 
+    private readonly string? _password;
     private readonly Logger _audioLogger;
     private readonly ConnectionManager _connection;
     private readonly SemaphoreSlim _stateLock;
 
     private Task? /*_heartbeatTask, _keepaliveTask, */_rtcpTask;
     private long _lastRtcpTime;
-    private uint _sequence;
     private uint _ssrc;
+    private byte _payloadType;
+    private int _bitrate;
 
     internal uint LastRtpTimestamp { get; set; }
     internal ushort LastRtpSequence { get; set; }
@@ -41,18 +41,16 @@ internal partial class AudioClient : IAudioClient
     public ConnectionState ConnectionState => _connection.State;
 
     /// <summary> Creates a new REST/WebSocket kook client. </summary>
-    internal AudioClient(SocketGuild guild, int clientId, ulong channelId)
+    internal AudioClient(SocketGuild guild, int clientId, ulong channelId, string? password)
     {
         Guild = guild;
         ChannelId = channelId;
+        _password = password;
         _ssrcRandom = new Random();
         _audioLogger = Kook.LogManager.CreateLogger($"Audio #{clientId}");
 
         ApiClient = new KookVoiceAPIClient(guild.Id, Kook.WebSocketProvider, Kook.UdpSocketProvider);
-        ApiClient.SentGatewayMessage += async opCode =>
-            await _audioLogger.DebugAsync($"Sent {opCode}").ConfigureAwait(false);
-        //ApiClient.SentData += async bytes => await _audioLogger.DebugAsync($"Sent {bytes} Bytes").ConfigureAwait(false);
-        ApiClient.ReceivedEvent += ProcessMessageAsync;
+        // ApiClient.SentData += async bytes => await _audioLogger.DebugAsync($"Sent {bytes} Bytes").ConfigureAwait(false);
         ApiClient.ReceivedPacket += ProcessPacketAsync;
         ApiClient.ReceivedRtcpPacket += ProcessRtcpPacketAsync;
 
@@ -61,10 +59,7 @@ internal partial class AudioClient : IAudioClient
             OnConnectingAsync, OnDisconnectingAsync, x => ApiClient.Disconnected += x);
         _connection.Connected += () => _connectedEvent.InvokeAsync();
         _connection.Disconnected += (ex, recon) => _disconnectedEvent.InvokeAsync(ex);
-        // _heartbeatTimes = new ConcurrentQueue<long>();
-        _sequence = 1000000;
 
-        // LatencyUpdated += async (old, val) => await _audioLogger.DebugAsync($"Latency = {val} ms").ConfigureAwait(false);
         UdpLatencyUpdated += async (old, val) =>
             await _audioLogger.DebugAsync($"UDP Latency = {val} ms").ConfigureAwait(false);
     }
@@ -76,325 +71,76 @@ internal partial class AudioClient : IAudioClient
     private async Task OnConnectingAsync()
     {
         await _audioLogger.DebugAsync("Connecting ApiClient").ConfigureAwait(false);
-        GetVoiceGatewayResponse voiceGatewayResponse = await Kook.ApiClient.GetVoiceGatewayAsync(ChannelId).ConfigureAwait(false);
-        await ApiClient.ConnectAsync(voiceGatewayResponse.Url).ConfigureAwait(false);
+        _ssrc = (uint)_ssrcRandom.Next(0, int.MaxValue);
+        _payloadType = 0x6F;
+        _bitrate = 96 * 1024;
+        CreateVoiceGatewayParams args = new()
+        {
+            ChannelId = ChannelId,
+            Ssrc = _ssrc,
+            PayloadType = _payloadType,
+            RtcpMultiplexing = false,
+            Password = _password
+        };
+        CreateVoiceGatewayResponse voiceGatewayResponse = await Kook.ApiClient.CreateVoiceGatewayAsync(args).ConfigureAwait(false);
+        _ssrc = voiceGatewayResponse.Ssrc;
+        _payloadType = voiceGatewayResponse.PayloadType;
+        _bitrate = voiceGatewayResponse.Bitrate;
+        ApiClient.SetUdpEndpoint(voiceGatewayResponse.Ip, voiceGatewayResponse.Port);
+        ApiClient.SetRtcpUdpEndpoint(voiceGatewayResponse.Ip, voiceGatewayResponse.RtcpPort);
+        _rtcpTask = RunRtcpAsync(KookSocketConfig.RtcpIntervalMilliseconds, _connection.CancellationToken);
+        await ApiClient.ConnectAsync().ConfigureAwait(false);
         await _audioLogger.DebugAsync($"Listening on port {ApiClient.UdpPort}, {ApiClient.RtcpUdpPort}").ConfigureAwait(false);
 
-        uint sequence = _sequence++;
-        await ApiClient.SendGetRouterRtpCapabilitiesRequestAsync(sequence).ConfigureAwait(false);
-
-        // // TODO: Wait for READY
-        await _connection.WaitAsync().ConfigureAwait(false);
+        await _connection.CompleteAsync();
     }
     private async Task OnDisconnectingAsync(Exception ex)
     {
         await _audioLogger.DebugAsync("Disconnecting ApiClient").ConfigureAwait(false);
+
         await ApiClient.DisconnectAsync().ConfigureAwait(false);
-
-        // //Wait for tasks to complete
-        // await _audioLogger.DebugAsync("Waiting for heartbeater").ConfigureAwait(false);
-
-        // if (_heartbeatTask != null)
-        //     await _heartbeatTask.ConfigureAwait(false);
-        // _heartbeatTask = null;
-
-        // if (_keepaliveTask != null)
-        //     await _keepaliveTask.ConfigureAwait(false);
-        // _keepaliveTask = null;
 
         if (_rtcpTask != null)
             await _rtcpTask.ConfigureAwait(false);
         _rtcpTask = null;
 
-        // while (_heartbeatTimes.TryDequeue(out _))
-        // {
-        // }
-
-        // await ClearInputStreamsAsync().ConfigureAwait(false);
-
-        // await _audioLogger.DebugAsync("Sending Voice State").ConfigureAwait(false);
-        // await Kook.ApiClient.SendVoiceStateUpdateAsync(Guild.Id, null, false, false).ConfigureAwait(false);
+        await Kook.ApiClient
+            .DisposeVoiceGatewayAsync(new DisposeVoiceGatewayParams { ChannelId = ChannelId })
+            .ConfigureAwait(false);
     }
 
     /// <inheritdoc />
     public AudioOutStream CreateOpusStream(int bufferMillis = 1000)
     {
-        OutputStream outputStream = new(ApiClient);                                                                 //Ignores header
-        RtpWriteStream rtpWriter = new(outputStream, _ssrc);                                                        //Consumes header, passes
+        OutputStream outputStream = new(ApiClient);                                                                      //Ignores header
+        RtpWriteStream rtpWriter = new(outputStream, _ssrc, _payloadType);                                               //Consumes header, passes
         return new BufferedWriteStream(rtpWriter, this, bufferMillis, _connection.CancellationToken, _audioLogger); //Generates header
     }
 
     /// <inheritdoc />
     public AudioOutStream CreateDirectOpusStream()
     {
-        OutputStream outputStream = new(ApiClient);     //Ignores header
-        return new RtpWriteStream(outputStream, _ssrc); //Consumes header, passes
+        OutputStream outputStream = new(ApiClient);                   //Ignores header
+        return new RtpWriteStream(outputStream, _ssrc, _payloadType); //Consumes header, passes
     }
 
     /// <inheritdoc />
-    public AudioOutStream CreatePcmStream(AudioApplication application, int bitrate = 96 * 1024, int bufferMillis = 1000, int packetLoss = 30)
+    public AudioOutStream CreatePcmStream(AudioApplication application, int? bitrate = null, int bufferMillis = 1000, int packetLoss = 30)
     {
         OutputStream outputStream = new(ApiClient);
-        RtpWriteStream rtpWriter = new(outputStream, _ssrc);
+        RtpWriteStream rtpWriter = new(outputStream, _ssrc, _payloadType);
         BufferedWriteStream bufferedStream = new(rtpWriter, this, bufferMillis, _connection.CancellationToken, _audioLogger); //Ignores header, generates header
-        return new OpusEncodeStream(bufferedStream, bitrate, application, packetLoss);
+        return new OpusEncodeStream(bufferedStream, bitrate ?? _bitrate, application, packetLoss);
     }
 
     /// <inheritdoc />
-    public AudioOutStream CreateDirectPcmStream(AudioApplication application, int bitrate = 96 * 1024, int packetLoss = 30)
+    public AudioOutStream CreateDirectPcmStream(AudioApplication application, int? bitrate = null, int packetLoss = 30)
     {
         OutputStream outputStream = new(ApiClient);
-        RtpWriteStream rtpWriter = new(outputStream, _ssrc);
-        return new OpusEncodeStream(rtpWriter, bitrate, application, packetLoss);
+        RtpWriteStream rtpWriter = new(outputStream, _ssrc, _payloadType);
+        return new OpusEncodeStream(rtpWriter, bitrate ?? _bitrate, application, packetLoss);
     }
 
-    private async Task ProcessMessageAsync(VoiceSocketFrameType type, bool okay, object payload)
-    {
-        if (!okay)
-        {
-            await _audioLogger.ErrorAsync($"Gateway {type} Failure: {payload}").ConfigureAwait(false);
-            _connection.Error(new Exception("Voice Connection Failed"));
-            return;
-        }
-
-        try
-        {
-            switch (type.Value)
-            {
-                case VoiceSocketFrameType.GetRouterRtpCapabilities:
-                {
-                    await _audioLogger.DebugAsync("RouterRtpCapabilities Completed").ConfigureAwait(false);
-                    uint nextSequence = _sequence++;
-                    await ApiClient.SendJoinRequestAsync(nextSequence).ConfigureAwait(false);
-                }
-                    break;
-                case VoiceSocketFrameType.Join:
-                {
-                    await _audioLogger.DebugAsync("Join Completed").ConfigureAwait(false);
-                    uint nextSequence = _sequence++;
-                    await ApiClient.SendCreatePlainTransportRequestAsync(nextSequence).ConfigureAwait(false);
-                }
-                    break;
-                case VoiceSocketFrameType.CreatePlainTransport:
-                {
-                    await _audioLogger.DebugAsync("CreatePlainTransport Completed").ConfigureAwait(false);
-                    string? json = payload.ToString();
-                    if (json is null
-                        || JsonSerializer.Deserialize<CreatePlainTransportResponse>(json) is not { } data)
-                    {
-                        _connection.Error(new Exception($"Unable to parse CreatePlainTransportResponse: {json}"));
-                        break;
-                    }
-                    ApiClient.SetUdpEndpoint(data.Ip, data.Port);
-                    ApiClient.SetRtcpUdpEndpoint(data.Ip, data.RtcpPort);
-                    uint nextSequence = _sequence++;
-                    _ssrc = (uint)_ssrcRandom.Next(0, int.MaxValue);
-                    if (Kook.CurrentUser is null)
-                    {
-                        _connection.CriticalError(new Exception("The client is not logged in"));
-                        break;
-                    }
-                    await ApiClient
-                        .SendProduceRequestAsync(nextSequence, Kook.CurrentUser.Id, data.Id, _ssrc)
-                        .ConfigureAwait(false);
-                }
-                    break;
-                case VoiceSocketFrameType.Produce:
-                {
-                    await _audioLogger.DebugAsync("Produce Completed").ConfigureAwait(false);
-                    _ = _connection.CompleteAsync();
-                    // int intervalMillis = KookSocketConfig.HeartbeatIntervalMilliseconds;
-                    // _heartbeatTask = RunHeartbeatAsync(intervalMillis, _connection.CancellationToken);
-                    // _keepaliveTask = RunKeepaliveAsync(_connection.CancellationToken);
-                    _rtcpTask = RunRtcpAsync(KookSocketConfig.RtcpIntervalMilliseconds, _connection.CancellationToken);
-                }
-                    break;
-                case VoiceSocketFrameType.NewPeer:
-                {
-                    if (payload is not JsonElement jsonElement
-                        || !jsonElement.TryGetProperty("id", out JsonElement peerIdElement)
-                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
-                        break;
-                    await _peerConnectedEvent.InvokeAsync(peerId).ConfigureAwait(false);
-                    await _audioLogger.DebugAsync("Received NewPeer").ConfigureAwait(false);
-                }
-                    break;
-                case VoiceSocketFrameType.PeerClosed:
-                {
-                    if (payload is not JsonElement jsonElement)
-                        break;
-                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
-                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
-                        break;
-                    if (!jsonElement.TryGetProperty("fromId", out JsonElement fromIdElement)
-                        || !ulong.TryParse(fromIdElement.ToString(), out ulong fromId)
-                        || fromId != ChannelId)
-                        break;
-
-                    await _peerDisconnectedEvent.InvokeAsync(peerId).ConfigureAwait(false);
-                    await _audioLogger.DebugAsync("Received PeerClosed").ConfigureAwait(false);
-                }
-                    break;
-                case VoiceSocketFrameType.ResumeHeadset:
-                {
-                    if (payload is not JsonElement jsonElement)
-                        break;
-                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
-                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
-                        break;
-
-                    await _headsetResumedEvent.InvokeAsync(peerId).ConfigureAwait(false);
-                    await _audioLogger.DebugAsync("Received ResumeHeadset").ConfigureAwait(false);
-                }
-                    break;
-                case VoiceSocketFrameType.PauseHeadset:
-                {
-                    if (payload is not JsonElement jsonElement)
-                        break;
-                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
-                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
-                        break;
-
-                    await _headsetPausedEvent.InvokeAsync(peerId).ConfigureAwait(false);
-                    await _audioLogger.DebugAsync("Received PauseHeadset").ConfigureAwait(false);
-                }
-                    break;
-                case VoiceSocketFrameType.ConsumerResumed:
-                {
-                    if (payload is not JsonElement jsonElement)
-                        break;
-                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
-                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
-                        break;
-
-                    await _consumerResumedEvent.InvokeAsync(peerId).ConfigureAwait(false);
-                    await _audioLogger.DebugAsync("Received ConsumerResumed").ConfigureAwait(false);
-                }
-                    break;
-                case VoiceSocketFrameType.ConsumerPaused:
-                {
-                    if (payload is not JsonElement jsonElement)
-                        break;
-                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
-                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
-                        break;
-
-                    await _consumerPausedEvent.InvokeAsync(peerId).ConfigureAwait(false);
-                    await _audioLogger.DebugAsync("Received ConsumerPaused").ConfigureAwait(false);
-                }
-                    break;
-                case VoiceSocketFrameType.PeerPermissionChanged:
-                {
-                    if (payload is not JsonElement jsonElement)
-                        break;
-                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
-                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
-                        break;
-                    if (!jsonElement.TryGetProperty("roomId", out JsonElement roomIdElement)
-                        || !ulong.TryParse(roomIdElement.ToString(), out ulong roomId)
-                        || roomId != ChannelId)
-                        break;
-                    if (!jsonElement.TryGetProperty("isServerMute", out JsonElement isServerMuteElement)
-                        || isServerMuteElement.ValueKind is not (JsonValueKind.True or JsonValueKind.False))
-                        break;
-                    if (!jsonElement.TryGetProperty("isServerMuteHeadset", out JsonElement isServerMuteHeadsetElement)
-                        || isServerMuteHeadsetElement.ValueKind is not (JsonValueKind.True or JsonValueKind.False))
-                        break;
-                    if (!jsonElement.TryGetProperty("permissionFreeMic", out JsonElement permissionFreeMicElement)
-                        || permissionFreeMicElement.ValueKind is not (JsonValueKind.True or JsonValueKind.False))
-                        break;
-                    if (!jsonElement.TryGetProperty("permissionLink", out JsonElement permissionLinkElement)
-                        || permissionLinkElement.ValueKind is not (JsonValueKind.True or JsonValueKind.False))
-                        break;
-                    if (!jsonElement.TryGetProperty("permissionSay", out JsonElement permissionSayElement)
-                        || permissionSayElement.ValueKind is not (JsonValueKind.True or JsonValueKind.False))
-                        break;
-                    if (!jsonElement.TryGetProperty("permissionVoiceManage", out JsonElement permissionVoiceManageElement)
-                        || permissionVoiceManageElement.ValueKind is not (JsonValueKind.True or JsonValueKind.False))
-                        break;
-                    PeerPermissionInfo peerPermissionInfo = new()
-                    {
-                        MutedByGuild = isServerMuteElement.GetBoolean(),
-                        DeafenedByGuild = isServerMuteHeadsetElement.GetBoolean(),
-                        CanUseVoiceActivity = permissionFreeMicElement.GetBoolean(),
-                        CanConnect = permissionLinkElement.GetBoolean(),
-                        CanSpeak = permissionSayElement.GetBoolean(),
-                        CanManageVoice = permissionVoiceManageElement.GetBoolean()
-                    };
-
-                    await _peerPermissionChangedEvent.InvokeAsync(peerId, peerPermissionInfo).ConfigureAwait(false);
-                    await _audioLogger.DebugAsync("Received PeerPermissionChanged").ConfigureAwait(false);
-                }
-                    break;
-                case VoiceSocketFrameType.Atmosphere:
-                {
-                    if (payload is not JsonElement jsonElement)
-                        break;
-                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
-                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
-                        break;
-                    if (!jsonElement.TryGetProperty("itemId", out JsonElement itemIdElement)
-                        || !int.TryParse(itemIdElement.ToString(), out int itemId))
-                        break;
-
-                    await _atmospherePlayedEvent.InvokeAsync(peerId, itemId).ConfigureAwait(false);
-                    await _audioLogger.DebugAsync("Received Atmosphere").ConfigureAwait(false);
-                }
-                    break;
-                case VoiceSocketFrameType.StartAccompaniment:
-                {
-                    if (payload is not JsonElement jsonElement)
-                        break;
-                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
-                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
-                        break;
-                    if (!jsonElement.TryGetProperty("data", out JsonElement dataElement))
-                        break;
-                    if (!dataElement.TryGetProperty("music_name", out JsonElement musicNameElement)
-                        || !dataElement.TryGetProperty("music_software", out JsonElement musicSoftwareElement)
-                        || !dataElement.TryGetProperty("singer", out JsonElement singerElement))
-                        break;
-                    SoundtrackInfo soundtrackInfo = new()
-                    {
-                        Software = musicSoftwareElement.ToString(),
-                        Music = musicNameElement.ToString(),
-                        Singer = singerElement.ToString()
-                    };
-
-                    await _soundtrackStartedEvent.InvokeAsync(peerId, soundtrackInfo).ConfigureAwait(false);
-                    await _audioLogger.DebugAsync("Received StartAccompaniment").ConfigureAwait(false);
-                }
-                    break;
-                case VoiceSocketFrameType.StopAccompaniment:
-                {
-                    if (payload is not JsonElement jsonElement)
-                        break;
-                    if (!jsonElement.TryGetProperty("peerId", out JsonElement peerIdElement)
-                        || !ulong.TryParse(peerIdElement.ToString(), out ulong peerId))
-                        break;
-
-                    await _soundtrackStoppedEvent.InvokeAsync(peerId).ConfigureAwait(false);
-                    await _audioLogger.DebugAsync("Received StopAccompaniment").ConfigureAwait(false);
-                }
-                    break;
-                case VoiceSocketFrameType.Disconnect:
-                {
-                    await _audioLogger.DebugAsync("Received Disconnect").ConfigureAwait(false);
-                    await _clientDisconnectedEvent.InvokeAsync().ConfigureAwait(false);
-                    await Guild.DisconnectAudioAsync().ConfigureAwait(false);
-                }
-                    break;
-                default:
-                    await _audioLogger.WarningAsync($"Unknown VoiceSocketFrameType ({type})").ConfigureAwait(false);
-                    break;
-            }
-        }
-        catch (Exception ex)
-        {
-            await _audioLogger.ErrorAsync($"Error Handling {type}: {payload}", ex)
-                .ConfigureAwait(false);
-        }
-    }
     private async Task ProcessPacketAsync(byte[] packet)
     {
         try
@@ -437,13 +183,17 @@ internal partial class AudioClient : IAudioClient
 
     private async Task RunRtcpAsync(int intervalMillis, CancellationToken cancellationToken)
     {
+        await Task.Yield();
         try
         {
             await _audioLogger.DebugAsync("RTCP Started").ConfigureAwait(false);
             while (!cancellationToken.IsCancellationRequested)
             {
                 if (LastRtpTimestamp == 0 || SentPackets == 0 || SentOctets == 0)
+                {
+                    await Task.Delay(intervalMillis, cancellationToken).ConfigureAwait(false);
                     continue;
+                }
 
                 _lastRtcpTime = Environment.TickCount;
 

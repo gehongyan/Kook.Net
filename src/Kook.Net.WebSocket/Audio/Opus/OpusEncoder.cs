@@ -57,7 +57,7 @@ internal unsafe class OpusEncoder : OpusConverter
 
     public unsafe int EncodeFrame(byte[] input, int inputOffset, byte[] output, int outputOffset)
     {
-        int result = 0;
+        int result;
         fixed (byte* inPtr = input)
         {
             fixed (byte* outPtr = output)
