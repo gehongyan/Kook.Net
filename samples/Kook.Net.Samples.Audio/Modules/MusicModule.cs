@@ -148,6 +148,21 @@ public class MusicModule : ModuleBase<SocketCommandContext>
         await ReplyTextAsync($"Added: {parsed}");
     }
 
+    [Command("addraw")]
+    [Alias("raw")]
+    [RequireContext(ContextType.Guild)]
+    public async Task AddRawAsync([Remainder] Uri url)
+    {
+        if (Context.Guild?.AudioClient?.ConnectionState != ConnectionState.Connected)
+        {
+            await ReplyTextAsync("I'm not connected to a voice channel.");
+            return;
+        }
+
+        _musicService.Enqueue(url);
+        await ReplyTextAsync($"Added: {url}");
+    }
+
     [Command("skip")]
     [RequireContext(ContextType.Guild)]
     public async Task SkipAsync()

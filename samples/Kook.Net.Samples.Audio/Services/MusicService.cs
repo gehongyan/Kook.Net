@@ -64,7 +64,7 @@ public class MusicService : IHostedService
         _ffmpeg = ffmpeg;
         if (ffmpeg is null) return;
         await using Stream output = ffmpeg.StandardOutput.BaseStream;
-        await using AudioOutStream kook = _audioClient.CreatePcmStream(AudioApplication.Voice);
+        await using AudioOutStream kook = _audioClient.CreatePcmStream(AudioApplication.Music);
         try
         {
             await output.CopyToAsync(kook, cancellationToken);
