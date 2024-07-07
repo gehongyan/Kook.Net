@@ -733,6 +733,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     IAudioClient? IGuild.AudioClient => null;
 
+    IReadOnlyDictionary<ulong, IAudioClient> IGuild.AudioClients => ImmutableDictionary<ulong, IAudioClient>.Empty;
+
     /// <inheritdoc />
     bool IGuild.Available => Available;
 

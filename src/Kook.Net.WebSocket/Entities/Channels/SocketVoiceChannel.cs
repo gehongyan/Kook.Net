@@ -1,6 +1,7 @@
 using Kook.Rest;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using Kook.API.Rest;
 using Kook.Audio;
 using Model = Kook.API.Channel;
 
@@ -10,8 +11,12 @@ namespace Kook.WebSocket;
 ///     Represents a WebSocket-based voice channel in a guild.
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudioChannel
+public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudioChannel, IDisposable
 {
+    private AudioClient? _audioClient;
+    private readonly SemaphoreSlim _audioLock;
+    private TaskCompletionSource<AudioClient?>? _audioConnectPromise;
+
     #region SocketVoiceChannel
 
     /// <inheritdoc />
@@ -31,6 +36,11 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
 
     /// <inheritdoc />
     public bool HasPassword { get; private set; }
+
+    /// <summary>
+    ///     Gets the <see cref="IAudioClient" /> associated with this guild.
+    /// </summary>
+    public IAudioClient? AudioClient => _audioClient;
 
     /// <inheritdoc />
     /// <seealso cref="SocketVoiceChannel.ConnectedUsers"/>
@@ -62,6 +72,7 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
         : base(kook, id, guild)
     {
         Type = ChannelType.Voice;
+        _audioLock = new SemaphoreSlim(1, 1);
     }
 
     internal static new SocketVoiceChannel Create(SocketGuild guild, ClientState state, Model model)
@@ -148,18 +159,138 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
 
     #endregion
 
-    private string DebuggerDisplay => $"{Name} ({Id}, Voice)";
-    internal new SocketVoiceChannel Clone() => (SocketVoiceChannel)MemberwiseClone();
+    private string DebuggerDisplay => $"{Name} ({Id}, Voice{(AudioClient is not null ? ", Connected" : string.Empty)})";
 
     #region IAudioChannel
 
     /// <inheritdoc />
-    public Task<IAudioClient?> ConnectAsync( /*bool selfDeaf = false, bool selfMute = false, */
-        bool external = false, bool disconnect = true, string? password = null) =>
-        Guild.ConnectAudioAsync(Id, /*selfDeaf, selfMute, */external, disconnect, password);
+    public async Task<IAudioClient?> ConnectAsync( /*bool selfDeaf = false, bool selfMute = false, */
+        bool external = false, bool disconnect = true, string? password = null)
+    {
+        TaskCompletionSource<AudioClient?> promise;
+        await _audioLock.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            if (disconnect || !external)
+                await DisconnectAudioInternalAsync().ConfigureAwait(false);
+            promise = new TaskCompletionSource<AudioClient?>();
+            _audioConnectPromise = promise;
+
+            if (external)
+            {
+                _ = promise.TrySetResultAsync(null);
+                // await UpdateSelfVoiceStateAsync(channelId, selfDeaf, selfMute).ConfigureAwait(false);
+                return null;
+            }
+
+            if (_audioClient is null)
+            {
+                AudioClient audioClient = new(this, Kook.GetAudioId(), password);
+                audioClient.Disconnected += async ex =>
+                {
+                    if (!promise.Task.IsCompleted)
+                    {
+                        try
+                        {
+                            audioClient.Dispose();
+                        }
+                        catch
+                        {
+                            // ignored
+                        }
+                        _audioClient = null;
+                        if (ex is not null)
+                            await promise.TrySetExceptionAsync(ex);
+                        else
+                            await promise.TrySetCanceledAsync();
+                    }
+                };
+                audioClient.Connected += () =>
+                {
+                    _ = promise.TrySetResultAsync(_audioClient);
+                    return Task.CompletedTask;
+                };
+                _audioClient = audioClient;
+            }
+
+            // await UpdateSelfVoiceStateAsync(channelId, selfDeaf, selfMute).ConfigureAwait(false);
+            await _audioClient.StartAsync().ConfigureAwait(false);
+        }
+        catch
+        {
+            await DisconnectAudioInternalAsync().ConfigureAwait(false);
+            throw;
+        }
+        finally
+        {
+            _audioLock.Release();
+        }
+
+        try
+        {
+            Task timeoutTask = Task.Delay(15000);
+            Task completedTask = await Task.WhenAny(promise.Task, timeoutTask).ConfigureAwait(false);
+            if (completedTask == timeoutTask)
+                throw new TimeoutException("The audio client failed to connect within 15 seconds.");
+            return await promise.Task.ConfigureAwait(false);
+        }
+        catch
+        {
+            await DisconnectAsync().ConfigureAwait(false);
+            throw;
+        }
+    }
+
+    private async Task UpdateSelfVoiceStateAsync(bool selfDeaf, bool selfMute)
+    {
+        SocketGuildUser? selfUser = Users
+            .SingleOrDefault(x => x.Id == Kook.CurrentUser?.Id);
+        if (selfUser is null)
+            return;
+        if (selfDeaf)
+            await selfUser.DeafenAsync();
+        else
+            await selfUser.UndeafenAsync();
+        if (selfMute)
+            await selfUser.MuteAsync();
+        else
+            await selfUser.UnmuteAsync();
+    }
 
     /// <inheritdoc />
-    public Task DisconnectAsync() => Guild.DisconnectAudioAsync();
+    public async Task DisconnectAsync()
+    {
+        await _audioLock.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            await DisconnectAudioInternalAsync().ConfigureAwait(false);
+        }
+        finally
+        {
+            _audioLock.Release();
+        }
+    }
+
+    private async Task DisconnectAudioInternalAsync()
+    {
+        _audioConnectPromise?.TrySetCanceledAsync(); //Cancel any previous audio connection
+        _audioConnectPromise = null;
+        if (_audioClient is not null)
+            await _audioClient.StopAsync().ConfigureAwait(false);
+        await Kook.ApiClient
+            .DisposeVoiceGatewayAsync(new DisposeVoiceGatewayParams { ChannelId = Id })
+            .ConfigureAwait(false);
+        _audioClient?.Dispose();
+        _audioClient = null;
+    }
+
+    /// <inheritdoc />
+    void IDisposable.Dispose()
+    {
+        DisconnectAsync().GetAwaiter().GetResult();
+        _audioLock?.Dispose();
+        _audioClient?.Dispose();
+    }
 
     #endregion
 

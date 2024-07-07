@@ -1,3 +1,6 @@
+using System.Collections.Concurrent;
+using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace Kook.WebSocket;
@@ -8,6 +11,8 @@ namespace Kook.WebSocket;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct SocketVoiceState : IVoiceState
 {
+    private readonly ConcurrentDictionary<ulong, SocketVoiceChannel> _voiceChannels;
+
     /// <summary>
     ///     Initializes a default <see cref="SocketVoiceState"/> with everything set to <c>null</c> or <c>false</c>.
     /// </summary>
@@ -18,25 +23,22 @@ public struct SocketVoiceState : IVoiceState
     /// </summary>
     public SocketVoiceState()
     {
-    }
-
-    /// <summary>
-    ///     Initializes a new <see cref="SocketVoiceState"/> with the specified voice channel.
-    /// </summary>
-    /// <param name="voiceChannel"> The voice channel that the user is currently in. </param>
-    /// <param name="isMuted"> Whether the user is muted. </param>
-    /// <param name="isDeafened"> Whether the user is deafened. </param>
-    public SocketVoiceState(SocketVoiceChannel? voiceChannel, bool? isMuted, bool? isDeafened)
-    {
-        VoiceChannel = voiceChannel;
-        IsMuted = isMuted;
-        IsDeafened = isDeafened;
+        _voiceChannels = [];
     }
 
     /// <summary>
     ///     Gets the voice channel that the user is currently in; or <c>null</c> if none.
     /// </summary>
-    public SocketVoiceChannel? VoiceChannel { get; private set; }
+    public SocketVoiceChannel? VoiceChannel => _voiceChannels.Values.FirstOrDefault();
+
+    /// <summary>
+    ///     Gets a collection of voice channels that the user is connected to.
+    /// </summary>
+    /// <remarks>
+    ///     Currently, KOOK only allows a user to be in one voice channel at a time,
+    ///     but allows a Bot user to be in multiple voice channels at a time.
+    /// </remarks>
+    public IReadOnlyCollection<SocketVoiceChannel> VoiceChannels => [.._voiceChannels.Values];
 
     /// <inheritdoc />
     public bool? IsMuted { get; private set; }
@@ -49,9 +51,19 @@ public struct SocketVoiceState : IVoiceState
     /// </summary>
     public LiveStreamStatus? LiveStreamStatus { get; private set; }
 
-    internal void Update(SocketVoiceChannel? voiceChannel)
+    internal void Join(SocketVoiceChannel voiceChannel)
     {
-        VoiceChannel = voiceChannel;
+        _voiceChannels[voiceChannel.Id] = voiceChannel;
+    }
+
+    internal void Leave(ulong id)
+    {
+        _voiceChannels.TryRemove(id, out _);
+    }
+
+    internal void ResetChannels()
+    {
+        _voiceChannels.Clear();
     }
 
     internal void Update(bool? isMuted, bool? isDeafened)
@@ -60,6 +72,13 @@ public struct SocketVoiceState : IVoiceState
             IsMuted = isMuted.Value;
         if (isDeafened.HasValue)
             IsDeafened = isDeafened.Value;
+    }
+
+    internal void Update(IEnumerable<SocketVoiceChannel> channel)
+    {
+        ResetChannels();
+        foreach (SocketVoiceChannel voiceChannel in channel)
+            _voiceChannels[voiceChannel.Id] = voiceChannel;
     }
 
     internal void Update(SocketVoiceChannel? voiceChannel, API.Gateway.LiveInfo model)

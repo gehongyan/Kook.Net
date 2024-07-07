@@ -1066,15 +1066,6 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<GetVoiceGatewayResponse> GetVoiceGatewayAsync(ulong channelId, RequestOptions? options = null)
-    {
-        Preconditions.NotEqual(channelId, 0, nameof(channelId));
-        options = RequestOptions.CreateOrClone(options);
-        return await SendAsync<GetVoiceGatewayResponse>(HttpMethod.Get,
-                () => $"gateway/voice?channel_id={channelId}", new BucketIds(), options: options)
-            .ConfigureAwait(false);
-    }
-
     public async Task<CreateVoiceGatewayResponse> CreateVoiceGatewayAsync(CreateVoiceGatewayParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));

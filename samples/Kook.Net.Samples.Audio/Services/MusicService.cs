@@ -1,6 +1,4 @@
-using System.Collections.Concurrent;
-using System.Diagnostics;
-using Kook.Audio;
+﻿using Kook.Audio;
 using Kook.WebSocket;
 using Microsoft.Extensions.Hosting;
 
@@ -8,70 +6,53 @@ namespace Kook.Net.Samples.Audio.Services;
 
 public class MusicService : IHostedService
 {
-    private readonly BlockingCollection<Uri> _musicQueue = [];
-    private ISocketMessageChannel? _sourceChannel;
-    private IAudioClient? _audioClient;
-    private Process? _ffmpeg;
-
-    public IEnumerable<Uri> Queue => _musicQueue;
-
-    public Uri? CurrentPlaying { get; private set; }
-
-    public void SetAudioClient(ISocketMessageChannel sourceChannel, IAudioClient audioClient)
-    {
-        _sourceChannel = sourceChannel;
-        _audioClient = audioClient;
-    }
-
-    public void Enqueue(Uri source)
-    {
-        _musicQueue.Add(source);
-    }
-
-    public void Skip()
-    {
-        _ffmpeg?.Kill();
-    }
-
-    public async Task StartAsync(CancellationToken cancellationToken)
-    {
-        while (_musicQueue.TryTake(out Uri? source, Timeout.Infinite, cancellationToken))
-            await PlayAsync(source, cancellationToken);
-    }
+    private readonly Dictionary<ulong, MusicClient> _musicClients = [];
 
     /// <inheritdoc />
-    public Task StopAsync(CancellationToken cancellationToken)
+    public Task StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+
+    /// <inheritdoc />
+    public async Task StopAsync(CancellationToken cancellationToken) =>
+        await Task.WhenAll(_musicClients.Select(x => x.Value.StopAsync()));
+
+    public async Task ConnectAsync(SocketVoiceChannel voiceChannel)
     {
-        _musicQueue.Dispose();
-        _ffmpeg?.Kill();
-        return Task.CompletedTask;
+        if (voiceChannel.AudioClient is not null)
+            throw new InvalidOperationException("I'm already connected to this voice channel.");
+        IAudioClient? audioClient = await voiceChannel.ConnectAsync();
+        if (audioClient is null)
+            throw new InvalidOperationException("Failed to connect to the voice channel.");
+        _musicClients[voiceChannel.Id] = new MusicClient(voiceChannel, audioClient);
     }
 
-    private async Task PlayAsync(Uri source, CancellationToken cancellationToken)
+    public async Task DisconnectAsync(SocketVoiceChannel voiceChannel)
     {
-        if (_audioClient?.ConnectionState != ConnectionState.Connected
-            || _sourceChannel is null)
-            return;
-        CurrentPlaying = source;
-        _ = _sourceChannel.SendTextAsync($"Now playing {source}");
-        using Process? ffmpeg = Process.Start(new ProcessStartInfo
-        {
-            FileName = "ffmpeg",
-            Arguments = $"""-hide_banner -loglevel panic -i "{source}" -ac 2 -f s16le -ar 48000 pipe:1""",
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-        });
-        _ffmpeg = ffmpeg;
-        if (ffmpeg is null) return;
-        await using Stream output = ffmpeg.StandardOutput.BaseStream;
-        await using AudioOutStream kook = _audioClient.CreatePcmStream(AudioApplication.Music);
-        try
-        {
-            await output.CopyToAsync(kook, cancellationToken);
-        }
-        finally
-        {
-            await kook.FlushAsync(cancellationToken);
-        }
+        if (_musicClients.Remove(voiceChannel.Id, out MusicClient? musicClient))
+            await musicClient.StopAsync();
+        await voiceChannel.DisconnectAsync();
+    }
+
+    public void Enqueue(SocketVoiceChannel voiceChannel, Uri uri) => Enqueue(voiceChannel, [uri]);
+
+    public void Enqueue(SocketVoiceChannel voiceChannel, IEnumerable<Uri> uris)
+    {
+        if (!_musicClients.TryGetValue(voiceChannel.Id, out MusicClient? musicClient))
+            throw new InvalidOperationException("I'm not connected to this voice channel.");
+        foreach (Uri uri in uris)
+            musicClient.Enqueue(uri);
+    }
+
+    public void Skip(SocketVoiceChannel voiceChannel)
+    {
+        if (!_musicClients.TryGetValue(voiceChannel.Id, out MusicClient? musicClient))
+            throw new InvalidOperationException("I'm not connected to this voice channel.");
+        musicClient.Skip();
+    }
+
+    public IEnumerable<Uri> GetQueue(SocketVoiceChannel voiceChannel)
+    {
+        if (!_musicClients.TryGetValue(voiceChannel.Id, out MusicClient? musicClient))
+            throw new InvalidOperationException("I'm not connected to this voice channel.");
+        return musicClient.Queue;
     }
 }

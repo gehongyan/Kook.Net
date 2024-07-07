@@ -72,7 +72,13 @@ public interface IGuild : IEntity<ulong>
     /// <returns>
     ///     An <see cref="IAudioClient"/> currently associated with this guild.
     /// </returns>
+    [Obsolete("Use AudioClients instead.")]
     IAudioClient? AudioClient { get; }
+
+    /// <summary>
+    ///     Gets a collection of all audio clients associated with this guild.
+    /// </summary>
+    IReadOnlyDictionary<ulong, IAudioClient> AudioClients { get; }
 
     /// <summary>
     ///     Gets whether this guild is public.
