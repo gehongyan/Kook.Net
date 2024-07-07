@@ -21,7 +21,7 @@ public class MusicClient
     {
         _voiceChannel = voiceChannel;
         _audioClient = audioClient;
-        _ = Task.Run(StartAsync);
+        _ = Task.Factory.StartNew(StartAsync, TaskCreationOptions.LongRunning);
     }
 
     public void Enqueue(Uri source)
@@ -52,7 +52,7 @@ public class MusicClient
         await Task.Yield();
         try
         {
-            while (_musicQueue.TryTake(out Uri? source, Timeout.Infinite, _cancellationToken.Token))
+            foreach (Uri source in _musicQueue.GetConsumingEnumerable(_cancellationToken.Token))
                 await PlayAsync(source, _cancellationToken.Token);
         }
         catch (Exception e)
