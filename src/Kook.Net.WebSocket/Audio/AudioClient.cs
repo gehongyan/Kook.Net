@@ -8,7 +8,9 @@ namespace Kook.Audio;
 internal partial class AudioClient : IAudioClient
 {
     private const int ConnectionTimeoutMs = 30000; // 30 seconds
-    public static readonly DateTimeOffset PrimeEpoch = new(1900, 1, 1, 0, 0, 0, TimeSpan.Zero);
+    private static readonly DateTimeOffset PrimeEpoch = new(1900, 1, 1, 0, 0, 0, TimeSpan.Zero);
+    private const byte DefaultPayloadType = 0x6F;
+    private const int DefaultBitrate = 96 * 1024;
 
     private readonly Random _ssrcRandom;
 
@@ -73,8 +75,8 @@ internal partial class AudioClient : IAudioClient
     {
         await _audioLogger.DebugAsync("Connecting ApiClient").ConfigureAwait(false);
         _ssrc = (uint)_ssrcRandom.Next(0, int.MaxValue);
-        _payloadType = 0x6F;
-        _bitrate = 96 * 1024;
+        _payloadType = DefaultPayloadType;
+        _bitrate = DefaultBitrate;
         CreateVoiceGatewayParams args = new()
         {
             ChannelId = ChannelId,
@@ -91,7 +93,7 @@ internal partial class AudioClient : IAudioClient
         ApiClient.SetRtcpUdpEndpoint(voiceGatewayResponse.Ip, voiceGatewayResponse.RtcpPort);
         _rtcpTask = RunRtcpAsync(KookSocketConfig.RtcpIntervalMilliseconds, Connection.CancellationToken);
         await ApiClient.ConnectAsync().ConfigureAwait(false);
-        await _audioLogger.DebugAsync($"Listening on port {ApiClient.UdpPort}, {ApiClient.RtcpUdpPort}").ConfigureAwait(false);
+        await _audioLogger.DebugAsync($"Listening on port RTP {ApiClient.UdpPort} and RTCP {ApiClient.RtcpUdpPort}").ConfigureAwait(false);
 
         await Connection.CompleteAsync();
     }
