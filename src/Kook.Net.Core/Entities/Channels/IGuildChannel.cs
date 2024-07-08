@@ -62,7 +62,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     一个表示异步获取操作的任务，任务的结果为此频道的创建者；如果没有找到则为 <c>null</c>。
+    ///     一个表示异步获取操作的任务。任务的结果为此频道的创建者；如果没有找到则为 <c>null</c>。
     /// </returns>
     Task<IUser?> GetCreatorAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
@@ -175,7 +175,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     一个表示异步获取操作的任务，任务的结果为此频道中的服务器用户；如果没有找到则为 <c>null</c>。
+    ///     一个表示异步获取操作的任务。任务的结果为此频道中的服务器用户；如果没有找到则为 <c>null</c>。
     /// </returns>
     new Task<IGuildUser?> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 

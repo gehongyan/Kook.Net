@@ -1,7 +1,6 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the slow-mode ratelimit in seconds for an <see cref="ITextChannel"/>.
 ///     表示 <see cref="T:Kook.ITextChannel"/> 的慢速模式延迟时间秒数。
 /// </summary>
 public enum SlowModeInterval

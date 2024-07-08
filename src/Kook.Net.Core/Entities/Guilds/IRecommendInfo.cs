@@ -1,95 +1,68 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic recommendation information.
+///     获取一个通用的推荐信息。
 /// </summary>
 public interface IRecommendInfo
 {
     /// <summary>
-    ///     Gets the ID of the recommended guild.
+    ///     获取推荐服务器的 ID。
     /// </summary>
-    /// <returns>
-    ///     A <c>ulong</c> representing the ID of the recommended guild.
-    /// </returns>
     ulong GuildId { get; }
 
     /// <summary>
-    ///     Gets the open ID for the recommended guild.
+    ///     获取推荐服务器的公开 ID。
     /// </summary>
     uint? OpenId { get; }
 
     /// <summary>
-    ///     Gets the default channel ID of the recommended guild.
+    ///     获取推荐服务器的默认文字频道 ID。
     /// </summary>
-    /// <returns>
-    ///     A <c>ulong</c> representing the default channel ID of the recommended guild.
-    /// </returns>
     ulong DefaultChannelId { get; }
 
     /// <summary>
-    ///     Gets the name of the recommended guild.
+    ///     获取推荐服务器的名称。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the name of the recommended guild.
-    /// </returns>
     string Name { get; }
 
     /// <summary>
-    ///     Gets the icon URL of the recommended guild.
+    ///     获取推荐服务器的图标 URL。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the icon URL of the recommended guild.
-    /// </returns>
     string Icon { get; }
 
     /// <summary>
-    ///     Gets the banner URL of the recommended guild.
+    ///     获取推荐服务器的横幅图像的 URL。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the banner URL of the recommended guild.
-    /// </returns>
     string Banner { get; }
 
     /// <summary>
-    ///     Gets the description of the recommended guild.
+    ///     获取推荐服务器的介绍。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the description of the recommended guild.
-    /// </returns>
     string Description { get; }
 
     /// <summary>
-    ///     Gets the status of the recommended guild.
+    ///     获取推荐服务器的状态。
     /// </summary>
-    /// <returns>
-    ///     A <c>int</c> representing the status of the recommended guild.
-    /// </returns>
     int Status { get; }
 
     /// <summary>
-    ///     Gets the tag of the recommended guild.
+    ///     获取推荐服务器的标签。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the tag of the recommended guild.
-    /// </returns>
     string Tag { get; }
 
     /// <summary>
-    ///     Gets the features of the recommended guild.
+    ///     获取推荐服务器的特性。
     /// </summary>
     GuildFeatures Features { get; }
 
     /// <summary>
-    ///     Gets the certifications of the recommended guild.
+    ///     获取推荐服务器的所有认证。
     /// </summary>
     IReadOnlyCollection<GuildCertification>? Certifications { get; }
 
     /// <summary>
-    ///     Gets the boost level of the recommended guild.
+    ///     获取推荐服务器的服务器助力等级。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="BoostLevel"/> representing the boost level of the recommended guild.
-    /// </returns>
     BoostLevel BoostLevel { get; }
 
     /// <summary>
@@ -98,11 +71,8 @@ public interface IRecommendInfo
     string CustomId { get; }
 
     /// <summary>
-    ///     Gets whether the recommended guild is an official partner.
+    ///     获取推荐服务器是否是官方合作伙伴。
     /// </summary>
-    /// <returns>
-    ///     A <c>bool</c> representing whether the recommended guild is an official partner.
-    /// </returns>
     bool IsOfficialPartner { get; }
 
     /// <summary>
@@ -116,10 +86,7 @@ public interface IRecommendInfo
     int AuditStatus { get; }
 
     /// <summary>
-    ///     Gets the number of days need to be waited before the recommendation information can be modified again.
+    ///     获取推荐服务器要等待多少天才能再次修改推荐信息。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="T:System.Int32"/> representing the number of days need to be waited before the recommendation information can be modified again.
-    /// </returns>
     int DaysBeforeModify { get; }
 }

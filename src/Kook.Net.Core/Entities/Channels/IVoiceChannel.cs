@@ -1,12 +1,12 @@
 namespace Kook;
 
 /// <summary>
-///     表示服务器中的一个通用语音频道。
+///     表示服务器中的一个通用的具有语音聊天能力的频道。
 /// </summary>
 public interface IVoiceChannel : ITextChannel, IAudioChannel
 {
     /// <summary>
-    ///     获取要求语音频道中的客户端使用的语音质量。
+    ///     获取要求此频道中的客户端使用的语音质量。
     /// </summary>
     VoiceQuality? VoiceQuality { get; }
 
@@ -24,9 +24,9 @@ public interface IVoiceChannel : ITextChannel, IAudioChannel
     bool HasPassword { get; }
 
     /// <summary>
-    ///     修改此语音频道。
+    ///     修改此频道有关语音聊天能力的属性。
     /// </summary>
-    /// <param name="func"> 一个包含修改语音频道属性的委托。 </param>
+    /// <param name="func"> 一个包含修改有关语音聊天能力的属性的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     一个表示异步修改操作的任务。
@@ -35,12 +35,12 @@ public interface IVoiceChannel : ITextChannel, IAudioChannel
     Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions? options = null);
 
     /// <summary>
-    ///     获取连接到此语音频道的用户。
+    ///     获取连接到此频道的用户。
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含连接到此语音频道的所有服务器用户。
+    ///     一个表示异步获取操作的任务。任务的结果包含连接到此频道的所有服务器用户。
     /// </returns>
     Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 }

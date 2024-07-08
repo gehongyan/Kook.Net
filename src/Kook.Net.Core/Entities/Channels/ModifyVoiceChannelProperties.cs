@@ -1,9 +1,9 @@
 namespace Kook;
 
 /// <summary>
-///     Provides properties that are used to modify an <see cref="IVoiceChannel"/> with the specified properties.
+///     提供用于修改 <see cref="T:Kook.IVoiceChannel"/> 的属性。
 /// </summary>
-/// <seealso cref="IVoiceChannel.ModifyAsync(System.Action{ModifyVoiceChannelProperties}, RequestOptions)"/>
+/// <seealso cref="M:Kook.IVoiceChannel.ModifyAsync(System.Action{Kook.ModifyVoiceChannelProperties},Kook.RequestOptions)"/>
 public class ModifyVoiceChannelProperties : ModifyTextChannelProperties
 {
     /// <summary>
@@ -49,41 +49,8 @@ public class ModifyVoiceChannelProperties : ModifyTextChannelProperties
     ///     获取或设置要设置到此频道的语音服务器区域。
     /// </summary>
     /// <remarks>
-    ///     语音服务器区域是指语音服务器所在的地理位置，各个语音服务器区域由一个唯一的字符串表示。 <br />
-    ///     可用语音服务器区域参考列表：
-    ///     <list type="table">
-    ///         <listheader>
-    ///             <term> 区域 ID </term>
-    ///             <description> 区域名称 </description>
-    ///         </listheader>
-    ///         <item>
-    ///             <term> <c>chengdu</c> </term>
-    ///             <description> 西南(成都) </description>
-    ///         </item>
-    ///         <item>
-    ///             <term> <c>beijing</c> </term>
-    ///             <description> 华北(北京) </description>
-    ///         </item>
-    ///         <item>
-    ///             <term> <c>shanghai</c> </term>
-    ///             <description> 华东(上海) </description>
-    ///         </item>
-    ///         <item>
-    ///             <term> <c>shenzhen</c> </term>
-    ///             <description> 华南(深圳) </description>
-    ///         </item>
-    ///         <item>
-    ///             <term> <c>hk</c> </term>
-    ///             <description> 亚太(香港) </description>
-    ///         </item>
-    ///         <item>
-    ///             <term> <c>vnga</c> </term>
-    ///             <description> 国际专线(助力专享) </description>
-    ///         </item>
-    ///     </list>
-    ///     此列表仅供参考。要获取最新可用服务器区域列表，可在 Kook.Net.Experimental 实验性 API 实现包中，在
-    ///     <see cref="T:Kook.Rest.BaseKookClient"/> 上调用 <c>GetVoiceRegionsAsync</c> 方法。 <br />
     ///     如果此值为 <c>null</c>，则语音服务器区域不会被修改。
     /// </remarks>
+    /// <seealso cref="P:Kook.IGuild.Region"/>
     public string? VoiceRegion { get; set; }
 }

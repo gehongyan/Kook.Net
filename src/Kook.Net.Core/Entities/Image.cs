@@ -1,7 +1,7 @@
 namespace Kook;
 
 /// <summary>
-///     An image that will be uploaded to Kook.
+///     表一个要上传到 KOOK 的图像。
 /// </summary>
 public struct Image : IDisposable
 {

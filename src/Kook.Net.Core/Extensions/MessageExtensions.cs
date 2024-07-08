@@ -1,16 +1,16 @@
 namespace Kook;
 
 /// <summary>
-///     Provides extension methods for <see cref="IMessage" />.
+///     提供用于各种消息实体的扩展方法。
 /// </summary>
 public static class MessageExtensions
 {
     /// <summary>
-    ///     Gets a URL that jumps to the message.
+    ///     获取一个跳转到消息的 URL。
     /// </summary>
-    /// <param name="msg">The message to jump to.</param>
+    /// <param name="msg"> 要获取跳转 URL 的消息。 </param>
     /// <returns>
-    ///     A string that contains a URL for jumping to the message in chat.
+    ///     一个包含用于在聊天中跳转到消息的 URL 的字符串。
     /// </returns>
     public static string GetJumpUrl(this IMessage msg)
     {
@@ -24,26 +24,19 @@ public static class MessageExtensions
     }
 
     /// <summary>
-    ///     Add multiple reactions to a message.
+    ///     向消息添加多个回应。
     /// </summary>
     /// <remarks>
-    ///     This method does not bulk add reactions! It will send a request for each reaction included.
+    ///     此方法会对每个要添加的回应分别发送请求。
     /// </remarks>
-    /// <example>
-    /// <code language="cs">
-    /// IEmote a = new Emoji("🅰");
-    /// IEmote b = new Emoji("🅱");
-    /// await msg.AddReactionsAsync([a, b]);
-    /// </code>
-    /// </example>
-    /// <param name="msg">The message to add reactions to.</param>
-    /// <param name="reactions">An array of reactions to add to the message.</param>
+    /// <param name="msg"> 要添加回应的消息。 </param>
+    /// <param name="reactions"> 要用于向此消息添加反应的表情符号的集合。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous operation for adding a reaction to this message.
+    ///     一个表示异步添加操作的任务。
     /// </returns>
-    /// <seealso cref="IMessage.AddReactionAsync(IEmote, RequestOptions)"/>
-    /// <seealso cref="IEmote"/>
+    /// <seealso cref="M:Kook.IMessage.AddReactionAsync(Kook.IEmote,Kook.RequestOptions)"/>
+    /// <seealso cref="T:Kook.IEmote"/>
     public static async Task AddReactionsAsync(this IUserMessage msg, IEnumerable<IEmote> reactions,
         RequestOptions? options = null)
     {
@@ -52,25 +45,20 @@ public static class MessageExtensions
     }
 
     /// <summary>
-    ///     Remove multiple reactions from a message.
+    ///     移除消息上的多个回应。
     /// </summary>
     /// <remarks>
-    ///     This method does not bulk remove reactions! It will send a request for each reaction included.
+    ///     此方法会对每个要移除的回应分别发送请求。
     /// </remarks>
-    /// <example>
-    /// <code language="cs">
-    /// await msg.RemoveReactionsAsync(currentUser, [A, B]);
-    /// </code>
-    /// </example>
-    /// <param name="msg">The message to remove reactions from.</param>
-    /// <param name="user">The user who removed the reaction.</param>
-    /// <param name="reactions">An array of reactions to remove from the message.</param>
+    /// <param name="msg"> 要添加回应的消息。 </param>
+    /// <param name="user"> 要删除其反应的用户。 </param>
+    /// <param name="reactions"> 要从此消息移除的反应的表情符号的集合。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous operation for removing a reaction to this message.
+    ///     一个表示异步添加操作的任务。
     /// </returns>
-    /// <seealso cref="IMessage.RemoveReactionAsync(IEmote, IUser, RequestOptions)"/>
-    /// <seealso cref="IEmote"/>
+    /// <seealso cref="M:Kook.IMessage.RemoveReactionAsync(Kook.IEmote,Kook.IUser,Kook.RequestOptions)"/>
+    /// <seealso cref="T:Kook.IEmote"/>
     public static async Task RemoveReactionsAsync(this IUserMessage msg, IUser user, IEnumerable<IEmote> reactions,
         RequestOptions? options = null)
     {
@@ -79,14 +67,14 @@ public static class MessageExtensions
     }
 
     /// <summary>
-    ///     Sends an inline reply of file that references a message.
+    ///     向消息所属的频道回复文件消息。
     /// </summary>
-    /// <param name="message">The message that is being replied on.</param>
+    /// <param name="message"> 要回复的消息。 </param>
     /// <param name="path"> 文件的路径。 </param>
     /// <param name="filename"> 文件名。 </param>
     /// <param name="type"> 文件的媒体类型。 </param>
-    /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
-    /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
+    /// <param name="isQuote"> 是否在回复消息时引用被回复的消息。 </param>
+    /// <param name="isEphemeral"> 是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
         string path, string? filename = null, AttachmentType type = AttachmentType.File, bool isQuote = false,
@@ -98,14 +86,14 @@ public static class MessageExtensions
             .ConfigureAwait(false);
 
     /// <summary>
-    ///     Sends an inline reply of file that references a message.
+    ///     向消息所属的频道回复文件消息。
     /// </summary>
-    /// <param name="message">The message that is being replied on.</param>
+    /// <param name="message"> 要回复的消息。 </param>
     /// <param name="stream"> 文件的流。 </param>
     /// <param name="filename"> 文件名。 </param>
     /// <param name="type"> 文件的媒体类型。 </param>
-    /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
-    /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
+    /// <param name="isQuote"> 是否在回复消息时引用被回复的消息。 </param>
+    /// <param name="isEphemeral"> 是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
         Stream stream, string filename, AttachmentType type = AttachmentType.File, bool isQuote = false,
@@ -117,12 +105,12 @@ public static class MessageExtensions
             .ConfigureAwait(false);
 
     /// <summary>
-    ///     Sends an inline reply of file that references a message.
+    ///     向消息所属的频道回复文件消息。
     /// </summary>
-    /// <param name="message">The message that is being replied on.</param>
+    /// <param name="message"> 要回复的消息。 </param>
     /// <param name="attachment"> 文件的附件信息。 </param>
-    /// <param name="isQuote"> <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>. </param>
-    /// <param name="isEphemeral"> <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>. </param>
+    /// <param name="isQuote"> 是否在回复消息时引用被回复的消息。 </param>
+    /// <param name="isEphemeral"> 是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
         FileAttachment attachment, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
@@ -133,12 +121,12 @@ public static class MessageExtensions
             .ConfigureAwait(false);
 
     /// <summary>
-    ///     Sends an inline reply of text that references a message.
+    ///     向消息所属的频道回复文字消息。
     /// </summary>
-    /// <param name="message">The message that is being replied on.</param>
+    /// <param name="message"> 要回复的消息。 </param>
     /// <param name="content">Contents of the message.</param>
-    /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
-    /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
+    /// <param name="isQuote">是否在回复消息时引用被回复的消息。</param>
+    /// <param name="isEphemeral">是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(this IUserMessage message,
         string content, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
@@ -149,12 +137,12 @@ public static class MessageExtensions
             .ConfigureAwait(false);
 
     /// <summary>
-    ///     Sends a card message to the source channel.
+    ///     向消息所属的频道回复卡片消息。
     /// </summary>
-    /// <param name="message">The message that is being replied on.</param>
+    /// <param name="message"> 要回复的消息。 </param>
     /// <param name="cards"> 要发送的卡片。 </param>
-    /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
-    /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
+    /// <param name="isQuote">是否在回复消息时引用被回复的消息。</param>
+    /// <param name="isEphemeral">是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(this IUserMessage message,
         IEnumerable<ICard> cards, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
@@ -165,12 +153,12 @@ public static class MessageExtensions
             .ConfigureAwait(false);
 
     /// <summary>
-    ///     Sends a card message to the source channel.
+    ///     向消息所属的频道回复卡片消息。
     /// </summary>
-    /// <param name="message">The message that is being replied on.</param>
+    /// <param name="message"> 要回复的消息。 </param>
     /// <param name="card"> 要发送的卡片。 </param>
-    /// <param name="isQuote"><c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.</param>
-    /// <param name="isEphemeral"><c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.</param>
+    /// <param name="isQuote">是否在回复消息时引用被回复的消息。</param>
+    /// <param name="isEphemeral">是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardAsync(this IUserMessage message,
         ICard card, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
@@ -181,10 +169,10 @@ public static class MessageExtensions
             .ConfigureAwait(false);
 
     /// <summary>
-    ///     Gets whether the message may be a text image mixed message.
+    ///     获取此消息是否可能是图文混排消息。
     /// </summary>
-    /// <param name="msg"> The message to check against. </param>
-    /// <returns> <c>true</c> if the message may be a text image mixed message; otherwise, <c>false</c>. </returns>
+    /// <param name="msg"> 要判断的消息。 </param>
+    /// <returns> 如果此消息可能是图文混排消息，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool MaybeTextImageMixedMessage(this IUserMessage msg)
     {
         if (msg.Cards.Count != 1) return false;

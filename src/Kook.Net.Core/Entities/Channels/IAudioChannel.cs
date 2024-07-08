@@ -20,6 +20,7 @@ public interface IAudioChannel : IChannel
     ///         对于语音频道区域设置功能发布之前创建的语音频道，该属性可能为空。
     ///     </note>
     /// </remarks>
+    /// <seealso cref="P:Kook.IGuild.Region"/>
     string? VoiceRegion { get; }
 
     /// <summary>
@@ -35,7 +36,7 @@ public interface IAudioChannel : IChannel
     /// <param name="external"> 指定语音客户端是否是由外部管理的。当设置为 <see langword="true"/> 时，当前方法不会尝试连接到语音频道。 </param>
     /// <param name="disconnect"> 指定客户端在连接到新的语音频道之前是否应调用断开连接。 </param>
     /// <returns>
-    ///     一个表示音频连接操作的异步任务，任务的结果是一个负责音频连接的 <see cref="IAudioClient"/> 实例；如果
+    ///     一个表示音频连接操作的异步任务。任务的结果是一个负责音频连接的 <see cref="IAudioClient"/> 实例；如果
     ///     <paramref name="external"/> 为 <see langword="true"/>，则会返回 <see langword="null"/>。
     /// </returns>
     Task<IAudioClient?> ConnectAsync( /*bool selfDeaf = false, bool selfMute = false, */

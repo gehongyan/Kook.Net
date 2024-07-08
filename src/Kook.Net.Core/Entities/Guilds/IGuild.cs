@@ -4,200 +4,178 @@ using Kook.Audio;
 namespace Kook;
 
 /// <summary>
-///     Represents a generic guild/server.
+///     表示一个通用的服务器。
 /// </summary>
 public interface IGuild : IEntity<ulong>
 {
     #region General
 
     /// <summary>
-    ///     Gets the name of this guild.
+    ///     获取此服务器的名称。
     /// </summary>
-    /// <returns>
-    ///     A string containing the name of this guild.
-    /// </returns>
     string Name { get; }
 
     /// <summary>
-    ///     Gets the topic for the guild.
+    ///     获取此服务器的介绍。
     /// </summary>
-    /// <returns>
-    ///     The description for the guild; <c>null</c> if none is set.
-    /// </returns>
     string Topic { get; }
 
     /// <summary>
-    ///     Gets the ID of the user that owns this guild.
+    ///     获取此服务器所有者的用户 ID。
     /// </summary>
-    /// <returns>
-    ///     A <c>ulong</c> representing the identifier of the user that owns this guild.
-    /// </returns>
     ulong OwnerId { get; }
 
     /// <summary>
-    ///     Gets the URL of this guild's icon.
+    ///     获取此服务器图标的 URL。
     /// </summary>
-    /// <returns>
-    ///     A URL pointing to the guild's icon; <c>null</c> if none is set.
-    /// </returns>
     string Icon { get; }
 
     /// <summary>
-    ///     Gets the URL of this guild's banner image.
+    ///     获取此服务器横幅图像的 URL。
     /// </summary>
-    /// <returns>
-    ///     A URL pointing to the guild's banner image; <c>null</c> if none is set.
-    /// </returns>
     string Banner { get; }
 
     /// <summary>
-    ///     Gets the default notification type for this guild.
+    ///     获取此服务器的默认通知类型。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="NotifyType"/> representing the default notification type for this guild.
-    /// </returns>
     NotifyType NotifyType { get; }
 
     /// <summary>
-    ///     Gets the default voice region for this guild.
+    ///     获取此服务器的默认语音服务器区域。
     /// </summary>
-    /// <returns>
-    ///     A string representing the default voice region for this guild.
-    /// </returns>
+    /// <remarks>
+    ///     语音服务器区域是指语音服务器所在的地理位置，各个语音服务器区域由一个唯一的字符串表示。 <br />
+    ///     可用语音服务器区域参考列表：
+    ///     <list type="table">
+    ///         <listheader>
+    ///             <term> 区域 ID </term>
+    ///             <description> 区域名称 </description>
+    ///         </listheader>
+    ///         <item>
+    ///             <term> <c>chengdu</c> </term>
+    ///             <description> 西南(成都) </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> <c>beijing</c> </term>
+    ///             <description> 华北(北京) </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> <c>shanghai</c> </term>
+    ///             <description> 华东(上海) </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> <c>shenzhen</c> </term>
+    ///             <description> 华南(深圳) </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> <c>hk</c> </term>
+    ///             <description> 亚太(香港) </description>
+    ///         </item>
+    ///         <item>
+    ///             <term> <c>vnga</c> </term>
+    ///             <description> 国际专线(助力专享) </description>
+    ///         </item>
+    ///     </list>
+    ///     此列表仅供参考。要获取最新可用服务器区域列表，可在安装 Kook.Net.Experimental 实验性 API 实现包后，在
+    ///     <c>BaseKookClient</c> 上调用 <c>GetVoiceRegionsAsync</c> 方法。
+    /// </remarks>
     string Region { get; }
 
     /// <summary>
-    ///     Gets the <see cref="IAudioClient"/> currently associated with this guild.
+    ///     获取当前与此服务器关联的语音客户端。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IAudioClient"/> currently associated with this guild.
-    /// </returns>
     IAudioClient? AudioClient { get; }
 
     /// <summary>
-    ///     Gets whether this guild is public.
+    ///     获取此服务器是否为公开服务器。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if this guild is public; <c>false</c> otherwise.
-    /// </returns>
     bool IsOpenEnabled { get; }
 
     /// <summary>
-    ///     Gets the open ID for this guild.
+    ///     获取此服务器的公开 ID。
     /// </summary>
-    /// <returns>
-    ///     A <c>uint</c> representing the open ID for this guild;
-    ///     this property should be <c>null</c> if <see cref="IsOpenEnabled"/> is <c>false</c>.
-    /// </returns>
+    /// <remarks>
+    ///     当 <see cref="IsOpenEnabled"/> 为 <c>true</c> 时，此属性应该返回一个有效的公开服务器 ID；
+    ///     如果 <see cref="IsOpenEnabled"/> 为 <c>false</c>，则此属性应该返回 <c>null</c>。
+    /// </remarks>
     uint? OpenId { get; }
 
     /// <summary>
-    ///     Gets the default channel ID for this guild.
+    ///     获取默认文字频道的 ID。
     /// </summary>
-    /// <returns>
-    ///     A <c>ulong</c> representing the default channel ID for this guild.
-    /// </returns>
     ulong? DefaultChannelId { get; }
 
     /// <summary>
-    ///     Gets the welcome channel ID for this guild.
+    ///     获取欢迎通知频道的 ID。
     /// </summary>
-    /// <returns>
-    ///     A <c>ulong</c> representing the welcome channel ID for this guild.
-    /// </returns>
     ulong? WelcomeChannelId { get; }
 
     /// <summary>
-    ///     Determines if this guild is currently connected and ready to be used.
+    ///     确定此服务器实体是否已准备就绪以供用户代码访问。
     /// </summary>
     /// <remarks>
     ///     <note>
-    ///         This property only applies to a WebSocket-based client.
+    ///         此属性仅对基于网关连接的客户端有意义。
     ///     </note>
-    ///     This boolean is used to determine if the guild is currently connected to the WebSocket and is ready to be used/accessed.
+    ///     此属性为 <c>true</c> 表示，此服务器实体已完整缓存基础数据，并与网关同步。 <br />
+    ///     缓存基础数据包括服务器基本信息、频道、角色、频道权限覆盖、当前用户在服务器内的昵称。
     /// </remarks>
-    /// <returns>
-    ///     <c>true</c> if this guild is currently connected and ready to be used; otherwise <c>false</c>.
-    /// </returns>
     bool Available { get; }
 
     /// <summary>
-    ///     Gets the built-in role containing all users in this guild.
+    ///     获取此服务器中的 <c>@everyone</c> 全体成员角色。
     /// </summary>
-    /// <returns>
-    ///     A role object that represents an <c>@everyone</c> role in this guild.
-    /// </returns>
     IRole EveryoneRole { get; }
 
     /// <summary>
-    ///     Gets the features of this guild.
+    ///     获取此服务器的所有特性。
     /// </summary>
-    /// <returns>
-    ///     An array of string representing the features of this guild.
-    /// </returns>
     GuildFeatures Features { get; }
 
     /// <summary>
-    ///     Gets the number of boost subscribers of this guild.
+    ///     获取此服务器的服务器助力包的数量。
     /// </summary>
-    /// <returns>
-    ///     The number of boost subscribers of this guild.
-    /// </returns>
     int BoostSubscriptionCount { get; }
 
     /// <summary>
-    ///     Gets the number of boost subscribers who activates buffer of this guild.
+    ///     获取此服务器来自拥有 BUFF 会员的用的的服务器助力包的数量。
     /// </summary>
-    /// <returns>
-    ///     The number of boost subscribers who activates buffer of this guild.
-    /// </returns>
     int BufferBoostSubscriptionCount { get; }
 
     /// <summary>
-    ///     Gets the max bitrate for voice channels in this guild.
+    ///     获取此服务器中语音频道的最高比特率。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="T:System.Int32"/> representing the maximum bitrate value allowed by Kook in this guild.
-    /// </returns>
+    /// <remarks>
+    ///     此限制取决于服务器的助力状态。
+    /// </remarks>
     int MaxBitrate { get; }
 
     /// <summary>
-    ///     Gets the upload limit in bytes for this guild. This number is dependent on the guild's boost status.
+    ///     获取此服务器的文件上传限制，以字节为单位。
     /// </summary>
+    /// <remarks>
+    ///     此限制取决于服务器的助力状态。
+    /// </remarks>
     ulong MaxUploadLimit { get; }
 
     /// <summary>
-    ///     Gets the level of guild boosting in this guild.
+    ///     获取此服务器的服务器助力等级。
     /// </summary>
-    /// <returns>
-    ///     The level of guild boosting in this guild.
-    /// </returns>
     BoostLevel BoostLevel { get; }
 
     /// <summary>
-    ///     Gets a collection of all custom emotes for this guild.
+    ///     获取此服务器的所有自定义表情。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of all custom emotes for this guild.
-    /// </returns>
-    /// <seealso cref="GetEmotesAsync"/>
     IReadOnlyCollection<GuildEmote> Emotes { get; }
 
     /// <summary>
-    ///     Gets a collection of all roles in this guild.
+    ///     获取此服务器的所有角色。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of roles found within this guild.
-    /// </returns>
     IReadOnlyCollection<IRole> Roles { get; }
 
     /// <summary>
-    ///     Gets the recommendation information for this guild.
+    ///     获取此服务器的推荐信息。
     /// </summary>
-    /// <returns>
-    ///     A recommendation object that represents the recommendation information for this guild;
-    ///     <c>null</c> if the guild does not have a recommendation.
-    /// </returns>
     IRecommendInfo? RecommendInfo { get; }
 
     #endregion
@@ -205,38 +183,29 @@ public interface IGuild : IEntity<ulong>
     #region Guilds
 
     /// <summary>
-    ///     Leaves this guild.
+    ///     退出此服务器。
     /// </summary>
-    /// <remarks>
-    ///     This method will make the currently logged-in user leave the guild.
-    ///     <note>
-    ///         If the user is the owner of this guild, use <see cref="IDeletable.DeleteAsync"/> instead.
-    ///     </note>
-    /// </remarks>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous leave operation.
+    ///     一个表示异步退出操作的任务。
     /// </returns>
     Task LeaveAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets all subscriptions for this guild.
+    ///     所有此服务器的所有服务器助力包。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous retrieval operation. The task result contains
-    ///     a collection of <see cref="BoostSubscriptionMetadata"/>, each representing the subscriptions information.
+    ///     一个表示异步获取操作的任务。任务的结果是所有为此服务器助力的用户及所应用的服务器助力包。
     /// </returns>
     Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetBoostSubscriptionsAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets subscriptions which are not expired for this guild.
+    ///     获取此服务器所有生效中的服务器助力包。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous retrieval operation. The task result contains
-    ///     a collection of <see cref="BoostSubscriptionMetadata"/> which are not expired,
-    ///     each representing the subscriptions information.
+    ///     一个表示异步获取操作的任务。任务的结果是所有为此服务器助力的用户及所应用的生效中的服务器助力包。
     /// </returns>
     Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetActiveBoostSubscriptionsAsync(RequestOptions? options = null);
 
@@ -245,81 +214,77 @@ public interface IGuild : IEntity<ulong>
     #region Guild Bans
 
     /// <summary>
-    ///     Gets a collection of all users banned in this guild.
+    ///     获取此服务器的所有封禁信息。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
-    ///     ban objects that this guild currently possesses, with each object containing the user banned and reason
-    ///     behind the ban.
+    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的所有封禁信息。
     /// </returns>
     Task<IReadOnlyCollection<IBan>> GetBansAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a ban object for a banned user.
+    ///     获取指定用户在此服务器内当前的封禁信息。
     /// </summary>
-    /// <param name="user">The banned user.</param>
+    /// <param name="user"> 要获取封禁信息的用户。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
-    ///     contains the user information and the reason for the ban; <c>null</c> if the ban entry cannot be found.
+    ///     一个表示异步获取操作的任务。任务的结果包含该用户在此服务器内的封禁信息；如果该用户当前未被此服务器封禁，则返回 <c>null</c>。
     /// </returns>
     Task<IBan?> GetBanAsync(IUser user, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a ban object for a banned user.
+    ///     获取指定用户在此服务器内的封禁信息。
     /// </summary>
-    /// <param name="userId">The identifier for the banned user.</param>
+    /// <param name="userId"> 要获取封禁信息的用户的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
-    ///     contains the user information and the reason for the ban; <c>null</c> if the ban entry cannot be found.
+    ///     一个表示异步获取操作的任务。任务的结果包含该用户在此服务器内的封禁信息；如果该用户未被此服务器封禁，或封禁已过期或解除，则返回 <c>null</c>。
     /// </returns>
     Task<IBan?> GetBanAsync(ulong userId, RequestOptions? options = null);
 
     /// <summary>
-    ///     Bans the user from this guild and optionally prunes their recent messages.
+    ///     封禁服务器内的用户。
     /// </summary>
-    /// <param name="user">The user to ban.</param>
-    /// <param name="pruneDays">The number of days to remove messages from this user for, and this number must be between [0, 7].</param>
-    /// <param name="reason">The reason of the ban to be written in the audit log.</param>
+    /// <param name="user"> 要封禁的用户。 </param>
+    /// <param name="pruneDays"> 要删除此服务器中来自此用户的最近几天的消息，范围为 <c>0</c> 至 <c>7</c>，<c>0</c> 表示不删除。 </param>
+    /// <param name="reason"> 封禁原因。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <exception cref="ArgumentException"><paramref name="pruneDays"/> is not between 0 to 7.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="pruneDays" /> 超出了 0 至 7 的范围。 </exception>
     /// <returns>
-    ///     A task that represents the asynchronous add operation for the ban.
+    ///     一个表示异步封禁操作的任务。
     /// </returns>
     Task AddBanAsync(IUser user, int pruneDays = 0, string? reason = null, RequestOptions? options = null);
 
     /// <summary>
-    ///     Bans the user from this guild and optionally prunes their recent messages.
+    ///     封禁服务器内的用户。
     /// </summary>
-    /// <param name="userId">The identifier of the user to ban.</param>
-    /// <param name="pruneDays">The number of days to remove messages from this user for, and this number must be between [0, 7].</param>
-    /// <param name="reason">The reason of the ban to be written in the audit log.</param>
+    /// <param name="userId"> 要封禁的用户的 ID。 </param>
+    /// <param name="pruneDays"> 要删除此服务器中来自此用户的最近几天的消息，范围为 <c>0</c> 至 <c>7</c>，<c>0</c> 表示不删除。 </param>
+    /// <param name="reason"> 封禁原因。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <exception cref="ArgumentException"><paramref name="pruneDays"/> is not between 0 to 7.</exception>
+    /// <exception cref="ArgumentException"> <paramref name="pruneDays" /> 超出了 0 至 7 的范围。 </exception>
     /// <returns>
-    ///     A task that represents the asynchronous add operation for the ban.
+    ///     一个表示异步封禁操作的任务。
     /// </returns>
     Task AddBanAsync(ulong userId, int pruneDays = 0, string? reason = null, RequestOptions? options = null);
 
     /// <summary>
-    ///     Unbans the user if they are currently banned.
+    ///     解除服务器对用户的封禁。
     /// </summary>
-    /// <param name="user">The user to be unbanned.</param>
+    /// <param name="user"> 要解除封禁的用户。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous removal operation for the ban.
+    ///     一个表示异步封禁解除操作的任务。
     /// </returns>
     Task RemoveBanAsync(IUser user, RequestOptions? options = null);
 
     /// <summary>
-    ///     Unbans the user if they are currently banned.
+    ///     解除服务器对用户的封禁。
     /// </summary>
-    /// <param name="userId">The identifier of the user to be unbanned.</param>
+    /// <param name="userId"> 要解除封禁的用户的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous removal operation for the ban.
+    ///     一个表示异步封禁解除操作的任务。
     /// </returns>
     Task RemoveBanAsync(ulong userId, RequestOptions? options = null);
 
@@ -328,144 +293,136 @@ public interface IGuild : IEntity<ulong>
     #region Channels
 
     /// <summary>
-    ///     Gets a collection of all channels in this guild.
+    ///     获取此服务器的所有频道。
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
-    ///     generic channels found within this guild.
+    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的所有频道。
     /// </returns>
     Task<IReadOnlyCollection<IGuildChannel>> GetChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a channel in this guild.
+    ///     获取此服务器内的频道。
     /// </summary>
-    /// <param name="id">The identifier for the channel.</param>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the generic channel
-    ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
+    ///     一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。
     /// </returns>
-    Task<IGuildChannel?> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload,
-        RequestOptions? options = null);
+    Task<IGuildChannel?> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a collection of all text channels in this guild.
+    ///     获取此服务器中所有具有文字聊天能力的频道。
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
-    ///     message channels found within this guild.
+    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的所有具有文字聊天能力的频道。
     /// </returns>
+    /// <remarks>
+    ///     语音频道也是一种文字频道，此方法本意用于获取所有具有文字聊天能力的频道，通过此方法获取到的文字频道列表中也包含了语音频道。
+    ///     如需获取频道的实际类型，请参考 <see cref="M:Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
+    /// </remarks>
     Task<IReadOnlyCollection<ITextChannel>> GetTextChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a text channel in this guild.
+    ///     获取此服务器内指定具有文字聊天能力的频道。
     /// </summary>
-    /// <param name="id">The identifier for the text channel.</param>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the text channel
-    ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
+    ///     一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。
     /// </returns>
-    Task<ITextChannel?> GetTextChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload,
-        RequestOptions? options = null);
+    /// <remarks>
+    ///     语音频道也是一种文字频道，此方法本意用于获取具有文字聊天能力的频道。如果通过此方法传入的 ID 对应的频道是语音频道，那么也会返回对应的语音频道实体。
+    ///     如需获取频道的实际类型，请参考 <see cref="M:Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
+    /// </remarks>
+    Task<ITextChannel?> GetTextChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a collection of all voice channels in this guild.
+    ///     获取此服务器中所有具有语音聊天能力的频道。
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
-    ///     voice channels found within this guild.
+    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的所有具有语音聊天能力的频道。
     /// </returns>
     Task<IReadOnlyCollection<IVoiceChannel>> GetVoiceChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a voice channel in this guild.
+    ///     获取此服务器内指定具有语音聊天能力的频道。
     /// </summary>
-    /// <param name="id">The identifier for the voice channel.</param>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the voice channel associated
-    ///     with the specified <paramref name="id"/>; <c>null</c> if none is found.
+    ///     一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。
     /// </returns>
-    Task<IVoiceChannel?> GetVoiceChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload,
-        RequestOptions? options = null);
+    Task<IVoiceChannel?> GetVoiceChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a collection of all category channels in this guild.
+    ///     获取此服务器中的所有分组频道。
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
-    ///     category channels found within this guild.
+    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的所有分组频道。
     /// </returns>
-    Task<IReadOnlyCollection<ICategoryChannel>> GetCategoryChannelsAsync(CacheMode mode = CacheMode.AllowDownload,
-        RequestOptions? options = null);
+    Task<IReadOnlyCollection<ICategoryChannel>> GetCategoryChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets the default text channel for this guild.
+    ///     获取此服务器的默认文字频道。
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the default text channel for this guild;
-    ///     <c>null</c> if none is found.
+    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的默认文字频道；如果未找到，则返回 <c>null</c>。
     /// </returns>
     Task<ITextChannel?> GetDefaultChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets the welcome text channel for this guild.
+    ///     获取此服务器的欢迎通知频道。
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the welcome text channel for this guild;
-    ///     <c>null</c> if none is found.
+    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的欢迎通知频道；如果未找到，则返回 <c>null</c>。
     /// </returns>
     Task<ITextChannel?> GetWelcomeChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Creates a new text channel in this guild.
+    ///     在此服务器内创建一个新的文字频道。
     /// </summary>
-    /// <param name="name">The new name for the text channel.</param>
-    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
+    /// <param name="name"> 频道的名称。 </param>
+    /// <param name="func"> 一个包含要应用到新创建频道的配置的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
-    ///     text channel.
+    ///     一个表示异步创建操作的任务。任务的结果包含新创建的文字频道。
     /// </returns>
     Task<ITextChannel> CreateTextChannelAsync(string name, Action<CreateTextChannelProperties>? func = null, RequestOptions? options = null);
 
     /// <summary>
-    ///     Creates a new voice channel in this guild.
+    ///     在此服务器内创建一个新的语音频道。
     /// </summary>
-    /// <param name="name">The new name for the voice channel.</param>
-    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
+    /// <param name="name"> 频道的名称。 </param>
+    /// <param name="func"> 一个包含要应用到新创建频道的配置的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
-    ///     voice channel.
+    ///     一个表示异步创建操作的任务。任务的结果包含新创建的语音频道。
     /// </returns>
     Task<IVoiceChannel> CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties>? func = null, RequestOptions? options = null);
 
     /// <summary>
-    ///     Creates a new channel category in this guild.
+    ///     在此服务器内创建一个新的分组频道。
     /// </summary>
-    /// <param name="name">The new name for the category.</param>
-    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
+    /// <param name="name"> 频道的名称。 </param>
+    /// <param name="func"> 一个包含要应用到新创建频道的配置的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
-    ///     category channel.
+    ///     一个表示异步创建操作的任务。任务的结果包含新创建的分组频道。
     /// </returns>
     Task<ICategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties>? func = null, RequestOptions? options = null);
 
@@ -474,36 +431,33 @@ public interface IGuild : IEntity<ulong>
     #region Invites
 
     /// <summary>
-    ///     Gets a collection of all invites in this guild.
+    ///     获取此服务器内的所有邀请信息。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
-    ///     invite, each representing information for an invite found within this guild.
+    ///     一个表示异步获取操作的任务。任务的结果包含此服务器内的所有邀请信息。
     /// </returns>
     Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     Creates a new invite to this channel.
+    ///     创建一个到此服务器的新邀请。
     /// </summary>
     /// <param name="maxAge"> 邀请链接的有效时长，<see cref="F:Kook.InviteMaxAge.NeverExpires"/> 表示永不过期。 </param>
     /// <param name="maxUses"> 邀请链接的可用人次，<see cref="F:Kook.InviteMaxUses.Unlimited"/> 表示无限制。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous invite creation operation. The task result contains an invite
-    ///     metadata object containing information for the created invite.
+    ///     一个表示异步创建操作的任务。任务的结果包含新创建的邀请链接的元数据，其中包含有关邀请链接的信息。
     /// </returns>
     Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited, RequestOptions? options = null);
 
     /// <summary>
-    ///     Creates a new invite to this channel.
+    ///     创建一个到此服务器的新邀请。
     /// </summary>
     /// <param name="maxAge"> 邀请链接的有效时长，<c>null</c> 表示永不过期。 </param>
     /// <param name="maxUses">邀请链接的可用人次，<c>null</c> 表示无限制。</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous invite creation operation. The task result contains an invite
-    ///     metadata object containing information for the created invite.
+    ///     一个表示异步创建操作的任务。任务的结果包含新创建的邀请链接的元数据，其中包含有关邀请链接的信息。
     /// </returns>
     Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null, RequestOptions? options = null);
 
@@ -512,21 +466,21 @@ public interface IGuild : IEntity<ulong>
     #region Roles
 
     /// <summary>
-    ///     Gets a role in this guild.
+    ///     获取此服务器内的角色。
     /// </summary>
-    /// <param name="id">The identifier for the role.</param>
+    /// <param name="id"> 要获取的角色的 ID。 </param>
     /// <returns>
-    ///     A role that is associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
+    ///     一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的角色；如果未找到，则返回 <c>null</c>。
     /// </returns>
     IRole? GetRole(uint id);
 
     /// <summary>
-    ///     Creates a new role with the provided name.
+    ///     在此服务器内创建一个新角色。
     /// </summary>
-    /// <param name="name">The new name for the role.</param>
+    /// <param name="name"> 角色的名称。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous creation operation. The task result contains the newly created role.
+    ///     一个表示异步创建操作的任务。任务的结果包含新创建的角色。
     /// </returns>
     Task<IRole> CreateRoleAsync(string name, RequestOptions? options = null);
 
@@ -535,111 +489,98 @@ public interface IGuild : IEntity<ulong>
     #region Users
 
     /// <summary>
-    ///     Gets a collection of all users in this guild.
+    ///     获取此服务器内的所有用户。
     /// </summary>
-    /// <remarks>
-    ///     This method retrieves all users found within this guild.
-    /// </remarks>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
-    ///     users found within this guild.
+    ///     一个表示异步获取操作的任务。任务的结果包含此服务器内的所有用户。
     /// </returns>
     Task<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a user from this guild.
+    ///     获取此服务器内的用户。
     /// </summary>
     /// <remarks>
-    ///     This method retrieves a user found within this guild.
+    ///     此方法获取加入到此服务器内的用户。
     ///     <note>
-    ///         This may return <c>null</c> in the WebSocket implementation due to incomplete user collection in
-    ///         large guilds.
+    ///         此方法在 WebSocket 的实现中可能返回 <c>null</c>，因为在大型服务器中，用户列表的缓存可能不完整。
     ///     </note>
     /// </remarks>
-    /// <param name="id">The identifier of the user.</param>
+    /// <param name="id"> 要获取的用户的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the guild user
-    ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
+    ///     一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的用户；如果未找到，则返回 <c>null</c>。
     /// </returns>
     Task<IGuildUser?> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets the current user for this guild.
+    ///     获取此服务器内当前登录的用户。
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the currently logged-in
-    ///     user within this guild.
+    ///     一个表示异步获取操作的任务。任务的结果包含此服务器内当前登录的用户。
     /// </returns>
     Task<IGuildUser?> GetCurrentUserAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets the owner of this guild.
+    ///     获取此服务器的所有者。
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the owner of this guild.
+    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的所有者。
     /// </returns>
     Task<IGuildUser?> GetOwnerAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Downloads all users for this guild if the current list is incomplete.
+    ///     下载此服务器内的所有用户。
     /// </summary>
     /// <remarks>
-    ///     This method downloads all users found within this guild through the Gateway and caches them.
+    ///     此方法会下载所有加入到此服务器内的用户，并缓存它们。
     /// </remarks>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous download operation.
+    ///     一个表示异步下载操作的任务。
     /// </returns>
     Task DownloadUsersAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     Downloads all voice states for this guild.
+    ///     下载此服务器内的所有语音状态。
     /// </summary>
     /// <remarks>
-    ///     This method downloads all voice states for this guild through the Gateway and caches them.
+    ///     此方法会下载此服务器内的所有语音状态，并缓存它们。
     /// </remarks>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous download operation.
+    ///     一个表示异步下载操作的任务。
     /// </returns>
     Task DownloadVoiceStatesAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     Downloads all boost subscriptions for this guild.
+    ///     下载此服务器内的所有服务器助力信息。
     /// </summary>
     /// <remarks>
-    ///     This method downloads all boost subscriptions for this guild through the Gateway and caches them.
-    ///     To download all boost subscriptions, the current user must has the
-    ///     <see cref="GuildPermission.ManageGuild"/> permission.
+    ///     此方法会通过网关下载此服务器内的所有服务器助力信息，并缓存它们。
+    ///     要下载所有服务器助力信息，当前用户必须具有 <see cref="F:Kook.GuildPermission.ManageGuild"/> 权限。
     /// </remarks>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous download operation.
+    ///     一个表示异步下载操作的任务。
     /// </returns>
     Task DownloadBoostSubscriptionsAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a collection of users in this guild that the name or nickname contains the
-    ///     provided string at <paramref name="func"/>.
+    ///     搜索加入到此服务器内匹配指定搜索条件的所有用户。
     /// </summary>
-    /// <remarks>
-    ///     The <paramref name="limit"/> can not be higher than <see cref="KookConfig.MaxUsersPerBatch"/>.
-    /// </remarks>
-    /// <param name="func">A delegate containing the properties to search users with.</param>
-    /// <param name="limit">The maximum number of users to be gotten.</param>
+    /// <param name="func"> 一个包含要搜索的用户属性及排序条件的委托。 </param>
+    /// <param name="limit"> 搜索结果的最大数量。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
-    ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/> at <paramref name="func"/>.
+    ///     一个表示异步获取操作的任务。任务的结果包含与提供的 <paramref name="func"/> 中指定的属性匹配的服务器用户集合。
     /// </returns>
     IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func,
         int limit = KookConfig.MaxUsersPerBatch, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
@@ -649,53 +590,50 @@ public interface IGuild : IEntity<ulong>
     #region Emotes
 
     /// <summary>
-    ///     Gets a collection of emotes from this guild.
+    ///     获取此服务器的所有自定义表情。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
-    ///     of emotes found within the guild.
+    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的所有自定义表情。
     /// </returns>
     Task<IReadOnlyCollection<GuildEmote>> GetEmotesAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a specific emote from this guild.
+    ///     获取此服务器的指定自定义表情。
     /// </summary>
-    /// <param name="id">The identifier for the guild emote.</param>
+    /// <param name="id"> 要获取的自定义表情的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the emote found with the
-    ///     specified <paramref name="id"/>; <c>null</c> if none is found.
+    ///     一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的自定义表情；如果未找到，则返回 <c>null</c>。
     /// </returns>
     Task<GuildEmote?> GetEmoteAsync(string id, RequestOptions? options = null);
 
     /// <summary>
-    ///     Creates a new <see cref="GuildEmote"/> in this guild.
+    ///     在此服务器内创建一个新的自定义表情。
     /// </summary>
-    /// <param name="name">The name of the guild emote.</param>
-    /// <param name="image">The image of the new emote.</param>
+    /// <param name="name"> 新自定义表情的名称。 </param>
+    /// <param name="image"> 新自定义表情的图像信息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous creation operation. The task result contains the created emote.
+    ///     一个表示异步创建操作的任务。任务的结果包含新创建的自定义表情。
     /// </returns>
     Task<GuildEmote> CreateEmoteAsync(string name, Image image, RequestOptions? options = null);
 
     /// <summary>
-    ///     Modifies an existing <see cref="GuildEmote"/> in this guild.
+    ///     修改此服务器内的现有自定义表情。
     /// </summary>
-    /// <param name="emote">The emote to be modified.</param>
-    /// <param name="name"> The new name of the emote.</param>
+    /// <param name="emote"> 要修改的自定义表情。 </param>
+    /// <param name="name"> 新的自定义表情名称。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous modification operation. The task result contains the modified
-    ///     emote.
+    ///     一个表示异步修改操作的任务。任务的结果包含修改后的自定义表情。
     /// </returns>
     Task ModifyEmoteNameAsync(GuildEmote emote, string name, RequestOptions? options = null);
 
     /// <summary>
-    ///     Deletes an existing <see cref="GuildEmote"/> from this guild.
+    ///     删除此服务器内的现有自定义表情。
     /// </summary>
-    /// <param name="emote">The emote to delete.</param>
+    /// <param name="emote"> 要删除的自定义表情。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     一个表示异步删除操作的任务。
@@ -707,12 +645,14 @@ public interface IGuild : IEntity<ulong>
     #region Voice
 
     /// <summary>
-    /// Moves the user to the voice channel.
+    ///     移动用户到语音频道。
     /// </summary>
-    /// <param name="users">The users to move.</param>
-    /// <param name="targetChannel">the channel where the user gets moved to.</param>
+    /// <param name="users"> 要移动的用户。 </param>
+    /// <param name="targetChannel"> 要移动用户到的语音频道。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>A task that represents the asynchronous operation for moving a user.</returns>
+    /// <returns>
+    ///     一个表示异步移动操作的任务。
+    /// </returns>
     Task MoveUsersAsync(IEnumerable<IGuildUser> users, IVoiceChannel targetChannel, RequestOptions? options = null);
 
     #endregion
@@ -720,13 +660,12 @@ public interface IGuild : IEntity<ulong>
     #region Badges
 
     /// <summary>
-    ///     Gets a badge which is associated with this guild.
+    ///     获取与此服务器关联的徽章。
     /// </summary>
-    /// <param name="style">The <see cref="BadgeStyle"/> that specifies the style of the badge.</param>
+    /// <param name="style"> 要获取的徽章的样式。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the stream of the badge
-    ///     associated with this guild.
+    ///     一个表示异步获取操作的任务。任务的结果包含与此服务器关联的徽章的流。
     /// </returns>
     Task<Stream> GetBadgeAsync(BadgeStyle style = BadgeStyle.GuildName, RequestOptions? options = null);
 

@@ -1,27 +1,27 @@
 namespace Kook;
 
 /// <summary>
-///     Represents the type of a role.
+///     表示角色的类型。
 /// </summary>
 public enum RoleType : ushort
 {
     /// <summary>
-    ///     Represents the role was created by a user.
+    ///     角色是由用户创建的。
     /// </summary>
     UserCreated = 0,
 
     /// <summary>
-    ///     Represents the role was created by system when a bot joined the guild.
+    ///     角色是在 Bot 加入服务器时由系统创建的。
     /// </summary>
     BotSpecified = 1,
 
     /// <summary>
-    ///     Represents the role representing a booster.
+    ///     角色表示服务器助力者。
     /// </summary>
     Booster = 2,
 
     /// <summary>
-    ///     Represents the role is the default everyone role.
+    ///     表示角色是默认的 <c>@everyone</c> 全体成员角色。
     /// </summary>
     Everyone = 255
 }

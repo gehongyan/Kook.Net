@@ -1,31 +1,22 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic ban object.
+///     表示一个通用的封禁对象。
 /// </summary>
 public interface IBan
 {
     /// <summary>
-    ///     Gets the banned user.
+    ///     获取被封禁的用户。
     /// </summary>
-    /// <returns>
-    ///     A user that was banned.
-    /// </returns>
     IUser User { get; }
 
     /// <summary>
-    ///     Gets the time when the ban was issued.
+    ///     获取封禁的时间。
     /// </summary>
-    /// <returns>
-    ///     A DateTime object that represents the time when the ban was issued.
-    /// </returns>
     DateTimeOffset CreatedAt { get; }
 
     /// <summary>
-    ///     Gets the reason why the user is banned if specified.
+    ///     获取封禁的原因。
     /// </summary>
-    /// <returns>
-    ///     A string containing the reason behind the ban; <c>null</c> if none is specified.
-    /// </returns>
     string Reason { get; }
 }

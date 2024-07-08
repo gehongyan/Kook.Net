@@ -1,14 +1,14 @@
 namespace Kook;
 
 /// <summary>
-///     表示服务器中一个通用的文字频道，可以发送和接收消息。
+///     表示服务器中一个通用的具有文字聊天能力的频道，可以发送和接收消息。
 /// </summary>
 public interface ITextChannel : INestedChannel, IMentionable, IMessageChannel
 {
     #region General
 
     /// <summary>
-    ///     获取此文字频道的说明。
+    ///     获取此频道的说明。
     /// </summary>
     string Topic { get; }
 
@@ -25,9 +25,9 @@ public interface ITextChannel : INestedChannel, IMentionable, IMessageChannel
     int SlowModeInterval { get; }
 
     /// <summary>
-    ///     修改此文字频道。
+    ///     修改此频道有关文字聊天能力的属性。
     /// </summary>
-    /// <param name="func"> 一个包含修改文字频道属性的委托。 </param>
+    /// <param name="func"> 一个包含修改频道有关文字聊天能力的属性的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     一个表示异步修改操作的任务。

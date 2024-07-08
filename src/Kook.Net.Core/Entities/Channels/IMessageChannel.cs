@@ -14,7 +14,7 @@ public interface IMessageChannel : IChannel
     /// <param name="filename"> 文件名。 </param>
     /// <param name="type"> 文件的媒体类型。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
-    /// <param name="ephemeralUser"> 临时消息的接收者。留空可以让所有人看到该消息。 </param>
+    /// <param name="ephemeralUser"> 临时消息的接收者。如果设置为指定的用户，则仅该用户可以看到此消息，否则所有人都可以看到此消息。。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
@@ -30,7 +30,7 @@ public interface IMessageChannel : IChannel
     /// <param name="filename"> 文件名。 </param>
     /// <param name="type"> 文件的媒体类型。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
-    /// <param name="ephemeralUser"> 临时消息的接收者。留空可以让所有人看到该消息。 </param>
+    /// <param name="ephemeralUser"> 临时消息的接收者。如果设置为指定的用户，则仅该用户可以看到此消息，否则所有人都可以看到此消息。。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
@@ -44,7 +44,7 @@ public interface IMessageChannel : IChannel
     /// </summary>
     /// <param name="attachment"> 文件的附件信息。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
-    /// <param name="ephemeralUser"> 临时消息的接收者。留空可以让所有人看到该消息。 </param>
+    /// <param name="ephemeralUser"> 临时消息的接收者。如果设置为指定的用户，则仅该用户可以看到此消息，否则所有人都可以看到此消息。。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
@@ -57,7 +57,7 @@ public interface IMessageChannel : IChannel
     /// </summary>
     /// <param name="text"> 要发送的文本。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
-    /// <param name="ephemeralUser"> 临时消息的接收者。留空可以让所有人看到该消息。 </param>
+    /// <param name="ephemeralUser"> 临时消息的接收者。如果设置为指定的用户，则仅该用户可以看到此消息，否则所有人都可以看到此消息。。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
@@ -70,7 +70,7 @@ public interface IMessageChannel : IChannel
     /// </summary>
     /// <param name="card"> 要发送的卡片。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
-    /// <param name="ephemeralUser"> 临时消息的接收者。留空可以让所有人看到该消息。 </param>
+    /// <param name="ephemeralUser"> 临时消息的接收者。如果设置为指定的用户，则仅该用户可以看到此消息，否则所有人都可以看到此消息。。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
@@ -83,7 +83,7 @@ public interface IMessageChannel : IChannel
     /// </summary>
     /// <param name="cards"> 要发送的卡片。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
-    /// <param name="ephemeralUser"> 临时消息的接收者。留空可以让所有人看到该消息。 </param>
+    /// <param name="ephemeralUser"> 临时消息的接收者。如果设置为指定的用户，则仅该用户可以看到此消息，否则所有人都可以看到此消息。。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。

@@ -1,15 +1,15 @@
 namespace Kook;
 
 /// <summary>
-///     Provides extension methods for <see cref="IChannel"/>.
+///     提供用于各种频道实体的扩展方法。
 /// </summary>
 public static class ChannelExtensions
 {
     /// <summary>
-    ///     Attempts to get the <see cref="ChannelType"/> based off of the channel's interfaces.
+    ///     尝试基于频道所实现的接口类型获取频道的实际类型。
     /// </summary>
-    /// <param name="channel">The channel to get the type of.</param>
-    /// <returns>The <see cref="ChannelType"/> of the channel if found, otherwise <c>null</c>.</returns>
+    /// <param name="channel"> 要获取其类型的频道。 </param>
+    /// <returns> 如果此频道的实际类型已知，则返回其类型；否则，返回 <c>null</c>。 </returns>
     public static ChannelType? GetChannelType(this IChannel channel) =>
         channel switch
         {
@@ -21,11 +21,11 @@ public static class ChannelExtensions
         };
 
     /// <summary>
-    ///     Gets a URL that jumps to the channel.
+    ///     获取一个跳转到频道的 URL。
     /// </summary>
-    /// <param name="channel">The channel to jump to.</param>
+    /// <param name="channel"> 要获取跳转 URL 的频道。 </param>
     /// <returns>
-    ///     A string that contains a URL for jumping to the message in chat.
+    ///     一个包含用于在聊天中跳转到频道的 URL 的字符串。
     /// </returns>
     public static string GetJumpUrl(this IChannel channel) =>
         channel switch

@@ -4,37 +4,35 @@ namespace Kook;
 
 /// <summary>
 ///     Represents a collection of features of a guild.
+///     表示一个服务器的所有特性。
 /// </summary>
 public readonly struct GuildFeatures
 {
-    /// <summary> Gets a blank <see cref="GuildPermissions"/> that grants no permissions. </summary>
-    public static readonly GuildPermissions None = new();
-
     /// <summary>
-    ///     Gets the flags of recognized features for this guild.
+    ///     获取此服务器的已识别特性。
     /// </summary>
     public GuildFeature Value { get; }
 
     /// <summary>
-    ///     Gets a collection of <c>string</c>s representing the raw values of the features.
+    ///     获取此服务器的所有特性的原始值。
     /// </summary>
     /// <remarks>
-    ///     Features that are not contained in <see cref="GuildFeature"/> can be found here.
+    ///     若特性未包含在 <see cref="GuildFeature"/> 中，则可以在此找到。
     /// </remarks>
     public IReadOnlyCollection<string> RawValues { get; }
 
     /// <summary>
-    ///     Gets whether the guild is an official KOOK guild.
+    ///     获取此服务器是否为官方服务器。
     /// </summary>
     public bool IsOfficial => HasFeature(GuildFeature.Official);
 
     /// <summary>
-    ///     Gets whether the guild is a partner guild.
+    ///     获取此服务器是否为合作伙伴服务器。
     /// </summary>
     public bool IsPartner => HasFeature(GuildFeature.Partner);
 
     /// <summary>
-    ///     Gets whether the guild is a key account guild.
+    ///     获取此服务器是否为重点客户服务器。
     /// </summary>
     public bool IsKeyAccount => HasFeature(GuildFeature.KeyAccount);
 
@@ -45,18 +43,18 @@ public readonly struct GuildFeatures
     }
 
     /// <summary>
-    ///     Returns whether or not this guild has a feature.
+    ///     获取此服务器是否具有指定的特性。
     /// </summary>
-    /// <param name="feature">The feature(s) to check for.</param>
-    /// <returns><c>true</c> if this guild has the provided feature(s), otherwise <c>false</c>.</returns>
+    /// <param name="feature"> 要进行检查的服务器特性。 </param>
+    /// <returns> 如果此服务器具有指定的特性，则为 <c>true</c>，否则为 <c>false</c>。 </returns>
     public bool HasFeature(GuildFeature feature) =>
         Value.HasFlag(feature);
 
     /// <summary>
-    ///     Returns whether or not this guild has a feature.
+    ///     获取此服务器是否具有指定的特性。
     /// </summary>
-    /// <param name="feature">The feature to check for.</param>
-    /// <returns><c>true</c> if this guild has the provided feature, otherwise <c>false</c>.</returns>
+    /// <param name="feature"> 要进行检查的服务器特性。 </param>
+    /// <returns> 如果此服务器具有指定的特性，则为 <c>true</c>，否则为 <c>false</c>。 </returns>
     public bool HasFeature(string feature) =>
         RawValues.Contains(feature);
 
