@@ -39,123 +39,6 @@ public interface IAudioClient : IDisposable
     event Func<int, int, Task> UdpLatencyUpdated;
 
     /// <summary>
-    ///     当其他语音客户端连接到当前语音服务器时引发。
-    /// </summary>
-    /// <remarks>
-    ///     事件参数：
-    ///     <list type="number">
-    ///     <item> <see cref="T:System.UInt64"/> 参数是连接到语音服务器的语音客户端用户的 ID。 </item>
-    ///     </list>
-    /// </remarks>
-    event Func<ulong, Task> PeerConnected;
-
-    /// <summary>
-    ///     当其他语音客户端从当前语音服务器断开连接时引发。
-    /// </summary>
-    /// <remarks>
-    ///     事件参数：
-    ///     <list type="number">
-    ///     <item> <see cref="T:System.UInt64"/> 参数是断开连接的语音客户端用户的 ID。 </item>
-    ///     </list>
-    /// </remarks>
-    event Func<ulong, Task> PeerDisconnected;
-
-    /// <summary>
-    ///     当其他语音客户端已恢复发送语音数据时引发，通常是闭麦状态解除操作。
-    /// </summary>
-    /// <remarks>
-    ///     事件参数：
-    ///     <list type="number">
-    ///     <item> <see cref="T:System.UInt64"/> 参数是恢复发送语音数据的语音客户端用户的 ID。 </item>
-    ///     </list>
-    /// </remarks>
-    event Func<ulong, Task> HeadsetResumed;
-
-    /// <summary>
-    ///     当其他语音客户端已暂停发送语音数据时引发，通常是闭麦操作。
-    /// </summary>
-    /// <remarks>
-    ///     事件参数：
-    ///     <list type="number">
-    ///     <item> <see cref="T:System.UInt64"/> 参数是暂停发送语音数据的语音客户端用户的 ID。 </item>
-    ///     </list>
-    /// </remarks>
-    event Func<ulong, Task> HeadsetPaused;
-
-    /// <summary>
-    ///     当其他语音客户端已恢复接收语音数据时引发，通常是静音状态解除操作。
-    /// </summary>
-    /// <remarks>
-    ///     事件参数：
-    ///     <list type="number">
-    ///     <item> <see cref="T:System.UInt64"/> 参数是恢复接收语音数据的语音客户端用户的 ID。 </item>
-    ///     </list>
-    /// </remarks>
-    event Func<ulong, Task> ConsumerResumed;
-
-    /// <summary>
-    ///     当其他语音客户端已暂停接收语音数据时引发，通常是静音操作。
-    /// </summary>
-    /// <remarks>
-    ///     事件参数：
-    ///     <list type="number">
-    ///     <item> <see cref="T:System.UInt64"/> 参数是暂停接收语音数据的语音客户端用户的 ID。 </item>
-    ///     </list>
-    /// </remarks>
-    event Func<ulong, Task> ConsumerPaused;
-
-    /// <summary>
-    ///     当其他语音客户端的权限发生变化时引发。
-    /// </summary>
-    /// <remarks>
-    ///     事件参数：
-    ///     <list type="number">
-    ///     <item> <see cref="T:System.UInt64"/> 参数是权限发生变化的语音客户端用户的 ID。 </item>
-    ///     <item> <see cref="T:Kook.Audio.PeerPermissionInfo"/> 参数是变更后的权限信息。 </item>
-    ///     </list>
-    /// </remarks>
-    event Func<ulong, PeerPermissionInfo, Task> PeerPermissionChanged;
-
-    /// <summary>
-    ///     当其他语音客户端播放了一个氛围音效时引发。
-    /// </summary>
-    /// <remarks>
-    ///     事件参数：
-    ///     <list type="number">
-    ///     <item> <see cref="T:System.UInt64"/> 参数是播放氛围音效的语音客户端用户的 ID。 </item>
-    ///     <item> <see cref="T:Kook.Audio.PeerPermissionInfo"/> 参数是氛围音效的 ID。 </item>
-    ///     </list>
-    /// </remarks>
-    event Func<ulong, int, Task> AtmospherePlayed;
-
-    /// <summary>
-    ///     当其他语音客户端开始了共享来自计算机其它应用程序的实时音频时引发。
-    /// </summary>
-    /// <remarks>
-    ///     事件参数：
-    ///     <list type="number">
-    ///     <item> <see cref="T:System.UInt64"/> 参数是开始共享计算机应用程序音频的语音客户端用户的 ID。 </item>
-    ///     </list>
-    /// </remarks>
-    event Func<ulong, SoundtrackInfo, Task> SoundtrackStarted;
-
-    /// <summary>
-    ///     当其他语音客户端停止了共享来自计算机其它应用程序的实时音频时引发。
-    /// </summary>
-    /// <remarks>
-    ///     事件参数：
-    ///     <list type="number">
-    ///     <item> <see cref="T:System.UInt64"/> 参数是停止共享计算机应用程序音频的语音客户端用户的 ID。 </item>
-    ///     </list>
-    /// </remarks>
-    event Func<ulong, Task> SoundtrackStopped;
-
-    /// <summary>
-    ///     当此语音客户端从语音服务器断开连接时引发。
-    /// </summary>
-    event Func<Task> ClientDisconnected;
-
-    /// <summary>
     ///     获取此客户端当前的连接状态。
     /// </summary>
     ConnectionState ConnectionState { get; }
@@ -193,18 +76,24 @@ public interface IAudioClient : IDisposable
     ///     使用 PCM 编解码器创建一个新的音频流。
     /// </summary>
     /// <param name="application"> 音频应用程序的应用场景。 </param>
-    /// <param name="bitrate"> 音频流的比特率，单位为比特每秒，默认值为 96 kbps。 </param>
+    /// <param name="bitrate"> 音频流的比特率，单位为比特每秒；留空则使用在请求建立音频通道时由 KOOK 返回的指定的比特率。 </param>
     /// <param name="bufferMillis"> 音频流的缓冲区大小，单位为毫秒。 </param>
     /// <param name="packetLoss"> 音频流的丢包率，单位为百分比，默认值为 30%。 </param>
     /// <returns> 一个新的 PCM 音频流。 </returns>
-    AudioOutStream CreatePcmStream(AudioApplication application, int bitrate = 96 * 1024, int bufferMillis = 1000, int packetLoss = 30);
+    /// <remarks>
+    ///     使用大于由 KOOK 返回的指定的比特率进行编码并推流，可能会导致语音连接被 KOOK 语音服务断开。
+    /// </remarks>
+    AudioOutStream CreatePcmStream(AudioApplication application, int? bitrate = null, int bufferMillis = 1000, int packetLoss = 30);
 
     /// <summary>
     ///     使用 PCM 编解码器创建一个新的音频流，不设置缓冲区。
     /// </summary>
     /// <param name="application"> 音频应用程序的应用场景。 </param>
-    /// <param name="bitrate"> 音频流的比特率，单位为比特每秒，默认值为 96 kbps。 </param>
+    /// <param name="bitrate"> 音频流的比特率，单位为比特每秒；留空则使用在请求建立音频通道时由 KOOK 返回的指定的比特率。 </param>
     /// <param name="packetLoss"> 音频流的丢包率，单位为百分比，默认值为 30%。 </param>
     /// <returns> 一个新的 PCM 音频流。 </returns>
-    AudioOutStream CreateDirectPcmStream(AudioApplication application, int bitrate = 96 * 1024, int packetLoss = 30);
+    /// <remarks>
+    ///     使用大于由 KOOK 返回的指定的比特率进行编码并推流，可能会导致语音连接被 KOOK 语音服务断开。
+    /// </remarks>
+    AudioOutStream CreateDirectPcmStream(AudioApplication application, int? bitrate = null, int packetLoss = 30);
 }

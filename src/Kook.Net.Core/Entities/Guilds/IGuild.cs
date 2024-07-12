@@ -84,7 +84,13 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     获取当前与此服务器关联的语音客户端。
     /// </summary>
+    [Obsolete("Use AudioClients instead.")]
     IAudioClient? AudioClient { get; }
+
+    /// <summary>
+    ///     Gets a collection of all audio clients associated with this guild.
+    /// </summary>
+    IReadOnlyDictionary<ulong, IAudioClient> AudioClients { get; }
 
     /// <summary>
     ///     获取此服务器是否为公开服务器。

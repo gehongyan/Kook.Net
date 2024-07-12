@@ -65,6 +65,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     internal uint SmallNumberOfGuildsThreshold { get; private set; }
     internal uint LargeNumberOfGuildsThreshold { get; private set; }
     internal StartupCacheFetchMode StartupCacheFetchMode { get; private set; }
+    internal int AudioClientIdleTimeout { get; private set; }
     internal bool AlwaysDownloadUsers { get; private set; }
     internal bool AlwaysDownloadVoiceStates { get; private set; }
     internal bool AlwaysDownloadBoostSubscriptions { get; private set; }
@@ -117,6 +118,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         LargeNumberOfGuildsThreshold = config.LargeNumberOfGuildsThreshold;
         // StartupCacheFetchMode will be set to the current config value whenever the socket client starts up
         StartupCacheFetchMode = config.StartupCacheFetchMode;
+        AudioClientIdleTimeout = config.AudioClientIdleTimeout;
         AlwaysDownloadUsers = config.AlwaysDownloadUsers;
         AlwaysDownloadVoiceStates = config.AlwaysDownloadVoiceStates;
         AlwaysDownloadBoostSubscriptions = config.AlwaysDownloadBoostSubscriptions;
@@ -399,14 +401,16 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     {
         foreach (SocketGuild socketGuild in guilds)
         {
+            socketGuild.ResetAllVoiceStateChannels();
             foreach (ulong channelId in socketGuild.VoiceChannels.Select(x => x.Id))
             {
                 if (options?.CancellationToken.IsCancellationRequested is true) return;
+                if (GetChannel(channelId) is not SocketVoiceChannel channel) continue;
                 IReadOnlyCollection<User> users = await ApiClient
                     .GetConnectedUsersAsync(channelId, options)
                     .ConfigureAwait(false);
                 foreach (User user in users)
-                    socketGuild.AddOrUpdateVoiceState(user.Id, channelId);
+                    socketGuild.AddOrUpdateVoiceStateForJoining(user.Id, channel);
             }
 
             GetGuildMuteDeafListResponse model = await ApiClient
@@ -1119,7 +1123,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         await _gatewayLogger.DebugAsync($"Unsynced Guild ({details}). Payload: {SerializePayload(payload)}").ConfigureAwait(false);
     }
 
-    internal int GetAudioId() => _nextAudioId++;
+    internal int GetAudioId() => Interlocked.Increment(ref _nextAudioId);
 
     #region IKookClient
 

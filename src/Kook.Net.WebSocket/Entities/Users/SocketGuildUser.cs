@@ -419,8 +419,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     {
         IReadOnlyCollection<SocketVoiceChannel> channels =
             await SocketUserHelper.GetConnectedChannelsAsync(this, Kook, options).ConfigureAwait(false);
-        foreach (SocketVoiceChannel channel in channels)
-            channel.Guild.AddOrUpdateVoiceState(Id, channel.Id);
+        Guild.AddOrUpdateVoiceState(Id, channels);
         return channels;
     }
 

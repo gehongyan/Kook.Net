@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Kook;
@@ -18,6 +19,7 @@ public readonly struct Cacheable<TEntity, TId>
     /// <summary>
     ///     获取此实体是否已缓存。
     /// </summary>
+    [MemberNotNullWhen(true, nameof(Value))]
     public bool HasValue { get; }
 
     /// <summary>

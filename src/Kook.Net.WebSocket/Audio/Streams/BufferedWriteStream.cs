@@ -95,6 +95,7 @@ public class BufferedWriteStream : AudioOutStream
                             _client.LastRtpTimestamp += OpusConverter.FrameSamplesPerChannel;
                             _client.SentPackets += 1;
                             _client.SentOctets += (uint)frame.Bytes;
+                            _client.LastRtpActiveTick = Environment.TickCount;
                             // _silenceFrames = 0;
 #if DEBUG
                             _ = _logger?.DebugAsync(

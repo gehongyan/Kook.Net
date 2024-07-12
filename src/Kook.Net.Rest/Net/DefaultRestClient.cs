@@ -186,7 +186,7 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 #if DEBUG_REST
         Debug.WriteLine($"[REST] [{id}] {request.Method} {request.RequestUri} {request.Content?.Headers.ContentType?.MediaType}");
         if (request.Content?.Headers.ContentType?.MediaType == "application/json")
-            Debug.WriteLine($"[REST] {await request.Content.ReadAsStringAsync().ConfigureAwait(false)}");
+            Debug.WriteLine($"[REST] [{id}] {await request.Content.ReadAsStringAsync().ConfigureAwait(false)}");
 #endif
         cancellationToken = cancellationTokenSource.Token;
         HttpResponseMessage response = await _client.SendAsync(request, cancellationToken).ConfigureAwait(false);

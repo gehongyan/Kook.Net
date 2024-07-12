@@ -115,7 +115,7 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
     /// <inheritdoc />
     /// <exception cref="NotSupportedException">Connecting to a REST-based channel is not supported.</exception>
     Task<IAudioClient?> IAudioChannel.ConnectAsync( /*bool selfDeaf, bool selfMute, */
-        bool external, bool disconnect) =>
+        bool external, bool disconnect, string? password) =>
         throw new NotSupportedException();
 
     /// <inheritdoc />

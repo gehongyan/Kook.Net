@@ -113,7 +113,7 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
 
     /// <inheritdoc />
     public Task<IAudioClient?> ConnectAsync( /*bool selfDeaf = false, bool selfMute = false, */
-        bool external = false, bool disconnect = true) =>
+        bool external = false, bool disconnect = true, string? password = null) =>
         throw new NotImplementedException();
 
     /// <inheritdoc />
