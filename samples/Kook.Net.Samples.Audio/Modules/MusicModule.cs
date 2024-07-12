@@ -1,7 +1,6 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Kook.Audio;
 using Kook.Commands;
 using Kook.Net.Samples.Audio.Services;
 using Kook.WebSocket;
@@ -13,8 +12,6 @@ namespace Kook.Net.Samples.Audio.Modules;
 /// </summary>
 public class MusicModule : ModuleBase<SocketCommandContext>
 {
-    private static readonly Regex markdownRegex = new(@"\[(?<text>.+?)\]\((?<url>.+?)\)", RegexOptions.Compiled);
-
     private readonly MusicService _musicService;
     private readonly IHttpClientFactory _httpClientFactory;
 
@@ -31,28 +28,14 @@ public class MusicModule : ModuleBase<SocketCommandContext>
     [RequireContext(ContextType.Guild)]
     public async Task JoinAsync()
     {
-        if (Context.User is not SocketGuildUser user
-            || await user.GetConnectedVoiceChannelsAsync() is not { Count: > 0 } voiceChannels)
+        if (Context.Message.Source is not MessageSource.User) return;
+        if (Context.Channel is not SocketVoiceChannel voiceChannel)
         {
-            await ReplyTextAsync("You must be in a voice channel to use this command.");
+            await ReplyTextAsync("You muse use this command in a voice channel.");
             return;
         }
 
-        SocketVoiceChannel voiceChannel = voiceChannels.First();
-        if (voiceChannel.ConnectedUsers.Contains(Context.Guild?.CurrentUser))
-        {
-            await ReplyTextAsync("I'm already connected to this voice channel.");
-            return;
-        }
-
-        IAudioClient? audioClient = await voiceChannel.ConnectAsync();
-        if (audioClient is null)
-        {
-            await ReplyTextAsync("Failed to connect to the voice channel.");
-            return;
-        }
-
-        _musicService.SetAudioClient(Context.Channel, audioClient);
+        await _musicService.ConnectAsync(voiceChannel);
         await ReplyTextAsync($"Connected to {voiceChannel.Name}.");
     }
 
@@ -60,14 +43,15 @@ public class MusicModule : ModuleBase<SocketCommandContext>
     [RequireContext(ContextType.Guild)]
     public async Task LeaveAsync()
     {
-        if (Context.Guild?.AudioClient?.ConnectionState != ConnectionState.Connected)
+        if (Context.Message.Source is not MessageSource.User) return;
+        if (Context.Channel is not SocketVoiceChannel voiceChannel)
         {
-            await ReplyTextAsync("I'm not connected to a voice channel.");
+            await ReplyTextAsync("You muse use this command in a voice channel.");
             return;
         }
 
-        await Context.Guild.AudioClient.StopAsync();
-        await ReplyTextAsync($"Disconnected.");
+        await _musicService.DisconnectAsync(voiceChannel);
+        await ReplyTextAsync("Disconnected.");
     }
 
     // [Command("search")]
@@ -128,37 +112,76 @@ public class MusicModule : ModuleBase<SocketCommandContext>
 
     [Command("add")]
     [RequireContext(ContextType.Guild)]
-    public async Task AddAsync([Remainder] string url)
+    public async Task AddAsync([Remainder] Uri url)
     {
-        if (Context.Guild?.AudioClient?.ConnectionState != ConnectionState.Connected)
+        if (Context.Message.Source is not MessageSource.User) return;
+        if (Context.Channel is not SocketVoiceChannel voiceChannel)
         {
-            await ReplyTextAsync("I'm not connected to a voice channel.");
+            await ReplyTextAsync("You muse use this command in a voice channel.");
             return;
         }
 
-        string rawContent = markdownRegex.Replace(url, "$1");
-        Uri? parsed = await ConvertUriAsync(rawContent);
+        Uri? parsed = await ConvertSongUriAsync(url.ToString());
         if (parsed is null)
         {
-            await ReplyTextAsync("Invalid URL.");
+            await ReplyTextAsync("Failed to convert the URL to a direct link.");
             return;
         }
 
-        _musicService.Enqueue(parsed);
+        _musicService.Enqueue(voiceChannel, parsed);
         await ReplyTextAsync($"Added: {parsed}");
+    }
+
+    [Command("addlist")]
+    [RequireContext(ContextType.Guild)]
+    public async Task AddListAsync([Remainder] Uri url)
+    {
+        if (Context.Message.Source is not MessageSource.User) return;
+        if (Context.Channel is not SocketVoiceChannel voiceChannel)
+        {
+            await ReplyTextAsync("You muse use this command in a voice channel.");
+            return;
+        }
+
+        List<Uri>? parsed = await ConvertSongListUriAsync(url.ToString());
+        if (parsed is null)
+        {
+            await ReplyTextAsync("Failed to passe the URL to a link representing a song list.");
+            return;
+        }
+
+        _musicService.Enqueue(voiceChannel, parsed);
+        await ReplyTextAsync($"Added: {parsed.Count} songs.");
+    }
+
+    [Command("addraw")]
+    [Alias("raw")]
+    [RequireContext(ContextType.Guild)]
+    public async Task AddRawAsync([Remainder] Uri url)
+    {
+        if (Context.Message.Source is not MessageSource.User) return;
+        if (Context.Channel is not SocketVoiceChannel voiceChannel)
+        {
+            await ReplyTextAsync("You muse use this command in a voice channel.");
+            return;
+        }
+
+        _musicService.Enqueue(voiceChannel, url);
+        await ReplyTextAsync($"Added: {url}");
     }
 
     [Command("skip")]
     [RequireContext(ContextType.Guild)]
     public async Task SkipAsync()
     {
-        if (Context.Guild?.AudioClient?.ConnectionState != ConnectionState.Connected)
+        if (Context.Message.Source is not MessageSource.User) return;
+        if (Context.Channel is not SocketVoiceChannel voiceChannel)
         {
-            await ReplyTextAsync("I'm not connected to a voice channel.");
+            await ReplyTextAsync("You muse use this command in a voice channel.");
             return;
         }
 
-        _musicService.Skip();
+        _musicService.Skip(voiceChannel);
         await ReplyTextAsync("Skipped.");
     }
 
@@ -166,30 +189,24 @@ public class MusicModule : ModuleBase<SocketCommandContext>
     [RequireContext(ContextType.Guild)]
     public async Task ListAsync()
     {
-        if (Context.Guild?.AudioClient?.ConnectionState != ConnectionState.Connected)
+        if (Context.Message.Source is not MessageSource.User) return;
+        if (Context.Channel is not SocketVoiceChannel voiceChannel)
         {
-            await ReplyTextAsync("I'm not connected to a voice channel.");
+            await ReplyTextAsync("You muse use this command in a voice channel.");
             return;
         }
 
-        await ReplyTextAsync(string.Join(Environment.NewLine, _musicService.Queue.Select((x, i) => $"[{i}] {x}")));
+        IEnumerable<Uri> queue = _musicService.GetQueue(voiceChannel);
+        await ReplyTextAsync(string.Join(Environment.NewLine, queue.Select((x, i) => $"[{i}] {x}")));
     }
 
-    private static readonly Regex neteaseSongPageRegex = new(@"^https://music.163.com/#/song\?id=(?<id>\d+)$", RegexOptions.Compiled);
-    private static readonly Regex neteaseSongDirectRegex = new(@"^https://music.163.com/song/media/outer/url\?id=(?<id>\d+).mp3$", RegexOptions.Compiled);
-    private static readonly Regex qqSongPageRegex = new(@"^https://y.qq.com/n/ryqq/songDetail/(?<id>\w+)$", RegexOptions.Compiled);
-    private async Task<Uri?> ConvertUriAsync(string url)
+    private static readonly Regex neteaseSongPageRegex = new(@"^https://music.163.com(/#)?/song\?id=(?<id>\d+)(&.*)?$", RegexOptions.Compiled);
+    private static readonly Regex qqSongPageRegex = new(@"^https://y.qq.com/n/ryqq/songDetail/(?<id>\w+)(&.*)?$", RegexOptions.Compiled);
+
+    private async Task<Uri?> ConvertSongUriAsync(string url)
     {
         // 网易云音乐歌曲页面
         Match match = neteaseSongPageRegex.Match(url);
-        if (match.Success)
-        {
-            string id = match.Groups["id"].Value;
-            return new Uri($"https://music.163.com/song/media/outer/url?id={id}.mp3");
-        }
-
-        // 网易云音乐直链
-        match = neteaseSongDirectRegex.Match(url);
         if (match.Success)
         {
             string id = match.Groups["id"].Value;
@@ -215,6 +232,33 @@ public class MusicModule : ModuleBase<SocketCommandContext>
                 .GetProperty("req_0").GetProperty("data").GetProperty("midurlinfo")[0].GetProperty("purl")
                 .ToString();
             return new Uri($"{sip}{path}");
+        }
+
+        return null;
+    }
+
+    private static readonly Regex neteaseSongListPageRegex = new(@"^https://music.163.com(/#)?/playlist\?id=(?<id>\d+)(&.*)?$", RegexOptions.Compiled);
+
+    private async Task<List<Uri>?> ConvertSongListUriAsync(string url)
+    {
+        // 网易云歌单页面
+        Match match = neteaseSongListPageRegex.Match(url);
+        if (match.Success)
+        {
+            string id = match.Groups["id"].Value;
+            HttpClient httpClient = _httpClientFactory.CreateClient("Music");
+            JsonDocument? response = await httpClient.GetFromJsonAsync<JsonDocument>(
+                $"https://music.163.com/api/playlist/detail?id={id}");
+            if (response is null) return null;
+            if (response.RootElement.GetProperty("code").GetInt32() != 200)
+                throw new InvalidOperationException(response.RootElement.GetProperty("message").ToString());
+            List<Uri> songs = response.RootElement
+                .GetProperty("result").GetProperty("tracks").EnumerateArray()
+                .Select(x => x.GetProperty("id").ToString())
+                .Select(x => $"https://music.163.com/song/media/outer/url?id={x}.mp3")
+                .Select(x => new Uri(x))
+                .ToList();
+            return songs;
         }
 
         return null;

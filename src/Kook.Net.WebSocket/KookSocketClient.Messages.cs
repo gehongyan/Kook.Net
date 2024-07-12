@@ -4,6 +4,7 @@ using System.Text.Json;
 using Kook.API;
 using Kook.API.Gateway;
 using Kook.API.Rest;
+using Kook.Audio;
 using Kook.Net;
 using Kook.Rest;
 
@@ -722,7 +723,7 @@ public partial class KookSocketClient
             {
                 SocketVoiceState after = voiceChannel.Guild.RemoveVoiceState(user.Id) ?? SocketVoiceState.Default;
                 SocketVoiceState before = after.Clone();
-                after.Update(null);
+                after.Leave(channel.Id);
                 await TimedInvokeAsync(_userDisconnectedEvent, nameof(UserDisconnected),
                     user, voiceChannel, gatewayEvent.MessageTimestamp).ConfigureAwait(false);
                 await TimedInvokeAsync(_userVoiceStateUpdatedEvent, nameof(UserVoiceStateUpdated),
@@ -1627,7 +1628,7 @@ public partial class KookSocketClient
         SocketGuildUser? user = guild.GetUser(data.UserId);
         Cacheable<SocketGuildUser, ulong> cacheableUser = GetCacheableSocketGuildUser(user, data.UserId, guild);
         SocketVoiceState before = guild.GetVoiceState(data.UserId)?.Clone() ?? SocketVoiceState.Default;
-        SocketVoiceState after = guild.AddOrUpdateVoiceState(data.UserId, channel.Id);
+        SocketVoiceState after = guild.AddOrUpdateVoiceStateForJoining(data.UserId, channel);
 
         await TimedInvokeAsync(_userConnectedEvent, nameof(UserConnected),
             cacheableUser, channel, data.At).ConfigureAwait(false);
@@ -1666,7 +1667,15 @@ public partial class KookSocketClient
         SocketGuildUser? user = guild.GetUser(data.UserId);
         Cacheable<SocketGuildUser, ulong> cacheableUser = GetCacheableSocketGuildUser(user, data.UserId, guild);
         SocketVoiceState before = guild.GetVoiceState(data.UserId)?.Clone() ?? SocketVoiceState.Default;
-        SocketVoiceState after = guild.AddOrUpdateVoiceState(data.UserId, null);
+        SocketVoiceState after = guild.AddOrUpdateVoiceStateForLeaving(data.UserId, channel);
+
+        if (data.UserId == CurrentUser?.Id && channel.AudioClient is AudioClient audioClient)
+        {
+            if (audioClient.LastRtpActiveTick - Environment.TickCount > AudioClientIdleTimeout)
+                audioClient.Connection.Error(new TimeoutException("Audio client has been idle for too long."));
+            else
+                audioClient.Connection.CriticalError(new InvalidOperationException("Audio client has been disconnected."));
+        }
 
         await TimedInvokeAsync(_userDisconnectedEvent, nameof(UserDisconnected),
             cacheableUser, channel, data.At).ConfigureAwait(false);

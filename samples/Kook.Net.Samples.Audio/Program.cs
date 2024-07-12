@@ -17,7 +17,7 @@ using Microsoft.Extensions.Hosting;
 HostApplicationBuilder builder = Host.CreateEmptyApplicationBuilder(null);
 builder.Services.AddSingleton(_ => new KookSocketClient(new KookSocketConfig
 {
-    LogLevel = LogSeverity.Debug,
+    LogLevel = LogSeverity.Verbose,
     MessageCacheSize = 100
 }));
 builder.Services.AddHostedService<KookClientService>();

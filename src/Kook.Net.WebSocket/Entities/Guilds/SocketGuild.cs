@@ -31,10 +31,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     private readonly ConcurrentDictionary<string, GuildEmote> _emotes;
     private readonly Dictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>> _boostSubscriptions;
 
-    private AudioClient? _audioClient;
-    private readonly SemaphoreSlim _audioLock;
-    private TaskCompletionSource<AudioClient?>? _audioConnectPromise;
-
     /// <inheritdoc />
     public string Name { get; private set; }
 
@@ -143,7 +139,17 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <summary>
     ///     Gets the <see cref="IAudioClient" /> associated with this guild.
     /// </summary>
-    public IAudioClient? AudioClient => _audioClient;
+    [Obsolete("Use AudioClients instead.")]
+    public IAudioClient? AudioClient => VoiceChannels
+        .FirstOrDefault(x => x.AudioClient is not null)?
+        .AudioClient;
+
+    /// <summary>
+    ///     Gets a collection of all audio clients in this guild.
+    /// </summary>
+    public IReadOnlyDictionary<ulong, IAudioClient> AudioClients => VoiceChannels
+        .Where(x => x.AudioClient is not null)
+        .ToDictionary(x => x.Id, x => x.AudioClient!);
 
     internal IReadOnlyDictionary<ulong, SocketVoiceState> VoiceStates => _voiceStates;
 
@@ -339,7 +345,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         _voiceStates = [];
         _emotes = [];
         _boostSubscriptions = [];
-        _audioLock = new SemaphoreSlim(1, 1);
         Name = string.Empty;
         Topic = string.Empty;
         Icon = string.Empty;
@@ -967,13 +972,10 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
     #region Voice States
 
-    internal SocketVoiceState AddOrUpdateVoiceState(ulong userId, ulong? voiceChannelId)
+    internal SocketVoiceState AddOrUpdateVoiceState(ulong userId, IEnumerable<SocketVoiceChannel> channels)
     {
-        SocketVoiceChannel? voiceChannel = voiceChannelId.HasValue
-            ? GetChannel(voiceChannelId.Value) as SocketVoiceChannel
-            : null;
         SocketVoiceState socketState = GetVoiceState(userId) ?? SocketVoiceState.Default;
-        socketState.Update(voiceChannel);
+        socketState.Update(channels);
         _voiceStates[userId] = socketState;
         return socketState;
     }
@@ -986,13 +988,35 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         return socketState;
     }
 
+    internal SocketVoiceState AddOrUpdateVoiceStateForJoining(ulong userId, SocketVoiceChannel voiceChannel)
+    {
+        SocketVoiceState socketState = GetVoiceState(userId) ?? SocketVoiceState.Default;
+        socketState.Join(voiceChannel);
+        _voiceStates[userId] = socketState;
+        return socketState;
+    }
+
+    internal SocketVoiceState AddOrUpdateVoiceStateForLeaving(ulong userId, SocketVoiceChannel voiceChannel)
+    {
+        SocketVoiceState socketState = GetVoiceState(userId) ?? SocketVoiceState.Default;
+        socketState.Leave(voiceChannel.Id);
+        _voiceStates[userId] = socketState;
+        return socketState;
+    }
+
     internal SocketVoiceState AddOrUpdateVoiceState(ulong userId, SocketVoiceChannel voiceChannel, LiveInfo liveInfo)
     {
         SocketVoiceState socketState = GetVoiceState(userId) ?? SocketVoiceState.Default;
         socketState.Update(liveInfo.InLive ? voiceChannel : null, liveInfo);
-        socketState.Update(voiceChannel);
+        socketState.Join(voiceChannel);
         _voiceStates[userId] = socketState;
         return socketState;
+    }
+
+    internal void ResetAllVoiceStateChannels()
+    {
+        foreach (SocketVoiceState voiceState in _voiceStates.Values)
+            voiceState.ResetChannels();
     }
 
     internal SocketVoiceState? GetVoiceState(ulong id) =>
@@ -1003,131 +1027,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
     #endregion
 
-    #region Audio
-
-    internal async Task<IAudioClient?> ConnectAudioAsync(ulong channelId,
-        /*bool selfDeaf, bool selfMute, */bool external, bool disconnect)
-    {
-        TaskCompletionSource<AudioClient?> promise;
-        await _audioLock.WaitAsync().ConfigureAwait(false);
-        try
-        {
-            if (disconnect || !external)
-                await DisconnectAudioInternalAsync().ConfigureAwait(false);
-            promise = new TaskCompletionSource<AudioClient?>();
-            _audioConnectPromise = promise;
-
-            if (external)
-            {
-                _ = promise.TrySetResultAsync(null);
-                // await UpdateSelfVoiceStateAsync(channelId, selfDeaf, selfMute).ConfigureAwait(false);
-                return null;
-            }
-
-            if (_audioClient is null)
-            {
-                AudioClient audioClient = new(this, Kook.GetAudioId(), channelId);
-                audioClient.Disconnected += async ex =>
-                {
-                    if (!promise.Task.IsCompleted)
-                    {
-                        try
-                        {
-                            audioClient.Dispose();
-                        }
-                        catch
-                        {
-                            // ignored
-                        }
-                        _audioClient = null;
-                        if (ex is not null)
-                            await promise.TrySetExceptionAsync(ex);
-                        else
-                            await promise.TrySetCanceledAsync();
-                    }
-                };
-                audioClient.Connected += () =>
-                {
-                    _ = promise.TrySetResultAsync(_audioClient);
-                    return Task.CompletedTask;
-                };
-                _audioClient = audioClient;
-            }
-
-            // await UpdateSelfVoiceStateAsync(channelId, selfDeaf, selfMute).ConfigureAwait(false);
-            await _audioClient.StartAsync().ConfigureAwait(false);
-        }
-        catch
-        {
-            await DisconnectAudioInternalAsync().ConfigureAwait(false);
-            throw;
-        }
-        finally
-        {
-            _audioLock.Release();
-        }
-
-        try
-        {
-            Task timeoutTask = Task.Delay(15000);
-            Task completedTask = await Task.WhenAny(promise.Task, timeoutTask).ConfigureAwait(false);
-            if (completedTask == timeoutTask)
-                throw new TimeoutException("The audio client failed to connect within 15 seconds.");
-            return await promise.Task.ConfigureAwait(false);
-        }
-        catch
-        {
-            await DisconnectAudioAsync().ConfigureAwait(false);
-            throw;
-        }
-    }
-
-    private async Task UpdateSelfVoiceStateAsync(ulong channelId, bool selfDeaf, bool selfMute)
-    {
-        SocketGuildUser? selfUser = GetVoiceChannel(channelId)?
-            .Users
-            .SingleOrDefault(x => x.Id == Kook.CurrentUser?.Id);
-        if (selfUser is null)
-            return;
-        if (selfDeaf)
-            await selfUser.DeafenAsync();
-        else
-            await selfUser.UndeafenAsync();
-        if (selfMute)
-            await selfUser.MuteAsync();
-        else
-            await selfUser.UnmuteAsync();
-    }
-
-    internal async Task DisconnectAudioAsync()
-    {
-        await _audioLock.WaitAsync().ConfigureAwait(false);
-        try
-        {
-            await DisconnectAudioInternalAsync().ConfigureAwait(false);
-        }
-        finally
-        {
-            _audioLock.Release();
-        }
-    }
-
-    private async Task DisconnectAudioInternalAsync()
-    {
-        _audioConnectPromise?.TrySetCanceledAsync(); //Cancel any previous audio connection
-        _audioConnectPromise = null;
-        if (_audioClient is not null)
-            await _audioClient.StopAsync().ConfigureAwait(false);
-        _audioClient?.Dispose();
-        _audioClient = null;
-    }
-
-    #endregion
-
     #region IGuild
-
-    /// <inheritdoc />
-    IAudioClient? IGuild.AudioClient => AudioClient;
 
     /// <inheritdoc />
     bool IGuild.Available => true;
@@ -1135,9 +1035,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc />
     void IDisposable.Dispose()
     {
-        DisconnectAudioAsync().GetAwaiter().GetResult();
-        _audioLock?.Dispose();
-        _audioClient?.Dispose();
+        foreach (SocketVoiceChannel voiceChannel in VoiceChannels)
+            ((IDisposable)voiceChannel).Dispose();
     }
 
     /// <inheritdoc />

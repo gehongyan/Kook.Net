@@ -91,6 +91,11 @@ public class KookSocketConfig : KookRestConfig
     public StartupCacheFetchMode StartupCacheFetchMode { get; set; } = StartupCacheFetchMode.Auto;
 
     /// <summary>
+    ///     Gets or sets the timeout for the audio client to be considered idle, in milliseconds.
+    /// </summary>
+    public int AudioClientIdleTimeout { get; set; } = 15000;
+
+    /// <summary>
     ///     Gets or sets whether or not all users should be downloaded as guilds come available.
     /// </summary>
     /// <remarks>

@@ -1061,16 +1061,29 @@ internal class KookRestApiClient : IDisposable
     public async Task<GetBotGatewayResponse> GetBotGatewayAsync(bool isCompressed = true, RequestOptions? options = null)
     {
         options = RequestOptions.CreateOrClone(options);
-        return await SendAsync<GetBotGatewayResponse>(HttpMethod.Get, () => $"gateway/index?compress={(isCompressed ? 1 : 0)}", new BucketIds(),
-            options: options).ConfigureAwait(false);
+        return await SendAsync<GetBotGatewayResponse>(HttpMethod.Get,
+                () => $"gateway/index?compress={(isCompressed ? 1 : 0)}", new BucketIds(), options: options)
+            .ConfigureAwait(false);
     }
 
-    public async Task<GetVoiceGatewayResponse> GetVoiceGatewayAsync(ulong channelId, RequestOptions? options = null)
+    public async Task<CreateVoiceGatewayResponse> CreateVoiceGatewayAsync(CreateVoiceGatewayParams args, RequestOptions? options = null)
     {
-        Preconditions.NotEqual(channelId, 0, nameof(channelId));
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
         options = RequestOptions.CreateOrClone(options);
-        return await SendAsync<GetVoiceGatewayResponse>(HttpMethod.Get, () => $"gateway/voice?channel_id={channelId}", new BucketIds(),
-            options: options).ConfigureAwait(false);
+        return await SendJsonAsync<CreateVoiceGatewayResponse>(HttpMethod.Post,
+                () => "voice/join", args, new BucketIds(), options: options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task DisposeVoiceGatewayAsync(DisposeVoiceGatewayParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
+        options = RequestOptions.CreateOrClone(options);
+        await SendJsonAsync(HttpMethod.Post,
+                () => "voice/leave", args, new BucketIds(), options: options)
+            .ConfigureAwait(false);
     }
 
     #endregion
