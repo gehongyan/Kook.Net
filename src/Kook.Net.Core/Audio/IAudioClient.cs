@@ -81,7 +81,10 @@ public interface IAudioClient : IDisposable
     /// <param name="packetLoss"> 音频流的丢包率，单位为百分比，默认值为 30%。 </param>
     /// <returns> 一个新的 PCM 音频流。 </returns>
     /// <remarks>
-    ///     使用大于由 KOOK 返回的指定的比特率进行编码并推流，可能会导致语音连接被 KOOK 语音服务断开。
+    ///     <note type="warning">
+    ///         如果为 <paramref name="bitrate" /> 设置了比特率，但比特率过多地超过了由
+    ///         KOOK 返回的指定的比特率，语音连接可能会被 KOOK 语音服务断开。
+    ///     </note>
     /// </remarks>
     AudioOutStream CreatePcmStream(AudioApplication application, int? bitrate = null, int bufferMillis = 1000, int packetLoss = 30);
 
@@ -93,7 +96,10 @@ public interface IAudioClient : IDisposable
     /// <param name="packetLoss"> 音频流的丢包率，单位为百分比，默认值为 30%。 </param>
     /// <returns> 一个新的 PCM 音频流。 </returns>
     /// <remarks>
-    ///     使用大于由 KOOK 返回的指定的比特率进行编码并推流，可能会导致语音连接被 KOOK 语音服务断开。
+    ///     <note type="warning">
+    ///         如果为 <paramref name="bitrate" /> 设置了比特率，但比特率过多地超过了由
+    ///         KOOK 返回的指定的比特率，语音连接可能会被 KOOK 语音服务断开。
+    ///     </note>
     /// </remarks>
     AudioOutStream CreateDirectPcmStream(AudioApplication application, int? bitrate = null, int packetLoss = 30);
 }
