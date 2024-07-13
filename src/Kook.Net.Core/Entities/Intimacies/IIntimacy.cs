@@ -1,63 +1,54 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic intimacy.
+///     表示一个通用的亲密度。
 /// </summary>
 public interface IIntimacy : IEntity<ulong>
 {
     /// <summary>
-    ///     Gets the user associated with this intimacy.
+    ///     获取与此亲密度相关的用户。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IUser" /> representing the user associated with this intimacy.
-    /// </returns>
     IUser User { get; }
 
     /// <summary>
-    ///     Gets the social information associated with this intimacy.
+    ///     获取与此亲密度关联的社交信息。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the social information associated with this intimacy.
-    /// </returns>
     string SocialInfo { get; }
 
     /// <summary>
-    ///     Gets the time at which the user read the message.
+    ///     获取用户最近一次查看此亲密度的时间。
     /// </summary>
-    /// <returns>
-    ///     A time at which the user read the message.
-    /// </returns>
     DateTimeOffset LastReadAt { get; }
 
     /// <summary>
-    ///     Gets the time at which this intimacy was modified last time.
+    ///     获取此亲密度最近一次修改的时间。
     /// </summary>
-    /// <returns>
-    ///     A time at which this intimacy was modified last time.
-    /// </returns>
     DateTimeOffset? LastModifyAt { get; }
 
     /// <summary>
-    ///     Gets the score associated with this intimacy.
+    ///     获取此亲密度的分数。
     /// </summary>
-    /// <returns>
-    ///     A <c>int</c> representing the score associated with this intimacy.
-    /// </returns>
+    /// <remarks>
+    ///     亲密度的分数是一个整数，表示用户与此亲密度的亲密程度，最小值为 0，最大值为 2200。<br />
+    ///     亲密度以 10 颗颜色与样式不同的心形图案组成。<br />
+    ///     当亲密度分数不小于 1000 时，亲密度将显示为红色，其中，实心图案的数量为 <c>(Score - 1000) / 100</c> 的四舍五入值，最大值为 10，其余为空心图案。<br />
+    ///     当亲密度分数小于 1000 时，亲密度将显示为灰色，其中，心碎图案的数量为 <c>10 - Score / 100</c> 的四舍五入值，其余为空心图案。
+    /// </remarks>
     int Score { get; }
 
     /// <summary>
-    ///     Gets the images associated with this intimacy.
+    ///     获取此亲密度的所有形象图像。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IReadOnlyCollection{IntimacyImage}"/> containing the images associated with this intimacy.
-    /// </returns>
     IReadOnlyCollection<IntimacyImage> Images { get; }
 
     /// <summary>
-    ///     Updates the intimacy information with this user.
+    ///     修改此用户的亲密度信息。
     /// </summary>
-    /// <param name="func">A delegate containing the properties to modify the <see cref="IIntimacy"/> with.</param>
+    /// <param name="func"> 一个包含修改此亲密度信息的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>A task that represents the asynchronous operation for updating the intimacy information.</returns>
+    /// <returns>
+    ///     A task that represents the asynchronous operation for updating the intimacy information.
+    ///     一个表示异步修改的任务。
+    /// </returns>
     Task UpdateAsync(Action<IntimacyProperties> func, RequestOptions? options = null);
 }

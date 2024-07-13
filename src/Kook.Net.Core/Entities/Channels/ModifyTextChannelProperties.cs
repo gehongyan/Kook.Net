@@ -16,7 +16,7 @@ public class ModifyTextChannelProperties : ModifyGuildChannelProperties
     public string? Topic { get; set; }
 
     /// <summary>
-    ///     获取或设置此要设置到此频道的慢速模式延迟。
+    ///     获取或设置要设置到此频道的慢速模式延迟。
     /// </summary>
     /// <remarks>
     ///     设置此值将要求每个用户在发送另一条消息之前等待指定的时间间隔；设置为 <see cref="F:Kook.SlowModeInterval.None"/>

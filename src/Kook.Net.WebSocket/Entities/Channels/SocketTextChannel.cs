@@ -110,7 +110,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <param name="id"> 消息的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     一个表示异步获取操作的额任务。任务结果包含检索到的消息；如果未找到具有指定 ID 的消息，则返回 <c>null</c>。
+    ///     一个表示异步获取操作的任务。任务结果包含检索到的消息；如果未找到具有指定 ID 的消息，则返回 <c>null</c>。
     /// </returns>
     public async Task<IMessage> GetMessageAsync(Guid id, RequestOptions? options = null)
     {

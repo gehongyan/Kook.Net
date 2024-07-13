@@ -48,7 +48,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <summary>
     ///     修改此服务器频道。
     /// </summary>
-    /// <param name="func">T 一个包含修改服务器频道属性的委托。</param>
+    /// <param name="func"> 一个包含修改服务器频道属性的委托。</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     一个表示服务器频道属性修改操作的异步任务。
