@@ -29,7 +29,7 @@ public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>, IEquatabl
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>.
+    ///     判定两个 <see cref="ImageGroupModule"/> 是否相等。
     /// </summary>
     /// <returns>
     ///     <c>true</c> if the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>;
@@ -38,7 +38,7 @@ public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>, IEquatabl
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ImageGroupModule"/> is not equal to the current <see cref="ImageGroupModule"/>.
+    ///     判定两个 <see cref="ImageGroupModule"/> 是否不相等。
     /// </summary>
     /// <returns>
     ///     <c>true</c> if the specified <see cref="ImageGroupModule"/> is not equal to the current <see cref="ImageGroupModule"/>;
@@ -46,16 +46,11 @@ public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>, IEquatabl
     public static bool operator !=(ImageGroupModule left, ImageGroupModule right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="ImageGroupModule"/>, <see cref="Equals(ImageGroupModule)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="ImageGroupModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is ImageGroupModule imageGroupModule && Equals(imageGroupModule);
 
-    /// <summary>Determines whether the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>.</summary>
-    /// <param name="imageGroupModule">The <see cref="ImageGroupModule"/> to compare with the current <see cref="ImageGroupModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] ImageGroupModule? imageGroupModule) =>
         GetHashCode() == imageGroupModule?.GetHashCode();
 

@@ -42,9 +42,7 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// <param name="field">
     ///     The PlainText element to add.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     /// <exception cref="ArgumentException">
     ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
     /// </exception>
@@ -60,9 +58,7 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// <param name="field">
     ///     The KMarkdown element to add.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public ContextModuleBuilder AddElement(KMarkdownElementBuilder field)
     {
         Elements.Add(field);
@@ -75,9 +71,7 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// <param name="field">
     ///     The image element to add.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     /// <exception cref="ArgumentException">
     ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
     /// </exception>
@@ -93,9 +87,7 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     /// <param name="action">
     ///     The action to add an element to the context module.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public ContextModuleBuilder AddElement<T>(Action<T>? action = null)
         where T : IElementBuilder, new()
     {
@@ -145,29 +137,24 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.
+    ///     判定两个 <see cref="ContextModuleBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ContextModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(ContextModuleBuilder? left, ContextModuleBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ContextModuleBuilder"/> is not equal to the current <see cref="ContextModuleBuilder"/>.
+    ///     判定两个 <see cref="ContextModuleBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ContextModuleBuilder"/> is not equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ContextModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(ContextModuleBuilder? left, ContextModuleBuilder? right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="ContextModuleBuilder"/>, <see cref="Equals(ContextModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="ContextModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is ContextModuleBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.</summary>
-    /// <param name="contextModuleBuilder">The <see cref="ContextModuleBuilder"/> to compare with the current <see cref="ContextModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] ContextModuleBuilder? contextModuleBuilder)
     {
         if (contextModuleBuilder is null)

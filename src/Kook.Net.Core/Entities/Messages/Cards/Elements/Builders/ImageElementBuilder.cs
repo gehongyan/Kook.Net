@@ -4,31 +4,33 @@ using Kook.Utils;
 namespace Kook;
 
 /// <summary>
-///     An element builder to build an <see cref="ImageElement"/>.
+///     用来构建 <see cref="ImageElement"/> 元素的构建器。
 /// </summary>
 public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuilder>, IEquatable<IElementBuilder>
 {
     /// <summary>
-    ///     Gets the maximum image alternative text length allowed by Kook.
+    ///     图片替代文本的最大长度。
     /// </summary>
     public const int MaxAlternativeLength = 20;
 
     /// <summary>
-    ///     Initialized a new instance of the <see cref="ImageElementBuilder"/> class.
+    ///     初始化一个 <see cref="ImageElementBuilder"/> 类的新实例。
     /// </summary>
     public ImageElementBuilder()
     {
     }
 
     /// <summary>
-    ///     Initialized a new instance of the <see cref="ImageElementBuilder"/> class.
+    ///     初始化一个 <see cref="ImageElementBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="source"> The source of the image. </param>
-    /// <param name="alternative"> The alternative text of the image. </param>
-    /// <param name="size"> The size of the image. </param>
-    /// <param name="circle"> Whether the image should be rendered as a circle. </param>
-    public ImageElementBuilder(string source, string? alternative = null, ImageSize size = ImageSize.Small,
-        bool circle = false)
+    /// <param name="source"> 图片的源。 </param>
+    /// <param name="alternative"> 图片的替代文本。 </param>
+    /// <param name="size"> 图片的大小。 </param>
+    /// <param name="circle"> 图片是否应渲染为圆形。 </param>
+    /// <remarks>
+    ///     <paramref name="size"/> 仅在 <see cref="ContextModuleBuilder"/> 中生效，<see cref="ContainerModule"/> 中不生效。
+    /// </remarks>
+    public ImageElementBuilder(string source, string? alternative = null, ImageSize? size = null, bool circle = false)
     {
         Source = source;
         Alternative = alternative;
@@ -36,57 +38,43 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
         Circle = circle;
     }
 
-    /// <summary>
-    ///     Gets the type of the element that this builder builds.
-    /// </summary>
-    /// <returns>
-    ///     An <see cref="ElementType"/> that represents the type of element that this builder builds.
-    /// </returns>
+    /// <inheritdoc />
     public ElementType Type => ElementType.Image;
 
     /// <summary>
-    ///     Gets or sets the source of an <see cref="ImageElementBuilder"/>.
+    ///     获取或设置图片的源。
     /// </summary>
-    /// <returns>
-    ///     A string that represents the source of the <see cref="ImageElementBuilder"/>.
-    /// </returns>
+    /// <remarks>
+    ///     图片的媒体类型仅支持 <c>image/jpeg</c>、<c>image/gif</c>、<c>image/png</c>。
+    /// </remarks>
     public string? Source { get; set; }
 
     /// <summary>
-    ///     Gets or sets the alternative text of an <see cref="ImageElementBuilder"/>.
+    ///     获取或设置图片的替代文本。
     /// </summary>
-    /// <returns>
-    ///     A string that represents the alternative text of the <see cref="ImageElementBuilder"/>.
-    /// </returns>
     public string? Alternative { get; set; }
 
     /// <summary>
-    ///     Gets or sets the size of the image of an <see cref="ImageElementBuilder"/>.
+    ///     获取或设置 <see cref="ImageElementBuilder"/> 的图片大小。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="ImageSize"/> that represents the size of the image of the <see cref="ImageElementBuilder"/>;
-    ///     <c>null</c> if the size is not specified.
-    /// </returns>
+    /// <remarks>
+    ///     当前属性仅在 <see cref="ContextModuleBuilder"/> 中生效，<see cref="ContainerModule"/> 中不生效。
+    /// </remarks>
     public ImageSize? Size { get; set; }
 
     /// <summary>
-    ///     Gets or sets whether the image should be rendered as a circle.
+    ///     获取或设置图片是否应渲染为圆形。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the image should be rendered as a circle; otherwise, <c>false</c>;
-    ///     or <c>null</c> if whether the image should be rendered as a circle is not specified.
-    /// </returns>
     public bool? Circle { get; set; }
 
     /// <summary>
-    ///     Sets the source of an <see cref="ImageElementBuilder"/>.
+    ///     设置图片的源，值将被设置到 <see cref="Source"/> 属性上。
     /// </summary>
-    /// <param name="source">
-    ///     The source to be set.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="source"> 图片的源。 </param>
+    /// <returns> 当前构建器。 </returns>
+    /// <remarks>
+    ///     图片的媒体类型仅支持 <c>image/jpeg</c>、<c>image/gif</c>、<c>image/png</c>。
+    /// </remarks>
     public ImageElementBuilder WithSource(string? source)
     {
         Source = source;
@@ -94,14 +82,10 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     }
 
     /// <summary>
-    ///     Sets the alternative text of an <see cref="ImageElementBuilder"/>.
+    ///     设置图片的替代文本，值将被设置到 <see cref="Alternative"/> 属性上。
     /// </summary>
-    /// <param name="alternative">
-    ///     The alternative text to be set.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="alternative"> 图片的替代文本。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ImageElementBuilder WithAlternative(string? alternative)
     {
         Alternative = alternative;
@@ -109,14 +93,10 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     }
 
     /// <summary>
-    ///     Sets the size of the image of an <see cref="ImageElementBuilder"/>.
+    ///     设置图片的大小，值将被设置到 <see cref="Size"/> 属性上。
     /// </summary>
-    /// <param name="size">
-    ///     The size to be set.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="size"> 图片的大小。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ImageElementBuilder WithSize(ImageSize? size)
     {
         Size = size;
@@ -124,14 +104,10 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     }
 
     /// <summary>
-    ///     Sets whether the image should be rendered as a circle.
+    ///     设置图片是否应渲染为圆形，值将被设置到 <see cref="Circle"/> 属性上。
     /// </summary>
-    /// <param name="circle">
-    ///     <c>true</c> if the image should be rendered as a circle; otherwise, <c>false</c>.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="circle"> 图片是否应渲染为圆形。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ImageElementBuilder WithCircle(bool? circle)
     {
         Circle = circle;
@@ -139,22 +115,22 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     }
 
     /// <summary>
-    ///     Builds the <see cref="ImageElementBuilder"/> into an <see cref="ImageElement"/>.
+    ///     构建当前构建器为一个 <see cref="ImageElement"/>。
     /// </summary>
     /// <returns>
-    ///     An <see cref="ImageElement"/> represents the built element object.
+    ///     由当前构建器表示的属性构建的 <see cref="ImageElement"/> 对象。
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     The <see cref="Source"/> url is null.
+    ///     <see cref="Source"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Source"/> url is empty.
+    ///     <see cref="Source"/> 为空字符串。
     /// </exception>
-    /// <exception cref="InvalidOperationException">
-    ///     The <see cref="Source"/> url does not include a protocol (either HTTP or HTTPS).
+    /// <exception cref="UriFormatException">
+    ///     <see cref="Source"/> 不是有效的 URL。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The length of <see cref="Alternative"/> is greater than <see cref="MaxAlternativeLength"/>.
+    ///     <see cref="Alternative"/> 的长度超过了 <see cref="MaxAlternativeLength"/>。
     /// </exception>
     [MemberNotNull(nameof(Source))]
     public ImageElement Build()
@@ -177,15 +153,10 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     }
 
     /// <summary>
-    ///     Initialized a new instance of the <see cref="ImageElementBuilder"/> class
-    ///     with the specified content.
+    ///     使用指定的图片源初始化一个新的 <see cref="ImageElementBuilder"/> 类的实例。
     /// </summary>
-    /// <param name="source">
-    ///     The content of the <see cref="ImageElement"/>.
-    /// </param>
-    /// <returns>
-    ///     An <see cref="ImageElementBuilder"/> object that is initialized with the specified image source.
-    /// </returns>
+    /// <param name="source"> 图片的源。 </param>
+    /// <returns> 一个使用指定的图片源初始化的 <see cref="ImageElementBuilder"/> 类的实例。 </returns>
     public static implicit operator ImageElementBuilder(string source) => new(source);
 
     /// <inheritdoc />
@@ -193,30 +164,24 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     IElement IElementBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ImageElementBuilder"/> is equal to the current <see cref="ImageElementBuilder"/>.
+    ///     判定两个 <see cref="ImageElementBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ImageElementBuilder"/> is equal to the current <see cref="ImageElementBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ImageElementBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(ImageElementBuilder? left, ImageElementBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ImageElementBuilder"/> is not equal to the current <see cref="ImageElementBuilder"/>.
+    ///     判定两个 <see cref="ImageElementBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ImageElementBuilder"/> is not equal to the current <see cref="ImageElementBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ImageElementBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(ImageElementBuilder? left, ImageElementBuilder? right) =>
         !(left == right);
 
-    /// <summary>
-    ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="ImageElementBuilder"/>.
-    /// </summary>
-    /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="ImageElementBuilder"/>. </param>
-    /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="ImageElementBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is ImageElementBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="ImageElementBuilder"/> is equal to the current <see cref="ImageElementBuilder"/>.</summary>
-    /// <param name="imageElementBuilder">The <see cref="ImageElementBuilder"/> to compare with the current <see cref="ImageElementBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ImageElementBuilder"/> is equal to the current <see cref="ImageElementBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] ImageElementBuilder? imageElementBuilder)
     {
         if (imageElementBuilder is null) return false;

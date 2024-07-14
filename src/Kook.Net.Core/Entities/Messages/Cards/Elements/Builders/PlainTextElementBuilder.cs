@@ -3,20 +3,17 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     An element builder to build a <see cref="PlainTextElement"/>.
+///     用来构建 <see cref="PlainTextElement"/> 元素的构建器。
 /// </summary>
 public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElementBuilder>, IEquatable<IElementBuilder>
 {
     /// <summary>
-    ///     Gets the maximum plain text length allowed by Kook.
+    ///     纯文本的最大长度。
     /// </summary>
-    /// <returns>
-    ///     An int that represents the maximum plain text length allowed by Kook.
-    /// </returns>
     public const int MaxPlainTextLength = 2000;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="PlainTextElementBuilder"/> class.
+    ///     初始化一个 <see cref="PlainTextElementBuilder"/> 类的新实例。
     /// </summary>
     public PlainTextElementBuilder()
     {
@@ -24,49 +21,36 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="PlainTextElementBuilder"/> class.
+    ///     初始化一个 <see cref="PlainTextElementBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="content"> The content of the <see cref="PlainTextElement"/>.</param>
-    /// <param name="emoji"> A boolean value that indicates whether the shortcuts should be translated into emojis.</param>
+    /// <param name="content"> 纯文本的内容。 </param>
+    /// <param name="emoji"> 是否将 Emoji 表情符号的短代码解析为表情符号。 </param>
+    /// <seealso cref="T:Kook.Emoji"/>
     public PlainTextElementBuilder(string? content, bool emoji = true)
     {
         Content = content;
         Emoji = emoji;
     }
 
-    /// <summary>
-    ///     Gets the type of the element that this builder builds.
-    /// </summary>
-    /// <returns>
-    ///     An <see cref="ElementType"/> that represents the type of element that this builder builds.
-    /// </returns>
+    /// <inheritdoc />
     public ElementType Type => ElementType.PlainText;
 
     /// <summary>
-    ///     Gets or sets the content of a <see cref="PlainTextElement"/>.
+    ///     获取或设置纯文本的文本内容。
     /// </summary>
-    /// <returns>
-    ///     The content of the <see cref="PlainTextElement"/>.
-    /// </returns>
     public string? Content { get; set; }
 
     /// <summary>
-    ///     Gets whether the shortcuts should be translated into emojis.
+    ///     获取或设置 Emoji 表情符号的短代码是否应被解析为表情符号。
     /// </summary>
-    /// <returns>
-    ///     A boolean value that indicates whether the shortcuts should be translated into emojis.
-    ///     <c>true</c> if the shortcuts should be translated into emojis;
-    ///     <c>false</c> if the text should be displayed as is.
-    /// </returns>
+    /// <seealso cref="T:Kook.Emoji"/>
     public bool Emoji { get; set; } = true;
 
     /// <summary>
-    ///     Sets the content of a <see cref="PlainTextElement"/>.
+    ///     设置纯文本的文本内容。
     /// </summary>
-    /// <param name="content">The text to be set as the content.</param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="content"> 纯文本的文本内容。 </param>
+    /// <returns> 当前构建器。 </returns>
     public PlainTextElementBuilder WithContent(string content)
     {
         Content = content;
@@ -74,16 +58,11 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     }
 
     /// <summary>
-    ///     Sets whether the shortcuts should be translated into emojis.
+    ///     设置 Emoji 表情符号的短代码是否应被解析为表情符号。
     /// </summary>
-    /// <param name="emoji">
-    ///     A boolean value that indicates whether the shortcuts should be translated into emojis.
-    ///     <c>true</c> if the shortcuts should be translated into emojis;
-    ///     <c>false</c> if the text should be displayed as is.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="emoji"> Emoji 表情符号的短代码是否应被解析为表情符号。 </param>
+    /// <returns> 当前构建器。 </returns>
+    /// <seealso cref="T:Kook.Emoji"/>
     public PlainTextElementBuilder WithEmoji(bool emoji)
     {
         Emoji = emoji;
@@ -91,16 +70,16 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     }
 
     /// <summary>
-    ///     Builds the <see cref="PlainTextElementBuilder"/> into a <see cref="PlainTextElement"/>.
+    ///     构建当前构建器为一个 <see cref="PlainTextElement"/>。
     /// </summary>
     /// <returns>
-    ///     A <see cref="PlainTextElement"/> represents the built element object.
+    ///     由当前构建器表示的属性构建的 <see cref="PlainTextElement"/> 对象。
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     The <see cref="Content"/> is null.
+    ///     <see cref="Content"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The length of the <see cref="Content"/> is greater than <see cref="MaxPlainTextLength"/>.
+    ///     <see cref="Content"/> 的长度超过了 <see cref="MaxPlainTextLength"/>。
     /// </exception>
     [MemberNotNull(nameof(Content))]
     public PlainTextElement Build()
@@ -117,15 +96,10 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     }
 
     /// <summary>
-    ///     Initialized a new instance of the <see cref="PlainTextElementBuilder"/> class
-    ///     with the specified content.
+    ///     使用指定的纯文本内容初始化一个新的 <see cref="PlainTextElementBuilder"/> 类的实例。
     /// </summary>
-    /// <param name="content">
-    ///     The content of the <see cref="PlainTextElement"/>.
-    /// </param>
-    /// <returns>
-    ///     A <see cref="PlainTextElementBuilder"/> object that is initialized with the specified content.
-    /// </returns>
+    /// <param name="content"> 纯文本内容。 </param>
+    /// <returns> 一个使用指定的纯文本内容初始化的 <see cref="PlainTextElementBuilder"/> 类的实例。 </returns>
     public static implicit operator PlainTextElementBuilder(string content) => new(content);
 
     /// <inheritdoc />
@@ -133,30 +107,24 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     IElement IElementBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>.
+    ///     判定两个 <see cref="PlainTextElementBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <returns> 如果两个 <see cref="PlainTextElementBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。</returns>
     public static bool operator ==(PlainTextElementBuilder? left, PlainTextElementBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="PlainTextElementBuilder"/> is not equal to the current <see cref="PlainTextElementBuilder"/>.
+    ///     判定两个 <see cref="PlainTextElementBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is not equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <returns> 如果两个 <see cref="PlainTextElementBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。</returns>
     public static bool operator !=(PlainTextElementBuilder? left, PlainTextElementBuilder? right) =>
         !(left == right);
 
-    /// <summary>
-    ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="PlainTextElementBuilder"/>.
-    /// </summary>
-    /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="PlainTextElementBuilder"/>.</param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is PlainTextElementBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>.</summary>
-    /// <param name="plainTextElementBuilder">The <see cref="PlainTextElementBuilder"/> to compare with the current <see cref="PlainTextElementBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="PlainTextElementBuilder"/> is equal to the current <see cref="PlainTextElementBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] PlainTextElementBuilder? plainTextElementBuilder)
     {
         if (plainTextElementBuilder is null) return false;

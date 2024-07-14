@@ -57,9 +57,7 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     /// <param name="mode">
     ///     A <see cref="CountdownMode"/> representing how the countdown should be displayed.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public CountdownModuleBuilder WithMode(CountdownMode mode)
     {
         Mode = mode;
@@ -72,9 +70,7 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     /// <param name="endTime">
     ///     The time at which the countdown ends.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public CountdownModuleBuilder WithEndTime(DateTimeOffset endTime)
     {
         EndTime = endTime;
@@ -87,9 +83,7 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     /// <param name="startTime">
     ///     The time at which the countdown begins.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public CountdownModuleBuilder WithStartTime(DateTimeOffset? startTime)
     {
         StartTime = startTime;
@@ -142,29 +136,24 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>.
+    ///     判定两个 <see cref="CountdownModuleBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="CountdownModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(CountdownModuleBuilder? left, CountdownModuleBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="CountdownModuleBuilder"/> is not equal to the current <see cref="CountdownModuleBuilder"/>.
+    ///     判定两个 <see cref="CountdownModuleBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is not equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="CountdownModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(CountdownModuleBuilder? left, CountdownModuleBuilder? right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="CountdownModuleBuilder"/>, <see cref="Equals(CountdownModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="CountdownModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is CountdownModuleBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>.</summary>
-    /// <param name="countdownModuleBuilder">The <see cref="CountdownModuleBuilder"/> to compare with the current <see cref="CountdownModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="CountdownModuleBuilder"/> is equal to the current <see cref="CountdownModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] CountdownModuleBuilder? countdownModuleBuilder)
     {
         if (countdownModuleBuilder is null) return false;

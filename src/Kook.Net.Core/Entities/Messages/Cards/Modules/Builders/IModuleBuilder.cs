@@ -14,7 +14,7 @@ public interface IModuleBuilder
     ModuleType Type { get; }
 
     /// <summary>
-    ///     Builds the <see cref="IModuleBuilder"/> into an <see cref="IModule"/>.
+    ///     构建当前构建器为一个 <see cref="IModule"/>。
     /// </summary>
     /// <returns>
     ///     An <see cref="IModule"/> representing the built module object.

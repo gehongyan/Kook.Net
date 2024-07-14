@@ -4,29 +4,35 @@ using Kook.Utils;
 namespace Kook;
 
 /// <summary>
-///     An element builder to build a <see cref="ButtonElement"/>.
+///     用来构建 <see cref="ButtonElement"/> 元素的构建器。
 /// </summary>
 public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBuilder>, IEquatable<IElementBuilder>
 {
     /// <summary>
-    ///     Gets the maximum button text length allowed by Kook.
+    ///     按钮文本的最大长度。
     /// </summary>
     public const int MaxButtonTextLength = 40;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ButtonElementBuilder"/> class.
+    ///     初始化一个 <see cref="ButtonElementBuilder"/> 类的新实例。
     /// </summary>
     public ButtonElementBuilder()
     {
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ButtonElementBuilder"/> class.
+    ///     初始化一个 <see cref="ButtonElementBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="text"> The text of the button.</param>
-    /// <param name="theme"> The theme of the button.</param>
-    /// <param name="value"> The value of the button.</param>
-    /// <param name="click"> The type of the click event.</param>
+    /// <param name="text"> 按钮的文本。 </param>
+    /// <param name="theme"> 按钮的主题。 </param>
+    /// <param name="value"> 按钮的值。 </param>
+    /// <param name="click"> 按钮的点击事件类型。 </param>
+    /// <remarks>
+    ///     如果 <paramref name="click"/> 设置为 <see cref="F:Kook.ButtonClickEventType.ReturnValue"/>，
+    ///     则在用户点击按钮时，KOOK 会通过网关下发按钮点击事件，并携带 <paramref name="value" /> 的值。<br />
+    ///     如果 <paramref name="click"/> 设置为 <see cref="F:Kook.ButtonClickEventType.Link"/>，
+    ///     则在用户点击按钮时，KOOK 会将用户重定向到 <paramref name="value" /> 指定的 URL。
+    /// </remarks>
     public ButtonElementBuilder(string text, ButtonTheme theme = ButtonTheme.Primary,
         string? value = null, ButtonClickEventType click = ButtonClickEventType.None)
     {
@@ -36,60 +42,49 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
         Click = click;
     }
 
-    /// <summary>
-    ///     Gets the type of the element that this builder builds.
-    /// </summary>
-    /// <returns>
-    ///     An <see cref="ElementType"/> that represents the type of element that this builder builds.
-    /// </returns>
+    /// <inheritdoc />
     public ElementType Type => ElementType.Button;
 
     /// <summary>
-    ///     Gets or sets the theme of the button.
+    ///     获取或设置按钮的主题。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="ButtonTheme"/> that represents the theme of the button.
-    /// </returns>
     public ButtonTheme Theme { get; set; }
 
     /// <summary>
-    ///     Gets or sets the value of the button.
+    ///     获取或设置按钮的值。
     /// </summary>
-    /// <returns>
-    ///     A string that represents the value of the button.
-    /// </returns>
     /// <remarks>
-    ///     If the <see cref="Click"/> is set to <see cref="ButtonClickEventType.ReturnValue"/>,
-    ///     the value of the property will be returned when the button is clicked.
+    ///     如果 <see cref="Click"/> 设置为 <see cref="F:Kook.ButtonClickEventType.ReturnValue"/>，
+    ///     则在用户点击按钮时，KOOK 会通过网关下发按钮点击事件，并携带此属性的值。<br />
+    ///     如果 <see cref="Click"/> 设置为 <see cref="F:Kook.ButtonClickEventType.Link"/>，
+    ///     则在用户点击按钮时，KOOK 会将用户重定向到此属性指定的 URL。
     /// </remarks>
     public string? Value { get; set; }
 
     /// <summary>
-    ///     Gets or sets the type of the click event.
+    ///     获取或设置按钮被点击时触发的事件类型。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="ButtonClickEventType"/> that represents the type of the click event.
-    /// </returns>
+    /// <remarks>
+    ///     如果此属性设置为 <see cref="F:Kook.ButtonClickEventType.ReturnValue"/>，
+    ///     则在用户点击按钮时，KOOK 会通过网关下发按钮点击事件，并携带 <see cref="Value"/> 的值。<br />
+    ///     如果此属性设置为 <see cref="F:Kook.ButtonClickEventType.Link"/>，
+    ///     则在用户点击按钮时，KOOK 会将用户重定向到 <see cref="Value"/> 指定的 URL。
+    /// </remarks>
     public ButtonClickEventType Click { get; set; }
 
     /// <summary>
-    ///     Gets or sets the text element of the button.
+    ///     获取或设置按钮的文本元素。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IElementBuilder"/> that represents the text of the button.
-    /// </returns>
     /// <remarks>
-    ///     This property only takes a <see cref="PlainTextElementBuilder"/> or a <see cref="KMarkdownElementBuilder"/>.
+    ///     此属性只接受 <see cref="PlainTextElementBuilder"/> 或 <see cref="KMarkdownElementBuilder"/>。
     /// </remarks>
     public IElementBuilder? Text { get; set; }
 
     /// <summary>
-    ///     Sets the theme of a <see cref="ButtonElement"/>.
+    ///     设置按钮的主题，值将被设置到 <see cref="Theme"/> 属性上。
     /// </summary>
-    /// <param name="theme">The theme to be set.</param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="theme"> 按钮的主题。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ButtonElementBuilder WithTheme(ButtonTheme theme)
     {
         Theme = theme;
@@ -97,12 +92,10 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     }
 
     /// <summary>
-    ///     Sets the value of a <see cref="ButtonElement"/>.
+    ///     设置按钮的值，值将被设置到 <see cref="Value"/> 属性上。
     /// </summary>
-    /// <param name="value">The value to be set.</param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="value"> 按钮的值。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ButtonElementBuilder WithValue(string? value)
     {
         Value = value;
@@ -110,14 +103,10 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     }
 
     /// <summary>
-    ///     Sets the type of the event to be fired when the button is clicked in a <see cref="ButtonElement"/>.
+    ///     设置按钮被点击时触发的事件类型，值将被设置到 <see cref="Click"/> 属性上。
     /// </summary>
-    /// <param name="click">
-    ///     The type of the event to be fired when the button is clicked.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="click"> 按钮的点击事件类型。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ButtonElementBuilder WithClick(ButtonClickEventType click)
     {
         Click = click;
@@ -125,14 +114,10 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     }
 
     /// <summary>
-    ///     Sets the text of a <see cref="ButtonElement"/>.
+    ///     设置按钮的文本。
     /// </summary>
-    /// <param name="text">
-    ///     The builder of a <see cref="PlainTextElement"/>, which will be set as the text of the button.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="text"> 按钮的文本。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ButtonElementBuilder WithText(PlainTextElementBuilder text)
     {
         Text = text;
@@ -140,14 +125,10 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     }
 
     /// <summary>
-    ///     Sets the text of a <see cref="ButtonElement"/>.
+    ///     设置按钮的文本。
     /// </summary>
-    /// <param name="text">
-    ///     The builder of a <see cref="KMarkdownElement"/>, which will be set as the text of the button.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="text"> 按钮的文本。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ButtonElementBuilder WithText(KMarkdownElementBuilder text)
     {
         Text = text;
@@ -155,16 +136,13 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     }
 
     /// <summary>
-    ///     Sets the text of a <see cref="ButtonElement"/>.
+    ///     设置按钮的文本。
     /// </summary>
     /// <param name="action">
-    ///     The action to create a builder of an <see cref="IElementBuilder"/>,
-    ///     which will be set as the text of the button.
-    ///     The action must return a <see cref="PlainTextElementBuilder"/> or a <see cref="KMarkdownElementBuilder"/>.
+    ///     一个包含创建文本元素构建器的委托，委托的返回类型必须是 <see cref="PlainTextElementBuilder"/>
+    ///     或 <see cref="KMarkdownElementBuilder"/>。
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public ButtonElementBuilder WithText<T>(Action<T> action)
         where T : IElementBuilder, new()
     {
@@ -175,19 +153,16 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     }
 
     /// <summary>
-    ///     Sets the text of a <see cref="ButtonElement"/>.
+    ///     设置按钮的文本。
     /// </summary>
     /// <param name="text">
-    ///     A string to be set as the text of the button.
+    ///     按钮的文本。
     /// </param>
     /// <param name="isKMarkdown">
-    ///     A bool indicating whether the text is in KMarkdown format;
-    ///     if <c>true</c>, the text will be set as a <see cref="KMarkdownElement"/>;
-    ///     if <c>false</c>, the text will be set as a <see cref="PlainTextElement"/>.
+    ///     文本是否为 KMarkdown 格式；如果为 <c>true</c>，则文本将被设置为 <see cref="KMarkdownElement"/>；如果为
+    ///     <c>false</c>，则文本将被设置为 <see cref="PlainTextElement"/>。
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public ButtonElementBuilder WithText(string text, bool isKMarkdown = false)
     {
         Text = isKMarkdown switch
@@ -199,25 +174,28 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     }
 
     /// <summary>
-    ///     Builds the <see cref="ButtonElementBuilder"/> into a <see cref="ButtonElement"/>.
+    ///     构建当前构建器为一个 <see cref="ButtonElement"/>。
     /// </summary>
     /// <returns>
-    ///     A <see cref="ButtonElement"/> represents the built element object.
+    ///     由当前构建器表示的属性构建的 <see cref="ButtonElement"/> 对象。
     /// </returns>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Text"/> is neither a <see cref="PlainTextElementBuilder"/> nor a <see cref="KMarkdownElementBuilder"/>.
+    ///     <see cref="Text"/> 既不是 <see cref="PlainTextElementBuilder"/> 也不是 <see cref="KMarkdownElementBuilder"/>。
     /// </exception>
     /// <exception cref="ArgumentNullException">
-    ///     The <see cref="Text"/> is null.
+    ///     <see cref="Text"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Text"/> is empty.
+    ///     <see cref="Text"/> 为空字符串。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The length of <see cref="Text"/> is greater than <see cref="MaxButtonTextLength"/>.
+    ///     文本的长度超过了 <see cref="MaxButtonTextLength"/>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Value"/> of a button with a link event type is null or empty.
+    ///     <see cref="Click"/> 为 <see cref="F:Kook.ButtonClickEventType.Link"/> 但 <see cref="Value"/> 为 <c>null</c> 或空。
+    /// </exception>
+    /// <exception cref="UriFormatException">
+    ///     <see cref="Value"/> 不是有效的 URL。
     /// </exception>
     [MemberNotNull(nameof(Text))]
     public ButtonElement Build()
@@ -247,7 +225,8 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
         if (Click == ButtonClickEventType.Link)
         {
             if (Value is null || string.IsNullOrEmpty(Value))
-                throw new ArgumentException("The value of a button with a link event type cannot be null or empty.", nameof(Value));
+                throw new ArgumentException("The value of a button with a link event type cannot be null or empty.",
+                    nameof(Value));
             UrlValidation.Validate(Value);
         }
 
@@ -259,30 +238,24 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     IElement IElementBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>.
+    ///     判定两个 <see cref="ButtonElementBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ButtonElementBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(ButtonElementBuilder? left, ButtonElementBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ButtonElementBuilder"/> is not equal to the current <see cref="ButtonElementBuilder"/>.
+    ///     判定两个 <see cref="ButtonElementBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ButtonElementBuilder"/> is not equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ButtonElementBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(ButtonElementBuilder? left, ButtonElementBuilder? right) =>
         !(left == right);
 
-    /// <summary>
-    ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="ButtonElementBuilder"/>.
-    /// </summary>
-    /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="ButtonElementBuilder"/>. </param>
-    /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is ButtonElementBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>.</summary>
-    /// <param name="buttonElementBuilder">The <see cref="ButtonElementBuilder"/> to compare with the current <see cref="ButtonElementBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ButtonElementBuilder"/> is equal to the current <see cref="ButtonElementBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] ButtonElementBuilder? buttonElementBuilder)
     {
         if (buttonElementBuilder is null)

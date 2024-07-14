@@ -51,9 +51,7 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>, 
     /// <param name="source">
     ///     The source URL of the file to be set.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public FileModuleBuilder WithSource(string? source)
     {
         Source = source;
@@ -66,9 +64,7 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>, 
     /// <param name="title">
     ///     The title of the file to be set.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public FileModuleBuilder WithTitle(string title)
     {
         Title = title;
@@ -87,7 +83,7 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>, 
     /// <exception cref="ArgumentException">
     ///     The <see cref="Source"/> url is empty.
     /// </exception>
-    /// <exception cref="InvalidOperationException">
+    /// <exception cref="UriFormatException">
     ///     The <see cref="Source"/> url does not include a protocol (either HTTP or HTTPS).
     /// </exception>
     [MemberNotNull(nameof(Source))]
@@ -108,29 +104,24 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>, 
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>.
+    ///     判定两个 <see cref="FileModuleBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="FileModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(FileModuleBuilder? left, FileModuleBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="FileModuleBuilder"/> is not equal to the current <see cref="FileModuleBuilder"/>.
+    ///     判定两个 <see cref="FileModuleBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="FileModuleBuilder"/> is not equal to the current <see cref="FileModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="FileModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(FileModuleBuilder? left, FileModuleBuilder? right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="FileModuleBuilder"/>, <see cref="Equals(FileModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="FileModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is FileModuleBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>.</summary>
-    /// <param name="fileModuleBuilder">The <see cref="FileModuleBuilder"/> to compare with the current <see cref="FileModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="FileModuleBuilder"/> is equal to the current <see cref="FileModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] FileModuleBuilder? fileModuleBuilder)
     {
         if (fileModuleBuilder is null) return false;

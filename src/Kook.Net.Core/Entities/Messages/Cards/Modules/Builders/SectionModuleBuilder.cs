@@ -90,9 +90,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <param name="text">
     ///     The text to be set for the section.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithText(PlainTextElementBuilder text)
     {
         Text = text;
@@ -105,9 +103,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <param name="text">
     ///     The text to be set for the section.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithText(KMarkdownElementBuilder text)
     {
         Text = text;
@@ -123,9 +119,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     ///     if <c>true</c>, the text will be set as a <see cref="KMarkdownElement"/>;
     ///     if <c>false</c>, the text will be set as a <see cref="PlainTextElement"/>.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithText(string? text, bool isKMarkdown = false)
     {
         Text = isKMarkdown switch
@@ -142,9 +136,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <param name="text">
     ///     The text to be set for the section.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithText(ParagraphStructBuilder text)
     {
         Text = text;
@@ -157,9 +149,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <param name="action">
     ///     The action to set the text of the section.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithText<T>(Action<T>? action = null)
         where T : IElementBuilder, new()
     {
@@ -175,9 +165,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <param name="accessory">
     ///     The accessory to be set for the section.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithAccessory(ImageElementBuilder accessory)
     {
         Accessory = accessory;
@@ -190,9 +178,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <param name="accessory">
     ///     The accessory to be set for the section.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithAccessory(ButtonElementBuilder accessory)
     {
         Accessory = accessory;
@@ -205,9 +191,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <param name="action">
     ///     The action to set the accessory of the section.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithAccessory<T>(Action<T>? action = null)
         where T : IElementBuilder, new()
     {
@@ -223,9 +207,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <param name="mode">
     ///     How the <see cref="Accessory"/> is positioned relative to the <see cref="Text"/>.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithMode(SectionAccessoryMode mode)
     {
         Mode = mode;
@@ -273,29 +255,24 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.
+    ///     判定两个 <see cref="SectionModuleBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="SectionModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(SectionModuleBuilder? left, SectionModuleBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="SectionModuleBuilder"/> is not equal to the current <see cref="SectionModuleBuilder"/>.
+    ///     判定两个 <see cref="SectionModuleBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="SectionModuleBuilder"/> is not equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="SectionModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(SectionModuleBuilder? left, SectionModuleBuilder? right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="SectionModuleBuilder"/>, <see cref="Equals(SectionModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="SectionModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is SectionModuleBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.</summary>
-    /// <param name="sectionModuleBuilder">The <see cref="SectionModuleBuilder"/> to compare with the current <see cref="SectionModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] SectionModuleBuilder? sectionModuleBuilder)
     {
         if (sectionModuleBuilder is null) return false;

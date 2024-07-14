@@ -244,7 +244,6 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     public Task DeleteAsync(RequestOptions? options = null) =>
         MessageHelper.DeleteAsync(this, Kook, options);
 
-
     internal void AddReaction(SocketReaction reaction) => _reactions.Add(reaction);
 
     internal void RemoveReaction(SocketReaction reaction)

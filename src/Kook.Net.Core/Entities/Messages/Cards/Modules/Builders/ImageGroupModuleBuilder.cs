@@ -48,9 +48,7 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
     /// <param name="field">
     ///     The image element to add.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     /// <exception cref="ArgumentException">
     ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
     /// </exception>
@@ -71,9 +69,7 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
     /// <param name="action">
     ///     The action to add an image element to the image group.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     /// <exception cref="ArgumentException">
     ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
     /// </exception>
@@ -120,29 +116,24 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>.
+    ///     判定两个 <see cref="ImageGroupModuleBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ImageGroupModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(ImageGroupModuleBuilder? left, ImageGroupModuleBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ImageGroupModuleBuilder"/> is not equal to the current <see cref="ImageGroupModuleBuilder"/>.
+    ///     判定两个 <see cref="ImageGroupModuleBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ImageGroupModuleBuilder"/> is not equal to the current <see cref="ImageGroupModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ImageGroupModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(ImageGroupModuleBuilder? left, ImageGroupModuleBuilder? right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="ImageGroupModuleBuilder"/>, <see cref="Equals(ImageGroupModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="ImageGroupModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is ImageGroupModuleBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>.</summary>
-    /// <param name="imageGroupModuleBuilder">The <see cref="ImageGroupModuleBuilder"/> to compare with the current <see cref="ImageGroupModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ImageGroupModuleBuilder"/> is equal to the current <see cref="ImageGroupModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] ImageGroupModuleBuilder? imageGroupModuleBuilder)
     {
         if (imageGroupModuleBuilder is null)

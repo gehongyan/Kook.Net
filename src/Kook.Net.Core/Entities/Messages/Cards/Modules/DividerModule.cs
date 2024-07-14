@@ -19,29 +19,24 @@ public class DividerModule : IModule, IEquatable<DividerModule>, IEquatable<IMod
     private string DebuggerDisplay => $"{Type}";
 
     /// <summary>
-    ///     Determines whether the specified <see cref="DividerModule"/> is equal to the current <see cref="DividerModule"/>.
+    ///     判定两个 <see cref="DividerModule"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="DividerModule"/> is equal to the current <see cref="DividerModule"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="DividerModule"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(DividerModule left, DividerModule right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="DividerModule"/> is not equal to the current <see cref="DividerModule"/>.
+    ///     判定两个 <see cref="DividerModule"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="DividerModule"/> is not equal to the current <see cref="DividerModule"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="DividerModule"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(DividerModule left, DividerModule right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="DividerModule"/> is equal to the current <see cref="DividerModule"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="DividerModule"/>, <see cref="Equals(DividerModule)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="DividerModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="DividerModule"/> is equal to the current <see cref="DividerModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is DividerModule dividerModule && Equals(dividerModule);
 
-    /// <summary>Determines whether the specified <see cref="DividerModule"/> is equal to the current <see cref="DividerModule"/>.</summary>
-    /// <param name="dividerModule">The <see cref="DividerModule"/> to compare with the current <see cref="DividerModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="DividerModule"/> is equal to the current <see cref="DividerModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] DividerModule? dividerModule) =>
         GetHashCode() == dividerModule?.GetHashCode();
 

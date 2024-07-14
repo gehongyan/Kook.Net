@@ -223,7 +223,6 @@ public partial class KookSocketClient
 
         if (Connection.CancellationToken.IsCancellationRequested) return;
 
-
         await TimedInvokeAsync(_readyEvent, nameof(Ready)).ConfigureAwait(false);
         await _gatewayLogger.InfoAsync("Ready").ConfigureAwait(false);
     }

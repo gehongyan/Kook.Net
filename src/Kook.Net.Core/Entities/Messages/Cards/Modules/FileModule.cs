@@ -33,33 +33,24 @@ public class FileModule : IMediaModule, IEquatable<FileModule>, IEquatable<IModu
     private string DebuggerDisplay => $"{Type}: {Title}";
 
     /// <summary>
-    ///     Determines whether the specified <see cref="FileModule"/> is equal to the current <see cref="FileModule"/>.
+    ///     判定两个 <see cref="FileModule"/> 是否相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="FileModule"/> is equal to the current <see cref="FileModule"/>; otherwise, <c>false</c>.
-    /// </returns>
+    /// <returns> 如果两个 <see cref="FileModule"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(FileModule left, FileModule right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="FileModule"/> is not equal to the current <see cref="FileModule"/>.
+    ///     判定两个 <see cref="FileModule"/> 是否不相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="FileModule"/> is not equal to the current <see cref="FileModule"/>; otherwise, <c>false</c>.
-    /// </returns>
+    /// <returns> 如果两个 <see cref="FileModule"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(FileModule left, FileModule right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="FileModule"/> is equal to the current <see cref="FileModule"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="FileModule"/>, <see cref="Equals(FileModule)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="FileModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="FileModule"/> is equal to the current <see cref="FileModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is FileModule fileModule && Equals(fileModule);
 
-    /// <summary>Determines whether the specified <see cref="FileModule"/> is equal to the current <see cref="FileModule"/>.</summary>
-    /// <param name="fileModule">The <see cref="FileModule"/> to compare with the current <see cref="FileModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="FileModule"/> is equal to the current <see cref="FileModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] FileModule? fileModule) =>
         GetHashCode() == fileModule?.GetHashCode();
 

@@ -54,9 +54,7 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     /// <param name="text">
     ///     The text to be set for the header.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public HeaderModuleBuilder WithText(PlainTextElementBuilder text)
     {
         Text = text;
@@ -67,7 +65,7 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     ///     Sets the text of the header.
     /// </summary>
     /// <param name="text"> The text to be set for the header. </param>
-    /// <returns> The current builder. </returns>
+    /// <returns> 当前构建器。 </returns>
     public HeaderModuleBuilder WithText(string text)
     {
         Text = new PlainTextElementBuilder(text);
@@ -80,9 +78,7 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     /// <param name="action">
     ///     The action to set the text of the header.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public HeaderModuleBuilder WithText(Action<PlainTextElementBuilder>? action = null)
     {
         PlainTextElementBuilder text = new();
@@ -140,29 +136,24 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>.
+    ///     判定两个 <see cref="HeaderModuleBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="HeaderModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(HeaderModuleBuilder? left, HeaderModuleBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="HeaderModuleBuilder"/> is not equal to the current <see cref="HeaderModuleBuilder"/>.
+    ///     判定两个 <see cref="HeaderModuleBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="HeaderModuleBuilder"/> is not equal to the current <see cref="HeaderModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="HeaderModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(HeaderModuleBuilder? left, HeaderModuleBuilder? right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="HeaderModuleBuilder"/>, <see cref="Equals(HeaderModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="HeaderModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is HeaderModuleBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>.</summary>
-    /// <param name="headerModuleBuilder">The <see cref="HeaderModuleBuilder"/> to compare with the current <see cref="HeaderModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="HeaderModuleBuilder"/> is equal to the current <see cref="HeaderModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] HeaderModuleBuilder? headerModuleBuilder)
     {
         if (headerModuleBuilder == null)

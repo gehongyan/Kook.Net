@@ -22,29 +22,24 @@ public class DividerModuleBuilder : IModuleBuilder, IEquatable<DividerModuleBuil
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="DividerModuleBuilder"/> is equal to the current <see cref="DividerModuleBuilder"/>.
+    ///     判定两个 <see cref="DividerModuleBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="DividerModuleBuilder"/> is equal to the current <see cref="DividerModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="DividerModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(DividerModuleBuilder? left, DividerModuleBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="DividerModuleBuilder"/> is not equal to the current <see cref="DividerModuleBuilder"/>.
+    ///     判定两个 <see cref="DividerModuleBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="DividerModuleBuilder"/> is not equal to the current <see cref="DividerModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="DividerModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(DividerModuleBuilder? left, DividerModuleBuilder? right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="DividerModuleBuilder"/> is equal to the current <see cref="DividerModuleBuilder"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="DividerModuleBuilder"/>, <see cref="Equals(DividerModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="DividerModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="DividerModuleBuilder"/> is equal to the current <see cref="DividerModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is DividerModuleBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="DividerModuleBuilder"/> is equal to the current <see cref="DividerModuleBuilder"/>.</summary>
-    /// <param name="dividerModuleBuilder">The <see cref="DividerModuleBuilder"/> to compare with the current <see cref="DividerModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="DividerModuleBuilder"/> is equal to the current <see cref="DividerModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] DividerModuleBuilder? dividerModuleBuilder)
     {
         if (dividerModuleBuilder is null)

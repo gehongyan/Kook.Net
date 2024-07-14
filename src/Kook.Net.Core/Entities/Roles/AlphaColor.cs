@@ -130,7 +130,6 @@ public readonly struct AlphaColor
             | (ulong)(uint)a;
     }
 
-
     /// <summary>
     ///     Initializes a <see cref="AlphaColor"/> struct with the given RGBA float value.
     /// </summary>

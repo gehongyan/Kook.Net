@@ -31,29 +31,24 @@ public class HeaderModule : IModule, IEquatable<HeaderModule>, IEquatable<IModul
     private string DebuggerDisplay => $"{Type}: {Text}";
 
     /// <summary>
-    ///     Determines whether the specified <see cref="HeaderModule"/> is equal to the current <see cref="HeaderModule"/>.
+    ///     判定两个 <see cref="HeaderModule"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="HeaderModule"/> is equal to the current <see cref="HeaderModule"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="HeaderModule"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(HeaderModule left, HeaderModule right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="HeaderModule"/> is not equal to the current <see cref="HeaderModule"/>.
+    ///     判定两个 <see cref="HeaderModule"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="HeaderModule"/> is not equal to the current <see cref="HeaderModule"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="HeaderModule"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(HeaderModule left, HeaderModule right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="HeaderModule"/> is equal to the current <see cref="HeaderModule"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="HeaderModule"/>, <see cref="Equals(HeaderModule)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="HeaderModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="HeaderModule"/> is equal to the current <see cref="HeaderModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is HeaderModule headerModule && Equals(headerModule);
 
-    /// <summary>Determines whether the specified <see cref="HeaderModule"/> is equal to the current <see cref="HeaderModule"/>.</summary>
-    /// <param name="headerModule">The <see cref="HeaderModule"/> to compare with the current <see cref="HeaderModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="HeaderModule"/> is equal to the current <see cref="HeaderModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] HeaderModule? headerModule) =>
         GetHashCode() == headerModule?.GetHashCode();
 

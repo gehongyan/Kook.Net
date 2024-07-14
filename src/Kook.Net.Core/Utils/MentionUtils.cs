@@ -22,7 +22,6 @@ public static class MentionUtils
         @"(@[^#]+?#\d{1,20})|(@role:\d{1,10};)|(#channel:\d{1,20}?;)|(\[:[^:]{1,32}?:[\w\/]{1,40}?\])",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
-
     internal static readonly Regex KMarkdownUserRegex = new(@"(\(met\))(?<id>\d{1,20}?)\1",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
@@ -35,7 +34,6 @@ public static class MentionUtils
     internal static readonly Regex KMarkdownTagRegex = new(
         @"(\((met|rol|chn)\)\d{1,20}?\(\2\))|(\(emj\)[^\(\)]{1,32}?\(emj\)\[[\w\/]{1,40}?\])",
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
-
 
     private const char SanitizeChar = '\u200b';
 
@@ -140,7 +138,6 @@ public static class MentionUtils
         userId = 0;
         return false;
     }
-
 
     /// <summary>
     ///     解析指定的频道提及字符串。

@@ -68,9 +68,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     /// <param name="theme">
     ///     A <see cref="CardTheme"/> value that represents the theme of the card to be set.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public CardBuilder WithTheme(CardTheme theme)
     {
         Theme = theme;
@@ -83,9 +81,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     /// <param name="color">
     ///     A <see cref="Color"/> value that represents the color displayed along the left side of the card to be set.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public CardBuilder WithColor(Color? color)
     {
         Color = color;
@@ -98,9 +94,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     /// <param name="size">
     ///     A <see cref="CardSize"/> value that represents the size of the card to be set.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public CardBuilder WithSize(CardSize size)
     {
         Size = size;
@@ -113,9 +107,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     /// <param name="module">
     ///     An <see cref="IModuleBuilder"/> that represents the module to be added to the card.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public CardBuilder AddModule(IModuleBuilder module)
     {
         Modules.Add(module);
@@ -128,9 +120,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     /// <param name="action">
     ///     The action to adds a module to the card.
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public CardBuilder AddModule<T>(Action<T>? action = null)
         where T : IModuleBuilder, new()
     {
@@ -141,7 +131,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     }
 
     /// <summary>
-    ///     Builds the <see cref="CardBuilder"/> into a <see cref="Card"/>.
+    ///     构建当前构建器为一个 <see cref="Card"/>。
     /// </summary>
     /// <returns>
     ///     A <see cref="KMarkdownElement"/> represents the built element object.
@@ -161,34 +151,24 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     ICard ICardBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>.
+    ///     判定两个 <see cref="CardBuilder"/> 是否相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.
-    /// </returns>
+    /// <returns> 如果两个 <see cref="CardBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(CardBuilder? left, CardBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="CardBuilder"/> is not equal to the current <see cref="CardBuilder"/>.
+    ///     判定两个 <see cref="CardBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="CardBuilder"/> is not equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.
-    /// </returns>
+    /// <returns> 如果两个 <see cref="CardBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(CardBuilder? left, CardBuilder? right) =>
         !(left == right);
 
-    /// <summary>
-    ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="CardBuilder"/>.
-    /// </summary>
-    /// <param name="obj"> The object to compare with the current <see cref="CardBuilder"/>.</param>
-    /// <returns> <c>true</c> if the specified object is equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is CardBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>.</summary>
-    /// <param name="cardBuilder">The <see cref="CardBuilder"/> to compare with the current <see cref="CardBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="CardBuilder"/> is equal to the current <see cref="CardBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] CardBuilder? cardBuilder)
     {
         if (cardBuilder is null)

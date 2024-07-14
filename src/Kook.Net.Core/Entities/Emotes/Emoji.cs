@@ -7,6 +7,9 @@ namespace Kook;
 /// <summary>
 ///     一个 Unicode 表情符号。
 /// </summary>
+/// <remarks>
+///     有关受支持的表情符号列表，请参阅 https://kooknet.dev/guides/emoji/emoji-list.html。
+/// </remarks>
 public class Emoji : IEmote
 {
     /// <inheritdoc />
@@ -29,7 +32,7 @@ public class Emoji : IEmote
     /// <param name="unicode"> 表情符号的 Unicode 表示。 </param>
     public Emoji(string unicode)
     {
-        Name = TryParseAsUnicodePoint(unicode, out string? name) ? name : unicode;
+        Name = TryParseToName(unicode, out string? name) ? name : unicode;
     }
 
     /// <inheritdoc />
@@ -49,14 +52,14 @@ public class Emoji : IEmote
     public static bool TryParse([NotNullWhen(true)] string? text,
         [NotNullWhen(true)] out Emoji? result)
     {
+        if (TryParseToName(text, out string? name))
+        {
+            result = new Emoji(name);
+            return true;
+        }
+
         result = null;
-        if (text is null || string.IsNullOrWhiteSpace(text))
-            return false;
-        if (NamesAndUnicodes.TryGetValue(text, out string? nameUnicode))
-            result = new Emoji(nameUnicode);
-        if (Unicodes.Contains(text))
-            result = new Emoji(text);
-        return result != null;
+        return false;
     }
 
     /// <summary>
@@ -73,18 +76,24 @@ public class Emoji : IEmote
     }
 
     /// <summary>
-    ///     尝试从由方括号包围的 HTML 实体编码的十进制表示形式解析 <see cref="Emoji"/> 的新实例。
+    ///     尝试从由方括号包围的 HTML 实体编码的十进制表示形式解析 <see cref="Emoji"/> 的凝成。
     /// </summary>
-    /// <param name="unicodePoint"> 要解析的字符串，例如：<c>[#128187;]</c>。</param>
-    /// <param name="name"> 如果解析成功，则包含解析的 <see cref="Emoji"/>；否则为 <c>null</c>。</param>
+    /// <param name="text"> 要解析的字符串，例如：<c>[#128187;]</c>，<c>:grinning:</c>。</param>
+    /// <param name="name"> 如果解析成功，则包含解析的名称；否则为 <c>null</c>。</param>
     /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。</returns>
-    internal static bool TryParseAsUnicodePoint(string unicodePoint, [NotNullWhen(true)] out string? name)
+    private static bool TryParseToName(string? text, [NotNullWhen(true)] out string? name)
     {
-        name = null;
-        if (!unicodePoint.StartsWith("[#") || !unicodePoint.EndsWith(";]")) return false;
-        if (!int.TryParse(unicodePoint[2..^2], out int codePoint)) return false;
-        name = char.ConvertFromUtf32(codePoint);
-        return true;
+        if (text is null || string.IsNullOrWhiteSpace(text))
+            name = null;
+        else if (text.StartsWith("[#") && text.EndsWith(";]") && int.TryParse(text[2..^2], out int codePoint))
+            name = char.ConvertFromUtf32(codePoint);
+        else if (NamesAndUnicodes.TryGetValue(text, out string? nameUnicode))
+            name = nameUnicode;
+        else if (Unicodes.Contains(text))
+            name = text;
+        else
+            name = null;
+        return name != null;
     }
 
     /// <inheritdoc />

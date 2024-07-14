@@ -11,7 +11,7 @@ public interface ICardBuilder
     CardType Type { get; }
 
     /// <summary>
-    ///     Builds the <see cref="ICardBuilder"/> into an <see cref="ICard"/>.
+    ///     构建当前构建器为一个 <see cref="ICard"/>。
     /// </summary>
     /// <returns>
     ///     An <see cref="ICard"/> represents the built card object.

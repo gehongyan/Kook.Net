@@ -326,7 +326,6 @@ public static class Format
         return $"```{language ?? ""}{newLine ?? "\n"}{(sanitize ? text.Sanitize("`") : text)}{newLine ?? "\n"}```";
     }
 
-
     /// <summary>
     ///     返回一个使用引用块格式的 KMarkdown 格式化字符串。
     /// </summary>
