@@ -6,4 +6,8 @@
     <ProjectReference Include="..\..\src\Kook.Net.CardMarkup\Kook.Net.CardMarkup.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="xunit" Version="2.9.0" />
+  </ItemGroup>
+
 </Project>

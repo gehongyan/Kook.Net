@@ -210,7 +210,7 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
             Assert.Equal(PermValue.Deny, rolePermissionOverwrite.Permissions.SendMessages);
             Assert.Equal(PermValue.Inherit, rolePermissionOverwrite.Permissions.AttachFiles);
             await channel.RemovePermissionOverwriteAsync(role);
-            Assert.Empty(channel.RolePermissionOverwrites.Where(overwrite => overwrite.Target > 0));
+            Assert.DoesNotContain(channel.RolePermissionOverwrites, overwrite => overwrite.Target > 0);
 
             // check permission sync
             Assert.True(channel.IsPermissionSynced);
