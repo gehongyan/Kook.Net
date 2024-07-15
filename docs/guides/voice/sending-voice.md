@@ -15,7 +15,7 @@ Linux 开发者需要从源码编译 [Opus](http://downloads.xiph.org/releases/o
 
 ## 加入语音频道
 
-语音推流前需要先加入语音频道，调用 [IAudioClient] 上的 [ConnectAsync]，该异步操作会返回一个 [IAudioClient] 对象，用于后续的语音推流操作。
+语音推流前需要先加入语音频道，调用 [IAudioChannel] 上的 [ConnectAsync]，该异步操作会返回一个 [IAudioClient] 对象，用于后续的语音推流操作。
 
 [!code-csharp[加入语音频道](samples/joining_audio.cs)]
 
@@ -27,8 +27,9 @@ Linux 开发者需要从源码编译 [Opus](http://downloads.xiph.org/releases/o
 
 应注意的是，语音连接是基于每个语音频道创建的，对多个语音频道分别调用 [ConnectAsync]，会创建多个 [IAudioClient] 的实例。
 
-[IAudioClient]: xref:Kook.Audio.IAudioClient
+[IAudioChannel]: xref:Kook.IAudioChannel
 [ConnectAsync]: xref:Kook.IAudioChannel.ConnectAsync*
+[IAudioClient]: xref:Kook.Audio.IAudioClient
 [RunMode.Async]: xref:Kook.Commands.RunMode
 
 ## 语音推流
