@@ -25,12 +25,7 @@ Linux 开发者需要从源码编译 [Opus](http://downloads.xiph.org/releases/o
 
 加入语音频道后，客户端将保持与此频道的连接，直到被踢出频道、掉线、或其它被服务端通知需主动断开连接。
 
-应注意的是，语音连接是基于每个服务器创建的。在单个服务器中，Bot 只能启动一个音频连接。
-要在服务器内切换频道，需要在服务器的另一个语音频道上调用 [ConnectAsync]。
-
-> [!WARNING]
-> KOOK 已对 Bot 禁用对多个服务器的语音频道同时推流的能力，在某个服务器上保持音频连接时，如果在另一个服务器上的某个语音频道中调用
-> [ConnectAsync]，或导致已有的音频链接被 KOOK 服务端中断。
+应注意的是，语音连接是基于每个语音频道创建的，对多个语音频道分别调用 [ConnectAsync]，会创建多个 [IAudioClient] 的实例。
 
 [IAudioClient]: xref:Kook.Audio.IAudioClient
 [ConnectAsync]: xref:Kook.IAudioChannel.ConnectAsync*
