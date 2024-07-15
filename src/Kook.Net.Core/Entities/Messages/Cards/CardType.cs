@@ -1,12 +1,12 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the type of the card.
+///     表示一个 <see cref="ICard"/> 的类型。
 /// </summary>
 public enum CardType
 {
     /// <summary>
-    ///     The card is a normal card.
+    ///     常规卡片。
     /// </summary>
     Card
 }

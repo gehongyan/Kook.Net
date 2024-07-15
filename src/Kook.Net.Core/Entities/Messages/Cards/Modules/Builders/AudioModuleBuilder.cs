@@ -4,7 +4,7 @@ using Kook.Utils;
 namespace Kook;
 
 /// <summary>
-///     Represents an audio module builder for creating an <see cref="AudioModule"/>.
+///     用来构建 <see cref="AudioModuleBuilder"/> 模块的构建器。
 /// </summary>
 public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>, IEquatable<IModuleBuilder>
 {
@@ -12,18 +12,18 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     public ModuleType Type => ModuleType.Audio;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="AudioModuleBuilder"/> class.
+    ///     初始化一个 <see cref="AudioModuleBuilder"/> 类的新实例。
     /// </summary>
     public AudioModuleBuilder()
     {
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="AudioModuleBuilder"/> class.
+    ///     初始化一个 <see cref="AudioModuleBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="source"> The source URL of the video. </param>
-    /// <param name="cover"> The cover URL of the video. </param>
-    /// <param name="title"> The title of the video. </param>
+    /// <param name="source"> 音频的 URL。 </param>
+    /// <param name="cover"> 音频的封面的 URL。 </param>
+    /// <param name="title"> 音频的标题。 </param>
     public AudioModuleBuilder(string source, string? cover = null, string? title = null)
     {
         Source = source;
@@ -32,35 +32,24 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     }
 
     /// <summary>
-    ///     Gets or sets the source URL of the video.
+    ///     获取或设置音频的 URL。
     /// </summary>
-    /// <returns>
-    ///     The source URL of the video.
-    /// </returns>
     public string? Source { get; set; }
 
     /// <summary>
-    ///     Gets or sets the cover URL of the video.
+    ///     获取或设置音频的封面的 URL。
     /// </summary>
-    /// <returns>
-    ///     The cover URL of the video.
-    /// </returns>
     public string? Cover { get; set; }
 
     /// <summary>
-    ///     Gets or sets the title of the video.
+    ///     获取或设置音频的标题。
     /// </summary>
-    /// <returns>
-    ///     The title of the video.
-    /// </returns>
     public string? Title { get; set; }
 
     /// <summary>
-    ///     Sets the source URL of the video.
+    ///     设置音频的 URL。
     /// </summary>
-    /// <param name="source">
-    ///     The source URL of the video to be set.
-    /// </param>
+    /// <param name="source"> 音频的 URL。 </param>
     /// <returns> 当前构建器。 </returns>
     public AudioModuleBuilder WithSource(string? source)
     {
@@ -69,11 +58,9 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     }
 
     /// <summary>
-    ///     Sets the cover URL of the video.
+    ///     设置音频的封面的 URL。
     /// </summary>
-    /// <param name="cover">
-    ///     The cover URL of the video to be set.
-    /// </param>
+    /// <param name="cover"> 音频的封面的 URL。 </param>
     /// <returns> 当前构建器。 </returns>
     public AudioModuleBuilder WithCover(string? cover)
     {
@@ -82,11 +69,9 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     }
 
     /// <summary>
-    ///     Sets the title of the video.
+    ///     设置音频的标题。
     /// </summary>
-    /// <param name="title">
-    ///     The title of the video to be set.
-    /// </param>
+    /// <param name="title"> 音频的标题。 </param>
     /// <returns> 当前构建器。 </returns>
     public AudioModuleBuilder WithTitle(string? title)
     {
@@ -95,22 +80,19 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     }
 
     /// <summary>
-    ///     Builds this builder into an <see cref="AudioModule"/>.
+    ///     构建当前构建器为一个 <see cref="AudioModule"/> 对象。
     /// </summary>
     /// <returns>
-    ///     An <see cref="AudioModule"/> representing the built audio module object.
+    ///     由当前构建器表示的属性构建的 <see cref="AudioModule"/> 对象。
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     <see cref="Source"/> cannot be null
+    ///     <see cref="Source"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     <see cref="Source"/> cannot be empty
+    ///     <see cref="Source"/> 为空字符串。
     /// </exception>
     /// <exception cref="UriFormatException">
-    ///     <see cref="Source"/> is not a valid URL
-    /// </exception>
-    /// <exception cref="UriFormatException">
-    ///     <see cref="Cover"/> is not a valid URL
+    ///     <see cref="Source"/> 不是有效的 URL。
     /// </exception>
     [MemberNotNull(nameof(Source))]
     public AudioModule Build()

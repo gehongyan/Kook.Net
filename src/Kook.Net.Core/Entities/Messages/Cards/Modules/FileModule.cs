@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     A file module that can be used in an <see cref="ICard"/>.
+///     文件模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class FileModule : IMediaModule, IEquatable<FileModule>, IEquatable<IModule>
@@ -19,14 +19,18 @@ public class FileModule : IMediaModule, IEquatable<FileModule>, IEquatable<IModu
     /// <inheritdoc />
     public ModuleType Type => ModuleType.File;
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     获取文件的 URL。
+    /// </summary>
     public string Source { get; }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     获取文件的标题。
+    /// </summary>
     public string? Title { get; }
 
     /// <summary>
-    ///     The size of the file in bytes.
+    ///     获取文件的大小（单位：字节）。
     /// </summary>
     public int? Size { get; }
 

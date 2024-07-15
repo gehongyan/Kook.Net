@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a countdown module that can be used in an <see cref="ICard"/>.
+///     倒计时模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class CountdownModule : IModule, IEquatable<CountdownModule>, IEquatable<IModule>
@@ -20,27 +20,18 @@ public class CountdownModule : IModule, IEquatable<CountdownModule>, IEquatable<
     public ModuleType Type => ModuleType.Countdown;
 
     /// <summary>
-    ///     Gets the end time of the countdown.
+    ///     获取倒计时的结束时间。
     /// </summary>
-    /// <returns>
-    ///     The end time of the countdown.
-    /// </returns>
     public DateTimeOffset EndTime { get; }
 
     /// <summary>
-    ///     Gets the start time of the countdown.
+    ///     获取倒计时的开始时间。
     /// </summary>
-    /// <returns>
-    ///     The start time of the countdown.
-    /// </returns>
     public DateTimeOffset? StartTime { get; }
 
     /// <summary>
-    ///     Gets the mode of the countdown.
+    ///     获取倒计时的显示模式。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="CountdownMode"/> value that represents the mode of the countdown.
-    /// </returns>
     public CountdownMode Mode { get; }
 
     private string DebuggerDisplay =>

@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents an action group module that can be used in an <see cref="ICard"/>.
+///     按钮组模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>, IEquatable<IModule>
@@ -19,11 +19,8 @@ public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>, IEquata
     public ModuleType Type => ModuleType.ActionGroup;
 
     /// <summary>
-    ///     Gets the elements of this module.
+    ///     获取模块的元素。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="ImmutableArray{ButtonElement}"/> containing the elements of this module.
-    /// </returns>
     public ImmutableArray<ButtonElement> Elements { get; }
 
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";

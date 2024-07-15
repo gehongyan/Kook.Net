@@ -3,8 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
-/// <summary>
-///     An invite module that can be used in an <see cref="ICard"/>.
+/// <summary>3
+///     邀请模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class InviteModule : IModule, IEquatable<InviteModule>, IEquatable<IModule>
@@ -18,7 +18,7 @@ public class InviteModule : IModule, IEquatable<InviteModule>, IEquatable<IModul
     public ModuleType Type => ModuleType.Invite;
 
     /// <summary>
-    ///     Gets the invite code.
+    ///     获取邀请代码。
     /// </summary>
     public string? Code { get; }
 
@@ -27,18 +27,14 @@ public class InviteModule : IModule, IEquatable<InviteModule>, IEquatable<IModul
     /// <summary>
     ///     判定两个 <see cref="InviteModule"/> 是否相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="InviteModule"/> is equal to the current <see cref="InviteModule"/>;
-    /// </returns>
+    /// <returns> 如果两个 <see cref="InviteModule"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(InviteModule left, InviteModule right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     判定两个 <see cref="InviteModule"/> 是否不相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="InviteModule"/> is not equal to the current <see cref="InviteModule"/>;
-    /// </returns>
+    /// <returns> 如果两个 <see cref="InviteModule"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(InviteModule left, InviteModule right) =>
         !(left == right);
 

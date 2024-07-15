@@ -4,7 +4,7 @@ using Kook.Utils;
 namespace Kook;
 
 /// <summary>
-///     Represents a file module builder for creating a <see cref="FileModule"/>.
+///     用来构建 <see cref="FileModule"/> 模块的构建器。
 /// </summary>
 public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>, IEquatable<IModuleBuilder>
 {
@@ -12,17 +12,17 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>, 
     public ModuleType Type => ModuleType.File;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="FileModuleBuilder"/> class.
+    ///     初始化一个 <see cref="FileModuleBuilder"/> 类的新实例。
     /// </summary>
     public FileModuleBuilder()
     {
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="FileModuleBuilder"/> class.
+    ///     初始化一个 <see cref="DividerModuleBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="source"> The source URL of the file. </param>
-    /// <param name="title"> The title of the file. </param>
+    /// <param name="source"> 文件的 URL。 </param>
+    /// <param name="title"> 文件名。 </param>
     public FileModuleBuilder(string source, string? title = null)
     {
         Source = source;
@@ -30,27 +30,19 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>, 
     }
 
     /// <summary>
-    ///     Gets or sets the source URL of the file.
+    ///     获取或设置文件的 URL。
     /// </summary>
-    /// <returns>
-    ///     The source URL of the file.
-    /// </returns>
     public string? Source { get; set; }
 
     /// <summary>
-    ///     Gets or sets the title of the file.
+    ///     获取或设置文件名。
     /// </summary>
-    /// <returns>
-    ///     The title of the file.
-    /// </returns>
     public string? Title { get; set; }
 
     /// <summary>
-    ///     Sets the source URL of the file.
+    ///     设置文件的 URL。
     /// </summary>
-    /// <param name="source">
-    ///     The source URL of the file to be set.
-    /// </param>
+    /// <param name="source"> 文件的 URL。 </param>
     /// <returns> 当前构建器。 </returns>
     public FileModuleBuilder WithSource(string? source)
     {
@@ -59,11 +51,9 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>, 
     }
 
     /// <summary>
-    ///     Sets the title of the file.
+    ///     设置文件名。
     /// </summary>
-    /// <param name="title">
-    ///     The title of the file to be set.
-    /// </param>
+    /// <param name="title"> 文件名。 </param>
     /// <returns> 当前构建器。 </returns>
     public FileModuleBuilder WithTitle(string title)
     {
@@ -72,19 +62,19 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>, 
     }
 
     /// <summary>
-    ///     Builds this builder into a <see cref="FileModule"/>.
+    ///     构建当前构建器为一个 <see cref="FileModule"/> 对象。
     /// </summary>
     /// <returns>
-    ///     A <see cref="FileModule"/> representing the built file module object.
+    ///     由当前构建器表示的属性构建的 <see cref="FileModule"/> 对象。
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     The <see cref="Source"/> url is null.
+    ///     <see cref="Source"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Source"/> url is empty.
+    ///     <see cref="Source"/> 为空字符串。
     /// </exception>
     /// <exception cref="UriFormatException">
-    ///     The <see cref="Source"/> url does not include a protocol (either HTTP or HTTPS).
+    ///     <see cref="Source"/> 不是有效的 URL。
     /// </exception>
     [MemberNotNull(nameof(Source))]
     public FileModule Build()

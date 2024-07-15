@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a container module that can be used in an <see cref="ICard"/>.
+///     容器模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ContainerModule : IModule, IEquatable<ContainerModule>, IEquatable<IModule>
@@ -19,11 +19,8 @@ public class ContainerModule : IModule, IEquatable<ContainerModule>, IEquatable<
     public ModuleType Type => ModuleType.Container;
 
     /// <summary>
-    ///     Gets the elements in this container module.
+    ///     获取模块的元素。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="ImmutableArray{ImageElement}"/> representing the elements in this container module.
-    /// </returns>
     public ImmutableArray<ImageElement> Elements { get; }
 
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";

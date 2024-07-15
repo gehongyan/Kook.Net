@@ -4,7 +4,7 @@ using Kook.Utils;
 namespace Kook;
 
 /// <summary>
-///     Represents a video module builder for creating a <see cref="VideoModule"/>.
+///     用来构建 <see cref="SectionModule"/> 模块的构建器。
 /// </summary>
 public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>, IEquatable<IModuleBuilder>
 {
@@ -12,17 +12,17 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     public ModuleType Type => ModuleType.Video;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="VideoModuleBuilder"/> class.
+    ///     初始化一个 <see cref="VideoModuleBuilder"/> 类的新实例。
     /// </summary>
     public VideoModuleBuilder()
     {
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="VideoModuleBuilder"/> class.
+    ///     初始化一个 <see cref="VideoModuleBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="source"> The source URL of the video. </param>
-    /// <param name="title"> The title of the video. </param>
+    /// <param name="source"> 视频的 URL。 </param>
+    /// <param name="title"> 视频标题。 </param>
     public VideoModuleBuilder(string source, string? title = null)
     {
         Source = source;
@@ -30,27 +30,19 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     }
 
     /// <summary>
-    ///     Gets or sets the source URL of the video.
+    ///     获取或设置视频的 URL。
     /// </summary>
-    /// <returns>
-    ///     The source URL of the video.
-    /// </returns>
     public string? Source { get; set; }
 
     /// <summary>
-    ///     Gets or sets the title of the video.
+    ///     获取或设置视频标题。
     /// </summary>
-    /// <returns>
-    ///     The title of the video.
-    /// </returns>
     public string? Title { get; set; }
 
     /// <summary>
-    ///     Sets the source URL of the video.
+    ///     设置视频的 URL。
     /// </summary>
-    /// <param name="source">
-    ///     The source URL of the video to be set.
-    /// </param>
+    /// <param name="source"> 视频的 URL。 </param>
     /// <returns> 当前构建器。 </returns>
     public VideoModuleBuilder WithSource(string? source)
     {
@@ -59,11 +51,9 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     }
 
     /// <summary>
-    ///     Sets the title of the video.
+    ///     设置视频标题。
     /// </summary>
-    /// <param name="title">
-    ///     The title of the video to be set.
-    /// </param>
+    /// <param name="title"> 视频标题。 </param>
     /// <returns> 当前构建器。 </returns>
     public VideoModuleBuilder WithTitle(string title)
     {
@@ -72,19 +62,19 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
     }
 
     /// <summary>
-    ///     Builds this builder into a <see cref="VideoModule"/>.
+    ///     构建当前构建器为一个 <see cref="VideoModule"/> 对象。
     /// </summary>
     /// <returns>
-    ///     A <see cref="VideoModule"/> representing the built video module object.
+    ///     由当前构建器表示的属性构建的 <see cref="VideoModule"/> 对象。
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     The <see cref="Source"/> url is null.
+    ///     <see cref="Source"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Source"/> url is empty.
+    ///     <see cref="Source"/> 为空字符串。
     /// </exception>
     /// <exception cref="UriFormatException">
-    ///     The <see cref="Source"/> url does not include a protocol (either HTTP or HTTPS).
+    ///     <see cref="Source"/> 不是有效的 URL。
     /// </exception>
     [MemberNotNull(nameof(Source))]
     public VideoModule Build()

@@ -1,12 +1,12 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic card builder for creating a <see cref="ICard"/>.
+///     表示一个通用的卡片构建器，用于构建一个 <see cref="ICard"/>。
 /// </summary>
 public interface ICardBuilder
 {
     /// <summary>
-    ///     Gets the type of the <see cref="ICard"/> this builder creates.
+    ///     获取此构建器构建的卡片的类型。
     /// </summary>
     CardType Type { get; }
 
@@ -14,7 +14,7 @@ public interface ICardBuilder
     ///     构建当前构建器为一个 <see cref="ICard"/>。
     /// </summary>
     /// <returns>
-    ///     An <see cref="ICard"/> represents the built card object.
+    ///     由当前构建器表示的属性构建的 <see cref="ICard"/> 对象。
     /// </returns>
     ICard Build();
 }

@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a video module in an <see cref="ICard"/>.
+///     视频模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class VideoModule : IMediaModule, IEquatable<VideoModule>, IEquatable<IModule>
@@ -18,10 +18,14 @@ public class VideoModule : IMediaModule, IEquatable<VideoModule>, IEquatable<IMo
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Video;
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     获取视频的 URL。
+    /// </summary>
     public string Source { get; }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     获取视频的标题。
+    /// </summary>
     public string? Title { get; }
 
     private string DebuggerDisplay => $"{Type}: {Title}";

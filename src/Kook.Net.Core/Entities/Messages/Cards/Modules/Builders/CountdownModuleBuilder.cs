@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a countdown module builder for creating a <see cref="CountdownModule"/>.
+///     用来构建 <see cref="CountdownModule"/> 模块的构建器。
 /// </summary>
 public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModuleBuilder>, IEquatable<IModuleBuilder>
 {
@@ -11,15 +11,18 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     public ModuleType Type => ModuleType.Countdown;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="CountdownModuleBuilder"/> class.
+    ///     初始化一个 <see cref="CountdownModuleBuilder"/> 类的新实例。
     /// </summary>
     public CountdownModuleBuilder()
     {
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="CountdownModuleBuilder"/> class.
+    ///     初始化一个 <see cref="CountdownModuleBuilder"/> 类的新实例。
     /// </summary>
+    /// <param name="mode"> 倒计时的显示模式。 </param>
+    /// <param name="endTime"> 倒计时结束的时间。 </param>
+    /// <param name="startTime"> 倒计时开始的时间。 </param>
     public CountdownModuleBuilder(CountdownMode mode, DateTimeOffset endTime, DateTimeOffset? startTime = null)
     {
         Mode = mode;
@@ -28,35 +31,27 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     }
 
     /// <summary>
-    ///  Gets or sets the ending time of the countdown.
+    ///     获取或设置倒计时结束的时间。
     /// </summary>
-    /// <returns>
-    ///     The time at which the countdown ends.
-    /// </returns>
     public DateTimeOffset EndTime { get; set; }
 
     /// <summary>
-    ///     Gets or sets the beginning time of the countdown.
+    ///     获取或设置倒计时开始的时间。
     /// </summary>
-    /// <returns>
-    ///     The time at which the countdown begins.
-    /// </returns>
+    /// <remarks>
+    ///     仅当 <see cref="Mode"/> 为 <see cref="F:Kook.CountdownMode.Second"/> 时，才允许设置 <see cref="StartTime"/>。
+    /// </remarks>
     public DateTimeOffset? StartTime { get; set; }
 
     /// <summary>
-    ///     Gets or sets how the countdown should be displayed.
+    ///     获取或设置倒计时的显示模式。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="CountdownMode"/> representing how the countdown should be displayed.
-    /// </returns>
     public CountdownMode Mode { get; set; }
 
     /// <summary>
-    ///     Sets how the countdown should be displayed.
+    ///     设置倒计时的显示模式。
     /// </summary>
-    /// <param name="mode">
-    ///     A <see cref="CountdownMode"/> representing how the countdown should be displayed.
-    /// </param>
+    /// <param name="mode"> 倒计时的显示模式。 </param>
     /// <returns> 当前构建器。 </returns>
     public CountdownModuleBuilder WithMode(CountdownMode mode)
     {
@@ -65,11 +60,9 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     }
 
     /// <summary>
-    ///     Sets the beginning time of the countdown.
+    ///     设置倒计时结束的时间。
     /// </summary>
-    /// <param name="endTime">
-    ///     The time at which the countdown ends.
-    /// </param>
+    /// <param name="endTime"> 倒计时结束的时间。 </param>
     /// <returns> 当前构建器。 </returns>
     public CountdownModuleBuilder WithEndTime(DateTimeOffset endTime)
     {
@@ -78,12 +71,13 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     }
 
     /// <summary>
-    ///     Sets the beginning time of the countdown.
+    ///     设置倒计时开始的时间。
     /// </summary>
-    /// <param name="startTime">
-    ///     The time at which the countdown begins.
-    /// </param>
+    /// <param name="startTime"> 倒计时开始的时间。 </param>
     /// <returns> 当前构建器。 </returns>
+    /// <remarks>
+    ///     仅当 <see cref="Mode"/> 为 <see cref="F:Kook.CountdownMode.Second"/> 时，才允许设置 <see cref="StartTime"/>。
+    /// </remarks>
     public CountdownModuleBuilder WithStartTime(DateTimeOffset? startTime)
     {
         StartTime = startTime;
@@ -91,22 +85,22 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     }
 
     /// <summary>
-    ///     Builds this builder into a <see cref="CountdownModule"/>.
+    ///     构建当前构建器为一个 <see cref="CountdownModule"/> 对象。
     /// </summary>
     /// <returns>
-    ///     A <see cref="CountdownModule"/> representing the built countdown module object.
+    ///     由当前构建器表示的属性构建的 <see cref="CountdownModule"/> 对象。
     /// </returns>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     <see cref="CountdownMode"/> is not <see cref="CountdownMode.Second"/> but <see cref="StartTime"/> is set.
+    ///     <see cref="CountdownMode"/> 不为 <see cref="F:Kook.CountdownMode.Second"/> 时，不允许设置 <see cref="StartTime"/>。
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     <see cref="EndTime"/> is before the current time.
+    ///     <see cref="EndTime"/> 早于当前时间。
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     <see cref="StartTime"/> is before the Unix epoch.
+    ///     <see cref="StartTime"/> 早于 Unix 纪元时间。
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     <see cref="EndTime"/> is equal or before <see cref="StartTime"/>
+    ///     <see cref="EndTime"/> 应晚于 <see cref="StartTime"/>。
     /// </exception>
     public CountdownModule Build()
     {

@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents an audio module that can be used in an <see cref="ICard"/>.
+///     音频模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class AudioModule : IMediaModule, IEquatable<AudioModule>, IEquatable<IModule>
@@ -19,18 +19,19 @@ public class AudioModule : IMediaModule, IEquatable<AudioModule>, IEquatable<IMo
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Audio;
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     获取音频的 URL。
+    /// </summary>
     public string Source { get; }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     获取音频的标题。
+    /// </summary>
     public string? Title { get; }
 
     /// <summary>
-    ///     Gets the cover of the audio associated with this module.
+    ///     获取音频的封面的 URL。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the cover of the audio associated with this module.
-    /// </returns>
     public string? Cover { get; }
 
     private string DebuggerDisplay => $"{Type}: {Title}";

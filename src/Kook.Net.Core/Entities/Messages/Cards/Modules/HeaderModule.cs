@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a header module in an <see cref="ICard"/>.
+///     标题模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class HeaderModule : IModule, IEquatable<HeaderModule>, IEquatable<IModule>
@@ -18,11 +18,8 @@ public class HeaderModule : IModule, IEquatable<HeaderModule>, IEquatable<IModul
     public ModuleType Type => ModuleType.Header;
 
     /// <summary>
-    ///     Gets the text element of the header.
+    ///     获取模块的标题内容。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="PlainTextElement"/> representing the text of the header.
-    /// </returns>
     public PlainTextElement? Text { get; }
 
     /// <inheritdoc />

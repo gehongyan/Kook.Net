@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a context module that can be used in an <see cref="ICard"/>.
+///     备注模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ContextModule : IModule, IEquatable<ContextModule>, IEquatable<IModule>
@@ -19,11 +19,8 @@ public class ContextModule : IModule, IEquatable<ContextModule>, IEquatable<IMod
     public ModuleType Type => ModuleType.Context;
 
     /// <summary>
-    ///     Gets the elements in this context module.
+    ///     获取模块的元素。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="ImmutableArray{IElement}"/> representing the elements in this context module.
-    /// </returns>
     public ImmutableArray<IElement> Elements { get; }
 
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";

@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a section module in card.
+///     内容模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SectionModule : IModule, IEquatable<SectionModule>, IEquatable<IModule>
@@ -20,28 +20,18 @@ public class SectionModule : IModule, IEquatable<SectionModule>, IEquatable<IMod
     public ModuleType Type => ModuleType.Section;
 
     /// <summary>
-    ///     Specifies that the <see cref="Accessory"/> is to the left or right of <see cref="Text"/>.
+    ///     获取模块的附加内容的位置。
     /// </summary>
-    /// <returns>
-    ///     <see cref="SectionAccessoryMode.Left"/> if the <see cref="Accessory"/> is to the left of <see cref="Text"/>,
-    ///     <see cref="SectionAccessoryMode.Right"/> if the <see cref="Accessory"/> is to the right of <see cref="Text"/>,
-    /// </returns>
     public SectionAccessoryMode? Mode { get; }
 
     /// <summary>
-    ///     Gets the text of the section.
+    ///     获取模块的文本内容。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IElement"/> representing the text of the section.
-    /// </returns>
     public IElement? Text { get; }
 
     /// <summary>
-    ///     Gets the accessory of the section.
+    ///     获取模块的附加内容。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IElement"/> representing the accessory of the section.
-    /// </returns>
     public IElement? Accessory { get; }
 
     private string DebuggerDisplay => $"{Type}: {Text}{(Accessory is null ? string.Empty : $"{Mode} Accessory")}";

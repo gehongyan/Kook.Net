@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     A divider module that can be used in an <see cref="ICard"/>.
+///     分割线模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class DividerModule : IModule, IEquatable<DividerModule>, IEquatable<IModule>

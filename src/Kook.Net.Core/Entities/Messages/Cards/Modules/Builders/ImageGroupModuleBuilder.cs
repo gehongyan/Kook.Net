@@ -3,17 +3,17 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Representing an image group module builder for create an <see cref="ImageGroupModule"/>.
+///     用来构建 <see cref="ImageGroupModule"/> 模块的构建器。
 /// </summary>
 public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModuleBuilder>, IEquatable<IModuleBuilder>
 {
     /// <summary>
-    ///     Returns the maximum number of elements allowed by Kook.
+    ///     元素的最大数量。
     /// </summary>
     public const int MaxElementCount = 9;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ImageGroupModuleBuilder"/> class.
+    ///     初始化一个 <see cref="ImageGroupModuleBuilder"/> 类的新实例。
     /// </summary>
     public ImageGroupModuleBuilder()
     {
@@ -21,8 +21,9 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ImageGroupModuleBuilder"/> class.
+    ///     初始化一个 <see cref="ImageGroupModuleBuilder"/> 类的新实例。
     /// </summary>
+    /// <param name="elements"> 图片组模块要包含的图片元素。 </param>
     public ImageGroupModuleBuilder(IList<ImageElementBuilder> elements)
     {
         Elements = elements;
@@ -32,26 +33,15 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
     public ModuleType Type => ModuleType.ImageGroup;
 
     /// <summary>
-    ///     Gets or sets the elements of the image group.
+    ///     获取或设置图片组模块的图片元素。
     /// </summary>
-    /// <exception cref="ArgumentException">
-    ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
-    /// </exception>
-    /// <returns>
-    ///     An <see cref="ImageElementBuilder"/> containing the elements of the image group.
-    /// </returns>
     public IList<ImageElementBuilder> Elements { get; set; }
 
     /// <summary>
-    ///     Adds an image element to the image group.
+    ///     添加一个图片元素到图片组模块。
     /// </summary>
-    /// <param name="field">
-    ///     The image element to add.
-    /// </param>
+    /// <param name="field"> 要添加的图片元素。 </param>
     /// <returns> 当前构建器。 </returns>
-    /// <exception cref="ArgumentException">
-    ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
-    /// </exception>
     public ImageGroupModuleBuilder AddElement(ImageElementBuilder field)
     {
         if (Elements.Count >= MaxElementCount)
@@ -64,15 +54,10 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
     }
 
     /// <summary>
-    ///     Adds an image element to the image group.
+    ///     添加一个图片元素到图片组模块。
     /// </summary>
-    /// <param name="action">
-    ///     The action to add an image element to the image group.
-    /// </param>
+    /// <param name="action"> 一个包含对要添加的新创建的图片元素进行配置的操作的委托。 </param>
     /// <returns> 当前构建器。 </returns>
-    /// <exception cref="ArgumentException">
-    ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
-    /// </exception>
     public ImageGroupModuleBuilder AddElement(Action<ImageElementBuilder> action)
     {
         ImageElementBuilder field = new();
@@ -82,19 +67,19 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
     }
 
     /// <summary>
-    ///     Builds this builder into an <see cref="ImageGroupModule"/>.
+    ///     构建当前构建器为一个 <see cref="ImageGroupModule"/> 对象。
     /// </summary>
     /// <returns>
-    ///     An <see cref="ImageGroupModule"/> representing the built image group module object.
+    ///     由当前构建器表示的属性构建的 <see cref="ImageGroupModule"/> 对象。
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     The <see cref="Elements"/> is null.
+    ///     <see cref="Elements"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Elements"/> is an empty list.
+    ///     <see cref="Elements"/> 为空列表。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     Element count is greater than <see cref="MaxElementCount"/>.
+    ///     <see cref="Elements"/> 的元素数量超过了 <see cref="MaxElementCount"/>。
     /// </exception>
     public ImageGroupModule Build()
     {

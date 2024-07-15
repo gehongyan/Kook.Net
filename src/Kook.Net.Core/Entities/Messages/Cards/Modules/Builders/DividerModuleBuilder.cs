@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a divider module builder for creating a <see cref="DividerModule"/>.
+///     用来构建 <see cref="DividerModule"/> 模块的构建器。
 /// </summary>
 public class DividerModuleBuilder : IModuleBuilder, IEquatable<DividerModuleBuilder>, IEquatable<IModuleBuilder>
 {
@@ -11,10 +11,17 @@ public class DividerModuleBuilder : IModuleBuilder, IEquatable<DividerModuleBuil
     public ModuleType Type => ModuleType.Divider;
 
     /// <summary>
-    ///     Builds this builder into a <see cref="DividerModule"/>.
+    ///     初始化一个 <see cref="DividerModuleBuilder"/> 类的新实例。
+    /// </summary>
+    public DividerModuleBuilder()
+    {
+    }
+
+    /// <summary>
+    ///     构建当前构建器为一个 <see cref="DividerModule"/> 对象。
     /// </summary>
     /// <returns>
-    ///     A <see cref="DividerModule"/> representing the built divider module object.
+    ///     由当前构建器表示的属性构建的 <see cref="DividerModule"/> 对象。
     /// </returns>
     public DividerModule Build() => new();
 

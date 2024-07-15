@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-/// Represents an image group module that can be used in an <see cref="ICard"/>.
+///     图片组模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>, IEquatable<IModule>
@@ -19,11 +19,8 @@ public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>, IEquatabl
     public ModuleType Type => ModuleType.ImageGroup;
 
     /// <summary>
-    ///     Gets the image elements in this image group module.
+    ///     获取模块的元素。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="ImmutableArray{ImageElement}"/> representing the images in this image group module.
-    /// </returns>
     public ImmutableArray<ImageElement> Elements { get; }
 
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";
@@ -31,18 +28,14 @@ public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>, IEquatabl
     /// <summary>
     ///     判定两个 <see cref="ImageGroupModule"/> 是否相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>;
-    /// </returns>
+    /// <returns> 如果两个 <see cref="ImageGroupModule"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(ImageGroupModule left, ImageGroupModule right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     判定两个 <see cref="ImageGroupModule"/> 是否不相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="ImageGroupModule"/> is not equal to the current <see cref="ImageGroupModule"/>;
-    /// </returns>
+    /// <returns> 如果两个 <see cref="ImageGroupModule"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(ImageGroupModule left, ImageGroupModule right) =>
         !(left == right);
 

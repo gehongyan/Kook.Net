@@ -139,7 +139,7 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     ///     设置按钮的文本。
     /// </summary>
     /// <param name="action">
-    ///     一个包含创建文本元素构建器的委托，委托的返回类型必须是 <see cref="PlainTextElementBuilder"/>
+    ///     一个包含对新创建的文本元素构建器进行配置的操作的委托，委托的入参类型必须是 <see cref="PlainTextElementBuilder"/>
     ///     或 <see cref="KMarkdownElementBuilder"/>。
     /// </param>
     /// <returns> 当前构建器。 </returns>

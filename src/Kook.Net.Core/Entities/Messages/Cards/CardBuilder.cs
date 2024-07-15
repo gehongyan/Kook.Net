@@ -3,18 +3,19 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a builder class for creating a <see cref="Card"/>.
+///     用来构建 <see cref="Card"/> 卡片的构建器。
 /// </summary>
 public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICardBuilder>
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="CardBuilder"/> class with the specified parameters.
+    ///     初始化一个 <see cref="CardBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="theme"> The theme of the card.</param>
-    /// <param name="color"> The color displayed along the left side of the card.</param>
-    /// <param name="size"> The size of the card.</param>
-    /// <param name="modules"> The modules in the card.</param>
-    public CardBuilder(CardTheme theme = CardTheme.Primary, Color? color = null, CardSize size = CardSize.Large, IList<IModuleBuilder>? modules = null)
+    /// <param name="theme"> 卡片的主题。 </param>
+    /// <param name="color"> 卡片侧边的颜色。 </param>
+    /// <param name="size"> 卡片的大小。 </param>
+    /// <param name="modules"> 卡片的模块。 </param>
+    public CardBuilder(CardTheme theme = CardTheme.Primary, Color? color = null, CardSize size = CardSize.Large,
+        IList<IModuleBuilder>? modules = null)
     {
         Theme = theme;
         Color = color;
@@ -22,53 +23,43 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
         Modules = modules ?? [];
     }
 
-    /// <summary>
-    ///     Gets the type of the card.
-    /// </summary>
-    /// <returns>
-    ///     A <see cref="CardType"/> value that represents the type of the card.
-    /// </returns>
+    /// <inheritdoc />
     public CardType Type => CardType.Card;
 
     /// <summary>
-    ///     Gets or sets the theme of the card.
+    ///     获取或设置卡片的主题。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="CardTheme"/> value that represents the theme of the card.
-    /// </returns>
+    /// <remarks>
+    ///     <see cref="Color"/> 属性的优先级高于此属性。
+    /// </remarks>
     public CardTheme Theme { get; set; }
 
     /// <summary>
-    ///     Gets or sets the color displayed along the left side of the card.
+    ///     获取或设置卡片侧边的颜色。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="Color"/> value that represents the color displayed along the left side of the card.
-    /// </returns>
+    /// <remarks>
+    ///     此属性的优先级高于 <see cref="Theme"/> 属性。
+    /// </remarks>
     public Color? Color { get; set; }
 
     /// <summary>
-    ///     Gets or sets the size of the card.
+    ///     获取或设置卡片的大小。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="CardSize"/> value that represents the size of the card.
-    /// </returns>
-    public CardSize Size { get; set; } = CardSize.Large;
+    public CardSize Size { get; set; }
 
     /// <summary>
-    ///     Gets or sets the modules in the card.
+    ///     获取或设置卡片的模块。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IList{IModuleBuilder}"/> containing the modules in the card.
-    /// </returns>
     public IList<IModuleBuilder> Modules { get; set; }
 
     /// <summary>
-    ///     Sets the theme of the card.
+    ///     设置卡片的主题。
     /// </summary>
-    /// <param name="theme">
-    ///     A <see cref="CardTheme"/> value that represents the theme of the card to be set.
-    /// </param>
+    /// <param name="theme"> 卡片的主题。 </param>
     /// <returns> 当前构建器。 </returns>
+    /// <remarks>
+    ///     <see cref="Color"/> 属性的优先级高于 <see cref="Theme"/> 属性。
+    /// </remarks>
     public CardBuilder WithTheme(CardTheme theme)
     {
         Theme = theme;
@@ -76,12 +67,13 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     }
 
     /// <summary>
-    ///     Sets the color displayed along the left side of the card.
+    ///     设置卡片侧边的颜色。
     /// </summary>
-    /// <param name="color">
-    ///     A <see cref="Color"/> value that represents the color displayed along the left side of the card to be set.
-    /// </param>
+    /// <param name="color"> 卡片侧边的颜色。 </param>
     /// <returns> 当前构建器。 </returns>
+    /// <remarks>
+    ///     <see cref="Color"/> 属性的优先级高于 <see cref="Theme"/> 属性。
+    /// </remarks>
     public CardBuilder WithColor(Color? color)
     {
         Color = color;
@@ -89,11 +81,9 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     }
 
     /// <summary>
-    ///     Sets the size of the card.
+    ///     设置卡片的大小。
     /// </summary>
-    /// <param name="size">
-    ///     A <see cref="CardSize"/> value that represents the size of the card to be set.
-    /// </param>
+    /// <param name="size"> 卡片的大小。 </param>
     /// <returns> 当前构建器。 </returns>
     public CardBuilder WithSize(CardSize size)
     {
@@ -102,11 +92,9 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     }
 
     /// <summary>
-    ///     Adds a module to the card.
+    ///     添加一个模块到卡片。
     /// </summary>
-    /// <param name="module">
-    ///     An <see cref="IModuleBuilder"/> that represents the module to be added to the card.
-    /// </param>
+    /// <param name="module"> 要添加的模块。 </param>
     /// <returns> 当前构建器。 </returns>
     public CardBuilder AddModule(IModuleBuilder module)
     {
@@ -115,11 +103,9 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     }
 
     /// <summary>
-    ///     Adds a module to the card.
+    ///     添加一个模块到卡片。
     /// </summary>
-    /// <param name="action">
-    ///     The action to adds a module to the card.
-    /// </param>
+    /// <param name="action"> 一个包含对要添加的新创建的模块进行配置的操作的委托。 </param>
     /// <returns> 当前构建器。 </returns>
     public CardBuilder AddModule<T>(Action<T>? action = null)
         where T : IModuleBuilder, new()
@@ -134,10 +120,10 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     ///     构建当前构建器为一个 <see cref="Card"/>。
     /// </summary>
     /// <returns>
-    ///     A <see cref="KMarkdownElement"/> represents the built element object.
+    ///     由当前构建器表示的属性构建的 <see cref="Card"/> 对象。
     /// </returns>
     /// <exception cref="InvalidOperationException">
-    ///     The theme of the card cannot be invisible, which is reserved for text graphics mixed messages.
+    ///     卡片的主题不能为 <see cref="F:Kook.CardTheme.Invisible"/>，该值保留用于图文混排消息，暂不支持手动构建。
     /// </exception>
     public Card Build()
     {

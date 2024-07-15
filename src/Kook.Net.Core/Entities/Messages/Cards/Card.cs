@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a card object seen in an <see cref="IUserMessage"/>.
+///     表示一个卡片对象，可用于卡片消息。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Card : ICard, IEquatable<Card>, IEquatable<ICard>
@@ -25,35 +25,23 @@ public class Card : ICard, IEquatable<Card>, IEquatable<ICard>
     public int ModuleCount => Modules.Length;
 
     /// <summary>
-    ///     Gets the theme of this card.
+    ///     获取卡片的主题。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="CardTheme"/> value that represents the theme of this card.
-    /// </returns>
     public CardTheme Theme { get; }
 
     /// <summary>
-    ///     Gets the color of this embed.
+    ///     获取卡片侧边的颜色。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="Color"/> represents a color present on the side of the card, or <c>null</c> if none is set.
-    /// </returns>
     public Color? Color { get; }
 
     /// <summary>
-    ///     Gets the size of this card.
+    ///     获取卡片的大小。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="CardSize"/> value that represents the size of this card.
-    /// </returns>
     public CardSize Size { get; }
 
     /// <summary>
-    ///     Gets the modules in this card.
+    ///     获取卡片的模块。
     /// </summary>
-    /// <returns>
-    ///     An array of the modules of the card.
-    /// </returns>
     public ImmutableArray<IModule> Modules { get; }
 
     private string DebuggerDisplay => $"{Type} ({Modules.Length} Modules)";

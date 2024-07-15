@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a invite module builder for creating an <see cref="InviteModule"/>.
+///     用来构建 <see cref="InviteModule"/> 模块的构建器。
 /// </summary>
 public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilder>, IEquatable<IModuleBuilder>
 {
@@ -11,35 +11,30 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
     public ModuleType Type => ModuleType.Invite;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="InviteModuleBuilder"/> class.
+    ///     初始化一个 <see cref="InviteModuleBuilder"/> 类的新实例。
     /// </summary>
     public InviteModuleBuilder()
     {
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="InviteModuleBuilder"/> class.
+    ///     初始化一个 <see cref="InviteModuleBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="code"></param>
+    /// <param name="code"> 邀请代码。 </param>
     public InviteModuleBuilder(string code)
     {
         Code = code;
     }
 
     /// <summary>
-    ///     Gets or sets the code of the invite.
+    ///     获取或设置邀请代码。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the code of the invite.
-    /// </returns>
     public string? Code { get; set; }
 
     /// <summary>
-    ///     Sets the code of the invite.
+    ///     设置邀请代码。
     /// </summary>
-    /// <param name="code">
-    ///     The code of the invite to be set.
-    /// </param>
+    /// <param name="code"> 邀请代码。 </param>
     /// <returns> 当前构建器。 </returns>
     public InviteModuleBuilder WithCode(string code)
     {
@@ -48,16 +43,16 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
     }
 
     /// <summary>
-    ///     Builds this builder into an <see cref="InviteModule"/>.
+    ///     构建当前构建器为一个 <see cref="InviteModule"/> 对象。
     /// </summary>
     /// <returns>
-    ///     An <see cref="InviteModule"/> representing the built invite module object.
+    ///     由当前构建器表示的属性构建的 <see cref="InviteModule"/> 对象。
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     The <see cref="Code"/> is null.
+    ///     <see cref="Code"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Code"/> is empty or whitespace.
+    ///     <see cref="Code"/> 为空或空白字符串。
     /// </exception>
     [MemberNotNull(nameof(Code))]
     public InviteModule Build()

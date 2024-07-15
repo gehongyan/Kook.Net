@@ -3,57 +3,52 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a header module builder for creating a <see cref="HeaderModule"/>.
+///     用来构建 <see cref="HeaderModule"/> 模块的构建器。
 /// </summary>
 public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilder>, IEquatable<IModuleBuilder>
 {
     /// <summary>
-    ///     Gets the maximum content length for header allowed by Kook.
+    ///     标题内容文本的最大长度。
     /// </summary>
-    public const int MaxTitleContentLength = 100;
+    public const int MaxHeaderContentLength = 100;
 
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Header;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="HeaderModuleBuilder"/> class.
+    ///     初始化一个 <see cref="HeaderModuleBuilder"/> 类的新实例。
     /// </summary>
     public HeaderModuleBuilder()
     {
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="HeaderModuleBuilder"/> class.
+    ///     初始化一个 <see cref="HeaderModuleBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="text"> The text to be set for the header. </param>
+    /// <param name="text"> 标题文本。 </param>
     public HeaderModuleBuilder(PlainTextElementBuilder text)
     {
         Text = text;
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="HeaderModuleBuilder"/> class.
+    ///     初始化一个 <see cref="HeaderModuleBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="text"> The text to be set for the header. </param>
+    /// <param name="text"> 标题文本。 </param>
     public HeaderModuleBuilder(string text)
     {
         Text = new PlainTextElementBuilder(text);
     }
 
     /// <summary>
-    ///     Gets or sets the text of the header.
+    ///     获取或设置标题文本。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="PlainTextElementBuilder"/> representing the text of the header.
-    /// </returns>
     public PlainTextElementBuilder? Text { get; set; }
 
     /// <summary>
-    ///     Sets the text of the header.
+    ///     设置标题文本。
     /// </summary>
-    /// <param name="text">
-    ///     The text to be set for the header.
-    /// </param>
+    /// <param name="text"> 要设置的标题文本。 </param>
     /// <returns> 当前构建器。 </returns>
     public HeaderModuleBuilder WithText(PlainTextElementBuilder text)
     {
@@ -62,9 +57,9 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     }
 
     /// <summary>
-    ///     Sets the text of the header.
+    ///     设置标题文本。
     /// </summary>
-    /// <param name="text"> The text to be set for the header. </param>
+    /// <param name="text"> 要设置的标题文本。 </param>
     /// <returns> 当前构建器。 </returns>
     public HeaderModuleBuilder WithText(string text)
     {
@@ -73,11 +68,9 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     }
 
     /// <summary>
-    ///     Sets the text of the header.
+    ///     设置标题文本。
     /// </summary>
-    /// <param name="action">
-    ///     The action to set the text of the header.
-    /// </param>
+    /// <param name="action"> 一个包含对要设置的标题文本进行配置的操作的委托。 </param>
     /// <returns> 当前构建器。 </returns>
     public HeaderModuleBuilder WithText(Action<PlainTextElementBuilder>? action = null)
     {
@@ -88,19 +81,19 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     }
 
     /// <summary>
-    ///     Builds this builder into a <see cref="HeaderModule"/>.
+    ///     构建当前构建器为一个 <see cref="HeaderModule"/> 对象。
     /// </summary>
     /// <returns>
-    ///     A <see cref="HeaderModule"/> representing the built header module object.
+    ///     由当前构建器表示的属性构建的 <see cref="HeaderModule"/> 对象。
     /// </returns>
     /// <exception cref="ArgumentNullException">
-    ///     The <see cref="Text"/> is null.
+    ///     <see cref="Text"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Text"/> is null.
+    ///     <see cref="Text"/> 的内容为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Text"/> content is longer than <see cref="MaxTitleContentLength"/>.
+    ///     <see cref="Text"/> 的内容长度超过了 <see cref="MaxHeaderContentLength"/>。
     /// </exception>
     [MemberNotNull(nameof(Text))]
     public HeaderModule Build()
@@ -111,9 +104,9 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
         if (Text.Content is null)
             throw new ArgumentException("The content of the header text cannot be null.", nameof(Text));
 
-        if (Text.Content.Length > MaxTitleContentLength)
+        if (Text.Content.Length > MaxHeaderContentLength)
             throw new ArgumentException(
-                $"Header content length must be less than or equal to {MaxTitleContentLength}.",
+                $"Header content length must be less than or equal to {MaxHeaderContentLength}.",
                 nameof(Text));
 
         return new HeaderModule(Text.Build());
