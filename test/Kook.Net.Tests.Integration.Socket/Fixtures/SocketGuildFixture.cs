@@ -24,7 +24,7 @@ public class SocketGuildFixture : KookSocketClientFixture
         List<SocketGuild> guilds = Client.Guilds
             .Where(x => x.Name == guildName)
             .ToList();
-        await RemoveUselessTestGuildsAsync(guilds.Skip(1));
+        // await RemoveUselessTestGuildsAsync(guilds.Skip(1));
 
         // If there is a guild created by this bot, use it
         if (guilds.Find(x => x.OwnerId == Client.CurrentUser?.Id) is { } guild)

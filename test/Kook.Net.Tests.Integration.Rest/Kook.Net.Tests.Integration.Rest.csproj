@@ -2,4 +2,8 @@
 
   <Import Project="../../Kook.Net.Test.targets" />
 
+  <ItemGroup>
+    <PackageReference Update="xunit" Version="2.9.0" />
+  </ItemGroup>
+
 </Project>

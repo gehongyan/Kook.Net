@@ -3,26 +3,6 @@ uid: Guides.Voice.SendingVoice
 title: 语音推流
 ---
 
-## 前言
-
-> [!WARNING]
-> KOOK 尚未正式公开面向 Bot 的语音连接与推流的 API，当前的实现基于 [hank9999/kook-voice-API] 进行开发，在此向 [hank9999]
-> 表示感谢。
->
-> 使用语音连接与推流的功能，视为认同**开黑啦 V3 语音 API - 使用须知**：
->
-> **注意本 API 由抓包得来，API 可能会随时变动进而失效**，
-> **您需要得知，使用此 API 会违反 [KOOK 语音软件许可及服务协议] `3.2.3` 或 `3.2.5` 条款**，
-> **同时会违反 [KOOK 开发者隐私政策] `数据信息` 或 `滥用` 中的相关条款**
-
-[hank9999/kook-voice-API]: https://github.com/hank9999/kook-voice-API
-
-[hank9999]: https://github.com/hank9999
-
-[KOOK 语音软件许可及服务协议]:https://www.kookapp.cn/protocol.html
-
-[KOOK 开发者隐私政策]: https://developer.kookapp.cn/doc/privacy
-
 ## 安装
 
 语音推流需要 Opus 编码器的支持，要使用语音功能，请将 `opus` 原生库放在 Bot 运行目录内。
@@ -35,7 +15,7 @@ Linux 开发者需要从源码编译 [Opus](http://downloads.xiph.org/releases/o
 
 ## 加入语音频道
 
-语音推流前需要先加入语音频道，调用 [IAudioClient] 上的 [ConnectAsync]，该异步操作会返回一个 [IAudioClient] 对象，用于后续的语音推流操作。
+语音推流前需要先加入语音频道，调用 [IAudioChannel] 上的 [ConnectAsync]，该异步操作会返回一个 [IAudioClient] 对象，用于后续的语音推流操作。
 
 [!code-csharp[加入语音频道](samples/joining_audio.cs)]
 
@@ -45,15 +25,11 @@ Linux 开发者需要从源码编译 [Opus](http://downloads.xiph.org/releases/o
 
 加入语音频道后，客户端将保持与此频道的连接，直到被踢出频道、掉线、或其它被服务端通知需主动断开连接。
 
-应注意的是，语音连接是基于每个服务器创建的。在单个服务器中，Bot 只能启动一个音频连接。
-要在服务器内切换频道，需要在服务器的另一个语音频道上调用 [ConnectAsync]。
+应注意的是，语音连接是基于每个语音频道创建的，对多个语音频道分别调用 [ConnectAsync]，会创建多个 [IAudioClient] 的实例。
 
-> [!WARNING]
-> KOOK 已对 Bot 禁用对多个服务器的语音频道同时推流的能力，在某个服务器上保持音频连接时，如果在另一个服务器上的某个语音频道中调用
-> [ConnectAsync]，或导致已有的音频链接被 KOOK 服务端中断。
-
-[IAudioClient]: xref:Kook.Audio.IAudioClient
+[IAudioChannel]: xref:Kook.IAudioChannel
 [ConnectAsync]: xref:Kook.IAudioChannel.ConnectAsync*
+[IAudioClient]: xref:Kook.Audio.IAudioClient
 [RunMode.Async]: xref:Kook.Commands.RunMode
 
 ## 语音推流
