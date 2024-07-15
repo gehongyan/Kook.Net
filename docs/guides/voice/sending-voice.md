@@ -3,26 +3,6 @@ uid: Guides.Voice.SendingVoice
 title: 语音推流
 ---
 
-## 前言
-
-> [!WARNING]
-> KOOK 尚未正式公开面向 Bot 的语音连接与推流的 API，当前的实现基于 [hank9999/kook-voice-API] 进行开发，在此向 [hank9999]
-> 表示感谢。
->
-> 使用语音连接与推流的功能，视为认同**开黑啦 V3 语音 API - 使用须知**：
->
-> **注意本 API 由抓包得来，API 可能会随时变动进而失效**，
-> **您需要得知，使用此 API 会违反 [KOOK 语音软件许可及服务协议] `3.2.3` 或 `3.2.5` 条款**，
-> **同时会违反 [KOOK 开发者隐私政策] `数据信息` 或 `滥用` 中的相关条款**
-
-[hank9999/kook-voice-API]: https://github.com/hank9999/kook-voice-API
-
-[hank9999]: https://github.com/hank9999
-
-[KOOK 语音软件许可及服务协议]:https://www.kookapp.cn/protocol.html
-
-[KOOK 开发者隐私政策]: https://developer.kookapp.cn/doc/privacy
-
 ## 安装
 
 语音推流需要 Opus 编码器的支持，要使用语音功能，请将 `opus` 原生库放在 Bot 运行目录内。
