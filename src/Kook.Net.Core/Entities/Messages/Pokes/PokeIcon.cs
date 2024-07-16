@@ -1,19 +1,19 @@
 namespace Kook;
 
 /// <summary>
-///     Represents an icon of an <see cref="IPoke"/>.
+///     表示一个 POKE 的图标。
 /// </summary>
 public struct PokeIcon
 {
     /// <summary>
-    ///     Gets the resource uri of the icon.
+    ///     获取图标资源的 URI。
     /// </summary>
-    public string Resource { get; internal set; }
+    public string Resource { get; }
 
     /// <summary>
-    ///     Gets the resource uri of the icon when the <see cref="IPoke"/> is expired.
+    ///     获取当此图标所关联的 POKE 过期后的图标资源的 URI。
     /// </summary>
-    public string ResourceExpired { get; internal set; }
+    public string ResourceExpired { get; }
 
     internal PokeIcon(string resource, string resourceExpired)
     {

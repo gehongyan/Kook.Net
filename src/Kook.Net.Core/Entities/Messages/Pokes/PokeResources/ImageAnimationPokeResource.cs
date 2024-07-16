@@ -1,7 +1,7 @@
 namespace Kook;
 
 /// <summary>
-///     Represents an image animation poke resource.
+///     表示一个 POKE 的图像与动画的资源。
 /// </summary>
 public struct ImageAnimationPokeResource : IPokeResource
 {
@@ -19,27 +19,27 @@ public struct ImageAnimationPokeResource : IPokeResource
     public PokeResourceType Type => PokeResourceType.ImageAnimation;
 
     /// <summary>
-    ///     Gets the resources of the image animation.
+    ///     获取图像动画的资源。
     /// </summary>
-    public IReadOnlyDictionary<string, string> Resources { get; internal set; }
+    public IReadOnlyDictionary<string, string> Resources { get; }
 
     /// <summary>
-    ///     Gets how long this animation should last filling the full screen.
+    ///     获取此动画以全屏的形式播放的持续时间。
     /// </summary>
-    public TimeSpan Duration { get; internal set; }
+    public TimeSpan Duration { get; }
 
     /// <summary>
-    ///     Gets the width of the image animation.
+    ///     获取图像动画的宽度。
     /// </summary>
-    public int Width { get; internal set; }
+    public int Width { get; }
 
     /// <summary>
-    ///     Gets the height of the image animation.
+    ///     获取图像动画的高度。
     /// </summary>
-    public int Height { get; internal set; }
+    public int Height { get; }
 
     /// <summary>
     ///     // TODO: To be documented.
     /// </summary>
-    public decimal Percent { get; internal set; }
+    public decimal Percent { get; }
 }

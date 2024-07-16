@@ -1,142 +1,117 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a message object.
+///     表示一个通用的消息。
 /// </summary>
 public interface IMessage : IEntity<Guid>, IDeletable
 {
     #region General
 
     /// <summary>
-    ///     Gets the type of this message.
+    ///     获取此消息的类型。
     /// </summary>
     MessageType Type { get; }
 
     /// <summary>
-    ///     Gets the source type of this message.
+    ///     获取此消息的来源。
     /// </summary>
     MessageSource Source { get; }
 
     /// <summary>
-    ///     Gets the value that indicates whether this message is pinned.
+    ///     获取此消息是否被置顶。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if this message was added to its channel's pinned messages; otherwise <c>false</c>.
-    /// </returns>
     bool? IsPinned { get; }
 
     /// <summary>
-    ///     Gets the source channel of the message.
+    ///     获取此消息的来源频道。
     /// </summary>
     IMessageChannel Channel { get; }
 
     /// <summary>
-    ///     Gets the author of this message.
+    ///     获取此消息的作者。
     /// </summary>
     IUser Author { get; }
 
     /// <summary>
-    ///     Gets the content for this message.
+    ///     获取此消息的内容。
     /// </summary>
-    /// <returns>
-    ///     A string that contains the body of the message;
-    ///     note that this field may be empty or the original code if the message is not a text based message.
-    /// </returns>
+    /// <remarks>
+    ///     如果消息不是文本消息，则此字段可能为空或包含原始代码。
+    /// </remarks>
     string Content { get; }
 
     /// <summary>
-    ///     Gets the clean content for this message.
+    ///     获取此消息的纯净内容。
     /// </summary>
     /// <returns>
-    ///     A string that contains the body of the message stripped of mentions, markdown, emojis and pings;
-    ///     note that this field may be empty or the original code if the message is not a text based message.
+    ///     此属性会对 <see cref="Content"/> 的内容进行两步操作： <br />
+    ///     1. 使用 <see cref="M:Kook.IUserMessage.Resolve(Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling)"/>
+    ///     方法解析所有标签的完整名称； <br />
+    ///     2. 使用 <see cref="M:Kook.Format.StripMarkdown(System.String)"/> 清理所有 KMarkdown 格式字符。
     /// </returns>
+    /// <seealso cref="M:Kook.IUserMessage.Resolve(Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling)"/>
+    /// <seealso cref="M:Kook.Format.StripMarkdown(System.String)"/>
     string CleanContent { get; }
 
     /// <summary>
-    ///     Gets the time this message was sent.
+    ///     获取此消息的发送时间。
     /// </summary>
-    /// <returns>
-    ///     Time of when the message was sent.
-    /// </returns>
     DateTimeOffset Timestamp { get; }
 
     /// <summary>
-    ///     Gets the time of this message's last edit.
+    ///     获取此消息最后一次编辑的时间。
     /// </summary>
-    /// <returns>
-    ///     Time of when the message was last edited;
-    ///     <c>null</c> if the message is never edited.
-    /// </returns>
+    /// <remarks>
+    ///     如果此消息从未被编辑过，则此属性的值为 <see langword="null"/>。
+    /// </remarks>
     DateTimeOffset? EditedTimestamp { get; }
 
     /// <summary>
-    ///     Gets the IDs of users mentioned in this message.
+    ///     获取此消息中提及的所有用户的 ID。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of user IDs.
-    /// </returns>
     IReadOnlyCollection<ulong> MentionedUserIds { get; }
 
     /// <summary>
-    ///     Gets the IDs of roles mentioned in this message.
+    ///     获取此消息中提及的所有角色的 ID。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of role IDs.
-    /// </returns>
     IReadOnlyCollection<uint> MentionedRoleIds { get; }
 
     /// <summary>
-    ///     Gets the value that indicates whether this message mentioned everyone.
+    ///     获取此消息是否提及了全体成员。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if this message mentioned everyone; otherwise <c>false</c>.
-    /// </returns>
     bool MentionedEveryone { get; }
 
     /// <summary>
-    ///     Gets the value that indicates whether this message mentioned online users.
+    ///     获取此消息是否提及了在线成员。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if this message mentioned online users; otherwise <c>false</c>.
-    /// </returns>
     bool MentionedHere { get; }
 
     /// <summary>
-    ///     Gets all tags included in this message's content.
+    ///     获取此消息中解析出的所有标签。
     /// </summary>
     IReadOnlyCollection<ITag> Tags { get; }
 
     /// <summary>
-    ///     Gets the attachment included in this message.
+    ///     获取此消息中包含的所有附件。
     /// </summary>
-    /// <returns>
-    ///     The attachment included in this message;
-    /// </returns>
+    /// <remarks>
+    ///     此属性也会包含从卡片中解析出来的附件信息。
+    /// </remarks>
     IReadOnlyCollection<IAttachment> Attachments { get; }
 
     /// <summary>
-    ///     Gets all cards included in this message.
+    ///     获取此消息中包含的所有卡片。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of card objects.
-    /// </returns>
     IReadOnlyCollection<ICard> Cards { get; }
 
     /// <summary>
-    ///     Gets all embeds included in this message.
+    ///     获取此消息中包含的所有嵌入式内容。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of embed objects.
-    /// </returns>
     IReadOnlyCollection<IEmbed> Embeds { get; }
 
     /// <summary>
-    ///     Gets all poke actions included in this message.
+    ///     获取此消息中包含的所有 POKE。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of poke actions objects.
-    /// </returns>
     IReadOnlyCollection<IPokeAction> Pokes { get; }
 
     #endregion
@@ -144,53 +119,42 @@ public interface IMessage : IEntity<Guid>, IDeletable
     #region Reactions
 
     /// <summary>
-    ///     Gets all reactions included in this message.
+    ///     获取此消息中包含的所有回应。
     /// </summary>
     IReadOnlyDictionary<IEmote, ReactionMetadata> Reactions { get; }
 
     /// <summary>
-    ///     Adds a reaction to this message.
+    ///     向此消息添加一个回应。
     /// </summary>
-    /// <param name="emote">The emoji used to react to this message.</param>
+    /// <param name="emote"> 要用于向此消息添加回应的表情符号。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for adding a reaction to this message.
-    /// </returns>
-    /// <seealso cref="IEmote"/>
+    /// <returns> 一个表示添加添加异步操作的任务。 </returns>
     Task AddReactionAsync(IEmote emote, RequestOptions? options = null);
 
     /// <summary>
-    ///     Removes a reaction from message.
+    ///     从此消息中移除一个回应。
     /// </summary>
-    /// <param name="emote">The emoji used to react to this message.</param>
-    /// <param name="user">The user that added the emoji.</param>
+    /// <param name="emote"> 要从此消息移除的回应的表情符号。 </param>
+    /// <param name="user"> 要删除其回应的用户。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for removing a reaction to this message.
-    /// </returns>
-    /// <seealso cref="IEmote"/>
+    /// <returns> 一个表示异步移除操作的任务。 </returns>
     Task RemoveReactionAsync(IEmote emote, IUser user, RequestOptions? options = null);
 
     /// <summary>
-    ///     Removes a reaction from message.
+    ///     从此消息中移除一个回应。
     /// </summary>
-    /// <param name="emote">The emoji used to react to this message.</param>
-    /// <param name="userId">The ID of the user that added the emoji.</param>
+    /// <param name="emote"> 要从此消息移除的回应的表情符号。 </param>
+    /// <param name="userId"> 要删除其回应的用户的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for removing a reaction to this message.
-    /// </returns>
-    /// <seealso cref="IEmote"/>
+    /// <returns> 一个表示异步移除操作的任务。 </returns>
     Task RemoveReactionAsync(IEmote emote, ulong userId, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets all users that reacted to a message with a given emote.
+    ///     获取所有对消息使用给定表情符号进行回应的用户。
     /// </summary>
-    /// <param name="emote">The emoji that represents the reaction that you wish to get.</param>
+    /// <param name="emote"> 要获取其回应用户的表情符号。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///      Collection of users.
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含对消息使用给定表情符号进行回应的所有用户。 </returns>
     Task<IReadOnlyCollection<IUser>> GetReactionUsersAsync(IEmote emote, RequestOptions? options = null);
 
     #endregion

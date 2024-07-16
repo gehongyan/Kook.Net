@@ -6,7 +6,7 @@ namespace Kook;
 public enum ButtonTheme
 {
     /// <summary>
-    ///     外观表示为主要操作。
+    ///     外观表现为主要操作。
     /// </summary>
     /// <remarks>
     ///     按钮的背景色大体为草绿色，浅色模式下为 <c>#7ACC35</c>（http://www.color-hex.com/color/7acc35），深色模式下为
@@ -15,7 +15,7 @@ public enum ButtonTheme
     Primary,
 
     /// <summary>
-    ///     外观表示为成功。
+    ///     外观表现为成功。
     /// </summary>
     /// <remarks>
     ///     按钮的背景色大体为薄荷绿色 <c>#00D287</c>（http://www.color-hex.com/color/00d287）。
@@ -23,7 +23,7 @@ public enum ButtonTheme
     Success,
 
     /// <summary>
-    ///     外观表示为警告。
+    ///     外观表现为警告。
     /// </summary>
     /// <remarks>
     ///     按钮的背景色大体为橙色，浅色模式下为 <c>#FF8200</c>（http://www.color-hex.com/color/ff8200），深色模式下为
@@ -32,7 +32,7 @@ public enum ButtonTheme
     Warning,
 
     /// <summary>
-    ///     外观表示为危险。
+    ///     外观表现为危险。
     /// </summary>
     /// <remarks>
     ///     按钮的背景色大体为鲜红色，浅色模式下为 <c>#FF3200</c>（http://www.color-hex.com/color/ff3200），深色模式下为
@@ -41,7 +41,7 @@ public enum ButtonTheme
     Danger,
 
     /// <summary>
-    ///     外观表示为信息。
+    ///     外观表现为信息。
     /// </summary>
     /// <remarks>
     ///     按钮的背景色大体为天蓝色，浅色模式下为 <c>#0096FF</c>（http://www.color-hex.com/color/0096ff），深色模式下为
@@ -50,7 +50,7 @@ public enum ButtonTheme
     Info,
 
     /// <summary>
-    ///     外观表示为次要操作。
+    ///     外观表现为次要操作。
     /// </summary>
     /// <remarks>
     ///     按钮的背景色大体为灰色 <c>#BBBEC4</c>（http://www.color-hex.com/color/bbbec4），不透明度为 <c>0.3</c>。

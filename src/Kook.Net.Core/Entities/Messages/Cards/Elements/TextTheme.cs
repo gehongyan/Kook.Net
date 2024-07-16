@@ -19,7 +19,7 @@ public enum TextTheme : ushort
     ///     外观表现为主要文本。
     /// </summary>
     /// <remarks>
-    ///     按钮的前景色大体为草绿色，浅色模式下为 <c>#7ACC35</c>（http://www.color-hex.com/color/7acc35），深色模式下为
+    ///     文本的前景色大体为草绿色，浅色模式下为 <c>#7ACC35</c>（http://www.color-hex.com/color/7acc35），深色模式下为
     ///     <c>#6CBF00</c>（http://www.color-hex.com/color/6cbf00）。
     /// </remarks>
     Primary,

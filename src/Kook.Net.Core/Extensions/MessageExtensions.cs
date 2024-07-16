@@ -9,9 +9,7 @@ public static class MessageExtensions
     ///     获取一个跳转到消息的 URL。
     /// </summary>
     /// <param name="msg"> 要获取跳转 URL 的消息。 </param>
-    /// <returns>
-    ///     一个包含用于在聊天中跳转到消息的 URL 的字符串。
-    /// </returns>
+    /// <returns> 一个包含用于在聊天中跳转到消息的 URL 的字符串。 </returns>
     public static string GetJumpUrl(this IMessage msg)
     {
         IMessageChannel channel = msg.Channel;
@@ -30,13 +28,10 @@ public static class MessageExtensions
     ///     此方法会对每个要添加的回应分别发送请求。
     /// </remarks>
     /// <param name="msg"> 要添加回应的消息。 </param>
-    /// <param name="reactions"> 要用于向此消息添加反应的表情符号的集合。 </param>
+    /// <param name="reactions"> 要用于向此消息添加回应的表情符号的集合。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步添加操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步添加操作的任务。 </returns>
     /// <seealso cref="M:Kook.IMessage.AddReactionAsync(Kook.IEmote,Kook.RequestOptions)"/>
-    /// <seealso cref="T:Kook.IEmote"/>
     public static async Task AddReactionsAsync(this IUserMessage msg, IEnumerable<IEmote> reactions,
         RequestOptions? options = null)
     {
@@ -51,14 +46,11 @@ public static class MessageExtensions
     ///     此方法会对每个要移除的回应分别发送请求。
     /// </remarks>
     /// <param name="msg"> 要添加回应的消息。 </param>
-    /// <param name="user"> 要删除其反应的用户。 </param>
-    /// <param name="reactions"> 要从此消息移除的反应的表情符号的集合。 </param>
+    /// <param name="user"> 要删除其回应的用户。 </param>
+    /// <param name="reactions"> 要从此消息移除的回应的表情符号的集合。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步添加操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步移除操作的任务。 </returns>
     /// <seealso cref="M:Kook.IMessage.RemoveReactionAsync(Kook.IEmote,Kook.IUser,Kook.RequestOptions)"/>
-    /// <seealso cref="T:Kook.IEmote"/>
     public static async Task RemoveReactionsAsync(this IUserMessage msg, IUser user, IEnumerable<IEmote> reactions,
         RequestOptions? options = null)
     {
