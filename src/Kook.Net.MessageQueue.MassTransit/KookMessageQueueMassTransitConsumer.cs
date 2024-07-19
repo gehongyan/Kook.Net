@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Kook.WebSocket;
+﻿using Kook.WebSocket;
 using MassTransit;
 
 namespace Kook.Net.Queue.MassTransit;

@@ -15,6 +15,7 @@ public class SocketSystemMessage : SocketMessage, ISystemMessage
     internal SocketSystemMessage(KookSocketClient kook, Guid id, ISocketMessageChannel channel, SocketUser author)
         : base(kook, id, channel, author, MessageSource.System)
     {
+        SystemMessageType = SystemMessageType.Unknown;
     }
 
     internal static new SocketSystemMessage Create(KookSocketClient kook, ClientState state, SocketUser author,

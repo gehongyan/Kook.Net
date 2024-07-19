@@ -2,11 +2,11 @@ using System.Diagnostics;
 
 namespace Kook;
 
-/// <summary>
-///     Represents a tag found in <see cref="IMessage"/>.
-/// </summary>
+/// <inheritdoc />
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class Tag<T> : ITag
+public class Tag<TKey, TValue> : ITag
+    where TKey : IEquatable<TKey>
+    where TValue : IEntity<TKey>
 {
     /// <inheritdoc />
     public TagType Type { get; }
@@ -17,20 +17,13 @@ public class Tag<T> : ITag
     /// <inheritdoc />
     public int Length { get; }
 
-    /// <inheritdoc />
-    public dynamic Key { get; }
+    /// <inheritdoc cref="P:Kook.ITag.Key" />
+    public TKey Key { get; }
 
-    /// <summary>
-    ///     Gets the value of the tag.
-    /// </summary>
-    /// <remarks>
-    ///     When <see cref="Type"/> is <see cref="TagType.HereMention"/>,
-    ///     this property returns the same entity as <see cref="IGuild.EveryoneRole"/> for convenience.
-    ///     because there is no actual entities representing a group of online users.
-    /// </remarks>
-    public T? Value { get; }
+    /// <inheritdoc cref="P:Kook.ITag.Key" />
+    public TValue? Value { get; }
 
-    internal Tag(TagType type, int index, int length, dynamic key, T? value)
+    internal Tag(TagType type, int index, int length, TKey key, TValue? value)
     {
         Type = type;
         Index = index;
@@ -43,6 +36,9 @@ public class Tag<T> : ITag
 
     /// <inheritdoc />
     public override string ToString() => DebuggerDisplay;
+
+    /// <inheritdoc />
+    object ITag.Key => Key;
 
     /// <inheritdoc />
     object? ITag.Value => Value;

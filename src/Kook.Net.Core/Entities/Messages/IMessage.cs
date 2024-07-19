@@ -36,7 +36,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     ///     获取此消息的内容。
     /// </summary>
     /// <remarks>
-    ///     如果消息不是文本消息，则此字段可能为空或包含原始代码。
+    ///     如果消息不是文本消息，则此属性可能为空或包含原始代码。
     /// </remarks>
     string Content { get; }
 

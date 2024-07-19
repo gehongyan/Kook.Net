@@ -7,7 +7,7 @@ namespace Kook;
 public class CreateTextChannelProperties : CreateGuildChannelProperties
 {
     /// <summary>
-    ///     获取或设置此频道所属分组频道的 ID。
+    ///     获取或设置要设置到此频道的所属分组频道的 ID。
     /// </summary>
     /// <remarks>
     ///     将此值设置为某分组频道的 ID 可以使新建频道位于该分组频道下；将此值设置为 <c>null</c>

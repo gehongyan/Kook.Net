@@ -334,7 +334,7 @@ public static class MentionUtils
         {
             TagHandling.Name or TagHandling.FullName => "@全体成员",
             TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => "全体成员",
-            TagHandling.Sanitize => $"@{SanitizeChar}全体成员",
+            TagHandling.Sanitize => $"@{SanitizeChar}all",
             _ => string.Empty
         };
     }
@@ -347,7 +347,7 @@ public static class MentionUtils
         {
             TagHandling.Name or TagHandling.FullName => "@在线成员",
             TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => "在线成员",
-            TagHandling.Sanitize => $"@{SanitizeChar}在线成员",
+            TagHandling.Sanitize => $"@{SanitizeChar}here",
             _ => ""
         };
     }
@@ -367,7 +367,7 @@ public static class MentionUtils
         {
             TagHandling.Name or TagHandling.FullName => $":{emoji.Name}:",
             TagHandling.NameNoPrefix or TagHandling.FullNameNoPrefix => $"{emoji.Name}",
-            TagHandling.Sanitize => $"[{SanitizeChar}{emoji.Name}{SanitizeChar}:{emoji.Id}]",
+            TagHandling.Sanitize => $"(emj){SanitizeChar}{emoji.Name}(emj)[{SanitizeChar}{emoji.Id}]",
             _ => ""
         };
     }

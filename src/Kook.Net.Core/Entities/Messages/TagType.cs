@@ -1,23 +1,37 @@
 namespace Kook;
 
-/// <summary> Specifies the type of Kook tag. </summary>
+/// <summary>
+///     表示标签的类型。
+/// </summary>
 public enum TagType
 {
-    /// <summary> The object is an user mention. </summary>
+    /// <summary>
+    ///     用户提及标签。
+    /// </summary>
     UserMention,
 
-    /// <summary> The object is a channel mention. </summary>
+    /// <summary>
+    ///     频道提及标签。
+    /// </summary>
     ChannelMention,
 
-    /// <summary> The object is a role mention. </summary>
+    /// <summary>
+    ///     角色提及标签。
+    /// </summary>
     RoleMention,
 
-    /// <summary> The object is an everyone mention. </summary>
+    /// <summary>
+    ///     全体成员提及标签。
+    /// </summary>
     EveryoneMention,
 
-    /// <summary> The object is a here mention. </summary>
+    /// <summary>
+    ///     在线成员提及标签。
+    /// </summary>
     HereMention,
 
-    /// <summary> The object is an emoji. </summary>
+    /// <summary>
+    ///     表情符号标签。
+    /// </summary>
     Emoji
 }

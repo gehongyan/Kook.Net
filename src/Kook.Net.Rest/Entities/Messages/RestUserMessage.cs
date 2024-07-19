@@ -208,7 +208,7 @@ public class RestUserMessage : RestMessage, IUserMessage
     public async Task ModifyAsync(Action<MessageProperties> func, RequestOptions? options = null)
     {
         await MessageHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
-        MessageProperties properties = new() { Content = Content, Cards = Cards, Quote = Quote };
+        MessageProperties properties = new() { Content = Content, Cards = [..Cards], Quote = Quote };
         func(properties);
         Content = properties.Content;
         _cards = properties.Cards?.ToImmutableArray() ?? ImmutableArray<ICard>.Empty;
