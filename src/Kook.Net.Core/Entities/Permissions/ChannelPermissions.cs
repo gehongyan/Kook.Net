@@ -3,28 +3,42 @@ using System.Diagnostics;
 namespace Kook;
 
 /// <summary>
-///     Represents a set of permissions for a channel.
+///     表示一个频道的权限集。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct ChannelPermissions
 {
-    /// <summary> Gets a blank <see cref="ChannelPermissions"/> that grants no permissions.</summary>
+    /// <summary>
+    ///     获取一个空的 <see cref="ChannelPermissions"/>，不包含任何权限。
+    /// </summary>
     public static readonly ChannelPermissions None = new();
 
-    /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for text channels.</summary>
+    /// <summary>
+    ///     获取一个包含所有可以为文字频道设置的权限的 <see cref="ChannelPermissions"/>。
+    /// </summary>
     public static readonly ChannelPermissions Text = new(0b0_0000_0000_0110_0111_1100_0010_1000);
 
-    /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for voice channels.</summary>
+    /// <summary>
+    ///     获取一个包含所有可以为语音频道设置的权限的 <see cref="ChannelPermissions"/>。
+    /// </summary>
     public static readonly ChannelPermissions Voice = new(0b1_1011_1101_0111_1111_1100_0010_1000);
 
-    /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for category channels.</summary>
+    /// <summary>
+    ///     获取一个包含所有可以为分组频道设置的权限的 <see cref="ChannelPermissions"/>。
+    /// </summary>
     public static readonly ChannelPermissions Category = new(0b1_1011_1101_0111_1111_1100_0010_1000);
 
-    /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for direct message channels.</summary>
+    /// <summary>
+    ///     获取一个包含所有可以为私聊频道设置的权限的 <see cref="ChannelPermissions"/>。
+    /// </summary>
     public static readonly ChannelPermissions DM = new(0b0_0000_0000_0100_0101_1000_0000_0000);
 
-    /// <summary> Gets a <see cref="ChannelPermissions"/> that grants all permissions for a given channel type.</summary>
-    /// <exception cref="ArgumentException">Unknown channel type.</exception>
+    /// <summary>
+    ///     为指定的频道根据其类型获取一个包含所有权限的 <see cref="ChannelPermissions"/>。
+    /// </summary>
+    /// <param name="channel"> 要获取其包含所有权限的频道。 </param>
+    /// <returns> 一个包含所有该频道可以拥有的权限的 <see cref="ChannelPermissions"/>。 </returns>
+    /// <exception cref="ArgumentException"> 未知的频道类型。 </exception>
     public static ChannelPermissions All(IChannel channel) =>
         channel switch
         {
@@ -35,64 +49,69 @@ public struct ChannelPermissions
             _ => throw new ArgumentException("Unknown channel type.", nameof(channel))
         };
 
-    /// <summary> Gets a packed value representing all the permissions in this <see cref="ChannelPermissions"/>.</summary>
+    /// <summary>
+    ///     获取此权限集的原始值。
+    /// </summary>
     public ulong RawValue { get; }
 
-    /// <summary> If <c>true</c>, a user may create invites. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.CreateInvites" />
     public bool CreateInvites => Permissions.GetValue(RawValue, ChannelPermission.CreateInvites);
 
-    /// <summary> If <c>true</c>, a user may view and revoke invites. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.ManageChannels" />
     public bool ManageChannels => Permissions.GetValue(RawValue, ChannelPermission.ManageChannels);
 
-    /// <summary> If <c>true</c>, a user may adjust roles. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.ManageRoles" />
     public bool ManageRoles => Permissions.GetValue(RawValue, ChannelPermission.ManageRoles);
 
-    /// <summary> If <c>true</c>, a user may view channels. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.ViewChannel" />
     public bool ViewChannel => Permissions.GetValue(RawValue, ChannelPermission.ViewChannel);
 
-    /// <summary> If <c>true</c>, a user may send messages. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.SendMessages" />
     public bool SendMessages => Permissions.GetValue(RawValue, ChannelPermission.SendMessages);
 
-    /// <summary> If <c>true</c>, a user may delete messages. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.ManageMessages" />
     public bool ManageMessages => Permissions.GetValue(RawValue, ChannelPermission.ManageMessages);
 
-    /// <summary> If <c>true</c>, a user may send files. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.AttachFiles" />
     public bool AttachFiles => Permissions.GetValue(RawValue, ChannelPermission.AttachFiles);
 
-    /// <summary> If <c>true</c>, a user may connect to a voice channel. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.Connect" />
     public bool Connect => Permissions.GetValue(RawValue, ChannelPermission.Connect);
 
-    /// <summary> If <c>true</c>, a user may kick other users from voice channels, and move other users between voice channels. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.ManageVoice" />
     public bool ManageVoice => Permissions.GetValue(RawValue, ChannelPermission.ManageVoice);
 
-    /// <summary> If <c>true</c>, a user may mention all users. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.MentionEveryone" />
     public bool MentionEveryone => Permissions.GetValue(RawValue, ChannelPermission.MentionEveryone);
 
-    /// <summary> If <c>true</c>, a user may add reactions. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.AddReactions" />
     public bool AddReactions => Permissions.GetValue(RawValue, ChannelPermission.AddReactions);
 
-    /// <summary> If <c>true</c>, a user may connect to a voice channel only when the user is invited or moved by other users. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.PassiveConnect" />
     public bool PassiveConnect => Permissions.GetValue(RawValue, ChannelPermission.PassiveConnect);
 
-    /// <summary> If <c>true</c>, a user may use voice activation. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.UseVoiceActivity" />
     public bool UseVoiceActivity => Permissions.GetValue(RawValue, ChannelPermission.UseVoiceActivity);
 
-    /// <summary> If <c>true</c>, a user may speak in a voice channel. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.Speak" />
     public bool Speak => Permissions.GetValue(RawValue, ChannelPermission.Speak);
 
-    /// <summary> If <c>true</c>, a user may deafen users. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.DeafenMembers" />
     public bool DeafenMembers => Permissions.GetValue(RawValue, ChannelPermission.DeafenMembers);
 
-    /// <summary> If <c>true</c>, a user may mute users. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.MuteMembers" />
     public bool MuteMembers => Permissions.GetValue(RawValue, ChannelPermission.MuteMembers);
 
-    /// <summary> If <c>true</c>, a user may play soundtracks in a voice channel. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.PlaySoundtrack" />
     public bool PlaySoundtrack => Permissions.GetValue(RawValue, ChannelPermission.PlaySoundtrack);
 
-    /// <summary> If <c>true</c>, a user may share screen in a voice channel. </summary>
+    /// <inheritdoc cref="P:Kook.GuildPermissions.ShareScreen" />
     public bool ShareScreen => Permissions.GetValue(RawValue, ChannelPermission.ShareScreen);
 
-    /// <summary> Creates a new <see cref="ChannelPermissions"/> with the provided packed value.</summary>
+    /// <summary>
+    ///     使用指定的权限原始值创建一个 <see cref="ChannelPermissions"/> 的新实例。
+    /// </summary>
+    /// <param name="rawValue"> 权限原始值。 </param>
     public ChannelPermissions(ulong rawValue)
     {
         RawValue = rawValue;
@@ -142,7 +161,27 @@ public struct ChannelPermissions
         RawValue = value;
     }
 
-    /// <summary> Creates a new <see cref="ChannelPermissions"/> with the provided permissions.</summary>
+    /// <summary>
+    ///     使用指定的权限位信息创建一个 <see cref="ChannelPermissions"/> 的新实例。
+    /// </summary>
+    /// <param name="createInvites"> 创建邀请。 </param>
+    /// <param name="manageChannels"> 频道管理。 </param>
+    /// <param name="manageRoles"> 管理角色权限。 </param>
+    /// <param name="viewChannel"> 查看文字与语音频道。 </param>
+    /// <param name="sendMessages"> 发送文字消息。 </param>
+    /// <param name="manageMessages"> 消息管理。 </param>
+    /// <param name="attachFiles"> 上传文件。 </param>
+    /// <param name="connect"> 语音连接。 </param>
+    /// <param name="manageVoice"> 语音管理。 </param>
+    /// <param name="mentionEveryone"> 提及全体成员、在线成员和所有角色。 </param>
+    /// <param name="addReactions"> 添加回应。 </param>
+    /// <param name="passiveConnect"> 被动连接语音频道。 </param>
+    /// <param name="useVoiceActivity"> 使用自由麦。 </param>
+    /// <param name="speak"> 发言。 </param>
+    /// <param name="deafenMembers"> 服务器静音。 </param>
+    /// <param name="muteMembers"> 服务器闭麦。 </param>
+    /// <param name="playSoundtrack"> 共享计算机音频。 </param>
+    /// <param name="shareScreen"> 屏幕分享。 </param>
     public ChannelPermissions(
         bool? createInvites = false,
         bool? manageChannels = false,
@@ -168,7 +207,28 @@ public struct ChannelPermissions
     {
     }
 
-    /// <summary> Creates a new <see cref="ChannelPermissions"/> from this one, changing the provided non-null permissions.</summary>
+    /// <summary>
+    ///     以当前权限集为基础，更改指定的权限，返回一个 <see cref="ChannelPermissions"/> 的新实例。
+    /// </summary>
+    /// <param name="createInvites"> 创建邀请。 </param>
+    /// <param name="manageChannels"> 频道管理。 </param>
+    /// <param name="manageRoles"> 管理角色权限。 </param>
+    /// <param name="viewChannel"> 查看文字与语音频道。 </param>
+    /// <param name="sendMessages"> 发送文字消息。 </param>
+    /// <param name="manageMessages"> 消息管理。 </param>
+    /// <param name="attachFiles"> 上传文件。 </param>
+    /// <param name="connect"> 语音连接。 </param>
+    /// <param name="manageVoice"> 语音管理。 </param>
+    /// <param name="mentionEveryone"> 提及全体成员、在线成员和所有角色。 </param>
+    /// <param name="addReactions"> 添加回应。 </param>
+    /// <param name="passiveConnect"> 被动连接语音频道。 </param>
+    /// <param name="useVoiceActivity"> 使用自由麦。 </param>
+    /// <param name="speak"> 发言。 </param>
+    /// <param name="deafenMembers"> 服务器静音。 </param>
+    /// <param name="muteMembers"> 服务器闭麦。 </param>
+    /// <param name="playSoundtrack"> 共享计算机音频。 </param>
+    /// <param name="shareScreen"> 屏幕分享。 </param>
+    /// <returns> 更改了指定权限的新的权限集。 </returns>
     public ChannelPermissions Modify(
         bool? createInvites = null,
         bool? manageChannels = null,
@@ -209,18 +269,16 @@ public struct ChannelPermissions
             shareScreen);
 
     /// <summary>
-    ///     Returns a value that indicates if a specific <see cref="ChannelPermission"/> is enabled
-    ///     in these permissions.
+    ///     获取当前权限集是否包含指定的权限。
     /// </summary>
-    /// <param name="permission">The permission value to check for.</param>
-    /// <returns><c>true</c> if the permission is enabled, <c>false</c> otherwise.</returns>
+    /// <param name="permission"> 要检查的权限。 </param>
+    /// <returns> 如果当前权限集包含了所有指定的权限信息，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public bool Has(ChannelPermission permission) => Permissions.GetValue(RawValue, permission);
 
     /// <summary>
-    ///     Returns a <see cref="List{T}"/> containing all of the <see cref="ChannelPermission"/>
-    ///     flags that are enabled.
+    ///     获取一个包含当前权限集所包含的所有已设置的 <see cref="ChannelPermission"/> 独立位标志枚举值的集合。
     /// </summary>
-    /// <returns>A <see cref="List{T}"/> containing <see cref="ChannelPermission"/> flags. Empty if none are enabled.</returns>
+    /// <returns> 一个包含当前权限集所包含的所有已设置的 <see cref="ChannelPermission"/> 独立位标志枚举值的集合；如果当前权限集未包含任何已设置的权限位，则会返回一个空集合。 </returns>
     public List<ChannelPermission> ToList()
     {
         List<ChannelPermission> perms = [];
@@ -238,8 +296,9 @@ public struct ChannelPermissions
     }
 
     /// <summary>
-    ///     Gets the raw value of the permissions.
+    ///     获取此权限集原始值的字符串表示。
     /// </summary>
+    /// <returns> 此权限集原始值的字符串表示。 </returns>
     public override string ToString() => RawValue.ToString();
 
     private string DebuggerDisplay => $"{string.Join(", ", ToList())}";

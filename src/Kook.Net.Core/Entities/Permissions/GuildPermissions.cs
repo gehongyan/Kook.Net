@@ -3,117 +3,178 @@ using System.Diagnostics;
 namespace Kook;
 
 /// <summary>
-///     Represents a set of permissions for a guild.
+///     表示一个服务器的权限集。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct GuildPermissions
 {
-    /// <summary> Gets a blank <see cref="GuildPermissions"/> that grants no permissions. </summary>
+    /// <summary>
+    ///     获取一个空的 <see cref="GuildPermissions"/>，不包含任何权限。
+    /// </summary>
     public static readonly GuildPermissions None = new();
 
-    /// <summary> Gets a <see cref="GuildPermissions"/> that grants all guild permissions. </summary>
+    /// <summary>
+    ///     获取一个包含所有可以为服务器设置的权限的 <see cref="GuildPermissions"/>。
+    /// </summary>
     public static readonly GuildPermissions All = new(0b1_1111_1111_1111_1111_1111_1111_1111);
 
-    /// <summary> Gets a packed value representing all the permissions in this <see cref="GuildPermissions"/>. </summary>
+    /// <summary>
+    ///     获取此权限集的原始值。
+    /// </summary>
     public ulong RawValue { get; }
 
-    /// <summary> If <c>true</c>, a user is granted all permissions, and cannot have them revoked via channel permissions. </summary>
+    /// <summary>
+    ///     获取此权限集的相关用户是否为服务器管理员。
+    /// </summary>
     public bool Administrator => Permissions.GetValue(RawValue, GuildPermission.Administrator);
 
-    /// <summary> If <c>true</c>, a user may adjust guild properties. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户管理服务器。
+    /// </summary>
     public bool ManageGuild => Permissions.GetValue(RawValue, GuildPermission.ManageGuild);
 
-    /// <summary> If <c>true</c>, a user may view the audit log. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户查看管理日志。
+    /// </summary>
     public bool ViewAuditLog => Permissions.GetValue(RawValue, GuildPermission.ViewAuditLog);
 
-    /// <summary> If <c>true</c>, a user may create invites. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户创建邀请。
+    /// </summary>
     public bool CreateInvites => Permissions.GetValue(RawValue, GuildPermission.CreateInvites);
 
-    /// <summary> If <c>true</c>, a user may view and revoke invites. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户管理邀请。
+    /// </summary>
     public bool ManageInvites => Permissions.GetValue(RawValue, GuildPermission.ManageInvites);
 
-    /// <summary> If <c>true</c>, a user may create, delete and modify channels. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户管理频道。
+    /// </summary>
     public bool ManageChannels => Permissions.GetValue(RawValue, GuildPermission.ManageChannels);
 
-    /// <summary> If <c>true</c>, a user may kick users from the guild. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户踢出其他用户。
+    /// </summary>
     public bool KickMembers => Permissions.GetValue(RawValue, GuildPermission.KickMembers);
 
-    /// <summary> If <c>true</c>, a user may ban users from the guild. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户封禁其他用户。
+    /// </summary>
     public bool BanMembers => Permissions.GetValue(RawValue, GuildPermission.BanMembers);
 
-    /// <summary> If <c>true</c>, a user may edit the emojis for this guild. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户管理自定义表情。
+    /// </summary>
     public bool ManageEmojis => Permissions.GetValue(RawValue, GuildPermission.ManageEmojis);
 
-    /// <summary> If <c>true</c>, a user may change their own nickname. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户修改昵称。
+    /// </summary>
     public bool ChangeNickname => Permissions.GetValue(RawValue, GuildPermission.ChangeNickname);
 
-    /// <summary> If <c>true</c>, a user may adjust roles. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户管理角色。
+    /// </summary>
     public bool ManageRoles => Permissions.GetValue(RawValue, GuildPermission.ManageRoles);
 
-    /// <summary> If <c>true</c>, a user may view channels. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户查看文字与语音频道。
+    /// </summary>
     public bool ViewChannel => Permissions.GetValue(RawValue, GuildPermission.ViewChannel);
 
-    /// <summary> If <c>true</c>, a user may send messages. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户发送文字消息。
+    /// </summary>
     public bool SendMessages => Permissions.GetValue(RawValue, GuildPermission.SendMessages);
 
-    /// <summary> If <c>true</c>, a user may delete messages. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户管理消息。
+    /// </summary>
     public bool ManageMessages => Permissions.GetValue(RawValue, GuildPermission.ManageMessages);
 
-    /// <summary> If <c>true</c>, a user may send files. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户上传文件。
+    /// </summary>
     public bool AttachFiles => Permissions.GetValue(RawValue, GuildPermission.AttachFiles);
 
-    /// <summary> If <c>true</c>, a user may connect to a voice channel. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户连接语音。
+    /// </summary>
     public bool Connect => Permissions.GetValue(RawValue, GuildPermission.Connect);
 
-    /// <summary> If <c>true</c>, a user may kick other users from voice channels, and move other users between voice channels. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户管理语音频道。
+    /// </summary>
     public bool ManageVoice => Permissions.GetValue(RawValue, GuildPermission.ManageVoice);
 
-    /// <summary> If <c>true</c>, a user may mention all users. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户提及全体成员、在线成员和所有角色。
+    /// </summary>
     public bool MentionEveryone => Permissions.GetValue(RawValue, GuildPermission.MentionEveryone);
 
-    /// <summary> If <c>true</c>, a user may add reactions. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户添加回应。
+    /// </summary>
     public bool AddReactions => Permissions.GetValue(RawValue, GuildPermission.AddReactions);
 
-    /// <summary> If <c>true</c>, a user may follow added reactions. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户跟随添加回应。
+    /// </summary>
     public bool FollowReactions => Permissions.GetValue(RawValue, GuildPermission.FollowReactions);
 
-    /// <summary> If <c>true</c>, a user may connect to a voice channel only when the user is invited or moved by other users. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户被动连接到语音频道。
+    /// </summary>
     public bool PassiveConnect => Permissions.GetValue(RawValue, GuildPermission.PassiveConnect);
 
-    /// <summary> If <c>true</c>, a user may speak only via push-to-talk. </summary>
+    /// <summary>
+    ///     获取此权限集是否要求相关用户仅可使用按键说话。
+    /// </summary>
     public bool OnlyPushToTalk => Permissions.GetValue(RawValue, GuildPermission.OnlyPushToTalk);
 
-    /// <summary> If <c>true</c>, a user may use voice activation. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户使用自由麦。
+    /// </summary>
     public bool UseVoiceActivity => Permissions.GetValue(RawValue, GuildPermission.UseVoiceActivity);
 
-    /// <summary> If <c>true</c>, a user may speak in a voice channel. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户在语音频道中发言。
+    /// </summary>
     public bool Speak => Permissions.GetValue(RawValue, GuildPermission.Speak);
 
-    /// <summary> If <c>true</c>, a user may deafen users. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户使其他用户被服务器静音。
+    /// </summary>
     public bool DeafenMembers => Permissions.GetValue(RawValue, GuildPermission.DeafenMembers);
 
-    /// <summary> If <c>true</c>, a user may mute users. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户使其他用户被服务器闭麦。
+    /// </summary>
     public bool MuteMembers => Permissions.GetValue(RawValue, GuildPermission.MuteMembers);
 
-    /// <summary> If <c>true</c>, a user may change the nickname of other users. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户修改他人昵称。
+    /// </summary>
     public bool ManageNicknames => Permissions.GetValue(RawValue, GuildPermission.ManageNicknames);
 
-    /// <summary> If <c>true</c>, a user may play soundtracks in a voice channel. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户共享计算机音频。
+    /// </summary>
     public bool PlaySoundtrack => Permissions.GetValue(RawValue, GuildPermission.PlaySoundtrack);
 
-    /// <summary> If <c>true</c>, a user may share screen in a voice channel. </summary>
+    /// <summary>
+    ///     获取此权限集是否允许相关用户共享计算机画面。
+    /// </summary>
     public bool ShareScreen => Permissions.GetValue(RawValue, GuildPermission.ShareScreen);
 
-    /// <summary> Creates a new <see cref="GuildPermissions"/> with the provided packed value. </summary>
+    /// <summary>
+    ///     使用指定的权限原始值创建一个 <see cref="GuildPermissions"/> 的新实例。
+    /// </summary>
+    /// <param name="rawValue"> 权限原始值。 </param>
     public GuildPermissions(ulong rawValue)
     {
         RawValue = rawValue;
-    }
-
-    /// <summary> Creates a new <see cref="GuildPermissions"/> with the provided packed value after converting to ulong. </summary>
-    public GuildPermissions(string rawValue)
-    {
-        RawValue = ulong.Parse(rawValue);
     }
 
     private GuildPermissions(ulong initialValue,
@@ -183,7 +244,38 @@ public struct GuildPermissions
         RawValue = value;
     }
 
-    /// <summary> Creates a new <see cref="GuildPermissions"/> structure with the provided permissions. </summary>
+    /// <summary>
+    ///     使用指定的权限位信息创建一个 <see cref="GuildPermissions"/> 的新实例。
+    /// </summary>
+    /// <param name="administrator"> 管理员。 </param>
+    /// <param name="manageGuild"> 管理服务器。 </param>
+    /// <param name="viewAuditLog"> 查看管理日志。 </param>
+    /// <param name="createInvites"> 创建邀请。 </param>
+    /// <param name="manageInvites"> 管理邀请。 </param>
+    /// <param name="manageChannels"> 频道管理。 </param>
+    /// <param name="kickMembers"> 踢出成员。 </param>
+    /// <param name="banMembers"> 加入服务器黑名单。 </param>
+    /// <param name="manageEmojis"> 管理自定义表情。 </param>
+    /// <param name="changeNickname"> 修改昵称。 </param>
+    /// <param name="manageRoles"> 管理角色权限。 </param>
+    /// <param name="viewChannel"> 查看文字与语音频道。 </param>
+    /// <param name="sendMessages"> 发送文字消息。 </param>
+    /// <param name="manageMessages"> 消息管理。 </param>
+    /// <param name="attachFiles"> 上传文件。 </param>
+    /// <param name="connect"> 语音连接。 </param>
+    /// <param name="manageVoice"> 语音管理。 </param>
+    /// <param name="mentionEveryone"> 提及全体成员、在线成员和所有角色。 </param>
+    /// <param name="addReactions"> 添加回应。 </param>
+    /// <param name="followReactions"> 跟随添加回应。 </param>
+    /// <param name="passiveConnect"> 被动连接语音频道。 </param>
+    /// <param name="onlyPushToTalk"> 仅使用按键说话。 </param>
+    /// <param name="useVoiceActivity"> 使用自由麦。 </param>
+    /// <param name="speak"> 发言。 </param>
+    /// <param name="deafenMembers"> 服务器静音。 </param>
+    /// <param name="muteMembers"> 服务器闭麦。 </param>
+    /// <param name="manageNicknames"> 修改他人昵称。 </param>
+    /// <param name="playSoundtrack"> 共享计算机音频。 </param>
+    /// <param name="shareScreen"> 屏幕分享。 </param>
     public GuildPermissions(
         bool administrator = false,
         bool manageGuild = false,
@@ -221,7 +313,39 @@ public struct GuildPermissions
     {
     }
 
-    /// <summary> Creates a new <see cref="GuildPermissions"/> from this one, changing the provided non-null permissions. </summary>
+    /// <summary>
+    ///     以当前权限集为基础，更改指定的权限，返回一个 <see cref="GuildPermissions"/> 的新实例。
+    /// </summary>
+    /// <param name="administrator"> 管理员。 </param>
+    /// <param name="manageGuild"> 管理服务器。 </param>
+    /// <param name="viewAuditLog"> 查看管理日志。 </param>
+    /// <param name="createInvites"> 创建邀请。 </param>
+    /// <param name="manageInvites"> 管理邀请。 </param>
+    /// <param name="manageChannels"> 频道管理。 </param>
+    /// <param name="kickMembers"> 踢出成员。 </param>
+    /// <param name="banMembers"> 加入服务器黑名单。 </param>
+    /// <param name="manageEmojis"> 管理自定义表情。 </param>
+    /// <param name="changeNickname"> 修改昵称。 </param>
+    /// <param name="manageRoles"> 管理角色权限。 </param>
+    /// <param name="viewChannel"> 查看文字与语音频道。 </param>
+    /// <param name="sendMessages"> 发送文字消息。 </param>
+    /// <param name="manageMessages"> 消息管理。 </param>
+    /// <param name="attachFiles"> 上传文件。 </param>
+    /// <param name="connect"> 语音连接。 </param>
+    /// <param name="manageVoice"> 语音管理。 </param>
+    /// <param name="mentionEveryone"> 提及全体成员、在线成员和所有角色。 </param>
+    /// <param name="addReactions"> 添加回应。 </param>
+    /// <param name="followReactions"> 跟随添加回应。 </param>
+    /// <param name="passiveConnect"> 被动连接语音频道。 </param>
+    /// <param name="onlyPushToTalk"> 仅使用按键说话。 </param>
+    /// <param name="useVoiceActivity"> 使用自由麦。 </param>
+    /// <param name="speak"> 发言。 </param>
+    /// <param name="deafenMembers"> 服务器静音。 </param>
+    /// <param name="muteMembers"> 服务器闭麦。 </param>
+    /// <param name="manageNicknames"> 修改他人昵称。 </param>
+    /// <param name="playSoundtrack"> 共享计算机音频。 </param>
+    /// <param name="shareScreen"> 屏幕分享。 </param>
+    /// <returns> 更改了指定权限的新的权限集。 </returns>
     public GuildPermissions Modify(
         bool? administrator = null,
         bool? manageGuild = null,
@@ -259,18 +383,16 @@ public struct GuildPermissions
             manageNicknames, playSoundtrack, shareScreen);
 
     /// <summary>
-    ///     Returns a value that indicates if a specific <see cref="GuildPermission"/> is enabled
-    ///     in these permissions.
+    ///     获取当前权限集是否包含指定的权限。
     /// </summary>
-    /// <param name="permission">The permission value to check for.</param>
-    /// <returns><c>true</c> if the permission is enabled, <c>false</c> otherwise.</returns>
+    /// <param name="permission"> 要检查的权限。 </param>
+    /// <returns> 如果当前权限集包含了所有指定的权限信息，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public bool Has(GuildPermission permission) => Permissions.GetValue(RawValue, permission);
 
     /// <summary>
-    ///     Returns a <see cref="List{T}"/> containing all of the <see cref="GuildPermission"/>
-    ///     flags that are enabled.
+    ///     获取一个包含当前权限集所包含的所有已设置的 <see cref="GuildPermission"/> 独立位标志枚举值的集合。
     /// </summary>
-    /// <returns>A <see cref="List{T}"/> containing <see cref="GuildPermission"/> flags. Empty if none are enabled.</returns>
+    /// <returns> 一个包含当前权限集所包含的所有已设置的 <see cref="GuildPermission"/> 独立位标志枚举值的集合；如果当前权限集未包含任何已设置的权限位，则会返回一个空集合。 </returns>
     public List<GuildPermission> ToList()
     {
         List<GuildPermission> perms = [];
@@ -305,8 +427,9 @@ public struct GuildPermissions
     }
 
     /// <summary>
-    ///     Gets the raw value of the permissions.
+    ///     获取此权限集原始值的字符串表示。
     /// </summary>
+    /// <returns> 此权限集原始值的字符串表示。 </returns>
     public override string ToString() => RawValue.ToString();
 
     private string DebuggerDisplay => $"{string.Join(", ", ToList())}";
