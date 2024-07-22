@@ -18,7 +18,10 @@
 
 ---
 
-## 文档
+## 源码与文档
+
+源代码提供在 [GitHub](https://github.com/gehongyan/Kook.Net)、[Gitee](https://gitee.com/gehongyan/Kook.Net)、以及
+[GitCode](https://gitcode.com/gehongyan/Kook.Net) 上。
 
 可在 [kooknet.dev](https://kooknet.dev) 上查看文档。
 

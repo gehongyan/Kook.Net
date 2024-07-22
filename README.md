@@ -18,7 +18,10 @@
 
 ---
 
-## Documentation
+## Source & Documentation
+
+Source code is available on [GitHub](https://github.com/gehongyan/Kook.Net),
+[Gitee](https://gitee.com/gehongyan/Kook.Net), and [GitCode](https://gitcode.com/gehongyan/Kook.Net).
 
 Documents are available on [kooknet.dev](https://kooknet.dev). (Simplified Chinese available only)
 
