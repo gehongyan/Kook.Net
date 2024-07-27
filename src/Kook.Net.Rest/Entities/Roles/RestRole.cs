@@ -14,9 +14,7 @@ public class RestRole : RestEntity<uint>, IRole
     /// <summary>
     ///     Gets the guild that owns this role.
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IGuild"/> representing the parent guild of this role.
-    /// </returns>
+    /// <returns> An <see cref="IGuild"/> representing the parent guild of this role. </returns>
     internal IGuild Guild { get; }
 
     /// <inheritdoc />
@@ -49,9 +47,7 @@ public class RestRole : RestEntity<uint>, IRole
     /// <summary>
     ///     Returns a value that determines if the role is an @everyone role.
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the role is @everyone; otherwise <c>false</c>.
-    /// </returns>
+    /// <returns> <c>true</c> if the role is @everyone; otherwise <c>false</c>. </returns>
     public bool IsEveryone => Id == 0;
 
     /// <inheritdoc />
@@ -82,8 +78,8 @@ public class RestRole : RestEntity<uint>, IRole
         ColorType = model.ColorType;
         GradientColor = model.GradientColor;
         Position = model.Position;
-        IsHoisted = model.Hoist;
-        IsMentionable = model.Mentionable;
+        IsHoisted = model.IsHoisted;
+        IsMentionable = model.IsMentionable;
         Permissions = new GuildPermissions(model.Permissions);
     }
 
@@ -127,9 +123,7 @@ public class RestRole : RestEntity<uint>, IRole
     /// <summary>
     ///     Gets the name of the role.
     /// </summary>
-    /// <returns>
-    ///     A string that is the name of the role.
-    /// </returns>
+    /// <returns> A string that is the name of the role. </returns>
     public override string ToString() => Name;
 
     private string DebuggerDisplay => $"{Name} ({Id})";

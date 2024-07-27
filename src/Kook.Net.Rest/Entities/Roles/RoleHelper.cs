@@ -28,13 +28,13 @@ internal static class RoleHelper
             RoleId = role.Id,
             Name = args.Name,
             Color = args.Color,
-            Hoist = args.Hoist switch
+            IsHoisted = args.IsHoisted switch
             {
                 true => 1,
                 false => 0,
                 _ => null
             },
-            Mentionable = args.Mentionable switch
+            IsMentionable = args.IsMentionable switch
             {
                 true => 1,
                 false => 0,

@@ -45,9 +45,7 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
     /// <summary>
     ///     构建当前构建器为一个 <see cref="InviteModule"/> 对象。
     /// </summary>
-    /// <returns>
-    ///     由当前构建器表示的属性构建的 <see cref="InviteModule"/> 对象。
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="InviteModule"/> 对象。 </returns>
     /// <exception cref="ArgumentNullException">
     ///     <see cref="Code"/> 为 <c>null</c>。
     /// </exception>
@@ -71,9 +69,7 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
     /// <param name="code">
     ///     The code representing the invite.
     /// </param>
-    /// <returns>
-    ///     An <see cref="InviteModuleBuilder"/> object that is initialized with the specified <paramref name="code"/>.
-    /// </returns>
+    /// <returns> An <see cref="InviteModuleBuilder"/> object that is initialized with the specified <paramref name="code"/>. </returns>
     public static implicit operator InviteModuleBuilder(string code) => new(code);
 
     /// <inheritdoc />

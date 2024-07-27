@@ -32,9 +32,7 @@ public struct ExecuteResult : IResult
     /// <summary>
     ///     Initializes a new <see cref="ExecuteResult" /> with no error, indicating a successful execution.
     /// </summary>
-    /// <returns>
-    ///     A <see cref="ExecuteResult" /> that does not contain any errors.
-    /// </returns>
+    /// <returns> A <see cref="ExecuteResult" /> that does not contain any errors. </returns>
     public static ExecuteResult FromSuccess() => new(null, null, null);
 
     /// <summary>
@@ -43,9 +41,7 @@ public struct ExecuteResult : IResult
     /// </summary>
     /// <param name="error">The type of error.</param>
     /// <param name="reason">The reason behind the error.</param>
-    /// <returns>
-    ///     A <see cref="ExecuteResult" /> that contains a <see cref="CommandError" /> and reason.
-    /// </returns>
+    /// <returns> A <see cref="ExecuteResult" /> that contains a <see cref="CommandError" /> and reason. </returns>
     public static ExecuteResult FromError(CommandError error, string reason) => new(null, error, reason);
 
     /// <summary>
@@ -66,9 +62,7 @@ public struct ExecuteResult : IResult
     ///     <see cref="Kook.Commands.IResult.ErrorReason" /> specified.
     /// </summary>
     /// <param name="result">The result to inherit from.</param>
-    /// <returns>
-    ///     A <see cref="ExecuteResult"/> that inherits the <see cref="IResult"/> error type and reason.
-    /// </returns>
+    /// <returns> A <see cref="ExecuteResult"/> that inherits the <see cref="IResult"/> error type and reason. </returns>
     public static ExecuteResult FromError(IResult result) => new(null, result.Error, result.ErrorReason);
 
     /// <summary>

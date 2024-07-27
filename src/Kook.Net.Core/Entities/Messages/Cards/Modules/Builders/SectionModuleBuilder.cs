@@ -175,9 +175,7 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     /// <summary>
     ///     构建当前构建器为一个 <see cref="SectionModule"/> 对象。
     /// </summary>
-    /// <returns>
-    ///     由当前构建器表示的属性构建的 <see cref="SectionModule"/> 对象。
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="SectionModule"/> 对象。 </returns>
     /// <exception cref="ArgumentException">
     ///     <see cref="Text"/> 不是任何形式的文本元素，包括 <see cref="PlainTextElementBuilder"/>、
     ///     <see cref="KMarkdownElementBuilder"/> 和 <see cref="ParagraphStructBuilder"/>。

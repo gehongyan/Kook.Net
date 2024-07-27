@@ -158,9 +158,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <param name="guildId"> The guild where the role and user are located. </param>
     /// <param name="userId"> The user to add the role to. </param>
     /// <param name="roleId"> The role to be added to the user. </param>
-    /// <returns>
-    ///     A task that represents the asynchronous role addition operation.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous role addition operation. </returns>
     public Task AddRoleAsync(ulong guildId, ulong userId, uint roleId) =>
         ClientHelper.AddRoleAsync(this, guildId, userId, roleId);
 
@@ -170,9 +168,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <param name="guildId"> The guild where the role and user are located. </param>
     /// <param name="userId"> The user to remove the role from. </param>
     /// <param name="roleId"> The role to be removed from the user. </param>
-    /// <returns>
-    ///     A task that represents the asynchronous role removal operation.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous role removal operation. </returns>
     public Task RemoveRoleAsync(ulong guildId, ulong userId, uint roleId) =>
         ClientHelper.RemoveRoleAsync(this, guildId, userId, roleId);
 
@@ -252,9 +248,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <param name="messageId"> 消息的 ID。 </param>
     /// <param name="emote"> The emoji used to react to the message. </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for adding a reaction to the message.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous operation for adding a reaction to the message. </returns>
     /// <seealso cref="IEmote"/>
     public Task AddReactionAsync(Guid messageId, IEmote emote, RequestOptions? options = null) =>
         MessageHelper.AddReactionAsync(messageId, emote, this, options);
@@ -266,9 +260,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <param name="userId"> The identifier of the user who added the reaction. </param>
     /// <param name="emote"> The emoji used to remove from the message. </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for removing a reaction from the message.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous operation for removing a reaction from the message. </returns>
     /// <seealso cref="IEmote"/>
     public Task RemoveReactionAsync(Guid messageId, ulong userId, IEmote emote, RequestOptions? options = null) =>
         MessageHelper.RemoveReactionAsync(messageId, userId, emote, this, options);
@@ -279,9 +271,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <param name="messageId"> The identifier of the direct message. </param>
     /// <param name="emote"> The emoji used to react to the message. </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for adding a reaction to the direct message.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous operation for adding a reaction to the direct message. </returns>
     /// <seealso cref="IEmote"/>
     public Task AddDirectMessageReactionAsync(Guid messageId, IEmote emote, RequestOptions? options = null) =>
         MessageHelper.AddDirectMessageReactionAsync(messageId, emote, this, options);
@@ -293,9 +283,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <param name="userId"> The identifier of the user who added the reaction. </param>
     /// <param name="emote"> The emoji used to remove from the message. </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for removing a reaction from the direct message.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous operation for removing a reaction from the direct message. </returns>
     /// <seealso cref="IEmote"/>
     public Task RemoveDirectMessageReactionAsync(Guid messageId, ulong userId, IEmote emote, RequestOptions? options = null) =>
         MessageHelper.RemoveDirectMessageReactionAsync(messageId, userId, emote, this, options);

@@ -10,13 +10,13 @@ public class MessageProperties
     ///     获取或设置要设置到此消息的消息内容。
     /// </summary>
     /// <remarks>
-    ///     更改此值为非空字符串可以修改消息的内容；不更改此值或将其设置为 <c>null</c> 可以保持消息的原内容。
+    ///     修改此值为非空字符串可以修改消息的内容；不修改此值或将其设置为 <c>null</c> 可以保持消息的原内容。
     /// </remarks>
     public string? Content { get; set; }
 
     /// <summary>
     ///     获取或设置要设置到此消息的卡片。
-    ///     更改此值，或更改此 <see cref="T:System.Collections.Generic.IList`1"/> 中的成员，可以修改消息中卡片的内容。
+    ///     修改此值，或修改此 <see cref="T:System.Collections.Generic.IList`1"/> 中的成员，可以修改消息中卡片的内容。
     /// </summary>
     public IList<ICard>? Cards { get; set; }
 

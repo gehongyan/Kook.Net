@@ -169,7 +169,7 @@ public struct GuildPermissions
     public bool ShareScreen => Permissions.GetValue(RawValue, GuildPermission.ShareScreen);
 
     /// <summary>
-    ///     使用指定的权限原始值创建一个 <see cref="GuildPermissions"/> 的新实例。
+    ///     使用指定的权限原始值创建一个 <see cref="GuildPermissions"/> 结构的新实例。
     /// </summary>
     /// <param name="rawValue"> 权限原始值。 </param>
     public GuildPermissions(ulong rawValue)
@@ -245,7 +245,7 @@ public struct GuildPermissions
     }
 
     /// <summary>
-    ///     使用指定的权限位信息创建一个 <see cref="GuildPermissions"/> 的新实例。
+    ///     使用指定的权限位信息创建一个 <see cref="GuildPermissions"/> 结构的新实例。
     /// </summary>
     /// <param name="administrator"> 管理员。 </param>
     /// <param name="manageGuild"> 管理服务器。 </param>
@@ -314,7 +314,7 @@ public struct GuildPermissions
     }
 
     /// <summary>
-    ///     以当前权限集为基础，更改指定的权限，返回一个 <see cref="GuildPermissions"/> 的新实例。
+    ///     以当前权限集为基础，更改指定的权限，返回一个 <see cref="GuildPermissions"/> 结构的新实例。
     /// </summary>
     /// <param name="administrator"> 管理员。 </param>
     /// <param name="manageGuild"> 管理服务器。 </param>

@@ -22,11 +22,11 @@ internal class ModifyGuildRoleParams
 
     [JsonPropertyName("hoist")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int? Hoist { get; set; }
+    public int? IsHoisted { get; set; }
 
     [JsonPropertyName("mentionable")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int? Mentionable { get; set; }
+    public int? IsMentionable { get; set; }
 
     [JsonPropertyName("permissions")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

@@ -34,9 +34,7 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel, IUpdateable
     ///     Gets a generic user from this channel.
     /// </summary>
     /// <param name="id">The identifier of the user.</param>
-    /// <returns>
-    ///     A generic WebSocket-based user associated with the identifier.
-    /// </returns>
+    /// <returns> A generic WebSocket-based user associated with the identifier. </returns>
     public SocketUser? GetUser(ulong id) => GetUserInternal(id);
 
     internal abstract SocketUser? GetUserInternal(ulong id);

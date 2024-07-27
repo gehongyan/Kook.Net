@@ -20,9 +20,7 @@ public class KookConfig
     /// <summary>
     ///     获取 Kook.Net 的版本，包括构建号。
     /// </summary>
-    /// <returns>
-    ///     一个包含详细版本信息的字符串，包括构建号；当无法获取构建版本时为 <c>Unknown</c>。
-    /// </returns>
+    /// <returns> 一个包含详细版本信息的字符串，包括构建号；当无法获取构建版本时为 <c>Unknown</c>。 </returns>
     public static string Version { get; } =
         typeof(KookConfig).GetTypeInfo().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
         ?? typeof(KookConfig).GetTypeInfo().Assembly.GetName().Version?.ToString(3)

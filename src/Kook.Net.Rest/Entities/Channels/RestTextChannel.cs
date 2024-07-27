@@ -89,7 +89,7 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
     /// <returns>
     ///     A paged collection containing a collection of guild users that can access this channel. Flattening the
     ///     paginated response into a collection of users with
-    ///     <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/> is required if you wish to access the users.
+    ///     <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" /> is required if you wish to access the users.
     /// </returns>
     public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> GetUsersAsync(RequestOptions? options = null) =>
         ChannelHelper.GetUsersAsync(this, Guild, Kook, KookConfig.MaxUsersPerBatch, 1, options);

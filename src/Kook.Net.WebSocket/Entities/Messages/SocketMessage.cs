@@ -17,17 +17,13 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// <summary>
     ///     Gets the author of this message.
     /// </summary>
-    /// <returns>
-    ///     A WebSocket-based user object.
-    /// </returns>
+    /// <returns> A WebSocket-based user object. </returns>
     public SocketUser Author { get; }
 
     /// <summary>
     ///     Gets the source channel of the message.
     /// </summary>
-    /// <returns>
-    ///     A WebSocket-based message channel.
-    /// </returns>
+    /// <returns> A WebSocket-based message channel. </returns>
     public ISocketMessageChannel Channel { get; }
 
     /// <inheritdoc />
@@ -73,41 +69,31 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// <summary>
     ///     Returns all cards included in this message.
     /// </summary>
-    /// <returns>
-    ///     Collection of card objects.
-    /// </returns>
+    /// <returns> Collection of card objects. </returns>
     public virtual IReadOnlyCollection<ICard> Cards => [];
 
     /// <summary>
     ///     Returns all embeds included in this message.
     /// </summary>
-    /// <returns>
-    ///     Collection of embed objects.
-    /// </returns>
+    /// <returns> Collection of embed objects. </returns>
     public virtual IReadOnlyCollection<IEmbed> Embeds => [];
 
     /// <summary>
     ///     Gets a collection of the <see cref="SocketPokeAction"/>'s on the message.
     /// </summary>
-    /// <returns>
-    ///     Collection of poke action objects.
-    /// </returns>
+    /// <returns> Collection of poke action objects. </returns>
     public virtual IReadOnlyCollection<SocketPokeAction> Pokes => [];
 
     /// <summary>
     ///     Returns the roles mentioned in this message.
     /// </summary>
-    /// <returns>
-    ///     Collection of WebSocket-based roles.
-    /// </returns>
+    /// <returns> Collection of WebSocket-based roles. </returns>
     public virtual IReadOnlyCollection<SocketRole> MentionedRoles => [];
 
     /// <summary>
     ///     Returns the users mentioned in this message.
     /// </summary>
-    /// <returns>
-    ///     Collection of WebSocket-based users.
-    /// </returns>
+    /// <returns> Collection of WebSocket-based users. </returns>
     public IReadOnlyCollection<SocketUser> MentionedUsers => _userMentions;
 
     /// <inheritdoc />
@@ -301,9 +287,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// <summary>
     ///     Gets the content of the message.
     /// </summary>
-    /// <returns>
-    ///     Content of the message.
-    /// </returns>
+    /// <returns> Content of the message. </returns>
     public override string ToString() => Content;
 
     internal SocketMessage Clone() => (SocketMessage)MemberwiseClone();

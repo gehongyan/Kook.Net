@@ -31,7 +31,7 @@ public readonly struct Cacheable<TEntity, TId>
     ///     如果可以从缓存中获取实体，则获取该实体。
     /// </summary>
     /// <remarks>
-    ///     此属性不保证非空；在无法从缓存中拉取实体的情况下，它此属性返回 <c>null</c>。
+    ///     此属性不保证非空；在无法从缓存中拉取实体的情况下，此属性返回 <c>null</c>。
     /// </remarks>
     public TEntity? Value { get; }
 
@@ -99,7 +99,7 @@ public readonly struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationsh
     ///     如果可以从缓存中获取实体，则获取该实体。
     /// </summary>
     /// <remarks>
-    ///     此属性不保证非空；在无法从缓存中拉取实体的情况下，它此属性返回 <c>null</c>。
+    ///     此属性不保证非空；在无法从缓存中拉取实体的情况下，此属性返回 <c>null</c>。
     /// </remarks>
     public TCachedEntity? Value { get; }
 

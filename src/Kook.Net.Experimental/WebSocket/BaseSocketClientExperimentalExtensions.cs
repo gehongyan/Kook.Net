@@ -24,9 +24,7 @@ public static class BaseSocketClientExperimentalExtensions
     /// <param name="icon">The icon of the new guild.</param>
     /// <param name="templateId">The identifier of the guild template to be used to create the new guild.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous creation operation. The task result contains the created guild.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous creation operation. The task result contains the created guild. </returns>
     public static Task<RestGuild> CreateGuildAsync(this BaseSocketClient client, string name,
         IVoiceRegion? region = null, Stream? icon = null, int? templateId = null, RequestOptions? options = null) =>
         ExperimentalClientHelper.CreateGuildAsync(client, name, region, icon, templateId, options);

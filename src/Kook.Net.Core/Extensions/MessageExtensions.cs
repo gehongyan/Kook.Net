@@ -28,7 +28,7 @@ public static class MessageExtensions
     ///     此方法会对每个要添加的回应分别发送请求。
     /// </remarks>
     /// <param name="msg"> 要添加回应的消息。 </param>
-    /// <param name="reactions"> 要用于向此消息添加回应的表情符号的集合。 </param>
+    /// <param name="reactions"> 要用于向此消息添加回应的所有表情符号。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步添加操作的任务。 </returns>
     /// <seealso cref="M:Kook.IMessage.AddReactionAsync(Kook.IEmote,Kook.RequestOptions)"/>
@@ -47,7 +47,7 @@ public static class MessageExtensions
     /// </remarks>
     /// <param name="msg"> 要添加回应的消息。 </param>
     /// <param name="user"> 要删除其回应的用户。 </param>
-    /// <param name="reactions"> 要从此消息移除的回应的表情符号的集合。 </param>
+    /// <param name="reactions"> 要从此消息移除的回应的所有表情符号。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步移除操作的任务。 </returns>
     /// <seealso cref="M:Kook.IMessage.RemoveReactionAsync(Kook.IEmote,Kook.IUser,Kook.RequestOptions)"/>
@@ -117,8 +117,8 @@ public static class MessageExtensions
     /// </summary>
     /// <param name="message"> 要回复的消息。 </param>
     /// <param name="content">Contents of the message.</param>
-    /// <param name="isQuote">是否在回复消息时引用被回复的消息。</param>
-    /// <param name="isEphemeral">是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。</param>
+    /// <param name="isQuote">是否在回复消息时引用被回复的消息。 </param>
+    /// <param name="isEphemeral">是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(this IUserMessage message,
         string content, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
@@ -133,8 +133,8 @@ public static class MessageExtensions
     /// </summary>
     /// <param name="message"> 要回复的消息。 </param>
     /// <param name="cards"> 要发送的卡片。 </param>
-    /// <param name="isQuote">是否在回复消息时引用被回复的消息。</param>
-    /// <param name="isEphemeral">是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。</param>
+    /// <param name="isQuote">是否在回复消息时引用被回复的消息。 </param>
+    /// <param name="isEphemeral">是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(this IUserMessage message,
         IEnumerable<ICard> cards, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
@@ -149,8 +149,8 @@ public static class MessageExtensions
     /// </summary>
     /// <param name="message"> 要回复的消息。 </param>
     /// <param name="card"> 要发送的卡片。 </param>
-    /// <param name="isQuote">是否在回复消息时引用被回复的消息。</param>
-    /// <param name="isEphemeral">是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。</param>
+    /// <param name="isQuote">是否在回复消息时引用被回复的消息。 </param>
+    /// <param name="isEphemeral">是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardAsync(this IUserMessage message,
         ICard card, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>

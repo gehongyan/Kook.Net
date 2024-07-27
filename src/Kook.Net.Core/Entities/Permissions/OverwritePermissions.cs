@@ -128,7 +128,7 @@ public struct OverwritePermissions
     public PermValue ShareScreen => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ShareScreen);
 
     /// <summary>
-    ///     使用指定的原始值初始化一个 <see cref="OverwritePermissions"/> 的新实例。
+    ///     使用指定的原始值初始化一个 <see cref="OverwritePermissions"/> 结构的新实例。
     /// </summary>
     /// <param name="allowValue"> 重写允许的权限的原始值。 </param>
     /// <param name="denyValue"> 重写禁止的权限的原始值。 </param>
@@ -182,7 +182,7 @@ public struct OverwritePermissions
     }
 
     /// <summary>
-    ///     使用指定的权限重写信息创建一个 <see cref="OverwritePermissions"/> 的新实例。
+    ///     使用指定的权限重写信息创建一个 <see cref="OverwritePermissions"/> 结构的新实例。
     /// </summary>
     /// <param name="createInvites"> 创建邀请。 </param>
     /// <param name="manageChannels"> 频道管理。 </param>
@@ -228,7 +228,7 @@ public struct OverwritePermissions
     }
 
     /// <summary>
-    ///     以当前权限重写配置为基础，更改指定的重写，返回一个 <see cref="OverwritePermissions"/> 的新实例。
+    ///     以当前权限重写配置为基础，更改指定的重写，返回一个 <see cref="OverwritePermissions"/> 结构的新实例。
     /// </summary>
     /// <param name="createInvites"> 创建邀请。 </param>
     /// <param name="manageChannels"> 频道管理。 </param>

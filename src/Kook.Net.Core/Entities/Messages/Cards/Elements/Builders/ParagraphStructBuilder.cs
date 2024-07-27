@@ -109,9 +109,7 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     /// <summary>
     ///     构建当前构建器为一个 <see cref="ParagraphStruct"/>。
     /// </summary>
-    /// <returns>
-    ///     由当前构建器表示的属性构建的 <see cref="ParagraphStruct"/> 对象。
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="ParagraphStruct"/> 对象。 </returns>
     /// <exception cref="ArgumentOutOfRangeException">
     ///     <see cref="ColumnCount"/> 不足 <see cref="MinColumnCount"/>。
     /// </exception>

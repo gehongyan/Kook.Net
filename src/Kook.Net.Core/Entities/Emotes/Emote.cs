@@ -105,17 +105,13 @@ public class Emote : IEmote
     /// <summary>
     ///     获取此表情的 KMarkdown 格式字符串。
     /// </summary>
-    /// <returns>
-    ///     此表情的 KMarkdown 格式字符串。
-    /// </returns>
+    /// <returns> 此表情的 KMarkdown 格式字符串。 </returns>
     public string ToKMarkdownString() => $"(emj){Name}(emj)[{Id}]";
 
     /// <summary>
     ///     获取此表情的纯文本格式字符串。
     /// </summary>
-    /// <returns>
-    ///     此表情的纯文本格式字符串。
-    /// </returns>
+    /// <returns> 此表情的纯文本格式字符串。 </returns>
     public string ToPlainTextString() => $"[:{Name}:{Id}]";
 
     private string DebuggerDisplay => $"{Name} ({Id})";

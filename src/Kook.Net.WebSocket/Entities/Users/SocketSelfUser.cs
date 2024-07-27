@@ -147,9 +147,7 @@ public class SocketSelfUser : SocketUser, ISelfUser, IUpdateable
     ///     especially the <see cref="Username"/> property.
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous reloading operation.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous reloading operation. </returns>
     public Task UpdateAsync(RequestOptions? options = null) =>
         SocketUserHelper.UpdateAsync(this, Kook, options);
 

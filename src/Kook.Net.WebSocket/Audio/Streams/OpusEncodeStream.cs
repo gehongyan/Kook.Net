@@ -34,9 +34,7 @@ public class OpusEncodeStream : AudioOutStream
     /// <summary>
     ///     发送静默帧以避免数据传输中断后的插值错误。
     /// </summary>
-    /// <returns>
-    ///     一个表示写入静默帧操作的异步任务。
-    /// </returns>
+    /// <returns> 一个表示写入静默帧操作的异步任务。 </returns>
     public async Task WriteSilentFramesAsync()
     {
         byte[] frameBytes = new byte[OpusConverter.FrameBytes];

@@ -30,7 +30,7 @@ public class HttpException : Exception
     public IRequest Request { get; }
 
     /// <summary>
-    ///     获取描述请求失败原因的 JSON 错误集合。
+    ///     获取描述请求失败原因的所有 JSON 错误。
     /// </summary>
     public IReadOnlyCollection<KookJsonError> Errors { get; }
 
@@ -41,7 +41,7 @@ public class HttpException : Exception
     /// <param name="request"> 引发异常前发送的请求。 </param>
     /// <param name="kookCode"> 由 KOOK 返回的 JSON 负载中解析出的状态码。 </param>
     /// <param name="reason"> 引发异常的原因。 </param>
-    /// <param name="errors"> 描述请求错误的 JSON 错误集合。 </param>
+    /// <param name="errors"> 描述请求错误的所有 JSON 错误。 </param>
     public HttpException(HttpStatusCode httpCode, IRequest request,
         KookErrorCode? kookCode = null, string? reason = null, KookJsonError[]? errors = null)
         : base(CreateMessage(httpCode, (int?)kookCode, reason))

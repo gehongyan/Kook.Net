@@ -109,7 +109,7 @@ public struct ChannelPermissions
     public bool ShareScreen => Permissions.GetValue(RawValue, ChannelPermission.ShareScreen);
 
     /// <summary>
-    ///     使用指定的权限原始值创建一个 <see cref="ChannelPermissions"/> 的新实例。
+    ///     使用指定的权限原始值创建一个 <see cref="ChannelPermissions"/> 结构的新实例。
     /// </summary>
     /// <param name="rawValue"> 权限原始值。 </param>
     public ChannelPermissions(ulong rawValue)
@@ -162,7 +162,7 @@ public struct ChannelPermissions
     }
 
     /// <summary>
-    ///     使用指定的权限位信息创建一个 <see cref="ChannelPermissions"/> 的新实例。
+    ///     使用指定的权限位信息创建一个 <see cref="ChannelPermissions"/> 结构的新实例。
     /// </summary>
     /// <param name="createInvites"> 创建邀请。 </param>
     /// <param name="manageChannels"> 频道管理。 </param>
@@ -208,7 +208,7 @@ public struct ChannelPermissions
     }
 
     /// <summary>
-    ///     以当前权限集为基础，更改指定的权限，返回一个 <see cref="ChannelPermissions"/> 的新实例。
+    ///     以当前权限集为基础，更改指定的权限，返回一个 <see cref="ChannelPermissions"/> 结构的新实例。
     /// </summary>
     /// <param name="createInvites"> 创建邀请。 </param>
     /// <param name="manageChannels"> 频道管理。 </param>

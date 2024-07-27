@@ -184,7 +184,7 @@ public readonly struct Color
     ///     获取此颜色的原始值。
     /// </summary>
     /// <remarks>
-    ///     颜色以 24 位无符号整型值 RGB 格式进行编码，最高 8 位表示红色通道的强度，中间 8 位表示绿色通道的强度，最低 8 位表示蓝色通道的强度。
+    ///     颜色以 24 位无符号整型值 RGB 格式进行编码，由高至低的每 8 位分别表示红色、绿色和蓝色通道的强度。
     /// </remarks>
     public uint RawValue { get; }
 
@@ -204,7 +204,7 @@ public readonly struct Color
     public byte B => (byte)RawValue;
 
     /// <summary>
-    ///     使用指定的 24 位无符号整型值初始化一个 <see cref="Color"/> 的新实例。
+    ///     使用指定的 24 位无符号整型值初始化一个 <see cref="Color"/> 结构的新实例。
     /// </summary>
     /// <example>
     ///     创建 #607D8B（http://www.color-hex.com/color/607d8b）所表示的颜色：
@@ -224,7 +224,7 @@ public readonly struct Color
     }
 
     /// <summary>
-    ///     使用指定的 RGB 通道值初始化一个 <see cref="Color" /> 的新实例。
+    ///     使用指定的 RGB 通道值初始化一个 <see cref="Color" /> 结构的新实例。
     /// </summary>
     /// <example>
     ///     创建 #607D8B（http://www.color-hex.com/color/607d8b）所表示的颜色：
@@ -249,7 +249,7 @@ public readonly struct Color
     }
 
     /// <summary>
-    ///     使用指定的 RGB 通道值初始化一个 <see cref="Color" /> 的新实例。
+    ///     使用指定的 RGB 通道值初始化一个 <see cref="Color" /> 结构的新实例。
     /// </summary>
     /// <example>
     ///     创建 #607D8B（http://www.color-hex.com/color/607d8b）所表示的颜色：
@@ -278,7 +278,7 @@ public readonly struct Color
     }
 
     /// <summary>
-    ///     使用指定的 RGB 通道值初始化一个 <see cref="Color" /> 的新实例。
+    ///     使用指定的 RGB 通道值初始化一个 <see cref="Color" /> 结构的新实例。
     /// </summary>
     /// <example>
     ///     创建 #607D8B（http://www.color-hex.com/color/607d8b）所表示的颜色：
@@ -319,7 +319,7 @@ public readonly struct Color
     public static bool operator !=(Color lhs, Color rhs) => lhs.RawValue != rhs.RawValue;
 
     /// <summary>
-    ///     使用指定的 24 位无符号整型值初始化一个 <see cref="Color"/> 的新实例。
+    ///     使用指定的 24 位无符号整型值初始化一个 <see cref="Color"/> 结构的新实例。
     /// </summary>
     /// <example>
     ///     创建 #607D8B（http://www.color-hex.com/color/607d8b）所表示的颜色：
@@ -358,11 +358,9 @@ public readonly struct Color
         new(((uint)color.ToArgb() << 8) >> 8);
 
     /// <summary>
-    ///     获取此颜色带有 <c>#</c> 前缀的十六进制字符串表示形式（例如 <c>#000CCC</c>）。
+    ///     获取此颜色带有 <c>#</c> 前缀的 RGB 十六进制字符串表示形式（例如 <c>#000CCC</c>）。
     /// </summary>
-    /// <returns>
-    ///     此颜色带有 <c>#</c> 前缀的十六进制字符串表示形式（例如 <c>#000CCC</c>）。
-    /// </returns>
+    /// <returns> 此颜色带有 <c>#</c> 前缀的 RGB 十六进制字符串表示形式（例如 <c>#000CCC</c>）。 </returns>
     public override string ToString() => $"#{RawValue:X6}";
 
     private string DebuggerDisplay => $"#{RawValue:X6} ({RawValue})";

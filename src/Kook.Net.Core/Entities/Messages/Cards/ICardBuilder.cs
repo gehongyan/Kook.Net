@@ -13,8 +13,6 @@ public interface ICardBuilder
     /// <summary>
     ///     构建当前构建器为一个 <see cref="ICard"/>。
     /// </summary>
-    /// <returns>
-    ///     由当前构建器表示的属性构建的 <see cref="ICard"/> 对象。
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="ICard"/> 对象。 </returns>
     ICard Build();
 }

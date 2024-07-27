@@ -62,9 +62,7 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     ///         or use <see cref="GetConnectedUsersAsync"/> to fetch the connected users from the API.
     ///     </note>
     /// </remarks>
-    /// <returns>
-    ///     A read-only collection of users that are currently connected to this voice channel.
-    /// </returns>
+    /// <returns> A read-only collection of users that are currently connected to this voice channel. </returns>
     public IReadOnlyCollection<SocketGuildUser> ConnectedUsers =>
         Guild.Users.Where(x => x.VoiceChannel?.Id == Id).ToImmutableArray();
 

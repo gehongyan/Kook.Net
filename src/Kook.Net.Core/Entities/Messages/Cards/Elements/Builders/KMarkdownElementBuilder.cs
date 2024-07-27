@@ -50,9 +50,7 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     /// <summary>
     ///     构建当前构建器为一个 <see cref="KMarkdownElement"/>。
     /// </summary>
-    /// <returns>
-    ///     由当前构建器表示的属性构建的 <see cref="KMarkdownElement"/> 对象。
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="KMarkdownElement"/> 对象。 </returns>
     /// <exception cref="ArgumentNullException">
     ///     <see cref="Content"/> 为 <c>null</c>。
     /// </exception>

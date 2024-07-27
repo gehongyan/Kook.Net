@@ -143,9 +143,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     ///     Creates a direct message channel to this user.
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a rest DM channel where the user is the recipient.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous get operation. The task result contains a rest DM channel where the user is the recipient. </returns>
     public Task<RestDMChannel> CreateDMChannelAsync(RequestOptions? options = null) =>
         UserHelper.CreateDMChannelAsync(this, Kook, options);
 
@@ -185,9 +183,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     /// <summary>
     ///     Gets the Username#IdentifyNumber of the user.
     /// </summary>
-    /// <returns>
-    ///     A string that resolves to Username#IdentifyNumber of the user.
-    /// </returns>
+    /// <returns> A string that resolves to Username#IdentifyNumber of the user. </returns>
     public override string ToString() => this.UsernameAndIdentifyNumber(Kook.FormatUsersInBidirectionalUnicode);
 
     private string DebuggerDisplay =>

@@ -74,9 +74,7 @@ public class Poke : IPoke
     /// <summary>
     ///     Returns the name of the poke.
     /// </summary>
-    /// <returns>
-    ///     A string containing the name of the poke.
-    /// </returns>
+    /// <returns> A string containing the name of the poke. </returns>
     public override string ToString() => Name;
 
     private string DebuggerDisplay => $"{Name} ({Resource.Type})";

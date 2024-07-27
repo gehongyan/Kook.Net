@@ -42,9 +42,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     /// <summary>
     ///     Gets a collection of guilds that the user is currently in.
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of guilds that the current user is in.
-    /// </returns>
+    /// <returns> A read-only collection of guilds that the current user is in. </returns>
     public abstract IReadOnlyCollection<SocketGuild> Guilds { get; }
 
     internal BaseSocketClient(KookSocketConfig config, KookRestApiClient client)
@@ -72,9 +70,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     ///         <see cref="KookRestClient.GetUserAsync(System.UInt64,Kook.RequestOptions)" />.
     ///     </note>
     /// </remarks>
-    /// <returns>
-    ///     A generic WebSocket-based user; <c>null</c> when the user cannot be found.
-    /// </returns>
+    /// <returns> A generic WebSocket-based user; <c>null</c> when the user cannot be found. </returns>
     public abstract SocketUser? GetUser(ulong id);
 
     /// <summary>
@@ -97,9 +93,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     /// </remarks>
     /// <param name="username">The name of the user.</param>
     /// <param name="identifyNumber">The identify value of the user.</param>
-    /// <returns>
-    ///     A generic WebSocket-based user; <c>null</c> when the user cannot be found.
-    /// </returns>
+    /// <returns> A generic WebSocket-based user; <c>null</c> when the user cannot be found. </returns>
     public abstract SocketUser? GetUser(string username, string identifyNumber);
 
     /// <summary>
@@ -159,9 +153,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     /// </summary>
     /// <param name="guilds">The guilds to download the members from.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous download operation.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous download operation. </returns>
     public abstract Task DownloadUsersAsync(IEnumerable<IGuild>? guilds = null, RequestOptions? options = null);
 
     /// <summary>

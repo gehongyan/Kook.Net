@@ -48,11 +48,9 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <summary>
     ///     修改此服务器频道。
     /// </summary>
-    /// <param name="func"> 一个包含修改服务器频道属性的委托。</param>
+    /// <param name="func"> 一个包含修改服务器频道属性的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示服务器频道属性修改操作的异步任务。
-    /// </returns>
+    /// <returns> 一个表示服务器频道属性修改操作的异步任务。 </returns>
     /// <seealso cref="T:Kook.ModifyGuildChannelProperties"/>
     Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions? options = null);
 
@@ -61,9 +59,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果为此频道的创建者；如果没有找到则为 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果为此频道的创建者；如果没有找到则为 <c>null</c>。 </returns>
     Task<IUser?> GetCreatorAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
@@ -74,18 +70,14 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     获取给定角色的权限覆盖配置。
     /// </summary>
     /// <param name="role"> 要获取权限覆盖配置的角色。 </param>
-    /// <returns>
-    ///     一个表示目标角色的权限覆盖配置；如果没有设置则为 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示目标角色的权限覆盖配置；如果没有设置则为 <c>null</c>。 </returns>
     OverwritePermissions? GetPermissionOverwrite(IRole role);
 
     /// <summary>
     ///     获取给定用户的权限覆盖配置。
     /// </summary>
     /// <param name="user"> 要获取权限覆盖配置的用户。 </param>
-    /// <returns>
-    ///     一个表示目标用户的权限覆盖配置；如果没有设置则为 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示目标用户的权限覆盖配置；如果没有设置则为 <c>null</c>。 </returns>
     OverwritePermissions? GetPermissionOverwrite(IUser user);
 
     /// <summary>
@@ -93,9 +85,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// </summary>
     /// <param name="role"> 要对其移除权限覆盖配置的角色。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步移除频道内角色权限覆盖配置操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步移除频道内角色权限覆盖配置操作的任务。 </returns>
     Task RemovePermissionOverwriteAsync(IRole role, RequestOptions? options = null);
 
     /// <summary>
@@ -103,9 +93,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// </summary>
     /// <param name="user"> 要对其移除权限覆盖配置的用户。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步移除频道内用户权限覆盖配置操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步移除频道内用户权限覆盖配置操作的任务。 </returns>
     Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null);
 
     /// <summary>
@@ -113,9 +101,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// </summary>
     /// <param name="role"> 要添加权限覆盖配置的角色。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步添加频道内角色权限覆盖配置操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步添加频道内角色权限覆盖配置操作的任务。 </returns>
     Task AddPermissionOverwriteAsync(IRole role, RequestOptions? options = null);
 
     /// <summary>
@@ -123,9 +109,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// </summary>
     /// <param name="user"> 要添加权限覆盖配置的用户。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步添加频道内用户权限覆盖配置操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步添加频道内用户权限覆盖配置操作的任务。 </returns>
     Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null);
 
     /// <summary>
@@ -134,9 +118,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <param name="role"> 要更新权限覆盖配置的角色。 </param>
     /// <param name="func"> 一个包含修改权限覆盖配置的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步更新频道内角色权限覆盖配置操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步更新频道内角色权限覆盖配置操作的任务。 </returns>
     Task ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options = null);
 
     /// <summary>
@@ -145,9 +127,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <param name="user"> 要更新权限覆盖配置的用户。 </param>
     /// <param name="func"> 一个包含修改权限覆盖配置的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步更新频道内用户权限覆盖配置操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步更新频道内用户权限覆盖配置操作的任务。 </returns>
     Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options = null);
 
     #endregion
@@ -163,9 +143,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// </remarks>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     分页的服务器用户集合的异步可枚举对象。
-    /// </returns>
+    /// <returns> 分页的服务器用户集合的异步可枚举对象。 </returns>
     new IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
@@ -174,9 +152,7 @@ public interface IGuildChannel : IChannel, IDeletable
     /// <param name="id"> 要获取的用户的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果为此频道中的服务器用户；如果没有找到则为 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果为此频道中的服务器用户；如果没有找到则为 <c>null</c>。 </returns>
     new Task<IGuildUser?> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion

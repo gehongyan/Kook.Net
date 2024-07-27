@@ -13,8 +13,6 @@ public interface IModuleBuilder
     /// <summary>
     ///     构建当前构建器为一个 <see cref="IModule"/>。
     /// </summary>
-    /// <returns>
-    ///     由当前构建器表示的属性构建的 <see cref="IModule"/> 对象。
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="IModule"/> 对象。 </returns>
     IModule Build();
 }

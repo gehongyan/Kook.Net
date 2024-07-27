@@ -78,9 +78,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     Gets a user in this channel from the provided <paramref name="id"/>.
     /// </summary>
     /// <param name="id">The identifier of the user.</param>
-    /// <returns>
-    ///     A <see cref="RestUser"/> object that is a recipient of this channel; otherwise <c>null</c>.
-    /// </returns>
+    /// <returns> A <see cref="RestUser"/> object that is a recipient of this channel; otherwise <c>null</c>. </returns>
     public RestUser? GetUser(ulong id)
     {
         if (id == Recipient.Id) return Recipient;
@@ -93,9 +91,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// <param name="text">The message to be sent.</param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote? quote = null,
         RequestOptions? options = null) =>
         ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, quote, options);
@@ -108,9 +104,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// <param name="type"> 文件的媒体类型。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, path, filename, type, quote, options);
@@ -123,9 +117,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// <param name="type"> 文件的媒体类型。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, stream, filename, type, quote, options);
@@ -136,9 +128,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// <param name="attachment"> 文件的附件信息。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, attachment, quote, options);
@@ -149,9 +139,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// <param name="cards"> 要发送的卡片。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardsAsync(this, Kook, cards, quote, options);
@@ -162,9 +150,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// <param name="card"> 要发送的卡片。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardAsync(this, Kook, card, quote, options);
@@ -291,9 +277,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// <summary>
     ///     Gets a string that represents the Username#IdentifyNumber of the recipient.
     /// </summary>
-    /// <returns>
-    ///     A string that resolves to the Recipient of this channel.
-    /// </returns>
+    /// <returns> A string that resolves to the Recipient of this channel. </returns>
     public override string ToString() => $"@{Recipient}";
 
     private string DebuggerDisplay => $"@{Recipient} ({Id}, DM)";

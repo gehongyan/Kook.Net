@@ -59,9 +59,7 @@ public static class KookRestClientExperimentalExtensions
     /// <param name="icon">The icon of the new guild.</param>
     /// <param name="templateId">The identifier of the guild template to be used to create the new guild.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous creation operation. The task result contains the created guild.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous creation operation. The task result contains the created guild. </returns>
     public static async Task<RestGuild> CreateGuildAsync(this KookRestClient client, string name,
         IVoiceRegion? region = null, Stream? icon = null, int? templateId = null, RequestOptions? options = null)
     {
@@ -91,9 +89,7 @@ public static class KookRestClientExperimentalExtensions
     /// <param name="client">The KOOK rest client instance.</param>
     /// <param name="card">The card to be validated.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous validation operation.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous validation operation. </returns>
     public static Task ValidateCardAsync(this KookRestClient client, ICard card, RequestOptions? options = null) =>
         ValidateCardsAsync(client, [card], options);
 
@@ -103,9 +99,7 @@ public static class KookRestClientExperimentalExtensions
     /// <param name="client">The KOOK rest client instance.</param>
     /// <param name="cards">The cards to be validated.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous validation operation.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous validation operation. </returns>
     public static Task ValidateCardsAsync(this KookRestClient client, IEnumerable<ICard> cards, RequestOptions? options = null) =>
         ExperimentalClientHelper.ValidateCardsAsync(client, cards, options);
 
@@ -115,9 +109,7 @@ public static class KookRestClientExperimentalExtensions
     /// <param name="client">The KOOK rest client instance.</param>
     /// <param name="cardsJson">The JSON representation of the cards to be validated.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous validation operation.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous validation operation. </returns>
     public static Task ValidateCardsAsync(this KookRestClient client, string cardsJson, RequestOptions? options = null) =>
         ExperimentalClientHelper.ValidateCardsAsync(client, cardsJson, options);
 }

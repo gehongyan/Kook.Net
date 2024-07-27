@@ -86,9 +86,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///         have just started the client, this may return an empty collection.
     ///     </note>
     /// </remarks>
-    /// <returns>
-    ///     A collection of DM channels that have been opened in this session.
-    /// </returns>
+    /// <returns> A collection of DM channels that have been opened in this session. </returns>
     public IReadOnlyCollection<SocketDMChannel> DMChannels =>
         State.DMChannels.Where(x => x is not null).ToImmutableArray();
 

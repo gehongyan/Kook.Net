@@ -63,9 +63,7 @@ public class Attachment : IAttachment
     /// <summary>
     ///     Returns the filename of this attachment.
     /// </summary>
-    /// <returns>
-    ///     A string containing the filename of this attachment.
-    /// </returns>
+    /// <returns> A string containing the filename of this attachment. </returns>
     public override string? ToString() => Filename;
 
     private string DebuggerDisplay => $"{Filename}{(Size.HasValue ? $" ({Size} bytes)" : "")}";

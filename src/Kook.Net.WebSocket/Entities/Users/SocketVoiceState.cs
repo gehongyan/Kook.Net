@@ -88,9 +88,7 @@ public struct SocketVoiceState : IVoiceState
     /// <summary>
     ///     Gets the name of this voice channel.
     /// </summary>
-    /// <returns>
-    ///     A string that resolves to name of this voice channel; otherwise "Unknown".
-    /// </returns>
+    /// <returns> A string that resolves to name of this voice channel; otherwise "Unknown". </returns>
     public override string ToString() => VoiceChannel?.Name ?? "Unknown";
 
     private string DebuggerDisplay =>

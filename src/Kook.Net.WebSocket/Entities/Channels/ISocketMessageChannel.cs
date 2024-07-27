@@ -8,9 +8,7 @@ public interface ISocketMessageChannel : IMessageChannel
     /// <summary>
     ///     Gets all messages in this channel's cache.
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of WebSocket-based messages.
-    /// </returns>
+    /// <returns> A read-only collection of WebSocket-based messages. </returns>
     IReadOnlyCollection<SocketMessage> CachedMessages { get; }
 
     /// <summary>
@@ -53,9 +51,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///     </para>
     /// </remarks>
     /// <param name="limit">The number of messages to get.</param>
-    /// <returns>
-    ///     A read-only collection of WebSocket-based messages.
-    /// </returns>
+    /// <returns> A read-only collection of WebSocket-based messages. </returns>
     IReadOnlyCollection<SocketMessage> GetCachedMessages(int limit = KookConfig.MaxMessagesPerBatch);
 
     /// <summary>
@@ -78,9 +74,7 @@ public interface ISocketMessageChannel : IMessageChannel
     /// <param name="fromMessageId">The message ID to start the fetching from.</param>
     /// <param name="dir">The direction of which the message should be gotten from.</param>
     /// <param name="limit">The number of messages to get.</param>
-    /// <returns>
-    ///     A read-only collection of WebSocket-based messages.
-    /// </returns>
+    /// <returns> A read-only collection of WebSocket-based messages. </returns>
     IReadOnlyCollection<SocketMessage> GetCachedMessages(Guid fromMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch);
 
     /// <summary>
@@ -103,8 +97,6 @@ public interface ISocketMessageChannel : IMessageChannel
     /// <param name="fromMessage">The message to start the fetching from.</param>
     /// <param name="dir">The direction of which the message should be gotten from.</param>
     /// <param name="limit">The number of messages to get.</param>
-    /// <returns>
-    ///     A read-only collection of WebSocket-based messages.
-    /// </returns>
+    /// <returns> A read-only collection of WebSocket-based messages. </returns>
     IReadOnlyCollection<SocketMessage> GetCachedMessages(IMessage fromMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch);
 }

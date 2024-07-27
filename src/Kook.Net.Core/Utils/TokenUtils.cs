@@ -119,7 +119,7 @@ public static class TokenUtils
     }
 
     /// <summary>
-    ///     令牌中不允许的所有字符的集合。
+    ///     令牌中不允许的所有字符。
     /// </summary>
     internal static readonly char[] IllegalTokenCharacters = [' ', '\t', '\r', '\n'];
 

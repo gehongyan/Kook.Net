@@ -82,9 +82,7 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     /// <summary>
     ///     构建当前构建器为一个 <see cref="AudioModule"/> 对象。
     /// </summary>
-    /// <returns>
-    ///     由当前构建器表示的属性构建的 <see cref="AudioModule"/> 对象。
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="AudioModule"/> 对象。 </returns>
     /// <exception cref="ArgumentNullException">
     ///     <see cref="Source"/> 为 <c>null</c>。
     /// </exception>

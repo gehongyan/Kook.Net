@@ -87,9 +87,7 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     /// <summary>
     ///     构建当前构建器为一个 <see cref="CountdownModule"/> 对象。
     /// </summary>
-    /// <returns>
-    ///     由当前构建器表示的属性构建的 <see cref="CountdownModule"/> 对象。
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="CountdownModule"/> 对象。 </returns>
     /// <exception cref="ArgumentOutOfRangeException">
     ///     <see cref="CountdownMode"/> 不为 <see cref="F:Kook.CountdownMode.Second"/> 时，不允许设置 <see cref="StartTime"/>。
     /// </exception>

@@ -100,33 +100,25 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets a collection of all text channels in this guild.
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of message channels found within this guild.
-    /// </returns>
+    /// <returns> A read-only collection of message channels found within this guild. </returns>
     public IReadOnlyCollection<RestTextChannel> TextChannels =>
         Channels.OfType<RestTextChannel>().ToImmutableArray();
 
     /// <summary>
     ///     Gets a collection of all voice channels in this guild.
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of voice channels found within this guild.
-    /// </returns>
+    /// <returns> A read-only collection of voice channels found within this guild. </returns>
     public IReadOnlyCollection<RestVoiceChannel> VoiceChannels =>
         Channels.OfType<RestVoiceChannel>().ToImmutableArray();
 
     /// <summary>
     ///     Gets a collection of all stage channels in this guild.
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of stage channels found within this guild.
-    /// </returns>
+    /// <returns> A read-only collection of stage channels found within this guild. </returns>
     /// <summary>
     ///     Gets a collection of all category channels in this guild.
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of category channels found within this guild.
-    /// </returns>
+    /// <returns> A read-only collection of category channels found within this guild. </returns>
     public IReadOnlyCollection<RestCategoryChannel> CategoryChannels =>
         Channels.OfType<RestCategoryChannel>().ToImmutableArray();
 
@@ -138,9 +130,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Gets the features of this guild.
     /// </summary>
-    /// <returns>
-    ///     An array of objects representing the features of this guild.
-    /// </returns>
+    /// <returns> An array of objects representing the features of this guild. </returns>
     /// <remarks>
     ///     <note type="important">
     ///         What this property represents is not well investigated.
@@ -376,9 +366,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     Gets a role in this guild.
     /// </summary>
     /// <param name="id">The identifier for the role.</param>
-    /// <returns>
-    ///     A role that is associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
-    /// </returns>
+    /// <returns> A role that is associated with the specified <paramref name="id"/>; <c>null</c> if none is found. </returns>
     public RestRole? GetRole(uint id) => _roles.TryGetValue(id, out RestRole? value) ? value : null;
 
     /// <summary>
@@ -449,9 +437,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     ///     Gets the owner of this guild.
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the owner of this guild.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous get operation. The task result contains the owner of this guild. </returns>
     public Task<RestGuildUser> GetOwnerAsync(RequestOptions? options = null) =>
         GuildHelper.GetUserAsync(this, Kook, OwnerId, options);
 
@@ -655,9 +641,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentNullException"><paramref name="name" /> is <c>null</c>.</exception>
-    /// <returns>
-    ///     The created voice channel.
-    /// </returns>
+    /// <returns> The created voice channel. </returns>
     public Task<RestVoiceChannel> CreateVoiceChannelAsync(string name,
         Action<CreateVoiceChannelProperties>? func = null, RequestOptions? options = null) =>
         GuildHelper.CreateVoiceChannelAsync(this, Kook, name, func, options);
@@ -669,9 +653,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentNullException"><paramref name="name" /> is <c>null</c>.</exception>
-    /// <returns>
-    ///     The created category channel.
-    /// </returns>
+    /// <returns> The created category channel. </returns>
     public Task<RestCategoryChannel> CreateCategoryChannelAsync(string name,
         Action<CreateCategoryChannelProperties>? func = null, RequestOptions? options = null) =>
         GuildHelper.CreateCategoryChannelAsync(this, Kook, name, func, options);
@@ -893,9 +875,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <summary>
     ///     Returns the name of the guild.
     /// </summary>
-    /// <returns>
-    ///     The name of the guild.
-    /// </returns>
+    /// <returns> The name of the guild. </returns>
     public override string ToString() => Name;
 
     private string DebuggerDisplay => $"{Name} ({Id})";

@@ -83,9 +83,7 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     /// <summary>
     ///     构建当前构建器为一个 <see cref="HeaderModule"/> 对象。
     /// </summary>
-    /// <returns>
-    ///     由当前构建器表示的属性构建的 <see cref="HeaderModule"/> 对象。
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="HeaderModule"/> 对象。 </returns>
     /// <exception cref="ArgumentNullException">
     ///     <see cref="Text"/> 为 <c>null</c>。
     /// </exception>
@@ -119,9 +117,7 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
     /// <param name="text">
     ///     The text to be set for the header.
     /// </param>
-    /// <returns>
-    ///     An <see cref="HeaderModuleBuilder"/> object that is initialized with the specified <paramref name="text"/>.
-    /// </returns>
+    /// <returns> An <see cref="HeaderModuleBuilder"/> object that is initialized with the specified <paramref name="text"/>. </returns>
     public static implicit operator HeaderModuleBuilder(string text) => new(text);
 
     /// <inheritdoc />

@@ -78,9 +78,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// <summary>
     ///     Gets the <see cref="Content"/> of the message.
     /// </summary>
-    /// <returns>
-    ///     A string that is the <see cref="Content"/> of the message.
-    /// </returns>
+    /// <returns> A string that is the <see cref="Content"/> of the message. </returns>
     public override string ToString() => Content;
 
     internal RestMessage(BaseKookClient kook, Guid id, MessageType messageType,

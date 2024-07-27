@@ -24,9 +24,7 @@ public static class ChannelExtensions
     ///     获取一个跳转到频道的 URL。
     /// </summary>
     /// <param name="channel"> 要获取跳转 URL 的频道。 </param>
-    /// <returns>
-    ///     一个包含用于在聊天中跳转到频道的 URL 的字符串。
-    /// </returns>
+    /// <returns> 一个包含用于在聊天中跳转到频道的 URL 的字符串。 </returns>
     public static string GetJumpUrl(this IChannel channel) =>
         channel switch
         {

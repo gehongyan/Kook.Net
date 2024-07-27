@@ -80,9 +80,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// </summary>
     /// <param name="id">TThe ID of the message.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     The message gotten from either the cache or the download, or <c>null</c> if none is found.
-    /// </returns>
+    /// <returns> The message gotten from either the cache or the download, or <c>null</c> if none is found. </returns>
     public async Task<IMessage> GetMessageAsync(Guid id, RequestOptions? options = null) =>
         await ChannelHelper.GetDirectMessageAsync(this, Kook, id, options).ConfigureAwait(false);
 
@@ -95,9 +93,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// </remarks>
     /// <param name="limit"> 要获取的消息数量。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     分页的消息集合的异步可枚举对象。
-    /// </returns>
+    /// <returns> 分页的消息集合的异步可枚举对象。 </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(
         int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         ChannelHelper.GetDirectMessagesAsync(this, Kook, null, Direction.Before, limit, true, options);
@@ -113,9 +109,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <param name="dir"> 要以参考位置为基准，获取消息的方向。 </param>
     /// <param name="limit"> 要获取的消息数量。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     分页的消息集合的异步可枚举对象。
-    /// </returns>
+    /// <returns> 分页的消息集合的异步可枚举对象。 </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         ChannelHelper.GetDirectMessagesAsync(this, Kook, referenceMessageId, dir, limit, true, options);
@@ -131,9 +125,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <param name="dir"> 要以参考位置为基准，获取消息的方向。 </param>
     /// <param name="limit"> 要获取的消息数量。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     分页的消息集合的异步可枚举对象。
-    /// </returns>
+    /// <returns> 分页的消息集合的异步可枚举对象。 </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         ChannelHelper.GetDirectMessagesAsync(this, Kook, referenceMessage.Id, dir, limit, true, options);
@@ -157,9 +149,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <param name="type"> 文件的媒体类型。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, path, filename, type, quote, options);
@@ -172,9 +162,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <param name="type"> 文件的媒体类型。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, stream, filename, type, quote, options);
@@ -185,9 +173,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <param name="attachment"> 文件的附件信息。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, attachment, quote, options);
@@ -198,9 +184,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <param name="text">The message to be sent.</param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, quote, options);
@@ -211,9 +195,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <param name="cards"> 要发送的卡片。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardsAsync(this, Kook, cards, quote, options);
@@ -224,9 +206,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <param name="card"> 要发送的卡片。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardAsync(this, Kook, card, quote, options);
@@ -258,9 +238,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     Gets a user in this channel from the provided <paramref name="id"/>.
     /// </summary>
     /// <param name="id">The identifier of the user.</param>
-    /// <returns>
-    ///     A <see cref="SocketUser"/> object that is a recipient of this channel; otherwise <c>null</c>.
-    /// </returns>
+    /// <returns> A <see cref="SocketUser"/> object that is a recipient of this channel; otherwise <c>null</c>. </returns>
     public new SocketUser? GetUser(ulong id)
     {
         if (id == Recipient.Id) return Recipient;

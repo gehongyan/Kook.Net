@@ -119,9 +119,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     /// <summary>
     ///     构建当前构建器为一个 <see cref="Card"/>。
     /// </summary>
-    /// <returns>
-    ///     由当前构建器表示的属性构建的 <see cref="Card"/> 对象。
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="Card"/> 对象。 </returns>
     /// <exception cref="InvalidOperationException">
     ///     卡片的主题不能为 <see cref="F:Kook.CardTheme.Invisible"/>，该值保留用于图文混排消息，暂不支持手动构建。
     /// </exception>

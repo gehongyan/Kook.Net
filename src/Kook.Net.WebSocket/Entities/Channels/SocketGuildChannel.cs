@@ -19,9 +19,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <summary>
     ///     Gets the guild associated with this channel.
     /// </summary>
-    /// <returns>
-    ///     A guild object that this channel belongs to.
-    /// </returns>
+    /// <returns> A guild object that this channel belongs to. </returns>
     public SocketGuild Guild { get; }
 
     /// <inheritdoc />
@@ -44,9 +42,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     ///     this method will return <c>null</c>. To get the creator under this circumstance, use
     ///     <see cref="Kook.Rest.KookRestClient.GetUserAsync(ulong,RequestOptions)"/>.
     /// </remarks>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous get operation. The task result contains the creator of this channel. </returns>
     public SocketGuildUser? Creator => CreatorId.HasValue ? GetUser(CreatorId.Value) : null;
 
     /// <inheritdoc />
@@ -58,9 +54,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <summary>
     ///     Gets a collection of users that are able to view the channel.
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of users that can access the channel (i.e. the users seen in the user list).
-    /// </returns>
+    /// <returns> A read-only collection of users that can access the channel (i.e. the users seen in the user list). </returns>
     public new virtual IReadOnlyCollection<SocketGuildUser> Users => [];
 
     internal SocketGuildChannel(KookSocketClient kook, ulong id, SocketGuild guild)
@@ -120,9 +114,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     ///     Gets the permission overwrite for a specific user.
     /// </summary>
     /// <param name="user">The user to get the overwrite from.</param>
-    /// <returns>
-    ///     An overwrite object for the targeted user; <c>null</c> if none is set.
-    /// </returns>
+    /// <returns> An overwrite object for the targeted user; <c>null</c> if none is set. </returns>
     public virtual OverwritePermissions? GetPermissionOverwrite(IUser user) =>
         _userPermissionOverwrites.FirstOrDefault(x => x.Target.Id == user.Id)?.Permissions;
 
@@ -130,9 +122,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     ///     Gets the permission overwrite for a specific role.
     /// </summary>
     /// <param name="role">The role to get the overwrite from.</param>
-    /// <returns>
-    ///     An overwrite object for the targeted role; <c>null</c> if none is set.
-    /// </returns>
+    /// <returns> An overwrite object for the targeted role; <c>null</c> if none is set. </returns>
     public virtual OverwritePermissions? GetPermissionOverwrite(IRole role) =>
         _rolePermissionOverwrites.FirstOrDefault(x => x.Target == role.Id)?.Permissions;
 
@@ -141,9 +131,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// </summary>
     /// <param name="user">The user to add the overwrite to.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
-    /// </returns>
+    /// <returns> A task representing the asynchronous permission operation for adding the specified permissions to the channel. </returns>
     public async Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null)
     {
         UserPermissionOverwrite perms = await ChannelHelper
@@ -157,9 +145,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// </summary>
     /// <param name="role">The role to add the overwrite to.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
-    /// </returns>
+    /// <returns> A task representing the asynchronous permission operation for adding the specified permissions to the channel. </returns>
     public async Task AddPermissionOverwriteAsync(IRole role, RequestOptions? options = null)
     {
         RolePermissionOverwrite perms = await ChannelHelper
@@ -173,9 +159,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// </summary>
     /// <param name="user">The user to remove the overwrite from.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
-    /// </returns>
+    /// <returns> A task representing the asynchronous operation for removing the specified permissions from the channel. </returns>
     public async Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null)
     {
         await ChannelHelper.RemovePermissionOverwriteAsync(this, Kook, user, options).ConfigureAwait(false);
@@ -187,9 +171,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// </summary>
     /// <param name="role">The role to remove the overwrite from.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
-    /// </returns>
+    /// <returns> A task representing the asynchronous operation for removing the specified permissions from the channel. </returns>
     public async Task RemovePermissionOverwriteAsync(IRole role, RequestOptions? options = null)
     {
         await ChannelHelper.RemovePermissionOverwriteAsync(this, Kook, role, options).ConfigureAwait(false);
@@ -202,9 +184,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <param name="user">The user to modify the overwrite for.</param>
     /// <param name="func">A delegate containing the values to modify the permission overwrite with.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
-    /// </returns>
+    /// <returns> A task representing the asynchronous operation for removing the specified permissions from the channel. </returns>
     public async Task ModifyPermissionOverwriteAsync(IGuildUser user,
         Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options = null)
     {
@@ -220,9 +200,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <param name="role">The role to remove the overwrite for.</param>
     /// <param name="func">A delegate containing the values to modify the permission overwrite with.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
-    /// </returns>
+    /// <returns> A task representing the asynchronous operation for removing the specified permissions from the channel. </returns>
     public async Task ModifyPermissionOverwriteAsync(IRole role,
         Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options = null)
     {
@@ -242,9 +220,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     /// <summary>
     ///     Gets the name of the channel.
     /// </summary>
-    /// <returns>
-    ///     A string that resolves to <see cref="SocketGuildChannel.Name"/>.
-    /// </returns>
+    /// <returns> A string that resolves to <see cref="SocketGuildChannel.Name"/>. </returns>
     public override string ToString() => Name;
 
     private string DebuggerDisplay => $"{Name} ({Id}, Guild)";
@@ -313,9 +289,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
     ///     this method will return <c>null</c>. To get the creator under this circumstance, use
     ///     <see cref="Kook.Rest.KookRestClient.GetUserAsync(ulong,RequestOptions)"/>.
     /// </remarks>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous get operation. The task result contains the creator of this channel. </returns>
     Task<IUser?> IGuildChannel.GetCreatorAsync(CacheMode mode, RequestOptions? options) =>
         Task.FromResult<IUser?>(Creator);
 

@@ -44,9 +44,7 @@ public class SocketPresence : IPresence
     /// <param name="clientType">
     ///     A string representing the client type.
     /// </param>
-    /// <returns>
-    ///     A <see cref="ClientType"/> that this user is active.
-    /// </returns>
+    /// <returns> A <see cref="ClientType"/> that this user is active. </returns>
     private static ClientType? ConvertClientType(string? clientType)
     {
         if (string.IsNullOrWhiteSpace(clientType))

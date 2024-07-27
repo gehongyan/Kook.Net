@@ -72,9 +72,7 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <summary>
     ///     构建当前构建器为一个 <see cref="PlainTextElement"/>。
     /// </summary>
-    /// <returns>
-    ///     由当前构建器表示的属性构建的 <see cref="PlainTextElement"/> 对象。
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="PlainTextElement"/> 对象。 </returns>
     /// <exception cref="ArgumentNullException">
     ///     <see cref="Content"/> 为 <c>null</c>。
     /// </exception>

@@ -27,9 +27,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     /// <summary>
     ///     Gets the <see cref="SocketGuild"/> that the message was sent from.
     /// </summary>
-    /// <returns>
-    ///     The <see cref="SocketGuild"/> that the message was sent from.
-    /// </returns>
+    /// <returns> The <see cref="SocketGuild"/> that the message was sent from. </returns>
     public SocketGuild? Guild { get; private set; }
 
     /// <inheritdoc />

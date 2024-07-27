@@ -176,9 +176,7 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     /// <summary>
     ///     构建当前构建器为一个 <see cref="ButtonElement"/>。
     /// </summary>
-    /// <returns>
-    ///     由当前构建器表示的属性构建的 <see cref="ButtonElement"/> 对象。
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="ButtonElement"/> 对象。 </returns>
     /// <exception cref="ArgumentException">
     ///     <see cref="Text"/> 既不是 <see cref="PlainTextElementBuilder"/> 也不是 <see cref="KMarkdownElementBuilder"/>。
     /// </exception>

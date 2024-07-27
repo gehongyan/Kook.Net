@@ -52,9 +52,7 @@ public sealed class BucketId : IEquatable<BucketId>
     /// <param name="httpMethod">  用于发送请求的 HTTP 方法。 </param>
     /// <param name="endpoint"> 请求的终结点。 </param>
     /// <param name="majorParams"> 终结点的主要路由参数。 </param>
-    /// <returns>
-    ///     一个基于指定的 <see cref="HttpMethod"/> 和 <see cref="Endpoint"/> 创建的 <see cref="BucketId"/>。
-    /// </returns>
+    /// <returns> 一个基于指定的 <see cref="HttpMethod"/> 和 <see cref="Endpoint"/> 创建的 <see cref="BucketId"/>。 </returns>
     public static BucketId Create(HttpMethod? httpMethod, string? endpoint, Dictionary<string, string>? majorParams)
     {
         Preconditions.NotNullOrWhitespace(endpoint, nameof(endpoint));
@@ -67,9 +65,7 @@ public sealed class BucketId : IEquatable<BucketId>
     /// </summary>
     /// <param name="hash"> 由 KOOK 提供的分组限速哈希值。 </param>
     /// <param name="oldBucket"> 要被升级为哈希分组限速桶的已有限速桶。 </param>
-    /// <returns>
-    ///     一个基于指定的 <see cref="BucketHash"/> 和之前的 <see cref="BucketId"/> 创建的 <see cref="BucketId"/>。
-    /// </returns>
+    /// <returns> 一个基于指定的 <see cref="BucketHash"/> 和之前的 <see cref="BucketId"/> 创建的 <see cref="BucketId"/>。 </returns>
     public static BucketId Create(string hash, BucketId oldBucket)
     {
         Preconditions.NotNullOrWhitespace(hash, nameof(hash));
@@ -91,9 +87,7 @@ public sealed class BucketId : IEquatable<BucketId>
     /// <summary>
     ///     获取将此桶定义为终结点限速桶的字符串。
     /// </summary>
-    /// <returns>
-    ///     如果此桶是终结点限速桶，则返回此桶的终结点；否则返回 <see langword="null"/>。
-    /// </returns>
+    /// <returns> 如果此桶是终结点限速桶，则返回此桶的终结点；否则返回 <see langword="null"/>。 </returns>
     public string? GetUniqueEndpoint() => HttpMethod != null ? $"{HttpMethod} {Endpoint}" : Endpoint;
 
     /// <inheritdoc />

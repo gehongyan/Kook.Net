@@ -159,9 +159,7 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     /// <summary>
     ///     Gets the full name of the user (e.g. Example#0001).
     /// </summary>
-    /// <returns>
-    ///     The full name of the user.
-    /// </returns>
+    /// <returns> The full name of the user. </returns>
     public override string ToString() => Format.UsernameAndIdentifyNumber(this, Kook.FormatUsersInBidirectionalUnicode);
 
     private string DebuggerDisplay =>

@@ -28,9 +28,7 @@ public static class RestGuildExperimentalExtensions
     /// <param name="guild">The guild to modify.</param>
     /// <param name="func">The delegate containing the properties to modify the guild with.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous modification operation.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous modification operation. </returns>
     /// <exception cref="ArgumentNullException"><paramref name="func"/> is <c>null</c>.</exception>
     public static async Task ModifyAsync(this RestGuild guild, Action<GuildProperties> func, RequestOptions? options = null)
     {

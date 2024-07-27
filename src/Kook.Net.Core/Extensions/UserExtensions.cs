@@ -14,9 +14,7 @@ public static class UserExtensions
     /// <param name="type"> 文件的媒体类型。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(this IUser user,
         string path, string? filename = null, AttachmentType type = AttachmentType.File, IQuote? quote = null,
         RequestOptions? options = null)
@@ -34,9 +32,7 @@ public static class UserExtensions
     /// <param name="type"> 文件的媒体类型。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(this IUser user,
         Stream stream, string filename, AttachmentType type = AttachmentType.File, IQuote? quote = null,
         RequestOptions? options = null)
@@ -52,9 +48,7 @@ public static class UserExtensions
     /// <param name="attachment"> 文件的附件信息。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public static async Task<Cacheable<IUserMessage, Guid>> SendFileAsync(this IUser user,
         FileAttachment attachment, IQuote? quote = null, RequestOptions? options = null)
     {
@@ -69,9 +63,7 @@ public static class UserExtensions
     /// <param name="content">The KMarkdown content to be sent.</param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public static async Task<Cacheable<IUserMessage, Guid>> SendTextAsync(this IUser user,
         string content, IQuote? quote = null, RequestOptions? options = null)
     {
@@ -86,9 +78,7 @@ public static class UserExtensions
     /// <param name="cards"> 要发送的卡片。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public static async Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(this IUser user,
         IEnumerable<ICard> cards, IQuote? quote = null, RequestOptions? options = null)
     {
@@ -103,9 +93,7 @@ public static class UserExtensions
     /// <param name="card"> 要发送的卡片。 </param>
     /// <param name="quote"> 消息引用，用于回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。
-    /// </returns>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public static async Task<Cacheable<IUserMessage, Guid>> SendCardAsync(this IUser user,
         ICard card, IQuote? quote = null, RequestOptions? options = null)
     {
@@ -121,9 +109,7 @@ public static class UserExtensions
     /// <param name="reason"> 封禁原因。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentException"> <paramref name="pruneDays" /> 超出了 0 至 7 的范围。 </exception>
-    /// <returns>
-    ///     一个表示异步封禁操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步封禁操作的任务。 </returns>
     public static Task BanAsync(this IGuildUser user, int pruneDays = 0, string? reason = null,
         RequestOptions? options = null) =>
         user.Guild.AddBanAsync(user, pruneDays, reason, options);

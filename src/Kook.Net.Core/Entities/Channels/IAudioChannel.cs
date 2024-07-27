@@ -46,8 +46,6 @@ public interface IAudioChannel : IChannel
     /// <summary>
     ///     断开与此音频频道的连接。
     /// </summary>
-    /// <returns>
-    ///     一个表示音频断开连接操作的异步任务。
-    /// </returns>
+    /// <returns> 一个表示音频断开连接操作的异步任务。 </returns>
     Task DisconnectAsync();
 }

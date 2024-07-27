@@ -10,9 +10,7 @@ public static class RestTextChannelExperimentalExtensions
     /// </summary>
     /// <param name="channel">The nested channel whose permissions will be synced.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for syncing channel permissions with its parent's.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous operation for syncing channel permissions with its parent's. </returns>
     /// <remarks>
     ///     <note type="warning">
     ///         This method is still in experimental state, which means that it is not for official API implementation

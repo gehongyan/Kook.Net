@@ -192,27 +192,21 @@ public interface IGuild : IEntity<ulong>
     ///     退出此服务器。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步退出操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步退出操作的任务。 </returns>
     Task LeaveAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     所有此服务器的所有服务器助力包。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果是所有为此服务器助力的用户及所应用的服务器助力包。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是所有为此服务器助力的用户及所应用的服务器助力包。 </returns>
     Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetBoostSubscriptionsAsync(RequestOptions? options = null);
 
     /// <summary>
     ///     获取此服务器所有生效中的服务器助力包。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果是所有为此服务器助力的用户及所应用的生效中的服务器助力包。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是所有为此服务器助力的用户及所应用的生效中的服务器助力包。 </returns>
     Task<ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>> GetActiveBoostSubscriptionsAsync(RequestOptions? options = null);
 
     #endregion
@@ -223,9 +217,7 @@ public interface IGuild : IEntity<ulong>
     ///     获取此服务器的所有封禁信息。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的所有封禁信息。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有封禁信息。 </returns>
     Task<IReadOnlyCollection<IBan>> GetBansAsync(RequestOptions? options = null);
 
     /// <summary>
@@ -233,9 +225,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="user"> 要获取封禁信息的用户。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含该用户在此服务器内的封禁信息；如果该用户当前未被此服务器封禁，则返回 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含该用户在此服务器内的封禁信息；如果该用户当前未被此服务器封禁，则返回 <c>null</c>。 </returns>
     Task<IBan?> GetBanAsync(IUser user, RequestOptions? options = null);
 
     /// <summary>
@@ -243,9 +233,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="userId"> 要获取封禁信息的用户的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含该用户在此服务器内的封禁信息；如果该用户未被此服务器封禁，或封禁已过期或解除，则返回 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含该用户在此服务器内的封禁信息；如果该用户未被此服务器封禁，或封禁已过期或解除，则返回 <c>null</c>。 </returns>
     Task<IBan?> GetBanAsync(ulong userId, RequestOptions? options = null);
 
     /// <summary>
@@ -256,9 +244,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="reason"> 封禁原因。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentException"> <paramref name="pruneDays" /> 超出了 0 至 7 的范围。 </exception>
-    /// <returns>
-    ///     一个表示异步封禁操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步封禁操作的任务。 </returns>
     Task AddBanAsync(IUser user, int pruneDays = 0, string? reason = null, RequestOptions? options = null);
 
     /// <summary>
@@ -269,9 +255,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="reason"> 封禁原因。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentException"> <paramref name="pruneDays" /> 超出了 0 至 7 的范围。 </exception>
-    /// <returns>
-    ///     一个表示异步封禁操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步封禁操作的任务。 </returns>
     Task AddBanAsync(ulong userId, int pruneDays = 0, string? reason = null, RequestOptions? options = null);
 
     /// <summary>
@@ -279,9 +263,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="user"> 要解除封禁的用户。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步封禁解除操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步封禁解除操作的任务。 </returns>
     Task RemoveBanAsync(IUser user, RequestOptions? options = null);
 
     /// <summary>
@@ -289,9 +271,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="userId"> 要解除封禁的用户的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步封禁解除操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步封禁解除操作的任务。 </returns>
     Task RemoveBanAsync(ulong userId, RequestOptions? options = null);
 
     #endregion
@@ -303,9 +283,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的所有频道。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有频道。 </returns>
     Task<IReadOnlyCollection<IGuildChannel>> GetChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
@@ -314,9 +292,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="id"> 要获取的频道的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
     Task<IGuildChannel?> GetChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
@@ -324,9 +300,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的所有具有文字聊天能力的频道。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有具有文字聊天能力的频道。 </returns>
     /// <remarks>
     ///     语音频道也是一种文字频道，此方法本意用于获取所有具有文字聊天能力的频道，通过此方法获取到的文字频道列表中也包含了语音频道。
     ///     如需获取频道的实际类型，请参考 <see cref="M:Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
@@ -339,9 +313,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="id"> 要获取的频道的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
     /// <remarks>
     ///     语音频道也是一种文字频道，此方法本意用于获取具有文字聊天能力的频道。如果通过此方法传入的 ID 对应的频道是语音频道，那么也会返回对应的语音频道实体。
     ///     如需获取频道的实际类型，请参考 <see cref="M:Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
@@ -353,9 +325,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的所有具有语音聊天能力的频道。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有具有语音聊天能力的频道。 </returns>
     Task<IReadOnlyCollection<IVoiceChannel>> GetVoiceChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
@@ -364,9 +334,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="id"> 要获取的频道的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
     Task<IVoiceChannel?> GetVoiceChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
@@ -374,9 +342,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的所有分组频道。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有分组频道。 </returns>
     Task<IReadOnlyCollection<ICategoryChannel>> GetCategoryChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
@@ -384,9 +350,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的默认文字频道；如果未找到，则返回 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的默认文字频道；如果未找到，则返回 <c>null</c>。 </returns>
     Task<ITextChannel?> GetDefaultChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
@@ -394,9 +358,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的欢迎通知频道；如果未找到，则返回 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的欢迎通知频道；如果未找到，则返回 <c>null</c>。 </returns>
     Task<ITextChannel?> GetWelcomeChannelAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
@@ -405,9 +367,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="name"> 频道的名称。 </param>
     /// <param name="func"> 一个包含要应用到新创建频道的配置的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步创建操作的任务。任务的结果包含新创建的文字频道。
-    /// </returns>
+    /// <returns> 一个表示异步创建操作的任务。任务的结果包含新创建的文字频道。 </returns>
     Task<ITextChannel> CreateTextChannelAsync(string name, Action<CreateTextChannelProperties>? func = null, RequestOptions? options = null);
 
     /// <summary>
@@ -416,9 +376,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="name"> 频道的名称。 </param>
     /// <param name="func"> 一个包含要应用到新创建频道的配置的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步创建操作的任务。任务的结果包含新创建的语音频道。
-    /// </returns>
+    /// <returns> 一个表示异步创建操作的任务。任务的结果包含新创建的语音频道。 </returns>
     Task<IVoiceChannel> CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties>? func = null, RequestOptions? options = null);
 
     /// <summary>
@@ -427,9 +385,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="name"> 频道的名称。 </param>
     /// <param name="func"> 一个包含要应用到新创建频道的配置的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步创建操作的任务。任务的结果包含新创建的分组频道。
-    /// </returns>
+    /// <returns> 一个表示异步创建操作的任务。任务的结果包含新创建的分组频道。 </returns>
     Task<ICategoryChannel> CreateCategoryChannelAsync(string name, Action<CreateCategoryChannelProperties>? func = null, RequestOptions? options = null);
 
     #endregion
@@ -440,9 +396,7 @@ public interface IGuild : IEntity<ulong>
     ///     获取此服务器内的所有邀请信息。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含此服务器内的所有邀请信息。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器内的所有邀请信息。 </returns>
     Task<IReadOnlyCollection<IInvite>> GetInvitesAsync(RequestOptions? options = null);
 
     /// <summary>
@@ -451,20 +405,16 @@ public interface IGuild : IEntity<ulong>
     /// <param name="maxAge"> 邀请链接的有效时长，<see cref="F:Kook.InviteMaxAge.NeverExpires"/> 表示永不过期。 </param>
     /// <param name="maxUses"> 邀请链接的可用人次，<see cref="F:Kook.InviteMaxUses.Unlimited"/> 表示无限制。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步创建操作的任务。任务的结果包含新创建的邀请链接的元数据，其中包含有关邀请链接的信息。
-    /// </returns>
+    /// <returns> 一个表示异步创建操作的任务。任务的结果包含新创建的邀请链接的元数据，其中包含有关邀请链接的信息。 </returns>
     Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited, RequestOptions? options = null);
 
     /// <summary>
     ///     创建一个到此服务器的新邀请。
     /// </summary>
     /// <param name="maxAge"> 邀请链接的有效时长，<c>null</c> 表示永不过期。 </param>
-    /// <param name="maxUses">邀请链接的可用人次，<c>null</c> 表示无限制。</param>
+    /// <param name="maxUses"> 邀请链接的可用人次，<c>null</c> 表示无限制。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步创建操作的任务。任务的结果包含新创建的邀请链接的元数据，其中包含有关邀请链接的信息。
-    /// </returns>
+    /// <returns> 一个表示异步创建操作的任务。任务的结果包含新创建的邀请链接的元数据，其中包含有关邀请链接的信息。 </returns>
     Task<IInvite> CreateInviteAsync(int? maxAge = 604800, int? maxUses = null, RequestOptions? options = null);
 
     #endregion
@@ -475,9 +425,7 @@ public interface IGuild : IEntity<ulong>
     ///     获取此服务器内的角色。
     /// </summary>
     /// <param name="id"> 要获取的角色的 ID。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的角色；如果未找到，则返回 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的角色；如果未找到，则返回 <c>null</c>。 </returns>
     IRole? GetRole(uint id);
 
     /// <summary>
@@ -485,9 +433,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="name"> 角色的名称。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步创建操作的任务。任务的结果包含新创建的角色。
-    /// </returns>
+    /// <returns> 一个表示异步创建操作的任务。任务的结果包含新创建的角色。 </returns>
     Task<IRole> CreateRoleAsync(string name, RequestOptions? options = null);
 
     #endregion
@@ -499,9 +445,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含此服务器内的所有用户。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器内的所有用户。 </returns>
     Task<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
@@ -516,9 +460,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="id"> 要获取的用户的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的用户；如果未找到，则返回 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的用户；如果未找到，则返回 <c>null</c>。 </returns>
     Task<IGuildUser?> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
@@ -526,9 +468,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含此服务器内当前登录的用户。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器内当前登录的用户。 </returns>
     Task<IGuildUser?> GetCurrentUserAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
@@ -536,9 +476,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的所有者。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有者。 </returns>
     Task<IGuildUser?> GetOwnerAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
@@ -548,9 +486,7 @@ public interface IGuild : IEntity<ulong>
     ///     此方法会下载所有加入到此服务器内的用户，并缓存它们。
     /// </remarks>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步下载操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步下载操作的任务。 </returns>
     Task DownloadUsersAsync(RequestOptions? options = null);
 
     /// <summary>
@@ -560,9 +496,7 @@ public interface IGuild : IEntity<ulong>
     ///     此方法会下载此服务器内的所有语音状态，并缓存它们。
     /// </remarks>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步下载操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步下载操作的任务。 </returns>
     Task DownloadVoiceStatesAsync(RequestOptions? options = null);
 
     /// <summary>
@@ -573,9 +507,7 @@ public interface IGuild : IEntity<ulong>
     ///     要下载所有服务器助力信息，当前用户必须具有 <see cref="F:Kook.GuildPermission.ManageGuild"/> 权限。
     /// </remarks>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步下载操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步下载操作的任务。 </returns>
     Task DownloadBoostSubscriptionsAsync(RequestOptions? options = null);
 
     /// <summary>
@@ -585,9 +517,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="limit"> 搜索结果的最大数量。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含与提供的 <paramref name="func"/> 中指定的属性匹配的服务器用户集合。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与提供的 <paramref name="func"/> 中指定的属性匹配的服务器用户集合。 </returns>
     IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> SearchUsersAsync(Action<SearchGuildMemberProperties> func,
         int limit = KookConfig.MaxUsersPerBatch, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
@@ -599,9 +529,7 @@ public interface IGuild : IEntity<ulong>
     ///     获取此服务器的所有自定义表情。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含此服务器的所有自定义表情。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有自定义表情。 </returns>
     Task<IReadOnlyCollection<GuildEmote>> GetEmotesAsync(RequestOptions? options = null);
 
     /// <summary>
@@ -609,9 +537,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="id"> 要获取的自定义表情的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的自定义表情；如果未找到，则返回 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的自定义表情；如果未找到，则返回 <c>null</c>。 </returns>
     Task<GuildEmote?> GetEmoteAsync(string id, RequestOptions? options = null);
 
     /// <summary>
@@ -620,9 +546,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="name"> 新自定义表情的名称。 </param>
     /// <param name="image"> 新自定义表情的图像信息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步创建操作的任务。任务的结果包含新创建的自定义表情。
-    /// </returns>
+    /// <returns> 一个表示异步创建操作的任务。任务的结果包含新创建的自定义表情。 </returns>
     Task<GuildEmote> CreateEmoteAsync(string name, Image image, RequestOptions? options = null);
 
     /// <summary>
@@ -631,9 +555,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="emote"> 要修改的自定义表情。 </param>
     /// <param name="name"> 新的自定义表情名称。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步修改操作的任务。任务的结果包含修改后的自定义表情。
-    /// </returns>
+    /// <returns> 一个表示异步修改操作的任务。任务的结果包含修改后的自定义表情。 </returns>
     Task ModifyEmoteNameAsync(GuildEmote emote, string name, RequestOptions? options = null);
 
     /// <summary>
@@ -641,9 +563,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="emote"> 要删除的自定义表情。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步删除操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步删除操作的任务。 </returns>
     Task DeleteEmoteAsync(GuildEmote emote, RequestOptions? options = null);
 
     #endregion
@@ -656,9 +576,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="users"> 要移动的用户。 </param>
     /// <param name="targetChannel"> 要移动用户到的语音频道。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步移动操作的任务。
-    /// </returns>
+    /// <returns> 一个表示异步移动操作的任务。 </returns>
     Task MoveUsersAsync(IEnumerable<IGuildUser> users, IVoiceChannel targetChannel, RequestOptions? options = null);
 
     #endregion
@@ -670,9 +588,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <param name="style"> 要获取的徽章的样式。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务的结果包含与此服务器关联的徽章的流。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与此服务器关联的徽章的流。 </returns>
     Task<Stream> GetBadgeAsync(BadgeStyle style = BadgeStyle.GuildName, RequestOptions? options = null);
 
     #endregion

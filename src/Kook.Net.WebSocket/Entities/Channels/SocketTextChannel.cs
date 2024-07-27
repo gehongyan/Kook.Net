@@ -27,9 +27,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <summary>
     ///     Gets the parent (category) of this channel in the guild's channel list.
     /// </summary>
-    /// <returns>
-    ///     An <see cref="ICategoryChannel"/> representing the parent of this channel; <c>null</c> if none is set.
-    /// </returns>
+    /// <returns> An <see cref="ICategoryChannel"/> representing the parent of this channel; <c>null</c> if none is set. </returns>
     public ICategoryChannel? Category => CategoryId.HasValue
         ? Guild.GetChannel(CategoryId.Value) as ICategoryChannel
         : null;
@@ -109,9 +107,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// </remarks>
     /// <param name="id"> 消息的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     一个表示异步获取操作的任务。任务结果包含检索到的消息；如果未找到具有指定 ID 的消息，则返回 <c>null</c>。
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务结果包含检索到的消息；如果未找到具有指定 ID 的消息，则返回 <c>null</c>。 </returns>
     public async Task<IMessage> GetMessageAsync(Guid id, RequestOptions? options = null)
     {
         IMessage? msg = _messages?.Get(id);
@@ -128,9 +124,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// </remarks>
     /// <param name="limit"> 要获取的消息数量。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     分页的消息集合的异步可枚举对象。
-    /// </returns>
+    /// <returns> 分页的消息集合的异步可枚举对象。 </returns>
     public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(
         int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         SocketChannelHelper.GetMessagesAsync(this, Kook, _messages,
@@ -148,9 +142,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <param name="dir"> 要以参考位置为基准，获取消息的方向。 </param>
     /// <param name="limit"> 要获取的消息数量。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     分页的消息集合的异步可枚举对象。
-    /// </returns>
+    /// <returns> 分页的消息集合的异步可枚举对象。 </returns>
     public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         SocketChannelHelper.GetMessagesAsync(this, Kook, _messages,
@@ -168,9 +160,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <param name="dir"> 要以参考位置为基准，获取消息的方向。 </param>
     /// <param name="limit"> 要获取的消息数量。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     分页的消息集合的异步可枚举对象。
-    /// </returns>
+    /// <returns> 分页的消息集合的异步可枚举对象。 </returns>
     public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         SocketChannelHelper.GetMessagesAsync(this, Kook, _messages,

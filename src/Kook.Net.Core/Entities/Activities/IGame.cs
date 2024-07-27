@@ -44,7 +44,7 @@ public interface IGame : IActivity, IEntity<int>, IDeletable
     ///     修改此游戏信息的属性。
     /// </summary>
     /// <remarks>
-    ///     此方法使用指定的属性修改当前游戏信息。要查看可用的属性，请参考 <see cref="GameProperties"/>。
+    ///     此方法使用指定的属性修改当前游戏信息。要查看可用的属性，请参考 <see cref="T:Kook.GameProperties"/>。
     /// </remarks>
     /// <param name="func"> 一个包含修改游戏属性的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>

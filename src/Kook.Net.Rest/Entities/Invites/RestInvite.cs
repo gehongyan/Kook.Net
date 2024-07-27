@@ -111,9 +111,7 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
     /// <summary>
     ///     Gets the URL of the invite.
     /// </summary>
-    /// <returns>
-    ///     A string that resolves to the Url of the invite.
-    /// </returns>
+    /// <returns> A string that resolves to the Url of the invite. </returns>
     public override string ToString() => Url;
 
     private string DebuggerDisplay => $"{Url} ({GuildName} / {ChannelName ?? "Channel not specified"})";

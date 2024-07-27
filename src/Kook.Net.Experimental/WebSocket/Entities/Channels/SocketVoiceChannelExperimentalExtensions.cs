@@ -13,9 +13,7 @@ public static class SocketVoiceChannelExperimentalExtensions
     /// <param name="channel">The voice channel where the use is connected to.</param>
     /// <param name="user">The user to disconnect.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for disconnecting the user from the voice channel.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous operation for disconnecting the user from the voice channel. </returns>
     /// <remarks>
     ///     <note type="warning">
     ///         This method is still in experimental state, which means that it is not for official API implementation

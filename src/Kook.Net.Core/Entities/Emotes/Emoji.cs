@@ -21,9 +21,7 @@ public class Emoji : IEmote
     /// <summary>
     ///     获取此表情符号的 Unicode 表示。
     /// </summary>
-    /// <returns>
-    ///     一个解析为 <see cref="P:Kook.Emoji.Name"/> 的字符串。
-    /// </returns>
+    /// <returns> 一个解析为 <see cref="P:Kook.Emoji.Name"/> 的字符串。 </returns>
     public override string ToString() => Name;
 
     /// <summary>
@@ -44,10 +42,10 @@ public class Emoji : IEmote
     }
 
     /// <summary>
-    ///     尝试从原始格式解析 <see cref="T:Kook.Emoji"/> 的新实例。
+    ///     尝试从原始格式解析 <see cref="T:Kook.Emoji"/> 类的新实例。
     /// </summary>
-    /// <param name="text"> 要解析的字符串，例如：<c>:heart:</c> 或 <c>❤</c>。</param>
-    /// <param name="result"> 如果解析成功，则包含解析的 <see cref="Emoji"/>；否则为 <c>null</c>。</param>
+    /// <param name="text"> 要解析的字符串，例如：<c>:heart:</c> 或 <c>❤</c>。 </param>
+    /// <param name="result"> 如果解析成功，则包含解析的 <see cref="Emoji"/>；否则为 <c>null</c>。 </param>
     /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。</returns>
     public static bool TryParse([NotNullWhen(true)] string? text,
         [NotNullWhen(true)] out Emoji? result)
@@ -63,9 +61,9 @@ public class Emoji : IEmote
     }
 
     /// <summary>
-    ///     从原始格式解析 <see cref="T:Kook.Emoji"/> 的新实例。
+    ///     从原始格式解析 <see cref="T:Kook.Emoji"/> 类的新实例。
     /// </summary>
-    /// <param name="text"> 要解析的字符串，例如：<c>:heart:</c> 或 <c>❤</c>。</param>
+    /// <param name="text"> 要解析的字符串，例如：<c>:heart:</c> 或 <c>❤</c>。 </param>
     /// <returns> 解析的 <see cref="Emoji"/>。</returns>
     /// <exception cref="FormatException"> <paramref name="text"/> 不是表情符号名称或 Unicode。</exception>
     public static Emoji Parse([NotNull] string? text)
@@ -78,8 +76,8 @@ public class Emoji : IEmote
     /// <summary>
     ///     尝试从由方括号包围的 HTML 实体编码的十进制表示形式解析 <see cref="Emoji"/> 的凝成。
     /// </summary>
-    /// <param name="text"> 要解析的字符串，例如：<c>[#128187;]</c>，<c>:grinning:</c>。</param>
-    /// <param name="name"> 如果解析成功，则包含解析的名称；否则为 <c>null</c>。</param>
+    /// <param name="text"> 要解析的字符串，例如：<c>[#128187;]</c>，<c>:grinning:</c>。 </param>
+    /// <param name="name"> 如果解析成功，则包含解析的名称；否则为 <c>null</c>。 </param>
     /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。</returns>
     private static bool TryParseToName(string? text, [NotNullWhen(true)] out string? name)
     {

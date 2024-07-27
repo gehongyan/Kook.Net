@@ -1,45 +1,49 @@
 namespace Kook;
 
 /// <summary>
-///     Properties that are used to modify an <see cref="IRole" /> with the specified changes.
+///     提供用于修改 <see cref="T:Kook.IRole"/> 的属性。
 /// </summary>
-/// <seealso cref="IRole.ModifyAsync" />
+/// <seealso cref="M:Kook.IRole.ModifyAsync(System.Action{Kook.RoleProperties},Kook.RequestOptions)" />
 public class RoleProperties
 {
     /// <summary>
-    ///     Gets or sets the name of the role.
+    ///     获取或设置要设置到此角色的名称。
     /// </summary>
-    /// <remarks>
-    ///     This value may not be set if the role is an @everyone role.
-    /// </remarks>
     public string? Name { get; set; }
 
     /// <summary>
-    ///     Gets or sets the color of the role.
+    ///     获取或设置要设置到此角色的颜色。
     /// </summary>
-    /// <remarks>
-    ///     This value may not be set if the role is an @everyone role.
-    /// </remarks>
     public Color? Color { get; set; }
 
     /// <summary>
-    ///     Gets or sets whether this role should be displayed independently in the user list.
+    ///     获取或设置要设置到此角色拥有此角色的用户是否在用户列表中与普通在线成员分开显示。
     /// </summary>
-    /// <remarks>
-    ///     This value may not be set if the role is an @everyone role.
-    /// </remarks>
-    public bool? Hoist { get; set; }
+    public bool? IsHoisted { get; set; }
+
+    /// <inheritdoc cref="P:Kook.RoleProperties.IsHoisted" />
+    [Obsolete("Use IsHoisted instead.")]
+    public bool? Hoist
+    {
+        get => IsHoisted;
+        set => IsHoisted = value;
+    }
 
     /// <summary>
-    ///     Gets or sets whether or not this role can be mentioned.
+    ///     获取或设置要设置到此角色是否允许任何人提及此角色。
     /// </summary>
-    /// <remarks>
-    ///     This value may not be set if the role is an @everyone role.
-    /// </remarks>
-    public bool? Mentionable { get; set; }
+    public bool? IsMentionable { get; set; }
+
+    /// <inheritdoc cref="P:Kook.RoleProperties.IsMentionable" />
+    [Obsolete("Use IsMentionable instead.")]
+    public bool? Mentionable
+    {
+        get => IsMentionable;
+        set => IsMentionable = value;
+    }
 
     /// <summary>
-    ///     Gets or sets the role's <see cref="GuildPermission"/>.
+    ///     获取或设置要设置到此角色的权限。
     /// </summary>
     public GuildPermissions? Permissions { get; set; }
 }
