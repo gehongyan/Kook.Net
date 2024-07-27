@@ -30,9 +30,7 @@ public interface ISelfUser : IUser
     /// </summary>
     /// <param name="game">The game to be played.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for starting a game activity.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous operation for starting a game activity. </returns>
     Task StartPlayingAsync(IGame game, RequestOptions? options = null);
 
     /// <summary>
@@ -40,9 +38,7 @@ public interface ISelfUser : IUser
     /// </summary>
     /// <param name="music">The music being listened to be showed.</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for starting a music activity.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous operation for starting a music activity. </returns>
     Task StartPlayingAsync(Music music, RequestOptions? options = null);
 
     /// <summary>
@@ -50,8 +46,6 @@ public interface ISelfUser : IUser
     /// </summary>
     /// <param name="type">The type of the activity to stop</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for stopping an activity.
-    /// </returns>
+    /// <returns> A task that represents the asynchronous operation for stopping an activity. </returns>
     Task StopPlayingAsync(ActivityType type, RequestOptions? options = null);
 }

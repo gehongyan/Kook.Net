@@ -12,25 +12,19 @@ public class UserTag : IEquatable<UserTag>
     /// <summary>
     ///     Gets the color of the tag given to user.
     /// </summary>
-    /// <returns>
-    ///     A <see cref="Color"/> struct representing the color of this tag.
-    /// </returns>
+    /// <returns> A <see cref="Color"/> struct representing the color of this tag. </returns>
     public Color Color { get; }
 
     /// <summary>
     ///     Gets the background color of the tag given to user.
     /// </summary>
-    /// <returns>
-    ///     A <see cref="AlphaColor"/> struct representing the background color of this tag.
-    /// </returns>
+    /// <returns> A <see cref="AlphaColor"/> struct representing the background color of this tag. </returns>
     public AlphaColor BackgroundColor { get; }
 
     /// <summary>
     ///     Gets the text of the tag given to user.
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the text of this tag.
-    /// </returns>
+    /// <returns> A <c>string</c> representing the text of this tag. </returns>
     public string Text { get; }
 
     private UserTag(Color color, AlphaColor backgroundColor, string text)
@@ -52,9 +46,7 @@ public class UserTag : IEquatable<UserTag>
     /// <param name="text">
     ///     The text of the tag given to user.
     /// </param>
-    /// <returns>
-    ///     A <see cref="UserTag"/> representing the given parameters.
-    /// </returns>
+    /// <returns> A <see cref="UserTag"/> representing the given parameters. </returns>
     public static UserTag Create(Color color, AlphaColor backgroundColor, string text) => new(color, backgroundColor, text);
 
     private string DebuggerDisplay => Text;

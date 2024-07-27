@@ -1,23 +1,23 @@
 namespace Kook;
 
 /// <summary>
-///     Defines the types of clients a user can be active on.
+///     表示一个用户所登录的客户端类型。
 /// </summary>
 public enum ClientType
 {
     /// <summary>
-    ///     The user is active using a WebSocket connection to the server.
+    ///     用户正在使用 WebSocket 连接到服务器。
     /// </summary>
     WebSocket,
 
     /// <summary>
-    ///     The user is active using the Android application.
+    ///     用户正在使用 Android 应用程序连接到服务器。
     /// </summary>
     Android,
 
-    /// <summary>
-    ///     The user is active using the iOS application.
-    /// </summary>
     // ReSharper disable once InconsistentNaming
+    /// <summary>
+    ///     用户正在使用 iOS 应用程序连接到服务器。
+    /// </summary>
     iOS
 }

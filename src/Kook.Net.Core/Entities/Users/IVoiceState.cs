@@ -18,9 +18,7 @@ public interface IVoiceState
     ///     Gets a value that indicates whether this user is muted (i.e. not permitted to speak via voice) by the
     ///     guild.
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if this user is muted by the guild; otherwise <c>false</c>; <c>null</c> if unknown.
-    /// </returns>
+    /// <returns> <c>true</c> if this user is muted by the guild; otherwise <c>false</c>; <c>null</c> if unknown. </returns>
     bool? IsMuted { get; }
 
     /// <summary>
