@@ -1,19 +1,21 @@
 namespace Kook;
 
 /// <summary>
-///     Defines whether the object is updateable or not.
+///     表示一个可以被更新的实体对象。
 /// </summary>
+/// <remarks>
+///     更新操作表示的是从 KOOK REST API 获取最新数据并替换当前对象的属性，而非修改 KOOK 服务端的数据。
+/// </remarks>
 public interface IUpdateable
 {
     /// <summary>
-    ///     Updates this object's properties with its current state.
+    ///     通过 REST API 获取此实体对象的最新状态，并替换当前对象的属性。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A task that represents an asynchronous reloading operation. </returns>
+    /// <returns> 一个表示异步更新操作的任务。 </returns>
     /// <remarks>
     ///     <note type="warning">
-    ///         This method will fetch the latest data from REST API,
-    ///         and replace the current object's properties with the new data.
+    ///         此方法将从 KOOK REST API 获取最新数据，并替换当前对象的属性，而非使用指定的属性修改 KOOK 服务端的数据。
     ///     </note>
     /// </remarks>
     Task UpdateAsync(RequestOptions? options = null);

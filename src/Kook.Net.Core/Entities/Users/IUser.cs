@@ -1,144 +1,161 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic user.
+///     表示一个通用的用户。
 /// </summary>
 public interface IUser : IEntity<ulong>, IMentionable, IPresence
 {
     /// <summary>
-    ///     Gets the username for this user.
+    ///     获取此用户的用户名。
     /// </summary>
     string Username { get; }
 
     /// <summary>
-    ///     Gets the per-username unique ID for this user.
+    ///     获取此用户的识别号。
     /// </summary>
     string IdentifyNumber { get; }
 
     /// <summary>
-    ///     Gets the per-username unique ID for this user.
+    ///     获取此用户识别号的数值形式。
     /// </summary>
     ushort IdentifyNumberValue { get; }
 
     /// <summary>
-    ///     Gets whether this user is a bot; <c>null</c> if unknown.
+    ///     获取此用户是否为 Bot。
     /// </summary>
+    /// <remarks>
+    ///     如果未知此用户是否为 Bot，则此属性返回 <see langword="null"/>。
+    /// </remarks>
     bool? IsBot { get; }
 
     /// <summary>
-    ///     Gets whether this user is banned; <c>null</c> if unknown.
+    ///     获取此用户是否被封禁。
     /// </summary>
+    /// <remarks>
+    ///     如果未知此用户是否被封禁，则此属性返回 <see langword="null"/>。
+    /// </remarks>
     bool? IsBanned { get; }
 
     /// <summary>
-    ///     Gets whether this user has subscribed to BUFF; <c>null</c> if unknown.
+    ///     获取此用户是否订阅了 BUFF 会员。
     /// </summary>
+    /// <remarks>
+    ///     如果未知此用户是否订阅了 BUFF 会员，则此属性返回 <see langword="null"/>。
+    /// </remarks>
     bool? HasBuff { get; }
 
     /// <summary>
-    ///     Gets whether this user's BUFF subscription is annual; <c>null</c> if unknown.
+    ///     获取此用户是否订阅了年度 BUFF 会员。
     /// </summary>
+    /// <remarks>
+    ///     如果未知此用户是否订阅了年度 BUFF 会员，则此属性返回 <see langword="null"/>。
+    /// </remarks>
     bool? HasAnnualBuff { get; }
 
     /// <summary>
-    ///     Gets the link to this user's avatar.
+    ///     获取此用户的头像图像的 URL。
     /// </summary>
+    /// <remarks>
+    ///     如果此用户为 BUFF 会员，且以 BUFF 会员权益设置了头像，则此属性返回的 URL 表示的是 BUFF 专属头像权益时效后的回退头像。
+    /// </remarks>
     string Avatar { get; }
 
     /// <summary>
-    ///     Gets the link to this user's BUFF avatar.
+    ///     获取此用户以 BUFF 会员权益设置的头像图像的 URL。
     /// </summary>
+    /// <remarks>
+    ///     如果此用户不是 BUFF 会员，或未以 BUFF 会员权限设置头像，则此属性返回 <see langword="null"/>。
+    /// </remarks>
     string? BuffAvatar { get; }
 
     /// <summary>
-    ///     Gets the link to this user's banner.
+    ///     获取此用户的横幅图像的 URL。
     /// </summary>
+    /// <remarks>
+    ///     如果此用户不是 BUFF 会员，或未以 BUFF 会员权限设置横幅，则此属性返回 <see langword="null"/>。
+    /// </remarks>
     string? Banner { get; }
 
     /// <summary>
-    ///     Gets whether this user enabled denoise feature; <c>null</c> if unknown.
+    ///     获取此用户是否启用了降噪功能。
     /// </summary>
+    /// <remarks>
+    ///     如果未知此用户是否启用了降噪功能，则此属性返回 <see langword="null"/>。
+    /// </remarks>
     bool? IsDenoiseEnabled { get; }
 
     /// <summary>
-    ///     Get the tag this user has.
+    ///     获取此用户的标签信息。
     /// </summary>
+    /// <remarks>
+    ///     用户的标签会显示在服务器用户列表、私信列表、私信消息页、好友列表、个人信息面板、聊天消息的用户名的右侧。 <br />
+    ///     如果此用户没有标签，或未知此用户的标签信息，则此属性返回 <see langword="null"/>。
+    /// </remarks>
     UserTag? UserTag { get; }
 
     /// <summary>
-    ///     Gets the nameplates this user has.
+    ///     获取此用户设置展示的所有铭牌。
     /// </summary>
+    /// <remarks>
+    ///     用户设置的首个铭牌会展示在该用户聊天消息的用户名的右侧，用户设置的所有铭牌会展示在个人信息面板内的用户名下方。
+    /// </remarks>
     IReadOnlyCollection<Nameplate> Nameplates { get; }
 
     /// <summary>
-    ///     Gets whether this user is a system user.
+    ///     获取此用户是否为系统用户。
     /// </summary>
     bool IsSystemUser { get; }
 
     /// <summary>
-    ///     Creates the direct message channel of this user.
+    ///     创建一个用于与此用户收发私信的频道。
     /// </summary>
-    /// <remarks>
-    ///     This method is used to obtain or create a channel used to send a direct message.
-    ///     <br />
-    ///     <note type="warning">
-    ///          In event that the current user cannot send a message to the target user, a channel can and will
-    ///          still be created by Kook. However, attempting to send a message will yield a
-    ///          <see cref="Kook.Net.HttpException"/> with a 403 as its
-    ///          <see cref="Kook.Net.HttpException.HttpCode"/>. There are currently no official workarounds by
-    ///          Kook.
-    ///     </note>
-    /// </remarks>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for getting or creating a DM channel. The task result
-    ///     contains the DM channel associated with this user.
-    /// </returns>
+    /// <returns> 一个表示异步创建操作的任务。任务结果包含与此用户相关的私信频道。 </returns>
     Task<IDMChannel> CreateDMChannelAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets the intimacy information with this user.
+    ///     获取与此用户的亲密度信息。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for getting the intimacy information. The task result
-    ///     contains the intimacy information associated with this user.
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务结果包含与此用户的亲密度信息。 </returns>
     Task<IIntimacy> GetIntimacyAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     Updates the intimacy information with this user.
+    ///     修改与此用户的亲密度信息。
     /// </summary>
-    /// <param name="func">A delegate containing the properties to modify the <see cref="IIntimacy"/> with.</param>
+    /// <remarks>
+    ///     此方法使用指定的属性修改与此用户的亲密度信息。要查看可用的属性，请参考 <see cref="T:Kook.IntimacyProperties"/>。
+    /// </remarks>
+    /// <param name="func"> 一个用于修改亲密度信息的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>A task that represents the asynchronous operation for updating the intimacy information.</returns>
+    /// <returns> 一个表示异步修改操作的任务。 </returns>
     Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets the friend state with this user.
+    ///     屏蔽此用户。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A task that represents the asynchronous operation for getting the friend state. </returns>
+    /// <returns> 一个表示异步屏蔽操作的任务。 </returns>
     Task BlockAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets the friend state with this user.
+    ///     取消屏蔽此用户。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A task that represents the asynchronous operation for getting the friend state. </returns>
+    /// <returns> 一个表示异步取消操作的任务。 </returns>
     Task UnblockAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     Sends a friend request to this user.
+    ///     向此用户发送好友请求。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A task that represents the asynchronous operation for sending the friend request. </returns>
+    /// <returns> 一个表示异步发送操作的任务。 </returns>
     Task RequestFriendAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets the friend state with this user.
+    ///     移除与此用户的好友关系。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A task that represents the asynchronous operation for getting the friend state. </returns>
+    /// <returns> 一个表示异步移除操作的任务。 </returns>
     Task RemoveFriendAsync(RequestOptions? options = null);
 }

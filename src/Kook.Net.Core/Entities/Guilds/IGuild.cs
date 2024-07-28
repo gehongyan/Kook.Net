@@ -513,6 +513,9 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     搜索加入到此服务器内匹配指定搜索条件的所有用户。
     /// </summary>
+    /// <remarks>
+    ///     此方法使用指定的属性搜索服务器用户。要查看可用的属性，请参考 <see cref="T:Kook.SearchGuildMemberProperties"/>。
+    /// </remarks>
     /// <param name="func"> 一个包含要搜索的用户属性及排序条件的委托。 </param>
     /// <param name="limit"> 搜索结果的最大数量。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>

@@ -4,28 +4,28 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Representing a nameplate an <see cref="IUser"/> can have.
+///     表示一个用户的铭牌。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Nameplate : IEquatable<Nameplate>
 {
     /// <summary>
-    ///     Gets the name of the nameplate given to user.
+    ///     获取此铭牌的名称。
     /// </summary>
     public string Name { get; }
 
     /// <summary>
-    ///     Gets the type of the nameplate given to user.
+    ///     获取此铭牌的类型。
     /// </summary>
     public int Type { get; }
 
     /// <summary>
-    ///     Gets the resource uri of the icon of the nameplate given to user.
+    ///     获取此铭牌的图标的 URL。
     /// </summary>
     public string Icon { get; }
 
     /// <summary>
-    ///     Gets the tips of the nameplate given to user.
+    ///     获取此铭牌的提示信息。
     /// </summary>
     public string Tips { get; }
 
@@ -37,15 +37,10 @@ public class Nameplate : IEquatable<Nameplate>
         Tips = tips;
     }
 
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="Nameplate"/> class.
-    /// </summary>
-    /// <param name="name"> The name of the nameplate given to user. </param>
-    /// <param name="type"> The type of the nameplate given to user. </param>
-    /// <param name="icon"> The resource uri of the icon of the nameplate given to user. </param>
-    /// <param name="tips"> The tips of the nameplate given to user. </param>
-    /// <returns> A <see cref="Nameplate"/> representing the given parameters. </returns>
-    public static Nameplate Create(string name, int type, string icon, string tips) => new(name, type, icon, tips);
+    internal static Nameplate Create(string name, int type, string icon, string tips)
+    {
+        return new Nameplate(name, type, icon, tips);
+    }
 
     private string DebuggerDisplay => Name;
 

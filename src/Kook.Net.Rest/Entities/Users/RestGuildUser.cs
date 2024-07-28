@@ -259,5 +259,8 @@ public class RestGuildUser : RestUser, IGuildUser
     /// <inheritdoc />
     IVoiceChannel? IVoiceState.VoiceChannel => null;
 
+    /// <inheritdoc />
+    IReadOnlyCollection<IVoiceChannel> IVoiceState.VoiceChannels => [];
+
     #endregion
 }

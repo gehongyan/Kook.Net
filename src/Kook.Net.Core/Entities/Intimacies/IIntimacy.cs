@@ -48,7 +48,7 @@ public interface IIntimacy : IEntity<ulong>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous operation for updating the intimacy information.
-    ///     一个表示异步修改的任务。
+    ///     一个表示异步修改操作的任务。
     /// </returns>
     Task UpdateAsync(Action<IntimacyProperties> func, RequestOptions? options = null);
 }

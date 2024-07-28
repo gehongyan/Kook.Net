@@ -110,4 +110,7 @@ public struct SocketVoiceState : IVoiceState
 
     /// <inheritdoc />
     IVoiceChannel? IVoiceState.VoiceChannel => VoiceChannel;
+
+    /// <inheritdoc />
+    IReadOnlyCollection<IVoiceChannel> IVoiceState.VoiceChannels => VoiceChannels;
 }

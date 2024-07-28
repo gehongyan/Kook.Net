@@ -24,7 +24,7 @@ public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IR
     ///     获取此角色的颜色。
     /// </summary>
     /// <remarks>
-    ///     如果此用户所拥有的最高角色的颜色类型为渐变色，则此属性返回的颜色是渐变色权益失效时的回退颜色。
+    ///     如果此用户所拥有的最高角色的颜色类型为渐变色，则此属性返回的颜色是渐变色权益失效后的回退颜色。
     /// </remarks>
     Color Color { get; }
 

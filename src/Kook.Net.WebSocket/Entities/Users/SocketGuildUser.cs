@@ -460,6 +460,9 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// <inheritdoc />
     IVoiceChannel? IVoiceState.VoiceChannel => VoiceChannel;
 
+    /// <inheritdoc />
+    IReadOnlyCollection<IVoiceChannel> IVoiceState.VoiceChannels => VoiceState?.VoiceChannels ?? [];
+
     #endregion
 
     private string DebuggerDisplay =>

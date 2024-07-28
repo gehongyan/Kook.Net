@@ -1,17 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Represents the user's presence status. This may include their online status and their activity.
+///     表示一个通用的用户实时状态。
 /// </summary>
 public interface IPresence
 {
     /// <summary>
-    ///     Gets the current status of this user.
+    ///     获取此用户当前是否在线。
     /// </summary>
     bool? IsOnline { get; }
 
     /// <summary>
-    ///     Gets the type of the client where this user is currently active.
+    ///     获取此用于当前登录的客户端类型。
     /// </summary>
     ClientType? ActiveClient { get; }
 }

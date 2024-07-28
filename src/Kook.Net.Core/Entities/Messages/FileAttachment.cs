@@ -64,7 +64,7 @@ public struct FileAttachment : IDisposable
     /// <param name="filename"> 文件名。 </param>
     /// <param name="type"> 附件的类型。 </param>
     /// <remarks>
-    ///     此方法不会校验文件路径的格式，<paramref name="path"/> 的值将会直接传递给
+    ///     此构造函数不会校验文件路径的格式，<paramref name="path"/> 的值将会直接传递给
     ///     <see cref="M:System.IO.File.OpenRead(System.String)"/> 方法。
     /// </remarks>
     /// <seealso cref="M:System.IO.File.OpenRead(System.String)"/>

@@ -4,27 +4,24 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Representing a tag an <see cref="IUser"/> can have.
+///     表示一个用户的标签。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class UserTag : IEquatable<UserTag>
 {
     /// <summary>
-    ///     Gets the color of the tag given to user.
+    ///     获取此用户标签的颜色。
     /// </summary>
-    /// <returns> A <see cref="Color"/> struct representing the color of this tag. </returns>
     public Color Color { get; }
 
     /// <summary>
-    ///     Gets the background color of the tag given to user.
+    ///     获取此用户标签的背景色。
     /// </summary>
-    /// <returns> A <see cref="AlphaColor"/> struct representing the background color of this tag. </returns>
     public AlphaColor BackgroundColor { get; }
 
     /// <summary>
-    ///     Gets the text of the tag given to user.
+    ///     获取此用户标签的文本。
     /// </summary>
-    /// <returns> A <c>string</c> representing the text of this tag. </returns>
     public string Text { get; }
 
     private UserTag(Color color, AlphaColor backgroundColor, string text)
@@ -34,20 +31,10 @@ public class UserTag : IEquatable<UserTag>
         Text = text;
     }
 
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="UserTag"/> class.
-    /// </summary>
-    /// <param name="color">
-    ///     The color of the tag given to user.
-    /// </param>
-    /// <param name="backgroundColor">
-    ///     The background color of the tag given to user.
-    /// </param>
-    /// <param name="text">
-    ///     The text of the tag given to user.
-    /// </param>
-    /// <returns> A <see cref="UserTag"/> representing the given parameters. </returns>
-    public static UserTag Create(Color color, AlphaColor backgroundColor, string text) => new(color, backgroundColor, text);
+    internal static UserTag Create(Color color, AlphaColor backgroundColor, string text)
+    {
+        return new UserTag(color, backgroundColor, text);
+    }
 
     private string DebuggerDisplay => Text;
 
