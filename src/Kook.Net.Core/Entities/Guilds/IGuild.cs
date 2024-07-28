@@ -82,14 +82,16 @@ public interface IGuild : IEntity<ulong>
     string Region { get; }
 
     /// <summary>
-    ///     获取当前与此服务器关联的语音客户端。
+    ///     获取在此服务内的语音频道上建立的语音客户端。
     /// </summary>
+    /// <seealso cref="P:Kook.IAudioChannel.AudioClient"/>
     [Obsolete("Use AudioClients instead.")]
     IAudioClient? AudioClient { get; }
 
     /// <summary>
-    ///     Gets a collection of all audio clients associated with this guild.
+    ///     获取在此服务内的语音频道上建立的所有语音客户端。
     /// </summary>
+    /// <seealso cref="P:Kook.IAudioChannel.AudioClient"/>
     IReadOnlyDictionary<ulong, IAudioClient> AudioClients { get; }
 
     /// <summary>
@@ -124,12 +126,12 @@ public interface IGuild : IEntity<ulong>
     ///         此属性仅对基于网关连接的客户端有意义。
     ///     </note>
     ///     此属性为 <c>true</c> 表示，此服务器实体已完整缓存基础数据，并与网关同步。 <br />
-    ///     缓存基础数据包括服务器基本信息、频道、角色、频道权限覆盖、当前用户在服务器内的昵称。
+    ///     缓存基础数据包括服务器基本信息、频道、角色、频道权限重写、当前用户在服务器内的昵称。
     /// </remarks>
     bool Available { get; }
 
     /// <summary>
-    ///     获取此服务器中的 <c>@everyone</c> 全体成员角色。
+    ///     获取此服务器中的 <c>@全体成员</c> 全体成员角色。
     /// </summary>
     IRole EveryoneRole { get; }
 

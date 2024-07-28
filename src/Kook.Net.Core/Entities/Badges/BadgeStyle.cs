@@ -6,7 +6,7 @@ namespace Kook;
 public enum BadgeStyle
 {
     /// <summary>
-    ///     徽章展示含服务器名称。
+    ///     徽章展示服务器名称。
     /// </summary>
     GuildName = 0,
 

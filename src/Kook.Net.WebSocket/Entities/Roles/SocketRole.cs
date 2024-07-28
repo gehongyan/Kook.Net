@@ -54,7 +54,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     public bool IsEveryone => Id == 0;
 
     /// <inheritdoc />
-    public string KMarkdownMention => IsEveryone ? "@everyone" : MentionUtils.KMarkdownMentionRole(Id);
+    public string KMarkdownMention => IsEveryone ? MentionUtils.KMarkdownMentionRole("all") : MentionUtils.KMarkdownMentionRole(Id);
 
     /// <inheritdoc />
     public string PlainTextMention => IsEveryone ? "@全体成员" : MentionUtils.PlainTextMentionRole(Id);

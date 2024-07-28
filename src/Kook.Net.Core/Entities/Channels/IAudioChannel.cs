@@ -3,10 +3,15 @@ using Kook.Audio;
 namespace Kook;
 
 /// <summary>
-///     表示一个通用音频频道。
+///     表示一个通用的音频频道。
 /// </summary>
 public interface IAudioChannel : IChannel
 {
+    /// <summary>
+    ///     获取在此音频频道上建立的语音客户端。
+    /// </summary>
+    IAudioClient? AudioClient { get; }
+
     /// <summary>
     ///     获取此音频频道的语音区域设置是否覆写了服务器的语音区域设置。
     /// </summary>

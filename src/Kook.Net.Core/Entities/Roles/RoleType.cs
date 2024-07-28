@@ -21,7 +21,7 @@ public enum RoleType : ushort
     Booster = 2,
 
     /// <summary>
-    ///     表示角色是默认的 <c>@everyone</c> 全体成员角色。
+    ///     表示角色是默认的 <c>@全体成员</c> 全体成员角色。
     /// </summary>
     Everyone = 255
 }

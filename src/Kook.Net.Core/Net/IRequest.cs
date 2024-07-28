@@ -1,7 +1,7 @@
 namespace Kook.Net;
 
 /// <summary>
-///     表示一个要发送到 KOOK 的通用请求。
+///     表示一个要发送到 KOOK 的通用的请求。
 /// </summary>
 public interface IRequest
 {

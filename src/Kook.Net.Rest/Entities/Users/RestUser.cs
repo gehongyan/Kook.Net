@@ -181,9 +181,10 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     #endregion
 
     /// <summary>
-    ///     Gets the Username#IdentifyNumber of the user.
+    ///     获取此用户的包含用户名及识别号的格式化字符串。
     /// </summary>
-    /// <returns> A string that resolves to Username#IdentifyNumber of the user. </returns>
+    /// <returns> 一个表示此用户的格式化字符串。 </returns>
+    /// <seealso cref="M:Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
     public override string ToString() => this.UsernameAndIdentifyNumber(Kook.FormatUsersInBidirectionalUnicode);
 
     private string DebuggerDisplay =>

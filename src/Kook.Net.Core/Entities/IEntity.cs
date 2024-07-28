@@ -1,7 +1,7 @@
 namespace Kook;
 
 /// <summary>
-///     表示一个具有唯一标识符的通用实体。
+///     表示一个具有唯一标识符的通用的实体。
 /// </summary>
 /// <typeparam name="TId"> 唯一标识符的类型。 </typeparam>
 public interface IEntity<TId>

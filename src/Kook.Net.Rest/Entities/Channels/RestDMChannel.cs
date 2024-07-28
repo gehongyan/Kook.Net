@@ -5,39 +5,35 @@ using Model = Kook.API.UserChat;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a REST-based direct-message channel.
+///     表示一个基于 REST 的私聊频道。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRestMessageChannel
 {
     #region RestDMChannel
 
-    /// <summary>
-    ///     Get the identifier of the DM channel.
-    /// </summary>
+    /// <inheritdoc cref="P:Kook.IDMChannel.Id" />
     /// <remarks>
-    ///     This property is the same as <see cref="ChatCode" />.
+    ///     此属性的值与 <see cref="P:Kook.Rest.RestDMChannel.ChatCode"/> 相同。
     /// </remarks>
     public new Guid Id { get; }
 
     /// <inheritdoc />
     /// <remarks>
-    ///     This property is the same as <see cref="Id" />.
+    ///     此属性的值与 <see cref="P:Kook.Rest.RestDMChannel.Id"/> 相同。
     /// </remarks>
     public Guid ChatCode => Id;
 
     /// <summary>
-    ///     Gets the current logged-in user.
+    ///     获取参与到此私聊频道中的当前用户。
     /// </summary>
     public RestUser CurrentUser { get; }
 
-    /// <summary>
-    ///     Gets the recipient of the channel.
-    /// </summary>
+    /// <inheritdoc cref="P:Kook.IDMChannel.Recipient" />
     public RestUser Recipient { get; }
 
     /// <summary>
-    ///     Gets a collection that is the current logged-in user and the recipient.
+    ///     获取参与到此私聊频道中的所有用户。
     /// </summary>
     public IReadOnlyCollection<RestUser> Users => [CurrentUser, Recipient];
 
@@ -75,82 +71,42 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
         ChannelHelper.DeleteDMChannelAsync(this, Kook, options);
 
     /// <summary>
-    ///     Gets a user in this channel from the provided <paramref name="id"/>.
+    ///     获取此私聊频道中具体指定 ID 的用户。
     /// </summary>
-    /// <param name="id">The identifier of the user.</param>
-    /// <returns> A <see cref="RestUser"/> object that is a recipient of this channel; otherwise <c>null</c>. </returns>
+    /// <param name="id"> 要获取的用户的 ID。 </param>
+    /// <returns> 此私聊频道中具有指定 ID 的用户；如果指定 ID 的用户不存在，或该用户并未参与到此私聊频道中，则返回 <c>null</c>。 </returns>
     public RestUser? GetUser(ulong id)
     {
         if (id == Recipient.Id) return Recipient;
         return id == Kook.CurrentUser?.Id ? CurrentUser : null;
     }
 
-    /// <summary>
-    ///     发送文本消息到此消息频道。
-    /// </summary>
-    /// <param name="text">The message to be sent.</param>
-    /// <param name="quote"> 消息引用，用于回复消息。 </param>
-    /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    /// <inheritdoc />
     public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote? quote = null,
         RequestOptions? options = null) =>
         ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, quote, options);
 
-    /// <summary>
-    ///     发送文件到此消息频道。
-    /// </summary>
-    /// <param name="path"> 文件的路径。 </param>
-    /// <param name="filename"> 文件名。 </param>
-    /// <param name="type"> 文件的媒体类型。 </param>
-    /// <param name="quote"> 消息引用，用于回复消息。 </param>
-    /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    /// <inheritdoc />
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, path, filename, type, quote, options);
 
-    /// <summary>
-    ///     发送文件到此消息频道。
-    /// </summary>
-    /// <param name="stream"> 文件的流。 </param>
-    /// <param name="filename"> 文件名。 </param>
-    /// <param name="type"> 文件的媒体类型。 </param>
-    /// <param name="quote"> 消息引用，用于回复消息。 </param>
-    /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    /// <inheritdoc />
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, stream, filename, type, quote, options);
 
-    /// <summary>
-    ///     发送文件到此消息频道。
-    /// </summary>
-    /// <param name="attachment"> 文件的附件信息。 </param>
-    /// <param name="quote"> 消息引用，用于回复消息。 </param>
-    /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    /// <inheritdoc />
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, attachment, quote, options);
 
-    /// <summary>
-    ///     发送卡片消息到此消息频道。
-    /// </summary>
-    /// <param name="cards"> 要发送的卡片。 </param>
-    /// <param name="quote"> 消息引用，用于回复消息。 </param>
-    /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    /// <inheritdoc />
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardsAsync(this, Kook, cards, quote, options);
 
-    /// <summary>
-    ///     发送卡片消息到此消息频道。
-    /// </summary>
-    /// <param name="card"> 要发送的卡片。 </param>
-    /// <param name="quote"> 消息引用，用于回复消息。 </param>
-    /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    /// <inheritdoc />
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardAsync(this, Kook, card, quote, options);
@@ -275,9 +231,10 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     #endregion
 
     /// <summary>
-    ///     Gets a string that represents the Username#IdentifyNumber of the recipient.
+    ///     获取此参与到此私聊频道的另外一位用户的包含 <c>@</c> 前缀的用户名及识别号格式化字符串。
     /// </summary>
-    /// <returns> A string that resolves to the Recipient of this channel. </returns>
+    /// <returns> 一个表示此私聊频道的格式化字符串。 </returns>
+    /// <seealso cref="M:Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
     public override string ToString() => $"@{Recipient}";
 
     private string DebuggerDisplay => $"@{Recipient} ({Id}, DM)";

@@ -184,7 +184,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     public Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions? options = null) =>
         ChannelHelper.GetPinnedMessagesAsync(this, Kook, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendFileAsync(string,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendFileAsync(System.String,System.String,Kook.AttachmentType,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, IUser? ephemeralUser = null,
         RequestOptions? options = null)
@@ -193,28 +193,28 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         return ChannelHelper.SendFileAsync(this, Kook, path, name, type, quote, ephemeralUser, options);
     }
 
-    /// <inheritdoc cref="IMessageChannel.SendFileAsync(Stream,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendFileAsync(System.IO.Stream,System.String,Kook.AttachmentType,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, IUser? ephemeralUser = null,
         RequestOptions? options = null) =>
         ChannelHelper.SendFileAsync(this, Kook, stream, filename, type, quote, ephemeralUser, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendFileAsync(FileAttachment,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendFileAsync(Kook.FileAttachment,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         ChannelHelper.SendFileAsync(this, Kook, attachment, quote, ephemeralUser, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendTextAsync(string,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendTextAsync(System.String,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         ChannelHelper.SendMessageAsync(this, Kook, MessageType.KMarkdown, text, quote, ephemeralUser, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendCardsAsync(IEnumerable{ICard},IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendCardsAsync(System.Collections.Generic.IEnumerable{Kook.ICard},Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         ChannelHelper.SendCardsAsync(this, Kook, cards, quote, ephemeralUser, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendCardAsync(ICard,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendCardAsync(Kook.ICard,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         ChannelHelper.SendCardAsync(this, Kook, card, quote, ephemeralUser, options);

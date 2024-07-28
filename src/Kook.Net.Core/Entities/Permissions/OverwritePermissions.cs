@@ -14,14 +14,14 @@ public struct OverwritePermissions
     public static OverwritePermissions InheritAll { get; } = new();
 
     /// <summary>
-    ///     获取一个在权限覆盖配置中为指定频道重写允许所有权限的 <see cref="OverwritePermissions"/>。
+    ///     获取一个在权限重写配置中为指定频道重写允许所有权限的 <see cref="OverwritePermissions"/>。
     /// </summary>
     /// <exception cref="ArgumentException"> 未知的频道类型。 </exception>
     public static OverwritePermissions AllowAll(IChannel channel) =>
         new(ChannelPermissions.All(channel).RawValue, 0);
 
     /// <summary>
-    ///     获取一个在权限覆盖配置中为指定频道重写禁止所有权限的 <see cref="OverwritePermissions"/>。
+    ///     获取一个在权限重写配置中为指定频道重写禁止所有权限的 <see cref="OverwritePermissions"/>。
     /// </summary>
     /// <exception cref="ArgumentException"> 未知的频道类型。 </exception>
     public static OverwritePermissions DenyAll(IChannel channel) =>

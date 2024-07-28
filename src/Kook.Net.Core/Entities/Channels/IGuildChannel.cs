@@ -36,12 +36,12 @@ public interface IGuildChannel : IChannel, IDeletable
     ulong? CreatorId { get; }
 
     /// <summary>
-    ///     获取此频道的角色的权限覆盖集合。
+    ///     获取此频道的角色的权限重写集合。
     /// </summary>
     IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites { get; }
 
     /// <summary>
-    ///     获取此频道的用户的权限覆盖集合。
+    ///     获取此频道的用户的权限重写集合。
     /// </summary>
     IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites { get; }
 
@@ -67,67 +67,67 @@ public interface IGuildChannel : IChannel, IDeletable
     #region Permissions
 
     /// <summary>
-    ///     获取给定角色的权限覆盖配置。
+    ///     获取给定角色的权限重写配置。
     /// </summary>
-    /// <param name="role"> 要获取权限覆盖配置的角色。 </param>
-    /// <returns> 一个表示目标角色的权限覆盖配置；如果没有设置则为 <c>null</c>。 </returns>
+    /// <param name="role"> 要获取权限重写配置的角色。 </param>
+    /// <returns> 一个表示目标角色的权限重写配置；如果没有设置则为 <c>null</c>。 </returns>
     OverwritePermissions? GetPermissionOverwrite(IRole role);
 
     /// <summary>
-    ///     获取给定用户的权限覆盖配置。
+    ///     获取给定用户的权限重写配置。
     /// </summary>
-    /// <param name="user"> 要获取权限覆盖配置的用户。 </param>
-    /// <returns> 一个表示目标用户的权限覆盖配置；如果没有设置则为 <c>null</c>。 </returns>
+    /// <param name="user"> 要获取权限重写配置的用户。 </param>
+    /// <returns> 一个表示目标用户的权限重写配置；如果没有设置则为 <c>null</c>。 </returns>
     OverwritePermissions? GetPermissionOverwrite(IUser user);
 
     /// <summary>
-    ///     对于给定的角色，如果存在权限覆盖配置，则移除它。
+    ///     对于给定的角色，如果存在权限重写配置，则移除它。
     /// </summary>
-    /// <param name="role"> 要对其移除权限覆盖配置的角色。 </param>
+    /// <param name="role"> 要对其移除权限重写配置的角色。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步移除频道内角色权限覆盖配置操作的任务。 </returns>
+    /// <returns> 一个表示异步移除频道内角色权限重写配置操作的任务。 </returns>
     Task RemovePermissionOverwriteAsync(IRole role, RequestOptions? options = null);
 
     /// <summary>
-    ///     对于给定的用户，如果存在权限覆盖配置，则移除它。
+    ///     对于给定的用户，如果存在权限重写配置，则移除它。
     /// </summary>
-    /// <param name="user"> 要对其移除权限覆盖配置的用户。 </param>
+    /// <param name="user"> 要对其移除权限重写配置的用户。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步移除频道内用户权限覆盖配置操作的任务。 </returns>
+    /// <returns> 一个表示异步移除频道内用户权限重写配置操作的任务。 </returns>
     Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null);
 
     /// <summary>
-    ///     添加给定角色的权限覆盖配置。
+    ///     添加给定角色的权限重写配置。
     /// </summary>
-    /// <param name="role"> 要添加权限覆盖配置的角色。 </param>
+    /// <param name="role"> 要添加权限重写配置的角色。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步添加频道内角色权限覆盖配置操作的任务。 </returns>
+    /// <returns> 一个表示异步添加频道内角色权限重写配置操作的任务。 </returns>
     Task AddPermissionOverwriteAsync(IRole role, RequestOptions? options = null);
 
     /// <summary>
-    ///     添加给定用户的权限覆盖配置。
+    ///     添加给定用户的权限重写配置。
     /// </summary>
-    /// <param name="user"> 要添加权限覆盖配置的用户。 </param>
+    /// <param name="user"> 要添加权限重写配置的用户。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步添加频道内用户权限覆盖配置操作的任务。 </returns>
+    /// <returns> 一个表示异步添加频道内用户权限重写配置操作的任务。 </returns>
     Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null);
 
     /// <summary>
-    ///     更新给定角色的权限覆盖配置。
+    ///     更新给定角色的权限重写配置。
     /// </summary>
-    /// <param name="role"> 要更新权限覆盖配置的角色。 </param>
-    /// <param name="func"> 一个包含修改权限覆盖配置的委托。 </param>
+    /// <param name="role"> 要更新权限重写配置的角色。 </param>
+    /// <param name="func"> 一个包含修改权限重写配置的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步更新频道内角色权限覆盖配置操作的任务。 </returns>
+    /// <returns> 一个表示异步更新频道内角色权限重写配置操作的任务。 </returns>
     Task ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options = null);
 
     /// <summary>
-    ///     更新给定用户的权限覆盖配置。
+    ///     更新给定用户的权限重写配置。
     /// </summary>
-    /// <param name="user"> 要更新权限覆盖配置的用户。 </param>
-    /// <param name="func"> 一个包含修改权限覆盖配置的委托。 </param>
+    /// <param name="user"> 要更新权限重写配置的用户。 </param>
+    /// <param name="func"> 一个包含修改权限重写配置的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步更新频道内用户权限覆盖配置操作的任务。 </returns>
+    /// <returns> 一个表示异步更新频道内用户权限重写配置操作的任务。 </returns>
     Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options = null);
 
     #endregion
@@ -138,8 +138,17 @@ public interface IGuildChannel : IChannel, IDeletable
     ///     获取能够查看频道或当前在此频道中的所有用户。
     /// </summary>
     /// <remarks>
-    ///     This method follows the same behavior as described in <see cref="IChannel.GetUsersAsync"/>.
-    ///     Please visit its documentation for more details on this method.
+    ///     <note type="important">
+    ///         返回的集合是一个异步可枚举对象；调用
+    ///         <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///         可以异步枚举所有分页，并将其合并为一个集合。
+    ///     </note>
+    ///     <br />
+    ///     此方法将尝试获取所有能够查看该频道或当前在该频道中的用户。此方法会根据 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/>
+    ///     将请求拆分。换句话说，如果有 3000 名用户，而 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/> 的常量为
+    ///     <c>50</c>，则请求将被拆分为 60 个单独请求，因此异步枚举器会异步枚举返回 60 个响应。
+    ///     <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///     方法可以展开这 60 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>

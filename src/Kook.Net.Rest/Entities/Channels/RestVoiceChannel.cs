@@ -68,10 +68,10 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
         ChannelHelper.UpdateAsync(this, Kook, options);
 
     /// <summary>
-    ///     Gets the users connected to this voice channel.
+    ///     获取连接到此频道的用户。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A task that represents the asynchronous get operation. The task result contains a collection of users. </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含连接到此频道的所有服务器用户。 </returns>
     public async Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(RequestOptions? options) =>
         await ChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false);
 
@@ -82,27 +82,27 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
     #region TextOverrides
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    /// <exception cref="NotSupportedException"> 不支持在语音频道中获取消息。 </exception>
     public override IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(
         int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    /// <exception cref="NotSupportedException"> 不支持在语音频道中获取消息。 </exception>
     public override IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(
         Guid referenceMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch,
         RequestOptions? options = null) =>
         throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    /// <exception cref="NotSupportedException"> 不支持在语音频道中获取消息。 </exception>
     public override IAsyncEnumerable<IReadOnlyCollection<RestMessage>> GetMessagesAsync(
         IMessage referenceMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch,
         RequestOptions? options = null) =>
         throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    /// <exception cref="NotSupportedException"> 不支持在语音频道中获取消息。 </exception>
     public override Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions? options = null) =>
         throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
@@ -111,13 +111,16 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
     #region IAudioChannel
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException">Connecting to a REST-based channel is not supported.</exception>
+    IAudioClient? IAudioChannel.AudioClient => null;
+
+    /// <inheritdoc />
+    /// <exception cref="NotSupportedException"> 不支持连接到基于 REST 的语音频道。 </exception>
     Task<IAudioClient?> IAudioChannel.ConnectAsync( /*bool selfDeaf, bool selfMute, */
         bool external, bool disconnect, string? password) =>
         throw new NotSupportedException();
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException">Connecting to a REST-based channel is not supported.</exception>
+    /// <exception cref="NotSupportedException"> 不支持连接到基于 REST 的语音频道。 </exception>
     Task IAudioChannel.DisconnectAsync() => throw new NotSupportedException();
 
     #endregion

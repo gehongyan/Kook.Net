@@ -102,6 +102,9 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
     public int UserLimit => throw new NotImplementedException();
 
     /// <inheritdoc />
+    public IAudioClient? AudioClient => throw new NotImplementedException();
+
+    /// <inheritdoc />
     public bool? IsVoiceRegionOverwritten => throw new NotImplementedException();
 
     /// <inheritdoc />
