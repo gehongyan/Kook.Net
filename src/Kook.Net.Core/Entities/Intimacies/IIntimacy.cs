@@ -3,6 +3,10 @@ namespace Kook;
 /// <summary>
 ///     表示一个通用的亲密度。
 /// </summary>
+/// <remarks>
+///     由于亲密度的使用率较低，官方已隐藏亲密度的管理入口。如要管理亲密度，请访问
+///     https://developer.kookapp.cn/bot/cohesion，在左上角切换至要管理其亲密度的应用。
+/// </remarks>
 public interface IIntimacy : IEntity<ulong>
 {
     /// <summary>
