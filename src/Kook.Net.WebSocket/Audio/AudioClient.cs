@@ -8,6 +8,7 @@ namespace Kook.Audio;
 internal partial class AudioClient : IAudioClient
 {
     private const int ConnectionTimeoutMs = 30000; // 30 seconds
+    private const int KeepAliveIntervalMs = 45000; // 45 seconds
     private static readonly DateTimeOffset PrimeEpoch = new(1900, 1, 1, 0, 0, 0, TimeSpan.Zero);
     private const byte DefaultPayloadType = 0x6F;
     private const int DefaultBitrate = 96 * 1024;
@@ -18,7 +19,7 @@ internal partial class AudioClient : IAudioClient
     private readonly Logger _audioLogger;
     private readonly SemaphoreSlim _stateLock;
 
-    private Task? /*_heartbeatTask, _keepaliveTask, */_rtcpTask;
+    private Task? /*_heartbeatTask, */_rtcpTask, _keepaliveTask;
     private long _lastRtcpTime;
     private uint _ssrc;
     private byte _payloadType;
@@ -92,6 +93,7 @@ internal partial class AudioClient : IAudioClient
         ApiClient.SetUdpEndpoint(voiceGatewayResponse.Ip, voiceGatewayResponse.Port);
         ApiClient.SetRtcpUdpEndpoint(voiceGatewayResponse.Ip, voiceGatewayResponse.RtcpPort);
         _rtcpTask = RunRtcpAsync(KookSocketConfig.RtcpIntervalMilliseconds, Connection.CancellationToken);
+        _keepaliveTask = RunKeepaliveAsync(Connection.CancellationToken);
         await ApiClient.ConnectAsync().ConfigureAwait(false);
         await _audioLogger.DebugAsync($"Listening on port RTP {ApiClient.UdpPort} and RTCP {ApiClient.RtcpUdpPort}").ConfigureAwait(false);
 
@@ -107,6 +109,10 @@ internal partial class AudioClient : IAudioClient
         if (_rtcpTask != null)
             await _rtcpTask.ConfigureAwait(false);
         _rtcpTask = null;
+
+        if (_keepaliveTask != null)
+            await _keepaliveTask.ConfigureAwait(false);
+        _keepaliveTask = null;
     }
 
     /// <inheritdoc />
@@ -272,6 +278,38 @@ internal partial class AudioClient : IAudioClient
         packet[27] = (byte)(sentOctets >> 0);
 
         await ApiClient.SendRtcpAsync(packet, 0, 28).ConfigureAwait(false);
+    }
+
+    private async Task RunKeepaliveAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await _audioLogger.DebugAsync("Keepalive Started").ConfigureAwait(false);
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                int now = Environment.TickCount;
+
+                try
+                {
+                    await Kook.ApiClient.KeepVoiceGatewayAliveAsync(ChannelId).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    await _audioLogger.WarningAsync("Failed to send keepalive", ex).ConfigureAwait(false);
+                }
+
+                await Task.Delay(KeepAliveIntervalMs, cancellationToken).ConfigureAwait(false);
+            }
+            await _audioLogger.DebugAsync("Keepalive Stopped").ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            await _audioLogger.DebugAsync("Keepalive Stopped").ConfigureAwait(false);
+        }
+        catch (Exception ex)
+        {
+            await _audioLogger.ErrorAsync("Keepalive Errored", ex).ConfigureAwait(false);
+        }
     }
 
     private void Dispose(bool disposing)
