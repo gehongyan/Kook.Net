@@ -210,23 +210,6 @@ public partial class KookSocketClient
         }
     }
 
-    private async Task ProcessGuildDataFetchingAsync(Task task)
-    {
-        // _lastGuildAvailableTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        if (task.IsFaulted)
-        {
-            Exception exception = task.Exception
-                ?? new Exception("Waiting for guilds failed without an exception");
-            Connection.Error(exception);
-            return;
-        }
-
-        if (Connection.CancellationToken.IsCancellationRequested) return;
-
-        await TimedInvokeAsync(_readyEvent, nameof(Ready)).ConfigureAwait(false);
-        await _gatewayLogger.InfoAsync("Ready").ConfigureAwait(false);
-    }
-
     private async Task HandlePongAsync()
     {
         await _gatewayLogger.DebugAsync("Received Pong").ConfigureAwait(false);
@@ -1668,13 +1651,14 @@ public partial class KookSocketClient
         SocketVoiceState before = guild.GetVoiceState(data.UserId)?.Clone() ?? SocketVoiceState.Default;
         SocketVoiceState after = guild.AddOrUpdateVoiceStateForLeaving(data.UserId, channel);
 
-        if (data.UserId == CurrentUser?.Id && channel.AudioClient is AudioClient audioClient)
-        {
-            if (audioClient.LastRtpActiveTick - Environment.TickCount > AudioClientIdleTimeout)
-                audioClient.Connection.Error(new TimeoutException("Audio client has been idle for too long."));
-            else
-                audioClient.Connection.CriticalError(new InvalidOperationException("Audio client has been disconnected."));
-        }
+        // TODO: 测试挂机逻辑
+        // if (data.UserId == CurrentUser?.Id && channel.AudioClient is AudioClient audioClient)
+        // {
+        //     if (Environment.TickCount - audioClient.LastRtpActiveTick > AudioClientIdleTimeout)
+        //         audioClient.Connection.Error(new TimeoutException("Audio client has been idle for too long."));
+        //     else
+        //         audioClient.Connection.CriticalError(new InvalidOperationException("Audio client has been disconnected."));
+        // }
 
         await TimedInvokeAsync(_userDisconnectedEvent, nameof(UserDisconnected),
             cacheableUser, channel, data.At).ConfigureAwait(false);

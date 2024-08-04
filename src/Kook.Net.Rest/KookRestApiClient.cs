@@ -1086,6 +1086,16 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
+    public async Task KeepVoiceGatewayAliveAsync(KeepVoiceGatewayAliveParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
+        options = RequestOptions.CreateOrClone(options);
+        await SendJsonAsync(HttpMethod.Post,
+                () => "voice/keep-alive", args, new BucketIds(), options: options)
+            .ConfigureAwait(false);
+    }
+
     #endregion
 
     #region Users

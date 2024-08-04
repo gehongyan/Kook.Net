@@ -81,8 +81,7 @@
         "template": [
             "default",
             "modern",
-            "_template/material",
-            "_template/description-generator"
+            "_template/material"
         ],
         "xrefService": [
             "https://xref.docs.microsoft.com/query?uid={uid}"
