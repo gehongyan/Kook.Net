@@ -151,8 +151,7 @@ internal static class ModuleClassBuilder
                     builder.Remarks ??= command.Remarks;
                     if (command.Aliases is { Length: > 0 })
                         builder.AddAliases(command.Aliases);
-                    if (!string.IsNullOrWhiteSpace(command.Text))
-                        builder.AddAliases(command.Text);
+                    builder.AddAliases(command.Text);
                     builder.RunMode = command.RunMode;
                     builder.Name ??= command.Text;
                     builder.IgnoreExtraArgs = command.IgnoreExtraArgs ?? service._ignoreExtraArgs;

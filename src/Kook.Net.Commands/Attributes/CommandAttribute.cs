@@ -35,7 +35,7 @@ public class CommandAttribute : Attribute
     /// <remarks>
     ///     <see cref="AliasAttribute"/> extends the base value of this if present.
     /// </remarks>
-    public string[]? Aliases { get; set; }
+    public string?[]? Aliases { get; set; }
 
     /// <summary>
     ///     Attaches remarks to your commands.
@@ -69,7 +69,7 @@ public class CommandAttribute : Attribute
     /// <param name="aliases"> The aliases of the command. </param>
     /// <param name="remarks"> The remarks of the command. </param>
     public CommandAttribute(string text, bool ignoreExtraArgs,
-        string? summary = null, string[]? aliases = null, string? remarks = null)
+        string? summary = null, string?[]? aliases = null, string? remarks = null)
     {
         Text = text;
         IgnoreExtraArgs = ignoreExtraArgs;
