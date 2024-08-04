@@ -6,7 +6,7 @@ using Model = Kook.API.Channel;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a REST-based voice channel in a guild.
+///     表示服务器中一个基于 REST 的具有语音聊天能力的频道。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChannel

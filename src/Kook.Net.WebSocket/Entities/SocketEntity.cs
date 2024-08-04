@@ -1,18 +1,18 @@
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based entity.
+///     表示一个基于网关的具有唯一标识符的实体。
 /// </summary>
-/// <typeparam name="T"> The type of the entity's identifier. </typeparam>
-public abstract class SocketEntity<T> : IEntity<T>
-    where T : IEquatable<T>
+/// <typeparam name="TId"> 唯一标识符的类型。 </typeparam>
+public abstract class SocketEntity<TId> : IEntity<TId>
+    where TId : IEquatable<TId>
 {
     internal KookSocketClient Kook { get; }
 
     /// <inheritdoc />
-    public T Id { get; }
+    public TId Id { get; }
 
-    internal SocketEntity(KookSocketClient kook, T id)
+    internal SocketEntity(KookSocketClient kook, TId id)
     {
         Kook = kook;
         Id = id;

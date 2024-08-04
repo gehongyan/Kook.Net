@@ -27,6 +27,7 @@ public interface IUserMessage : IMessage
     /// <param name="roleHandling"> 指定角色提及标签的处理方式。 </param>
     /// <param name="everyoneHandling"> 指定全体成员与在线成员提及标签的处理方式。 </param>
     /// <param name="emojiHandling"> 指定表情符号标签的处理方式。 </param>
+    /// <returns> 转换后的消息文本。 </returns>
     string Resolve(
         TagHandling userHandling = TagHandling.Name,
         TagHandling channelHandling = TagHandling.Name,

@@ -4,7 +4,7 @@ using Model = Kook.API.Poke;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a poke in messages.
+///     表示一个基于 REST 的 POKE。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Poke : IPoke
@@ -71,10 +71,8 @@ public class Poke : IPoke
             quality, pokeResource, model.MessageScenarios);
     }
 
-    /// <summary>
-    ///     Returns the name of the poke.
-    /// </summary>
-    /// <returns> A string containing the name of the poke. </returns>
+    /// <inheritdoc cref="P:Kook.Rest.Poke.Name" />
+    /// <returns> POKE 的名称。 </returns>
     public override string ToString() => Name;
 
     private string DebuggerDisplay => $"{Name} ({Resource.Type})";

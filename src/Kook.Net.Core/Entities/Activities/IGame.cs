@@ -1,7 +1,7 @@
 namespace Kook;
 
 /// <summary>
-///     表示是一个通用的游戏信息。
+///     表示一个通用的游戏信息。
 /// </summary>
 public interface IGame : IActivity, IEntity<int>, IDeletable
 {

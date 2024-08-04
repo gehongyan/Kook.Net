@@ -1,18 +1,18 @@
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a generic REST-based entity.
+///     表示一个基于 REST 的具有唯一标识符的实体。
 /// </summary>
-/// <typeparam name="T"></typeparam>
-public abstract class RestEntity<T> : IEntity<T>
-    where T : IEquatable<T>
+/// <typeparam name="TId"> 唯一标识符的类型。 </typeparam>
+public abstract class RestEntity<TId> : IEntity<TId>
+    where TId : IEquatable<TId>
 {
     internal BaseKookClient Kook { get; }
 
     /// <inheritdoc />
-    public T Id { get; }
+    public TId Id { get; }
 
-    internal RestEntity(BaseKookClient kook, T id)
+    internal RestEntity(BaseKookClient kook, TId id)
     {
         Kook = kook;
         Id = id;

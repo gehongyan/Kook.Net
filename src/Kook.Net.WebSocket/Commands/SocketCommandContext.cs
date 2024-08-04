@@ -3,7 +3,7 @@ using Kook.WebSocket;
 namespace Kook.Commands;
 
 /// <summary>
-///     表示一个基于 WebSocket 客户端的命令的上下文。这可能包括客户端、公会、频道、用户和消息。
+///     表示一个基于网关的客户端的命令的上下文。这可能包括客户端、公会、频道、用户和消息。
 /// </summary>
 public class SocketCommandContext : ICommandContext
 {

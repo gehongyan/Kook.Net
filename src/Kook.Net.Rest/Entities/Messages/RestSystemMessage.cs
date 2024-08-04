@@ -4,8 +4,13 @@ using Kook.API;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a REST-based system message.
+///     表示一个基于 REST 的系统消息。
 /// </summary>
+/// <remarks>
+///     <note type="warning">
+///         KOOK 未统一规范系统消息类型，此类并未在 <see cref="T:Kook.Rest.RestMessage"/> 之上封装更多的实用功能。
+///     </note>
+/// </remarks>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestSystemMessage : RestMessage, ISystemMessage
 {

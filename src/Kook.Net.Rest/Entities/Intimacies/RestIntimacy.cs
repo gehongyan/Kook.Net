@@ -4,8 +4,12 @@ using Model = Kook.API.Intimacy;
 namespace Kook.Rest;
 
 /// <summary>
-///     Gets the intimacy information associated with the specified user.
+///     表示一个基于 REST 的亲密度。
 /// </summary>
+/// <remarks>
+///     由于亲密度的使用率较低，官方已隐藏亲密度的管理入口。如要管理亲密度，请访问
+///     https://developer.kookapp.cn/bot/cohesion，在左上角切换至要管理其亲密度的应用。
+/// </remarks>
 public class RestIntimacy : RestEntity<ulong>, IIntimacy
 {
     private ImmutableArray<IntimacyImage> _images;

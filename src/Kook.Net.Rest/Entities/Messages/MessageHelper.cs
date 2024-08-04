@@ -14,14 +14,14 @@ using UserModel = User;
 internal static class MessageHelper
 {
     /// <summary>
-    /// Regex used to check if some text is formatted as inline code.
+    ///     用于匹配内联代码块的正则表达式。
     /// </summary>
     private static readonly Regex InlineCodeRegex =
         new(@"[^\\]?(`).+?[^\\](`)",
             RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
     /// <summary>
-    /// Regex used to check if some text is formatted as a code block.
+    ///     用于匹配代码块的正则表达式。
     /// </summary>
     private static readonly Regex BlockCodeRegex =
         new(@"[^\\]?(```).+?[^\\](```)",

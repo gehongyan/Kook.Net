@@ -3,7 +3,6 @@ using System.Collections.Immutable;
 namespace Kook;
 
 /// <summary>
-///     Represents a collection of features of a guild.
 ///     表示一个服务器的所有特性。
 /// </summary>
 public readonly struct GuildFeatures

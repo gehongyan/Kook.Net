@@ -3,7 +3,9 @@ using Model = Kook.API.Attachment;
 
 namespace Kook.Rest;
 
-/// <inheritdoc cref="IAttachment"/>
+/// <summary>
+///     表示一个消息内基于的附件。
+/// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Attachment : IAttachment
 {
@@ -60,10 +62,8 @@ public class Attachment : IAttachment
             model.Size, model.FileType, duration, model.Width, model.Height);
     }
 
-    /// <summary>
-    ///     Returns the filename of this attachment.
-    /// </summary>
-    /// <returns> A string containing the filename of this attachment. </returns>
+    /// <inheritdoc cref="P:Kook.Rest.Attachment.Filename" />
+    /// <returns> 此附件的文件名。 </returns>
     public override string? ToString() => Filename;
 
     private string DebuggerDisplay => $"{Filename}{(Size.HasValue ? $" ({Size} bytes)" : "")}";

@@ -5,7 +5,7 @@ using Model = Kook.API.Invite;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a REST-based invite.
+///     表示一个基于 REST 的邀请。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
@@ -108,10 +108,8 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
     public Task DeleteAsync(RequestOptions? options = null) =>
         InviteHelper.DeleteAsync(this, Kook, options);
 
-    /// <summary>
-    ///     Gets the URL of the invite.
-    /// </summary>
-    /// <returns> A string that resolves to the Url of the invite. </returns>
+    /// <inheritdoc cref="P:Kook.Rest.RestInvite.Url" />
+    /// <returns> 此邀请的 URL，URL 的路径中包含 <see cref="P:Kook.Rest.RestInvite.Code"/> 属性的值。 </returns>
     public override string ToString() => Url;
 
     private string DebuggerDisplay => $"{Url} ({GuildName} / {ChannelName ?? "Channel not specified"})";

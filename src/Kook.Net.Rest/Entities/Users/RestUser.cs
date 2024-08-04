@@ -4,7 +4,7 @@ using Model = Kook.API.User;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a REST-based user.
+///     表示一个基于 REST 的用户。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestUser : RestEntity<ulong>, IUser, IUpdateable
@@ -139,22 +139,11 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         Presence.Update(isOnline, activeClient);
     }
 
-    /// <summary>
-    ///     Creates a direct message channel to this user.
-    /// </summary>
-    /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A task that represents the asynchronous get operation. The task result contains a rest DM channel where the user is the recipient. </returns>
+    /// <inheritdoc cref="M:Kook.IUser.CreateDMChannelAsync(Kook.RequestOptions)" />
     public Task<RestDMChannel> CreateDMChannelAsync(RequestOptions? options = null) =>
         UserHelper.CreateDMChannelAsync(this, Kook, options);
 
-    /// <summary>
-    ///     Gets the intimacy information with this user.
-    /// </summary>
-    /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for getting the intimacy information. The task result
-    ///     contains the intimacy information associated with this user.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IUser.GetIntimacyAsync(Kook.RequestOptions)" />
     public Task<RestIntimacy> GetIntimacyAsync(RequestOptions? options = null) =>
         UserHelper.GetIntimacyAsync(this, Kook, options);
 
@@ -183,7 +172,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     /// <summary>
     ///     获取此用户的包含用户名及识别号的格式化字符串。
     /// </summary>
-    /// <returns> 一个表示此用户的格式化字符串。 </returns>
+    /// <returns> 一个表示此用户的包含用户名及识别号的格式化字符串。 </returns>
     /// <seealso cref="M:Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
     public override string ToString() => this.UsernameAndIdentifyNumber(Kook.FormatUsersInBidirectionalUnicode);
 
