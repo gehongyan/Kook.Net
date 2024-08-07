@@ -1,6 +1,8 @@
+using System.Diagnostics;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Kook.Audio;
 using Kook.Commands;
 using Kook.Net.Samples.Audio.Services;
 using Kook.WebSocket;
@@ -14,6 +16,8 @@ public class MusicModule : ModuleBase<SocketCommandContext>
 {
     private readonly MusicService _musicService;
     private readonly IHttpClientFactory _httpClientFactory;
+
+
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="MusicModule"/> class.
@@ -35,7 +39,39 @@ public class MusicModule : ModuleBase<SocketCommandContext>
             return;
         }
 
-        await _musicService.ConnectAsync(voiceChannel);
+        IAudioClient audioClient = await _musicService.ConnectAsync(voiceChannel);
+        audioClient.StreamCreated += (ssrc, stream) =>
+        {
+            Task.Run(async () =>
+            {
+                try
+                {
+                    Console.WriteLine($"Stream created for SSRC: {ssrc}.");
+                    using Process? ffmpeg = Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "ffmpeg",
+                        Arguments = $"-hide_banner -loglevel debug -ac 2 -f s16le -ar 48000 -i - output_{ssrc}_{DateTimeOffset.Now.ToUnixTimeSeconds()}.mp3",
+                        UseShellExecute = false,
+                        RedirectStandardInput = true,
+                        RedirectStandardOutput = true,
+                    });
+                    if (ffmpeg is null) return;
+                    _musicService.StartRecording(ssrc, ffmpeg.Id);
+                    await stream.CopyToAsync(ffmpeg.StandardInput.BaseStream);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            });
+            return Task.CompletedTask;
+        };
+        audioClient.StreamDestroyed += ssrc =>
+        {
+            _musicService.StopRecording(ssrc);
+            Console.WriteLine($"Stream destroyed for {ssrc}.");
+            return Task.CompletedTask;
+        };
         await ReplyTextAsync($"Connected to {voiceChannel.Name}.");
     }
 

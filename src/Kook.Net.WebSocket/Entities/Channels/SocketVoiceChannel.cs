@@ -188,7 +188,7 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
                 AudioClient audioClient = new(this, Kook.GetAudioId(), password);
                 audioClient.Disconnected += async ex =>
                 {
-                    if (!promise.Task.IsCompleted)
+                    if (!promise.Task.IsCompleted && audioClient.IsFinished)
                     {
                         try
                         {

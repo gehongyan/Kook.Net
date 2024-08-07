@@ -6,6 +6,19 @@ namespace Kook.Audio;
 public interface IAudioClient : IDisposable
 {
     /// <summary>
+    ///     Occurs when a new incoming stream is created.
+    ///     The first <see cref="int"/> parameter is the RTP SSRC.
+    ///     The second <see cref="AudioInStream" /> parameter is the audio stream.
+    /// </summary>
+    event Func<uint, AudioInStream, Task> StreamCreated;
+
+    /// <summary>
+    ///     Occurs when an incoming stream is destroyed.
+    ///     The first <see cref="int"/> parameter is the RTP SSRC.
+    /// </summary>
+    event Func<uint, Task> StreamDestroyed;
+
+    /// <summary>
     ///     Occurs when the client has connected to the voice server.
     /// </summary>
     event Func<Task> Connected;

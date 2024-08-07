@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Kook.Logging;
 using Kook.WebSocket;
 using Kook.API.Rest;
@@ -18,6 +19,8 @@ internal partial class AudioClient : IAudioClient
     private readonly string? _password;
     private readonly Logger _audioLogger;
     private readonly SemaphoreSlim _stateLock;
+
+    private readonly ConcurrentDictionary<uint, StreamPair> _streams;
 
     private Task? /*_heartbeatTask, */_rtcpTask, _keepaliveTask;
     private long _lastRtcpTime;
@@ -43,6 +46,7 @@ internal partial class AudioClient : IAudioClient
     public SocketGuild Guild => Channel.Guild;
     private KookSocketClient Kook => Guild.Kook;
 
+    internal bool IsFinished { get; private set; }
     public ConnectionState ConnectionState => Connection.State;
 
     /// <summary> Creates a new REST/WebSocket kook client. </summary>
@@ -64,6 +68,8 @@ internal partial class AudioClient : IAudioClient
         Connection.Connected += () => _connectedEvent.InvokeAsync();
         Connection.Disconnected += (ex, recon) => _disconnectedEvent.InvokeAsync(ex);
 
+        _streams = new ConcurrentDictionary<uint, StreamPair>();
+
         UdpLatencyUpdated += async (old, val) =>
             await _audioLogger.DebugAsync($"UDP Latency = {val} ms").ConfigureAwait(false);
     }
@@ -71,6 +77,9 @@ internal partial class AudioClient : IAudioClient
     internal Task StartAsync() => Connection.StartAsync();
 
     public Task StopAsync() => Connection.StopAsync();
+
+    public IReadOnlyDictionary<uint, AudioInStream> GetStreams() =>
+        _streams.ToDictionary(pair => pair.Key, pair => pair.Value.Reader);
 
     private async Task OnConnectingAsync()
     {
@@ -103,16 +112,34 @@ internal partial class AudioClient : IAudioClient
     private async Task OnDisconnectingAsync(Exception ex)
     {
         await _audioLogger.DebugAsync("Disconnecting ApiClient").ConfigureAwait(false);
-
         await ApiClient.DisconnectAsync().ConfigureAwait(false);
+        await FinishDisconnect(ex, true);
+    }
 
-        if (_rtcpTask != null)
-            await _rtcpTask.ConfigureAwait(false);
-        _rtcpTask = null;
+    private async Task FinishDisconnect(Exception ex, bool wontTryReconnect)
+    {
+        await _audioLogger.DebugAsync("Finishing audio connection").ConfigureAwait(false);
+        await ClearHeartBeaters().ConfigureAwait(false);
+        if (wontTryReconnect)
+        {
+            await Connection.StopAsync().ConfigureAwait(false);
+            await ClearInputStreamsAsync().ConfigureAwait(false);
+            IsFinished = true;
+        }
+    }
+
+    private async Task ClearHeartBeaters()
+    {
+        //Wait for tasks to complete
+        await _audioLogger.DebugAsync("Waiting for heartbeater").ConfigureAwait(false);
 
         if (_keepaliveTask != null)
             await _keepaliveTask.ConfigureAwait(false);
         _keepaliveTask = null;
+
+        if (_rtcpTask != null)
+            await _rtcpTask.ConfigureAwait(false);
+        _rtcpTask = null;
     }
 
     /// <inheritdoc />
@@ -151,7 +178,16 @@ internal partial class AudioClient : IAudioClient
     {
         try
         {
-            // Print packets
+            if (!RtpReadStream.TryReadSsrc(packet, 0, out uint ssrc))
+                await _audioLogger.DebugAsync("Malformed Frame").ConfigureAwait(false);
+            StreamPair streamPair = _streams.TryGetValue(ssrc, out StreamPair resolvedStreamPair)
+                ? resolvedStreamPair
+                : await CreateInputStreamAsync(ssrc);
+#if NET6_0_OR_GREATER
+            await streamPair.Writer.WriteAsync(packet).ConfigureAwait(false);
+#else
+            await streamPair.Writer.WriteAsync(packet, 0, packet.Length).ConfigureAwait(false);
+#endif
             await _audioLogger.DebugAsync($"Received {packet.Length} Bytes").ConfigureAwait(false);
         }
         catch (Exception ex)
@@ -287,8 +323,6 @@ internal partial class AudioClient : IAudioClient
             await _audioLogger.DebugAsync("Keepalive Started").ConfigureAwait(false);
             while (!cancellationToken.IsCancellationRequested)
             {
-                int now = Environment.TickCount;
-
                 try
                 {
                     await Kook.ApiClient.KeepVoiceGatewayAliveAsync(ChannelId).ConfigureAwait(false);
@@ -312,6 +346,31 @@ internal partial class AudioClient : IAudioClient
         }
     }
 
+    private async Task<StreamPair> CreateInputStreamAsync(uint ssrc)
+    {
+        if (_streams.TryGetValue(ssrc, out StreamPair streamPair))
+            return streamPair;
+        InputStream readerStream = new();                 // Consumes header
+        OpusDecodeStream opusDecoder = new(readerStream); // Passes header
+        RtpReadStream rtpReader = new(opusDecoder);       // Generates header
+        _streams.TryAdd(ssrc, new StreamPair(readerStream, rtpReader));
+        await _streamCreatedEvent.InvokeAsync(ssrc, readerStream);
+        return _streams[ssrc];
+    }
+
+    private async Task ClearInputStreamsAsync()
+    {
+        foreach (KeyValuePair<uint, StreamPair> pair in _streams)
+        {
+            await _streamDestroyedEvent.InvokeAsync(pair.Key).ConfigureAwait(false);
+            pair.Value.Reader.Dispose();
+        }
+        _streams.Clear();
+    }
+
+    internal AudioInStream? GetInputStream(uint ssrc) =>
+        _streams.TryGetValue(ssrc, out StreamPair streamPair) ? streamPair.Reader : null;
+
     private void Dispose(bool disposing)
     {
         if (disposing)
@@ -321,6 +380,13 @@ internal partial class AudioClient : IAudioClient
             _stateLock?.Dispose();
         }
     }
+
     /// <inheritdoc />
     public void Dispose() => Dispose(true);
+
+    private readonly struct StreamPair(AudioInStream reader, AudioOutStream writer)
+    {
+        public AudioInStream Reader => reader;
+        public AudioOutStream Writer => writer;
+    }
 }

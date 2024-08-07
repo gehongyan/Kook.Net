@@ -18,9 +18,9 @@ internal abstract class OpusConverter : IDisposable
     public const int Channels = 2;
 
     /// <summary>
-    ///     Gets the milliseconds per frame, typically 20.
+    ///     Gets the milliseconds per frame, typically 40.
     /// </summary>
-    public const int FrameMillis = 20;
+    public const int FrameMillis = 40;
 
     /// <summary>
     ///     Gets the sample size, in bytes, of the audio, typically 4.
@@ -28,17 +28,17 @@ internal abstract class OpusConverter : IDisposable
     public const int SampleBytes = sizeof(short) * Channels;
 
     /// <summary>
-    ///     Gets the number of samples per channel per frame, typically 960.
+    ///     Gets the number of samples per channel per frame, typically 1920.
     /// </summary>
     public const int FrameSamplesPerChannel = SamplingRate / 1000 * FrameMillis;
 
     /// <summary>
-    ///     Gets the number of samples per frame, typically 1920.
+    ///     Gets the number of samples per frame, typically 3840.
     /// </summary>
     public const int FrameSamples = FrameSamplesPerChannel * Channels;
 
     /// <summary>
-    ///     Gets the number of bytes per frame, typically 3840.
+    ///     Gets the number of bytes per frame, typically 7680.
     /// </summary>
     public const int FrameBytes = FrameSamplesPerChannel * SampleBytes;
 

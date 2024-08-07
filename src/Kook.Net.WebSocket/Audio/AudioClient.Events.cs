@@ -33,4 +33,20 @@ internal partial class AudioClient
     }
 
     private readonly AsyncEvent<Func<int, int, Task>> _udpLatencyUpdatedEvent = new();
+
+    public event Func<uint, AudioInStream, Task> StreamCreated
+    {
+        add => _streamCreatedEvent.Add(value);
+        remove => _streamCreatedEvent.Remove(value);
+    }
+
+    private readonly AsyncEvent<Func<uint, AudioInStream, Task>> _streamCreatedEvent = new();
+
+    public event Func<uint, Task> StreamDestroyed
+    {
+        add => _streamDestroyedEvent.Add(value);
+        remove => _streamDestroyedEvent.Remove(value);
+    }
+
+    private readonly AsyncEvent<Func<uint, Task>> _streamDestroyedEvent = new();
 }
