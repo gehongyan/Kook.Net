@@ -78,14 +78,14 @@ public class MusicClient
         using Process? ffmpeg = Process.Start(new ProcessStartInfo
         {
             FileName = "ffmpeg",
-            Arguments = $"""-hide_banner -loglevel panic -i "{source}" -ac 2 -f s16le -ar 48000 pipe:1""",
+            Arguments = $"""-hide_banner -loglevel panic -i "{source}" -ac 2 -f s16le -ar 48000 -""",
             UseShellExecute = false,
             RedirectStandardOutput = true,
         });
         if (ffmpeg is null) return;
         _ffmpegProcessId = ffmpeg.Id;
         await using Stream output = ffmpeg.StandardOutput.BaseStream;
-        await using AudioOutStream kook = _audioClient.CreatePcmStream(AudioApplication.Music);
+        await using AudioOutStream kook = _audioClient.CreateDirectPcmStream(AudioApplication.Music);
         try
         {
             await output.CopyToAsync(kook, cancellationToken);

@@ -18,9 +18,9 @@ internal abstract class OpusConverter : IDisposable
     public const int Channels = 2;
 
     /// <summary>
-    ///     获取每帧的毫秒数，通常为 20。
+    ///     获取每帧的毫秒数，通常为 40。
     /// </summary>
-    public const int FrameMillis = 20;
+    public const int FrameMillis = 40;
 
     /// <summary>
     ///     获取音频的样本大小，单位为字节，通常为 4。
@@ -28,17 +28,17 @@ internal abstract class OpusConverter : IDisposable
     public const int SampleBytes = sizeof(short) * Channels;
 
     /// <summary>
-    ///     获取每帧每个通道的样本数，通常为 960。
+    ///     获取每帧每个通道的样本数，通常为 1920。
     /// </summary>
     public const int FrameSamplesPerChannel = SamplingRate / 1000 * FrameMillis;
 
     /// <summary>
-    ///     获取每帧的样本数，通常为 1920。
+    ///     获取每帧的样本数，通常为 3840。
     /// </summary>
     public const int FrameSamples = FrameSamplesPerChannel * Channels;
 
     /// <summary>
-    ///     获取每帧的字节数，通常为 3840。
+    ///     获取每帧的字节数，通常为 7680。
     /// </summary>
     public const int FrameBytes = FrameSamplesPerChannel * SampleBytes;
 

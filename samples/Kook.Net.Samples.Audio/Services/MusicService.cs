@@ -1,4 +1,5 @@
-﻿using Kook.Audio;
+﻿using System.Diagnostics;
+using Kook.Audio;
 using Kook.WebSocket;
 using Microsoft.Extensions.Hosting;
 
@@ -8,6 +9,24 @@ public class MusicService : IHostedService
 {
     private readonly Dictionary<ulong, MusicClient> _musicClients = [];
 
+    private readonly Dictionary<uint, int> _recordingProcessIds = [];
+
+    public void StartRecording(uint ssrc, int processId) => _recordingProcessIds[ssrc] = processId;
+
+    public void StopRecording(uint ssrc)
+    {
+        if (!_recordingProcessIds.Remove(ssrc, out int processId)) return;
+        try
+        {
+            Process process = Process.GetProcessById(processId);
+            process.Kill();
+        }
+        catch (ArgumentException)
+        {
+            // ignored
+        }
+    }
+
     /// <inheritdoc />
     public Task StartAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
@@ -15,7 +34,7 @@ public class MusicService : IHostedService
     public async Task StopAsync(CancellationToken cancellationToken) =>
         await Task.WhenAll(_musicClients.Select(x => x.Value.StopAsync()));
 
-    public async Task ConnectAsync(SocketVoiceChannel voiceChannel)
+    public async Task<IAudioClient> ConnectAsync(SocketVoiceChannel voiceChannel)
     {
         if (voiceChannel.AudioClient is not null)
             throw new InvalidOperationException("I'm already connected to this voice channel.");
@@ -23,6 +42,7 @@ public class MusicService : IHostedService
         if (audioClient is null)
             throw new InvalidOperationException("Failed to connect to the voice channel.");
         _musicClients[voiceChannel.Id] = new MusicClient(voiceChannel, audioClient);
+        return audioClient;
     }
 
     public async Task DisconnectAsync(SocketVoiceChannel voiceChannel)

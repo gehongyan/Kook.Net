@@ -27,13 +27,11 @@ public abstract class AudioStream : Stream
     /// <inheritdoc />
     public override void Write(byte[] buffer, int offset, int count)
     {
-        WriteAsync(buffer, offset, count, CancellationToken.None).GetAwaiter().GetResult();
     }
 
     /// <inheritdoc />
     public override void Flush()
     {
-        FlushAsync(CancellationToken.None).GetAwaiter().GetResult();
     }
 
     /// <summary>
@@ -44,7 +42,6 @@ public abstract class AudioStream : Stream
     /// </remarks>
     public void Clear()
     {
-        ClearAsync(CancellationToken.None).GetAwaiter().GetResult();
     }
 
     /// <summary>
