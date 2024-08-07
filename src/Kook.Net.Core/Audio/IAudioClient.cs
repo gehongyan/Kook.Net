@@ -6,15 +6,38 @@ namespace Kook.Audio;
 public interface IAudioClient : IDisposable
 {
     /// <summary>
-    ///     Occurs when a new incoming stream is created.
-    ///     The first <see cref="int"/> parameter is the RTP SSRC.
-    ///     The second <see cref="AudioInStream" /> parameter is the audio stream.
+    ///     当客户端接收到一个新的语音输入流时引发。
     /// </summary>
+    /// <remarks>
+    ///     <note type="important">
+    ///         SSRC 为 RTP 实时传输协议中的同步信源标识符，RTP 会话中，每个媒体流应具有一个唯一的 SSRC 标识符。KOOK
+    ///         服务端未通过网关下发用户与 RTP 流 SSRC 的映射关系，因此无法通过 SSRC 直接获取其关联的用户。Kook.Net 遵循 RTP
+    ///         协议，以 SSRC 区分不同的信源，创建不同的 <see cref="T:Kook.Audio.AudioInStream"/> 实例，并引发此事件。
+    ///         一般地，每个 SSRC 值都可以分别表示一个用户在一个语音频道内在一次连接与断开之间的音频流的唯一标识符，
+    ///         同一用户切换语音频道或断开后重新连接到同一语音频道，KOOK 语音服务器都会为其分配新的 SSRC 标识符。
+    ///     </note>
+    ///     <br />
+    ///     <note type="warning">
+    ///         Bot 用户可以通过 API 指定要使用的 SSRC 标识符，这可能会导致 SSRC 碰撞。KOOK 开发者文档推荐 Bot
+    ///         用户使用 <c>1111</c> 为 SSRC 标识符，如果需要区分音频流是否由 Bot 创建，可以尝试判断 SSRC 标识符是否为
+    ///         <c>1111</c> 作为参考。Kook.Net 不以固定的 <c>1111</c> 作为 SSRC
+    ///         标识符，而是使用随机值，如果音频由 Kook.Net 所构建的 Bot 推送，此方法可能无法区分该音频流是否由 Bot 创建。
+    ///     </note>
+    ///     <br />
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.Int32"/> 参数是 RTP 流的 SSRC 同步信源标识符。 </item>
+    ///     <item> <see cref="T:Kook.Audio.AudioInStream"/> 参数是所新创建的音频输入流。 </item>
+    ///     </list>
+    /// </remarks>
     event Func<uint, AudioInStream, Task> StreamCreated;
 
     /// <summary>
-    ///     Occurs when an incoming stream is destroyed.
-    ///     The first <see cref="int"/> parameter is the RTP SSRC.
+    ///     当音频输入流被销毁时引发。
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.Int32"/> 参数是 RTP 流的 SSRC 同步信源标识符。 </item>
+    ///     </list>
     /// </summary>
     event Func<uint, Task> StreamDestroyed;
 

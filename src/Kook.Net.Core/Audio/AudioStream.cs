@@ -20,7 +20,7 @@ public abstract class AudioStream : Stream
     /// <param name="seq"> 头部的序列号。 </param>
     /// <param name="timestamp"> 头部的时间戳。 </param>
     /// <param name="missed"> 头部是否用于标识丢失的数据包。 </param>
-    /// <exception cref="InvalidOperationException"> 该流不接受头部信息。 </exception>
+    /// <exception cref="InvalidOperationException"> 该流不接收头部信息。 </exception>
     public virtual void WriteHeader(ushort seq, uint timestamp, bool missed) =>
         throw new InvalidOperationException("This stream does not accept headers.");
 

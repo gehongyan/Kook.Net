@@ -1,11 +1,11 @@
 namespace Kook.Audio.Streams;
 
-///<summary> Converts Opus to PCM </summary>
+///<summary>
+///     表示一个 Opus 解码音频流。
+/// </summary>
 public class OpusDecodeStream : AudioOutStream
 {
-    /// <summary>
-    ///     Gets the sample rate.
-    /// </summary>
+    /// <inheritdoc cref="F:Kook.Audio.Streams.OpusEncodeStream.SampleRate" />
     public const int SampleRate = OpusEncodeStream.SampleRate;
 
     private readonly AudioStream _next;
@@ -14,7 +14,9 @@ public class OpusDecodeStream : AudioOutStream
     private bool _nextMissed;
     private bool _hasHeader;
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     初始化一个 <see cref="OpusDecodeStream"/> 类的新实例。
+    /// </summary>
     public OpusDecodeStream(AudioStream next)
     {
         _next = next;
@@ -22,7 +24,8 @@ public class OpusDecodeStream : AudioOutStream
         _decoder = new OpusDecoder();
     }
 
-    /// <exception cref="InvalidOperationException">Header received with no payload.</exception>
+    /// <inheritdoc />
+    /// <exception cref="InvalidOperationException"> 该流接收到没有有效负载的 RTP 头部。 </exception>
     public override void WriteHeader(ushort seq, uint timestamp, bool missed)
     {
         if (_hasHeader)
@@ -33,7 +36,8 @@ public class OpusDecodeStream : AudioOutStream
         _next.WriteHeader(seq, timestamp, missed);
     }
 
-    /// <exception cref="InvalidOperationException">Received payload without an RTP header.</exception>
+    /// <inheritdoc />
+    /// <exception cref="InvalidOperationException"> 该流接收到没有 RTP 头部的有效负载。 </exception>
     public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
     {
         if (!_hasHeader)

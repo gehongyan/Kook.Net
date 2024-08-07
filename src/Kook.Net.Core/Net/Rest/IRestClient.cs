@@ -19,7 +19,7 @@ public interface IRestClient : IDisposable
     /// <summary>
     ///     设置此客户端的取消令牌。
     /// </summary>
-    /// <param name="cancellationToken"> 取消令牌。 </param>
+    /// <param name="cancellationToken"> 用于取消任务的取消令牌。 </param>
     void SetCancellationToken(CancellationToken cancellationToken);
 
     /// <summary>
