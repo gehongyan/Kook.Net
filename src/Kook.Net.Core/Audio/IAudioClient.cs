@@ -57,6 +57,12 @@ public interface IAudioClient : IDisposable
     int UdpLatency { get; }
 
     /// <summary>
+    ///     Gets the current audio streams.
+    /// </summary>
+    /// <returns> A dictionary of audio streams, where each stream is keyed by the RTP SSRC. </returns>
+    IReadOnlyDictionary<uint, AudioInStream> GetStreams();
+
+    /// <summary>
     ///     Stops the client from sending audio.
     /// </summary>
     /// <returns> A task representing the asynchronous operation. </returns>
