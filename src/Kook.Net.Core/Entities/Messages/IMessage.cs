@@ -135,7 +135,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     ///     从此消息中移除一个回应。
     /// </summary>
     /// <param name="emote"> 要从此消息移除的回应的表情符号。 </param>
-    /// <param name="user"> 要删除其回应的用户。 </param>
+    /// <param name="user"> 要移除其回应的用户。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步移除操作的任务。 </returns>
     Task RemoveReactionAsync(IEmote emote, IUser user, RequestOptions? options = null);
@@ -144,7 +144,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     ///     从此消息中移除一个回应。
     /// </summary>
     /// <param name="emote"> 要从此消息移除的回应的表情符号。 </param>
-    /// <param name="userId"> 要删除其回应的用户的 ID。 </param>
+    /// <param name="userId"> 要移除其回应的用户的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步移除操作的任务。 </returns>
     Task RemoveReactionAsync(IEmote emote, ulong userId, RequestOptions? options = null);

@@ -7,7 +7,7 @@ using Kook.API.Rest;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a REST-based KOOK client.
+///     表示一个基于 REST 的 KOOK 客户端。
 /// </summary>
 public class KookRestClient : BaseKookClient, IKookClient
 {
@@ -19,9 +19,7 @@ public class KookRestClient : BaseKookClient, IKookClient
         NumberHandling = JsonNumberHandling.AllowReadingFromString
     };
 
-    /// <summary>
-    ///     Gets the logged-in user.
-    /// </summary>
+    /// <inheritdoc cref="P:Kook.Rest.BaseKookClient.CurrentUser" />
     public new RestSelfUser? CurrentUser
     {
         get => base.CurrentUser as RestSelfUser;
@@ -29,7 +27,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     }
 
     /// <summary>
-    ///     Initializes a new REST-based KOOK client with the default configuration.
+    ///     使用默认配置初始化一个 <see cref="KookRestClient"/> 类的新实例。
     /// </summary>
     public KookRestClient()
         : this(new KookRestConfig())
@@ -37,9 +35,9 @@ public class KookRestClient : BaseKookClient, IKookClient
     }
 
     /// <summary>
-    ///     Initializes a new REST-based KOOK client with the specified configuration.
+    ///     使用指定的配置初始化一个 <see cref="KookRestClient"/> 类的新实例。
     /// </summary>
-    /// <param name="config"> The configuration to use. </param>
+    /// <param name="config"> 用于初始化客户端的配置。 </param>
     public KookRestClient(KookRestConfig config)
         : base(config, CreateApiClient(config))
     {
@@ -79,25 +77,19 @@ public class KookRestClient : BaseKookClient, IKookClient
     #region Guilds
 
     /// <summary>
-    ///     Gets a guild.
+    ///     获取一个服务器。
     /// </summary>
-    /// <param name="id">The guild identifier.</param>
+    /// <param name="id"> 服务器的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the guild associated
-    ///     with the identifier; <c>null</c> when the guild cannot be found.
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的服务器；若指定 ID 的服务器不存在，则为 <c>null</c>。 </returns>
     public Task<RestGuild> GetGuildAsync(ulong id, RequestOptions? options = null) =>
         ClientHelper.GetGuildAsync(this, id, options);
 
     /// <summary>
-    ///     Gets a collection of guilds that the user is currently in.
+    ///     获取当前用户所在的所有服务器。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
-    ///     of guilds that the current user is in.
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是当前用户所在的所有服务器。 </returns>
     public Task<IReadOnlyCollection<RestGuild>> GetGuildsAsync(RequestOptions? options = null) =>
         ClientHelper.GetGuildsAsync(this, options);
 
@@ -106,45 +98,33 @@ public class KookRestClient : BaseKookClient, IKookClient
     #region Channels
 
     /// <summary>
-    ///     Gets a generic channel.
+    ///     获取一个频道。
     /// </summary>
-    /// <param name="id">The identifier of the channel.</param>
+    /// <param name="id"> 频道的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the channel associated
-    ///     with the identifier; <c>null</c> when the channel cannot be found.
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的频道；若指定 ID 的频道不存在，则为 <c>null</c>。 </returns>
     public Task<RestChannel> GetChannelAsync(ulong id, RequestOptions? options = null) =>
         ClientHelper.GetChannelAsync(this, id, options);
 
     /// <summary>
-    ///     Gets a direct message channel.
+    ///     获取一个私聊频道。
     /// </summary>
-    /// <param name="chatCode">The identifier of the channel.</param>
+    /// <param name="chatCode"> 私聊频道的聊天代码。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
-    ///     of direct-message channels that the user currently partakes in.
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定聊天代码的私聊频道；若指定聊天代码的私聊频道不存在，则为 <c>null</c>。 </returns>
     public Task<RestDMChannel> GetDMChannelAsync(Guid chatCode, RequestOptions? options = null) =>
         ClientHelper.GetDMChannelAsync(this, chatCode, options);
 
     /// <summary>
-    ///     Gets a collection of direct message channels opened in this session.
+    ///     获取当前会话中已创建的所有私聊频道。
     /// </summary>
     /// <remarks>
-    ///     This method returns a collection of currently opened direct message channels.
-    ///     <br />
     ///     <note type="warning">
-    ///         This method will not return previously opened DM channels outside of the current session! If you
-    ///         have just started the client, this may return an empty collection.
+    ///         此方法不会返回当前会话之外已创建的私聊频道。如果客户端刚刚启动，这可能会返回一个空集合。
     ///     </note>
     /// </remarks>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection
-    ///     of direct-message channels that the user currently partakes in.
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是当前会话中已创建的所有私聊频道。 </returns>
     public Task<IReadOnlyCollection<RestDMChannel>> GetDMChannelsAsync(RequestOptions? options = null) =>
         ClientHelper.GetDMChannelsAsync(this, options);
 
@@ -153,23 +133,25 @@ public class KookRestClient : BaseKookClient, IKookClient
     #region Roles
 
     /// <summary>
-    ///     Adds the specified role to this user in the guild.
+    ///     在指定服务器内授予指定用户指定的角色。
     /// </summary>
-    /// <param name="guildId"> The guild where the role and user are located. </param>
-    /// <param name="userId"> The user to add the role to. </param>
-    /// <param name="roleId"> The role to be added to the user. </param>
-    /// <returns> A task that represents the asynchronous role addition operation. </returns>
-    public Task AddRoleAsync(ulong guildId, ulong userId, uint roleId) =>
+    /// <param name="guildId"> 要授予的角色及服务器用户所在的服务器的 ID。 </param>
+    /// <param name="userId"> 要为其授予角色的用户的 ID。 </param>
+    /// <param name="roleId"> 要授予的角色的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步授予操作的任务。 </returns>
+    public Task AddRoleAsync(ulong guildId, ulong userId, uint roleId, RequestOptions? options = null) =>
         ClientHelper.AddRoleAsync(this, guildId, userId, roleId);
 
     /// <summary>
-    ///     Removes the specified <paramref name="roleId"/> from this user in the guild.
+    ///     在指定服务器内撤销指定用户指定的角色。
     /// </summary>
-    /// <param name="guildId"> The guild where the role and user are located. </param>
-    /// <param name="userId"> The user to remove the role from. </param>
-    /// <param name="roleId"> The role to be removed from the user. </param>
-    /// <returns> A task that represents the asynchronous role removal operation. </returns>
-    public Task RemoveRoleAsync(ulong guildId, ulong userId, uint roleId) =>
+    /// <param name="guildId"> 要撤销的角色及服务器用户所在的服务器的 ID。 </param>
+    /// <param name="userId"> 要为其撤销角色的用户的 ID。 </param>
+    /// <param name="roleId"> 要撤销的角色的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步撤销操作的任务。 </returns>
+    public Task RemoveRoleAsync(ulong guildId, ulong userId, uint roleId, RequestOptions? options = null) =>
         ClientHelper.RemoveRoleAsync(this, guildId, userId, roleId);
 
     #endregion
@@ -177,27 +159,21 @@ public class KookRestClient : BaseKookClient, IKookClient
     #region Users
 
     /// <summary>
-    ///     Gets a user.
+    ///     获取一个用户。
     /// </summary>
-    /// <param name="id"> The identifier of the user (e.g. `168693960628371456`). </param>
+    /// <param name="id"> 用户的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the user associated with
-    ///     the identifier; <c>null</c> if the user is not found.
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的用户；若指定 ID 的用户不存在，则为 <c>null</c>。 </returns>
     public Task<RestUser> GetUserAsync(ulong id, RequestOptions? options = null) =>
         ClientHelper.GetUserAsync(this, id, options);
 
     /// <summary>
-    ///     Gets a user from a guild.
+    ///     获取一个服务器用户。
     /// </summary>
-    /// <param name="guildId"> The identifier of the guild where the user is located. </param>
-    /// <param name="id"> The identifier of the user (e.g. `168693960628371456`). </param>
+    /// <param name="guildId"> 服务器的 ID。 </param>
+    /// <param name="id"> 用户的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the user from a guild
-    ///     associated with the identifier; <c>null</c> if the user is not found in the guild.
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是在具有指定 ID 的服务器内具有指定 ID 的用户；若指定 ID 的服务器内指定 ID 的用户不存在，则为 <c>null</c>。 </returns>
     public Task<RestGuildUser?> GetGuildUserAsync(ulong guildId, ulong id, RequestOptions? options = null) =>
         ClientHelper.GetGuildMemberAsync(this, guildId, id, options);
 
@@ -206,35 +182,26 @@ public class KookRestClient : BaseKookClient, IKookClient
     #region Friends
 
     /// <summary>
-    ///     Gets friends.
+    ///     获取所有好友。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a collection of users
-    ///     that are friends with the current user.
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是所有与当前用户是好友的用户。 </returns>
     public Task<IReadOnlyCollection<RestUser>> GetFriendsAsync(RequestOptions? options = null) =>
         ClientHelper.GetFriendsAsync(this, options);
 
     /// <summary>
-    ///     Gets friend requests.
+    ///     获取所有好友请求。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a collection of
-    ///     friend requests that the current user has received.
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是所有请求与当前用户成为好友的用户。 </returns>
     public Task<IReadOnlyCollection<RestFriendRequest>> GetFriendRequestsAsync(RequestOptions? options = null) =>
         ClientHelper.GetFriendRequestsAsync(this, options);
 
     /// <summary>
-    ///     Gets blocked users.
+    ///     获取所有被当前用户屏蔽的用户。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a collection of users
-    ///     that are blocked by the current user.
-    /// </returns>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是所有被当前用户屏蔽的用户。 </returns>
     public Task<IReadOnlyCollection<RestUser>> GetBlockedUsersAsync(RequestOptions? options = null) =>
         ClientHelper.GetBlockedUsersAsync(this, options);
 
@@ -243,48 +210,44 @@ public class KookRestClient : BaseKookClient, IKookClient
     #region Reactions
 
     /// <summary>
-    ///     Adds a reaction to a message.
+    ///     向指定的消息添加一个回应。
     /// </summary>
-    /// <param name="messageId"> 消息的 ID。 </param>
-    /// <param name="emote"> The emoji used to react to the message. </param>
+    /// <param name="messageId"> 要为其添加回应的消息的 ID。 </param>
+    /// <param name="emote"> 要用于向指定消息添加回应的表情符号。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A task that represents the asynchronous operation for adding a reaction to the message. </returns>
-    /// <seealso cref="IEmote"/>
+    /// <returns> 一个表示添加添加异步操作的任务。 </returns>
     public Task AddReactionAsync(Guid messageId, IEmote emote, RequestOptions? options = null) =>
         MessageHelper.AddReactionAsync(messageId, emote, this, options);
 
     /// <summary>
-    ///     Removes a reaction from a message.
+    ///     从指定的消息移除一个回应。
     /// </summary>
-    /// <param name="messageId"> 消息的 ID。 </param>
-    /// <param name="userId"> The identifier of the user who added the reaction. </param>
-    /// <param name="emote"> The emoji used to remove from the message. </param>
+    /// <param name="messageId"> 要从中移除回应的消息的 ID。 </param>
+    /// <param name="userId"> 要移除其回应的用户的 ID。 </param>
+    /// <param name="emote"> 要从指定消息移除的回应的表情符号。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A task that represents the asynchronous operation for removing a reaction from the message. </returns>
-    /// <seealso cref="IEmote"/>
+    /// <returns> 一个表示异步移除操作的任务。 </returns>
     public Task RemoveReactionAsync(Guid messageId, ulong userId, IEmote emote, RequestOptions? options = null) =>
         MessageHelper.RemoveReactionAsync(messageId, userId, emote, this, options);
 
     /// <summary>
-    ///     Adds a reaction to a direct message.
+    ///     向指定的私聊消息添加一个回应。
     /// </summary>
-    /// <param name="messageId"> The identifier of the direct message. </param>
-    /// <param name="emote"> The emoji used to react to the message. </param>
+    /// <param name="messageId"> 要为其添加回应的消息的 ID。 </param>
+    /// <param name="emote"> 要用于向指定消息添加回应的表情符号。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A task that represents the asynchronous operation for adding a reaction to the direct message. </returns>
-    /// <seealso cref="IEmote"/>
+    /// <returns> 一个表示添加添加异步操作的任务。 </returns>
     public Task AddDirectMessageReactionAsync(Guid messageId, IEmote emote, RequestOptions? options = null) =>
         MessageHelper.AddDirectMessageReactionAsync(messageId, emote, this, options);
 
     /// <summary>
-    ///     Removes a reaction from a direct message.
+    ///     从指定的私聊消息移除一个回应。
     /// </summary>
-    /// <param name="messageId"> The identifier of the direct message. </param>
-    /// <param name="userId"> The identifier of the user who added the reaction. </param>
-    /// <param name="emote"> The emoji used to remove from the message. </param>
+    /// <param name="messageId"> 要从中移除回应的消息的 ID。 </param>
+    /// <param name="userId"> 要移除其回应的用户的 ID。 </param>
+    /// <param name="emote"> 要从指定消息移除的回应的表情符号。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A task that represents the asynchronous operation for removing a reaction from the direct message. </returns>
-    /// <seealso cref="IEmote"/>
+    /// <returns> 一个表示异步移除操作的任务。 </returns>
     public Task RemoveDirectMessageReactionAsync(Guid messageId, ulong userId, IEmote emote, RequestOptions? options = null) =>
         MessageHelper.RemoveDirectMessageReactionAsync(messageId, userId, emote, this, options);
 
@@ -293,12 +256,12 @@ public class KookRestClient : BaseKookClient, IKookClient
     #region Assets
 
     /// <summary>
-    ///     Creates an asset from a file path.
+    ///     从文件路径上传并创建一个资源。
     /// </summary>
     /// <param name="path"> 文件的路径。 </param>
     /// <param name="filename"> 文件名。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> The asset resource URI of the uploaded file. </returns>
+    /// <returns> 一个表示异步创建操作的任务。任务的结果是上传文件后的资源地址 URL。 </returns>
     public async Task<string> CreateAssetAsync(string path, string? filename = null, RequestOptions? options = null)
     {
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
@@ -311,12 +274,12 @@ public class KookRestClient : BaseKookClient, IKookClient
     }
 
     /// <summary>
-    ///     Creates an asset from a stream.
+    ///     从文件的流上传并创建一个资源。
     /// </summary>
     /// <param name="stream"> 文件的流。 </param>
     /// <param name="filename"> 文件名。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> The asset resource URI of the uploaded file. </returns>
+    /// <returns> 一个表示异步创建操作的任务。任务的结果是上传文件后的资源地址 URL。 </returns>
     public Task<string> CreateAssetAsync(Stream stream, string filename, RequestOptions? options = null) =>
         ClientHelper.CreateAssetAsync(this, stream, filename, options);
 
@@ -325,26 +288,36 @@ public class KookRestClient : BaseKookClient, IKookClient
     #region Games
 
     /// <summary>
-    ///     Gets games information.
+    ///     获取所有游戏信息。
     /// </summary>
-    /// <param name="source">
-    ///     Specifies whether to return games information created by the current user or
-    ///     by the system by default; <c>null</c> to return all games information.
-    /// </param>
+    /// <remarks>
+    ///     <note type="important">
+    ///         返回的集合是一个异步可枚举对象；调用
+    ///         <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///         可以异步枚举所有分页，并将其合并为一个集合。
+    ///     </note>
+    ///     <br />
+    ///     此方法将尝试获取所有具有指定创建源的游戏信息。此方法会根据 <see cref="F:Kook.KookConfig.MaxItemsPerBatchByDefault"/>
+    ///     将请求拆分。换句话说，如果有 3000 款游戏的信息，而 <see cref="F:Kook.KookConfig.MaxItemsPerBatchByDefault"/> 的常量为
+    ///     <c>100</c>，则请求将被拆分为 30 个单独请求，因此异步枚举器会异步枚举返回 30 个响应。
+    ///     <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///     方法可以展开这 30 个响应返回的集合，并将其合并为一个集合。
+    /// </remarks>
+    /// <param name="source"> 要获取的游戏信息的创建来源。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A collection of games information. </returns>
+    /// <returns> 分页的游戏信息集合的异步可枚举对象。 </returns>
     public IAsyncEnumerable<IReadOnlyCollection<RestGame>> GetGamesAsync(
         GameCreationSource? source = null, RequestOptions? options = null) =>
         ClientHelper.GetGamesAsync(this, source, options);
 
     /// <summary>
-    ///     Creates game information.
+    ///     创建一款游戏的信息。
     /// </summary>
-    /// <param name="name"> The name of the game. </param>
-    /// <param name="processName"> The process name of the game. </param>
-    /// <param name="iconUrl"> The icon URI of the game. </param>
+    /// <param name="name"> 游戏的名称。 </param>
+    /// <param name="processName"> 游戏进程的名称。 </param>
+    /// <param name="iconUrl"> 游戏图标的资源地址 URL。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns></returns>
+    /// <returns> 一个表示异步创建操作的任务。任务的结果是所创建的游戏信息。 </returns>
     public Task<RestGame> CreateGameAsync(string name,
         string? processName = null, string? iconUrl = null, RequestOptions? options = null) =>
         ClientHelper.CreateGameAsync(this, name, processName, iconUrl, options);

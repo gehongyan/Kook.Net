@@ -1,7 +1,6 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic Kook client.
 ///     表示一个通用的 KOOK 客户端。
 /// </summary>
 public interface IKookClient : IDisposable
@@ -46,7 +45,7 @@ public interface IKookClient : IDisposable
     #region Channels
 
     /// <summary>
-    ///     获取一个通用的频道。
+    ///     获取一个频道。
     /// </summary>
     /// <param name="id"> 频道的 ID。 </param>
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>

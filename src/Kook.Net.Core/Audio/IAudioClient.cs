@@ -34,11 +34,13 @@ public interface IAudioClient : IDisposable
 
     /// <summary>
     ///     当音频输入流被销毁时引发。
+    /// </summary>
+    /// <remarks>
     ///     事件参数：
     ///     <list type="number">
     ///     <item> <see cref="T:System.Int32"/> 参数是 RTP 流的 SSRC 同步信源标识符。 </item>
     ///     </list>
-    /// </summary>
+    /// </remarks>
     event Func<uint, Task> StreamDestroyed;
 
     /// <summary>
@@ -92,7 +94,7 @@ public interface IAudioClient : IDisposable
     /// <summary>
     ///     获取该语音客户端所接收的所有音频输入流。
     /// </summary>
-    /// <returns> 一个以 SSRC 同步信源标识符为键，音频输入流为值的只读字典。 </returns>
+    /// <returns> 一个只读字典，其中键是 RTP 流的 SSRC 同步信源标识符，值是对应的音频输入流。 </returns>
     IReadOnlyDictionary<uint, AudioInStream> GetStreams();
 
     /// <summary>
