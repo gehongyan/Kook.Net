@@ -5,7 +5,7 @@ using Model = Kook.API.Channel;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a REST-based guild channel in a guild.
+///     表示一个基于 REST 的服务器频道。
 /// </summary>
 public class RestGuildChannel : RestChannel, IGuildChannel
 {
@@ -20,13 +20,8 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// <inheritdoc />
     public virtual IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites => _userPermissionOverwrites;
 
-    /// <summary>
-    ///     Gets the guild associated with this channel.
-    /// </summary>
-    /// <returns>
-    ///     A guild object that this channel belongs to.
-    /// </returns>
-    internal IGuild Guild { get; }
+    /// <inheritdoc cref="P:Kook.IGuildChannel.Guild" />
+    public IGuild Guild { get; }
 
     /// <inheritdoc />
     public ChannelType Type { get; internal set; }
@@ -95,17 +90,15 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     }
 
     /// <summary>
-    ///     Gets the creator of this channel.
+    ///     获取此频道的创建者。
     /// </summary>
     /// <remarks>
-    ///     This method will try to get the user as a global user. To get the creator as a guild member,
-    ///     you will need to get the user through
-    ///     <see cref="IGuild.GetUserAsync(ulong,CacheMode,RequestOptions)"/>."/>
+    ///     此方法会尝试获取服务器创建者的非服务器特定的用户实体。要获取该用户作为此服务器成员的服务器用户实体，请在
+    ///     <see cref="Guild"/> 上调用
+    ///     <see cref="M:Kook.IGuild.GetUserAsync(System.UInt64,Kook.CacheMode,Kook.RequestOptions)"/>。
     /// </remarks>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果为此频道的创建者；如果没有找到则为 <c>null</c>。 </returns>
     public async Task<RestUser?> GetCreatorAsync(RequestOptions? options = null)
     {
         if (CreatorId.HasValue)
@@ -124,34 +117,15 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         Update(model);
     }
 
-    /// <summary>
-    ///     Gets the permission overwrite for a specific user.
-    /// </summary>
-    /// <param name="user">The user to get the overwrite from.</param>
-    /// <returns>
-    ///     An overwrite object for the targeted user; <c>null</c> if none is set.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuildChannel.GetPermissionOverwrite(Kook.IUser)" />
     public OverwritePermissions? GetPermissionOverwrite(IUser user) =>
         _userPermissionOverwrites.FirstOrDefault(x => x.Target.Id == user.Id)?.Permissions;
 
-    /// <summary>
-    ///     Gets the permission overwrite for a specific role.
-    /// </summary>
-    /// <param name="role">The role to get the overwrite from.</param>
-    /// <returns>
-    ///     An overwrite object for the targeted role; <c>null</c> if none is set.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuildChannel.GetPermissionOverwrite(Kook.IRole)" />
     public OverwritePermissions? GetPermissionOverwrite(IRole role) =>
         _rolePermissionOverwrites.FirstOrDefault(x => x.Target == role.Id)?.Permissions;
 
-    /// <summary>
-    ///     Adds the permission overwrite for the given user.
-    /// </summary>
-    /// <param name="user">The user to add the overwrite to.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuildChannel.AddPermissionOverwriteAsync(Kook.IGuildUser,Kook.RequestOptions)" />
     public async Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null)
     {
         UserPermissionOverwrite permissionOverwrite = await ChannelHelper
@@ -160,14 +134,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         _userPermissionOverwrites = [.._userPermissionOverwrites, permissionOverwrite];
     }
 
-    /// <summary>
-    ///     Adds the permission overwrite for the given role.
-    /// </summary>
-    /// <param name="role">The role to add the overwrite to.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuildChannel.AddPermissionOverwriteAsync(Kook.IRole,Kook.RequestOptions)" />
     public async Task AddPermissionOverwriteAsync(IRole role, RequestOptions? options = null)
     {
         RolePermissionOverwrite permissionOverwrite = await ChannelHelper
@@ -176,43 +143,21 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         _rolePermissionOverwrites = [.._rolePermissionOverwrites, permissionOverwrite];
     }
 
-    /// <summary>
-    ///     Removes the permission overwrite for the given user, if one exists.
-    /// </summary>
-    /// <param name="user">The user to remove the overwrite from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuildChannel.RemovePermissionOverwriteAsync(Kook.IGuildUser,Kook.RequestOptions)" />
     public async Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null)
     {
         await ChannelHelper.RemovePermissionOverwriteAsync(this, Kook, user, options).ConfigureAwait(false);
         _userPermissionOverwrites = [.._userPermissionOverwrites.Where(x => x.Target.Id != user.Id)];
     }
 
-    /// <summary>
-    ///     Removes the permission overwrite for the given role, if one exists.
-    /// </summary>
-    /// <param name="role">The role to remove the overwrite from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuildChannel.RemovePermissionOverwriteAsync(Kook.IRole,Kook.RequestOptions)" />
     public async Task RemovePermissionOverwriteAsync(IRole role, RequestOptions? options = null)
     {
         await ChannelHelper.RemovePermissionOverwriteAsync(this, Kook, role, options).ConfigureAwait(false);
         _rolePermissionOverwrites = [.._rolePermissionOverwrites.Where(x => x.Target != role.Id)];
     }
 
-    /// <summary>
-    ///     Updates the permission overwrite for the given user, if one exists.
-    /// </summary>
-    /// <param name="user">The user to modify the overwrite for.</param>
-    /// <param name="func">A delegate containing the values to modify the permission overwrite with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuildChannel.ModifyPermissionOverwriteAsync(Kook.IGuildUser,System.Func{Kook.OverwritePermissions,Kook.OverwritePermissions},Kook.RequestOptions)" />
     public async Task ModifyPermissionOverwriteAsync(IGuildUser user,
         Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options = null)
     {
@@ -222,15 +167,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         _userPermissionOverwrites = [.._userPermissionOverwrites.Where(x => x.Target.Id != user.Id), permission];
     }
 
-    /// <summary>
-    ///     Updates the permission overwrite for the given role, if one exists.
-    /// </summary>
-    /// <param name="role">The role to remove the overwrite for.</param>
-    /// <param name="func">A delegate containing the values to modify the permission overwrite with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuildChannel.ModifyPermissionOverwriteAsync(Kook.IRole,System.Func{Kook.OverwritePermissions,Kook.OverwritePermissions},Kook.RequestOptions)" />
     public async Task ModifyPermissionOverwriteAsync(IRole role,
         Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options = null)
     {
@@ -240,12 +177,8 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         _rolePermissionOverwrites = [.._rolePermissionOverwrites.Where(x => x.Target != role.Id), permission];
     }
 
-    /// <summary>
-    ///     Gets the name of this channel.
-    /// </summary>
-    /// <returns>
-    ///     A string that is the name of this channel.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.Rest.RestGuildChannel.Name" />
+    /// <returns> 此频道的名称。 </returns>
     public override string ToString() => Name;
 
     #endregion

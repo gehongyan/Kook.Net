@@ -1,32 +1,32 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the type of a guild channel.
+///     表示服务器频道的类型。
 /// </summary>
 public enum ChannelType
 {
     /// <summary>
-    ///     Specifies that the type of the channel is unknown.
+    ///     频道类型未指定。
     /// </summary>
     Unspecified = -1,
 
     /// <summary>
-    ///     Specifies that the channel is a guild category channel.
+    ///     分组频道。
     /// </summary>
     Category = 0,
 
     /// <summary>
-    ///     Specifies that the channel is a guild text channel.
+    ///     文字频道。
     /// </summary>
     Text = 1,
 
     /// <summary>
-    ///     Specifies that the channel is a guild voice channel.
+    ///     语音频道。
     /// </summary>
     Voice = 2,
 
     /// <summary>
-    ///     Specifies that the channel is a direct message channel.
+    ///     私信频道。
     /// </summary>
     DM = 3
 }

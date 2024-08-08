@@ -1,76 +1,47 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a message attachment found in a <see cref="IUserMessage"/>.
+///     表示一个消息内通用的附件。
 /// </summary>
 public interface IAttachment
 {
     /// <summary>
-    ///     Gets the type of the attachment.
+    ///     获取此附件的类型。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="AttachmentType"/> representing the type of the attachment.
-    /// </returns>
     AttachmentType Type { get; }
 
     /// <summary>
-    ///     Gets the URL of the attachment.
+    ///     获取此附件的 URL。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the URL of the attachment.
-    /// </returns>
     string Url { get; }
 
     /// <summary>
-    ///     Gets the filename of this attachment.
+    ///     获取此附件的文件名。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> containing the full filename of this attachment.
-    /// </returns>
     string? Filename { get; }
 
     /// <summary>
-    ///     Gets the file size of the attachment.
+    ///     获取此附件的文件大小。
     /// </summary>
-    /// <returns>
-    ///     An <c>int</c> representing the file size of the attachment;
-    ///     <c>null</c> if the file size is unknown or not applicable.
-    /// </returns>
     int? Size { get; }
 
     /// <summary>
-    ///     Gets the file type of the attachment.
+    ///     获取此附件的文件类型。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the file type of the attachment;
-    ///     <c>null</c> if the file type is unknown or not applicable.
-    /// </returns>
     string? FileType { get; }
 
     /// <summary>
-    ///     Gets the duration of the attachment.
+    ///     如果此附件表示可播放的内容，则获取其持续时间。
     /// </summary>
-    /// <remarks>
-    ///     A timespan representing the duration of the attachment;
-    ///     <c>null</c> if the duration is unknown or not applicable.
-    /// </remarks>
     TimeSpan? Duration { get; }
 
     /// <summary>
-    ///     Gets the width of the attachment.
+    ///     如果此附件表示的内容包含画面，则获取其宽度。
     /// </summary>
-    /// <returns>
-    ///     An <c>int</c> representing the width of the attachment;
-    ///     <c>null</c> if the width is unknown or not applicable.
-    /// </returns>
     int? Width { get; }
 
     /// <summary>
-    ///     Gets the height of the attachment.
+    ///     如果此附件表示的内容包含画面，则获取其高度。
     /// </summary>
-    /// <returns>
-    ///     An <c>int</c> representing the height of the attachment;
-    ///     <c>null</c> if the height is unknown or not applicable.
-    /// </returns>
     int? Height { get; }
 }

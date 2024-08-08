@@ -23,7 +23,6 @@ internal class Logger
     public Task LogAsync(LogSeverity severity, FormattableString message, Exception? exception = null) =>
         _manager.LogAsync(severity, Name, message, exception);
 
-
     public Task ErrorAsync(Exception? exception) => _manager.ErrorAsync(Name, exception);
 
     public Task ErrorAsync(string message, Exception? exception = null) =>
@@ -31,7 +30,6 @@ internal class Logger
 
     public Task ErrorAsync(FormattableString message, Exception? exception = null) =>
         _manager.ErrorAsync(Name, message, exception);
-
 
     public Task WarningAsync(Exception? exception) => _manager.WarningAsync(Name, exception);
 
@@ -41,14 +39,12 @@ internal class Logger
     public Task WarningAsync(FormattableString message, Exception? exception = null) =>
         _manager.WarningAsync(Name, message, exception);
 
-
     public Task InfoAsync(Exception? exception) => _manager.InfoAsync(Name, exception);
 
     public Task InfoAsync(string message, Exception? exception = null) => _manager.InfoAsync(Name, message, exception);
 
     public Task InfoAsync(FormattableString message, Exception? exception = null) =>
         _manager.InfoAsync(Name, message, exception);
-
 
     public Task VerboseAsync(Exception? exception) => _manager.VerboseAsync(Name, exception);
 
@@ -57,7 +53,6 @@ internal class Logger
 
     public Task VerboseAsync(FormattableString message, Exception? exception = null) =>
         _manager.VerboseAsync(Name, message, exception);
-
 
     public Task DebugAsync(Exception? exception) => _manager.DebugAsync(Name, exception);
 

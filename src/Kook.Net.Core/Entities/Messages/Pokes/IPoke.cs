@@ -1,52 +1,52 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic poke.
+///     表示一个通用的 POKE。
 /// </summary>
 public interface IPoke : IEntity<uint>
 {
     /// <summary>
-    ///     Gets the name of the poke.
+    ///     获取 POKE 的名称。
     /// </summary>
     string Name { get; }
 
     /// <summary>
-    ///     Gets the description of the poke.
+    ///     获取 POKE 的描述。
     /// </summary>
     string Description { get; }
 
     /// <summary>
-    ///     Gets how long a user needs to wait before they can use the poke again.
+    ///     获取用户使用此 POKE 后的冷却时间。
     /// </summary>
     TimeSpan Cooldown { get; }
 
     /// <summary>
-    ///     Gets the categories of the poke.
+    ///     获取此 POKE 的分类。
     /// </summary>
     IReadOnlyCollection<string> Categories { get; }
 
     /// <summary>
-    ///     Gets the label of the poke.
+    ///     获取此 POKE 的标签。
     /// </summary>
     PokeLabel Label { get; }
 
     /// <summary>
-    ///      Gets the icon resources of the poke.
+    ///     获取此 POKE 的图标资源。
     /// </summary>
     PokeIcon Icon { get; }
 
     /// <summary>
-    ///     Gets the quality of the poke.
+    ///     获取此 POKE 的品质。
     /// </summary>
     PokeQuality Quality { get; }
 
     /// <summary>
-    ///     Gets the resource of the poke.
+    ///     获取此 POKE 的资源。
     /// </summary>
     IPokeResource Resource { get; }
 
     /// <summary>
-    ///     Gets how the poke can be used and displayed in message contexts.
+    ///     获取此 POKE 如何在消息上下文中使用和显示。
     /// </summary>
     IReadOnlyDictionary<string, string> MessageScenarios { get; }
 }

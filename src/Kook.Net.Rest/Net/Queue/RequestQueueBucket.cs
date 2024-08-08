@@ -124,12 +124,7 @@ internal class RequestBucket
                                 responseBase?.Code,
                                 responseBase?.Message,
                                 responseBase?.Data is not null
-                                    ?
-                                    [
-                                        new("root",
-                                            [new(((int)responseBase.Code).ToString(), responseBase.Message)]
-                                        )
-                                    ]
+                                    ? [new KookJsonError("root", [new KookError(((int)responseBase.Code).ToString(), responseBase.Message)])]
                                     : null
                             );
                     }
@@ -150,12 +145,7 @@ internal class RequestBucket
                                 responseBase.Code,
                                 responseBase.Message,
                                 responseBase.Data is not null
-                                    ?
-                                    [
-                                        new KookJsonError("root",
-                                            [new KookError(((int)responseBase.Code).ToString(), responseBase.Message)]
-                                        )
-                                    ]
+                                    ? [new KookJsonError("root", [new KookError(((int)responseBase.Code).ToString(), responseBase.Message)])]
                                     : null
                             );
                         }

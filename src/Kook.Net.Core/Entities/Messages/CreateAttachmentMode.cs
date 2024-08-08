@@ -1,23 +1,22 @@
 namespace Kook;
 
 /// <summary>
-///     Indicates that how the <see cref="FileAttachment"/> will be operated to attache files.
+///     指示 <see cref="FileAttachment"/> 如何创建附件。
 /// </summary>
 public enum CreateAttachmentMode
 {
     /// <summary>
-    ///     The <see cref="FileAttachment"/> will be created via a local file path.
+    ///     通过本地文件路径创建附件。
     /// </summary>
     FilePath,
 
     /// <summary>
-    ///     The <see cref="FileAttachment"/> will be created via a <see cref="Stream"/>.
+    ///     通过 <see cref="T:System.IO.Stream"/> 流的实例创建附件。
     /// </summary>
     Stream,
 
     /// <summary>
-    ///     The <see cref="FileAttachment"/> will be created via a <see cref="System.Uri"/>
-    ///     pointing to a file on KOOK asset OSS.
+    ///     通过指向 KOOK 对象存储服务器上的文件的 <see cref="T:System.Uri"/> 创建附件。
     /// </summary>
     AssetUri
 }

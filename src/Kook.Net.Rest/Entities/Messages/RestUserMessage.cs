@@ -5,7 +5,7 @@ using System.Diagnostics;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a REST-based message sent by a user.
+///     表示一个基于 REST 的用户消息。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestUserMessage : RestMessage, IUserMessage
@@ -49,12 +49,12 @@ public class RestUserMessage : RestMessage, IUserMessage
     public override IReadOnlyCollection<uint> MentionedRoleIds => _roleMentionIds;
 
     /// <summary>
-    ///     Gets a collection of the mentioned roles in the message.
+    ///     获取此消息中提及的所有角色。
     /// </summary>
     public IReadOnlyCollection<RestRole> MentionedRoles => _roleMentions;
 
     /// <summary>
-    ///     Gets a collection of the mentioned channels in the message.
+    ///     获取此消息中提及的所有频道。
     /// </summary>
     public IReadOnlyCollection<RestGuildChannel> MentionedChannels => _channelMentions;
 
@@ -173,14 +173,15 @@ public class RestUserMessage : RestMessage, IUserMessage
     }
 
     /// <summary>
-    ///     Transforms this message's text into a human-readable form by resolving its tags.
+    ///     转换消息文本中的提及与表情符号为可读形式。
     /// </summary>
-    /// <param name="startIndex">The zero-based index at which to begin the resolving for the specified value.</param>
-    /// <param name="userHandling">Determines how the user tag should be handled.</param>
-    /// <param name="channelHandling">Determines how the channel tag should be handled.</param>
-    /// <param name="roleHandling">Determines how the role tag should be handled.</param>
-    /// <param name="everyoneHandling">Determines how the @everyone tag should be handled.</param>
-    /// <param name="emojiHandling">Determines how the emoji tag should be handled.</param>
+    /// <param name="startIndex"> 指定解析的起始位置。 </param>
+    /// <param name="userHandling"> 指定用户提及标签的处理方式。 </param>
+    /// <param name="channelHandling"> 指定频道提及标签的处理方式。 </param>
+    /// <param name="roleHandling"> 指定角色提及标签的处理方式。 </param>
+    /// <param name="everyoneHandling"> 指定全体成员与在线成员提及标签的处理方式。 </param>
+    /// <param name="emojiHandling"> 指定表情符号标签的处理方式。 </param>
+    /// <returns> 转换后的消息文本。 </returns>
     public string Resolve(int startIndex, TagHandling userHandling = TagHandling.Name,
         TagHandling channelHandling = TagHandling.Name, TagHandling roleHandling = TagHandling.Name,
         TagHandling everyoneHandling = TagHandling.Ignore, TagHandling emojiHandling = TagHandling.Name) =>
@@ -208,21 +209,12 @@ public class RestUserMessage : RestMessage, IUserMessage
     public async Task ModifyAsync(Action<MessageProperties> func, RequestOptions? options = null)
     {
         await MessageHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
-        MessageProperties properties = new() { Content = Content, Cards = Cards, Quote = Quote };
+        MessageProperties properties = new() { Content = Content, Cards = [..Cards], Quote = Quote };
         func(properties);
         Content = properties.Content;
         _cards = properties.Cards?.ToImmutableArray() ?? ImmutableArray<ICard>.Empty;
         Quote = properties.Quote?.QuotedMessageId == Guid.Empty ? null : properties.Quote;
     }
-
-    /// <inheritdoc />
-    bool? IMessage.IsPinned => IsPinned;
-
-    /// <inheritdoc />
-    IReadOnlyCollection<ICard> IMessage.Cards => Cards;
-
-    /// <inheritdoc />
-    IReadOnlyCollection<IEmbed> IMessage.Embeds => Embeds;
 
     #endregion
 }

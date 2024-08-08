@@ -2,7 +2,9 @@ using System.Collections.Concurrent;
 
 namespace Kook.Audio.Streams;
 
-///<summary> Reads the payload from an RTP frame </summary>
+///<summary>
+///     表示输入音频流，用于在 <see cref="T:Kook.Audio.IAudioClient"/> 实例中，从语音服务器接收语音数据。
+/// </summary>
 public class InputStream : AudioInStream
 {
     private const int MaxFrames = 100; //1-2 Seconds

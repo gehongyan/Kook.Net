@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a section module in card.
+///     内容模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SectionModule : IModule, IEquatable<SectionModule>, IEquatable<IModule>
@@ -20,60 +20,41 @@ public class SectionModule : IModule, IEquatable<SectionModule>, IEquatable<IMod
     public ModuleType Type => ModuleType.Section;
 
     /// <summary>
-    ///     Specifies that the <see cref="Accessory"/> is to the left or right of <see cref="Text"/>.
+    ///     获取模块的附加内容的位置。
     /// </summary>
-    /// <returns>
-    ///     <see cref="SectionAccessoryMode.Left"/> if the <see cref="Accessory"/> is to the left of <see cref="Text"/>,
-    ///     <see cref="SectionAccessoryMode.Right"/> if the <see cref="Accessory"/> is to the right of <see cref="Text"/>,
-    /// </returns>
     public SectionAccessoryMode? Mode { get; }
 
     /// <summary>
-    ///     Gets the text of the section.
+    ///     获取模块的文本内容。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IElement"/> representing the text of the section.
-    /// </returns>
     public IElement? Text { get; }
 
     /// <summary>
-    ///     Gets the accessory of the section.
+    ///     获取模块的附加内容。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IElement"/> representing the accessory of the section.
-    /// </returns>
     public IElement? Accessory { get; }
 
     private string DebuggerDisplay => $"{Type}: {Text}{(Accessory is null ? string.Empty : $"{Mode} Accessory")}";
 
     /// <summary>
-    ///     Determines whether the specified <see cref="SectionModule"/> is equal to the current <see cref="SectionModule"/>.
+    ///     判定两个 <see cref="SectionModule"/> 是否相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="SectionModule"/> is equal to the current <see cref="SectionModule"/>; otherwise, <c>false</c>.
-    /// </returns>
+    /// <returns> 如果两个 <see cref="SectionModule"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(SectionModule left, SectionModule right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="SectionModule"/> is not equal to the current <see cref="SectionModule"/>.
+    ///     判定两个 <see cref="SectionModule"/> 是否不相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="SectionModule"/> is not equal to the current <see cref="SectionModule"/>; otherwise, <c>false</c>.
-    /// </returns>
+    /// <returns> 如果两个 <see cref="SectionModule"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(SectionModule left, SectionModule right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="SectionModule"/> is equal to the current <see cref="SectionModule"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="SectionModule"/>, <see cref="Equals(SectionModule)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="SectionModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="SectionModule"/> is equal to the current <see cref="SectionModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is SectionModule sectionModule && Equals(sectionModule);
 
-    /// <summary>Determines whether the specified <see cref="SectionModule"/> is equal to the current <see cref="SectionModule"/>.</summary>
-    /// <param name="sectionModule">The <see cref="SectionModule"/> to compare with the current <see cref="SectionModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="SectionModule"/> is equal to the current <see cref="SectionModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] SectionModule? sectionModule) =>
         GetHashCode() == sectionModule?.GetHashCode();
 

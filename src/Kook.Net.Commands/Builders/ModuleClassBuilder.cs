@@ -33,7 +33,6 @@ internal static class ModuleClassBuilder
             && info.GetCustomAttribute<DontAutoLoadAttribute>() == null;
     }
 
-
     public static Task<Dictionary<Type, ModuleInfo>> BuildAsync(CommandService service,
         IServiceProvider services, params TypeInfo[] validTypes) =>
         BuildAsync(validTypes, service, services);

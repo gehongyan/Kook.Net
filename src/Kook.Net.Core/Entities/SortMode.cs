@@ -1,17 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the sorting mode.
+///     表示排序模式。
 /// </summary>
 public enum SortMode
 {
     /// <summary>
-    ///     The items are sorted in ascending order.
+    ///     项目按升序排序。
     /// </summary>
     Ascending = 0,
 
     /// <summary>
-    ///     The items are sorted in descending order.
+    ///     项目按降序排序。
     /// </summary>
     Descending = 1
 }

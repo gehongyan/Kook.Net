@@ -3,7 +3,7 @@ using System.Diagnostics;
 namespace Kook;
 
 /// <summary>
-///     An image-based emote that is attached to a guild.
+///     表示一个附属于服务器的基于图片的表情符号。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class GuildEmote : Emote
@@ -16,31 +16,19 @@ public class GuildEmote : Emote
     }
 
     /// <summary>
-    ///     The ID of the guild this emote is attached to.
+    ///     获取此表情符号所属的服务器的 ID。
     /// </summary>
-    /// <returns>
-    ///     A ulong that identifies the guild this emote is attached to.
-    /// </returns>
     public ulong GuildId { get; }
 
     /// <summary>
-    ///     Gets the user who created this emote.
+    ///     获取创建此表情符号的用户的 ID
     /// </summary>
-    /// <returns>
-    ///     An <see cref="ulong"/> representing the user who created this emote;
-    ///     <c>null</c> if unknown.
-    /// </returns>
+    /// <remarks>
+    ///     如果无法确定创建此表情符号的用户的 ID，则为 <c>null</c>。
+    /// </remarks>
     public ulong? CreatorId { get; }
 
     private string DebuggerDisplay => $"{Name} ({Id}{(Animated == true ? ", Animated" : "")})";
-
-    /// <summary>
-    ///     Gets the raw representation of the emote.
-    /// </summary>
-    /// <returns>
-    ///     A string representing the raw presentation of the emote.
-    /// </returns>
-    public override string ToString() => $"(emj){Name}(emj)[{Id}]";
 
     internal GuildEmote Clone() => (GuildEmote) MemberwiseClone();
 }

@@ -3,6 +3,6 @@
 namespace Kook.Net.Queue;
 
 /// <summary>
-///     Represents a delegate that provides a new <see cref="IMessageQueue"/> instance.
+///     表示一个提供新的 <see cref="IMessageQueue"/> 实例的委托。
 /// </summary>
 public delegate BaseMessageQueue MessageQueueProvider(Func<JsonElement, Task> eventHandler);

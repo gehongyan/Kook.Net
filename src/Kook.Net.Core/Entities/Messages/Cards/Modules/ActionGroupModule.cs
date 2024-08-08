@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents an action group module that can be used in an <see cref="ICard"/>.
+///     按钮组模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>, IEquatable<IModule>
@@ -19,39 +19,31 @@ public class ActionGroupModule : IModule, IEquatable<ActionGroupModule>, IEquata
     public ModuleType Type => ModuleType.ActionGroup;
 
     /// <summary>
-    ///     Gets the elements of this module.
+    ///     获取模块的元素。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="ImmutableArray{ButtonElement}"/> containing the elements of this module.
-    /// </returns>
     public ImmutableArray<ButtonElement> Elements { get; }
 
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ActionGroupModule"/> is equal to the current <see cref="ActionGroupModule"/>.
+    ///     判定两个 <see cref="ActionGroupModule"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ActionGroupModule"/> is equal to the current <see cref="ActionGroupModule"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ActionGroupModule"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(ActionGroupModule left, ActionGroupModule right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ActionGroupModule"/> is not equal to the current <see cref="ActionGroupModule"/>.
+    ///     判定两个 <see cref="ActionGroupModule"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ActionGroupModule"/> is not equal to the current <see cref="ActionGroupModule"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ActionGroupModule"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(ActionGroupModule left, ActionGroupModule right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="ActionGroupModule"/> is equal to the current <see cref="ActionGroupModule"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="ActionGroupModule"/>, <see cref="Equals(ActionGroupModule)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="ActionGroupModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ActionGroupModule"/> is equal to the current <see cref="ActionGroupModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is ActionGroupModule actionGroupModule && Equals(actionGroupModule);
 
-    /// <summary>Determines whether the specified <see cref="ActionGroupModule"/> is equal to the current <see cref="ActionGroupModule"/>.</summary>
-    /// <param name="actionGroupModule">The <see cref="ActionGroupModule"/> to compare with the current <see cref="ActionGroupModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ActionGroupModule"/> is equal to the current <see cref="ActionGroupModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] ActionGroupModule? actionGroupModule) =>
         GetHashCode() == actionGroupModule?.GetHashCode();
 

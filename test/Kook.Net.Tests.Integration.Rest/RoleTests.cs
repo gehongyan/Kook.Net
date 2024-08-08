@@ -43,8 +43,8 @@ public class RoleTests : IClassFixture<RestGuildFixture>
             await role.ModifyAsync(x =>
             {
                 x.Name = "UPDATED ROLE";
-                x.Hoist = true;
-                x.Mentionable = true;
+                x.IsHoisted = true;
+                x.IsMentionable = true;
                 x.Color = Color.Red;
                 x.Permissions = GuildPermissions.All;
             });

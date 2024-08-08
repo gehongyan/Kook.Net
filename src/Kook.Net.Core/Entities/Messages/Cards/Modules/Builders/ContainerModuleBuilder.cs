@@ -3,17 +3,17 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a container module builder for creating a <see cref="ContainerModule"/>.
+///     用来构建 <see cref="ContainerModule"/> 模块的构建器。
 /// </summary>
 public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModuleBuilder>, IEquatable<IModuleBuilder>
 {
     /// <summary>
-    ///     Returns the maximum number of elements allowed by Kook.
+    ///     元素的最大数量。
     /// </summary>
     public const int MaxElementCount = 9;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ContainerModuleBuilder"/> class.
+    ///     初始化一个 <see cref="ContainerModuleBuilder"/> 类的新实例。
     /// </summary>
     public ContainerModuleBuilder()
     {
@@ -21,8 +21,9 @@ public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModule
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ContainerModuleBuilder"/> class.
+    ///     初始化一个 <see cref="ContainerModuleBuilder"/> 类的新实例。
     /// </summary>
+    /// <param name="elements"> 图片组模块要包含的图片元素。 </param>
     public ContainerModuleBuilder(IList<ImageElementBuilder> elements)
     {
         Elements = elements;
@@ -32,22 +33,15 @@ public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModule
     public ModuleType Type => ModuleType.Container;
 
     /// <summary>
-    ///     Gets or sets the image elements in the container module.
+    ///     获取或设置图片组模块的图片元素。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IList{ImageElementBuilder}"/> containing the image elements in this image container module.
-    /// </returns>
     public IList<ImageElementBuilder> Elements { get; set; }
 
     /// <summary>
-    ///     Adds an image element to the container module.
+    ///     添加一个图片元素到图片组模块。
     /// </summary>
-    /// <param name="field">
-    ///     The image element to add.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="field"> 要添加的图片元素。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ContainerModuleBuilder AddElement(ImageElementBuilder field)
     {
         Elements.Add(field);
@@ -55,14 +49,10 @@ public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModule
     }
 
     /// <summary>
-    ///     Adds an image element to the container module.
+    ///     添加一个图片元素到图片组模块。
     /// </summary>
-    /// <param name="action">
-    ///     The action to add an image element to the container module.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="action"> 一个包含对要添加的新创建的图片元素进行配置的操作的委托。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ContainerModuleBuilder AddElement(Action<ImageElementBuilder>? action = null)
     {
         ImageElementBuilder field = new();
@@ -72,19 +62,17 @@ public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModule
     }
 
     /// <summary>
-    ///     Builds this builder into a <see cref="ContainerModule"/>.
+    ///     构建当前构建器为一个 <see cref="ContainerModule"/> 对象。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="ContainerModule"/> representing the built container module object.
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="ContainerModule"/> 对象。 </returns>
     /// <exception cref="ArgumentNullException">
-    ///     <see cref="Elements"/> cannot be null.
+    ///     <see cref="Elements"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     <see cref="Elements"/> cannot be an empty list.
+    ///     <see cref="Elements"/> 为空列表。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     <see cref="Elements"/> count must be less than or equal to <see cref="MaxElementCount"/>.
+    ///     <see cref="Elements"/> 的元素数量超过了 <see cref="MaxElementCount"/>。
     /// </exception>
     public ContainerModule Build()
     {
@@ -106,29 +94,24 @@ public class ContainerModuleBuilder : IModuleBuilder, IEquatable<ContainerModule
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>.
+    ///     判定两个 <see cref="ContainerModuleBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ContainerModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(ContainerModuleBuilder? left, ContainerModuleBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ContainerModuleBuilder"/> is not equal to the current <see cref="ContainerModuleBuilder"/>.
+    ///     判定两个 <see cref="ContainerModuleBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ContainerModuleBuilder"/> is not equal to the current <see cref="ContainerModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ContainerModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(ContainerModuleBuilder? left, ContainerModuleBuilder? right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="ContainerModuleBuilder"/>, <see cref="Equals(ContainerModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="ContainerModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is ContainerModuleBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>.</summary>
-    /// <param name="containerModuleBuilder">The <see cref="ContainerModuleBuilder"/> to compare with the current <see cref="ContainerModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ContainerModuleBuilder"/> is equal to the current <see cref="ContainerModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] ContainerModuleBuilder? containerModuleBuilder)
     {
         if (containerModuleBuilder is null)

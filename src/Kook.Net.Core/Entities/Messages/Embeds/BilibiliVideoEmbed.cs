@@ -1,7 +1,7 @@
 namespace Kook;
 
 /// <summary>
-///     Represents an embed in a message that links to a Bilibili video.
+///     表示一个消息中解析出的哔哩哔哩视频嵌入式内容。
 /// </summary>
 public struct BilibiliVideoEmbed : IEmbed
 {
@@ -20,40 +20,37 @@ public struct BilibiliVideoEmbed : IEmbed
     public EmbedType Type => EmbedType.BilibiliVideo;
 
     /// <summary>
-    ///     Gets the URL of this embed.
+    ///     获取视频所在页面的 URL。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> that represents the URL of this embed.
-    /// </returns>
-    public string Url { get; internal set; }
+    public string Url { get; }
 
     /// <summary>
-    ///     A <c>string</c> that represents the origin URL of the Bilibili video.
+    ///     获取嵌入式内容所解析的原始 URL。
     /// </summary>
-    public string OriginUrl { get; internal set; }
+    public string OriginUrl { get; }
 
     /// <summary>
-    ///     A <c>string</c> that represents the Bilibili video number in BV format.
+    ///     获取视频的 BV 号。
     /// </summary>
-    public string BvNumber { get; internal set; }
+    public string BvNumber { get; }
 
     /// <summary>
-    ///     A <c>string</c> that represents the path of the iframe.
+    ///     获取视频的 iframe 路径。
     /// </summary>
-    public string IframePath { get; internal set; }
+    public string IframePath { get; }
 
     /// <summary>
-    ///     A <see cref="TimeSpan"/> that represents the duration of the Bilibili video.
+    ///     获取视频的时长。
     /// </summary>
-    public TimeSpan Duration { get; internal set; }
+    public TimeSpan Duration { get; }
 
     /// <summary>
-    ///     A <c>string</c> that represents the title of the Bilibili video.
+    ///     获取视频的标题。
     /// </summary>
-    public string Title { get; internal set; }
+    public string Title { get; }
 
     /// <summary>
-    ///     A <c>string</c> that represents the cover of the Bilibili video.
+    ///     获取图像封面图像的 URL。
     /// </summary>
-    public string Cover { get; internal set; }
+    public string Cover { get; }
 }

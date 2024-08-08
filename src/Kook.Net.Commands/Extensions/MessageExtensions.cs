@@ -13,9 +13,7 @@ public static class MessageExtensions
     /// <param name="msg">The message to check against.</param>
     /// <param name="c">The char prefix.</param>
     /// <param name="argPos">References where the command starts.</param>
-    /// <returns>
-    ///     <c>true</c> if the message begins with the char <paramref name="c"/>; otherwise <c>false</c>.
-    /// </returns>
+    /// <returns> <c>true</c> if the message begins with the char <paramref name="c"/>; otherwise <c>false</c>. </returns>
     public static bool HasCharPrefix(this IUserMessage msg, char c, ref int argPos)
     {
         string text;

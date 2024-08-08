@@ -1,15 +1,12 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic module that can be used in an <see cref="ICard"/>.
+///     表示一个通用的模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 public interface IModule
 {
     /// <summary>
-    ///     Gets the type of the module.
+    ///     获取模块的类型。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="ModuleType"/> value that represents the type of the module.
-    /// </returns>
     ModuleType Type { get; }
 }

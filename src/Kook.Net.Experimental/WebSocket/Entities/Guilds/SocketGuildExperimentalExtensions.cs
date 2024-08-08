@@ -11,7 +11,7 @@ public static class SocketGuildExperimentalExtensions
     ///     Deletes this guild.
     /// </summary>
     /// <param name="guild">The guild to delete.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>A task that represents the asynchronous deletion operation.</returns>
     /// <remarks>
     ///     <note type="warning">
@@ -27,10 +27,8 @@ public static class SocketGuildExperimentalExtensions
     /// </summary>
     /// <param name="guild">The guild to modify.</param>
     /// <param name="func">The delegate containing the properties to modify the guild with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous modification operation.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> A task that represents the asynchronous modification operation. </returns>
     /// <remarks>
     ///     <note type="warning">
     ///         This method is still in experimental state, which means that it is not for official API implementation

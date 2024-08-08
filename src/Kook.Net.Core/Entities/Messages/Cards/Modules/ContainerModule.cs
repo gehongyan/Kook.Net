@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a container module that can be used in an <see cref="ICard"/>.
+///     容器模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ContainerModule : IModule, IEquatable<ContainerModule>, IEquatable<IModule>
@@ -19,39 +19,31 @@ public class ContainerModule : IModule, IEquatable<ContainerModule>, IEquatable<
     public ModuleType Type => ModuleType.Container;
 
     /// <summary>
-    ///     Gets the elements in this container module.
+    ///     获取模块的元素。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="ImmutableArray{ImageElement}"/> representing the elements in this container module.
-    /// </returns>
     public ImmutableArray<ImageElement> Elements { get; }
 
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>.
+    ///     判定两个 <see cref="ContainerModule"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ContainerModule"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(ContainerModule left, ContainerModule right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ContainerModule"/> is not equal to the current <see cref="ContainerModule"/>.
+    ///     判定两个 <see cref="ContainerModule"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ContainerModule"/> is not equal to the current <see cref="ContainerModule"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ContainerModule"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(ContainerModule left, ContainerModule right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="ContainerModule"/>, <see cref="Equals(ContainerModule)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="ContainerModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is ContainerModule containerModule && Equals(containerModule);
 
-    /// <summary>Determines whether the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>.</summary>
-    /// <param name="containerModule">The <see cref="ContainerModule"/> to compare with the current <see cref="ContainerModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ContainerModule"/> is equal to the current <see cref="ContainerModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] ContainerModule? containerModule) =>
         GetHashCode() == containerModule?.GetHashCode();
 

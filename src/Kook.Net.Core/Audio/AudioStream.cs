@@ -1,7 +1,7 @@
 namespace Kook.Audio;
 
 /// <summary>
-///  Represents a generic audio stream.
+///     表示一个通用的音频流。
 /// </summary>
 public abstract class AudioStream : Stream
 {
@@ -15,12 +15,12 @@ public abstract class AudioStream : Stream
     public override bool CanWrite => false;
 
     /// <summary>
-    ///     Writes a header to the stream.
+    ///     向流中写入一个头部信息。
     /// </summary>
-    /// <param name="seq"> The sequence number of the header. </param>
-    /// <param name="timestamp"> The timestamp of the header. </param>
-    /// <param name="missed"> Whether the header is for a missed packet. </param>
-    // <exception cref="InvalidOperationException"> This stream does not accept headers. </exception>
+    /// <param name="seq"> 头部的序列号。 </param>
+    /// <param name="timestamp"> 头部的时间戳。 </param>
+    /// <param name="missed"> 头部是否用于标识丢失的数据包。 </param>
+    /// <exception cref="InvalidOperationException"> 该流不接收头部信息。 </exception>
     public virtual void WriteHeader(ushort seq, uint timestamp, bool missed) =>
         throw new InvalidOperationException("This stream does not accept headers.");
 
@@ -35,26 +35,32 @@ public abstract class AudioStream : Stream
     }
 
     /// <summary>
-    ///     Clears the stream, causing all buffered data to be lost.
+    ///     清空该流.
     /// </summary>
+    /// <remarks>
+    ///     此操作会导致丢失所有缓冲的数据。
+    /// </remarks>
     public void Clear()
     {
     }
 
     /// <summary>
-    ///     Clears the stream, causing all buffered data to be lost.
+    ///     清空该流.
     /// </summary>
-    /// <param name="cancellationToken"> The cancellation token to be used. </param>
-    /// <returns> A task that represents an asynchronous clear operation. </returns>
+    /// <param name="cancellationToken"> 用于取消该异步操作的取消令牌。 </param>
+    /// <returns> 一个清空操作的异步任务。 </returns>
+    /// <remarks>
+    ///     此操作会导致丢失所有缓冲的数据。
+    /// </remarks>
     public virtual Task ClearAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException">Reading stream length is not supported.</exception>
+    /// <exception cref="NotSupportedException"> 不支持获取此音频流的长度。 </exception>
     public override long Length =>
         throw new NotSupportedException();
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException">Getting or setting this stream position is not supported.</exception>
+    /// <exception cref="NotSupportedException"> 不支持获取或设置此音频流的位置。 </exception>
     public override long Position
     {
         get => throw new NotSupportedException();
@@ -62,17 +68,17 @@ public abstract class AudioStream : Stream
     }
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException">Reading this stream is not supported.</exception>
+    /// <exception cref="NotSupportedException"> 不支持读取此音频流。 </exception>
     public override int Read(byte[] buffer, int offset, int count) =>
         throw new NotSupportedException();
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException">Setting the length to this stream is not supported.</exception>
+    /// <exception cref="NotSupportedException"> 不支持为此音频流设置长度。 </exception>
     public override void SetLength(long value) =>
         throw new NotSupportedException();
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException">Seeking this stream is not supported..</exception>
+    /// <exception cref="NotSupportedException"> 不支持在此音频流中进行定位操作。 </exception>
     public override long Seek(long offset, SeekOrigin origin) =>
         throw new NotSupportedException();
 }

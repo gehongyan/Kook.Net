@@ -1,23 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic card.
+///     表示一个通用的卡片。
 /// </summary>
 public interface ICard
 {
     /// <summary>
-    ///     Gets the type of the card.
+    ///     获取卡片的类型。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="CardType"/> value that represents the type of the card.
-    /// </returns>
     CardType Type { get; }
 
     /// <summary>
-    ///     Gets the number of the modules in this card.
+    ///     获取卡片中模块的数量。
     /// </summary>
-    /// <returns>
-    ///     An <c>int</c> value that represents how many modules are in this card.
-    /// </returns>
     int ModuleCount { get; }
 }

@@ -1,18 +1,15 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic channel.
+///     表示一个通用的频道。
 /// </summary>
 public interface IChannel : IEntity<ulong>
 {
     #region General
 
     /// <summary>
-    ///     Gets the name of this channel.
+    ///     获取此频道的名称。
     /// </summary>
-    /// <returns>
-    ///     A string containing the name of this channel.
-    /// </returns>
     string Name { get; }
 
     #endregion
@@ -20,37 +17,33 @@ public interface IChannel : IEntity<ulong>
     #region Users
 
     /// <summary>
-    ///     Gets a collection of users that are able to view the channel or are currently in this channel.
+    ///     获取能够查看频道或当前在该频道中的所有用户。
     /// </summary>
     /// <remarks>
     ///     <note type="important">
-    ///         The returned collection is an asynchronous enumerable object; one must call
-    ///         <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/> to access the individual messages as a
-    ///         collection.
+    ///         返回的集合是一个异步可枚举对象；调用
+    ///         <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///         可以异步枚举所有分页，并将其合并为一个集合。
     ///     </note>
-    ///     This method will attempt to fetch all users that is able to view this channel or is currently in this channel.
-    ///     The library will attempt to split up the requests according to and <see cref="KookConfig.MaxUsersPerBatch"/>.
-    ///     In other words, if there are 3000 users, and the <see cref="Kook.KookConfig.MaxUsersPerBatch"/> constant
-    ///     is <c>50</c>, the request will be split into 60 individual requests; thus returning 60 individual asynchronous
-    ///     responses, hence the need of flattening.
+    ///     <br />
+    ///     此方法将尝试获取所有能够查看该频道或当前在该频道中的用户。此方法会根据 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/>
+    ///     将请求拆分。换句话说，如果有 3000 名用户，而 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/> 的常量为
+    ///     <c>50</c>，则请求将被拆分为 60 个单独请求，因此异步枚举器会异步枚举返回 60 个响应。
+    ///     <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///     方法可以展开这 60 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     Paged collection of users.
-    /// </returns>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 分页的用户集合的异步可枚举对象。 </returns>
     IAsyncEnumerable<IReadOnlyCollection<IUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a user in this channel.
+    ///     获取此频道中的用户。
     /// </summary>
-    /// <param name="id">The identifier of the user (e.g. <c>168693960628371456</c>).</param>
-    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a user object that
-    ///     represents the found user; <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="id"> 要获取的用户的 ID。 </param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务结果包含表示找到的用户；如果没有找到，则返回 <c>null</c>。 </returns>
     Task<IUser?> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion

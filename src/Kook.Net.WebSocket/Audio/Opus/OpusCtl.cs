@@ -1,10 +1,10 @@
 namespace Kook.Audio;
 
 /// <summary>
-///     Represents the Opus control codes.
+///     表示 Opus 控制码。
 /// </summary>
 /// <remarks>
-///     See https://github.com/gcp/opus/blob/master/include/opus_defines.h
+///     参见 https://github.com/gcp/opus/blob/master/include/opus_defines.h
 /// </remarks>
 internal enum OpusCtl
 {
@@ -12,7 +12,7 @@ internal enum OpusCtl
     ///     <c>OPUS_SET_BITRATE</c>
     /// </summary>
     /// <remarks>
-    ///     Configures the bitrate in the encoder.
+    ///     配置编码器中的比特率。
     /// </remarks>
     SetBitrate = 4002,
 
@@ -20,7 +20,7 @@ internal enum OpusCtl
     ///     <c>OPUS_SET_BANDWIDTH_REQUEST</c>
     /// </summary>
     /// <remarks>
-    ///     Configures the maximum bandwidth in the encoder.
+    ///     配置编码器中的最大带宽。
     /// </remarks>
     SetBandwidth = 4008,
 
@@ -28,7 +28,7 @@ internal enum OpusCtl
     ///     <c>OPUS_SET_PACKET_LOSS_PERC_REQUEST</c>
     /// </summary>
     /// <remarks>
-    ///     Configures the expected packet loss percentage in the encoder.
+    ///     配置编码器中预期的丢包百分比。
     /// </remarks>
     SetPacketLossPercent = 4014,
 
@@ -36,7 +36,7 @@ internal enum OpusCtl
     ///     <c>OPUS_SET_SIGNAL_REQUEST</c>
     /// </summary>
     /// <remarks>
-    ///     Configures the type of signal being encoded.
+    ///     配置正在编码的信号类型。
     /// </remarks>
     SetSignal = 4024
 }

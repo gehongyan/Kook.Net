@@ -79,10 +79,8 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     Gets the message associated with the given <paramref name="id"/>.
     /// </summary>
     /// <param name="id">TThe ID of the message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     The message gotten from either the cache or the download, or <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> The message gotten from either the cache or the download, or <c>null</c> if none is found. </returns>
     public async Task<IMessage> GetMessageAsync(Guid id, RequestOptions? options = null) =>
         await ChannelHelper.GetDirectMessageAsync(this, Kook, id, options).ConfigureAwait(false);
 
@@ -93,11 +91,9 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     This method follows the same behavior as described in <see cref="IMessageChannel.GetMessagesAsync(int, CacheMode, RequestOptions)"/>.
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
-    /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     Paged collection of messages.
-    /// </returns>
+    /// <param name="limit"> 要获取的消息数量。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 分页的消息集合的异步可枚举对象。 </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(
         int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         ChannelHelper.GetDirectMessagesAsync(this, Kook, null, Direction.Before, limit, true, options);
@@ -109,13 +105,11 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     This method follows the same behavior as described in <see cref="IMessageChannel.GetMessagesAsync(Guid, Direction, int, CacheMode, RequestOptions)"/>.
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
-    /// <param name="referenceMessageId">The ID of the starting message to get the messages from.</param>
-    /// <param name="dir">The direction of the messages to be gotten from.</param>
-    /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     Paged collection of messages.
-    /// </returns>
+    /// <param name="referenceMessageId"> 要开始获取消息的参考位置的消息的 ID。 </param>
+    /// <param name="dir"> 要以参考位置为基准，获取消息的方向。 </param>
+    /// <param name="limit"> 要获取的消息数量。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 分页的消息集合的异步可枚举对象。 </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         ChannelHelper.GetDirectMessagesAsync(this, Kook, referenceMessageId, dir, limit, true, options);
@@ -127,13 +121,11 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     This method follows the same behavior as described in <see cref="IMessageChannel.GetMessagesAsync(IMessage, Direction, int, CacheMode, RequestOptions)"/>.
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
-    /// <param name="referenceMessage">The starting message to get the messages from.</param>
-    /// <param name="dir">The direction of the messages to be gotten from.</param>
-    /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     Paged collection of messages.
-    /// </returns>
+    /// <param name="referenceMessage"> 要开始获取消息的参考位置的消息。 </param>
+    /// <param name="dir"> 要以参考位置为基准，获取消息的方向。 </param>
+    /// <param name="limit"> 要获取的消息数量。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 分页的消息集合的异步可枚举对象。 </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         ChannelHelper.GetDirectMessagesAsync(this, Kook, referenceMessage.Id, dir, limit, true, options);
@@ -150,98 +142,71 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch) => [];
 
     /// <summary>
-    ///     Sends a file to this message channel.
+    ///     发送文件到此消息频道。
     /// </summary>
-    /// <remarks>
-    ///     This method sends a file as if you are uploading a file directly from your Kook client.
-    /// </remarks>
-    /// <param name="path">The file path of the file.</param>
-    /// <param name="filename">The name of the file.</param>
-    /// <param name="type">The type of the file.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
+    /// <param name="path"> 文件的路径。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 文件的媒体类型。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, path, filename, type, quote, options);
 
     /// <summary>
-    ///     Sends a file to this message channel.
+    ///     发送文件到此消息频道。
     /// </summary>
-    /// <remarks>
-    ///     This method sends a file as if you are uploading a file directly from your Kook client.
-    /// </remarks>
-    /// <param name="stream">The stream of the file.</param>
-    /// <param name="filename">The name of the file.</param>
-    /// <param name="type">The type of the file.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
+    /// <param name="stream"> 文件的流。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 文件的媒体类型。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, stream, filename, type, quote, options);
 
     /// <summary>
-    ///     Sends a file to this message channel.
+    ///     发送文件到此消息频道。
     /// </summary>
-    /// <remarks>
-    ///     This method sends a file as if you are uploading a file directly from your Kook client.
-    /// </remarks>
-    /// <param name="attachment">The attachment containing the file.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
+    /// <param name="attachment"> 文件的附件信息。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, attachment, quote, options);
 
     /// <summary>
-    ///     Sends a text message to this message channel.
+    ///     发送文本消息到此消息频道。
     /// </summary>
     /// <param name="text">The message to be sent.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, quote, options);
 
     /// <summary>
-    ///     Sends a card message to this message channel.
+    ///     发送卡片消息到此消息频道。
     /// </summary>
-    /// <param name="cards">The cards to be sent.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
+    /// <param name="cards"> 要发送的卡片。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardsAsync(this, Kook, cards, quote, options);
 
     /// <summary>
-    ///     Sends a card message to this message channel.
+    ///     发送卡片消息到此消息频道。
     /// </summary>
-    /// <param name="card">The card to be sent.</param>
-    /// <param name="quote">The message quote to be included. Used to reply to specific messages.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous send operation for delivering the message. The task result
-    ///     contains the identifier and timestamp of the sent message.
-    /// </returns>
+    /// <param name="card"> 要发送的卡片。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardAsync(this, Kook, card, quote, options);
@@ -273,9 +238,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     Gets a user in this channel from the provided <paramref name="id"/>.
     /// </summary>
     /// <param name="id">The identifier of the user.</param>
-    /// <returns>
-    ///     A <see cref="SocketUser"/> object that is a recipient of this channel; otherwise <c>null</c>.
-    /// </returns>
+    /// <returns> A <see cref="SocketUser"/> object that is a recipient of this channel; otherwise <c>null</c>. </returns>
     public new SocketUser? GetUser(ulong id)
     {
         if (id == Recipient.Id) return Recipient;

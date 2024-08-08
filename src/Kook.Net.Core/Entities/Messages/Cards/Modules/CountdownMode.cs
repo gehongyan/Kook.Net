@@ -1,22 +1,22 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the display mode for the countdown timer.
+///     表示一个 <see cref="CountdownModule"/> 的倒计时显示模式。
 /// </summary>
 public enum CountdownMode
 {
     /// <summary>
-    ///     The timer will display the time in days, hours, minutes and seconds.
+    ///     倒计时器将以天、小时、分钟和秒的形式显示时间。
     /// </summary>
     Day,
 
     /// <summary>
-    ///     The timer will display the time in hours, minutes and seconds.
+    ///     倒计时器将以小时、分钟和秒的形式显示时间。
     /// </summary>
     Hour,
 
     /// <summary>
-    ///     The timer will display the time in seconds.
+    ///     倒计时器将以秒的形式显示时间。
     /// </summary>
     Second
 }

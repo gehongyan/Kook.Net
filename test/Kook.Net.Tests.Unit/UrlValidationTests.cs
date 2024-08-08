@@ -28,7 +28,6 @@ public class UrlValidationTests
     public void UrlValidation_EmptyUrl(string? url) =>
         Assert.Throws<UriFormatException>(() => UrlValidation.Validate(url!));
 
-
     [Theory]
     [InlineData(" ")]
     [InlineData("kaiheila.net")]

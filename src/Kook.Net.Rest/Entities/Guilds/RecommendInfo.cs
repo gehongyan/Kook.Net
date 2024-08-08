@@ -4,7 +4,7 @@ using Model = Kook.API.RecommendInfo;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a recommendation information for a guild.
+///     获取一个推荐信息。
 /// </summary>
 public class RecommendInfo : IRecommendInfo
 {

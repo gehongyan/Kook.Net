@@ -1,17 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Represents the mode to parse tags.
+///     表示标签的语法模式。
 /// </summary>
 public enum TagMode
 {
     /// <summary>
-    ///     Parse tags as plain text.
+    ///     纯文本形式。
     /// </summary>
     PlainText,
 
     /// <summary>
-    ///     Parse tags as KMarkdown.
+    ///     KMarkdown 格式。
     /// </summary>
     KMarkdown
 }

@@ -1,14 +1,14 @@
 namespace Kook;
 
 /// <summary>
-///     Provides extension methods for <see cref="IElement"/>, <see cref="IModule"/> and <see cref="ICard"/>.
+///     提供用于 <see cref="IElement"/>、<see cref="IModule"/> 和 <see cref="ICard"/> 等卡片相关对象的扩展方法。
 /// </summary>
 public static class CardExtensions
 {
     #region Elements
 
     /// <summary>
-    ///     Converts the <see cref="IElement"/> to a <see cref="IElementBuilder"/> with the same properties.
+    ///     将 <see cref="IElement"/> 实体转换为具有相同属性的 <see cref="IElementBuilder"/> 实体构建器。
     /// </summary>
     public static IElementBuilder ToBuilder(this IElement entity)
     {
@@ -24,7 +24,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="PlainTextElement"/> to a <see cref="PlainTextElementBuilder"/> with the same properties.
+    ///     将 <see cref="PlainTextElement"/> 实体转换为具有相同属性的 <see cref="PlainTextElementBuilder"/> 实体构建器。
     /// </summary>
     public static PlainTextElementBuilder ToBuilder(this PlainTextElement entity)
     {
@@ -36,7 +36,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="KMarkdownElement"/> to a <see cref="KMarkdownElementBuilder"/> with the same properties.
+    ///     将 <see cref="KMarkdownElement"/> 实体转换为具有相同属性的 <see cref="KMarkdownElementBuilder"/> 实体构建器。
     /// </summary>
     public static KMarkdownElementBuilder ToBuilder(this KMarkdownElement entity)
     {
@@ -44,7 +44,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="ImageElement"/> to an <see cref="ImageElementBuilder"/> with the same properties.
+    ///     将 <see cref="ImageElement"/> 实体转换为具有相同属性的 <see cref="ImageElementBuilder"/> 实体构建器。
     /// </summary>
     public static ImageElementBuilder ToBuilder(this ImageElement entity)
     {
@@ -58,7 +58,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="ButtonElement"/> to a <see cref="ButtonElementBuilder"/> with the same properties.
+    ///     将 <see cref="ButtonElement"/> 实体转换为具有相同属性的 <see cref="ButtonElementBuilder"/> 实体构建器。
     /// </summary>
     public static ButtonElementBuilder ToBuilder(this ButtonElement entity)
     {
@@ -72,7 +72,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="ParagraphStruct"/> to a <see cref="ParagraphStructBuilder"/> with the same properties.
+    ///     将 <see cref="ParagraphStruct"/> 实体转换为具有相同属性的 <see cref="ParagraphStructBuilder"/> 实体构建器。
     /// </summary>
     public static ParagraphStructBuilder ToBuilder(this ParagraphStruct entity)
     {
@@ -88,7 +88,7 @@ public static class CardExtensions
     #region Modules
 
     /// <summary>
-    ///     Converts the <see cref="IModule"/> to a <see cref="IModuleBuilder"/> with the same properties.
+    ///     将 <see cref="IModule"/> 实体转换为具有相同属性的 <see cref="IModuleBuilder"/> 实体构建器。
     /// </summary>
     public static IModuleBuilder ToBuilder(this IModule entity)
     {
@@ -111,7 +111,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="HeaderModule"/> to a <see cref="HeaderModuleBuilder"/> with the same properties.
+    ///     将 <see cref="HeaderModule"/> 实体转换为具有相同属性的 <see cref="HeaderModuleBuilder"/> 实体构建器。
     /// </summary>
     public static HeaderModuleBuilder ToBuilder(this HeaderModule entity)
     {
@@ -122,7 +122,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="SectionModule"/> to a <see cref="SectionModuleBuilder"/> with the same properties.
+    ///     将 <see cref="SectionModule"/> 实体转换为具有相同属性的 <see cref="SectionModuleBuilder"/> 实体构建器。
     /// </summary>
     public static SectionModuleBuilder ToBuilder(this SectionModule entity)
     {
@@ -135,7 +135,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="ImageGroupModule"/> to a <see cref="ImageGroupModuleBuilder"/> with the same properties.
+    ///     将 <see cref="ImageGroupModule"/> 实体转换为具有相同属性的 <see cref="ImageGroupModuleBuilder"/> 实体构建器。
     /// </summary>
     public static ImageGroupModuleBuilder ToBuilder(this ImageGroupModule entity)
     {
@@ -146,7 +146,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="ContainerModule"/> to a <see cref="ContainerModuleBuilder"/> with the same properties.
+    ///     将 <see cref="ContainerModule"/> 实体转换为具有相同属性的 <see cref="ContainerModuleBuilder"/> 实体构建器。
     /// </summary>
     public static ContainerModuleBuilder ToBuilder(this ContainerModule entity)
     {
@@ -157,7 +157,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="ActionGroupModule"/> to a <see cref="ActionGroupModuleBuilder"/> with the same properties.
+    ///     将 <see cref="ActionGroupModule"/> 实体转换为具有相同属性的 <see cref="ActionGroupModuleBuilder"/> 实体构建器。
     /// </summary>
     public static ActionGroupModuleBuilder ToBuilder(this ActionGroupModule entity)
     {
@@ -168,7 +168,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="ContextModule"/> to a <see cref="ContextModuleBuilder"/> with the same properties.
+    ///     将 <see cref="ContextModule"/> 实体转换为具有相同属性的 <see cref="ContextModuleBuilder"/> 实体构建器。
     /// </summary>
     public static ContextModuleBuilder ToBuilder(this ContextModule entity)
     {
@@ -179,7 +179,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="DividerModule"/> to a <see cref="DividerModuleBuilder"/> with the same properties.
+    ///     将 <see cref="DividerModule"/> 实体转换为具有相同属性的 <see cref="DividerModuleBuilder"/> 实体构建器。
     /// </summary>
     public static DividerModuleBuilder ToBuilder(this DividerModule _)
     {
@@ -187,7 +187,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="FileModule"/> to a <see cref="FileModuleBuilder"/> with the same properties.
+    ///     将 <see cref="FileModule"/> 实体转换为具有相同属性的 <see cref="FileModuleBuilder"/> 实体构建器。
     /// </summary>
     public static FileModuleBuilder ToBuilder(this FileModule entity)
     {
@@ -199,7 +199,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="AudioModule"/> to an <see cref="AudioModuleBuilder"/> with the same properties.
+    ///     将 <see cref="AudioModule"/> 实体转换为具有相同属性的 <see cref="AudioModuleBuilder"/> 实体构建器。
     /// </summary>
     public static AudioModuleBuilder ToBuilder(this AudioModule entity)
     {
@@ -212,7 +212,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="VideoModule"/> to a <see cref="VideoModuleBuilder"/> with the same properties.
+    ///     将 <see cref="VideoModule"/> 实体转换为具有相同属性的 <see cref="VideoModuleBuilder"/> 实体构建器。
     /// </summary>
     public static VideoModuleBuilder ToBuilder(this VideoModule entity)
     {
@@ -224,7 +224,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="CountdownModule"/> to a <see cref="CountdownModuleBuilder"/> with the same properties.
+    ///     将 <see cref="CountdownModule"/> 实体转换为具有相同属性的 <see cref="CountdownModuleBuilder"/> 实体构建器。
     /// </summary>
     public static CountdownModuleBuilder ToBuilder(this CountdownModule entity)
     {
@@ -237,7 +237,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="InviteModule"/> to an <see cref="InviteModuleBuilder"/> with the same properties.
+    ///     将 <see cref="InviteModule"/> 实体转换为具有相同属性的 <see cref="InviteModuleBuilder"/> 实体构建器。
     /// </summary>
     public static InviteModuleBuilder ToBuilder(this InviteModule entity)
     {
@@ -252,7 +252,7 @@ public static class CardExtensions
     #region Cards
 
     /// <summary>
-    ///     Converts the <see cref="ICard"/> to an <see cref="ICardBuilder"/> with the same properties.
+    ///     将 <see cref="ICard"/> 实体转换为具有相同属性的 <see cref="ICardBuilder"/> 实体构建器。
     /// </summary>
     public static ICardBuilder ToBuilder(this ICard entity)
     {
@@ -264,7 +264,7 @@ public static class CardExtensions
     }
 
     /// <summary>
-    ///     Converts the <see cref="Card"/> to a <see cref="CardBuilder"/> with the same properties.
+    ///     将 <see cref="Card"/> 实体转换为具有相同属性的 <see cref="CardBuilder"/> 实体构建器。
     /// </summary>
     public static CardBuilder ToBuilder(this Card entity)
     {

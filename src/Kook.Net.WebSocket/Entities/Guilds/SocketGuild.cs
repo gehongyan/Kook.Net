@@ -97,6 +97,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <remarks>
     ///     This property retrieves the number of members returned by Kook.
+    ///     <br />
     ///     <note type="tip">
     ///     <para>
     ///         Due to how this property is returned by Kook instead of relying on the WebSocket cache, the
@@ -108,6 +109,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///         between that and this property.
     ///     </para>
     ///     </note>
+    ///     <br />
     ///     <note type="warning">
     ///         Only when <see cref="KookSocketConfig.AlwaysDownloadUsers"/> is set to <c>true</c>
     ///         will this property be populated upon startup. Otherwise, this property will be <c>null</c>,
@@ -168,47 +170,35 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <summary>
     ///     Gets the built-in role containing all users in this guild.
     /// </summary>
-    /// <returns>
-    ///     A role object that represents an <c>@everyone</c> role in this guild.
-    /// </returns>
+    /// <returns> A role object that represents an <c>@everyone</c> role in this guild. </returns>
     public SocketRole EveryoneRole => GetRole(0) ?? new SocketRole(this, 0);
 
     /// <summary>
     ///     Gets a collection of all text channels in this guild.
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of message channels found within this guild.
-    /// </returns>
+    /// <returns> A read-only collection of message channels found within this guild. </returns>
     public IReadOnlyCollection<SocketTextChannel> TextChannels => [..Channels.OfType<SocketTextChannel>()];
 
     /// <summary>
     ///     Gets a collection of all voice channels in this guild.
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of voice channels found within this guild.
-    /// </returns>
+    /// <returns> A read-only collection of voice channels found within this guild. </returns>
     public IReadOnlyCollection<SocketVoiceChannel> VoiceChannels => [..Channels.OfType<SocketVoiceChannel>()];
 
     /// <summary>
     ///     Gets a collection of all stage channels in this guild.
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of stage channels found within this guild.
-    /// </returns>
+    /// <returns> A read-only collection of stage channels found within this guild. </returns>
     /// <summary>
     ///     Gets a collection of all category channels in this guild.
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of category channels found within this guild.
-    /// </returns>
+    /// <returns> A read-only collection of category channels found within this guild. </returns>
     public IReadOnlyCollection<SocketCategoryChannel> CategoryChannels => [..Channels.OfType<SocketCategoryChannel>()];
 
     /// <summary>
     ///     Gets a collection of all channels in this guild.
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of generic channels found within this guild.
-    /// </returns>
+    /// <returns> A read-only collection of generic channels found within this guild. </returns>
     public IReadOnlyCollection<SocketGuildChannel> Channels => [.._channels.Values];
 
     /// <summary>
@@ -217,9 +207,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <remarks>
     ///     This property retrieves default text channel for this guild.
     /// </remarks>
-    /// <returns>
-    ///     A <see cref="SocketTextChannel"/> representing the default text channel for this guild.
-    /// </returns>
+    /// <returns> A <see cref="SocketTextChannel"/> representing the default text channel for this guild. </returns>
     public SocketTextChannel? DefaultChannel => TextChannels
         .Where(x => CurrentUser?.GetPermissions(x).ViewChannel is true)
         .FirstOrDefault(c => c.Id == DefaultChannelId);
@@ -230,9 +218,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <remarks>
     ///     This property retrieves default text channel for this guild.
     /// </remarks>
-    /// <returns>
-    ///     A <see cref="SocketTextChannel"/> representing the default text channel for this guild.
-    /// </returns>
+    /// <returns> A <see cref="SocketTextChannel"/> representing the default text channel for this guild. </returns>
     public SocketTextChannel? WelcomeChannel => TextChannels
         .Where(c => CurrentUser?.GetPermissions(c).ViewChannel is true)
         .FirstOrDefault(c => c.Id == WelcomeChannelId);
@@ -314,9 +300,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///         </para>
     ///     </note>
     /// </remarks>
-    /// <returns>
-    ///     A collection of guild users found within this guild.
-    /// </returns>
+    /// <returns> A collection of guild users found within this guild. </returns>
     /// <seealso cref="DownloadUsersAsync"/>
     /// <seealso cref="KookSocketClient.DownloadUsersAsync"/>
     public IReadOnlyCollection<SocketGuildUser> Users => _members.ToReadOnlyCollection();
@@ -324,9 +308,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <summary>
     ///     Gets a collection of all roles in this guild.
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of roles found within this guild.
-    /// </returns>
+    /// <returns> A read-only collection of roles found within this guild. </returns>
     /// <remarks>
     ///     <note type="warning">
     ///         Due to the lack of event args which should contains the reordered roles data
@@ -507,9 +489,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <summary>
     ///     Gets the name of the guild.
     /// </summary>
-    /// <returns>
-    ///     A string that resolves to <see cref="Kook.WebSocket.SocketGuild.Name"/>.
-    /// </returns>
+    /// <returns> A string that resolves to <see cref="Kook.WebSocket.SocketGuild.Name"/>. </returns>
     public override string ToString() => Name;
 
     private string DebuggerDisplay => $"{Name} ({Id})";
@@ -571,36 +551,28 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     Gets a channel in this guild.
     /// </summary>
     /// <param name="id">The identifier for the channel.</param>
-    /// <returns>
-    ///     A generic channel associated with the specified <paramref name="id" />; <c>null</c> if none is found.
-    /// </returns>
+    /// <returns> A generic channel associated with the specified <paramref name="id" />; <c>null</c> if none is found. </returns>
     public SocketGuildChannel? GetChannel(ulong id) => Kook.State.GetChannel(id) as SocketGuildChannel;
 
     /// <summary>
     ///     Gets a text channel in this guild.
     /// </summary>
     /// <param name="id">The identifier for the text channel.</param>
-    /// <returns>
-    ///     A text channel associated with the specified <paramref name="id" />; <c>null</c> if none is found.
-    /// </returns>
+    /// <returns> A text channel associated with the specified <paramref name="id" />; <c>null</c> if none is found. </returns>
     public SocketTextChannel? GetTextChannel(ulong id) => GetChannel(id) as SocketTextChannel;
 
     /// <summary>
     ///     Gets a voice channel in this guild.
     /// </summary>
     /// <param name="id">The identifier for the voice channel.</param>
-    /// <returns>
-    ///     A voice channel associated with the specified <paramref name="id" />; <c>null</c> if none is found.
-    /// </returns>
+    /// <returns> A voice channel associated with the specified <paramref name="id" />; <c>null</c> if none is found. </returns>
     public SocketVoiceChannel? GetVoiceChannel(ulong id) => GetChannel(id) as SocketVoiceChannel;
 
     /// <summary>
     ///     Gets a category channel in this guild.
     /// </summary>
     /// <param name="id">The snowflake identifier for the category channel.</param>
-    /// <returns>
-    ///     A category channel associated with the specified <paramref name="id" />; <c>null</c> if none is found.
-    /// </returns>
+    /// <returns> A category channel associated with the specified <paramref name="id" />; <c>null</c> if none is found. </returns>
     public SocketCategoryChannel? GetCategoryChannel(ulong id) => GetChannel(id) as SocketCategoryChannel;
 
     /// <summary>
@@ -608,7 +580,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <param name="name">The new name for the text channel.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
     ///     text channel.
@@ -622,7 +594,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <param name="name">The new name for the voice channel.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
@@ -637,7 +609,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </summary>
     /// <param name="name">The new name for the category.</param>
     /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
@@ -688,7 +660,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     // /// <summary>
     // ///     Gets a collection of all invites in this guild.
     // /// </summary>
-    // /// <param name="options">The options to be used when sending the request.</param>
+    // /// <param name="options"> 发送请求时要使用的选项。 </param>
     // /// <returns>
     // ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
     // ///     invite metadata, each representing information for an invite found within this guild.
@@ -704,9 +676,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     Gets a role in this guild.
     /// </summary>
     /// <param name="id">The identifier for the role.</param>
-    /// <returns>
-    ///     A role that is associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
-    /// </returns>
+    /// <returns> A role that is associated with the specified <paramref name="id"/>; <c>null</c> if none is found. </returns>
     public SocketRole? GetRole(uint id) =>
         _roles.TryGetValue(id, out SocketRole? value) ? value : null;
 
@@ -714,7 +684,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     Creates a new role with the provided name.
     /// </summary>
     /// <param name="name">The new name for the role.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
     /// <returns>
     ///     A task that represents the asynchronous creation operation. The task result contains the newly created
@@ -756,9 +726,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     </note>
     /// </remarks>
     /// <param name="id">The identifier of the user.</param>
-    /// <returns>
-    ///     A guild user associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
-    /// </returns>
+    /// <returns> A guild user associated with the specified <paramref name="id"/>; <c>null</c> if none is found. </returns>
     public SocketGuildUser? GetUser(ulong id) =>
         _members.TryGetValue(id, out SocketGuildUser? member) ? member : null;
 
@@ -852,7 +820,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     <para>This method retrieves all users found within this guild through REST.</para>
     ///     <para>Users returned by this method are not cached.</para>
     /// </remarks>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
     ///     users found within this guild.
@@ -885,7 +853,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// </remarks>
     /// <param name="func">A delegate containing the properties to search users with.</param>
     /// <param name="limit">The maximum number of users to be gotten.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
     ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
     ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/>
@@ -913,9 +881,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     Gets a guild emoji in this guild.
     /// </summary>
     /// <param name="id">The identifier for the guild emoji.</param>
-    /// <returns>
-    ///     A guild emoji associated with the specified <paramref name="id" />; <c>null</c> if none is found.
-    /// </returns>
+    /// <returns> A guild emoji associated with the specified <paramref name="id" />; <c>null</c> if none is found. </returns>
     public GuildEmote? GetEmote(string id) =>
         _emotes.TryGetValue(id, out GuildEmote? emote) ? emote : null;
 

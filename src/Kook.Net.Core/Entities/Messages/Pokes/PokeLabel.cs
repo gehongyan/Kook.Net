@@ -1,19 +1,19 @@
 namespace Kook;
 
 /// <summary>
-///     Represents the label of a <see cref="IPoke"/>.
+///     表示一个 POKE 的标签。
 /// </summary>
 public struct PokeLabel : IEntity<uint>
 {
     /// <summary>
-    ///     Gets the ID of the  poke action label.
+    ///     获取 POKE 的标签的唯一标识符。
     /// </summary>
-    public uint Id { get; internal set; }
+    public uint Id { get; }
 
     /// <summary>
-    ///     Gets the name of the poke action label.
+    ///     获取 POKE 的标签的名称。
     /// </summary>
-    public string Name { get; internal set; }
+    public string Name { get; }
 
     internal PokeLabel(uint id, string name)
     {

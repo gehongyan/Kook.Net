@@ -1,38 +1,50 @@
 namespace Kook;
 
 /// <summary>
-///     Properties that are used to search for a <see cref="IGuildUser" /> in a <see cref="IGuild" />.
+///     提供用于搜索服务器用户的属性。
 /// </summary>
-/// <seealso cref="IGuild.SearchUsersAsync"/>
+/// <seealso cref="M:Kook.IGuild.SearchUsersAsync(System.Action{Kook.SearchGuildMemberProperties},System.Int32,Kook.CacheMode,Kook.RequestOptions)"/>
 public class SearchGuildMemberProperties
 {
     /// <summary>
-    ///     Gets or sets the name of the user to be searched for;
-    ///     <c>null</c> to not search via a name.
+    ///     获取或设置要用于搜索用户的用户名关键字。
     /// </summary>
+    /// <remarks>
+    ///     如果此属性不为 <see langword="null"/>，则搜索结果中的用户的用户名必须包含此属性的值；否则不使用用户名关键字作为搜索条件。
+    /// </remarks>
     public string? SearchName { get; set; }
 
     /// <summary>
-    ///     Gets or sets the ID of the role the user must have to be searched for;
-    ///     <c>null</c> to not search via a role.
+    ///     获取或设置要用于搜索用户的角色 ID。
     /// </summary>
+    /// <remarks>
+    ///     如果此属性不为 <see langword="null"/>，则搜索结果中的用户必须拥有此属性的值对应的角色；否则不使用角色 ID 作为搜索条件。
+    /// </remarks>
     public uint? RoleId { get; set; }
 
     /// <summary>
-    ///     Gets or sets whether the user must have his/her mobile verified to be searched for;
-    ///     <c>null</c> to not search via a verified status.
+    ///     获取或设置搜索用户的结果中所有用户是否都必须已经验证了手机号码。
     /// </summary>
+    /// <remarks>
+    ///     如果此属性为 <see langword="true"/>，则搜索结果中的所有用户必须已经验证了手机号码；如果此属性为
+    ///     <see langword="false"/>，则搜索结果中的所有用户必须没有验证了手机号码；如果此属性为
+    ///     <see langword="null"/>，则不使用手机号码验证状态作为搜索条件。
+    /// </remarks>
     public bool? IsMobileVerified { get; set; }
 
     /// <summary>
-    ///     Gets or sets whether and how the searching results should be sorted by the activating time of the user;
-    ///     <c>null</c> to not sort by active time.
+    ///     获取或设置搜索用户的结果是否应该按用户在此服务器内的最近活跃时间排序。
     /// </summary>
+    /// <remarks>
+    ///     如果此属性不为 <see langword="null"/>，则搜索结果中的用户将按照其在此服务器内的最近活跃时间排序；否则不使用最近活跃时间作为排序条件。
+    /// </remarks>
     public SortMode? SortedByActiveTime { get; set; }
 
     /// <summary>
-    ///     Gets or sets whether and how the searching results should be sorted by the joining time of the user;
-    ///     <c>null</c> to not sort by joining time.
+    ///     获取或设置搜索用户的结果是否应该按用户加入此服务器的时间排序。
     /// </summary>
+    /// <remarks>
+    ///     如果此属性不为 <see langword="null"/>，则搜索结果中的用户将按照其加入此服务器的时间排序；否则不使用加入时间作为排序条件。
+    /// </remarks>
     public SortMode? SortedByJoinTime { get; set; }
 }

@@ -3,7 +3,7 @@ using Model = Kook.API.Channel;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a generic REST-based channel.
+///     表示一个基于 REST 的频道。
 /// </summary>
 public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
 {

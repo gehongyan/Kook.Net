@@ -1,45 +1,43 @@
-using Kook.Utils;
-
 namespace Kook;
 
 /// <summary>
-///     Represents a file attachment.
+///     表示一个文件附件。
 /// </summary>
 public struct FileAttachment : IDisposable
 {
     private bool _isDisposed;
 
     /// <summary>
-    ///     Gets how this attachment will be operated.
+    ///     获取创建此文件附件的方式。
     /// </summary>
-    public CreateAttachmentMode Mode { get; private set; }
+    public CreateAttachmentMode Mode { get; }
 
     /// <summary>
-    ///     Gets the type of this attachment.
+    ///     获取此附件的类型。
     /// </summary>
-    public AttachmentType Type { get; private set; }
+    public AttachmentType Type { get; }
 
     /// <summary>
-    ///     Gets the filename.
+    ///     获取此附件的文件名。
     /// </summary>
-    public string FileName { get; private set; }
+    public string FileName { get; }
 
     /// <summary>
-    ///     Gets the stream containing the file content.
+    ///     获取包含文件内容的流。
     /// </summary>
     public Stream? Stream { get; }
 
     /// <summary>
-    ///     Gets the URI of the file.
+    ///     获取指向文件的 URL。
     /// </summary>
     public Uri? Uri { get; internal set; }
 
     /// <summary>
-    ///     Creates a file attachment from a stream.
+    ///     通过流创建附件。
     /// </summary>
-    /// <param name="stream">The stream to create the attachment from.</param>
-    /// <param name="filename">The name of the attachment.</param>
-    /// <param name="type">The type of the attachment.</param>
+    /// <param name="stream"> 创建附件所使用的流。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 附件的类型。 </param>
     public FileAttachment(Stream stream, string filename, AttachmentType type = AttachmentType.File)
     {
         _isDisposed = false;
@@ -60,42 +58,16 @@ public struct FileAttachment : IDisposable
     }
 
     /// <summary>
-    ///     Create the file attachment from a file path.
+    ///     通过文件路径创建附件。
     /// </summary>
+    /// <param name="path"> 文件的路径。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 附件的类型。 </param>
     /// <remarks>
-    ///     This file path is NOT validated and is passed directly into a
-    ///     <see cref="File.OpenRead"/>.
+    ///     此构造函数不会校验文件路径的格式，<paramref name="path"/> 的值将会直接传递给
+    ///     <see cref="M:System.IO.File.OpenRead(System.String)"/> 方法。
     /// </remarks>
-    /// <param name="path">The path to the file.</param>
-    /// <param name="filename">The name of the attachment.</param>
-    /// <param name="type">The type of the attachment.</param>
-    /// <exception cref="System.ArgumentException">
-    ///     <paramref name="path" /> is a zero-length string, contains only white space, or contains one or
-    ///     more invalid characters as defined by <see cref="Path.GetInvalidPathChars"/>.
-    /// </exception>
-    /// <exception cref="System.ArgumentNullException">
-    ///     <paramref name="path" /> is <c>null</c>.
-    /// </exception>
-    /// <exception cref="PathTooLongException">
-    ///     The specified path, file name, or both exceed the system-defined maximum length. For example, on
-    ///     Windows-based platforms, paths must be less than 248 characters, and file names must be less than 260
-    ///     characters.
-    /// </exception>
-    /// <exception cref="System.NotSupportedException">
-    ///     <paramref name="path" /> is in an invalid format.
-    /// </exception>
-    /// <exception cref="DirectoryNotFoundException">
-    ///     The specified <paramref name="path"/> is invalid, (for example, it is on an unmapped drive).
-    /// </exception>
-    /// <exception cref="System.UnauthorizedAccessException">
-    ///     <paramref name="path" /> specified a directory. -or- The caller does not have the required permission.
-    /// </exception>
-    /// <exception cref="FileNotFoundException">
-    ///     The file specified in <paramref name="path" /> was not found.
-    /// </exception>
-    /// <exception cref="IOException">
-    ///     An I/O error occurred while opening the file.
-    /// </exception>
+    /// <seealso cref="M:System.IO.File.OpenRead(System.String)"/>
     public FileAttachment(string path, string? filename = null, AttachmentType type = AttachmentType.File)
     {
         _isDisposed = false;
@@ -107,19 +79,16 @@ public struct FileAttachment : IDisposable
     }
 
     /// <summary>
-    ///     Create the file attachment from a URI.
+    ///     通过 URL 创建附件。
     /// </summary>
     /// <remarks>
-    ///     This URI path will be validated before being passed into REST API.
-    ///     If the resource the URI points to is not stored on KOOK OSS, this constructor will throw an exception.
-    ///     Under this circumstance, please create asset in advance.
+    ///     URL 应该是指向 KOOK 对象存储服务器上的资源的 URL。如果传入的网络地址不是指向 KOOK 对象存储服务器上的资源的 URL，
+    ///     虽然此构造函数不会引发异常，但在发送消息时可能会引发异常。此时，网络资源应先通过转存至 KOOK 对象存储服务器上，再使用此构造函数。
     /// </remarks>
-    /// <param name="uri">The URI of the file.</param>
-    /// <param name="filename">The name of the attachment.</param>
-    /// <param name="type">The type of the attachment.</param>
-    /// <exception cref="InvalidOperationException">The URI provided is not an asset on the KOOK OSS.</exception>
-    /// <exception cref="ArgumentException">The URI provided is blank.</exception>
-    /// <seealso cref="UrlValidation.ValidateKookAssetUrl"/>
+    /// <param name="uri"> 文件的 URL。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 附件的类型。 </param>
+    /// <seealso cref="M:Kook.Utils.UrlValidation.ValidateKookAssetUrl(System.String)"/>
     public FileAttachment(Uri uri, string filename, AttachmentType type = AttachmentType.File)
     {
         _isDisposed = false;

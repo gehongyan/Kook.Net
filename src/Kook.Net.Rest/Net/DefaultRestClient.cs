@@ -39,12 +39,10 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
     {
         _baseUrl = baseUrl;
 
-#pragma warning disable IDISP014
         _client = new HttpClient(new HttpClientHandler
         {
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate, UseCookies = false, UseProxy = useProxy
         });
-#pragma warning restore IDISP014
         SetHeader("accept-encoding", "gzip, deflate");
 
         _cancellationToken = CancellationToken.None;
@@ -125,9 +123,7 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         //
         // See this comment explaining why this is safe: https://github.com/aspnet/Security/issues/886#issuecomment-229181249
         // See also the source for HttpRequestMessage: https://github.com/microsoft/referencesource/blob/master/System/net/System/Net/Http/HttpRequestMessage.cs
-#pragma warning disable IDISP004
         var restRequest = new HttpRequestMessage(method, uri);
-#pragma warning restore IDISP004
 
         if (reason != null)
             restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));

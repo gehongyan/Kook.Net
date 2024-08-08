@@ -3,7 +3,9 @@ using System.Collections.Concurrent;
 
 namespace Kook.Audio.Streams;
 
-///<summary> Wraps another stream with a timed buffer. </summary>
+///<summary>
+///     表示一个定时缓冲的音频写入流，用于将定时缓冲的音频数据写入到下一个音频流中。
+/// </summary>
 public class BufferedWriteStream : AudioOutStream
 {
     private const int MaxSilenceFrames = 10;

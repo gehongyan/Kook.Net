@@ -16,9 +16,7 @@ public class SocketReaction : IReaction
     ///     property will always contain the user identifier in event that
     ///     <see cref="Kook.WebSocket.SocketReaction.User" /> cannot be retrieved.
     /// </remarks>
-    /// <returns>
-    ///     A user identifier associated with the user.
-    /// </returns>
+    /// <returns> A user identifier associated with the user. </returns>
     public ulong UserId { get; }
 
     /// <summary>
@@ -36,33 +34,25 @@ public class SocketReaction : IReaction
     ///         <see cref="Kook.Rest.KookRestClient" /> which will attempt to retrieve the user from REST.
     ///     </para>
     /// </remarks>
-    /// <returns>
-    ///     A user object where possible; a value is not always returned.
-    /// </returns>
+    /// <returns> A user object where possible; a value is not always returned. </returns>
     public IUser? User { get; internal set; }
 
     /// <summary>
     ///     Gets the ID of the message that has been reacted to.
     /// </summary>
-    /// <returns>
-    ///     A message Guid associated with the message.
-    /// </returns>
+    /// <returns> A message Guid associated with the message. </returns>
     public Guid MessageId { get; }
 
     /// <summary>
     ///     Gets the message that has been reacted to if possible.
     /// </summary>
-    /// <returns>
-    ///     A WebSocket-based message where possible; a value is not always returned.
-    /// </returns>
+    /// <returns> A WebSocket-based message where possible; a value is not always returned. </returns>
     public IMessage? Message { get; internal set; }
 
     /// <summary>
     ///     Gets the channel where the reaction takes place in.
     /// </summary>
-    /// <returns>
-    ///     A WebSocket-based message channel.
-    /// </returns>
+    /// <returns> A WebSocket-based message channel. </returns>
     public ISocketMessageChannel? Channel { get; }
 
     /// <inheritdoc />

@@ -1,12 +1,12 @@
 namespace Kook;
 
 /// <summary>
-///     A generic element used in modules.
+///     表示一个通用的用于模块内的元素。
 /// </summary>
 public interface IElement
 {
     /// <summary>
-    ///     Gets the type of this element.
+    ///     获取元素的类型。
     /// </summary>
     ElementType Type { get; }
 }

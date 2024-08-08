@@ -8,9 +8,7 @@ public interface ISocketMessageChannel : IMessageChannel
     /// <summary>
     ///     Gets all messages in this channel's cache.
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of WebSocket-based messages.
-    /// </returns>
+    /// <returns> A read-only collection of WebSocket-based messages. </returns>
     IReadOnlyCollection<SocketMessage> CachedMessages { get; }
 
     /// <summary>
@@ -22,6 +20,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///         this method will always return <c>null</c>. Please refer to
     ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> for more details.
     ///     </note>
+    ///     <br />
     ///     <para>
     ///         This method retrieves the message from the local WebSocket cache and does not send any additional
     ///         request to Kook. This message may be a message that has been deleted.
@@ -43,6 +42,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///         this method will always return an empty collection. Please refer to
     ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> for more details.
     ///     </note>
+    ///     <br />
     ///     <para>
     ///         This method retrieves the message(s) from the local WebSocket cache and does not send any additional
     ///         request to Kook. This read-only collection may include messages that have been deleted. The
@@ -51,9 +51,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///     </para>
     /// </remarks>
     /// <param name="limit">The number of messages to get.</param>
-    /// <returns>
-    ///     A read-only collection of WebSocket-based messages.
-    /// </returns>
+    /// <returns> A read-only collection of WebSocket-based messages. </returns>
     IReadOnlyCollection<SocketMessage> GetCachedMessages(int limit = KookConfig.MaxMessagesPerBatch);
 
     /// <summary>
@@ -65,6 +63,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///         this method will always return an empty collection. Please refer to
     ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> for more details.
     ///     </note>
+    ///     <br />
     ///     <para>
     ///         This method retrieves the message(s) from the local WebSocket cache and does not send any additional
     ///         request to Kook. This read-only collection may include messages that have been deleted. The
@@ -75,9 +74,7 @@ public interface ISocketMessageChannel : IMessageChannel
     /// <param name="fromMessageId">The message ID to start the fetching from.</param>
     /// <param name="dir">The direction of which the message should be gotten from.</param>
     /// <param name="limit">The number of messages to get.</param>
-    /// <returns>
-    ///     A read-only collection of WebSocket-based messages.
-    /// </returns>
+    /// <returns> A read-only collection of WebSocket-based messages. </returns>
     IReadOnlyCollection<SocketMessage> GetCachedMessages(Guid fromMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch);
 
     /// <summary>
@@ -89,6 +86,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///         this method will always return an empty collection. Please refer to
     ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> for more details.
     ///     </note>
+    ///     <br />
     ///     <para>
     ///         This method retrieves the message(s) from the local WebSocket cache and does not send any additional
     ///         request to Kook. This read-only collection may include messages that have been deleted. The
@@ -99,8 +97,6 @@ public interface ISocketMessageChannel : IMessageChannel
     /// <param name="fromMessage">The message to start the fetching from.</param>
     /// <param name="dir">The direction of which the message should be gotten from.</param>
     /// <param name="limit">The number of messages to get.</param>
-    /// <returns>
-    ///     A read-only collection of WebSocket-based messages.
-    /// </returns>
+    /// <returns> A read-only collection of WebSocket-based messages. </returns>
     IReadOnlyCollection<SocketMessage> GetCachedMessages(IMessage fromMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch);
 }

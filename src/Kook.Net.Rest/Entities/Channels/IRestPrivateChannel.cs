@@ -1,12 +1,10 @@
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a REST-based channel that is private to select recipients.
+///     表示一个基于 REST 的通用的私有频道，只有特定的用户可以访问。
 /// </summary>
 public interface IRestPrivateChannel : IPrivateChannel
 {
-    /// <summary>
-    ///     Users that can access this channel.
-    /// </summary>
+    /// <inheritdoc cref="P:Kook.IPrivateChannel.Recipients" />
     new IReadOnlyCollection<RestUser> Recipients { get; }
 }

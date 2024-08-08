@@ -200,6 +200,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
 
     /// <summary>
     ///     Returns the voice channel the user is in, or <c>null</c> if none or unknown.
+    ///     <br />
     ///     <note type="warning">
     ///         If a user connects to a voice channel before the bot has connected to the gateway,
     ///         this property will be <c>null</c> until <see cref="SocketGuild.DownloadVoiceStatesAsync"/>
@@ -429,10 +430,8 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     ///     Fetches the users data from the REST API to update this object,
     ///     especially the <see cref="Roles"/> property.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous reloading operation.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> A task that represents the asynchronous reloading operation. </returns>
     public Task UpdateAsync(RequestOptions? options = null) =>
         SocketUserHelper.UpdateAsync(this, Kook, options);
 
@@ -463,6 +462,9 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
 
     /// <inheritdoc />
     IVoiceChannel? IVoiceState.VoiceChannel => VoiceChannel;
+
+    /// <inheritdoc />
+    IReadOnlyCollection<IVoiceChannel> IVoiceState.VoiceChannels => VoiceState?.VoiceChannels ?? [];
 
     #endregion
 

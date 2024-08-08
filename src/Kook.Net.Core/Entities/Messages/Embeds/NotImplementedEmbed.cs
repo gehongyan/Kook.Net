@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 namespace Kook;
 
 /// <summary>
-///     Represents a unimplemented embed.
+///     表示一个消息中未能被解析为已知的强类型的嵌入式内容。
 /// </summary>
 public struct NotImplementedEmbed : IEmbed
 {
@@ -20,36 +20,21 @@ public struct NotImplementedEmbed : IEmbed
     public EmbedType Type => EmbedType.NotImplemented;
 
     /// <summary>
-    ///     Gets the type of the embed.
+    ///     获取嵌入式内容的类型的原始值。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the type of the embed.
-    /// </returns>
-    /// <remarks>
-    ///     This value originally came from the <c>type</c> field of the <see cref="JsonNode"/>.
-    /// </remarks>
-    public string RawType { get; internal set; }
+    public string RawType { get; }
 
     /// <summary>
-    ///     Gets the raw JSON of the embed.
+    ///     获取嵌入式内容的原始 JSON。
     /// </summary>
-    /// <returns>
-    ///     A JsonNode representing the raw JSON of the embed.
-    /// </returns>
-    public JsonNode JsonNode { get; internal set; }
+    public JsonNode JsonNode { get; }
 
     /// <summary>
-    ///     Resolves the embed to a concrete type via JSON deserialization.
+    ///     通过 JSON 反序列化将嵌入式内容解析为具体类型。
     /// </summary>
-    /// <param name="options">
-    ///     The options to use when deserializing the embed.
-    /// </param>
-    /// <typeparam name="T">
-    ///     The concrete type to deserialize the embed to.
-    /// </typeparam>
-    /// <returns>
-    ///     A <typeparamref name="T"/> representing the resolved embed.
-    /// </returns>
+    /// <param name="options"> 用于反序列化操作的选项。 </param>
+    /// <typeparam name="T"> 要解析为的具体类型。 </typeparam>
+    /// <returns> 解析后的嵌入式内容。 </returns>
     public T? Resolve<T>(JsonSerializerOptions? options = null)
         where T : IEmbed
     {
@@ -63,17 +48,11 @@ public struct NotImplementedEmbed : IEmbed
     }
 
     /// <summary>
-    ///     Resolves the embed to a concrete type via delegate.
+    ///     通过指定的解析函数将嵌入式内容解析为具体类型。
     /// </summary>
-    /// <param name="resolvingFunc">
-    ///     The resolving function to use when resolves the embed.
-    /// </param>
-    /// <typeparam name="T">
-    ///     The concrete type to deserialize the embed to.
-    /// </typeparam>
-    /// <returns>
-    ///     A <typeparamref name="T"/> representing the resolved embed.
-    /// </returns>
+    /// <param name="resolvingFunc"> 用于解析的函数。 </param>
+    /// <typeparam name="T"> 要解析为的具体类型。 </typeparam>
+    /// <returns> 解析后的嵌入式内容。 </returns>
     public T Resolve<T>(Func<NotImplementedEmbed, T> resolvingFunc)
         where T : IEmbed
     {

@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-/// Represents an image group module that can be used in an <see cref="ICard"/>.
+///     图片组模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>, IEquatable<IModule>
@@ -19,43 +19,31 @@ public class ImageGroupModule : IModule, IEquatable<ImageGroupModule>, IEquatabl
     public ModuleType Type => ModuleType.ImageGroup;
 
     /// <summary>
-    ///     Gets the image elements in this image group module.
+    ///     获取模块的元素。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="ImmutableArray{ImageElement}"/> representing the images in this image group module.
-    /// </returns>
     public ImmutableArray<ImageElement> Elements { get; }
 
     private string DebuggerDisplay => $"{Type} ({Elements.Length} Elements)";
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>.
+    ///     判定两个 <see cref="ImageGroupModule"/> 是否相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>;
-    /// </returns>
+    /// <returns> 如果两个 <see cref="ImageGroupModule"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(ImageGroupModule left, ImageGroupModule right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ImageGroupModule"/> is not equal to the current <see cref="ImageGroupModule"/>.
+    ///     判定两个 <see cref="ImageGroupModule"/> 是否不相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="ImageGroupModule"/> is not equal to the current <see cref="ImageGroupModule"/>;
-    /// </returns>
+    /// <returns> 如果两个 <see cref="ImageGroupModule"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(ImageGroupModule left, ImageGroupModule right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="ImageGroupModule"/>, <see cref="Equals(ImageGroupModule)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="ImageGroupModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is ImageGroupModule imageGroupModule && Equals(imageGroupModule);
 
-    /// <summary>Determines whether the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>.</summary>
-    /// <param name="imageGroupModule">The <see cref="ImageGroupModule"/> to compare with the current <see cref="ImageGroupModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ImageGroupModule"/> is equal to the current <see cref="ImageGroupModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] ImageGroupModule? imageGroupModule) =>
         GetHashCode() == imageGroupModule?.GetHashCode();
 

@@ -1,32 +1,32 @@
 namespace Kook;
 
 /// <summary>
-///     Represents the type of an embed.
+///     表示嵌入式内容的类型。
 /// </summary>
 public enum EmbedType
 {
     /// <summary>
-    ///     Represents an embed that is not implemented.
+    ///     嵌入式内容的类型未解析到已知的强类型。
     /// </summary>
     NotImplemented,
 
     /// <summary>
-    ///     Represents an embed that is a link.
+    ///     嵌入式内容是一个网址链接。
     /// </summary>
     Link,
 
     /// <summary>
-    ///     Represents an embed that is an image.
+    ///     嵌入式内容是一个图片。
     /// </summary>
     Image,
 
     /// <summary>
-    ///     Represents an embed that is a Bilibili video.
+    ///     嵌入式内容是一个哔哩哔哩视频。
     /// </summary>
     BilibiliVideo,
 
     /// <summary>
-    ///     Represents an embed that is a card.
+    ///     嵌入式内容是一个卡片。
     /// </summary>
     Card,
 

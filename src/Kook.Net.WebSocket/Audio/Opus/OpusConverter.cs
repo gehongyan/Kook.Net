@@ -1,44 +1,44 @@
 namespace Kook.Audio;
 
 /// <summary>
-///     Represents a generic Opus converter.
+///     表示一个通用的 Opus 转换器。
 /// </summary>
 internal abstract class OpusConverter : IDisposable
 {
     protected IntPtr _ptr;
 
     /// <summary>
-    ///     Gets the sampling rate of the audio, typically 48000.
+    ///     获取音频的采样率，通常为 48000。
     /// </summary>
     public const int SamplingRate = 48000;
 
     /// <summary>
-    ///     Gets the number of channels of the audio, typically 2.
+    ///     获取音频的通道数，通常为 2。
     /// </summary>
     public const int Channels = 2;
 
     /// <summary>
-    ///     Gets the milliseconds per frame, typically 40.
+    ///     获取每帧的毫秒数，通常为 40。
     /// </summary>
     public const int FrameMillis = 40;
 
     /// <summary>
-    ///     Gets the sample size, in bytes, of the audio, typically 4.
+    ///     获取音频的样本大小，单位为字节，通常为 4。
     /// </summary>
     public const int SampleBytes = sizeof(short) * Channels;
 
     /// <summary>
-    ///     Gets the number of samples per channel per frame, typically 1920.
+    ///     获取每帧每个通道的样本数，通常为 1920。
     /// </summary>
     public const int FrameSamplesPerChannel = SamplingRate / 1000 * FrameMillis;
 
     /// <summary>
-    ///     Gets the number of samples per frame, typically 3840.
+    ///     获取每帧的样本数，通常为 3840。
     /// </summary>
     public const int FrameSamples = FrameSamplesPerChannel * Channels;
 
     /// <summary>
-    ///     Gets the number of bytes per frame, typically 7680.
+    ///     获取每帧的字节数，通常为 7680。
     /// </summary>
     public const int FrameBytes = FrameSamplesPerChannel * SampleBytes;
 

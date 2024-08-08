@@ -3,8 +3,6 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 #endif
 
-#pragma warning disable CS8073
-
 namespace Kook.Net.Queue;
 
 internal class RequestQueue : IDisposable, IAsyncDisposable

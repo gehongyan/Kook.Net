@@ -1,17 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the cache mode that should be used.
+///     表示应该使用的缓存模式。
 /// </summary>
 public enum CacheMode
 {
     /// <summary>
-    ///     Allows the object to be downloaded if it does not exist in the current cache.
+    ///     允许在实体不存在于现有缓存中时下载对象。
     /// </summary>
     AllowDownload,
 
     /// <summary>
-    ///     Only allows the object to be pulled from the existing cache.
+    ///     仅允许从现有缓存中提取对象。
     /// </summary>
     CacheOnly
 }

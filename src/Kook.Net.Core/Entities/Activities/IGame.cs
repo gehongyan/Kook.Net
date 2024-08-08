@@ -1,77 +1,53 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic game object.
+///     表示一个通用的游戏信息。
 /// </summary>
 public interface IGame : IActivity, IEntity<int>, IDeletable
 {
     /// <summary>
-    ///     Gets the name of the game.
+    ///     获取游戏的名称。
     /// </summary>
-    /// <returns>
-    ///     A string containing the name of the game.
-    /// </returns>
     string Name { get; }
 
     /// <summary>
-    ///     Gets the type of the game.
+    ///     获取游戏的类型。
     /// </summary>
-    /// <returns>
-    ///     The type of the game.
-    /// </returns>
     GameType GameType { get; }
 
     /// <summary>
-    ///     Gets the additional information about the game.
+    ///     获取游戏的额外信息。
     /// </summary>
-    /// <returns>
-    ///     A string containing the additional information about the game.
-    /// </returns>
     string? Options { get; }
 
     /// <summary>
-    ///     Gets whether the Kook client needs administrator privileges to detect the game.
+    ///     获取 KOOK 客户端是否需要管理员权限来检测游戏进程。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the Kook client needs administrator privileges to detect the game; otherwise, <c>false</c>.
-    /// </returns>
     bool RequireAdminPrivilege { get; }
 
     /// <summary>
-    ///     Gets the process names of the game.
+    ///     获取游戏的进程名称。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IReadOnlyCollection{String}"/> containing the process names of the game.
-    /// </returns>
     IReadOnlyCollection<string> ProcessNames { get; }
 
     /// <summary>
-    ///     Gets the product names of the game.
+    ///     获取游戏的产品名称。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IReadOnlyCollection{String}"/> containing the product names of the game.
-    /// </returns>
     IReadOnlyCollection<string> ProductNames { get; }
 
     /// <summary>
-    ///     Gets the URL of the game's icon.
+    ///     获取游戏图标的 URL。
     /// </summary>
-    /// <returns>
-    ///     A string representing the URL of the game's icon.
-    /// </returns>
     string? Icon { get; }
 
     /// <summary>
-    ///     Modifies this game.
+    ///     修改此游戏信息的属性。
     /// </summary>
     /// <remarks>
-    ///     This method modifies this game with the specified properties. To see an example of this
-    ///     method and what properties are available, please refer to <see cref="GameProperties"/>.
+    ///     此方法使用指定的属性修改当前游戏信息。要查看可用的属性，请参考 <see cref="T:Kook.GameProperties"/>。
     /// </remarks>
-    /// <param name="func">A delegate containing the properties to modify the game with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous modification operation.
-    /// </returns>
+    /// <param name="func"> 一个包含修改游戏属性的委托。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示信息属性修改操作的异步任务。 </returns>
     Task<IGame> ModifyAsync(Action<GameProperties> func, RequestOptions? options = null);
 }

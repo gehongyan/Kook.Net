@@ -1,12 +1,12 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic message quote.
+///     表示一个通用的消息引用。
 /// </summary>
 public interface IQuote
 {
     /// <summary>
-    ///     Gets the identifier of the message this quote refers to.
+    ///     获取此引用所指向的消息的 ID。
     /// </summary>
     Guid QuotedMessageId { get; }
 }

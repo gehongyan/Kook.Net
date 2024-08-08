@@ -1,17 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the type of an emoji.
+///     表示一个表情符号的类型。
 /// </summary>
 public enum EmojiType
 {
     /// <summary>
-    ///     The emoji is static.
+    ///     静态表情符号。
     /// </summary>
     Static = 1,
 
     /// <summary>
-    ///     The emoji is animated.
+    ///     动态表情符号。
     /// </summary>
     Animated = 2
 }

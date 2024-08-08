@@ -1,27 +1,27 @@
 ﻿namespace Kook;
 
 /// <summary>
-///     Represents a guild certification type.
+///     表示一个服务器认证的类型。
 /// </summary>
 public enum GuildCertificationType
 {
     /// <summary>
-    ///     Represents an official certification.
+    ///     官方认证。
     /// </summary>
     Official = 1,
 
     /// <summary>
-    ///     Represents a partner certification.
+    ///     合作伙伴认证。
     /// </summary>
     Partner = 2,
 
     /// <summary>
-    ///     Represents a recommended certification.
+    ///     推荐认证。
     /// </summary>
     Recommended = 4,
 
     /// <summary>
-    ///     Represents a personal certification.
+    ///     个人认证。
     /// </summary>
     Personal = 6
 

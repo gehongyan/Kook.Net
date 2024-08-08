@@ -27,9 +27,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <summary>
     ///     Gets the parent (category) of this channel in the guild's channel list.
     /// </summary>
-    /// <returns>
-    ///     An <see cref="ICategoryChannel"/> representing the parent of this channel; <c>null</c> if none is set.
-    /// </returns>
+    /// <returns> An <see cref="ICategoryChannel"/> representing the parent of this channel; <c>null</c> if none is set. </returns>
     public ICategoryChannel? Category => CategoryId.HasValue
         ? Guild.GetChannel(CategoryId.Value) as ICategoryChannel
         : null;
@@ -107,12 +105,9 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     ///     This method follows the same behavior as described in <see cref="IMessageChannel.GetMessageAsync"/>.
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
-    /// <param name="id">The identifier of the message.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents an asynchronous get operation for retrieving the message. The task result contains
-    ///     the retrieved message; <c>null</c> if no message is found with the specified identifier.
-    /// </returns>
+    /// <param name="id"> 消息的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务结果包含检索到的消息；如果未找到具有指定 ID 的消息，则返回 <c>null</c>。 </returns>
     public async Task<IMessage> GetMessageAsync(Guid id, RequestOptions? options = null)
     {
         IMessage? msg = _messages?.Get(id);
@@ -127,11 +122,9 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     ///     <see cref="IMessageChannel.GetMessagesAsync(int, CacheMode, RequestOptions)"/>.
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
-    /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     Paged collection of messages.
-    /// </returns>
+    /// <param name="limit"> 要获取的消息数量。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 分页的消息集合的异步可枚举对象。 </returns>
     public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(
         int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         SocketChannelHelper.GetMessagesAsync(this, Kook, _messages,
@@ -145,13 +138,11 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     ///     <see cref="IMessageChannel.GetMessagesAsync(Guid, Direction, int, CacheMode, RequestOptions)"/>.
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
-    /// <param name="referenceMessageId">The ID of the starting message to get the messages from.</param>
-    /// <param name="dir">The direction of the messages to be gotten from.</param>
-    /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     Paged collection of messages.
-    /// </returns>
+    /// <param name="referenceMessageId"> 要开始获取消息的参考位置的消息的 ID。 </param>
+    /// <param name="dir"> 要以参考位置为基准，获取消息的方向。 </param>
+    /// <param name="limit"> 要获取的消息数量。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 分页的消息集合的异步可枚举对象。 </returns>
     public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         SocketChannelHelper.GetMessagesAsync(this, Kook, _messages,
@@ -165,13 +156,11 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     ///     <see cref="IMessageChannel.GetMessagesAsync(IMessage, Direction, int, CacheMode, RequestOptions)"/>.
     ///     Please visit its documentation for more details on this method.
     /// </remarks>
-    /// <param name="referenceMessage">The starting message to get the messages from.</param>
-    /// <param name="dir">The direction of the messages to be gotten from.</param>
-    /// <param name="limit">The numbers of message to be gotten from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     Paged collection of messages.
-    /// </returns>
+    /// <param name="referenceMessage"> 要开始获取消息的参考位置的消息。 </param>
+    /// <param name="dir"> 要以参考位置为基准，获取消息的方向。 </param>
+    /// <param name="limit"> 要获取的消息数量。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 分页的消息集合的异步可枚举对象。 </returns>
     public virtual IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         SocketChannelHelper.GetMessagesAsync(this, Kook, _messages,
@@ -195,7 +184,7 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     public Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions? options = null) =>
         ChannelHelper.GetPinnedMessagesAsync(this, Kook, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendFileAsync(string,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendFileAsync(System.String,System.String,Kook.AttachmentType,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, IUser? ephemeralUser = null,
         RequestOptions? options = null)
@@ -204,28 +193,28 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         return ChannelHelper.SendFileAsync(this, Kook, path, name, type, quote, ephemeralUser, options);
     }
 
-    /// <inheritdoc cref="IMessageChannel.SendFileAsync(Stream,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendFileAsync(System.IO.Stream,System.String,Kook.AttachmentType,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, IUser? ephemeralUser = null,
         RequestOptions? options = null) =>
         ChannelHelper.SendFileAsync(this, Kook, stream, filename, type, quote, ephemeralUser, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendFileAsync(FileAttachment,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendFileAsync(Kook.FileAttachment,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         ChannelHelper.SendFileAsync(this, Kook, attachment, quote, ephemeralUser, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendTextAsync(string,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendTextAsync(System.String,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         ChannelHelper.SendMessageAsync(this, Kook, MessageType.KMarkdown, text, quote, ephemeralUser, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendCardsAsync(IEnumerable{ICard},IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendCardsAsync(System.Collections.Generic.IEnumerable{Kook.ICard},Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         ChannelHelper.SendCardsAsync(this, Kook, cards, quote, ephemeralUser, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendCardAsync(ICard,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendCardAsync(Kook.ICard,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         ChannelHelper.SendCardAsync(this, Kook, card, quote, ephemeralUser, options);

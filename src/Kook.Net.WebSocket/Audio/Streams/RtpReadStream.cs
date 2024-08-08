@@ -1,6 +1,8 @@
 namespace Kook.Audio.Streams;
 
-///<summary> Reads the payload from an RTP frame </summary>
+/// <summary>
+///     表示一个 RTP 帧读取流。
+/// </summary>
 public class RtpReadStream : AudioOutStream
 {
     private readonly AudioStream _next;
@@ -24,8 +26,7 @@ public class RtpReadStream : AudioOutStream
         _nonce = new byte[24];
     }
 
-    /// <exception cref="OperationCanceledException">The token has had cancellation requested.</exception>
-    /// <exception cref="ObjectDisposedException">The associated <see cref="T:System.Threading.CancellationTokenSource" /> has been disposed.</exception>
+    /// <inheritdoc />
     public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -45,8 +46,12 @@ public class RtpReadStream : AudioOutStream
     }
 
     /// <summary>
-    ///     Tries to read SSRC from UDP packet.
+    ///     尝试从 RTP 数据报中读取 SSRC。
     /// </summary>
+    /// <param name="buffer"> 要从中读取 SSRC 的数据报。 </param>
+    /// <param name="offset"> 数据报的偏移量。 </param>
+    /// <param name="ssrc"> 如果读取成功，则为 SSRC 值；否则为 0。 </param>
+    /// <returns> 读取是否成功。 </returns>
     public static bool TryReadSsrc(byte[] buffer, int offset, out uint ssrc)
     {
         ssrc = 0;
@@ -68,8 +73,11 @@ public class RtpReadStream : AudioOutStream
     }
 
     /// <summary>
-    ///     Gets the header size.
+    ///     获取 RTP 数据报的头部大小。
     /// </summary>
+    /// <param name="buffer"> 要获取头部大小的数据报。 </param>
+    /// <param name="offset"> 数据报的偏移量。 </param>
+    /// <returns> 数据报的头部大小。 </returns>
     public static int GetHeaderSize(byte[] buffer, int offset)
     {
         byte headerByte = buffer[offset];

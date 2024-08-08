@@ -1,17 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the size of the image in <see cref="ImageElement"/>.
+///     表示 <see cref="ImageElement"/> 中的图像大小。
 /// </summary>
 public enum ImageSize
 {
     /// <summary>
-    ///     The image is displayed at small size.
+    ///     图像以小尺寸显示。
     /// </summary>
     Small,
 
     /// <summary>
-    ///     The image is displayed at large size.
+    ///     图像以大尺寸显示。
     /// </summary>
     Large
 }

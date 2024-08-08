@@ -1,34 +1,33 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a user's voice connection status.
+///     表示一个通用的用户语音连接状态。
 /// </summary>
 public interface IVoiceState
 {
     /// <summary>
-    ///     Gets a value that indicates whether this user is deafened by the guild.
+    ///     获取此用户是否被服务器静音。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the user is deafened (i.e. not permitted to listen to or speak to others) by the guild;
-    ///     otherwise <c>false</c>; <c>null</c> if unknown.
-    /// </returns>
+    /// <remarks>
+    ///     被服务器静音表示无法在语音频道内接收来自其他用户的语音。
+    /// </remarks>
     bool? IsDeafened { get; }
 
     /// <summary>
-    ///     Gets a value that indicates whether this user is muted (i.e. not permitted to speak via voice) by the
-    ///     guild.
+    ///     获取此用户是否被服务器闭麦。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if this user is muted by the guild; otherwise <c>false</c>; <c>null</c> if unknown.
-    /// </returns>
+    /// <remarks>
+    ///     被服务器闭麦表示无法在语音频道内发言。
+    /// </remarks>
     bool? IsMuted { get; }
 
     /// <summary>
-    ///     Gets the voice channel this user is currently in.
+    ///     获取此用户当前所连接的语音频道。
     /// </summary>
-    /// <returns>
-    ///     A generic voice channel object representing the voice channel that the user is currently in; <c>null</c>
-    ///     if none.
-    /// </returns>
     IVoiceChannel? VoiceChannel { get; }
+
+    /// <summary>
+    ///     获取此用户连接的所有语音频道。
+    /// </summary>
+    IReadOnlyCollection<IVoiceChannel> VoiceChannels { get; }
 }

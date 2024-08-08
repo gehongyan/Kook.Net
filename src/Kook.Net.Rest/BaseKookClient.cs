@@ -8,15 +8,21 @@ using Kook.Logging;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a client that can connect to the Kook API.
+///     表示一个可以连接到 KOOK API 的通用的 KOOK 客户端。
 /// </summary>
 public abstract class BaseKookClient : IKookClient
 {
     #region BaseKookClient
 
     /// <summary>
-    ///     Fired when a log message is sent.
+    ///     当生成一条日志消息时引发。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.LogMessage"/> 参数是描述日志消息的结构。 </item>
+    ///     </list>
+    /// </remarks>
     public event Func<LogMessage, Task> Log
     {
         add => _logEvent.Add(value);
@@ -26,7 +32,7 @@ public abstract class BaseKookClient : IKookClient
     internal readonly AsyncEvent<Func<LogMessage, Task>> _logEvent = new();
 
     /// <summary>
-    ///     Fired when the client has logged in.
+    ///     当客户端登录成功时引发。
     /// </summary>
     public event Func<Task> LoggedIn
     {
@@ -37,7 +43,7 @@ public abstract class BaseKookClient : IKookClient
     internal readonly AsyncEvent<Func<Task>> _loggedInEvent = new();
 
     /// <summary>
-    ///     Fired when the client has logged out.
+    ///     当客户端退出登录时引发。
     /// </summary>
     public event Func<Task> LoggedOut
     {
@@ -48,13 +54,20 @@ public abstract class BaseKookClient : IKookClient
     internal readonly AsyncEvent<Func<Task>> _loggedOutEvent = new();
 
     /// <summary>
-    ///     Fired when a REST request is sent to the API. First parameter is the HTTP method,
-    ///     second is the endpoint, and third is the time taken to complete the request.
+    ///     当向 API 发送 REST 请求时引发。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.Net.Http.HttpMethod"/> 参数是 HTTP 方法。 </item>
+    ///     <item> <see cref="T:System.String"/> 参数是终结点。 </item>
+    ///     <item> <see cref="T:System.Double"/> 参数是完成请求所花费的时间。 </item>
+    ///     </list>
+    /// </remarks>
     public event Func<HttpMethod, string, double, Task> SentRequest
     {
-        add { _sentRequest.Add(value); }
-        remove { _sentRequest.Remove(value); }
+        add => _sentRequest.Add(value);
+        remove => _sentRequest.Remove(value);
     }
 
     internal readonly AsyncEvent<Func<HttpMethod, string, double, Task>> _sentRequest = new();
@@ -68,12 +81,12 @@ public abstract class BaseKookClient : IKookClient
     internal LogManager LogManager { get; }
 
     /// <summary>
-    ///     Gets the login state of the client.
+    ///     获取此客户端的登录状态。
     /// </summary>
     public LoginState LoginState { get; protected set; }
 
     /// <summary>
-    ///     Gets the logged-in user.
+    ///     获取登录到此客户端的当前用户；如果未登录，则为 <c>null</c>。
     /// </summary>
     public ISelfUser? CurrentUser { get; protected set; }
 
@@ -121,11 +134,17 @@ public abstract class BaseKookClient : IKookClient
     public void Dispose() => Dispose(true);
 
     /// <summary>
-    ///     Logs in to the Kook API.
+    ///     登录到 KOOK API。
     /// </summary>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
+    /// <param name="tokenType"> 要使用的令牌类型。 </param>
+    /// <param name="token"> 要使用的令牌。 </param>
+    /// <param name="validateToken"> 是否验证令牌。 </param>
+    /// <returns> 一个表示异步登录操作的任务。 </returns>
+    /// <remarks>
+    ///     验证令牌的操作是通过 <see cref="M:Kook.TokenUtils.ValidateToken(Kook.TokenType,System.String)"/> 方法完成的。 <br />
+    ///     此方法用于向当前客户端设置后续 API 请求的身份验证信息，并获取所登录用户的信息，设置
+    ///     <see cref="P:Kook.Rest.BaseKookClient.CurrentUser"/> 属性。
+    /// </remarks>
     public async Task LoginAsync(TokenType tokenType, string token, bool validateToken = true)
     {
         await _stateLock.WaitAsync().ConfigureAwait(false);
@@ -185,8 +204,12 @@ public abstract class BaseKookClient : IKookClient
     internal virtual Task OnLoginAsync(TokenType tokenType, string token) => Task.CompletedTask;
 
     /// <summary>
-    ///     Logs out from the Kook API.
+    ///     从 KOOK API 退出登录。
     /// </summary>
+    /// <returns> 一个表示异步退出登录操作的任务。 </returns>
+    /// <remarks>
+    ///     此方法用于清除当前客户端的身份验证信息，并清除 <see cref="P:Kook.Rest.BaseKookClient.CurrentUser"/> 属性。
+    /// </remarks>
     public async Task LogoutAsync()
     {
         await _stateLock.WaitAsync().ConfigureAwait(false);

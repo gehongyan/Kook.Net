@@ -1,37 +1,37 @@
 ﻿namespace Kook.Audio;
 
 /// <summary>
-///     Represents the information of a peer's permission in a voice channel.
+///     表示语音频道中其它语音客户端的权限信息。
 /// </summary>
 public readonly struct PeerPermissionInfo
 {
     /// <summary>
-    ///     Gets whether the peer is muted by the guild.
+    ///     获取是否被服务器闭麦。
     /// </summary>
     public bool MutedByGuild { get; init; }
 
     /// <summary>
-    ///     Gets whether the peer is deafened by the guild.
+    ///     获取是否被服务器静音。
     /// </summary>
     public bool DeafenedByGuild { get; init; }
 
     /// <summary>
-    ///     Gets whether the peer can use voice activity, i.e. the peer can speak without pressing a key.
+    ///     获取是否可以在当前语音频道使用语音活性检测，以自由麦的方式不按键即说话。
     /// </summary>
     public bool CanUseVoiceActivity { get; init; }
 
     /// <summary>
-    ///     Gets whether the peer can connect to the voice channel.
+    ///     获取是否可以连接到当前语音频道。
     /// </summary>
     public bool CanConnect { get; init; }
 
     /// <summary>
-    ///     Gets whether the peer can speak in the voice channel.
+    ///     获取是否可以在当前语音频道中说话。
     /// </summary>
     public bool CanSpeak { get; init; }
 
     /// <summary>
-    ///     Gets whether the peer can manage the voice channel.
+    ///     获取是否可以管理当前语音频道。
     /// </summary>
     public bool CanManageVoice { get; init; }
 }

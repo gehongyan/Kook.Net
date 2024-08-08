@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     A paragraph struct that can be used in modules.
+///     区域文本结构，可用于 <see cref="IModule"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ParagraphStruct : IElement, IEquatable<ParagraphStruct>, IEquatable<IElement>
@@ -16,56 +16,40 @@ public class ParagraphStruct : IElement, IEquatable<ParagraphStruct>, IEquatable
         Fields = fields;
     }
 
-    /// <summary>
-    ///     Gets the type of the element.
-    /// </summary>
-    /// <returns>
-    ///     An <see cref="ElementType"/> value that represents the theme of the button.
-    /// </returns>
+    /// <inheritdoc />
     public ElementType Type => ElementType.Paragraph;
 
     /// <summary>
-    ///     Gets the number of columns in the paragraph.
+    ///     获取区域文本的列数。
     /// </summary>
-    /// <returns>
-    ///     An int value that represents the number of columns in the paragraph.
-    /// </returns>
     public int? ColumnCount { get; }
 
     /// <summary>
-    ///     Gets the fields in the paragraph.
+    ///     获取区域文本的文本块。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="ImmutableArray{IElement}"/> array that contains the fields in the paragraph.
-    /// </returns>
     public ImmutableArray<IElement> Fields { get; }
 
     private string DebuggerDisplay => $"{Type} ({ColumnCount} Columns, {Fields.Length} Fields)";
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>.
+    ///     判定两个 <see cref="ParagraphStruct"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ParagraphStruct"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(ParagraphStruct? left, ParagraphStruct? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ParagraphStruct"/> is not equal to the current <see cref="ParagraphStruct"/>.
+    ///     判定两个 <see cref="ParagraphStruct"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ParagraphStruct"/> is not equal to the current <see cref="ParagraphStruct"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ParagraphStruct"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(ParagraphStruct? left, ParagraphStruct? right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="ParagraphStruct"/>, <see cref="Equals(ParagraphStruct)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="ParagraphStruct"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is ParagraphStruct paragraphStruct && Equals(paragraphStruct);
 
-    /// <summary>Determines whether the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>.</summary>
-    /// <param name="paragraphStruct">The <see cref="ParagraphStruct"/> to compare with the current <see cref="ParagraphStruct"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ParagraphStruct"/> is equal to the current <see cref="ParagraphStruct"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] ParagraphStruct? paragraphStruct) =>
         GetHashCode() == paragraphStruct?.GetHashCode();
 

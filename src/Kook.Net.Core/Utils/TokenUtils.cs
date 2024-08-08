@@ -4,51 +4,45 @@ using System.Text;
 namespace Kook;
 
 /// <summary>
-///     Provides a series of helper methods for handling Kook login tokens.
+///     提供一组用于处理 KOOK 登录令牌的辅助方法。
 /// </summary>
 public static class TokenUtils
 {
     /// <summary>
-    ///     The minimum length of a Bot token.
+    ///     Bot 令牌的最小长度。
     /// </summary>
     /// <remarks>
-    ///     This value was determined by comparing against the examples in the Kook
-    ///     documentation, and pre-existing tokens.
+    ///     此值是通过与 KOOK 文档和现有令牌的示例进行比较确定的。
     /// </remarks>
     internal const int MinBotTokenLength = 33;
 
     /// <summary>
-    ///     The standard length of a Bot token.
+    ///     Bot 令牌的标准长度。
     /// </summary>
     /// <remarks>
-    ///     This value was determined by comparing against the examples in the Kook
-    ///     documentation, and pre-existing tokens.
+    ///     此值是通过与 KOOK 文档和现有令牌的示例进行比较确定的。
     /// </remarks>
     internal const int StandardBotTokenLength = 35;
 
     /// <summary>
-    ///     The padding character used in base64 encoding.
+    ///     Base64 编码中使用的填充字符。
     /// </summary>
     internal const char Base64Padding = '=';
 
     /// <summary>
-    ///     Pads a base64-encoded string with 0, 1, or 2 '=' characters,
-    ///     if the string is not a valid multiple of 4.
-    ///     Does not ensure that the provided string contains only valid base64 characters.
-    ///     Strings that already contain padding will not have any more padding applied.
+    ///     如果一个 Base64 编码的字符串长度不是 4 的倍数，则使用 0、1 或 2 个 '=' 字符对其进行填充。
+    ///     此方法不保证提供的字符串仅包含有效的 Base64 字符，已经包含填充的字符串不会再添加额外的填充字符。
     /// </summary>
     /// <remarks>
-    ///     A string that would require 3 padding characters is considered to be already corrupt.
-    ///     Some older bot tokens may require padding, as the format provided by Kook
-    ///     does not include this padding in the token.
+    ///     需要 3 个填充字符的 base64 字符串会被视为其格式不正确。
     /// </remarks>
-    /// <param name="encodedBase64">The base64 encoded string to pad with characters.</param>
-    /// <returns>A string containing the base64 padding.</returns>
+    /// <param name="encodedBase64"> 要用字符填充的 base64 编码字符串。 </param>
+    /// <returns> 包含 base64 填充字符的字符串。 </returns>
     /// <exception cref="FormatException">
-    ///     Thrown if <paramref name="encodedBase64"/> would require an invalid number of padding characters.
+    ///     如果 <paramref name="encodedBase64"/> 需要无效数量的填充字符，将引发异常。
     /// </exception>
     /// <exception cref="ArgumentNullException">
-    ///     Thrown if <paramref name="encodedBase64"/> is null, empty, or whitespace.
+    ///     如果 <paramref name="encodedBase64"/> 为 null、空字符串或仅包含空白字符，将引发异常。
     /// </exception>
     internal static string PadBase64String(string encodedBase64)
     {
@@ -71,11 +65,11 @@ public static class TokenUtils
     }
 
     /// <summary>
-    ///     Decodes a base 64 encoded string into a ulong value.
+    ///     解码 Base64 编码的字符串为 <c>ulong</c> 类型的数值。
     /// </summary>
-    /// <param name="encoded"> A base 64 encoded string containing a User Id.</param>
-    /// <returns> A ulong containing the decoded value of the string, or null if the value was invalid. </returns>
-    internal static ulong? DecodeBase64UserId(string encoded)
+    /// <param name="encoded"> 由 Base64 编码的数值字符串。 </param>
+    /// <returns> 包含解码值的 <c>ulong</c> 类型的数值，如果值无效则返回 <c>null</c>。 </returns>
+    internal static ulong? DecodeBase64AsNumber(string encoded)
     {
         if (string.IsNullOrWhiteSpace(encoded)) return null;
 
@@ -106,52 +100,44 @@ public static class TokenUtils
     }
 
     /// <summary>
-    ///     Checks the validity of a bot token by attempting to decode a ulong userid
-    ///     from the bot token.
+    ///     校验 Bot 令牌的有效性。
     /// </summary>
-    /// <param name="message">
-    ///     The bot token to validate.
-    /// </param>
-    /// <returns>
-    ///     <c>true</c> if the token is valid, <c>false</c> otherwise.
-    /// </returns>
-    internal static bool CheckBotTokenValidity(string message)
+    /// <param name="token"> 要校验的 Bot 令牌。 </param>
+    /// <returns> 如果校验成功，则返回 <c>true</c>；否则返回 <c>false</c>。 </returns>
+    internal static bool CheckBotTokenValidity(string token)
     {
-        if (string.IsNullOrWhiteSpace(message)) return false;
+        if (string.IsNullOrWhiteSpace(token)) return false;
 
         // split each component of the JWT
-        string[] segments = message.Split('/');
+        string[] segments = token.Split('/');
 
         // ensure that there are three parts
         if (segments.Length < 3) return false;
 
         // return true if the user id could be determined
-        return DecodeBase64UserId(segments[1]).HasValue;
+        return DecodeBase64AsNumber(segments[1]).HasValue;
     }
 
     /// <summary>
-    ///     The set of all characters that are not allowed inside of a token.
+    ///     令牌中不允许的所有字符。
     /// </summary>
     internal static readonly char[] IllegalTokenCharacters = [' ', '\t', '\r', '\n'];
 
     /// <summary>
-    ///     Checks if the given token contains a whitespace or newline character
-    ///     that would fail to log in.
+    ///     检查给定的令牌是否包含会导致登录失败的空格或换行符。
     /// </summary>
-    /// <param name="token"> The token to validate. </param>
-    /// <returns>
-    ///     <c>true</c> if the token contains a whitespace or newline character.
-    /// </returns>
+    /// <param name="token"> 要检查的令牌。 </param>
+    /// <returns> 如果令牌包含空格或换行符，则返回 <c>true</c>；否则返回 <c>false</c>。 </returns>
     internal static bool CheckContainsIllegalCharacters(string token) =>
         token.IndexOfAny(IllegalTokenCharacters) != -1;
 
     /// <summary>
-    ///     Checks the validity of the supplied token of a specific type.
+    ///     检查指定类型的令牌的有效性。
     /// </summary>
-    /// <param name="tokenType"> The type of token to validate. </param>
-    /// <param name="token"> The token value to validate. </param>
-    /// <exception cref="ArgumentNullException"> Thrown when the supplied token string is <c>null</c>, empty, or contains only whitespace.</exception>
-    /// <exception cref="ArgumentException"> Thrown when the supplied <see cref="TokenType"/> or token value is invalid. </exception>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 要校验的令牌。 </param>
+    /// <exception cref="ArgumentNullException"> 当提供的令牌值为 <c>null</c>、空字符串或仅包含空白字符时引发异常。 </exception>
+    /// <exception cref="ArgumentException"> 当提供的令牌类型或令牌值无效时引发异常。 </exception>
     public static void ValidateToken(TokenType tokenType, string token)
     {
         // A Null or WhiteSpace token of any type is invalid.

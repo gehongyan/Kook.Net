@@ -1,6 +1,4 @@
 using System.Collections.Concurrent;
-using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace Kook.WebSocket;
@@ -90,9 +88,7 @@ public struct SocketVoiceState : IVoiceState
     /// <summary>
     ///     Gets the name of this voice channel.
     /// </summary>
-    /// <returns>
-    ///     A string that resolves to name of this voice channel; otherwise "Unknown".
-    /// </returns>
+    /// <returns> A string that resolves to name of this voice channel; otherwise "Unknown". </returns>
     public override string ToString() => VoiceChannel?.Name ?? "Unknown";
 
     private string DebuggerDisplay =>
@@ -114,4 +110,7 @@ public struct SocketVoiceState : IVoiceState
 
     /// <inheritdoc />
     IVoiceChannel? IVoiceState.VoiceChannel => VoiceChannel;
+
+    /// <inheritdoc />
+    IReadOnlyCollection<IVoiceChannel> IVoiceState.VoiceChannels => VoiceChannels;
 }

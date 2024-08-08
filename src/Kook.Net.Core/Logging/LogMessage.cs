@@ -3,50 +3,37 @@ using System.Text;
 namespace Kook;
 
 /// <summary>
-///     Provides a message object used for logging purposes.
+///     表示一个用于记录日志的消息对象。
 /// </summary>
 public readonly struct LogMessage
 {
     /// <summary>
-    ///     Gets the severity of the log entry.
+    ///     获取日志记录的严重性。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="LogSeverity"/> enum to indicate the severeness of the incident or event.
-    /// </returns>
     public LogSeverity Severity { get; }
 
     /// <summary>
-    ///     Gets the source of the log entry.
+    ///     获取日志记录的来源。
     /// </summary>
-    /// <returns>
-    ///     A string representing the source of the log entry.
-    /// </returns>
     public string Source { get; }
 
     /// <summary>
-    ///     Gets the message of this log entry.
+    ///     获取日志记录的消息。
     /// </summary>
-    /// <returns>
-    ///     A string containing the message of this log entry.
-    /// </returns>
     public string? Message { get; }
 
     /// <summary>
-    ///     Gets the exception of this log entry.
+    ///     获取此日志条目的异常。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="Kook.LogMessage.Exception" /> object associated with an incident; otherwise <c>null</c>.
-    /// </returns>
     public Exception? Exception { get; }
 
     /// <summary>
-    ///     Initializes a new <see cref="LogMessage"/> struct with the severity, source, message of the event, and
-    ///     optionally, an exception.
+    ///     使用事件的严重性、来源、消息和可选的异常初始化 <see cref="LogMessage"/> 结构。
     /// </summary>
-    /// <param name="severity">The severity of the event.</param>
-    /// <param name="source">The source of the event.</param>
-    /// <param name="message">The message of the event.</param>
-    /// <param name="exception">The exception of the event.</param>
+    /// <param name="severity"> 事件的严重性。 </param>
+    /// <param name="source"> 事件的来源。 </param>
+    /// <param name="message"> 事件的消息。 </param>
+    /// <param name="exception"> 事件的异常。 </param>
     public LogMessage(LogSeverity severity, string source, string? message, Exception? exception = null)
     {
         Severity = severity;
@@ -56,20 +43,20 @@ public readonly struct LogMessage
     }
 
     /// <summary>
-    ///     Returns a string representation of this log message.
+    ///     返回此日志消息的字符串表示形式。
     /// </summary>
-    /// <returns> A string representation of this log message. </returns>
+    /// <returns> 此日志消息的字符串表示形式。 </returns>
     public override string ToString() => ToString();
 
     /// <summary>
-    ///     Returns a string representation of this log message.
+    ///     返回此日志消息的字符串表示形式。
     /// </summary>
-    /// <param name="builder"> The string builder to use. </param>
-    /// <param name="fullException"> Whether to include the full exception in the string. </param>
-    /// <param name="prependTimestamp"> Whether to prepend the timestamp to the string. </param>
-    /// <param name="timestampKind"> The kind of timestamp to use. </param>
-    /// <param name="padSource"> The amount of padding to use for the source. </param>
-    /// <returns> A string representation of this log message. </returns>
+    /// <param name="builder"> 要使用的字符串构建器。 </param>
+    /// <param name="fullException"> 是否在字符串中包含完整的异常信息。 </param>
+    /// <param name="prependTimestamp"> 是否在字符串前添加时间戳。 </param>
+    /// <param name="timestampKind"> 要使用的时间戳类型。 </param>
+    /// <param name="padSource"> 源字符串的填充量。 </param>
+    /// <returns> 此日志消息的字符串表示形式。 </returns>
     public string ToString(StringBuilder? builder = null, bool fullException = true, bool prependTimestamp = true,
         DateTimeKind timestampKind = DateTimeKind.Local, int? padSource = 11)
     {

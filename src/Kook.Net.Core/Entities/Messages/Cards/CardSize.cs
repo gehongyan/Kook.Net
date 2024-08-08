@@ -1,17 +1,23 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the size of a card.
+///     表示卡片的大小。
 /// </summary>
 public enum CardSize
 {
     /// <summary>
-    ///     The card is a small card.
+    ///     卡片的尺寸较小。
     /// </summary>
+    /// <remarks>
+    ///     卡片的宽度为 <c>276px</c>。
+    /// </remarks>
     Small,
 
     /// <summary>
-    ///     The card is a large card.
+    ///     卡片的尺寸较大。
     /// </summary>
+    /// <remarks>
+    ///     卡片的最大宽度为 <c>436px</c>。
+    /// </remarks>
     Large
 }

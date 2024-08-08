@@ -3,7 +3,7 @@ using Model = Kook.API.Reaction;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a single REST-based reaction.
+///     表示一个基于 REST 的回应。
 /// </summary>
 public class RestReaction : IReaction
 {
@@ -11,12 +11,12 @@ public class RestReaction : IReaction
     public IEmote Emote { get; }
 
     /// <summary>
-    ///     Gets the number of reactions added.
+    ///     获取添加或跟随此回应的用户数量。
     /// </summary>
     public int Count { get; }
 
     /// <summary>
-    ///     Gets whether the reactions is added by the user.
+    ///     获取当前用户是否添加或跟随了此回应。
     /// </summary>
     public bool Me { get; }
 

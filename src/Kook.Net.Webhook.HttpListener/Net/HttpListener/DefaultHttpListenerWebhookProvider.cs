@@ -1,20 +1,20 @@
 namespace Kook.Net.Webhooks.HttpListener;
 
 /// <summary>
-///     Represents a default <see cref="WebhookProvider"/> that creates <see cref="HttpListenerWebhookClient"/> instances.
+///     表示一个默认的使用 HTTP 监听器的 <see cref="WebhookProvider"/>，用于创建 <see cref="HttpListenerWebhookClient"/> 实例。
 /// </summary>
 public static class DefaultHttpListenerWebhookProvider
 {
     /// <summary>
-    ///     A delegate that creates a default <see cref="WebhookProvider"/> instance.
+    ///     一个创建默认的使用 HTTP 监听器的 <see cref="HttpListenerWebhookClient"/> 实例的委托。
     /// </summary>
     public static readonly WebhookProvider Instance = Create();
 
     /// <summary>
-    ///     Creates a delegate that creates a new <see cref="HttpListenerWebhookClient"/> instance.
+    ///     创建一个新的用于创建默认的使用 HTTP 监听器的 <see cref="HttpListenerWebhookClient"/> 实例的委托。
     /// </summary>
-    /// <returns> A delegate that creates a new <see cref="HttpListenerWebhookClient"/> instance. </returns>
-    /// <exception cref="PlatformNotSupportedException">The default WebhookProvider is not supported on this platform.</exception>
+    /// <returns> 一个用于创建默认的使用 HTTP 监听器的 <see cref="HttpListenerWebhookClient"/> 实例的委托。 </returns>
+    /// <exception cref="PlatformNotSupportedException"> 当默认的 <see cref="DefaultHttpListenerWebhookProvider"/> 在当前平台上不受支持时引发。 </exception>
     public static WebhookProvider Create() =>
         () =>
         {

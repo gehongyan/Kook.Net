@@ -95,7 +95,7 @@ public class MessageTests : IClassFixture<SocketChannelFixture>, IClassFixture<M
         _client.MessageReceived += ClientOnMessageReceived;
         await using Stream imageStream = await new HttpClient().GetStreamAsync(rawUri);
         string assetUri = await _client.Rest.CreateAssetAsync(imageStream, filename);
-        FileAttachment fileAttachment = new(new Uri(assetUri), filename, AttachmentType.Image);
+        using FileAttachment fileAttachment = new(new Uri(assetUri), filename, AttachmentType.Image);
         Cacheable<IUserMessage, Guid> cacheableMessage = await _textChannel.SendFileAsync(fileAttachment);
 
         // The message content received should be the same as the message sent
@@ -135,7 +135,7 @@ public class MessageTests : IClassFixture<SocketChannelFixture>, IClassFixture<M
         byte[] buffer = RandomNumberGenerator.GetBytes(fileSize);
         using MemoryStream stream = new(buffer);
         string assetUri = await _client.Rest.CreateAssetAsync(stream, filename);
-        FileAttachment fileAttachment = new(new Uri(assetUri), filename);
+        using FileAttachment fileAttachment = new(new Uri(assetUri), filename);
         Cacheable<IUserMessage, Guid> cacheableMessage = await _textChannel.SendFileAsync(fileAttachment);
 
         // The message content received should be the same as the message sent

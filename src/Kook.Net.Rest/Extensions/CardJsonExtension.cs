@@ -8,7 +8,7 @@ using Kook.Net.Converters;
 namespace Kook.Rest;
 
 /// <summary>
-///     Provides extension methods for <see cref="Card"/> and <see cref="CardBuilder"/>.
+///     提供一系列用于 <see cref="Card"/> 和 <see cref="CardBuilder"/> 的扩展方法。
 /// </summary>
 public static class CardJsonExtension
 {
@@ -20,11 +20,11 @@ public static class CardJsonExtension
     });
 
     /// <summary>
-    ///     Tries to parse a string into an <see cref="ICardBuilder"/>.
+    ///     尝试将字符串解析为单个卡片构造器 <see cref="ICardBuilder"/>。
     /// </summary>
-    /// <param name="json">The json string to parse.</param>
-    /// <param name="builder">The <see cref="ICardBuilder"/> with populated values. An empty instance if method returns <c>false</c>.</param>
-    /// <returns><c>true</c> if <paramref name="json"/> was successfully parsed. <c>false</c> if not.</returns>
+    /// <param name="json"> 要解析的 JSON 字符串。 </param>
+    /// <param name="builder"> 如果所提供的 JSON 字符串可以解析为单个卡片构造器实例，则返回该实例；否则返回 <c>null</c>。 </param>
+    /// <returns> 如果成功解析 <paramref name="json"/>，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool TryParseSingle(string json, [NotNullWhen(true)] out ICardBuilder? builder)
     {
         try
@@ -48,11 +48,11 @@ public static class CardJsonExtension
     }
 
     /// <summary>
-    ///     Tries to parse a string into an <see cref="ICardBuilder"/>.
+    ///     尝试将字符串解析为多个卡片构造器 <see cref="ICardBuilder"/>。
     /// </summary>
-    /// <param name="json">The json string to parse.</param>
-    /// <param name="builders">A collection of <see cref="ICardBuilder"/> with populated values. An empty instance if method returns <c>false</c>.</param>
-    /// <returns><c>true</c> if <paramref name="json"/> was successfully parsed. <c>false</c> if not.</returns>
+    /// <param name="json"> 要解析的 JSON 字符串。 </param>
+    /// <param name="builders"> 如果所提供的 JSON 字符串可以解析为多个卡片构造器实例，则返回该实例；否则返回 <c>null</c>。 </param>
+    /// <returns> 如果成功解析 <paramref name="json"/>，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool TryParseMany(string json, [NotNullWhen(true)] out IEnumerable<ICardBuilder>? builders)
     {
         try
@@ -76,11 +76,11 @@ public static class CardJsonExtension
     }
 
     /// <summary>
-    ///     Parses a string into an <see cref="ICardBuilder"/>.
+    ///     将字符串解析为单个卡片构造器 <see cref="ICardBuilder"/>。
     /// </summary>
-    /// <param name="json">The json string to parse.</param>
-    /// <returns>An <see cref="ICardBuilder"/> with populated values from the passed <paramref name="json"/>.</returns>
-    /// <exception cref="InvalidOperationException">Thrown if the string passed is not valid json.</exception>
+    /// <param name="json"> 要解析的 JSON 字符串。 </param>
+    /// <returns> 单个卡片构造器实例。 </returns>
+    /// <exception cref="InvalidOperationException"> 如果无法将 JSON 解析为单个卡片构造器。 </exception>
     public static ICardBuilder ParseSingle(string json)
     {
         CardBase model = JsonSerializer.Deserialize<CardBase>(json, _options.Value)
@@ -89,11 +89,11 @@ public static class CardJsonExtension
     }
 
     /// <summary>
-    ///     Parses a string into a collection of <see cref="ICardBuilder"/>s.
+    ///     将字符串解析为多个卡片构造器 <see cref="ICardBuilder"/>。
     /// </summary>
-    /// <param name="json">The json string to parse.</param>
-    /// <returns>A collection of <see cref="ICardBuilder"/>s with populated values from the passed <paramref name="json"/>.</returns>
-    /// <exception cref="InvalidOperationException">Thrown if the string passed is not valid json.</exception>
+    /// <param name="json"> 要解析的 JSON 字符串。 </param>
+    /// <returns> 多个卡片构造器实例。 </returns>
+    /// <exception cref="InvalidOperationException"> 如果无法将 JSON 解析为多个卡片构造器。 </exception>
     public static IEnumerable<ICardBuilder> ParseMany(string json)
     {
         IEnumerable<CardBase> models = JsonSerializer.Deserialize<IEnumerable<CardBase>>(json, _options.Value)
@@ -102,26 +102,20 @@ public static class CardJsonExtension
     }
 
     /// <summary>
-    ///     Gets a Json formatted <c>string</c> from an <see cref="CardBuilder"/>.
+    ///     将卡片构造器 <see cref="ICardBuilder"/> 序列化为 JSON 格式的字符串。
     /// </summary>
-    /// <remarks>
-    ///     See <see cref="TryParseSingle"/> to parse Json back into card.
-    /// </remarks>
-    /// <param name="builder">The builder to format as Json <c>string</c>.</param>
-    /// <param name="writeIndented">Whether to write the json with indents.</param>
-    /// <returns>A Json <c>string</c> containing the data from the <paramref name="builder"/>.</returns>
+    /// <param name="builder"> 要序列化的卡片构造器。 </param>
+    /// <param name="writeIndented"> 是否使用缩进写入 JSON。 </param>
+    /// <returns> 包含来自 <paramref name="builder"/> 的数据的 JSON 字符串。 </returns>
     public static string ToJsonString(this ICardBuilder builder, bool writeIndented = true) =>
         ToJsonString(builder.Build(), writeIndented);
 
     /// <summary>
-    ///     Gets a Json formatted <c>string</c> from an <see cref="Card"/>.
+    ///     将卡片 <see cref="ICard"/> 序列化为 JSON 格式的字符串。
     /// </summary>
-    /// <remarks>
-    ///     See <see cref="TryParseSingle"/> to parse Json back into card.
-    /// </remarks>
-    /// <param name="card">The card to format as Json <c>string</c>.</param>
-    /// <param name="writeIndented">Whether to write the json with indents.</param>
-    /// <returns>A Json <c>string</c> containing the data from the <paramref name="card"/>.</returns>
+    /// <param name="card"> 要序列化的卡片构造器。 </param>
+    /// <param name="writeIndented"> 是否使用缩进写入 JSON。 </param>
+    /// <returns> 包含来自 <paramref name="card"/> 的数据的 JSON 字符串。 </returns>
     public static string ToJsonString(this ICard card, bool writeIndented = true)
     {
         JsonSerializerOptions options = new()

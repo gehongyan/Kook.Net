@@ -1,23 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Determines whether the object is mentionable or not.
+///     表示一个可以被提及的实体对象。
 /// </summary>
 public interface IMentionable
 {
     /// <summary>
-    ///     Returns a special string used to mention this object in plain text formatted text.
+    ///     获取一个用于在纯文本格式文本中提及此对象的格式化字符串。
     /// </summary>
-    /// <returns>
-    ///     A string that is recognized by Kook as a mention in plain text formatted text.
-    /// </returns>
     string PlainTextMention { get; }
 
     /// <summary>
-    ///     Returns a special string used to mention this object in KMarkdown formatted text.
+    ///     返回一个用于在 KMarkdown 格式文本中提及此对象的格式化字符串。
     /// </summary>
-    /// <returns>
-    ///     A string that is recognized by Kook as a mention in KMarkdown formatted text.
-    /// </returns>
     string KMarkdownMention { get; }
 }

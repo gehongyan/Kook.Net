@@ -1,23 +1,23 @@
 namespace Kook;
 
 /// <summary>
-///     Represent a permission object for a user.
+///     表示一个为用户设置的频道权限重写设置。
 /// </summary>
 public class UserPermissionOverwrite : IPermissionOverwrite<IUser>
 {
     /// <summary>
-    ///     Gets the user this overwrite is targeting.
+    ///     获取此重写所应用的用户。
     /// </summary>
     public IUser Target { get; }
 
-    /// <summary>
-    ///     Gets the permissions associated with this overwrite entry for a user.
-    /// </summary>
+    /// <inheritdoc />
     public OverwritePermissions Permissions { get; }
 
     /// <summary>
-    ///     Initializes a new <see cref="UserPermissionOverwrite"/> with provided user information and modified permissions.
+    ///     初始化一个 <see cref="UserPermissionOverwrite"/> 类的新实例。
     /// </summary>
+    /// <param name="target"> 用户。 </param>
+    /// <param name="permissions"> 用户的权限重写配置。 </param>
     public UserPermissionOverwrite(IUser target, OverwritePermissions permissions)
     {
         Target = target;

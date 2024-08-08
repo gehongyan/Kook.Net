@@ -1,23 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     A metadata containing reaction information.
+///     表示一个关于消息回应的元数据。
 /// </summary>
 public struct ReactionMetadata
 {
     /// <summary>
-    ///     Gets the number of reactions.
+    ///     获取此消息中已添加此回应的人数。
     /// </summary>
-    /// <returns>
-    ///     An int representing the number of this reactions that has been added to this message.
-    /// </returns>
     public int ReactionCount { get; internal set; }
 
     /// <summary>
-    ///     Gets a value that indicates whether the current user has reacted to this.
+    ///     获取当前用户是否已对此消息做出回应。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the user has reacted to the message; otherwise <c>false</c>.
-    /// </returns>
     public bool IsMe { get; internal set; }
 }

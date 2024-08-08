@@ -1,27 +1,27 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the type of the attachment.
+///     表示附件的类型。
 /// </summary>
 public enum AttachmentType
 {
     /// <summary>
-    ///     The attachment is a file.
+    ///     附件是一份文件。
     /// </summary>
     File,
 
     /// <summary>
-    ///     The attachment is an image.
+    ///     附件是一张图片。
     /// </summary>
     Image,
 
     /// <summary>
-    ///     The attachment is a video.
+    ///     附件是一段视频。
     /// </summary>
     Video,
 
     /// <summary>
-    ///     The attachment is an audio.
+    ///     附件是一段音频。
     /// </summary>
     Audio
 }

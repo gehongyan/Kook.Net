@@ -1,22 +1,22 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a single generic poke action.
+///     表示一个通用的 POKE 动作。
 /// </summary>
 public interface IPokeAction
 {
     /// <summary>
-    ///     Gets the user who performed the action.
+    ///     获取执行此动作的用户。
     /// </summary>
     IUser Operator { get; }
 
     /// <summary>
-    ///     Gets the users who were poked by the action.
+    ///     获取此动作的目标用户。
     /// </summary>
     IReadOnlyCollection<IUser> Targets { get; }
 
     /// <summary>
-    ///     Gets the poke this action is associated with.
+    ///     获取此动作关联的 POKE。
     /// </summary>
     IPoke Poke { get; }
 }

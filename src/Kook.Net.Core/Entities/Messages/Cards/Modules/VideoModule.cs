@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a video module in an <see cref="ICard"/>.
+///     视频模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class VideoModule : IMediaModule, IEquatable<VideoModule>, IEquatable<IModule>
@@ -18,42 +18,37 @@ public class VideoModule : IMediaModule, IEquatable<VideoModule>, IEquatable<IMo
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Video;
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     获取视频的 URL。
+    /// </summary>
     public string Source { get; }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     获取视频的标题。
+    /// </summary>
     public string? Title { get; }
 
     private string DebuggerDisplay => $"{Type}: {Title}";
 
     /// <summary>
-    ///     Determines whether the specified <see cref="VideoModule"/> is equal to the current <see cref="VideoModule"/>.
+    ///     判定两个 <see cref="VideoModule"/> 是否相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="VideoModule"/> is equal to the current <see cref="VideoModule"/>; otherwise, <c>false</c>.
-    /// </returns>
+    /// <returns> 如果两个 <see cref="VideoModule"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(VideoModule left, VideoModule right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="VideoModule"/> is not equal to the current <see cref="VideoModule"/>.
+    ///     判定两个 <see cref="VideoModule"/> 是否不相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="VideoModule"/> is not equal to the current <see cref="VideoModule"/>; otherwise, <c>false</c>.
-    /// </returns>
+    /// <returns> 如果两个 <see cref="VideoModule"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(VideoModule left, VideoModule right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="VideoModule"/> is equal to the current <see cref="VideoModule"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="VideoModule"/>, <see cref="Equals(VideoModule)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="VideoModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="VideoModule"/> is equal to the current <see cref="VideoModule"/>; otherwise, <c>false</c>.</returns>
-    public override bool Equals([NotNullWhen(true)]object? obj) =>
+    /// <inheritdoc />
+    public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is VideoModule videoModule && Equals(videoModule);
 
-    /// <summary>Determines whether the specified <see cref="VideoModule"/> is equal to the current <see cref="VideoModule"/>.</summary>
-    /// <param name="videoModule">The <see cref="VideoModule"/> to compare with the current <see cref="VideoModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="VideoModule"/> is equal to the current <see cref="VideoModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)]VideoModule? videoModule) =>
         GetHashCode() == videoModule?.GetHashCode();
 

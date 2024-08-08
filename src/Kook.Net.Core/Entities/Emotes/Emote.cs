@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 namespace Kook;
 
 /// <summary>
-///     Represents a guild emote.
+///     表示一个表情符号。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Emote : IEmote
@@ -17,22 +17,22 @@ public class Emote : IEmote
         RegexOptions.Compiled | RegexOptions.Multiline | RegexOptions.Singleline);
 
     /// <summary>
-    ///     Gets the identifier of this emote.
+    ///     获取此表情符号的唯一标识符。
     /// </summary>
     public string Id { get; }
 
     /// <summary>
-    ///     Gets the name of this emote.
+    ///     获取此表情符号的名称。
     /// </summary>
     public string Name { get; }
 
     /// <summary>
-    ///     Gets whether this emote is animated.
+    ///     获取此表情符号是否为动态表情。如果无法确定此表情符号是否为动态表情，则为 <c>null</c>。
     /// </summary>
     public bool? Animated { get; }
 
     /// <summary>
-    ///    Creates a new instance of <see cref="Emote" />.
+    ///     创建一个新的 <see cref="T:Kook.Emote" /> 实例。
     /// </summary>
     public Emote(string id, string name, bool? animated = null)
     {
@@ -50,14 +50,17 @@ public class Emote : IEmote
         return Id == otherEmote.Id;
     }
 
-    /// <summary> Tries to parse an <see cref="Emote"/> from its raw format. </summary>
+    /// <summary>
+    ///     尝试从一个表情符号的原始格式中解析出一个 <see cref="T:Kook.Emote"/>。
+    /// </summary>
     /// <param name="text">
-    ///     The raw encoding of an emote; for example,
-    ///     [:emotename:1991895624896587/hbCFVWhu923k03k] when <paramref name="tagMode"/> is <c>TagMode.PlainText</c>,
-    ///     or (emj)emotename(emj)[1991895624896587/hbCFVWhu923k03k] when <paramref name="tagMode"/> is <c>TagMode.KMarkdown</c>.
+    ///     表情符号的原始格式。例如：<paramref name="tagMode"/> 为 <see cref="F:Kook.TagMode.PlainText"/> 时的
+    ///     <c>[:emotename:1991895624896587/hbCFVWhu923k03k]</c>；为 <see cref="F:Kook.TagMode.KMarkdown"/> 时的
+    ///     <c>(emj)emotename(emj)[1991895624896587/hbCFVWhu923k03k]</c>。
     /// </param>
-    /// <param name="result">An emote.</param>
-    /// <param name="tagMode"></param>
+    /// <param name="result"> 如果解析成功，则为解析出的 <see cref="T:Kook.Emote"/>；否则为 <c>null</c>。 </param>
+    /// <param name="tagMode"> 解析标签的语法模式。 </param>
+    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool TryParse([NotNullWhen(true)] string? text,
         [NotNullWhen(true)] out Emote? result, TagMode tagMode)
     {
@@ -76,42 +79,56 @@ public class Emote : IEmote
         return true;
     }
 
-    /// <summary> Parses an <see cref="Emote"/> from its raw format. </summary>
+    /// <summary>
+    ///     从一个表情符号的原始格式中解析出一个 <see cref="T:Kook.Emote"/>。
+    /// </summary>
     /// <param name="text">
-    ///     The raw encoding of an emote; for example,
-    ///     [:emotename:1991895624896587/hbCFVWhu923k03k] when <paramref name="tagMode"/> is <c>TagMode.PlainText</c>,
-    ///     or (emj)emotename(emj)[1991895624896587/hbCFVWhu923k03k] when <paramref name="tagMode"/> is <c>TagMode.KMarkdown</c>.
+    ///     表情符号的原始格式。例如：<paramref name="tagMode"/> 为 <see cref="F:Kook.TagMode.PlainText"/> 时的
+    ///     <c>[:emotename:1991895624896587/hbCFVWhu923k03k]</c>；为 <see cref="F:Kook.TagMode.KMarkdown"/> 时的
+    ///     <c>(emj)emotename(emj)[1991895624896587/hbCFVWhu923k03k]</c>。
     /// </param>
-    /// <param name="tagMode"></param>
-    /// <returns>An emote.</returns>
-    /// <exception cref="ArgumentException">Invalid emote format.</exception>
+    /// <param name="tagMode"> 解析标签的语法模式。 </param>
+    /// <returns> 解析出的 <see cref="T:Kook.Emote"/>。 </returns>
+    /// <exception cref="ArgumentException">
+    ///     无法以 <paramref name="tagMode"/> 的语法模式解析 <paramref name="text"/> 为一个有效的表情符号。
+    /// </exception>
     public static Emote Parse([NotNull] string? text, TagMode tagMode)
     {
         if (TryParse(text, out Emote? result, tagMode))
             return result;
-        throw new ArgumentException("Invalid emote format.", nameof(text));
+        throw new FormatException("Invalid emote format.");
     }
 
     /// <inheritdoc />
     public override int GetHashCode() => Id.GetHashCode();
 
     /// <summary>
-    ///     Gets a string representation of the emote in KMarkdown format.
+    ///     获取此表情的 KMarkdown 格式字符串。
     /// </summary>
+    /// <returns> 此表情的 KMarkdown 格式字符串。 </returns>
     public string ToKMarkdownString() => $"(emj){Name}(emj)[{Id}]";
 
     /// <summary>
-    ///     Gets a string representation of the emote in plain text format.
+    ///     获取此表情的纯文本格式字符串。
     /// </summary>
+    /// <returns> 此表情的纯文本格式字符串。 </returns>
     public string ToPlainTextString() => $"[:{Name}:{Id}]";
 
     private string DebuggerDisplay => $"{Name} ({Id})";
 
+    /// <inheritdoc cref="M:Kook.Emote.ToKMarkdownString" />
+    public override string ToString() => ToString(TagMode.KMarkdown);
+
     /// <summary>
-    ///     Returns the raw representation of the emote.
+    ///     获取此表情的字符串表示形式。
     /// </summary>
-    /// <returns>
-    ///     A string representing the raw presentation of the emote (e.g. <c>[:thonkang:282745590985523200]</c>).
-    /// </returns>
-    public override string ToString() => $"[:{Name}:{Id}]";
+    /// <param name="tagMode"> 标签的语法模式。 </param>
+    /// <returns> 此表情的字符串表示形式。 </returns>
+    /// <exception cref="ArgumentOutOfRangeException"> <paramref name="tagMode"/> 不是有效的标签语法模式。 </exception>
+    public string ToString(TagMode tagMode) => tagMode switch
+    {
+        TagMode.PlainText => ToPlainTextString(),
+        TagMode.KMarkdown => ToKMarkdownString(),
+        _ => throw new ArgumentOutOfRangeException(nameof(tagMode), tagMode, null)
+    };
 }

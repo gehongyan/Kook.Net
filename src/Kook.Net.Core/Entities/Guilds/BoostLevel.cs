@@ -1,42 +1,42 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the boost level of a guild.
+///     表示一个服务器助力等级。
 /// </summary>
 public enum BoostLevel
 {
     /// <summary>
-    ///     No boost.
+    ///     服务器助力等级 0。
     /// </summary>
     None = 0,
 
     /// <summary>
-    ///     Boost level 1.
+    ///     服务器助力等级 1。
     /// </summary>
     Level1 = 1,
 
     /// <summary>
-    ///     Boost level 2.
+    ///     服务器助力等级 2。
     /// </summary>
     Level2 = 2,
 
     /// <summary>
-    ///     Boost level 3.
+    ///     服务器助力等级 3。
     /// </summary>
     Level3 = 3,
 
     /// <summary>
-    ///     Boost level 4.
+    ///     服务器助力等级 4。
     /// </summary>
     Level4 = 4,
 
     /// <summary>
-    ///     Boost level 5.
+    ///     服务器助力等级 5。
     /// </summary>
     Level5 = 5,
 
     /// <summary>
-    ///     Boost level 6.
+    ///     服务器助力等级 6。
     /// </summary>
     Level6 = 6
 }

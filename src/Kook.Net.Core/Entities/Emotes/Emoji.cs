@@ -5,8 +5,11 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     A Unicode emoji.
+///     一个 Unicode 表情符号。
 /// </summary>
+/// <remarks>
+///     有关受支持的表情符号列表，请参阅 https://kooknet.dev/guides/emoji/emoji-list.html。
+/// </remarks>
 public class Emoji : IEmote
 {
     /// <inheritdoc />
@@ -16,26 +19,21 @@ public class Emoji : IEmote
     public string Id => Name;
 
     /// <summary>
-    ///     Gets the Unicode representation of this emoji.
+    ///     获取此表情符号的 Unicode 表示。
     /// </summary>
-    /// <returns>
-    ///     A string that resolves to <see cref="Emoji.Name"/>.
-    /// </returns>
+    /// <returns> 一个解析为 <see cref="P:Kook.Emoji.Name"/> 的字符串。 </returns>
     public override string ToString() => Name;
 
     /// <summary>
-    ///     Initializes a new <see cref="Emoji"/> class with the provided Unicode.
+    ///     使用提供的 Unicode 初始化一个新的 <see cref="Emoji"/> 类的实例。
     /// </summary>
-    /// <param name="unicode">The pure UTF-8 encoding of an emoji.</param>
+    /// <param name="unicode"> 表情符号的 Unicode 表示。 </param>
     public Emoji(string unicode)
     {
-        Name = TryParseAsUnicodePoint(unicode, out string? name) ? name : unicode;
+        Name = TryParseToName(unicode, out string? name) ? name : unicode;
     }
 
-    /// <summary>
-    ///     Determines whether the specified emoji is equal to the current one.
-    /// </summary>
-    /// <param name="obj">The object to compare with the current object.</param>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj)
     {
         if (obj == null) return false;
@@ -43,49 +41,63 @@ public class Emoji : IEmote
         return obj is Emoji otherEmoji && string.Equals(Name, otherEmoji.Name);
     }
 
-    /// <summary> Tries to parse an <see cref="Emoji"/> from its raw format. </summary>
-    /// <param name="text">The raw encoding of an emoji. For example: <code>:heart: or ❤</code></param>
-    /// <param name="result">An emoji.</param>
+    /// <summary>
+    ///     尝试从原始格式解析 <see cref="T:Kook.Emoji"/> 类的新实例。
+    /// </summary>
+    /// <param name="text"> 要解析的字符串，例如：<c>:heart:</c> 或 <c>❤</c>。 </param>
+    /// <param name="result"> 如果解析成功，则包含解析的 <see cref="Emoji"/>；否则为 <c>null</c>。 </param>
+    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。</returns>
     public static bool TryParse([NotNullWhen(true)] string? text,
         [NotNullWhen(true)] out Emoji? result)
     {
+        if (TryParseToName(text, out string? name))
+        {
+            result = new Emoji(name);
+            return true;
+        }
+
         result = null;
-        if (text is null || string.IsNullOrWhiteSpace(text))
-            return false;
-        if (NamesAndUnicodes.TryGetValue(text, out string? nameUnicode))
-            result = new Emoji(nameUnicode);
-        if (Unicodes.Contains(text))
-            result = new Emoji(text);
-        return result != null;
+        return false;
     }
 
-    /// <summary> Parse an <see cref="Emoji"/> from its raw format.</summary>
-    /// <param name="emojiStr">The raw encoding of an emoji. For example: <c>:heart: or ❤</c></param>
-    /// <exception cref="FormatException">String is not emoji or unicode!</exception>
-    public static Emoji Parse([NotNull] string? emojiStr)
+    /// <summary>
+    ///     从原始格式解析 <see cref="T:Kook.Emoji"/> 类的新实例。
+    /// </summary>
+    /// <param name="text"> 要解析的字符串，例如：<c>:heart:</c> 或 <c>❤</c>。 </param>
+    /// <returns> 解析的 <see cref="Emoji"/>。</returns>
+    /// <exception cref="FormatException"> <paramref name="text"/> 不是表情符号名称或 Unicode。</exception>
+    public static Emoji Parse([NotNull] string? text)
     {
-        if (!TryParse(emojiStr, out Emoji? emoji))
+        if (!TryParse(text, out Emoji? emoji))
             throw new FormatException("String is not emoji name or unicode.");
         return emoji;
     }
 
     /// <summary>
-    ///     Try parsing an <see cref="Emoji"/> from its unicode point format.
-    ///     For example: <c>[#128187;]</c> -> <c>💻</c>
+    ///     尝试从由方括号包围的 HTML 实体编码的十进制表示形式解析 <see cref="Emoji"/> 的凝成。
     /// </summary>
-    internal static bool TryParseAsUnicodePoint(string unicodePoint, [NotNullWhen(true)] out string? name)
+    /// <param name="text"> 要解析的字符串，例如：<c>[#128187;]</c>，<c>:grinning:</c>。 </param>
+    /// <param name="name"> 如果解析成功，则包含解析的名称；否则为 <c>null</c>。 </param>
+    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。</returns>
+    private static bool TryParseToName(string? text, [NotNullWhen(true)] out string? name)
     {
-        name = null;
-        if (!unicodePoint.StartsWith("[#") || !unicodePoint.EndsWith(";]")) return false;
-        if (!int.TryParse(unicodePoint[2..^2], out int codePoint)) return false;
-        name = char.ConvertFromUtf32(codePoint);
-        return true;
+        if (text is null || string.IsNullOrWhiteSpace(text))
+            name = null;
+        else if (text.StartsWith("[#") && text.EndsWith(";]") && int.TryParse(text[2..^2], out int codePoint))
+            name = char.ConvertFromUtf32(codePoint);
+        else if (NamesAndUnicodes.TryGetValue(text, out string? nameUnicode))
+            name = nameUnicode;
+        else if (Unicodes.Contains(text))
+            name = text;
+        else
+            name = null;
+        return name != null;
     }
 
     /// <inheritdoc />
     public override int GetHashCode() => Name.GetHashCode();
 
-    // Originally from https://img.kookapp.cn/assets/emoji.json
+    // 源于 https://img.kookapp.cn/assets/emoji.json
     private static IReadOnlyDictionary<string, string> NamesAndUnicodes { get; } = new Dictionary<string, string>
     {
         [":grinning:"] = "\ud83d\ude00",
@@ -1833,12 +1845,6 @@ public class Emoji : IEmote
         }
     }
 
-    /// <summary>
-    ///     Parses the given string into an <see cref="Emoji" />.
-    /// </summary>
-    /// <param name="s"> The string to parse. </param>
-    /// <returns> The parsed <see cref="Emoji" />. </returns>
-    /// <exception cref="FormatException"> The provided string is not emoji name or unicode. </exception>
-    /// <seealso cref="Parse"/>
-    public static implicit operator Emoji(string s) => Parse(s);
+    /// <inheritdoc cref="M:Kook.Emoji.Parse(System.String)" />
+    public static implicit operator Emoji(string emojiStr) => Parse(emojiStr);
 }

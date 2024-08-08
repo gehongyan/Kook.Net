@@ -4,7 +4,7 @@ using Model = Kook.API.Channel;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a REST-based channel in a guild that can send and receive messages.
+///     表示服务器中一个基于 REST 的具有文字聊天能力的频道，可以发送和接收消息。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChannel
@@ -65,32 +65,32 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         ChannelHelper.UpdateAsync(this, Kook, options);
 
     /// <summary>
-    ///     Gets a user in this channel.
+    ///     获取此频道中的用户。
     /// </summary>
-    /// <param name="id">The identifier of the user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <exception cref="InvalidOperationException">
-    /// Resolving permissions requires the parent guild to be downloaded.
-    /// </exception>
-    /// <returns>
-    ///     A task representing the asynchronous get operation. The task result contains a guild user object that
-    ///     represents the user; <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="id"> 要获取的用户的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果为此频道中的服务器用户；如果没有找到则为 <c>null</c>。 </returns>
     public Task<RestGuildUser?> GetUserAsync(ulong id, RequestOptions? options = null) =>
         ChannelHelper.GetUserAsync(this, Guild, Kook, id, options);
 
     /// <summary>
-    ///     Gets a collection of users that are able to view the channel.
+    ///     获取能够查看频道或当前在此频道中的所有用户。
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <exception cref="InvalidOperationException">
-    /// Resolving permissions requires the parent guild to be downloaded.
-    /// </exception>
-    /// <returns>
-    ///     A paged collection containing a collection of guild users that can access this channel. Flattening the
-    ///     paginated response into a collection of users with
-    ///     <see cref="AsyncEnumerableExtensions.FlattenAsync{T}"/> is required if you wish to access the users.
-    /// </returns>
+    /// <remarks>
+    ///     <note type="important">
+    ///         返回的集合是一个异步可枚举对象；调用
+    ///         <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///         可以异步枚举所有分页，并将其合并为一个集合。
+    ///     </note>
+    ///     <br />
+    ///     此方法将尝试获取所有能够查看该频道或当前在该频道中的用户。此方法会根据 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/>
+    ///     将请求拆分。换句话说，如果有 3000 名用户，而 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/> 的常量为
+    ///     <c>50</c>，则请求将被拆分为 60 个单独请求，因此异步枚举器会异步枚举返回 60 个响应。
+    ///     <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///     方法可以展开这 60 个响应返回的集合，并将其合并为一个集合。
+    /// </remarks>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 分页的服务器用户集合的异步可枚举对象。 </returns>
     public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> GetUsersAsync(RequestOptions? options = null) =>
         ChannelHelper.GetUsersAsync(this, Guild, Kook, KookConfig.MaxUsersPerBatch, 1, options);
 
@@ -115,11 +115,11 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         RequestOptions? options = null) =>
         ChannelHelper.GetMessagesAsync(this, Kook, referenceMessage.Id, dir, limit, true, options);
 
-    /// <inheritdoc cref="ITextChannel.GetPinnedMessagesAsync" />
+    /// <inheritdoc cref="M:Kook.ITextChannel.GetPinnedMessagesAsync(Kook.RequestOptions)" />
     public virtual Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions? options = null) =>
         ChannelHelper.GetPinnedMessagesAsync(this, Kook, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendFileAsync(string,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendFileAsync(System.String,System.String,Kook.AttachmentType,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, IUser? ephemeralUser = null,
         RequestOptions? options = null)
@@ -128,40 +128,37 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         return ChannelHelper.SendFileAsync(this, Kook, path, name, type, quote, ephemeralUser, options);
     }
 
-    /// <inheritdoc cref="IMessageChannel.SendFileAsync(Stream,string,AttachmentType,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendFileAsync(System.IO.Stream,System.String,Kook.AttachmentType,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, IUser? ephemeralUser = null,
         RequestOptions? options = null) =>
         ChannelHelper.SendFileAsync(this, Kook, stream, filename, type, quote, ephemeralUser, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendFileAsync(FileAttachment,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendFileAsync(Kook.FileAttachment,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         ChannelHelper.SendFileAsync(this, Kook, attachment, quote, ephemeralUser, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendTextAsync(string,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendTextAsync(System.String,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         ChannelHelper.SendMessageAsync(this, Kook, MessageType.KMarkdown, text, quote, ephemeralUser, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendCardsAsync(IEnumerable{ICard},IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendCardsAsync(System.Collections.Generic.IEnumerable{Kook.ICard},Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         ChannelHelper.SendCardsAsync(this, Kook, cards, quote, ephemeralUser, options);
 
-    /// <inheritdoc cref="IMessageChannel.SendCardAsync(ICard,IQuote,IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IMessageChannel.SendCardAsync(Kook.ICard,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         ChannelHelper.SendCardAsync(this, Kook, card, quote, ephemeralUser, options);
 
     /// <summary>
-    ///     Gets the parent (category) channel of this channel.
+    ///     获取此频道的所属分组频道。
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the category channel
-    ///     representing the parent of this channel; <c>null</c> if none is set.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此频道所属的分组频道，如果当前频道不属于任何分组频道，则为 <c>null</c>。 </returns>
     public Task<ICategoryChannel?> GetCategoryAsync(RequestOptions? options = null) =>
         ChannelHelper.GetCategoryAsync(this, Kook, options);
 

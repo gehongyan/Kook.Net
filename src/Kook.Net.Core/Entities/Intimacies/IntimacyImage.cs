@@ -1,15 +1,10 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a single image of an intimacy.
+///     表示一个亲密度的形象图像。
 /// </summary>
 public class IntimacyImage
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="IntimacyImage" /> class.
-    /// </summary>
-    /// <param name="id">The ID of the image of an intimacy. </param>
-    /// <param name="url">The URL of the image of an intimacy. </param>
     internal IntimacyImage(uint id, string url)
     {
         Id = id;
@@ -17,18 +12,12 @@ public class IntimacyImage
     }
 
     /// <summary>
-    ///     Gets the ID of the image of an intimacy.
+    ///     获取此亲密度的形象图像的唯一标识符。
     /// </summary>
-    /// <returns>
-    ///     An <c>int</c> representing the ID of the image of an intimacy.
-    /// </returns>
     public uint Id { get; }
 
     /// <summary>
-    ///     Gets the URL of the image of an intimacy.
+    ///     获取此亲密度的形象图像的 URL。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the URL of the image of an intimacy.
-    /// </returns>
     public string Url { get; }
 }

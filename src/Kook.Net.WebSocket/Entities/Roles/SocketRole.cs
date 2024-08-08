@@ -17,9 +17,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     /// <summary>
     ///     Gets the guild that owns this role.
     /// </summary>
-    /// <returns>
-    ///     A <see cref="SocketGuild"/> representing the parent guild of this role.
-    /// </returns>
+    /// <returns> A <see cref="SocketGuild"/> representing the parent guild of this role. </returns>
     public SocketGuild Guild { get; }
 
     /// <inheritdoc />
@@ -52,13 +50,11 @@ public class SocketRole : SocketEntity<uint>, IRole
     /// <summary>
     ///     Returns a value that determines if the role is an @everyone role.
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the role is @everyone; otherwise <c>false</c>.
-    /// </returns>
+    /// <returns> <c>true</c> if the role is @everyone; otherwise <c>false</c>. </returns>
     public bool IsEveryone => Id == 0;
 
     /// <inheritdoc />
-    public string KMarkdownMention => IsEveryone ? "@everyone" : MentionUtils.KMarkdownMentionRole(Id);
+    public string KMarkdownMention => IsEveryone ? MentionUtils.KMarkdownMentionRole("all") : MentionUtils.KMarkdownMentionRole(Id);
 
     /// <inheritdoc />
     public string PlainTextMention => IsEveryone ? "@全体成员" : MentionUtils.PlainTextMentionRole(Id);
@@ -85,8 +81,8 @@ public class SocketRole : SocketEntity<uint>, IRole
         ColorType = model.ColorType;
         GradientColor = model.GradientColor;
         Position = model.Position;
-        IsHoisted = model.Hoist;
-        IsMentionable = model.Mentionable;
+        IsHoisted = model.IsHoisted;
+        IsMentionable = model.IsMentionable;
         Permissions = new GuildPermissions(model.Permissions);
     }
 
@@ -101,10 +97,8 @@ public class SocketRole : SocketEntity<uint>, IRole
     /// <summary>
     ///     Gets a collection of users with this role.
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     Paged collection of users with this role.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> Paged collection of users with this role. </returns>
     /// <remarks>
     ///     If the guild this role belongs to does not has all members cached locally
     ///     by checking <see cref="SocketGuild.HasAllMembers"/>, this method will request
@@ -141,9 +135,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     /// <summary>
     ///     Gets the name of the role.
     /// </summary>
-    /// <returns>
-    ///     A string that resolves to <see cref="Kook.WebSocket.SocketRole.Name" />.
-    /// </returns>
+    /// <returns> A string that resolves to <see cref="Kook.WebSocket.SocketRole.Name" />. </returns>
     public override string ToString() => Name;
 
     private string DebuggerDisplay => $"{Name} ({Id})";

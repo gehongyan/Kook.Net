@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     A button element that can be used in an <see cref="IModule"/>.
+///     按钮元素，可用于 <see cref="IModule"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ButtonElement : IElement, IEquatable<ButtonElement>, IEquatable<IElement>
@@ -17,76 +17,50 @@ public class ButtonElement : IElement, IEquatable<ButtonElement>, IEquatable<IEl
         Text = text;
     }
 
-    /// <summary>
-    ///     Gets the theme of the button.
-    /// </summary>
-    /// <returns>
-    ///     An <see cref="ElementType"/> value that represents the theme of the button.
-    /// </returns>
+    /// <inheritdoc />
     public ElementType Type => ElementType.Button;
 
     /// <summary>
-    ///     Gets the theme of the button.
+    ///     获取按钮的主题。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="ButtonTheme"/> value that represents the theme of the button.
-    /// </returns>
     public ButtonTheme? Theme { get; }
 
     /// <summary>
-    ///     Gets the value of the button.
+    ///     获取按钮的值。
     /// </summary>
-    /// <returns>
-    ///     A string value that represents the value of the button.
-    /// </returns>
     public string? Value { get; }
 
     /// <summary>
-    ///     Gets the event type fired when the button is clicked.
+    ///     获取按钮被点击时触发的事件类型。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="ButtonClickEventType"/> value that represents the event type fired when the button is clicked.
-    /// </returns>
     public ButtonClickEventType? Click { get; }
 
     /// <summary>
-    ///     Gets the text element of the button.
+    ///     获取按钮的文本元素。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IElement"/> value that represents the text element of the button.
-    /// </returns>
     public IElement Text { get; }
 
     private string DebuggerDisplay => $"{Type}: {Text} ({Click}, {Value}, {Theme})";
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>.
+    ///     判定两个 <see cref="ButtonElement"/> 是否相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>; otherwise, <c>false</c>.
-    /// </returns>
+    /// <returns> 如果两个 <see cref="ButtonElement"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(ButtonElement? left, ButtonElement? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ButtonElement"/> is not equal to the current <see cref="ButtonElement"/>.
+    ///     判定两个 <see cref="ButtonElement"/> 是否不相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="ButtonElement"/> is not equal to the current <see cref="ButtonElement"/>; otherwise, <c>false</c>.
-    /// </returns>
+    /// <returns> 如果两个 <see cref="ButtonElement"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(ButtonElement? left, ButtonElement? right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="ButtonElement"/>, <see cref="Equals(ButtonElement)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="ButtonElement"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is ButtonElement buttonElement && Equals(buttonElement);
 
-    /// <summary>Determines whether the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>.</summary>
-    /// <param name="buttonElement">The <see cref="ButtonElement"/> to compare with the current <see cref="ButtonElement"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ButtonElement"/> is equal to the current <see cref="ButtonElement"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] ButtonElement? buttonElement) =>
         GetHashCode() == buttonElement?.GetHashCode();
 

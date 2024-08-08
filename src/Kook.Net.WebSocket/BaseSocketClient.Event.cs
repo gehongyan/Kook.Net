@@ -264,6 +264,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the message cannot be retrieved by Kook
     ///             after the message has been deleted.
     ///         </note>
+    ///         <br />
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the deleted message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the message is preserved in the
@@ -295,6 +296,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original message cannot be retrieved by
     ///             Kook after the message has been updated.
     ///         </note>
+    ///         <br />
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the message is preserved in the
@@ -332,6 +334,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original message cannot be retrieved by
     ///             Kook after the message has been updated.
     ///         </note>
+    ///         <br />
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the message is preserved in the
@@ -351,7 +354,7 @@ public abstract partial class BaseSocketClient
     ///         The guild member that pinned this message is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the guild member
     ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task> MessagePinned
@@ -375,6 +378,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original message cannot be retrieved by
     ///             Kook after the message has been updated.
     ///         </note>
+    ///         <br />
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the message is preserved in the
@@ -394,7 +398,7 @@ public abstract partial class BaseSocketClient
     ///         The guild member that unpinned this message is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the guild member
     ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task> MessageUnpinned
@@ -454,6 +458,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original direct message cannot be retrieved by Kook
     ///             after the message has been deleted.
     ///         </note>
+    ///         <br />
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the deleted direct message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the direct message is preserved in the
@@ -463,7 +468,7 @@ public abstract partial class BaseSocketClient
     ///         The user that originally sent this direct message is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the guild member
     ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         If a direct message was sent by the current user to this user, or the recipient had sent a message before
@@ -493,6 +498,7 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original direct message cannot be retrieved by Kook
     ///             after the message has been updated.
     ///         </note>
+    ///         <br />
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
     ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the updated direct message; otherwise, in event
     ///         that the message cannot be retrieved, the ID of the direct message is preserved in the
@@ -502,7 +508,7 @@ public abstract partial class BaseSocketClient
     ///         The user that originally sent this direct message is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the guild member
     ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         If a direct message was sent by the current user to this user, or the recipient had sent a message before
@@ -527,6 +533,7 @@ public abstract partial class BaseSocketClient
     ///     <note type="warning">
     ///         It is reported that this event will not be fired if a guild contains more than 2000 members.
     ///     </note>
+    ///     <br />
     ///     <para>
     ///         This event is fired when a user joins a guild. The event handler must return a
     ///         <see cref="Task"/> and accept a <see cref="SocketGuildUser"/> and a <see cref="DateTimeOffset"/>
@@ -552,6 +559,7 @@ public abstract partial class BaseSocketClient
     ///     <note type="warning">
     ///         It is reported that this event will not be fired if a guild contains more than 2000 members.
     ///     </note>
+    ///     <br />
     ///     <para>
     ///         This event is fired when a user leaves a guild. The event handler must return a
     ///         <see cref="Task"/> and accept a <see cref="SocketGuildUser"/> and a <see cref="DateTimeOffset"/>
@@ -560,7 +568,7 @@ public abstract partial class BaseSocketClient
     ///     <para>
     ///         If the left user presents in the cache, the <see cref="Cacheable{TEntity,TId}"/> entity
     ///         will contain the left user; otherwise, in event that the user cannot be retrieved,
-    ///         the ID of the left user is preserved in the <see cref="ulong"/>.
+    ///         the ID of the left user is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         The time at which the user left the guild will be passed into the <see cref="DateTimeOffset"/> parameter.
@@ -587,16 +595,17 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original user cannot be retrieved by
     ///             Kook after the user has been banned.
     ///         </note>
+    ///         <br />
     ///         The users that are banned are passed into the event handler parameter as
     ///         <see cref="IReadOnlyCollection{T}"/>, where <c>T</c> is <see cref="Cacheable{TEntity,TId}"/>,
     ///         each of which contains a <see cref="SocketUser"/> when the user presents in the cache; otherwise,
-    ///         in event that the user cannot be retrieved, the ID of the user is preserved in the <see cref="ulong"/>.
+    ///         in event that the user cannot be retrieved, the ID of the user is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         The users who operated the bans is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the user
     ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         The guild where the banning action takes place is passed in the event handler parameter as
@@ -627,16 +636,17 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original user cannot be retrieved by
     ///             Kook after the user has been unbanned.
     ///         </note>
+    ///         <br />
     ///         The users that are unbanned are passed into the event handler parameter as
     ///         <see cref="IReadOnlyCollection{T}"/>, where <c>T</c> is <see cref="Cacheable{TEntity,TId}"/>,
     ///         each of which contains a <see cref="SocketUser"/> when the user presents in the cache; otherwise,
-    ///         in event that the user cannot be retrieved, the ID of the user is preserved in the <see cref="ulong"/>.
+    ///         in event that the user cannot be retrieved, the ID of the user is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         The users who operated the unbans is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the user
     ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         The guild where the unbanning action takes place is passed in the event handler parameter as
@@ -664,16 +674,17 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original user cannot be retrieved by
     ///             Kook after the user has been updated.
     ///         </note>
+    ///         <br />
     ///         The user that is updated is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketUser"/> when the user
     ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         The user that is updated is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketUser"/> when the user
     ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     /// </remarks>
     public event Func<Cacheable<SocketUser, ulong>, Cacheable<SocketUser, ulong>, Task> UserUpdated
@@ -721,16 +732,17 @@ public abstract partial class BaseSocketClient
     ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original guild member cannot be retrieved by
     ///             Kook after the guild member has been updated.
     ///         </note>
+    ///         <br />
     ///         The guild member that is updated is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the guild member
     ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         The guild member that is updated is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the guild member
     ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     /// </remarks>
     public event Func<Cacheable<SocketGuildUser, ulong>, Cacheable<SocketGuildUser, ulong>, Task> GuildMemberUpdated
@@ -752,7 +764,7 @@ public abstract partial class BaseSocketClient
     ///         The guild member that is online is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the guild member
     ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         The time when the guild member is online is passed into the event handler parameter as
@@ -778,7 +790,7 @@ public abstract partial class BaseSocketClient
     ///         The guild member that is offline is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the guild member
     ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         The time when the guild member is offline is passed into the event handler parameter as
@@ -825,7 +837,7 @@ public abstract partial class BaseSocketClient
     ///         The user that connected to a voice channel is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the user
     ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         The voice channel that the user connected to is passed into the event handler parameter as
@@ -856,7 +868,7 @@ public abstract partial class BaseSocketClient
     ///         The user that disconnected to a voice channel is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the user
     ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         The voice channel that the user disconnected to is passed into the event handler parameter as
@@ -888,7 +900,7 @@ public abstract partial class BaseSocketClient
     // ///         The user that started the livestream is passed into the event handler parameter as
     // ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the user
     // ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    // ///         is preserved in the <see cref="ulong"/>.
+    // ///         is preserved in the <see cref="T:System.UInt64"/>.
     // ///     </para>
     // ///     <para>
     // ///         The voice channel where the livestream is started is passed into the event handler parameter as
@@ -919,7 +931,7 @@ public abstract partial class BaseSocketClient
     // ///         The user that stopped the livestream is passed into the event handler parameter as
     // ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the user
     // ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    // ///         is preserved in the <see cref="ulong"/>.
+    // ///         is preserved in the <see cref="T:System.UInt64"/>.
     // ///     </para>
     // ///     <para>
     // ///         The voice channel where the livestream is stopped is passed into the event handler parameter as
@@ -1118,6 +1130,7 @@ public abstract partial class BaseSocketClient
     ///             waiting for completion of the task in this asynchronous event, the object
     ///             passed to it will be disposed.
     ///         </note>
+    ///         <br />
     ///         The guild where the account leaves is passed into the event handler parameter as
     ///         <see cref="SocketGuild"/>.
     ///     </para>
@@ -1211,7 +1224,7 @@ public abstract partial class BaseSocketClient
     ///         The users who clicked the button is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketUser"/> when the user
     ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
@@ -1246,7 +1259,7 @@ public abstract partial class BaseSocketClient
     ///         The users who clicked the button is passed into the event handler parameter as
     ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketUser"/> when the user
     ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="ulong"/>.
+    ///         is preserved in the <see cref="T:System.UInt64"/>.
     ///     </para>
     ///     <para>
     ///         If caching is enabled via <see cref="KookSocketConfig"/>, the

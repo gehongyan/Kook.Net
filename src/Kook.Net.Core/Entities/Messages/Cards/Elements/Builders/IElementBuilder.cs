@@ -1,23 +1,18 @@
 namespace Kook;
 
 /// <summary>
-///     A generic builder for creating an <see cref="IElement"/>.
+///     表示一个通用的元素构建器，用于构建一个 <see cref="IElement"/>。
 /// </summary>
 public interface IElementBuilder
 {
     /// <summary>
-    ///     Specifies the type of the element to be created.
+    ///     获取此构建器构建的元素的类型。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="ElementType"/> that specifies the type of the element to be created.
-    /// </returns>
     ElementType Type { get; }
 
     /// <summary>
-    ///     Builds the <see cref="IElementBuilder"/> into an <see cref="IElement"/>.
+    ///     构建当前构建器为一个 <see cref="IElement"/>。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IElement"/> represents the built element object.
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="IElement"/> 对象。 </returns>
     IElement Build();
 }

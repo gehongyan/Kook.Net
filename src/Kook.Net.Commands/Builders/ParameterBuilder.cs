@@ -151,7 +151,6 @@ public class ParameterBuilder
             return reader;
         }
 
-
         IDictionary<Type, TypeReader>? readers = commands.GetTypeReaders(type);
         return readers != null ? readers.FirstOrDefault().Value : commands.GetDefaultTypeReader(type);
     }

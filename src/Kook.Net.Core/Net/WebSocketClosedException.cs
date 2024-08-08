@@ -1,27 +1,25 @@
 namespace Kook.Net;
 
 /// <summary>
-///     The exception that is thrown when the WebSocket session is closed by Kook.
+///     表示一个由 KOOK 意外关闭 WebSocket 会话时引发的异常。
 /// </summary>
 public class WebSocketClosedException : Exception
 {
     /// <summary>
-    ///     Gets the close code sent by Kook.
+    ///     获取由 KOOK 发送的关闭代码。
     /// </summary>
-    /// <returns>
-    ///     A close code from Kook. See https://developer.kookapp.cn/doc/websocket
-    /// </returns>
     public int? CloseCode { get; }
 
     /// <summary>
-    ///     Gets the reason of the interruption.
+    ///     获取中断的原因。
     /// </summary>
     public string? Reason { get; }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="WebSocketClosedException" /> using a Kook close code
-    ///     and an optional reason.
+    ///     使用 KOOK 发送的关闭代码及原因初始化一个 <see cref="WebSocketClosedException" /> 类的新实例。
     /// </summary>
+    /// <param name="closeCode"> 由 KOOK 发送的关闭代码。 </param>
+    /// <param name="reason"> 中断的原因。 </param>
     public WebSocketClosedException(int? closeCode, string? reason = null)
         : base($"The server sent close {closeCode}{(reason != null ? $": \"{reason}\"" : "")}")
     {

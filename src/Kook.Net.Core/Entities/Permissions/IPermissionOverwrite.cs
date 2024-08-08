@@ -1,20 +1,18 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic permission overwrite.
+///     表示一个通用的的频道权限重写设置。
 /// </summary>
-/// <typeparam name="TTarget">
-///     The type of the target.
-/// </typeparam>
+/// <typeparam name="TTarget"> 权限重写设置所应用的目标的实体类型。 </typeparam>
 public interface IPermissionOverwrite<TTarget>
 {
     /// <summary>
-    ///     Gets the target of this overwrite.
+    ///     获取此重写所应用的目标。
     /// </summary>
     TTarget Target { get; }
 
     /// <summary>
-    ///     Gets the overwritten permission.
+    ///     获取此重写的权限重写配置。
     /// </summary>
     OverwritePermissions Permissions { get; }
 }

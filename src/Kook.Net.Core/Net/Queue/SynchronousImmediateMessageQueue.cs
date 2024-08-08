@@ -3,8 +3,13 @@
 namespace Kook.Net.Queue.SynchronousImmediate;
 
 /// <summary>
-///     Represents a synchronous immediate message queue.
+///     表示一个同步处理消息队列。
 /// </summary>
+/// <remarks>
+///     此消息队列会在接收到网关事件后调用
+///     <see cref="M:Kook.Net.Queue.SynchronousImmediate.SynchronousImmediateMessageQueue.EnqueueAsync(System.Text.Json.JsonElement,System.Int32,System.Threading.CancellationToken)"/>
+///     时立即使用构造函数中传入的 <c>eventHandler</c> 委托同步进行处理，处理完成后，该方法才会返回。
+/// </remarks>
 public class SynchronousImmediateMessageQueue : BaseMessageQueue
 {
     /// <inheritdoc />

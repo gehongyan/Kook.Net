@@ -1,16 +1,13 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic embed.
+///     表示一个消息内解析出的通用的嵌入式内容。
 /// </summary>
-/// <seealso cref="IMessage.Embeds"/>
+/// <seealso cref="P:Kook.IMessage.Embeds"/>
 public interface IEmbed
 {
     /// <summary>
-    ///     Gets the type of this embed.
+    ///     获取此嵌入式内容的类型。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="EmbedType"/> that represents the type of this embed.
-    /// </returns>
     EmbedType Type { get; }
 }
