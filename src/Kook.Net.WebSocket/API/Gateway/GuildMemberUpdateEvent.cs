@@ -7,6 +7,9 @@ internal class GuildMemberUpdateEvent
     [JsonPropertyName("user_id")]
     public ulong UserId { get; set; }
 
+    [JsonPropertyName("is_vip")]
+    public bool? IsVip { get; set; }
+
     [JsonPropertyName("nickname")]
-    public required string Nickname { get; set; }
+    public string? Nickname { get; set; }
 }
