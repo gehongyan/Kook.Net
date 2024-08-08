@@ -85,7 +85,7 @@ public class MusicClient
         if (ffmpeg is null) return;
         _ffmpegProcessId = ffmpeg.Id;
         await using Stream output = ffmpeg.StandardOutput.BaseStream;
-        await using AudioOutStream kook = _audioClient.CreateDirectPcmStream(AudioApplication.Music);
+        await using AudioOutStream kook = _audioClient.CreatePcmStream(AudioApplication.Music);
         try
         {
             await output.CopyToAsync(kook, cancellationToken);

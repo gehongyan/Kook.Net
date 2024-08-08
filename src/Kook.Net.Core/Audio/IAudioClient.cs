@@ -90,6 +90,12 @@ public interface IAudioClient : IDisposable
     int UdpLatency { get; }
 
     /// <summary>
+    ///     获取该语音客户端所接收的所有音频输入流。
+    /// </summary>
+    /// <returns> 一个以 SSRC 同步信源标识符为键，音频输入流为值的只读字典。 </returns>
+    IReadOnlyDictionary<uint, AudioInStream> GetStreams();
+
+    /// <summary>
     ///     停止该语音客户端发送音频。
     /// </summary>
     /// <returns> 一个停止操作的异步任务。 </returns>
