@@ -150,11 +150,11 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
 
     #region IVoiceChannel
 
-    async Task<IReadOnlyCollection<IUser>> IVoiceChannel.GetConnectedUsersAsync(
+    async Task<IReadOnlyCollection<IGuildUser>> IVoiceChannel.GetConnectedUsersAsync(
         CacheMode mode, RequestOptions? options) =>
         mode is CacheMode.AllowDownload
             ? await ChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false)
-            : ImmutableArray.Create<IUser>();
+            : ImmutableArray.Create<IGuildUser>();
 
     #endregion
 }

@@ -10,16 +10,15 @@ public interface INestedChannel : IGuildChannel
     /// <summary>
     ///     获取此嵌套频道在服务器频道列表中所属的分组频道的 ID。
     /// </summary>
-    /// <returns> 一个 <c>ulong</c>，表示此频道所属的分组频道的 ID；如果当前频道不属于任何分组频道，则为 <c>null</c>。 </returns>
+    /// <remarks> 如果当前频道不属于任何分组频道，则会返回 <c>null</c>。 </remarks>
     ulong? CategoryId { get; }
 
     /// <summary>
     ///     指示此嵌套频道的权限是否与其所属分组频道同步。
     /// </summary>
-    /// <returns>
-    ///     一个 <c>bool</c>，表示此频道的权限是否与其所属分组频道同步；如果权限同步，则为 <c>true</c>；如果权限不同步，则为
-    ///     <c>false</c>；如果无法确定权限是否同步，则为 <c>null</c>。
-    /// </returns>
+    /// <remarks>
+    ///     如果权限同步，则此属性返回 <c>true</c>；如果权限不同步，则返回 <c>false</c>；如果无法确定权限是否同步，则返回 <c>null</c>。
+    /// </remarks>
     bool? IsPermissionSynced { get; }
 
     /// <summary>

@@ -134,11 +134,11 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     public IReadOnlyCollection<SocketMessage> GetCachedMessages(int limit = KookConfig.MaxMessagesPerBatch) => [];
 
     /// <inheritdoc />
-    public IReadOnlyCollection<SocketMessage> GetCachedMessages(Guid fromMessageId,
+    public IReadOnlyCollection<SocketMessage> GetCachedMessages(Guid referenceMessageId,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch) => [];
 
     /// <inheritdoc />
-    public IReadOnlyCollection<SocketMessage> GetCachedMessages(IMessage fromMessage,
+    public IReadOnlyCollection<SocketMessage> GetCachedMessages(IMessage referenceMessage,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch) => [];
 
     /// <summary>

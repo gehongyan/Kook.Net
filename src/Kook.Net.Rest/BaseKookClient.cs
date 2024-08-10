@@ -61,7 +61,7 @@ public abstract class BaseKookClient : IKookClient
     ///     <list type="number">
     ///     <item> <see cref="T:System.Net.Http.HttpMethod"/> 参数是 HTTP 方法。 </item>
     ///     <item> <see cref="T:System.String"/> 参数是终结点。 </item>
-    ///     <item> <see cref="T:System.Double"/> 参数是完成请求所花费的时间。 </item>
+    ///     <item> <see cref="T:System.Double"/> 参数是完成请求所花费的时间，以毫秒为单位。 </item>
     ///     </list>
     /// </remarks>
     public event Func<HttpMethod, string, double, Task> SentRequest

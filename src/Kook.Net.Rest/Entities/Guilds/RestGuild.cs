@@ -53,7 +53,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     public string CurrentUserDisplayName { get; private set; }
 
     /// <summary>
-    ///     获取当前用户在此服务器所拥有的的所有角色。
+    ///     获取当前用户在此服务器所拥有的所有角色。
     /// </summary>
     public IReadOnlyCollection<RestRole> CurrentUserRoles => _currentUserRoles.ToReadOnlyCollection();
 

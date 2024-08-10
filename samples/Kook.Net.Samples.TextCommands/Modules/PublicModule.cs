@@ -42,10 +42,7 @@ public class PublicModule : ModuleBase<SocketCommandContext>
     {
         if (Context.Message.MaybeTextImageMixedMessage()
             && image.IsAbsoluteUri)
-        {
-            using FileAttachment fileAttachment = new(image, "image.png", AttachmentType.Image);
-            await ReplyFileAsync(fileAttachment);
-        }
+            await ReplyFileAsync(new FileAttachment(image, "image.png", AttachmentType.Image));
     }
 
     // Ban a user

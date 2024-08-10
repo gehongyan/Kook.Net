@@ -1,102 +1,87 @@
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a generic WebSocket-based channel that can send and receive messages.
+///    表示一个基于网关的消息频道，可以用来发送和接收消息。
 /// </summary>
 public interface ISocketMessageChannel : IMessageChannel
 {
     /// <summary>
-    ///     Gets all messages in this channel's cache.
-    /// </summary>
-    /// <returns> A read-only collection of WebSocket-based messages. </returns>
-    IReadOnlyCollection<SocketMessage> CachedMessages { get; }
-
-    /// <summary>
-    ///     Gets a cached message from this channel.
+    ///     获取此频道缓存的所有消息。
     /// </summary>
     /// <remarks>
     ///     <note type="warning">
-    ///         This method requires the use of cache, which is not enabled by default; if caching is not enabled,
-    ///         this method will always return <c>null</c>. Please refer to
-    ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> for more details.
+    ///         要想通过此属性获取缓存的消息，需要启用缓存功能，否则此属性将始终返回空集合。缓存功能是默认禁用的，要想启用缓存，请参考
+    ///         <see cref="P:Kook.WebSocket.KookSocketConfig.MessageCacheSize"/>。
+    ///     </note>
+    ///     此属性从本地的内存缓存中获取消息实体，不会向 KOOK 发送额外的 API 请求。所获取的消息也可能是已经被删除的消息。
+    /// </remarks>
+    IReadOnlyCollection<SocketMessage> CachedMessages { get; }
+
+    /// <summary>
+    ///     获取此频道缓存的消息。
+    /// </summary>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         要想通过此方法获取缓存的消息，需要启用缓存功能，否则此方法将始终返回 <c>null</c>。缓存功能是默认禁用的，要想启用缓存，请参考
+    ///         <see cref="P:Kook.WebSocket.KookSocketConfig.MessageCacheSize"/>。
     ///     </note>
     ///     <br />
-    ///     <para>
-    ///         This method retrieves the message from the local WebSocket cache and does not send any additional
-    ///         request to Kook. This message may be a message that has been deleted.
-    ///     </para>
+    ///     此方法从本地的内存缓存中获取消息实体，不会向 KOOK 发送额外的 API 请求。所获取的消息也可能是已经被删除的消息。
     /// </remarks>
-    /// <param name="id">The Guid of the message.</param>
+    /// <param name="id"> 消息的 ID。 </param>
     /// <returns>
-    ///     A WebSocket-based message object; <c>null</c> if it does not exist in the cache or if caching is not
-    ///     enabled.
+    ///     如果获取到了缓存的消息，则返回该消息实体；否则返回 <c>null</c>。
     /// </returns>
     SocketMessage? GetCachedMessage(Guid id);
 
     /// <summary>
-    ///     Gets the last N cached messages from this message channel.
+    ///     获取此频道缓存的多条消息。
     /// </summary>
+    /// <param name="limit"> 要获取的缓存消息的数量。 </param>
     /// <remarks>
+    ///     此重载将会从缓存中获取最新的指定数量的缓存消息实体。
+    ///     <br />
     ///     <note type="warning">
-    ///         This method requires the use of cache, which is not enabled by default; if caching is not enabled,
-    ///         this method will always return an empty collection. Please refer to
-    ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> for more details.
+    ///         要想通过此方法获取缓存的消息，需要启用缓存功能，否则此方法将始终返回空集合。缓存功能是默认禁用的，要想启用缓存，请参考
+    ///         <see cref="P:Kook.WebSocket.KookSocketConfig.MessageCacheSize"/>。
     ///     </note>
     ///     <br />
-    ///     <para>
-    ///         This method retrieves the message(s) from the local WebSocket cache and does not send any additional
-    ///         request to Kook. This read-only collection may include messages that have been deleted. The
-    ///         maximum number of messages that can be retrieved from this method depends on the
-    ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> set.
-    ///     </para>
+    ///     此方法从本地的内存缓存中获取消息实体，不会向 KOOK 发送额外的 API 请求。所获取的消息也可能是已经被删除的消息。
     /// </remarks>
-    /// <param name="limit">The number of messages to get.</param>
-    /// <returns> A read-only collection of WebSocket-based messages. </returns>
+    /// <returns> 此频道缓存的所有消息。 </returns>
     IReadOnlyCollection<SocketMessage> GetCachedMessages(int limit = KookConfig.MaxMessagesPerBatch);
 
     /// <summary>
-    ///     Gets the last N cached messages starting from a certain message in this message channel.
+    ///     获取此频道缓存的多条消息。
     /// </summary>
+    /// <param name="referenceMessageId"> 要开始获取消息的参考位置的消息的 ID。 </param>
+    /// <param name="dir"> 要以参考位置为基准，获取消息的方向。 </param>
+    /// <param name="limit"> 要获取的消息数量。 </param>
     /// <remarks>
     ///     <note type="warning">
-    ///         This method requires the use of cache, which is not enabled by default; if caching is not enabled,
-    ///         this method will always return an empty collection. Please refer to
-    ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> for more details.
+    ///         要想通过此方法获取缓存的消息，需要启用缓存功能，否则此方法将始终返回空集合。缓存功能是默认禁用的，要想启用缓存，请参考
+    ///         <see cref="P:Kook.WebSocket.KookSocketConfig.MessageCacheSize"/>。
     ///     </note>
     ///     <br />
-    ///     <para>
-    ///         This method retrieves the message(s) from the local WebSocket cache and does not send any additional
-    ///         request to Kook. This read-only collection may include messages that have been deleted. The
-    ///         maximum number of messages that can be retrieved from this method depends on the
-    ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> set.
-    ///     </para>
+    ///     此方法从本地的内存缓存中获取消息实体，不会向 KOOK 发送额外的 API 请求。所获取的消息也可能是已经被删除的消息。
     /// </remarks>
-    /// <param name="fromMessageId">The message ID to start the fetching from.</param>
-    /// <param name="dir">The direction of which the message should be gotten from.</param>
-    /// <param name="limit">The number of messages to get.</param>
-    /// <returns> A read-only collection of WebSocket-based messages. </returns>
-    IReadOnlyCollection<SocketMessage> GetCachedMessages(Guid fromMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch);
+    /// <returns> 获取到的多条缓存消息。 </returns>
+    IReadOnlyCollection<SocketMessage> GetCachedMessages(Guid referenceMessageId, Direction dir, int limit = KookConfig.MaxMessagesPerBatch);
 
     /// <summary>
-    ///     Gets the last N cached messages starting from a certain message in this message channel.
+    ///     获取此频道缓存的多条消息。
     /// </summary>
+    /// <param name="referenceMessage"> 要开始获取消息的参考位置的消息。 </param>
+    /// <param name="dir"> 要以参考位置为基准，获取消息的方向。 </param>
+    /// <param name="limit"> 要获取的消息数量。 </param>
     /// <remarks>
     ///     <note type="warning">
-    ///         This method requires the use of cache, which is not enabled by default; if caching is not enabled,
-    ///         this method will always return an empty collection. Please refer to
-    ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> for more details.
+    ///         要想通过此方法获取缓存的消息，需要启用缓存功能，否则此方法将始终返回空集合。缓存功能是默认禁用的，要想启用缓存，请参考
+    ///         <see cref="P:Kook.WebSocket.KookSocketConfig.MessageCacheSize"/>。
     ///     </note>
     ///     <br />
-    ///     <para>
-    ///         This method retrieves the message(s) from the local WebSocket cache and does not send any additional
-    ///         request to Kook. This read-only collection may include messages that have been deleted. The
-    ///         maximum number of messages that can be retrieved from this method depends on the
-    ///         <see cref="Kook.WebSocket.KookSocketConfig.MessageCacheSize" /> set.
-    ///     </para>
+    ///     此方法从本地的内存缓存中获取消息实体，不会向 KOOK 发送额外的 API 请求。所获取的消息也可能是已经被删除的消息。
     /// </remarks>
-    /// <param name="fromMessage">The message to start the fetching from.</param>
-    /// <param name="dir">The direction of which the message should be gotten from.</param>
-    /// <param name="limit">The number of messages to get.</param>
-    /// <returns> A read-only collection of WebSocket-based messages. </returns>
-    IReadOnlyCollection<SocketMessage> GetCachedMessages(IMessage fromMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch);
+    /// <returns> 获取到的多条缓存消息。 </returns>
+    IReadOnlyCollection<SocketMessage> GetCachedMessages(IMessage referenceMessage, Direction dir, int limit = KookConfig.MaxMessagesPerBatch);
 }

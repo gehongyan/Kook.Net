@@ -146,7 +146,7 @@ public interface IGuild : IEntity<ulong>
     int BoostSubscriptionCount { get; }
 
     /// <summary>
-    ///     获取此服务器来自拥有 BUFF 会员的用的的服务器助力包的数量。
+    ///     获取此服务器来自拥有 BUFF 会员的用的服务器助力包的数量。
     /// </summary>
     int BufferBoostSubscriptionCount { get; }
 

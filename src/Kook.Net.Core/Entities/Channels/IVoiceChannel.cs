@@ -36,5 +36,5 @@ public interface IVoiceChannel : ITextChannel, IAudioChannel
     /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步获取操作的任务。任务的结果包含连接到此频道的所有服务器用户。 </returns>
-    Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+    Task<IReadOnlyCollection<IGuildUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 }
