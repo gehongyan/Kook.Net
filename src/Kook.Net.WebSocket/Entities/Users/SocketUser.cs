@@ -7,7 +7,7 @@ using Model = Kook.API.User;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based user.
+///     表示一个基于网关的用户。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public abstract class SocketUser : SocketEntity<ulong>, IUser
@@ -70,12 +70,7 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     /// <inheritdoc />
     public ClientType? ActiveClient => Presence?.ActiveClient;
 
-    /// <summary>
-    ///     Initializes a new WebSocket-based user.
-    /// </summary>
-    /// <param name="kook"> The WebSocket client. </param>
-    /// <param name="id"> The identifier of the user. </param>
-    protected SocketUser(KookSocketClient kook, ulong id)
+    internal SocketUser(KookSocketClient kook, ulong id)
         : base(kook, id)
     {
         IsSystemUser = Id == KookConfig.SystemMessageAuthorID;
@@ -128,15 +123,15 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
         Presence.Update(isOnline, activeClient);
     }
 
-    /// <inheritdoc cref="IUser.CreateDMChannelAsync(RequestOptions)" />
+    /// <inheritdoc cref="M:Kook.IUser.CreateDMChannelAsync(Kook.RequestOptions)" />
     public async Task<SocketDMChannel> CreateDMChannelAsync(RequestOptions? options = null) =>
         await SocketUserHelper.CreateDMChannelAsync(this, Kook, options).ConfigureAwait(false);
 
-    /// <inheritdoc cref="IUser.GetIntimacyAsync(RequestOptions)" />
+    /// <inheritdoc cref="M:Kook.IUser.GetIntimacyAsync(Kook.RequestOptions)" />
     public Task<RestIntimacy> GetIntimacyAsync(RequestOptions? options = null) =>
         UserHelper.GetIntimacyAsync(this, Kook, options);
 
-    /// <inheritdoc cref="IUser.UpdateIntimacyAsync(Action{IntimacyProperties},RequestOptions)" />
+    /// <inheritdoc />
     public async Task UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions? options = null) =>
         await UserHelper.UpdateIntimacyAsync(this, Kook, func, options).ConfigureAwait(false);
 
@@ -157,9 +152,10 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
         UserHelper.RemoveFriendAsync(this, Kook, options);
 
     /// <summary>
-    ///     Gets the full name of the user (e.g. Example#0001).
+    ///     获取此用户的包含用户名及识别号的格式化字符串。
     /// </summary>
-    /// <returns> The full name of the user. </returns>
+    /// <returns> 一个表示此用户的包含用户名及识别号的格式化字符串。 </returns>
+    /// <seealso cref="M:Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
     public override string ToString() => Format.UsernameAndIdentifyNumber(this, Kook.FormatUsersInBidirectionalUnicode);
 
     private string DebuggerDisplay =>
@@ -177,10 +173,6 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     /// <inheritdoc />
     async Task<IIntimacy> IUser.GetIntimacyAsync(RequestOptions? options) =>
         await GetIntimacyAsync(options).ConfigureAwait(false);
-
-    /// <inheritdoc />
-    async Task IUser.UpdateIntimacyAsync(Action<IntimacyProperties> func, RequestOptions? options) =>
-        await UpdateIntimacyAsync(func, options).ConfigureAwait(false);
 
     #endregion
 }

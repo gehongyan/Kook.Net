@@ -1,12 +1,14 @@
 namespace Kook.Net.Udp;
 
 /// <summary>
-///     Represents a delegate that provides a <see cref="IUdpSocket"/> instance.
+///     表示一个默认的 <see cref="T:Kook.Net.Udp.UdpSocketProvider"/>，用于创建
+///     <see cref="T:Kook.Net.Udp.IUdpSocket"/> 的默认实现的实例。
 /// </summary>
 public static class DefaultUdpSocketProvider
 {
     /// <summary>
-    ///     A delegate that creates a default <see cref="UdpSocketProvider"/> instance.
+    ///     获取一个默认的 <see cref="T:Kook.Net.Udp.UdpSocketProvider"/> 委托，用于创建
+    ///     <see cref="T:Kook.Net.Udp.IUdpSocket"/> 的默认实现的实例。
     /// </summary>
     public static readonly UdpSocketProvider Instance = () =>
     {

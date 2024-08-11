@@ -3,10 +3,10 @@ using System.Diagnostics;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based user that is yet to be recognized by the client.
+///     表示一个基于网关的未知用户。
 /// </summary>
 /// <remarks>
-///     A user may not be recognized due to the user missing from the cache or failed to be recognized properly.
+///     如果用户未能被识别，或缓存中不存在该用户，则会使用此类型的用户实体设置需要用户实体的属性。
 /// </remarks>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketUnknownUser : SocketUser
@@ -47,15 +47,12 @@ public class SocketUnknownUser : SocketUser
     /// <inheritdoc />
     public override IReadOnlyCollection<Nameplate> Nameplates { get; internal set; } = [];
 
-    /// <inheritdoc />
     internal override SocketPresence Presence
     {
         get => new();
         set { }
     }
 
-    /// <inheritdoc />
-    /// <exception cref="NotSupportedException">This field is not supported for an unknown user.</exception>
     internal override SocketGlobalUser GlobalUser => throw new NotSupportedException();
 
     internal SocketUnknownUser(KookSocketClient kook, ulong id)

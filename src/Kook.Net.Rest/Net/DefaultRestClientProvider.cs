@@ -1,21 +1,22 @@
 namespace Kook.Net.Rest;
 
 /// <summary>
-///     Represents a default <see cref="RestClientProvider"/> that creates <see cref="DefaultRestClient"/> instances.
+///     表示一个默认的 <see cref="T:Kook.Net.Rest.RestClientProvider"/>，用于创建
+///     <see cref="T:Kook.Net.Rest.IRestClient"/> 的默认实现的实例。
 /// </summary>
 public static class DefaultRestClientProvider
 {
     /// <summary>
-    ///     Gets a <see cref="RestClientProvider"/> delegate that creates <see cref="IRestClient"/> instances.
+    ///     获取一个默认的 <see cref="T:Kook.Net.Rest.RestClientProvider"/> 委托，用于创建
+    ///     <see cref="T:Kook.Net.Rest.IRestClient"/> 的默认实现的实例。
     /// </summary>
     public static readonly RestClientProvider Instance = Create();
 
     /// <summary>
-    ///     Creates a delegate that creates a new <see cref="DefaultRestClient"/> instance.
+    ///     创建一个新的 <see cref="T:Kook.Net.Rest.RestClientProvider"/> 委托。
     /// </summary>
-    /// <param name="useProxy"> Whether to use the system proxy. </param>
-    /// <returns> A delegate that creates a new <see cref="DefaultRestClient"/> instance. </returns>
-    // /// <exception cref="PlatformNotSupportedException">The default RestClientProvider is not supported on this platform.</exception>
+    /// <param name="useProxy"> 是否使用系统代理。 </param>
+    /// <returns> 一个新的 <see cref="T:Kook.Net.Rest.RestClientProvider"/> 委托。 </returns>
     public static RestClientProvider Create(bool useProxy = false) =>
         url =>
         {

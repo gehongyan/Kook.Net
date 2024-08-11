@@ -5,7 +5,7 @@ using Model = Kook.API.Invite;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based invite to a guild.
+///     表示一个基于网关的邀请。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketInvite : SocketEntity<uint>, IInvite
@@ -13,17 +13,13 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     /// <inheritdoc />
     public ulong? ChannelId { get; private set; }
 
-    /// <summary>
-    ///     Gets the channel where this invite was created.
-    /// </summary>
+    /// <inheritdoc cref="P:Kook.IInvite.Channel" />
     public SocketGuildChannel Channel { get; }
 
     /// <inheritdoc />
     public ulong? GuildId { get; private set; }
 
-    /// <summary>
-    ///     Gets the guild where this invite was created.
-    /// </summary>
+    /// <inheritdoc cref="P:Kook.IInvite.Guild" />
     public SocketGuild Guild { get; }
 
     /// <inheritdoc />
@@ -47,9 +43,7 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     /// <inheritdoc />
     public int InvitedUsersCount { get; private set; }
 
-    /// <summary>
-    ///     Gets the user that created this invite if available.
-    /// </summary>
+    /// <inheritdoc cref="P:Kook.IInvite.Inviter" />
     public SocketGuildUser Inviter { get; private set; }
 
     /// <inheritdoc />
@@ -96,10 +90,7 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     public Task DeleteAsync(RequestOptions? options = null) =>
         InviteHelper.DeleteAsync(this, Kook, options);
 
-    /// <summary>
-    ///     Gets the URL of the invite.
-    /// </summary>
-    /// <returns> A string that resolves to the Url of the invite. </returns>
+    /// <inheritdoc cref="P:Kook.WebSocket.SocketInvite.Url" />
     public override string ToString() => Url;
 
     private string DebuggerDisplay => $"{Url} ({Guild?.Name} / {Channel.Name})";

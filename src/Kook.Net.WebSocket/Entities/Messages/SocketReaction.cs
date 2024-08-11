@@ -4,55 +4,42 @@ using Kook.API.Gateway;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based reaction.
+///     表示一个基于网关的回应。
 /// </summary>
 public class SocketReaction : IReaction
 {
     /// <summary>
-    ///     Gets the ID of the user who added the reaction.
+    ///     获取添加此回应的用户的 ID。
     /// </summary>
-    /// <remarks>
-    ///     This property retrieves the identifier of the user responsible for this reaction. This
-    ///     property will always contain the user identifier in event that
-    ///     <see cref="Kook.WebSocket.SocketReaction.User" /> cannot be retrieved.
-    /// </remarks>
-    /// <returns> A user identifier associated with the user. </returns>
     public ulong UserId { get; }
 
     /// <summary>
-    ///     Gets the user who added the reaction if possible.
+    ///     获取添加此回应的用户。
     /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This property attempts to retrieve a WebSocket-cached user that is responsible for this reaction from
-    ///         the client. In other words, when the user is not in the WebSocket cache, this property may not
-    ///         contain a value, leaving the only identifiable information to be
-    ///         <see cref="Kook.WebSocket.SocketReaction.UserId" />.
-    ///     </para>
-    ///     <para>
-    ///         If you wish to obtain an identifiable user object, consider utilizing
-    ///         <see cref="Kook.Rest.KookRestClient" /> which will attempt to retrieve the user from REST.
-    ///     </para>
+    ///     如果要获取的用户实体不存在于缓存中，则此属性将返回 <see langword="null"/>。
     /// </remarks>
-    /// <returns> A user object where possible; a value is not always returned. </returns>
     public IUser? User { get; internal set; }
 
     /// <summary>
-    ///     Gets the ID of the message that has been reacted to.
+    ///     获取此回应所对应的消息的 ID。
     /// </summary>
-    /// <returns> A message Guid associated with the message. </returns>
     public Guid MessageId { get; }
 
     /// <summary>
-    ///     Gets the message that has been reacted to if possible.
+    ///     获取此回应所对应的消息。
     /// </summary>
-    /// <returns> A WebSocket-based message where possible; a value is not always returned. </returns>
+    /// <remarks>
+    ///     如果要获取的消息实体不存在于缓存中，则此属性将返回 <see langword="null"/>。
+    /// </remarks>
     public IMessage? Message { get; internal set; }
 
     /// <summary>
-    ///     Gets the channel where the reaction takes place in.
+    ///     获取此回应所在的消息频道。
     /// </summary>
-    /// <returns> A WebSocket-based message channel. </returns>
+    /// <remarks>
+    ///     如果要获取的频道实体不存在于缓存中，则此属性将返回 <see langword="null"/>。
+    /// </remarks>
     public ISocketMessageChannel? Channel { get; }
 
     /// <inheritdoc />

@@ -4,7 +4,7 @@ using Model = Kook.API.Role;
 namespace Kook.Rest;
 
 /// <summary>
-///     表示一个可授予服务器用户的基于 REST 的角色。
+///     表示一个基于 REST 的可授予服务器用户的角色。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestRole : RestEntity<uint>, IRole

@@ -7,9 +7,7 @@ namespace Kook;
 /// </summary>
 public class RequestOptions
 {
-    /// <summary>
-    ///     使用默认设置创建一个新的 <see cref="RequestOptions" /> 类的实例。
-    /// </summary>
+    /// <inheritdoc cref="M:Kook.RequestOptions.#ctor" />
     public static RequestOptions Default => new();
 
     /// <summary>

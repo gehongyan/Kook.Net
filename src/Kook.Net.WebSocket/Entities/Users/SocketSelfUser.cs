@@ -5,7 +5,7 @@ using Model = Kook.API.Rest.SelfUser;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents the logged-in WebSocket-based user.
+///     表示一个基于网关的当前登录的用户信息。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketSelfUser : SocketUser, ISelfUser, IUpdateable
@@ -142,12 +142,7 @@ public class SocketSelfUser : SocketUser, ISelfUser, IUpdateable
         return hasChanged;
     }
 
-    /// <summary>
-    ///     Fetches the users data from the REST API to update this object,
-    ///     especially the <see cref="Username"/> property.
-    /// </summary>
-    /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A task that represents the asynchronous reloading operation. </returns>
+    /// <inheritdoc />
     public Task UpdateAsync(RequestOptions? options = null) =>
         SocketUserHelper.UpdateAsync(this, Kook, options);
 

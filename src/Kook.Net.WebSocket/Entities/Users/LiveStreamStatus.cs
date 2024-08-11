@@ -4,73 +4,73 @@ using Model = Kook.API.Gateway.LiveInfo;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents the status of a live stream.
+///     表示一个直播状态。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct LiveStreamStatus
 {
     /// <summary>
-    ///     Gets the voice channel that the user is currently in; or <c>null</c> if none.
+    ///     获取用户当前所在的语音频道；如果不在任何频道中则为 <c>null</c>。
     /// </summary>
     public SocketVoiceChannel? VoiceChannel { get; private set; }
 
     /// <summary>
-    ///     Gets whether the stream is live.
+    ///     获取此直播是否正在进行。
     /// </summary>
     public bool IsLive { get; private set; }
 
     /// <summary>
-    ///     Gets the number of audience members.
+    ///     获取此直播的观众人数。
     /// </summary>
     public int AudienceCount { get; private set; }
 
     /// <summary>
-    ///     Gets the maximum number of audience members.
+    ///     获取此直播间可容纳的最大观众人数。
     /// </summary>
     public int AudienceLimit { get; private set; }
 
     /// <summary>
-    ///     Gets the thumbnail of the live stream.
+    ///     获取此直播的封面缩略图。
     /// </summary>
     public string? CoverThumbnail { get; private set; }
 
     /// <summary>
-    ///     Gets the start time of the live stream.
+    ///     获取此直播的开始时间。
     /// </summary>
     public DateTimeOffset? StartTime { get; private set; }
 
     /// <summary>
-    ///     Gets the resolution of the live stream.
+    ///     获取此直播的分辨率。
     /// </summary>
     public int? Resolution { get; private set; }
 
     /// <summary>
-    ///     Gets the frame rate of the live stream.
+    ///     获取此直播的帧率。
     /// </summary>
     public int? FrameRate { get; private set; }
 
     /// <summary>
-    ///     Gets the tag of the live stream.
+    ///     获取此直播的标签。
     /// </summary>
     public string Tag { get; private set; } = string.Empty;
 
     /// <summary>
-    ///     Gets the color of the live stream.
+    ///     // TODO: To be documented.
     /// </summary>
     public AlphaColor Color { get; private set; }
 
     /// <summary>
-    ///     Gets the image URL of the live stream.
+    ///     获取此直播间图像的 URL。
     /// </summary>
     public string Image { get; private set; } = string.Empty;
 
     /// <summary>
-    ///     Gets the mode of the live stream.
+    ///     获取直播间的模式。
     /// </summary>
     public int Mode { get; private set; }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="LiveStreamStatus"/> structure.
+    ///     初始化 <see cref="LiveStreamStatus"/> 结构的新实例。
     /// </summary>
     public LiveStreamStatus()
     {

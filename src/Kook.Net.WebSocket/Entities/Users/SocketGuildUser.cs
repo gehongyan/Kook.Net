@@ -9,7 +9,7 @@ using UserModel = Kook.API.User;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based guild user.
+///     表示一个基于网关的服务器用户。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
@@ -20,9 +20,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
 
     internal override SocketGlobalUser GlobalUser { get; }
 
-    /// <summary>
-    ///     Gets the guild the user is in.
-    /// </summary>
+    /// <inheritdoc cref="P:Kook.IGuildUser.Guild" />
     public SocketGuild Guild { get; }
 
     /// <inheritdoc />
@@ -149,34 +147,23 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// <inheritdoc />
     public bool? IsMuted => VoiceState?.IsMuted;
 
-    /// <summary>
-    ///     Gets the live stream status of the user.
-    /// </summary>
+    /// <inheritdoc cref="P:Kook.WebSocket.SocketVoiceState.LiveStreamStatus" />
     public LiveStreamStatus? LiveStreamStatus => VoiceState?.LiveStreamStatus;
 
     /// <summary>
-    ///     Gets a collection of all boost subscriptions of this user for this guild.
+    ///     获取此用户在该服务器内的所有服务器助力信息。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of boost subscription metadata of this user for this guild;
-    ///     or <c>null</c> if the boost subscription data has never been cached.
-    /// </returns>
     /// <remarks>
     ///     <note type="warning">
-    ///         <para>
-    ///             Only when <see cref="KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> is set to <c>true</c>
-    ///             will this property be populated upon startup. Due to the lack of event support for boost subscriptions,
-    ///             this property may be not up-to-date. The changes of <see cref="SocketGuild.BoostSubscriptionCount"/> will trigger the update
-    ///             of this property, but KOOK gateway will not publish this event resulting from the changes of total boost subscription
-    ///             count. To fetch the latest boost subscription data, use <see cref="SocketGuild.DownloadBoostSubscriptionsAsync"/> upon <see cref="SocketGuild"/>
-    ///             or <see cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/>
-    ///             upon a <see cref="KookSocketClient"/> to manually download the latest boost subscription data,
-    ///             or <see cref="GetBoostSubscriptionsAsync"/>.
-    ///         </para>
+    ///         当 <see cref="P:Kook.WebSocket.KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> 为 <c>true</c>
+    ///         时，Bot 启动时会自动下载所有服务器的所有助力信息。否则，此属性将为 <c>null</c>。调用
+    ///         <see cref="M:Kook.WebSocket.SocketGuild.DownloadBoostSubscriptionsAsync(Kook.RequestOptions)"/>
+    ///         也可以立即下载服务器的所有助力信息，下载完成后，此属性值将被设定。
+    ///         <br />
+    ///         网关不会发布有关此属性值变更的事件，此属性值可能并不准确。要获取准确的服务器订阅信息，请调用
+    ///         <see cref="M:Kook.WebSocket.SocketGuild.GetBoostSubscriptionsAsync(Kook.RequestOptions)"/>。
     ///     </note>
     /// </remarks>
-    /// <seealso cref="SocketGuild.DownloadBoostSubscriptionsAsync"/>
-    /// <seealso cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/>
     public IReadOnlyCollection<BoostSubscriptionMetadata> BoostSubscriptions => Guild.BoostSubscriptions?
             .Where(x => x.Key.Id == Id)
             .SelectMany(x => x.Value)
@@ -184,13 +171,12 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         ?? [];
 
     /// <summary>
-    ///     Returns a collection of roles that the user possesses.
+    ///     获取此用户在该服务器内拥有的所有角色。
     /// </summary>
     /// <remarks>
     ///     <note type="warning">
-    ///         Due to the lack of events which should be raised when a role is added or removed from a user,
-    ///         this property may not be completely accurate. To ensure the most accurate results,
-    ///         it is recommended to call <see cref="UpdateAsync"/> before this property is used.
+    ///         由于网关不会发布有关服务器用户角色变更的事件，此属性值可能并不准确。要获取准确的角色信息，请在使用此属性前调用
+    ///         <see cref="M:Kook.WebSocket.SocketGuildUser.UpdateAsync(Kook.RequestOptions)"/>。
     ///     </note>
     /// </remarks>
     public IReadOnlyCollection<SocketRole> Roles => _roleIds
@@ -198,26 +184,20 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         .Where(x => x != null)
         .ToImmutableArray();
 
+    /// <inheritdoc cref="P:Kook.WebSocket.SocketVoiceState.VoiceChannel" />
     /// <summary>
-    ///     Returns the voice channel the user is in, or <c>null</c> if none or unknown.
     ///     <br />
     ///     <note type="warning">
-    ///         If a user connects to a voice channel before the bot has connected to the gateway,
-    ///         this property will be <c>null</c> until <see cref="SocketGuild.DownloadVoiceStatesAsync"/>
-    ///         or <see cref="KookSocketClient.DownloadVoiceStatesAsync"/> is called.
-    ///         To ensure whether the user is in a voice channel or not, use those methods above,
-    ///         or <see cref="GetConnectedVoiceChannelsAsync"/>.
+    ///         默认情况下，此属性不会返回用户在 Bot 启动前所连接到的语音频道。如需让 Bot 在启动后自动获取所有用户的语音状态，请设置
+    ///         <see cref="P:Kook.WebSocket.KookSocketConfig.AlwaysDownloadVoiceStates"/>，也可以在使用此属性前调用
+    ///         <see cref="M:Kook.WebSocket.SocketGuild.DownloadVoiceStatesAsync(Kook.RequestOptions)"/> 或
     ///     </note>
     /// </summary>
     public SocketVoiceChannel? VoiceChannel => VoiceState?.VoiceChannel;
 
     /// <summary>
-    ///     Gets the voice status of the user if any.
+    ///     获取此用户的语音状态。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="SocketVoiceState" /> representing the user's voice status; <c>null</c> if the user is neither
-    ///     connected to a voice channel nor is muted or deafened by the guild.
-    /// </returns>
     public SocketVoiceState? VoiceState => Guild.GetVoiceState(Id);
 
     internal SocketGuildUser(SocketGuild guild, SocketGlobalUser globalUser)
@@ -330,74 +310,34 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         UserHelper.KickAsync(this, Kook, options);
 
     /// <inheritdoc />
-    /// <note type="warning">
-    ///     Due to the lack of events which should be raised when a role is added to a user,
-    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
-    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
-    /// </note>
     public Task AddRoleAsync(uint roleId, RequestOptions? options = null) =>
-        AddRolesAsync(new[] { roleId }, options);
+        AddRolesAsync([roleId], options);
 
     /// <inheritdoc />
-    /// <note type="warning">
-    ///     Due to the lack of events which should be raised when a role is added to a user,
-    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
-    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
-    /// </note>
     public Task AddRoleAsync(IRole role, RequestOptions? options = null) =>
         AddRoleAsync(role.Id, options);
 
     /// <inheritdoc />
-    /// <note type="warning">
-    ///     Due to the lack of events which should be raised when a role is added to a user,
-    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
-    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
-    /// </note>
     public Task AddRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null) =>
         SocketUserHelper.AddRolesAsync(this, Kook, roleIds, options);
 
     /// <inheritdoc />
-    /// <note type="warning">
-    ///     Due to the lack of events which should be raised when a role is added to a user,
-    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
-    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
-    /// </note>
     public Task AddRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null) =>
         AddRolesAsync(roles.Select(x => x.Id), options);
 
     /// <inheritdoc />
-    /// <note type="warning">
-    ///     Due to the lack of events which should be raised when a role is removed from a user,
-    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
-    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
-    /// </note>
     public Task RemoveRoleAsync(uint roleId, RequestOptions? options = null) =>
-        RemoveRolesAsync(new[] { roleId }, options);
+        RemoveRolesAsync([roleId], options);
 
     /// <inheritdoc />
-    /// <note type="warning">
-    ///     Due to the lack of events which should be raised when a role is removed from a user,
-    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
-    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
-    /// </note>
     public Task RemoveRoleAsync(IRole role, RequestOptions? options = null) =>
         RemoveRoleAsync(role.Id, options);
 
     /// <inheritdoc />
-    /// <note type="warning">
-    ///     Due to the lack of events which should be raised when a role is removed from a user,
-    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
-    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
-    /// </note>
     public Task RemoveRolesAsync(IEnumerable<uint> roleIds, RequestOptions? options = null) =>
         SocketUserHelper.RemoveRolesAsync(this, Kook, roleIds, options);
 
     /// <inheritdoc />
-    /// <note type="warning">
-    ///     Due to the lack of events which should be raised when a role is removed from a user,
-    ///     the <see cref="SocketGuildUser.Roles"/> property will not be updated immediately after
-    ///     calling this method. To update the cached roles of this user, please use <see cref="UpdateAsync"/>.
-    /// </note>
     public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null) =>
         RemoveRolesAsync(roles.Select(x => x.Id));
 
@@ -417,7 +357,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     public Task UndeafenAsync(RequestOptions? options = null) =>
         GuildHelper.UndeafenUserAsync(this, Kook, options);
 
-    /// <inheritdoc cref="IGuildUser.GetConnectedVoiceChannelsAsync"/>
+    /// <inheritdoc cref="M:Kook.IGuildUser.GetConnectedVoiceChannelsAsync(Kook.RequestOptions)"/>
     public async Task<IReadOnlyCollection<SocketVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions? options = null)
     {
         IReadOnlyCollection<SocketVoiceChannel> channels =
@@ -426,12 +366,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         return channels;
     }
 
-    /// <summary>
-    ///     Fetches the users data from the REST API to update this object,
-    ///     especially the <see cref="Roles"/> property.
-    /// </summary>
-    /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A task that represents the asynchronous reloading operation. </returns>
+    /// <inheritdoc />
     public Task UpdateAsync(RequestOptions? options = null) =>
         SocketUserHelper.UpdateAsync(this, Kook, options);
 
