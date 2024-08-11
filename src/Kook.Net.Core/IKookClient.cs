@@ -40,6 +40,19 @@ public interface IKookClient : IDisposable
     /// <returns> 一个表示异步停止操作的任务。 </returns>
     Task StopAsync();
 
+    /// <summary>
+    ///     Logs in to the Kook API.
+    /// </summary>
+    /// <param name="tokenType"> The type of token to use. </param>
+    /// <param name="token"> The token to use. </param>
+    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
+    Task LoginAsync(TokenType tokenType, string token, bool validateToken = true);
+
+    /// <summary>
+    ///     Logs out from the Kook API.
+    /// </summary>
+    Task LogoutAsync();
+
     #endregion
 
     #region Channels

@@ -133,18 +133,7 @@ public abstract class BaseKookClient : IKookClient
     /// <inheritdoc />
     public void Dispose() => Dispose(true);
 
-    /// <summary>
-    ///     登录到 KOOK API。
-    /// </summary>
-    /// <param name="tokenType"> 要使用的令牌类型。 </param>
-    /// <param name="token"> 要使用的令牌。 </param>
-    /// <param name="validateToken"> 是否验证令牌。 </param>
-    /// <returns> 一个表示异步登录操作的任务。 </returns>
-    /// <remarks>
-    ///     验证令牌的操作是通过 <see cref="M:Kook.TokenUtils.ValidateToken(Kook.TokenType,System.String)"/> 方法完成的。 <br />
-    ///     此方法用于向当前客户端设置后续 API 请求的身份验证信息，并获取所登录用户的信息，设置
-    ///     <see cref="P:Kook.Rest.BaseKookClient.CurrentUser"/> 属性。
-    /// </remarks>
+    /// <inheritdoc />
     public async Task LoginAsync(TokenType tokenType, string token, bool validateToken = true)
     {
         await _stateLock.WaitAsync().ConfigureAwait(false);
@@ -203,13 +192,7 @@ public abstract class BaseKookClient : IKookClient
 
     internal virtual Task OnLoginAsync(TokenType tokenType, string token) => Task.CompletedTask;
 
-    /// <summary>
-    ///     从 KOOK API 退出登录。
-    /// </summary>
-    /// <returns> 一个表示异步退出登录操作的任务。 </returns>
-    /// <remarks>
-    ///     此方法用于清除当前客户端的身份验证信息，并清除 <see cref="P:Kook.Rest.BaseKookClient.CurrentUser"/> 属性。
-    /// </remarks>
+    /// <inheritdoc />
     public async Task LogoutAsync()
     {
         await _stateLock.WaitAsync().ConfigureAwait(false);
