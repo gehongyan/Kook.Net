@@ -128,7 +128,7 @@ public interface IGuild : IEntity<ulong>
     ///     此属性为 <c>true</c> 表示，此服务器实体已完整缓存基础数据，并与网关同步。 <br />
     ///     缓存基础数据包括服务器基本信息、频道、角色、频道权限重写、当前用户在服务器内的昵称。
     /// </remarks>
-    bool Available { get; }
+    bool IsAvailable { get; }
 
     /// <summary>
     ///     获取此服务器中的 <c>@全体成员</c> 全体成员角色。

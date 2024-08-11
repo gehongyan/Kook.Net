@@ -44,7 +44,7 @@ public class RestGuildUser : RestUser, IGuildUser
 
     /// <inheritdoc />
     /// <exception cref="InvalidOperationException" accessor="get"> 解析服务器用户的权限需要所属服务器的基础数据已完整下载。 </exception>
-    public GuildPermissions GuildPermissions => Guild.Available
+    public GuildPermissions GuildPermissions => Guild.IsAvailable
         ? new GuildPermissions(Permissions.ResolveGuild(Guild, this))
         : throw new InvalidOperationException("Resolving permissions requires the parent guild to be downloaded.");
 

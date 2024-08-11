@@ -75,7 +75,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     public ulong? WelcomeChannelId { get; private set; }
 
-    internal bool Available { get; private set; }
+    /// <inheritdoc />
+    public bool IsAvailable { get; private set; }
 
     /// <inheritdoc/>
     public int MaxBitrate => GuildHelper.GetMaxBitrate(this);
@@ -230,7 +231,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             DefaultChannelId = null;
         WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
-        Available = true;
+        IsAvailable = true;
 
         if (model.Roles is { Length: 0 })
         {
@@ -613,9 +614,6 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     IAudioClient? IGuild.AudioClient => null;
 
     IReadOnlyDictionary<ulong, IAudioClient> IGuild.AudioClients => ImmutableDictionary<ulong, IAudioClient>.Empty;
-
-    /// <inheritdoc />
-    bool IGuild.Available => Available;
 
     /// <inheritdoc />
     IReadOnlyCollection<IRole> IGuild.Roles => Roles;
