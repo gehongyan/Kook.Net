@@ -13,6 +13,7 @@ public interface ISocketMessageChannel : IMessageChannel
     ///         要想通过此属性获取缓存的消息，需要启用缓存功能，否则此属性将始终返回空集合。缓存功能是默认禁用的，要想启用缓存，请参考
     ///         <see cref="P:Kook.WebSocket.KookSocketConfig.MessageCacheSize"/>。
     ///     </note>
+    ///     <br />
     ///     此属性从本地的内存缓存中获取消息实体，不会向 KOOK 发送额外的 API 请求。所获取的消息也可能是已经被删除的消息。
     /// </remarks>
     IReadOnlyCollection<SocketMessage> CachedMessages { get; }
