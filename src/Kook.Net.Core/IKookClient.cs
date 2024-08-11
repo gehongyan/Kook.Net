@@ -41,16 +41,25 @@ public interface IKookClient : IDisposable
     Task StopAsync();
 
     /// <summary>
-    ///     Logs in to the Kook API.
+    ///     登录到 KOOK API。
     /// </summary>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
+    /// <param name="tokenType"> 要使用的令牌类型。 </param>
+    /// <param name="token"> 要使用的令牌。 </param>
+    /// <param name="validateToken"> 是否验证令牌。 </param>
+    /// <returns> 一个表示异步登录操作的任务。 </returns>
+    /// <remarks>
+    ///     验证令牌的操作是通过 <see cref="M:Kook.TokenUtils.ValidateToken(Kook.TokenType,System.String)"/> 方法完成的。 <br />
+    ///     此方法用于向当前客户端设置后续 API 请求的身份验证信息，获取并设置当前所登录用户的信息。
+    /// </remarks>
     Task LoginAsync(TokenType tokenType, string token, bool validateToken = true);
 
     /// <summary>
-    ///     Logs out from the Kook API.
+    ///     从 KOOK API 退出登录。
     /// </summary>
+    /// <returns> 一个表示异步退出登录操作的任务。 </returns>
+    /// <remarks>
+    ///     此方法用于清除当前客户端的身份验证信息及所缓存的当前所登录的用户信息。
+    /// </remarks>
     Task LogoutAsync();
 
     #endregion
