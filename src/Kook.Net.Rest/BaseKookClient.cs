@@ -120,12 +120,7 @@ public abstract class BaseKookClient : IKookClient
     /// <inheritdoc />
     public void Dispose() => Dispose(true);
 
-    /// <summary>
-    ///     Logs in to the Kook API.
-    /// </summary>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
+    /// <inheritdoc />
     public async Task LoginAsync(TokenType tokenType, string token, bool validateToken = true)
     {
         await _stateLock.WaitAsync().ConfigureAwait(false);
@@ -184,9 +179,7 @@ public abstract class BaseKookClient : IKookClient
 
     internal virtual Task OnLoginAsync(TokenType tokenType, string token) => Task.CompletedTask;
 
-    /// <summary>
-    ///     Logs out from the Kook API.
-    /// </summary>
+    /// <inheritdoc />
     public async Task LogoutAsync()
     {
         await _stateLock.WaitAsync().ConfigureAwait(false);
