@@ -456,7 +456,7 @@ public interface IGuild : IEntity<ulong>
     /// <remarks>
     ///     此方法获取加入到此服务器内的用户。
     ///     <note>
-    ///         此方法在 WebSocket 的实现中可能返回 <c>null</c>，因为在大型服务器中，用户列表的缓存可能不完整。
+    ///         此方法在网关的实现中可能返回 <c>null</c>，因为在大型服务器中，用户列表的缓存可能不完整。
     ///     </note>
     /// </remarks>
     /// <param name="id"> 要获取的用户的 ID。 </param>

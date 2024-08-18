@@ -610,7 +610,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     获取此服务器内的用户。
     /// </summary>
     /// <remarks>
-    ///     用户列表的缓存可能不完整，此方法在可能返回 <c>null</c>，因为在大型服务器中。
+    ///     此方法可能返回 <c>null</c>，因为在大型服务器中，用户列表的缓存可能不完整。
     /// </remarks>
     /// <param name="id"> 要获取的用户的 ID。 </param>
     /// <returns> 与指定的 <paramref name="id"/> 关联的用户；如果未找到，则返回 <c>null</c>。 </returns>

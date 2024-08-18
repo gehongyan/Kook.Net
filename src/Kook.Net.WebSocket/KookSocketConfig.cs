@@ -7,15 +7,13 @@ using Kook.Rest;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a configuration class for <see cref="KookSocketClient"/>.
+///     表示一个用于 <see cref="T:Kook.WebSocket.KookSocketClient"/> 的配置类。
 /// </summary>
 /// <remarks>
-///     This configuration, based on <see cref="KookRestConfig"/>, helps determine several key configurations the
-///     socket client depend on. For instance, message cache and connection timeout.
+///     此配置基于 <see cref="T:Kook.Rest.KookRestConfig"/>，在与 REST 有关的配置的基础上，定义了有关网关的配置。
 /// </remarks>
 /// <example>
-///     The following config enables the message cache and configures the client to always download user upon guild
-///     availability.
+///     以下代码启用了消息缓存，并配置客户端在服务器可用时始终下载用户。
 ///     <code language="cs">
 ///     var config = new KookSocketConfig
 ///     {
@@ -28,131 +26,130 @@ namespace Kook.WebSocket;
 public class KookSocketConfig : KookRestConfig
 {
     /// <summary>
-    ///    Returns the encoding gateway should use.
+    ///     获取网关使用的数据格式。
     /// </summary>
     public const string GatewayEncoding = "json";
 
     /// <summary>
-    ///     Gets or sets the WebSocket host to connect to. If <c>null</c>, the client will use the
-    ///     /gateway endpoint.
+    ///     获取或设置要连接的网关地址。如果为 <c>null</c>，则客户端将会通过 API 请求获取网关地址。
     /// </summary>
     public string? GatewayHost { get; set; }
 
     /// <summary>
-    ///     Gets or sets the time, in milliseconds, to wait for a connection to complete before aborting.
+    ///     获取或设置连接到网关时的超时时间间隔（毫秒）。
     /// </summary>
     public int ConnectionTimeout { get; set; } = 6000;
 
     /// <summary>
-    ///     Gets the heartbeat interval of WebSocket connection in milliseconds.
+    ///     获取网关发送心跳包的时间间隔（毫秒）。
     /// </summary>
     public int HeartbeatIntervalMilliseconds { get; internal set; } = 30000;
 
     /// <summary>
-    ///     Gets the RTCP interval of RTP connection in milliseconds.
+    ///     获取语音客户端 RTP 连接中发送 RTCP 数据报的时间间隔（毫秒）。
     /// </summary>
     public const int RtcpIntervalMilliseconds = 5000;
 
     /// <summary>
-    ///     Gets or sets the timeout for event handlers, in milliseconds, after which a warning will be logged.
-    ///     Setting this property to <c>null</c>disables this check.
+    ///     获取或设置阻塞网关线程的事件处理程序的超时时间间隔（毫秒），超过此时间间隔的阻塞网关线程的事件处理程序会被日志记录警告。将此属性设置为 <c>null</c> 将禁用此检查。
     /// </summary>
     public int? HandlerTimeout { get; set; } = 3000;
 
     /// <summary>
-    ///     Gets or sets the threshold quantity considered as joining a small number of guilds.
+    ///     获取或设置被视为加入少量服务器的阈值数量。
     /// </summary>
+    /// <seealso cref="F:Kook.WebSocket.StartupCacheFetchMode.Auto"/>
     public uint SmallNumberOfGuildsThreshold { get; set; } = 5;
 
     /// <summary>
-    ///     Get or set the threshold quantity considered as joining a large number of guilds.
+    ///     获取或设置被视为加入大量服务器的阈值数量。
     /// </summary>
+    /// <seealso cref="F:Kook.WebSocket.StartupCacheFetchMode.Auto"/>
     public uint LargeNumberOfGuildsThreshold { get; set; } = 50;
 
     /// <summary>
-    ///     Gets or sets the number of messages per channel that should be kept in cache. Setting this to zero
-    ///     disables the message cache entirely.
+    ///     获取或设置应在缓存中保留的每个频道的消息数量。将此属性设置为零将完全禁用消息缓存。
     /// </summary>
     public int MessageCacheSize { get; set; } = 10;
 
     /// <summary>
-    ///     Gets or sets the provider used to generate new WebSocket connections.
+    ///     获取或设置用于创建 WebSocket 客户端的委托。
     /// </summary>
     public WebSocketProvider WebSocketProvider { get; set; }
 
     /// <summary>
-    ///     Gets or sets the provider used to generate new UDP sockets.
+    ///     获取或设置用于创建 UDP 客户端的委托。
     /// </summary>
     public UdpSocketProvider UdpSocketProvider { get; set; }
 
     /// <summary>
-    ///     Gets or sets the startup mode of the socket client.
+    ///     获取或设置在启动时缓存获取模式。
     /// </summary>
+    /// <remarks>
+    ///     此属性用于指定客户端在启动时如何缓存基础数据，并影响 <see cref="E:Kook.WebSocket.KookSocketClient.Ready"/> 事件的引发时机。 <br />
+    ///     缓存基础数据包括服务器基本信息、频道、角色、频道权限重写、当前用户在服务器内的昵称。
+    /// </remarks>
     public StartupCacheFetchMode StartupCacheFetchMode { get; set; } = StartupCacheFetchMode.Auto;
 
     /// <summary>
-    ///     Gets or sets the timeout for the audio client to be considered idle, in milliseconds.
+    ///     获取或设置音频客户端被视为空闲的超时时间间隔（毫秒）。
     /// </summary>
     public int AudioClientIdleTimeout { get; set; } = 15000;
 
     /// <summary>
-    ///     Gets or sets whether or not all users should be downloaded as guilds come available.
+    ///     获取或设置是否在服务器可用时始终下载所有用户。
     /// </summary>
     /// <remarks>
     ///     <note>
-    ///         Setting this property to <c>true</c> will cause the client to download all users
-    ///         for all guilds upon startup.
-    ///         Please note that it can be difficult to fill the cache completely on large guilds depending on the
-    ///         traffic. If you are experiencing issues, try setting this to <c>false</c> and manually call
-    ///         <see cref="KookSocketClient.DownloadUsersAsync(IEnumerable{IGuild},RequestOptions)"/> on the guilds you want.
+    ///         对于大型服务器，启用此选项可能会导致性能问题。调用
+    ///         <see cref="M:Kook.WebSocket.KookSocketClient.DownloadUsersAsync(System.Collections.Generic.IEnumerable{Kook.IGuild},Kook.RequestOptions)"/>
+    ///         可以按需下载服务器用户列表。
     ///     </note>
     /// </remarks>
     public bool AlwaysDownloadUsers { get; set; } = false;
 
     /// <summary>
-    ///     Gets or sets whether or not all voice states should be downloaded as guilds come available.
+    ///     获取或设置是否在服务器可用时始终下载所有语音状态。
     /// </summary>
     /// <remarks>
     ///     <note>
-    ///         Setting this property to <c>true</c> will cause the client to download all voice states
-    ///         for all guilds upon startup.
-    ///         Please note that it can be difficult to fill the cache completely on large guilds depending on the
-    ///         traffic. If you are experiencing issues, try setting this to <c>false</c> and manually call
-    ///         <see cref="KookSocketClient.DownloadVoiceStatesAsync(IEnumerable{IGuild},RequestOptions)"/> on the guilds you want.
+    ///         对于大型服务器，启用此选项可能会导致性能问题。调用
+    ///         <see cref="M:Kook.WebSocket.KookSocketClient.DownloadVoiceStatesAsync(System.Collections.Generic.IEnumerable{Kook.IGuild},Kook.RequestOptions)"/>
+    ///         可以按需下载服务器语音状态。
     ///     </note>
     /// </remarks>
     public bool AlwaysDownloadVoiceStates { get; set; } = false;
 
     /// <summary>
-    ///     Gets or sets whether or not all boost subscriptions should be downloaded as guilds come available.
+    ///     获取或设置是否在服务器可用时始终下载所有服务器的所有服务器助力信息。
     /// </summary>
     /// <remarks>
     ///     <note>
-    ///         Setting this property to <c>true</c> will cause the client to download all boost subscriptions
-    ///         for all guilds upon startup and when <see cref="BaseSocketClient.GuildUpdated"/> is triggered with
-    ///         changes occurring to <see cref="SocketGuild.BoostSubscriptionCount"/>.
-    ///         Please note that it can be difficult to fill the cache completely on large guilds depending on the
-    ///         traffic. If you are experiencing issues, try setting this to <c>false</c> and manually call
-    ///         <see cref="KookSocketClient.DownloadBoostSubscriptionsAsync(IEnumerable{IGuild},RequestOptions)"/> on the guilds you want.
+    ///         当此属性为 <c>true</c> 时，客户端将在启动时下载所有服务器的所有服务器助力信息，并在引发
+    ///         <see cref="E:Kook.WebSocket.KookSocketClient.GuildUpdated"/> 事件时，当 <see cref="SocketGuild.BoostSubscriptionCount"/>
+    ///         发生更改时，也会重新下载所有服务器的所有服务器助力信息。 <br />
+    ///         对于大型服务器，启用此选项可能会导致性能问题。调用
+    ///         <see cref="M:Kook.WebSocket.KookSocketClient.DownloadBoostSubscriptionsAsync(System.Collections.Generic.IEnumerable{Kook.IGuild},Kook.RequestOptions)"/>
+    ///         可以按需下载服务器的所有服务器助力信息。
     ///     </note>
     /// </remarks>
     public bool AlwaysDownloadBoostSubscriptions { get; set; } = false;
 
     /// <summary>
-    ///     Gets or sets the maximum number of times to retry fetching joined guild data.
+    ///     获取或设置获取新加入服务器数据的最大重试次数。
     /// </summary>
     /// <remarks>
-    ///     Due to the KOOK API cannot return the newly joined guilds immediately well, this property is used to
-    ///     control the maximum number of times to retry fetching joined guild data. Each retry will be delayed
-    ///     by <see cref="JoinedGuildDataFetchingRetryDelay"/> milliseconds. Set to 0 or negative value to disable
-    ///     retrying.
+    ///     KOOK API 无法立即返回刚刚新加入的服务器数据，因此此属性用于控制获取加入的服务器数据的最大重试次数。
+    ///     每次重试前都会等待 <see cref="P:Kook.WebSocket.KookSocketConfig.JoinedGuildDataFetchingRetryDelay"/>
+    ///     毫秒。将当前属性设置为 0 或负值以禁用重试。
     /// </remarks>
     public int MaxJoinedGuildDataFetchingRetryTimes { get; set; } = 10;
 
     /// <summary>
-    ///     Gets or sets the delay in milliseconds between each retry of fetching joined guild data.
+    ///     获取或设置获取新加入服务器数据每次重试之前所等待的时间间隔（毫秒）。
     /// </summary>
-    /// <exception cref="System.ArgumentException">Value must be at least 0.</exception>
+    /// <exception cref="System.ArgumentException"> 时间间隔不能小于 <c>0</c>。 </exception>
+    /// <seealso cref="P:Kook.WebSocket.KookSocketConfig.MaxJoinedGuildDataFetchingRetryTimes"/>
     public int JoinedGuildDataFetchingRetryDelay
     {
         get => _joinedGuildDataFetchingRetryDelay;
@@ -166,22 +163,22 @@ public class KookSocketConfig : KookRestConfig
     private int _joinedGuildDataFetchingRetryDelay = 500;
 
     /// <summary>
-    ///     Gets or sets whether to update guild role positions via API when <see cref="BaseSocketClient.GuildUpdated"/> fires.
+    ///     获取或设置是否在引发 <see cref="E:Kook.WebSocket.BaseSocketClient.GuildUpdated"/> 事件时通过 API 更新服务器角色位置。
     /// </summary>
     public bool AutoUpdateRolePositions { get; set; } = false;
 
     /// <summary>
-    ///     Gets or sets whether to update guild channels via API when gateway publishes sort_channel events.
+    ///     获取或设置是否在网关发布 <c>sort_channel</c> 事件时通过 API 更新服务器频道。
     /// </summary>
     public bool AutoUpdateChannelPositions { get; set; } = false;
 
     /// <summary>
-    ///     Gets or sets the provider used to generate new message queues.
+    ///     获取或设置用于创建消息队列的委托。
     /// </summary>
     public MessageQueueProvider MessageQueueProvider { get; set; }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="KookSocketConfig"/> class.
+    ///     初始化一个 <see cref="KookSocketConfig"/> 类的新实例。
     /// </summary>
     public KookSocketConfig()
     {

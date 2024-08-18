@@ -71,7 +71,7 @@ public interface IAudioClient : IDisposable
     ///     事件参数：
     ///     <list type="number">
     ///     <item> <see cref="T:System.Int32"/> 参数是更新前的延迟（毫秒）。 </item>
-    ///     <item> <see cref="T:System.Int32"/> 参数是当前更新后的延迟（毫秒）。 </item>
+    ///     <item> <see cref="T:System.Int32"/> 参数是更新后的延迟（毫秒）。 </item>
     ///     </list>
     /// </remarks>
     event Func<int, int, Task> UdpLatencyUpdated;

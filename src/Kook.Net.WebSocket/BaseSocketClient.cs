@@ -4,35 +4,32 @@ using Kook.Rest;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents an abstract base class for WebSocket-based clients.
+///     表示一个基于网关的客户端的抽象基类。
 /// </summary>
 public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
 {
     /// <summary>
-    ///     Gets the configuration used by this client.
+    ///     获取此客户端使用的配置。
     /// </summary>
     protected readonly KookSocketConfig BaseConfig;
 
     /// <summary>
-    ///     Gets the estimated round-trip latency, in milliseconds, to the gateway server.
+    ///     获取到网关服务器的往返延迟估计值（以毫秒为单位）。
     /// </summary>
-    /// <returns>
-    ///     An int that represents the round-trip latency to the WebSocket server. Please
-    ///     note that this value does not represent a "true" latency for operations such as sending a message.
-    /// </returns>
+    /// <remarks>
+    ///     此往返估计值源于心跳包的延迟，不代表诸如发送消息等操作的真实延迟。
+    /// </remarks>
     public abstract int Latency { get; protected set; }
 
     /// <summary>
-    ///     Provides access to a REST-only client with a shared state from this client.
+    ///     获取一个与此客户端共享状态的仅限于 REST 的客户端。
     /// </summary>
     public abstract KookSocketRestClient Rest { get; }
 
     internal new KookSocketApiClient ApiClient => base.ApiClient as KookSocketApiClient
         ?? throw new InvalidOperationException("The API client is not a WebSocket-based client.");
 
-    /// <summary>
-    ///     Gets the current logged-in user.
-    /// </summary>
+    /// <inheritdoc cref="P:Kook.Rest.BaseKookClient.CurrentUser" />
     public new virtual SocketSelfUser? CurrentUser
     {
         get => base.CurrentUser as SocketSelfUser;
@@ -40,9 +37,8 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     }
 
     /// <summary>
-    ///     Gets a collection of guilds that the user is currently in.
+    ///     获取当前用户所在的所有服务器。
     /// </summary>
-    /// <returns> A read-only collection of guilds that the current user is in. </returns>
     public abstract IReadOnlyCollection<SocketGuild> Guilds { get; }
 
     internal BaseSocketClient(KookSocketConfig config, KookRestApiClient client)
@@ -52,127 +48,85 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     }
 
     /// <summary>
-    ///     Gets a generic user.
+    ///     获取用户。
     /// </summary>
-    /// <param name="id">The user ID.</param>
     /// <remarks>
-    ///     This method gets the user present in the WebSocket cache with the given condition.
-    ///     <note type="warning">
-    ///         Sometimes a user may return <c>null</c> due to Kook not sending offline users in large guilds
-    ///         (i.e. guild with 100+ members) actively. To download users on startup and to see more information
-    ///         about this subject, see <see cref="Kook.WebSocket.KookSocketConfig.AlwaysDownloadUsers" />.
-    ///     </note>
-    ///     <br />
-    ///     <note>
-    ///         This method does not attempt to fetch users that the logged-in user does not have access to (i.e.
-    ///         users who don't share mutual guild(s) with the current user). If you wish to get a user that you do
-    ///         not have access to, consider using the REST implementation of
-    ///         <see cref="KookRestClient.GetUserAsync(System.UInt64,Kook.RequestOptions)" />.
-    ///     </note>
+    ///     此方法可能返回 <c>null</c>，因为此方法仅会返回网关缓存中存在的用户，如果在当前 Bot
+    ///     登录会话中，要获取的用户未引发过任何事件，那么该用户实体则不会存在于缓存中。
     /// </remarks>
-    /// <returns> A generic WebSocket-based user; <c>null</c> when the user cannot be found. </returns>
+    /// <param name="id"> 要获取的用户的 ID。 </param>
+    /// <returns> 与指定的 <paramref name="id"/> 关联的用户；如果未找到，则返回 <c>null</c>。 </returns>
     public abstract SocketUser? GetUser(ulong id);
 
     /// <summary>
-    ///     Gets a user.
+    ///     获取用户。
     /// </summary>
     /// <remarks>
-    ///     This method gets the user present in the WebSocket cache with the given condition.
-    ///     <note type="warning">
-    ///         Sometimes a user may return <c>null</c> due to Kook not sending offline users in large guilds
-    ///         (i.e. guild with 100+ members) actively. To download users on startup and to see more information
-    ///         about this subject, see <see cref="Kook.WebSocket.KookSocketConfig.AlwaysDownloadUsers" />.
-    ///     </note>
-    ///     <br />
-    ///     <note>
-    ///         This method does not attempt to fetch users that the logged-in user does not have access to (i.e.
-    ///         users who don't share mutual guild(s) with the current user). If you wish to get a user that you do
-    ///         not have access to, consider using the REST implementation of
-    ///         <see cref="KookRestClient.GetUserAsync(System.UInt64,Kook.RequestOptions)" />.
-    ///     </note>
+    ///     此方法可能返回 <c>null</c>，因为此方法仅会返回网关缓存中存在的用户，如果在当前 Bot
+    ///     登录会话中，要获取的用户未引发过任何事件，那么该用户实体则不会存在于缓存中。
     /// </remarks>
-    /// <param name="username">The name of the user.</param>
-    /// <param name="identifyNumber">The identify value of the user.</param>
-    /// <returns> A generic WebSocket-based user; <c>null</c> when the user cannot be found. </returns>
+    /// <param name="username"> 用户的名称。 </param>
+    /// <param name="identifyNumber"> 用户的识别号。 </param>
+    /// <returns> 与指定的名称和识别号关联的用户；如果未找到，则返回 <c>null</c>。 </returns>
     public abstract SocketUser? GetUser(string username, string identifyNumber);
 
     /// <summary>
-    ///     Gets a channel.
+    ///     获取一个服务器频道。
     /// </summary>
-    /// <param name="id">The identifier of the channel.</param>
-    /// <returns>
-    ///     A generic WebSocket-based channel object (voice, text, category, etc.) associated with the identifier;
-    ///     <c>null</c> when the channel cannot be found.
-    /// </returns>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
+    /// <returns> 与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
     public abstract SocketChannel? GetChannel(ulong id);
 
     /// <summary>
-    ///     Gets a channel.
+    ///     获取一个私聊频道。
     /// </summary>
-    /// <param name="chatCode">The chat code of the direct-message channel.</param>
-    /// <returns>
-    ///     A generic WebSocket-based channel object (voice, text, category, etc.) associated with the identifier;
-    ///     <c>null</c> when the channel cannot be found.
-    /// </returns>
+    /// <param name="chatCode"> 私聊频道的聊天代码。 </param>
+    /// <returns> 具有指定聊天代码的私聊频道；如果未找到，则返回 <c>null</c>。 </returns>
     public abstract SocketDMChannel? GetDMChannel(Guid chatCode);
 
     /// <summary>
-    ///     Gets a channel.
+    ///     获取一个私聊频道。
     /// </summary>
-    /// <param name="userId">The user identifier of the direct-message channel.</param>
-    /// <returns>
-    ///     A generic WebSocket-based channel object (voice, text, category, etc.) associated with the identifier;
-    ///     <c>null</c> when the channel cannot be found.
-    /// </returns>
+    /// <param name="userId"> 私聊频道中另一位用户的 ID。 </param>
+    /// <returns> 另一位用户具有指定用户 ID 的私聊频道；如果未找到，则返回 <c>null</c>。 </returns>
     public abstract SocketDMChannel? GetDMChannel(ulong userId);
 
     /// <summary>
-    ///     Gets a guild.
+    ///     获取一个服务器。
     /// </summary>
-    /// <param name="id">The guild identifier.</param>
-    /// <returns>
-    ///     A WebSocket-based guild associated with the identifier; <c>null</c> when the guild cannot be
-    ///     found.
-    /// </returns>
+    /// <param name="id"> 要获取的服务器的 ID。 </param>
+    /// <returns> 与指定的 <paramref name="id"/> 关联的服务器；如果未找到，则返回 <c>null</c>。 </returns>
     public abstract SocketGuild? GetGuild(ulong id);
 
-    /// <summary>
-    ///     Starts the WebSocket connection.
-    /// </summary>
-    /// <returns> A task that represents the asynchronous start operation. </returns>
+    /// <inheritdoc />
     public abstract Task StartAsync();
 
-    /// <summary>
-    ///     Stops the WebSocket connection.
-    /// </summary>
-    /// <returns> A task that represents the asynchronous stop operation. </returns>
+    /// <inheritdoc />
     public abstract Task StopAsync();
 
     /// <summary>
-    ///     Attempts to download users into the user cache for the selected guilds.
+    ///     下载全部或指定服务器的用户到缓存中。
     /// </summary>
-    /// <param name="guilds">The guilds to download the members from.</param>
+    /// <param name="guilds"> 要下载用户的服务器。如果为 <c>null</c>，则下载所有可用的服务器。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> A task that represents the asynchronous download operation. </returns>
+    /// <returns> 一个表示异步下载操作的任务。 </returns>
     public abstract Task DownloadUsersAsync(IEnumerable<IGuild>? guilds = null, RequestOptions? options = null);
 
     /// <summary>
-    ///     Downloads all voice states for the specified guilds.
+    ///     下载全部或指定服务器的语音状态到缓存中。
     /// </summary>
-    /// <param name="guilds">
-    ///     The guilds to download the voice states for. If <c>null</c>, all available guilds will be downloaded.
-    /// </param>
+    /// <param name="guilds"> 要下载语音状态的服务器。如果为 <c>null</c>，则下载所有可用的服务器。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步下载操作的任务。 </returns>
     public abstract Task DownloadVoiceStatesAsync(IEnumerable<IGuild>? guilds = null, RequestOptions? options = null);
 
     /// <summary>
-    ///     Downloads all boost subscriptions for the specified guilds.
+    ///     下载全部或指定服务器的服务器助力信息到缓存中。
     /// </summary>
-    /// <param name="guilds">
-    ///     The guilds to download the boost subscriptions for. If <c>null</c>, all available guilds will be downloaded.
-    ///     To download all boost subscriptions, the current user must has the
-    ///     <see cref="GuildPermission.ManageGuild"/> permission.
-    /// </param>
+    /// <param name="guilds"> 要下载服务器助力信息的服务器。如果为 <c>null</c>，则下载所有可用的服务器。 </param>
+    /// <remarks>
+    ///     对于要下载服务器助力信息的服务器，当前用户在该服务器中必须具有 <see cref="F:Kook.GuildPermission.ManageGuild"/> 权限。
+    /// </remarks>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public abstract Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild>? guilds = null,
         RequestOptions? options = null);

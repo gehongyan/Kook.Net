@@ -1,55 +1,53 @@
 ﻿namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents the mode in which the socket client fetches the cache when starting up.
+///     表示基于网关的客户端在启动时缓存基础数据的模式。
 /// </summary>
+/// <remarks>
+///     缓存基础数据包括服务器基本信息、频道、角色、频道权限重写、当前用户在服务器内的昵称。
+/// </remarks>
 public enum StartupCacheFetchMode
 {
     /// <summary>
-    ///     Automatically selects the best mode based on the number of guilds.
+    ///     根据服务器数量自动选择最佳模式。
     /// </summary>
     /// <remarks>
-    ///     If the number of guilds reaches value of
-    ///     <see cref="P:Kook.WebSocket.KookSocketConfig.LargeNumberOfGuildsThreshold"/>,
-    ///     the mode will be <see cref="F:Kook.WebSocket.StartupCacheFetchMode.Lazy"/>;
-    ///     otherwise, if that reaches value of
-    ///     <see cref="P:Kook.WebSocket.KookSocketConfig.SmallNumberOfGuildsThreshold"/>,
-    ///     the mode will be <see cref="F:Kook.WebSocket.StartupCacheFetchMode.Synchronous"/>;
-    ///     otherwise, the mode will be <see cref="F:Kook.WebSocket.StartupCacheFetchMode.Synchronous"/>.
+    ///     如果服务器数量达到了 <see cref="P:Kook.WebSocket.KookSocketConfig.LargeNumberOfGuildsThreshold"/>
+    ///     的值，模式将为 <see cref="F:Kook.WebSocket.StartupCacheFetchMode.Lazy"/>；否则，如果达到了
+    ///     <see cref="P:Kook.WebSocket.KookSocketConfig.SmallNumberOfGuildsThreshold"/>
+    ///     的值，模式将为 <see cref="F:Kook.WebSocket.StartupCacheFetchMode.Asynchronous"/>；
+    ///     否则，模式将为 <see cref="F:Kook.WebSocket.StartupCacheFetchMode.Synchronous"/>。
     /// </remarks>
-    /// <seealso cref="P:Kook.WebSocket.KookSocketConfig.LargeNumberOfGuildsThreshold"/>.
     Auto,
 
     /// <summary>
-    ///     Fetches the cache synchronously.
+    ///     同步主动获取。
     /// </summary>
     /// <remarks>
-    ///     When the socket client starts up, it will proactively fetch all the basic data from the KOOK API.
-    ///     The <see cref="E:Kook.WebSocket.KookSocketClient.Ready"/> event will be triggered
-    ///     after the data fetching is complete.
+    ///     当客户端启动时，将主动通过 KOOK API 获取所有服务器基础数据，数据获取完成后引发
+    ///     <see cref="E:Kook.WebSocket.KookSocketClient.Ready"/> 事件。 <br />
+    ///     缓存基础数据包括服务器基本信息、频道、角色、频道权限重写、当前用户在服务器内的昵称。
     /// </remarks>
     Synchronous,
 
     /// <summary>
-    ///     Fetches the cache asynchronously.
+    ///     异步主动获取。
     /// </summary>
     /// <remarks>
-    ///     When the socket client starts up, it will trigger the <see cref="E:Kook.WebSocket.KookSocketClient.Ready"/>
-    ///     event as soon as possible, then start a background task to fetch all the basic data from the KOOK API.
-    ///     If an event related to a guild is received during this period and the basic data for that guild has not
-    ///     yet been fetched, the event handler will fetch the basic data for that server before triggering
-    ///     the event subscribed to by the user code.
+    ///     当客户端启动时，将尽快引发 <see cref="E:Kook.WebSocket.KookSocketClient.Ready"/> 事件，然后启动一个后台任务，通过
+    ///     KOOK API 获取所有服务器基础数据。如果在基础数据获取期间接收到与服务器相关的事件，但该服务器的基础数据尚未获取，
+    ///     事件处理程序将在引发用户代码订阅的事件之前获取该服务器的基础数据。 <br />
+    ///     缓存基础数据包括服务器基本信息、频道、角色、频道权限重写、当前用户在服务器内的昵称。
     /// </remarks>
     Asynchronous,
 
     /// <summary>
-    ///     Fetches the cache lazily.
+    ///     被动获取。
     /// </summary>
     /// <remarks>
-    ///     When the socket client starts up, it will trigger the <see cref="E:Kook.WebSocket.KookSocketClient.Ready"/>
-    ///     event as soon as possible. When an event related to a guild is received and the basic data for that guild
-    ///     has not yet been fetched, the event handler will fetch the basic data for that server before triggering
-    ///     the event subscribed to by the user code.
+    ///     当客户端启动时，将尽快引发 <see cref="E:Kook.WebSocket.KookSocketClient.Ready"/>
+    ///     事件。当接收到与服务器相关的事件，但该服务器的基础数据尚未获取时，事件处理程序将在引发用户代码订阅的事件之前获取该服务器的基础数据。 <br />
+    ///     缓存基础数据包括服务器基本信息、频道、角色、频道权限重写、当前用户在服务器内的昵称。
     /// </remarks>
     Lazy
 }

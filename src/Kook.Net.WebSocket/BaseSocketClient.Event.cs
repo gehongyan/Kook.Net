@@ -4,17 +4,14 @@ public abstract partial class BaseSocketClient
 {
     #region Channels
 
-    /// <summary> Fired when a channel is created. </summary>
+    /// <summary>
+    ///     当服务器频道被创建时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a generic channel has been created. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketChannel"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The newly created channel is passed into the event handler parameter. The given channel type may
-    ///         include, but not limited to, Private Channels (DM, Group), Guild Channels (Text, Voice, Category);
-    ///         see the derived classes of <see cref="SocketChannel"/> for more details.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketChannel"/> 参数是新创建的服务器频道。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketChannel, Task> ChannelCreated
     {
@@ -24,17 +21,14 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<SocketChannel, Task>> _channelCreatedEvent = new();
 
-    /// <summary> Fired when a channel is destroyed. </summary>
+    /// <summary>
+    ///     当服务器频道被删除时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a generic channel has been destroyed. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketChannel"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The destroyed channel is passed into the event handler parameter. The given channel type may
-    ///         include, but not limited to, Private Channels (DM, Group), Guild Channels (Text, Voice, Category);
-    ///         see the derived classes of <see cref="SocketChannel"/> for more details.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketChannel"/> 参数是被删除的服务器频道。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketChannel, Task> ChannelDestroyed
     {
@@ -44,18 +38,15 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<SocketChannel, Task>> _channelDestroyedEvent = new();
 
-    /// <summary> Fired when a channel is updated. </summary>
+    /// <summary>
+    ///     当服务器频道信息被更新时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a generic channel has been updated. The event handler must return a
-    ///         <see cref="Task"/> and accept 2 <see cref="SocketChannel"/> as its parameters.
-    ///     </para>
-    ///     <para>
-    ///         The original (prior to update) channel is passed into the first <see cref="SocketChannel"/>, while
-    ///         the updated channel is passed into the second. The given channel type may include, but not limited
-    ///         to, Private Channels (DM, Group), Guild Channels (Text, Voice, Category); see the derived classes of
-    ///         <see cref="SocketChannel"/> for more details.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketChannel"/> 参数是更新前的服务器频道。 </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketChannel"/> 参数是更新后的服务器频道。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketChannel, SocketChannel, Task> ChannelUpdated
     {
@@ -65,34 +56,23 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<SocketChannel, SocketChannel, Task>> _channelUpdatedEvent = new();
 
-    /// <summary> Fired when a reaction is added to a channel message. </summary>
+    /// <summary>
+    ///     当服务器内的消息上被添加了新的回应时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a reaction is added to a message in a channel. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, an
-    ///         <see cref="SocketTextChannel"/>, a <see cref="Cacheable{TEntity,TId}"/>, and a
-    ///         <see cref="SocketReaction"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the <see cref="Guid"/>
-    ///     </para>
-    ///     <para>
-    ///         The source channel of the reaction addition will be passed into the
-    ///         <see cref="SocketTextChannel"/> parameter.
-    ///     </para>
-    ///     <para>
-    ///         The user who added the reaction will be passed into the <see cref="Cacheable{TEntity,TId}"/>.
-    ///     </para>
-    ///     <para>
-    ///         The reaction that was added will be passed into the <see cref="SocketReaction"/> parameter.
-    ///     </para>
-    ///     <note>
-    ///         When fetching the reaction from this event, a user may not be provided under
-    ///         <see cref="SocketReaction.User"/>. Please see the documentation of the property for more
-    ///         information.
-    ///     </note>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是被添加了回应的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 消息；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketChannel"/> 参数是消息所在的频道。 </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是添加了此回应的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketReaction"/> 参数是被添加的回应。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, SocketReaction, Task> ReactionAdded
     {
@@ -102,34 +82,23 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, SocketReaction, Task>> _reactionAddedEvent = new();
 
-    /// <summary> Fired when a reaction is removed from a message. </summary>
+    /// <summary>
+    ///     当服务器内的消息上存在的回应被用户移除时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a reaction is removed from a message in a channel. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, an
-    ///         <see cref="SocketTextChannel"/>, a <see cref="Cacheable{TEntity,TId}"/>, and a
-    ///         <see cref="SocketReaction"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the <see cref="Guid"/>
-    ///     </para>
-    ///     <para>
-    ///         The source channel of the reaction addition will be passed into the
-    ///         <see cref="SocketTextChannel"/> parameter.
-    ///     </para>
-    ///     <para>
-    ///         The user who removed the reaction will be passed into the <see cref="Cacheable{TEntity,TId}"/>.
-    ///     </para>
-    ///     <para>
-    ///         The reaction that was removed will be passed into the <see cref="SocketReaction"/> parameter.
-    ///     </para>
-    ///     <note>
-    ///         When fetching the reaction from this event, a user may not be provided under
-    ///         <see cref="SocketReaction.User"/>. Please see the documentation of the property for more
-    ///         information.
-    ///     </note>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是被移除了回应的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 消息；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketChannel"/> 参数是消息所在的频道。 </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是移除了此回应的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketReaction"/> 参数是被移除的回应。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, SocketReaction, Task> ReactionRemoved
     {
@@ -139,36 +108,26 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, SocketReaction, Task>> _reactionRemovedEvent = new();
 
-    /// <summary> Fired when a reaction is added to a direct message. </summary>
+    /// <summary>
+    ///     当私聊频道内的消息上被添加了新的回应时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a reaction is added to a user message in a private channel. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, a
-    ///         <see cref="Cacheable{TEntity,TId}"/>, a <see cref="Cacheable{TEntity,TId}"/>, and a
-    ///         <see cref="SocketReaction"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the
-    ///         <see cref="Guid"/>.
-    ///     </para>
-    ///     <para>
-    ///         If a direct message was sent by the current user to this user, or the recipient had sent a message before
-    ///         in current session, the <see cref="Cacheable{TEntity,TId}"/> entity will contains the direct message channel;
-    ///         otherwise, the direct message channel has not been created yet, and the <see cref="Guid"/> as chat code will be preserved.
-    ///     </para>
-    ///     <para>
-    ///         The user who removed the reaction will be passed into the <see cref="Cacheable{TEntity,TId}"/>.
-    ///     </para>
-    ///     <para>
-    ///         The reaction that was added will be passed into the <see cref="SocketReaction"/> parameter.
-    ///     </para>
-    ///     <note>
-    ///         When fetching the reaction from this event, a user may not be provided under
-    ///         <see cref="SocketReaction.User"/>. Please see the documentation of the property for more
-    ///         information.
-    ///     </note>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是被添加了回应的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 消息；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是消息所在的可缓存私聊频道。如果缓存中存在此私聊频道实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketDMChannel"/> 私聊频道；否则，包含 <see cref="T:System.Guid"/> 私聊频道聊天代码，以供按需下载实体。
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是添加了此回应的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketReaction"/> 参数是被添加的回应。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task> DirectReactionAdded
     {
@@ -178,36 +137,26 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<SocketDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task>> _directReactionAddedEvent = new();
 
-    /// <summary> Fired when a reaction is removed from a message. </summary>
+    /// <summary>
+    ///     当私聊频道内的消息上存在的回应被用户移除时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a reaction is removed from a user message in a private channel. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, a
-    ///         <see cref="Cacheable{TEntity,TId}"/>, a <see cref="Cacheable{TEntity,TId}"/>, and a
-    ///         <see cref="SocketReaction"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the
-    ///         <see cref="Guid"/>.
-    ///     </para>
-    ///     <para>
-    ///         If a direct message was sent by the current user to this user, or the recipient had sent a message before
-    ///         in current session, the <see cref="Cacheable{TEntity,TId}"/> entity will contains the direct message channel;
-    ///         otherwise, the direct message channel has not been created yet, and the <see cref="Guid"/> as chat code will be preserved.
-    ///     </para>
-    ///     <para>
-    ///         The user who added the reaction will be passed into the <see cref="Cacheable{TEntity,TId}"/>.
-    ///     </para>
-    ///     <para>
-    ///         The reaction that was added will be passed into the <see cref="SocketReaction"/> parameter.
-    ///     </para>
-    ///     <note>
-    ///         When fetching the reaction from this event, a user may not be provided under
-    ///         <see cref="SocketReaction.User"/>. Please see the documentation of the property for more
-    ///         information.
-    ///     </note>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是被移除了回应的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 消息；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是消息所在的可缓存私聊频道。如果缓存中存在此私聊频道实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketDMChannel"/> 私聊频道；否则，包含 <see cref="T:System.Guid"/> 私聊频道聊天代码，以供按需下载实体。
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是移除了此回应的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketReaction"/> 参数是被移除的回应。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task> DirectReactionRemoved
     {
@@ -221,27 +170,16 @@ public abstract partial class BaseSocketClient
 
     #region Messages
 
-    /// <summary> Fired when a message is received. </summary>
+    /// <summary>
+    ///     当接收到新的服务器消息时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a message is received. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketMessage"/>, a
-    ///         <see cref="SocketGuildUser"/>, and a <see cref="SocketTextChannel"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The message that is sent to the client is passed into the event handler parameter as
-    ///         <see cref="SocketMessage"/>. This message may be a system message (i.e.
-    ///         <see cref="SocketSystemMessage"/>) or a user message (i.e. <see cref="SocketUserMessage"/>. See the
-    ///         derived classes of <see cref="SocketMessage"/> for more details.
-    ///     </para>
-    ///     <para>
-    ///         The guild member that sent this message is passed into the event handler parameter as
-    ///         <see cref="SocketGuildUser"/>.
-    ///     </para>
-    ///     <para>
-    ///         The source channel of the removed message will be passed into the
-    ///         <see cref="SocketTextChannel"/> parameter.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketMessage"/> 参数是新接收到的服务器消息。 </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketGuildUser"/> 参数是发送消息的服务器用户。 </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketTextChannel"/> 参数是消息所在的服务器频道。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketMessage, SocketGuildUser, SocketTextChannel, Task> MessageReceived
     {
@@ -251,29 +189,22 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<SocketMessage, SocketGuildUser, SocketTextChannel, Task>> _messageReceivedEvent = new();
 
-    /// <summary> Fired when a message is deleted. </summary>
+    /// <summary>
+    ///     当服务器内的消息被删除时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a message is deleted. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, and a
-    ///         <see cref="SocketTextChannel"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         <note type="important">
-    ///             It is not possible to retrieve the message via
-    ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the message cannot be retrieved by Kook
-    ///             after the message has been deleted.
-    ///         </note>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是被删除的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 被删除的消息；否则，包含 <see cref="T:System.Guid"/> 消息 ID。
     ///         <br />
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the deleted message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the
-    ///         <see cref="Guid"/>.
-    ///     </para>
-    ///     <para>
-    ///         The source channel of the removed message will be passed into the
-    ///         <see cref="SocketTextChannel"/> parameter.
-    ///     </para>
+    ///         <note type="important">
+    ///             消息被删除后无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///         </note>
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketTextChannel"/> 参数是消息被删除前所在的服务器频道。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, SocketTextChannel, Task> MessageDeleted
     {
@@ -283,35 +214,26 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, SocketTextChannel, Task>> _messageDeletedEvent = new();
 
-    /// <summary> Fired when a message is updated. </summary>
+    /// <summary>
+    ///     当服务器内的消息被更新时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a message is updated. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>,
-    ///         a <see cref="Cacheable{TEntity,TId}"/>, and <see cref="SocketTextChannel"/> as its parameters.
-    ///     </para>
-    ///     <para>
-    ///         <note type="important">
-    ///             It is not possible to retrieve the message via
-    ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original message cannot be retrieved by
-    ///             Kook after the message has been updated.
-    ///         </note>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被更新前的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 消息被更新前的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID。
     ///         <br />
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the
-    ///         <see cref="Guid"/>.
-    ///     </para>
-    ///     <para>
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the updated message; otherwise, in event
-    ///         that the entire message entity cannot be retrieved, the ID of the message is preserved in the
-    ///         <see cref="Guid"/>.
-    ///     </para>
-    ///     <para>
-    ///         The source channel of the updated message will be passed into the
-    ///         <see cref="SocketTextChannel"/> parameter.
-    ///     </para>
+    ///         <note type="important">
+    ///             消息被更新前的状态无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///         </note>
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被更新后的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 消息被更新后的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketTextChannel"/> 参数是消息所在的服务器频道。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, SocketTextChannel, Task> MessageUpdated
     {
@@ -321,41 +243,30 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, SocketTextChannel, Task>> _messageUpdatedEvent = new();
 
-    /// <summary> Fired when a message is pinned. </summary>
+    /// <summary>
+    ///     当服务器内的消息被置顶时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a message is pinned. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, <see cref="SocketMessage"/>,
-    ///         and <see cref="SocketTextChannel"/> as its parameters.
-    ///     </para>
-    ///     <para>
-    ///         <note type="important">
-    ///             It is not possible to retrieve the message via
-    ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original message cannot be retrieved by
-    ///             Kook after the message has been updated.
-    ///         </note>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被置顶前的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 消息被置顶前的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID。
     ///         <br />
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the
-    ///         <see cref="Guid"/>.
-    ///     </para>
-    ///     <para>
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the pinned message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the
-    ///         <see cref="Guid"/>.
-    ///     </para>
-    ///     <para>
-    ///         The source channel of the updated message will be passed into the
-    ///         <see cref="SocketTextChannel"/> parameter.
-    ///     </para>
-    ///     <para>
-    ///         The guild member that pinned this message is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the guild member
-    ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
+    ///         <note type="important">
+    ///             消息被置顶前的状态无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///         </note>
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被置顶后的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 消息被置顶后的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketTextChannel"/> 参数是消息所在的服务器频道。 </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是置顶了该消息的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task> MessagePinned
     {
@@ -365,41 +276,30 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task>> _messagePinnedEvent = new();
 
-    /// <summary> Fired when a message is unpinned. </summary>
+    /// <summary>
+    ///     当服务器内的消息被取消置顶时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a message is unpinned. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>, <see cref="SocketMessage"/>,
-    ///         and <see cref="SocketTextChannel"/> as its parameters.
-    ///     </para>
-    ///     <para>
-    ///         <note type="important">
-    ///             It is not possible to retrieve the message via
-    ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original message cannot be retrieved by
-    ///             Kook after the message has been updated.
-    ///         </note>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被取消置顶前的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 消息被取消置顶前的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID。
     ///         <br />
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the original message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the
-    ///         <see cref="Guid"/>.
-    ///     </para>
-    ///     <para>
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the unpinned message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the
-    ///         <see cref="Guid"/>.
-    ///     </para>
-    ///     <para>
-    ///         The source channel of the updated message will be passed into the
-    ///         <see cref="SocketTextChannel"/> parameter.
-    ///     </para>
-    ///     <para>
-    ///         The guild member that unpinned this message is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the guild member
-    ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
+    ///         <note type="important">
+    ///             消息被取消置顶前的状态无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///         </note>
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被取消置顶后的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 消息被取消置顶后的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketTextChannel"/> 参数是消息所在的服务器频道。 </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是取消置顶了该消息的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, Task> MessageUnpinned
     {
@@ -413,28 +313,16 @@ public abstract partial class BaseSocketClient
 
     #region Direct Messages
 
-    /// <summary> Fired when a direct message is received. </summary>
+    /// <summary>
+    ///     当接收到新的私聊消息时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a direct message is received. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketMessage"/>, a
-    ///         <see cref="SocketUser"/>, and a <see cref="SocketDMChannel"/>
-    ///         as its parameters.
-    ///     </para>
-    ///     <para>
-    ///         The message that is sent to the client is passed into the event handler parameter as
-    ///         <see cref="SocketMessage"/>. This message may be a system message (i.e.
-    ///         <see cref="SocketSystemMessage"/>) or a user message (i.e. <see cref="SocketUserMessage"/>. See the
-    ///         derived classes of <see cref="SocketMessage"/> for more details.
-    ///     </para>
-    ///     <para>
-    ///         The user that sent this direct message is passed into the event handler parameter as
-    ///         <see cref="SocketUser"/>.
-    ///     </para>
-    ///     <para>
-    ///         The source direct channel of the removed message will be passed into the
-    ///         <see cref="SocketTextChannel"/> parameter.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketMessage"/> 参数是新接收到的私聊消息。 </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketUser"/> 参数是发送消息的用户。 </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketDMChannel"/> 参数是消息所在的私聊频道。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketMessage, SocketUser, SocketDMChannel, Task> DirectMessageReceived
     {
@@ -444,37 +332,26 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<SocketMessage, SocketUser, SocketDMChannel, Task>> _directMessageReceivedEvent = new();
 
-    /// <summary> Fired when a direct message is deleted. </summary>
+    /// <summary>
+    ///     当私聊频道内的消息被删除时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a direct message is deleted. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>,
-    ///         a <see cref="Cacheable{TEntity,TId}"/>, and a <see cref="Cacheable{TEntity,TId}"/>
-    ///         as its parameters.
-    ///     </para>
-    ///     <para>
-    ///         <note type="important">
-    ///             It is not possible to retrieve the direct message via
-    ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original direct message cannot be retrieved by Kook
-    ///             after the message has been deleted.
-    ///         </note>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是被删除的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 被删除的消息；否则，包含 <see cref="T:System.Guid"/> 消息 ID。
     ///         <br />
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the deleted direct message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the direct message is preserved in the
-    ///         <see cref="Guid"/>.
-    ///     </para>
-    ///     <para>
-    ///         The user that originally sent this direct message is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the guild member
-    ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         If a direct message was sent by the current user to this user, or the recipient had sent a message before
-    ///         in current session, the <see cref="Cacheable{TEntity,TId}"/> entity will contains the direct message channel;
-    ///         otherwise, the direct message channel has not been created yet, and the <see cref="Guid"/> as chat code will be preserved.
-    ///     </para>
+    ///         <note type="important">
+    ///             消息被删除后无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///         </note>
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是该消息的作者的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketTextChannel"/> 参数是消息被删除前所在的服务器频道。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketUser, ulong>, Cacheable<SocketDMChannel, Guid>, Task> DirectMessageDeleted
     {
@@ -484,37 +361,30 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<Cacheable<IMessage, Guid>, Cacheable<SocketUser, ulong>, Cacheable<SocketDMChannel, Guid>, Task>> _directMessageDeletedEvent = new();
 
-    /// <summary> Fired when a message is updated. </summary>
+    /// <summary>
+    ///     当私聊频道内的消息被更新时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a direct message is updated. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>,
-    ///         a <see cref="Cacheable{TEntity,TId}"/>, a <see cref="Cacheable{TEntity,TId}"/>,
-    ///         and a <see cref="Cacheable{TEntity,TId}"/> as its parameters.
-    ///     </para>
-    ///     <para>
-    ///         <note type="important">
-    ///             It is not possible to retrieve the direct message via
-    ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original direct message cannot be retrieved by Kook
-    ///             after the message has been updated.
-    ///         </note>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被更新前的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 消息被更新前的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID。
     ///         <br />
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the updated direct message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the direct message is preserved in the
-    ///         <see cref="Guid"/>.
-    ///     </para>
-    ///     <para>
-    ///         The user that originally sent this direct message is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the guild member
-    ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         If a direct message was sent by the current user to this user, or the recipient had sent a message before
-    ///         in current session, the <see cref="Cacheable{TEntity,TId}"/> entity will contains the direct message channel;
-    ///         otherwise, the direct message channel has not been created yet, and the <see cref="Guid"/> as chat code will be preserved.
-    ///     </para>
+    ///         <note type="important">
+    ///             消息被更新前的状态无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///         </note>
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被更新后的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 消息被更新后的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是该消息的作者的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketDMChannel"/> 参数是消息所在的私聊频道。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, Cacheable<SocketUser, ulong>, Cacheable<SocketDMChannel, Guid>, Task> DirectMessageUpdated
     {
@@ -528,23 +398,22 @@ public abstract partial class BaseSocketClient
 
     #region Users
 
-    /// <summary> Fired when a user joins a guild. </summary>
+    /// <summary>
+    ///     当用户加入服务器时引发。
+    /// </summary>
     /// <remarks>
     ///     <note type="warning">
-    ///         It is reported that this event will not be fired if a guild contains more than 2000 members.
+    ///         有消息称，那么此事件不会在其成员数量超过 2000 人的服务器内被触发。
     ///     </note>
     ///     <br />
-    ///     <para>
-    ///         This event is fired when a user joins a guild. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketGuildUser"/> and a <see cref="DateTimeOffset"/>
-    ///         as its parameters.
-    ///     </para>
-    ///     <para>
-    ///         The joined user will be passed into the <see cref="SocketGuildUser"/> parameter.
-    ///     </para>
-    ///     <para>
-    ///         The time at which the user joined the guild will be passed into the <see cref="DateTimeOffset"/> parameter.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是加入服务器的可缓存服务器用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:System.DateTimeOffset"/> 参数是用户加入服务器的时间。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<SocketGuildUser, ulong>, DateTimeOffset, Task> UserJoined
     {
@@ -554,25 +423,23 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, DateTimeOffset, Task>> _userJoinedEvent = new();
 
-    /// <summary> Fired when a user leaves a guild. </summary>
+    /// <summary>
+    ///     当用户离开服务器时引发。
+    /// </summary>
     /// <remarks>
     ///     <note type="warning">
-    ///         It is reported that this event will not be fired if a guild contains more than 2000 members.
+    ///         有消息称，那么此事件不会在其成员数量超过 2000 人的服务器内被触发。
     ///     </note>
     ///     <br />
-    ///     <para>
-    ///         This event is fired when a user leaves a guild. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketGuildUser"/> and a <see cref="DateTimeOffset"/>
-    ///         as its parameters.
-    ///     </para>
-    ///     <para>
-    ///         If the left user presents in the cache, the <see cref="Cacheable{TEntity,TId}"/> entity
-    ///         will contain the left user; otherwise, in event that the user cannot be retrieved,
-    ///         the ID of the left user is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         The time at which the user left the guild will be passed into the <see cref="DateTimeOffset"/> parameter.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是用户离开的服务器。 </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是离开服务器的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:System.DateTimeOffset"/> 参数是用户加入服务器的时间。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketGuild, Cacheable<SocketUser, ulong>, DateTimeOffset, Task> UserLeft
     {
@@ -582,38 +449,24 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<SocketGuild, Cacheable<SocketUser, ulong>, DateTimeOffset, Task>> _userLeftEvent = new();
 
-    /// <summary> Fired when a user is banned from a guild. </summary>
+    /// <summary>
+    ///     当用户被服务器封禁时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a user is banned. The event handler must return a
-    ///         <see cref="Task"/> and accept an <see cref="IReadOnlyCollection{T}"/>, a <see cref="SocketMessage"/>,
-    ///         a <c>string</c> and a <see cref="SocketGuild"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         <note type="important">
-    ///             It is not possible to retrieve the user via
-    ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original user cannot be retrieved by
-    ///             Kook after the user has been banned.
-    ///         </note>
-    ///         <br />
-    ///         The users that are banned are passed into the event handler parameter as
-    ///         <see cref="IReadOnlyCollection{T}"/>, where <c>T</c> is <see cref="Cacheable{TEntity,TId}"/>,
-    ///         each of which contains a <see cref="SocketUser"/> when the user presents in the cache; otherwise,
-    ///         in event that the user cannot be retrieved, the ID of the user is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         The users who operated the bans is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the user
-    ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         The guild where the banning action takes place is passed in the event handler parameter as
-    ///         <see cref="SocketGuild"/>.
-    ///     </para>
-    ///     <para>
-    ///         The reason of the ban is passed into the event handler parameter as <c>string</c>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> 参数是所有此批次被封禁的用户。每个用户都由一个
+    ///         <see cref="T:Kook.Cacheable`2"/> 表示。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是操作此批次封禁的可缓存服务器用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是封禁操作所在的服务器。 </item>
+    ///     <item> <see cref="T:System.String"/> 参数是封禁的原因。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketGuildUser, ulong>, SocketGuild, string?, Task> UserBanned
     {
@@ -623,35 +476,23 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketGuildUser, ulong>, SocketGuild, string?, Task>> _userBannedEvent = new();
 
-    /// <summary> Fired when a user is unbanned from a guild. </summary>
+    /// <summary>
+    ///     当用户在服务器内的封禁被解除时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a user is unbanned. The event handler must return a
-    ///         <see cref="Task"/> and accept an <see cref="IReadOnlyCollection{T}"/>, a <see cref="SocketMessage"/>
-    ///         and a <see cref="SocketGuild"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         <note type="important">
-    ///             It is not possible to retrieve the user via
-    ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original user cannot be retrieved by
-    ///             Kook after the user has been unbanned.
-    ///         </note>
-    ///         <br />
-    ///         The users that are unbanned are passed into the event handler parameter as
-    ///         <see cref="IReadOnlyCollection{T}"/>, where <c>T</c> is <see cref="Cacheable{TEntity,TId}"/>,
-    ///         each of which contains a <see cref="SocketUser"/> when the user presents in the cache; otherwise,
-    ///         in event that the user cannot be retrieved, the ID of the user is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         The users who operated the unbans is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the user
-    ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         The guild where the unbanning action takes place is passed in the event handler parameter as
-    ///         <see cref="SocketGuild"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> 参数是所有此批次被解除封禁的用户。每个用户都由一个
+    ///         <see cref="T:Kook.Cacheable`2"/> 表示。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是操作此批次解除封禁的可缓存服务器用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是解除封禁操作所在的服务器。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketGuildUser, ulong>, SocketGuild, Task> UserUnbanned
     {
@@ -661,31 +502,27 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketGuildUser, ulong>, SocketGuild, Task>> _userUnbannedEvent = new();
 
-    /// <summary> Fired when a user is updated. </summary>
+    /// <summary>
+    ///     当用户信息被更新时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a user is updated. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>,
-    ///         and a <see cref="Cacheable{TEntity,TId}"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         <note type="important">
-    ///             It is not possible to retrieve the user via
-    ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original user cannot be retrieved by
-    ///             Kook after the user has been updated.
-    ///         </note>
+    ///     当用户的用户名或头像变更，且该用户与当前用户存在聊天会话或互为好友时，此事件会被引发。
+    ///     <br />
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存用户被更新前的状态。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户被更新前的状态；否则，包含 <see cref="T:System.UInt64"/> 用户 ID。
     ///         <br />
-    ///         The user that is updated is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketUser"/> when the user
-    ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         The user that is updated is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketUser"/> when the user
-    ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
+    ///         <note type="important">
+    ///             用户被更新前的状态无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///         </note>
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存用户被更新后的状态。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.SocketUser"/> 用户被更新后的状态；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<SocketUser, ulong>, Cacheable<SocketUser, ulong>, Task> UserUpdated
     {
@@ -695,21 +532,15 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<Cacheable<SocketUser, ulong>, Cacheable<SocketUser, ulong>, Task>> _userUpdatedEvent = new();
 
-    /// <summary> Fired when the connected account is updated. </summary>
+    /// <summary>
+    ///     当当前用户信息被更新时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when the connected account is updated. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketSelfUser"/>,
-    ///         and a <see cref="SocketSelfUser"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The current user before the update is passed into the event handler parameter as
-    ///         <see cref="SocketSelfUser"/>.
-    ///     </para>
-    ///     <para>
-    ///         The current user after the update is passed into the event handler parameter as
-    ///         <see cref="SocketSelfUser"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketSelfUser"/> 参数是当前用户被更新前的状态。 </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketSelfUser"/> 参数是当前用户被更新后的状态。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketSelfUser, SocketSelfUser, Task> CurrentUserUpdated
     {
@@ -719,31 +550,25 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<SocketSelfUser, SocketSelfUser, Task>> _currentUserUpdatedEvent = new();
 
-    /// <summary> Fired when a guild member is updated. </summary>
+    /// <summary>
+    ///     当服务器用户信息被更新时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a guild member is updated. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>,
-    ///         and a <see cref="Cacheable{TEntity,TId}"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         <note type="important">
-    ///             It is not possible to retrieve the guild member via
-    ///             <see cref="Cacheable{TEntity,TId}.DownloadAsync"/>; the original guild member cannot be retrieved by
-    ///             Kook after the guild member has been updated.
-    ///         </note>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 参数是可缓存服务器用户被更新前的状态。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户被更新前的状态；否则，包含 <see cref="T:System.UInt64"/> 用户 ID。
     ///         <br />
-    ///         The guild member that is updated is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the guild member
-    ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         The guild member that is updated is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketGuildUser"/> when the guild member
-    ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
+    ///         <note type="important">
+    ///             服务器用户被更新前的状态无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///         </note>
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存服务器用户被更新后的状态。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.SocketGuildUser"/> 用户被更新后的状态；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<SocketGuildUser, ulong>, Cacheable<SocketGuildUser, ulong>, Task> GuildMemberUpdated
     {
@@ -753,23 +578,19 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, Cacheable<SocketGuildUser, ulong>, Task>> _guildMemberUpdatedEvent = new();
 
-    /// <summary> Fired when a guild member is online. </summary>
+    /// <summary>
+    ///     当服务器用户的在线状态变更为在线时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a guild member is online. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>,
-    ///         and a <see cref="DateTimeOffset"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The guild member that is online is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the guild member
-    ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         The time when the guild member is online is passed into the event handler parameter as
-    ///         <see cref="DateTimeOffset"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> 参数是所有此批次在线状态变更为在线的服务器用户。每个服务器用户都由一个
+    ///         <see cref="T:Kook.Cacheable`2"/> 表示。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:System.DateTimeOffset"/> 参数是在线状态变更为在线的时间。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<IReadOnlyCollection<Cacheable<SocketGuildUser, ulong>>, DateTimeOffset, Task> GuildMemberOnline
     {
@@ -779,23 +600,19 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<IReadOnlyCollection<Cacheable<SocketGuildUser, ulong>>, DateTimeOffset, Task>> _guildMemberOnlineEvent = new();
 
-    /// <summary> Fired when a guild member is offline. </summary>
+    /// <summary>
+    ///     当服务器用户的在线状态变更为离线时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a guild member is offline. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>,
-    ///         and a <see cref="DateTimeOffset"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The guild member that is offline is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the guild member
-    ///         presents in the cache; otherwise, in event that the guild member cannot be retrieved, the ID of the guild member
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         The time when the guild member is offline is passed into the event handler parameter as
-    ///         <see cref="DateTimeOffset"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> 参数是所有此批次在线状态变更为离线的服务器用户。每个服务器用户都由一个
+    ///         <see cref="T:Kook.Cacheable`2"/> 表示。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:System.DateTimeOffset"/> 参数是在线状态变更为离线的时间。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<IReadOnlyCollection<Cacheable<SocketGuildUser, ulong>>, DateTimeOffset, Task> GuildMemberOffline
     {
@@ -806,13 +623,19 @@ public abstract partial class BaseSocketClient
     internal readonly AsyncEvent<Func<IReadOnlyCollection<Cacheable<SocketGuildUser, ulong>>, DateTimeOffset, Task>> _guildMemberOfflineEvent = new();
 
     /// <summary>
-    ///     Fired when a user's voice state is updated.
+    ///     当服务器用户的语音状态发生变化时引发。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="Task"/> representing the result of the asynchronous operation.
-    ///     The task result contains the updated <see cref="SocketGuildUser"/>, the previous <see cref="SocketVoiceState"/>,
-    ///     and the current <see cref="SocketVoiceState"/>.
-    /// </returns>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是其语音状态发生变化的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketVoiceState"/> 参数是用户语音状态变更前的状态。 </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketVoiceState"/> 参数是用户语音状态变更后的状态。 </item>
+    ///     </list>
+    /// </remarks>
     public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceState, SocketVoiceState, Task> UserVoiceStateUpdated
     {
         add => _userVoiceStateUpdatedEvent.Add(value);
@@ -825,28 +648,19 @@ public abstract partial class BaseSocketClient
 
     #region Voices
 
-    /// <summary> Fired when a user connected to a voice channel. </summary>
+    /// <summary>
+    ///     当服务器用户连接到语音频道时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a user connected to a voice channel. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>,
-    ///         a <see cref="SocketVoiceChannel"/>, a <see cref="SocketGuild"/>, and a <see cref="DateTimeOffset"/>
-    ///         as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The user that connected to a voice channel is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the user
-    ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         The voice channel that the user connected to is passed into the event handler parameter as
-    ///         <see cref="SocketVoiceChannel"/>.
-    ///     </para>
-    ///     <para>
-    ///         The time when the user is offline is passed into the event handler parameter as
-    ///         <see cref="DateTimeOffset"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是连接到语音频道的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketVoiceChannel"/> 参数是用户连接到的语音频道。 </item>
+    ///     <item> <see cref="T:System.DateTimeOffset"/> 参数是用户连接到语音频道的时间。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task> UserConnected
     {
@@ -856,28 +670,19 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task>> _userConnectedEvent = new();
 
-    /// <summary> Fired when a user disconnected to a voice channel. </summary>
+    /// <summary>
+    ///     当服务器用户从语音频道断开连接时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a user disconnected to a voice channel. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/>,
-    ///         a <see cref="SocketVoiceChannel"/>, a <see cref="SocketGuild"/>, and a <see cref="DateTimeOffset"/>
-    ///         as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The user that disconnected to a voice channel is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the user
-    ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         The voice channel that the user disconnected to is passed into the event handler parameter as
-    ///         <see cref="SocketVoiceChannel"/>.
-    ///     </para>
-    ///     <para>
-    ///         The time when the user is offline is passed into the event handler parameter as
-    ///         <see cref="DateTimeOffset"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是从语音频道断开连接的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketVoiceChannel"/> 参数是用户断开连接的语音频道。 </item>
+    ///     <item> <see cref="T:System.DateTimeOffset"/> 参数是用户断开连接的时间。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task> UserDisconnected
     {
@@ -888,27 +693,17 @@ public abstract partial class BaseSocketClient
     internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task>> _userDisconnectedEvent = new();
 
     // /// <summary>
-    // ///     Fired when a user started a livestream in a voice channel.
+    // ///     当服务器用户开始直播时引发。
     // /// </summary>
     // /// <remarks>
-    // ///     <para>
-    // ///         This event is fired when a user started a livestream in a voice channel. The event handler must return a
-    // ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/> and a <see cref="SocketVoiceChannel"/>
-    // ///         as its parameters.
-    // ///     </para>
-    // ///     <para>
-    // ///         The user that started the livestream is passed into the event handler parameter as
-    // ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the user
-    // ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    // ///         is preserved in the <see cref="T:System.UInt64"/>.
-    // ///     </para>
-    // ///     <para>
-    // ///         The voice channel where the livestream is started is passed into the event handler parameter as
-    // ///         <see cref="SocketVoiceChannel"/>.
-    // ///     </para>
-    // ///     <para>
-    // ///         To retrieve the details of the livestream status, see <see cref="SocketGuildUser.LiveStreamStatus"/>.
-    // ///     </para>
+    // ///     事件参数：
+    // ///     <list type="number">
+    // ///     <item>
+    // ///         <see cref="T:Kook.Cacheable`2"/> 参数是开始直播的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    // ///         <see cref="T:Kook.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    // ///     </item>
+    // ///     <item> <see cref="T:Kook.WebSocket.SocketVoiceChannel"/> 参数是用户开始直播的语音频道。 </item>
+    // ///     </list>
     // /// </remarks>
     // public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, Task> LivestreamBegan
     // {
@@ -919,27 +714,17 @@ public abstract partial class BaseSocketClient
     // internal readonly AsyncEvent<Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, Task>> _livestreamBeganEvent = new();
     //
     // /// <summary>
-    // ///     Fired when a user stopped a livestream in a voice channel.
+    // ///     当服务器用户结束直播时引发。
     // /// </summary>
     // /// <remarks>
-    // ///     <para>
-    // ///         This event is fired when a user stopped a livestream in a voice channel. The event handler must return a
-    // ///         <see cref="Task"/> and accept a <see cref="Cacheable{TEntity,TId}"/> and a <see cref="SocketVoiceChannel"/>
-    // ///         as its parameters.
-    // ///     </para>
-    // ///     <para>
-    // ///         The user that stopped the livestream is passed into the event handler parameter as
-    // ///         <see cref="Cacheable{TEntity,TId}"/>, which contains the original <see cref="SocketGuildUser"/> when the user
-    // ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    // ///         is preserved in the <see cref="T:System.UInt64"/>.
-    // ///     </para>
-    // ///     <para>
-    // ///         The voice channel where the livestream is stopped is passed into the event handler parameter as
-    // ///         <see cref="SocketVoiceChannel"/>.
-    // ///     </para>
-    // ///     <para>
-    // ///         To retrieve the details of the livestream status, see <see cref="SocketGuildUser.LiveStreamStatus"/>.
-    // ///     </para>
+    // ///     事件参数：
+    // ///     <list type="number">
+    // ///     <item>
+    // ///         <see cref="T:Kook.Cacheable`2"/> 参数是结束直播的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    // ///         <see cref="T:Kook.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    // ///     </item>
+    // ///     <item> <see cref="T:Kook.WebSocket.SocketVoiceChannel"/> 参数是用户结束直播的语音频道。 </item>
+    // ///     </list>
     // /// </remarks>
     // public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, Task> LivestreamEnded
     // {
@@ -953,16 +738,14 @@ public abstract partial class BaseSocketClient
 
     #region Roles
 
-    /// <summary> Fired when a role is created. </summary>
+    /// <summary>
+    ///     当服务器内的角色被创建时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a role is created. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketRole"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The role that is created is passed into the event handler parameter as
-    ///         <see cref="SocketRole"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketRole"/> 参数是被创建的角色。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketRole, Task> RoleCreated
     {
@@ -972,16 +755,14 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<SocketRole, Task>> _roleCreatedEvent = new();
 
-    /// <summary> Fired when a role is deleted. </summary>
+    /// <summary>
+    ///     当服务器内的角色被删除时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a role is deleted. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketRole"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The role that is deleted is passed into the event handler parameter as
-    ///         <see cref="SocketRole"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketRole"/> 参数是被删除的角色。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketRole, Task> RoleDeleted
     {
@@ -991,21 +772,15 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<SocketRole, Task>> _roleDeletedEvent = new();
 
-    /// <summary> Fired when a role is updated. </summary>
+    /// <summary>
+    ///     当服务器内的角色被更新时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a role is deleted. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketRole"/> and a <see cref="SocketRole"/>
-    ///         as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The original role entity is passed into the event handler parameter as
-    ///         <see cref="SocketRole"/>.
-    ///     </para>
-    ///     <para>
-    ///         The updated role entity is passed into the event handler parameter as
-    ///         <see cref="SocketRole"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketRole"/> 参数是角色被更新前的状态。 </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketRole"/> 参数是角色被更新后的状态。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketRole, SocketRole, Task> RoleUpdated
     {
@@ -1019,21 +794,15 @@ public abstract partial class BaseSocketClient
 
     #region Emotes
 
-    /// <summary> Fired when an emote is created. </summary>
+    /// <summary>
+    ///     当服务器内的自定义表情被创建时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when an emote is created. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="GuildEmote"/> and a <see cref="SocketGuild"/>
-    ///         as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The emote that is created is passed into the event handler parameter as
-    ///         <see cref="GuildEmote"/>.
-    ///     </para>
-    ///     <para>
-    ///         The guild where the emote is created is passed into the event handler parameter as
-    ///         <see cref="SocketGuild"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.GuildEmote"/> 参数是被创建的自定义表情。 </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是自定义表情所在的服务器。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<GuildEmote, SocketGuild, Task> EmoteCreated
     {
@@ -1043,21 +812,15 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<GuildEmote, SocketGuild, Task>> _emoteCreatedEvent = new();
 
-    /// <summary> Fired when a emote is deleted. </summary>
+    /// <summary>
+    ///     当服务器内的自定义表情被删除时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when an emote is deleted. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="GuildEmote"/> and a <see cref="SocketGuild"/>
-    ///         as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The emote that is deleted is passed into the event handler parameter as
-    ///         <see cref="GuildEmote"/>.
-    ///     </para>
-    ///     <para>
-    ///         The guild where the emote is deleted is passed into the event handler parameter as
-    ///         <see cref="SocketGuild"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.GuildEmote"/> 参数是被删除的自定义表情。 </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是自定义表情被删除前所在的服务器。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<GuildEmote, SocketGuild, Task> EmoteDeleted
     {
@@ -1067,25 +830,16 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<GuildEmote, SocketGuild, Task>> _emoteDeletedEvent = new();
 
-    /// <summary> Fired when a emote is updated. </summary>
+    /// <summary>
+    ///     当服务器内的自定义表情被更新时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when an emote is updated. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="GuildEmote"/>, a <see cref="GuildEmote"/>
-    ///         and a <see cref="SocketGuild"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The original emote entity is passed into the event handler parameter as
-    ///         <see cref="GuildEmote"/>.
-    ///     </para>
-    ///     <para>
-    ///         The updated emote entity is passed into the event handler parameter as
-    ///         <see cref="GuildEmote"/>.
-    ///     </para>
-    ///     <para>
-    ///         The guild where the emote is updated is passed into the event handler parameter as
-    ///         <see cref="SocketGuild"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.GuildEmote"/> 参数是自定义表情被更新前的状态，如果缓存中不存在此自定义表情实体，则为 <see langword="null"/>。 </item>
+    ///     <item> <see cref="T:Kook.GuildEmote"/> 参数是自定义表情被更新后的状态。 </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是自定义表情所在的服务器。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<GuildEmote?, GuildEmote, SocketGuild, Task> EmoteUpdated
     {
@@ -1099,16 +853,14 @@ public abstract partial class BaseSocketClient
 
     #region Guilds
 
-    /// <summary> Fired when the connected account joins a guild. </summary>
+    /// <summary>
+    ///     当当前用户新加入服务器时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when the connected account joins a guild. The event handler must
-    ///         return a <see cref="Task"/> and accept a <see cref="SocketGuild"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The guild where the account joins is passed into the event handler parameter as
-    ///         <see cref="SocketGuild"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是当前用户新加入的服务器。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketGuild, Task> JoinedGuild
     {
@@ -1118,22 +870,14 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<SocketGuild, Task>> _joinedGuildEvent = new();
 
-    /// <summary> Fired when the connected account leaves a guild. </summary>
+    /// <summary>
+    ///     当当前用户离开服务器时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when the connected account leaves a guild. The event handler must
-    ///         return a <see cref="Task"/> and accept a <see cref="SocketGuild"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         <note type="important">
-    ///             This parameter must be accessed within the current thread context. After
-    ///             waiting for completion of the task in this asynchronous event, the object
-    ///             passed to it will be disposed.
-    ///         </note>
-    ///         <br />
-    ///         The guild where the account leaves is passed into the event handler parameter as
-    ///         <see cref="SocketGuild"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是当前用户离开的服务器。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketGuild, Task> LeftGuild
     {
@@ -1143,21 +887,15 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<SocketGuild, Task>> _leftGuildEvent = new();
 
-    /// <summary> Fired when a guild is updated. </summary>
+    /// <summary>
+    ///     当服务器信息被更新时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a guild is updated. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketGuild"/>,
-    ///         and a <see cref="SocketGuild"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The guild before the update is passed into the event handler parameter as
-    ///         <see cref="SocketGuild"/>.
-    ///     </para>
-    ///     <para>
-    ///         The guild after the update is passed into the event handler parameter as
-    ///         <see cref="SocketGuild"/>.
-    ///     </para>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是服务器信息被更新前的状态。 </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是服务器信息被更新后的状态。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketGuild, SocketGuild, Task> GuildUpdated
     {
@@ -1167,16 +905,17 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<SocketGuild, SocketGuild, Task>> _guildUpdatedEvent = new();
 
-    /// <summary> Fired when a guild becomes available. </summary>
+    /// <summary>
+    ///     当服务器状态变更为可用时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a guild becomes available. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketGuild"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The guild that becomes available is passed into the event handler parameter as
-    ///         <see cref="SocketGuild"/>.
-    ///     </para>
+    ///     服务器状态变更为可用，表示此服务器实体已完整缓存基础数据，并与网关同步。 <br />
+    ///     缓存基础数据包括服务器基本信息、频道、角色、频道权限重写、当前用户在服务器内的昵称。
+    ///     <br />
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是服务器状态变更为可用的服务器。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketGuild, Task> GuildAvailable
     {
@@ -1186,16 +925,16 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<SocketGuild, Task>> _guildAvailableEvent = new();
 
-    /// <summary> Fired when a guild becomes unavailable. </summary>
+    /// <summary>
+    ///     当服务器状态变更为不可用时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a guild becomes unavailable. The event handler must return a
-    ///         <see cref="Task"/> and accept a <see cref="SocketGuild"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The guild that becomes unavailable is passed into the event handler parameter as
-    ///         <see cref="SocketGuild"/>.
-    ///     </para>
+    ///     服务器状态变更为不可用，表示此服务器实体丢失与网关的同步，所缓存的数据不可靠，这通常发生在服务器被删除、当前用户离开服务器、网关连接断开等情况。
+    ///     <br />
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是服务器状态变更为不可用的服务器。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<SocketGuild, Task> GuildUnavailable
     {
@@ -1209,32 +948,26 @@ public abstract partial class BaseSocketClient
 
     #region Interactions
 
-    /// <summary> Fired when a button is clicked in a card message. </summary>
+    /// <summary>
+    ///     当用户点击服务器频道内的卡片消息按钮时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a button is clicked in a card message. The event handler must
-    ///         return a <see cref="Task"/> and accept a <c>string</c>,
-    ///         a <see cref="Cacheable{TEntity,TId}"/>, a <see cref="Cacheable{TEntity,TId}"/>,
-    ///         a <see cref="SocketTextChannel"/>, and a <see cref="SocketGuild"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The button value is passed into the event handler parameter as <c>string</c>.
-    ///     </para>
-    ///     <para>
-    ///         The users who clicked the button is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketUser"/> when the user
-    ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the card message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the <see cref="Guid"/>
-    ///     </para>
-    ///     <para>
-    ///         The channel where the button is clicked is passed into the event handler parameter as
-    ///         <see cref="SocketTextChannel"/>.
-    ///     </para>
+    ///     卡片消息中的按钮包含多种点击事件类型，当该类型为 <see cref="F:Kook.ButtonClickEventType.ReturnValue"/>
+    ///     时，用户点击按钮后会引发此事件。
+    ///     <br />
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.String"/> 参数是按钮的值。 </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是点击按钮的可缓存服务器用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是点击按钮所在的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 消息被更新后的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketTextChannel"/> 参数是点击按钮所在的服务器频道。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<string, Cacheable<SocketGuildUser, ulong>, Cacheable<IMessage, Guid>, SocketTextChannel, Task> MessageButtonClicked
     {
@@ -1244,32 +977,26 @@ public abstract partial class BaseSocketClient
 
     internal readonly AsyncEvent<Func<string, Cacheable<SocketGuildUser, ulong>, Cacheable<IMessage, Guid>, SocketTextChannel, Task>> _messageButtonClickedEvent = new();
 
-    /// <summary> Fired when a button is clicked in a direct card message. </summary>
+    /// <summary>
+    ///     当用户点击私聊频道内的卡片消息按钮时引发。
+    /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         This event is fired when a button is clicked in a direct card message. The event handler must
-    ///         return a <see cref="Task"/> and accept a <c>string</c>,
-    ///         a <see cref="Cacheable{TEntity,TId}"/>, a <see cref="Cacheable{TEntity,TId}"/>,
-    ///         and a <see cref="SocketTextChannel"/> as its parameter.
-    ///     </para>
-    ///     <para>
-    ///         The button value is passed into the event handler parameter as <c>string</c>.
-    ///     </para>
-    ///     <para>
-    ///         The users who clicked the button is passed into the event handler parameter as
-    ///         <see cref="Cacheable{TEntity,TId}"/>, which contains a <see cref="SocketUser"/> when the user
-    ///         presents in the cache; otherwise, in event that the user cannot be retrieved, the ID of the user
-    ///         is preserved in the <see cref="T:System.UInt64"/>.
-    ///     </para>
-    ///     <para>
-    ///         If caching is enabled via <see cref="KookSocketConfig"/>, the
-    ///         <see cref="Cacheable{TEntity,TId}"/> entity will contain the direct card message; otherwise, in event
-    ///         that the message cannot be retrieved, the ID of the message is preserved in the <see cref="Guid"/>
-    ///     </para>
-    ///     <para>
-    ///         The channel where the button is clicked is passed into the event handler parameter as
-    ///         <see cref="SocketTextChannel"/>.
-    ///     </para>
+    ///     卡片消息中的按钮包含多种点击事件类型，当该类型为 <see cref="F:Kook.ButtonClickEventType.ReturnValue"/>
+    ///     时，用户点击按钮后会引发此事件。
+    ///     <br />
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.String"/> 参数是按钮的值。 </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是点击按钮的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="T:Kook.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item>
+    ///         <see cref="T:Kook.Cacheable`2"/> 参数是点击按钮所在的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="T:Kook.IMessage"/> 消息被更新后的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///     </item>
+    ///     <item> <see cref="T:Kook.WebSocket.SocketDMChannel"/> 参数是点击按钮所在的私聊频道。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<string, Cacheable<SocketUser, ulong>, Cacheable<IMessage, Guid>, SocketDMChannel, Task> DirectMessageButtonClicked
     {

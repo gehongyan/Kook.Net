@@ -3,7 +3,7 @@ using System.Reflection;
 namespace Kook;
 
 /// <summary>
-///     定义 Kook.Net 各种行为的配置项。
+///     定义 Kook.Net 各种基础行为的配置项。
 /// </summary>
 public class KookConfig
 {

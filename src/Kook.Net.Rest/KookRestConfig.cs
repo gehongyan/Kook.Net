@@ -5,6 +5,9 @@ namespace Kook.Rest;
 /// <summary>
 ///     定义 Kook.Net 有关 REST 各种行为的配置类。
 /// </summary>
+/// <remarks>
+///     此配置基于 <see cref="T:Kook.KookConfig"/>，在基础配置的基础上，定义了有关 REST 的配置。
+/// </remarks>
 public class KookRestConfig : KookConfig
 {
     /// <summary>
