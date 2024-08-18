@@ -3,19 +3,19 @@
 namespace Kook.Webhook.HttpListener;
 
 /// <summary>
-///     Represents a KOOK webhook client using HTTP listener.
+///     表示一个使用 HTTP 监听器的 KOOK Webhook 客户端。
 /// </summary>
 public class KookHttpListenerWebhookClient : KookWebhookClient
 {
-    /// <inheritdoc />
+    /// <summary>
+    ///     初始化一个 <see cref="KookHttpListenerWebhookClient"/> 类的新实例。
+    /// </summary>
+    /// <param name="config"> 用于配置 KOOK Webhook 客户端的 <see cref="T:Kook.Webhook.HttpListener.KookHttpListenerWebhookConfig"/>。 </param>
     public KookHttpListenerWebhookClient(KookHttpListenerWebhookConfig config)
         : base(config)
     {
     }
 
-    /// <summary>
-    ///     Gets the configuration used by this client.
-    /// </summary>
     internal new KookHttpListenerWebhookConfig BaseConfig => base.BaseConfig as KookHttpListenerWebhookConfig
         ?? throw new InvalidOperationException("The base configuration is not a Webhook-based configuration for HTTP listener.");
 
