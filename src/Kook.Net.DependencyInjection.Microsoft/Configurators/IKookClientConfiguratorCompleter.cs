@@ -1,12 +1,12 @@
 ﻿namespace Kook.Net.DependencyInjection.Microsoft;
 
 /// <summary>
-///     Represents a generic completer for a Kook client configurator.
+///     表示一个通用的 KOOK 客户端配置器的完成器。
 /// </summary>
 public interface IKookClientConfiguratorCompleter
 {
     /// <summary>
-    ///     Completes the configuration.
+    ///     完成配置。
     /// </summary>
     void Complete();
 }

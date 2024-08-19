@@ -22,7 +22,8 @@ internal static class ReflectionUtils
                 .ToArray();
 
             T obj = InvokeConstructor<T>(constructor, args, typeInfo);
-            foreach (PropertyInfo property in properties) property.SetValue(obj, GetMember(commands, services, property.PropertyType, typeInfo));
+            foreach (PropertyInfo property in properties)
+                property.SetValue(obj, GetMember(commands, services, property.PropertyType, typeInfo));
             return obj;
         };
     }

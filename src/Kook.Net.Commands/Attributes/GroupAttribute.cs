@@ -1,26 +1,28 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     Marks the module as a command group.
+///     标记模块为命令组。
 /// </summary>
 [AttributeUsage(AttributeTargets.Class)]
 public class GroupAttribute : Attribute
 {
     /// <summary>
-    ///     Gets the prefix set for the module.
+    ///     获取模块组命令的前缀。
     /// </summary>
     public string? Prefix { get; }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     初始化一个 <see cref="GroupAttribute"/> 类的新实例。
+    /// </summary>
     public GroupAttribute()
     {
         Prefix = null;
     }
 
     /// <summary>
-    ///     Initializes a new <see cref="GroupAttribute" /> with the provided prefix.
+    ///     初始化一个 <see cref="GroupAttribute"/> 类的新实例。
     /// </summary>
-    /// <param name="prefix">The prefix of the module group.</param>
+    /// <param name="prefix"> 模块组命令的前缀。 </param>
     public GroupAttribute(string prefix)
     {
         Prefix = prefix;

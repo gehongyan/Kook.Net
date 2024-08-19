@@ -104,19 +104,19 @@ public sealed class TypeReaderTests
 
         ArgumentType? m = result.BestMatch as ArgumentType;
         Assert.NotNull(m);
-        Assert.Equal(new[] { 1, 2, 3, 4, 5, 6, 7 }, m.ManyInts);
+        Assert.Equal([1, 2, 3, 4, 5, 6, 7], m.ManyInts);
     }
 }
 
 [NamedArgumentType]
 public sealed class ArgumentType
 {
-    public required int Foo { get; set; }
+    public int? Foo { get; set; }
 
     [OverrideTypeReader(typeof(CustomTypeReader))]
-    public required string Bar { get; set; }
+    public string? Bar { get; set; }
 
-    public required IEnumerable<int> ManyInts { get; set; }
+    public IEnumerable<int>? ManyInts { get; set; }
 }
 
 public sealed class CustomTypeReader : TypeReader

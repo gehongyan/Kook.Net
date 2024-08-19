@@ -107,14 +107,14 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <summary>
     ///     判定两个 <see cref="PlainTextElementBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> 如果两个 <see cref="PlainTextElementBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。</returns>
+    /// <returns> 如果两个 <see cref="PlainTextElementBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(PlainTextElementBuilder? left, PlainTextElementBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     判定两个 <see cref="PlainTextElementBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> 如果两个 <see cref="PlainTextElementBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。</returns>
+    /// <returns> 如果两个 <see cref="PlainTextElementBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(PlainTextElementBuilder? left, PlainTextElementBuilder? right) =>
         !(left == right);
 

@@ -6,15 +6,16 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Kook.Net.Queue.MassTransit;
 
 /// <summary>
-///     Provides extension methods for <see cref="IKookClientConfigurator{TClient, TConfig}"/> to configure MassTransit message queues.
+///     提供用于配置 <see cref="T:Kook.Net.DependencyInjection.Microsoft.IKookClientConfigurator`2"/>
+///     使用 MassTransit 消息队列的扩展方法。
 /// </summary>
 public static class KookMassTransitMessageQueueExtensions
 {
     /// <summary>
-    ///     Adds a MassTransit message queue consumer to the <see cref="IBusRegistrationConfigurator"/>.
+    ///     配置一个 MassTransit 消息队列消费者到 <see cref="T:MassTransit.IBusRegistrationConfigurator"/>。
     /// </summary>
-    /// <param name="configurator"> The configurator. </param>
-    /// <returns> The configurator. </returns>
+    /// <param name="configurator"> MassTransit 配置器。 </param>
+    /// <returns> 配置了 MassTransit 消息队列消费者的配置器。 </returns>
     public static IBusRegistrationConfigurator AddMessageQueueMassTransitConsumer(
         this IBusRegistrationConfigurator configurator)
     {
@@ -23,11 +24,13 @@ public static class KookMassTransitMessageQueueExtensions
     }
 
     /// <summary>
-    ///     Configures a Kook client to use a MassTransit message queue.
+    ///     配置一个 KOOK 客户端配置器使用 MassTransit 消息队列。
     /// </summary>
-    /// <param name="configurator"> The configurator. </param>
-    /// <param name="massTransitConfigure"> The MassTransit configuration action. </param>
-    /// <returns> The configurator. </returns>
+    /// <param name="configurator"> KOOK 客户端配置器。 </param>
+    /// <param name="massTransitConfigure"> MassTransit 配置操作。 </param>
+    /// <typeparam name="TClient"> 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> 配置的类型。 </typeparam>
+    /// <returns> 配置了 MassTransit 消息队列的配置器。 </returns>
     public static IKookClientConfigurator<TClient, TConfig> UseMassTransitMessageQueue<TClient, TConfig>(
         this IKookClientConfigurator<TClient, TConfig> configurator,
         Action<IBusRegistrationConfigurator> massTransitConfigure)
@@ -44,10 +47,12 @@ public static class KookMassTransitMessageQueueExtensions
     }
 
     /// <summary>
-    ///     Configures a Kook client to use a MassTransit message queue.
+    ///     配置一个 KOOK 客户端配置器使用 MassTransit 消息队列。
     /// </summary>
-    /// <param name="configurator"> The configurator. </param>
-    /// <returns> The configurator. </returns>
+    /// <param name="configurator"> KOOK 客户端配置器。 </param>
+    /// <typeparam name="TClient"> 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> 配置的类型。 </typeparam>
+    /// <returns> 配置了 MassTransit 消息队列的配置器。 </returns>
     public static IKookClientConfigurator<TClient, TConfig> UseMassTransitMessageQueue<TClient, TConfig>(
         this IKookClientConfigurator<TClient, TConfig> configurator)
         where TClient : BaseSocketClient

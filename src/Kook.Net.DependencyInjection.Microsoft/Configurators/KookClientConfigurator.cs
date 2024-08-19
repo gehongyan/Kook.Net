@@ -3,7 +3,11 @@ using Microsoft.Extensions.Options;
 
 namespace Kook.Net.DependencyInjection.Microsoft;
 
-/// <inheritdoc cref="T:Kook.Net.DependencyInjection.Microsoft.IKookClientConfigurator`2" />
+/// <summary>
+///     表示一个 KOOK 客户端配置器基类。
+/// </summary>
+/// <typeparam name="TClient"> 客户端的类型。 </typeparam>
+/// <typeparam name="TConfig"> 配置的类型。 </typeparam>
 public abstract class KookClientConfigurator<TClient, TConfig>
     : IKookClientConfigurator<TClient, TConfig>, IKookClientConfiguratorCompleter
     where TClient : IKookClient

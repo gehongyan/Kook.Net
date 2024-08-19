@@ -85,14 +85,14 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     /// <summary>
     ///     判定两个 <see cref="KMarkdownElementBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> 如果两个 <see cref="KMarkdownElementBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。</returns>
+    /// <returns> 如果两个 <see cref="KMarkdownElementBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(KMarkdownElementBuilder? left, KMarkdownElementBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
     ///     判定两个 <see cref="KMarkdownElementBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> 如果两个 <see cref="KMarkdownElementBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。</returns>
+    /// <returns> 如果两个 <see cref="KMarkdownElementBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(KMarkdownElementBuilder? left, KMarkdownElementBuilder? right) =>
         !(left == right);
 

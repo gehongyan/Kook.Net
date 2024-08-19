@@ -46,7 +46,7 @@ public class Emoji : IEmote
     /// </summary>
     /// <param name="text"> 要解析的字符串，例如：<c>:heart:</c> 或 <c>❤</c>。 </param>
     /// <param name="result"> 如果解析成功，则包含解析的 <see cref="Emoji"/>；否则为 <c>null</c>。 </param>
-    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。</returns>
+    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool TryParse([NotNullWhen(true)] string? text,
         [NotNullWhen(true)] out Emoji? result)
     {
@@ -64,7 +64,7 @@ public class Emoji : IEmote
     ///     从原始格式解析 <see cref="T:Kook.Emoji"/> 类的新实例。
     /// </summary>
     /// <param name="text"> 要解析的字符串，例如：<c>:heart:</c> 或 <c>❤</c>。 </param>
-    /// <returns> 解析的 <see cref="Emoji"/>。</returns>
+    /// <returns> 解析的 <see cref="Emoji"/>。 </returns>
     /// <exception cref="FormatException"> <paramref name="text"/> 不是表情符号名称或 Unicode。</exception>
     public static Emoji Parse([NotNull] string? text)
     {
@@ -78,7 +78,7 @@ public class Emoji : IEmote
     /// </summary>
     /// <param name="text"> 要解析的字符串，例如：<c>[#128187;]</c>，<c>:grinning:</c>。 </param>
     /// <param name="name"> 如果解析成功，则包含解析的名称；否则为 <c>null</c>。 </param>
-    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。</returns>
+    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     private static bool TryParseToName(string? text, [NotNullWhen(true)] out string? name)
     {
         if (text is null || string.IsNullOrWhiteSpace(text))

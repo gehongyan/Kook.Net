@@ -108,7 +108,7 @@ public static class MentionUtils
     /// <param name="text"> 要解析的用户提及字符串。 </param>
     /// <param name="userId"> 如果解析成功，则为用户 ID；否则为 <c>0</c>。 </param>
     /// <param name="tagMode"> 提及标签的语法模式。 </param>
-    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。</returns>
+    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     /// <exception cref="ArgumentOutOfRangeException"> <paramref name="tagMode"/> 不是有效的标签语法模式。 </exception>
     public static bool TryParseUser(string text, out ulong userId, TagMode tagMode)
     {
@@ -149,7 +149,7 @@ public static class MentionUtils
     /// <param name="text"> 要解析的频道提及字符串。 </param>
     /// <param name="channelId"> 如果解析成功，则为频道 ID；否则为 <c>0</c>。 </param>
     /// <param name="tagMode"> 提及标签的语法模式。 </param>
-    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。</returns>
+    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     /// <exception cref="ArgumentOutOfRangeException"> <paramref name="tagMode"/> 不是有效的标签语法模式。 </exception>
     public static bool TryParseChannel(string text, out ulong channelId, TagMode tagMode)
     {
@@ -189,7 +189,7 @@ public static class MentionUtils
     /// <param name="text">T 要解析的角色提及字符串。 </param>
     /// <param name="roleId"> 如果解析成功，则为角色 ID；否则为 <c>0</c>。 </param>
     /// <param name="tagMode"> 提及标签的语法模式。 </param>
-    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。</returns>
+    /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     /// <exception cref="ArgumentOutOfRangeException"> <paramref name="tagMode"/> 不是有效的标签语法模式。 </exception>
     public static bool TryParseRole(string text, out uint roleId, TagMode tagMode)
     {

@@ -9,20 +9,21 @@ using Microsoft.Extensions.Options;
 namespace Kook.Net.Hosting;
 
 /// <summary>
-///     Provides extension methods for Kook.Net to host clients using the <see cref="IHost"/>.
+///     提供用于与 Microsoft.Extensions.Hosting 集成，注册与配置 Kook.Net 客户端作为服务的扩展方法。
 /// </summary>
 public static class KookClientHostExtensions
 {
     /// <summary>
-    ///     Adds a <see cref="KookRestClient"/> to the specified <see cref="IServiceCollection"/> with
-    ///     the specified configuration action and login information.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 添加
+    ///     <see cref="T:Kook.Rest.KookRestClient" /> 客户端，并添加包装为
+    ///     <see cref="T:Microsoft.Extensions.Hosting.IHostedService" /> 的服务。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="config"> The action to configure the <see cref="KookRestConfig"/>. </param>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK REST 客户端及服务的服务集合。 </param>
+    /// <param name="config"> 用于配置 KOOK REST 客户端的配置。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否在登录前验证令牌。 </param>
+    /// <returns> 添加了 KOOK REST 客户端及服务的服务集合。 </returns>
     public static IServiceCollection AddHostedKookRestClient(this IServiceCollection services,
         KookRestConfig config, TokenType tokenType, string token, bool validateToken = true)
     {
@@ -33,15 +34,16 @@ public static class KookClientHostExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookRestClient"/> to the specified <see cref="IServiceCollection"/> with
-    ///     the specified configuration action and login information.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 添加
+    ///     <see cref="T:Kook.Rest.KookRestClient" /> 客户端，并添加包装为
+    ///     <see cref="T:Microsoft.Extensions.Hosting.IHostedService" /> 的服务。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="configure"> The action to configure the <see cref="KookRestConfig"/>. </param>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK REST 客户端及服务的服务集合。 </param>
+    /// <param name="configure"> 用于配置 KOOK REST 客户端的配置委托。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否在登录前验证令牌。 </param>
+    /// <returns> 添加了 KOOK REST 客户端及服务的服务集合。 </returns>
     public static IServiceCollection AddHostedKookRestClient(this IServiceCollection services,
         Action<KookRestConfig> configure, TokenType tokenType, string token, bool validateToken = true)
     {
@@ -52,15 +54,16 @@ public static class KookClientHostExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookRestClient"/> to the specified <see cref="IServiceCollection"/> with
-    ///     the specified configuration action and login information.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 添加
+    ///     <see cref="T:Kook.Rest.KookRestClient" /> 客户端，并添加包装为
+    ///     <see cref="T:Microsoft.Extensions.Hosting.IHostedService" /> 的服务。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="configure"> The action to configure the <see cref="KookRestConfig"/>. </param>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK REST 客户端及服务的服务集合。 </param>
+    /// <param name="configure"> 用于配置 KOOK REST 客户端的配置委托。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否在登录前验证令牌。 </param>
+    /// <returns> 添加了 KOOK REST 客户端及服务的服务集合。 </returns>
     public static IServiceCollection AddHostedKookRestClient(this IServiceCollection services,
         Action<KookRestConfig> configure, Func<IServiceProvider, TokenType> tokenType,
         Func<IServiceProvider, string> token, Func<IServiceProvider, bool>? validateToken = null)
@@ -73,15 +76,16 @@ public static class KookClientHostExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookRestClient"/> to the specified <see cref="IServiceCollection"/> with
-    ///     the specified configuration action and login information.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 添加
+    ///     <see cref="T:Kook.Rest.KookRestClient" /> 客户端，并添加包装为
+    ///     <see cref="T:Microsoft.Extensions.Hosting.IHostedService" /> 的服务。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="config"> The action to configure the <see cref="KookRestConfig"/>. </param>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK REST 客户端及服务的服务集合。 </param>
+    /// <param name="config"> 用于配置 KOOK REST 客户端的配置。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否在登录前验证令牌。 </param>
+    /// <returns> 添加了 KOOK REST 客户端及服务的服务集合。 </returns>
     public static IServiceCollection AddHostedKookRestClient(this IServiceCollection services,
         KookRestConfig config, Func<IServiceProvider, TokenType> tokenType,
         Func<IServiceProvider, string> token, Func<IServiceProvider, bool>? validateToken = null)
@@ -94,15 +98,16 @@ public static class KookClientHostExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookSocketClient"/> to the specified <see cref="IServiceCollection"/> with
-    ///     the specified configuration action and login information.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 添加
+    ///     <see cref="T:Kook.WebSocket.KookSocketClient" /> 客户端，并添加包装为
+    ///     <see cref="T:Microsoft.Extensions.Hosting.IHostedService" /> 的服务。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="configure"> The action to configure the <see cref="KookSocketConfig"/>. </param>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK 网关客户端及服务的服务集合。 </param>
+    /// <param name="configure"> 用于配置 KOOK 网关客户端的配置委托。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否在登录前验证令牌。 </param>
+    /// <returns> 添加了 KOOK 网关客户端及服务的服务集合。 </returns>
     public static IServiceCollection AddHostedKookSocketClient(this IServiceCollection services,
         Action<KookSocketConfig> configure, TokenType tokenType, string token, bool validateToken = true)
     {
@@ -113,15 +118,16 @@ public static class KookClientHostExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookSocketClient"/> to the specified <see cref="IServiceCollection"/> with
-    ///     the specified configuration action and login information.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 添加
+    ///     <see cref="T:Kook.WebSocket.KookSocketClient" /> 客户端，并添加包装为
+    ///     <see cref="T:Microsoft.Extensions.Hosting.IHostedService" /> 的服务。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="config"> The action to configure the <see cref="KookSocketConfig"/>. </param>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK 网关客户端及服务的服务集合。 </param>
+    /// <param name="config"> 用于配置 KOOK 网关客户端的配置。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否在登录前验证令牌。 </param>
+    /// <returns> 添加了 KOOK 网关客户端及服务的服务集合。 </returns>
     public static IServiceCollection AddHostedKookSocketClient(this IServiceCollection services,
         KookSocketConfig config, TokenType tokenType, string token, bool validateToken = true)
     {
@@ -132,15 +138,16 @@ public static class KookClientHostExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookSocketClient"/> to the specified <see cref="IServiceCollection"/> with
-    ///     the specified configuration action and login information.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 添加
+    ///     <see cref="T:Kook.WebSocket.KookSocketClient" /> 客户端，并添加包装为
+    ///     <see cref="T:Microsoft.Extensions.Hosting.IHostedService" /> 的服务。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="configure"> The action to configure the <see cref="KookSocketConfig"/>. </param>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK 网关客户端及服务的服务集合。 </param>
+    /// <param name="configure"> 用于配置 KOOK 网关客户端的配置委托。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否在登录前验证令牌。 </param>
+    /// <returns> 添加了 KOOK 网关客户端及服务的服务集合。 </returns>
     public static IServiceCollection AddHostedKookSocketClient(this IServiceCollection services,
         Action<KookSocketConfig> configure, Func<IServiceProvider, TokenType> tokenType,
         Func<IServiceProvider, string> token, Func<IServiceProvider, bool>? validateToken = null)
@@ -153,15 +160,16 @@ public static class KookClientHostExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookSocketClient"/> to the specified <see cref="IServiceCollection"/> with
-    ///     the specified configuration action and login information.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 添加
+    ///     <see cref="T:Kook.WebSocket.KookSocketClient" /> 客户端，并添加包装为
+    ///     <see cref="T:Microsoft.Extensions.Hosting.IHostedService" /> 的服务。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="config"> The action to configure the <see cref="KookSocketConfig"/>. </param>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK 网关客户端及服务的服务集合。 </param>
+    /// <param name="config"> 用于配置 KOOK 网关客户端的配置。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否在登录前验证令牌。 </param>
+    /// <returns> 添加了 KOOK 网关客户端及服务的服务集合。 </returns>
     public static IServiceCollection AddHostedKookSocketClient(this IServiceCollection services,
         KookSocketConfig config, Func<IServiceProvider, TokenType> tokenType,
         Func<IServiceProvider, string> token, Func<IServiceProvider, bool>? validateToken = null)
@@ -174,17 +182,19 @@ public static class KookClientHostExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookWebhookClient"/> to the specified <see cref="IServiceCollection"/> with
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 添加
+    ///     <see cref="T:Kook.Webhook.KookWebhookClient" /> 客户端，并添加包装为
+    ///     <see cref="T:Microsoft.Extensions.Hosting.IHostedService" /> 的服务。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="clientFactory"> The factory to create the <see cref="KookWebhookClient"/>. </param>
-    /// <param name="configure"> The action to configure the <see cref="KookWebhookConfig"/>. </param>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
-    /// <typeparam name="TClient"> The type of the <see cref="KookWebhookClient"/>. </typeparam>
-    /// <typeparam name="TConfig"> The type of the <see cref="KookWebhookConfig"/>. </typeparam>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加基于 Webhook 的 KOOK 网关客户端及服务的服务集合。 </param>
+    /// <param name="clientFactory"> 客户端创建委托。 </param>
+    /// <param name="configure"> 用于配置基于 Webhook 的 KOOK 网关客户端的配置委托。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否在登录前验证令牌。 </param>
+    /// <typeparam name="TClient"> 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> 配置的类型。 </typeparam>
+    /// <returns> 添加了基于 Webhook 的 KOOK 网关客户端及服务的服务集合。 </returns>
     public static IServiceCollection AddHostedKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
         Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<TConfig> configure,
         Func<IServiceProvider, TokenType> tokenType, Func<IServiceProvider, string> token,
@@ -202,17 +212,19 @@ public static class KookClientHostExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookWebhookClient"/> to the specified <see cref="IServiceCollection"/> with
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 添加
+    ///     <see cref="T:Kook.Webhook.KookWebhookClient" /> 客户端，并添加包装为
+    ///     <see cref="T:Microsoft.Extensions.Hosting.IHostedService" /> 的服务。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="clientFactory"> The factory to create the <see cref="KookWebhookClient"/>. </param>
-    /// <param name="config"> The action to configure the <see cref="KookWebhookConfig"/>. </param>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
-    /// <typeparam name="TClient"> The type of the <see cref="KookWebhookClient"/>. </typeparam>
-    /// <typeparam name="TConfig"> The type of the <see cref="KookWebhookConfig"/>. </typeparam>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加基于 Webhook 的 KOOK 网关客户端及服务的服务集合。 </param>
+    /// <param name="clientFactory"> 客户端创建委托。 </param>
+    /// <param name="config"> 用于配置基于 Webhook 的 KOOK 网关客户端的配置。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否在登录前验证令牌。 </param>
+    /// <typeparam name="TClient"> 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> 配置的类型。 </typeparam>
+    /// <returns> 添加了基于 Webhook 的 KOOK 网关客户端及服务的服务集合。 </returns>
     public static IServiceCollection AddHostedKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
         Func<IServiceProvider, TConfig, TClient> clientFactory, TConfig config,
         Func<IServiceProvider, TokenType> tokenType, Func<IServiceProvider, string> token,
@@ -230,17 +242,19 @@ public static class KookClientHostExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookWebhookClient"/> to the specified <see cref="IServiceCollection"/> with
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 添加
+    ///     <see cref="T:Kook.Webhook.KookWebhookClient" /> 客户端，并添加包装为
+    ///     <see cref="T:Microsoft.Extensions.Hosting.IHostedService" /> 的服务。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="clientFactory"> The factory to create the <see cref="KookWebhookClient"/>. </param>
-    /// <param name="configure"> The action to configure the <see cref="KookWebhookConfig"/>. </param>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
-    /// <typeparam name="TClient"> The type of the <see cref="KookWebhookClient"/>. </typeparam>
-    /// <typeparam name="TConfig"> The type of the <see cref="KookWebhookConfig"/>. </typeparam>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加基于 Webhook 的 KOOK 网关客户端及服务的服务集合。 </param>
+    /// <param name="clientFactory"> 客户端创建委托。 </param>
+    /// <param name="configure"> 用于配置基于 Webhook 的 KOOK 网关客户端的配置委托。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否在登录前验证令牌。 </param>
+    /// <typeparam name="TClient"> 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> 配置的类型。 </typeparam>
+    /// <returns> 添加了基于 Webhook 的 KOOK 网关客户端及服务的服务集合。 </returns>
     public static IServiceCollection AddHostedKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
         Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<TConfig> configure,
         TokenType tokenType, string token, bool validateToken = true)
@@ -257,17 +271,19 @@ public static class KookClientHostExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookWebhookClient"/> to the specified <see cref="IServiceCollection"/> with
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 添加
+    ///     <see cref="T:Kook.Webhook.KookWebhookClient" /> 客户端，并添加包装为
+    ///     <see cref="T:Microsoft.Extensions.Hosting.IHostedService" /> 的服务。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="clientFactory"> The factory to create the <see cref="KookWebhookClient"/>. </param>
-    /// <param name="config"> The action to configure the <see cref="KookWebhookConfig"/>. </param>
-    /// <param name="tokenType"> The type of token to use. </param>
-    /// <param name="token"> The token to use. </param>
-    /// <param name="validateToken"> Whether to validate the token before logging in. </param>
-    /// <typeparam name="TClient"> The type of the <see cref="KookWebhookClient"/>. </typeparam>
-    /// <typeparam name="TConfig"> The type of the <see cref="KookWebhookConfig"/>. </typeparam>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加基于 Webhook 的 KOOK 网关客户端及服务的服务集合。 </param>
+    /// <param name="clientFactory"> 客户端创建委托。 </param>
+    /// <param name="config"> 用于配置基于 Webhook 的 KOOK 网关客户端的配置。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否在登录前验证令牌。 </param>
+    /// <typeparam name="TClient"> 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> 配置的类型。 </typeparam>
+    /// <returns> 添加了基于 Webhook 的 KOOK 网关客户端及服务的服务集合。 </returns>
     public static IServiceCollection AddHostedKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
         Func<IServiceProvider, TConfig, TClient> clientFactory, TConfig config,
         TokenType tokenType, string token, bool validateToken = true)
