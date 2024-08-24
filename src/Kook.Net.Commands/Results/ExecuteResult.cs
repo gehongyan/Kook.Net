@@ -3,13 +3,13 @@ using System.Diagnostics;
 namespace Kook.Commands;
 
 /// <summary>
-///     Contains information of the command's overall execution result.
+///     表示一个命令的整体执行结果的信息。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct ExecuteResult : IResult
 {
     /// <summary>
-    ///     Gets the exception that may have occurred during the command execution.
+    ///     获取在命令执行期间发生的异常，如果没有异常则为 <c>null</c>。
     /// </summary>
     public Exception? Exception { get; }
 
@@ -30,48 +30,38 @@ public struct ExecuteResult : IResult
     }
 
     /// <summary>
-    ///     Initializes a new <see cref="ExecuteResult" /> with no error, indicating a successful execution.
+    ///     初始化一个不包含任何错误的 <see cref="ExecuteResult"/> 结构的新实例，表示一个成功的执行。
     /// </summary>
-    /// <returns> A <see cref="ExecuteResult" /> that does not contain any errors. </returns>
+    /// <returns> 一个表示执行成功的 <see cref="ExecuteResult"/>。 </returns>
     public static ExecuteResult FromSuccess() => new(null, null, null);
 
     /// <summary>
-    ///     Initializes a new <see cref="ExecuteResult" /> with a specified <see cref="CommandError" /> and its
-    ///     reason, indicating an unsuccessful execution.
+    ///     初始化一个包含指定错误类型和原因的 <see cref="ExecuteResult"/> 结构的新实例，表示一个失败的执行。
     /// </summary>
-    /// <param name="error">The type of error.</param>
-    /// <param name="reason">The reason behind the error.</param>
-    /// <returns> A <see cref="ExecuteResult" /> that contains a <see cref="CommandError" /> and reason. </returns>
+    /// <param name="error"> 错误类型。 </param>
+    /// <param name="reason"> 错误原因。 </param>
+    /// <returns> 一个表示执行失败的 <see cref="ExecuteResult"/>。 </returns>
     public static ExecuteResult FromError(CommandError error, string reason) => new(null, error, reason);
 
     /// <summary>
-    ///     Initializes a new <see cref="ExecuteResult" /> with a specified exception, indicating an unsuccessful
-    ///     execution.
+    ///     初始化一个包含指定异常的 <see cref="ExecuteResult"/> 结构的新实例，表示一个失败的执行。
     /// </summary>
-    /// <param name="ex">The exception that caused the command execution to fail.</param>
+    /// <param name="ex"> 导致执行失败的异常。 </param>
     /// <returns>
-    ///     A <see cref="ExecuteResult" /> that contains the exception that caused the unsuccessful execution, along
-    ///     with a <see cref="CommandError" /> of type <c>Exception</c> as well as the exception message as the
-    ///     reason.
+    ///     一个包含导致执行失败的异常的 <see cref="ExecuteResult"/>，其错误类型为
+    ///     <see cref="F:Kook.Commands.CommandError.Exception"/>，原因为异常消息。
     /// </returns>
     public static ExecuteResult FromError(Exception? ex) => new(ex, CommandError.Exception, ex?.Message);
 
     /// <summary>
-    ///     Initializes a new <see cref="ExecuteResult" /> with a specified result; this may or may not be an
-    ///     successful execution depending on the <see cref="Kook.Commands.IResult.Error" /> and
-    ///     <see cref="Kook.Commands.IResult.ErrorReason" /> specified.
+    ///     初始化一个包含指定结果的 <see cref="ExecuteResult"/> 结构的新实例，根据指定的 <see cref="Kook.Commands.IResult.Error"/> 和
+    ///     <see cref="Kook.Commands.IResult.ErrorReason"/>，这可能是一个成功的执行，也可能是一个失败的执行。
     /// </summary>
-    /// <param name="result">The result to inherit from.</param>
-    /// <returns> A <see cref="ExecuteResult"/> that inherits the <see cref="IResult"/> error type and reason. </returns>
+    /// <param name="result"> 要包装的结果。 </param>
+    /// <returns> 一个表示执行结果的 <see cref="ExecuteResult"/>，错误类型和原因与 <paramref name="result"/> 相同。 </returns>
     public static ExecuteResult FromError(IResult result) => new(null, result.Error, result.ErrorReason);
 
-    /// <summary>
-    ///     Gets a string that indicates the execution result.
-    /// </summary>
-    /// <returns>
-    ///     <c>Success</c> if <see cref="IsSuccess"/> is <c>true</c>; otherwise "<see cref="Error"/>:
-    ///     <see cref="ErrorReason"/>".
-    /// </returns>
+    /// <inheritdoc />
     public override string ToString() => IsSuccess ? "Success" : $"{Error}: {ErrorReason}";
 
     private string DebuggerDisplay => IsSuccess ? "Success" : $"{Error}: {ErrorReason}";

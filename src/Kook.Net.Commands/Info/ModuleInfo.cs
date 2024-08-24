@@ -3,67 +3,67 @@ using Kook.Commands.Builders;
 namespace Kook.Commands;
 
 /// <summary>
-///     Provides the information of a module.
+///     表示一个模块的信息。
 /// </summary>
 public class ModuleInfo
 {
     /// <summary>
-    ///     Gets the command service associated with this module.
+    ///     获取与此模块关联的命令服务。
     /// </summary>
     public CommandService Service { get; }
 
     /// <summary>
-    ///     Gets the name of this module.
+    ///     获取此模块的名称。
     /// </summary>
     public string? Name { get; }
 
     /// <summary>
-    ///     Gets the summary of this module.
+    ///     获取此模块的摘要。
     /// </summary>
     public string? Summary { get; }
 
     /// <summary>
-    ///     Gets the remarks of this module.
+    ///     获取此模块的备注。
     /// </summary>
     public string? Remarks { get; }
 
     /// <summary>
-    ///     Gets the group name (main prefix) of this module.
+    ///     获取此模块的分组。
     /// </summary>
     public string? Group { get; }
 
     /// <summary>
-    ///     Gets a read-only list of aliases associated with this module.
+    ///     获取此模块的所有别名。
     /// </summary>
     public IReadOnlyList<string> Aliases { get; }
 
     /// <summary>
-    ///     Gets a read-only list of commands associated with this module.
+    ///     获取此模块的所有命令。
     /// </summary>
     public IReadOnlyList<CommandInfo> Commands { get; }
 
     /// <summary>
-    ///     Gets a read-only list of preconditions that apply to this module.
+    ///     获取此模块的所有先决条件。
     /// </summary>
     public IReadOnlyList<PreconditionAttribute> Preconditions { get; }
 
     /// <summary>
-    ///     Gets a read-only list of attributes that apply to this module.
+    ///     获取此模块的所有特性。
     /// </summary>
     public IReadOnlyList<Attribute> Attributes { get; }
 
     /// <summary>
-    ///     Gets a read-only list of submodules associated with this module.
+    ///     获取此模块的所有子模块。
     /// </summary>
     public IReadOnlyList<ModuleInfo> Submodules { get; }
 
     /// <summary>
-    ///     Gets the parent module of this submodule if applicable.
+    ///     获取此模块的父模块。
     /// </summary>
     public ModuleInfo? Parent { get; }
 
     /// <summary>
-    ///     Gets a value that indicates whether this module is a submodule or not.
+    ///     获取此模块是否为子模块。
     /// </summary>
     public bool IsSubmodule => Parent != null;
 

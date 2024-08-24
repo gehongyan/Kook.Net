@@ -3,7 +3,7 @@ using System.Reflection;
 namespace Kook.Commands.Builders;
 
 /// <summary>
-///     Represents a parameter builder.
+///     表示一个参数构建器。
 /// </summary>
 public class ParameterBuilder
 {
@@ -13,57 +13,57 @@ public class ParameterBuilder
     private readonly List<Attribute> _attributes;
 
     /// <summary>
-    ///     Gets the command builder that this parameter builder belongs to.
+    ///     获取此参数构建器所属的命令构建器。
     /// </summary>
     public CommandBuilder Command { get; }
 
     /// <summary>
-    ///     Gets the name of this parameter.
+    ///     获取或设置此参数的名称。
     /// </summary>
     public string Name { get; internal set; }
 
     /// <summary>
-    ///     Gets the type of this parameter.
+    ///     获取或设置此参数的类型。
     /// </summary>
     public Type? ParameterType { get; internal set; }
 
     /// <summary>
-    ///     Gets the type reader of this parameter.
+    ///     获取或设置此参数的类型读取器。
     /// </summary>
     public TypeReader? TypeReader { get; set; }
 
     /// <summary>
-    ///     Gets or sets a value that indicates whether this parameter is an optional parameter or not.
+    ///     获取或设置此参数是否为可选参数。
     /// </summary>
     public bool IsOptional { get; set; }
 
     /// <summary>
-    ///     Gets or sets a value that indicates whether this parameter is a remainder parameter or not.
+    ///     获取或设置此参数是否接收全部剩余参数。
     /// </summary>
     public bool IsRemainder { get; set; }
 
     /// <summary>
-    ///     Gets or sets a value that indicates whether this parameter is a multiple parameter or not.
+    ///     获取或设置此参数是否为多值参数。
     /// </summary>
     public bool IsMultiple { get; set; }
 
     /// <summary>
-    ///     Gets or sets the default value of this parameter.
+    ///     获取或设置此参数的默认值。
     /// </summary>
     public object? DefaultValue { get; set; }
 
     /// <summary>
-    ///     Gets or sets the summary of this parameter.
+    ///     获取或设置此参数的摘要。
     /// </summary>
     public string? Summary { get; set; }
 
     /// <summary>
-    ///     Gets a read-only collection containing the preconditions of this parameter.
+    ///     获取此参数的先决条件。
     /// </summary>
     public IReadOnlyList<ParameterPreconditionAttribute> Preconditions => _preconditions;
 
     /// <summary>
-    ///     Gets a read-only collection containing the attributes of this parameter.
+    ///     获取此参数的特性。
     /// </summary>
     public IReadOnlyList<Attribute> Attributes => _attributes;
 
@@ -71,10 +71,6 @@ public class ParameterBuilder
 
     #region Automatic
 
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="ParameterBuilder"/> class.
-    /// </summary>
-    /// <param name="command"> The command builder that this parameter builder belongs to. </param>
     internal ParameterBuilder(CommandBuilder command)
     {
         _preconditions = [];
@@ -156,10 +152,10 @@ public class ParameterBuilder
     }
 
     /// <summary>
-    ///     Sets the summary of this parameter.
+    ///     设置此参数的摘要。
     /// </summary>
-    /// <param name="summary"> The summary of this parameter. </param>
-    /// <returns> This parameter builder. </returns>
+    /// <param name="summary"> 此参数的摘要。 </param>
+    /// <returns> 此参数构建器。 </returns>
     public ParameterBuilder WithSummary(string summary)
     {
         Summary = summary;
@@ -167,10 +163,10 @@ public class ParameterBuilder
     }
 
     /// <summary>
-    ///     Sets the default value of this parameter.
+    ///     设置此参数的默认值。
     /// </summary>
-    /// <param name="defaultValue"> The default value of this parameter. </param>
-    /// <returns> This parameter builder. </returns>
+    /// <param name="defaultValue"> 此参数的默认值。 </param>
+    /// <returns> 此参数构建器。 </returns>
     public ParameterBuilder WithDefault(object defaultValue)
     {
         DefaultValue = defaultValue;
@@ -178,10 +174,10 @@ public class ParameterBuilder
     }
 
     /// <summary>
-    ///     Sets whether this parameter is an optional parameter or not.
+    ///     设置此参数是否为可选参数。
     /// </summary>
-    /// <param name="isOptional"> Whether this parameter is an optional parameter or not. </param>
-    /// <returns> This parameter builder. </returns>
+    /// <param name="isOptional"> 此参数是否为可选参数。 </param>
+    /// <returns> 此参数构建器。 </returns>
     public ParameterBuilder WithIsOptional(bool isOptional)
     {
         IsOptional = isOptional;
@@ -189,10 +185,10 @@ public class ParameterBuilder
     }
 
     /// <summary>
-    ///     Sets whether this parameter is a remainder parameter or not.
+    ///     设置此参数是否接收全部剩余参数。
     /// </summary>
-    /// <param name="isRemainder"> Whether this parameter is a remainder parameter or not. </param>
-    /// <returns> This parameter builder. </returns>
+    /// <param name="isRemainder"> 此参数是否接收全部剩余参数。 </param>
+    /// <returns> 此参数构建器。 </returns>
     public ParameterBuilder WithIsRemainder(bool isRemainder)
     {
         IsRemainder = isRemainder;
@@ -200,10 +196,10 @@ public class ParameterBuilder
     }
 
     /// <summary>
-    ///     Sets whether this parameter is a multiple parameter or not.
+    ///     设置此参数是否为多值参数。
     /// </summary>
-    /// <param name="isMultiple"> Whether this parameter is a multiple parameter or not. </param>
-    /// <returns> This parameter builder. </returns>
+    /// <param name="isMultiple"> 此参数是否为多值参数。 </param>
+    /// <returns> 此参数构建器。 </returns>
     public ParameterBuilder WithIsMultiple(bool isMultiple)
     {
         IsMultiple = isMultiple;
@@ -211,10 +207,10 @@ public class ParameterBuilder
     }
 
     /// <summary>
-    ///     Adds attributes to this parameter.
+    ///     添加特性到此参数。
     /// </summary>
-    /// <param name="attributes"> An array containing the attributes to add. </param>
-    /// <returns> This parameter builder. </returns>
+    /// <param name="attributes"> 要添加到此参数的特性数组。 </param>
+    /// <returns> 此参数构建器。 </returns>
     public ParameterBuilder AddAttributes(params Attribute[] attributes)
     {
         _attributes.AddRange(attributes);
@@ -222,22 +218,16 @@ public class ParameterBuilder
     }
 
     /// <summary>
-    ///     Adds a precondition to this parameter.
+    ///     添加先决条件到此参数。
     /// </summary>
-    /// <param name="precondition"> The precondition to add. </param>
-    /// <returns> This parameter builder. </returns>
+    /// <param name="precondition"> 要添加到此参数的先决条件。 </param>
+    /// <returns> 此参数构建器。 </returns>
     public ParameterBuilder AddPrecondition(ParameterPreconditionAttribute precondition)
     {
         _preconditions.Add(precondition);
         return this;
     }
 
-    /// <summary>
-    ///     Builds this parameter builder.
-    /// </summary>
-    /// <param name="info"> The command info that this parameter belongs to. </param>
-    /// <returns> The built parameter info. </returns>
-    /// <exception cref="InvalidOperationException"> No type reader was found for this parameter, which must be specified. </exception>
     internal ParameterInfo Build(CommandInfo info)
     {
         if ((TypeReader ??= GetReader(ParameterType)) is null)

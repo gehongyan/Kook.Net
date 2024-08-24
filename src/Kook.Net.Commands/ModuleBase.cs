@@ -3,43 +3,34 @@ using Kook.Commands.Builders;
 namespace Kook.Commands;
 
 /// <summary>
-///     Provides a base class for a command module to inherit from.
+///     表示一个模块基类。
 /// </summary>
 public abstract class ModuleBase : ModuleBase<ICommandContext>;
 
 /// <summary>
-///     Provides a base class for a command module to inherit from.
+///     表示一个模块基类。
 /// </summary>
-/// <typeparam name="T">A class that implements <see cref="ICommandContext"/>.</typeparam>
+/// <typeparam name="T"> 模块的上下文类型。 </typeparam>
 public abstract class ModuleBase<T> : IModuleBase
     where T : class, ICommandContext
 {
     #region ModuleBase
 
     /// <summary>
-    ///     The underlying context of the command.
+    ///     获取此命令的上下文。
     /// </summary>
-    /// <seealso cref="T:Kook.Commands.ICommandContext" />
-    /// <seealso cref="T:Kook.Commands.CommandContext" />
-    public T Context { get; private set; } = null!; // Set by SetContext
+    public T Context { get; private set; } = null!; // 将由 SetContext 方法设置。
 
     /// <summary>
-    ///     Sends a file to the source channel.
+    ///     发送文件到此命令消息所在的频道。
     /// </summary>
-    /// <param name="path">
-    ///     The file path of the file.
-    /// </param>
-    /// <param name="filename">
-    ///     The name of the file.
-    /// </param>
-    /// <param name="type">The type of the attachment.</param>
-    /// <param name="isQuote">
-    ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
-    /// </param>
-    /// <param name="isEphemeral">
-    ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
-    /// </param>
+    /// <param name="path"> 文件的路径。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 文件的媒体类型。 </param>
+    /// <param name="isQuote"> 是否引用源消息。 </param>
+    /// <param name="isEphemeral"> 是否以临时消息的形式发送给命令调用者。如果设置为 <c>true</c>，则仅该用户可以看到此消息，否则所有人都可以看到此消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false,
         RequestOptions? options = null) =>
@@ -49,22 +40,15 @@ public abstract class ModuleBase<T> : IModuleBase
             .ConfigureAwait(false);
 
     /// <summary>
-    ///     Sends a file to the source channel.
+    ///     发送文件到此命令消息所在的频道。
     /// </summary>
-    /// <param name="stream">
-    ///     Stream of the file to be sent.
-    /// </param>
-    /// <param name="filename">
-    ///     The name of the file.
-    /// </param>
-    /// <param name="type">The type of the attachment.</param>
-    /// <param name="isQuote">
-    ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
-    /// </param>
-    /// <param name="isEphemeral">
-    ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
-    /// </param>
+    /// <param name="stream"> 文件的流。 </param>
+    /// <param name="filename"> 文件名。 </param>
+    /// <param name="type"> 文件的媒体类型。 </param>
+    /// <param name="isQuote"> 是否引用源消息。 </param>
+    /// <param name="isEphemeral"> 是否以临时消息的形式发送给命令调用者。如果设置为 <c>true</c>，则仅该用户可以看到此消息，否则所有人都可以看到此消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, bool isQuote = true, bool isEphemeral = false,
         RequestOptions? options = null) =>
@@ -74,16 +58,13 @@ public abstract class ModuleBase<T> : IModuleBase
             .ConfigureAwait(false);
 
     /// <summary>
-    ///     Sends a file to the source channel.
+    ///     发送文件到此命令消息所在的频道。
     /// </summary>
     /// <param name="attachment"> 文件的附件信息。 </param>
-    /// <param name="isQuote">
-    ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
-    /// </param>
-    /// <param name="isEphemeral">
-    ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
-    /// </param>
+    /// <param name="isQuote"> 是否引用源消息。 </param>
+    /// <param name="isEphemeral"> 是否以临时消息的形式发送给命令调用者。如果设置为 <c>true</c>，则仅该用户可以看到此消息，否则所有人都可以看到此消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(FileAttachment attachment,
         bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendFileAsync(attachment,
@@ -92,38 +73,28 @@ public abstract class ModuleBase<T> : IModuleBase
             .ConfigureAwait(false);
 
     /// <summary>
-    ///     Sends a text message to the source channel.
+    ///     发送文本消息到此命令消息所在的频道。
     /// </summary>
-    /// <param name="message">
-    ///     Contents of the message.
-    /// </param>
-    /// <param name="isQuote">
-    ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
-    /// </param>
-    /// <param name="isEphemeral">
-    ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
-    /// </param>
+    /// <param name="text"> 要发送的文本。 </param>
+    /// <param name="isQuote"> 是否引用源消息。 </param>
+    /// <param name="isEphemeral"> 是否以临时消息的形式发送给命令调用者。如果设置为 <c>true</c>，则仅该用户可以看到此消息，否则所有人都可以看到此消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(string message, bool isQuote = true,
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(string text, bool isQuote = true,
         bool isEphemeral = false, RequestOptions? options = null) =>
-        await Context.Channel.SendTextAsync(message,
+        await Context.Channel.SendTextAsync(text,
                 isQuote ? new MessageReference(Context.Message.Id) : null,
                 isEphemeral ? Context.User : null, options)
             .ConfigureAwait(false);
 
     /// <summary>
-    ///     Sends a card message to the source channel.
+    ///     发送卡片消息到此命令消息所在的频道。
     /// </summary>
-    /// <param name="cards">
-    ///      要发送的卡片。
-    /// </param>
-    /// <param name="isQuote">
-    ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
-    /// </param>
-    /// <param name="isEphemeral">
-    ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
-    /// </param>
+    /// <param name="cards"> 要发送的卡片。 </param>
+    /// <param name="isQuote"> 是否引用源消息。 </param>
+    /// <param name="isEphemeral"> 是否以临时消息的形式发送给命令调用者。如果设置为 <c>true</c>，则仅该用户可以看到此消息，否则所有人都可以看到此消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(IEnumerable<ICard> cards,
         bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendCardsAsync(cards,
@@ -132,18 +103,13 @@ public abstract class ModuleBase<T> : IModuleBase
             .ConfigureAwait(false);
 
     /// <summary>
-    ///     Sends a card message to the source channel.
+    ///     发送卡片消息到此命令消息所在的频道。
     /// </summary>
-    /// <param name="card">
-    ///      要发送的卡片。
-    /// </param>
-    /// <param name="isQuote">
-    ///     <c>true</c> if the source message will be quoted in this message; otherwise, <c>false</c>.
-    /// </param>
-    /// <param name="isEphemeral">
-    ///     <c>true</c> if the message to be sent can be seen only by the command invoker; otherwise, <c>false</c>.
-    /// </param>
+    /// <param name="card"> 要发送的卡片。 </param>
+    /// <param name="isQuote"> 是否引用源消息。 </param>
+    /// <param name="isEphemeral"> 是否以临时消息的形式发送给命令调用者。如果设置为 <c>true</c>，则仅该用户可以看到此消息，否则所有人都可以看到此消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyCardAsync(ICard card,
         bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendCardAsync(card,
@@ -151,39 +117,23 @@ public abstract class ModuleBase<T> : IModuleBase
                 isEphemeral ? Context.User : null, options)
             .ConfigureAwait(false);
 
-    /// <summary>
-    ///     The method to execute asynchronously before executing the command.
-    /// </summary>
-    /// <param name="command">The <see cref="CommandInfo"/> of the command to be executed.</param>
+    /// <inheritdoc cref="M:Kook.Commands.IModuleBase.BeforeExecuteAsync(Kook.Commands.CommandInfo)" />
     protected virtual Task BeforeExecuteAsync(CommandInfo command) => Task.CompletedTask;
 
-    /// <summary>
-    ///     The method to execute before executing the command.
-    /// </summary>
-    /// <param name="command">The <see cref="CommandInfo"/> of the command to be executed.</param>
+    /// <inheritdoc cref="M:Kook.Commands.IModuleBase.BeforeExecute(Kook.Commands.CommandInfo)" />
     protected virtual void BeforeExecute(CommandInfo command)
     {
     }
 
-    /// <summary>
-    ///     The method to execute asynchronously after executing the command.
-    /// </summary>
-    /// <param name="command">The <see cref="CommandInfo"/> of the command to be executed.</param>
+    /// <inheritdoc cref="M:Kook.Commands.IModuleBase.AfterExecuteAsync(Kook.Commands.CommandInfo)" />
     protected virtual Task AfterExecuteAsync(CommandInfo command) => Task.CompletedTask;
 
-    /// <summary>
-    ///     The method to execute after executing the command.
-    /// </summary>
-    /// <param name="command">The <see cref="CommandInfo"/> of the command to be executed.</param>
+    /// <inheritdoc cref="M:Kook.Commands.IModuleBase.AfterExecute(Kook.Commands.CommandInfo)" />
     protected virtual void AfterExecute(CommandInfo command)
     {
     }
 
-    /// <summary>
-    ///     The method to execute when building the module.
-    /// </summary>
-    /// <param name="commandService">The <see cref="CommandService"/> used to create the module.</param>
-    /// <param name="builder">The builder used to build the module.</param>
+    /// <inheritdoc cref="M:Kook.Commands.IModuleBase.OnModuleBuilding(Kook.Commands.CommandService,Kook.Commands.Builders.ModuleBuilder)" />
     protected virtual void OnModuleBuilding(CommandService commandService, ModuleBuilder builder)
     {
     }

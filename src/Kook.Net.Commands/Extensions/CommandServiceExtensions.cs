@@ -1,17 +1,17 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     Provides extension methods for the <see cref="CommandService"/> class.
+///     提供用于 <see cref="T:Kook.Commands.CommandService"/> 的扩展方法。
 /// </summary>
 public static class CommandServiceExtensions
 {
     /// <summary>
-    ///     Returns commands that can be executed under the current context.
+    ///     获取可以在当前上下文下执行的命令。
     /// </summary>
-    /// <param name="commands">The set of commands to be checked against.</param>
-    /// <param name="context">The current command context.</param>
-    /// <param name="provider">The service provider used for dependency injection upon precondition check.</param>
-    /// <returns> A read-only collection of commands that can be executed under the current context. </returns>
+    /// <param name="commands"> 要检查的命令。 </param>
+    /// <param name="context"> 当前命令上下文。 </param>
+    /// <param name="provider"> 用于检查时的依赖注入的服务提供程序。 </param>
+    /// <returns> 所提供的命令中可以在当前上下文下执行的所有命令。 </returns>
     public static async Task<IReadOnlyCollection<CommandInfo>> GetExecutableCommandsAsync(this ICollection<CommandInfo> commands,
         ICommandContext context, IServiceProvider provider)
     {
@@ -31,23 +31,23 @@ public static class CommandServiceExtensions
     }
 
     /// <summary>
-    ///     Returns commands that can be executed under the current context.
+    ///     获取可以在当前上下文下执行的命令。
     /// </summary>
-    /// <param name="commandService">The desired command service class to check against.</param>
-    /// <param name="context">The current command context.</param>
-    /// <param name="provider">The service provider used for dependency injection upon precondition check.</param>
-    /// <returns> A read-only collection of commands that can be executed under the current context. </returns>
+    /// <param name="commandService"> 要检查的命令服务。 </param>
+    /// <param name="context"> 当前命令上下文。 </param>
+    /// <param name="provider"> 用于检查时的依赖注入的服务提供程序。 </param>
+    /// <returns> 可以在当前上下文下执行的所有命令。 </returns>
     public static Task<IReadOnlyCollection<CommandInfo>> GetExecutableCommandsAsync(this CommandService commandService,
         ICommandContext context, IServiceProvider provider) =>
         GetExecutableCommandsAsync(commandService.Commands.ToArray(), context, provider);
 
     /// <summary>
-    ///     Returns commands that can be executed under the current context.
+    ///     获取可以在当前上下文下执行的命令。
     /// </summary>
-    /// <param name="module">The module to be checked against.</param>
-    /// <param name="context">The current command context.</param>
-    /// <param name="provider">The service provider used for dependency injection upon precondition check.</param>
-    /// <returns> A read-only collection of commands that can be executed under the current context. </returns>
+    /// <param name="module"> 要检查的模块。 </param>
+    /// <param name="context"> 当前命令上下文。 </param>
+    /// <param name="provider"> 用于检查时的依赖注入的服务提供程序。 </param>
+    /// <returns> 所提供的模块中可以在当前上下文下执行的所有命令。 </returns>
     public static async Task<IReadOnlyCollection<CommandInfo>> GetExecutableCommandsAsync(this ModuleInfo module, ICommandContext context,
         IServiceProvider provider)
     {

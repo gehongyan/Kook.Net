@@ -19,7 +19,7 @@ public static class CardMarkupSerializer
     /// </summary>
     /// <param name="file"> UTF-8 编码的 XML 文件 </param>
     /// <param name="token"> 取消令牌。 </param>
-    /// <returns> 一个表示异步解析操作的任务，任务的结果包含一个可用于枚举 <see cref="ICard"/> 成员的 <see cref="T:System.Collections.Generic.IEnumerable`1"/>。 </returns>
+    /// <returns> 一个表示异步解析操作的任务。任务的结果包含一个可用于枚举 <see cref="ICard"/> 成员的 <see cref="T:System.Collections.Generic.IEnumerable`1"/>。 </returns>
     public static async Task<IEnumerable<ICard>> DeserializeAsync(FileInfo file, CancellationToken token = default)
     {
 #if NETSTANDARD2_0 || NET462
@@ -36,7 +36,7 @@ public static class CardMarkupSerializer
     /// </summary>
     /// <param name="xmlText"> UTF-8 编码的 XML 文本。 </param>
     /// <param name="token"> 取消令牌。 </param>
-    /// <returns> 一个表示异步解析操作的任务，任务的结果包含一个可用于枚举 <see cref="ICard"/> 成员的 <see cref="T:System.Collections.Generic.IEnumerable`1"/>。 </returns>
+    /// <returns> 一个表示异步解析操作的任务。任务的结果包含一个可用于枚举 <see cref="ICard"/> 成员的 <see cref="T:System.Collections.Generic.IEnumerable`1"/>。 </returns>
     public static async Task<IEnumerable<ICard>> DeserializeAsync(string xmlText, CancellationToken token = default)
     {
         using MemoryStream xmlStream = new(Encoding.UTF8.GetBytes(xmlText));
@@ -49,7 +49,7 @@ public static class CardMarkupSerializer
     /// </summary>
     /// <param name="xmlStream"> UTF-8 编码的 XML 流。 </param>
     /// <param name="token"> 取消令牌。 </param>
-    /// <returns> 一个表示异步解析操作的任务，任务的结果包含一个可用于枚举 <see cref="ICard"/> 成员的 <see cref="T:System.Collections.Generic.IEnumerable`1"/>。 </returns>
+    /// <returns> 一个表示异步解析操作的任务。任务的结果包含一个可用于枚举 <see cref="ICard"/> 成员的 <see cref="T:System.Collections.Generic.IEnumerable`1"/>。 </returns>
     public static async Task<IEnumerable<ICard>> DeserializeAsync(Stream xmlStream, CancellationToken token = default)
     {
         using XmlReader xmlReader = XmlReader.Create(xmlStream, new XmlReaderSettings

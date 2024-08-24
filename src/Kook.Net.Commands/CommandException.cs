@@ -1,24 +1,26 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     The exception that is thrown if another exception occurs during a command execution.
+///     表示一个命令执行过程中发生的异常。
 /// </summary>
 public class CommandException : Exception
 {
-    /// <summary> Gets the command that caused the exception. </summary>
+    /// <summary>
+    ///     获取异常的命令信息。
+    /// </summary>
     public CommandInfo Command { get; }
 
-    /// <summary> Gets the command context of the exception. </summary>
+    /// <summary>
+    ///     获取异常的命令上下文。
+    /// </summary>
     public ICommandContext Context { get; }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="CommandException" /> class using a
-    ///     <paramref name="command"/> information, a <paramref name="command"/> context, and the exception that
-    ///     interrupted the execution.
+    ///     初始化一个 <see cref="CommandException" /> 类的新实例。
     /// </summary>
-    /// <param name="command">The command information.</param>
-    /// <param name="context">The context of the command.</param>
-    /// <param name="ex">The exception that interrupted the command execution.</param>
+    /// <param name="command"> 引发异常的命令。 </param>
+    /// <param name="context"> 引发异常的命令上下文。 </param>
+    /// <param name="ex"> 引发的异常。 </param>
     public CommandException(CommandInfo command, ICommandContext context, Exception? ex)
         : base($"Error occurred executing {command.GetLogText(context)}.", ex)
     {

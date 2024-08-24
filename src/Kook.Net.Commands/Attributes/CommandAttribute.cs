@@ -17,11 +17,13 @@ public class CommandAttribute : Attribute
     /// <summary>
     ///     获取或设置命令的运行模式。
     /// </summary>
+    /// <seealso cref="P:Kook.Commands.CommandServiceConfig.DefaultRunMode"/>
     public RunMode RunMode { get; set; } = RunMode.Default;
 
     /// <summary>
     ///     获取或设置是否忽略此命令的额外参数。
     /// </summary>
+    /// <seealso cref="P:Kook.Commands.CommandServiceConfig.IgnoreExtraArgs"/>
     public bool? IgnoreExtraArgs { get; }
 
     /// <summary>

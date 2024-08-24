@@ -1,52 +1,61 @@
 namespace Kook.Commands;
 
-/// <summary> Defines the type of error a command can throw. </summary>
+/// <summary>
+///     表示命令执行的错误。
+/// </summary>
 public enum CommandError
 {
-    //Search
+    // 搜索
+
     /// <summary>
-    /// Thrown when the command is unknown.
+    ///     当命令未知时引发。
     /// </summary>
     UnknownCommand = 1,
 
-    //Parse
+    // 解析
+
     /// <summary>
-    /// Thrown when the command fails to be parsed.
+    ///     当命令解析失败时引发。
     /// </summary>
     ParseFailed,
 
     /// <summary>
-    /// Thrown when the input text has too few or too many arguments.
+    ///     当输入文本的参数过少或过多时引发。
     /// </summary>
     BadArgCount,
 
-    //Parse (Type Reader)
-    //CastFailed,
+    // 解析
+
+    // CastFailed,
+
     /// <summary>
-    /// Thrown when the object cannot be found by the <see cref="TypeReader"/>.
+    ///     当对象未被 <see cref="TypeReader"/> 找到时引发。
     /// </summary>
     ObjectNotFound,
 
     /// <summary>
-    /// Thrown when more than one object is matched by <see cref="TypeReader"/>.
+    ///     当 <see cref="TypeReader"/> 匹配到多个对象时引发。
     /// </summary>
     MultipleMatches,
 
-    //Preconditions
+    // 先决条件
+
     /// <summary>
-    /// Thrown when the command fails to meet a <see cref="PreconditionAttribute"/>'s conditions.
+    ///     当命令未满足先决条件时引发。
     /// </summary>
     UnmetPrecondition,
 
-    //Execute
+    // 执行
+
     /// <summary>
-    /// Thrown when an exception occurs mid-command execution.
+    ///     当命令执行时发生异常时引发。
     /// </summary>
     Exception,
 
-    //Runtime
+    // 运行时
+
     /// <summary>
-    /// Thrown when the command is not successfully executed on runtime.
+    ///     当命令在运行时未成功执行时引发。
     /// </summary>
     Unsuccessful
 }
