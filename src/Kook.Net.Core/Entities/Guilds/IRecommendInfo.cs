@@ -66,8 +66,11 @@ public interface IRecommendInfo
     BoostLevel BoostLevel { get; }
 
     /// <summary>
-    ///     TODO: To be documented.
+    ///     获取推荐服务器的自定义 ID。
     /// </summary>
+    /// <remarks>
+    ///     自定义 ID 可能是一个自定义字符串，也可能是服务器靓号 ID，当无自定义 ID 时为空字符串。
+    /// </remarks>
     string CustomId { get; }
 
     /// <summary>
