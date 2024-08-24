@@ -533,8 +533,7 @@ KMarkdown 格式化帮助类 `Format` 中的各格式化方法皆已变更为扩
 
 - 修复 [IUserMessage.Resolve](xref:Kook.IUserMessage.Resolve*) 对全体成员与在线成员标签文本化不正确的问题
 - 修复 [IGuild.CreateRoleAsync](xref:Kook.IGuild.CreateRoleAsync*) 反序列化结果失败的问题
-- （实验性功能）修复 [BaseKookClient.CreateGuildAsync](xref:Kook.Rest.KookRestClientExperimentalExtensions.CreateGuildAsync*)
-  及 [KookSocketClient.CreateGuildAsync](xref:Kook.WebSocket.BaseSocketClientExperimentalExtensions.CreateGuildAsync*)
+- （实验性功能）修复 `BaseKookClient.CreateGuildAsync` 及 `KookSocketClient.CreateGuildAsync`
   返回所创建的服务器信息不完整的问题
 
 ### 其它
@@ -571,7 +570,7 @@ KMarkdown 格式化帮助类 `Format` 中的各格式化方法皆已变更为扩
 ### 修复
 
 - 修复 [KookRestClient.GetGuildsAsync](xref:Kook.Rest.KookRestClient.GetGuildsAsync*) 在服务器数量较大时下载数据过慢的问题
-- （实验性功能）修复 [KookRestClient.GetGuildsAsync](xref:Kook.Rest.KookRestClient.GetGuildsAsync*) 在 Bearer 类型认证下构造对象失败的问题
+- （实验性功能）修复 `KookRestClient.GetGuildsAsync` 在 Bearer 类型认证下构造对象失败的问题
 - 修复 [Color](xref:Kook.Color) 部分值不正确的问题
 
 ## v0.2.2 [2022-12-30]

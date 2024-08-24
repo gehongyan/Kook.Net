@@ -3,7 +3,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <VersionPrefix>0.9.0</VersionPrefix>
-    <VersionSuffix>beta4</VersionSuffix>
+    <VersionSuffix>beta5</VersionSuffix>
     <IsPackable>false</IsPackable>
     <IsTrimmable>false</IsTrimmable>
     <IsAotCompatible>false</IsAotCompatible>
