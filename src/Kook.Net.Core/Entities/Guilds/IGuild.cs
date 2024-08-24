@@ -76,8 +76,7 @@ public interface IGuild : IEntity<ulong>
     ///             <description> 国际专线(助力专享) </description>
     ///         </item>
     ///     </list>
-    ///     此列表仅供参考。要获取最新可用服务器区域列表，可在安装 Kook.Net.Experimental 实验性 API 实现包后，在
-    ///     <c>BaseKookClient</c> 上调用 <c>GetVoiceRegionsAsync</c> 方法。
+    ///     此列表仅供参考。
     /// </remarks>
     string Region { get; }
 
