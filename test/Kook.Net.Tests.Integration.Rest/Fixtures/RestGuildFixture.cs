@@ -45,7 +45,7 @@ public class RestGuildFixture : KookRestClientFixture
     /// </summary>
     private async Task RemoveAllChannelsAsync()
     {
-        IReadOnlyCollection<RestGuildChannel> channels = Guild.GetChannelsAsync().GetAwaiter().GetResult();
+        IReadOnlyCollection<RestGuildChannel> channels = await Guild.GetChannelsAsync();
         foreach (RestGuildChannel channel in channels.Where(x => x is INestedChannel))
             await channel.DeleteAsync();
         foreach (RestGuildChannel channel in channels.Where(x => x is ICategoryChannel))

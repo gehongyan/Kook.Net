@@ -100,8 +100,8 @@ CODE BLOCK
             List<ITag> tags = message.Tags.ToList();
             Assert.Equal(_channel.Id, tags.Single(tag => tag.Type == TagType.ChannelMention).Key);
             Assert.Equal(selfUser.Id, tags.Single(tag => tag.Type == TagType.UserMention).Key);
-            Assert.Equal(0, tags.Single(tag => tag.Type == TagType.EveryoneMention).Key);
-            Assert.Equal(0, tags.Single(tag => tag.Type == TagType.HereMention).Key);
+            Assert.Equal(0U, tags.Single(tag => tag.Type == TagType.EveryoneMention).Key);
+            Assert.Equal(0U, tags.Single(tag => tag.Type == TagType.HereMention).Key);
         }
         finally
         {

@@ -396,7 +396,7 @@ internal static class MessageHelper
                 int? tagIndex = FindIndex(tags, index);
                 if (tagIndex.HasValue)
                 {
-                    Tag<uint, IRole> everyoneMention = new(TagType.EveryoneMention, index, "@全体成员".Length, 0, guild?.EveryoneRole);
+                    Tag<uint, IRole> everyoneMention = new(TagType.EveryoneMention, index, "@全体成员".Length, 0U, guild?.EveryoneRole);
                     tags.Insert(tagIndex.Value, everyoneMention);
                 }
                 index++;
@@ -412,7 +412,7 @@ internal static class MessageHelper
                 int? tagIndex = FindIndex(tags, index);
                 if (tagIndex.HasValue)
                 {
-                    Tag<uint, IRole> everyoneMention = new(TagType.EveryoneMention, index, "(met)all(met)".Length, 0, guild?.EveryoneRole);
+                    Tag<uint, IRole> everyoneMention = new(TagType.EveryoneMention, index, "(met)all(met)".Length, 0U, guild?.EveryoneRole);
                     tags.Insert(tagIndex.Value, everyoneMention);
                 }
                 index++;
@@ -431,7 +431,7 @@ internal static class MessageHelper
                 int? tagIndex = FindIndex(tags, index);
                 if (tagIndex.HasValue)
                 {
-                    Tag<uint, IRole> hereMention = new(TagType.HereMention, index, "@在线成员".Length, 0, null);
+                    Tag<uint, IRole> hereMention = new(TagType.HereMention, index, "@在线成员".Length, 0U, null);
                     tags.Insert(tagIndex.Value, hereMention);
                 }
                 index++;
@@ -447,7 +447,7 @@ internal static class MessageHelper
                 int? tagIndex = FindIndex(tags, index);
                 if (tagIndex.HasValue)
                 {
-                    Tag<uint, IRole> hereMention = new(TagType.HereMention, index, "(met)here(met)".Length, 0, guild?.EveryoneRole);
+                    Tag<uint, IRole> hereMention = new(TagType.HereMention, index, "(met)here(met)".Length, 0U, guild?.EveryoneRole);
                     tags.Insert(tagIndex.Value, hereMention);
                 }
                 index++;
