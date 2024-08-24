@@ -26,7 +26,6 @@ public interface INestedChannel : IGuildChannel
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous operation for syncing channel permissions with its parent's.
     ///     一个表示异步频道权限同步操作的任务。
     /// </returns>
     Task SyncPermissionsAsync(RequestOptions? options = null);

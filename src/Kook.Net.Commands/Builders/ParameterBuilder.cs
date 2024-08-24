@@ -83,12 +83,6 @@ public class ParameterBuilder
 
     #region User-defined
 
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="ParameterBuilder"/> class.
-    /// </summary>
-    /// <param name="command"> The command builder that this parameter builder belongs to. </param>
-    /// <param name="name"> The name of this parameter. </param>
-    /// <param name="type"> The type of this parameter. </param>
     internal ParameterBuilder(CommandBuilder command, string name, Type type)
         : this(command)
     {
@@ -97,10 +91,6 @@ public class ParameterBuilder
         SetType(type);
     }
 
-    /// <summary>
-    ///     Sets the type of this parameter.
-    /// </summary>
-    /// <param name="type"> The type of this parameter. </param>
     internal void SetType(Type type)
     {
         TypeReader = GetReader(type);
@@ -111,12 +101,6 @@ public class ParameterBuilder
         ParameterType = type;
     }
 
-    /// <summary>
-    ///     Gets the type reader of this parameter.
-    /// </summary>
-    /// <param name="type"> The type of this parameter. </param>
-    /// <returns> The type reader of this parameter. </returns>
-    /// <exception cref="InvalidOperationException"> The type for the command must be a class with a public parameterless constructor to use as a NamedArgumentType. </exception>
     private TypeReader? GetReader(Type? type)
     {
         if (type is null) return null;

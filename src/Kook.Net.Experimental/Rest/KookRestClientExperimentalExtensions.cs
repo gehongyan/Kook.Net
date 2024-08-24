@@ -1,7 +1,6 @@
 namespace Kook.Rest;
 
 /// <summary>
-///     Provides extension methods of experimental functionalities for <see cref="KookRestClient"/>s.
 ///     提供用于 <see cref="T:Kook.Rest.KookRestClient"/> 的实验性功能的扩展方法。
 /// </summary>
 public static class KookRestClientExperimentalExtensions

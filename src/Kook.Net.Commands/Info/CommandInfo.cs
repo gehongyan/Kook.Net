@@ -44,7 +44,7 @@ public class CommandInfo
     public string? Summary { get; }
 
     /// <summary>
-    ///     Gets the remarks of the command.
+    ///     获取此命令的备注。
     /// </summary>
     /// <remarks>
     ///     此字段返回命令的摘要。<see cref="Summary"/> 和 <see cref="Remarks"/> 可以用于帮助命令中，为用户提供命令的详细信息。

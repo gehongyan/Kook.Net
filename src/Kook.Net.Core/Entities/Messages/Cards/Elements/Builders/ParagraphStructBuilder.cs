@@ -91,10 +91,10 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     }
 
     /// <summary>
-    ///     Adds a field to the paragraph.
+    ///     添加一个文本块到区域文本。
     /// </summary>
     /// <param name="action">
-    ///     The action to create a builder of a <see cref="KMarkdownElement"/>, which will be added to the paragraph.
+    ///     用于创建一个 <see cref="KMarkdownElement"/> 的构建器的操作，该构建器将被添加到区域文本。
     /// </param>
     /// <returns> 当前构建器。 </returns>
     public ParagraphStructBuilder AddField<T>(Action<T>? action = null)

@@ -77,7 +77,6 @@ public sealed class BucketId : IEquatable<BucketId>
     ///     获取将此桶定义为哈希分组限速桶的字符串。
     /// </summary>
     /// <returns>
-    ///     A string that defines this bucket as a hash based one.
     ///     如果此桶是哈希分组限速桶，则返回此桶的哈希值；否则返回 <see langword="null"/>。
     /// </returns>
     public string? GetBucketHash() => IsHashBucket

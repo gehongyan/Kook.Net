@@ -5,9 +5,9 @@ namespace Kook.Net.Webhooks.AspNet;
 internal interface IAspNetWebhookClient : IWebhookClient
 {
     /// <summary>
-    ///     Handles a Kook webhook request.
+    ///     处理一个 KOOK Webhook 请求。
     /// </summary>
-    /// <param name="httpContext"> The HTTP context to handle the request with. </param>
-    /// <returns> A task that represents the asynchronous operation. </returns>
+    /// <param name="httpContext"> KOOK Webhook 请求的 HTTP 上下文。 </param>
+    /// <returns> 一个表示异步操作的任务。 </returns>
     Task HandleRequestAsync(HttpContext httpContext);
 }

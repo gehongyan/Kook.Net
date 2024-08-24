@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook.Commands;
 
 /// <summary>
-///     Provides extension methods for <see cref="IUserMessage" /> that relates to commands.
 ///     提供用于 <see cref="T:Kook.IUserMessage" /> 与命令相关的扩展方法。
 /// </summary>
 public static class MessageExtensions

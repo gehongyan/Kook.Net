@@ -213,10 +213,10 @@ public readonly struct AlphaColor
     public override int GetHashCode() => RawValue.GetHashCode();
 
     /// <summary>
-    ///     Converts the given Kook.Net-defined <see cref="Color"/> to a Kook.Net-defined <see cref="AlphaColor"/>.
+    ///     将由 Kook.Net 定义的 <see cref="T:Kook.Color"/> 颜色转换为 Kook.Net 定义的 <see cref="T:Kook.AlphaColor"/> 颜色。
     /// </summary>
-    /// <param name="color"> The Kook.Net-defined <see cref="Color"/> to convert. </param>
-    /// <returns> The Kook.Net-defined <see cref="AlphaColor"/> that represents the given Kook.Net-defined <see cref="Color"/>. </returns>
+    /// <param name="color"> 要进行转换的 Kook.Net 定义的 <see cref="T:Kook.Color"/> 颜色。 </param>
+    /// <returns> 与该 Kook.Net 定义的 <see cref="T:Kook.Color"/> 颜色具有相同色值的 <see cref="T:Kook.AlphaColor"/> 颜色。 </returns>
     public static implicit operator AlphaColor(Color color) =>
         new((color.RawValue << 8) | 0xFF);
 

@@ -17,8 +17,6 @@ public class MusicModule : ModuleBase<SocketCommandContext>
     private readonly MusicService _musicService;
     private readonly IHttpClientFactory _httpClientFactory;
 
-
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="MusicModule"/> class.
     /// </summary>

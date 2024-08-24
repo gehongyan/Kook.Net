@@ -16,7 +16,6 @@ public interface IRateLimitInfo
     int? Limit { get; }
 
     /// <summary>
-    ///     Gets the number of remaining requests that can be made.
     ///     获取目前可以立即进行的请求数量。
     /// </summary>
     int? Remaining { get; }

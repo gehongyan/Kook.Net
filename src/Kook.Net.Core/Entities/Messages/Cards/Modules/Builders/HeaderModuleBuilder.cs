@@ -110,14 +110,7 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
         return new HeaderModule(Text.Build());
     }
 
-    /// <summary>
-    ///     Initialized a new instance of the <see cref="HeaderModuleBuilder"/> class
-    ///     with the specified <paramref name="text"/>.
-    /// </summary>
-    /// <param name="text">
-    ///     The text to be set for the header.
-    /// </param>
-    /// <returns> An <see cref="HeaderModuleBuilder"/> object that is initialized with the specified <paramref name="text"/>. </returns>
+    /// <inheritdoc cref="M:Kook.HeaderModuleBuilder.#ctor(System.String)" />
     public static implicit operator HeaderModuleBuilder(string text) => new(text);
 
     /// <inheritdoc />

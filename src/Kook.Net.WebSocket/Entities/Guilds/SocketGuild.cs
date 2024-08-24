@@ -159,7 +159,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     public ulong MaxUploadLimit => GuildHelper.GetUploadLimit(this);
 
     /// <summary>
-    ///     Gets the current logged-in user.
+    ///     获取当前登录的用户。
     /// </summary>
     public SocketGuildUser? CurrentUser =>
         Kook.CurrentUser is not null

@@ -62,14 +62,7 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
         return new InviteModule(Code);
     }
 
-    /// <summary>
-    ///     Initialized a new instance of the <see cref="InviteModuleBuilder"/> class
-    ///     with the specified <paramref name="code"/>.
-    /// </summary>
-    /// <param name="code">
-    ///     The code representing the invite.
-    /// </param>
-    /// <returns> An <see cref="InviteModuleBuilder"/> object that is initialized with the specified <paramref name="code"/>. </returns>
+    /// <inheritdoc cref="M:Kook.InviteModuleBuilder.#ctor(System.String)" />
     public static implicit operator InviteModuleBuilder(string code) => new(code);
 
     /// <inheritdoc />

@@ -255,9 +255,6 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
             _roleIds = [..guildModel.CurrentUserRoles];
     }
 
-    /// <summary>
-    ///     Updates the nickname of this user.
-    /// </summary>
     internal void UpdateNickname()
     {
         if (Nickname == Username)
