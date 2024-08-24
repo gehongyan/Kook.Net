@@ -8,7 +8,7 @@ using Model = Kook.API.Guild;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a REST-based guild/server.
+///     表示一个基于 REST 的服务器。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
@@ -37,17 +37,23 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     public string Banner { get; private set; }
 
     /// <summary>
-    ///     Gets the nickname of the current user in this guild.
+    ///     获取当前用户在此服务器的昵称。
     /// </summary>
+    /// <remarks>
+    ///     如果当前用户在此服务器未设置昵称，或所设置的昵称与当前用户的用户名相同，则此属性为 <c>null</c>。
+    /// </remarks>
     public string? CurrentUserNickname { get; private set; }
 
     /// <summary>
-    ///     Gets the display name of the current user in this guild.
+    ///     获取当前用户在此服务器的显示名称。
     /// </summary>
+    /// <remarks>
+    ///     如果当前用户在此服务器内设置了昵称，则此属性为设置的昵称；否则为当前用户的用户名。
+    /// </remarks>
     public string CurrentUserDisplayName { get; private set; }
 
     /// <summary>
-    ///     Gets the roles of the current user in this guild.
+    ///     获取当前用户在此服务器所拥有的所有角色。
     /// </summary>
     public IReadOnlyCollection<RestRole> CurrentUserRoles => _currentUserRoles.ToReadOnlyCollection();
 
@@ -69,7 +75,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc />
     public ulong? WelcomeChannelId { get; private set; }
 
-    internal bool Available { get; private set; }
+    /// <inheritdoc />
+    public bool IsAvailable { get; private set; }
 
     /// <inheritdoc/>
     public int MaxBitrate => GuildHelper.GetMaxBitrate(this);
@@ -77,75 +84,47 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc/>
     public ulong MaxUploadLimit => GuildHelper.GetUploadLimit(this);
 
-    /// <summary>
-    ///     Gets the built-in role containing all users in this guild.
-    /// </summary>
+    /// <inheritdoc cref="P:Kook.IGuild.EveryoneRole" />
     public RestRole EveryoneRole => GetRole(0) ?? new RestRole(Kook, this, 0);
 
-    /// <inheritdoc cref="IGuild.Emotes"/>
+    /// <inheritdoc cref="P:Kook.IGuild.Emotes"/>
     /// <remarks>
     ///     <note type="warning">
-    ///         This property may contain no elements if the current guild is fetched
-    ///         via <see cref="KookRestClient.GetGuildAsync"/>. In this case, you must
-    ///         use <see cref="GetEmoteAsync"/> to retrieve all emotes.
+    ///         如果当前服务器是通过 <see cref="KookRestClient.GetGuildAsync"/> 获取的，此属性可能不包含任何元素。访问
+    ///         <see cref="M:Kook.Rest.RestGuild.GetEmoteAsync(System.String,Kook.RequestOptions)"/>
+    ///         以获取所有服务器自定义表情。
     ///     </note>
     /// </remarks>
     public IReadOnlyCollection<GuildEmote> Emotes => _emotes.ToReadOnlyCollection();
 
-    /// <summary>
-    ///     Gets a collection of all roles in this guild.
-    /// </summary>
+    /// <inheritdoc cref="P:Kook.IGuild.Roles" />
     public IReadOnlyCollection<RestRole> Roles => _roles.ToReadOnlyCollection();
 
     /// <summary>
-    ///     Gets a collection of all text channels in this guild.
+    ///     获取此服务器中所有具有文字聊天能力的频道。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of message channels found within this guild.
-    /// </returns>
-    public IReadOnlyCollection<RestTextChannel> TextChannels =>
-        Channels.OfType<RestTextChannel>().ToImmutableArray();
+    /// <remarks>
+    ///     语音频道也是一种文字频道，此计算属性本意用于获取所有具有文字聊天能力的频道，通过此方法获取到的文字频道列表中也包含了语音频道。
+    ///     如需获取频道的实际类型，请参考 <see cref="M:Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
+    /// </remarks>
+    public IReadOnlyCollection<RestTextChannel> TextChannels => Channels.OfType<RestTextChannel>().ToImmutableArray();
 
     /// <summary>
-    ///     Gets a collection of all voice channels in this guild.
+    ///     获取此服务器中所有具有语音聊天能力的频道。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of voice channels found within this guild.
-    /// </returns>
-    public IReadOnlyCollection<RestVoiceChannel> VoiceChannels =>
-        Channels.OfType<RestVoiceChannel>().ToImmutableArray();
+    public IReadOnlyCollection<RestVoiceChannel> VoiceChannels => Channels.OfType<RestVoiceChannel>().ToImmutableArray();
 
     /// <summary>
-    ///     Gets a collection of all stage channels in this guild.
+    ///     获取此服务器中的所有分组频道。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of stage channels found within this guild.
-    /// </returns>
-    /// <summary>
-    ///     Gets a collection of all category channels in this guild.
-    /// </summary>
-    /// <returns>
-    ///     A read-only collection of category channels found within this guild.
-    /// </returns>
-    public IReadOnlyCollection<RestCategoryChannel> CategoryChannels =>
-        Channels.OfType<RestCategoryChannel>().ToImmutableArray();
+    public IReadOnlyCollection<RestCategoryChannel> CategoryChannels => Channels.OfType<RestCategoryChannel>().ToImmutableArray();
 
     /// <summary>
-    ///     Gets a collection of all channels in this guild.
+    ///     获取此服务器中的所有频道。
     /// </summary>
     public IReadOnlyCollection<RestGuildChannel> Channels => _channels.ToReadOnlyCollection();
 
-    /// <summary>
-    ///     Gets the features of this guild.
-    /// </summary>
-    /// <returns>
-    ///     An array of objects representing the features of this guild.
-    /// </returns>
-    /// <remarks>
-    ///      <note type="important">
-    ///         What this property represents is not well investigated.
-    ///     </note>
-    /// </remarks>
+    /// <inheritdoc />
     public GuildFeatures Features { get; private set; }
 
     /// <inheritdoc />
@@ -167,7 +146,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </summary>
     public string? AutoDeleteTime { get; private set; }
 
-    /// <inheritdoc cref="IGuild.RecommendInfo"/>
+    /// <inheritdoc cref="P:Kook.IGuild.RecommendInfo"/>
     public RecommendInfo? RecommendInfo { get; private set; }
 
     internal RestGuild(BaseKookClient client, ulong id)
@@ -252,7 +231,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         else
             DefaultChannelId = null;
         WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
-        Available = true;
+        IsAvailable = true;
 
         if (model.Roles is { Length: 0 })
         {
@@ -302,39 +281,15 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
     #region Bans
 
-    /// <summary>
-    ///     Gets a collection of all users banned in this guild.
-    /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
-    ///     ban objects that this guild currently possesses, with each object containing the user banned and reason
-    ///     behind the ban.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuild.GetBansAsync(Kook.RequestOptions)" />
     public Task<IReadOnlyCollection<RestBan>> GetBansAsync(RequestOptions? options = null) =>
         GuildHelper.GetBansAsync(this, Kook, options);
 
-    /// <summary>
-    ///     Gets a ban object for a banned user.
-    /// </summary>
-    /// <param name="user">The banned user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
-    ///     contains the user information and the reason for the ban; <c>null</c> if the ban entry cannot be found.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuild.GetBanAsync(Kook.IUser,Kook.RequestOptions)" />
     public Task<RestBan?> GetBanAsync(IUser user, RequestOptions? options = null) =>
         GuildHelper.GetBanAsync(this, Kook, user.Id, options);
 
-    /// <summary>
-    ///     Gets a ban object for a banned user.
-    /// </summary>
-    /// <param name="userId">The identifier for the banned user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a ban object, which
-    ///     contains the user information and the reason for the ban; <c>null</c> if the ban entry cannot be found.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuild.GetBanAsync(System.UInt64,Kook.RequestOptions)" />
     public Task<RestBan?> GetBanAsync(ulong userId, RequestOptions? options = null) =>
         GuildHelper.GetBanAsync(this, Kook, userId, options);
 
@@ -372,24 +327,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
     #region Roles
 
-    /// <summary>
-    ///     Gets a role in this guild.
-    /// </summary>
-    /// <param name="id">The identifier for the role.</param>
-    /// <returns>
-    ///     A role that is associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuild.GetRole(System.UInt32)" />
     public RestRole? GetRole(uint id) => _roles.TryGetValue(id, out RestRole? value) ? value : null;
 
-    /// <summary>
-    ///     Creates a new role with the provided name.
-    /// </summary>
-    /// <param name="name">The new name for the role.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
-    ///     role.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuild.CreateRoleAsync(System.String,Kook.RequestOptions)" />
     public async Task<RestRole> CreateRoleAsync(string? name = null, RequestOptions? options = null)
     {
         RestRole role = await GuildHelper.CreateRoleAsync(this, Kook, name, options).ConfigureAwait(false);
@@ -402,42 +343,27 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     #region Users
 
     /// <summary>
-    ///     Gets a collection of all users in this guild.
+    ///     获取此服务器内的所有用户。
     /// </summary>
-    /// <remarks>
-    ///     This method retrieves all users found within this guild.
-    /// </remarks>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
-    ///     users found within this guild.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器内的所有用户。 </returns>
     public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> GetUsersAsync(RequestOptions? options = null) =>
         GuildHelper.GetUsersAsync(this, Kook, KookConfig.MaxUsersPerBatch, 1, options);
 
     /// <summary>
-    ///     Gets a user from this guild.
+    ///     获取此服务器内的用户。
     /// </summary>
-    /// <remarks>
-    ///     This method retrieves a user found within this guild.
-    /// </remarks>
-    /// <param name="id">The identifier of the user.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the guild user
-    ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="id"> 要获取的用户的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的用户；如果未找到，则返回 <c>null</c>。 </returns>
     public Task<RestGuildUser> GetUserAsync(ulong id, RequestOptions? options = null) =>
         GuildHelper.GetUserAsync(this, Kook, id, options);
 
     /// <summary>
-    ///     Gets the current user for this guild.
+    ///     获取此服务器内当前登录的用户。
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the currently logged-in
-    ///     user within this guild.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器内当前登录的用户。 </returns>
     public Task<RestGuildUser> GetCurrentUserAsync(RequestOptions? options = null)
     {
         if (Kook.CurrentUser is null)
@@ -446,32 +372,35 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <summary>
-    ///     Gets the owner of this guild.
+    ///     获取此服务器的所有者。
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the owner of this guild.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有者。 </returns>
     public Task<RestGuildUser> GetOwnerAsync(RequestOptions? options = null) =>
         GuildHelper.GetUserAsync(this, Kook, OwnerId, options);
 
     /// <summary>
-    ///     Gets a collection of users in this guild that the name or nickname contains the
-    ///     provided <c>string</c> at <paramref name="func"/>.
+    ///     获取此服务器内与指定搜索条件匹配的用户。
     /// </summary>
     /// <remarks>
-    ///     The <paramref name="limit"/> can not be higher than <see cref="KookConfig.MaxUsersPerBatch"/>.
+    ///     <note type="important">
+    ///         返回的集合是一个异步可枚举对象；调用
+    ///         <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///         可以异步枚举所有分页，并将其合并为一个集合。
+    ///     </note>
+    ///     <br />
+    ///     此方法将尝试获取所有与指定搜索条件匹配的用户。此方法会根据 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/>
+    ///     将请求拆分。换句话说，如果搜索结果有 3000 名用户，而 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/> 的常量为
+    ///     <c>50</c>，则请求将被拆分为 60 个单独请求，因此异步枚举器会异步枚举返回 60 个响应。
+    ///     <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///     方法可以展开这 60 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
-    /// <param name="func">A delegate containing the properties to search users with.</param>
-    /// <param name="limit">The maximum number of users to be gotten.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
-    ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/> at <paramref name="func"/>.
-    /// </returns>
+    /// <param name="func"> 一个包含设置服务器用户搜索条件属性的委托。 </param>
+    /// <param name="limit"> 要获取搜索到的服务器用户的数量。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 分页的服务器用户集合的异步可枚举对象。 </returns>
     public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> SearchUsersAsync(
-        Action<SearchGuildMemberProperties> func, int limit = KookConfig.MaxUsersPerBatch,
-        RequestOptions? options = null) =>
+        Action<SearchGuildMemberProperties> func, int limit = KookConfig.MaxUsersPerBatch, RequestOptions? options = null) =>
         GuildHelper.SearchUsersAsync(this, Kook, func, limit, options);
 
     #endregion
@@ -479,37 +408,32 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     #region Channels
 
     /// <summary>
-    ///     Gets a collection of all channels in this guild.
+    ///     获取此服务器的所有频道。
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
-    ///     generic channels found within this guild.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有频道。 </returns>
     public Task<IReadOnlyCollection<RestGuildChannel>> GetChannelsAsync(RequestOptions? options = null) =>
         GuildHelper.GetChannelsAsync(this, Kook, options);
 
     /// <summary>
-    ///     Gets a channel in this guild.
+    ///     获取此服务器内的频道。
     /// </summary>
-    /// <param name="id">The identifier for the channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the generic channel
-    ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
     public Task<RestGuildChannel> GetChannelAsync(ulong id, RequestOptions? options = null) =>
         GuildHelper.GetChannelAsync(this, Kook, id, options);
 
     /// <summary>
-    ///     Gets a text channel in this guild.
+    ///     获取此服务器内指定具有文字聊天能力的频道。
     /// </summary>
-    /// <param name="id">The identifier for the text channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the text channel
-    ///     associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
+    /// <remarks>
+    ///     语音频道也是一种文字频道，此方法本意用于获取具有文字聊天能力的频道。如果通过此方法传入的 ID 对应的频道是语音频道，那么也会返回对应的语音频道实体。
+    ///     如需获取频道的实际类型，请参考 <see cref="M:Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
+    /// </remarks>
     public async Task<RestTextChannel?> GetTextChannelAsync(ulong id, RequestOptions? options = null)
     {
         RestGuildChannel channel = await GuildHelper
@@ -519,13 +443,14 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <summary>
-    ///     Gets a collection of all text channels in this guild.
+    ///     获取此服务器中所有具有文字聊天能力的频道。
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
-    ///     message channels found within this guild.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有具有文字聊天能力的频道。 </returns>
+    /// <remarks>
+    ///     语音频道也是一种文字频道，此方法本意用于获取所有具有文字聊天能力的频道，通过此方法获取到的文字频道列表中也包含了语音频道。
+    ///     如需获取频道的实际类型，请参考 <see cref="M:Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
+    /// </remarks>
     public async Task<IReadOnlyCollection<RestTextChannel>> GetTextChannelsAsync(RequestOptions? options = null)
     {
         IReadOnlyCollection<RestGuildChannel> channels = await GuildHelper
@@ -535,14 +460,11 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <summary>
-    ///     Gets a voice channel in this guild.
+    ///     获取此服务器内指定具有语音聊天能力的频道。
     /// </summary>
-    /// <param name="id">The identifier for the voice channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the voice channel associated
-    ///     with the specified <paramref name="id"/>; <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
     public async Task<RestVoiceChannel?> GetVoiceChannelAsync(ulong id, RequestOptions? options = null)
     {
         RestGuildChannel channel = await GuildHelper
@@ -552,13 +474,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <summary>
-    ///     Gets a collection of all voice channels in this guild.
+    ///     获取此服务器中所有具有语音聊天能力的频道。
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
-    ///     voice channels found within this guild.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有具有语音聊天能力的频道。 </returns>
     public async Task<IReadOnlyCollection<RestVoiceChannel>> GetVoiceChannelsAsync(RequestOptions? options = null)
     {
         IReadOnlyCollection<RestGuildChannel> channels = await GuildHelper
@@ -568,14 +487,11 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <summary>
-    ///     Gets a category channel in this guild.
+    ///     获取此服务器内指定的分组频道。
     /// </summary>
-    /// <param name="id">The identifier for the category channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the category channel associated
-    ///     with the specified <paramref name="id"/>; <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
     public async Task<RestCategoryChannel?> GetCategoryChannelAsync(ulong id, RequestOptions? options = null)
     {
         RestGuildChannel channel = await GuildHelper
@@ -585,13 +501,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <summary>
-    ///     Gets a collection of all category channels in this guild.
+    ///     获取此服务器中的所有分组频道。
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
-    ///     category channels found within this guild.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有分组频道。 </returns>
     public async Task<IReadOnlyCollection<RestCategoryChannel>> GetCategoryChannelsAsync(RequestOptions? options = null)
     {
         IReadOnlyCollection<RestGuildChannel> channels = await GuildHelper
@@ -601,13 +514,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <summary>
-    ///     Gets the default text channel in this guild.
+    ///     获取此服务器的默认文字频道。
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the default text channel of this guild;
-    ///     <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的默认文字频道；如果未找到，则返回 <c>null</c>。 </returns>
     public async Task<RestTextChannel?> GetDefaultChannelAsync(RequestOptions? options = null)
     {
         if (!DefaultChannelId.HasValue) return null;
@@ -618,13 +528,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <summary>
-    ///     Gets the welcome text channel in this guild.
+    ///     获取此服务器的欢迎通知频道。
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the welcome text channel of this guild;
-    ///     <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的欢迎通知频道；如果未找到，则返回 <c>null</c>。 </returns>
     public async Task<RestTextChannel?> GetWelcomeChannelAsync(RequestOptions? options = null)
     {
         if (!WelcomeChannelId.HasValue) return null;
@@ -634,44 +541,17 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         return channel as RestTextChannel;
     }
 
-    /// <summary>
-    ///     Creates a new text channel in this guild.
-    /// </summary>
-    /// <param name="name">The new name for the text channel.</param>
-    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
-    ///     text channel.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuild.CreateTextChannelAsync(System.String,System.Action{Kook.CreateTextChannelProperties},Kook.RequestOptions)" />
     public Task<RestTextChannel> CreateTextChannelAsync(string name,
         Action<CreateTextChannelProperties>? func = null, RequestOptions? options = null) =>
         GuildHelper.CreateTextChannelAsync(this, Kook, name, func, options);
 
-    /// <summary>
-    ///     Creates a voice channel with the provided name.
-    /// </summary>
-    /// <param name="name">The name of the new channel.</param>
-    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="name" /> is <c>null</c>.</exception>
-    /// <returns>
-    ///     The created voice channel.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuild.CreateVoiceChannelAsync(System.String,System.Action{Kook.CreateVoiceChannelProperties},Kook.RequestOptions)" />
     public Task<RestVoiceChannel> CreateVoiceChannelAsync(string name,
         Action<CreateVoiceChannelProperties>? func = null, RequestOptions? options = null) =>
         GuildHelper.CreateVoiceChannelAsync(this, Kook, name, func, options);
 
-    /// <summary>
-    ///     Creates a category channel with the provided name.
-    /// </summary>
-    /// <param name="name">The name of the new channel.</param>
-    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="name" /> is <c>null</c>.</exception>
-    /// <returns>
-    ///     The created category channel.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuild.CreateCategoryChannelAsync(System.String,System.Action{Kook.CreateCategoryChannelProperties},Kook.RequestOptions)" />
     public Task<RestCategoryChannel> CreateCategoryChannelAsync(string name,
         Action<CreateCategoryChannelProperties>? func = null, RequestOptions? options = null) =>
         GuildHelper.CreateCategoryChannelAsync(this, Kook, name, func, options);
@@ -736,9 +616,6 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     IReadOnlyDictionary<ulong, IAudioClient> IGuild.AudioClients => ImmutableDictionary<ulong, IAudioClient>.Empty;
 
     /// <inheritdoc />
-    bool IGuild.Available => Available;
-
-    /// <inheritdoc />
     IReadOnlyCollection<IRole> IGuild.Roles => Roles;
 
     /// <inheritdoc />
@@ -776,15 +653,15 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
             : [];
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException">Downloading users is not supported for a REST-based guild.</exception>
+    /// <exception cref="NotSupportedException"> 不支持在基于 REST 的服务器上下载用户。 </exception>
     Task IGuild.DownloadUsersAsync(RequestOptions? options) => throw new NotSupportedException();
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException">Downloading voice states is not supported for a REST-based guild.</exception>
+    /// <exception cref="NotSupportedException"> 不支持在基于 REST 的服务器上下载语音状态。 </exception>
     Task IGuild.DownloadVoiceStatesAsync(RequestOptions? options) => throw new NotSupportedException();
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException">Downloading boost subscriptions is not supported for a REST-based guild.</exception>
+    /// <exception cref="NotSupportedException"> 不支持在基于 REST 的服务器上下载服务器助力西南西。 </exception>
     Task IGuild.DownloadBoostSubscriptionsAsync(RequestOptions? options) => throw new NotSupportedException();
 
     /// <inheritdoc />
@@ -890,12 +767,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
     #endregion
 
-    /// <summary>
-    ///     Returns the name of the guild.
-    /// </summary>
-    /// <returns>
-    ///     The name of the guild.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.Rest.RestGuild.Name" />
+    /// <returns> 此服务器的名称。 </returns>
     public override string ToString() => Name;
 
     private string DebuggerDisplay => $"{Name} ({Id})";

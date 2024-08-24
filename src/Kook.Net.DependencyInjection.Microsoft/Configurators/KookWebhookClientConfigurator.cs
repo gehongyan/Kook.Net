@@ -4,12 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace Kook.Net.DependencyInjection.Microsoft;
 
-/// <summary>
-///     Represents a configurator for a Kook webhook client.
-/// </summary>
-/// <typeparam name="TClient"> The type of the client. </typeparam>
-/// <typeparam name="TConfig"> The type of the configuration. </typeparam>
-public class KookWebhookClientConfigurator<TClient, TConfig> : KookClientConfigurator<TClient, TConfig>
+internal class KookWebhookClientConfigurator<TClient, TConfig> : KookClientConfigurator<TClient, TConfig>
     where TClient : KookWebhookClient
     where TConfig : KookWebhookConfig
 {

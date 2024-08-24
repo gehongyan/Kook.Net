@@ -1,27 +1,27 @@
 namespace Kook;
 
 /// <summary>
-///     A metadata containing boost subscription information.
+///     表示一个包含服务器助力订阅信息的元数据。
 /// </summary>
 public class BoostSubscriptionMetadata
 {
     /// <summary>
-    ///     Gets the date and time when this subscription began.
+    ///     获取此订阅开始的日期和时间。
     /// </summary>
     public DateTimeOffset Since { get; private set; }
 
     /// <summary>
-    ///     Gets the date and time when this subscription will end or ended.
+    ///     获取此订阅将于或已于何时结束的日期和时间。
     /// </summary>
     public DateTimeOffset Until { get; private set; }
 
     /// <summary>
-    ///     Gets whether this subscription has not expired.
+    ///     获取此订阅是否仍在有效期内。
     /// </summary>
     public bool IsValid => DateTimeOffset.Now < Until;
 
     /// <summary>
-    ///     Gets how many boost packs the user used for this subscription.
+    ///     获取用户为此订阅所使用的助力包数量。
     /// </summary>
     public int Count { get; private set; }
 

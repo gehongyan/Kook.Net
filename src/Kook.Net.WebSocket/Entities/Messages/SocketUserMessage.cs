@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based message sent by a user.
+///     表示一个基于网关的用户消息。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketUserMessage : SocketMessage, IUserMessage
@@ -25,11 +25,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     public IQuote? Quote { get; private set; }
 
     /// <summary>
-    ///     Gets the <see cref="SocketGuild"/> that the message was sent from.
+    ///     获取此消息所属的服务器。
     /// </summary>
-    /// <returns>
-    ///     The <see cref="SocketGuild"/> that the message was sent from.
-    /// </returns>
     public SocketGuild? Guild { get; private set; }
 
     /// <inheritdoc />
@@ -51,7 +48,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     public override IReadOnlyCollection<SocketRole> MentionedRoles => _roleMentions;
 
     /// <summary>
-    ///     Gets a collection of the mentioned channels in the message.
+    ///     获取此消息中提及的所有频道。
     /// </summary>
     public IReadOnlyCollection<SocketGuildChannel> MentionedChannels => _channelMentions;
 
@@ -393,20 +390,19 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     }
 
     /// <inheritdoc />
-    /// <exception cref="InvalidOperationException">Only the author of a message may modify the message.</exception>
-    /// <exception cref="ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="KookConfig.MaxMessageSize"/>.</exception>
     public Task ModifyAsync(Action<MessageProperties> func, RequestOptions? options = null) =>
         MessageHelper.ModifyAsync(this, Kook, func, options);
 
     /// <summary>
-    ///     Transforms this message's text into a human-readable form by resolving its tags.
+    ///     转换消息文本中的提及与表情符号为可读形式。
     /// </summary>
-    /// <param name="startIndex">The zero-based index at which to begin the resolving for the specified value.</param>
-    /// <param name="userHandling">Determines how the user tag should be handled.</param>
-    /// <param name="channelHandling">Determines how the channel tag should be handled.</param>
-    /// <param name="roleHandling">Determines how the role tag should be handled.</param>
-    /// <param name="everyoneHandling">Determines how the @everyone tag should be handled.</param>
-    /// <param name="emojiHandling">Determines how the emoji tag should be handled.</param>
+    /// <param name="startIndex"> 指定要开始解析的位置。 </param>
+    /// <param name="userHandling"> 指定用户提及标签的处理方式。 </param>
+    /// <param name="channelHandling"> 指定频道提及标签的处理方式。 </param>
+    /// <param name="roleHandling"> 指定角色提及标签的处理方式。 </param>
+    /// <param name="everyoneHandling"> 指定全体成员与在线成员提及标签的处理方式。 </param>
+    /// <param name="emojiHandling"> 指定表情符号标签的处理方式。 </param>
+    /// <returns> 转换后的消息文本。 </returns>
     public string Resolve(int startIndex, TagHandling userHandling = TagHandling.Name,
         TagHandling channelHandling = TagHandling.Name, TagHandling roleHandling = TagHandling.Name,
         TagHandling everyoneHandling = TagHandling.Name, TagHandling emojiHandling = TagHandling.Name) =>

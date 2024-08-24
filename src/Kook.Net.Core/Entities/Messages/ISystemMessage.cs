@@ -1,19 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic message sent by the system.
+///     表示一个通用的系统消息。
 /// </summary>
+/// <remarks>
+///     <note type="warning">
+///         KOOK 未统一规范系统消息类型，此接口并未在 <see cref="T:Kook.IMessage"/> 之上封装更多的实用功能。
+///     </note>
+/// </remarks>
 public interface ISystemMessage : IMessage
 {
     /// <summary>
-    ///     Gets the type of the system message.
+    ///     获取此系统消息的类型。
     /// </summary>
-    /// <remarks>
-    ///     <note type="warning">
-    ///         Because the data from Kook does not describe the type
-    ///         of the message in detail, this property is not implemented yet.
-    ///         Accessing this property will always result in an exception at present.
-    ///     </note>
-    /// </remarks>
     SystemMessageType SystemMessageType { get; }
 }

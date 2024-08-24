@@ -5,7 +5,7 @@ using Model = Kook.API.Game;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a game object.
+///     表示一个基于 REST 的游戏信息。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestGame : RestEntity<int>, IGame

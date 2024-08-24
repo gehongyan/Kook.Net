@@ -1,23 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     A generic media module that can be used in an <see cref="ICard"/>.
+///     表示一个通用的媒体模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 public interface IMediaModule : IModule
 {
     /// <summary>
-    ///     Gets the source of the media associated with this module.
+    ///     获取与此模块关联的媒体的源。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the source of the audio associated with this module.
-    /// </returns>
     string Source { get; }
 
     /// <summary>
-    ///     Gets the title of the media associated with this module.
+    ///     获取与此模块关联的媒体的标题。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the title of the media associated with this module.
-    /// </returns>
     string? Title { get; }
 }

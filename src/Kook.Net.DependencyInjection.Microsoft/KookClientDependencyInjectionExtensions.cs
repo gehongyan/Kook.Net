@@ -7,17 +7,19 @@ using Microsoft.Extensions.Options;
 namespace Kook.Net.DependencyInjection.Microsoft;
 
 /// <summary>
-///     Provides extension methods for Kook.Net to add clients using the <see cref="IServiceCollection"/>.
+///     提供用于与 Microsoft.Extensions.DependencyInjection 集成，注册与配置 Kook.Net 客户端作为服务的扩展方法。
 /// </summary>
 public static class KookClientDependencyInjectionExtensions
 {
+    #region REST
+
     /// <summary>
-    ///     Adds a <see cref="KookRestClient"/> to the specified <see cref="IServiceCollection"/> with
-    ///     the specified configuration action and login information.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="T:Kook.Rest.KookRestClient"/> 客户端。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="configure"> The action to configure the <see cref="KookRestConfig"/>. </param>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK REST 客户端的服务集合。 </param>
+    /// <param name="configure"> 用于配置 KOOK REST 客户端的配置委托。 </param>
+    /// <returns> 添加了 KOOK REST 客户端的服务集合。 </returns>
     public static IServiceCollection AddKookRestClient(this IServiceCollection services, Action<KookRestConfig> configure)
     {
         services.Configure(configure);
@@ -26,12 +28,12 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookRestClient"/> to the specified <see cref="IServiceCollection"/> with
-    ///     the specified configuration action and login information.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="T:Kook.Rest.KookRestClient"/> 客户端。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="config"> The action to configure the <see cref="KookRestConfig"/>. </param>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK REST 客户端的服务集合。 </param>
+    /// <param name="config"> 用于配置 KOOK REST 客户端的配置。 </param>
+    /// <returns> 添加了 KOOK REST 客户端的服务集合。 </returns>
     public static IServiceCollection AddKookRestClient(this IServiceCollection services, KookRestConfig config)
     {
         services.AddSingleton(config);
@@ -40,11 +42,11 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookRestClient"/> to the specified <see cref="IServiceCollection"/> with
-    ///     the specified configuration action and login information.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="T:Kook.Rest.KookRestClient"/> 客户端。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK REST 客户端的服务集合。 </param>
+    /// <returns> 添加了 KOOK REST 客户端的服务集合。 </returns>
     public static IServiceCollection AddKookRestClient(this IServiceCollection services)
     {
         services.AddSingleton<KookRestClient>(provider => provider.GetService<IOptions<KookRestConfig>>()?.Value is { } config
@@ -55,13 +57,17 @@ public static class KookClientDependencyInjectionExtensions
         return services;
     }
 
+    #endregion
+
+    #region Socket
+
     /// <summary>
-    ///     Adds a <see cref="KookSocketClient"/> to the specified <see cref="IServiceCollection"/> with
-    ///     the specified configuration action and login information.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="T:Kook.WebSocket.KookSocketClient"/> 客户端。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="configure"> The action to configure the <see cref="KookSocketConfig"/>. </param>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK 网关客户端的服务集合。 </param>
+    /// <param name="configure"> 用于配置 KOOK 网关客户端的配置委托。 </param>
+    /// <returns> 添加了 KOOK 网关客户端的服务集合。 </returns>
     public static IServiceCollection AddKookSocketClient(this IServiceCollection services, Action<KookSocketConfig> configure)
     {
         services.Configure(configure);
@@ -70,12 +76,12 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookSocketClient"/> to the specified <see cref="IServiceCollection"/> with
-    ///     the specified configuration action and login information.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="T:Kook.WebSocket.KookSocketClient"/> 客户端。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="config"> The action to configure the <see cref="KookSocketConfig"/>. </param>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK 网关客户端的服务集合。 </param>
+    /// <param name="config"> 用于配置 KOOK 网关客户端的配置。 </param>
+    /// <returns> 添加了 KOOK 网关客户端的服务集合。 </returns>
     public static IServiceCollection AddKookSocketClient(this IServiceCollection services, KookSocketConfig config)
     {
         services.AddSingleton(config);
@@ -84,11 +90,11 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookSocketClient"/> to the specified <see cref="IServiceCollection"/> with
-    ///     the specified configuration action and login information.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="T:Kook.WebSocket.KookSocketClient"/> 客户端。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK 网关客户端的服务集合。 </param>
+    /// <returns> 添加了 KOOK 网关客户端的服务集合。 </returns>
     public static IServiceCollection AddKookSocketClient(this IServiceCollection services)
     {
         services.AddSingleton<KookSocketClient>(provider => provider.GetService<IOptions<KookSocketConfig>>()?.Value is { } config
@@ -100,15 +106,20 @@ public static class KookClientDependencyInjectionExtensions
         return services;
     }
 
+    #endregion
+
+    #region Webhook
+
     /// <summary>
-    ///     Adds a <see cref="KookWebhookClient"/> to the specified <see cref="IServiceCollection"/> with
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="T:Kook.Webhook.KookWebhookClient"/> 客户端。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="clientFactory"> The factory to create the <see cref="KookWebhookClient"/>. </param>
-    /// <param name="configure"> The action to configure the <see cref="KookWebhookConfig"/>. </param>
-    /// <typeparam name="TClient"> The type of the <see cref="KookWebhookClient"/>. </typeparam>
-    /// <typeparam name="TConfig"> The type of the <see cref="KookWebhookConfig"/>. </typeparam>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
+    /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>
+    /// <param name="configure"> 用于配置 KOOK Webhook 客户端的配置委托。 </param>
+    /// <typeparam name="TClient"> Webhook 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> Webhook 客户端的配置类型。 </typeparam>
+    /// <returns> 添加了 KOOK Webhook 客户端的服务集合。 </returns>
     public static IServiceCollection AddKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
         Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<TConfig> configure)
         where TClient: KookWebhookClient
@@ -120,14 +131,15 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookWebhookClient"/> to the specified <see cref="IServiceCollection"/> with
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="T:Kook.Webhook.KookWebhookClient"/> 客户端。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="clientFactory"> The factory to create the <see cref="KookWebhookClient"/>. </param>
-    /// <param name="config"> The action to configure the <see cref="KookWebhookConfig"/>. </param>
-    /// <typeparam name="TClient"> The type of the <see cref="KookWebhookClient"/>. </typeparam>
-    /// <typeparam name="TConfig"> The type of the <see cref="KookWebhookConfig"/>. </typeparam>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
+    /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>
+    /// <param name="config"> 用于配置 KOOK Webhook 客户端的配置。 </param>
+    /// <typeparam name="TClient"> Webhook 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> Webhook 客户端的配置类型。 </typeparam>
+    /// <returns> 添加了 KOOK Webhook 客户端的服务集合。 </returns>
     public static IServiceCollection AddKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
         Func<IServiceProvider, TConfig, TClient> clientFactory, TConfig config)
         where TClient: KookWebhookClient
@@ -139,13 +151,14 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookWebhookClient"/> to the specified <see cref="IServiceCollection"/> with
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="T:Kook.Webhook.KookWebhookClient"/> 客户端。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="clientFactory"> The factory to create the <see cref="KookWebhookClient"/>. </param>
-    /// <typeparam name="TClient"> The type of the <see cref="KookWebhookClient"/>. </typeparam>
-    /// <typeparam name="TConfig"> The type of the <see cref="KookWebhookConfig"/>. </typeparam>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
+    /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>
+    /// <typeparam name="TClient"> Webhook 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> Webhook 客户端的配置类型。 </typeparam>
+    /// <returns> 添加了 KOOK Webhook 客户端的服务集合。 </returns>
     public static IServiceCollection AddKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
         Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory)
         where TClient: KookWebhookClient
@@ -157,13 +170,14 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookWebhookClient"/> to the specified <see cref="IServiceCollection"/> with
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="T:Kook.Webhook.KookWebhookClient"/> 客户端。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="clientFactory"> The factory to create the <see cref="KookWebhookClient"/>. </param>
-    /// <typeparam name="TClient"> The type of the <see cref="KookWebhookClient"/>. </typeparam>
-    /// <typeparam name="TConfig"> The type of the <see cref="KookWebhookConfig"/>. </typeparam>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
+    /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>
+    /// <typeparam name="TClient"> Webhook 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> Webhook 客户端的配置类型。 </typeparam>
+    /// <returns> 添加了 KOOK Webhook 客户端的服务集合。 </returns>
     public static IServiceCollection AddKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
         Func<IServiceProvider, TConfig, TClient> clientFactory)
         where TClient: KookWebhookClient
@@ -175,12 +189,13 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     Adds a <see cref="KookWebhookClient"/> to the specified <see cref="IServiceCollection"/> with
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="T:Kook.Webhook.KookWebhookClient"/> 客户端。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection"/> to add the services. </param>
-    /// <param name="clientFactory"> The factory to create the <see cref="KookWebhookClient"/>. </param>
-    /// <typeparam name="TClient"> The type of the <see cref="KookWebhookClient"/>. </typeparam>
-    /// <returns> The <see cref="IServiceCollection"/> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
+    /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>
+    /// <typeparam name="TClient"> Webhook 客户端的类型。 </typeparam>
+    /// <returns> 添加了 KOOK Webhook 客户端的服务集合。 </returns>
     public static IServiceCollection AddKookWebhookClient<TClient>(this IServiceCollection services,
         Func<IServiceProvider, TClient> clientFactory)
         where TClient: KookWebhookClient
@@ -199,4 +214,6 @@ public static class KookClientDependencyInjectionExtensions
         services.AddSingleton<KookSocketClient, TClient>(provider => provider.GetRequiredService<TClient>());
         services.AddSingleton<KookWebhookClient, TClient>(provider => provider.GetRequiredService<TClient>());
     }
+
+    #endregion
 }

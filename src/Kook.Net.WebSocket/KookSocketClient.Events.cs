@@ -4,7 +4,9 @@ public partial class KookSocketClient
 {
     #region General
 
-    /// <summary> Fired when connected to the Kook gateway. </summary>
+    /// <summary>
+    ///     当连接到 KOOK 网关时引发。
+    /// </summary>
     public event Func<Task> Connected
     {
         add => _connectedEvent.Add(value);
@@ -13,7 +15,9 @@ public partial class KookSocketClient
 
     internal readonly AsyncEvent<Func<Task>> _connectedEvent = new();
 
-    /// <summary> Fired when disconnected to the Kook gateway. </summary>
+    /// <summary>
+    ///     当与 KOOK 网关断开连接时引发。
+    /// </summary>
     public event Func<Exception, Task> Disconnected
     {
         add => _disconnectedEvent.Add(value);
@@ -23,15 +27,10 @@ public partial class KookSocketClient
     internal readonly AsyncEvent<Func<Exception, Task>> _disconnectedEvent = new();
 
     /// <summary>
-    ///     Fired when guild data has finished downloading.
+    ///     当此 Bot 准备就绪以供用户代码访问时引发。
     /// </summary>
     /// <remarks>
-    ///     <note type="warning">
-    ///         Because guilds may contain a large amount of members,
-    ///         this event will not wait for all users, subscriptions, and voice states
-    ///         to be downloaded. It will only wait for guilds, channels, roles, and
-    ///         emojis to be downloaded.
-    ///     </note>
+    ///     此事件引发的时机可由 <see cref="P:Kook.WebSocket.KookSocketConfig.StartupCacheFetchMode"/> 配置指定。
     /// </remarks>
     public event Func<Task> Ready
     {
@@ -41,7 +40,16 @@ public partial class KookSocketClient
 
     private readonly AsyncEvent<Func<Task>> _readyEvent = new();
 
-    /// <summary> Fired when a heartbeat is received from the Kook gateway. </summary>
+    /// <summary>
+    ///     当网关延迟已更新时引发。
+    /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.Int32"/> 参数是更新前的延迟（毫秒）。 </item>
+    ///     <item> <see cref="T:System.Int32"/> 参数是更新后的延迟（毫秒）。 </item>
+    ///     </list>
+    /// </remarks>
     public event Func<int, int, Task> LatencyUpdated
     {
         add => _latencyUpdatedEvent.Add(value);

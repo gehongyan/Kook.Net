@@ -3,7 +3,7 @@ using System.Diagnostics;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents the REST user's presence status. This may include their online status and their activity.
+///     表示一个基于 REST 的当前登录的用户信息。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestPresence : IPresence
@@ -38,15 +38,6 @@ public class RestPresence : IPresence
         ActiveClient = ConvertClientType(activeClient);
     }
 
-    /// <summary>
-    ///     The client type where a user is active.
-    /// </summary>
-    /// <param name="clientType">
-    ///     A string representing the client type.
-    /// </param>
-    /// <returns>
-    ///     A <see cref="ClientType"/> that this user is active.
-    /// </returns>
     private static ClientType? ConvertClientType(string? clientType)
     {
         if (string.IsNullOrWhiteSpace(clientType))

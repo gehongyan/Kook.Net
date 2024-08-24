@@ -1,7 +1,7 @@
 namespace Kook.Audio;
 
 /// <summary>
-///     Represents the Opus error codes.
+///     表示 Opus 错误代码。
 /// </summary>
 internal enum OpusError
 {
@@ -9,7 +9,7 @@ internal enum OpusError
     ///     <c>OPUS_OK</c>
     /// </summary>
     /// <remarks>
-    ///     No error.
+    ///     没有错误。
     /// </remarks>
     OK = 0,
 
@@ -17,7 +17,7 @@ internal enum OpusError
     ///     <c>OPUS_BAD_ARG</c>
     /// </summary>
     /// <remarks>
-    ///     One or more invalid/out of range arguments.
+    ///     一个或多个参数无效/超出范围。
     /// </remarks>
     BadArg = -1,
 
@@ -25,7 +25,7 @@ internal enum OpusError
     ///     <c>OPUS_BUFFER_TOO_SMALL</c>
     /// </summary>
     /// <remarks>
-    ///     Not enough bytes allocated in the buffer.
+    ///     缓冲区中分配的字节不足。
     /// </remarks>
     BufferTooSmall = -2,
 
@@ -33,7 +33,7 @@ internal enum OpusError
     ///     <c>OPUS_INTERNAL_ERROR</c>
     /// </summary>
     /// <remarks>
-    ///     An internal error was detected.
+    ///     检测到内部错误。
     /// </remarks>
     InternalError = -3,
 
@@ -41,7 +41,7 @@ internal enum OpusError
     ///     <c>OPUS_INVALID_PACKET</c>
     /// </summary>
     /// <remarks>
-    ///     The compressed data passed is corrupted.
+    ///     传递的压缩数据已损坏。
     /// </remarks>
     InvalidPacket = -4,
 
@@ -49,7 +49,7 @@ internal enum OpusError
     ///     <c>OPUS_UNIMPLEMENTED</c>
     /// </summary>
     /// <remarks>
-    ///     Invalid/unsupported request number.
+    ///     请求号无效/不支持。
     /// </remarks>
     Unimplemented = -5,
 
@@ -57,7 +57,7 @@ internal enum OpusError
     ///     <c>OPUS_INVALID_STATE</c>
     /// </summary>
     /// <remarks>
-    ///     An encoder or decoder structure is invalid or already freed.
+    ///     编码器或解码器结构无效或已释放。
     /// </remarks>
     InvalidState = -6,
 
@@ -65,7 +65,7 @@ internal enum OpusError
     ///     <c>OPUS_ALLOC_FAIL</c>
     /// </summary>
     /// <remarks>
-    ///     Memory allocation has failed.
+    ///     内存分配失败。
     /// </remarks>
     AllocFail = -7
 }

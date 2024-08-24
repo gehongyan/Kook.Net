@@ -1,143 +1,104 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic invite.
+///     表示一个通用的邀请。
 /// </summary>
 public interface IInvite : IEntity<uint>, IDeletable
 {
     /// <summary>
-    ///     Gets the unique identifier for this invite.
+    ///     获取此邀请的唯一代码。
     /// </summary>
-    /// <returns>
-    ///     A string containing the invite code (e.g. <c>wEAF5t</c>).
-    /// </returns>
     string Code { get; }
 
     /// <summary>
-    ///     Gets the URL used to accept this invite using <see cref="Code"/>.
+    ///     获取用于接受此邀请的 URL，URL 的路径中包含 <see cref="Code"/> 属性的值。
     /// </summary>
-    /// <returns>
-    ///     A string containing the full invite URL (e.g. <c>https://kaihei.co/wEAF5t</c>).
-    /// </returns>
     string Url { get; }
 
     /// <summary>
-    ///     Gets the user that created this invite.
+    ///     获取创建此邀请的用户。
     /// </summary>
-    /// <returns>
-    ///     A user that created this invite.
-    /// </returns>
     IUser Inviter { get; }
 
     /// <summary>
-    ///     Gets the channel this invite is linked to.
+    ///     获取此邀请链接指向的频道。
     /// </summary>
-    /// <returns>
-    ///     A generic channel that the invite points to.
-    /// </returns>
     IChannel Channel { get; }
 
     /// <summary>
-    ///     Gets the type of the channel this invite is linked to.
+    ///     获取此邀请链接指向的频道的类型。
     /// </summary>
     ChannelType ChannelType { get; }
 
     /// <summary>
-    ///     Gets the ID of the channel this invite is linked to.
+    ///     获取此邀请链接指向的频道的 ID。
     /// </summary>
-    /// <returns>
-    ///     A ulong representing the channel identifier that the invite points to.
-    /// </returns>
     ulong? ChannelId { get; }
 
     /// <summary>
-    ///     Gets the name of the channel this invite is linked to.
+    ///     获取此邀请链接指向的频道的名称。
     /// </summary>
-    /// <returns>
-    ///     A string containing the name of the channel that the invite points to.
-    /// </returns>
     string? ChannelName { get; }
 
     /// <summary>
-    ///     Gets the guild this invite is linked to.
+    ///     获取此邀请链接指向的服务器。
     /// </summary>
-    /// <returns>
-    ///     A guild object representing the guild that the invite points to.
-    /// </returns>
     IGuild Guild { get; }
 
     /// <summary>
-    ///     Gets the ID of the guild this invite is linked to.
+    ///     获取此邀请链接指向的服务器的 ID。
     /// </summary>
-    /// <returns>
-    ///     A ulong representing the guild identifier that the invite points to.
-    /// </returns>
     ulong? GuildId { get; }
 
     /// <summary>
-    ///     Gets the name of the guild this invite is linked to.
+    ///     获取此邀请链接指向的服务器的名称。
     /// </summary>
-    /// <returns>
-    ///     A string containing the name of the guild that the invite points to.
-    /// </returns>
     string GuildName { get; }
 
     /// <summary>
-    ///     Gets the time at which this invite was created.
+    ///     获取此邀请的创建时间。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="DateTimeOffset"/> representing the time at which this invite was created.
-    /// </returns>
     DateTimeOffset CreatedAt { get; }
 
     /// <summary>
-    ///     Gets the time at which this invite will expire.
+    ///     获取此邀请的过期时间。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="DateTimeOffset"/> representing the time until this invite expires; <c>null</c> if this
-    ///     invite never expires.
-    /// </returns>
+    /// <remarks>
+    ///     如果此邀请永不过期，则此属性的值为 <c>null</c>。
+    /// </remarks>
     DateTimeOffset? ExpiresAt { get; }
 
     /// <summary>
-    ///     Gets the time span until the invite expires.
+    ///     获取此邀请的有效时长。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="TimeSpan"/> representing the time span until this invite expires; <c>null</c> if this
-    ///     invite never expires.
-    /// </returns>
+    /// <remarks>
+    ///     如果此邀请永不过期，则此属性的值为 <c>null</c>。
+    /// </remarks>
     TimeSpan? MaxAge { get; }
 
     /// <summary>
-    ///     Gets the max number of uses this invite may have.
+    ///     获取此邀请的可用人次。
     /// </summary>
-    /// <returns>
-    ///     An int representing the number of uses this invite may be accepted until it is removed
-    ///     from the guild; <c>null</c> if none is set.
-    /// </returns>
+    /// <remarks>
+    ///     如果此邀请不限制可用人次，则此属性的值为 <c>null</c>。
+    /// </remarks>
     int? MaxUses { get; }
 
     /// <summary>
-    ///     Gets the number of times this invite has been used.
+    ///     获取此邀请已被使用的次数。
     /// </summary>
-    /// <returns>
-    ///     An int representing the number of times this invite has been used; <c>null</c> if none is set.
-    /// </returns>
     int? Uses { get; }
 
     /// <summary>
-    ///     Gets the number of times this invite still remains.
+    ///     获取此邀请剩余可用次数。
     /// </summary>
-    /// <returns>
-    ///     An int representing the number of times this invite still remains; <c>null</c> if none is set.
-    /// </returns>
+    /// <remarks>
+    ///     如果此邀请不限制可用人次，则此属性的值为 <c>null</c>。
+    /// </remarks>
     int? RemainingUses { get; }
 
     /// <summary>
-    ///     Gets the number of users that have accepted this invite.
+    ///     获取已接受此邀请的用户数量。
     /// </summary>
-    /// <returns>
-    ///     An int representing the number of users that have accepted this invite.
-    /// </returns>
     int InvitedUsersCount { get; }
 }

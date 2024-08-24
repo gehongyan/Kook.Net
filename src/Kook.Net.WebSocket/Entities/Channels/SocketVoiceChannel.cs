@@ -8,7 +8,7 @@ using Model = Kook.API.Channel;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based voice channel in a guild.
+///     表示服务器中的一个基于网关的具有语音聊天能力的频道。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudioChannel, IDisposable
@@ -37,9 +37,7 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     /// <inheritdoc />
     public bool HasPassword { get; private set; }
 
-    /// <summary>
-    ///     Gets the <see cref="IAudioClient" /> associated with this guild.
-    /// </summary>
+    /// <inheritdoc />
     public IAudioClient? AudioClient => _audioClient;
 
     /// <inheritdoc />
@@ -50,21 +48,18 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
             ChannelPermission.ViewChannel)).ToImmutableArray();
 
     /// <summary>
-    ///     Gets a collection of users that are currently connected to this voice channel.
+    ///     获取当前连接到此语音频道的所有用户。
     /// </summary>
     /// <remarks>
     ///     <note type="warning">
-    ///         This property may not always return all the members that are connected to this voice channel,
-    ///         because uses may connected this voice channel before the bot has connected to the gateway.
-    ///         To ensure accuracy, you may need to enable <see cref="KookSocketConfig.AlwaysDownloadVoiceStates"/>
-    ///         to fetch the full voice states upon startup, or use <see cref="SocketGuild.DownloadVoiceStatesAsync"/>
-    ///         on the guild this voice channel belongs to to manually download the users voice states,
-    ///         or use <see cref="GetConnectedUsersAsync"/> to fetch the connected users from the API.
+    ///         此属性可能不会始终返回连接到此语音频道的所有成员，因为用户可能在 Bot 连接到网关之前就连接到了此语音频道。
+    ///         如需准确获取所有连接到此语音频道的成员，可能需要启用
+    ///         <see cref="P:Kook.WebSocket.KookSocketConfig.AlwaysDownloadVoiceStates"/>，这可以让 Bot
+    ///         在启动连接到网关时获取完整的语音状态。也可以调用方法
+    ///         <see cref="M:Kook.WebSocket.SocketVoiceChannel.GetConnectedUsersAsync(Kook.CacheMode,Kook.RequestOptions)"/>
+    ///         访问 API 获取连接到此语音频道的用户。
     ///     </note>
     /// </remarks>
-    /// <returns>
-    ///     A read-only collection of users that are currently connected to this voice channel.
-    /// </returns>
     public IReadOnlyCollection<SocketGuildUser> ConnectedUsers =>
         Guild.Users.Where(x => x.VoiceChannel?.Id == Id).ToImmutableArray();
 
@@ -105,15 +100,7 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     public Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions? options = null) =>
         ChannelHelper.ModifyAsync(this, Kook, func, options);
 
-    /// <summary>
-    ///     Gets a collection of users that are currently connected to this voice channel.
-    /// </summary>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of users
-    ///     that are currently connected to this voice channel.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IVoiceChannel.GetConnectedUsersAsync(Kook.CacheMode,Kook.RequestOptions)" />
     public async Task<IReadOnlyCollection<SocketGuildUser>> GetConnectedUsersAsync(
         CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null) =>
         mode is CacheMode.AllowDownload
@@ -125,25 +112,25 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     #region TextOverrides
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    /// <exception cref="NotSupportedException"> 不支持在语音频道中获取消息。 </exception>
     public override IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(
         int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    /// <exception cref="NotSupportedException"> 不支持在语音频道中获取消息。 </exception>
     public override IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(Guid referenceMessageId, Direction dir,
         int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    /// <exception cref="NotSupportedException"> 不支持在语音频道中获取消息。 </exception>
     public override IAsyncEnumerable<IReadOnlyCollection<IMessage>> GetMessagesAsync(IMessage referenceMessage, Direction dir,
         int limit = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null) =>
         throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
     /// <inheritdoc />
-    /// <exception cref="NotSupportedException"> Getting messages from a voice channel is not supported. </exception>
+    /// <exception cref="NotSupportedException"> 不支持在语音频道中获取消息。 </exception>
     Task<IReadOnlyCollection<IMessage>> ITextChannel.GetPinnedMessagesAsync(RequestOptions? options) =>
         Task.FromException<IReadOnlyCollection<IMessage>>(
             new NotSupportedException("Getting messages from a voice channel is not supported."));
@@ -153,7 +140,7 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     #region IVoiceChannel
 
     /// <inheritdoc />
-    async Task<IReadOnlyCollection<IUser>> IVoiceChannel.GetConnectedUsersAsync(
+    async Task<IReadOnlyCollection<IGuildUser>> IVoiceChannel.GetConnectedUsersAsync(
         CacheMode mode, RequestOptions? options) =>
         await GetConnectedUsersAsync(mode, options).ConfigureAwait(false);
 
@@ -301,7 +288,7 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
         Task.FromResult<IGuildUser?>(GetUser(id));
 
     /// <inheritdoc />
-    /// <seealso cref="IVoiceChannel.GetConnectedUsersAsync"/>
+    /// <seealso cref="M:Kook.IVoiceChannel.GetConnectedUsersAsync(Kook.CacheMode,Kook.RequestOptions)"/>
     IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(
         CacheMode mode, RequestOptions? options) =>
         mode == CacheMode.AllowDownload

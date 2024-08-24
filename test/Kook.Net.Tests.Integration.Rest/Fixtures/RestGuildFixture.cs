@@ -1,3 +1,4 @@
+using System;
 using Kook.Rest;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,6 @@ public class RestGuildFixture : KookRestClientFixture
         List<RestGuild> guilds = Client.GetGuildsAsync().GetAwaiter().GetResult()
             .Where(x => x.Name == guildName)
             .ToList();
-        await RemoveUselessTestGuildsAsync(guilds.Skip(1));
 
         // If there is a guild created by this bot, use it
         if (guilds.Find(x => x.OwnerId == Client.CurrentUser?.Id) is { } guild)
@@ -34,16 +34,10 @@ public class RestGuildFixture : KookRestClientFixture
             Guild = guilds[0];
         // Otherwise, create a new guild
         else
-            Guild = await Client.CreateGuildAsync(guildName);
+            throw new InvalidOperationException("No guild found to use for testing.");
 
         await RemoveAllChannelsAsync();
         await RemoveAllRolesAsync();
-    }
-
-    private async Task RemoveUselessTestGuildsAsync(IEnumerable<RestGuild> guilds)
-    {
-        foreach (RestGuild guild in guilds)
-            await guild.DeleteAsync();
     }
 
     /// <summary>
@@ -51,7 +45,7 @@ public class RestGuildFixture : KookRestClientFixture
     /// </summary>
     private async Task RemoveAllChannelsAsync()
     {
-        IReadOnlyCollection<RestGuildChannel> channels = Guild.GetChannelsAsync().GetAwaiter().GetResult();
+        IReadOnlyCollection<RestGuildChannel> channels = await Guild.GetChannelsAsync();
         foreach (RestGuildChannel channel in channels.Where(x => x is INestedChannel))
             await channel.DeleteAsync();
         foreach (RestGuildChannel channel in channels.Where(x => x is ICategoryChannel))
@@ -78,15 +72,4 @@ public class RestGuildFixture : KookRestClientFixture
         foreach (RestRole role in roles)
             await role.DeleteAsync();
     }
-
-    /// <inheritdoc />
-    public override async ValueTask DisposeAsync()
-    {
-        if (Guild.OwnerId == Client.CurrentUser?.Id)
-            await Guild.DeleteAsync();
-        await base.DisposeAsync();
-    }
-
-    /// <inheritdoc />
-    public override void Dispose() => DisposeAsync().AsTask().GetAwaiter().GetResult();
 }

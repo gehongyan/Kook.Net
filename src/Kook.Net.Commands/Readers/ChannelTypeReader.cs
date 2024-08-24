@@ -3,15 +3,9 @@ using System.Globalization;
 namespace Kook.Commands;
 
 /// <summary>
-///     A <see cref="TypeReader"/> for parsing objects implementing <see cref="IChannel"/>.
+///     表示一个用于解析字符串到实现了 <see cref="T:Kook.IChannel"/> 的对象的类型读取器。
 /// </summary>
-/// <remarks>
-///     This <see cref="TypeReader"/> is shipped with Kook.Net and is used by default to parse any
-///     <see cref="IChannel"/> implemented object within a command. The TypeReader will attempt to first parse the
-///     input by mention, then the identifier, then by name; the highest candidate will be chosen as the
-///     final output; otherwise, an erroneous <see cref="TypeReaderResult"/> is returned.
-/// </remarks>
-/// <typeparam name="T">The type to be checked; must implement <see cref="IChannel"/>.</typeparam>
+/// <typeparam name="T"> 要解析为的频道类型。 </typeparam>
 public class ChannelTypeReader<T> : TypeReader
     where T : class, IChannel
 {

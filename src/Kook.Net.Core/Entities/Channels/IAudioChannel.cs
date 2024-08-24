@@ -3,53 +3,54 @@ using Kook.Audio;
 namespace Kook;
 
 /// <summary>
-///     Represents a generic audio channel.
+///     表示一个通用的音频频道。
 /// </summary>
 public interface IAudioChannel : IChannel
 {
     /// <summary>
-    ///     Gets whether the voice region of this audio channel is overwritten.
+    ///     获取在此音频频道上建立的语音客户端。
+    /// </summary>
+    IAudioClient? AudioClient { get; }
+
+    /// <summary>
+    ///     获取此音频频道的语音区域设置是否覆写了服务器的语音区域设置。
     /// </summary>
     bool? IsVoiceRegionOverwritten { get; }
 
     /// <summary>
-    ///     Gets the voice region for this audio channel.
+    ///     获取此音频频道所设置的语音服务器区域。
     /// </summary>
     /// <remarks>
     ///     <note type="warning">
-    ///         This property may be empty if the voice channel is created before this feature was released.
+    ///         对于语音频道区域设置功能发布之前创建的语音频道，该属性可能为空。
     ///     </note>
     /// </remarks>
+    /// <seealso cref="P:Kook.IGuild.Region"/>
     string? VoiceRegion { get; }
 
     /// <summary>
-    ///     Gets the server url that clients should connect to to join this voice channel.
+    ///     获取语音客户端连接到此语音频道的语音服务器 URL。
     /// </summary>
-    /// <returns>
-    ///     A string representing the url that clients should connect to to join this voice channel.
-    /// </returns>
     string? ServerUrl { get; }
 
-    // /// <param name="selfDeaf">Determines whether the client should deaf itself upon connection.</param>
-    // /// <param name="selfMute">Determines whether the client should mute itself upon connection.</param>
+    // /// <param name="selfDeaf"> 指定连接到此语音客户端时是否应该对自身静音。 </param>
+    // /// <param name="selfMute"> 指定连接到此语音客户端时是否应该对自身闭麦。 </param>
     /// <summary>
-    ///     Connects to this audio channel.
+    ///     连接到此音频频道。
     /// </summary>
-    /// <param name="external">Determines whether the audio client is an external one or not.</param>
-    /// <param name="disconnect">Determines whether the client should send a disconnect call before connecting to a new voice channel.</param>
-    /// <param name="password">The password to use when connecting to the audio channel.</param>
+    /// <param name="external"> 指定语音客户端是否是由外部管理的。当设置为 <see langword="true"/> 时，当前方法不会尝试连接到语音频道。 </param>
+    /// <param name="disconnect"> 指定语音客户端在连接到新的语音频道之前是否应调用断开连接。 </param>
+    /// <param name="password"> 指定客户端连接到设置了密码的语音频道时所使用的密码。 </param>
     /// <returns>
-    ///     A task representing the asynchronous connection operation. The task result contains the
-    ///     <see cref="IAudioClient"/> responsible for the connection.
+    ///     一个表示音频连接操作的异步任务。任务的结果是一个负责音频连接的 <see cref="IAudioClient"/> 实例；如果
+    ///     <paramref name="external"/> 为 <see langword="true"/>，则会返回 <see langword="null"/>。
     /// </returns>
     Task<IAudioClient?> ConnectAsync( /*bool selfDeaf = false, bool selfMute = false, */
         bool external = false, bool disconnect = true, string? password = null);
 
     /// <summary>
-    ///     Disconnects from this audio channel.
+    ///     断开与此音频频道的连接。
     /// </summary>
-    /// <returns>
-    ///     A task representing the asynchronous operation for disconnecting from the audio channel.
-    /// </returns>
+    /// <returns> 一个表示音频断开连接操作的异步任务。 </returns>
     Task DisconnectAsync();
 }

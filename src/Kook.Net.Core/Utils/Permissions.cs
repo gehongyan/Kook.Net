@@ -93,7 +93,6 @@ internal static class Permissions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void UnsetFlag(ref ulong value, ulong flag) => value &= ~flag;
 
-
     public static ChannelPermissions ToChannelPerms(IGuildChannel channel, ulong guildPermissions) =>
         new(guildPermissions & ChannelPermissions.All(channel).RawValue);
 

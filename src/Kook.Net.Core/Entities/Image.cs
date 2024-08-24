@@ -1,29 +1,23 @@
 namespace Kook;
 
 /// <summary>
-///     An image that will be uploaded to Kook.
+///     表一个要上传到 KOOK 的图像。
 /// </summary>
 public struct Image : IDisposable
 {
     private bool _isDisposed;
 
     /// <summary>
-    ///     Gets the stream to be uploaded to Kook.
+    ///     获取此图像的流。
     /// </summary>
     public Stream Stream { get; }
 
-    /// <summary>
-    ///     Gets the file extension of the image if possible.
-    /// </summary>
     internal string? FileExtension { get; }
 
     /// <summary>
-    ///     Create the image with a <see cref="System.IO.Stream"/>.
+    ///     使用指定的流初始化一个 <see cref="Image"/> 解构的新实例。
     /// </summary>
-    /// <param name="stream">
-    ///     The <see cref="System.IO.Stream" /> to create the image with. Note that this must be some type of stream
-    ///     with the contents of a file in it.
-    /// </param>
+    /// <param name="stream"> 图像的流。 </param>
     public Image(Stream stream)
     {
         _isDisposed = false;
@@ -40,33 +34,15 @@ public struct Image : IDisposable
     }
 
     /// <summary>
-    ///     Create the image from a file path.
+    ///     通过文件路径创建图像。
     /// </summary>
+    /// <param name="path"> 文件的路径。 </param>
     /// <remarks>
-    ///     This file path is NOT validated and is passed directly into a
-    ///     <see cref="File.OpenRead"/>.
+    ///     此构造函数会使用 <see cref="M:System.IO.Path.GetExtension(System.String)"/> 获取文件的扩展名，然后将其直接传递给
+    ///     <see cref="M:System.IO.File.OpenRead(System.String)"/> 方法。
     /// </remarks>
-    /// <param name="path">The path to the file.</param>
-    /// <exception cref="System.ArgumentException">
-    /// <paramref name="path" /> is a zero-length string, contains only white space, or contains one or more invalid
-    /// characters as defined by <see cref="Path.GetInvalidPathChars"/>.
-    /// </exception>
-    /// <exception cref="System.ArgumentNullException"><paramref name="path" /> is <c>null</c>.</exception>
-    /// <exception cref="PathTooLongException">
-    /// The specified path, file name, or both exceed the system-defined maximum length. For example, on
-    /// Windows-based platforms, paths must be less than 248 characters, and file names must be less than 260
-    /// characters.
-    /// </exception>
-    /// <exception cref="System.NotSupportedException"><paramref name="path" /> is in an invalid format.</exception>
-    /// <exception cref="DirectoryNotFoundException">
-    /// The specified <paramref name="path"/> is invalid, (for example, it is on an unmapped drive).
-    /// </exception>
-    /// <exception cref="System.UnauthorizedAccessException">
-    /// <paramref name="path" /> specified a directory.-or- The caller does not have the required permission.
-    /// </exception>
-    /// <exception cref="FileNotFoundException">The file specified in <paramref name="path" /> was not found.
-    /// </exception>
-    /// <exception cref="IOException">An I/O error occurred while opening the file. </exception>
+    /// <seealso cref="M:System.IO.Path.GetExtension(System.String)"/>
+    /// <seealso cref="M:System.IO.File.OpenRead(System.String)"/>
     public Image(string path)
     {
         _isDisposed = false;

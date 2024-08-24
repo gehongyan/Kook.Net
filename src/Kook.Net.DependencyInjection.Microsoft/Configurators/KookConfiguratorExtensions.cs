@@ -3,19 +3,19 @@
 namespace Kook.Net.DependencyInjection.Microsoft;
 
 /// <summary>
-///     Provides extension methods for <see cref="IServiceCollection"/> to add Kook clients and services.
+///     提供用于向 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> 添加 KOOK 客户端和服务的扩展方法。
 /// </summary>
 public static class KookConfiguratorExtensions
 {
     /// <summary>
-    ///     Adds a Kook client to the service collection.
+    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> 添加 KOOK 客户端和服务。
     /// </summary>
-    /// <param name="services"> The service collection. </param>
-    /// <param name="configure"> The configuration action. </param>
-    /// <returns> The service collection. </returns>
+    /// <param name="services"> 要向其添加 KOOK 客户端和服务的服务集合。 </param>
+    /// <param name="configure"> 用于配置 KOOK 客户端和服务的配置委托。 </param>
+    /// <returns> 添加了 KOOK 客户端和服务的服务集合。 </returns>
     public static IServiceCollection AddKook(this IServiceCollection services, Action<IKookClientServiceConfigurator> configure)
     {
-        IKookClientServiceConfigurator configurator = new KookClientServiceConfigurator(services);
+        KookClientServiceConfigurator configurator = new(services);
         configure(configurator);
         configurator.Complete();
         return services;

@@ -4,7 +4,7 @@ using Model = Kook.API.Ban;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a REST-based ban object.
+///     表示一个基于 REST 的封禁对象。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestBan : IBan
@@ -12,11 +12,8 @@ public class RestBan : IBan
     #region RestBan
 
     /// <summary>
-    ///     Gets the banned user.
+    ///     获取被封禁的用户。
     /// </summary>
-    /// <returns>
-    ///     A generic <see cref="RestUser"/> object that was banned.
-    /// </returns>
     public RestUser User { get; }
 
     /// <inheritdoc />
@@ -36,11 +33,11 @@ public class RestBan : IBan
         new(RestUser.Create(client, model.User), model.Reason, model.CreatedAt);
 
     /// <summary>
-    ///     Gets the name of the banned user.
+    ///     获取被封禁用户的包含用户名及识别号的格式化字符串。
     /// </summary>
-    /// <returns>
-    ///     A string containing the name of the user that was banned.
-    /// </returns>
+    /// <returns> 被封禁用户的包含用户名及识别号的格式化字符串。 </returns>
+    /// <seealso cref="P:Kook.Rest.RestBan.User"/>
+    /// <seealso cref="M:Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
     public override string ToString() => User.ToString();
 
     private string DebuggerDisplay => $"{User}: {Reason}";

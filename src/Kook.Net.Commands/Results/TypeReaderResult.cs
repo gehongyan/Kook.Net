@@ -4,26 +4,26 @@ using System.Diagnostics;
 namespace Kook.Commands;
 
 /// <summary>
-///     Represents a parsing result of a type reader.
+///     表示一个类型读取器的解析值。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct TypeReaderValue
 {
     /// <summary>
-    ///     Gets the parsed value.
+    ///     获取解析的值。
     /// </summary>
     public object? Value { get; }
 
     /// <summary>
-    ///     Gets the confidence score of the parsing.
+    ///     获取解析的置信度分数。
     /// </summary>
     public float Score { get; }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="TypeReaderValue"/> struct.
+    ///     齿梳化一个包含解析值和置信度分数的 <see cref="TypeReaderValue"/> 结构的新实例。
     /// </summary>
-    /// <param name="value"> The parsed value. </param>
-    /// <param name="score"> The confidence score of the parsing. </param>
+    /// <param name="value"> 解析的值。 </param>
+    /// <param name="score"> 解析的置信度分数。 </param>
     public TypeReaderValue(object? value, float score)
     {
         Value = value;
@@ -37,13 +37,13 @@ public struct TypeReaderValue
 }
 
 /// <summary>
-///     Represents a parsing result of a type reader.
+///     表示一个类型读取器的解析结果。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct TypeReaderResult : IResult
 {
     /// <summary>
-    ///     Gets the parsed values.
+    ///     获取解析的值。
     /// </summary>
     public IReadOnlyCollection<TypeReaderValue> Values { get; }
 
@@ -56,7 +56,10 @@ public struct TypeReaderResult : IResult
     /// <inheritdoc/>
     public bool IsSuccess => !Error.HasValue;
 
-    /// <exception cref="InvalidOperationException">TypeReaderResult was not successful.</exception>
+    /// <summary>
+    ///     获取最佳匹配的解析值。
+    /// </summary>
+    /// <exception cref="InvalidOperationException"> 解析失败。 </exception>
     public object? BestMatch => IsSuccess
         ? Values?.MaxBy(v => v.Score).Value
         : throw new InvalidOperationException("TypeReaderResult was not successful.");
@@ -69,42 +72,48 @@ public struct TypeReaderResult : IResult
     }
 
     /// <summary>
-    ///     Returns a <see cref="TypeReaderResult" /> with no errors.
+    ///     初始化一个不包含任何错误的 <see cref="TypeReaderResult"/> 结构的新实例，表示一个成功的解析。
     /// </summary>
-    /// <param name="value"> The parsed value. </param>
+    /// <param name="value"> 解析的值。 </param>
+    /// <returns> 一个表示解析成功的 <see cref="TypeReaderResult"/>。 </returns>
     public static TypeReaderResult FromSuccess(object? value) =>
         new(ImmutableArray.Create(new TypeReaderValue(value, 1.0f)), null, null);
 
     /// <summary>
-    ///     Returns a <see cref="TypeReaderResult" /> with no errors.
+    ///     初始化一个不包含任何错误的 <see cref="TypeReaderResult"/> 结构的新实例，表示一个成功的解析。
     /// </summary>
-    /// <param name="value"> The parsed value. </param>
+    /// <param name="value"> 解析的值。 </param>
+    /// <returns> 一个表示解析成功的 <see cref="TypeReaderResult"/>。 </returns>
     public static TypeReaderResult FromSuccess(TypeReaderValue value) =>
         new(ImmutableArray.Create(value), null, null);
 
     /// <summary>
-    ///     Returns a <see cref="TypeReaderResult" /> with no errors.
+    ///     初始化一个不包含任何错误的 <see cref="TypeReaderResult"/> 结构的新实例，表示一个成功的解析。
     /// </summary>
-    /// <param name="values"> The parsed values. </param>
+    /// <param name="values"> 解析的值。 </param>
+    /// <returns> 一个表示解析成功的 <see cref="TypeReaderResult"/>。 </returns>
     public static TypeReaderResult FromSuccess(IReadOnlyCollection<TypeReaderValue> values) => new(values, null, null);
 
     /// <summary>
-    ///     Returns a <see cref="TypeReaderResult" /> with a specified error.
+    ///     初始化一个包含指定错误类型和原因的 <see cref="TypeReaderResult"/> 结构的新实例，表示一个失败的解析。
     /// </summary>
-    /// <param name="error"> The error. </param>
-    /// <param name="reason"> The reason for the error. </param>
+    /// <param name="error"> 错误类型。 </param>
+    /// <param name="reason"> 错误原因。 </param>
+    /// <returns> 一个表示解析失败的 <see cref="TypeReaderResult"/>。 </returns>
     public static TypeReaderResult FromError(CommandError error, string reason) => new([], error, reason);
 
     /// <summary>
-    ///     Returns a <see cref="TypeReaderResult" /> with an exception.
+    ///     初始化一个包含指定异常的 <see cref="TypeReaderResult"/> 结构的新实例，表示一个失败的解析。
     /// </summary>
-    /// <param name="ex"> The exception that occurred. </param>
+    /// <param name="ex"> 导致解析失败的异常。 </param>
+    /// <returns> 一个表示解析失败的 <see cref="TypeReaderResult"/>。 </returns>
     public static TypeReaderResult FromError(Exception ex) => FromError(CommandError.Exception, ex.Message);
 
     /// <summary>
-    ///     Returns a <see cref="TypeReaderResult" /> with a specified result.
+    ///     初始化一个包含指定结果的 <see cref="TypeReaderResult"/> 结构的新实例，表示一个失败的解析。
     /// </summary>
-    /// <param name="result"> The result. </param>
+    /// <param name="result"> 要包装的结果。 </param>
+    /// <returns> 一个表示解析失败的 <see cref="TypeReaderResult"/>。 </returns>
     public static TypeReaderResult FromError(IResult result) => new([], result.Error, result.ErrorReason);
 
     /// <inheritdoc />

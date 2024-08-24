@@ -1,7 +1,7 @@
 ﻿namespace Kook;
 
 /// <summary>
-///     Represents an embed in a message that
+///     表示一个消息中解析出的卡片嵌入式内容。
 /// </summary>
 public struct CardEmbed : IEmbed
 {
@@ -11,9 +11,9 @@ public struct CardEmbed : IEmbed
     }
 
     /// <summary>
-    ///     Gets the cards in this embed.
+    ///     获取卡片。
     /// </summary>
-    public ICard Card { get; internal set; }
+    public ICard Card { get; }
 
     /// <inheritdoc />
     public EmbedType Type => EmbedType.Card;

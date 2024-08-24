@@ -1,16 +1,14 @@
 namespace Kook.Commands;
 
 /// <summary>
-/// Utility class which contains the default matching pairs of quotation marks for CommandServiceConfig
+///     包含默认的匹配引号对的帮助类，用于 <see cref="T:Kook.Commands.CommandServiceConfig"/>。
 /// </summary>
 internal static class QuotationAliasUtils
 {
     /// <summary>
-    /// A default map of open-close pairs of quotation marks.
-    /// Contains many regional and Unicode equivalents.
-    /// Used in the <see cref="CommandServiceConfig"/>.
+    ///     一个默认的引号对的开闭映射，这可能包含了许多地区和 Unicode 符号中可视为开闭对的符号。
     /// </summary>
-    /// <seealso cref="CommandServiceConfig.QuotationMarkAliasMap"/>
+    /// <seealso cref="P:Kook.Commands.CommandServiceConfig.QuotationMarkAliasMap"/>
     internal static Dictionary<char, char> DefaultAliasMap =>
         // Output of a gist provided by https://gist.github.com/ufcpp
         // https://gist.github.com/ufcpp/5b2cf9a9bf7d0b8743714a0b88f7edc5
@@ -34,8 +32,7 @@ internal static class QuotationAliasUtils
             { '＂', '＂' },
             { '＇', '＇' },
             { '｢', '｣' },
-            // Changed from ( and ) because of the usage of keyword by Kook KMarkdown
-            { '（', '）' },
+            // { '(', ')' }, // Removed ( and ) because of the usage of keyword by KOOK KMarkdown
             { '༺', '༻' },
             { '༼', '༽' },
             { '᚛', '᚜' },
@@ -79,6 +76,7 @@ internal static class QuotationAliasUtils
             { '⸤', '⸥' },
             { '⸦', '⸧' },
             { '⸨', '⸩' },
+            { '（', '）' },
             { '【', '】' },
             { '〔', '〕' },
             { '〖', '〗' },

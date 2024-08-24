@@ -3,16 +3,16 @@ using System.Diagnostics;
 namespace Kook;
 
 /// <summary>
-///     Represents a gradient color.
+///     表示一个渐变色。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public readonly struct GradientColor
 {
     /// <summary>
-    ///     Initializes a new instance of <see cref="GradientColor"/>.
+    ///     初始化一个 <see cref="GradientColor"/> 结构的新实例。
     /// </summary>
-    /// <param name="left"> The left color of the gradient. </param>
-    /// <param name="right"> The right color of the gradient. </param>
+    /// <param name="left"> 渐变色的左侧颜色。 </param>
+    /// <param name="right"> 渐变色的右侧颜色。 </param>
     public GradientColor(Color left, Color right)
     {
         Left = left;
@@ -20,27 +20,38 @@ public readonly struct GradientColor
     }
 
     /// <summary>
-    ///     The left color of the gradient.
+    ///     获取此渐变色的左侧颜色。
     /// </summary>
     public Color Left { get; }
 
     /// <summary>
-    ///     The right color of the gradient.
+    ///     获取此渐变色的右侧颜色。
     /// </summary>
     public Color Right { get; }
 
     /// <summary>
-    ///     Converts the <see cref="GradientColor"/> to a tuple of <see cref="Color"/>.
+    ///     将此渐变色解构为表示左右两个颜色的元组。
     /// </summary>
-    /// <param name="gradient"> The gradient color to convert. </param>
-    /// <returns> The tuple of <see cref="Color"/>. </returns>
+    /// <param name="left"> 左侧颜色。 </param>
+    /// <param name="right"> 右侧颜色。 </param>
+    public void Deconstruct(out Color left, out Color right)
+    {
+        left = Left;
+        right = Right;
+    }
+
+    /// <summary>
+    ///     将此渐变色转换为表示左右两个颜色的元组。
+    /// </summary>
+    /// <param name="gradient"> 要转换的渐变色。 </param>
+    /// <returns> 表示左右两个颜色的元组。 </returns>
     public static implicit operator (Color Left, Color Right)(GradientColor gradient) => (gradient.Left, gradient.Right);
 
     /// <summary>
-    ///     Converts the tuple of <see cref="Color"/> to a <see cref="GradientColor"/>.
+    ///     将此表示左右两个颜色的元组转换为渐变色。
     /// </summary>
-    /// <param name="gradient"> The tuple of <see cref="Color"/> to convert. </param>
-    /// <returns> The <see cref="GradientColor"/>. </returns>
+    /// <param name="gradient"> 要转换的表示左右两个颜色的元组。 </param>
+    /// <returns> 转换后的渐变色。 </returns>
     public static implicit operator GradientColor((Color Left, Color Right) gradient) => new(gradient.Left, gradient.Right);
 
     private string DebuggerDisplay => $"{Left} -> {Right}";

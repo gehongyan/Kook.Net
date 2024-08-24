@@ -1,67 +1,67 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the type of an <see cref="IModule"/>.
+///     表示一个 <see cref="IModule"/> 的类型。
 /// </summary>
 public enum ModuleType
 {
     /// <summary>
-    ///     A <see cref="HeaderModule"/>.
+    ///     标题模块。
     /// </summary>
     Header,
 
     /// <summary>
-    ///     A <see cref="SectionModule"/>.
+    ///     内容模块。
     /// </summary>
     Section,
 
     /// <summary>
-    ///     An <see cref="ImageGroupModule"/>.
+    ///     图片组模块。
     /// </summary>
     ImageGroup,
 
     /// <summary>
-    ///     A <see cref="ContainerModule"/>.
+    ///     容器模块。
     /// </summary>
     Container,
 
     /// <summary>
-    ///     An <see cref="ActionGroupModule"/>.
+    ///     按钮组模块。
     /// </summary>
     ActionGroup,
 
     /// <summary>
-    ///     A <see cref="ContextModule"/>.
+    ///     备注模块。
     /// </summary>
     Context,
 
     /// <summary>
-    ///     A <see cref="DividerModule"/>.
+    ///     分割线模块。
     /// </summary>
     Divider,
 
     /// <summary>
-    ///     A <see cref="FileModule"/>.
+    ///     文件模块。
     /// </summary>
     File,
 
     /// <summary>
-    ///     An <see cref="AudioModule"/>.
+    ///     音频模块。
     /// </summary>
     Audio,
 
     /// <summary>
-    ///     A <see cref="VideoModule"/>.
+    ///     视频模块。
     /// </summary>
     Video,
 
     /// <summary>
-    ///     A <see cref="CountdownModule"/>.
+    ///     倒计时模块。
     /// </summary>
     Countdown,
 
     /// <summary>
-    ///     An <see cref="InviteModule"/>.
+    ///     邀请模块。
     /// </summary>
     Invite
 }

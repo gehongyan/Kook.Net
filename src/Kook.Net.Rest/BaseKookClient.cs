@@ -8,15 +8,21 @@ using Kook.Logging;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a client that can connect to the Kook API.
+///     表示一个可以连接到 KOOK API 的通用的 KOOK 客户端。
 /// </summary>
 public abstract class BaseKookClient : IKookClient
 {
     #region BaseKookClient
 
     /// <summary>
-    ///     Fired when a log message is sent.
+    ///     当生成一条日志消息时引发。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.LogMessage"/> 参数是描述日志消息的结构。 </item>
+    ///     </list>
+    /// </remarks>
     public event Func<LogMessage, Task> Log
     {
         add => _logEvent.Add(value);
@@ -26,7 +32,7 @@ public abstract class BaseKookClient : IKookClient
     internal readonly AsyncEvent<Func<LogMessage, Task>> _logEvent = new();
 
     /// <summary>
-    ///     Fired when the client has logged in.
+    ///     当客户端登录成功时引发。
     /// </summary>
     public event Func<Task> LoggedIn
     {
@@ -37,7 +43,7 @@ public abstract class BaseKookClient : IKookClient
     internal readonly AsyncEvent<Func<Task>> _loggedInEvent = new();
 
     /// <summary>
-    ///     Fired when the client has logged out.
+    ///     当客户端退出登录时引发。
     /// </summary>
     public event Func<Task> LoggedOut
     {
@@ -48,13 +54,20 @@ public abstract class BaseKookClient : IKookClient
     internal readonly AsyncEvent<Func<Task>> _loggedOutEvent = new();
 
     /// <summary>
-    ///     Fired when a REST request is sent to the API. First parameter is the HTTP method,
-    ///     second is the endpoint, and third is the time taken to complete the request.
+    ///     当向 API 发送 REST 请求时引发。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:System.Net.Http.HttpMethod"/> 参数是 HTTP 方法。 </item>
+    ///     <item> <see cref="T:System.String"/> 参数是终结点。 </item>
+    ///     <item> <see cref="T:System.Double"/> 参数是完成请求所花费的时间，以毫秒为单位。 </item>
+    ///     </list>
+    /// </remarks>
     public event Func<HttpMethod, string, double, Task> SentRequest
     {
-        add { _sentRequest.Add(value); }
-        remove { _sentRequest.Remove(value); }
+        add => _sentRequest.Add(value);
+        remove => _sentRequest.Remove(value);
     }
 
     internal readonly AsyncEvent<Func<HttpMethod, string, double, Task>> _sentRequest = new();
@@ -68,12 +81,12 @@ public abstract class BaseKookClient : IKookClient
     internal LogManager LogManager { get; }
 
     /// <summary>
-    ///     Gets the login state of the client.
+    ///     获取此客户端的登录状态。
     /// </summary>
     public LoginState LoginState { get; protected set; }
 
     /// <summary>
-    ///     Gets the logged-in user.
+    ///     获取登录到此客户端的当前用户；如果未登录，则为 <c>null</c>。
     /// </summary>
     public ISelfUser? CurrentUser { get; protected set; }
 

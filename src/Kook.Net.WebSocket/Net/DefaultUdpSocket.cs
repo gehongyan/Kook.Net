@@ -42,7 +42,6 @@ internal class DefaultUdpSocket : IUdpSocket, IDisposable
 
     public void Dispose() => Dispose(true);
 
-
     public async Task StartAsync()
     {
         await _lock.WaitAsync(CancellationToken.None).ConfigureAwait(false);

@@ -1,22 +1,22 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the event type fired when a <see cref="ButtonElement"/> is clicked.
+///     表示 <see cref="ButtonElement"/> 被点击时触发的事件类型。
 /// </summary>
 public enum ButtonClickEventType
 {
     /// <summary>
-    ///     Nothing will happen when the button is clicked.
+    ///     用户点击按钮时不会触发任何事件。
     /// </summary>
     None,
 
     /// <summary>
-    ///     The user will be redirected to the specified URL when the button is clicked.
+    ///     用户点击按钮时将会被重定向到指定的 URL。
     /// </summary>
     Link,
 
     /// <summary>
-    ///     The value of the button's <see cref="ButtonElement.Value"/> property will be submitted.
+    ///     用户点击按钮时将会提交按钮的 <see cref="P:Kook.ButtonElement.Value"/> 属性的值，KOOK 将会通过网关携带此值下发事件。
     /// </summary>
     ReturnValue
 }

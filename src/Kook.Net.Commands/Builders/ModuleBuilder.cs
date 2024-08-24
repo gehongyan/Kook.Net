@@ -3,7 +3,7 @@ using System.Reflection;
 namespace Kook.Commands.Builders;
 
 /// <summary>
-///     Represents a module builder.
+///     表示一个模块构建器。
 /// </summary>
 public class ModuleBuilder
 {
@@ -17,32 +17,32 @@ public class ModuleBuilder
     private readonly List<string> _aliases;
 
     /// <summary>
-    ///     Gets the command service that this module builder belongs to.
+    ///     获取此模块构建器所属的命令服务。
     /// </summary>
     public CommandService Service { get; }
 
     /// <summary>
-    ///     Gets the parent module builder that this module builder belongs to.
+    ///     获取此模块构建器所属的父模块构建器。
     /// </summary>
     public ModuleBuilder? Parent { get; }
 
     /// <summary>
-    ///     Gets or sets the name of this module.
+    ///     获取或设置此模块的基本名称。
     /// </summary>
     public string? Name { get; set; }
 
     /// <summary>
-    ///     Gets or sets the summary of this module.
+    ///     获取或设置此模块的摘要。
     /// </summary>
     public string? Summary { get; set; }
 
     /// <summary>
-    ///     Gets or sets the remarks of this module.
+    ///     获取或设置此模块的备注。
     /// </summary>
     public string? Remarks { get; set; }
 
     /// <summary>
-    ///     Gets or sets the group of this module.
+    ///     获取或设置此模块的分组。
     /// </summary>
     public string? Group
     {
@@ -57,27 +57,27 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Gets a read-only list of commands that this module builder contains.
+    ///     获取此模块的别名。
     /// </summary>
     public IReadOnlyList<CommandBuilder> Commands => _commands;
 
     /// <summary>
-    ///     Gets a read-only list of submodules that this module builder contains.
+    ///     获取此模块的子模块。
     /// </summary>
     public IReadOnlyList<ModuleBuilder> Modules => _submodules;
 
     /// <summary>
-    ///     Gets a read-only list of preconditions that this module builder contains.
+    ///     获取此模块的先决条件。
     /// </summary>
     public IReadOnlyList<PreconditionAttribute> Preconditions => _preconditions;
 
     /// <summary>
-    ///     Gets a read-only list of attributes that this module builder contains.
+    ///     获取此模块的特性。
     /// </summary>
     public IReadOnlyList<Attribute> Attributes => _attributes;
 
     /// <summary>
-    ///     Gets a read-only list of aliases that this module builder contains.
+    ///     获取此模块的别名。
     /// </summary>
     public IReadOnlyList<string?> Aliases => _aliases;
 
@@ -87,11 +87,6 @@ public class ModuleBuilder
 
     #region Automatic
 
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="ModuleBuilder"/> class.
-    /// </summary>
-    /// <param name="service"> The command service that this module builder belongs to. </param>
-    /// <param name="parent"> The parent module builder that this module builder belongs to. </param>
     internal ModuleBuilder(CommandService service, ModuleBuilder? parent)
     {
         Service = service;
@@ -109,11 +104,11 @@ public class ModuleBuilder
     #region User-defined
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ModuleBuilder"/> class.
+    ///     初始化一个 <see cref="ModuleBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="service"> The command service that this module builder belongs to. </param>
-    /// <param name="parent"> The parent module builder that this module builder belongs to. </param>
-    /// <param name="primaryAlias"> The primary alias of this module. </param>
+    /// <param name="service"> 此模块构建器所属的命令服务。 </param>
+    /// <param name="parent"> 此模块构建器所属的父模块构建器。 </param>
+    /// <param name="primaryAlias"> 此模块的首要别名。 </param>
     internal ModuleBuilder(CommandService service, ModuleBuilder? parent, string primaryAlias)
         : this(service, parent)
     {
@@ -122,10 +117,10 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Sets the name of this module.
+    ///     设置此模块的名基本称。
     /// </summary>
-    /// <param name="name"> The name of this module. </param>
-    /// <returns> This module builder. </returns>
+    /// <param name="name"> 此模块的基本名称。 </param>
+    /// <returns> 此模块构建器。 </returns>
     public ModuleBuilder WithName(string name)
     {
         Name = name;
@@ -133,10 +128,10 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Sets the summary of this module.
+    ///     设置此模块的摘要。
     /// </summary>
-    /// <param name="summary"> The summary of this module. </param>
-    /// <returns> This module builder. </returns>
+    /// <param name="summary"> 此模块的摘要。 </param>
+    /// <returns> 此模块构建器。 </returns>
     public ModuleBuilder WithSummary(string summary)
     {
         Summary = summary;
@@ -144,10 +139,10 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Sets the remarks of this module.
+    ///     设置此模块的备注。
     /// </summary>
-    /// <param name="remarks"> The remarks of this module. </param>
-    /// <returns> This module builder. </returns>
+    /// <param name="remarks"> 此模块的备注。 </param>
+    /// <returns> 此模块构建器。 </returns>
     public ModuleBuilder WithRemarks(string remarks)
     {
         Remarks = remarks;
@@ -155,10 +150,10 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Adds aliases to this module.
+    ///     添加别名到此模块。
     /// </summary>
-    /// <param name="aliases"> An array of aliases to add to this module. </param>
-    /// <returns> This module builder. </returns>
+    /// <param name="aliases"> 要添加到此模块的别名数组。 </param>
+    /// <returns> 此模块构建器。 </returns>
     public ModuleBuilder AddAliases(params string?[] aliases)
     {
         foreach (string? x in aliases)
@@ -172,10 +167,10 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Adds a precondition to this module.
+    ///     添加特性到此模块。
     /// </summary>
-    /// <param name="attributes"> An array of attributes to add to this module. </param>
-    /// <returns> This module builder. </returns>
+    /// <param name="attributes"> 要添加到此模块的特性数组。 </param>
+    /// <returns> 此模块构建器。 </returns>
     public ModuleBuilder AddAttributes(params Attribute[] attributes)
     {
         _attributes.AddRange(attributes);
@@ -183,10 +178,10 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Adds a precondition to this module.
+    ///     添加先决条件到此模块。
     /// </summary>
-    /// <param name="precondition"> The precondition to add to this module. </param>
-    /// <returns> This module builder. </returns>
+    /// <param name="precondition"> 要添加到此模块的先决条件。 </param>
+    /// <returns> 此模块构建器。 </returns>
     public ModuleBuilder AddPrecondition(PreconditionAttribute precondition)
     {
         _preconditions.Add(precondition);
@@ -194,12 +189,12 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Adds a command to this module.
+    ///     添加命令到此模块。
     /// </summary>
-    /// <param name="primaryAlias"> The primary alias of this command. </param>
-    /// <param name="callback"> The callback of this command. </param>
-    /// <param name="createFunc"> The function delegate that creates this command. </param>
-    /// <returns> This module builder. </returns>
+    /// <param name="primaryAlias"> 此命令的首要别名。 </param>
+    /// <param name="callback"> 当执行此命令时调用的回调。 </param>
+    /// <param name="createFunc"> 一个创建命令构建器的委托。 </param>
+    /// <returns> 此模块构建器。 </returns>
     public ModuleBuilder AddCommand(string primaryAlias,
         Func<ICommandContext, object?[], IServiceProvider, CommandInfo, Task> callback,
         Action<CommandBuilder> createFunc)
@@ -211,10 +206,10 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Adds a command to this module.
+    ///     添加命令到此模块。
     /// </summary>
-    /// <param name="createFunc"> The function delegate that creates this command. </param>
-    /// <returns> This module builder. </returns>
+    /// <param name="createFunc"> 一个创建命令构建器的委托。 </param>
+    /// <returns> 此模块构建器。 </returns>
     internal ModuleBuilder AddCommand(Action<CommandBuilder> createFunc)
     {
         CommandBuilder builder = new(this);
@@ -224,11 +219,11 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Adds a module to this module.
+    ///     添加子模块到此模块。
     /// </summary>
-    /// <param name="primaryAlias"> The primary alias of this module. </param>
-    /// <param name="createFunc"> The function delegate that creates this module. </param>
-    /// <returns> This module builder. </returns>
+    /// <param name="primaryAlias"> 此模块的首要别名。 </param>
+    /// <param name="createFunc"> 一个创建模块构建器的委托。 </param>
+    /// <returns> 此模块构建器。 </returns>
     public ModuleBuilder AddModule(string primaryAlias, Action<ModuleBuilder> createFunc)
     {
         ModuleBuilder builder = new(Service, this, primaryAlias);
@@ -238,10 +233,10 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Adds a module to this module.
+    ///     添加子模块到此模块。
     /// </summary>
-    /// <param name="createFunc"> The function delegate that creates this module. </param>
-    /// <returns> This module builder. </returns>
+    /// <param name="createFunc"> 一个创建模块构建器的委托。 </param>
+    /// <returns> 此模块构建器。 </returns>
     internal ModuleBuilder AddModule(Action<ModuleBuilder> createFunc)
     {
         ModuleBuilder builder = new(Service, this);
@@ -250,13 +245,6 @@ public class ModuleBuilder
         return this;
     }
 
-    /// <summary>
-    ///     Builds this module builder into a module.
-    /// </summary>
-    /// <param name="service"> The command service that this module builder belongs to. </param>
-    /// <param name="services"> The service provider that this module builder belongs to. </param>
-    /// <param name="parent"> The parent module that this module builder belongs to. </param>
-    /// <returns> The built module. </returns>
     private ModuleInfo BuildImpl(CommandService service, IServiceProvider services, ModuleInfo? parent = null)
     {
         //Default name to first alias
@@ -272,20 +260,20 @@ public class ModuleBuilder
     }
 
     /// <summary>
-    ///     Builds this module builder into a module.
+    ///     构建此模块构建器为模块。
     /// </summary>
-    /// <param name="service"> The command service that this module builder belongs to. </param>
-    /// <param name="services"> The service provider that this module builder belongs to. </param>
-    /// <returns> The built module. </returns>
+    /// <param name="service"> 此模块构建器所属的命令服务。 </param>
+    /// <param name="services"> 此模块构建器所属的服务提供程序。 </param>
+    /// <returns> 构建的模块。 </returns>
     public ModuleInfo Build(CommandService service, IServiceProvider services) => BuildImpl(service, services);
 
     /// <summary>
-    ///     Builds this module builder into a module.
+    ///     构建此模块构建器为模块。
     /// </summary>
-    /// <param name="service"> The command service that this module builder belongs to. </param>
-    /// <param name="services"> The service provider that this module builder belongs to. </param>
-    /// <param name="parent"> The parent module that this module builder belongs to. </param>
-    /// <returns> The built module. </returns>
+    /// <param name="service"> 此模块构建器所属的命令服务。 </param>
+    /// <param name="services"> 此模块构建器所属的服务提供程序。 </param>
+    /// <param name="parent"> 此模块构建器所属的父模块。 </param>
+    /// <returns> 构建的模块。 </returns>
     internal ModuleInfo Build(CommandService service, IServiceProvider services, ModuleInfo parent) => BuildImpl(service, services, parent);
 
     #endregion

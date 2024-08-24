@@ -7,28 +7,26 @@ using System.Reflection;
 namespace Kook.Commands;
 
 /// <summary>
-///     Provides a framework for building Kook commands.
+///     表示一个基于文本的命令服务。
 /// </summary>
 /// <remarks>
-///     <para>
-///         The service provides a framework for building Kook commands both dynamically via runtime builders or
-///         statically via compile-time modules. To create a command module at compile-time, see
-///         <see cref="ModuleBase" /> (most common); otherwise, see <see cref="ModuleBuilder" />.
-///     </para>
-///     <para>
-///         This service also provides several events for monitoring command usages; such as
-///         <see cref="Kook.Commands.CommandService.Log" /> for any command-related log events, and
-///         <see cref="Kook.Commands.CommandService.CommandExecuted" /> for information about commands that have
-///         been successfully executed.
-///     </para>
+///     此类用于支持在运行时动态创建命令，或者在编译时静态创建命令。要在编译时创建命令模块，参见
+///     <see cref="T:Kook.Commands.ModuleBase"/> 或 <see cref="T:Kook.Commands.Builders.ModuleBuilder"/>。 <br />
+///     此服务还提供了几个事件，用于监视命令的使用情况；例如 <see cref="M:Kook.Commands.CommandService.Log" /> 用于任何与命令相关的日志事件，
 /// </remarks>
 public class CommandService : IDisposable
 {
     #region CommandService
 
     /// <summary>
-    ///     Occurs when a command-related information is received.
+    ///     当产生与命令相关的日志信息时引发。
     /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.LogMessage"/> 参数是日志消息。 </item>
+    ///     </list>
+    /// </remarks>
     public event Func<LogMessage, Task> Log
     {
         add => _logEvent.Add(value);
@@ -38,11 +36,17 @@ public class CommandService : IDisposable
     internal readonly AsyncEvent<Func<LogMessage, Task>> _logEvent = new();
 
     /// <summary>
-    ///     Occurs when a command is executed.
+    ///     当命令执行时引发。
     /// </summary>
     /// <remarks>
-    ///     This event is fired when a command has been executed, successfully or not. When a command fails to
-    ///     execute during parsing or precondition stage, the CommandInfo may not be returned.
+    ///     此事件在命令执行后引发，既包含了执行成功的情况，也包含了执行失败的情况。
+    ///     <br />
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="T:Kook.Commands.CommandInfo"/>? 参数是执行的命令，如果命令在解析或先决条件阶段失败，则可能为 <c>null</c>。 </item>
+    ///     <item> <see cref="T:Kook.Commands.ICommandContext"/> 参数是命令的上下文。 </item>
+    ///     <item> <see cref="T:Kook.Commands.IResult"/> 参数是命令的结果。 </item>
+    ///     </list>
     /// </remarks>
     public event Func<CommandInfo?, ICommandContext, IResult, Task> CommandExecuted
     {
@@ -70,36 +74,34 @@ public class CommandService : IDisposable
     internal bool _isDisposed;
 
     /// <summary>
-    ///     Represents all modules loaded within <see cref="CommandService"/>.
+    ///     获取所有加载的模块。
     /// </summary>
     public IEnumerable<ModuleInfo> Modules => _moduleDefs.Select(x => x);
 
     /// <summary>
-    ///     Represents all commands loaded within <see cref="CommandService"/>.
+    ///     获取所有加载的命令。
     /// </summary>
     public IEnumerable<CommandInfo> Commands => _moduleDefs.SelectMany(x => x.Commands);
 
     /// <summary>
-    ///     Represents all <see cref="TypeReader" /> loaded within <see cref="CommandService"/>.
+    ///     获取所有加载的类型读取器。
     /// </summary>
     public ILookup<Type, TypeReader> TypeReaders => _typeReaders
         .SelectMany(x => x.Value.Select(y => new { y.Key, y.Value }))
         .ToLookup(x => x.Key, x => x.Value);
 
     /// <summary>
-    ///     Initializes a new <see cref="CommandService"/> class.
+    ///     初始化一个 <see cref="CommandService"/> 类的新实例。
     /// </summary>
     public CommandService() : this(new CommandServiceConfig())
     {
     }
 
     /// <summary>
-    ///     Initializes a new <see cref="CommandService"/> class with the provided configuration.
+    ///     初始化一个 <see cref="CommandService"/> 类的新实例。
     /// </summary>
-    /// <param name="config">The configuration class.</param>
-    /// <exception cref="InvalidOperationException">
-    /// The <see cref="RunMode"/> cannot be set to <see cref="RunMode.Default"/>.
-    /// </exception>
+    /// <param name="config"> 命令服务的配置。 </param>
+    /// <exception cref="InvalidOperationException"> 默认运行模式不能设置为 <see cref="F:Kook.Commands.RunMode.Default"/>。 </exception>
     public CommandService(CommandServiceConfig config)
     {
         _caseSensitive = config.CaseSensitiveCommands;
@@ -155,11 +157,11 @@ public class CommandService : IDisposable
     #region Modules
 
     /// <summary>
-    ///     Creates a new module builder.
+    ///     创建一个命令模块。
     /// </summary>
-    /// <param name="primaryAlias"> The primary alias for the module. </param>
-    /// <param name="buildFunc"> The action delegate to build the module. </param>
-    /// <returns> A task that represents the asynchronous operation for creating the module. </returns>
+    /// <param name="primaryAlias"> 模块的首要别名。 </param>
+    /// <param name="buildFunc"> 一个构建模块的委托。 </param>
+    /// <returns> 一个表示异步操作的任务。任务结果包含构建的模块。 </returns>
     public async Task<ModuleInfo> CreateModuleAsync(string primaryAlias, Action<ModuleBuilder> buildFunc)
     {
         await _moduleLock.WaitAsync().ConfigureAwait(false);
@@ -177,40 +179,30 @@ public class CommandService : IDisposable
     }
 
     /// <summary>
-    ///     Add a command module from a <see cref="Type" />.
+    ///     添加一个命令模块。
     /// </summary>
+    /// <typeparam name="T"> 要添加的模块的类型。 </typeparam>
+    /// <param name="services"> 用于依赖注入的服务提供程序；如果不使用依赖注入，则传递 <c>null</c>。 </param>
+    /// <returns> 一个表示异步添加操作的任务。任务结果包含添加的模块。 </returns>
+    /// <exception cref="ArgumentException"> 此模块已经添加。 </exception>
+    /// <exception cref="InvalidOperationException"> 无法构建 <see cref="T:Kook.Commands.ModuleInfo"/>；可能提供了无效的类型。 </exception>
     /// <example>
-    ///     <para>The following example registers the module <c>MyModule</c> to <c>commandService</c>.</para>
+    ///     以下示例代码将模块 <c>MyModule</c> 注册到 <c>commandService</c> 中。
     ///     <code language="cs">
-    ///     await commandService.AddModuleAsync&lt;MyModule&gt;(serviceProvider);
+    ///         await commandService.AddModuleAsync&lt;MyModule&gt;(serviceProvider);
     ///     </code>
     /// </example>
-    /// <typeparam name="T">The type of module.</typeparam>
-    /// <param name="services">The <see cref="IServiceProvider"/> for your dependency injection solution if using one; otherwise, pass <c>null</c>.</param>
-    /// <exception cref="ArgumentException">This module has already been added.</exception>
-    /// <exception cref="InvalidOperationException">
-    /// The <see cref="ModuleInfo"/> fails to be built; an invalid type may have been provided.
-    /// </exception>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for adding the module. The task result contains the
-    ///     built module.
-    /// </returns>
-    public Task<ModuleInfo> AddModuleAsync<T>(IServiceProvider services) => AddModuleAsync(typeof(T), services);
+    public Task<ModuleInfo> AddModuleAsync<T>(IServiceProvider? services) => AddModuleAsync(typeof(T), services);
 
     /// <summary>
-    ///     Adds a command module from a <see cref="Type" />.
+    ///     添加一个命令模块。
     /// </summary>
-    /// <param name="type">The type of module.</param>
-    /// <param name="services">The <see cref="IServiceProvider" /> for your dependency injection solution if using one; otherwise, pass <c>null</c> .</param>
-    /// <exception cref="ArgumentException">This module has already been added.</exception>
-    /// <exception cref="InvalidOperationException">
-    /// The <see cref="ModuleInfo"/> fails to be built; an invalid type may have been provided.
-    /// </exception>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for adding the module. The task result contains the
-    ///     built module.
-    /// </returns>
-    public async Task<ModuleInfo> AddModuleAsync(Type type, IServiceProvider services)
+    /// <param name="type"> 要添加的模块的类型。 </param>
+    /// <param name="services"> 用于依赖注入的服务提供程序；如果不使用依赖注入，则传递 <c>null</c>。 </param>
+    /// <returns> 一个表示异步添加操作的任务。任务结果包含添加的模块。 </returns>
+    /// <exception cref="ArgumentException"> 此模块已经添加。 </exception>
+    /// <exception cref="InvalidOperationException"> 无法构建 <see cref="T:Kook.Commands.ModuleInfo"/>；可能提供了无效的类型。 </exception>
+    public async Task<ModuleInfo> AddModuleAsync(Type type, IServiceProvider? services)
     {
         services ??= EmptyServiceProvider.Instance;
         await _moduleLock.WaitAsync().ConfigureAwait(false);
@@ -237,15 +229,12 @@ public class CommandService : IDisposable
     }
 
     /// <summary>
-    ///     Add command modules from an <see cref="Assembly"/>.
+    ///     添加程序集内的所有命令模块。
     /// </summary>
-    /// <param name="assembly">The <see cref="Assembly"/> containing command modules.</param>
-    /// <param name="services">The <see cref="IServiceProvider"/> for your dependency injection solution if using one; otherwise, pass <c>null</c>.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous operation for adding the command modules. The task result
-    ///     contains an enumerable collection of modules added.
-    /// </returns>
-    public async Task<IEnumerable<ModuleInfo>> AddModulesAsync(Assembly assembly, IServiceProvider services)
+    /// <param name="assembly"> 要添加其所有模块的程序集。 </param>
+    /// <param name="services"> 用于依赖注入的服务提供程序；如果不使用依赖注入，则传递 <c>null</c>。 </param>
+    /// <returns> 一个表示异步添加操作的任务。任务结果包含所有添加的模块。 </returns>
+    public async Task<IEnumerable<ModuleInfo>> AddModulesAsync(Assembly assembly, IServiceProvider? services)
     {
         services ??= EmptyServiceProvider.Instance;
 
@@ -280,13 +269,10 @@ public class CommandService : IDisposable
     }
 
     /// <summary>
-    ///     Removes the command module.
+    ///     移除命令模块。
     /// </summary>
-    /// <param name="module">The <see cref="ModuleInfo" /> to be removed from the service.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous removal operation. The task result contains a value that
-    ///     indicates whether the <paramref name="module"/> is successfully removed.
-    /// </returns>
+    /// <param name="module"> 要移除的模块。 </param>
+    /// <returns> 一个表示异步删除操作的任务。如果任务结果为 <c>true</c>，则表示模块已成功删除，否则表示模块不存在。 </returns>
     public async Task<bool> RemoveModuleAsync(ModuleInfo module)
     {
         await _moduleLock.WaitAsync().ConfigureAwait(false);
@@ -301,23 +287,17 @@ public class CommandService : IDisposable
     }
 
     /// <summary>
-    ///     Removes the command module.
+    ///     移除命令模块。
     /// </summary>
-    /// <typeparam name="T">The <see cref="Type"/> of the module.</typeparam>
-    /// <returns>
-    ///     A task that represents the asynchronous removal operation. The task result contains a value that
-    ///     indicates whether the module is successfully removed.
-    /// </returns>
+    /// <typeparam name="T"> 要移除的模块的类型。 </typeparam>
+    /// <returns> 一个表示异步删除操作的任务。如果任务结果为 <c>true</c>，则表示模块已成功删除，否则表示模块不存在。 </returns>
     public Task<bool> RemoveModuleAsync<T>() => RemoveModuleAsync(typeof(T));
 
     /// <summary>
-    ///     Removes the command module.
+    ///     移除命令模块。
     /// </summary>
-    /// <param name="type">The <see cref="Type"/> of the module.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous removal operation. The task result contains a value that
-    ///     indicates whether the module is successfully removed.
-    /// </returns>
+    /// <param name="type"> 要移除的模块的类型。 </param>
+    /// <returns> 一个表示异步删除操作的任务。如果任务结果为 <c>true</c>，则表示模块已成功删除，否则表示模块不存在。 </returns>
     public async Task<bool> RemoveModuleAsync(Type type)
     {
         await _moduleLock.WaitAsync().ConfigureAwait(false);
@@ -348,27 +328,25 @@ public class CommandService : IDisposable
     #region Type Readers
 
     /// <summary>
-    ///     Adds a custom <see cref="TypeReader" /> to this <see cref="CommandService" /> for the supplied object
-    ///     type.
-    ///     If <typeparamref name="T" /> is a <see cref="ValueType" />, a nullable <see cref="TypeReader" /> will
-    ///     also be added.
-    ///     If a default <see cref="TypeReader" /> exists for <typeparamref name="T" />, a warning will be logged
-    ///     and the default <see cref="TypeReader" /> will be replaced.
+    ///     添加一个自定义的类型读取器。
     /// </summary>
-    /// <typeparam name="T">The object type to be read by the <see cref="TypeReader"/>.</typeparam>
-    /// <param name="reader">An instance of the <see cref="TypeReader" /> to be added.</param>
+    /// <remarks>
+    ///     如果 <typeparamref name="T" /> 是一个值类型，那么一个读取对应可空值类型的 <see cref="TypeReader" /> 也会被添加。 <br />
+    ///     如果 <typeparamref name="T" /> 的默认 <see cref="TypeReader" /> 已经存在，那么会记录一个警告，默认的 <see cref="TypeReader" /> 将会被替换。
+    /// </remarks>
+    /// <typeparam name="T"> 要读取的对象类型。 </typeparam>
+    /// <param name="reader"> 要添加的类型读取器的实例。 </param>
     public void AddTypeReader<T>(TypeReader reader) => AddTypeReader(typeof(T), reader);
 
     /// <summary>
-    ///     Adds a custom <see cref="TypeReader" /> to this <see cref="CommandService" /> for the supplied object
-    ///     type.
-    ///     If <paramref name="type" /> is a <see cref="ValueType" />, a nullable <see cref="TypeReader" /> for the
-    ///     value type will also be added.
-    ///     If a default <see cref="TypeReader" /> exists for <paramref name="type" />, a warning will be logged and
-    ///     the default <see cref="TypeReader" /> will be replaced.
+    ///     添加一个自定义的类型读取器。
     /// </summary>
-    /// <param name="type">A <see cref="Type" /> instance for the type to be read.</param>
-    /// <param name="reader">An instance of the <see cref="TypeReader" /> to be added.</param>
+    /// <remarks>
+    ///     如果 <paramref name="type" /> 是一个值类型，那么一个读取对应可空值类型的 <see cref="TypeReader" /> 也会被添加。 <br />
+    ///     如果 <paramref name="type" /> 的默认 <see cref="TypeReader" /> 已经存在，那么会记录一个警告，默认的 <see cref="TypeReader" /> 将会被替换。
+    /// </remarks>
+    /// <param name="type"> 要读取的对象类型。 </param>
+    /// <param name="reader"> 要添加的类型读取器的实例。 </param>
     public void AddTypeReader(Type type, TypeReader reader)
     {
         if (_defaultTypeReaders.ContainsKey(type))
@@ -382,32 +360,26 @@ public class CommandService : IDisposable
     }
 
     /// <summary>
-    ///     Adds a custom <see cref="TypeReader" /> to this <see cref="CommandService" /> for the supplied object
-    ///     type.
-    ///     If <typeparamref name="T" /> is a <see cref="ValueType" />, a nullable <see cref="TypeReader" /> will
-    ///     also be added.
+    ///     添加一个自定义的类型读取器。
     /// </summary>
-    /// <typeparam name="T">The object type to be read by the <see cref="TypeReader"/>.</typeparam>
-    /// <param name="reader">An instance of the <see cref="TypeReader" /> to be added.</param>
-    /// <param name="replaceDefault">
-    ///     Defines whether the <see cref="TypeReader"/> should replace the default one for
-    ///     <see cref="Type" /> if it exists.
-    /// </param>
+    /// <remarks>
+    ///     如果 <typeparamref name="T" /> 是一个值类型，那么一个读取对应可空值类型的 <see cref="TypeReader" /> 也会被添加。
+    /// </remarks>
+    /// <typeparam name="T"> 要读取的对象类型。 </typeparam>
+    /// <param name="reader"> 要添加的类型读取器的实例。 </param>
+    /// <param name="replaceDefault"> 是否替换默认的 <see cref="TypeReader"/>。 </param>
     public void AddTypeReader<T>(TypeReader reader, bool replaceDefault) =>
         AddTypeReader(typeof(T), reader, replaceDefault);
 
     /// <summary>
-    ///     Adds a custom <see cref="TypeReader" /> to this <see cref="CommandService" /> for the supplied object
-    ///     type.
-    ///     If <paramref name="type" /> is a <see cref="ValueType" />, a nullable <see cref="TypeReader" /> for the
-    ///     value type will also be added.
+    ///     添加一个自定义的类型读取器。
     /// </summary>
-    /// <param name="type">A <see cref="Type" /> instance for the type to be read.</param>
-    /// <param name="reader">An instance of the <see cref="TypeReader" /> to be added.</param>
-    /// <param name="replaceDefault">
-    ///     Defines whether the <see cref="TypeReader"/> should replace the default one for <see cref="Type" /> if
-    ///     it exists.
-    /// </param>
+    /// <remarks>
+    ///     如果 <paramref name="type" /> 是一个值类型，那么一个读取对应可空值类型的 <see cref="TypeReader" /> 也会被添加。
+    /// </remarks>
+    /// <param name="type"> 要读取的对象类型。 </param>
+    /// <param name="reader"> 要添加的类型读取器的实例。 </param>
+    /// <param name="replaceDefault"> 是否替换默认的 <see cref="TypeReader"/>。 </param>
     public void AddTypeReader(Type type, TypeReader reader, bool replaceDefault)
     {
         if (replaceDefault && HasDefaultTypeReader(type))
@@ -429,16 +401,16 @@ public class CommandService : IDisposable
     }
 
     /// <summary>
-    ///     Removes a type reader from the list of type readers.
+    ///     移除一个类型读取器。
     /// </summary>
     /// <remarks>
-    ///     Removing a <see cref="TypeReader"/> from the <see cref="CommandService"/> will not dereference the <see cref="TypeReader"/> from the loaded module/command instances.
-    ///     You need to reload the modules for the changes to take effect.
+    ///     从命令服务中移除一个 <see cref="TypeReader"/> 不会从已加载的模块与命令的实例中取消引用
+    ///     <see cref="TypeReader"/>。要使更改生效，您需要重新加载模块。
     /// </remarks>
-    /// <param name="type">The type to remove the readers from.</param>
-    /// <param name="isDefaultTypeReader"><c>true</c> if the default readers for <paramref name="type"/> should be removed; otherwise <c>false</c>.</param>
-    /// <param name="readers">The removed collection of type readers.</param>
-    /// <returns><c>true</c> if the remove operation was successful; otherwise <c>false</c>.</returns>
+    /// <param name="type"> 要移除的类型读取器所读取的对象类型。 </param>
+    /// <param name="isDefaultTypeReader"> 是否要移除默认的 <see cref="TypeReader"/>。 </param>
+    /// <param name="readers"> 移除的类型读取器。 </param>
+    /// <returns> 如果成功移除，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public bool TryRemoveTypeReader(Type type, bool isDefaultTypeReader, out IDictionary<Type, TypeReader> readers)
     {
         readers = new Dictionary<Type, TypeReader>();
@@ -529,27 +501,27 @@ public class CommandService : IDisposable
     #region Execution
 
     /// <summary>
-    ///     Searches for the command.
+    ///     搜索命令。
     /// </summary>
-    /// <param name="context">The context of the command.</param>
-    /// <param name="argPos">The position of which the command starts at.</param>
-    /// <returns>The result containing the matching commands.</returns>
+    /// <param name="context"> 命令的上下文。 </param>
+    /// <param name="argPos"> 命令的位置。 </param>
+    /// <returns> 命令搜索的结果。 </returns>
     public SearchResult Search(ICommandContext context, int argPos) =>
         Search(context.Message.Content.Substring(argPos));
 
     /// <summary>
-    ///     Searches for the command.
+    ///     搜索命令。
     /// </summary>
-    /// <param name="context">The context of the command.</param>
-    /// <param name="input">The command string.</param>
-    /// <returns>The result containing the matching commands.</returns>
+    /// <param name="context"> 命令的上下文。 </param>
+    /// <param name="input"> 命令字符串。 </param>
+    /// <returns> 命令搜索的结果。 </returns>
     public SearchResult Search(ICommandContext context, string input) => Search(input);
 
     /// <summary>
-    ///     Searches for the command.
+    ///     搜索命令。
     /// </summary>
-    /// <param name="input"> The command string. </param>
-    /// <returns> The result containing the matching commands. </returns>
+    /// <param name="input"> 命令字符串。 </param>
+    /// <returns> 命令搜索的结果。 </returns>
     public SearchResult Search(string input)
     {
         string searchInput = _caseSensitive ? input : input.ToLowerInvariant();
@@ -561,15 +533,14 @@ public class CommandService : IDisposable
     }
 
     /// <summary>
-    ///     Executes the command.
+    ///     执行命令。
     /// </summary>
-    /// <param name="context">The context of the command.</param>
-    /// <param name="argPos">The position of which the command starts at.</param>
-    /// <param name="services">The service to be used in the command's dependency injection.</param>
-    /// <param name="multiMatchHandling">The handling mode when multiple command matches are found.</param>
+    /// <param name="context"> 命令的上下文。 </param>
+    /// <param name="argPos"> 命令的位置。 </param>
+    /// <param name="services"> 要用于命令执行的依赖注入服务。 </param>
+    /// <param name="multiMatchHandling"> 当匹配到多个命令时的处理模式。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous execution operation. The task result contains the result of the
-    ///     command execution.
+    ///     一个表示异步执行操作的任务。任务的结果包含执行的结果。
     /// </returns>
     public Task<IResult> ExecuteAsync(ICommandContext context, int argPos, IServiceProvider services,
         MultiMatchHandling multiMatchHandling = MultiMatchHandling.Exception)
@@ -581,15 +552,14 @@ public class CommandService : IDisposable
     }
 
     /// <summary>
-    ///     Executes the command.
+    ///     执行命令。
     /// </summary>
-    /// <param name="context">The context of the command.</param>
-    /// <param name="input">The command string.</param>
-    /// <param name="services">The service to be used in the command's dependency injection.</param>
-    /// <param name="multiMatchHandling">The handling mode when multiple command matches are found.</param>
+    /// <param name="context"> 命令的上下文。 </param>
+    /// <param name="input"> 命令字符串。 </param>
+    /// <param name="services"> 要用于命令执行的依赖注入服务。 </param>
+    /// <param name="multiMatchHandling"> 当匹配到多个命令时的处理模式。 </param>
     /// <returns>
-    ///     A task that represents the asynchronous execution operation. The task result contains the result of the
-    ///     command execution.
+    ///     一个表示异步执行操作的任务。任务的结果包含执行的结果。
     /// </returns>
     public async Task<IResult> ExecuteAsync(ICommandContext context, string input, IServiceProvider services,
         MultiMatchHandling multiMatchHandling = MultiMatchHandling.Exception)
@@ -659,14 +629,13 @@ public class CommandService : IDisposable
     }
 
     /// <summary>
-    /// Validates and gets the best <see cref="CommandMatch"/> from a specified <see cref="SearchResult"/>
+    ///     从指定的搜索结果中验证先决条件并获取最佳匹配。
     /// </summary>
-    /// <param name="matches">The SearchResult.</param>
-    /// <param name="context">The context of the command.</param>
-    /// <param name="provider">The service provider to be used on the command's dependency injection.</param>
-    /// <param name="multiMatchHandling">The handling mode when multiple command matches are found.</param>
-    /// <returns>A task that represents the asynchronous validation operation. The task result contains the result of the
-    ///     command validation as a <see cref="MatchResult"/> or a <see cref="SearchResult"/> if no matches were found.</returns>
+    /// <param name="matches"> 要验证的搜索结果。 </param>
+    /// <param name="context"> 命令的上下文。 </param>
+    /// <param name="provider"> 要用于命令验证与解析的依赖注入服务。 </param>
+    /// <param name="multiMatchHandling"> 当匹配到多个命令时的处理模式。 </param>
+    /// <returns> 一个表示异步操作的任务。任务的结果包含验证与最佳匹配的结果。 </returns>
     public async Task<IResult> ValidateAndGetBestMatch(SearchResult matches, ICommandContext context, IServiceProvider provider,
         MultiMatchHandling multiMatchHandling = MultiMatchHandling.Exception)
     {

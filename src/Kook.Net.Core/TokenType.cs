@@ -1,17 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the type of token to use with the client.
+///     表示客户端所使用的令牌类型。
 /// </summary>
 public enum TokenType
 {
     /// <summary>
-    ///     An OAuth2 token type.
+    ///     OAuth2 令牌类型。
     /// </summary>
     Bearer,
 
     /// <summary>
-    ///     A bot token type.
+    ///     Bot 令牌类型。
     /// </summary>
     Bot
 }

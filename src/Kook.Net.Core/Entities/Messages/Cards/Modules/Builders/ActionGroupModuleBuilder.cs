@@ -3,17 +3,17 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a action group module builder for creating an <see cref="ActionGroupModule"/>.
+///     用来构建 <see cref="ActionGroupModule"/> 模块的构建器。
 /// </summary>
 public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupModuleBuilder>, IEquatable<IModuleBuilder>
 {
     /// <summary>
-    ///     Returns the maximum number of elements allowed by Kook.
+    ///     元素的最大数量。
     /// </summary>
     public const int MaxElementCount = 4;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ActionGroupModuleBuilder"/> class.
+    ///     初始化一个 <see cref="ActionGroupModuleBuilder"/> 类的新实例。
     /// </summary>
     public ActionGroupModuleBuilder()
     {
@@ -21,8 +21,9 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ActionGroupModuleBuilder"/> class.
+    ///     初始化一个 <see cref="ActionGroupModuleBuilder"/> 类的新实例。
     /// </summary>
+    /// <param name="elements"> 按钮组模块要包含的按钮元素。 </param>
     public ActionGroupModuleBuilder(IList<ButtonElementBuilder> elements)
     {
         Elements = elements;
@@ -32,22 +33,15 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
     public ModuleType Type => ModuleType.ActionGroup;
 
     /// <summary>
-    ///     Gets or sets the button elements of the action group module.
+    ///     获取或设置按钮组模块的按钮元素。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IList{ButtonElementBuilder}"/> containing the button elements of the action group module.
-    /// </returns>
     public IList<ButtonElementBuilder> Elements { get; set; }
 
     /// <summary>
-    ///     Adds a button element to the action group module.
+    ///     添加一个按钮元素到按钮组模块。
     /// </summary>
-    /// <param name="field">
-    ///     The button element to add.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="field"> 要添加的按钮元素。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ActionGroupModuleBuilder AddElement(ButtonElementBuilder field)
     {
         Elements.Add(field);
@@ -55,17 +49,10 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
     }
 
     /// <summary>
-    ///     Adds a button element to the action group module.
+    ///     添加一个按钮元素到按钮组模块。
     /// </summary>
-    /// <param name="action">
-    ///     The action to add a button element to the action group module.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
-    /// <exception cref="ArgumentException">
-    ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
-    /// </exception>
+    /// <param name="action"> 一个包含对要添加的新创建的按钮元素进行配置的操作的委托。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ActionGroupModuleBuilder AddElement(Action<ButtonElementBuilder>? action = null)
     {
         ButtonElementBuilder field = new();
@@ -75,19 +62,17 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
     }
 
     /// <summary>
-    ///     Builds this builder into an <see cref="ActionGroupModule"/>.
+    ///     构建当前构建器为一个 <see cref="ActionGroupModule"/> 对象。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="ActionGroupModule"/> representing the built action group module object.
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="ActionGroupModule"/> 对象。 </returns>
     /// <exception cref="ArgumentNullException">
-    ///     <see cref="Elements"/> is null.
+    ///     <see cref="Elements"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     <see cref="Elements"/> is an empty list.
+    ///     <see cref="Elements"/> 是一个空列表。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The number of elements of <see cref="Elements"/> is greater than <see cref="MaxElementCount"/>.
+    ///     <see cref="Elements"/> 的元素数量超过了 <see cref="MaxElementCount"/>。
     /// </exception>
     public ActionGroupModule Build()
     {
@@ -107,29 +92,24 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ActionGroupModuleBuilder"/> is equal to the current <see cref="ActionGroupModuleBuilder"/>.
+    ///     判定两个 <see cref="ActionGroupModuleBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ActionGroupModuleBuilder"/> is equal to the current <see cref="ActionGroupModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ActionGroupModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(ActionGroupModuleBuilder? left, ActionGroupModuleBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ActionGroupModuleBuilder"/> is not equal to the current <see cref="ActionGroupModuleBuilder"/>.
+    ///     判定两个 <see cref="ActionGroupModuleBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ActionGroupModuleBuilder"/> is not equal to the current <see cref="ActionGroupModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ActionGroupModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(ActionGroupModuleBuilder? left, ActionGroupModuleBuilder? right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="ActionGroupModuleBuilder"/> is equal to the current <see cref="ActionGroupModuleBuilder"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="ActionGroupModuleBuilder"/>, <see cref="Equals(ActionGroupModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="ActionGroupModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ActionGroupModuleBuilder"/> is equal to the current <see cref="ActionGroupModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is ActionGroupModuleBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="ActionGroupModuleBuilder"/> is equal to the current <see cref="ActionGroupModuleBuilder"/>.</summary>
-    /// <param name="actionGroupModuleBuilder">The <see cref="ActionGroupModuleBuilder"/> to compare with the current <see cref="ActionGroupModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ActionGroupModuleBuilder"/> is equal to the current <see cref="ActionGroupModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] ActionGroupModuleBuilder? actionGroupModuleBuilder)
     {
         if (actionGroupModuleBuilder is null)

@@ -1,11 +1,4 @@
 using Kook.Net.Udp;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-
-#if DEBUG_AUDIO
-using System.Diagnostics;
-#endif
 
 namespace Kook.Audio;
 

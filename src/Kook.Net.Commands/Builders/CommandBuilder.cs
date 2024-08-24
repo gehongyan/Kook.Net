@@ -1,7 +1,7 @@
 namespace Kook.Commands.Builders;
 
 /// <summary>
-///     Represents a command builder.
+///     表示一个命令构建器。
 /// </summary>
 public class CommandBuilder
 {
@@ -13,67 +13,68 @@ public class CommandBuilder
     private readonly List<string> _aliases;
 
     /// <summary>
-    ///     Gets the module builder that this command builder belongs to.
+    ///     获取此命令构建器所属的模块构建器。
     /// </summary>
     public ModuleBuilder Module { get; }
 
     /// <summary>
-    ///     Gets or sets the callback that is invoked when this command is executed.
+    ///     获取或设置当执行此命令时调用的回调。
     /// </summary>
     internal Func<ICommandContext, object?[], IServiceProvider, CommandInfo, Task>? Callback { get; set; }
 
     /// <summary>
-    ///     Gets or sets the name of this command.
+    ///     获取或设置此命令的基本名称。
     /// </summary>
     public string? Name { get; set; }
 
     /// <summary>
-    ///     Gets or sets the summary of this command.
+    ///     获取或设置此命令的摘要。
     /// </summary>
     public string? Summary { get; set; }
 
     /// <summary>
-    ///     Gets or sets the remarks of this command.
+    ///     获取或设置此命令的备注。
     /// </summary>
     public string? Remarks { get; set; }
 
     /// <summary>
-    ///     Gets or sets the primary alias of this command.
+    ///     获取或设置此命令的首要别名。
     /// </summary>
     public string? PrimaryAlias { get; set; }
 
     /// <summary>
-    ///     Gets or sets the run mode of this command.
+    ///     获取或设置此命令的运行模式。
     /// </summary>
     public RunMode RunMode { get; set; }
 
     /// <summary>
-    ///     Gets or sets the priority of this command.
+    ///     获取或设置此命令的优先级。
     /// </summary>
+    /// <seealso cref="M:Kook.Commands.PriorityAttribute.#ctor(System.Int32)"/>
     public int Priority { get; set; }
 
     /// <summary>
-    ///     Gets or sets whether the extra arguments should be ignored.
+    ///     获取或设置此命令是否忽略额外的参数。
     /// </summary>
     public bool IgnoreExtraArgs { get; set; }
 
     /// <summary>
-    ///     Gets the preconditions of this command.
+    ///     获取此命令的先决条件。
     /// </summary>
     public IReadOnlyList<PreconditionAttribute> Preconditions => _preconditions;
 
     /// <summary>
-    ///     Gets the parameters of this command.
+    ///     获取此命令的参数构建器。
     /// </summary>
     public IReadOnlyList<ParameterBuilder> Parameters => _parameters;
 
     /// <summary>
-    ///     Gets the attributes of this command.
+    ///     获取此命令的特性。
     /// </summary>
     public IReadOnlyList<Attribute> Attributes => _attributes;
 
     /// <summary>
-    ///     Gets the aliases of this command.
+    ///     获取此命令的别名。
     /// </summary>
     public IReadOnlyList<string> Aliases => _aliases;
 
@@ -81,10 +82,6 @@ public class CommandBuilder
 
     #region Automatic
 
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="CommandBuilder"/> class.
-    /// </summary>
-    /// <param name="module"> The module builder that this command builder belongs to. </param>
     internal CommandBuilder(ModuleBuilder module)
     {
         Module = module;
@@ -99,11 +96,11 @@ public class CommandBuilder
     #region User-defined
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="CommandBuilder"/> class.
+    ///     初始化一个 <see cref="CommandBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="module"> The module builder that this command builder belongs to. </param>
-    /// <param name="primaryAlias"> The primary alias of this command. </param>
-    /// <param name="callback"> The callback that is invoked when this command is executed. </param>
+    /// <param name="module"> 此命令构建器所属的模块构建器。 </param>
+    /// <param name="primaryAlias"> 此命令的首要别名。 </param>
+    /// <param name="callback"> 当执行此命令时调用的回调。 </param>
     internal CommandBuilder(ModuleBuilder module, string? primaryAlias,
         Func<ICommandContext, object?[], IServiceProvider, CommandInfo, Task> callback)
         : this(module)
@@ -117,10 +114,10 @@ public class CommandBuilder
     }
 
     /// <summary>
-    ///     Sets the name of this command.
+    ///     设置此命令的基本名称。
     /// </summary>
-    /// <param name="name"> The name of this command. </param>
-    /// <returns> This command builder. </returns>
+    /// <param name="name"> 此命令的基本名称。 </param>
+    /// <returns> 当前命令构建器。 </returns>
     public CommandBuilder WithName(string name)
     {
         Name = name;
@@ -128,10 +125,10 @@ public class CommandBuilder
     }
 
     /// <summary>
-    ///     Sets the summary of this command.
+    ///     设置此命令的摘要。
     /// </summary>
-    /// <param name="summary"> The summary of this command. </param>
-    /// <returns> This command builder. </returns>
+    /// <param name="summary"> 此命令的摘要。 </param>
+    /// <returns> 当前命令构建器。 </returns>
     public CommandBuilder WithSummary(string summary)
     {
         Summary = summary;
@@ -139,10 +136,10 @@ public class CommandBuilder
     }
 
     /// <summary>
-    ///      Sets the remarks of this command.
+    ///      设置此命令的备注。
     /// </summary>
-    /// <param name="remarks"> The remarks of this command. </param>
-    /// <returns> This command builder. </returns>
+    /// <param name="remarks"> 此命令的备注。 </param>
+    /// <returns> 当前命令构建器。 </returns>
     public CommandBuilder WithRemarks(string remarks)
     {
         Remarks = remarks;
@@ -150,10 +147,10 @@ public class CommandBuilder
     }
 
     /// <summary>
-    ///     Sets the run mode of this command.
+    ///     设置此命令的运行模式。
     /// </summary>
-    /// <param name="runMode"> The run mode of this command. </param>
-    /// <returns> This command builder. </returns>
+    /// <param name="runMode"> 此命令的运行模式。 </param>
+    /// <returns> 当前命令构建器。 </returns>
     public CommandBuilder WithRunMode(RunMode runMode)
     {
         RunMode = runMode;
@@ -161,10 +158,11 @@ public class CommandBuilder
     }
 
     /// <summary>
-    ///      Sets the priority of this command.
+    ///      设置此命令的优先级。
     /// </summary>
-    /// <param name="priority"> The priority of this command. </param>
-    /// <returns> This command builder. </returns>
+    /// <param name="priority"> 此命令的优先级。 </param>
+    /// <returns> 当前命令构建器。 </returns>
+    /// <seealso cref="M:Kook.Commands.PriorityAttribute.#ctor(System.Int32)"/>
     public CommandBuilder WithPriority(int priority)
     {
         Priority = priority;
@@ -172,10 +170,10 @@ public class CommandBuilder
     }
 
     /// <summary>
-    ///     Adds aliases to this command.
+    ///     向此命令添加别名。
     /// </summary>
-    /// <param name="aliases"> An array containing the aliases to add. </param>
-    /// <returns> This command builder. </returns>
+    /// <param name="aliases"> 包含要添加的别名的数组。 </param>
+    /// <returns> 当前命令构建器。 </returns>
     public CommandBuilder AddAliases(params string?[] aliases)
     {
         foreach (string? x in aliases)
@@ -189,10 +187,10 @@ public class CommandBuilder
     }
 
     /// <summary>
-    ///     Adds attributes to this command.
+    ///     添加特性到此命令。
     /// </summary>
-    /// <param name="attributes"> An array containing the attributes to add. </param>
-    /// <returns> This command builder. </returns>
+    /// <param name="attributes"> 要添加的特性。 </param>
+    /// <returns> 当前命令构建器。 </returns>
     public CommandBuilder AddAttributes(params Attribute[] attributes)
     {
         _attributes.AddRange(attributes);
@@ -200,10 +198,10 @@ public class CommandBuilder
     }
 
     /// <summary>
-    ///     Adds a precondition to this command.
+    ///     添加先决条件到此命令。
     /// </summary>
-    /// <param name="precondition"> The precondition to add. </param>
-    /// <returns> This command builder. </returns>
+    /// <param name="precondition"> 要添加的先决条件。 </param>
+    /// <returns> 当前命令构建器。 </returns>
     public CommandBuilder AddPrecondition(PreconditionAttribute precondition)
     {
         _preconditions.Add(precondition);
@@ -211,12 +209,12 @@ public class CommandBuilder
     }
 
     /// <summary>
-    ///     Adds a parameter to this command.
+    ///     添加参数到此命令。
     /// </summary>
-    /// <param name="name"> The name of the parameter. </param>
-    /// <param name="createFunc"> An action delegate that is invoked to create the parameter. </param>
-    /// <typeparam name="T"> The type of the parameter. </typeparam>
-    /// <returns> This command builder. </returns>
+    /// <param name="name"> 参数的名称。 </param>
+    /// <param name="createFunc"> 一个创建参数构建器的委托。 </param>
+    /// <typeparam name="T"> 参数的类型。 </typeparam>
+    /// <returns> 当前命令构建器。 </returns>
     public CommandBuilder AddParameter<T>(string name, Action<ParameterBuilder> createFunc)
     {
         ParameterBuilder param = new(this, name, typeof(T));
@@ -226,12 +224,12 @@ public class CommandBuilder
     }
 
     /// <summary>
-    ///     Adds a parameter to this command.
+    ///     添加参数到此命令。
     /// </summary>
-    /// <param name="name"> The name of the parameter. </param>
-    /// <param name="type"> The type of the parameter. </param>
-    /// <param name="createFunc"> An action delegate that is invoked to create the parameter. </param>
-    /// <returns> This command builder. </returns>
+    /// <param name="name"> 参数的名称。 </param>
+    /// <param name="type"> 参数的类型。 </param>
+    /// <param name="createFunc"> 一个创建参数构建器的委托。 </param>
+    /// <returns> 当前命令构建器。 </returns>
     public CommandBuilder AddParameter(string name, Type type, Action<ParameterBuilder> createFunc)
     {
         ParameterBuilder param = new(this, name, type);
@@ -241,10 +239,10 @@ public class CommandBuilder
     }
 
     /// <summary>
-    ///     Adds a parameter to this command.
+    ///     添加参数到此命令。
     /// </summary>
-    /// <param name="createFunc"> An action delegate that is invoked to create the parameter. </param>
-    /// <returns> This command builder. </returns>
+    /// <param name="createFunc"> 一个创建参数构建器的委托。 </param>
+    /// <returns> 当前命令构建器。 </returns>
     internal CommandBuilder AddParameter(Action<ParameterBuilder> createFunc)
     {
         ParameterBuilder param = new(this);
@@ -254,12 +252,12 @@ public class CommandBuilder
     }
 
     /// <summary>
-    ///     Builds the command.
+    ///     构建此命令构建器。
     /// </summary>
-    /// <param name="info"> The module info. </param>
-    /// <param name="service"> The command service. </param>
-    /// <returns> The command info. </returns>
-    /// <exception cref="InvalidOperationException">Only the last parameter in a command may have the Remainder or Multiple flag.</exception>
+    /// <param name="info"> 此命令所属的模块信息。 </param>
+    /// <param name="service"> 此命令所属的命令服务。 </param>
+    /// <returns> 此命令构建器构建的命令信息。 </returns>
+    /// <exception cref="InvalidOperationException"> 仅支持在最后一个参数上设置接收全部剩余参数或接收多个参数。 </exception>
     internal CommandInfo Build(ModuleInfo info, CommandService service)
     {
         // Default name to primary alias

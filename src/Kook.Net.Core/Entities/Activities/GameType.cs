@@ -1,22 +1,22 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the type of games.
+///     表示游戏的类型。
 /// </summary>
 public enum GameType
 {
     /// <summary>
-    ///     Specifies that the game is just a game.
+    ///     仅仅是游戏。
     /// </summary>
     Game = 0,
 
     /// <summary>
-    ///     Specifies that the game is a virtual uploader.
+    ///     虚拟主播。
     /// </summary>
     VirtualUploader = 1,
 
     /// <summary>
-    ///     Specifies that the game is a process.
+    ///     进程。
     /// </summary>
     Process = 2
 }

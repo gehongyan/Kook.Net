@@ -287,7 +287,6 @@ internal static class ChannelHelper
         Guid messageId, BaseKookClient client, RequestOptions? options) =>
         MessageHelper.DeleteDirectAsync(messageId, client, options);
 
-
     public static async Task ModifyMessageAsync(IMessageChannel channel, Guid messageId,
         Action<MessageProperties> func, BaseKookClient client, RequestOptions? options) =>
         await MessageHelper.ModifyAsync(messageId, client, func, options).ConfigureAwait(false);

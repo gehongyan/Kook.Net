@@ -1,24 +1,22 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     Specifies the behavior of the command execution workflow.
+///     表示命令执行工作流的行为。
 /// </summary>
-/// <seealso cref="CommandServiceConfig"/>
-/// <seealso cref="CommandAttribute"/>
 public enum RunMode
 {
     /// <summary>
-    /// The default behavior set in <see cref="CommandServiceConfig"/>.
+    ///     使用在 <see cref="T:Kook.Commands.CommandServiceConfig"/> 中设置的默认行为。
     /// </summary>
     Default,
 
     /// <summary>
-    /// Executes the command on the same thread as gateway one.
+    ///     在与网关线程相同的线程上执行命令。
     /// </summary>
     Sync,
 
     /// <summary>
-    /// Executes the command on a different thread from the gateway one.
+    ///     在与网关线程不同的线程上执行命令。
     /// </summary>
     Async
 }

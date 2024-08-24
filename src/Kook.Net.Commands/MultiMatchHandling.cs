@@ -1,13 +1,17 @@
 namespace Kook.Commands;
 
 /// <summary>
-/// Specifies the behavior when multiple matches are found during the command parsing stage.
+///     表示在命令解析阶段匹配到多个结果时的行为。
 /// </summary>
 public enum MultiMatchHandling
 {
-    /// <summary> Indicates that when multiple results are found, an exception should be thrown. </summary>
+    /// <summary>
+    ///     当匹配到多个结果时引发异常。
+    /// </summary>
     Exception,
 
-    /// <summary> Indicates that when multiple results are found, the best result should be chosen. </summary>
+    /// <summary>
+    ///     当匹配到多个结果时选择最佳匹配。
+    /// </summary>
     Best
 }

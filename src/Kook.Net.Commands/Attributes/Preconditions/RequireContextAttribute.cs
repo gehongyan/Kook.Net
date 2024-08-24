@@ -1,48 +1,52 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     Defines the type of command context (i.e. where the command is being executed).
+///     表示一个运行命令支持的上下文类型。
 /// </summary>
 [Flags]
 public enum ContextType
 {
     /// <summary>
-    ///     Specifies the command to be executed within a guild.
+    ///     命令可以在服务器内执行。
     /// </summary>
     Guild = 0x01,
 
     /// <summary>
-    ///     Specifies the command to be executed within a DM.
+    ///     命令可以在私聊频道中执行。
     /// </summary>
     DM = 0x02
 }
 
 /// <summary>
-///     Requires the command to be invoked in a specified context (e.g. in guild, DM).
+///     要求命令在指定的上下文类型中（例如在服务器内、私聊频道中）执行。
 /// </summary>
+/// <example>
+/// <code language="cs">
+///     [Command("secret")]
+///     [RequireContext(ContextType.DM | ContextType.Group)]
+///     public Task PrivateOnlyAsync()
+///     {
+///         return ReplyTextAsync("shh, this command is a secret");
+///     }
+/// </code>
+/// </example>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 public class RequireContextAttribute : PreconditionAttribute
 {
     /// <summary>
-    ///     Gets the context required to execute the command.
+    ///     获取命令执行所需的上下文类型。
     /// </summary>
     public ContextType Contexts { get; }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     获取或设置错误消息。
+    /// </summary>
     public override string? ErrorMessage { get; set; }
 
-    /// <summary> Requires the command to be invoked in the specified context. </summary>
-    /// <param name="contexts">The type of context the command can be invoked in. Multiple contexts can be specified by ORing the contexts together.</param>
-    /// <example>
-    /// <code language="cs">
-    ///     [Command("secret")]
-    ///     [RequireContext(ContextType.DM | ContextType.Group)]
-    ///     public Task PrivateOnlyAsync()
-    ///     {
-    ///         return ReplyAsync("shh, this command is a secret");
-    ///     }
-    /// </code>
-    /// </example>
+    /// <summary>
+    ///     初始化一个 <see cref="RequireContextAttribute"/> 类的新实例。
+    /// </summary>
+    /// <param name="contexts"> 命令执行所需的上下文类型。 </param>
     public RequireContextAttribute(ContextType contexts)
     {
         Contexts = contexts;

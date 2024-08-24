@@ -5,7 +5,7 @@ using Model = Kook.API.Rest.FriendState;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a REST-based friend request.
+///     表示一个基于 REST 的好友请求。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestFriendRequest : RestEntity<ulong>, IFriendRequest

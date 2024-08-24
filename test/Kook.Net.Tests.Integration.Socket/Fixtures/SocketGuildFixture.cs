@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kook.WebSocket;
@@ -7,8 +8,6 @@ namespace Kook;
 
 public class SocketGuildFixture : KookSocketClientFixture
 {
-    private readonly TaskCompletionSource<SocketGuild> _joinedPromise = new();
-
     public SocketGuild Guild { get; private set; } = null!;
 
     public SocketGuildFixture()
@@ -35,27 +34,10 @@ public class SocketGuildFixture : KookSocketClientFixture
             Guild = existingGuild;
         // Otherwise, create a new guild
         else
-        {
-            Client.JoinedGuild += OnJoinedGuild;
-            await Client.CreateGuildAsync(guildName);
-            Guild = await _joinedPromise.Task.WithTimeout();
-            Client.JoinedGuild -= OnJoinedGuild;
-        }
+            throw new InvalidOperationException("No guild found to use for testing.");
 
         await RemoveAllChannelsAsync();
         await RemoveAllRolesAsync();
-    }
-
-    private Task OnJoinedGuild(SocketGuild guild)
-    {
-        _joinedPromise.SetResult(guild);
-        return Task.CompletedTask;
-    }
-
-    private async Task RemoveUselessTestGuildsAsync(IEnumerable<SocketGuild> guilds)
-    {
-        foreach (SocketGuild guild in guilds)
-            await guild.DeleteAsync();
     }
 
     /// <summary>
@@ -91,15 +73,4 @@ public class SocketGuildFixture : KookSocketClientFixture
         foreach (SocketRole role in roles)
             await role.DeleteAsync();
     }
-
-    /// <inheritdoc />
-    public override async ValueTask DisposeAsync()
-    {
-        if (Guild.OwnerId == Client.CurrentUser?.Id)
-            await Guild.DeleteAsync();
-        await base.DisposeAsync();
-    }
-
-    /// <inheritdoc />
-    public override void Dispose() => DisposeAsync().AsTask();
 }

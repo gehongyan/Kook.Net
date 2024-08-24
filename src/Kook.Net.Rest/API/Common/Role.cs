@@ -27,11 +27,11 @@ internal class Role
 
     [JsonPropertyName("hoist")]
     [JsonConverter(typeof(NumberBooleanConverter))]
-    public bool Hoist { get; set; }
+    public bool IsHoisted { get; set; }
 
     [JsonPropertyName("mentionable")]
     [JsonConverter(typeof(NumberBooleanConverter))]
-    public bool Mentionable { get; set; }
+    public bool IsMentionable { get; set; }
 
     [JsonPropertyName("permissions")]
     public ulong Permissions { get; set; }

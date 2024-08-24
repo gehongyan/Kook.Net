@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a section module builder for creating a <see cref="SectionModule"/>.
+///     用来构建 <see cref="SectionModule"/> 模块的构建器。
 /// </summary>
 public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuilder>, IEquatable<IModuleBuilder>
 {
@@ -11,21 +11,18 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     public ModuleType Type => ModuleType.Section;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="SectionModuleBuilder"/> class.
+    ///     初始化一个 <see cref="SectionModuleBuilder"/> 类的新实例。
     /// </summary>
     public SectionModuleBuilder()
     {
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="SectionModuleBuilder"/> class.
+    ///     初始化一个 <see cref="SectionModuleBuilder"/> 类的新实例。
     /// </summary>
-    /// <exception cref="ArgumentException">
-    ///     The <paramref name="text"/> is not any form of text element,
-    ///     including <see cref="PlainTextElementBuilder"/>, <see cref="KMarkdownElementBuilder"/>,
-    ///     and <see cref="ParagraphStructBuilder"/>; or the <paramref name="accessory"/> is neither
-    ///     an <see cref="ImageElementBuilder"/> nor <see cref="ButtonElementBuilder"/>.
-    /// </exception>
+    /// <param name="text"> 文本元素。 </param>
+    /// <param name="mode"> 附加内容的显示模式。 </param>
+    /// <param name="accessory"> 附加内容元素。 </param>
     public SectionModuleBuilder(IElementBuilder? text,
         SectionAccessoryMode? mode = null, IElementBuilder? accessory = null)
     {
@@ -35,14 +32,12 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="SectionModuleBuilder"/> class.
+    ///     初始化一个 <see cref="SectionModuleBuilder"/> 类的新实例。
     /// </summary>
-    /// <exception cref="ArgumentException">
-    ///     The <paramref name="text"/> is not any form of text element,
-    ///     including <see cref="PlainTextElementBuilder"/>, <see cref="KMarkdownElementBuilder"/>,
-    ///     and <see cref="ParagraphStructBuilder"/>; or the <paramref name="accessory"/> is neither
-    ///     an <see cref="ImageElementBuilder"/> nor <see cref="ButtonElementBuilder"/>.
-    /// </exception>
+    /// <param name="text"> 文本元素。 </param>
+    /// <param name="isKMarkdown"> 是否为 KMarkdown 格式。 </param>
+    /// <param name="mode"> 附加内容的显示模式。 </param>
+    /// <param name="accessory"> 附加内容元素。 </param>
     public SectionModuleBuilder(string? text, bool isKMarkdown = false,
         SectionAccessoryMode? mode = null, IElementBuilder? accessory = null)
     {
@@ -52,47 +47,25 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     }
 
     /// <summary>
-    ///     Gets or sets how the <see cref="Accessory"/> is positioned relative to the <see cref="Text"/>.
+    ///     获取或设置附加内容的显示模式。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="SectionAccessoryMode"/> representing
-    ///     how the <see cref="Accessory"/> is positioned relative to the <see cref="Text"/>.
-    /// </returns>
     public SectionAccessoryMode? Mode { get; set; }
 
     /// <summary>
-    ///     Gets or sets the text of the section.
+    ///     获取或设置模块的文本。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IElementBuilder"/> representing the text of the section.
-    /// </returns>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The <paramref name="value"/> is not any form of text element,
-    ///     including <see cref="PlainTextElementBuilder"/>, <see cref="KMarkdownElementBuilder"/>, and <see cref="ParagraphStructBuilder"/>.
-    /// </exception>
     public IElementBuilder? Text { get; set; }
 
     /// <summary>
-    ///     Gets or sets the accessory of the section.
+    ///     获取或设置模块的附加内容。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IElementBuilder"/> representing the accessory of the section.
-    /// </returns>
-    /// <exception cref="ArgumentException" accessor="set">
-    ///     The <paramref name="value"/> is neither an <see cref="ImageElementBuilder"/>
-    ///     nor <see cref="ButtonElementBuilder"/>.
-    /// </exception>
     public IElementBuilder? Accessory { get; set; }
 
     /// <summary>
-    ///     Sets the text of the section.
+    ///     设置模块的文本。
     /// </summary>
-    /// <param name="text">
-    ///     The text to be set for the section.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="text"> 要设置的文本。 </param>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithText(PlainTextElementBuilder text)
     {
         Text = text;
@@ -100,14 +73,10 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     }
 
     /// <summary>
-    ///     Sets the text of the section.
+    ///     设置模块的文本。
     /// </summary>
-    /// <param name="text">
-    ///     The text to be set for the section.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="text"> 要设置的文本。 </param>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithText(KMarkdownElementBuilder text)
     {
         Text = text;
@@ -115,17 +84,11 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     }
 
     /// <summary>
-    ///     Sets the text of the section.
+    ///     设置模块的文本。
     /// </summary>
-    /// <param name="text">The text to be set for the section.</param>
-    /// <param name="isKMarkdown">
-    ///     A bool indicating whether the text is in KMarkdown format;
-    ///     if <c>true</c>, the text will be set as a <see cref="KMarkdownElement"/>;
-    ///     if <c>false</c>, the text will be set as a <see cref="PlainTextElement"/>.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="text"> 要设置的文本。 </param>
+    /// <param name="isKMarkdown"> 是否为 KMarkdown 格式。 </param>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithText(string? text, bool isKMarkdown = false)
     {
         Text = isKMarkdown switch
@@ -137,14 +100,10 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     }
 
     /// <summary>
-    ///     Sets the text of the section.
+    ///     设置模块的文本。
     /// </summary>
-    /// <param name="text">
-    ///     The text to be set for the section.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="text"> 要设置的文本。 </param>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithText(ParagraphStructBuilder text)
     {
         Text = text;
@@ -152,14 +111,11 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     }
 
     /// <summary>
-    ///     Sets the text of the section.
+    ///     设置模块的文本。
     /// </summary>
-    /// <param name="action">
-    ///     The action to set the text of the section.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="action"> 一个包含对要设置的文本进行配置的操作的委托。 </param>
+    /// <typeparam name="T"> 要设置的文本的类型。 </typeparam>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithText<T>(Action<T>? action = null)
         where T : IElementBuilder, new()
     {
@@ -170,14 +126,10 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     }
 
     /// <summary>
-    ///     Sets the accessory of the section.
+    ///     设置模块的附加内容。
     /// </summary>
-    /// <param name="accessory">
-    ///     The accessory to be set for the section.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="accessory"> 要设置的附加内容。 </param>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithAccessory(ImageElementBuilder accessory)
     {
         Accessory = accessory;
@@ -185,14 +137,10 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     }
 
     /// <summary>
-    ///     Sets the accessory of the section.
+    ///     设置模块的附加内容。
     /// </summary>
-    /// <param name="accessory">
-    ///     The accessory to be set for the section.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="accessory"> 要设置的附加内容。 </param>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithAccessory(ButtonElementBuilder accessory)
     {
         Accessory = accessory;
@@ -200,14 +148,10 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     }
 
     /// <summary>
-    ///     Sets the accessory of the section.
+    ///     设置模块的附加内容。
     /// </summary>
-    /// <param name="action">
-    ///     The action to set the accessory of the section.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="action"> 一个包含对要设置的附加内容进行配置的操作的委托。 </param>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithAccessory<T>(Action<T>? action = null)
         where T : IElementBuilder, new()
     {
@@ -218,14 +162,10 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     }
 
     /// <summary>
-    ///     Sets how the <see cref="Accessory"/> is positioned relative to the <see cref="Text"/>.
+    ///     设置附加内容的显示模式。
     /// </summary>
-    /// <param name="mode">
-    ///     How the <see cref="Accessory"/> is positioned relative to the <see cref="Text"/>.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="mode"> 要设置的附加内容的显示模式。 </param>
+    /// <returns> 当前构建器。 </returns>
     public SectionModuleBuilder WithMode(SectionAccessoryMode mode)
     {
         Mode = mode;
@@ -233,23 +173,18 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     }
 
     /// <summary>
-    ///     Builds this builder into a <see cref="SectionModule"/>.
+    ///     构建当前构建器为一个 <see cref="SectionModule"/> 对象。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="SectionModule"/> representing the built section module object.
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="SectionModule"/> 对象。 </returns>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Text"/> is not any form of text element,
-    ///     including <see cref="PlainTextElementBuilder"/>, <see cref="KMarkdownElementBuilder"/>,
-    ///     and <see cref="ParagraphStructBuilder"/>.
+    ///     <see cref="Text"/> 不是任何形式的文本元素，包括 <see cref="PlainTextElementBuilder"/>、
+    ///     <see cref="KMarkdownElementBuilder"/> 和 <see cref="ParagraphStructBuilder"/>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Accessory"/> is neither an <see cref="ImageElementBuilder"/>
-    ///     nor <see cref="ButtonElementBuilder"/>.
+    ///     <see cref="Accessory"/> 既不是 <see cref="ImageElementBuilder"/> 也不是 <see cref="ButtonElementBuilder"/>。
     /// </exception>
     /// <exception cref="InvalidOperationException">
-    ///     The <see cref="ButtonElement"/> was not positioned to the left of the <see cref="Text"/>,
-    ///     which is not allowed.
+    ///     <see cref="ButtonElement"/> 不应位于 <see cref="Text"/> 的左侧。
     /// </exception>
     public SectionModule Build()
     {
@@ -273,29 +208,24 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.
+    ///     判定两个 <see cref="SectionModuleBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="SectionModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(SectionModuleBuilder? left, SectionModuleBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="SectionModuleBuilder"/> is not equal to the current <see cref="SectionModuleBuilder"/>.
+    ///     判定两个 <see cref="SectionModuleBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="SectionModuleBuilder"/> is not equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="SectionModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(SectionModuleBuilder? left, SectionModuleBuilder? right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="SectionModuleBuilder"/>, <see cref="Equals(SectionModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="SectionModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is SectionModuleBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>.</summary>
-    /// <param name="sectionModuleBuilder">The <see cref="SectionModuleBuilder"/> to compare with the current <see cref="SectionModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="SectionModuleBuilder"/> is equal to the current <see cref="SectionModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] SectionModuleBuilder? sectionModuleBuilder)
     {
         if (sectionModuleBuilder is null) return false;

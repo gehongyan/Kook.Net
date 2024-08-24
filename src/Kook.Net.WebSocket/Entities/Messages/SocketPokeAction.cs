@@ -3,7 +3,7 @@ using Kook.Rest;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a single WebSocket-based poke action.
+///     表示一个基于网关的 POKE 动作。
 /// </summary>
 public class SocketPokeAction : IPokeAction
 {

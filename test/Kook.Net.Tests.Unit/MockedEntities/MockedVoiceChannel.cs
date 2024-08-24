@@ -102,6 +102,9 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
     public int UserLimit => throw new NotImplementedException();
 
     /// <inheritdoc />
+    public IAudioClient? AudioClient => throw new NotImplementedException();
+
+    /// <inheritdoc />
     public bool? IsVoiceRegionOverwritten => throw new NotImplementedException();
 
     /// <inheritdoc />
@@ -122,7 +125,7 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
     public Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions? options = null) =>
         throw new NotImplementedException();
 
-    public Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(
+    public Task<IReadOnlyCollection<IGuildUser>> GetConnectedUsersAsync(
         CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null) =>
         throw new NotImplementedException();
 

@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a invite module builder for creating an <see cref="InviteModule"/>.
+///     用来构建 <see cref="InviteModule"/> 模块的构建器。
 /// </summary>
 public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilder>, IEquatable<IModuleBuilder>
 {
@@ -11,38 +11,31 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
     public ModuleType Type => ModuleType.Invite;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="InviteModuleBuilder"/> class.
+    ///     初始化一个 <see cref="InviteModuleBuilder"/> 类的新实例。
     /// </summary>
     public InviteModuleBuilder()
     {
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="InviteModuleBuilder"/> class.
+    ///     初始化一个 <see cref="InviteModuleBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="code"></param>
+    /// <param name="code"> 邀请代码。 </param>
     public InviteModuleBuilder(string code)
     {
         Code = code;
     }
 
     /// <summary>
-    ///     Gets or sets the code of the invite.
+    ///     获取或设置邀请代码。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the code of the invite.
-    /// </returns>
     public string? Code { get; set; }
 
     /// <summary>
-    ///     Sets the code of the invite.
+    ///     设置邀请代码。
     /// </summary>
-    /// <param name="code">
-    ///     The code of the invite to be set.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="code"> 邀请代码。 </param>
+    /// <returns> 当前构建器。 </returns>
     public InviteModuleBuilder WithCode(string code)
     {
         Code = code;
@@ -50,16 +43,14 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
     }
 
     /// <summary>
-    ///     Builds this builder into an <see cref="InviteModule"/>.
+    ///     构建当前构建器为一个 <see cref="InviteModule"/> 对象。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="InviteModule"/> representing the built invite module object.
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="InviteModule"/> 对象。 </returns>
     /// <exception cref="ArgumentNullException">
-    ///     The <see cref="Code"/> is null.
+    ///     <see cref="Code"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Code"/> is empty or whitespace.
+    ///     <see cref="Code"/> 为空或空白字符串。
     /// </exception>
     [MemberNotNull(nameof(Code))]
     public InviteModule Build()
@@ -71,16 +62,7 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
         return new InviteModule(Code);
     }
 
-    /// <summary>
-    ///     Initialized a new instance of the <see cref="InviteModuleBuilder"/> class
-    ///     with the specified <paramref name="code"/>.
-    /// </summary>
-    /// <param name="code">
-    ///     The code representing the invite.
-    /// </param>
-    /// <returns>
-    ///     An <see cref="InviteModuleBuilder"/> object that is initialized with the specified <paramref name="code"/>.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.InviteModuleBuilder.#ctor(System.String)" />
     public static implicit operator InviteModuleBuilder(string code) => new(code);
 
     /// <inheritdoc />
@@ -88,29 +70,24 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>.
+    ///     判定两个 <see cref="InviteModuleBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="InviteModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(InviteModuleBuilder? left, InviteModuleBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="InviteModuleBuilder"/> is not equal to the current <see cref="InviteModuleBuilder"/>.
+    ///     判定两个 <see cref="InviteModuleBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="InviteModuleBuilder"/> is not equal to the current <see cref="InviteModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="InviteModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(InviteModuleBuilder? left, InviteModuleBuilder? right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="InviteModuleBuilder"/>, <see cref="Equals(InviteModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="InviteModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is InviteModuleBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>.</summary>
-    /// <param name="inviteModuleBuilder">The <see cref="InviteModuleBuilder"/> to compare with the current <see cref="InviteModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="InviteModuleBuilder"/> is equal to the current <see cref="InviteModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] InviteModuleBuilder? inviteModuleBuilder)
     {
         if (inviteModuleBuilder is null) return false;

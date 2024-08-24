@@ -69,7 +69,7 @@ CODE BLOCK
 ```";
         // Due to the client is REST, the channel name will not be parsed.
         // Hence, the channel name will be displayed as empty string.
-        string kMarkDownCleanContent = @"TEST KMARKDOWN MESSAGE
+        string kMarkdownCleanContent = @"TEST KMARKDOWN MESSAGE
  NOTHING
 [INLINE LINK](https://kooknet.dev)
 UNDERLINESPOLIER
@@ -93,15 +93,15 @@ CODE BLOCK
             Assert.NotNull(message);
             Assert.Equal(MessageType.KMarkdown, message.Type);
             Assert.Equal(kMarkdownParsedContent, message.Content);
-            Assert.Equal(kMarkDownCleanContent, message.CleanContent);
+            Assert.Equal(kMarkdownCleanContent, message.CleanContent);
             Assert.Equal(selfUser.Id, message.Author.Id);
             Assert.Equal(MessageSource.Bot, message.Source);
             Assert.Equal(4, message.Tags.Count);
             List<ITag> tags = message.Tags.ToList();
             Assert.Equal(_channel.Id, tags.Single(tag => tag.Type == TagType.ChannelMention).Key);
             Assert.Equal(selfUser.Id, tags.Single(tag => tag.Type == TagType.UserMention).Key);
-            Assert.Equal(0, tags.Single(tag => tag.Type == TagType.EveryoneMention).Key);
-            Assert.Equal(0, tags.Single(tag => tag.Type == TagType.HereMention).Key);
+            Assert.Equal(0U, tags.Single(tag => tag.Type == TagType.EveryoneMention).Key);
+            Assert.Equal(0U, tags.Single(tag => tag.Type == TagType.HereMention).Key);
         }
         finally
         {

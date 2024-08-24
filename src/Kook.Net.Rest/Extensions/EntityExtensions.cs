@@ -155,7 +155,6 @@ internal static class EntityExtensions
     public static InviteModule ToEntity(this API.InviteModule model) =>
         new(model.Code);
 
-
     public static API.ModuleBase ToModel(this IModule entity)
     {
         return entity switch

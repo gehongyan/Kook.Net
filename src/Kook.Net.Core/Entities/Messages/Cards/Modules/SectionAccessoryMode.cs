@@ -1,17 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the accessory position relative to the text element.
+///     表示 <see cref="SectionModule"/> 中的附加内容的位置。
 /// </summary>
 public enum SectionAccessoryMode
 {
     /// <summary>
-    ///     The accessory is positioned to the left of the text element.
+    ///     附加内容位于文本元素的左侧。
     /// </summary>
     Left,
 
     /// <summary>
-    ///     The accessory is positioned to the right of the text element.
+    ///     附加内容位于文本元素的右侧。
     /// </summary>
     Right
 }

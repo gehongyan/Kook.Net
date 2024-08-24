@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 namespace Kook.Net.DependencyInjection.Microsoft;
 
 /// <summary>
-///     Represents a configurator for a Kook client.
+///     表示一个 KOOK 客户端配置器。
 /// </summary>
 public class KookClientServiceConfigurator : IKookClientServiceConfigurator
 {

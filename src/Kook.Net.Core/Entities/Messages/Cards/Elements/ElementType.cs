@@ -1,32 +1,32 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the type of an <see cref="IElement"/>.
+///     表示一个 <see cref="IElement"/> 的类型。
 /// </summary>
 public enum ElementType
 {
     /// <summary>
-    ///     The element is a plain text element.
+    ///     纯文本元素。
     /// </summary>
     PlainText,
 
     /// <summary>
-    ///     The element is a KMarkdown element.
+    ///     KMarkdown 文本元素。
     /// </summary>
     KMarkdown,
 
     /// <summary>
-    ///     The element is an image element.
+    ///     图片元素。
     /// </summary>
     Image,
 
     /// <summary>
-    ///     The element is a button element.
+    ///     按钮元素。
     /// </summary>
     Button,
 
     /// <summary>
-    ///     The element is a paragraph struct.
+    ///     区域文本结构。
     /// </summary>
     Paragraph
 }

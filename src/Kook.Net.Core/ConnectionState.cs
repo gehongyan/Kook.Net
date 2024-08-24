@@ -1,17 +1,27 @@
 namespace Kook;
 
-/// <summary> Specifies the connection state of a client. </summary>
+/// <summary>
+///     指定客户端的连接状态。
+/// </summary>
 public enum ConnectionState : byte
 {
-    /// <summary> The client has disconnected from Kook. </summary>
+    /// <summary>
+    ///     客户端已断开与 KOOK 的连接。
+    /// </summary>
     Disconnected,
 
-    /// <summary> The client is connecting to Kook. </summary>
+    /// <summary>
+    ///     客户端正在连接到 KOOK。
+    /// </summary>
     Connecting,
 
-    /// <summary> The client has established a connection to Kook. </summary>
+    /// <summary>
+    ///     客户端已连接到 KOOK。
+    /// </summary>
     Connected,
 
-    /// <summary> The client is disconnecting from Kook. </summary>
+    /// <summary>
+    ///     客户端正在断开与 KOOK 的连接。
+    /// </summary>
     Disconnecting
 }

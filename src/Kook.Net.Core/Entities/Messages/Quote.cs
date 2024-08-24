@@ -3,7 +3,7 @@ using System.Diagnostics;
 namespace Kook;
 
 /// <summary>
-///     Represents a quoted message.
+///     表示一个引用的消息。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class Quote : IQuote
@@ -12,48 +12,38 @@ public class Quote : IQuote
     public Guid QuotedMessageId { get; }
 
     /// <summary>
-    ///     Gets the type of the message this quote refers to.
+    ///     获取此引用的消息的类型。
     /// </summary>
     public MessageType Type { get; }
 
     /// <summary>
-    ///     Gets the content of the message this quote refers to.
+    ///     获取此引用的消息的内容。
     /// </summary>
-    /// <returns>
-    ///     A string that contains the body of the message;
-    ///     note that this field may be empty or the original code if the message is not a text based message.
-    /// </returns>
+    /// <remarks>
+    ///     如果此引用的消息不是文本消息，则此属性可能为空或包含原始代码。
+    /// </remarks>
     public string Content { get; }
 
     /// <summary>
-    ///     Gets the time this message was sent.
+    ///     获取此引用的消息的发送时间。
     /// </summary>
-    /// <returns>
-    ///     Time of when the message was sent.
-    /// </returns>
     public DateTimeOffset CreateAt { get; }
 
     /// <summary>
-    ///     Gets the author of this message.
+    ///     获取此引用的消息的作者。
     /// </summary>
     public IUser Author { get; }
 
-    /// <summary>
-    ///     Gets an empty quote whose quoted message is null.
-    /// </summary>
-    /// <remarks>
-    ///     Used to delete a quote when modifying a message.
-    /// </remarks>
+    /// <inheritdoc cref="P:Kook.MessageReference.Empty" />
     [Obsolete("Use MessageReference.Empty instead.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public static MessageReference Empty => new(Guid.Empty);
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="Quote"/> class.
+    ///     使用指定的消息 ID 创建一个新的 <see cref="Quote"/> 实例。
     /// </summary>
-    /// <param name="quotedMessageId">
-    ///     The quoted message identifier.
-    /// </param>
+    /// <param name="quotedMessageId"> 要引用的消息的 ID。 </param>
+    /// <seealso cref="M:Kook.MessageReference.#ctor(System.Guid)"/>
     [Obsolete("Use MessageReference instead.")]
     public Quote(Guid quotedMessageId)
     {

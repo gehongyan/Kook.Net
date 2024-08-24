@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based message.
+///     表示一个基于网关的消息。
 /// </summary>
 public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
 {
@@ -14,20 +14,10 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     private readonly List<SocketReaction> _reactions = [];
     private ImmutableArray<SocketUser> _userMentions = [];
 
-    /// <summary>
-    ///     Gets the author of this message.
-    /// </summary>
-    /// <returns>
-    ///     A WebSocket-based user object.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.IMessage.Author" />
     public SocketUser Author { get; }
 
-    /// <summary>
-    ///     Gets the source channel of the message.
-    /// </summary>
-    /// <returns>
-    ///     A WebSocket-based message channel.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.IMessage.Channel" />
     public ISocketMessageChannel Channel { get; }
 
     /// <inheritdoc />
@@ -37,10 +27,10 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     public string Content { get; internal set; }
 
     /// <summary>
-    ///     Gets the raw content of the message.
+    ///     获取消息的原始可读文本。
     /// </summary>
     /// <remarks>
-    ///     This property is only available for messages that were received from the gateway.
+    ///     此属性值仅在从网关接收的消息中可用。
     /// </remarks>
     public string RawContent { get; internal set; }
 
@@ -53,7 +43,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     public DateTimeOffset? EditedTimestamp { get; private set; }
 
-    /// <inheritdoc cref="IMessage.IsPinned" />
+    /// <inheritdoc cref="P:Kook.IMessage.IsPinned" />
     public virtual bool IsPinned { get; protected internal set; }
 
     /// <inheritdoc />
@@ -65,49 +55,26 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc/>
     public MessageType Type { get; private set; }
 
-    /// <summary>
-    ///     Gets the attachment included in this message.
-    /// </summary>
+    /// <inheritdoc cref="P:Kook.IMessage.Attachments" />
     public virtual IReadOnlyCollection<Attachment> Attachments { get; private set; }
 
-    /// <summary>
-    ///     Returns all cards included in this message.
-    /// </summary>
-    /// <returns>
-    ///     Collection of card objects.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.IMessage.Cards" />
     public virtual IReadOnlyCollection<ICard> Cards => [];
 
-    /// <summary>
-    ///     Returns all embeds included in this message.
-    /// </summary>
-    /// <returns>
-    ///     Collection of embed objects.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.IMessage.Embeds" />
     public virtual IReadOnlyCollection<IEmbed> Embeds => [];
 
-    /// <summary>
-    ///     Gets a collection of the <see cref="SocketPokeAction"/>'s on the message.
-    /// </summary>
-    /// <returns>
-    ///     Collection of poke action objects.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.IMessage.Pokes" />
     public virtual IReadOnlyCollection<SocketPokeAction> Pokes => [];
 
     /// <summary>
-    ///     Returns the roles mentioned in this message.
+    ///     获取此消息中提及的所有角色。
     /// </summary>
-    /// <returns>
-    ///     Collection of WebSocket-based roles.
-    /// </returns>
     public virtual IReadOnlyCollection<SocketRole> MentionedRoles => [];
 
     /// <summary>
-    ///     Returns the users mentioned in this message.
+    ///     获取此消息中提及的所有用户。
     /// </summary>
-    /// <returns>
-    ///     Collection of WebSocket-based users.
-    /// </returns>
     public IReadOnlyCollection<SocketUser> MentionedUsers => _userMentions;
 
     /// <inheritdoc />
@@ -244,7 +211,6 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     public Task DeleteAsync(RequestOptions? options = null) =>
         MessageHelper.DeleteAsync(this, Kook, options);
 
-
     internal void AddReaction(SocketReaction reaction) => _reactions.Add(reaction);
 
     internal void RemoveReaction(SocketReaction reaction)
@@ -299,12 +265,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
 
     #endregion
 
-    /// <summary>
-    ///     Gets the content of the message.
-    /// </summary>
-    /// <returns>
-    ///     Content of the message.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.WebSocket.SocketMessage.Content" />
     public override string ToString() => Content;
 
     internal SocketMessage Clone() => (SocketMessage)MemberwiseClone();

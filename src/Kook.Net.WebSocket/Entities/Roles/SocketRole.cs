@@ -7,19 +7,14 @@ using Model = Kook.API.Role;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based role to be given to a guild user.
+///     表示一个基于网关的可授予服务器用户的角色。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketRole : SocketEntity<uint>, IRole
 {
     #region SocketRole
 
-    /// <summary>
-    ///     Gets the guild that owns this role.
-    /// </summary>
-    /// <returns>
-    ///     A <see cref="SocketGuild"/> representing the parent guild of this role.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.IRole.Guild" />
     public SocketGuild Guild { get; }
 
     /// <inheritdoc />
@@ -50,15 +45,12 @@ public class SocketRole : SocketEntity<uint>, IRole
     public GuildPermissions Permissions { get; private set; }
 
     /// <summary>
-    ///     Returns a value that determines if the role is an @everyone role.
+    ///     获取此角色是否为 <c>@全体成员</c> 角色。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the role is @everyone; otherwise <c>false</c>.
-    /// </returns>
     public bool IsEveryone => Id == 0;
 
     /// <inheritdoc />
-    public string KMarkdownMention => IsEveryone ? "@everyone" : MentionUtils.KMarkdownMentionRole(Id);
+    public string KMarkdownMention => IsEveryone ? MentionUtils.KMarkdownMentionRole("all") : MentionUtils.KMarkdownMentionRole(Id);
 
     /// <inheritdoc />
     public string PlainTextMention => IsEveryone ? "@全体成员" : MentionUtils.PlainTextMentionRole(Id);
@@ -85,8 +77,8 @@ public class SocketRole : SocketEntity<uint>, IRole
         ColorType = model.ColorType;
         GradientColor = model.GradientColor;
         Position = model.Position;
-        IsHoisted = model.Hoist;
-        IsMentionable = model.Mentionable;
+        IsHoisted = model.IsHoisted;
+        IsMentionable = model.IsMentionable;
         Permissions = new GuildPermissions(model.Permissions);
     }
 
@@ -99,18 +91,27 @@ public class SocketRole : SocketEntity<uint>, IRole
         RoleHelper.DeleteAsync(this, Kook, options);
 
     /// <summary>
-    ///     Gets a collection of users with this role.
+    ///     获取拥有此角色的用户的集合。
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     Paged collection of users with this role.
-    /// </returns>
     /// <remarks>
-    ///     If the guild this role belongs to does not has all members cached locally
-    ///     by checking <see cref="SocketGuild.HasAllMembers"/>, this method will request
-    ///     the data via REST and update the guild users cache, otherwise it will
-    ///     return the cached data.
+    ///     <note type="important">
+    ///         返回的集合是一个异步可枚举对象；调用
+    ///         <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///         可以异步枚举所有分页，并将其合并为一个集合。
+    ///     </note>
+    ///     <br />
+    ///     <note type="warning">
+    ///         请勿一次性获取过多消息，这可能会导致抢占式速率限制，甚至触发实际的速率限制，从而导致 Bot 服务暂停。
+    ///     </note>
+    ///     <br />
+    ///     此方法将尝试获取拥有此角色的所有服务器用户。此方法会根据 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/>
+    ///     将请求拆分。换句话说，如果存在 500 个用户拥有此角色，而 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/> 的常量为
+    ///     <c>50</c>，则请求将被拆分为 10 个单独请求，因此异步枚举器会异步枚举返回 10 个响应。
+    ///     <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///     方法可以展开这 10 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 分页的用户集合的异步可枚举对象。 </returns>
     public async IAsyncEnumerable<IReadOnlyCollection<SocketGuildUser>> GetUsersAsync(RequestOptions? options = null)
     {
         // From SocketGuild.Users
@@ -138,12 +139,7 @@ public class SocketRole : SocketEntity<uint>, IRole
 
     #endregion
 
-    /// <summary>
-    ///     Gets the name of the role.
-    /// </summary>
-    /// <returns>
-    ///     A string that resolves to <see cref="Kook.WebSocket.SocketRole.Name" />.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.WebSocket.SocketRole.Name" />
     public override string ToString() => Name;
 
     private string DebuggerDisplay => $"{Name} ({Id})";
