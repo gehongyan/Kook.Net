@@ -1,15 +1,14 @@
 namespace Kook.WebSocket;
 
 /// <summary>
-///     The exception thrown when the gateway client has been requested to reconnect.
+///     当网关客户端被请求重新连接时引发的异常。
 /// </summary>
 public class GatewayReconnectException : Exception
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="GatewayReconnectException" /> class with the reconnection
-    ///     message.
+    ///     初始化一个带有重新连接消息的 <see cref="GatewayReconnectException" /> 类的新实例。
     /// </summary>
-    /// <param name="message">The reason why the gateway has been requested to reconnect.</param>
+    /// <param name="message"> 包含要求客户端重新连接原因的消息。 </param>
     public GatewayReconnectException(string message)
         : base(message)
     {

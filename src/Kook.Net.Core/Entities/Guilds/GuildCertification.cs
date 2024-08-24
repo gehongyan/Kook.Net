@@ -1,27 +1,27 @@
 ﻿namespace Kook;
 
 /// <summary>
-///     Represents a guild certification.
+///     表示一个服务器认证信息。
 /// </summary>
 public class GuildCertification
 {
     /// <summary>
-    ///     Gets the type of the certification.
+    ///     获取认证的类型。
     /// </summary>
     public GuildCertificationType Type { get; }
 
     /// <summary>
-    ///     Gets the title of the certification.
+    ///     获取认证的名称。
     /// </summary>
     public string Title { get; private set; } = string.Empty;
 
     /// <summary>
-    ///     Gets the picture URL of the certification.
+    ///     获取认证的图片 URL。
     /// </summary>
     public string? Picture { get; private set; }
 
     /// <summary>
-    ///     Gets the description of the certification.
+    ///     获取认证的描述。
     /// </summary>
     public string? Description { get; private set; }
 

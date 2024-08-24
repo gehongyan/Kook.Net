@@ -3,17 +3,17 @@ using System.Collections.Immutable;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a single REST-based poke action.
+///     表示一个基于 REST 的 POKE 动作。
 /// </summary>
 public class RestPokeAction : IPokeAction
 {
-    /// <inheritdoc cref="IPokeAction.Operator" />
+    /// <inheritdoc />
     public IUser Operator { get; }
 
-    /// <inheritdoc cref="IPokeAction.Targets" />
+    /// <inheritdoc />
     public IReadOnlyCollection<IUser> Targets { get; }
 
-    /// <inheritdoc cref="IPokeAction.Poke" />
+    /// <inheritdoc cref="P:Kook.IPokeAction.Poke" />
     public Poke Poke { get; }
 
     internal RestPokeAction(IUser @operator, IEnumerable<IUser> targets, Poke poke)
@@ -30,12 +30,6 @@ public class RestPokeAction : IPokeAction
     }
 
     #region IPokeAction
-
-    /// <inheritdoc />
-    IUser IPokeAction.Operator => Operator;
-
-    /// <inheritdoc />
-    IReadOnlyCollection<IUser> IPokeAction.Targets => Targets;
 
     /// <inheritdoc />
     IPoke IPokeAction.Poke => Poke;

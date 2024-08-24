@@ -3,21 +3,21 @@
 internal interface IHttpListenerWebhookClient : IWebhookClient
 {
     /// <summary>
-    ///     Sets the cancellation token for this client.
+    ///     设置此客户端的取消令牌。
     /// </summary>
-    /// <param name="cancellationToken"> The cancellation token to be used. </param>
+    /// <param name="cancellationToken"> 要设置的取消令牌。 </param>
     void SetCancellationToken(CancellationToken cancellationToken);
 
     /// <summary>
-    ///     Connects to the specified host.
+    ///     连接到主机。
     /// </summary>
-    /// <param name="uriPrefixes"> </param>
-    /// <returns> A task that represents an asynchronous connect operation. </returns>
+    /// <param name="uriPrefixes"> 要监听的 URI 前缀。 </param>
+    /// <returns> 一个表示异步连接操作的任务。 </returns>
     Task StartAsync(IEnumerable<string> uriPrefixes);
 
     /// <summary>
-    ///     Disconnects from the host.
+    ///     断开连接。
     /// </summary>
-    /// <returns> A task that represents an asynchronous disconnect operation. </returns>
+    /// <returns> 一个表示异步断开连接操作的任务。 </returns>
     Task StopAsync();
 }

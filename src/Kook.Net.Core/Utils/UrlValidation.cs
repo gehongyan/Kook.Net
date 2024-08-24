@@ -5,12 +5,15 @@ namespace Kook.Utils;
 internal static class UrlValidation
 {
     /// <summary>
-    ///     Not full URL validation right now. Just ensures protocol is present and that it's either http or https.
+    ///     检查 URL 是否有效。
     /// </summary>
-    /// <param name="url">The URL to validate before sending to Kook.</param>
-    /// <exception cref="UriFormatException">A URL cannot be null or empty.</exception>
-    /// <exception cref="UriFormatException">A URL must include a protocol (http or https).</exception>
-    /// <returns><c>true</c> if URL is valid by our standard, <c>false</c> if null, throws an error upon invalid.</returns>
+    /// <param name="url"> 要校验的 URL。 </param>
+    /// <exception cref="UriFormatException"> URL 不能为空。 </exception>
+    /// <exception cref="UriFormatException"> URL 必须包含协议（HTTP 或 HTTPS）。 </exception>
+    /// <returns> 如果 URL 有效，则为 <c>true</c>，否则为 <c>false</c>。 </returns>
+    /// <remarks>
+    ///     当前方法仅检查 URL 是否非空，且指定了了 HTTP 或 HTTPS 协议。
+    /// </remarks>
     public static void Validate(string url)
     {
         if (string.IsNullOrEmpty(url))
@@ -22,21 +25,21 @@ internal static class UrlValidation
     }
 
     /// <summary>
-    ///     Ensures that the URL represents an asset on the Kook OSS server.
+    ///     确保 URL 表示的是 KOOK 对象存储服务器上的资源。
     /// </summary>
     /// <remarks>
-    ///     This method checks the URL from 3 parts:
+    ///     此方法从 3 个部分检查 URL：
     ///     <list type="number">
-    ///         <item>The scheme must be either http or https</item>
+    ///         <item> URL 的协议必须是 HTTP 或 HTTPS。 </item>
     ///         <item>
-    ///             The host must be one of the following:
+    ///             URL 的主机名必须是以下之一：
     ///             <list type="bullet">
     ///                 <item>img.kaiheila.cn</item>
     ///                 <item>img.kookapp.cn</item>
     ///                 <item>kaiheila.oss-cn-beijing.aliyuncs.com</item>
     ///             </list>
     ///         </item>
-    ///         <item>The path must in the form of the following:
+    ///         <item> URL 的路径的格式必需形如：
     ///             <list type="bullet">
     ///                 <item>/assets/2021-01/7kr4FkWpLV0ku0ku.jpeg</item>
     ///                 <item>/assets/2022-01/21/HwuGGgpohG0ku0ku.jpeg</item>
@@ -45,9 +48,9 @@ internal static class UrlValidation
     ///         </item>
     ///     </list>
     /// </remarks>
-    /// <param name="url">The URL to validate before sending to Kook.</param>
-    /// <exception cref="InvalidOperationException">The URL provided is not an asset on the Kook OSS.</exception>
-    /// <returns><c>true</c> if URL represents a valid asset on the Kook OSS, <c>false</c> if null, throws an error upon invalid.</returns>
+    /// <param name="url"> 要校验的 URL。 </param>
+    /// <exception cref="InvalidOperationException"> URL 不是有效的 KOOK 对象存储服务器上的资源地址。 </exception>
+    /// <returns> 如果 URL 指向了有效的 KOOK 对象存储服务器上的资源，则为 <c>true</c>，否则为 <c>false</c>。 </returns>
     public static bool ValidateKookAssetUrl(string url)
     {
         if (string.IsNullOrEmpty(url)) return false;

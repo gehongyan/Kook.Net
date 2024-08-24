@@ -4,7 +4,7 @@ using Model = Kook.API.Rest.SelfUser;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents the logged-in REST-based user.
+///     表示一个基于 REST 的当前登录的用户信息。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestSelfUser : RestUser, ISelfUser
@@ -45,7 +45,7 @@ public class RestSelfUser : RestUser, ISelfUser
     }
 
     /// <inheritdoc />
-    /// <exception cref="InvalidOperationException">Unable to update this object using a different token.</exception>
+    /// <exception cref="InvalidOperationException"> 无法使用不同的用户令牌更新此对象。 </exception>
     public override async Task UpdateAsync(RequestOptions? options = null)
     {
         Model model = await Kook.ApiClient.GetSelfUserAsync(options).ConfigureAwait(false);

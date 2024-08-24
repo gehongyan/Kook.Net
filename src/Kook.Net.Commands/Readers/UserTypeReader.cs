@@ -4,9 +4,9 @@ using System.Globalization;
 namespace Kook.Commands;
 
 /// <summary>
-///     A <see cref="TypeReader"/> for parsing objects implementing <see cref="IUser"/>.
+///     表示一个用于解析实现了 <see cref="T:Kook.IUser"/> 的对象的类型读取器。
 /// </summary>
-/// <typeparam name="T">The type to be checked; must implement <see cref="IUser"/>.</typeparam>
+/// <typeparam name="T"> 要解析为的用户类型。 </typeparam>
 public class UserTypeReader<T> : TypeReader
     where T : class, IUser
 {

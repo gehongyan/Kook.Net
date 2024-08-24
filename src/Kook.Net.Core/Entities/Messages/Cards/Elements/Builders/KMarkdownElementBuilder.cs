@@ -3,54 +3,44 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     An element builder to build a <see cref="KMarkdownElement"/>.
+///     用来构建 <see cref="KMarkdownElement"/> 元素的构建器。
 /// </summary>
 public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElementBuilder>, IEquatable<IElementBuilder>
 {
     /// <summary>
-    ///     Gets the maximum KMarkdown length allowed by Kook.
+    ///     KMarkdown 文本的最大长度。
     /// </summary>
     public const int MaxKMarkdownLength = 5000;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="KMarkdownElementBuilder"/> class.
+    ///     初始化一个 <see cref="KMarkdownElementBuilder"/> 类的新实例。
     /// </summary>
     public KMarkdownElementBuilder()
     {
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="KMarkdownElementBuilder"/> class.
+    ///     初始化一个 <see cref="KMarkdownElementBuilder"/> 类的新实例。
     /// </summary>
-    /// <param name="content"></param>
+    /// <param name="content"> KMarkdown 文本内容。 </param>
     public KMarkdownElementBuilder(string? content)
     {
         Content = content;
     }
 
-    /// <summary>
-    ///     Gets the type of the element that this builder builds.
-    /// </summary>
-    /// <returns>
-    ///     An <see cref="ElementType"/> that represents the type of element that this builder builds.
-    /// </returns>
+    /// <inheritdoc />
     public ElementType Type => ElementType.KMarkdown;
 
     /// <summary>
-    ///     Gets or sets the content of a <see cref="KMarkdownElementBuilder"/>.
+    ///     获取或设置 KMarkdown 的文本内容。
     /// </summary>
-    /// <returns>
-    ///     The content of the <see cref="KMarkdownElementBuilder"/>.
-    /// </returns>
     public string? Content { get; set; }
 
     /// <summary>
-    ///     Sets the content of a <see cref="KMarkdownElementBuilder"/>.
+    ///     设置 KMarkdown 的文本内容，值将被设置到 <see cref="Content"/> 属性上。
     /// </summary>
-    /// <param name="content">The text to be set as the content.</param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="content"> KMarkdown 的文本内容。 </param>
+    /// <returns> 当前构建器。 </returns>
     public KMarkdownElementBuilder WithContent(string content)
     {
         Content = content;
@@ -58,16 +48,14 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     }
 
     /// <summary>
-    ///     Builds the <see cref="KMarkdownElementBuilder"/> into a <see cref="KMarkdownElement"/>.
+    ///     构建当前构建器为一个 <see cref="KMarkdownElement"/>。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="KMarkdownElement"/> represents the built element object.
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="KMarkdownElement"/> 对象。 </returns>
     /// <exception cref="ArgumentNullException">
-    ///     The <see cref="Content"/> is null.
+    ///     <see cref="Content"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The length of <see cref="Content"/> is greater than <see cref="MaxKMarkdownLength"/>.
+    ///     <see cref="Content"/> 的长度超过了 <see cref="MaxKMarkdownLength"/>。
     /// </exception>
     [MemberNotNull(nameof(Content))]
     public KMarkdownElement Build()
@@ -84,15 +72,10 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     }
 
     /// <summary>
-    ///     Initialized a new instance of the <see cref="KMarkdownElementBuilder"/> class
-    ///     with the specified content.
+    ///     使用指定的 KMarkdown 文本内容初始化一个新的 <see cref="KMarkdownElementBuilder"/> 类的实例。
     /// </summary>
-    /// <param name="content">
-    ///     The content of the <see cref="KMarkdownElement"/>.
-    /// </param>
-    /// <returns>
-    ///     A <see cref="KMarkdownElementBuilder"/> object that is initialized with the specified content.
-    /// </returns>
+    /// <param name="content"> KMarkdown 文本内容。 </param>
+    /// <returns> 一个使用指定的 KMarkdown 文本内容初始化的 <see cref="KMarkdownElementBuilder"/> 类的实例。 </returns>
     public static implicit operator KMarkdownElementBuilder(string content) => new(content);
 
     /// <inheritdoc />
@@ -100,30 +83,24 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     IElement IElementBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>.
+    ///     判定两个 <see cref="KMarkdownElementBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <returns> 如果两个 <see cref="KMarkdownElementBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(KMarkdownElementBuilder? left, KMarkdownElementBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="KMarkdownElementBuilder"/> is not equal to the current <see cref="KMarkdownElementBuilder"/>.
+    ///     判定两个 <see cref="KMarkdownElementBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="KMarkdownElementBuilder"/> is not equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <returns> 如果两个 <see cref="KMarkdownElementBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(KMarkdownElementBuilder? left, KMarkdownElementBuilder? right) =>
         !(left == right);
 
-    /// <summary>
-    ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="KMarkdownElementBuilder"/>.
-    /// </summary>
-    /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="KMarkdownElementBuilder"/>.</param>
-    /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is KMarkdownElementBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>.</summary>
-    /// <param name="kMarkdownElementBuilder">The <see cref="KMarkdownElementBuilder"/> to compare with the current <see cref="KMarkdownElementBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="KMarkdownElementBuilder"/> is equal to the current <see cref="KMarkdownElementBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] KMarkdownElementBuilder? kMarkdownElementBuilder)
     {
         if (kMarkdownElementBuilder is null)

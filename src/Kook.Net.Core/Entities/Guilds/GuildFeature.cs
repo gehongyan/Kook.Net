@@ -1,28 +1,28 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a feature of a guild.
+///     表示一个服务器特性。
 /// </summary>
 [Flags]
 public enum GuildFeature : uint
 {
     /// <summary>
-    ///     The guild has no features.
+    ///     无特性。
     /// </summary>
     None = 0,
 
     /// <summary>
-    ///     The guild is an official KOOK guild.
+    ///     服务器是官方服务器。
     /// </summary>
     Official = 1 << 0,
 
     /// <summary>
-    ///     The guild is a partner guild.
+    ///     服务器是合作伙伴服务器。
     /// </summary>
     Partner = 1 << 1,
 
     /// <summary>
-    ///     The guild is a key account guild.
+    ///     服务器是重点客户服务器。
     /// </summary>
     KeyAccount = 1 << 2,
 }

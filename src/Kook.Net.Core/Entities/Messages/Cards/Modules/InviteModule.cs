@@ -3,8 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Kook;
 
-/// <summary>
-///     An invite module that can be used in an <see cref="ICard"/>.
+/// <summary>3
+///     邀请模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class InviteModule : IModule, IEquatable<InviteModule>, IEquatable<IModule>
@@ -18,40 +18,31 @@ public class InviteModule : IModule, IEquatable<InviteModule>, IEquatable<IModul
     public ModuleType Type => ModuleType.Invite;
 
     /// <summary>
-    ///     Gets the invite code.
+    ///     获取邀请代码。
     /// </summary>
     public string? Code { get; }
 
     private string DebuggerDisplay => $"{Type}: {Code}";
 
     /// <summary>
-    ///     Determines whether the specified <see cref="InviteModule"/> is equal to the current <see cref="InviteModule"/>.
+    ///     判定两个 <see cref="InviteModule"/> 是否相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="InviteModule"/> is equal to the current <see cref="InviteModule"/>;
-    /// </returns>
+    /// <returns> 如果两个 <see cref="InviteModule"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(InviteModule left, InviteModule right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="InviteModule"/> is not equal to the current <see cref="InviteModule"/>.
+    ///     判定两个 <see cref="InviteModule"/> 是否不相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="InviteModule"/> is not equal to the current <see cref="InviteModule"/>;
-    /// </returns>
+    /// <returns> 如果两个 <see cref="InviteModule"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(InviteModule left, InviteModule right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="InviteModule"/> is equal to the current <see cref="InviteModule"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="InviteModule"/>, <see cref="Equals(InviteModule)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="InviteModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="InviteModule"/> is equal to the current <see cref="InviteModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is InviteModule inviteModule && Equals(inviteModule);
 
-    /// <summary>Determines whether the specified <see cref="InviteModule"/> is equal to the current <see cref="InviteModule"/>.</summary>
-    /// <param name="inviteModule">The <see cref="InviteModule"/> to compare with the current <see cref="InviteModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="InviteModule"/> is equal to the current <see cref="InviteModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] InviteModule? inviteModule) =>
         GetHashCode() == inviteModule?.GetHashCode();
 

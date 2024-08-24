@@ -4,27 +4,27 @@ using System.Net.Http.Headers;
 namespace Kook.Net.Rest;
 
 /// <summary>
-///     Represents a REST response.
+///     表示一个 RESTful API 请求的响应。
 /// </summary>
 public struct RestResponse
 {
     /// <summary>
-    ///     Gets the status code of the response.
+    ///     获取响应的 HTTP 状态码。
     /// </summary>
     public HttpStatusCode StatusCode { get; }
 
     /// <summary>
-    ///     Gets the headers of the response.
+    ///     获取响应的头部。
     /// </summary>
     public Dictionary<string, string?> Headers { get; }
 
     /// <summary>
-    ///     Gets the stream of the response.
+    ///     获取响应的流。
     /// </summary>
     public Stream Stream { get; }
 
     /// <summary>
-    ///     Gets the media type header of the response.
+    ///     获取响应的媒体类型头部。
     /// </summary>
     public MediaTypeHeaderValue? MediaTypeHeader { get; }
 

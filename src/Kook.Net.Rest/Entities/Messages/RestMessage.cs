@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 namespace Kook.Rest;
 
 /// <summary>
-///     Represents a REST-based message.
+///     表示一个基于 REST 的消息。
 /// </summary>
 public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
 {
@@ -17,9 +17,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     public IMessageChannel Channel { get; }
 
-    /// <summary>
-    ///     Gets the Author of the message.
-    /// </summary>
+    /// <inheritdoc />
     public IUser Author { get; }
 
     /// <inheritdoc />
@@ -31,7 +29,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     public string CleanContent => MessageHelper.SanitizeMessage(this);
 
-    /// <inheritdoc cref="IMessage.Attachments" />
+    /// <inheritdoc cref="P:Kook.IMessage.Attachments" />
     public virtual IReadOnlyCollection<Attachment> Attachments { get; private set; }
 
     /// <inheritdoc />
@@ -46,26 +44,20 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     public virtual bool MentionedHere => false;
 
-    /// <summary>
-    ///     Gets a collection of the <see cref="ICard"/>'s on the message.
-    /// </summary>
+    /// <inheritdoc />
     public virtual IReadOnlyCollection<ICard> Cards => ImmutableArray.Create<ICard>();
 
-    /// <summary>
-    ///     Gets a collection of the <see cref="IEmbed"/>'s on the message.
-    /// </summary>
+    /// <inheritdoc />
     public virtual IReadOnlyCollection<IEmbed> Embeds => ImmutableArray.Create<IEmbed>();
 
-    /// <summary>
-    ///     Gets a collection of the <see cref="RestPokeAction"/>'s on the message.
-    /// </summary>
+    /// <inheritdoc cref="P:Kook.Rest.RestMessage.Pokes" />
     public virtual IReadOnlyCollection<RestPokeAction> Pokes => ImmutableArray.Create<RestPokeAction>();
 
     /// <inheritdoc />
     public virtual IReadOnlyCollection<uint> MentionedRoleIds => ImmutableArray.Create<uint>();
 
     /// <summary>
-    ///     Gets a collection of the mentioned users in the message.
+    ///     获取此消息中提及的所有用户。
     /// </summary>
     public IReadOnlyCollection<RestUser> MentionedUsers => _userMentions;
 
@@ -75,12 +67,8 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     public virtual bool? IsPinned { get; internal set; }
 
-    /// <summary>
-    ///     Gets the <see cref="Content"/> of the message.
-    /// </summary>
-    /// <returns>
-    ///     A string that is the <see cref="Content"/> of the message.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.Rest.RestMessage.Content" />
+    /// <returns> 此消息的内容。 </returns>
     public override string ToString() => Content;
 
     internal RestMessage(BaseKookClient kook, Guid id, MessageType messageType,
@@ -149,9 +137,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     public Task DeleteAsync(RequestOptions? options = null) => MessageHelper.DeleteAsync(this, Kook, options);
 
     /// <inheritdoc />
-    /// <exception cref="InvalidOperationException">
-    ///     This message is neither a guild channel message nor a direct message.
-    /// </exception>
+    /// <exception cref="NotSupportedException"> 此类型的消息不支持此操作。 </exception>
     public async Task UpdateAsync(RequestOptions? options = null)
     {
         if (Channel is IGuildChannel)
@@ -174,6 +160,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     }
 
     /// <inheritdoc />
+    /// <exception cref="NotSupportedException"> 此类型的消息不支持此操作。 </exception>
     public Task AddReactionAsync(IEmote emote, RequestOptions? options = null) =>
         Channel switch
         {
@@ -183,6 +170,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         };
 
     /// <inheritdoc />
+    /// <exception cref="NotSupportedException"> 此类型的消息不支持此操作。 </exception>
     public Task RemoveReactionAsync(IEmote emote, IUser user, RequestOptions? options = null) =>
         Channel switch
         {
@@ -192,6 +180,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         };
 
     /// <inheritdoc />
+    /// <exception cref="NotSupportedException"> 此类型的消息不支持此操作。 </exception>
     public Task RemoveReactionAsync(IEmote emote, ulong userId, RequestOptions? options = null) =>
         Channel switch
         {
@@ -201,6 +190,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
         };
 
     /// <inheritdoc />
+    /// <exception cref="NotSupportedException"> 此类型的消息不支持此操作。 </exception>
     public Task<IReadOnlyCollection<IUser>> GetReactionUsersAsync(IEmote emote, RequestOptions? options = null) =>
         Channel switch
         {
@@ -211,16 +201,8 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
 
     #region IMessage
 
-    IUser IMessage.Author => Author;
-
     /// <inheritdoc />
     IReadOnlyCollection<IAttachment> IMessage.Attachments => Attachments;
-
-    /// <inheritdoc />
-    IReadOnlyCollection<ICard> IMessage.Cards => Cards;
-
-    /// <inheritdoc />
-    IReadOnlyCollection<IEmbed> IMessage.Embeds => Embeds;
 
     /// <inheritdoc />
     IReadOnlyCollection<IPokeAction> IMessage.Pokes => Pokes;

@@ -3,7 +3,7 @@ using Kook.Rest;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents an REST-only client that is used in a WebSocket-based client.
+///     表示一个用于网关客户端内的 REST 客户端。
 /// </summary>
 public class KookSocketRestClient : KookRestClient
 {
@@ -11,21 +11,16 @@ public class KookSocketRestClient : KookRestClient
     {
     }
 
-    /// <summary>
-    ///     Throws a <see cref="NotSupportedException"/> when trying to log in.
-    /// </summary>
-    /// <exception cref="NotSupportedException"> The Socket REST wrapper cannot be used to log in or out. </exception>
+    /// <inheritdoc cref="M:Kook.Rest.BaseKookClient.LoginAsync(Kook.TokenType,System.String,System.Boolean)" />
+    /// <exception cref="NotSupportedException"> 网关客户端内的 REST 客户端无法进行登录或退出登录。 </exception>
     public new Task LoginAsync(TokenType tokenType, string token, bool validateToken = true) =>
         throw new NotSupportedException("The Socket REST wrapper cannot be used to log in or out.");
 
     internal override Task LoginInternalAsync(TokenType tokenType, string token, bool validateToken) =>
         throw new NotSupportedException("The Socket REST wrapper cannot be used to log in or out.");
 
-    /// <summary>
-    ///     Throws a <see cref="NotSupportedException"/> when trying to log out.
-    /// </summary>
-    /// <returns></returns>
-    /// <exception cref="NotSupportedException"> The Socket REST wrapper cannot be used to log in or out. </exception>
+    /// <inheritdoc cref="M:Kook.Rest.BaseKookClient.LogoutAsync" />
+    /// <exception cref="NotSupportedException"> 网关客户端内的 REST 客户端无法进行登录或退出登录。 </exception>
     public new Task LogoutAsync() =>
         throw new NotSupportedException("The Socket REST wrapper cannot be used to log in or out.");
 

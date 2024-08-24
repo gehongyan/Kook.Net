@@ -1,21 +1,20 @@
 namespace Kook.Commands;
 
-// Extension of the Cosmetic Summary, for Groups, Commands, and Parameters
 /// <summary>
-///     Attaches remarks to your commands.
+///     标记命令的备注。
 /// </summary>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
 public class RemarksAttribute : Attribute
 {
     /// <summary>
-    ///     Gets the remarks of the command.
+    ///     获取命令的备注。
     /// </summary>
     public string Text { get; }
 
     /// <summary>
-    ///     Initializes a new <see cref="RemarksAttribute" /> attribute with the specified remarks.
+    ///     初始化一个 <see cref="RemarksAttribute"/> 类的新实例。
     /// </summary>
-    /// <param name="text"></param>
+    /// <param name="text"> 命令的备注。 </param>
     public RemarksAttribute(string text)
     {
         Text = text;

@@ -3,18 +3,18 @@ using System.Diagnostics;
 namespace Kook.Commands;
 
 /// <summary>
-///     Contains information for the parsing result from the command service's parser.
+///     表示一个命令的解析结果。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct ParseResult : IResult
 {
     /// <summary>
-    ///     Gets a read-only collection containing the parsed argument values.
+    ///     获取所有实参解析结果。
     /// </summary>
     public IReadOnlyList<TypeReaderResult> ArgValues { get; }
 
     /// <summary>
-    ///     Gets a read-only collection containing the parsed parameter values.
+    ///     获取所有形参解析结果。
     /// </summary>
     public IReadOnlyList<TypeReaderResult> ParamValues { get; }
 
@@ -25,12 +25,8 @@ public struct ParseResult : IResult
     public string? ErrorReason { get; }
 
     /// <summary>
-    ///     Provides information about the parameter that caused the parsing error.
+    ///     获取在解析过程中导致解析错误的参数信息。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="ParameterInfo" /> indicating the parameter info of the error that may have occurred during parsing;
-    ///     <c>null</c> if the parsing was successful or the parsing error is not specific to a single parameter.
-    /// </returns>
     public ParameterInfo? ErrorParameter { get; }
 
     /// <inheritdoc/>
@@ -47,11 +43,11 @@ public struct ParseResult : IResult
     }
 
     /// <summary>
-    ///     Creates a successful parsing result.
+    ///     初始化一个不包含任何错误的 <see cref="ParseResult"/> 结构的新实例，表示一个成功的解析。
     /// </summary>
-    /// <param name="argValues"> The parsed argument values. </param>
-    /// <param name="paramValues"> The parsed parameter values. </param>
-    /// <returns> The parsing result. </returns>
+    /// <param name="argValues"> 实参解析结果。 </param>
+    /// <param name="paramValues"> 形参解析结果。 </param>
+    /// <returns> 一个表示匹配成功的 <see cref="ParseResult"/>。 </returns>
     public static ParseResult FromSuccess(IReadOnlyList<TypeReaderResult> argValues, IReadOnlyList<TypeReaderResult> paramValues)
     {
         if (argValues.Any(x => x.Values.Count > 1))
@@ -62,11 +58,11 @@ public struct ParseResult : IResult
     }
 
     /// <summary>
-    ///     Creates a successful parsing result.
+    ///     初始化一个不包含任何错误的 <see cref="ParseResult"/> 结构的新实例，表示一个成功的解析。
     /// </summary>
-    /// <param name="argValues"> The parsed argument values. </param>
-    /// <param name="paramValues"> The parsed parameter values. </param>
-    /// <returns> The parsing result. </returns>
+    /// <param name="argValues"> 实参解析结果。 </param>
+    /// <param name="paramValues"> 形参解析结果。 </param>
+    /// <returns> 一个表示匹配成功的 <see cref="ParseResult"/>。 </returns>
     public static ParseResult FromSuccess(IReadOnlyList<TypeReaderValue> argValues, IReadOnlyList<TypeReaderValue> paramValues)
     {
         TypeReaderResult[] argList = [..argValues.Select(TypeReaderResult.FromSuccess)];
@@ -75,44 +71,44 @@ public struct ParseResult : IResult
     }
 
     /// <summary>
-    ///     Creates a failed parsing result.
+    ///     初始化一个包含指定错误类型和原因的 <see cref="ParseResult"/> 结构的新实例，表示一个失败的匹配。
     /// </summary>
-    /// <param name="error"> The error that occurred. </param>
-    /// <param name="reason"> The reason for the error. </param>
-    /// <returns> The parsing result. </returns>
+    /// <param name="error"> 命令匹配失败的类型。 </param>
+    /// <param name="reason"> 参数解析失败的原因。 </param>
+    /// <returns> 一个表示解析失败的 <see cref="ParseResult"/>。 </returns>
     public static ParseResult FromError(CommandError error, string reason) =>
         new([], [], error, reason, null);
 
     /// <summary>
-    ///     Creates a failed parsing result.
+    ///     初始化一个包含指定错误类型和原因的 <see cref="ParseResult"/> 结构的新实例，表示一个失败的匹配。
     /// </summary>
-    /// <param name="error"> The error that occurred. </param>
-    /// <param name="reason"> The reason for the error. </param>
-    /// <param name="parameterInfo"> The parameter info of the error that may have occurred during parsing. </param>
-    /// <returns> The parsing result. </returns>
+    /// <param name="error"> 命令匹配失败的类型。 </param>
+    /// <param name="reason"> 参数解析失败的原因。 </param>
+    /// <param name="parameterInfo"> 导致解析失败的参数信息。 </param>
+    /// <returns> 一个表示解析失败的 <see cref="ParseResult"/>。 </returns>
     public static ParseResult FromError(CommandError error, string reason, ParameterInfo parameterInfo) =>
         new([], [], error, reason, parameterInfo);
 
     /// <summary>
-    ///     Creates a failed parsing result.
+    ///     初始化一个包含指定异常的 <see cref="ParseResult"/> 结构的新实例，表示一个失败的匹配。
     /// </summary>
-    /// <param name="ex"> The exception that occurred. </param>
-    /// <returns> The parsing result. </returns>
+    /// <param name="ex"> 导致匹配失败的异常。 </param>
+    /// <returns> 一个表示匹配失败的 <see cref="MatchResult"/>。 </returns>
     public static ParseResult FromError(Exception ex) => FromError(CommandError.Exception, ex.Message);
 
     /// <summary>
-    ///     Creates a failed parsing result.
+    ///     初始化一个包含指定异常的 <see cref="ParseResult"/> 结构的新实例，表示一个失败的匹配。
     /// </summary>
-    /// <param name="result"> The result that contains the error. </param>
-    /// <returns> The parsing result. </returns>
+    /// <param name="result"> 失败的结果。 </param>
+    /// <returns> 一个表示匹配失败的 <see cref="MatchResult"/>。 </returns>
     public static ParseResult FromError(IResult result) => new([], [], result.Error, result.ErrorReason, null);
 
     /// <summary>
-    ///     Creates a failed parsing result.
+    ///     初始化一个包含指定异常的 <see cref="ParseResult"/> 结构的新实例，表示一个失败的匹配。
     /// </summary>
-    /// <param name="result"> The result that contains the error. </param>
-    /// <param name="parameterInfo"> The parameter info of the error that may have occurred during parsing. </param>
-    /// <returns> The parsing result. </returns>
+    /// <param name="result"> 失败的结果。 </param>
+    /// <param name="parameterInfo"> 导致解析失败的参数信息。 </param>
+    /// <returns> 一个表示匹配失败的 <see cref="MatchResult"/>。 </returns>
     public static ParseResult FromError(IResult result, ParameterInfo parameterInfo) =>
         new([], [], result.Error, result.ErrorReason, parameterInfo);
 

@@ -1,20 +1,18 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     Prevents the marked property from being injected into a module.
+///     标记指定的成员不应被注入到其父模块。
 /// </summary>
 /// <remarks>
-///     This attribute prevents the marked member from being injected into its parent module. Useful when you have a
-///     public property that you do not wish to invoke the library's dependency injection service.
+///     此特性阻止被标记的成员被注入到其父模块。当存在一个公共属性但不希望为该属性自动注入服务时，请标记此特性。
 /// </remarks>
 /// <example>
-///     In the following example, <c>DatabaseService</c> will not be automatically injected into the module and will
-///     not throw an error message if the dependency fails to be resolved.
+///     以下示例代码中，<c>DatabaseService</c> 将不会自动注入服务，如果依赖项无法解析，也不会抛出错误消息。
 ///     <code language="cs">
 ///     public class MyModule : ModuleBase
 ///     {
 ///         [DontInject]
-///         public DatabaseService DatabaseService;
+///         public DatabaseService DatabaseService { get; }
 ///         public MyModule()
 ///         {
 ///             DatabaseService = DatabaseFactory.Generate();

@@ -6,6 +6,9 @@ using Kook.Audio.Streams;
 
 namespace Kook.Audio;
 
+/// <summary>
+///     表示一个音频客户端。
+/// </summary>
 internal partial class AudioClient : IAudioClient
 {
     private const int ConnectionTimeoutMs = 30000; // 30 seconds
@@ -49,7 +52,9 @@ internal partial class AudioClient : IAudioClient
     internal bool IsFinished { get; private set; }
     public ConnectionState ConnectionState => Connection.State;
 
-    /// <summary> Creates a new REST/WebSocket kook client. </summary>
+    /// <summary>
+    ///     初始化一个 <see cref="AudioClient"/> 类的新实例。
+    /// </summary>
     internal AudioClient(SocketVoiceChannel voiceChannel, int clientId, string? password)
     {
         Channel = voiceChannel;

@@ -1,10 +1,12 @@
 namespace Kook.Audio.Streams;
 
-///<summary> Converts PCM to Opus </summary>
+///<summary>
+///     表示一个 Opus 编码音频流。
+/// </summary>
 public class OpusEncodeStream : AudioOutStream
 {
     /// <summary>
-    ///     Gets the sample rate of the audio stream.
+    ///     获取音频流的采样率。
     /// </summary>
     public const int SampleRate = 48000;
 
@@ -16,12 +18,12 @@ public class OpusEncodeStream : AudioOutStream
     private uint _timestamp;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="OpusEncodeStream"/> class.
+    ///     初始化一个 <see cref="OpusEncodeStream"/> 类的新实例。
     /// </summary>
-    /// <param name="next"> The next audio stream to write to. </param>
-    /// <param name="bitrate"> The bitrate of the audio stream. </param>
-    /// <param name="application"> The audio application to use. </param>
-    /// <param name="packetLoss"> The packet loss percentage of the audio stream. </param>
+    /// <param name="next"> 要写入编码数据的音频流，是音频流写入链中的下一个音频流对象。 </param>
+    /// <param name="bitrate"> 音频流的比特率。 </param>
+    /// <param name="application"> 音频应用程序的应用场景。 </param>
+    /// <param name="packetLoss"> 音频流的丢包率。 </param>
     public OpusEncodeStream(AudioStream next, int bitrate, AudioApplication application, int packetLoss)
     {
         _next = next;
@@ -30,13 +32,11 @@ public class OpusEncodeStream : AudioOutStream
     }
 
     /// <summary>
-    ///     Sends silent frames to avoid interpolation errors after breaks in data transmission.
+    ///     发送静默帧以避免数据传输中断后的插值错误。
     /// </summary>
-    /// <returns>A task representing the asynchronous operation of sending a silent frame.</returns>
+    /// <returns> 一个表示写入静默帧操作的异步任务。 </returns>
     public async Task WriteSilentFramesAsync()
     {
-        // https://kook.com/developers/docs/topics/voice-connections#voice-data-interpolation
-
         byte[] frameBytes = new byte[OpusConverter.FrameBytes];
 
         // Magic silence numbers.

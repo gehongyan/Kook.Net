@@ -1,6 +1,6 @@
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a generic WebSocket-based audio channel.
+///     表示一个基于网关的音频频道。
 /// </summary>
 public interface ISocketAudioChannel : IAudioChannel;

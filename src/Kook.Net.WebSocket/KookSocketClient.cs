@@ -18,7 +18,7 @@ using Kook.Rest;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based KOOK client.
+///     表示一个基于网关的 KOOK 客户端。
 /// </summary>
 public partial class KookSocketClient : BaseSocketClient, IKookClient
 {
@@ -76,32 +76,27 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     public override IReadOnlyCollection<SocketGuild> Guilds => State.Guilds;
 
     /// <summary>
-    ///     Gets a collection of direct message channels opened in this session.
+    ///     获取在此会话中存在的所有私聊频道。
     /// </summary>
     /// <remarks>
-    ///     This method returns a collection of currently opened direct message channels.
     ///     <note type="warning">
-    ///         This method will not return previously opened DM channels outside of the current session! If you
-    ///         have just started the client, this may return an empty collection.
+    ///         此属性不会包含在当前会话之外创建的私聊会话的私聊频道实体，如果此 Bot 刚刚启动，此属性可能会返回一个空集合。
     ///     </note>
     /// </remarks>
-    /// <returns>
-    ///     A collection of DM channels that have been opened in this session.
-    /// </returns>
     public IReadOnlyCollection<SocketDMChannel> DMChannels =>
         State.DMChannels.Where(x => x is not null).ToImmutableArray();
 
     /// <summary>
-    ///     Initializes a new REST/WebSocket-based Kook client.
+    ///     初始化一个 <see cref="KookSocketClient" /> 类的新实例。
     /// </summary>
     public KookSocketClient() : this(new KookSocketConfig())
     {
     }
 
     /// <summary>
-    ///     Initializes a new REST/WebSocket-based Kook client with the provided configuration.
+    ///     初始化一个 <see cref="KookSocketClient" /> 类的新实例。
     /// </summary>
-    /// <param name="config">The configuration to be used with the client.</param>
+    /// <param name="config"> 用于配置此客户端的配置对象。 </param>
     public KookSocketClient(KookSocketConfig config) : this(config, CreateApiClient(config))
     {
     }
@@ -275,14 +270,11 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     public override SocketDMChannel? GetDMChannel(ulong userId) => State.GetDMChannel(userId);
 
     /// <summary>
-    ///     Gets a generic channel from the cache or does a rest request if unavailable.
+    ///     获取一个频道。
     /// </summary>
-    /// <param name="id">The identifier of the channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the channel associated
-    ///     with the identifier; <c>null</c> when the channel cannot be found.
-    /// </returns>
+    /// <param name="id"> 频道的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的频道；若指定 ID 的频道不存在，则为 <c>null</c>。 </returns>
     public async Task<IChannel> GetChannelAsync(ulong id, RequestOptions? options = null)
     {
         if (GetChannel(id) is { } channel) return channel;
@@ -290,37 +282,33 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     }
 
     /// <summary>
-    ///     Gets a direct message channel from the cache or does a rest request if unavailable.
+    ///     获取一个私聊频道。
     /// </summary>
-    /// <param name="chatCode">The identifier of the channel.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the channel associated
-    ///     with the identifier; <c>null</c> when the channel cannot be found.
-    /// </returns>
+    /// <param name="chatCode"> 私聊频道的聊天代码。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定聊天代码的私聊频道；若指定聊天代码的私聊频道不存在，则为 <c>null</c>。 </returns>
     public async Task<IDMChannel> GetDMChannelAsync(Guid chatCode, RequestOptions? options = null) =>
         await ClientHelper.GetDMChannelAsync(this, chatCode, options).ConfigureAwait(false);
 
     /// <summary>
-    ///     Gets a collection of direct message channels from the cache or does a rest request if unavailable.
+    ///     获取当前会话中已创建的所有私聊频道。
     /// </summary>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the channel associated
-    ///     with the identifier; <c>null</c> when the channel cannot be found.
-    /// </returns>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         此方法不会返回当前会话之外已创建的私聊频道。如果客户端刚刚启动，这可能会返回一个空集合。
+    ///     </note>
+    /// </remarks>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是当前会话中已创建的所有私聊频道。 </returns>
     public async Task<IReadOnlyCollection<IDMChannel>> GetDMChannelsAsync(RequestOptions? options = null) =>
         (await ClientHelper.GetDMChannelsAsync(this, options).ConfigureAwait(false)).ToImmutableArray();
 
     /// <summary>
-    ///     Gets a user from the cache or does a rest request if unavailable.
+    ///     获取一个用户。
     /// </summary>
-    /// <param name="id">The identifier of the user (e.g. `168693960628371456`).</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the user associated with
-    ///     the identifier; <c>null</c> if the user is not found.
-    /// </returns>
+    /// <param name="id"> 用户的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的用户；若指定 ID 的用户不存在，则为 <c>null</c>。 </returns>
     public async Task<IUser> GetUserAsync(ulong id, RequestOptions? options = null)
     {
         if (GetUser(id) is { } user) return user;
@@ -350,13 +338,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
     internal void RemoveUser(ulong id) => State.RemoveUser(id);
 
-    /// <summary>
-    ///     Downloads all users for the specified guilds.
-    /// </summary>
-    /// <param name="guilds">
-    ///     The guilds to download the users for. If <c>null</c>, all available guilds will be downloaded.
-    /// </param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <inheritdoc />
     public override async Task DownloadUsersAsync(IEnumerable<IGuild>? guilds = null, RequestOptions? options = null)
     {
         if (ConnectionState != ConnectionState.Connected) return;
@@ -379,13 +361,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         }
     }
 
-    /// <summary>
-    ///     Downloads all voice states for the specified guilds.
-    /// </summary>
-    /// <param name="guilds">
-    ///     The guilds to download the voice states for. If <c>null</c>, all available guilds will be downloaded.
-    /// </param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <inheritdoc />
     public override async Task DownloadVoiceStatesAsync(IEnumerable<IGuild>? guilds = null,
         RequestOptions? options = null)
     {
@@ -426,15 +402,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         }
     }
 
-    /// <summary>
-    ///     Downloads all boost subscriptions for the specified guilds.
-    /// </summary>
-    /// <param name="guilds">
-    ///     The guilds to download the boost subscriptions for. If <c>null</c>, all available guilds will be downloaded.
-    ///     To download all boost subscriptions, the current user must has the
-    ///     <see cref="GuildPermission.ManageGuild"/> permission.
-    /// </param>
-    /// <param name="options">The options to be used when sending the request.</param>
+    /// <inheritdoc />
     public override async Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild>? guilds = null,
         RequestOptions? options = null)
     {
@@ -460,13 +428,6 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
     #region ProcessMessageAsync
 
-    /// <summary>
-    ///     Processes a message received from the gateway.
-    /// </summary>
-    /// <param name="gatewaySocketFrameType"> The type of the gateway socket frame. </param>
-    /// <param name="sequence"> The sequence number of the message. </param>
-    /// <param name="payload"> The payload of the message. </param>
-    /// <exception cref="InvalidOperationException"> Unknown event type. </exception>
     internal virtual async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType, int? sequence, JsonElement payload)
     {
         if (sequence.HasValue)

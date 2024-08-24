@@ -3,22 +3,22 @@ using System.Diagnostics;
 namespace Kook.Commands;
 
 /// <summary>
-///     Represents the result of a grouped precondition check.
+///     表示一个分组的先决条件检查结果。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class PreconditionGroupResult : PreconditionResult
 {
     /// <summary>
-    ///     Gets the results of the precondition checks.
+    ///     获取先决条件检查的结果。
     /// </summary>
     public IReadOnlyCollection<PreconditionResult> PreconditionResults { get; }
 
     /// <summary>
-    ///     Creates a new <see cref="PreconditionGroupResult"/> with the specified error, reason, and precondition results.
+    ///     初始化一个包含指定错误、原因和先决条件检查结果的 <see cref="PreconditionGroupResult"/> 类的新实例。
     /// </summary>
-    /// <param name="error"> The error that occurred. </param>
-    /// <param name="errorReason"> The reason for the error. </param>
-    /// <param name="preconditions"> The results of the precondition checks. </param>
+    /// <param name="error"> 错误类型。 </param>
+    /// <param name="errorReason"> 错误原因。 </param>
+    /// <param name="preconditions"> 先决条件检查结果。 </param>
     protected PreconditionGroupResult(CommandError? error, string? errorReason, ICollection<PreconditionResult> preconditions)
         : base(error, errorReason)
     {
@@ -26,28 +26,32 @@ public class PreconditionGroupResult : PreconditionResult
     }
 
     /// <summary>
-    ///     Returns a <see cref="PreconditionResult" /> with no errors.
+    ///     初始化一个不包含任何错误的 <see cref="PreconditionGroupResult"/> 类的新实例，表示一个成功的先决条件检查。
     /// </summary>
+    /// <returns> 一个表示先决条件检查成功的 <see cref="PreconditionGroupResult"/>。 </returns>
     public static new PreconditionGroupResult FromSuccess() => new(null, null, []);
 
     /// <summary>
-    ///     Returns a <see cref="PreconditionResult" /> with the reason and precondition results.
+    ///     初始化一个包含指定错误类型和原因的 <see cref="PreconditionGroupResult"/> 类的新实例，表示一个失败的先决条件检查。
     /// </summary>
-    /// <param name="reason"> The reason for the error. </param>
-    /// <param name="preconditions"> The results of the precondition checks. </param>
+    /// <param name="reason"> 错误原因。 </param>
+    /// <param name="preconditions"> 先决条件检查结果。 </param>
+    /// <returns> 一个表示先决条件检查失败的 <see cref="PreconditionGroupResult"/>。 </returns>
     public static PreconditionGroupResult FromError(string reason, ICollection<PreconditionResult> preconditions) =>
         new(CommandError.UnmetPrecondition, reason, preconditions);
 
     /// <summary>
-    ///     Returns a <see cref="PreconditionResult" /> with an exception.
+    ///     初始化一个包含指定错误类型和原因的 <see cref="PreconditionGroupResult"/> 类的新实例，表示一个失败的先决条件检查。
     /// </summary>
-    /// <param name="ex"> The exception that occurred. </param>
+    /// <param name="ex"> 导致先决条件检查失败的异常。 </param>
+    /// <returns> 一个表示先决条件检查失败的 <see cref="PreconditionGroupResult"/>。 </returns>
     public static new PreconditionGroupResult FromError(Exception ex) => new(CommandError.Exception, ex.Message, []);
 
     /// <summary>
-    ///     Returns a <see cref="PreconditionResult" /> with the specified result.
+    ///     初始化一个包含指定错误类型和原因的 <see cref="PreconditionGroupResult"/> 类的新实例，表示一个失败的先决条件检查。
     /// </summary>
-    /// <param name="result"> The result of failure. </param>
+    /// <param name="result"> 包含错误类型和原因的结果。 </param>
+    /// <returns> 一个表示先决条件检查失败的 <see cref="PreconditionGroupResult"/>。 </returns>
     public static new PreconditionGroupResult FromError(IResult result) => new(result.Error, result.ErrorReason, []); //needed?
 
     /// <inheritdoc />

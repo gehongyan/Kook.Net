@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a countdown module that can be used in an <see cref="ICard"/>.
+///     倒计时模块，可用于 <see cref="ICard"/> 中。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class CountdownModule : IModule, IEquatable<CountdownModule>, IEquatable<IModule>
@@ -20,60 +20,42 @@ public class CountdownModule : IModule, IEquatable<CountdownModule>, IEquatable<
     public ModuleType Type => ModuleType.Countdown;
 
     /// <summary>
-    ///     Gets the end time of the countdown.
+    ///     获取倒计时的结束时间。
     /// </summary>
-    /// <returns>
-    ///     The end time of the countdown.
-    /// </returns>
     public DateTimeOffset EndTime { get; }
 
     /// <summary>
-    ///     Gets the start time of the countdown.
+    ///     获取倒计时的开始时间。
     /// </summary>
-    /// <returns>
-    ///     The start time of the countdown.
-    /// </returns>
     public DateTimeOffset? StartTime { get; }
 
     /// <summary>
-    ///     Gets the mode of the countdown.
+    ///     获取倒计时的显示模式。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="CountdownMode"/> value that represents the mode of the countdown.
-    /// </returns>
     public CountdownMode Mode { get; }
 
     private string DebuggerDisplay =>
         $"{Type}: To {EndTime:yyyy'/'M'/'d HH:mm:ss z} ({Mode} Mode{(StartTime is null ? string.Empty : $", From {EndTime:yyyy'/'M'/'d HH:mm:ss z}")})";
 
     /// <summary>
-    ///     Determines whether the specified <see cref="CountdownModule"/> is equal to the current <see cref="CountdownModule"/>.
+    ///     判定两个 <see cref="CountdownModule"/> 是否相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="CountdownModule"/> is equal to the current <see cref="CountdownModule"/>; otherwise, <c>false</c>.
-    /// </returns>
+    /// <returns> 如果两个 <see cref="CountdownModule"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(CountdownModule left, CountdownModule right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="CountdownModule"/> is not equal to the current <see cref="CountdownModule"/>.
+    ///     判定两个 <see cref="CountdownModule"/> 是否不相等。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the specified <see cref="CountdownModule"/> is not equal to the current <see cref="CountdownModule"/>; otherwise, <c>false</c>.
-    /// </returns>
+    /// <returns> 如果两个 <see cref="CountdownModule"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(CountdownModule left, CountdownModule right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="CountdownModule"/> is equal to the current <see cref="CountdownModule"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="CountdownModule"/>, <see cref="Equals(CountdownModule)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="CountdownModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="CountdownModule"/> is equal to the current <see cref="CountdownModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is CountdownModule countdownModule && Equals(countdownModule);
 
-    /// <summary>Determines whether the specified <see cref="CountdownModule"/> is equal to the current <see cref="CountdownModule"/>.</summary>
-    /// <param name="countdownModule">The <see cref="CountdownModule"/> to compare with the current <see cref="CountdownModule"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="CountdownModule"/> is equal to the current <see cref="CountdownModule"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] CountdownModule? countdownModule) =>
         GetHashCode() == countdownModule?.GetHashCode();
 

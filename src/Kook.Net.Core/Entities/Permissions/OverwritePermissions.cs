@@ -3,106 +3,139 @@ using System.Diagnostics;
 namespace Kook;
 
 /// <summary>
-///     Represents a container for a series of overwrite permissions.
+///     表示一组权限重写配置。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct OverwritePermissions
 {
     /// <summary>
-    ///     Gets a blank <see cref="OverwritePermissions" /> that inherits all permissions.
+    ///     获取一个空的 <see cref="OverwritePermissions"/>，继承所有权限。
     /// </summary>
     public static OverwritePermissions InheritAll { get; } = new();
 
     /// <summary>
-    ///     Gets a <see cref="OverwritePermissions" /> that grants all permissions for the given channel.
+    ///     获取一个在权限重写配置中为指定频道重写允许所有权限的 <see cref="OverwritePermissions"/>。
     /// </summary>
-    /// <exception cref="ArgumentException">Unknown channel type.</exception>
+    /// <exception cref="ArgumentException"> 未知的频道类型。 </exception>
     public static OverwritePermissions AllowAll(IChannel channel) =>
         new(ChannelPermissions.All(channel).RawValue, 0);
 
     /// <summary>
-    ///     Gets a <see cref="OverwritePermissions" /> that denies all permissions for the given channel.
+    ///     获取一个在权限重写配置中为指定频道重写禁止所有权限的 <see cref="OverwritePermissions"/>。
     /// </summary>
-    /// <exception cref="ArgumentException">Unknown channel type.</exception>
+    /// <exception cref="ArgumentException"> 未知的频道类型。 </exception>
     public static OverwritePermissions DenyAll(IChannel channel) =>
         new(0, ChannelPermissions.All(channel).RawValue);
 
     /// <summary>
-    ///     Gets a packed value representing all the allowed permissions in this <see cref="OverwritePermissions"/>.
+    ///     获取一个表示此重写中所有允许的权限的原始值。
     /// </summary>
     public ulong AllowValue { get; }
 
     /// <summary>
-    ///     Gets a packed value representing all the denied permissions in this <see cref="OverwritePermissions"/>.
+    ///     获取一个表示此重写中所有禁止的权限的原始值。
     /// </summary>
     public ulong DenyValue { get; }
 
-    /// <summary> If Allowed, a user may create invites. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.CreateInvites"/> 的重写配置。
+    /// </summary>
     public PermValue CreateInvites => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.CreateInvites);
 
-    /// <summary> If Allowed, a user may create, delete and modify channels. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.ManageChannels"/> 的重写配置。
+    /// </summary>
     public PermValue ManageChannels => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageChannels);
 
-    /// <summary> If Allowed, a user may adjust roles. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.ManageRoles"/> 的重写配置。
+    /// </summary>
     public PermValue ManageRoles => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageRoles);
 
-    /// <summary> If Allowed, a user may view channels. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.ViewChannel"/> 的重写配置。
+    /// </summary>
     public PermValue ViewChannel => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ViewChannel);
 
-    /// <summary> If Allowed, a user may send messages. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.SendMessages"/> 的重写配置。
+    /// </summary>
     public PermValue SendMessages => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.SendMessages);
 
-    /// <summary> If Allowed, a user may delete messages. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.ManageMessages"/> 的重写配置。
+    /// </summary>
     public PermValue ManageMessages => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageMessages);
 
-    /// <summary> If Allowed, a user may send files. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.AttachFiles"/> 的重写配置。
+    /// </summary>
     public PermValue AttachFiles => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.AttachFiles);
 
-    /// <summary> If Allowed, a user may connect to a voice channel. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.Connect"/> 的重写配置。
+    /// </summary>
     public PermValue Connect => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.Connect);
 
-    /// <summary> If Allowed, a user may kick other users from voice channels, and move other users between voice channels. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.ManageVoice"/> 的重写配置。
+    /// </summary>
     public PermValue ManageVoice => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageVoice);
 
-    /// <summary> If Allowed, a user may mention all users. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.MentionEveryone"/> 的重写配置。
+    /// </summary>
     public PermValue MentionEveryone => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.MentionEveryone);
 
-    /// <summary> If Allowed, a user may add reactions. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.AddReactions"/> 的重写配置。
+    /// </summary>
     public PermValue AddReactions => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.AddReactions);
 
-    /// <summary> If Allowed, a user may connect to a voice channel only when the user is invited or moved by other users. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.PassiveConnect"/> 的重写配置。
+    /// </summary>
     public PermValue PassiveConnect => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.PassiveConnect);
 
-    /// <summary> If Allowed, a user may use voice activation. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.UseVoiceActivity"/> 的重写配置。
+    /// </summary>
     public PermValue UseVoiceActivity => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.UseVoiceActivity);
 
-    /// <summary> If Allowed, a user may speak in a voice channel. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.Speak"/> 的重写配置。
+    /// </summary>
     public PermValue Speak => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.Speak);
 
-    /// <summary> If Allowed, a user may deafen users. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.DeafenMembers"/> 的重写配置。
+    /// </summary>
     public PermValue DeafenMembers => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.DeafenMembers);
 
-    /// <summary> If Allowed, a user may mute users. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.MuteMembers"/> 的重写配置。
+    /// </summary>
     public PermValue MuteMembers => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.MuteMembers);
 
-    /// <summary> If Allowed, a user may play soundtracks in a voice channel. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.PlaySoundtrack"/> 的重写配置。
+    /// </summary>
     public PermValue PlaySoundtrack => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.PlaySoundtrack);
 
-    /// <summary> If Allowed, a user may share screen in a voice channel. </summary>
+    /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.ShareScreen"/> 的重写配置。
+    /// </summary>
     public PermValue ShareScreen => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ShareScreen);
 
-    /// <summary> Creates a new OverwritePermissions with the provided allow and deny packed values. </summary>
+    /// <summary>
+    ///     使用指定的原始值初始化一个 <see cref="OverwritePermissions"/> 结构的新实例。
+    /// </summary>
+    /// <param name="allowValue"> 重写允许的权限的原始值。 </param>
+    /// <param name="denyValue"> 重写禁止的权限的原始值。 </param>
     public OverwritePermissions(ulong allowValue, ulong denyValue)
     {
         AllowValue = allowValue;
         DenyValue = denyValue;
-    }
-
-    /// <summary> Creates a new OverwritePermissions with the provided allow and deny packed values after converting to ulong. </summary>
-    public OverwritePermissions(string allowValue, string denyValue)
-    {
-        AllowValue = uint.Parse(allowValue);
-        DenyValue = uint.Parse(denyValue);
     }
 
     private OverwritePermissions(ulong allowValue, ulong denyValue,
@@ -149,8 +182,26 @@ public struct OverwritePermissions
     }
 
     /// <summary>
-    ///     Initializes a new <see cref="ChannelPermissions"/> struct with the provided permissions.
+    ///     使用指定的权限重写信息创建一个 <see cref="OverwritePermissions"/> 结构的新实例。
     /// </summary>
+    /// <param name="createInvites"> 创建邀请。 </param>
+    /// <param name="manageChannels"> 频道管理。 </param>
+    /// <param name="manageRoles"> 管理角色权限。 </param>
+    /// <param name="viewChannel"> 查看文字与语音频道。 </param>
+    /// <param name="sendMessages"> 发送文字消息。 </param>
+    /// <param name="manageMessages"> 消息管理。 </param>
+    /// <param name="attachFiles"> 上传文件。 </param>
+    /// <param name="connect"> 语音连接。 </param>
+    /// <param name="manageVoice"> 语音管理。 </param>
+    /// <param name="mentionEveryone"> 提及全体成员、在线成员和所有角色。 </param>
+    /// <param name="addReactions"> 添加回应。 </param>
+    /// <param name="passiveConnect"> 被动连接语音频道。 </param>
+    /// <param name="useVoiceActivity"> 使用自由麦。 </param>
+    /// <param name="speak"> 发言。 </param>
+    /// <param name="deafenMembers"> 服务器静音。 </param>
+    /// <param name="muteMembers"> 服务器闭麦。 </param>
+    /// <param name="playSoundtrack"> 共享计算机音频。 </param>
+    /// <param name="shareScreen"> 屏幕分享。 </param>
     public OverwritePermissions(
         PermValue createInvites = PermValue.Inherit,
         PermValue manageChannels = PermValue.Inherit,
@@ -177,9 +228,27 @@ public struct OverwritePermissions
     }
 
     /// <summary>
-    ///     Initializes a new <see cref="OverwritePermissions" /> from the current one, changing the provided
-    ///     non-null permissions.
+    ///     以当前权限重写配置为基础，更改指定的重写，返回一个 <see cref="OverwritePermissions"/> 结构的新实例。
     /// </summary>
+    /// <param name="createInvites"> 创建邀请。 </param>
+    /// <param name="manageChannels"> 频道管理。 </param>
+    /// <param name="manageRoles"> 管理角色权限。 </param>
+    /// <param name="viewChannel"> 查看文字与语音频道。 </param>
+    /// <param name="sendMessages"> 发送文字消息。 </param>
+    /// <param name="manageMessages"> 消息管理。 </param>
+    /// <param name="attachFiles"> 上传文件。 </param>
+    /// <param name="connect"> 语音连接。 </param>
+    /// <param name="manageVoice"> 语音管理。 </param>
+    /// <param name="mentionEveryone"> 提及全体成员、在线成员和所有角色。 </param>
+    /// <param name="addReactions"> 添加回应。 </param>
+    /// <param name="passiveConnect"> 被动连接语音频道。 </param>
+    /// <param name="useVoiceActivity"> 使用自由麦。 </param>
+    /// <param name="speak"> 发言。 </param>
+    /// <param name="deafenMembers"> 服务器静音。 </param>
+    /// <param name="muteMembers"> 服务器闭麦。 </param>
+    /// <param name="playSoundtrack"> 共享计算机音频。 </param>
+    /// <param name="shareScreen"> 屏幕分享。 </param>
+    /// <returns> 更改了指定权限的新的权限集。 </returns>
     public OverwritePermissions Modify(
         PermValue? createInvites = null,
         PermValue? manageChannels = null,
@@ -204,9 +273,9 @@ public struct OverwritePermissions
             passiveConnect, useVoiceActivity, speak, deafenMembers, muteMembers, playSoundtrack, shareScreen);
 
     /// <summary>
-    ///     Creates a <see cref="List{T}"/> of all the <see cref="ChannelPermission"/> values that are allowed.
+    ///     获取一个包含当前权限重写配置所包含的所有重写允许的 <see cref="ChannelPermission"/> 独立位标志枚举值的集合。
     /// </summary>
-    /// <returns>A <see cref="List{T}"/> of all allowed <see cref="ChannelPermission"/> flags. If none, the list will be empty.</returns>
+    /// <returns> 一个包含当前权限重写配置所包含的所有重写允许的 <see cref="ChannelPermission"/> 独立位标志枚举值的集合；如果当前权限重写配置未包含任何重写允许的权限位，则会返回一个空集合。 </returns>
     public List<ChannelPermission> ToAllowList()
     {
         List<ChannelPermission> perms = [];
@@ -222,9 +291,9 @@ public struct OverwritePermissions
     }
 
     /// <summary>
-    ///     Creates a <see cref="List{T}"/> of all the <see cref="ChannelPermission"/> values that are denied.
+    ///     获取一个包含当前权限重写配置所包含的所有重写禁止的 <see cref="ChannelPermission"/> 独立位标志枚举值的集合。
     /// </summary>
-    /// <returns>A <see cref="List{T}"/> of all denied <see cref="ChannelPermission"/> flags. If none, the list will be empty.</returns>
+    /// <returns> 一个包含当前权限重写配置所包含的所有重写禁止的 <see cref="ChannelPermission"/> 独立位标志枚举值的集合；如果当前权限重写配置未包含任何重写禁止的权限位，则会返回一个空集合。 </returns>
     public List<ChannelPermission> ToDenyList()
     {
         List<ChannelPermission> perms = new();
@@ -238,7 +307,10 @@ public struct OverwritePermissions
         return perms;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     获取此权限重写配置所重写允许与重写禁止的权限的原始值的字符串表示。
+    /// </summary>
+    /// <returns> 此权限重写配置所重写允许与重写禁止的权限的原始值的字符串表示。 </returns>
     public override string ToString() => $"Allow {AllowValue}, Deny {DenyValue}";
 
     private string DebuggerDisplay =>

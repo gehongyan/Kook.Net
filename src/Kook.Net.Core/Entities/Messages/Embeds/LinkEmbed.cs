@@ -1,7 +1,7 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a link embed.
+///     表示一个消息中解析出的网址链接嵌入式内容。
 /// </summary>
 public struct LinkEmbed : IEmbed
 {
@@ -19,50 +19,32 @@ public struct LinkEmbed : IEmbed
     public EmbedType Type => EmbedType.Link;
 
     /// <summary>
-    ///     Gets the URL of this embed.
+    ///     获取网址链接的 URL。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> that represents the URL of this embed.
-    /// </returns>
     public string Url { get; internal set; }
 
     /// <summary>
-    ///     Gets the title of the website the link directs to.
+    ///     获取链接指向的网站的页面标题。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the title of the website the link directs to.
-    /// </returns>
     public string Title { get; internal set; }
 
     /// <summary>
-    ///     Gets the description of the website the link directs to.
+    ///     获取链接指向的网站的页面描述。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the description of the website the link directs to.
-    /// </returns>
     public string Description { get; internal set; }
 
     /// <summary>
-    ///     Gets the name of the website the link directs to.
+    ///     获取链接指向的网站的名称。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the name of the website the link directs to.
-    /// </returns>
     public string SiteName { get; internal set; }
 
     /// <summary>
-    ///     Gets the color displayed along the left side of the card.
+    ///     获取卡片左侧边的颜色。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the color displayed along the left side of the card.
-    /// </returns>
     public Color Color { get; internal set; }
 
     /// <summary>
-    ///     Gets the URL of the image related to the website the link directs to.
+    ///     获取预览图像的 URL。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the URL of the image related to the website the link directs to.
-    /// </returns>
     public string Image { get; internal set; }
 }

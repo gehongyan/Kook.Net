@@ -8,11 +8,10 @@ using System.Runtime.ExceptionServices;
 namespace Kook.Commands;
 
 /// <summary>
-///     Provides the information of a command.
+///     表示一个命令的信息。
 /// </summary>
 /// <remarks>
-///     This object contains the information of a command. This can include the module of the command, various
-///     descriptions regarding the command, and its <see cref="RunMode"/>.
+///     此对象包含命令的信息。这可能包括命令的模块、有关命令的各种描述以及执行模式等。
 /// </remarks>
 [DebuggerDisplay("{Name,nq}")]
 public class CommandInfo
@@ -27,71 +26,69 @@ public class CommandInfo
     private readonly Func<ICommandContext, object?[], IServiceProvider, CommandInfo, Task>? _action;
 
     /// <summary>
-    ///     Gets the module that the command belongs in.
+    ///     获取此命令所属的模块。
     /// </summary>
     public ModuleInfo Module { get; }
 
     /// <summary>
-    ///     Gets the name of the command. If none is set, the first alias is used.
+    ///     获取此命令的名称。如果未设置基本名称，则返回首要别名。
     /// </summary>
     public string Name { get; }
 
     /// <summary>
-    ///     Gets the summary of the command.
+    ///     获取此命令的摘要。
     /// </summary>
     /// <remarks>
-    ///     This field returns the summary of the command. <see cref="Summary"/> and <see cref="Remarks"/> can be
-    ///     useful in help commands and various implementation that fetches details of the command for the user.
+    ///     此字段返回命令的摘要。<see cref="Summary"/> 和 <see cref="Remarks"/> 可以用于帮助命令中，为用户提供命令的详细信息。
     /// </remarks>
     public string? Summary { get; }
 
     /// <summary>
-    ///     Gets the remarks of the command.
+    ///     获取此命令的备注。
     /// </summary>
     /// <remarks>
-    ///     This field returns the summary of the command. <see cref="Summary"/> and <see cref="Remarks"/> can be
-    ///     useful in help commands and various implementation that fetches details of the command for the user.
+    ///     此字段返回命令的摘要。<see cref="Summary"/> 和 <see cref="Remarks"/> 可以用于帮助命令中，为用户提供命令的详细信息。
     /// </remarks>
     public string? Remarks { get; }
 
     /// <summary>
-    ///     Gets the priority of the command. This is used when there are multiple overloads of the command.
+    ///     获取此命令的优先级。当命令匹配多个重载时，此优先级将用于确定要执行的重载。
     /// </summary>
+    /// <seealso cref="M:Kook.Commands.PriorityAttribute.#ctor(System.Int32)"/>
     public int Priority { get; }
 
     /// <summary>
-    ///     Indicates whether the command accepts a <c>params</c> <see cref="Type"/>[] for its
-    ///     parameter.
+    ///     获取此命令是否可变数量的参数。
     /// </summary>
     public bool HasVarArgs { get; }
 
     /// <summary>
-    ///     Indicates whether extra arguments should be ignored for this command.
+    ///     获取此命令是否应忽略额外的参数。
     /// </summary>
     public bool IgnoreExtraArgs { get; }
 
     /// <summary>
-    ///     Gets the <see cref="RunMode" /> that is being used for the command.
+    ///     获取此命令的执行模式。
     /// </summary>
     public RunMode RunMode { get; }
 
     /// <summary>
-    ///     Gets a list of aliases defined by the <see cref="AliasAttribute" /> of the command.
+    ///     获取此命令的所有别名。
     /// </summary>
     public IReadOnlyList<string> Aliases { get; }
 
     /// <summary>
-    ///     Gets a list of information about the parameters of the command.
+    ///     获取此命令的所有参数的信息。
     /// </summary>
     public IReadOnlyList<ParameterInfo> Parameters { get; }
 
     /// <summary>
-    ///     Gets a list of preconditions defined by the <see cref="PreconditionAttribute" /> of the command.
+    ///     获取此命令的所有先决条件。
     /// </summary>
     public IReadOnlyList<PreconditionAttribute> Preconditions { get; }
 
     /// <summary>
-    ///     Gets a list of attributes of the command.
+    ///     获取此命令的所有特性。
     /// </summary>
     public IReadOnlyList<Attribute> Attributes { get; }
 
@@ -128,11 +125,11 @@ public class CommandInfo
     }
 
     /// <summary>
-    ///     Checks the preconditions of the command.
+    ///     检查命令在指定的上下文中是否可以执行。
     /// </summary>
-    /// <param name="context"> The context of the command. </param>
-    /// <param name="services"> The services to be used for precondition checking. </param>
-    /// <returns> A <see cref="PreconditionResult" /> that indicates whether the precondition check was successful. </returns>
+    /// <param name="context"> 命令的上下文。 </param>
+    /// <param name="services"> 用于检查的服务提供程序。 </param>
+    /// <returns> 一个表示异步检查操作的任务。任务的结果包含先决条件的结果。 </returns>
     public async Task<PreconditionResult> CheckPreconditionsAsync(ICommandContext context, IServiceProvider? services = null)
     {
         services ??= EmptyServiceProvider.Instance;
@@ -174,14 +171,14 @@ public class CommandInfo
     }
 
     /// <summary>
-    ///     Parses the arguments of the command.
+    ///     解析命令的参数。
     /// </summary>
-    /// <param name="context"> The context of the command. </param>
-    /// <param name="startIndex"> The index to start parsing from. </param>
-    /// <param name="searchResult"> The search result of the command. </param>
-    /// <param name="preconditionResult"> The result of the precondition check. </param>
-    /// <param name="services"> The services to be used for parsing. </param>
-    /// <returns> A <see cref="ParseResult" /> that indicates whether the parsing was successful. </returns>
+    /// <param name="context"> 命令执行上下文。 </param>
+    /// <param name="startIndex"> 解析的起始索引。 </param>
+    /// <param name="searchResult"> 命令搜索结果。 </param>
+    /// <param name="preconditionResult"> 先决条件的检查结果。 </param>
+    /// <param name="services"> 用于解析的服务提供程序。 </param>
+    /// <returns> 一个表示异步解析操作的任务。任务的结果包含解析的结果。 </returns>
     public async Task<ParseResult> ParseAsync(ICommandContext context, int startIndex, SearchResult searchResult,
         PreconditionResult? preconditionResult = null, IServiceProvider? services = null)
     {
@@ -199,12 +196,12 @@ public class CommandInfo
     }
 
     /// <summary>
-    ///     Executes the command.
+    ///     执行命令。
     /// </summary>
-    /// <param name="context"> The context of the command. </param>
-    /// <param name="parseResult"> The result of the parsing. </param>
-    /// <param name="services"> The services to be used for execution. </param>
-    /// <returns> An <see cref="IResult"/> that indicates whether the execution was successful. </returns>
+    /// <param name="context"> 命令执行上下文。 </param>
+    /// <param name="parseResult"> 命令的参数解析结果。 </param>
+    /// <param name="services"> 用于执行的服务提供程序。 </param>
+    /// <returns> 一个表示异步执行操作的任务。任务的结果包含命令执行的结果。 </returns>
     public Task<IResult> ExecuteAsync(ICommandContext context, ParseResult parseResult, IServiceProvider services)
     {
         if (!parseResult.IsSuccess)
@@ -230,13 +227,13 @@ public class CommandInfo
     }
 
     /// <summary>
-    ///     Executes the command.
+    ///     执行命令。
     /// </summary>
-    /// <param name="context"> The context of the command. </param>
-    /// <param name="argList"> The arguments of the command. </param>
-    /// <param name="paramList"> The parameters of the command. </param>
-    /// <param name="services"> The services to be used for execution. </param>
-    /// <returns> An <see cref="IResult"/> that indicates whether the execution was successful. </returns>
+    /// <param name="context"> 命令执行上下文。 </param>
+    /// <param name="argList"> 命令的实参列表。 </param>
+    /// <param name="paramList"> 命令的形参列表。 </param>
+    /// <param name="services"> 用于执行的服务提供程序。 </param>
+    /// <returns> 一个表示异步执行操作的任务。任务的结果包含命令执行的结果。 </returns>
     public async Task<IResult> ExecuteAsync(ICommandContext context, IEnumerable<object?> argList,
         IEnumerable<object?> paramList, IServiceProvider services)
     {

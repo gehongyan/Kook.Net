@@ -10,7 +10,7 @@ using Kook.WebSocket;
 namespace Kook.Webhook;
 
 /// <summary>
-///     Represents a KOOK webhook client.
+///     表示一个基于 Webhook 网关的 KOOK 客户端。
 /// </summary>
 public abstract class KookWebhookClient : KookSocketClient
 {
@@ -23,9 +23,9 @@ public abstract class KookWebhookClient : KookSocketClient
     private protected Logger WebhookLogger { get; }
 
     /// <summary>
-    ///     Initializes a new REST/WebSocket-based Kook client with the provided configuration.
+    ///     初始化一个 <see cref="KookWebhookClient"/> 类的新实例。
     /// </summary>
-    /// <param name="config">The configuration to be used with the client.</param>
+    /// <param name="config"> Webhook 客户端的配置。 </param>
     protected KookWebhookClient(KookWebhookConfig config)
         : this(config, CreateApiClient(config))
     {
@@ -51,9 +51,6 @@ public abstract class KookWebhookClient : KookSocketClient
     internal new KookWebhookApiClient ApiClient => base.ApiClient as KookWebhookApiClient
         ?? throw new InvalidOperationException("The API client is not a Webhook-based client.");
 
-    /// <summary>
-    ///     Gets the configuration used by this client.
-    /// </summary>
     internal new KookWebhookConfig BaseConfig => base.BaseConfig as KookWebhookConfig
         ?? throw new InvalidOperationException("The base configuration is not a Webhook-based configuration.");
 
@@ -153,7 +150,6 @@ public abstract class KookWebhookClient : KookSocketClient
         base.Dispose(disposing);
     }
 
-    /// <inheritdoc />
     internal override async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType, int? sequence, JsonElement payload)
     {
         if (gatewaySocketFrameType is GatewaySocketFrameType.Event)

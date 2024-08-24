@@ -5,111 +5,126 @@ using StandardColor = System.Drawing.Color;
 namespace Kook;
 
 /// <summary>
-///     Represents a <see cref="Color"/> with an alpha channel.
+///     表示 KOOK 中使用的带有不透明度通道的颜色。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public readonly struct AlphaColor
 {
-    /// <summary> Gets the max decimal value of an color with an alpha channel. </summary>
-    public const ulong MaxDecimalValue = 0xFFFFFFFF;
+    /// <summary>
+    ///     获取一个 KOOK 中带有不透明度通道的颜色的最大值的原始值。
+    /// </summary>
+    public const uint MaxDecimalValue = 0xFFFFFFFF;
 
-    /// <summary> Gets the default user color value. </summary>
+    /// <summary>
+    ///     获取默认颜色。
+    /// </summary>
     public static readonly AlphaColor Default = new(Color.Default, 0xFF);
 
     /// <summary>
-    ///     Gets the raw value for this color.
+    ///     获取此颜色的原始值。
     /// </summary>
-    public ulong RawValue { get; }
+    /// <remarks>
+    ///     颜色以 32 位无符号整型值 RGBA 格式进行编码，由高至低的每 8 位分别表示红色、绿色、蓝色和不透明度通道的强度。
+    /// </remarks>
+    public uint RawValue { get; }
 
-    /// <summary> Gets the red component for this color. </summary>
+    /// <summary>
+    ///     获取此颜色的红色通道的强度。
+    /// </summary>
     public byte R => (byte)(RawValue >> 24);
 
-    /// <summary> Gets the green component for this color. </summary>
+    /// <summary>
+    ///     获取此颜色的绿色通道的强度。
+    /// </summary>
     public byte G => (byte)(RawValue >> 16);
 
-    /// <summary> Gets the blue component for this color. </summary>
+    /// <summary>
+    ///     获取此颜色的蓝色通道的强度。
+    /// </summary>
     public byte B => (byte)(RawValue >> 8);
 
-    /// <summary> Gets the alpha component for this color. </summary>
+    /// <summary>
+    ///     获取此颜色的不透明度通道的强度。
+    /// </summary>
     public byte A => (byte)RawValue;
 
     /// <summary>
-    ///     Gets the base color for this color without the alpha channel.
+    ///     获取此颜色不带有不透明度通道的基础颜色。
     /// </summary>
-    public Color BaseColor => new((uint)RawValue >> 8);
+    public Color BaseColor => new(RawValue >> 8);
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="AlphaColor"/> struct with the specified raw value.
+    ///     使用指定的 32 位无符号整型值初始化一个 <see cref="AlphaColor"/> 结构的新实例。
     /// </summary>
-    /// <param name="rawValue"> The raw value to use. </param>
-    public AlphaColor(ulong rawValue)
+    /// <example>
+    ///     创建 #607D8BFF（http://www.color-hex.com/color/607d8b）所表示的颜色，且其完全不透明：
+    ///     <code language="cs">
+    ///         AlphaColor darkGrey = new AlphaColor(0x607D8BFF);
+    ///     </code>
+    /// </example>
+    /// <param name="rawValue"> 颜色的 32 位无符号整型原始值。 </param>
+    public AlphaColor(uint rawValue)
     {
-        if (rawValue > MaxDecimalValue)
-            throw new ArgumentException($"{nameof(RawValue)} of color cannot be greater than {MaxDecimalValue}!", nameof(rawValue));
-
         RawValue = rawValue;
     }
 
     /// <summary>
-    ///     Initializes a <see cref="AlphaColor" /> struct with the given base color and alpha channel.
+    ///     使用指定的 <see cref="T:Kook.Color"/> 及不透明度初始化一个 <see cref="AlphaColor"/> 结构的新实例。
     /// </summary>
-    /// <param name="baseColor"> The base color to use. </param>
-    /// <param name="alpha">The byte that represents the alpha channel.</param>
-    /// <exception cref="ArgumentException">Value exceeds <see cref="MaxDecimalValue"/>.</exception>
+    /// <example>
+    ///     创建 #607D8BFF（http://www.color-hex.com/color/607d8b）所表示的颜色，且其完全不透明：
+    ///     <code language="cs">
+    ///         AlphaColor darkGrey = new AlphaColor(new Color(0x607D8B), (byte)0xFF);
+    ///     </code>
+    /// </example>
+    /// <param name="baseColor"> 基础颜色。 </param>
+    /// <param name="alpha"> 不透明度。 </param>
     public AlphaColor(Color baseColor, byte alpha)
     {
-        ulong value = ((ulong)baseColor.R << 24)
-            | ((ulong)baseColor.G << 16)
-            | ((ulong)baseColor.B << 8)
-            | (ulong)alpha;
-
-        if (value > MaxDecimalValue)
-            throw new ArgumentException($"{nameof(RawValue)} of color cannot be greater than {MaxDecimalValue}!");
+        uint value = ((uint)baseColor.R << 24)
+            | ((uint)baseColor.G << 16)
+            | ((uint)baseColor.B << 8)
+            | (uint)alpha;
 
         RawValue = value;
     }
 
     /// <summary>
-    ///     Initializes a <see cref="AlphaColor" /> struct with the given RGBA bytes.
+    ///     使用指定的 RGBA 通道值初始化一个 <see cref="Color" /> 结构的新实例。
     /// </summary>
     /// <example>
-    ///     The following will create a color that has a value of <c>#607D8BFF</c>.
+    ///     创建 #607D8B（http://www.color-hex.com/color/607d8b）所表示的颜色，且其完全不透明：
     ///     <code language="cs">
-    ///     AlphaColor darkGrey = new AlphaColor((byte)0b_01100000, (byte)0b_01111101, (byte)0b_10001011, (byte)0b_11111111);
+    ///         AlphaColor darkGrey = new AlphaColor((byte)0x60, (byte)0x7D, (byte)0x8B, (byte)0xFF);
     ///     </code>
     /// </example>
-    /// <param name="r">The byte that represents the red color.</param>
-    /// <param name="g">The byte that represents the green color.</param>
-    /// <param name="b">The byte that represents the blue color.</param>
-    /// <param name="a">The byte that represents the alpha channel.</param>
-    /// <exception cref="ArgumentException">Value exceeds <see cref="MaxDecimalValue"/>.</exception>
+    /// <param name="r"> 红色通道的强度。 </param>
+    /// <param name="g"> 绿色通道的强度。 </param>
+    /// <param name="b"> 蓝色通道的强度。 </param>
+    /// <param name="a"> 不透明度通道的强度。 </param>
     public AlphaColor(byte r, byte g, byte b, byte a)
     {
-        ulong value = ((ulong)r << 24)
-            | ((ulong)g << 16)
-            | ((ulong)b << 8)
-            | (ulong)a;
-
-        if (value > MaxDecimalValue)
-            throw new ArgumentException($"{nameof(RawValue)} of color cannot be greater than {MaxDecimalValue}!");
+        uint value = ((uint)r << 24)
+            | ((uint)g << 16)
+            | ((uint)b << 8)
+            | (uint)a;
 
         RawValue = value;
     }
 
     /// <summary>
-    ///     Initializes a <see cref="AlphaColor"/> struct with the given RGBA value.
+    ///     使用指定的 RGBA 通道值初始化一个 <see cref="Color" /> 结构的新实例。
     /// </summary>
     /// <example>
-    ///     The following will create a color that has a value of <c>#607D8BFF</c>.
+    ///     创建 #607D8B（http://www.color-hex.com/color/607d8b）所表示的颜色，且其完全不透明：
     ///     <code language="cs">
-    ///     AlphaColor darkGrey = new AlphaColor(96, 125, 139, 255);
+    ///         AlphaColor darkGrey = new AlphaColor(96, 125, 139, 255);
     ///     </code>
     /// </example>
-    /// <param name="r">The value that represents the red color. Must be within 0~255.</param>
-    /// <param name="g">The value that represents the green color. Must be within 0~255.</param>
-    /// <param name="b">The value that represents the blue color. Must be within 0~255.</param>
-    /// <param name="a">The value that represents the alpha channel. Must be within 0~255.</param>
-    /// <exception cref="ArgumentOutOfRangeException">The argument value is not between 0 to 255.</exception>
+    /// <param name="r"> 红色通道的强度。 </param>
+    /// <param name="g"> 绿色通道的强度。 </param>
+    /// <param name="b"> 蓝色通道的强度。 </param>
+    /// <param name="a"> 不透明度通道的强度。 </param>
     public AlphaColor(int r, int g, int b, int a)
     {
         if (r is < 0 or > 255)
@@ -124,27 +139,25 @@ public readonly struct AlphaColor
         if (a is < 0 or > 255)
             throw new ArgumentOutOfRangeException(nameof(a), "Value must be within [0,255].");
 
-        RawValue = ((ulong)(uint)r << 24)
-            | ((ulong)(uint)g << 16)
-            | ((ulong)(uint)b << 8)
-            | (ulong)(uint)a;
+        RawValue = ((uint)r << 24)
+            | ((uint)g << 16)
+            | ((uint)b << 8)
+            | (uint)a;
     }
 
-
     /// <summary>
-    ///     Initializes a <see cref="AlphaColor"/> struct with the given RGBA float value.
+    ///     使用指定的 RGBA 通道值初始化一个 <see cref="Color" /> 结构的新实例。
     /// </summary>
     /// <example>
-    ///     The following will create a color that has a value of <c>#607C8CFF</c>.
+    ///     创建 #607D8B（http://www.color-hex.com/color/607d8b）所表示的颜色，且其完全不透明：
     ///     <code language="cs">
-    ///     AlphaColor darkGrey = new AlphaColor(0.38f, 0.49f, 0.55f, 1.00f);
+    ///         AlphaColor darkGrey = new AlphaColor(0.38f, 0.49f, 0.55f, 1.00f);
     ///     </code>
     /// </example>
-    /// <param name="r">The value that represents the red color. Must be within 0~1.</param>
-    /// <param name="g">The value that represents the green color. Must be within 0~1.</param>
-    /// <param name="b">The value that represents the blue color. Must be within 0~1.</param>
-    /// <param name="a">The value that represents the alpha channel. Must be within 0~1.</param>
-    /// <exception cref="ArgumentOutOfRangeException">The argument value is not between 0 to 1.</exception>
+    /// <param name="r"> 红色通道的强度。 </param>
+    /// <param name="g"> 绿色通道的强度。 </param>
+    /// <param name="b"> 蓝色通道的强度。 </param>
+    /// <param name="a"> 不透明度通道的强度。 </param>
     public AlphaColor(float r, float g, float b, float a)
     {
         if (r is < 0.0f or > 1.0f)
@@ -166,34 +179,31 @@ public readonly struct AlphaColor
     }
 
     /// <summary>
-    ///     Determines whether the specified <see cref="AlphaColor" /> is equal to this instance.
+    ///     判定两个 <see cref="AlphaColor"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="AlphaColor" /> is equal to this instance; otherwise, <c>false</c> . </returns>
-    public static bool operator ==(AlphaColor lhs, AlphaColor rhs) =>
-        lhs.RawValue == rhs.RawValue;
+    /// <returns> 如果两个 <see cref="AlphaColor"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
+    public static bool operator ==(AlphaColor lhs, AlphaColor rhs) => lhs.RawValue == rhs.RawValue;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="AlphaColor" /> is not equal to this instance.
+    ///     判定两个 <see cref="AlphaColor"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="AlphaColor" /> is not equal to this instance; otherwise, <c>false</c> . </returns>
-    public static bool operator !=(AlphaColor lhs, AlphaColor rhs) =>
-        lhs.RawValue != rhs.RawValue;
+    /// <returns> 如果两个 <see cref="AlphaColor"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
+    public static bool operator !=(AlphaColor lhs, AlphaColor rhs) => lhs.RawValue != rhs.RawValue;
 
     /// <summary>
-    ///     Converts the given raw value of <see cref="uint"/> to a <see cref="AlphaColor"/>.
+    ///     使用指定的 32 位无符号整型值初始化一个 <see cref="AlphaColor"/> 结构的新实例。
     /// </summary>
-    /// <param name="rawValue"> The raw value of the color. </param>
-    /// <returns> The <see cref="AlphaColor"/> that represents the given raw value. </returns>
-    public static implicit operator AlphaColor(ulong rawValue) =>
-        new(rawValue);
+    /// <example>
+    ///     创建 #607D8B（http://www.color-hex.com/color/607d8b）所表示的颜色，且其完全不透明：
+    ///     <code language="cs">
+    ///         AlphaColor darkGrey = 0x607D8BFF;
+    ///     </code>
+    /// </example>
+    /// <param name="rawValue"> 颜色的 32 位无符号整型原始值。 </param>
+    public static implicit operator AlphaColor(uint rawValue) => new(rawValue);
 
-    /// <summary>
-    ///     Converts the given <see cref="AlphaColor"/> to its raw value of <see cref="uint"/>.
-    /// </summary>
-    /// <param name="color"> The <see cref="AlphaColor"/> to convert. </param>
-    /// <returns> The raw value of the given <see cref="AlphaColor"/>. </returns>
-    public static implicit operator ulong(AlphaColor color) =>
-        color.RawValue;
+    /// <inheritdoc cref="P:Kook.AlphaColor.RawValue" />
+    public static implicit operator uint(AlphaColor color) => color.RawValue;
 
     /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
@@ -203,47 +213,41 @@ public readonly struct AlphaColor
     public override int GetHashCode() => RawValue.GetHashCode();
 
     /// <summary>
-    ///     Converts the given Kook.Net-defined <see cref="Color"/> to a Kook.Net-defined <see cref="AlphaColor"/>.
+    ///     将由 Kook.Net 定义的 <see cref="T:Kook.Color"/> 颜色转换为 Kook.Net 定义的 <see cref="T:Kook.AlphaColor"/> 颜色。
     /// </summary>
-    /// <param name="color"> The Kook.Net-defined <see cref="Color"/> to convert. </param>
-    /// <returns> The Kook.Net-defined <see cref="AlphaColor"/> that represents the given Kook.Net-defined <see cref="Color"/>. </returns>
+    /// <param name="color"> 要进行转换的 Kook.Net 定义的 <see cref="T:Kook.Color"/> 颜色。 </param>
+    /// <returns> 与该 Kook.Net 定义的 <see cref="T:Kook.Color"/> 颜色具有相同色值的 <see cref="T:Kook.AlphaColor"/> 颜色。 </returns>
     public static implicit operator AlphaColor(Color color) =>
-        new(((ulong)color.RawValue << 8) | 0xFF);
+        new((color.RawValue << 8) | 0xFF);
 
-    /// <summary>
-    ///     Converts the given Kook.Net-defined <see cref="AlphaColor"/> to a Kook.Net-defined <see cref="Color"/>.
-    /// </summary>
-    /// <param name="color"> The Kook.Net-defined <see cref="AlphaColor"/> to convert. </param>
-    /// <returns> The Kook.Net-defined <see cref="Color"/> that represents the given Kook.Net-defined <see cref="AlphaColor"/>. </returns>
+    /// <inheritdoc cref="P:Kook.AlphaColor.BaseColor" />
     /// <remarks>
     ///     <note type="warning">
-    ///         This conversion will drop the alpha channel of the given <see cref="AlphaColor"/>.
+    ///         此转换会丢失不透明度通道的信息。
     ///     </note>
     /// </remarks>
     public static explicit operator Color(AlphaColor color) => color.BaseColor;
 
     /// <summary>
-    ///     Converts the given Kook.Net-defined <see cref="AlphaColor"/> to a .NET standard <see cref="StandardColor"/>.
+    ///     将由 Kook.Net 定义的 <see cref="T:Kook.AlphaColor"/> 颜色转换为由 .NET 定义的 <see cref="T:System.Drawing.Color"/> 颜色。
     /// </summary>
-    /// <param name="color"> The Kook.Net-defined <see cref="AlphaColor"/> to convert. </param>
-    /// <returns> The .NET standard <see cref="StandardColor"/> that represents the given Kook.Net-defined <see cref="AlphaColor"/>. </returns>
+    /// <param name="color"> 要进行转换的 <see cref="T:Kook.AlphaColor"/> 颜色。 </param>
+    /// <returns> 与该 <see cref="T:Kook.AlphaColor"/> 颜色具有相同色值的 .NET <see cref="T:System.Drawing.Color"/> 颜色。 </returns>
     public static implicit operator StandardColor(AlphaColor color) =>
         StandardColor.FromArgb(color.A, color.R, color.G, color.B);
 
     /// <summary>
-    ///     Converts the given .NET standard <see cref="StandardColor"/> to a Kook.Net-defined <see cref="AlphaColor"/>.
+    ///     将由 .NET 定义的 <see cref="T:System.Drawing.Color"/> 颜色转换为由 Kook.Net 定义的 <see cref="T:Kook.AlphaColor"/> 颜色。
     /// </summary>
-    /// <param name="color"> The .NET standard <see cref="StandardColor"/> to convert. </param>
-    /// <returns> The Kook.Net-defined <see cref="AlphaColor"/> that represents the given .NET standard <see cref="StandardColor"/>. </returns>
+    /// <param name="color"> 要进行转换的 .NET <see cref="T:System.Drawing.Color"/> 颜色。 </param>
+    /// <returns> 与该 .NET <see cref="T:System.Drawing.Color"/> 颜色具有相同色值的 <see cref="T:Kook.AlphaColor"/> 颜色。 </returns>
     public static explicit operator AlphaColor(StandardColor color) =>
         new(color.R, color.G, color.B, color.A);
 
     /// <summary>
-    ///     Gets the hexadecimal representation of the color (e.g. <c>#000cccff</c>).
+    ///     获取此颜色带有 <c>#</c> 前缀的 RGBA 十六进制字符串表示形式（例如 <c>#000CCCFF</c>）。
     /// </summary>
-    /// <returns>
-    ///     A hexadecimal string of the color.
-    /// </returns>
+    /// <returns> 此颜色带有 <c>#</c> 前缀的 RGBA 十六进制字符串表示形式（例如 <c>#000CCCFF</c>）。 </returns>
     public override string ToString() => $"#{RawValue:X8}";
 
     private string DebuggerDisplay => $"#{RawValue:X8} ({RawValue})";

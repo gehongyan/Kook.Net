@@ -1,6 +1,6 @@
 namespace Kook.Commands;
 
-/// <summary> The context of a command which may contain the client, user, guild, channel, and message. </summary>
+/// <inheritdoc />
 public class CommandContext : ICommandContext
 {
     /// <inheritdoc/>
@@ -18,14 +18,16 @@ public class CommandContext : ICommandContext
     /// <inheritdoc/>
     public IUserMessage Message { get; }
 
-    /// <summary> Indicates whether the channel that the command is executed in is a private channel. </summary>
+    /// <summary>
+    ///     获取当前上下文是否为私有的执行上下文。
+    /// </summary>
     public bool IsPrivate => Channel is IPrivateChannel;
 
     /// <summary>
-    ///     Initializes a new <see cref="CommandContext" /> class with the provided client and message.
+    ///     初始化一个包含指定客户端和消息的 <see cref="CommandContext" /> 类的新实例。
     /// </summary>
-    /// <param name="client">The underlying client.</param>
-    /// <param name="msg">The underlying message.</param>
+    /// <param name="client"> 命令执行时所使用的客户端。 </param>
+    /// <param name="msg"> 命令解析的源消息。 </param>
     public CommandContext(IKookClient client, IUserMessage msg)
     {
         Client = client;

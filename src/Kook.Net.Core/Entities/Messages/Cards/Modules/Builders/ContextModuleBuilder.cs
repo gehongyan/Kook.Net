@@ -3,17 +3,17 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     Represents a context module builder for creating a <see cref="ContextModule"/>.
+///     用来构建 <see cref="ContextModule"/> 模块的构建器。
 /// </summary>
 public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuilder>, IEquatable<IModuleBuilder>
 {
     /// <summary>
-    ///     Returns the maximum number of elements allowed by Kook.
+    ///     元素的最大数量。
     /// </summary>
     public const int MaxElementCount = 10;
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ContextModuleBuilder"/> class.
+    ///     初始化一个 <see cref="ContextModuleBuilder"/> 类的新实例。
     /// </summary>
     public ContextModuleBuilder()
     {
@@ -21,8 +21,9 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ContextModuleBuilder"/> class.
+    ///     初始化一个 <see cref="ContextModuleBuilder"/> 类的新实例。
     /// </summary>
+    /// <param name="elements"> 备注模块要包含的元素。 </param>
     public ContextModuleBuilder(IList<IElementBuilder> elements)
     {
         Elements = elements;
@@ -32,22 +33,15 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     public ModuleType Type => ModuleType.Context;
 
     /// <summary>
-    ///     Gets or sets the elements of the context module.
+    ///     获取或设置备注模块的元素。
     /// </summary>
     public IList<IElementBuilder> Elements { get; set; }
 
     /// <summary>
-    ///     Adds a PlainText element to the context module.
+    ///     添加一个纯文本元素到备注模块。
     /// </summary>
-    /// <param name="field">
-    ///     The PlainText element to add.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
-    /// <exception cref="ArgumentException">
-    ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
-    /// </exception>
+    /// <param name="field"> 要添加的纯文本元素。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ContextModuleBuilder AddElement(PlainTextElementBuilder field)
     {
         Elements.Add(field);
@@ -55,14 +49,10 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     }
 
     /// <summary>
-    ///     Adds a KMarkdown element to the context module.
+    ///     添加一个 KMarkdown 元素到备注模块。
     /// </summary>
-    /// <param name="field">
-    ///     The KMarkdown element to add.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="field"> 要添加的 KMarkdown 元素。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ContextModuleBuilder AddElement(KMarkdownElementBuilder field)
     {
         Elements.Add(field);
@@ -70,17 +60,10 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     }
 
     /// <summary>
-    ///     Adds an image element to the context module.
+    ///     添加一个图片元素到备注模块。
     /// </summary>
-    /// <param name="field">
-    ///     The image element to add.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
-    /// <exception cref="ArgumentException">
-    ///     The addition operation would cause the number of elements to exceed <see cref="MaxElementCount"/>.
-    /// </exception>
+    /// <param name="field"> 要添加的图片元素。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ContextModuleBuilder AddElement(ImageElementBuilder field)
     {
         Elements.Add(field);
@@ -88,14 +71,11 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     }
 
     /// <summary>
-    ///     Adds an element to the context module.
+    ///     添加一个元素到备注模块。
     /// </summary>
-    /// <param name="action">
-    ///     The action to add an element to the context module.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="action"> 一个包含对要添加的新创建的元素进行配置的操作的委托。 </param>
+    /// <typeparam name="T"> 要添加的元素的类型。 </typeparam>
+    /// <returns> 当前构建器。 </returns>
     public ContextModuleBuilder AddElement<T>(Action<T>? action = null)
         where T : IElementBuilder, new()
     {
@@ -106,20 +86,18 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     }
 
     /// <summary>
-    ///     Builds this builder into a <see cref="ContextModule"/>.
+    ///     构建当前构建器为一个 <see cref="ContextModule"/> 对象。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="ContextModule"/> representing the built context module object.
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="ContextModule"/> 对象。 </returns>
     /// <exception cref="ArgumentNullException">
-    ///     The <see cref="Elements"/> is null.
+    ///     <see cref="Elements"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Elements"/> count is greater than <see cref="MaxElementCount"/>.
+    ///     <see cref="Elements"/> 的元素数量超过了 <see cref="MaxElementCount"/>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Elements"/> contain an element that is not a <see cref="PlainTextElementBuilder"/>,
-    ///     <see cref="KMarkdownElementBuilder"/>, or <see cref="ImageElementBuilder"/>.
+    ///     <see cref="Elements"/> 包含一个既不是 <see cref="PlainTextElementBuilder"/>，
+    ///     也不是 <see cref="KMarkdownElementBuilder"/> 或 <see cref="ImageElementBuilder"/> 的元素。
     /// </exception>
     public ContextModule Build()
     {
@@ -145,29 +123,24 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
     IModule IModuleBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.
+    ///     判定两个 <see cref="ContextModuleBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ContextModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(ContextModuleBuilder? left, ContextModuleBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ContextModuleBuilder"/> is not equal to the current <see cref="ContextModuleBuilder"/>.
+    ///     判定两个 <see cref="ContextModuleBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ContextModuleBuilder"/> is not equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ContextModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(ContextModuleBuilder? left, ContextModuleBuilder? right) =>
         !(left == right);
 
-    /// <summary>Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.</summary>
-    /// <remarks>If the object passes is an <see cref="ContextModuleBuilder"/>, <see cref="Equals(ContextModuleBuilder)"/> will be called to compare the 2 instances.</remarks>
-    /// <param name="obj">The object to compare with the current <see cref="ContextModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is ContextModuleBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>.</summary>
-    /// <param name="contextModuleBuilder">The <see cref="ContextModuleBuilder"/> to compare with the current <see cref="ContextModuleBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ContextModuleBuilder"/> is equal to the current <see cref="ContextModuleBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] ContextModuleBuilder? contextModuleBuilder)
     {
         if (contextModuleBuilder is null)

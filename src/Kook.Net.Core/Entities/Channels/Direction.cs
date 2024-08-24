@@ -1,36 +1,27 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the direction of where message(s) should be retrieved from.
+///     表示获取消息的方向。
 /// </summary>
-/// <remarks>
-///     This enum is used to specify the direction for retrieving messages.
-///     <note type="important">
-///         At the time of writing, <see cref="Around"/> is not yet implemented into
-///         <see cref="IMessageChannel.GetMessagesAsync(int, CacheMode, RequestOptions)"/>.
-///         Attempting to use the method with <see cref="Around"/> will throw
-///         a <see cref="System.NotImplementedException"/>.
-///     </note>
-/// </remarks>
 public enum Direction
 {
     /// <summary>
-    ///     How the message(s) should be retrieved is unspecified.
+    ///     未指定消息的获取方向。
     /// </summary>
     Unspecified,
 
     /// <summary>
-    ///     The message(s) should be retrieved before a message.
+    ///     以指定的参考消息为基准，向前获取消息。
     /// </summary>
     Before,
 
     /// <summary>
-    ///     The message(s) should be retrieved around a message.
+    ///     以指定的参考消息为基准，获取周围的消息。
     /// </summary>
     Around,
 
     /// <summary>
-    ///     The message(s) should be retrieved after a message.
+    ///     以指定的参考消息为基准，向后获取消息。
     /// </summary>
     After
 }

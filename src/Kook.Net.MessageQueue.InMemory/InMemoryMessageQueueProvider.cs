@@ -1,12 +1,12 @@
 ﻿namespace Kook.Net.Queue.InMemory;
 
 /// <summary>
-///     Represents a delegate that provides a new <see cref="IMessageQueue"/> instance of <see cref="InMemoryMessageQueue"/>.
+///     表示一个默认的使用内存队列的 <see cref="MessageQueueProvider"/>，用于创建 <see cref="InMemoryMessageQueue"/> 实例。
 /// </summary>
 public static class InMemoryMessageQueueProvider
 {
     /// <summary>
-    ///     A delegate that creates a default <see cref="MessageQueueProvider"/> instance.
+    ///     创建一个新的用于创建默认的使用内存队列的 <see cref="InMemoryMessageQueue"/> 实例的委托。
     /// </summary>
     public static readonly MessageQueueProvider Instance = eventHandler =>
     {

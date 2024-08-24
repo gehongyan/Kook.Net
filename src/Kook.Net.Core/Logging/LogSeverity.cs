@@ -1,38 +1,37 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the severity of the log message.
+///     表示日志消息的严重性。
 /// </summary>
 public enum LogSeverity
 {
     /// <summary>
-    ///     Logs that contain the most severe level of error. This type of error indicate that immediate attention
-    ///     may be required.
+    ///     记录包含最高严重级别错误的日志，这类错误可能需要立即关注。
     /// </summary>
     Critical = 0,
 
     /// <summary>
-    ///     Logs that highlight when the flow of execution is stopped due to a failure.
+    ///     记录在执行流程因故障而停止时的日志。
     /// </summary>
     Error = 1,
 
     /// <summary>
-    ///     Logs that highlight an abnormal activity in the flow of execution.
+    ///     记录在执行流程中出现的异常活动。
     /// </summary>
     Warning = 2,
 
     /// <summary>
-    ///     Logs that track the general flow of the application.
+    ///     记录跟踪应用程序的一般流程的日志。
     /// </summary>
     Info = 3,
 
     /// <summary>
-    ///     Logs that are used for interactive investigation during development.
+    ///     记录用于在开发过程中进行交互式调查的日志。
     /// </summary>
     Verbose = 4,
 
     /// <summary>
-    ///     Logs that contain the most detailed messages.
+    ///     记录任何日志，包括最详细的诊断日志。
     /// </summary>
     Debug = 5
 }

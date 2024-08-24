@@ -1,25 +1,21 @@
 using System.Collections.Concurrent;
-using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket user's voice connection status.
+///     表示一个基于网关的用户的语音连接状态。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public struct SocketVoiceState : IVoiceState
 {
     private readonly ConcurrentDictionary<ulong, SocketVoiceChannel> _voiceChannels;
 
-    /// <summary>
-    ///     Initializes a default <see cref="SocketVoiceState"/> with everything set to <c>null</c> or <c>false</c>.
-    /// </summary>
+    /// <inheritdoc cref="M:Kook.WebSocket.SocketVoiceState.#ctor" />
     public static SocketVoiceState Default => new();
 
     /// <summary>
-    ///     Initializes a new <see cref="SocketVoiceState"/> with the specified voice channel.
+    ///     初始化一个 <see cref="SocketVoiceState"/> 结构的新实例。
     /// </summary>
     public SocketVoiceState()
     {
@@ -27,16 +23,15 @@ public struct SocketVoiceState : IVoiceState
     }
 
     /// <summary>
-    ///     Gets the voice channel that the user is currently in; or <c>null</c> if none.
+    ///     获取用户当前所在的语音频道；如果不在任何频道中则为 <c>null</c>。
     /// </summary>
     public SocketVoiceChannel? VoiceChannel => _voiceChannels.Values.FirstOrDefault();
 
     /// <summary>
-    ///     Gets a collection of voice channels that the user is connected to.
+    ///     获取用户连接到的所有语音频道。
     /// </summary>
     /// <remarks>
-    ///     Currently, KOOK only allows a user to be in one voice channel at a time,
-    ///     but allows a Bot user to be in multiple voice channels at a time.
+    ///     目前，KOOK 仅允许用户同时连接到一个语音频道，但允许 Bot 用户同时连接到多个语音频道。
     /// </remarks>
     public IReadOnlyCollection<SocketVoiceChannel> VoiceChannels => [.._voiceChannels.Values];
 
@@ -47,7 +42,7 @@ public struct SocketVoiceState : IVoiceState
     public bool? IsDeafened { get; private set; }
 
     /// <summary>
-    ///     Gets the live stream status of the user.
+    ///     获取用户的直播状态。
     /// </summary>
     public LiveStreamStatus? LiveStreamStatus { get; private set; }
 
@@ -88,11 +83,8 @@ public struct SocketVoiceState : IVoiceState
     }
 
     /// <summary>
-    ///     Gets the name of this voice channel.
+    ///     获取此语音状态所属语音频道的名称。
     /// </summary>
-    /// <returns>
-    ///     A string that resolves to name of this voice channel; otherwise "Unknown".
-    /// </returns>
     public override string ToString() => VoiceChannel?.Name ?? "Unknown";
 
     private string DebuggerDisplay =>
@@ -114,4 +106,7 @@ public struct SocketVoiceState : IVoiceState
 
     /// <inheritdoc />
     IVoiceChannel? IVoiceState.VoiceChannel => VoiceChannel;
+
+    /// <inheritdoc />
+    IReadOnlyCollection<IVoiceChannel> IVoiceState.VoiceChannels => VoiceChannels;
 }

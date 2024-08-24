@@ -1,12 +1,12 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic reaction object.
+///     表示一个通用的回应。
 /// </summary>
 public interface IReaction
 {
     /// <summary>
-    ///     The <see cref="IEmote" /> used in the reaction.
+    ///     获取此回应所使用的表情符号。
     /// </summary>
     IEmote Emote { get; }
 }

@@ -3,16 +3,14 @@
 namespace Kook.Net.Queue.MassTransit;
 
 /// <summary>
-///     Represents a delegate that provides a new <see cref="IMessageQueue"/> instance of <see cref="MassTransitMessageQueue"/>.
+///     表示一个默认的使用 MassTransit 消息队列的 <see cref="MessageQueueProvider"/>，用于创建 <see cref="MassTransitMessageQueue"/> 实例。
 /// </summary>
 public class DefaultMassTransitMessageQueueProvider
 {
     /// <summary>
-    ///     Creates a delegate that provides a new <see cref="IMessageQueue"/> instance of <see cref="MassTransitMessageQueue"/>.
+    ///     创建一个新的用于创建默认的使用 MassTransit 消息队列的 <see cref="MassTransitMessageQueue"/> 实例的委托。
     /// </summary>
-    /// <param name="bus"> The MassTransit bus. </param>
-    /// <returns> A new <see cref="IMessageQueue"/> instance of <see cref="MassTransitMessageQueue"/>. </returns>
-    /// <exception cref="PlatformNotSupportedException"> The default <see cref="DefaultMassTransitMessageQueueProvider"/> is not supported on this platform. </exception>
+    /// <param name="bus"> 用于创建消息队列的 MassTransit 消息总线。 </param>
     public static MessageQueueProvider Create(IBus bus)
     {
         try

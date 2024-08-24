@@ -1,73 +1,79 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     Marks the execution information for a command.
+///     为命令标记执行信息。
 /// </summary>
 [AttributeUsage(AttributeTargets.Method)]
 public class CommandAttribute : Attribute
 {
     /// <summary>
-    ///     Gets the text that has been set to be recognized as a command.
+    ///     获取此命令的基本名称。
     /// </summary>
+    /// <remarks>
+    ///     <see cref="T:Kook.Commands.NameAttribute"/> 特性重写此属性的值。
+    /// </remarks>
     public string? Text { get; }
 
     /// <summary>
-    ///     Specifies the <see cref="RunMode" /> of the command. This affects how the command is executed.
+    ///     获取或设置命令的运行模式。
     /// </summary>
+    /// <seealso cref="P:Kook.Commands.CommandServiceConfig.DefaultRunMode"/>
     public RunMode RunMode { get; set; } = RunMode.Default;
 
     /// <summary>
-    ///     Indicates whether extra arguments should be ignored for this command.
+    ///     获取或设置是否忽略此命令的额外参数。
     /// </summary>
+    /// <seealso cref="P:Kook.Commands.CommandServiceConfig.IgnoreExtraArgs"/>
     public bool? IgnoreExtraArgs { get; }
 
     /// <summary>
-    ///     Attaches a summary to your command.
+    ///     获取或设置命令的摘要。
     /// </summary>
     /// <remarks>
-    ///     <see cref="Summary"/> overrides the value of this property if present.
+    ///     <see cref="T:Kook.Commands.SummaryAttribute"/> 特性重写此属性的值。
     /// </remarks>
     public string? Summary { get; set; }
 
     /// <summary>
-    ///     Marks the aliases for a command.
+    ///     获取或设置命令的别名。
     /// </summary>
     /// <remarks>
-    ///     <see cref="AliasAttribute"/> extends the base value of this if present.
+    ///     <see cref="T:Kook.Commands.AliasAttribute"/> 特性的值会与此属性的值合并。
     /// </remarks>
     public string?[]? Aliases { get; set; }
 
     /// <summary>
-    ///     Attaches remarks to your commands.
+    ///     获取或设置命令的备注。
     /// </summary>
     /// <remarks>
-    ///     <see cref="RemainderAttribute"/> overrides the value of this property if present.
+    ///     <see cref="T:Kook.Commands.RemainderAttribute"/> 特性重写此属性的值。
     /// </remarks>
     public string? Remarks { get; set; }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     初始化一个 <see cref="CommandAttribute"/> 类的新实例。
+    /// </summary>
     public CommandAttribute()
     {
     }
 
     /// <summary>
-    ///     Initializes a new <see cref="CommandAttribute" /> attribute with the specified name.
+    ///     初始化一个 <see cref="CommandAttribute"/> 类的新实例。
     /// </summary>
-    /// <param name="text">The name of the command.</param>
+    /// <param name="text"> 命令的基本名称。 </param>
     public CommandAttribute(string text)
     {
         Text = text;
     }
 
     /// <summary>
-    ///     Initializes a new <see cref="CommandAttribute" /> attribute with the specified name
-    ///     and mode of whether to ignore extra arguments.
+    ///     初始化一个 <see cref="CommandAttribute"/> 类的新实例。
     /// </summary>
-    /// <param name="text"> The name of the command. </param>
-    /// <param name="ignoreExtraArgs"> Whether to ignore extra arguments. </param>
-    /// <param name="summary"> The summary of the command. </param>
-    /// <param name="aliases"> The aliases of the command. </param>
-    /// <param name="remarks"> The remarks of the command. </param>
+    /// <param name="text"> 命令的基本名称。 </param>
+    /// <param name="ignoreExtraArgs"> 是否忽略此命令的额外参数。 </param>
+    /// <param name="summary"> 命令的摘要。 </param>
+    /// <param name="aliases"> 命令的别名。 </param>
+    /// <param name="remarks"> 命令的备注。 </param>
     public CommandAttribute(string text, bool ignoreExtraArgs,
         string? summary = null, string?[]? aliases = null, string? remarks = null)
     {

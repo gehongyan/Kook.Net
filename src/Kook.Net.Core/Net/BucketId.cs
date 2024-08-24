@@ -6,35 +6,35 @@ using System.Net.Http;
 namespace Kook.Net;
 
 /// <summary>
-///     Represents a ratelimit bucket.
+///     表示一个限速桶。
 /// </summary>
 public sealed class BucketId : IEquatable<BucketId>
 {
     /// <summary>
-    ///     Gets the http method used to make the request if available.
+    ///     获取用于发起请求的 HTTP 方法（如果可用）。
     /// </summary>
     public HttpMethod? HttpMethod { get; }
 
     /// <summary>
-    ///     Gets the endpoint that is going to be requested if available.
+    ///     获取将要请求的终结点（如果可用）。
     /// </summary>
     public string? Endpoint { get; }
 
     /// <summary>
-    ///     Gets the major parameters of the route.
+    ///     获取路由的主要参数。
     /// </summary>
     public IOrderedEnumerable<KeyValuePair<string, string>> MajorParameters { get; }
 
     /// <summary>
-    ///     Gets the hash of this bucket.
+    ///     获取此桶的哈希值。
     /// </summary>
     /// <remarks>
-    ///     The hash is provided by Kook to group ratelimits.
+    ///     此哈希值由 KOOK 提供，用于分组限速。
     /// </remarks>
     public string? BucketHash { get; }
 
     /// <summary>
-    ///     Gets if this bucket is a hash type.
+    ///     获取此限速桶是否为哈希分组限速桶。
     /// </summary>
     public bool IsHashBucket => BucketHash != null;
 
@@ -47,16 +47,12 @@ public sealed class BucketId : IEquatable<BucketId>
     }
 
     /// <summary>
-    ///     Creates a new <see cref="BucketId"/> based on the
-    ///     <see cref="HttpMethod"/> and <see cref="Endpoint"/>.
+    ///     基于 <see cref="HttpMethod"/> 和 <see cref="Endpoint"/> 创建一个新的 <see cref="BucketId"/>。
     /// </summary>
-    /// <param name="httpMethod">Http method used to make the request.</param>
-    /// <param name="endpoint">Endpoint that is going to receive requests.</param>
-    /// <param name="majorParams">Major parameters of the route of this endpoint.</param>
-    /// <returns>
-    ///     A <see cref="BucketId"/> based on the <see cref="HttpMethod"/>
-    ///     and the <see cref="Endpoint"/> with the provided data.
-    /// </returns>
+    /// <param name="httpMethod">  用于发送请求的 HTTP 方法。 </param>
+    /// <param name="endpoint"> 请求的终结点。 </param>
+    /// <param name="majorParams"> 终结点的主要路由参数。 </param>
+    /// <returns> 一个基于指定的 <see cref="HttpMethod"/> 和 <see cref="Endpoint"/> 创建的 <see cref="BucketId"/>。 </returns>
     public static BucketId Create(HttpMethod? httpMethod, string? endpoint, Dictionary<string, string>? majorParams)
     {
         Preconditions.NotNullOrWhitespace(endpoint, nameof(endpoint));
@@ -65,15 +61,11 @@ public sealed class BucketId : IEquatable<BucketId>
     }
 
     /// <summary>
-    ///     Creates a new <see cref="BucketId"/> based on a
-    ///     <see cref="BucketHash"/> and a previous <see cref="BucketId"/>.
+    ///     基于 <see cref="BucketHash"/> 和之前的 <see cref="BucketId"/> 创建一个新的 <see cref="BucketId"/>。
     /// </summary>
-    /// <param name="hash">Bucket hash provided by Kook.</param>
-    /// <param name="oldBucket"><see cref="BucketId"/> that is going to be upgraded to a hash type.</param>
-    /// <returns>
-    ///     A <see cref="BucketId"/> based on the <see cref="BucketHash"/>
-    ///     and <see cref="MajorParameters"/>.
-    /// </returns>
+    /// <param name="hash"> 由 KOOK 提供的分组限速哈希值。 </param>
+    /// <param name="oldBucket"> 要被升级为哈希分组限速桶的已有限速桶。 </param>
+    /// <returns> 一个基于指定的 <see cref="BucketHash"/> 和之前的 <see cref="BucketId"/> 创建的 <see cref="BucketId"/>。 </returns>
     public static BucketId Create(string hash, BucketId oldBucket)
     {
         Preconditions.NotNullOrWhitespace(hash, nameof(hash));
@@ -82,21 +74,19 @@ public sealed class BucketId : IEquatable<BucketId>
     }
 
     /// <summary>
-    ///     Gets the string that will define this bucket as a hash based one.
+    ///     获取将此桶定义为哈希分组限速桶的字符串。
     /// </summary>
     /// <returns>
-    ///     A string that defines this bucket as a hash based one.
+    ///     如果此桶是哈希分组限速桶，则返回此桶的哈希值；否则返回 <see langword="null"/>。
     /// </returns>
     public string? GetBucketHash() => IsHashBucket
         ? $"{BucketHash}:{string.Join("/", MajorParameters.Select(x => x.Value))}"
         : null;
 
     /// <summary>
-    ///     Gets the string that will define this bucket as an endpoint based one.
+    ///     获取将此桶定义为终结点限速桶的字符串。
     /// </summary>
-    /// <returns>
-    ///     A string that defines this bucket as an endpoint based one.
-    /// </returns>
+    /// <returns> 如果此桶是终结点限速桶，则返回此桶的终结点；否则返回 <see langword="null"/>。 </returns>
     public string? GetUniqueEndpoint() => HttpMethod != null ? $"{HttpMethod} {Endpoint}" : Endpoint;
 
     /// <inheritdoc />

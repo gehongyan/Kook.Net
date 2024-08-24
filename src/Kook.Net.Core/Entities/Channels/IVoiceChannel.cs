@@ -1,55 +1,40 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic voice channel in a guild.
+///     表示服务器中的一个通用的具有语音聊天能力的频道。
 /// </summary>
 public interface IVoiceChannel : ITextChannel, IAudioChannel
 {
     /// <summary>
-    ///     Gets the voice quality that the clients in this voice channel are requested to use.
+    ///     获取要求此频道中的客户端使用的语音质量。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="VoiceQuality"/> representing the voice quality that this voice channel defines and requests the
-    ///     client(s) to use.
-    /// </returns>
     VoiceQuality? VoiceQuality { get; }
 
     /// <summary>
-    ///     Gets the max number of users allowed to be connected to this channel at once.
+    ///     获取允许同时连接到此频道的最大用户数。
     /// </summary>
-    /// <returns>
-    ///     An int representing the maximum number of users that are allowed to be connected to this
-    ///     channel at once; <c>0</c> if a limit is not set.
-    /// </returns>
+    /// <returns> 一个 <c>int</c>，表示允许同时连接到此频道的最大用户数；如果没有限制，则为 <c>0</c>。 </returns>
     int UserLimit { get; }
 
     /// <summary>
-    ///     Gets whether this voice channel is locked by a password.
+    ///     获取此频道是否已被密码锁定。
     /// </summary>
-    /// <returns>
-    ///     A bool representing whether this voice channel is locked by a password.
-    /// </returns>
     bool HasPassword { get; }
 
     /// <summary>
-    ///     Modifies this voice channel.
+    ///     修改此频道有关语音聊天能力的属性。
     /// </summary>
-    /// <param name="func">The properties to modify the channel with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous modification operation.
-    /// </returns>
-    /// <seealso cref="ModifyVoiceChannelProperties"/>
+    /// <param name="func"> 一个包含修改有关语音聊天能力的属性的委托。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步修改操作的任务。 </returns>
+    /// <seealso cref="T:Kook.ModifyVoiceChannelProperties"/>
     Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets the users connected to this voice channel.
+    ///     获取连接到此频道的用户。
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a collection of
-    ///     <see cref="IGuildUser"/>s that are connected to this voice channel.
-    /// </returns>
-    Task<IReadOnlyCollection<IUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含连接到此频道的所有服务器用户。 </returns>
+    Task<IReadOnlyCollection<IGuildUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 }

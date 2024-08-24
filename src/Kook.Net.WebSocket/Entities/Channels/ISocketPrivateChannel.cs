@@ -1,15 +1,10 @@
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a generic WebSocket-based channel that is private to select recipients.
+///     表示一个基于网关的私有频道，只有特定的用户可以访问。
 /// </summary>
 public interface ISocketPrivateChannel : IPrivateChannel
 {
-    /// <summary>
-    ///     Gets the users that can access this channel.
-    /// </summary>
-    /// <returns>
-    ///     A read-only collection of users that can access this channel.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.IPrivateChannel.Recipients" />
     new IReadOnlyCollection<SocketUser> Recipients { get; }
 }

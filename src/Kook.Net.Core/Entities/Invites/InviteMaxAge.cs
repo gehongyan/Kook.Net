@@ -1,42 +1,42 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies the time in second after which an <see cref="IInvite"/> will be expired.
+///     表示一个邀请的最大有效时长。
 /// </summary>
 public enum InviteMaxAge
 {
     /// <summary>
-    ///     The invite will never expire.
+    ///     永不过期。
     /// </summary>
     NeverExpires = 0,
 
     /// <summary>
-    ///     The invite will expire after half an hour (1800 seconds).
+    ///     此邀请在创建后半小时（1800 秒）后过期。
     /// </summary>
     _1800 = 1800,
 
     /// <summary>
-    ///     The invite will expire after one hour (3600 seconds).
+    ///     此邀请在创建后一小时（3600 秒）后过期。
     /// </summary>
     _3600 = 3600,
 
     /// <summary>
-    ///     The invite will expire after 6 hours (21600 seconds).
+    ///     此邀请在创建后 6 小时（21600 秒）后过期。
     /// </summary>
     _21600 = 21600,
 
     /// <summary>
-    ///     The invite will expire after half a day (43200 seconds).
+    ///     此邀请在创建后半天（43200 秒）后过期。
     /// </summary>
     _43200 = 43200,
 
     /// <summary>
-    ///     The invite will expire after one day (86400 seconds).
+    ///     此邀请在创建后一天（86400 秒）后过期。
     /// </summary>
     _86400 = 86400,
 
     /// <summary>
-    ///     The invite will expire after one week (604800 seconds).
+    ///     此邀请在创建后一周（604800 秒）后过期。
     /// </summary>
     _604800 = 604800
 }

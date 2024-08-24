@@ -1,18 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Provides properties that are used to create an <see cref="ITextChannel"/> with the specified properties.
+///     提供用于创建 <see cref="T:Kook.ITextChannel"/> 的属性。
 /// </summary>
-/// <seealso cref="IGuild.CreateTextChannelAsync(string, System.Action{CreateTextChannelProperties}, RequestOptions)"/>
+/// <seealso cref="M:Kook.IGuild.CreateTextChannelAsync(System.String,System.Action{Kook.CreateTextChannelProperties},Kook.RequestOptions)"/>
 public class CreateTextChannelProperties : CreateGuildChannelProperties
 {
     /// <summary>
-    ///     Gets or sets the category ID for this channel.
+    ///     获取或设置要设置到此频道的所属分组频道的 ID。
     /// </summary>
     /// <remarks>
-    ///     Setting this value to a category's identifier will set this channel's parent to the
-    ///     specified channel; setting this value to <c>null</c> will leave this channel alone
-    ///     from any parents.
+    ///     将此值设置为某分组频道的 ID 可以使新建频道位于该分组频道下；将此值设置为 <c>null</c>
+    ///     可以使新建频道位于服务器所有分组频道的上方，即不属于任何分组频道。
     /// </remarks>
     public ulong? CategoryId { get; set; }
 }

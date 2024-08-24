@@ -117,7 +117,7 @@ public class TokenUtilsTests
     [InlineData("these chars aren't allowed @U#)*@#!)*", true, 0)]
     public void DecodeBase64UserId(string? encodedUserId, bool isNull, ulong expectedUserId)
     {
-        ulong? result = TokenUtils.DecodeBase64UserId(encodedUserId!);
+        ulong? result = TokenUtils.DecodeBase64AsNumber(encodedUserId!);
         if (isNull)
             Assert.Null(result);
         else

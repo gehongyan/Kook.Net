@@ -6,32 +6,32 @@ using Microsoft.Extensions.Options;
 namespace Kook.Net.DependencyInjection.Microsoft;
 
 /// <summary>
-///     Represents a configurator for a Kook client.
+///     表示一个通用的 KOOK 客户端服务配置器。
 /// </summary>
 public interface IKookClientServiceConfigurator : IKookClientConfiguratorCompleter
 {
     /// <summary>
-    ///     Configures the Kook service to use the REST client.
+    ///     配置使用 REST 客户端。
     /// </summary>
-    /// <param name="configure"> The configuration action. </param>
-    /// <returns> The configurator. </returns>
+    /// <param name="configure"> 配置操作。 </param>
+    /// <returns> 配置了 REST 客户端的配置器。 </returns>
     IKookClientConfigurator<KookRestClient, KookRestConfig> UseRestClient(Action<KookRestConfig> configure);
 
     /// <summary>
-    ///     Configures the Kook service to use the socket client.
+    ///     配置使用网关客户端。
     /// </summary>
-    /// <param name="configure"> The configuration action. </param>
-    /// <returns> The configurator. </returns>
+    /// <param name="configure"> 配置操作。 </param>
+    /// <returns> 配置了网关客户端的配置器。 </returns>
     IKookClientConfigurator<KookSocketClient, KookSocketConfig> UseSocketClient(Action<KookSocketConfig> configure);
 
     /// <summary>
-    ///     Configures the Kook service to use the webhook client.
+    ///     配置使用基于 Webhook 的网关客户端。
     /// </summary>
-    /// <param name="clientFactory"> The client factory. </param>
-    /// <param name="configure"> The configuration action. </param>
-    /// <typeparam name="TClient"> The type of the client. </typeparam>
-    /// <typeparam name="TConfig"> The type of the configuration. </typeparam>
-    /// <returns> The configurator. </returns>
+    /// <param name="clientFactory"> 客户端创建委托。 </param>
+    /// <param name="configure"> 配置操作。 </param>
+    /// <typeparam name="TClient"> 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> 配置的类型。 </typeparam>
+    /// <returns> 配置了基于 Webhook 的网关客户端的配置器。 </returns>
     IKookClientConfigurator<TClient, TConfig> UseWebhookClient<TClient, TConfig>(
         Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<TConfig> configure)
         where TClient : KookWebhookClient

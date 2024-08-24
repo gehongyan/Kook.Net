@@ -4,7 +4,7 @@ using Model = Kook.API.Channel;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based channel.
+///     表示一个基于网关的频道。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public abstract class SocketChannel : SocketEntity<ulong>, IChannel, IUpdateable
@@ -12,8 +12,11 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel, IUpdateable
     #region SocketChannel
 
     /// <summary>
-    ///     Gets a collection of users from the WebSocket cache.
+    ///     获取用户缓存列表中的可以访问此频道的所有用户。
     /// </summary>
+    /// <remarks>
+    ///     此属性仅会返回缓存中可以访问此频道的所有用户，如果未启用用户列表缓存，或者由于网关事件确实导致本地缓存不同步，此属性所返回的用户列表可能不准确。
+    /// </remarks>
     public IReadOnlyCollection<SocketUser> Users => GetUsersInternal();
 
     internal SocketChannel(KookSocketClient kook, ulong id)
@@ -31,12 +34,10 @@ public abstract class SocketChannel : SocketEntity<ulong>, IChannel, IUpdateable
     #region User
 
     /// <summary>
-    ///     Gets a generic user from this channel.
+    ///     获取此频道中的一个用户。
     /// </summary>
-    /// <param name="id">The identifier of the user.</param>
-    /// <returns>
-    ///     A generic WebSocket-based user associated with the identifier.
-    /// </returns>
+    /// <param name="id"> 要获取的用户的 ID。 </param>
+    /// <returns> 如果找到了具有指定 ID 的用户，则返回该用户；否则返回 <c>null</c>。 </returns>
     public SocketUser? GetUser(ulong id) => GetUserInternal(id);
 
     internal abstract SocketUser? GetUserInternal(ulong id);

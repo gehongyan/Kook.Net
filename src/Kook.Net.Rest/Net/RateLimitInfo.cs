@@ -3,7 +3,7 @@ using System.Globalization;
 namespace Kook.Net;
 
 /// <summary>
-///     Represents a REST-Based ratelimit info.
+///     表示一个基于 REST 的速率限制信息。
 /// </summary>
 public struct RateLimitInfo : IRateLimitInfo
 {

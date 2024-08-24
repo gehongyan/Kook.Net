@@ -1,7 +1,7 @@
 namespace Kook;
 
 /// <summary>
-///     Represents an image embed.
+///     表示一个消息中解析出的图片嵌入式内容。
 /// </summary>
 public struct ImageEmbed : IEmbed
 {
@@ -15,18 +15,12 @@ public struct ImageEmbed : IEmbed
     public EmbedType Type => EmbedType.Image;
 
     /// <summary>
-    ///     Gets the URL of this embed.
+    ///     获取图像的 URL。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> that represents the URL of this embed.
-    /// </returns>
-    public string Url { get; internal set; }
+    public string Url { get; }
 
     /// <summary>
-    ///     Gets the original URL of the image.
+    ///     获取嵌入式内容所解析的原始 URL。
     /// </summary>
-    /// <returns>
-    ///     A <c>string</c> representing the original URL of the image.
-    /// </returns>
-    public string OriginUrl { get; internal set; }
+    public string OriginUrl { get; }
 }

@@ -66,7 +66,7 @@ opus 在同一位置），参见 [FFmpeg 的下载页面]，或使用操作系�
 
 [IAudioClient]: xref:Kook.Audio.IAudioClient
 [AudioOutStream]: xref:Kook.Audio.AudioOutStream
-[IAudioClient.CreatePCMStream]: xref:Kook.Audio.IAudioClient#Kook_Audio_IAudioClient_CreatePcmStream_Kook_Audio_AudioApplication_System_Int32_System_Int32_System_Int32_
+[IAudioClient.CreatePCMStream]: xref:Kook.Audio.IAudioClient#Kook_Audio_IAudioClient_CreatePcmStream_Kook_Audio_AudioApplication_System_Nullable_System_Int32__System_Int32_System_Int32_
 
 最后，音频需要从 FFmpeg 的标准输出流传输到你的 AudioOutStream 对象中。
 根据你的业务需要，这个步骤中间可能会进行某些处理，但在大多数情况下，使用 [Stream.CopyToAsync] 即可。

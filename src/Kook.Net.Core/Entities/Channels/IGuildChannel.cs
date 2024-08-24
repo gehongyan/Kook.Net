@@ -1,92 +1,65 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic guild channel.
+///     表示一个通用的服务器频道。
 /// </summary>
 public interface IGuildChannel : IChannel, IDeletable
 {
     #region General
 
     /// <summary>
-    ///     Gets the guild associated with this channel.
+    ///     获取此频道所属的服务器。
     /// </summary>
-    /// <returns>
-    ///     A guild object that this channel belongs to.
-    /// </returns>
     IGuild Guild { get; }
 
     /// <summary>
-    ///     Gets the guild ID associated with this channel.
+    ///     获取与此频道所属的服务器的 ID。
     /// </summary>
-    /// <returns>
-    ///     An <c>ulong</c> representing the guild identifier for the guild that this channel
-    ///     belongs to.
-    /// </returns>
     ulong GuildId { get; }
 
     /// <summary>
-    ///     Gets the position of this channel.
+    ///     获取此频道在服务器频道列表中的位置。
     /// </summary>
-    /// <returns>
-    ///     An <c>int</c> representing the position of this channel in the guild's channel list relative to
-    ///     others of the same type.
-    /// </returns>
+    /// <remarks>
+    ///     更小的数值表示更靠近列表顶部的位置。
+    /// </remarks>
     int? Position { get; }
 
     /// <summary>
-    ///     Gets the type of this channel.
+    ///     获取此频道的类型。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="ChannelType"/> representing the type of this channel.
-    /// </returns>
     ChannelType Type { get; }
 
     /// <summary>
-    ///     Gets the identifier of the user who created this channel.
+    ///     获取创建此频道的用户的 ID。
     /// </summary>
-    /// <returns>
-    ///     A <c>ulong</c> representing the identifier of the user who created this channel.
-    /// </returns>
     ulong? CreatorId { get; }
 
     /// <summary>
-    ///     Gets a collection of permission overwrites for roles for this channel.
+    ///     获取此频道的角色的权限重写集合。
     /// </summary>
-    /// <returns>
-    ///     A collection of overwrites for roles associated with this channel.
-    /// </returns>
     IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites { get; }
 
     /// <summary>
-    ///     Gets a collection of permission overwrites for users for this channel.
+    ///     获取此频道的用户的权限重写集合。
     /// </summary>
-    /// <returns>
-    ///     A collection of overwrites for users associated with this channel.
-    /// </returns>
     IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites { get; }
 
     /// <summary>
-    ///     Modifies this guild channel.
+    ///     修改此服务器频道。
     /// </summary>
-    /// <remarks>
-    ///     This method modifies the current guild channel with the specified properties. To see an example of this
-    ///     method and what properties are available, please refer to <see cref="ModifyGuildChannelProperties"/>.
-    /// </remarks>
-    /// <param name="func">The delegate containing the properties to modify the channel with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous modification operation.
-    /// </returns>
+    /// <param name="func"> 一个包含修改服务器频道属性的委托。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示服务器频道属性修改操作的异步任务。 </returns>
+    /// <seealso cref="T:Kook.ModifyGuildChannelProperties"/>
     Task ModifyAsync(Action<ModifyGuildChannelProperties> func, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets the creator of this channel.
+    ///     获取此频道的创建者。
     /// </summary>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains the creator of this channel.
-    /// </returns>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果为此频道的创建者；如果没有找到则为 <c>null</c>。 </returns>
     Task<IUser?> GetCreatorAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion
@@ -94,85 +67,67 @@ public interface IGuildChannel : IChannel, IDeletable
     #region Permissions
 
     /// <summary>
-    ///     Gets the permission overwrite for a specific role.
+    ///     获取给定角色的权限重写配置。
     /// </summary>
-    /// <param name="role">The role to get the overwrite from.</param>
-    /// <returns>
-    ///     An overwrite object for the targeted role; <c>null</c> if none is set.
-    /// </returns>
+    /// <param name="role"> 要获取权限重写配置的角色。 </param>
+    /// <returns> 一个表示目标角色的权限重写配置；如果没有设置则为 <c>null</c>。 </returns>
     OverwritePermissions? GetPermissionOverwrite(IRole role);
 
     /// <summary>
-    ///     Gets the permission overwrite for a specific user.
+    ///     获取给定用户的权限重写配置。
     /// </summary>
-    /// <param name="user">The user to get the overwrite from.</param>
-    /// <returns>
-    ///     An overwrite object for the targeted user; <c>null</c> if none is set.
-    /// </returns>
+    /// <param name="user"> 要获取权限重写配置的用户。 </param>
+    /// <returns> 一个表示目标用户的权限重写配置；如果没有设置则为 <c>null</c>。 </returns>
     OverwritePermissions? GetPermissionOverwrite(IUser user);
 
     /// <summary>
-    ///     Removes the permission overwrite for the given role, if one exists.
+    ///     对于给定的角色，如果存在权限重写配置，则移除它。
     /// </summary>
-    /// <param name="role">The role to remove the overwrite from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
-    /// </returns>
+    /// <param name="role"> 要对其移除权限重写配置的角色。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步移除频道内角色权限重写配置操作的任务。 </returns>
     Task RemovePermissionOverwriteAsync(IRole role, RequestOptions? options = null);
 
     /// <summary>
-    ///     Removes the permission overwrite for the given user, if one exists.
+    ///     对于给定的用户，如果存在权限重写配置，则移除它。
     /// </summary>
-    /// <param name="user">The user to remove the overwrite from.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task representing the asynchronous operation for removing the specified permissions from the channel.
-    /// </returns>
+    /// <param name="user"> 要对其移除权限重写配置的用户。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步移除频道内用户权限重写配置操作的任务。 </returns>
     Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null);
 
     /// <summary>
-    ///     Adds the permission overwrite for the given role.
+    ///     添加给定角色的权限重写配置。
     /// </summary>
-    /// <param name="role">The role to add the overwrite to.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task representing the asynchronous permission operation for adding the specified permissions to the
-    ///     channel.
-    /// </returns>
+    /// <param name="role"> 要添加权限重写配置的角色。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步添加频道内角色权限重写配置操作的任务。 </returns>
     Task AddPermissionOverwriteAsync(IRole role, RequestOptions? options = null);
 
     /// <summary>
-    ///     Adds the permission overwrite for the given user.
+    ///     添加给定用户的权限重写配置。
     /// </summary>
-    /// <param name="user">The user to add the overwrite to.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
-    /// </returns>
+    /// <param name="user"> 要添加权限重写配置的用户。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步添加频道内用户权限重写配置操作的任务。 </returns>
     Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null);
 
     /// <summary>
-    ///     Updates the permission overwrite for the given role.
+    ///     更新给定角色的权限重写配置。
     /// </summary>
-    /// <param name="role">The role to add the overwrite to.</param>
-    /// <param name="func">A delegate containing the values to modify the permission overwrite with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task representing the asynchronous permission operation for adding the specified permissions to the
-    ///     channel.
-    /// </returns>
+    /// <param name="role"> 要更新权限重写配置的角色。 </param>
+    /// <param name="func"> 一个包含修改权限重写配置的委托。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步更新频道内角色权限重写配置操作的任务。 </returns>
     Task ModifyPermissionOverwriteAsync(IRole role, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options = null);
 
     /// <summary>
-    ///     Updates the permission overwrite for the given user.
+    ///     更新给定用户的权限重写配置。
     /// </summary>
-    /// <param name="user">The user to add the overwrite to.</param>
-    /// <param name="func">A delegate containing the values to modify the permission overwrite with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task representing the asynchronous permission operation for adding the specified permissions to the channel.
-    /// </returns>
+    /// <param name="user"> 要更新权限重写配置的用户。 </param>
+    /// <param name="func"> 一个包含修改权限重写配置的委托。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步更新频道内用户权限重写配置操作的任务。 </returns>
     Task ModifyPermissionOverwriteAsync(IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func, RequestOptions? options = null);
 
     #endregion
@@ -180,29 +135,33 @@ public interface IGuildChannel : IChannel, IDeletable
     #region Users
 
     /// <summary>
-    ///     Gets a collection of users that are able to view the channel or are currently in this channel.
+    ///     获取能够查看频道或当前在此频道中的所有用户。
     /// </summary>
     /// <remarks>
-    ///     This method follows the same behavior as described in <see cref="IChannel.GetUsersAsync"/>.
-    ///     Please visit its documentation for more details on this method.
+    ///     <note type="important">
+    ///         返回的集合是一个异步可枚举对象；调用
+    ///         <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///         可以异步枚举所有分页，并将其合并为一个集合。
+    ///     </note>
+    ///     <br />
+    ///     此方法将尝试获取所有能够查看该频道或当前在该频道中的用户。此方法会根据 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/>
+    ///     将请求拆分。换句话说，如果有 3000 名用户，而 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/> 的常量为
+    ///     <c>50</c>，则请求将被拆分为 60 个单独请求，因此异步枚举器会异步枚举返回 60 个响应。
+    ///     <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///     方法可以展开这 60 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
-    /// <param name="mode">The <see cref="CacheMode" /> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     Paged collection of users.
-    /// </returns>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 分页的服务器用户集合的异步可枚举对象。 </returns>
     new IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     /// <summary>
-    ///     Gets a user in this channel.
+    ///     获取此频道中的用户。
     /// </summary>
-    /// <param name="id">The identifier of the user.</param>
-    /// <param name="mode">The <see cref="CacheMode"/> that determines whether the object should be fetched from cache.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task representing the asynchronous get operation. The task result contains a guild user object that
-    ///     represents the user; <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="id"> 要获取的用户的 ID。 </param>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果为此频道中的服务器用户；如果没有找到则为 <c>null</c>。 </returns>
     new Task<IGuildUser?> GetUserAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
     #endregion

@@ -3,26 +3,24 @@ using System.Reflection;
 namespace Kook.Commands;
 
 /// <summary>
-///     Marks the <see cref="Type"/> to be read by the specified <see cref="Kook.Commands.TypeReader"/>.
+///     标记指定的参数应有应由指定的 <see cref="T:Kook.Commands.TypeReader"/> 读取并解析。
 /// </summary>
 /// <remarks>
-///     This attribute will override the <see cref="Kook.Commands.TypeReader"/> to be used when parsing for the
-///     desired type in the command. This is useful when one wishes to use a particular
-///     <see cref="Kook.Commands.TypeReader"/> without affecting other commands that are using the same target
-///     type.
+///     此特性允许在解析命令参数时为指定的参数指定特定的
+///     <see cref="T:Kook.Commands.TypeReader"/>，可用于在不影响其他命令的情况下使用特定的命令解析器。
+///     <br />
 ///     <note type="warning">
-///         If the given type reader does not inherit from <see cref="Kook.Commands.TypeReader"/>, an
-///         <see cref="ArgumentException"/> will be thrown.
+///         标记此特性的类型解析器类型必须继承自 <see cref="Kook.Commands.TypeReader"/>，否则将引发
+///         <see cref="T:System.InvalidOperationException"/> 异常。
 ///     </note>
 /// </remarks>
 /// <example>
-///     In this example, the <see cref="TimeSpan"/> will be read by a custom
-///     <see cref="Kook.Commands.TypeReader"/>, <c>FriendlyTimeSpanTypeReader</c>, instead of the
-///     <see cref="TimeSpanTypeReader"/> shipped by Kook.Net.
+///     在以下的示例中，<see cref="TimeSpan"/> 类型的 <c>time</c> 参数将由自定义的类型解析器 <c>FriendlyTimeSpanTypeReader</c>
+///     解析，而不是由内置的 <see cref="TimeSpanTypeReader"/> 解析。
 ///     <code language="cs">
 ///     [Command("time")]
-///     public Task GetTimeAsync([OverrideTypeReader(typeof(FriendlyTimeSpanTypeReader))]TimeSpan time)
-///         => ReplyAsync(time);
+///     public Task GetTimeAsync([OverrideTypeReader(typeof(FriendlyTimeSpanTypeReader))] TimeSpan time)
+///         => ReplyTextAsync(time);
 ///     </code>
 /// </example>
 [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property)]
@@ -31,17 +29,19 @@ public sealed class OverrideTypeReaderAttribute : Attribute
     private static readonly TypeInfo TypeReaderTypeInfo = typeof(TypeReader).GetTypeInfo();
 
     /// <summary>
-    ///     Gets the specified <see cref="TypeReader"/> of the parameter.
+    ///     获取解析此参数所使用的类型解析器的类型。
     /// </summary>
     public Type TypeReader { get; }
 
-    /// <inheritdoc/>
-    /// <param name="overridenTypeReader">The <see cref="TypeReader"/> to be used with the parameter. </param>
-    /// <exception cref="ArgumentException">The given <paramref name="overridenTypeReader"/> does not inherit from <see cref="TypeReader"/>.</exception>
+    /// <summary>
+    ///     初始化一个 <see cref="OverrideTypeReaderAttribute"/> 类的新实例。
+    /// </summary>
+    /// <param name="overridenTypeReader"> 解析此参数所使用的类型解析器的类型。 </param>
+    /// <exception cref="InvalidOperationException"> 所提供的类型解析器类型不是 <see cref="T:Kook.Commands.TypeReader"/> 的派生类。 </exception>
     public OverrideTypeReaderAttribute(Type overridenTypeReader)
     {
         if (!TypeReaderTypeInfo.IsAssignableFrom(overridenTypeReader.GetTypeInfo()))
-            throw new ArgumentException($"{nameof(overridenTypeReader)} must inherit from {nameof(TypeReader)}.");
+            throw new InvalidOperationException($"{nameof(overridenTypeReader)} must inherit from {nameof(TypeReader)}.");
         TypeReader = overridenTypeReader;
     }
 }

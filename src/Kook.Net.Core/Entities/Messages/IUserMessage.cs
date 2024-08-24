@@ -1,40 +1,33 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic message sent by a user.
+///     表示一个通用的用户消息。
 /// </summary>
 public interface IUserMessage : IMessage
 {
     /// <summary>
-    ///     Gets the message quote.
+    ///     获取消息的引用。
     /// </summary>
-    /// <returns>
-    ///     The message quote.
-    /// </returns>
     IQuote? Quote { get; }
 
     /// <summary>
-    ///     Modifies this message.
+    ///     修改此消息。
     /// </summary>
-    /// <remarks>
-    ///     This method modifies this message with the specified properties. To see an example of this
-    ///     method and what properties are available, please refer to <see cref="MessageProperties"/>.
-    /// </remarks>
-    /// <param name="func">A delegate containing the properties to modify the message with.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous modification operation.
-    /// </returns>
+    /// <param name="func"> 一个包含修改消息属性的委托。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步修改操作的任务。 </returns>
+    /// <seealso cref="T:Kook.MessageProperties"/>
     Task ModifyAsync(Action<MessageProperties> func, RequestOptions? options = null);
 
     /// <summary>
-    ///     Transforms this message's text into a human-readable form by resolving its tags.
+    ///     转换消息文本中的提及与表情符号为可读形式。
     /// </summary>
-    /// <param name="userHandling">Determines how the user tag should be handled.</param>
-    /// <param name="channelHandling">Determines how the channel tag should be handled.</param>
-    /// <param name="roleHandling">Determines how the role tag should be handled.</param>
-    /// <param name="everyoneHandling">Determines how the @everyone tag should be handled.</param>
-    /// <param name="emojiHandling">Determines how the emoji tag should be handled.</param>
+    /// <param name="userHandling"> 指定用户提及标签的处理方式。 </param>
+    /// <param name="channelHandling"> 指定频道提及标签的处理方式。 </param>
+    /// <param name="roleHandling"> 指定角色提及标签的处理方式。 </param>
+    /// <param name="everyoneHandling"> 指定全体成员与在线成员提及标签的处理方式。 </param>
+    /// <param name="emojiHandling"> 指定表情符号标签的处理方式。 </param>
+    /// <returns> 转换后的消息文本。 </returns>
     string Resolve(
         TagHandling userHandling = TagHandling.Name,
         TagHandling channelHandling = TagHandling.Name,

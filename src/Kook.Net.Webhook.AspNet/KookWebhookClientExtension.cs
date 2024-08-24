@@ -11,16 +11,16 @@ using Microsoft.Extensions.Options;
 namespace Kook.Webhook.AspNet;
 
 /// <summary>
-///     Provides extension methods for Kook webhook client.
+///     提供用于与 ASP.NET 集成，注册与配置 <see cref="T:Kook.Webhook.AspNet.KookAspNetWebhookClient"/> 的扩展方法。
 /// </summary>
 public static class KookWebhookClientExtension
 {
     /// <summary>
-    ///     Adds a KOOK webhook client to the specified <see cref="IServiceCollection" />.
+    ///     向指定的 <see cref="IServiceCollection" /> 添加 <see cref="T:Kook.Webhook.AspNet.KookAspNetWebhookClient"/> 客户端。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection" /> to add the KOOK webhook client to. </param>
-    /// <param name="config"> The <see cref="KookSocketConfig" /> to configure the KOOK webhook client with. </param>
-    /// <returns> The <see cref="IServiceCollection" /> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK ASP.NET Webhook 客户端的服务集合。 </param>
+    /// <param name="config"> 用于配置 KOOK ASP.NET Webhook 客户端的配置。 </param>
+    /// <returns> 添加了 KOOK ASP.NET Webhook 客户端的服务集合。 </returns>
     public static IServiceCollection AddKookAspNetWebhookClient(this IServiceCollection services, KookAspNetWebhookConfig config)
     {
         services.AddSingleton(config);
@@ -30,11 +30,11 @@ public static class KookWebhookClientExtension
     }
 
     /// <summary>
-    ///     Adds a KOOK webhook client to the specified <see cref="IServiceCollection" />.
+    ///     向指定的 <see cref="IServiceCollection" /> 添加 <see cref="T:Kook.Webhook.AspNet.KookAspNetWebhookClient"/> 客户端。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection" /> to add the KOOK webhook client to. </param>
-    /// <param name="configure"> The <see cref="KookSocketConfig" /> to configure the KOOK webhook client with. </param>
-    /// <returns> The <see cref="IServiceCollection" /> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK ASP.NET Webhook 客户端的服务集合。 </param>
+    /// <param name="configure"> 用于配置 KOOK ASP.NET Webhook 客户端的配置委托。 </param>
+    /// <returns> 添加了 KOOK ASP.NET Webhook 客户端的服务集合。 </returns>
     public static IServiceCollection AddKookAspNetWebhookClient(this IServiceCollection services, Action<KookAspNetWebhookConfig> configure)
     {
         services.AddKookWebhookClient((_, config) => new KookAspNetWebhookClient(config), configure);
@@ -44,10 +44,10 @@ public static class KookWebhookClientExtension
     }
 
     /// <summary>
-    ///     Adds a KOOK webhook client to the specified <see cref="IServiceCollection" />.
+    ///     向指定的 <see cref="IServiceCollection" /> 添加 KOOK Webhook 客户端。
     /// </summary>
-    /// <param name="services"> The <see cref="IServiceCollection" /> to add the KOOK webhook client to. </param>
-    /// <returns> The <see cref="IServiceCollection" /> so that additional calls can be chained. </returns>
+    /// <param name="services"> 要向其添加 KOOK ASP.NET Webhook 客户端的服务集合。 </param>
+    /// <returns> 添加了 KOOK ASP.NET Webhook 客户端的服务集合。 </returns>
     public static IServiceCollection AddKookAspNetWebhookClient(this IServiceCollection services)
     {
         services.AddKookWebhookClient<KookAspNetWebhookClient>(provider =>
@@ -65,11 +65,11 @@ public static class KookWebhookClientExtension
     }
 
     /// <summary>
-    ///     Configures the KOOK service to use the ASP.NET webhook client.
+    ///     配置 KOOK 服务以使用 ASP.NET Webhook 客户端。
     /// </summary>
-    /// <param name="configurator"> The KOOK service configurator. </param>
-    /// <param name="configure"> The configuration action. </param>
-    /// <returns> The KOOK service configurator. </returns>
+    /// <param name="configurator"> KOOK 服务配置器。 </param>
+    /// <param name="configure"> 用于配置 KOOK ASP.NET Webhook 客户端的配置委托。 </param>
+    /// <returns> 配置了  KOOK ASP.NET Webhook 客户端的配置器。 </returns>
     public static IKookClientConfigurator<KookAspNetWebhookClient, KookAspNetWebhookConfig> UseAspNetWebhookClient
         (this IKookClientServiceConfigurator configurator, Action<KookAspNetWebhookConfig> configure)
     {
@@ -83,13 +83,13 @@ public static class KookWebhookClientExtension
     }
 
     /// <summary>
-    ///     Configures the KOOK service to use the ASP.NET webhook client.
+    ///     配置 KOOK 服务以将 ASP.NET Webhook 客户端包装为 <see cref="T:Microsoft.Extensions.Hosting.IHostedService"/>。
     /// </summary>
-    /// <param name="configurator"> The KOOK service configurator. </param>
-    /// <param name="tokenType"> The token type. </param>
-    /// <param name="token"> The token. </param>
-    /// <param name="validateToken"> The value indicating whether to validate the token. </param>
-    /// <returns> The KOOK service configurator. </returns>
+    /// <param name="configurator"> KOOK 服务配置器。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否验证令牌。 </param>
+    /// <returns> 配置了 ASP.NET Webhook 客户端的配置器。 </returns>
     [DoesNotReturn]
     [Obsolete("The KookAspNetWebhookClient itself is a hosted service, configure the token in the KookAspNetWebhookConfig.")]
     public static IKookClientConfigurator<KookAspNetWebhookClient, KookAspNetWebhookConfig> UseHostedClient(
@@ -98,13 +98,13 @@ public static class KookWebhookClientExtension
         throw new InvalidOperationException("The KookAspNetWebhookClient itself is a hosted service, configure the token in the KookAspNetWebhookConfig.");
 
     /// <summary>
-    ///     Configures the KOOK service to use the ASP.NET webhook client.
+    ///     配置 KOOK 服务以将 ASP.NET Webhook 客户端包装为 <see cref="T:Microsoft.Extensions.Hosting.IHostedService"/>。
     /// </summary>
-    /// <param name="configurator"> The KOOK service configurator. </param>
-    /// <param name="tokenType"> The token type. </param>
-    /// <param name="token"> The token. </param>
-    /// <param name="validateToken"> The value indicating whether to validate the token. </param>
-    /// <returns> The KOOK service configurator. </returns>
+    /// <param name="configurator"> KOOK 服务配置器。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否验证令牌。 </param>
+    /// <returns> 配置了 ASP.NET Webhook 客户端的配置器。 </returns>
     [DoesNotReturn]
     [Obsolete("The KookAspNetWebhookClient itself is a hosted service, configure the token in the KookAspNetWebhookConfig.")]
     public static IKookClientConfigurator<KookAspNetWebhookClient, KookAspNetWebhookConfig> UseHostedClient(
@@ -114,11 +114,11 @@ public static class KookWebhookClientExtension
         throw new InvalidOperationException("The KookAspNetWebhookClient itself is a hosted service, configure the token in the KookAspNetWebhookConfig.");
 
     /// <summary>
-    ///     Adds a KOOK webhook endpoint to the specified <see cref="IApplicationBuilder" />.
+    ///     向 <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder" /> 添加 KOOK Webhook 路由端点。
     /// </summary>
-    /// <param name="builder"> The <see cref="IApplicationBuilder" /> to add the KOOK webhook endpoint to. </param>
-    /// <param name="routePattern"> The route pattern to use for the KOOK webhook endpoint. </param>
-    /// <returns> A reference to this instance after the operation has completed. </returns>
+    /// <param name="builder"> 要向其添加 KOOK Webhook 端点的应用程序构建器。 </param>
+    /// <param name="routePattern"> 用于注册 KOOK Webhook 的路由模式。 </param>
+    /// <returns> 添加了 KOOK Webhook 端点的应用程序构建器。 </returns>
     public static T UseKookEndpoint<T>(this T builder, string? routePattern = null)
         where T: IHost, IEndpointRouteBuilder
     {

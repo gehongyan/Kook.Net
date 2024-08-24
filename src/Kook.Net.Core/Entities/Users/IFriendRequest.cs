@@ -1,26 +1,26 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a generic friend request.
+///     表示一个通用的好友请求。
 /// </summary>
 public interface IFriendRequest : IEntity<ulong>
 {
     /// <summary>
-    ///     Gets the user who sent this friend request.
+    ///     获取发送此好友请求的用户。
     /// </summary>
     IUser User { get; }
 
     /// <summary>
-    ///     Accepts this friend request.
+    ///     接受此好友请求。
     /// </summary>
-    /// <param name="options"> The options to use when accepting this friend request. </param>
-    /// <returns> A task that represents the asynchronous accept operation. </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步接受操作的任务。 </returns>
     Task AcceptAsync(RequestOptions? options = null);
 
     /// <summary>
-    ///     Declines this friend request.
+    ///     拒绝此好友请求。
     /// </summary>
-    /// <param name="options"> The options to use when declining this friend request. </param>
-    /// <returns> A task that represents the asynchronous decline operation. </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步拒绝操作的任务。 </returns>
     Task DeclineAsync(RequestOptions? options = null);
 }

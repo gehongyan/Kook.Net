@@ -50,6 +50,6 @@ public class EmojiTests
     public void Test_Invalid_Emote_Parse(string input, TagMode tagMode)
     {
         Assert.False(Emote.TryParse(input, out _, tagMode));
-        Assert.Throws<ArgumentException>(() => Emote.Parse(input, tagMode));
+        Assert.Throws<FormatException>(() => Emote.Parse(input, tagMode));
     }
 }

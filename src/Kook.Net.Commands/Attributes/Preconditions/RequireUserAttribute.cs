@@ -1,17 +1,10 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     Requires the command to be invoked by the specified user.
+///     要求调用命令的用户具有指定的 ID。
 /// </summary>
-/// <remarks>
-///     This precondition will restrict the access of the command or module to a specified user.
-///     If the precondition fails to be met, an erroneous <see cref="PreconditionResult"/> will be returned with the
-///     message "Command can only be run by the specified user." For example, you can pass the owner of this bot
-///     application to restrict the command to the bot owner to be able to use it.
-/// </remarks>
 /// <example>
-///     The following example restricts the command to a set of sensitive commands that only the specified user
-///     should be able to access.
+///     以下代码示例将 admin 命令组限制为仅允许用户 ID 为 2810246202 的用户可以调用。
 ///     <code language="cs">
 ///     [RequireUser(2810246202)]
 ///     [Group("admin")]
@@ -20,6 +13,7 @@ namespace Kook.Commands;
 ///         [Command("exit")]
 ///         public async Task ExitAsync()
 ///         {
+///             await ReplyTextAsync("Goodbye!");
 ///             Environment.Exit(0);
 ///         }
 ///     }
@@ -31,15 +25,17 @@ public class RequireUserAttribute : PreconditionAttribute
     private readonly ulong _userId;
 
     /// <summary>
-    ///     Initializes a new <see cref="RequireUserAttribute" /> attribute with the specified user identifier.
+    ///     初始化一个 <see cref="RequireUserAttribute"/> 类的新实例。
     /// </summary>
-    /// <param name="userId"> The identifier of the user. </param>
+    /// <param name="userId"> 所要求调用命令的用户应具有的 ID。 </param>
     public RequireUserAttribute(ulong userId)
     {
         _userId = userId;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     获取或设置错误消息。
+    /// </summary>
     public override string? ErrorMessage { get; set; }
 
     /// <inheritdoc />

@@ -1,6 +1,6 @@
 namespace Kook.Net.Webhooks;
 
 /// <summary>
-///     Represents a delegate that provides a new <see cref="IWebhookClient"/> instance.
+///     表示一个提供新的 <see cref="IWebhookClient"/> 实例的委托。
 /// </summary>
 public delegate IWebhookClient WebhookProvider();

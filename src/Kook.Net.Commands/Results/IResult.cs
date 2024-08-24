@@ -1,32 +1,22 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     Contains information of the result related to a command.
+///     表示一个有关命令的结果的信息。
 /// </summary>
 public interface IResult
 {
     /// <summary>
-    ///     Describes the error type that may have occurred during the operation.
+    ///     获取在命令执行期间发生的异常信息，如果没有异常则为 <c>null</c>。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="CommandError" /> indicating the type of error that may have occurred during the operation; 
-    ///     <c>null</c> if the operation was successful.
-    /// </returns>
     CommandError? Error { get; }
 
     /// <summary>
-    ///     Describes the reason for the error.
+    ///     获取在命令执行期间发生的异常的原因，如果没有异常则为 <c>null</c>。
     /// </summary>
-    /// <returns>
-    ///     A string containing the error reason.
-    /// </returns>
     string? ErrorReason { get; }
 
     /// <summary>
-    ///     Indicates whether the operation was successful or not.
+    ///     获取命令执行的结果是否为成功。
     /// </summary>
-    /// <returns>
-    ///     <c>true</c> if the result is positive; otherwise <c>false</c>.
-    /// </returns>
     bool IsSuccess { get; }
 }

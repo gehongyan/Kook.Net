@@ -1,40 +1,38 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     Requires the bot to have a specific permission in the channel a command is invoked in.
+///     要求当前用户在命令调用所在的的频道或服务器拥有指定的权限。
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 public class RequireBotPermissionAttribute : PreconditionAttribute
 {
     /// <summary>
-    ///     Gets the specified <see cref="Kook.GuildPermission" /> of the precondition.
+    ///     获取此先决条件所要求的服务器权限。
     /// </summary>
     public GuildPermission? GuildPermission { get; }
 
     /// <summary>
-    ///     Gets the specified <see cref="Kook.ChannelPermission" /> of the precondition.
+    ///     获取此先决条件所要求的频道权限。
     /// </summary>
     public ChannelPermission? ChannelPermission { get; }
 
-    /// <inheritdoc />
+    /// <summary>
+    ///     获取或设置错误消息。
+    /// </summary>
     public override string? ErrorMessage { get; set; }
 
     /// <summary>
-    ///     Gets or sets the error message if the precondition
-    ///     fails due to being run outside a Guild channel.
+    ///     获取或设置由于在服务器频道外执行命令而导致的先决条件失败的错误消息。
     /// </summary>
     public string? NotAGuildErrorMessage { get; set; }
 
     /// <summary>
-    ///     Requires the bot account to have a specific <see cref="Kook.GuildPermission"/>.
+    ///     初始化一个 <see cref="RequireBotPermissionAttribute"/> 类的新实例。
     /// </summary>
     /// <remarks>
-    ///     This precondition will always fail if the command is being invoked in a <see cref="IPrivateChannel"/>.
+    ///     设置此先决条件将导致命令在私有频道中无法使用。
     /// </remarks>
-    /// <param name="permission">
-    ///     The <see cref="Kook.GuildPermission"/> that the bot must have. Multiple permissions can be specified
-    ///     by ORing the permissions together.
-    /// </param>
+    /// <param name="permission"> 所要求当前用户需要在命令调用所在的的服务器拥有的权限。 </param>
     public RequireBotPermissionAttribute(GuildPermission permission)
     {
         GuildPermission = permission;
@@ -42,12 +40,12 @@ public class RequireBotPermissionAttribute : PreconditionAttribute
     }
 
     /// <summary>
-    ///     Requires that the bot account to have a specific <see cref="Kook.ChannelPermission"/>.
+    ///     初始化一个 <see cref="RequireBotPermissionAttribute"/> 类的新实例。
     /// </summary>
-    /// <param name="permission">
-    ///     The <see cref="Kook.ChannelPermission"/> that the bot must have. Multiple permissions can be
-    ///     specified by ORing the permissions together.
-    /// </param>
+    /// <remarks>
+    ///     设置此先决条件将导致命令在私有频道中无法使用。
+    /// </remarks>
+    /// <param name="permission"> 所要求当前用户需要在命令调用所在的的服务器频道拥有的权限。 </param>
     public RequireBotPermissionAttribute(ChannelPermission permission)
     {
         ChannelPermission = permission;

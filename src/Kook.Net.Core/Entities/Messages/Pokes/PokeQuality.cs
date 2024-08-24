@@ -1,24 +1,24 @@
 namespace Kook;
 
 /// <summary>
-///     Represents the quality of a <see cref="IPoke"/>.
+///     表示一个 POKE 的品质。
 /// </summary>
 public struct PokeQuality : IEntity<uint>
 {
     /// <summary>
-    ///     Gets the identifier of the <see cref="PokeQuality"/>.
+    ///     获取 POKE 品质的唯一标识符。
     /// </summary>
-    public uint Id { get; internal set; }
+    public uint Id { get; }
 
     /// <summary>
-    ///     Gets the color of the <see cref="PokeQuality"/>.
+    ///     获取 POKE 品质的颜色。
     /// </summary>
-    public Color Color { get; internal set; }
+    public Color Color { get; }
 
     /// <summary>
-    ///     Gets the resources of the <see cref="PokeQuality"/>.
+    ///     获取 POKE 品质的资源。
     /// </summary>
-    public IReadOnlyDictionary<string, string> Resources { get; internal set; }
+    public IReadOnlyDictionary<string, string> Resources { get; }
 
     internal PokeQuality(uint id, Color color, IReadOnlyDictionary<string, string> resources)
     {

@@ -4,8 +4,13 @@ using System.Diagnostics;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based message sent by the system.
+///     表示一个基于网关的系统消息。
 /// </summary>
+/// <remarks>
+///     <note type="warning">
+///         KOOK 未统一规范系统消息类型，此接口并未在 <see cref="T:Kook.WebSocket.SocketMessage"/> 之上封装更多的实用功能。
+///     </note>
+/// </remarks>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketSystemMessage : SocketMessage, ISystemMessage
 {
@@ -15,6 +20,7 @@ public class SocketSystemMessage : SocketMessage, ISystemMessage
     internal SocketSystemMessage(KookSocketClient kook, Guid id, ISocketMessageChannel channel, SocketUser author)
         : base(kook, id, channel, author, MessageSource.System)
     {
+        SystemMessageType = SystemMessageType.Unknown;
     }
 
     internal static new SocketSystemMessage Create(KookSocketClient kook, ClientState state, SocketUser author,

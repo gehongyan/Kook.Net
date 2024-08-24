@@ -1,22 +1,22 @@
 namespace Kook;
 
 /// <summary>
-///     Represents a state of a friend relationship with the current user.
+///     表示一个用户之间的好友关系状态。
 /// </summary>
 public enum FriendState
 {
     /// <summary>
-    ///     Represents a pending friend request that has not been accepted yet.
+    ///     表示一个尚未被接受的待处理好友请求。
     /// </summary>
     Pending,
 
     /// <summary>
-    ///     Represents an accepted friend request, where the user has been added to the current user's friend list.
+    ///     表示一个已接受的好友请求，即该用户已被添加到当前用户的好友列表中。
     /// </summary>
     Accepted,
 
     /// <summary>
-    ///     Represents a blocked friend status, where the user has been blocked by the current user.
+    ///     表示一个已屏蔽的好友状态，即该用户已被当前用户屏蔽。
     /// </summary>
     Blocked
 }

@@ -3,16 +3,16 @@ using System.Diagnostics;
 namespace Kook.Commands;
 
 /// <summary>
-///     Represents the runtime result of a command execution.
+///     表示命令执行的运行时结果。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public abstract class RuntimeResult : IResult
 {
     /// <summary>
-    ///     Initializes a new <see cref="RuntimeResult" /> class with the type of error and reason.
+    ///     初始化一个包含指定错误类型和原因的 <see cref="RuntimeResult" /> 类的新实例。
     /// </summary>
-    /// <param name="error">The type of failure, or <c>null</c> if none.</param>
-    /// <param name="reason">The reason of failure.</param>
+    /// <param name="error"> 错误类型。 </param>
+    /// <param name="reason"> 错误原因。 </param>
     protected RuntimeResult(CommandError? error, string reason)
     {
         Error = error;
@@ -22,7 +22,9 @@ public abstract class RuntimeResult : IResult
     /// <inheritdoc/>
     public CommandError? Error { get; }
 
-    /// <summary> Describes the execution reason or result. </summary>
+    /// <summary>
+    ///     获取错误原因。
+    /// </summary>
     public string Reason { get; }
 
     /// <inheritdoc/>

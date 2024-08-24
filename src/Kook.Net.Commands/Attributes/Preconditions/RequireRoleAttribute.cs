@@ -1,14 +1,8 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     Requires the user invoking the command to have a specified role.
+///     要求调用命令的用户在命令调用所在的服务器拥有指定的角色。
 /// </summary>
-/// <remarks>
-///     This precondition will restrict the access of the command or module to a user with the specified role.
-///     If the precondition fails to be met, an erroneous <see cref="PreconditionResult"/> will be returned with the
-///     message "Command can only be run by the specified user." For example, you can pass the guild manager role
-///     to restrict the command to the guild managers to be able to use it.
-/// </remarks>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 public class RequireRoleAttribute : PreconditionAttribute
 {
@@ -16,24 +10,23 @@ public class RequireRoleAttribute : PreconditionAttribute
     private readonly uint? _roleId;
 
     /// <summary>
-    ///     Gets or sets the error message if the precondition
-    ///     fails due to being run outside a Guild channel.
+    ///     获取或设置由于在服务器频道外执行命令而导致的先决条件失败的错误消息。
     /// </summary>
     public string? NotAGuildErrorMessage { get; set; }
 
     /// <summary>
-    ///     Requires that the user invoking the command to have a specific Role.
+    ///     初始化一个 <see cref="RequireRoleAttribute"/> 类的新实例。
     /// </summary>
-    /// <param name="roleId">Id of the role that the user must have.</param>
+    /// <param name="roleId"> 所要求调用命令的用户需要在命令调用所在的的服务器拥有的角色的 ID。 </param>
     public RequireRoleAttribute(uint roleId)
     {
         _roleId = roleId;
     }
 
     /// <summary>
-    ///     Requires that the user invoking the command to have a specific Role.
+    ///     初始化一个 <see cref="RequireRoleAttribute"/> 类的新实例。
     /// </summary>
-    /// <param name="roleName">Name of the role that the user must have.</param>
+    /// <param name="roleName"> 所要求调用命令的用户需要在命令调用所在的的服务器拥有的角色的名称。 </param>
     public RequireRoleAttribute(string roleName)
     {
         _roleName = roleName;

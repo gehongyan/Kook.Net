@@ -1,17 +1,17 @@
 namespace Kook;
 
 /// <summary>
-///     Represents the type of a <see cref="IPokeResource"/>.
+///     表示一个 POKE 资源的类型。
 /// </summary>
 public enum PokeResourceType
 {
     /// <summary>
-    ///     Represents a resource that is not implemented.
+    ///     POKE 资源的类型未解析到已知的强类型。
     /// </summary>
     NotImplemented,
 
     /// <summary>
-    ///     Represents a resource that is an image.
+    ///     POKE 资源是一个图像动画
     /// </summary>
     ImageAnimation
 }

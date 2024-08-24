@@ -5,39 +5,30 @@ using Microsoft.Extensions.Options;
 namespace Kook.Webhook.AspNet;
 
 /// <summary>
-///     Represents a KOOK webhook client using ASP.NET.
+///     表示一个使用 ASP.NET 的 KOOK Webhook 客户端。
 /// </summary>
 public class KookAspNetWebhookClient : KookWebhookClient, IHostedService
 {
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="KookAspNetWebhookClient" /> class.
-    /// </summary>
-    /// <param name="config"> The <see cref="IOptions{TOptions}" /> to configure the KOOK ASP.NET webhook client with. </param>
     internal KookAspNetWebhookClient(IOptions<KookAspNetWebhookConfig> config)
         : base(config.Value)
     {
     }
 
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="KookAspNetWebhookClient" /> class.
-    /// </summary>
-    /// <param name="config"> The <see cref="IOptions{TOptions}" /> to configure the KOOK ASP.NET webhook client with. </param>
     internal KookAspNetWebhookClient(KookAspNetWebhookConfig config)
         : base(config)
     {
     }
 
-    /// <summary>
-    ///     Gets the configuration used by this client.
-    /// </summary>
     internal new KookAspNetWebhookConfig BaseConfig => base.BaseConfig as KookAspNetWebhookConfig
         ?? throw new InvalidOperationException("The base configuration is not a Webhook-based configuration for ASP.NET.");
 
     /// <inheritdoc />
+    /// <exception cref="InvalidOperationException"> KOOK Webhook 客户端不支持手动启动。 </exception>
     public override Task StartAsync() =>
         throw new NotSupportedException("Webhook client does not support starting manually.");
 
     /// <inheritdoc />
+    /// <exception cref="InvalidOperationException"> KOOK Webhook 客户端不支持手动停止。 </exception>
     public override Task StopAsync() =>
         throw new NotSupportedException("Webhook client does not support stopping manually.");
 

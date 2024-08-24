@@ -1,27 +1,27 @@
 namespace Kook;
 
 /// <summary>
-///     Specifies that how the guild should notify the user.
+///     表示服务器应如何通知用户。
 /// </summary>
 public enum NotifyType
 {
     /// <summary>
-    ///     Notifies the user as the default behavior of the guild.
+    ///     以服务器的默认行为通知用户。
     /// </summary>
     Default = 0,
 
     /// <summary>
-    ///     Notifies the user of all messages.
+    ///     通知用户所有消息。
     /// </summary>
     AcceptAll = 1,
 
     /// <summary>
-    ///     Notifies the user of the messages which mention the user.
+    ///     通知提及用户的消息。
     /// </summary>
     OnlyMentioned = 2,
 
     /// <summary>
-    ///      ]Never notifies the user.
+    ///     从不通知用户。
     /// </summary>
     Muted = 3
 }

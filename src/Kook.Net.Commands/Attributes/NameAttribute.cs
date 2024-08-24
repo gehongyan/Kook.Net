@@ -1,21 +1,20 @@
 namespace Kook.Commands;
 
-// Override public name of command/module
 /// <summary>
-///     Marks the public name of a command, module, or parameter.
+///     标记命令、模块或参数的基本名称。
 /// </summary>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Parameter)]
 public class NameAttribute : Attribute
 {
     /// <summary>
-    ///     Gets the name of the command.
+    ///     获取基本名称。
     /// </summary>
     public string Text { get; }
 
     /// <summary>
-    ///     Marks the public name of a command, module, or parameter with the provided name.
+    ///     标记命令、模块或参数的基本名称。
     /// </summary>
-    /// <param name="text">The public name of the object.</param>
+    /// <param name="text"> 基本名称。 </param>
     public NameAttribute(string text)
     {
         Text = text;

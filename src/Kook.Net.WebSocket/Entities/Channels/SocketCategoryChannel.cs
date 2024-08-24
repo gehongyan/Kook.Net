@@ -6,7 +6,7 @@ using Model = Kook.API.Channel;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based category channel.
+///     表示一个基于网关的分组频道。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
@@ -21,12 +21,8 @@ public class SocketCategoryChannel : SocketGuildChannel, ICategoryChannel
         .ToImmutableArray();
 
     /// <summary>
-    ///     Gets the child channels of this category.
+    ///     获取所有属于此分组频道的所有子频道。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of <see cref="SocketGuildChannel" /> whose
-    ///     <see cref="Kook.INestedChannel.CategoryId" /> matches the identifier of this category channel.
-    /// </returns>
     public IReadOnlyCollection<SocketGuildChannel> Channels =>
         [..Guild.Channels.Where(x => x is INestedChannel nestedChannel && nestedChannel.CategoryId == Id)];
 

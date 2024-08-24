@@ -17,7 +17,7 @@ using UserModel = Kook.API.User;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     Represents a WebSocket-based guild object.
+///     表示一个基于网关的服务器。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
@@ -40,7 +40,15 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc />
     public ulong OwnerId { get; private set; }
 
-    /// <summary> Gets the user that owns this guild. </summary>
+    /// <summary>
+    ///     获取此服务器的所有者。
+    /// </summary>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         此属性尝试在缓存的用户列表中获取具有其用户 ID 为 <see cref="P:Kook.WebSocket.SocketGuild.OwnerId"/>
+    ///         的用户。如果该用户不在缓存中，则此属性将返回 <c>null</c>。
+    ///     </note>
+    /// </remarks>
     public SocketGuildUser? Owner => GetUser(OwnerId);
 
     /// <inheritdoc />
@@ -93,60 +101,54 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     public RecommendInfo? RecommendInfo { get; private set; }
 
     /// <summary>
-    ///     Gets the number of members.
+    ///     获取此服务器的成员数。
     /// </summary>
     /// <remarks>
-    ///     This property retrieves the number of members returned by Kook.
     ///     <note type="tip">
-    ///     <para>
-    ///         Due to how this property is returned by Kook instead of relying on the WebSocket cache, the
-    ///         number here is the most accurate in terms of counting the number of users within this guild.
-    ///     </para>
-    ///     <para>
-    ///         Use this instead of enumerating the count of the
-    ///         <see cref="Kook.WebSocket.SocketGuild.Users" /> collection, as you may see discrepancy
-    ///         between that and this property.
-    ///     </para>
+    ///         在 <see cref="P:Kook.WebSocket.SocketGuild.Users"/> 属性上计数的结果为所缓存用户的数量，
+    ///         如果缓存不完整，统计结果可能会与此属性值不一致。
     ///     </note>
+    ///     <br />
     ///     <note type="warning">
-    ///         Only when <see cref="KookSocketConfig.AlwaysDownloadUsers"/> is set to <c>true</c>
-    ///         will this property be populated upon startup. Otherwise, this property will be <c>null</c>,
-    ///         and will be populated when <see cref="DownloadUsersAsync"/> is called.
+    ///         当 <see cref="P:Kook.WebSocket.KookSocketConfig.AlwaysDownloadUsers"/> 为 <c>true</c> 时。
+    ///         Bot 启动后会自动下载服务器的所有用户，并设定此属性值。否则，此属性将为 <c>null</c>。调用
+    ///         <see cref="M:Kook.WebSocket.SocketGuild.DownloadUsersAsync(Kook.RequestOptions)"/>
+    ///         也可以立即下载服务器的所有用户，下载完成后，此属性值将被设定。
     ///     </note>
     /// </remarks>
     public int? MemberCount { get; internal set; }
 
-    /// <summary> Gets the number of members downloaded to the local guild cache. </summary>
-    public int DownloadedMemberCount { get; private set; }
+    /// <summary>
+    ///     获取此服务器内已缓存的成员数量。
+    /// </summary>
+    public int DownloadedMemberCount => _members.Count;
 
-    internal bool IsAvailable { get; private set; }
+    /// <inheritdoc />
+    public bool IsAvailable { get; private set; }
 
-    /// <summary> Indicates whether the client is connected to this guild. </summary>
+    /// <summary>
+    ///     获取此服务器是否已连接至网关。
+    /// </summary>
     public bool IsConnected { get; internal set; }
 
-    /// <summary> Indicates whether the client has all the members downloaded to the local guild cache. </summary>
+    /// <summary>
+    ///     获取是否已下载此服务器的所有成员至缓存。
+    /// </summary>
     /// <remarks>
-    ///     <note type="warning">
-    ///         If <see cref="MemberCount"/> is <c>null</c>, this property will always return <c>null</c>,
-    ///         which means that the client is unable to determine whether all the members are downloaded or not.
-    ///     </note>
+    ///     当如法确定是否已下载此服务器的所有成员，或者服务器的成员数量未知时，此属性将返回 <c>null</c>。
     /// </remarks>
     public bool? HasAllMembers => MemberCount is null ? null : MemberCount <= DownloadedMemberCount;
 
     /// <inheritdoc/>
     public int MaxBitrate => GuildHelper.GetMaxBitrate(this);
 
-    /// <summary>
-    ///     Gets the <see cref="IAudioClient" /> associated with this guild.
-    /// </summary>
+    /// <inheritdoc />
     [Obsolete("Use AudioClients instead.")]
     public IAudioClient? AudioClient => VoiceChannels
         .FirstOrDefault(x => x.AudioClient is not null)?
         .AudioClient;
 
-    /// <summary>
-    ///     Gets a collection of all audio clients in this guild.
-    /// </summary>
+    /// <inheritdoc />
     public IReadOnlyDictionary<ulong, IAudioClient> AudioClients => VoiceChannels
         .Where(x => x.AudioClient is not null)
         .ToDictionary(x => x.Id, x => x.AudioClient!);
@@ -157,7 +159,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     public ulong MaxUploadLimit => GuildHelper.GetUploadLimit(this);
 
     /// <summary>
-    ///     Gets the current logged-in user.
+    ///     获取当前登录的用户。
     /// </summary>
     public SocketGuildUser? CurrentUser =>
         Kook.CurrentUser is not null
@@ -165,131 +167,82 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
             ? member
             : null;
 
-    /// <summary>
-    ///     Gets the built-in role containing all users in this guild.
-    /// </summary>
-    /// <returns>
-    ///     A role object that represents an <c>@everyone</c> role in this guild.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.IGuild.EveryoneRole" />
     public SocketRole EveryoneRole => GetRole(0) ?? new SocketRole(this, 0);
 
     /// <summary>
-    ///     Gets a collection of all text channels in this guild.
+    ///     获取此服务器中所有具有文字聊天能力的频道。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of message channels found within this guild.
-    /// </returns>
+    /// <remarks>
+    ///     语音频道也是一种文字频道，此属性本意用于获取所有具有文字聊天能力的频道，通过此方法获取到的文字频道列表中也包含了语音频道。
+    ///     如需获取频道的实际类型，请参考 <see cref="M:Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
+    /// </remarks>
     public IReadOnlyCollection<SocketTextChannel> TextChannels => [..Channels.OfType<SocketTextChannel>()];
 
     /// <summary>
-    ///     Gets a collection of all voice channels in this guild.
+    ///     获取此服务器中所有具有语音聊天能力的频道。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of voice channels found within this guild.
-    /// </returns>
     public IReadOnlyCollection<SocketVoiceChannel> VoiceChannels => [..Channels.OfType<SocketVoiceChannel>()];
 
     /// <summary>
-    ///     Gets a collection of all stage channels in this guild.
+    ///     获取此服务器中的所有分组频道。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of stage channels found within this guild.
-    /// </returns>
-    /// <summary>
-    ///     Gets a collection of all category channels in this guild.
-    /// </summary>
-    /// <returns>
-    ///     A read-only collection of category channels found within this guild.
-    /// </returns>
     public IReadOnlyCollection<SocketCategoryChannel> CategoryChannels => [..Channels.OfType<SocketCategoryChannel>()];
 
     /// <summary>
-    ///     Gets a collection of all channels in this guild.
+    ///     获取此服务器的所有频道。
     /// </summary>
-    /// <returns>
-    ///     A read-only collection of generic channels found within this guild.
-    /// </returns>
     public IReadOnlyCollection<SocketGuildChannel> Channels => [.._channels.Values];
 
     /// <summary>
-    ///     Gets the default text channel for this guild.
+    ///     获取此服务器的默认文字频道。
     /// </summary>
-    /// <remarks>
-    ///     This property retrieves default text channel for this guild.
-    /// </remarks>
-    /// <returns>
-    ///     A <see cref="SocketTextChannel"/> representing the default text channel for this guild.
-    /// </returns>
     public SocketTextChannel? DefaultChannel => TextChannels
         .Where(x => CurrentUser?.GetPermissions(x).ViewChannel is true)
         .FirstOrDefault(c => c.Id == DefaultChannelId);
 
     /// <summary>
-    ///     Gets the welcome text channel for this guild.
+    ///     获取此服务器的欢迎通知频道。
     /// </summary>
-    /// <remarks>
-    ///     This property retrieves default text channel for this guild.
-    /// </remarks>
-    /// <returns>
-    ///     A <see cref="SocketTextChannel"/> representing the default text channel for this guild.
-    /// </returns>
     public SocketTextChannel? WelcomeChannel => TextChannels
         .Where(c => CurrentUser?.GetPermissions(c).ViewChannel is true)
         .FirstOrDefault(c => c.Id == WelcomeChannelId);
 
-    /// <inheritdoc cref="IGuild.Emotes"/>
+    /// <inheritdoc cref="P:Kook.IGuild.Emotes" />
     public IReadOnlyCollection<GuildEmote> Emotes => [.._emotes.Values];
 
     /// <summary>
-    ///     Gets a dictionary of all boost subscriptions for this guild.
+    ///     获取此服务器内的所有服务器助力信息。
     /// </summary>
-    /// <returns>
-    ///     A read-only dictionary containing all boost subscription metadata for this guild grouped by users;
-    ///     or <c>null</c> if the boost subscription data has never been cached.
-    /// </returns>
     /// <remarks>
     ///     <note type="warning">
-    ///         <para>
-    ///             Only when <see cref="KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> is set to <c>true</c>
-    ///             will this property be populated upon startup. Due to the lack of event support for boost subscriptions,
-    ///             this property will never be updated. The changes of <see cref="SocketGuild.BoostSubscriptionCount"/> will trigger the update
-    ///             of this property, but KOOK gateway will not publish this event resulting from the changes of total boost subscription
-    ///             count. To fetch the latest boost subscription data, use <see cref="DownloadBoostSubscriptionsAsync"/> or
-    ///             <see cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/> upon a <see cref="KookSocketClient"/> to
-    ///             manually download the latest boost subscription data, or <see cref="GetBoostSubscriptionsAsync"/>.
-    ///         </para>
+    ///         当 <see cref="P:Kook.WebSocket.KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> 为 <c>true</c>
+    ///         时，Bot 启动时会自动下载所有服务器的所有助力信息。否则，此属性将为 <c>null</c>。调用
+    ///         <see cref="M:Kook.WebSocket.SocketGuild.DownloadBoostSubscriptionsAsync(Kook.RequestOptions)"/>
+    ///         也可以立即下载服务器的所有助力信息，下载完成后，此属性值将被设定。
+    ///         <br />
+    ///         网关不会发布有关此属性值变更的事件，此属性值可能并不准确。要获取准确的服务器订阅信息，请调用
+    ///         <see cref="M:Kook.WebSocket.SocketGuild.GetBoostSubscriptionsAsync(Kook.RequestOptions)"/>。
     ///     </note>
     /// </remarks>
-    /// <seealso cref="ValidBoostSubscriptions"/>
-    /// <seealso cref="DownloadBoostSubscriptionsAsync"/>
-    /// <seealso cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/>
     public ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>> BoostSubscriptions =>
         _boostSubscriptions.ToImmutableDictionary();
 
     /// <summary>
-    ///     Gets a dictionary of all boost subscriptions which have not expired for this guild.
+    ///     获取此服务器内的所有生效中的服务器助力信息。
     /// </summary>
-    /// <returns>
-    ///     A read-only dictionary containing all boost subscription metadata which have not expired for this guild grouped by users;
-    ///     or <c>null</c> if the boost subscription data has never been cached.
-    /// </returns>
     /// <remarks>
     ///     <note type="warning">
-    ///         <para>
-    ///             Only when <see cref="KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> is set to <c>true</c>
-    ///             will this property be populated upon startup. Due to the lack of event support for boost subscriptions,
-    ///             this property will never be updated. The changes of <see cref="SocketGuild.BoostSubscriptionCount"/> will trigger the update
-    ///             of this property, but KOOK gateway will not publish this event resulting from the changes of total boost subscription
-    ///             count. To fetch the latest boost subscription data, use <see cref="DownloadBoostSubscriptionsAsync"/> or
-    ///             <see cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/> upon a <see cref="KookSocketClient"/> to
-    ///             manually download the latest boost subscription data, or <see cref="GetBoostSubscriptionsAsync"/>.
-    ///         </para>
+    ///         当 <see cref="P:Kook.WebSocket.KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> 为 <c>true</c>
+    ///         时，Bot 启动时会自动下载所有服务器的所有助力信息。否则，此属性将为 <c>null</c>。调用
+    ///         <see cref="M:Kook.WebSocket.SocketGuild.DownloadBoostSubscriptionsAsync(Kook.RequestOptions)"/>
+    ///         也可以立即下载服务器的所有助力信息，下载完成后，此属性值将被设定。
+    ///         <br />
+    ///         网关不会发布有关此属性值变更的事件，此属性值可能并不准确。要获取准确的服务器订阅信息，请调用
+    ///         <see cref="M:Kook.WebSocket.SocketGuild.GetActiveBoostSubscriptionsAsync(Kook.RequestOptions)"/>。
     ///     </note>
     /// </remarks>
-    /// <seealso cref="BoostSubscriptions"/>
-    /// <seealso cref="DownloadBoostSubscriptionsAsync"/>
-    /// <seealso cref="KookSocketClient.DownloadBoostSubscriptionsAsync"/>
-    public ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>> ValidBoostSubscriptions =>
+    public ImmutableDictionary<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>> ActiveBoostSubscriptions =>
         _boostSubscriptions.Select(x =>
                 new KeyValuePair<IUser, IReadOnlyCollection<BoostSubscriptionMetadata>>(
                     x.Key, [..x.Value.Where(y => y.IsValid)]))
@@ -297,42 +250,19 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
             .ToImmutableDictionary();
 
     /// <summary>
-    ///     Gets a collection of users in this guild.
+    ///     获取此服务器内缓存的所有用户。
     /// </summary>
     /// <remarks>
-    ///     This property retrieves all users found within this guild.
-    ///     <note type="warning">
-    ///         <para>
-    ///             This property may not always return all the members for large guilds (i.e. guilds containing
-    ///             100+ users). If you are simply looking to get the number of users present in this guild,
-    ///             consider using <see cref="MemberCount"/> instead.
-    ///         </para>
-    ///         <para>
-    ///             Otherwise, you may need to enable <see cref="KookSocketConfig.AlwaysDownloadUsers"/> to fetch
-    ///             the full user list upon startup, or use <see cref="DownloadUsersAsync"/> to manually download
-    ///             the users.
-    ///         </para>
-    ///     </note>
+    ///     要获取服务器的总成员数量，请访问 <see cref="P:Kook.WebSocket.SocketGuild.MemberCount"/>。
     /// </remarks>
-    /// <returns>
-    ///     A collection of guild users found within this guild.
-    /// </returns>
-    /// <seealso cref="DownloadUsersAsync"/>
-    /// <seealso cref="KookSocketClient.DownloadUsersAsync"/>
     public IReadOnlyCollection<SocketGuildUser> Users => _members.ToReadOnlyCollection();
 
-    /// <summary>
-    ///     Gets a collection of all roles in this guild.
-    /// </summary>
-    /// <returns>
-    ///     A read-only collection of roles found within this guild.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.IGuild.Roles" />
     /// <remarks>
     ///     <note type="warning">
-    ///         Due to the lack of event args which should contains the reordered roles data
-    ///         when roles are reordered, this property may not be completely accurate.
-    ///         To ensure the most accurate results, it is recommended to
-    ///         call <see cref="UpdateAsync"/> before this property is used.
+    ///         由于 KOOK 不会通过网关发布有关服务器角色重新排序的事件，此属性值可能并不准确。
+    ///         要确保获取准确的服务器角色排序信息，请在使用此属性之前调用
+    ///         <see cref="M:Kook.WebSocket.SocketGuild.UpdateAsync(Kook.RequestOptions)"/>。
     ///     </note>
     /// </remarks>
     public IReadOnlyCollection<SocketRole> Roles => _roles.ToReadOnlyCollection();
@@ -391,7 +321,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
             if (_members.TryAdd(member.Id, member))
                 member.GlobalUser.AddRef();
         }
-        DownloadedMemberCount = _members.Count;
         MemberCount = _members.Count;
     }
 
@@ -504,12 +433,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
     #endregion
 
-    /// <summary>
-    ///     Gets the name of the guild.
-    /// </summary>
-    /// <returns>
-    ///     A string that resolves to <see cref="Kook.WebSocket.SocketGuild.Name"/>.
-    /// </returns>
+    /// <inheritdoc cref="P:Kook.WebSocket.SocketGuild.Name" />
     public override string ToString() => Name;
 
     private string DebuggerDisplay => $"{Name} ({Id})";
@@ -535,15 +459,15 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
     #region Bans
 
-    /// <inheritdoc cref="IGuild.GetBansAsync(RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IGuild.GetBansAsync(Kook.RequestOptions)"/>
     public Task<IReadOnlyCollection<RestBan>> GetBansAsync(RequestOptions? options = null) =>
         GuildHelper.GetBansAsync(this, Kook, options);
 
-    /// <inheritdoc cref="IGuild.GetBanAsync(IUser,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IGuild.GetBanAsync(Kook.IUser,Kook.RequestOptions)"/>
     public Task<RestBan?> GetBanAsync(IUser user, RequestOptions? options = null) =>
         GuildHelper.GetBanAsync(this, Kook, user.Id, options);
 
-    /// <inheritdoc cref="IGuild.GetBanAsync(ulong,RequestOptions)"/>
+    /// <inheritdoc cref="M:Kook.IGuild.GetBanAsync(System.UInt64,Kook.RequestOptions)"/>
     public Task<RestBan?> GetBanAsync(ulong userId, RequestOptions? options = null) =>
         GuildHelper.GetBanAsync(this, Kook, userId, options);
 
@@ -568,81 +492,48 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     #region Channels
 
     /// <summary>
-    ///     Gets a channel in this guild.
+    ///     获取此服务器内的频道。
     /// </summary>
-    /// <param name="id">The identifier for the channel.</param>
-    /// <returns>
-    ///     A generic channel associated with the specified <paramref name="id" />; <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
+    /// <returns> 与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
     public SocketGuildChannel? GetChannel(ulong id) => Kook.State.GetChannel(id) as SocketGuildChannel;
 
     /// <summary>
-    ///     Gets a text channel in this guild.
+    ///     获取此服务器中所有具有文字聊天能力的频道。
     /// </summary>
-    /// <param name="id">The identifier for the text channel.</param>
-    /// <returns>
-    ///     A text channel associated with the specified <paramref name="id" />; <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
+    /// <returns> 与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
+    /// <remarks>
+    ///     语音频道也是一种文字频道，此方法本意用于获取具有文字聊天能力的频道。如果通过此方法传入的 ID 对应的频道是语音频道，那么也会返回对应的语音频道实体。
+    ///     如需获取频道的实际类型，请参考 <see cref="M:Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
+    /// </remarks>
     public SocketTextChannel? GetTextChannel(ulong id) => GetChannel(id) as SocketTextChannel;
 
     /// <summary>
-    ///     Gets a voice channel in this guild.
+    ///     获取此服务器内指定具有语音聊天能力的频道。
     /// </summary>
-    /// <param name="id">The identifier for the voice channel.</param>
-    /// <returns>
-    ///     A voice channel associated with the specified <paramref name="id" />; <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
     public SocketVoiceChannel? GetVoiceChannel(ulong id) => GetChannel(id) as SocketVoiceChannel;
 
     /// <summary>
-    ///     Gets a category channel in this guild.
+    ///     获取此服务器内指定的分组频道
     /// </summary>
-    /// <param name="id">The snowflake identifier for the category channel.</param>
-    /// <returns>
-    ///     A category channel associated with the specified <paramref name="id" />; <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
+    /// <returns> 与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
     public SocketCategoryChannel? GetCategoryChannel(ulong id) => GetChannel(id) as SocketCategoryChannel;
 
-    /// <summary>
-    ///     Creates a new text channel in this guild.
-    /// </summary>
-    /// <param name="name">The new name for the text channel.</param>
-    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
-    ///     text channel.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuild.CreateTextChannelAsync(System.String,System.Action{Kook.CreateTextChannelProperties},Kook.RequestOptions)" />
     public Task<RestTextChannel> CreateTextChannelAsync(string name,
         Action<CreateTextChannelProperties>? func = null, RequestOptions? options = null) =>
         GuildHelper.CreateTextChannelAsync(this, Kook, name, func, options);
 
-    /// <summary>
-    ///     Creates a new voice channel in this guild.
-    /// </summary>
-    /// <param name="name">The new name for the voice channel.</param>
-    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
-    /// <returns>
-    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
-    ///     voice channel.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuild.CreateVoiceChannelAsync(System.String,System.Action{Kook.CreateVoiceChannelProperties},Kook.RequestOptions)" />
     public Task<RestVoiceChannel> CreateVoiceChannelAsync(string name,
         Action<CreateVoiceChannelProperties>? func = null, RequestOptions? options = null) =>
         GuildHelper.CreateVoiceChannelAsync(this, Kook, name, func, options);
 
-    /// <summary>
-    ///     Creates a new channel category in this guild.
-    /// </summary>
-    /// <param name="name">The new name for the category.</param>
-    /// <param name="func">The delegate containing the properties to be applied to the channel upon its creation.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
-    /// <returns>
-    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
-    ///     category channel.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuild.CreateCategoryChannelAsync(System.String,System.Action{Kook.CreateCategoryChannelProperties},Kook.RequestOptions)" />
     public Task<RestCategoryChannel> CreateCategoryChannelAsync(string name,
         Action<CreateCategoryChannelProperties>? func = null, RequestOptions? options = null) =>
         GuildHelper.CreateCategoryChannelAsync(this, Kook, name, func, options);
@@ -683,43 +574,13 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
 
     #endregion
 
-    // #region Invites
-    //
-    // /// <summary>
-    // ///     Gets a collection of all invites in this guild.
-    // /// </summary>
-    // /// <param name="options">The options to be used when sending the request.</param>
-    // /// <returns>
-    // ///     A task that represents the asynchronous get operation. The task result contains a read-only collection of
-    // ///     invite metadata, each representing information for an invite found within this guild.
-    // /// </returns>
-    // public Task<IReadOnlyCollection<RestInvite>> GetInvitesAsync(RequestOptions? options = null)
-    //     => GuildHelper.GetInvitesAsync(this, Kook, options);
-    //
-    // #endregion
-
     #region Roles
 
-    /// <summary>
-    ///     Gets a role in this guild.
-    /// </summary>
-    /// <param name="id">The identifier for the role.</param>
-    /// <returns>
-    ///     A role that is associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuild.GetRole(System.UInt32)" />
     public SocketRole? GetRole(uint id) =>
         _roles.TryGetValue(id, out SocketRole? value) ? value : null;
 
-    /// <summary>
-    ///     Creates a new role with the provided name.
-    /// </summary>
-    /// <param name="name">The new name for the role.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
-    /// <returns>
-    ///     A task that represents the asynchronous creation operation. The task result contains the newly created
-    ///     role.
-    /// </returns>
+    /// <inheritdoc cref="M:Kook.IGuild.CreateRoleAsync(System.String,Kook.RequestOptions)" />
     public Task<RestRole> CreateRoleAsync(string name, RequestOptions? options = null) =>
         GuildHelper.CreateRoleAsync(this, Kook, name, options);
 
@@ -746,19 +607,13 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     #region Users
 
     /// <summary>
-    ///     Gets a user from this guild.
+    ///     获取此服务器内的用户。
     /// </summary>
     /// <remarks>
-    ///     This method retrieves a user found within this guild.
-    ///     <note>
-    ///         This may return <c>null</c> in the WebSocket implementation due to incomplete user collection in
-    ///         large guilds.
-    ///     </note>
+    ///     此方法可能返回 <c>null</c>，因为在大型服务器中，用户列表的缓存可能不完整。
     /// </remarks>
-    /// <param name="id">The identifier of the user.</param>
-    /// <returns>
-    ///     A guild user associated with the specified <paramref name="id"/>; <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="id"> 要获取的用户的 ID。 </param>
+    /// <returns> 与指定的 <paramref name="id"/> 关联的用户；如果未找到，则返回 <c>null</c>。 </returns>
     public SocketGuildUser? GetUser(ulong id) =>
         _members.TryGetValue(id, out SocketGuildUser? member) ? member : null;
 
@@ -774,7 +629,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         SocketGuildUser member = SocketGuildUser.Create(this, Kook.State, model);
         member.GlobalUser.AddRef();
         _members[member.Id] = member;
-        DownloadedMemberCount++;
         return member;
     }
 
@@ -790,7 +644,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         SocketGuildUser member = SocketGuildUser.Create(this, Kook.State, model);
         member.GlobalUser.AddRef();
         _members[member.Id] = member;
-        DownloadedMemberCount++;
         return member;
     }
 
@@ -805,7 +658,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
             member = SocketGuildUser.Create(this, Kook.State, model);
             member.GlobalUser.AddRef();
             _members[member.Id] = member;
-            DownloadedMemberCount++;
         }
 
         return member;
@@ -815,21 +667,20 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     {
         if (!_members.TryRemove(id, out SocketGuildUser? member))
             return null;
-        DownloadedMemberCount--;
         member.GlobalUser.RemoveRef(Kook);
         return member;
     }
 
     /// <summary>
-    ///     Purges this guild's user cache.
+    ///     清除此服务器的用户缓存。
     /// </summary>
     public void PurgeUserCache() => PurgeUserCache(_ => true);
 
     /// <summary>
-    ///     Purges this guild's user cache.
+    ///     清除此服务器的用户缓存。
     /// </summary>
-    /// <param name="predicate">The predicate used to select which users to clear.</param>
-    public void PurgeUserCache(Func<SocketGuildUser, bool> predicate)
+    /// <param name="predicate"> 要清除的用户的筛选条件。 </param>
+    public void PurgeUserCache(Predicate<SocketGuildUser> predicate)
     {
         IEnumerable<SocketGuildUser> membersToPurge = Users
             .Where(x => predicate.Invoke(x) && x.Id != Kook.CurrentUser?.Id);
@@ -842,21 +693,13 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         }
         foreach (SocketGuildUser member in membersToKeep)
             _members.TryAdd(member.Id, member);
-        DownloadedMemberCount = _members.Count;
     }
 
     /// <summary>
-    ///     Gets a collection of all users in this guild.
+    ///     获取此服务器内的所有用户。
     /// </summary>
-    /// <remarks>
-    ///     <para>This method retrieves all users found within this guild through REST.</para>
-    ///     <para>Users returned by this method are not cached.</para>
-    /// </remarks>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
-    ///     users found within this guild.
-    /// </returns>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器内的所有用户。 </returns>
     public IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> GetUsersAsync(RequestOptions? options = null)
     {
         if (HasAllMembers is true)
@@ -877,20 +720,15 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         await Kook.DownloadBoostSubscriptionsAsync(new[] { this }, options).ConfigureAwait(false);
 
     /// <summary>
-    ///     Gets a collection of users in this guild that the name or nickname contains the
-    ///     provided string at <paramref name="func"/>.
+    ///     搜索加入到此服务器内匹配指定搜索条件的所有用户。
     /// </summary>
     /// <remarks>
-    ///     The <paramref name="limit"/> can not be higher than <see cref="KookConfig.MaxUsersPerBatch"/>.
+    ///     此方法使用指定的属性搜索服务器用户。要查看可用的属性，请参考 <see cref="T:Kook.SearchGuildMemberProperties"/>。
     /// </remarks>
-    /// <param name="func">A delegate containing the properties to search users with.</param>
-    /// <param name="limit">The maximum number of users to be gotten.</param>
-    /// <param name="options">The options to be used when sending the request.</param>
-    /// <returns>
-    ///     A task that represents the asynchronous get operation. The task result contains a collection of guild
-    ///     users that matches the properties with the provided <see cref="Action{SearchGuildMemberProperties}"/>
-    ///     at <paramref name="func"/>.
-    /// </returns>
+    /// <param name="func"> 一个包含要搜索的用户属性及排序条件的委托。 </param>
+    /// <param name="limit"> 搜索结果的最大数量。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与提供的 <paramref name="func"/> 中指定的属性匹配的服务器用户集合。 </returns>
     public IAsyncEnumerable<IReadOnlyCollection<RestGuildUser>> SearchUsersAsync(
         Action<SearchGuildMemberProperties> func, int limit = KookConfig.MaxUsersPerBatch,
         RequestOptions? options = null) =>
@@ -910,12 +748,10 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     #region Emotes
 
     /// <summary>
-    ///     Gets a guild emoji in this guild.
+    ///     获取此服务器的指定自定义表情。
     /// </summary>
-    /// <param name="id">The identifier for the guild emoji.</param>
-    /// <returns>
-    ///     A guild emoji associated with the specified <paramref name="id" />; <c>null</c> if none is found.
-    /// </returns>
+    /// <param name="id"> 要获取的自定义表情的 ID。 </param>
+    /// <returns> 与指定的 <paramref name="id"/> 关联的自定义表情；如果未找到，则返回 <c>null</c>。 </returns>
     public GuildEmote? GetEmote(string id) =>
         _emotes.TryGetValue(id, out GuildEmote? emote) ? emote : null;
 
@@ -942,7 +778,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         GuildHelper.CreateEmoteAsync(this, Kook, name, image, options);
 
     /// <inheritdoc />
-    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <c>null</c>.</exception>
     public Task ModifyEmoteNameAsync(GuildEmote emote, string name, RequestOptions? options = null) =>
         GuildHelper.ModifyEmoteNameAsync(this, Kook, emote, name, options);
 
@@ -1028,9 +863,6 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     #endregion
 
     #region IGuild
-
-    /// <inheritdoc />
-    bool IGuild.Available => true;
 
     /// <inheritdoc />
     void IDisposable.Dispose()

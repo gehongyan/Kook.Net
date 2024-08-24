@@ -3,19 +3,17 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook.Commands;
 
 /// <summary>
-///     Provides extension methods for <see cref="IUserMessage" /> that relates to commands.
+///     提供用于 <see cref="T:Kook.IUserMessage" /> 与命令相关的扩展方法。
 /// </summary>
 public static class MessageExtensions
 {
     /// <summary>
-    ///     Gets whether the message starts with the provided character.
+    ///     获取消息是否以提供的字符开头。
     /// </summary>
-    /// <param name="msg">The message to check against.</param>
-    /// <param name="c">The char prefix.</param>
-    /// <param name="argPos">References where the command starts.</param>
-    /// <returns>
-    ///     <c>true</c> if the message begins with the char <paramref name="c"/>; otherwise <c>false</c>.
-    /// </returns>
+    /// <param name="msg"> 要检查的消息。 </param>
+    /// <param name="c"> 要检查的前导字符。 </param>
+    /// <param name="argPos"> 开始检查的位置。 </param>
+    /// <returns> 如果消息以指定的字符开头，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool HasCharPrefix(this IUserMessage msg, char c, ref int argPos)
     {
         string text;
@@ -51,8 +49,13 @@ public static class MessageExtensions
     }
 
     /// <summary>
-    ///     Gets whether the message starts with the provided string.
+    ///     获取消息是否以提供的字符串开头。
     /// </summary>
+    /// <param name="msg"> 要检查的消息。 </param>
+    /// <param name="str"> 要检查的前导字符。 </param>
+    /// <param name="argPos"> 开始检查的位置。 </param>
+    /// <param name="comparisonType"> 字符串比较模式。 </param>
+    /// <returns> 如果消息以指定的字符串开头，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool HasStringPrefix(this IUserMessage msg, string str,
         ref int argPos, StringComparison comparisonType = StringComparison.Ordinal)
     {
@@ -89,8 +92,12 @@ public static class MessageExtensions
     }
 
     /// <summary>
-    ///     Gets whether the message starts with the user's mention string.
+    ///     获取消息是否以提供的用户提及开头。
     /// </summary>
+    /// <param name="msg"> 要检查的消息。 </param>
+    /// <param name="user"> 要检查的用户。 </param>
+    /// <param name="argPos"> 开始检查的位置。 </param>
+    /// <returns> 如果消息以指定的用户提及开头，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool HasMentionPrefix(this IUserMessage msg, IUser user, ref int argPos)
     {
         string text;
@@ -178,11 +185,11 @@ public static class MessageExtensions
     }
 
     /// <summary>
-    ///     Tries to expand the content of the card into a single string.
+    ///     尝试将卡片的内容展开为单个字符串。
     /// </summary>
-    /// <param name="msg"> The message to expand the content of. </param>
-    /// <param name="expandedContent"> The expanded content of the card. </param>
-    /// <returns> <c>true</c> if the content was successfully expanded; otherwise, <c>false</c>. </returns>
+    /// <param name="msg"> 要展开的消息。 </param>
+    /// <param name="expandedContent"> 展开的内容。 </param>
+    /// <returns> 如果成功展开，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool TryExpandCardContent(this IUserMessage msg,
         [NotNullWhen(true)] out string? expandedContent)
     {

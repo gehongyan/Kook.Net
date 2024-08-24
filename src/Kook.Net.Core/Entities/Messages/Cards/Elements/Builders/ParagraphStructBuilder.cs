@@ -3,27 +3,27 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook;
 
 /// <summary>
-///     An element builder to build a <see cref="ParagraphStruct"/>.
+///     用来构建 <see cref="ParagraphStruct"/> 元素的构建器。
 /// </summary>
 public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStructBuilder>, IEquatable<IElementBuilder>
 {
     /// <summary>
-    ///     Returns the maximum number of fields allowed by Kook.
+    ///     区域文本内文本块的最大数量。
     /// </summary>
     public const int MaxFieldCount = 50;
 
     /// <summary>
-    ///     Returns the minimum number of columns allowed by Kook.
+    ///     区域文本的最小列数。
     /// </summary>
     public const int MinColumnCount = 1;
 
     /// <summary>
-    ///     Returns the maximum number of columns allowed by Kook.
+    ///     区域文本的最大列数。
     /// </summary>
     public const int MaxColumnCount = 3;
 
     /// <summary>
-    ///     Initializes a new <see cref="ParagraphStructBuilder"/> class.
+    ///     初始化一个 <see cref="ParagraphStructBuilder"/> 类的新实例。
     /// </summary>
     public ParagraphStructBuilder()
     {
@@ -31,47 +31,37 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     }
 
     /// <summary>
-    ///     Initializes a new <see cref="ParagraphStructBuilder"/> class.
+    ///     初始化一个 <see cref="ParagraphStructBuilder"/> 类的新实例。
     /// </summary>
+    /// <param name="columnCount"> 区域文本的列数。 </param>
+    /// <param name="fields"> 区域文本的文本块。 </param>
     public ParagraphStructBuilder(int columnCount, IList<IElementBuilder>? fields = null)
     {
         ColumnCount = columnCount;
         Fields = fields ?? [];
     }
 
-    /// <summary>
-    ///     Gets the type of the element that this builder builds.
-    /// </summary>
-    /// <returns>
-    ///     An <see cref="ElementType"/> that represents the type of element that this builder builds.
-    /// </returns>
+    /// <inheritdoc />
     public ElementType Type => ElementType.Paragraph;
 
     /// <summary>
-    ///     Gets or sets the number of columns of the paragraph.
+    ///     获取或设置区域文本的列数。
     /// </summary>
-    /// <returns>
-    ///     An int that represents the number of columns of the paragraph.
-    /// </returns>
+    /// <remarks>
+    ///     默认值为 <see cref="MinColumnCount"/>。
+    /// </remarks>
     public int ColumnCount { get; set; } = MinColumnCount;
 
     /// <summary>
-    ///     Gets or sets the fields of the paragraph.
+    ///     获取或设置区域文本的文本块。
     /// </summary>
-    /// <returns>
-    ///     An <see cref="IList{IElementBuilder}"/> that represents the fields of the paragraph.
-    /// </returns>
     public IList<IElementBuilder> Fields { get; set; }
 
     /// <summary>
-    ///     Sets the number of columns of the paragraph.
+    ///     设置区域文本的列数。
     /// </summary>
-    /// <param name="count">
-    ///     An int that represents the number of columns of the paragraph.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="count"> 区域文本的列数。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ParagraphStructBuilder WithColumnCount(int count)
     {
         ColumnCount = count;
@@ -79,14 +69,10 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     }
 
     /// <summary>
-    ///     Adds a field to the paragraph.
+    ///     添加一个纯文本文本块到区域文本。
     /// </summary>
-    /// <param name="field">
-    ///     A <see cref="PlainTextElementBuilder"/> that represents the field to add.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="field"> 要添加的纯文本文本块。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ParagraphStructBuilder AddField(PlainTextElementBuilder field)
     {
         Fields.Add(field);
@@ -94,14 +80,10 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     }
 
     /// <summary>
-    ///     Adds a field to the paragraph.
+    ///     添加一个 KMarkdown 文本块到区域文本。
     /// </summary>
-    /// <param name="field">
-    ///     A <see cref="KMarkdownElementBuilder"/> that represents the field to add.
-    /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <param name="field"> 要添加的 KMarkdown 文本块。 </param>
+    /// <returns> 当前构建器。 </returns>
     public ParagraphStructBuilder AddField(KMarkdownElementBuilder field)
     {
         Fields.Add(field);
@@ -109,14 +91,12 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     }
 
     /// <summary>
-    ///     Adds a field to the paragraph.
+    ///     添加一个文本块到区域文本。
     /// </summary>
     /// <param name="action">
-    ///     The action to create a builder of a <see cref="KMarkdownElement"/>, which will be added to the paragraph.
+    ///     用于创建一个 <see cref="KMarkdownElement"/> 的构建器的操作，该构建器将被添加到区域文本。
     /// </param>
-    /// <returns>
-    ///     The current builder.
-    /// </returns>
+    /// <returns> 当前构建器。 </returns>
     public ParagraphStructBuilder AddField<T>(Action<T>? action = null)
         where T : IElementBuilder, new()
     {
@@ -127,26 +107,23 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     }
 
     /// <summary>
-    ///     Builds the <see cref="ParagraphStructBuilder"/> into a <see cref="ParagraphStruct"/>.
+    ///     构建当前构建器为一个 <see cref="ParagraphStruct"/>。
     /// </summary>
-    /// <returns>
-    ///     A <see cref="ParagraphStruct"/> represents the built element object.
-    /// </returns>
+    /// <returns> 由当前构建器表示的属性构建的 <see cref="ParagraphStruct"/> 对象。 </returns>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     The <see cref="ColumnCount"/> is less than <see cref="MinColumnCount"/>.
+    ///     <see cref="ColumnCount"/> 不足 <see cref="MinColumnCount"/>。
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     The <see cref="ColumnCount"/> is greater than <see cref="MaxColumnCount"/>.
+    ///     <see cref="ColumnCount"/> 超出了 <see cref="MaxColumnCount"/>。
     /// </exception>
     /// <exception cref="ArgumentNullException">
-    ///     The <see cref="Fields"/> is null.
+    ///     <see cref="Fields"/> 为 <c>null</c>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The number of <see cref="Fields"/> is greater than <see cref="MaxFieldCount"/>.
+    ///     <see cref="Fields"/> 的数量超出了 <see cref="MaxFieldCount"/>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     The <see cref="Fields"/> contain an element that is not a <see cref="PlainTextElementBuilder"/>
-    ///     or <see cref="KMarkdownElementBuilder"/>.
+    ///     <see cref="Fields"/> 包含了既不是 <see cref="PlainTextElementBuilder"/> 也不是 <see cref="KMarkdownElementBuilder"/> 的元素。
     /// </exception>
     public ParagraphStruct Build()
     {
@@ -190,30 +167,24 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
     IElement IElementBuilder.Build() => Build();
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ParagraphStructBuilder"/> is equal to the current <see cref="ParagraphStructBuilder"/>.
+    ///     判定两个 <see cref="ParagraphStructBuilder"/> 是否相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ParagraphStructBuilder"/> is equal to the current <see cref="ParagraphStructBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ParagraphStructBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator ==(ParagraphStructBuilder? left, ParagraphStructBuilder? right) =>
         left?.Equals(right) ?? right is null;
 
     /// <summary>
-    ///     Determines whether the specified <see cref="ParagraphStructBuilder"/> is not equal to the current <see cref="ParagraphStructBuilder"/>.
+    ///     判定两个 <see cref="ParagraphStructBuilder"/> 是否不相等。
     /// </summary>
-    /// <returns> <c>true</c> if the specified <see cref="ParagraphStructBuilder"/> is not equal to the current <see cref="ParagraphStructBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <returns> 如果两个 <see cref="ParagraphStructBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool operator !=(ParagraphStructBuilder? left, ParagraphStructBuilder? right) =>
         !(left == right);
 
-    /// <summary>
-    ///     Determines whether the specified <see cref="object"/> is equal to the current <see cref="ParagraphStructBuilder"/>.
-    /// </summary>
-    /// <param name="obj"> The <see cref="object"/> to compare with the current <see cref="ParagraphStructBuilder"/>. </param>
-    /// <returns> <c>true</c> if the specified <see cref="object"/> is equal to the current <see cref="ParagraphStructBuilder"/>; otherwise, <c>false</c>. </returns>
+    /// <inheritdoc />
     public override bool Equals([NotNullWhen(true)] object? obj) =>
         obj is ParagraphStructBuilder builder && Equals(builder);
 
-    /// <summary>Determines whether the specified <see cref="ParagraphStructBuilder"/> is equal to the current <see cref="ParagraphStructBuilder"/>.</summary>
-    /// <param name="paragraphStructBuilder">The <see cref="ParagraphStructBuilder"/> to compare with the current <see cref="ParagraphStructBuilder"/>.</param>
-    /// <returns><c>true</c> if the specified <see cref="ParagraphStructBuilder"/> is equal to the current <see cref="ParagraphStructBuilder"/>; otherwise, <c>false</c>.</returns>
+    /// <inheritdoc />
     public bool Equals([NotNullWhen(true)] ParagraphStructBuilder? paragraphStructBuilder)
     {
         if (paragraphStructBuilder is null)

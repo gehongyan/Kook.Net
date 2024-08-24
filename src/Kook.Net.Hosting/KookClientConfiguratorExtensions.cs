@@ -9,18 +9,21 @@ using Microsoft.Extensions.Options;
 namespace Kook.Net.Hosting;
 
 /// <summary>
-///     Provides extension methods for <see cref="IKookClientConfigurator{TClient,TConfig}"/> to configure hosted clients.
+///     提供用于配置 <see cref="T:Kook.Net.DependencyInjection.Microsoft.IKookClientConfigurator`2"/>
+///     添加客户端托管服务的扩展方法。
 /// </summary>
 public static class KookClientConfiguratorExtensions
 {
     /// <summary>
-    ///     Configures a hosted client with the specified token.
+    ///     配置指定的 KOOK 客户端配置器添加客户端托管服务。
     /// </summary>
-    /// <param name="configurator"> The configurator. </param>
-    /// <param name="tokenType"> The token type. </param>
-    /// <param name="token"> The token. </param>
-    /// <param name="validateToken"> The value indicating whether to validate the token. </param>
-    /// <returns> The configurator. </returns>
+    /// <param name="configurator"> KOOK 服务配置器。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否验证令牌。 </param>
+    /// <typeparam name="TClient"> 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> 配置的类型。 </typeparam>
+    /// <returns> 配置了客户端托管服务的 KOOK 客户端配置器。 </returns>
     public static IKookClientConfigurator<TClient, TConfig> UseHostedClient<TClient, TConfig>(
         this IKookClientConfigurator<TClient, TConfig> configurator,
         TokenType tokenType, string token, bool validateToken = true)
@@ -35,13 +38,15 @@ public static class KookClientConfiguratorExtensions
     }
 
     /// <summary>
-    ///     Configures a hosted client with the specified token.
+    ///     配置指定的 KOOK 客户端配置器添加客户端托管服务。
     /// </summary>
-    /// <param name="configurator"> The configurator. </param>
-    /// <param name="tokenType"> The token type. </param>
-    /// <param name="token"> The token. </param>
-    /// <param name="validateToken"> The value indicating whether to validate the token. </param>
-    /// <returns> The configurator. </returns>
+    /// <param name="configurator"> KOOK 服务配置器。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否验证令牌。 </param>
+    /// <typeparam name="TClient"> 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> 配置的类型。 </typeparam>
+    /// <returns> 配置了客户端托管服务的 KOOK 客户端配置器。 </returns>
     public static IKookClientConfigurator<TClient, TConfig> UseHostedClient<TClient, TConfig>(
         this IKookClientConfigurator<TClient, TConfig> configurator,
         Func<IServiceProvider, TokenType> tokenType, Func<IServiceProvider, string> token,
@@ -58,14 +63,14 @@ public static class KookClientConfiguratorExtensions
     }
 
     /// <summary>
-    ///     Configures a hosted REST client with the specified token.
+    ///     配置指定的 KOOK 客户端配置器添加基于 REST 的客户端并添加客户端托管服务。
     /// </summary>
-    /// <param name="configurator"> The configurator. </param>
-    /// <param name="configure"> The configuration action. </param>
-    /// <param name="tokenType"> The token type. </param>
-    /// <param name="token"> The token. </param>
-    /// <param name="validateToken"> The value indicating whether to validate the token. </param>
-    /// <returns> The configurator. </returns>
+    /// <param name="configurator"> KOOK 服务配置器。 </param>
+    /// <param name="configure"> 用于配置 KOOK REST 客户端的配置委托。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否验证令牌。 </param>
+    /// <returns> 配置了 REST 客户端及客户端托管服务的 KOOK 客户端配置器。 </returns>
     public static IKookClientConfigurator<KookRestClient, KookRestConfig> UseHostedRestClient(
         this IKookClientServiceConfigurator configurator, Action<KookRestConfig> configure,
         TokenType tokenType, string token, bool validateToken = true) =>
@@ -74,14 +79,14 @@ public static class KookClientConfiguratorExtensions
             .UseHostedClient(tokenType, token, validateToken);
 
     /// <summary>
-    ///     Configures a hosted REST client with the specified token.
+    ///     配置指定的 KOOK 客户端配置器添加基于 REST 的客户端并添加客户端托管服务。
     /// </summary>
-    /// <param name="configurator"> The configurator. </param>
-    /// <param name="configure"> The configuration action. </param>
-    /// <param name="tokenType"> The token type. </param>
-    /// <param name="token"> The token. </param>
-    /// <param name="validateToken"> The value indicating whether to validate the token. </param>
-    /// <returns> The configurator. </returns>
+    /// <param name="configurator"> KOOK 服务配置器。 </param>
+    /// <param name="configure"> 用于配置 KOOK REST 客户端的配置委托。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否验证令牌。 </param>
+    /// <returns> 配置了 REST 客户端及客户端托管服务的 KOOK 客户端配置器。 </returns>
     public static IKookClientConfigurator<KookRestClient, KookRestConfig> UseHostedRestClient(
         this IKookClientServiceConfigurator configurator, Action<KookRestConfig> configure,
         Func<IServiceProvider, TokenType> tokenType, Func<IServiceProvider, string> token,
@@ -91,14 +96,14 @@ public static class KookClientConfiguratorExtensions
             .UseHostedClient(tokenType, token, validateToken);
 
     /// <summary>
-    ///     Configures a hosted socket client with the specified token.
+    ///     配置指定的 KOOK 客户端配置器添加基于网关的客户端并添加客户端托管服务。
     /// </summary>
-    /// <param name="configurator"> The configurator. </param>
-    /// <param name="configure"> The configuration action. </param>
-    /// <param name="tokenType"> The token type. </param>
-    /// <param name="token"> The token. </param>
-    /// <param name="validateToken"> The value indicating whether to validate the token. </param>
-    /// <returns> The configurator. </returns>
+    /// <param name="configurator"> KOOK 服务配置器。 </param>
+    /// <param name="configure"> 用于配置 KOOK 网关客户端的配置委托。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否验证令牌。 </param>
+    /// <returns> 配置了网关客户端及客户端托管服务的 KOOK 客户端配置器。 </returns>
     public static IKookClientConfigurator<KookSocketClient, KookSocketConfig> UseHostedSocketClient(
         this IKookClientServiceConfigurator configurator, Action<KookSocketConfig> configure,
         TokenType tokenType, string token, bool validateToken = true) =>
@@ -107,14 +112,14 @@ public static class KookClientConfiguratorExtensions
             .UseHostedClient(tokenType, token, validateToken);
 
     /// <summary>
-    ///     Configures a hosted socket client with the specified token.
+    ///     配置指定的 KOOK 客户端配置器添加基于网关的客户端并添加客户端托管服务。
     /// </summary>
-    /// <param name="configurator"> The configurator. </param>
-    /// <param name="configure"> The configuration action. </param>
-    /// <param name="tokenType"> The token type. </param>
-    /// <param name="token"> The token. </param>
-    /// <param name="validateToken"> The value indicating whether to validate the token. </param>
-    /// <returns> The configurator. </returns>
+    /// <param name="configurator"> KOOK 服务配置器。 </param>
+    /// <param name="configure"> 用于配置 KOOK 网关客户端的配置委托。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否验证令牌。 </param>
+    /// <returns> 配置了网关客户端及客户端托管服务的 KOOK 客户端配置器。 </returns>
     public static IKookClientConfigurator<KookSocketClient, KookSocketConfig> UseHostedSocketClient(
         this IKookClientServiceConfigurator configurator, Action<KookSocketConfig> configure,
         Func<IServiceProvider, TokenType> tokenType, Func<IServiceProvider, string> token,
@@ -124,17 +129,17 @@ public static class KookClientConfiguratorExtensions
             .UseHostedClient(tokenType, token, validateToken);
 
     /// <summary>
-    ///     Configures a hosted webhook client with the specified token.
+    ///     配置指定的基于 Webhook 的 KOOK 客户端配置器添加基于网关的客户端并添加客户端托管服务。
     /// </summary>
-    /// <param name="configurator"> The configurator. </param>
-    /// <param name="clientFactory"> The client factory. </param>
-    /// <param name="configure"> The configuration action. </param>
-    /// <param name="tokenType"> The token type. </param>
-    /// <param name="token"> The token. </param>
-    /// <param name="validateToken"> The value indicating whether to validate the token. </param>
-    /// <typeparam name="TClient"> The type of the client. </typeparam>
-    /// <typeparam name="TConfig"> The type of the configuration. </typeparam>
-    /// <returns> The configurator. </returns>
+    /// <param name="configurator"> KOOK 服务配置器。 </param>
+    /// <param name="clientFactory"> 客户端创建委托。 </param>
+    /// <param name="configure"> 用于配置基于 Webhook 的 KOOK 网关客户端的配置委托。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否验证令牌。 </param>
+    /// <typeparam name="TClient"> 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> 配置的类型。 </typeparam>
+    /// <returns> 配置了基于 Webhook 的网关客户端及客户端托管服务的 KOOK 客户端配置器。 </returns>
     public static IKookClientConfigurator<TClient, TConfig> UseHostedWebhookClient<TClient, TConfig>(
         this IKookClientServiceConfigurator configurator, Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory,
         Action<TConfig> configure, TokenType tokenType, string token, bool validateToken = true)
@@ -145,17 +150,17 @@ public static class KookClientConfiguratorExtensions
             .UseHostedClient(tokenType, token, validateToken);
 
     /// <summary>
-    ///     Configures a hosted webhook client with the specified token.
+    ///     配置指定的基于 Webhook 的 KOOK 客户端配置器添加基于网关的客户端并添加客户端托管服务。
     /// </summary>
-    /// <param name="configurator"> The configurator. </param>
-    /// <param name="clientFactory"> The client factory. </param>
-    /// <param name="configure"> The configuration action. </param>
-    /// <param name="tokenType"> The token type. </param>
-    /// <param name="token"> The token. </param>
-    /// <param name="validateToken"> The value indicating whether to validate the token. </param>
-    /// <typeparam name="TClient"> The type of the client. </typeparam>
-    /// <typeparam name="TConfig"> The type of the configuration. </typeparam>
-    /// <returns> The configurator. </returns>
+    /// <param name="configurator"> KOOK 服务配置器。 </param>
+    /// <param name="clientFactory"> 客户端创建委托。 </param>
+    /// <param name="configure"> 用于配置基于 Webhook 的 KOOK 网关客户端的配置委托。 </param>
+    /// <param name="tokenType"> 令牌的类型。 </param>
+    /// <param name="token"> 令牌。 </param>
+    /// <param name="validateToken"> 是否验证令牌。 </param>
+    /// <typeparam name="TClient"> 客户端的类型。 </typeparam>
+    /// <typeparam name="TConfig"> 配置的类型。 </typeparam>
+    /// <returns> 配置了基于 Webhook 的网关客户端及客户端托管服务的 KOOK 客户端配置器。 </returns>
     public static IKookClientConfigurator<TClient, TConfig> UseHostedWebhookClient<TClient, TConfig>(
         this IKookClientServiceConfigurator configurator, Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory,
         Action<TConfig> configure, Func<IServiceProvider, TokenType> tokenType,

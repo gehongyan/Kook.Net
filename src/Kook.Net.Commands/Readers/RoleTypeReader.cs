@@ -3,9 +3,9 @@ using System.Globalization;
 namespace Kook.Commands;
 
 /// <summary>
-///     A <see cref="TypeReader"/> for parsing objects implementing <see cref="IRole"/>.
+///     表示一个用于解析实现了 <see cref="T:Kook.IRole"/> 的对象的类型读取器。
 /// </summary>
-/// <typeparam name="T">The type to be checked; must implement <see cref="IRole"/>.</typeparam>
+/// <typeparam name="T"> 要解析为的角色类型。 </typeparam>
 public class RoleTypeReader<T> : TypeReader
     where T : class, IRole
 {
