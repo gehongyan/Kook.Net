@@ -5,6 +5,73 @@ title: 变更日志
 
 # 变更日志
 
+## v0.9.0 [2024-08-30]
+
+### 更新路线
+
+本次更新增加了以下新的软件包：
+
+- `Kook.Net.Webhook`：Webhook 支持包
+- `Kook.Net.Webhook.HttpListener`：HTTP Listener 的 Webhook 实现包
+- `Kook.Net.Webhook.AspNet`：与 ASP.NET 集成的 Webhook 实现包
+- `Kook.Net.MessageQueue.InMemory`：内存消息队列支持包
+- `Kook.Net.MessageQueue.MassTransit`：MassTransit 消息队列支持包
+- `Kook.Net.DependencyInjection.Microsoft`：Microsoft.Extensions.DependencyInjection 依赖注入扩展包
+- `Kook.Net.Hosting`：主机服务扩展包
+
+`Kook.Net` 包新增了对 `Kook.Net.Webhook` 包的引用，移除了对 `Kook.Net.CardMarkup` 包的引用，如需继续使用有关通过标记语言构建卡片消息的功能，请单独引用 `Kook.Net.CardMarkup` 包。
+
+语音连接与推流功能已变更为由受官方支持的方式实现，新增的接收语音数据流相关的 API 为实验性功能，不受官方支持。
+
+`Emote.Parse` 在发生错误时会引发的异常从 `ArgumentException` 变更为 `FormatException`。`Emote.ToString` 的返回结果变更为等效于 `ToKMarkdownString` 的结果。`MessageExtensions.GetJumpUrl` 所提供的链接格式进行了调整。`SocketGuild.ValidBoostSubscriptions` 变更为 `SocketGuild.ActiveBoostSubscriptions`。`Tag<T>` 变更为 `Tag<TKey, TValue>`。
+
+### 新增
+
+- 新增支持自定义消息队列，默认实现为同步消息处理，支持通过安装扩展 NuGet 包并配置 `KookSocketConfig.MessageQueueProvider` 来设置消息队列提供者。`Kook.Net.MessageQueue.InMemory` 为内存队列支持包，`Kook.Net.MessageQueue.MassTransit` 为 MassTransit 队列支持包。用法请参考示例。
+- 新增支持 Webhook 模式，目前所实现的 Webhook 模式建立在 Socket 实现之上，Kook.Net 所集成的 Webhook 为抽象类 `KookWebhookClient`。`Kook.Net.Webhook.HttpListener` 为 HTTP Listener 的 Webhook 实现包，`Kook.Net.Webhook.AspNet` 为与 ASP.NET 集成的 Webhook 实现包。用法请参考示例。
+- 新增对 Microsoft.Extensions.DependencyInjection 依赖注入框架的扩展方法包 `Kook.Net.DependencyInjection.Microsoft`，用于支持快捷添加 Kook.Net 中各种客户端的服务，用法请参考示例。
+- 新增基于 `IHost` 及 `IHostedService` 扩展的主机服务扩展包 `Kook.Net.Hosting`，用于支持快捷添加 Kook.Net 中各种客户端的主机服务，用法请参考示例。
+- 新增支持接收语音数据流相关的 API。（实验性功能，不受官方支持）
+- 文本命令框架新增内置支持对 `DateOnly` 与 `TimeOnly` 类型的参数解析，新增支持对 `Uri` 类型的参数解析，新增对图文混排消息的命令解析。
+- `IUserMessage` 上新增扩展方法 `MaybeTextImageMixedMessage`，用于判断是否可能为图文混排消息。
+- 公开 `Emote` 的构造函数。
+- 新增 `KookComparers` 类，用于支持 KOOK 实体按 ID 比较。
+- 新增 `Color` 上的 `Parse` 与 `TryParse` 方法。
+- `IKookClient` 提供 `LoginAsync` 与 `LogoutAsync` 方法。
+- 新增 `TagUtil`，用于转换 `ITag` 为 `Tag<TKey, TValue>`。
+
+### 修复
+
+- 修复 `AudioClient.ClientDisconnected` 事件未能被正确引发的问题。
+- 修复 `Rest/SocketGuildUser` 上 `IsOwner` 可以被确定但值为 `null` 的问题。
+- 修复 `RequireRoleAttribute` 可以被错误地添加到不恰当的目标的问题。
+- 修复服务器成员更新事件未携带昵称参数时引发异常的问题。
+- 修复 `IGuild` 上的实现未公开 `IsAvailable` 属性的问题。
+- 修复 `ITag` 中的 `EveryoneMention` 和 `HereMention` 的值可能为 `0` 而非 `0U` 的问题。
+
+### 变更
+
+- 用户代码通过 API 操作服务器成员的角色后，框架会尝试更新缓存，以在不通过 API 更新用户角色信息时，可以通过缓存获得尽量准确的角色信息。
+- `Emote.Parse` 在发生错误时会引发的异常从 `ArgumentException` 变更为 `FormatException`。
+- `Emote.ToString` 的返回结果变更为等效于 `ToKMarkdownString` 的结果。
+- 语音连接与推流功能已变更为由受官方支持的方式实现。
+- 变更 `MessageExtensions.GetJumpUrl` 所提供的链接格式，服务器频道更改为官方新增支持的链接格式，私聊频道中的参数调整为使用聊天代码。
+- 变更 `Tag<T>` 为 `Tag<TKey, TValue>`。
+- 调整 `IUserMessage.Resolve` 的结果，使其更符合 KMarkdown 的格式。
+- `ModuleBase.ReplyTextAsync` 上的第一个参数重命名为 `text`。
+- 重命名 `SocketGuild.ValidBoostSubscriptions` 为 `SocketGuild.ActiveBoostSubscriptions`。
+- `Kook.Net` 包不再包含对 `Kook.Net.CardMarkup` 的引用。
+
+### 移除
+
+- 由于大量非官方接口已被禁用，Kook.Net.Experimental 上的大部分 API 均已移除。
+
+### 其它
+
+- XML 文档已重写为简体中文。
+- 新增 MessageQueue、Webhook、OAuth 的用法示例。
+- 新增简体中文 README。
+
 ## v0.8.0 [2024-05-28]
 
 ### 更新路线

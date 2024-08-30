@@ -2,6 +2,95 @@
 
 ---
 
+## v0.9.0 [2024-08-30]
+
+## Update Roadmap
+
+This update introduces the following new packages:
+
+- `Kook.Net.Webhook`: Webhook support package
+- `Kook.Net.Webhook.HttpListener`: Webhook implementation package for HTTP Listener
+- `Kook.Net.Webhook.AspNet`: Webhook implementation package integrated with ASP.NET
+- `Kook.Net.MessageQueue.InMemory`: In-memory message queue support package
+- `Kook.Net.MessageQueue.MassTransit`: MassTransit message queue support package
+- `Kook.Net.DependencyInjection.Microsoft`: Dependency injection extension package for
+  Microsoft.Extensions.DependencyInjection
+- `Kook.Net.Hosting`: Hosting service extension package
+
+The `Kook.Net` package now references the `Kook.Net.Webhook` package and has removed the reference to the
+`Kook.Net.CardMarkup` package. If you need to continue using the functionality for building card messages via markup
+language, please reference the `Kook.Net.CardMarkup` package separately.
+
+Voice connection and streaming features have been changed to be implemented by an officially supported method. The newly
+added API for receiving voice data streams is experimental and not officially supported.
+
+The exception thrown by `Emote.Parse` when an error occurs has been changed from `ArgumentException` to
+`FormatException`. The return result of `Emote.ToString` has been changed to be equivalent to the result of
+`ToKMarkdownString`. The link format provided by `MessageExtensions.GetJumpUrl` has been adjusted.
+`SocketGuild.ValidBoostSubscriptions` has been changed to `SocketGuild.ActiveBoostSubscriptions`. `Tag<T>` has been
+changed to `Tag<TKey, TValue>`.
+
+### Added
+
+- Added support for custom message queues, with the default implementation being synchronous message processing. Support
+  for setting the message queue provider by installing extension NuGet packages and configuring
+  `KookSocketConfig.MessageQueueProvider`. `Kook.Net.MessageQueue.InMemory` is the in-memory queue support package, and
+  `Kook.Net.MessageQueue.MassTransit` is the MassTransit queue support package. Refer to the examples for usage.
+- Added support for Webhook mode, which is currently implemented based on the Socket implementation. The Webhook
+  integrated by Kook.Net is the abstract class `KookWebhookClient`. `Kook.Net.Webhook.HttpListener` is the Webhook
+  implementation package for HTTP Listener, and `Kook.Net.Webhook.AspNet` is the Webhook implementation package
+  integrated with ASP.NET. Refer to the examples for usage.
+- Added extension methods package for the Microsoft.Extensions.DependencyInjection dependency injection framework
+  `Kook.Net.DependencyInjection.Microsoft`, to support quick addition of various clients from Kook.Net, refer to the
+  examples for usage.
+- Added hosting service extension package based on `IHost` and `IHostedService` `Kook.Net.Hosting`, to support quick
+  addition of various clients from Kook.Net as hosting services, refer to the examples for usage.
+- Added support for receiving voice data stream related APIs. (Experimental feature, not officially supported)
+- The text command framework has added built-in support for parameter parsing of `DateOnly` and `TimeOnly` types, added
+  support for parameter parsing of `Uri` type, and added command parsing for mixed text-image messages.
+- Added extension method `MaybeTextImageMixedMessage` on `IUserMessage` to determine if it might be a mixed text-image
+  message.
+- Made the constructor of `Emote` public.
+- Added `KookComparers` class to support KOOK entities comparison by ID.
+- Added `Parse` and `TryParse` methods to the `Color` class.
+- `IKookClient` provides `LoginAsync` and `LogoutAsync` methods.
+- Added `TagUtil` to convert `ITag` to `Tag<TKey, TValue>`.
+
+### Fixed
+
+- Fixed the issue where the `AudioClient.ClientDisconnected` event was not correctly raised.
+- Fixed the issue where `IsOwner` on `Rest/SocketGuildUser` could be determined but the value was `null`.
+- Fixed the issue where `RequireRoleAttribute` could be incorrectly added to inappropriate targets.
+- Fixed the issue where the server member update event threw an exception when the nickname parameter was not carried.
+- Fixed the issue where the implementation on `IGuild` did not expose the `IsAvailable` property.
+- Fixed the issue where the values of `EveryoneMention` and `HereMention` in `ITag` might be `0` instead of `0U`.
+
+### Changed
+
+- After user code manipulates server member roles via API, the framework will attempt to update the cache to get as
+  accurate role information as possible without updating user role information via API.
+- The exception thrown by `Emote.Parse` when an error occurs has been changed from `ArgumentException` to
+  `FormatException`.
+- The return result of `Emote.ToString` has been changed to be equivalent to the result of `ToKMarkdownString`.
+- Voice connection and streaming features have been changed to be implemented by an officially supported method.
+- Changed the link format provided by `MessageExtensions.GetJumpUrl`, adjusted the server channel to the newly supported
+  official link format, and adjusted the parameters in private chat channels to use chat codes.
+- Changed `Tag<T>` to `Tag<TKey, TValue>`.
+- Adjusted the result of `IUserMessage.Resolve` to be more in line with the KMarkdown format.
+- Renamed the first parameter on `ModuleBase.ReplyTextAsync` to `text`.
+- Renamed `SocketGuild.ValidBoostSubscriptions` to `SocketGuild.ActiveBoostSubscriptions`.
+- The `Kook.Net` package no longer includes a reference to `Kook.Net.CardMarkup`.
+
+### Removed
+
+- Due to the deactivation of many unofficial interfaces, most APIs on Kook.Net.Experimental have been removed.
+
+### Misc
+
+- XML documentation has been rewritten in Simplified Chinese.
+- Added usage examples for MessageQueue, Webhook, and OAuth.
+- Added Simplified Chinese README.
+
 ## v0.8.0 [2024-05-28]
 
 ### Update Roadmap
@@ -114,7 +203,8 @@ It's important to note that, due to limitations in the KOOK API, fetching messag
 supported within voice channels. Therefore, calling `GetMessagesAsync` and `GetPinnedMessagesAsync` methods from
 `IMessageChannel` on voice channels is not supported.
 
-Additionally, while voice channels support operations on `Topic` and `SlowModeInterval` at the API level, the KOOK client
+Additionally, while voice channels support operations on `Topic` and `SlowModeInterval` at the API level, the KOOK
+client
 currently does not reflect these capabilities.
 
 Creating channels does not immediately support specifying a Topic. The `Topic` property in `CreateTextChannelProperties`
@@ -147,9 +237,11 @@ creation.
 
 ### Update Roadmap
 
-In KOOK, mentioning voice channels in text messages is not supported, meaning `IVoiceChannel` should not be derived from `IMentionable` interface. Incorrect usage of mentioning `IVoiceChannel` should be removed or modified.
+In KOOK, mentioning voice channels in text messages is not supported, meaning `IVoiceChannel` should not be derived from
+`IMentionable` interface. Incorrect usage of mentioning `IVoiceChannel` should be removed or modified.
 
-The name of the cancellation token has been changed from `CancelToken` to `CancellationToken`. Existing methods, variables, properties, and parameters related to cancellation token should be updated.
+The name of the cancellation token has been changed from `CancelToken` to `CancellationToken`. Existing methods,
+variables, properties, and parameters related to cancellation token should be updated.
 
 ### Added
 
@@ -157,7 +249,8 @@ The name of the cancellation token has been changed from `CancelToken` to `Cance
 
 ### Fixed
 
-- Fixed an issue where `KookSocketClient` did not correctly handle `ConnectionState` when casted to `IKookClient` or `BaseKookClient`.
+- Fixed an issue where `KookSocketClient` did not correctly handle `ConnectionState` when casted to `IKookClient` or
+  `BaseKookClient`.
 
 ### Changes
 
