@@ -19,18 +19,27 @@ title: 变更日志
 - `Kook.Net.DependencyInjection.Microsoft`：Microsoft.Extensions.DependencyInjection 依赖注入扩展包
 - `Kook.Net.Hosting`：主机服务扩展包
 
-`Kook.Net` 包新增了对 `Kook.Net.Webhook` 包的引用，移除了对 `Kook.Net.CardMarkup` 包的引用，如需继续使用有关通过标记语言构建卡片消息的功能，请单独引用 `Kook.Net.CardMarkup` 包。
+`Kook.Net` 包新增了对 `Kook.Net.Webhook` 包的引用，移除了对 `Kook.Net.CardMarkup`
+包的引用，如需继续使用有关通过标记语言构建卡片消息的功能，请单独引用 `Kook.Net.CardMarkup` 包。
 
 语音连接与推流功能已变更为由受官方支持的方式实现，新增的接收语音数据流相关的 API 为实验性功能，不受官方支持。
 
-`Emote.Parse` 在发生错误时会引发的异常从 `ArgumentException` 变更为 `FormatException`。`Emote.ToString` 的返回结果变更为等效于 `ToKMarkdownString` 的结果。`MessageExtensions.GetJumpUrl` 所提供的链接格式进行了调整。`SocketGuild.ValidBoostSubscriptions` 变更为 `SocketGuild.ActiveBoostSubscriptions`。`Tag<T>` 变更为 `Tag<TKey, TValue>`。
+`Emote.Parse` 在发生错误时会引发的异常从 `ArgumentException` 变更为 `FormatException`。`Emote.ToString` 的返回结果变更为等效于
+`ToKMarkdownString` 的结果。`MessageExtensions.GetJumpUrl` 所提供的链接格式进行了调整。
+`SocketGuild.ValidBoostSubscriptions` 变更为 `SocketGuild.ActiveBoostSubscriptions`。`Tag<T>` 变更为 `Tag<TKey, TValue>`。
 
 ### 新增
 
-- 新增支持自定义消息队列，默认实现为同步消息处理，支持通过安装扩展 NuGet 包并配置 `KookSocketConfig.MessageQueueProvider` 来设置消息队列提供者。`Kook.Net.MessageQueue.InMemory` 为内存队列支持包，`Kook.Net.MessageQueue.MassTransit` 为 MassTransit 队列支持包。用法请参考示例。
-- 新增支持 Webhook 模式，目前所实现的 Webhook 模式建立在 Socket 实现之上，Kook.Net 所集成的 Webhook 为抽象类 `KookWebhookClient`。`Kook.Net.Webhook.HttpListener` 为 HTTP Listener 的 Webhook 实现包，`Kook.Net.Webhook.AspNet` 为与 ASP.NET 集成的 Webhook 实现包。用法请参考示例。
-- 新增对 Microsoft.Extensions.DependencyInjection 依赖注入框架的扩展方法包 `Kook.Net.DependencyInjection.Microsoft`，用于支持快捷添加 Kook.Net 中各种客户端的服务，用法请参考示例。
-- 新增基于 `IHost` 及 `IHostedService` 扩展的主机服务扩展包 `Kook.Net.Hosting`，用于支持快捷添加 Kook.Net 中各种客户端的主机服务，用法请参考示例。
+- 新增支持自定义消息队列，默认实现为同步消息处理，支持通过安装扩展 NuGet 包并配置 `KookSocketConfig.MessageQueueProvider`
+  来设置消息队列提供者。`Kook.Net.MessageQueue.InMemory` 为内存队列支持包，`Kook.Net.MessageQueue.MassTransit` 为
+  MassTransit 队列支持包。用法请参考示例。
+- 新增支持 Webhook 模式，目前所实现的 Webhook 模式建立在 Socket 实现之上，Kook.Net 所集成的 Webhook 为抽象类
+  `KookWebhookClient`。`Kook.Net.Webhook.HttpListener` 为 HTTP Listener 的 Webhook 实现包，`Kook.Net.Webhook.AspNet` 为与
+  ASP.NET 集成的 Webhook 实现包。用法请参考示例。
+- 新增对 Microsoft.Extensions.DependencyInjection 依赖注入框架的扩展方法包 `Kook.Net.DependencyInjection.Microsoft`
+  ，用于支持快捷添加 Kook.Net 中各种客户端的服务，用法请参考示例。
+- 新增基于 `IHost` 及 `IHostedService` 扩展的主机服务扩展包 `Kook.Net.Hosting`，用于支持快捷添加 Kook.Net
+  中各种客户端的主机服务，用法请参考示例。
 - 新增支持接收语音数据流相关的 API。（实验性功能，不受官方支持）
 - 文本命令框架新增内置支持对 `DateOnly` 与 `TimeOnly` 类型的参数解析，新增支持对 `Uri` 类型的参数解析，新增对图文混排消息的命令解析。
 - `IUserMessage` 上新增扩展方法 `MaybeTextImageMixedMessage`，用于判断是否可能为图文混排消息。
@@ -119,8 +128,7 @@ Bot 启动时加载服务器所需基础数据的方式。
 - SocketSelfUser 现在实现了 `IUpdateable`
 - 添加了 `IGuild.RecommendInfo.Certifications`
 - `IQuote` 新增新的实现 `MessageReference`，这仅包含要被引用的消息 ID，用于在用户代码调用 API 时传入
--
-添加了对事件类型 `embeds_append`、`sort_channel`、`updated_server_type`、`batch_added_channel`、`batch_updated_channel`、
+- 添加了对事件类型 `embeds_append`、`sort_channel`、`updated_server_type`、`batch_added_channel`、`batch_updated_channel`、
 `batch_deleted_channel`、`live_status_changed`、`PERSON` 类型的 `updated_guild`、`add_guild_mute`、`delete_guild_mute`、
 `unread_count_changed` 的支持，但暂时无法确认这些事件是否会实际下发。
 
