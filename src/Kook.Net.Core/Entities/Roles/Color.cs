@@ -358,6 +358,92 @@ public readonly struct Color
         new(((uint)color.ToArgb() << 8) >> 8);
 
     /// <summary>
+    ///     将颜色的字符串表示形式转换为颜色对象。
+    /// </summary>
+    /// <param name="rawValue"> 要解析为颜色的字符串。 </param>
+    /// <returns> 颜色对象。 </returns>
+    /// <exception cref="ArgumentOutOfRangeException"> 值必须是有效长度的数字。 </exception>
+    public static Color Parse(string rawValue)
+    {
+        if (TryParse(rawValue, out Color color))
+            return color;
+
+        throw new ArgumentOutOfRangeException(nameof(rawValue), "Value must be a number of valid length");
+    }
+
+    /// <summary>
+    ///     将颜色的字符串表示形式转换为颜色对象。
+    /// </summary>
+    /// <param name="rawValue"> 要解析为颜色的字符串。 </param>
+    /// <param name="color"> 如果转换成功，则为颜色对象；否则为默认颜色。 </param>
+    /// <returns> 如果转换成功，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
+    public static bool TryParse(string rawValue, out Color color)
+    {
+        color = new Color();
+
+        if (string.IsNullOrWhiteSpace(rawValue))
+            return false;
+
+        rawValue = rawValue.TrimStart('#');
+
+        if (rawValue.StartsWith("0x"))
+            rawValue = rawValue.Substring(2);
+
+        if (!uint.TryParse(rawValue, System.Globalization.NumberStyles.HexNumber, null, out var parsedValue))
+            return false;
+
+        uint r;
+        uint g;
+        uint b;
+        uint fullHex;
+
+        switch (rawValue.Length)
+        {
+            case 3:
+                r = parsedValue >> 8;
+                g = (parsedValue & 0xF0) >> 4;
+                b = parsedValue & 0xF;
+
+                r = (r << 4) | r;
+                g = (g << 4) | g;
+                b = (b << 4) | b;
+
+                fullHex = (r << 16) | (g << 8) | b;
+
+                break;
+
+            case 4:
+                r = (parsedValue & 0xF00) >> 8;
+                g = (parsedValue & 0xF0) >> 4;
+                b = parsedValue & 0xF;
+
+                r = (r << 4) | r;
+                g = (g << 4) | g;
+                b = (b << 4) | b;
+
+                fullHex = (r << 16) | (g << 8) | b;
+
+                break;
+
+            case 6:
+                color = new Color(parsedValue);
+                return true;
+
+            case 8:
+                parsedValue &= 0xFFFFFF;
+                color = new Color(parsedValue);
+                return true;
+
+            default:
+                return false;
+        }
+
+        color = new Color(fullHex);
+
+        return true;
+    }
+
+    /// <summary>
     ///     获取此颜色带有 <c>#</c> 前缀的 RGB 十六进制字符串表示形式（例如 <c>#000CCC</c>）。
     /// </summary>
     /// <returns> 此颜色带有 <c>#</c> 前缀的 RGB 十六进制字符串表示形式（例如 <c>#000CCC</c>）。 </returns>

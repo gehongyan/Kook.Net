@@ -80,6 +80,29 @@ public class ColorTests
     }
 
     [Fact]
+    public void Color_FromRgb_String()
+    {
+        Assert.Equal(0xFF0000u, Color.Parse("#F00").RawValue);
+        Assert.Equal(0x22BB44u, Color.Parse("#2B4").RawValue);
+        Assert.Equal(0xAABBAAu, Color.Parse("FABA").RawValue);
+        Assert.Equal(0x00F672u, Color.Parse("00F672").RawValue);
+        Assert.Equal(0x257777u, Color.Parse("0xFF257777").RawValue);
+    }
+
+    [Fact]
+    public void Color_FromRgb_String_Invalid()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => Color.Parse(null!));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Color.Parse(string.Empty));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Color.Parse(" "));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Color.Parse("#F"));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Color.Parse("F0"));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Color.Parse("FF000"));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Color.Parse("FF00000"));
+        Assert.Throws<ArgumentOutOfRangeException>(() => Color.Parse("FF0000000"));
+    }
+
+    [Fact]
     public void Color_Red() => Assert.Equal(0xAF, new Color(0xAF1390).R);
 
     [Fact]
