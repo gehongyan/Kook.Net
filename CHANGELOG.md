@@ -2,6 +2,12 @@
 
 ---
 
+## v0.9.1 [2024-09-07]
+
+### Fixed
+
+- Fix the issue where the channel creator field being an empty string causes startup failure.
+
 ## v0.9.0 [2024-08-30]
 
 ### Update Roadmap
