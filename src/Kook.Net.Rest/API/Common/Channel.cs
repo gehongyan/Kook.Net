@@ -12,6 +12,7 @@ internal class Channel
     public required string Name { get; set; }
 
     [JsonPropertyName("user_id")]
+    [JsonConverter(typeof(NullableUInt64Converter))]
     public ulong? CreatorId { get; set; }
 
     [JsonPropertyName("guild_id")]
