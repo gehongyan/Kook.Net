@@ -1,7 +1,7 @@
 namespace Kook;
 
 /// <summary>
-///     表示一个基于网关的可授予服务器用户的角色。
+///     表示一个通用的可授予服务器用户的角色。
 /// </summary>
 public interface IRole : IEntity<uint>, IDeletable, IMentionable, IComparable<IRole>
 {

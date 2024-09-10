@@ -41,7 +41,9 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 
         _client = new HttpClient(new HttpClientHandler
         {
-            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate, UseCookies = false, UseProxy = useProxy
+            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+            UseCookies = false,
+            UseProxy = useProxy
         });
         SetHeader("accept-encoding", "gzip, deflate");
 
@@ -60,8 +62,8 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
     {
         if (!_isDisposed)
         {
-            if (disposing) _client.Dispose();
-
+            if (disposing)
+                _client.Dispose();
             _isDisposed = true;
         }
     }
@@ -83,7 +85,8 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         string uri = Path.Combine(_baseUrl, endpoint);
         using (HttpRequestMessage restRequest = new(method, uri))
         {
-            if (reason != null) restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
+            if (reason != null)
+                restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
 
             if (requestHeaders != null)
                 foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)
@@ -99,7 +102,8 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
     {
         string uri = Path.Combine(_baseUrl, endpoint);
         using HttpRequestMessage restRequest = new(method, uri);
-        if (reason != null) restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
+        if (reason != null)
+            restRequest.Headers.Add("X-Audit-Log-Reason", Uri.EscapeDataString(reason));
 
         if (requestHeaders != null)
             foreach (KeyValuePair<string, IEnumerable<string>> header in requestHeaders)

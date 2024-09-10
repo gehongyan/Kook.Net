@@ -45,7 +45,10 @@ public class RtpWriteStream : AudioOutStream
     public override void WriteHeader(ushort seq, uint timestamp, bool missed)
     {
         if (_hasHeader)
+        {
+            _hasHeader = false;
             throw new InvalidOperationException("Header received with no payload");
+        }
 
         _hasHeader = true;
         _nextSeq = seq;

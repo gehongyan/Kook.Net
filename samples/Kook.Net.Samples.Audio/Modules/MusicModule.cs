@@ -234,6 +234,106 @@ public class MusicModule : ModuleBase<SocketCommandContext>
         await ReplyTextAsync(string.Join(Environment.NewLine, queue.Select((x, i) => $"[{i}] {x}")));
     }
 
+    [Command("relay", RunMode = RunMode.Async)]
+    [RequireContext(ContextType.Guild)]
+    public async Task RelayAsync(SocketVoiceChannel targetChannel)
+    {
+        if (Context.Message.Source is not MessageSource.User) return;
+        if (Context.Channel is not SocketVoiceChannel voiceChannel)
+        {
+            await ReplyTextAsync("You muse use this command in a voice channel.");
+            return;
+        }
+
+        IAudioClient? sourceClient = await voiceChannel.ConnectAsync();
+        if (sourceClient is null)
+        {
+            await ReplyTextAsync("Failed to connect to the voice channel.");
+            return;
+        }
+        await Task.Delay(TimeSpan.FromSeconds(3));
+        IAudioClient? targetClient = await targetChannel.ConnectAsync();
+        if (targetClient is null)
+        {
+            await ReplyTextAsync("Failed to connect to the target voice channel.");
+            return;
+        }
+        bool hasStarted = false;
+
+        CancellationTokenSource relayCancellationTokenSource = new();
+        sourceClient.StreamCreated += (ssrc, stream) =>
+        {
+            if (hasStarted)
+                return Task.CompletedTask;
+            hasStarted = true;
+            Task.Run(async () =>
+            {
+                try
+                {
+                    Console.WriteLine($"Stream created for SSRC: {ssrc}.");
+                    _ = Task.Run(async () => await PushStreamAsync(targetClient, stream, relayCancellationTokenSource.Token));
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            });
+            return Task.CompletedTask;
+        };
+        sourceClient.StreamDestroyed += ssrc =>
+        {
+            relayCancellationTokenSource.Cancel();
+            Console.WriteLine($"Stream destroyed for {ssrc}.");
+            return Task.CompletedTask;
+        };
+
+        CancellationTokenSource cancellationTokenSource = new(TimeSpan.FromSeconds(10));
+        await PushStreamAsync(sourceClient, cancellationTokenSource.Token);
+
+        await ReplyTextAsync("Relaying.");
+
+    }
+
+    private async Task PushStreamAsync(IAudioClient audioClient, Stream stream, CancellationToken cancellationToken)
+    {
+        await using AudioOutStream kook = audioClient.CreatePcmStream(AudioApplication.Music);
+        try
+        {
+            await stream.CopyToAsync(kook, cancellationToken);
+        }
+        finally
+        {
+            await kook.FlushAsync(cancellationToken);
+        }
+    }
+
+    private async Task PushStreamAsync(IAudioClient audioClient, CancellationToken cancellationToken)
+    {
+        // Just push some audio data to the audio client to start receiving audio data.
+        using Process? ffmpeg = Process.Start(new ProcessStartInfo
+        {
+            FileName = "ffmpeg",
+            Arguments = $"""-hide_banner -loglevel panic -i "https://sao.fm/api/fm/?id=734" -ac 2 -f s16le -ar 48000 -""",
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+        });
+        if (ffmpeg is null) return;
+        await using Stream output = ffmpeg.StandardOutput.BaseStream;
+        await using AudioOutStream kook = audioClient.CreatePcmStream(AudioApplication.Music);
+        try
+        {
+            await output.CopyToAsync(kook, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        finally
+        {
+            await kook.FlushAsync(cancellationToken);
+        }
+    }
+
     private static readonly Regex neteaseSongPageRegex = new(@"^https://music.163.com(/#)?/song\?id=(?<id>\d+)(&.*)?$", RegexOptions.Compiled);
     private static readonly Regex qqSongPageRegex = new(@"^https://y.qq.com/n/ryqq/songDetail/(?<id>\w+)(&.*)?$", RegexOptions.Compiled);
 
@@ -298,3 +398,4 @@ public class MusicModule : ModuleBase<SocketCommandContext>
         return null;
     }
 }
+
