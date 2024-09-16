@@ -1,9 +1,9 @@
 namespace Kook;
 
 /// <summary>
-///     提供用于修改 <see cref="T:Kook.IGuildChannel" /> 的属性。
+///     提供用于修改 <see cref="Kook.IGuildChannel" /> 的属性。
 /// </summary>
-/// <seealso cref="M:Kook.IGuildChannel.ModifyAsync(System.Action{Kook.ModifyGuildChannelProperties},Kook.RequestOptions)"/>
+/// <seealso cref="Kook.IGuildChannel.ModifyAsync(System.Action{Kook.ModifyGuildChannelProperties},Kook.RequestOptions)"/>
 public class ModifyGuildChannelProperties
 {
     /// <summary>

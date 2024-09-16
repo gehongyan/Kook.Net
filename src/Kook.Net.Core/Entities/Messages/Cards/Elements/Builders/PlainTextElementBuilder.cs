@@ -25,7 +25,7 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// </summary>
     /// <param name="content"> 纯文本的内容。 </param>
     /// <param name="emoji"> 是否将 Emoji 表情符号的短代码解析为表情符号。 </param>
-    /// <seealso cref="T:Kook.Emoji"/>
+    /// <seealso cref="Kook.Emoji"/>
     public PlainTextElementBuilder(string? content, bool emoji = true)
     {
         Content = content;
@@ -43,7 +43,7 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <summary>
     ///     获取或设置 Emoji 表情符号的短代码是否应被解析为表情符号。
     /// </summary>
-    /// <seealso cref="T:Kook.Emoji"/>
+    /// <seealso cref="Kook.Emoji"/>
     public bool Emoji { get; set; } = true;
 
     /// <summary>
@@ -62,7 +62,7 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// </summary>
     /// <param name="emoji"> Emoji 表情符号的短代码是否应被解析为表情符号。 </param>
     /// <returns> 当前构建器。 </returns>
-    /// <seealso cref="T:Kook.Emoji"/>
+    /// <seealso cref="Kook.Emoji"/>
     public PlainTextElementBuilder WithEmoji(bool emoji)
     {
         Emoji = emoji;

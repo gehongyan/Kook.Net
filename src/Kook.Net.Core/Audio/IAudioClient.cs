@@ -12,7 +12,7 @@ public interface IAudioClient : IDisposable
     ///     <note type="important">
     ///         SSRC 为 RTP 实时传输协议中的同步信源标识符，RTP 会话中，每个媒体流应具有一个唯一的 SSRC 标识符。KOOK
     ///         服务端未通过网关下发用户与 RTP 流 SSRC 的映射关系，因此无法通过 SSRC 直接获取其关联的用户。Kook.Net 遵循 RTP
-    ///         协议，以 SSRC 区分不同的信源，创建不同的 <see cref="T:Kook.Audio.AudioInStream"/> 实例，并引发此事件。
+    ///         协议，以 SSRC 区分不同的信源，创建不同的 <see cref="Kook.Audio.AudioInStream"/> 实例，并引发此事件。
     ///         一般地，每个 SSRC 值都可以分别表示一个用户在一个语音频道内在一次连接与断开之间的音频流的唯一标识符，
     ///         同一用户切换语音频道或断开后重新连接到同一语音频道，KOOK 语音服务器都会为其分配新的 SSRC 标识符。
     ///     </note>
@@ -26,8 +26,8 @@ public interface IAudioClient : IDisposable
     ///     <br />
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.Int32"/> 参数是 RTP 流的 SSRC 同步信源标识符。 </item>
-    ///     <item> <see cref="T:Kook.Audio.AudioInStream"/> 参数是所新创建的音频输入流。 </item>
+    ///     <item> <see cref="System.Int32"/> 参数是 RTP 流的 SSRC 同步信源标识符。 </item>
+    ///     <item> <see cref="Kook.Audio.AudioInStream"/> 参数是所新创建的音频输入流。 </item>
     ///     </list>
     /// </remarks>
     event Func<uint, AudioInStream, Task> StreamCreated;
@@ -38,7 +38,7 @@ public interface IAudioClient : IDisposable
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.Int32"/> 参数是 RTP 流的 SSRC 同步信源标识符。 </item>
+    ///     <item> <see cref="System.Int32"/> 参数是 RTP 流的 SSRC 同步信源标识符。 </item>
     ///     </list>
     /// </remarks>
     event Func<uint, Task> StreamDestroyed;
@@ -54,7 +54,7 @@ public interface IAudioClient : IDisposable
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.Exception"/> 参数是导致连接断开的异常。 </item>
+    ///     <item> <see cref="System.Exception"/> 参数是导致连接断开的异常。 </item>
     ///     </list>
     /// </remarks>
     event Func<Exception, Task> Disconnected;
@@ -70,8 +70,8 @@ public interface IAudioClient : IDisposable
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.Int32"/> 参数是更新前的延迟（毫秒）。 </item>
-    ///     <item> <see cref="T:System.Int32"/> 参数是更新后的延迟（毫秒）。 </item>
+    ///     <item> <see cref="System.Int32"/> 参数是更新前的延迟（毫秒）。 </item>
+    ///     <item> <see cref="System.Int32"/> 参数是更新后的延迟（毫秒）。 </item>
     ///     </list>
     /// </remarks>
     event Func<int, int, Task> UdpLatencyUpdated;

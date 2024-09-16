@@ -84,20 +84,20 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc/>
     public ulong MaxUploadLimit => GuildHelper.GetUploadLimit(this);
 
-    /// <inheritdoc cref="P:Kook.IGuild.EveryoneRole" />
+    /// <inheritdoc cref="Kook.IGuild.EveryoneRole" />
     public RestRole EveryoneRole => GetRole(0) ?? new RestRole(Kook, this, 0);
 
-    /// <inheritdoc cref="P:Kook.IGuild.Emotes"/>
+    /// <inheritdoc cref="Kook.IGuild.Emotes"/>
     /// <remarks>
     ///     <note type="warning">
     ///         如果当前服务器是通过 <see cref="KookRestClient.GetGuildAsync"/> 获取的，此属性可能不包含任何元素。访问
-    ///         <see cref="M:Kook.Rest.RestGuild.GetEmoteAsync(System.String,Kook.RequestOptions)"/>
+    ///         <see cref="Kook.Rest.RestGuild.GetEmoteAsync(System.String,Kook.RequestOptions)"/>
     ///         以获取所有服务器自定义表情。
     ///     </note>
     /// </remarks>
     public IReadOnlyCollection<GuildEmote> Emotes => _emotes.ToReadOnlyCollection();
 
-    /// <inheritdoc cref="P:Kook.IGuild.Roles" />
+    /// <inheritdoc cref="Kook.IGuild.Roles" />
     public IReadOnlyCollection<RestRole> Roles => _roles.ToReadOnlyCollection();
 
     /// <summary>
@@ -105,7 +105,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </summary>
     /// <remarks>
     ///     语音频道也是一种文字频道，此计算属性本意用于获取所有具有文字聊天能力的频道，通过此方法获取到的文字频道列表中也包含了语音频道。
-    ///     如需获取频道的实际类型，请参考 <see cref="M:Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
+    ///     如需获取频道的实际类型，请参考 <see cref="Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
     /// </remarks>
     public IReadOnlyCollection<RestTextChannel> TextChannels => Channels.OfType<RestTextChannel>().ToImmutableArray();
 
@@ -146,7 +146,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// </summary>
     public string? AutoDeleteTime { get; private set; }
 
-    /// <inheritdoc cref="P:Kook.IGuild.RecommendInfo"/>
+    /// <inheritdoc cref="Kook.IGuild.RecommendInfo"/>
     public RecommendInfo? RecommendInfo { get; private set; }
 
     internal RestGuild(BaseKookClient client, ulong id)
@@ -281,15 +281,15 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
     #region Bans
 
-    /// <inheritdoc cref="M:Kook.IGuild.GetBansAsync(Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IGuild.GetBansAsync(Kook.RequestOptions)" />
     public Task<IReadOnlyCollection<RestBan>> GetBansAsync(RequestOptions? options = null) =>
         GuildHelper.GetBansAsync(this, Kook, options);
 
-    /// <inheritdoc cref="M:Kook.IGuild.GetBanAsync(Kook.IUser,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IGuild.GetBanAsync(Kook.IUser,Kook.RequestOptions)" />
     public Task<RestBan?> GetBanAsync(IUser user, RequestOptions? options = null) =>
         GuildHelper.GetBanAsync(this, Kook, user.Id, options);
 
-    /// <inheritdoc cref="M:Kook.IGuild.GetBanAsync(System.UInt64,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IGuild.GetBanAsync(System.UInt64,Kook.RequestOptions)" />
     public Task<RestBan?> GetBanAsync(ulong userId, RequestOptions? options = null) =>
         GuildHelper.GetBanAsync(this, Kook, userId, options);
 
@@ -313,12 +313,12 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
     #region Invites
 
-    /// <inheritdoc cref="M:Kook.IGuild.CreateInviteAsync(Kook.InviteMaxAge,Kook.InviteMaxUses,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IGuild.CreateInviteAsync(Kook.InviteMaxAge,Kook.InviteMaxUses,Kook.RequestOptions)" />
     public async Task<RestInvite> CreateInviteAsync(int? maxAge = 604800,
         int? maxUses = null, RequestOptions? options = null) =>
         await GuildHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
 
-    /// <inheritdoc cref="M:Kook.IGuild.CreateInviteAsync(System.Nullable{System.Int32},System.Nullable{System.Int32},Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IGuild.CreateInviteAsync(System.Nullable{System.Int32},System.Nullable{System.Int32},Kook.RequestOptions)" />
     public async Task<RestInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800,
         InviteMaxUses maxUses = InviteMaxUses.Unlimited, RequestOptions? options = null) =>
         await GuildHelper.CreateInviteAsync(this, Kook, maxAge, maxUses, options).ConfigureAwait(false);
@@ -327,10 +327,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
     #region Roles
 
-    /// <inheritdoc cref="M:Kook.IGuild.GetRole(System.UInt32)" />
+    /// <inheritdoc cref="Kook.IGuild.GetRole(System.UInt32)" />
     public RestRole? GetRole(uint id) => _roles.TryGetValue(id, out RestRole? value) ? value : null;
 
-    /// <inheritdoc cref="M:Kook.IGuild.CreateRoleAsync(System.String,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IGuild.CreateRoleAsync(System.String,Kook.RequestOptions)" />
     public async Task<RestRole> CreateRoleAsync(string? name = null, RequestOptions? options = null)
     {
         RestRole role = await GuildHelper.CreateRoleAsync(this, Kook, name, options).ConfigureAwait(false);
@@ -385,14 +385,14 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <remarks>
     ///     <note type="important">
     ///         返回的集合是一个异步可枚举对象；调用
-    ///         <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///         <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///         可以异步枚举所有分页，并将其合并为一个集合。
     ///     </note>
     ///     <br />
-    ///     此方法将尝试获取所有与指定搜索条件匹配的用户。此方法会根据 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/>
-    ///     将请求拆分。换句话说，如果搜索结果有 3000 名用户，而 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/> 的常量为
+    ///     此方法将尝试获取所有与指定搜索条件匹配的用户。此方法会根据 <see cref="Kook.KookConfig.MaxUsersPerBatch"/>
+    ///     将请求拆分。换句话说，如果搜索结果有 3000 名用户，而 <see cref="Kook.KookConfig.MaxUsersPerBatch"/> 的常量为
     ///     <c>50</c>，则请求将被拆分为 60 个单独请求，因此异步枚举器会异步枚举返回 60 个响应。
-    ///     <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///     <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///     方法可以展开这 60 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
     /// <param name="func"> 一个包含设置服务器用户搜索条件属性的委托。 </param>
@@ -432,7 +432,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
     /// <remarks>
     ///     语音频道也是一种文字频道，此方法本意用于获取具有文字聊天能力的频道。如果通过此方法传入的 ID 对应的频道是语音频道，那么也会返回对应的语音频道实体。
-    ///     如需获取频道的实际类型，请参考 <see cref="M:Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
+    ///     如需获取频道的实际类型，请参考 <see cref="Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
     /// </remarks>
     public async Task<RestTextChannel?> GetTextChannelAsync(ulong id, RequestOptions? options = null)
     {
@@ -449,7 +449,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有具有文字聊天能力的频道。 </returns>
     /// <remarks>
     ///     语音频道也是一种文字频道，此方法本意用于获取所有具有文字聊天能力的频道，通过此方法获取到的文字频道列表中也包含了语音频道。
-    ///     如需获取频道的实际类型，请参考 <see cref="M:Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
+    ///     如需获取频道的实际类型，请参考 <see cref="Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
     /// </remarks>
     public async Task<IReadOnlyCollection<RestTextChannel>> GetTextChannelsAsync(RequestOptions? options = null)
     {
@@ -541,17 +541,17 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         return channel as RestTextChannel;
     }
 
-    /// <inheritdoc cref="M:Kook.IGuild.CreateTextChannelAsync(System.String,System.Action{Kook.CreateTextChannelProperties},Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IGuild.CreateTextChannelAsync(System.String,System.Action{Kook.CreateTextChannelProperties},Kook.RequestOptions)" />
     public Task<RestTextChannel> CreateTextChannelAsync(string name,
         Action<CreateTextChannelProperties>? func = null, RequestOptions? options = null) =>
         GuildHelper.CreateTextChannelAsync(this, Kook, name, func, options);
 
-    /// <inheritdoc cref="M:Kook.IGuild.CreateVoiceChannelAsync(System.String,System.Action{Kook.CreateVoiceChannelProperties},Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IGuild.CreateVoiceChannelAsync(System.String,System.Action{Kook.CreateVoiceChannelProperties},Kook.RequestOptions)" />
     public Task<RestVoiceChannel> CreateVoiceChannelAsync(string name,
         Action<CreateVoiceChannelProperties>? func = null, RequestOptions? options = null) =>
         GuildHelper.CreateVoiceChannelAsync(this, Kook, name, func, options);
 
-    /// <inheritdoc cref="M:Kook.IGuild.CreateCategoryChannelAsync(System.String,System.Action{Kook.CreateCategoryChannelProperties},Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IGuild.CreateCategoryChannelAsync(System.String,System.Action{Kook.CreateCategoryChannelProperties},Kook.RequestOptions)" />
     public Task<RestCategoryChannel> CreateCategoryChannelAsync(string name,
         Action<CreateCategoryChannelProperties>? func = null, RequestOptions? options = null) =>
         GuildHelper.CreateCategoryChannelAsync(this, Kook, name, func, options);
@@ -767,7 +767,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
 
     #endregion
 
-    /// <inheritdoc cref="P:Kook.Rest.RestGuild.Name" />
+    /// <inheritdoc cref="Kook.Rest.RestGuild.Name" />
     /// <returns> 此服务器的名称。 </returns>
     public override string ToString() => Name;
 

@@ -63,7 +63,7 @@ public interface IGuildUser : IUser, IVoiceState
     /// <remarks>
     ///     如果此用户所拥有的最高角色的颜色类型为渐变色，则此属性返回的颜色是渐变色权益失效后的回退颜色。 <br />
     ///     <note type="warning">
-    ///         一个角色的颜色可能是纯色或渐变色，参见 <see cref="P:Kook.IRole.ColorType"/>。但由于服务器用户列表 API
+    ///         一个角色的颜色可能是纯色或渐变色，参见 <see cref="Kook.IRole.ColorType"/>。但由于服务器用户列表 API
     ///         及服务器用户详情 API 所返回的用户信息均不包含角色的颜色类型和渐变色信息，因此，如果用户的最高角色的颜色是渐变色，
     ///         则此属性的值可能是不正确的。如需获取该用户的准确的显示名称及颜色，请获取此用户的最高角色实体对象，访问其颜色类型及渐变色属性。
     ///     </note>

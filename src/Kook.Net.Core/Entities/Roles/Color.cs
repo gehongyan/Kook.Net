@@ -331,7 +331,7 @@ public readonly struct Color
     /// <exception cref="ArgumentException"> 颜色原始值超过了 <see cref="MaxDecimalValue"/>。 </exception>
     public static implicit operator Color(uint rawValue) => new(rawValue);
 
-    /// <inheritdoc cref="P:Kook.Color.RawValue" />
+    /// <inheritdoc cref="Kook.Color.RawValue" />
     public static implicit operator uint(Color color) => color.RawValue;
 
     /// <inheritdoc />
@@ -342,18 +342,18 @@ public readonly struct Color
     public override int GetHashCode() => RawValue.GetHashCode();
 
     /// <summary>
-    ///     将由 Kook.Net 定义的 <see cref="T:Kook.Color"/> 颜色转换为由 .NET 定义的 <see cref="T:System.Drawing.Color"/> 颜色。
+    ///     将由 Kook.Net 定义的 <see cref="Kook.Color"/> 颜色转换为由 .NET 定义的 <see cref="System.Drawing.Color"/> 颜色。
     /// </summary>
-    /// <param name="color"> 要进行转换的 <see cref="T:Kook.Color"/> 颜色。 </param>
-    /// <returns> 与该 <see cref="T:Kook.Color"/> 颜色具有相同色值的 .NET <see cref="T:System.Drawing.Color"/> 颜色。 </returns>
+    /// <param name="color"> 要进行转换的 <see cref="Kook.Color"/> 颜色。 </param>
+    /// <returns> 与该 <see cref="Kook.Color"/> 颜色具有相同色值的 .NET <see cref="System.Drawing.Color"/> 颜色。 </returns>
     public static implicit operator StandardColor(Color color) =>
         StandardColor.FromArgb((int)color.RawValue);
 
     /// <summary>
-    ///     将由 .NET 定义的 <see cref="T:System.Drawing.Color"/> 颜色转换为由 Kook.Net 定义的 <see cref="T:Kook.Color"/> 颜色。
+    ///     将由 .NET 定义的 <see cref="System.Drawing.Color"/> 颜色转换为由 Kook.Net 定义的 <see cref="Kook.Color"/> 颜色。
     /// </summary>
-    /// <param name="color"> 要进行转换的 .NET <see cref="T:System.Drawing.Color"/> 颜色。 </param>
-    /// <returns> 与该 .NET <see cref="T:System.Drawing.Color"/> 颜色具有相同色值的 <see cref="T:Kook.Color"/> 颜色。 </returns>
+    /// <param name="color"> 要进行转换的 .NET <see cref="System.Drawing.Color"/> 颜色。 </param>
+    /// <returns> 与该 .NET <see cref="System.Drawing.Color"/> 颜色具有相同色值的 <see cref="Kook.Color"/> 颜色。 </returns>
     public static explicit operator Color(StandardColor color) =>
         new(((uint)color.ToArgb() << 8) >> 8);
 

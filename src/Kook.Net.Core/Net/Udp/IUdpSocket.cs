@@ -11,9 +11,9 @@ public interface IUdpSocket : IDisposable
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.Byte"/>[] 参数是接收到的数据报的字节数组。 </item>
-    ///     <item> <see cref="T:System.Int32"/> 参数是接收到的数据报的字节数组的起始位置。 </item>
-    ///     <item> <see cref="T:System.Int32"/> 参数是接收到的数据报的字节数组的长度。 </item>
+    ///     <item> <see cref="System.Byte"/>[] 参数是接收到的数据报的字节数组。 </item>
+    ///     <item> <see cref="System.Int32"/> 参数是接收到的数据报的字节数组的起始位置。 </item>
+    ///     <item> <see cref="System.Int32"/> 参数是接收到的数据报的字节数组的长度。 </item>
     ///     </list>
     /// </remarks>
     event Func<byte[], int, int, Task>? ReceivedDatagram;

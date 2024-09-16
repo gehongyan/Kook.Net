@@ -17,10 +17,10 @@ public class Tag<TKey, TValue> : ITag
     /// <inheritdoc />
     public int Length { get; }
 
-    /// <inheritdoc cref="P:Kook.ITag.Key" />
+    /// <inheritdoc cref="Kook.ITag.Key" />
     public TKey Key { get; }
 
-    /// <inheritdoc cref="P:Kook.ITag.Key" />
+    /// <inheritdoc cref="Kook.ITag.Key" />
     public TValue? Value { get; }
 
     internal Tag(TagType type, int index, int length, TKey key, TValue? value)

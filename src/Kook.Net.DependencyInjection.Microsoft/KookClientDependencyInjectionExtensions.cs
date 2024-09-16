@@ -14,8 +14,8 @@ public static class KookClientDependencyInjectionExtensions
     #region REST
 
     /// <summary>
-    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
-    ///     添加 <see cref="T:Kook.Rest.KookRestClient"/> 客户端。
+    ///     向指定的 <see cref="global::Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="Kook.Rest.KookRestClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK REST 客户端的服务集合。 </param>
     /// <param name="configure"> 用于配置 KOOK REST 客户端的配置委托。 </param>
@@ -28,8 +28,8 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
-    ///     添加 <see cref="T:Kook.Rest.KookRestClient"/> 客户端。
+    ///     向指定的 <see cref="global::Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="Kook.Rest.KookRestClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK REST 客户端的服务集合。 </param>
     /// <param name="config"> 用于配置 KOOK REST 客户端的配置。 </param>
@@ -42,8 +42,8 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
-    ///     添加 <see cref="T:Kook.Rest.KookRestClient"/> 客户端。
+    ///     向指定的 <see cref="global::Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="Kook.Rest.KookRestClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK REST 客户端的服务集合。 </param>
     /// <returns> 添加了 KOOK REST 客户端的服务集合。 </returns>
@@ -62,8 +62,8 @@ public static class KookClientDependencyInjectionExtensions
     #region Socket
 
     /// <summary>
-    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
-    ///     添加 <see cref="T:Kook.WebSocket.KookSocketClient"/> 客户端。
+    ///     向指定的 <see cref="global::Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="Kook.WebSocket.KookSocketClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK 网关客户端的服务集合。 </param>
     /// <param name="configure"> 用于配置 KOOK 网关客户端的配置委托。 </param>
@@ -76,8 +76,8 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
-    ///     添加 <see cref="T:Kook.WebSocket.KookSocketClient"/> 客户端。
+    ///     向指定的 <see cref="global::Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="Kook.WebSocket.KookSocketClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK 网关客户端的服务集合。 </param>
     /// <param name="config"> 用于配置 KOOK 网关客户端的配置。 </param>
@@ -90,8 +90,8 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
-    ///     添加 <see cref="T:Kook.WebSocket.KookSocketClient"/> 客户端。
+    ///     向指定的 <see cref="global::Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="Kook.WebSocket.KookSocketClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK 网关客户端的服务集合。 </param>
     /// <returns> 添加了 KOOK 网关客户端的服务集合。 </returns>
@@ -111,8 +111,8 @@ public static class KookClientDependencyInjectionExtensions
     #region Webhook
 
     /// <summary>
-    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
-    ///     添加 <see cref="T:Kook.Webhook.KookWebhookClient"/> 客户端。
+    ///     向指定的 <see cref="global::Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="Kook.Webhook.KookWebhookClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
     /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>
@@ -131,8 +131,8 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
-    ///     添加 <see cref="T:Kook.Webhook.KookWebhookClient"/> 客户端。
+    ///     向指定的 <see cref="global::Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="Kook.Webhook.KookWebhookClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
     /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>
@@ -151,8 +151,8 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
-    ///     添加 <see cref="T:Kook.Webhook.KookWebhookClient"/> 客户端。
+    ///     向指定的 <see cref="global::Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="Kook.Webhook.KookWebhookClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
     /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>
@@ -170,8 +170,8 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
-    ///     添加 <see cref="T:Kook.Webhook.KookWebhookClient"/> 客户端。
+    ///     向指定的 <see cref="global::Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="Kook.Webhook.KookWebhookClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
     /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>
@@ -189,8 +189,8 @@ public static class KookClientDependencyInjectionExtensions
     }
 
     /// <summary>
-    ///     向指定的 <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
-    ///     添加 <see cref="T:Kook.Webhook.KookWebhookClient"/> 客户端。
+    ///     向指定的 <see cref="global::Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
+    ///     添加 <see cref="Kook.Webhook.KookWebhookClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
     /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>

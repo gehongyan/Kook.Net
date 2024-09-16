@@ -11,8 +11,8 @@ namespace Kook.Commands;
 /// </summary>
 /// <remarks>
 ///     此类用于支持在运行时动态创建命令，或者在编译时静态创建命令。要在编译时创建命令模块，参见
-///     <see cref="T:Kook.Commands.ModuleBase"/> 或 <see cref="T:Kook.Commands.Builders.ModuleBuilder"/>。 <br />
-///     此服务还提供了几个事件，用于监视命令的使用情况；例如 <see cref="M:Kook.Commands.CommandService.Log" /> 用于任何与命令相关的日志事件，
+///     <see cref="Kook.Commands.ModuleBase"/> 或 <see cref="Kook.Commands.Builders.ModuleBuilder"/>。 <br />
+///     此服务还提供了几个事件，用于监视命令的使用情况；例如 <see cref="Kook.Commands.CommandService.Log" /> 用于任何与命令相关的日志事件，
 /// </remarks>
 public class CommandService : IDisposable
 {
@@ -24,7 +24,7 @@ public class CommandService : IDisposable
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.LogMessage"/> 参数是日志消息。 </item>
+    ///     <item> <see cref="Kook.LogMessage"/> 参数是日志消息。 </item>
     ///     </list>
     /// </remarks>
     public event Func<LogMessage, Task> Log
@@ -43,9 +43,9 @@ public class CommandService : IDisposable
     ///     <br />
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.Commands.CommandInfo"/>? 参数是执行的命令，如果命令在解析或先决条件阶段失败，则可能为 <c>null</c>。 </item>
-    ///     <item> <see cref="T:Kook.Commands.ICommandContext"/> 参数是命令的上下文。 </item>
-    ///     <item> <see cref="T:Kook.Commands.IResult"/> 参数是命令的结果。 </item>
+    ///     <item> <see cref="Kook.Commands.CommandInfo"/>? 参数是执行的命令，如果命令在解析或先决条件阶段失败，则可能为 <c>null</c>。 </item>
+    ///     <item> <see cref="Kook.Commands.ICommandContext"/> 参数是命令的上下文。 </item>
+    ///     <item> <see cref="Kook.Commands.IResult"/> 参数是命令的结果。 </item>
     ///     </list>
     /// </remarks>
     public event Func<CommandInfo?, ICommandContext, IResult, Task> CommandExecuted
@@ -101,7 +101,7 @@ public class CommandService : IDisposable
     ///     初始化一个 <see cref="CommandService"/> 类的新实例。
     /// </summary>
     /// <param name="config"> 命令服务的配置。 </param>
-    /// <exception cref="InvalidOperationException"> 默认运行模式不能设置为 <see cref="F:Kook.Commands.RunMode.Default"/>。 </exception>
+    /// <exception cref="InvalidOperationException"> 默认运行模式不能设置为 <see cref="Kook.Commands.RunMode.Default"/>。 </exception>
     public CommandService(CommandServiceConfig config)
     {
         _caseSensitive = config.CaseSensitiveCommands;
@@ -185,7 +185,7 @@ public class CommandService : IDisposable
     /// <param name="services"> 用于依赖注入的服务提供程序；如果不使用依赖注入，则传递 <c>null</c>。 </param>
     /// <returns> 一个表示异步添加操作的任务。任务结果包含添加的模块。 </returns>
     /// <exception cref="ArgumentException"> 此模块已经添加。 </exception>
-    /// <exception cref="InvalidOperationException"> 无法构建 <see cref="T:Kook.Commands.ModuleInfo"/>；可能提供了无效的类型。 </exception>
+    /// <exception cref="InvalidOperationException"> 无法构建 <see cref="Kook.Commands.ModuleInfo"/>；可能提供了无效的类型。 </exception>
     /// <example>
     ///     以下示例代码将模块 <c>MyModule</c> 注册到 <c>commandService</c> 中。
     ///     <code language="cs">
@@ -201,7 +201,7 @@ public class CommandService : IDisposable
     /// <param name="services"> 用于依赖注入的服务提供程序；如果不使用依赖注入，则传递 <c>null</c>。 </param>
     /// <returns> 一个表示异步添加操作的任务。任务结果包含添加的模块。 </returns>
     /// <exception cref="ArgumentException"> 此模块已经添加。 </exception>
-    /// <exception cref="InvalidOperationException"> 无法构建 <see cref="T:Kook.Commands.ModuleInfo"/>；可能提供了无效的类型。 </exception>
+    /// <exception cref="InvalidOperationException"> 无法构建 <see cref="Kook.Commands.ModuleInfo"/>；可能提供了无效的类型。 </exception>
     public async Task<ModuleInfo> AddModuleAsync(Type type, IServiceProvider? services)
     {
         services ??= EmptyServiceProvider.Instance;

@@ -3,7 +3,7 @@ namespace Kook.Commands;
 /// <summary>
 ///     表示一个模块或类中的命令在执行前需要符合的先决条件的基类。
 /// </summary>
-/// <seealso cref="T:Kook.Commands.ParameterPreconditionAttribute"/>
+/// <seealso cref="Kook.Commands.ParameterPreconditionAttribute"/>
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
 public abstract class PreconditionAttribute : Attribute
 {

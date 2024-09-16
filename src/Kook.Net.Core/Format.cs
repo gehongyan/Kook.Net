@@ -92,7 +92,7 @@ public static class Format
     public static string Url(this string? text, string url, bool sanitize = true) =>
         $"[{(sanitize ? text.Sanitize("[", "]") : text)}]({(sanitize ? url.Sanitize("(", ")") : url)})";
 
-    /// <inheritdoc cref="M:Kook.Format.Url(System.String,System.String,System.Boolean)" />
+    /// <inheritdoc cref="Kook.Format.Url(System.String,System.String,System.Boolean)" />
     public static string Url(this string? text, Uri url, bool sanitize = true) =>
         text.Url(url.ToString(), sanitize);
 
@@ -129,13 +129,13 @@ public static class Format
     ///         零宽连接符 (<c>\u200d</c>)，以确保引用的正确显示。当用户复制引用内的文本时，他们不会复制到这个特殊字符。
     ///         但是，如果通过消息相关的 API 从服务器获取消息文本，返回的消息文本将包含此方法插入的特殊字符。
     ///         另外，在块的末尾还会附加一个额外的换行符，以修正由于引用格式化引起的换行缺失问题。附加的换行符与附近的换行符样式一致。
-    ///         如果要引用整个文本块，请使用 <see cref="M:Kook.Format.BlockQuote(System.String,System.Boolean)"/>。
+    ///         如果要引用整个文本块，请使用 <see cref="Kook.Format.BlockQuote(System.String,System.Boolean)"/>。
     ///     </note>
     ///     <br />
     ///     此方法会尝试分析字符串中的行分隔符，并在需要因要保持排版时插入行分隔符时，尽可能地使用原有的行分隔符。 <br />
     ///     设置 <paramref name="sanitize"/> 为 <c>true</c> 将会对文本中出现的所有 <c>&gt;</c> 字符转义为 <c>\&gt;</c>。
     /// </remarks>
-    /// <seealso cref="M:Kook.Format.BlockQuote(System.String,System.Boolean)"/>
+    /// <seealso cref="Kook.Format.BlockQuote(System.String,System.Boolean)"/>
     [return: NotNullIfNotNull(nameof(text))]
     public static string? Quote(this string? text, bool sanitize = true)
     {
@@ -341,7 +341,7 @@ public static class Format
     ///     <br />
     ///     设置 <paramref name="sanitize"/> 为 <c>true</c> 将会对文本中出现的所有 <c>&gt;</c> 字符转义为 <c>\&gt;</c>。
     /// </remarks>
-    /// <seealso cref="M:Kook.Format.Quote(System.String,System.Boolean)"/>
+    /// <seealso cref="Kook.Format.Quote(System.String,System.Boolean)"/>
     public static string BlockQuote(this string? text, bool sanitize = true)
     {
         if (text is null) return "> \u200d";
@@ -368,7 +368,7 @@ public static class Format
         return result.ToString();
     }
 
-    /// <inheritdoc cref="M:Kook.Format.StripMarkdown(System.String)" />
+    /// <inheritdoc cref="Kook.Format.StripMarkdown(System.String)" />
     [Obsolete("Use StripMarkdown instead.")]
     public static string StripMarkDown(this string text) => StripMarkdown(text);
 
@@ -391,7 +391,7 @@ public static class Format
     /// <param name="user"> 要格式化其用户名称与识别号的用户。 </param>
     /// <param name="doBidirectional"> 是否要保持双向 Unicode 进行格式化。 </param>
     /// <returns> 获取格式化后的用户名称与识别号。 </returns>
-    /// <seealso cref="P:Kook.KookConfig.FormatUsersInBidirectionalUnicode"/>
+    /// <seealso cref="Kook.KookConfig.FormatUsersInBidirectionalUnicode"/>
     public static string UsernameAndIdentifyNumber(this IUser user, bool doBidirectional) =>
         doBidirectional
             ? $"\u2066{user.Username}\u2069#{user.IdentifyNumber}"

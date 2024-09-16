@@ -36,8 +36,8 @@ public class RestBan : IBan
     ///     获取被封禁用户的包含用户名及识别号的格式化字符串。
     /// </summary>
     /// <returns> 被封禁用户的包含用户名及识别号的格式化字符串。 </returns>
-    /// <seealso cref="P:Kook.Rest.RestBan.User"/>
-    /// <seealso cref="M:Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
+    /// <seealso cref="Kook.Rest.RestBan.User"/>
+    /// <seealso cref="Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
     public override string ToString() => User.ToString();
 
     private string DebuggerDisplay => $"{User}: {Reason}";

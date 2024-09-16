@@ -11,9 +11,9 @@ public interface IWebSocketClient : IDisposable
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.Byte"/>[] 参数是接收到的二进制消息的字节数组。 </item>
-    ///     <item> <see cref="T:System.Int32"/> 参数是接收到的二进制消息的字节数组的起始位置。 </item>
-    ///     <item> <see cref="T:System.Int32"/> 参数是接收到的二进制消息的字节数组的长度。 </item>
+    ///     <item> <see cref="System.Byte"/>[] 参数是接收到的二进制消息的字节数组。 </item>
+    ///     <item> <see cref="System.Int32"/> 参数是接收到的二进制消息的字节数组的起始位置。 </item>
+    ///     <item> <see cref="System.Int32"/> 参数是接收到的二进制消息的字节数组的长度。 </item>
     ///     </list>
     /// </remarks>
     event Func<byte[], int, int, Task>? BinaryMessage;
@@ -24,7 +24,7 @@ public interface IWebSocketClient : IDisposable
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.String"/> 参数是接收到的文本消息的字符串。 </item>
+    ///     <item> <see cref="System.String"/> 参数是接收到的文本消息的字符串。 </item>
     ///     </list>
     /// </remarks>
     event Func<string, Task>? TextMessage;
@@ -35,7 +35,7 @@ public interface IWebSocketClient : IDisposable
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.Exception"/> 参数是导致连接关闭的异常。 </item>
+    ///     <item> <see cref="System.Exception"/> 参数是导致连接关闭的异常。 </item>
     ///     </list>
     /// </remarks>
     event Func<Exception, Task>? Closed;
@@ -52,9 +52,9 @@ public interface IWebSocketClient : IDisposable
     /// </summary>
     /// <param name="keepAliveInterval"> 保持活动间隔。 </param>
     /// <remarks>
-    ///     如果未调用此方法，则默认的保持活动间隔是 <see cref="P:System.Net.WebSockets.WebSocket.DefaultKeepAliveInterval"/>。
+    ///     如果未调用此方法，则默认的保持活动间隔是 <see cref="System.Net.WebSockets.WebSocket.DefaultKeepAliveInterval"/>。
     /// </remarks>
-    /// <seealso cref="P:System.Net.WebSockets.ClientWebSocketOptions.KeepAliveInterval"/>
+    /// <seealso cref="System.Net.WebSockets.ClientWebSocketOptions.KeepAliveInterval"/>
     void SetKeepAliveInterval(TimeSpan keepAliveInterval);
 
     /// <summary>

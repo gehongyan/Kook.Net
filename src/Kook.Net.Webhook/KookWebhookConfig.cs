@@ -4,10 +4,10 @@ using Kook.WebSocket;
 namespace Kook.Webhook;
 
 /// <summary>
-///     表示一个用于 <see cref="T:Kook.Webhook.KookWebhookClient"/> 的配置类。
+///     表示一个用于 <see cref="Kook.Webhook.KookWebhookClient"/> 的配置类。
 /// </summary>
 /// <remarks>
-///     此配置基于 <see cref="T:Kook.WebSocket.KookSocketConfig"/>，在与网关有关的配置的基础上，定义了有关 Webhook 的配置。
+///     此配置基于 <see cref="Kook.WebSocket.KookSocketConfig"/>，在与网关有关的配置的基础上，定义了有关 Webhook 的配置。
 /// </remarks>
 public abstract class KookWebhookConfig : KookSocketConfig
 {

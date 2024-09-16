@@ -1,7 +1,7 @@
 namespace Kook.Audio.Streams;
 
 /// <summary>
-///     表示输出音频流，用于包装一个 <see cref="T:Kook.Audio.IAudioClient"/>，在写入时向语音服务器发送语音数据。
+///     表示输出音频流，用于包装一个 <see cref="Kook.Audio.IAudioClient"/>，在写入时向语音服务器发送语音数据。
 /// </summary>
 public class OutputStream : AudioOutStream
 {

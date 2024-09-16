@@ -71,7 +71,7 @@ public class Poke : IPoke
             quality, pokeResource, model.MessageScenarios);
     }
 
-    /// <inheritdoc cref="P:Kook.Rest.Poke.Name" />
+    /// <inheritdoc cref="Kook.Rest.Poke.Name" />
     /// <returns> POKE 的名称。 </returns>
     public override string ToString() => Name;
 

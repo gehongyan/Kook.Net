@@ -6,27 +6,27 @@ namespace Kook.Commands;
 public interface ICommandContext
 {
     /// <summary>
-    ///     获取命令执行时所使用的 <see cref="T:Kook.IKookClient" />。
+    ///     获取命令执行时所使用的 <see cref="Kook.IKookClient" />。
     /// </summary>
     IKookClient Client { get; }
 
     /// <summary>
-    ///     获取命令执行所在的 <see cref="T:Kook.IGuild" />。
+    ///     获取命令执行所在的 <see cref="Kook.IGuild" />。
     /// </summary>
     IGuild? Guild { get; }
 
     /// <summary>
-    ///     获取命令执行所在的 <see cref="T:Kook.IMessageChannel" />。
+    ///     获取命令执行所在的 <see cref="Kook.IMessageChannel" />。
     /// </summary>
     IMessageChannel Channel { get; }
 
     /// <summary>
-    ///     获取执行命令的 <see cref="T:Kook.IUser" />。
+    ///     获取执行命令的 <see cref="Kook.IUser" />。
     /// </summary>
     IUser User { get; }
 
     /// <summary>
-    ///     获取命令解析的源 <see cref="T:Kook.IUserMessage" />。
+    ///     获取命令解析的源 <see cref="Kook.IUserMessage" />。
     /// </summary>
     IUserMessage Message { get; }
 }

@@ -108,8 +108,8 @@ public class RestInvite : RestEntity<uint>, IInvite, IUpdateable
     public Task DeleteAsync(RequestOptions? options = null) =>
         InviteHelper.DeleteAsync(this, Kook, options);
 
-    /// <inheritdoc cref="P:Kook.Rest.RestInvite.Url" />
-    /// <returns> 此邀请的 URL，URL 的路径中包含 <see cref="P:Kook.Rest.RestInvite.Code"/> 属性的值。 </returns>
+    /// <inheritdoc cref="Kook.Rest.RestInvite.Url" />
+    /// <returns> 此邀请的 URL，URL 的路径中包含 <see cref="Kook.Rest.RestInvite.Code"/> 属性的值。 </returns>
     public override string ToString() => Url;
 
     private string DebuggerDisplay => $"{Url} ({GuildName} / {ChannelName ?? "Channel not specified"})";

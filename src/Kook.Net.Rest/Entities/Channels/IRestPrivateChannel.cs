@@ -5,6 +5,6 @@ namespace Kook.Rest;
 /// </summary>
 public interface IRestPrivateChannel : IPrivateChannel
 {
-    /// <inheritdoc cref="P:Kook.IPrivateChannel.Recipients" />
+    /// <inheritdoc cref="Kook.IPrivateChannel.Recipients" />
     new IReadOnlyCollection<RestUser> Recipients { get; }
 }

@@ -54,9 +54,9 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     ///     <note type="warning">
     ///         此属性可能不会始终返回连接到此语音频道的所有成员，因为用户可能在 Bot 连接到网关之前就连接到了此语音频道。
     ///         如需准确获取所有连接到此语音频道的成员，可能需要启用
-    ///         <see cref="P:Kook.WebSocket.KookSocketConfig.AlwaysDownloadVoiceStates"/>，这可以让 Bot
+    ///         <see cref="Kook.WebSocket.KookSocketConfig.AlwaysDownloadVoiceStates"/>，这可以让 Bot
     ///         在启动连接到网关时获取完整的语音状态。也可以调用方法
-    ///         <see cref="M:Kook.WebSocket.SocketVoiceChannel.GetConnectedUsersAsync(Kook.CacheMode,Kook.RequestOptions)"/>
+    ///         <see cref="Kook.WebSocket.SocketVoiceChannel.GetConnectedUsersAsync(Kook.CacheMode,Kook.RequestOptions)"/>
     ///         访问 API 获取连接到此语音频道的用户。
     ///     </note>
     /// </remarks>
@@ -100,7 +100,7 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
     public Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions? options = null) =>
         ChannelHelper.ModifyAsync(this, Kook, func, options);
 
-    /// <inheritdoc cref="M:Kook.IVoiceChannel.GetConnectedUsersAsync(Kook.CacheMode,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IVoiceChannel.GetConnectedUsersAsync(Kook.CacheMode,Kook.RequestOptions)" />
     public async Task<IReadOnlyCollection<SocketGuildUser>> GetConnectedUsersAsync(
         CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null) =>
         mode is CacheMode.AllowDownload
@@ -288,7 +288,7 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
         Task.FromResult<IGuildUser?>(GetUser(id));
 
     /// <inheritdoc />
-    /// <seealso cref="M:Kook.IVoiceChannel.GetConnectedUsersAsync(Kook.CacheMode,Kook.RequestOptions)"/>
+    /// <seealso cref="Kook.IVoiceChannel.GetConnectedUsersAsync(Kook.CacheMode,Kook.RequestOptions)"/>
     IAsyncEnumerable<IReadOnlyCollection<IGuildUser>> IGuildChannel.GetUsersAsync(
         CacheMode mode, RequestOptions? options) =>
         mode == CacheMode.AllowDownload

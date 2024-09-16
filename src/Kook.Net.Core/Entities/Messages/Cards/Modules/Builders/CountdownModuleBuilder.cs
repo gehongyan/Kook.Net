@@ -39,7 +39,7 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     ///     获取或设置倒计时开始的时间。
     /// </summary>
     /// <remarks>
-    ///     仅当 <see cref="Mode"/> 为 <see cref="F:Kook.CountdownMode.Second"/> 时，才允许设置 <see cref="StartTime"/>。
+    ///     仅当 <see cref="Mode"/> 为 <see cref="Kook.CountdownMode.Second"/> 时，才允许设置 <see cref="StartTime"/>。
     /// </remarks>
     public DateTimeOffset? StartTime { get; set; }
 
@@ -76,7 +76,7 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     /// <param name="startTime"> 倒计时开始的时间。 </param>
     /// <returns> 当前构建器。 </returns>
     /// <remarks>
-    ///     仅当 <see cref="Mode"/> 为 <see cref="F:Kook.CountdownMode.Second"/> 时，才允许设置 <see cref="StartTime"/>。
+    ///     仅当 <see cref="Mode"/> 为 <see cref="Kook.CountdownMode.Second"/> 时，才允许设置 <see cref="StartTime"/>。
     /// </remarks>
     public CountdownModuleBuilder WithStartTime(DateTimeOffset? startTime)
     {
@@ -89,7 +89,7 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
     /// </summary>
     /// <returns> 由当前构建器表示的属性构建的 <see cref="CountdownModule"/> 对象。 </returns>
     /// <exception cref="ArgumentOutOfRangeException">
-    ///     <see cref="CountdownMode"/> 不为 <see cref="F:Kook.CountdownMode.Second"/> 时，不允许设置 <see cref="StartTime"/>。
+    ///     <see cref="CountdownMode"/> 不为 <see cref="Kook.CountdownMode.Second"/> 时，不允许设置 <see cref="StartTime"/>。
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
     ///     <see cref="EndTime"/> 早于当前时间。

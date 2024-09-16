@@ -4,7 +4,7 @@ using System.Globalization;
 namespace Kook.Commands;
 
 /// <summary>
-///     表示一个用于解析实现了 <see cref="T:Kook.IUser"/> 的对象的类型读取器。
+///     表示一个用于解析实现了 <see cref="Kook.IUser"/> 的对象的类型读取器。
 /// </summary>
 /// <typeparam name="T"> 要解析为的用户类型。 </typeparam>
 public class UserTypeReader<T> : TypeReader

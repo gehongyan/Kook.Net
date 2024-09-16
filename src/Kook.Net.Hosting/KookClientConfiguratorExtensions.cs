@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 namespace Kook.Net.Hosting;
 
 /// <summary>
-///     提供用于配置 <see cref="T:Kook.Net.DependencyInjection.Microsoft.IKookClientConfigurator`2"/>
+///     提供用于配置 <see cref="Kook.Net.DependencyInjection.Microsoft.IKookClientConfigurator{TClient,TConfig}"/>
 ///     添加客户端托管服务的扩展方法。
 /// </summary>
 public static class KookClientConfiguratorExtensions

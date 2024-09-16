@@ -1,9 +1,9 @@
 namespace Kook;
 
 /// <summary>
-///     提供用于修改 <see cref="T:Kook.IVoiceChannel"/> 的属性。
+///     提供用于修改 <see cref="Kook.IVoiceChannel"/> 的属性。
 /// </summary>
-/// <seealso cref="M:Kook.IVoiceChannel.ModifyAsync(System.Action{Kook.ModifyVoiceChannelProperties},Kook.RequestOptions)"/>
+/// <seealso cref="Kook.IVoiceChannel.ModifyAsync(System.Action{Kook.ModifyVoiceChannelProperties},Kook.RequestOptions)"/>
 public class ModifyVoiceChannelProperties : ModifyTextChannelProperties
 {
     /// <summary>
@@ -11,9 +11,9 @@ public class ModifyVoiceChannelProperties : ModifyTextChannelProperties
     /// </summary>
     /// <remarks>
     ///     <note type="warning">
-    ///         受限于 KOOK API，无法通过 KOOK API 设置语音频道的语音质量为 <see cref="F:Kook.VoiceQuality._128kbps"/>
+    ///         受限于 KOOK API，无法通过 KOOK API 设置语音频道的语音质量为 <see cref="Kook.VoiceQuality._128kbps"/>
     ///         或更高的值，尽管语音频道所属的服务器已有相应的服务器助力。通过此属性设置为不低于
-    ///         <see cref="F:Kook.VoiceQuality._128kbps"/> 的语音质量的操作是无效的。
+    ///         <see cref="Kook.VoiceQuality._128kbps"/> 的语音质量的操作是无效的。
     ///     </note>
     ///     <br />
     ///     如果此值为 <c>null</c>，则语音质量不会被修改。
@@ -33,7 +33,7 @@ public class ModifyVoiceChannelProperties : ModifyTextChannelProperties
     /// </summary>
     /// <remarks>
     ///     密码只支持 1 至 12 位的数字，设置密码后，用户连接到此频道时需要输入密码。如果此值为
-    ///     <see cref="F:System.String.Empty"/>，则密码将被清除；如果此值为 <c>null</c>，则密码不会被修改。
+    ///     <see cref="System.String.Empty"/>，则密码将被清除；如果此值为 <c>null</c>，则密码不会被修改。
     /// </remarks>
     public string? Password { get; set; }
 
@@ -51,6 +51,6 @@ public class ModifyVoiceChannelProperties : ModifyTextChannelProperties
     /// <remarks>
     ///     如果此值为 <c>null</c>，则语音服务器区域不会被修改。
     /// </remarks>
-    /// <seealso cref="P:Kook.IGuild.Region"/>
+    /// <seealso cref="Kook.IGuild.Region"/>
     public string? VoiceRegion { get; set; }
 }

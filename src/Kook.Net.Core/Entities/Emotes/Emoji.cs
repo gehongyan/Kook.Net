@@ -21,7 +21,7 @@ public class Emoji : IEmote
     /// <summary>
     ///     获取此表情符号的 Unicode 表示。
     /// </summary>
-    /// <returns> 一个解析为 <see cref="P:Kook.Emoji.Name"/> 的字符串。 </returns>
+    /// <returns> 一个解析为 <see cref="Kook.Emoji.Name"/> 的字符串。 </returns>
     public override string ToString() => Name;
 
     /// <summary>
@@ -42,7 +42,7 @@ public class Emoji : IEmote
     }
 
     /// <summary>
-    ///     尝试从原始格式解析 <see cref="T:Kook.Emoji"/> 类的新实例。
+    ///     尝试从原始格式解析 <see cref="Kook.Emoji"/> 类的新实例。
     /// </summary>
     /// <param name="text"> 要解析的字符串，例如：<c>:heart:</c> 或 <c>❤</c>。 </param>
     /// <param name="result"> 如果解析成功，则包含解析的 <see cref="Emoji"/>；否则为 <c>null</c>。 </param>
@@ -61,7 +61,7 @@ public class Emoji : IEmote
     }
 
     /// <summary>
-    ///     从原始格式解析 <see cref="T:Kook.Emoji"/> 类的新实例。
+    ///     从原始格式解析 <see cref="Kook.Emoji"/> 类的新实例。
     /// </summary>
     /// <param name="text"> 要解析的字符串，例如：<c>:heart:</c> 或 <c>❤</c>。 </param>
     /// <returns> 解析的 <see cref="Emoji"/>。 </returns>
@@ -1845,6 +1845,6 @@ public class Emoji : IEmote
         }
     }
 
-    /// <inheritdoc cref="M:Kook.Emoji.Parse(System.String)" />
+    /// <inheritdoc cref="Kook.Emoji.Parse(System.String)" />
     public static implicit operator Emoji(string emojiStr) => Parse(emojiStr);
 }

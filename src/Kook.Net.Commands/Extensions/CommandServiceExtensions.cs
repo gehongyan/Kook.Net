@@ -1,7 +1,7 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     提供用于 <see cref="T:Kook.Commands.CommandService"/> 的扩展方法。
+///     提供用于 <see cref="Kook.Commands.CommandService"/> 的扩展方法。
 /// </summary>
 public static class CommandServiceExtensions
 {

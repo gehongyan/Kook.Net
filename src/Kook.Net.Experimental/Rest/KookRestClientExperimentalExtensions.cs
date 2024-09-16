@@ -1,16 +1,16 @@
 namespace Kook.Rest;
 
 /// <summary>
-///     提供用于 <see cref="T:Kook.Rest.KookRestClient"/> 的实验性功能的扩展方法。
+///     提供用于 <see cref="Kook.Rest.KookRestClient"/> 的实验性功能的扩展方法。
 /// </summary>
 public static class KookRestClientExperimentalExtensions
 {
     /// <summary>
-    ///     获取当前用户具有 <see cref="F:Kook.GuildPermission.Administrator"/> 权限的服务器的集合。
+    ///     获取当前用户具有 <see cref="Kook.GuildPermission.Administrator"/> 权限的服务器的集合。
     /// </summary>
     /// <param name="client"> KOOK REST 客户端实例。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步操作的任务，任务的结果包含当前用户具有 <see cref="F:Kook.GuildPermission.Administrator"/> 权限的使用服务器。 </returns>
+    /// <returns> 一个表示异步操作的任务，任务的结果包含当前用户具有 <see cref="Kook.GuildPermission.Administrator"/> 权限的使用服务器。 </returns>
     public static Task<IReadOnlyCollection<RestGuild>> GetAdminGuildsAsync(this KookRestClient client, RequestOptions? options = null) =>
         ExperimentalClientHelper.GetAdminGuildsAsync(client, options);
 

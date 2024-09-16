@@ -12,7 +12,7 @@ namespace Kook;
 ///         彩色文本的颜色在不同的平台上可能会有所不同。建议您在不同的平台上测试您的卡片消息，以确保文本颜色符合您的预期。
 ///     </note>
 /// </remarks>
-/// <seealso cref="M:Kook.Format.Colorize(System.String,Kook.TextTheme,System.Boolean)"/>。
+/// <seealso cref="Kook.Format.Colorize(System.String,Kook.TextTheme,System.Boolean)"/>。
 public enum TextTheme : ushort
 {
     /// <summary>

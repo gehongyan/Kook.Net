@@ -67,7 +67,7 @@ public class CardBuilderTests
     }
 
     /// <summary>
-    ///     Tests the behavior of <see cref="M:Kook.CardBuilder.WithColor(System.Nullable{Kook.Color})"/>.
+    ///     Tests the behavior of <see cref="Kook.CardBuilder.WithColor(System.Nullable{Kook.Color})"/>.
     /// </summary>
     [Fact]
     public void WithColor()

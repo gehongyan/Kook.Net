@@ -45,12 +45,12 @@ public interface IMessage : IEntity<Guid>, IDeletable
     /// </summary>
     /// <returns>
     ///     此属性会对 <see cref="Content"/> 的内容进行两步操作： <br />
-    ///     1. 使用 <see cref="M:Kook.IUserMessage.Resolve(Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling)"/>
+    ///     1. 使用 <see cref="Kook.IUserMessage.Resolve(Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling)"/>
     ///     方法解析所有标签的完整名称； <br />
-    ///     2. 使用 <see cref="M:Kook.Format.StripMarkdown(System.String)"/> 清理所有 KMarkdown 格式字符。
+    ///     2. 使用 <see cref="Kook.Format.StripMarkdown(System.String)"/> 清理所有 KMarkdown 格式字符。
     /// </returns>
-    /// <seealso cref="M:Kook.IUserMessage.Resolve(Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling)"/>
-    /// <seealso cref="M:Kook.Format.StripMarkdown(System.String)"/>
+    /// <seealso cref="Kook.IUserMessage.Resolve(Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling)"/>
+    /// <seealso cref="Kook.Format.StripMarkdown(System.String)"/>
     string CleanContent { get; }
 
     /// <summary>

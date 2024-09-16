@@ -34,7 +34,7 @@ public class Quote : IQuote
     /// </summary>
     public IUser Author { get; }
 
-    /// <inheritdoc cref="P:Kook.MessageReference.Empty" />
+    /// <inheritdoc cref="Kook.MessageReference.Empty" />
     [Obsolete("Use MessageReference.Empty instead.")]
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
     public static MessageReference Empty => new(Guid.Empty);
@@ -43,7 +43,7 @@ public class Quote : IQuote
     ///     使用指定的消息 ID 创建一个新的 <see cref="Quote"/> 实例。
     /// </summary>
     /// <param name="quotedMessageId"> 要引用的消息的 ID。 </param>
-    /// <seealso cref="M:Kook.MessageReference.#ctor(System.Guid)"/>
+    /// <seealso cref="Kook.MessageReference(System.Guid)"/>
     [Obsolete("Use MessageReference instead.")]
     public Quote(Guid quotedMessageId)
     {

@@ -1,7 +1,7 @@
 namespace Kook;
 
 /// <summary>
-///     表示 <see cref="T:Kook.ITextChannel"/> 的慢速模式延迟时间秒数。
+///     表示 <see cref="Kook.ITextChannel"/> 的慢速模式延迟时间秒数。
 /// </summary>
 public enum SlowModeInterval
 {

@@ -3,7 +3,7 @@ namespace Kook;
 /// <summary>
 ///     提供用于搜索服务器用户的属性。
 /// </summary>
-/// <seealso cref="M:Kook.IGuild.SearchUsersAsync(System.Action{Kook.SearchGuildMemberProperties},System.Int32,Kook.CacheMode,Kook.RequestOptions)"/>
+/// <seealso cref="Kook.IGuild.SearchUsersAsync(System.Action{Kook.SearchGuildMemberProperties},System.Int32,Kook.CacheMode,Kook.RequestOptions)"/>
 public class SearchGuildMemberProperties
 {
     /// <summary>

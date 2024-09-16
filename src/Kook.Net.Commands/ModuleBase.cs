@@ -117,23 +117,23 @@ public abstract class ModuleBase<T> : IModuleBase
                 isEphemeral ? Context.User : null, options)
             .ConfigureAwait(false);
 
-    /// <inheritdoc cref="M:Kook.Commands.IModuleBase.BeforeExecuteAsync(Kook.Commands.CommandInfo)" />
+    /// <inheritdoc cref="Kook.Commands.IModuleBase.BeforeExecuteAsync(Kook.Commands.CommandInfo)" />
     protected virtual Task BeforeExecuteAsync(CommandInfo command) => Task.CompletedTask;
 
-    /// <inheritdoc cref="M:Kook.Commands.IModuleBase.BeforeExecute(Kook.Commands.CommandInfo)" />
+    /// <inheritdoc cref="Kook.Commands.IModuleBase.BeforeExecute(Kook.Commands.CommandInfo)" />
     protected virtual void BeforeExecute(CommandInfo command)
     {
     }
 
-    /// <inheritdoc cref="M:Kook.Commands.IModuleBase.AfterExecuteAsync(Kook.Commands.CommandInfo)" />
+    /// <inheritdoc cref="Kook.Commands.IModuleBase.AfterExecuteAsync(Kook.Commands.CommandInfo)" />
     protected virtual Task AfterExecuteAsync(CommandInfo command) => Task.CompletedTask;
 
-    /// <inheritdoc cref="M:Kook.Commands.IModuleBase.AfterExecute(Kook.Commands.CommandInfo)" />
+    /// <inheritdoc cref="Kook.Commands.IModuleBase.AfterExecute(Kook.Commands.CommandInfo)" />
     protected virtual void AfterExecute(CommandInfo command)
     {
     }
 
-    /// <inheritdoc cref="M:Kook.Commands.IModuleBase.OnModuleBuilding(Kook.Commands.CommandService,Kook.Commands.Builders.ModuleBuilder)" />
+    /// <inheritdoc cref="Kook.Commands.IModuleBase.OnModuleBuilding(Kook.Commands.CommandService,Kook.Commands.Builders.ModuleBuilder)" />
     protected virtual void OnModuleBuilding(CommandService commandService, ModuleBuilder builder)
     {
     }

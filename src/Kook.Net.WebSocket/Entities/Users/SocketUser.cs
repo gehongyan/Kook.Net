@@ -123,11 +123,11 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
         Presence.Update(isOnline, activeClient);
     }
 
-    /// <inheritdoc cref="M:Kook.IUser.CreateDMChannelAsync(Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IUser.CreateDMChannelAsync(Kook.RequestOptions)" />
     public async Task<SocketDMChannel> CreateDMChannelAsync(RequestOptions? options = null) =>
         await SocketUserHelper.CreateDMChannelAsync(this, Kook, options).ConfigureAwait(false);
 
-    /// <inheritdoc cref="M:Kook.IUser.GetIntimacyAsync(Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IUser.GetIntimacyAsync(Kook.RequestOptions)" />
     public Task<RestIntimacy> GetIntimacyAsync(RequestOptions? options = null) =>
         UserHelper.GetIntimacyAsync(this, Kook, options);
 
@@ -155,7 +155,7 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     ///     获取此用户的包含用户名及识别号的格式化字符串。
     /// </summary>
     /// <returns> 一个表示此用户的包含用户名及识别号的格式化字符串。 </returns>
-    /// <seealso cref="M:Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
+    /// <seealso cref="Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
     public override string ToString() => Format.UsernameAndIdentifyNumber(this, Kook.FormatUsersInBidirectionalUnicode);
 
     private string DebuggerDisplay =>

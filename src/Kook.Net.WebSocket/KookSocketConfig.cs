@@ -7,10 +7,10 @@ using Kook.Rest;
 namespace Kook.WebSocket;
 
 /// <summary>
-///     表示一个用于 <see cref="T:Kook.WebSocket.KookSocketClient"/> 的配置类。
+///     表示一个用于 <see cref="Kook.WebSocket.KookSocketClient"/> 的配置类。
 /// </summary>
 /// <remarks>
-///     此配置基于 <see cref="T:Kook.Rest.KookRestConfig"/>，在与 REST 有关的配置的基础上，定义了有关网关的配置。
+///     此配置基于 <see cref="Kook.Rest.KookRestConfig"/>，在与 REST 有关的配置的基础上，定义了有关网关的配置。
 /// </remarks>
 /// <example>
 ///     以下代码启用了消息缓存，并配置客户端在服务器可用时始终下载用户。
@@ -58,13 +58,13 @@ public class KookSocketConfig : KookRestConfig
     /// <summary>
     ///     获取或设置被视为加入少量服务器的阈值数量。
     /// </summary>
-    /// <seealso cref="F:Kook.WebSocket.StartupCacheFetchMode.Auto"/>
+    /// <seealso cref="Kook.WebSocket.StartupCacheFetchMode.Auto"/>
     public uint SmallNumberOfGuildsThreshold { get; set; } = 5;
 
     /// <summary>
     ///     获取或设置被视为加入大量服务器的阈值数量。
     /// </summary>
-    /// <seealso cref="F:Kook.WebSocket.StartupCacheFetchMode.Auto"/>
+    /// <seealso cref="Kook.WebSocket.StartupCacheFetchMode.Auto"/>
     public uint LargeNumberOfGuildsThreshold { get; set; } = 50;
 
     /// <summary>
@@ -86,7 +86,7 @@ public class KookSocketConfig : KookRestConfig
     ///     获取或设置在启动时缓存获取模式。
     /// </summary>
     /// <remarks>
-    ///     此属性用于指定客户端在启动时如何缓存基础数据，并影响 <see cref="E:Kook.WebSocket.KookSocketClient.Ready"/> 事件的引发时机。 <br />
+    ///     此属性用于指定客户端在启动时如何缓存基础数据，并影响 <see cref="Kook.WebSocket.KookSocketClient.Ready"/> 事件的引发时机。 <br />
     ///     缓存基础数据包括服务器基本信息、频道、角色、频道权限重写、当前用户在服务器内的昵称。
     /// </remarks>
     public StartupCacheFetchMode StartupCacheFetchMode { get; set; } = StartupCacheFetchMode.Auto;
@@ -102,7 +102,7 @@ public class KookSocketConfig : KookRestConfig
     /// <remarks>
     ///     <note>
     ///         对于大型服务器，启用此选项可能会导致性能问题。调用
-    ///         <see cref="M:Kook.WebSocket.KookSocketClient.DownloadUsersAsync(System.Collections.Generic.IEnumerable{Kook.IGuild},Kook.RequestOptions)"/>
+    ///         <see cref="Kook.WebSocket.KookSocketClient.DownloadUsersAsync(System.Collections.Generic.IEnumerable{Kook.IGuild},Kook.RequestOptions)"/>
     ///         可以按需下载服务器用户列表。
     ///     </note>
     /// </remarks>
@@ -114,7 +114,7 @@ public class KookSocketConfig : KookRestConfig
     /// <remarks>
     ///     <note>
     ///         对于大型服务器，启用此选项可能会导致性能问题。调用
-    ///         <see cref="M:Kook.WebSocket.KookSocketClient.DownloadVoiceStatesAsync(System.Collections.Generic.IEnumerable{Kook.IGuild},Kook.RequestOptions)"/>
+    ///         <see cref="Kook.WebSocket.KookSocketClient.DownloadVoiceStatesAsync(System.Collections.Generic.IEnumerable{Kook.IGuild},Kook.RequestOptions)"/>
     ///         可以按需下载服务器语音状态。
     ///     </note>
     /// </remarks>
@@ -126,10 +126,10 @@ public class KookSocketConfig : KookRestConfig
     /// <remarks>
     ///     <note>
     ///         当此属性为 <c>true</c> 时，客户端将在启动时下载所有服务器的所有服务器助力信息，并在引发
-    ///         <see cref="E:Kook.WebSocket.KookSocketClient.GuildUpdated"/> 事件时，当 <see cref="SocketGuild.BoostSubscriptionCount"/>
+    ///         <see cref="Kook.WebSocket.BaseSocketClient.GuildUpdated"/> 事件时，当 <see cref="SocketGuild.BoostSubscriptionCount"/>
     ///         发生更改时，也会重新下载所有服务器的所有服务器助力信息。 <br />
     ///         对于大型服务器，启用此选项可能会导致性能问题。调用
-    ///         <see cref="M:Kook.WebSocket.KookSocketClient.DownloadBoostSubscriptionsAsync(System.Collections.Generic.IEnumerable{Kook.IGuild},Kook.RequestOptions)"/>
+    ///         <see cref="Kook.WebSocket.KookSocketClient.DownloadBoostSubscriptionsAsync(System.Collections.Generic.IEnumerable{Kook.IGuild},Kook.RequestOptions)"/>
     ///         可以按需下载服务器的所有服务器助力信息。
     ///     </note>
     /// </remarks>
@@ -140,7 +140,7 @@ public class KookSocketConfig : KookRestConfig
     /// </summary>
     /// <remarks>
     ///     KOOK API 无法立即返回刚刚新加入的服务器数据，因此此属性用于控制获取加入的服务器数据的最大重试次数。
-    ///     每次重试前都会等待 <see cref="P:Kook.WebSocket.KookSocketConfig.JoinedGuildDataFetchingRetryDelay"/>
+    ///     每次重试前都会等待 <see cref="Kook.WebSocket.KookSocketConfig.JoinedGuildDataFetchingRetryDelay"/>
     ///     毫秒。将当前属性设置为 0 或负值以禁用重试。
     /// </remarks>
     public int MaxJoinedGuildDataFetchingRetryTimes { get; set; } = 10;
@@ -149,7 +149,7 @@ public class KookSocketConfig : KookRestConfig
     ///     获取或设置获取新加入服务器数据每次重试之前所等待的时间间隔（毫秒）。
     /// </summary>
     /// <exception cref="System.ArgumentException"> 时间间隔不能小于 <c>0</c>。 </exception>
-    /// <seealso cref="P:Kook.WebSocket.KookSocketConfig.MaxJoinedGuildDataFetchingRetryTimes"/>
+    /// <seealso cref="Kook.WebSocket.KookSocketConfig.MaxJoinedGuildDataFetchingRetryTimes"/>
     public int JoinedGuildDataFetchingRetryDelay
     {
         get => _joinedGuildDataFetchingRetryDelay;
@@ -163,7 +163,7 @@ public class KookSocketConfig : KookRestConfig
     private int _joinedGuildDataFetchingRetryDelay = 500;
 
     /// <summary>
-    ///     获取或设置是否在引发 <see cref="E:Kook.WebSocket.BaseSocketClient.GuildUpdated"/> 事件时通过 API 更新服务器角色位置。
+    ///     获取或设置是否在引发 <see cref="Kook.WebSocket.BaseSocketClient.GuildUpdated"/> 事件时通过 API 更新服务器角色位置。
     /// </summary>
     public bool AutoUpdateRolePositions { get; set; } = false;
 

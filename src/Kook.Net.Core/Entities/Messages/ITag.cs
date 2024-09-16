@@ -30,7 +30,7 @@ public interface ITag
     /// </summary>
     /// <remarks>
     ///     当 <see cref="Type"/> 为 <see cref="TagType.HereMention"/>，此属性应返回表示提及在线成员的实体，但这样的实体不存在。
-    ///     为了便利，此属性返回与 <see cref="P:Kook.IGuild.EveryoneRole"/> 相同的实体，但并不表示此标签提及的是所有人，而仍表示提及的是在线成员。
+    ///     为了便利，此属性返回与 <see cref="Kook.IGuild.EveryoneRole"/> 相同的实体，但并不表示此标签提及的是所有人，而仍表示提及的是在线成员。
     /// </remarks>
     object? Value { get; }
 }

@@ -29,7 +29,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     internal new KookSocketApiClient ApiClient => base.ApiClient as KookSocketApiClient
         ?? throw new InvalidOperationException("The API client is not a WebSocket-based client.");
 
-    /// <inheritdoc cref="P:Kook.Rest.BaseKookClient.CurrentUser" />
+    /// <inheritdoc cref="Kook.Rest.BaseKookClient.CurrentUser" />
     public new virtual SocketSelfUser? CurrentUser
     {
         get => base.CurrentUser as SocketSelfUser;
@@ -125,7 +125,7 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     /// </summary>
     /// <param name="guilds"> 要下载服务器助力信息的服务器。如果为 <c>null</c>，则下载所有可用的服务器。 </param>
     /// <remarks>
-    ///     对于要下载服务器助力信息的服务器，当前用户在该服务器中必须具有 <see cref="F:Kook.GuildPermission.ManageGuild"/> 权限。
+    ///     对于要下载服务器助力信息的服务器，当前用户在该服务器中必须具有 <see cref="Kook.GuildPermission.ManageGuild"/> 权限。
     /// </remarks>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     public abstract Task DownloadBoostSubscriptionsAsync(IEnumerable<IGuild>? guilds = null,

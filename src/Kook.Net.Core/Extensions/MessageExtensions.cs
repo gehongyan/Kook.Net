@@ -31,7 +31,7 @@ public static class MessageExtensions
     /// <param name="reactions"> 要用于向此消息添加回应的所有表情符号。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步添加操作的任务。 </returns>
-    /// <seealso cref="M:Kook.IMessage.AddReactionAsync(Kook.IEmote,Kook.RequestOptions)"/>
+    /// <seealso cref="Kook.IMessage.AddReactionAsync(Kook.IEmote,Kook.RequestOptions)"/>
     public static async Task AddReactionsAsync(this IUserMessage msg, IEnumerable<IEmote> reactions,
         RequestOptions? options = null)
     {
@@ -50,7 +50,7 @@ public static class MessageExtensions
     /// <param name="reactions"> 要从此消息移除的回应的所有表情符号。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步移除操作的任务。 </returns>
-    /// <seealso cref="M:Kook.IMessage.RemoveReactionAsync(Kook.IEmote,Kook.IUser,Kook.RequestOptions)"/>
+    /// <seealso cref="Kook.IMessage.RemoveReactionAsync(Kook.IEmote,Kook.IUser,Kook.RequestOptions)"/>
     public static async Task RemoveReactionsAsync(this IUserMessage msg, IUser user, IEnumerable<IEmote> reactions,
         RequestOptions? options = null)
     {

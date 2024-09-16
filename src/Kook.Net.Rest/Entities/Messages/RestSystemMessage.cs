@@ -8,7 +8,7 @@ namespace Kook.Rest;
 /// </summary>
 /// <remarks>
 ///     <note type="warning">
-///         KOOK 未统一规范系统消息类型，此类并未在 <see cref="T:Kook.Rest.RestMessage"/> 之上封装更多的实用功能。
+///         KOOK 未统一规范系统消息类型，此类并未在 <see cref="Kook.Rest.RestMessage"/> 之上封装更多的实用功能。
 ///     </note>
 /// </remarks>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]

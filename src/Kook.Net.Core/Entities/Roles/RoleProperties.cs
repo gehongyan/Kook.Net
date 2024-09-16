@@ -1,9 +1,9 @@
 namespace Kook;
 
 /// <summary>
-///     提供用于修改 <see cref="T:Kook.IRole"/> 的属性。
+///     提供用于修改 <see cref="Kook.IRole"/> 的属性。
 /// </summary>
-/// <seealso cref="M:Kook.IRole.ModifyAsync(System.Action{Kook.RoleProperties},Kook.RequestOptions)" />
+/// <seealso cref="Kook.IRole.ModifyAsync(System.Action{Kook.RoleProperties},Kook.RequestOptions)" />
 public class RoleProperties
 {
     /// <summary>
@@ -21,7 +21,7 @@ public class RoleProperties
     /// </summary>
     public bool? IsHoisted { get; set; }
 
-    /// <inheritdoc cref="P:Kook.RoleProperties.IsHoisted" />
+    /// <inheritdoc cref="Kook.RoleProperties.IsHoisted" />
     [Obsolete("Use IsHoisted instead.")]
     public bool? Hoist
     {
@@ -34,7 +34,7 @@ public class RoleProperties
     /// </summary>
     public bool? IsMentionable { get; set; }
 
-    /// <inheritdoc cref="P:Kook.RoleProperties.IsMentionable" />
+    /// <inheritdoc cref="Kook.RoleProperties.IsMentionable" />
     [Obsolete("Use IsMentionable instead.")]
     public bool? Mentionable
     {

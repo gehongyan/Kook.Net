@@ -27,7 +27,7 @@ public interface IVoiceChannel : ITextChannel, IAudioChannel
     /// <param name="func"> 一个包含修改有关语音聊天能力的属性的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步修改操作的任务。 </returns>
-    /// <seealso cref="T:Kook.ModifyVoiceChannelProperties"/>
+    /// <seealso cref="Kook.ModifyVoiceChannelProperties"/>
     Task ModifyAsync(Action<ModifyVoiceChannelProperties> func, RequestOptions? options = null);
 
     /// <summary>

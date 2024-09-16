@@ -1,7 +1,7 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     提供用于 <see cref="T:System.Collections.Generic.IEnumerable`1"/> 的扩展方法。
+///     提供用于 <see cref="System.Collections.Generic.IEnumerable{T}"/> 的扩展方法。
 /// </summary>
 public static class IEnumerableExtensions
 {

@@ -10,27 +10,27 @@ public class CommandAttribute : Attribute
     ///     获取此命令的基本名称。
     /// </summary>
     /// <remarks>
-    ///     <see cref="T:Kook.Commands.NameAttribute"/> 特性重写此属性的值。
+    ///     <see cref="Kook.Commands.NameAttribute"/> 特性重写此属性的值。
     /// </remarks>
     public string? Text { get; }
 
     /// <summary>
     ///     获取或设置命令的运行模式。
     /// </summary>
-    /// <seealso cref="P:Kook.Commands.CommandServiceConfig.DefaultRunMode"/>
+    /// <seealso cref="Kook.Commands.CommandServiceConfig.DefaultRunMode"/>
     public RunMode RunMode { get; set; } = RunMode.Default;
 
     /// <summary>
     ///     获取或设置是否忽略此命令的额外参数。
     /// </summary>
-    /// <seealso cref="P:Kook.Commands.CommandServiceConfig.IgnoreExtraArgs"/>
+    /// <seealso cref="Kook.Commands.CommandServiceConfig.IgnoreExtraArgs"/>
     public bool? IgnoreExtraArgs { get; }
 
     /// <summary>
     ///     获取或设置命令的摘要。
     /// </summary>
     /// <remarks>
-    ///     <see cref="T:Kook.Commands.SummaryAttribute"/> 特性重写此属性的值。
+    ///     <see cref="Kook.Commands.SummaryAttribute"/> 特性重写此属性的值。
     /// </remarks>
     public string? Summary { get; set; }
 
@@ -38,7 +38,7 @@ public class CommandAttribute : Attribute
     ///     获取或设置命令的别名。
     /// </summary>
     /// <remarks>
-    ///     <see cref="T:Kook.Commands.AliasAttribute"/> 特性的值会与此属性的值合并。
+    ///     <see cref="Kook.Commands.AliasAttribute"/> 特性的值会与此属性的值合并。
     /// </remarks>
     public string?[]? Aliases { get; set; }
 
@@ -46,7 +46,7 @@ public class CommandAttribute : Attribute
     ///     获取或设置命令的备注。
     /// </summary>
     /// <remarks>
-    ///     <see cref="T:Kook.Commands.RemainderAttribute"/> 特性重写此属性的值。
+    ///     <see cref="Kook.Commands.RemainderAttribute"/> 特性重写此属性的值。
     /// </remarks>
     public string? Remarks { get; set; }
 

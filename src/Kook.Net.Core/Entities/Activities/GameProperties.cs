@@ -1,9 +1,9 @@
 namespace Kook;
 
 /// <summary>
-///     提供用于修改 <see cref="T:Kook.IGame" /> 的属性。
+///     提供用于修改 <see cref="Kook.IGame" /> 的属性。
 /// </summary>
-/// <seealso cref="M:Kook.IGame.ModifyAsync(System.Action{Kook.GameProperties},Kook.RequestOptions)"/>
+/// <seealso cref="Kook.IGame.ModifyAsync(System.Action{Kook.GameProperties},Kook.RequestOptions)"/>
 public class GameProperties
 {
     /// <summary>

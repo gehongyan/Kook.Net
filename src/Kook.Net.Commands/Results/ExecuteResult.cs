@@ -49,7 +49,7 @@ public struct ExecuteResult : IResult
     /// <param name="ex"> 导致执行失败的异常。 </param>
     /// <returns>
     ///     一个包含导致执行失败的异常的 <see cref="ExecuteResult"/>，其错误类型为
-    ///     <see cref="F:Kook.Commands.CommandError.Exception"/>，原因为异常消息。
+    ///     <see cref="Kook.Commands.CommandError.Exception"/>，原因为异常消息。
     /// </returns>
     public static ExecuteResult FromError(Exception? ex) => new(ex, CommandError.Exception, ex?.Message);
 

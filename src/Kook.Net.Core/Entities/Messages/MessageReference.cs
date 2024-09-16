@@ -14,7 +14,7 @@ public class MessageReference : IQuote
     /// <remarks>
     ///     此属性用于在修改消息时删除引用。
     /// </remarks>
-    /// <seealso cref="P:Kook.MessageProperties.Quote"/>
+    /// <seealso cref="Kook.MessageProperties.Quote"/>
     public static MessageReference Empty => new(Guid.Empty);
 
     /// <summary>

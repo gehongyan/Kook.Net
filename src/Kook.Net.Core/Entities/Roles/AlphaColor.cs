@@ -69,7 +69,7 @@ public readonly struct AlphaColor
     }
 
     /// <summary>
-    ///     使用指定的 <see cref="T:Kook.Color"/> 及不透明度初始化一个 <see cref="AlphaColor"/> 结构的新实例。
+    ///     使用指定的 <see cref="Kook.Color"/> 及不透明度初始化一个 <see cref="AlphaColor"/> 结构的新实例。
     /// </summary>
     /// <example>
     ///     创建 #607D8BFF（http://www.color-hex.com/color/607d8b）所表示的颜色，且其完全不透明：
@@ -202,7 +202,7 @@ public readonly struct AlphaColor
     /// <param name="rawValue"> 颜色的 32 位无符号整型原始值。 </param>
     public static implicit operator AlphaColor(uint rawValue) => new(rawValue);
 
-    /// <inheritdoc cref="P:Kook.AlphaColor.RawValue" />
+    /// <inheritdoc cref="Kook.AlphaColor.RawValue" />
     public static implicit operator uint(AlphaColor color) => color.RawValue;
 
     /// <inheritdoc />
@@ -213,14 +213,14 @@ public readonly struct AlphaColor
     public override int GetHashCode() => RawValue.GetHashCode();
 
     /// <summary>
-    ///     将由 Kook.Net 定义的 <see cref="T:Kook.Color"/> 颜色转换为 Kook.Net 定义的 <see cref="T:Kook.AlphaColor"/> 颜色。
+    ///     将由 Kook.Net 定义的 <see cref="Kook.Color"/> 颜色转换为 Kook.Net 定义的 <see cref="Kook.AlphaColor"/> 颜色。
     /// </summary>
-    /// <param name="color"> 要进行转换的 Kook.Net 定义的 <see cref="T:Kook.Color"/> 颜色。 </param>
-    /// <returns> 与该 Kook.Net 定义的 <see cref="T:Kook.Color"/> 颜色具有相同色值的 <see cref="T:Kook.AlphaColor"/> 颜色。 </returns>
+    /// <param name="color"> 要进行转换的 Kook.Net 定义的 <see cref="Kook.Color"/> 颜色。 </param>
+    /// <returns> 与该 Kook.Net 定义的 <see cref="Kook.Color"/> 颜色具有相同色值的 <see cref="Kook.AlphaColor"/> 颜色。 </returns>
     public static implicit operator AlphaColor(Color color) =>
         new((color.RawValue << 8) | 0xFF);
 
-    /// <inheritdoc cref="P:Kook.AlphaColor.BaseColor" />
+    /// <inheritdoc cref="Kook.AlphaColor.BaseColor" />
     /// <remarks>
     ///     <note type="warning">
     ///         此转换会丢失不透明度通道的信息。
@@ -229,18 +229,18 @@ public readonly struct AlphaColor
     public static explicit operator Color(AlphaColor color) => color.BaseColor;
 
     /// <summary>
-    ///     将由 Kook.Net 定义的 <see cref="T:Kook.AlphaColor"/> 颜色转换为由 .NET 定义的 <see cref="T:System.Drawing.Color"/> 颜色。
+    ///     将由 Kook.Net 定义的 <see cref="Kook.AlphaColor"/> 颜色转换为由 .NET 定义的 <see cref="System.Drawing.Color"/> 颜色。
     /// </summary>
-    /// <param name="color"> 要进行转换的 <see cref="T:Kook.AlphaColor"/> 颜色。 </param>
-    /// <returns> 与该 <see cref="T:Kook.AlphaColor"/> 颜色具有相同色值的 .NET <see cref="T:System.Drawing.Color"/> 颜色。 </returns>
+    /// <param name="color"> 要进行转换的 <see cref="Kook.AlphaColor"/> 颜色。 </param>
+    /// <returns> 与该 <see cref="Kook.AlphaColor"/> 颜色具有相同色值的 .NET <see cref="System.Drawing.Color"/> 颜色。 </returns>
     public static implicit operator StandardColor(AlphaColor color) =>
         StandardColor.FromArgb(color.A, color.R, color.G, color.B);
 
     /// <summary>
-    ///     将由 .NET 定义的 <see cref="T:System.Drawing.Color"/> 颜色转换为由 Kook.Net 定义的 <see cref="T:Kook.AlphaColor"/> 颜色。
+    ///     将由 .NET 定义的 <see cref="System.Drawing.Color"/> 颜色转换为由 Kook.Net 定义的 <see cref="Kook.AlphaColor"/> 颜色。
     /// </summary>
-    /// <param name="color"> 要进行转换的 .NET <see cref="T:System.Drawing.Color"/> 颜色。 </param>
-    /// <returns> 与该 .NET <see cref="T:System.Drawing.Color"/> 颜色具有相同色值的 <see cref="T:Kook.AlphaColor"/> 颜色。 </returns>
+    /// <param name="color"> 要进行转换的 .NET <see cref="System.Drawing.Color"/> 颜色。 </param>
+    /// <returns> 与该 .NET <see cref="System.Drawing.Color"/> 颜色具有相同色值的 <see cref="Kook.AlphaColor"/> 颜色。 </returns>
     public static explicit operator AlphaColor(StandardColor color) =>
         new(color.R, color.G, color.B, color.A);
 

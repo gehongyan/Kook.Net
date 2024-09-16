@@ -1,7 +1,7 @@
 ﻿namespace Kook;
 
 /// <summary>
-///     提供用于转换 <see cref="T:Kook.ITag"/> 为强类型实现类的工具方法。
+///     提供用于转换 <see cref="Kook.ITag"/> 为强类型实现类的工具方法。
 /// </summary>
 public static class TagUtils
 {

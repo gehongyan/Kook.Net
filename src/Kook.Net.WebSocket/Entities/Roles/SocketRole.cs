@@ -14,7 +14,7 @@ public class SocketRole : SocketEntity<uint>, IRole
 {
     #region SocketRole
 
-    /// <inheritdoc cref="P:Kook.IRole.Guild" />
+    /// <inheritdoc cref="Kook.IRole.Guild" />
     public SocketGuild Guild { get; }
 
     /// <inheritdoc />
@@ -96,7 +96,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     /// <remarks>
     ///     <note type="important">
     ///         返回的集合是一个异步可枚举对象；调用
-    ///         <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///         <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///         可以异步枚举所有分页，并将其合并为一个集合。
     ///     </note>
     ///     <br />
@@ -104,10 +104,10 @@ public class SocketRole : SocketEntity<uint>, IRole
     ///         请勿一次性获取过多消息，这可能会导致抢占式速率限制，甚至触发实际的速率限制，从而导致 Bot 服务暂停。
     ///     </note>
     ///     <br />
-    ///     此方法将尝试获取拥有此角色的所有服务器用户。此方法会根据 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/>
-    ///     将请求拆分。换句话说，如果存在 500 个用户拥有此角色，而 <see cref="F:Kook.KookConfig.MaxUsersPerBatch"/> 的常量为
+    ///     此方法将尝试获取拥有此角色的所有服务器用户。此方法会根据 <see cref="Kook.KookConfig.MaxUsersPerBatch"/>
+    ///     将请求拆分。换句话说，如果存在 500 个用户拥有此角色，而 <see cref="Kook.KookConfig.MaxUsersPerBatch"/> 的常量为
     ///     <c>50</c>，则请求将被拆分为 10 个单独请求，因此异步枚举器会异步枚举返回 10 个响应。
-    ///     <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///     <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///     方法可以展开这 10 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
@@ -139,7 +139,7 @@ public class SocketRole : SocketEntity<uint>, IRole
 
     #endregion
 
-    /// <inheritdoc cref="P:Kook.WebSocket.SocketRole.Name" />
+    /// <inheritdoc cref="Kook.WebSocket.SocketRole.Name" />
     public override string ToString() => Name;
 
     private string DebuggerDisplay => $"{Name} ({Id})";

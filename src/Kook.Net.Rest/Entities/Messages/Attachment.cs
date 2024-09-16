@@ -62,7 +62,7 @@ public class Attachment : IAttachment
             model.Size, model.FileType, duration, model.Width, model.Height);
     }
 
-    /// <inheritdoc cref="P:Kook.Rest.Attachment.Filename" />
+    /// <inheritdoc cref="Kook.Rest.Attachment.Filename" />
     /// <returns> 此附件的文件名。 </returns>
     public override string? ToString() => Filename;
 

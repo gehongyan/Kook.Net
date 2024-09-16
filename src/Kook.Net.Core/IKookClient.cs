@@ -48,7 +48,7 @@ public interface IKookClient : IDisposable
     /// <param name="validateToken"> 是否验证令牌。 </param>
     /// <returns> 一个表示异步登录操作的任务。 </returns>
     /// <remarks>
-    ///     验证令牌的操作是通过 <see cref="M:Kook.TokenUtils.ValidateToken(Kook.TokenType,System.String)"/> 方法完成的。 <br />
+    ///     验证令牌的操作是通过 <see cref="Kook.TokenUtils.ValidateToken(Kook.TokenType,System.String)"/> 方法完成的。 <br />
     ///     此方法用于向当前客户端设置后续 API 请求的身份验证信息，获取并设置当前所登录用户的信息。
     /// </remarks>
     Task LoginAsync(TokenType tokenType, string token, bool validateToken = true);

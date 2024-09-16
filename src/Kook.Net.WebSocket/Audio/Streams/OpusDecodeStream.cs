@@ -5,7 +5,7 @@ namespace Kook.Audio.Streams;
 /// </summary>
 public class OpusDecodeStream : AudioOutStream
 {
-    /// <inheritdoc cref="F:Kook.Audio.Streams.OpusEncodeStream.SampleRate" />
+    /// <inheritdoc cref="Kook.Audio.Streams.OpusEncodeStream.SampleRate" />
     public const int SampleRate = OpusEncodeStream.SampleRate;
 
     private readonly AudioStream _next;

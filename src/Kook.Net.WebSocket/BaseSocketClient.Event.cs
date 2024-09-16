@@ -10,7 +10,7 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketChannel"/> 参数是新创建的服务器频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketChannel"/> 参数是新创建的服务器频道。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketChannel, Task> ChannelCreated
@@ -27,7 +27,7 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketChannel"/> 参数是被删除的服务器频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketChannel"/> 参数是被删除的服务器频道。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketChannel, Task> ChannelDestroyed
@@ -44,8 +44,8 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketChannel"/> 参数是更新前的服务器频道。 </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketChannel"/> 参数是更新后的服务器频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketChannel"/> 参数是更新前的服务器频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketChannel"/> 参数是更新后的服务器频道。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketChannel, SocketChannel, Task> ChannelUpdated
@@ -63,15 +63,15 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是被添加了回应的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 消息；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是被添加了回应的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 消息；否则，包含 <see cref="System.Guid"/> 消息 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketChannel"/> 参数是消息所在的频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketChannel"/> 参数是消息所在的频道。 </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是添加了此回应的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是添加了此回应的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketReaction"/> 参数是被添加的回应。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketReaction"/> 参数是被添加的回应。 </item>
     ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, SocketReaction, Task> ReactionAdded
@@ -89,15 +89,15 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是被移除了回应的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 消息；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是被移除了回应的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 消息；否则，包含 <see cref="System.Guid"/> 消息 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketChannel"/> 参数是消息所在的频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketChannel"/> 参数是消息所在的频道。 </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是移除了此回应的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是移除了此回应的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketReaction"/> 参数是被移除的回应。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketReaction"/> 参数是被移除的回应。 </item>
     ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, SocketTextChannel, Cacheable<SocketGuildUser, ulong>, SocketReaction, Task> ReactionRemoved
@@ -115,18 +115,18 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是被添加了回应的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 消息；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是被添加了回应的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 消息；否则，包含 <see cref="System.Guid"/> 消息 ID，以供按需下载实体。
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是消息所在的可缓存私聊频道。如果缓存中存在此私聊频道实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketDMChannel"/> 私聊频道；否则，包含 <see cref="T:System.Guid"/> 私聊频道聊天代码，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是消息所在的可缓存私聊频道。如果缓存中存在此私聊频道实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketDMChannel"/> 私聊频道；否则，包含 <see cref="System.Guid"/> 私聊频道聊天代码，以供按需下载实体。
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是添加了此回应的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是添加了此回应的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketReaction"/> 参数是被添加的回应。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketReaction"/> 参数是被添加的回应。 </item>
     ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task> DirectReactionAdded
@@ -144,18 +144,18 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是被移除了回应的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 消息；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是被移除了回应的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 消息；否则，包含 <see cref="System.Guid"/> 消息 ID，以供按需下载实体。
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是消息所在的可缓存私聊频道。如果缓存中存在此私聊频道实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketDMChannel"/> 私聊频道；否则，包含 <see cref="T:System.Guid"/> 私聊频道聊天代码，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是消息所在的可缓存私聊频道。如果缓存中存在此私聊频道实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketDMChannel"/> 私聊频道；否则，包含 <see cref="System.Guid"/> 私聊频道聊天代码，以供按需下载实体。
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是移除了此回应的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是移除了此回应的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketReaction"/> 参数是被移除的回应。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketReaction"/> 参数是被移除的回应。 </item>
     ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketDMChannel, Guid>, Cacheable<SocketUser, ulong>, SocketReaction, Task> DirectReactionRemoved
@@ -176,9 +176,9 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketMessage"/> 参数是新接收到的服务器消息。 </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketGuildUser"/> 参数是发送消息的服务器用户。 </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketTextChannel"/> 参数是消息所在的服务器频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketMessage"/> 参数是新接收到的服务器消息。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketGuildUser"/> 参数是发送消息的服务器用户。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketTextChannel"/> 参数是消息所在的服务器频道。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketMessage, SocketGuildUser, SocketTextChannel, Task> MessageReceived
@@ -196,14 +196,14 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是被删除的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 被删除的消息；否则，包含 <see cref="T:System.Guid"/> 消息 ID。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是被删除的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 被删除的消息；否则，包含 <see cref="System.Guid"/> 消息 ID。
     ///         <br />
     ///         <note type="important">
-    ///             消息被删除后无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///             消息被删除后无法通过 <see cref="Kook.Cacheable{TEntity,TId}.DownloadAsync"/> 方法下载。
     ///         </note>
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketTextChannel"/> 参数是消息被删除前所在的服务器频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketTextChannel"/> 参数是消息被删除前所在的服务器频道。 </item>
     ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, SocketTextChannel, Task> MessageDeleted
@@ -221,18 +221,18 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被更新前的状态。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 消息被更新前的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是可缓存消息被更新前的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 消息被更新前的状态；否则，包含 <see cref="System.Guid"/> 消息 ID。
     ///         <br />
     ///         <note type="important">
-    ///             消息被更新前的状态无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///             消息被更新前的状态无法通过 <see cref="Kook.Cacheable{TEntity,TId}.DownloadAsync"/> 方法下载。
     ///         </note>
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被更新后的状态。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 消息被更新后的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是可缓存消息被更新后的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 消息被更新后的状态；否则，包含 <see cref="System.Guid"/> 消息 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketTextChannel"/> 参数是消息所在的服务器频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketTextChannel"/> 参数是消息所在的服务器频道。 </item>
     ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, SocketTextChannel, Task> MessageUpdated
@@ -250,21 +250,21 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被置顶前的状态。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 消息被置顶前的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是可缓存消息被置顶前的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 消息被置顶前的状态；否则，包含 <see cref="System.Guid"/> 消息 ID。
     ///         <br />
     ///         <note type="important">
-    ///             消息被置顶前的状态无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///             消息被置顶前的状态无法通过 <see cref="Kook.Cacheable{TEntity,TId}.DownloadAsync"/> 方法下载。
     ///         </note>
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被置顶后的状态。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 消息被置顶后的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是可缓存消息被置顶后的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 消息被置顶后的状态；否则，包含 <see cref="System.Guid"/> 消息 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketTextChannel"/> 参数是消息所在的服务器频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketTextChannel"/> 参数是消息所在的服务器频道。 </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是置顶了该消息的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是置顶了该消息的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
     ///     </list>
     /// </remarks>
@@ -283,21 +283,21 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被取消置顶前的状态。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 消息被取消置顶前的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是可缓存消息被取消置顶前的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 消息被取消置顶前的状态；否则，包含 <see cref="System.Guid"/> 消息 ID。
     ///         <br />
     ///         <note type="important">
-    ///             消息被取消置顶前的状态无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///             消息被取消置顶前的状态无法通过 <see cref="Kook.Cacheable{TEntity,TId}.DownloadAsync"/> 方法下载。
     ///         </note>
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被取消置顶后的状态。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 消息被取消置顶后的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是可缓存消息被取消置顶后的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 消息被取消置顶后的状态；否则，包含 <see cref="System.Guid"/> 消息 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketTextChannel"/> 参数是消息所在的服务器频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketTextChannel"/> 参数是消息所在的服务器频道。 </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是取消置顶了该消息的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是取消置顶了该消息的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
     ///     </list>
     /// </remarks>
@@ -319,9 +319,9 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketMessage"/> 参数是新接收到的私聊消息。 </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketUser"/> 参数是发送消息的用户。 </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketDMChannel"/> 参数是消息所在的私聊频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketMessage"/> 参数是新接收到的私聊消息。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketUser"/> 参数是发送消息的用户。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketDMChannel"/> 参数是消息所在的私聊频道。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketMessage, SocketUser, SocketDMChannel, Task> DirectMessageReceived
@@ -339,18 +339,18 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是被删除的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 被删除的消息；否则，包含 <see cref="T:System.Guid"/> 消息 ID。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是被删除的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 被删除的消息；否则，包含 <see cref="System.Guid"/> 消息 ID。
     ///         <br />
     ///         <note type="important">
-    ///             消息被删除后无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///             消息被删除后无法通过 <see cref="Kook.Cacheable{TEntity,TId}.DownloadAsync"/> 方法下载。
     ///         </note>
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是该消息的作者的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是该消息的作者的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketTextChannel"/> 参数是消息被删除前所在的服务器频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketTextChannel"/> 参数是消息被删除前所在的服务器频道。 </item>
     ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, Cacheable<SocketUser, ulong>, Cacheable<SocketDMChannel, Guid>, Task> DirectMessageDeleted
@@ -368,22 +368,22 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被更新前的状态。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 消息被更新前的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是可缓存消息被更新前的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 消息被更新前的状态；否则，包含 <see cref="System.Guid"/> 消息 ID。
     ///         <br />
     ///         <note type="important">
-    ///             消息被更新前的状态无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///             消息被更新前的状态无法通过 <see cref="Kook.Cacheable{TEntity,TId}.DownloadAsync"/> 方法下载。
     ///         </note>
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存消息被更新后的状态。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 消息被更新后的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是可缓存消息被更新后的状态。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 消息被更新后的状态；否则，包含 <see cref="System.Guid"/> 消息 ID，以供按需下载实体。
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是该消息的作者的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是该消息的作者的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketDMChannel"/> 参数是消息所在的私聊频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketDMChannel"/> 参数是消息所在的私聊频道。 </item>
     ///     </list>
     /// </remarks>
     public event Func<Cacheable<IMessage, Guid>, Cacheable<IMessage, Guid>, Cacheable<SocketUser, ulong>, Cacheable<SocketDMChannel, Guid>, Task> DirectMessageUpdated
@@ -409,10 +409,10 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是加入服务器的可缓存服务器用户。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是加入服务器的可缓存服务器用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:System.DateTimeOffset"/> 参数是用户加入服务器的时间。 </item>
+    ///     <item> <see cref="System.DateTimeOffset"/> 参数是用户加入服务器的时间。 </item>
     ///     </list>
     /// </remarks>
     public event Func<Cacheable<SocketGuildUser, ulong>, DateTimeOffset, Task> UserJoined
@@ -433,12 +433,12 @@ public abstract partial class BaseSocketClient
     ///     <br />
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是用户离开的服务器。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketGuild"/> 参数是用户离开的服务器。 </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是离开服务器的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是离开服务器的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:System.DateTimeOffset"/> 参数是用户加入服务器的时间。 </item>
+    ///     <item> <see cref="System.DateTimeOffset"/> 参数是用户加入服务器的时间。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketGuild, Cacheable<SocketUser, ulong>, DateTimeOffset, Task> UserLeft
@@ -456,16 +456,16 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> 参数是所有此批次被封禁的用户。每个用户都由一个
-    ///         <see cref="T:Kook.Cacheable`2"/> 表示。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="System.Collections.Generic.IReadOnlyCollection{T}"/> 参数是所有此批次被封禁的用户。每个用户都由一个
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 表示。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是操作此批次封禁的可缓存服务器用户。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是操作此批次封禁的可缓存服务器用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是封禁操作所在的服务器。 </item>
-    ///     <item> <see cref="T:System.String"/> 参数是封禁的原因。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketGuild"/> 参数是封禁操作所在的服务器。 </item>
+    ///     <item> <see cref="System.String"/> 参数是封禁的原因。 </item>
     ///     </list>
     /// </remarks>
     public event Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketGuildUser, ulong>, SocketGuild, string?, Task> UserBanned
@@ -483,15 +483,15 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> 参数是所有此批次被解除封禁的用户。每个用户都由一个
-    ///         <see cref="T:Kook.Cacheable`2"/> 表示。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="System.Collections.Generic.IReadOnlyCollection{T}"/> 参数是所有此批次被解除封禁的用户。每个用户都由一个
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 表示。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是操作此批次解除封禁的可缓存服务器用户。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是操作此批次解除封禁的可缓存服务器用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是解除封禁操作所在的服务器。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketGuild"/> 参数是解除封禁操作所在的服务器。 </item>
     ///     </list>
     /// </remarks>
     public event Func<IReadOnlyCollection<Cacheable<SocketUser, ulong>>, Cacheable<SocketGuildUser, ulong>, SocketGuild, Task> UserUnbanned
@@ -511,16 +511,16 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存用户被更新前的状态。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketUser"/> 用户被更新前的状态；否则，包含 <see cref="T:System.UInt64"/> 用户 ID。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是可缓存用户被更新前的状态。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketUser"/> 用户被更新前的状态；否则，包含 <see cref="System.UInt64"/> 用户 ID。
     ///         <br />
     ///         <note type="important">
-    ///             用户被更新前的状态无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///             用户被更新前的状态无法通过 <see cref="Kook.Cacheable{TEntity,TId}.DownloadAsync"/> 方法下载。
     ///         </note>
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存用户被更新后的状态。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.SocketUser"/> 用户被更新后的状态；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是可缓存用户被更新后的状态。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketUser"/> 用户被更新后的状态；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
     ///     </list>
     /// </remarks>
@@ -538,8 +538,8 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketSelfUser"/> 参数是当前用户被更新前的状态。 </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketSelfUser"/> 参数是当前用户被更新后的状态。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketSelfUser"/> 参数是当前用户被更新前的状态。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketSelfUser"/> 参数是当前用户被更新后的状态。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketSelfUser, SocketSelfUser, Task> CurrentUserUpdated
@@ -557,16 +557,16 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 参数是可缓存服务器用户被更新前的状态。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户被更新前的状态；否则，包含 <see cref="T:System.UInt64"/> 用户 ID。
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 参数是可缓存服务器用户被更新前的状态。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 服务器用户被更新前的状态；否则，包含 <see cref="System.UInt64"/> 用户 ID。
     ///         <br />
     ///         <note type="important">
-    ///             服务器用户被更新前的状态无法通过 <see cref="M:Kook.Cacheable`2.DownloadAsync"/> 方法下载。
+    ///             服务器用户被更新前的状态无法通过 <see cref="Kook.Cacheable{TEntity,TId}.DownloadAsync"/> 方法下载。
     ///         </note>
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是可缓存服务器用户被更新后的状态。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.SocketGuildUser"/> 用户被更新后的状态；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是可缓存服务器用户被更新后的状态。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 用户被更新后的状态；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
     ///     </list>
     /// </remarks>
@@ -585,11 +585,11 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> 参数是所有此批次在线状态变更为在线的服务器用户。每个服务器用户都由一个
-    ///         <see cref="T:Kook.Cacheable`2"/> 表示。如果缓存中存在此服务器用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="System.Collections.Generic.IReadOnlyCollection{T}"/> 参数是所有此批次在线状态变更为在线的服务器用户。每个服务器用户都由一个
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 表示。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:System.DateTimeOffset"/> 参数是在线状态变更为在线的时间。 </item>
+    ///     <item> <see cref="System.DateTimeOffset"/> 参数是在线状态变更为在线的时间。 </item>
     ///     </list>
     /// </remarks>
     public event Func<IReadOnlyCollection<Cacheable<SocketGuildUser, ulong>>, DateTimeOffset, Task> GuildMemberOnline
@@ -607,11 +607,11 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:System.Collections.Generic.IReadOnlyCollection`1"/> 参数是所有此批次在线状态变更为离线的服务器用户。每个服务器用户都由一个
-    ///         <see cref="T:Kook.Cacheable`2"/> 表示。如果缓存中存在此服务器用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="System.Collections.Generic.IReadOnlyCollection{T}"/> 参数是所有此批次在线状态变更为离线的服务器用户。每个服务器用户都由一个
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 表示。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:System.DateTimeOffset"/> 参数是在线状态变更为离线的时间。 </item>
+    ///     <item> <see cref="System.DateTimeOffset"/> 参数是在线状态变更为离线的时间。 </item>
     ///     </list>
     /// </remarks>
     public event Func<IReadOnlyCollection<Cacheable<SocketGuildUser, ulong>>, DateTimeOffset, Task> GuildMemberOffline
@@ -629,11 +629,11 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是其语音状态发生变化的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是其语音状态发生变化的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketVoiceState"/> 参数是用户语音状态变更前的状态。 </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketVoiceState"/> 参数是用户语音状态变更后的状态。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketVoiceState"/> 参数是用户语音状态变更前的状态。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketVoiceState"/> 参数是用户语音状态变更后的状态。 </item>
     ///     </list>
     /// </remarks>
     public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceState, SocketVoiceState, Task> UserVoiceStateUpdated
@@ -655,11 +655,11 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是连接到语音频道的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是连接到语音频道的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketVoiceChannel"/> 参数是用户连接到的语音频道。 </item>
-    ///     <item> <see cref="T:System.DateTimeOffset"/> 参数是用户连接到语音频道的时间。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketVoiceChannel"/> 参数是用户连接到的语音频道。 </item>
+    ///     <item> <see cref="System.DateTimeOffset"/> 参数是用户连接到语音频道的时间。 </item>
     ///     </list>
     /// </remarks>
     public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task> UserConnected
@@ -677,11 +677,11 @@ public abstract partial class BaseSocketClient
     ///     事件参数：
     ///     <list type="number">
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是从语音频道断开连接的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是从语音频道断开连接的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketVoiceChannel"/> 参数是用户断开连接的语音频道。 </item>
-    ///     <item> <see cref="T:System.DateTimeOffset"/> 参数是用户断开连接的时间。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketVoiceChannel"/> 参数是用户断开连接的语音频道。 </item>
+    ///     <item> <see cref="System.DateTimeOffset"/> 参数是用户断开连接的时间。 </item>
     ///     </list>
     /// </remarks>
     public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, DateTimeOffset, Task> UserDisconnected
@@ -699,10 +699,10 @@ public abstract partial class BaseSocketClient
     // ///     事件参数：
     // ///     <list type="number">
     // ///     <item>
-    // ///         <see cref="T:Kook.Cacheable`2"/> 参数是开始直播的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
-    // ///         <see cref="T:Kook.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    // ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是开始直播的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    // ///         <see cref="Kook.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     // ///     </item>
-    // ///     <item> <see cref="T:Kook.WebSocket.SocketVoiceChannel"/> 参数是用户开始直播的语音频道。 </item>
+    // ///     <item> <see cref="Kook.WebSocket.SocketVoiceChannel"/> 参数是用户开始直播的语音频道。 </item>
     // ///     </list>
     // /// </remarks>
     // public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, Task> LivestreamBegan
@@ -720,10 +720,10 @@ public abstract partial class BaseSocketClient
     // ///     事件参数：
     // ///     <list type="number">
     // ///     <item>
-    // ///         <see cref="T:Kook.Cacheable`2"/> 参数是结束直播的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
-    // ///         <see cref="T:Kook.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    // ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是结束直播的可缓存服务器用户。如果缓存中存在此服务器用户实体，那么该结构内包含该
+    // ///         <see cref="Kook.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     // ///     </item>
-    // ///     <item> <see cref="T:Kook.WebSocket.SocketVoiceChannel"/> 参数是用户结束直播的语音频道。 </item>
+    // ///     <item> <see cref="Kook.WebSocket.SocketVoiceChannel"/> 参数是用户结束直播的语音频道。 </item>
     // ///     </list>
     // /// </remarks>
     // public event Func<Cacheable<SocketGuildUser, ulong>, SocketVoiceChannel, Task> LivestreamEnded
@@ -744,7 +744,7 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketRole"/> 参数是被创建的角色。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketRole"/> 参数是被创建的角色。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketRole, Task> RoleCreated
@@ -761,7 +761,7 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketRole"/> 参数是被删除的角色。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketRole"/> 参数是被删除的角色。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketRole, Task> RoleDeleted
@@ -778,8 +778,8 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketRole"/> 参数是角色被更新前的状态。 </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketRole"/> 参数是角色被更新后的状态。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketRole"/> 参数是角色被更新前的状态。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketRole"/> 参数是角色被更新后的状态。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketRole, SocketRole, Task> RoleUpdated
@@ -800,8 +800,8 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.GuildEmote"/> 参数是被创建的自定义表情。 </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是自定义表情所在的服务器。 </item>
+    ///     <item> <see cref="Kook.GuildEmote"/> 参数是被创建的自定义表情。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketGuild"/> 参数是自定义表情所在的服务器。 </item>
     ///     </list>
     /// </remarks>
     public event Func<GuildEmote, SocketGuild, Task> EmoteCreated
@@ -818,8 +818,8 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.GuildEmote"/> 参数是被删除的自定义表情。 </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是自定义表情被删除前所在的服务器。 </item>
+    ///     <item> <see cref="Kook.GuildEmote"/> 参数是被删除的自定义表情。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketGuild"/> 参数是自定义表情被删除前所在的服务器。 </item>
     ///     </list>
     /// </remarks>
     public event Func<GuildEmote, SocketGuild, Task> EmoteDeleted
@@ -836,9 +836,9 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.GuildEmote"/> 参数是自定义表情被更新前的状态，如果缓存中不存在此自定义表情实体，则为 <see langword="null"/>。 </item>
-    ///     <item> <see cref="T:Kook.GuildEmote"/> 参数是自定义表情被更新后的状态。 </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是自定义表情所在的服务器。 </item>
+    ///     <item> <see cref="Kook.GuildEmote"/> 参数是自定义表情被更新前的状态，如果缓存中不存在此自定义表情实体，则为 <see langword="null"/>。 </item>
+    ///     <item> <see cref="Kook.GuildEmote"/> 参数是自定义表情被更新后的状态。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketGuild"/> 参数是自定义表情所在的服务器。 </item>
     ///     </list>
     /// </remarks>
     public event Func<GuildEmote?, GuildEmote, SocketGuild, Task> EmoteUpdated
@@ -859,7 +859,7 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是当前用户新加入的服务器。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketGuild"/> 参数是当前用户新加入的服务器。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketGuild, Task> JoinedGuild
@@ -876,7 +876,7 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是当前用户离开的服务器。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketGuild"/> 参数是当前用户离开的服务器。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketGuild, Task> LeftGuild
@@ -893,8 +893,8 @@ public abstract partial class BaseSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是服务器信息被更新前的状态。 </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是服务器信息被更新后的状态。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketGuild"/> 参数是服务器信息被更新前的状态。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketGuild"/> 参数是服务器信息被更新后的状态。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketGuild, SocketGuild, Task> GuildUpdated
@@ -914,7 +914,7 @@ public abstract partial class BaseSocketClient
     ///     <br />
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是服务器状态变更为可用的服务器。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketGuild"/> 参数是服务器状态变更为可用的服务器。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketGuild, Task> GuildAvailable
@@ -933,7 +933,7 @@ public abstract partial class BaseSocketClient
     ///     <br />
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.WebSocket.SocketGuild"/> 参数是服务器状态变更为不可用的服务器。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketGuild"/> 参数是服务器状态变更为不可用的服务器。 </item>
     ///     </list>
     /// </remarks>
     public event Func<SocketGuild, Task> GuildUnavailable
@@ -952,21 +952,21 @@ public abstract partial class BaseSocketClient
     ///     当用户点击服务器频道内的卡片消息按钮时引发。
     /// </summary>
     /// <remarks>
-    ///     卡片消息中的按钮包含多种点击事件类型，当该类型为 <see cref="F:Kook.ButtonClickEventType.ReturnValue"/>
+    ///     卡片消息中的按钮包含多种点击事件类型，当该类型为 <see cref="Kook.ButtonClickEventType.ReturnValue"/>
     ///     时，用户点击按钮后会引发此事件。
     ///     <br />
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.String"/> 参数是按钮的值。 </item>
+    ///     <item> <see cref="System.String"/> 参数是按钮的值。 </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是点击按钮的可缓存服务器用户。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是点击按钮的可缓存服务器用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketGuildUser"/> 服务器用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是点击按钮所在的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 消息被更新后的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是点击按钮所在的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 消息被更新后的状态；否则，包含 <see cref="System.Guid"/> 消息 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketTextChannel"/> 参数是点击按钮所在的服务器频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketTextChannel"/> 参数是点击按钮所在的服务器频道。 </item>
     ///     </list>
     /// </remarks>
     public event Func<string, Cacheable<SocketGuildUser, ulong>, Cacheable<IMessage, Guid>, SocketTextChannel, Task> MessageButtonClicked
@@ -981,21 +981,21 @@ public abstract partial class BaseSocketClient
     ///     当用户点击私聊频道内的卡片消息按钮时引发。
     /// </summary>
     /// <remarks>
-    ///     卡片消息中的按钮包含多种点击事件类型，当该类型为 <see cref="F:Kook.ButtonClickEventType.ReturnValue"/>
+    ///     卡片消息中的按钮包含多种点击事件类型，当该类型为 <see cref="Kook.ButtonClickEventType.ReturnValue"/>
     ///     时，用户点击按钮后会引发此事件。
     ///     <br />
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.String"/> 参数是按钮的值。 </item>
+    ///     <item> <see cref="System.String"/> 参数是按钮的值。 </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是点击按钮的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
-    ///         <see cref="T:Kook.SocketUser"/> 用户；否则，包含 <see cref="T:System.UInt64"/> 用户 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是点击按钮的可缓存用户。如果缓存中存在此用户实体，那么该结构内包含该
+    ///         <see cref="Kook.WebSocket.SocketUser"/> 用户；否则，包含 <see cref="System.UInt64"/> 用户 ID，以供按需下载实体。
     ///     </item>
     ///     <item>
-    ///         <see cref="T:Kook.Cacheable`2"/> 参数是点击按钮所在的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
-    ///         <see cref="T:Kook.IMessage"/> 消息被更新后的状态；否则，包含 <see cref="T:System.Guid"/> 消息 ID，以供按需下载实体。
+    ///         <see cref="Kook.Cacheable{TEntity,TId}"/> 参数是点击按钮所在的可缓存消息。如果缓存中存在此消息实体，那么该结构内包含该
+    ///         <see cref="Kook.IMessage"/> 消息被更新后的状态；否则，包含 <see cref="System.Guid"/> 消息 ID，以供按需下载实体。
     ///     </item>
-    ///     <item> <see cref="T:Kook.WebSocket.SocketDMChannel"/> 参数是点击按钮所在的私聊频道。 </item>
+    ///     <item> <see cref="Kook.WebSocket.SocketDMChannel"/> 参数是点击按钮所在的私聊频道。 </item>
     ///     </list>
     /// </remarks>
     public event Func<string, Cacheable<SocketUser, ulong>, Cacheable<IMessage, Guid>, SocketDMChannel, Task> DirectMessageButtonClicked

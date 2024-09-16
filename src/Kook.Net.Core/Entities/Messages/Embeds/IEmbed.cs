@@ -3,7 +3,7 @@ namespace Kook;
 /// <summary>
 ///     表示一个消息内解析出的通用的嵌入式内容。
 /// </summary>
-/// <seealso cref="P:Kook.IMessage.Embeds"/>
+/// <seealso cref="Kook.IMessage.Embeds"/>
 public interface IEmbed
 {
     /// <summary>

@@ -17,7 +17,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     获取此私聊频道的唯一标识符。
     /// </summary>
     /// <remarks>
-    ///     此属性的值与 <see cref="P:Kook.WebSocket.SocketDMChannel.ChatCode"/> 相同。
+    ///     此属性的值与 <see cref="Kook.WebSocket.SocketDMChannel.ChatCode"/> 相同。
     /// </remarks>
     public new Guid Id { get; }
 
@@ -25,11 +25,11 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     获取此私聊频道的聊天代码。
     /// </summary>
     /// <remarks>
-    ///     此属性的值与 <see cref="P:Kook.WebSocket.SocketDMChannel.Id"/> 相同。
+    ///     此属性的值与 <see cref="Kook.WebSocket.SocketDMChannel.Id"/> 相同。
     /// </remarks>
     public Guid ChatCode => Id;
 
-    /// <inheritdoc cref="P:Kook.IDMChannel.Recipient" />
+    /// <inheritdoc cref="Kook.IDMChannel.Recipient" />
     public SocketUser Recipient { get; }
 
     /// <inheritdoc />
@@ -40,7 +40,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// </remarks>
     public IReadOnlyCollection<SocketMessage> CachedMessages => ImmutableArray.Create<SocketMessage>();
 
-    /// <inheritdoc cref="P:Kook.WebSocket.SocketChannel.Users" />
+    /// <inheritdoc cref="Kook.WebSocket.SocketChannel.Users" />
     public new IReadOnlyCollection<SocketUser> Users => ImmutableArray.Create(Kook.CurrentUser, Recipient);
 
     internal SocketDMChannel(KookSocketClient kook, Guid chatCode, SocketUser recipient)
@@ -100,7 +100,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <remarks>
     ///     <note type="important">
     ///         返回的集合是一个异步可枚举对象；调用
-    ///         <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///         <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///         可以异步枚举所有分页，并将其合并为一个集合。
     ///     </note>
     ///     <br />
@@ -108,10 +108,10 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///         请勿一次性获取过多消息，这可能会导致抢占式速率限制，甚至触发实际的速率限制，从而导致 Bot 服务暂停。
     ///     </note>
     ///     <br />
-    ///     此方法将尝试获取此频道最新的 <paramref name="limit"/> 条消息。此方法会根据 <see cref="F:Kook.KookConfig.MaxMessagesPerBatch"/>
-    ///     将请求拆分。换句话说，如果要获取 500 条消息，而 <see cref="F:Kook.KookConfig.MaxMessagesPerBatch"/> 的常量为
+    ///     此方法将尝试获取此频道最新的 <paramref name="limit"/> 条消息。此方法会根据 <see cref="Kook.KookConfig.MaxMessagesPerBatch"/>
+    ///     将请求拆分。换句话说，如果要获取 500 条消息，而 <see cref="Kook.KookConfig.MaxMessagesPerBatch"/> 的常量为
     ///     <c>50</c>，则请求将被拆分为 10 个单独请求，因此异步枚举器会异步枚举返回 10 个响应。
-    ///     <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///     <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///     方法可以展开这 10 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
     /// <param name="limit"> 要获取的消息数量。 </param>
@@ -127,7 +127,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <remarks>
     ///     <note type="important">
     ///         返回的集合是一个异步可枚举对象；调用
-    ///         <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///         <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///         可以异步枚举所有分页，并将其合并为一个集合。
     ///     </note>
     ///     <br />
@@ -135,10 +135,10 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///         请勿一次性获取过多消息，这可能会导致抢占式速率限制，甚至触发实际的速率限制，从而导致 Bot 服务暂停。
     ///     </note>
     ///     <br />
-    ///     此方法将尝试获取此频道最新的 <paramref name="limit"/> 条消息。此方法会根据 <see cref="F:Kook.KookConfig.MaxMessagesPerBatch"/>
-    ///     将请求拆分。换句话说，如果要获取 500 条消息，而 <see cref="F:Kook.KookConfig.MaxMessagesPerBatch"/> 的常量为
+    ///     此方法将尝试获取此频道最新的 <paramref name="limit"/> 条消息。此方法会根据 <see cref="Kook.KookConfig.MaxMessagesPerBatch"/>
+    ///     将请求拆分。换句话说，如果要获取 500 条消息，而 <see cref="Kook.KookConfig.MaxMessagesPerBatch"/> 的常量为
     ///     <c>50</c>，则请求将被拆分为 10 个单独请求，因此异步枚举器会异步枚举返回 10 个响应。
-    ///     <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///     <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///     方法可以展开这 10 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
     /// <param name="referenceMessageId"> 要开始获取消息的参考位置的消息的 ID。 </param>
@@ -156,7 +156,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <remarks>
     ///     <note type="important">
     ///         返回的集合是一个异步可枚举对象；调用
-    ///         <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///         <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///         可以异步枚举所有分页，并将其合并为一个集合。
     ///     </note>
     ///     <br />
@@ -164,10 +164,10 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///         请勿一次性获取过多消息，这可能会导致抢占式速率限制，甚至触发实际的速率限制，从而导致 Bot 服务暂停。
     ///     </note>
     ///     <br />
-    ///     此方法将尝试获取此频道最新的 <paramref name="limit"/> 条消息。此方法会根据 <see cref="F:Kook.KookConfig.MaxMessagesPerBatch"/>
-    ///     将请求拆分。换句话说，如果要获取 500 条消息，而 <see cref="F:Kook.KookConfig.MaxMessagesPerBatch"/> 的常量为
+    ///     此方法将尝试获取此频道最新的 <paramref name="limit"/> 条消息。此方法会根据 <see cref="Kook.KookConfig.MaxMessagesPerBatch"/>
+    ///     将请求拆分。换句话说，如果要获取 500 条消息，而 <see cref="Kook.KookConfig.MaxMessagesPerBatch"/> 的常量为
     ///     <c>50</c>，则请求将被拆分为 10 个单独请求，因此异步枚举器会异步枚举返回 10 个响应。
-    ///     <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///     <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///     方法可以展开这 10 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
     /// <param name="referenceMessage"> 要开始获取消息的参考位置的消息。 </param>
@@ -205,32 +205,32 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     public IReadOnlyCollection<SocketMessage> GetCachedMessages(IMessage referenceMessage,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch) => [];
 
-    /// <inheritdoc cref="M:Kook.IMessageChannel.SendFileAsync(System.String,System.String,Kook.AttachmentType,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IMessageChannel.SendFileAsync(System.String,System.String,Kook.AttachmentType,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, path, filename, type, quote, options);
 
-    /// <inheritdoc cref="M:Kook.IMessageChannel.SendFileAsync(System.IO.Stream,System.String,Kook.AttachmentType,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IMessageChannel.SendFileAsync(System.IO.Stream,System.String,Kook.AttachmentType,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, stream, filename, type, quote, options);
 
-    /// <inheritdoc cref="M:Kook.IMessageChannel.SendFileAsync(Kook.FileAttachment,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IMessageChannel.SendFileAsync(Kook.FileAttachment,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, attachment, quote, options);
 
-    /// <inheritdoc cref="M:Kook.IMessageChannel.SendTextAsync(System.String,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IMessageChannel.SendTextAsync(System.String,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
     public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, quote, options);
 
-    /// <inheritdoc cref="M:Kook.IMessageChannel.SendCardsAsync(System.Collections.Generic.IEnumerable{Kook.ICard},Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IMessageChannel.SendCardsAsync(System.Collections.Generic.IEnumerable{Kook.ICard},Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardsAsync(this, Kook, cards, quote, options);
 
-    /// <inheritdoc cref="M:Kook.IMessageChannel.SendCardAsync(Kook.ICard,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IMessageChannel.SendCardAsync(Kook.ICard,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardAsync(this, Kook, card, quote, options);
@@ -258,7 +258,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
 
     #region Users
 
-    /// <inheritdoc cref="M:Kook.WebSocket.SocketChannel.GetUser(System.UInt64)" />
+    /// <inheritdoc cref="Kook.WebSocket.SocketChannel.GetUser(System.UInt64)" />
     public new SocketUser? GetUser(ulong id)
     {
         if (id == Recipient.Id) return Recipient;
@@ -412,7 +412,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     ///     获取此参与到此私聊频道的另外一位用户的包含 <c>@</c> 前缀的用户名及识别号格式化字符串。
     /// </summary>
     /// <returns> 一个表示此私聊频道的格式化字符串。 </returns>
-    /// <seealso cref="M:Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
+    /// <seealso cref="Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
     public override string ToString() => $"@{Recipient}";
 
     private string DebuggerDisplay => $"@{Recipient} ({Id}, DM)";

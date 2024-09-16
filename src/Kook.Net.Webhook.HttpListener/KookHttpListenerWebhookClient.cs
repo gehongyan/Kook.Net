@@ -10,7 +10,7 @@ public class KookHttpListenerWebhookClient : KookWebhookClient
     /// <summary>
     ///     初始化一个 <see cref="KookHttpListenerWebhookClient"/> 类的新实例。
     /// </summary>
-    /// <param name="config"> 用于配置 KOOK Webhook 客户端的 <see cref="T:Kook.Webhook.HttpListener.KookHttpListenerWebhookConfig"/>。 </param>
+    /// <param name="config"> 用于配置 KOOK Webhook 客户端的 <see cref="Kook.Webhook.HttpListener.KookHttpListenerWebhookConfig"/>。 </param>
     public KookHttpListenerWebhookClient(KookHttpListenerWebhookConfig config)
         : base(config)
     {

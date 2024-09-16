@@ -13,7 +13,7 @@ public class RestPokeAction : IPokeAction
     /// <inheritdoc />
     public IReadOnlyCollection<IUser> Targets { get; }
 
-    /// <inheritdoc cref="P:Kook.IPokeAction.Poke" />
+    /// <inheritdoc cref="Kook.IPokeAction.Poke" />
     public Poke Poke { get; }
 
     internal RestPokeAction(IUser @operator, IEnumerable<IUser> targets, Poke poke)

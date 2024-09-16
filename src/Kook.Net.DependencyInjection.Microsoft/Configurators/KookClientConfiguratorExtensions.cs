@@ -4,7 +4,7 @@ using Kook.WebSocket;
 namespace Kook.Net.DependencyInjection.Microsoft;
 
 /// <summary>
-///     为 <see cref="T:Kook.Net.DependencyInjection.Microsoft.IKookClientConfigurator`2"/> 提供配置 KOOK 客户端的扩展方法。
+///     为 <see cref="Kook.Net.DependencyInjection.Microsoft.IKookClientConfigurator{TClient,TConfig}"/> 提供配置 KOOK 客户端的扩展方法。
 /// </summary>
 public static class KookClientConfiguratorExtensions
 {

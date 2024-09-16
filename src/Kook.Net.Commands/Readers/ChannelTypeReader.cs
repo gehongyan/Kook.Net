@@ -3,7 +3,7 @@ using System.Globalization;
 namespace Kook.Commands;
 
 /// <summary>
-///     表示一个用于解析字符串到实现了 <see cref="T:Kook.IChannel"/> 的对象的类型读取器。
+///     表示一个用于解析字符串到实现了 <see cref="Kook.IChannel"/> 的对象的类型读取器。
 /// </summary>
 /// <typeparam name="T"> 要解析为的频道类型。 </typeparam>
 public class ChannelTypeReader<T> : TypeReader

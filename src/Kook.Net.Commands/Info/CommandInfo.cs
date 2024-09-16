@@ -54,7 +54,7 @@ public class CommandInfo
     /// <summary>
     ///     获取此命令的优先级。当命令匹配多个重载时，此优先级将用于确定要执行的重载。
     /// </summary>
-    /// <seealso cref="M:Kook.Commands.PriorityAttribute.#ctor(System.Int32)"/>
+    /// <seealso cref="Kook.Commands.PriorityAttribute(System.Int32)"/>
     public int Priority { get; }
 
     /// <summary>

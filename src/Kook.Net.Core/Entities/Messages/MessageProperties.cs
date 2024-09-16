@@ -1,9 +1,9 @@
 namespace Kook;
 
 /// <summary>
-///     提供用于修改 <see cref="T:Kook.IUserMessage"/> 的属性。
+///     提供用于修改 <see cref="Kook.IUserMessage"/> 的属性。
 /// </summary>
-/// <seealso cref="M:Kook.IUserMessage.ModifyAsync(System.Action{Kook.MessageProperties},Kook.RequestOptions)"/>
+/// <seealso cref="Kook.IUserMessage.ModifyAsync(System.Action{Kook.MessageProperties},Kook.RequestOptions)"/>
 public class MessageProperties
 {
     /// <summary>
@@ -16,7 +16,7 @@ public class MessageProperties
 
     /// <summary>
     ///     获取或设置要设置到此消息的卡片。
-    ///     修改此值，或修改此 <see cref="T:System.Collections.Generic.IList`1"/> 中的成员，可以修改消息中卡片的内容。
+    ///     修改此值，或修改此 <see cref="System.Collections.Generic.IList{T}"/> 中的成员，可以修改消息中卡片的内容。
     /// </summary>
     public IList<ICard>? Cards { get; set; }
 
@@ -26,7 +26,7 @@ public class MessageProperties
     /// <remarks>
     ///     仅支持通过将此属性设置为 <c>MessageReference.Empty</c> 来清除消息引用，不支持更改现有消息引用。
     /// </remarks>
-    /// <seealso cref="P:Kook.MessageReference.Empty"/>
+    /// <seealso cref="Kook.MessageReference.Empty"/>
     public IQuote? Quote { get; set; }
 
     /// <summary>

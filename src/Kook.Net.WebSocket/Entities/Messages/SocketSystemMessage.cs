@@ -8,7 +8,7 @@ namespace Kook.WebSocket;
 /// </summary>
 /// <remarks>
 ///     <note type="warning">
-///         KOOK 未统一规范系统消息类型，此接口并未在 <see cref="T:Kook.WebSocket.SocketMessage"/> 之上封装更多的实用功能。
+///         KOOK 未统一规范系统消息类型，此接口并未在 <see cref="Kook.WebSocket.SocketMessage"/> 之上封装更多的实用功能。
 ///     </note>
 /// </remarks>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]

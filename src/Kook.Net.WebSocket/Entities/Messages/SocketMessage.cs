@@ -14,10 +14,10 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     private readonly List<SocketReaction> _reactions = [];
     private ImmutableArray<SocketUser> _userMentions = [];
 
-    /// <inheritdoc cref="P:Kook.IMessage.Author" />
+    /// <inheritdoc cref="Kook.IMessage.Author" />
     public SocketUser Author { get; }
 
-    /// <inheritdoc cref="P:Kook.IMessage.Channel" />
+    /// <inheritdoc cref="Kook.IMessage.Channel" />
     public ISocketMessageChannel Channel { get; }
 
     /// <inheritdoc />
@@ -43,7 +43,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     public DateTimeOffset? EditedTimestamp { get; private set; }
 
-    /// <inheritdoc cref="P:Kook.IMessage.IsPinned" />
+    /// <inheritdoc cref="Kook.IMessage.IsPinned" />
     public virtual bool IsPinned { get; protected internal set; }
 
     /// <inheritdoc />
@@ -55,16 +55,16 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc/>
     public MessageType Type { get; private set; }
 
-    /// <inheritdoc cref="P:Kook.IMessage.Attachments" />
+    /// <inheritdoc cref="Kook.IMessage.Attachments" />
     public virtual IReadOnlyCollection<Attachment> Attachments { get; private set; }
 
-    /// <inheritdoc cref="P:Kook.IMessage.Cards" />
+    /// <inheritdoc cref="Kook.IMessage.Cards" />
     public virtual IReadOnlyCollection<ICard> Cards => [];
 
-    /// <inheritdoc cref="P:Kook.IMessage.Embeds" />
+    /// <inheritdoc cref="Kook.IMessage.Embeds" />
     public virtual IReadOnlyCollection<IEmbed> Embeds => [];
 
-    /// <inheritdoc cref="P:Kook.IMessage.Pokes" />
+    /// <inheritdoc cref="Kook.IMessage.Pokes" />
     public virtual IReadOnlyCollection<SocketPokeAction> Pokes => [];
 
     /// <summary>
@@ -265,7 +265,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
 
     #endregion
 
-    /// <inheritdoc cref="P:Kook.WebSocket.SocketMessage.Content" />
+    /// <inheritdoc cref="Kook.WebSocket.SocketMessage.Content" />
     public override string ToString() => Content;
 
     internal SocketMessage Clone() => (SocketMessage)MemberwiseClone();

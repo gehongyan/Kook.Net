@@ -20,7 +20,7 @@ public abstract class BaseKookClient : IKookClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:Kook.LogMessage"/> 参数是描述日志消息的结构。 </item>
+    ///     <item> <see cref="Kook.LogMessage"/> 参数是描述日志消息的结构。 </item>
     ///     </list>
     /// </remarks>
     public event Func<LogMessage, Task> Log
@@ -59,9 +59,9 @@ public abstract class BaseKookClient : IKookClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.Net.Http.HttpMethod"/> 参数是 HTTP 方法。 </item>
-    ///     <item> <see cref="T:System.String"/> 参数是终结点。 </item>
-    ///     <item> <see cref="T:System.Double"/> 参数是完成请求所花费的时间，以毫秒为单位。 </item>
+    ///     <item> <see cref="System.Net.Http.HttpMethod"/> 参数是 HTTP 方法。 </item>
+    ///     <item> <see cref="System.String"/> 参数是终结点。 </item>
+    ///     <item> <see cref="System.Double"/> 参数是完成请求所花费的时间，以毫秒为单位。 </item>
     ///     </list>
     /// </remarks>
     public event Func<HttpMethod, string, double, Task> SentRequest

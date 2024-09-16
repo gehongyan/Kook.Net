@@ -19,7 +19,7 @@ public class KookRestClient : BaseKookClient, IKookClient
         NumberHandling = JsonNumberHandling.AllowReadingFromString
     };
 
-    /// <inheritdoc cref="P:Kook.Rest.BaseKookClient.CurrentUser" />
+    /// <inheritdoc cref="Kook.Rest.BaseKookClient.CurrentUser" />
     public new RestSelfUser? CurrentUser
     {
         get => base.CurrentUser as RestSelfUser;
@@ -293,14 +293,14 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <remarks>
     ///     <note type="important">
     ///         返回的集合是一个异步可枚举对象；调用
-    ///         <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///         <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///         可以异步枚举所有分页，并将其合并为一个集合。
     ///     </note>
     ///     <br />
-    ///     此方法将尝试获取所有具有指定创建源的游戏信息。此方法会根据 <see cref="F:Kook.KookConfig.MaxItemsPerBatchByDefault"/>
-    ///     将请求拆分。换句话说，如果有 3000 款游戏的信息，而 <see cref="F:Kook.KookConfig.MaxItemsPerBatchByDefault"/> 的常量为
+    ///     此方法将尝试获取所有具有指定创建源的游戏信息。此方法会根据 <see cref="Kook.KookConfig.MaxItemsPerBatchByDefault"/>
+    ///     将请求拆分。换句话说，如果有 3000 款游戏的信息，而 <see cref="Kook.KookConfig.MaxItemsPerBatchByDefault"/> 的常量为
     ///     <c>100</c>，则请求将被拆分为 30 个单独请求，因此异步枚举器会异步枚举返回 30 个响应。
-    ///     <see cref="M:Kook.AsyncEnumerableExtensions.FlattenAsync``1(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{``0}})" />
+    ///     <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///     方法可以展开这 30 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
     /// <param name="source"> 要获取的游戏信息的创建来源。 </param>

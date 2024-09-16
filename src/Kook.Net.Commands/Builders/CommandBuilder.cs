@@ -50,7 +50,7 @@ public class CommandBuilder
     /// <summary>
     ///     获取或设置此命令的优先级。
     /// </summary>
-    /// <seealso cref="M:Kook.Commands.PriorityAttribute.#ctor(System.Int32)"/>
+    /// <seealso cref="Kook.Commands.PriorityAttribute(System.Int32)"/>
     public int Priority { get; set; }
 
     /// <summary>
@@ -162,7 +162,7 @@ public class CommandBuilder
     /// </summary>
     /// <param name="priority"> 此命令的优先级。 </param>
     /// <returns> 当前命令构建器。 </returns>
-    /// <seealso cref="M:Kook.Commands.PriorityAttribute.#ctor(System.Int32)"/>
+    /// <seealso cref="Kook.Commands.PriorityAttribute(System.Int32)"/>
     public CommandBuilder WithPriority(int priority)
     {
         Priority = priority;

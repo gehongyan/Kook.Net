@@ -10,32 +10,32 @@ public class SocketCommandContext : ICommandContext
     #region SocketCommandContext
 
     /// <summary>
-    ///     获取命令执行时所使用的 <see cref="T:Kook.WebSocket.KookSocketClient" />。
+    ///     获取命令执行时所使用的 <see cref="Kook.WebSocket.KookSocketClient" />。
     /// </summary>
     public KookSocketClient Client { get; }
 
     /// <summary>
-    ///     获取命令执行所在的 <see cref="T:Kook.WebSocket.SocketGuild" />。
+    ///     获取命令执行所在的 <see cref="Kook.WebSocket.SocketGuild" />。
     /// </summary>
     public SocketGuild? Guild { get; }
 
     /// <summary>
-    ///     获取命令执行所在的 <see cref="T:Kook.WebSocket.ISocketMessageChannel" />。
+    ///     获取命令执行所在的 <see cref="Kook.WebSocket.ISocketMessageChannel" />。
     /// </summary>
     public ISocketMessageChannel Channel { get; }
 
     /// <summary>
-    ///     获取执行命令的 <see cref="T:Kook.WebSocket.SocketUser" />。
+    ///     获取执行命令的 <see cref="Kook.WebSocket.SocketUser" />。
     /// </summary>
     public SocketUser User { get; }
 
     /// <summary>
-    ///     获取命令解析的源 <see cref="T:Kook.WebSocket.SocketUserMessage" />。
+    ///     获取命令解析的源 <see cref="Kook.WebSocket.SocketUserMessage" />。
     /// </summary>
     public SocketUserMessage Message { get; }
 
     /// <summary>
-    ///     指示命令执行所在的频道是否为 <see cref="T:Kook.IPrivateChannel"/> 私聊频道。
+    ///     指示命令执行所在的频道是否为 <see cref="Kook.IPrivateChannel"/> 私聊频道。
     /// </summary>
     public bool IsPrivate => Channel is IPrivateChannel;
 

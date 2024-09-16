@@ -1,7 +1,7 @@
 namespace Kook.Commands;
 
 /// <summary>
-///     表示一个用于 <see cref="T:Kook.Commands.CommandService"/> 的配置类。
+///     表示一个用于 <see cref="Kook.Commands.CommandService"/> 的配置类。
 /// </summary>
 public class CommandServiceConfig
 {
@@ -9,7 +9,7 @@ public class CommandServiceConfig
     ///     获取或设置命令的默认运行模式，如果在命令属性或构建器上未指定运行模式，则使用此值。
     /// </summary>
     /// <remarks>
-    ///     如需在命令上重写默认行为，请使用 <see cref="P:Kook.Commands.CommandAttribute.RunMode"/> 属性。
+    ///     如需在命令上重写默认行为，请使用 <see cref="Kook.Commands.CommandAttribute.RunMode"/> 属性。
     /// </remarks>
     public RunMode DefaultRunMode { get; set; } = RunMode.Sync;
 
@@ -24,7 +24,7 @@ public class CommandServiceConfig
     public bool CaseSensitiveCommands { get; set; } = false;
 
     /// <summary>
-    ///     获取或设置将引发 <see cref="E:Kook.Commands.CommandService.Log"/> 事件的最低日志级别严重性。
+    ///     获取或设置将引发 <see cref="Kook.Commands.CommandService.Log"/> 事件的最低日志级别严重性。
     /// </summary>
     public LogSeverity LogLevel { get; set; } = LogSeverity.Info;
 
@@ -32,7 +32,7 @@ public class CommandServiceConfig
     ///     获取或设置同步执行的命令是否应将异常传递给调用者。
     /// </summary>
     /// <remarks>
-    ///     同步命令指的是其运行模式为 <see cref="F:Kook.Commands.RunMode.Sync"/> 的命令。
+    ///     同步命令指的是其运行模式为 <see cref="Kook.Commands.RunMode.Sync"/> 的命令。
     /// </remarks>
     public bool ThrowOnError { get; set; } = true;
 
@@ -61,8 +61,8 @@ public class CommandServiceConfig
     /// </summary>
     /// <remarks>
     ///     如果设置为 <see langword="true"/>，则默认情况下命令将忽略额外的参数。否则，将引发
-    ///     <see cref="F:Kook.Commands.CommandError.BadArgCount"/>
-    ///     错误。如需在命令上重写默认行为，请使用 <see cref="P:Kook.Commands.CommandAttribute.IgnoreExtraArgs"/> 属性。
+    ///     <see cref="Kook.Commands.CommandError.BadArgCount"/>
+    ///     错误。如需在命令上重写默认行为，请使用 <see cref="Kook.Commands.CommandAttribute.IgnoreExtraArgs"/> 属性。
     /// </remarks>
     public bool IgnoreExtraArgs { get; set; } = false;
 }

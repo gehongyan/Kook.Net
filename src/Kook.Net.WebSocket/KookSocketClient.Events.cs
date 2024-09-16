@@ -30,7 +30,7 @@ public partial class KookSocketClient
     ///     当此 Bot 准备就绪以供用户代码访问时引发。
     /// </summary>
     /// <remarks>
-    ///     此事件引发的时机可由 <see cref="P:Kook.WebSocket.KookSocketConfig.StartupCacheFetchMode"/> 配置指定。
+    ///     此事件引发的时机可由 <see cref="Kook.WebSocket.KookSocketConfig.StartupCacheFetchMode"/> 配置指定。
     /// </remarks>
     public event Func<Task> Ready
     {
@@ -46,8 +46,8 @@ public partial class KookSocketClient
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.Int32"/> 参数是更新前的延迟（毫秒）。 </item>
-    ///     <item> <see cref="T:System.Int32"/> 参数是更新后的延迟（毫秒）。 </item>
+    ///     <item> <see cref="System.Int32"/> 参数是更新前的延迟（毫秒）。 </item>
+    ///     <item> <see cref="System.Int32"/> 参数是更新后的延迟（毫秒）。 </item>
     ///     </list>
     /// </remarks>
     public event Func<int, int, Task> LatencyUpdated

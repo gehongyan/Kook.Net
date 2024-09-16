@@ -110,7 +110,7 @@ public class HeaderModuleBuilder : IModuleBuilder, IEquatable<HeaderModuleBuilde
         return new HeaderModule(Text.Build());
     }
 
-    /// <inheritdoc cref="M:Kook.HeaderModuleBuilder.#ctor(System.String)" />
+    /// <inheritdoc cref="Kook.HeaderModuleBuilder(System.String)" />
     public static implicit operator HeaderModuleBuilder(string text) => new(text);
 
     /// <inheritdoc />

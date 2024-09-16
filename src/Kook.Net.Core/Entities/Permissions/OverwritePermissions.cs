@@ -38,92 +38,92 @@ public struct OverwritePermissions
     public ulong DenyValue { get; }
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.CreateInvites"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.CreateInvites"/> 的重写配置。
     /// </summary>
     public PermValue CreateInvites => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.CreateInvites);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.ManageChannels"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.ManageChannels"/> 的重写配置。
     /// </summary>
     public PermValue ManageChannels => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageChannels);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.ManageRoles"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.ManageRoles"/> 的重写配置。
     /// </summary>
     public PermValue ManageRoles => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageRoles);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.ViewChannel"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.ViewChannel"/> 的重写配置。
     /// </summary>
     public PermValue ViewChannel => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ViewChannel);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.SendMessages"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.SendMessages"/> 的重写配置。
     /// </summary>
     public PermValue SendMessages => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.SendMessages);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.ManageMessages"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.ManageMessages"/> 的重写配置。
     /// </summary>
     public PermValue ManageMessages => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageMessages);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.AttachFiles"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.AttachFiles"/> 的重写配置。
     /// </summary>
     public PermValue AttachFiles => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.AttachFiles);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.Connect"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.Connect"/> 的重写配置。
     /// </summary>
     public PermValue Connect => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.Connect);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.ManageVoice"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.ManageVoice"/> 的重写配置。
     /// </summary>
     public PermValue ManageVoice => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ManageVoice);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.MentionEveryone"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.MentionEveryone"/> 的重写配置。
     /// </summary>
     public PermValue MentionEveryone => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.MentionEveryone);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.AddReactions"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.AddReactions"/> 的重写配置。
     /// </summary>
     public PermValue AddReactions => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.AddReactions);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.PassiveConnect"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.PassiveConnect"/> 的重写配置。
     /// </summary>
     public PermValue PassiveConnect => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.PassiveConnect);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.UseVoiceActivity"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.UseVoiceActivity"/> 的重写配置。
     /// </summary>
     public PermValue UseVoiceActivity => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.UseVoiceActivity);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.Speak"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.Speak"/> 的重写配置。
     /// </summary>
     public PermValue Speak => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.Speak);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.DeafenMembers"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.DeafenMembers"/> 的重写配置。
     /// </summary>
     public PermValue DeafenMembers => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.DeafenMembers);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.MuteMembers"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.MuteMembers"/> 的重写配置。
     /// </summary>
     public PermValue MuteMembers => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.MuteMembers);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.PlaySoundtrack"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.PlaySoundtrack"/> 的重写配置。
     /// </summary>
     public PermValue PlaySoundtrack => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.PlaySoundtrack);
 
     /// <summary>
-    ///     获取此权限重写配置对频道权限位 <see cref="F:Kook.ChannelPermission.ShareScreen"/> 的重写配置。
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.ShareScreen"/> 的重写配置。
     /// </summary>
     public PermValue ShareScreen => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ShareScreen);
 

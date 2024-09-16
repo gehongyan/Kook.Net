@@ -62,7 +62,7 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
         return new InviteModule(Code);
     }
 
-    /// <inheritdoc cref="M:Kook.InviteModuleBuilder.#ctor(System.String)" />
+    /// <inheritdoc cref="Kook.InviteModuleBuilder(System.String)" />
     public static implicit operator InviteModuleBuilder(string code) => new(code);
 
     /// <inheritdoc />

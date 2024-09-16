@@ -1,9 +1,9 @@
 namespace Kook;
 
 /// <summary>
-///     提供用于创建 <see cref="T:Kook.ITextChannel"/> 的属性。
+///     提供用于创建 <see cref="Kook.ITextChannel"/> 的属性。
 /// </summary>
-/// <seealso cref="M:Kook.IGuild.CreateTextChannelAsync(System.String,System.Action{Kook.CreateTextChannelProperties},Kook.RequestOptions)"/>
+/// <seealso cref="Kook.IGuild.CreateTextChannelAsync(System.String,System.Action{Kook.CreateTextChannelProperties},Kook.RequestOptions)"/>
 public class CreateTextChannelProperties : CreateGuildChannelProperties
 {
     /// <summary>

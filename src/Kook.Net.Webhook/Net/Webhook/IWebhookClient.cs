@@ -11,9 +11,9 @@ public interface IWebhookClient : IDisposable
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.Byte"/>[] 参数是消息的二进制数据。 </item>
-    ///     <item> <see cref="T:System.Int32"/> 参数是数据的起始索引。 </item>
-    ///     <item> <see cref="T:System.Int32"/> 参数是数据的长度。 </item>
+    ///     <item> <see cref="System.Byte"/>[] 参数是消息的二进制数据。 </item>
+    ///     <item> <see cref="System.Int32"/> 参数是数据的起始索引。 </item>
+    ///     <item> <see cref="System.Int32"/> 参数是数据的长度。 </item>
     ///     </list>
     ///     事件返回值：返回一个表示异步操作的任务。任务的结果是一个字符串，表示响应消息。
     /// </remarks>
@@ -25,7 +25,7 @@ public interface IWebhookClient : IDisposable
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.String"/> 参数是消息的文本。 </item>
+    ///     <item> <see cref="System.String"/> 参数是消息的文本。 </item>
     ///     </list>
     ///     事件返回值：返回一个表示异步操作的任务。任务的结果是一个字符串，表示响应消息。
     /// </remarks>
@@ -37,7 +37,7 @@ public interface IWebhookClient : IDisposable
     /// <remarks>
     ///     事件参数：
     ///     <list type="number">
-    ///     <item> <see cref="T:System.Exception"/> 参数是引发关闭的异常。 </item>
+    ///     <item> <see cref="System.Exception"/> 参数是引发关闭的异常。 </item>
     ///     </list>
     /// </remarks>
     event Func<Exception, Task>? Closed;

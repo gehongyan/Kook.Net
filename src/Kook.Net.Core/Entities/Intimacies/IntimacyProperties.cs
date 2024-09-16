@@ -1,9 +1,9 @@
 namespace Kook;
 
 /// <summary>
-///     提供用于修改 <see cref="T:Kook.IIntimacy" /> 的属性。
+///     提供用于修改 <see cref="Kook.IIntimacy" /> 的属性。
 /// </summary>
-/// <seealso cref="M:Kook.IIntimacy.UpdateAsync(System.Action{Kook.IntimacyProperties},Kook.RequestOptions)"/>
+/// <seealso cref="Kook.IIntimacy.UpdateAsync(System.Action{Kook.IntimacyProperties},Kook.RequestOptions)"/>
 public class IntimacyProperties
 {
     internal IntimacyProperties(string socialInfo, int score)
@@ -27,7 +27,7 @@ public class IntimacyProperties
     /// <remarks>
     ///     如果此值为 <c>null</c>，则不会修改此亲密度的分数。
     /// </remarks>
-    /// <seealso cref="P:Kook.IIntimacy.Score"/>
+    /// <seealso cref="Kook.IIntimacy.Score"/>
     public int? Score { get; set; }
 
     /// <summary>

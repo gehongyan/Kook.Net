@@ -11,7 +11,7 @@ public struct SocketVoiceState : IVoiceState
 {
     private readonly ConcurrentDictionary<ulong, SocketVoiceChannel> _voiceChannels;
 
-    /// <inheritdoc cref="M:Kook.WebSocket.SocketVoiceState.#ctor" />
+    /// <inheritdoc cref="Kook.WebSocket.SocketVoiceState()" />
     public static SocketVoiceState Default => new();
 
     /// <summary>

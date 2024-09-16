@@ -7,7 +7,7 @@ namespace Kook;
 /// </summary>
 public class RequestOptions
 {
-    /// <inheritdoc cref="M:Kook.RequestOptions.#ctor" />
+    /// <inheritdoc cref="Kook.RequestOptions()" />
     public static RequestOptions Default => new();
 
     /// <summary>
@@ -27,7 +27,7 @@ public class RequestOptions
     /// <summary>
     ///     获取或设置请求失败时的重试行为；如果为 <c>null</c>，则使用配置的默认的重试行为。
     /// </summary>
-    /// <seealso cref="P:Kook.KookConfig.DefaultRetryMode"/>
+    /// <seealso cref="Kook.KookConfig.DefaultRetryMode"/>
     public RetryMode? RetryMode { get; set; }
 
     /// <summary>
@@ -41,7 +41,7 @@ public class RequestOptions
     /// <summary>
     ///     获取或设置此请求触发速率限制时要执行的回调委托。
     /// </summary>
-    /// <seealso cref="P:Kook.KookConfig.DefaultRatelimitCallback"/>
+    /// <seealso cref="Kook.KookConfig.DefaultRatelimitCallback"/>
     public Func<IRateLimitInfo, Task>? RatelimitCallback { get; set; }
 
     internal bool IgnoreState { get; set; }
@@ -66,7 +66,7 @@ public class RequestOptions
     ///     使用默认设置创建一个新的 <see cref="RequestOptions" /> 类的实例。
     /// </summary>
     /// <remarks>
-    ///     默认的请求超时时间是 <see cref="F:Kook.KookConfig.DefaultRequestTimeout"/>。
+    ///     默认的请求超时时间是 <see cref="Kook.KookConfig.DefaultRequestTimeout"/>。
     /// </remarks>
     public RequestOptions()
     {
@@ -74,6 +74,6 @@ public class RequestOptions
         RequestHeaders = new Dictionary<string, IEnumerable<string>>();
     }
 
-    /// <inheritdoc cref="M:System.Object.MemberwiseClone" />
+    /// <inheritdoc cref="System.Object.MemberwiseClone" />
     public RequestOptions Clone() => (RequestOptions) MemberwiseClone();
 }

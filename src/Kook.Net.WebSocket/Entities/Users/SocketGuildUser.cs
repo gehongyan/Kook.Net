@@ -20,7 +20,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
 
     internal override SocketGlobalUser GlobalUser { get; }
 
-    /// <inheritdoc cref="P:Kook.IGuildUser.Guild" />
+    /// <inheritdoc cref="Kook.IGuildUser.Guild" />
     public SocketGuild Guild { get; }
 
     /// <inheritdoc />
@@ -147,7 +147,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// <inheritdoc />
     public bool? IsMuted => VoiceState?.IsMuted;
 
-    /// <inheritdoc cref="P:Kook.WebSocket.SocketVoiceState.LiveStreamStatus" />
+    /// <inheritdoc cref="Kook.WebSocket.SocketVoiceState.LiveStreamStatus" />
     public LiveStreamStatus? LiveStreamStatus => VoiceState?.LiveStreamStatus;
 
     /// <summary>
@@ -155,13 +155,13 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// </summary>
     /// <remarks>
     ///     <note type="warning">
-    ///         当 <see cref="P:Kook.WebSocket.KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> 为 <c>true</c>
+    ///         当 <see cref="Kook.WebSocket.KookSocketConfig.AlwaysDownloadBoostSubscriptions"/> 为 <c>true</c>
     ///         时，Bot 启动时会自动下载所有服务器的所有助力信息。否则，此属性将为 <c>null</c>。调用
-    ///         <see cref="M:Kook.WebSocket.SocketGuild.DownloadBoostSubscriptionsAsync(Kook.RequestOptions)"/>
+    ///         <see cref="Kook.WebSocket.SocketGuild.DownloadBoostSubscriptionsAsync(Kook.RequestOptions)"/>
     ///         也可以立即下载服务器的所有助力信息，下载完成后，此属性值将被设定。
     ///         <br />
     ///         网关不会发布有关此属性值变更的事件，此属性值可能并不准确。要获取准确的服务器订阅信息，请调用
-    ///         <see cref="M:Kook.WebSocket.SocketGuild.GetBoostSubscriptionsAsync(Kook.RequestOptions)"/>。
+    ///         <see cref="Kook.WebSocket.SocketGuild.GetBoostSubscriptionsAsync(Kook.RequestOptions)"/>。
     ///     </note>
     /// </remarks>
     public IReadOnlyCollection<BoostSubscriptionMetadata> BoostSubscriptions => Guild.BoostSubscriptions?
@@ -176,7 +176,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// <remarks>
     ///     <note type="warning">
     ///         由于网关不会发布有关服务器用户角色变更的事件，此属性值可能并不准确。要获取准确的角色信息，请在使用此属性前调用
-    ///         <see cref="M:Kook.WebSocket.SocketGuildUser.UpdateAsync(Kook.RequestOptions)"/>。
+    ///         <see cref="Kook.WebSocket.SocketGuildUser.UpdateAsync(Kook.RequestOptions)"/>。
     ///     </note>
     /// </remarks>
     public IReadOnlyCollection<SocketRole> Roles => _roleIds
@@ -184,13 +184,13 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         .Where(x => x != null)
         .ToImmutableArray();
 
-    /// <inheritdoc cref="P:Kook.WebSocket.SocketVoiceState.VoiceChannel" />
+    /// <inheritdoc cref="Kook.WebSocket.SocketVoiceState.VoiceChannel" />
     /// <summary>
     ///     <br />
     ///     <note type="warning">
     ///         默认情况下，此属性不会返回用户在 Bot 启动前所连接到的语音频道。如需让 Bot 在启动后自动获取所有用户的语音状态，请设置
-    ///         <see cref="P:Kook.WebSocket.KookSocketConfig.AlwaysDownloadVoiceStates"/>，也可以在使用此属性前调用
-    ///         <see cref="M:Kook.WebSocket.SocketGuild.DownloadVoiceStatesAsync(Kook.RequestOptions)"/> 或
+    ///         <see cref="Kook.WebSocket.KookSocketConfig.AlwaysDownloadVoiceStates"/>，也可以在使用此属性前调用
+    ///         <see cref="Kook.WebSocket.SocketGuild.DownloadVoiceStatesAsync(Kook.RequestOptions)"/> 或
     ///     </note>
     /// </summary>
     public SocketVoiceChannel? VoiceChannel => VoiceState?.VoiceChannel;
@@ -354,7 +354,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     public Task UndeafenAsync(RequestOptions? options = null) =>
         GuildHelper.UndeafenUserAsync(this, Kook, options);
 
-    /// <inheritdoc cref="M:Kook.IGuildUser.GetConnectedVoiceChannelsAsync(Kook.RequestOptions)"/>
+    /// <inheritdoc cref="Kook.IGuildUser.GetConnectedVoiceChannelsAsync(Kook.RequestOptions)"/>
     public async Task<IReadOnlyCollection<SocketVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions? options = null)
     {
         IReadOnlyCollection<SocketVoiceChannel> channels =

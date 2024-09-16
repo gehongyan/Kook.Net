@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 namespace Kook.Audio.Streams;
 
 ///<summary>
-///     表示输入音频流，用于在 <see cref="T:Kook.Audio.IAudioClient"/> 实例中，从语音服务器接收语音数据。
+///     表示输入音频流，用于在 <see cref="Kook.Audio.IAudioClient"/> 实例中，从语音服务器接收语音数据。
 /// </summary>
 public class InputStream : AudioInStream
 {

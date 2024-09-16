@@ -139,11 +139,11 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         Presence.Update(isOnline, activeClient);
     }
 
-    /// <inheritdoc cref="M:Kook.IUser.CreateDMChannelAsync(Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IUser.CreateDMChannelAsync(Kook.RequestOptions)" />
     public Task<RestDMChannel> CreateDMChannelAsync(RequestOptions? options = null) =>
         UserHelper.CreateDMChannelAsync(this, Kook, options);
 
-    /// <inheritdoc cref="M:Kook.IUser.GetIntimacyAsync(Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IUser.GetIntimacyAsync(Kook.RequestOptions)" />
     public Task<RestIntimacy> GetIntimacyAsync(RequestOptions? options = null) =>
         UserHelper.GetIntimacyAsync(this, Kook, options);
 
@@ -173,7 +173,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     ///     获取此用户的包含用户名及识别号的格式化字符串。
     /// </summary>
     /// <returns> 一个表示此用户的包含用户名及识别号的格式化字符串。 </returns>
-    /// <seealso cref="M:Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
+    /// <seealso cref="Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
     public override string ToString() => this.UsernameAndIdentifyNumber(Kook.FormatUsersInBidirectionalUnicode);
 
     private string DebuggerDisplay =>

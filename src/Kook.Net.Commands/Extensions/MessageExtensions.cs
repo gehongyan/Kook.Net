@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Kook.Commands;
 
 /// <summary>
-///     提供用于 <see cref="T:Kook.IUserMessage" /> 与命令相关的扩展方法。
+///     提供用于 <see cref="Kook.IUserMessage" /> 与命令相关的扩展方法。
 /// </summary>
 public static class MessageExtensions
 {

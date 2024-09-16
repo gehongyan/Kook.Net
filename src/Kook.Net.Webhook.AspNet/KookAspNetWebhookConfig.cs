@@ -3,10 +3,10 @@
 namespace Kook.Webhook.AspNet;
 
 /// <summary>
-///     表示一个用于 <see cref="T:Kook.Webhook.AspNet.KookAspNetWebhookClient"/> 的配置类。
+///     表示一个用于 <see cref="Kook.Webhook.AspNet.KookAspNetWebhookClient"/> 的配置类。
 /// </summary>
 /// <remarks>
-///     此配置基于 <see cref="T:Kook.Webhook.KookWebhookConfig"/>，在与 Webhook 有关的配置的基础上，定义了有关在 ASP.NET 内继承 KOOK Webhook 的配置。
+///     此配置基于 <see cref="Kook.Webhook.KookWebhookConfig"/>，在与 Webhook 有关的配置的基础上，定义了有关在 ASP.NET 内继承 KOOK Webhook 的配置。
 /// </remarks>
 public class KookAspNetWebhookConfig : KookWebhookConfig
 {

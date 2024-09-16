@@ -16,7 +16,7 @@ public enum ButtonClickEventType
     Link,
 
     /// <summary>
-    ///     用户点击按钮时将会提交按钮的 <see cref="P:Kook.ButtonElement.Value"/> 属性的值，KOOK 将会通过网关携带此值下发事件。
+    ///     用户点击按钮时将会提交按钮的 <see cref="Kook.ButtonElement.Value"/> 属性的值，KOOK 将会通过网关携带此值下发事件。
     /// </summary>
     ReturnValue
 }

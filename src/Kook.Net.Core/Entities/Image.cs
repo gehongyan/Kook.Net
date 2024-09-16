@@ -38,11 +38,11 @@ public struct Image : IDisposable
     /// </summary>
     /// <param name="path"> 文件的路径。 </param>
     /// <remarks>
-    ///     此构造函数会使用 <see cref="M:System.IO.Path.GetExtension(System.String)"/> 获取文件的扩展名，然后将其直接传递给
-    ///     <see cref="M:System.IO.File.OpenRead(System.String)"/> 方法。
+    ///     此构造函数会使用 <see cref="System.IO.Path.GetExtension(System.String)"/> 获取文件的扩展名，然后将其直接传递给
+    ///     <see cref="System.IO.File.OpenRead(System.String)"/> 方法。
     /// </remarks>
-    /// <seealso cref="M:System.IO.Path.GetExtension(System.String)"/>
-    /// <seealso cref="M:System.IO.File.OpenRead(System.String)"/>
+    /// <seealso cref="System.IO.Path.GetExtension(System.String)"/>
+    /// <seealso cref="System.IO.File.OpenRead(System.String)"/>
     public Image(string path)
     {
         _isDisposed = false;

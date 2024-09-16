@@ -52,8 +52,8 @@ public interface INestedChannel : IGuildChannel
     /// <summary>
     ///     创建一个到此频道新邀请。
     /// </summary>
-    /// <param name="maxAge"> 邀请链接的有效时长，<see cref="F:Kook.InviteMaxAge.NeverExpires"/> 表示永不过期。 </param>
-    /// <param name="maxUses"> 邀请链接的可用人次，<see cref="F:Kook.InviteMaxUses.Unlimited"/> 表示无限制。 </param>
+    /// <param name="maxAge"> 邀请链接的有效时长，<see cref="Kook.InviteMaxAge.NeverExpires"/> 表示永不过期。 </param>
+    /// <param name="maxUses"> 邀请链接的可用人次，<see cref="Kook.InviteMaxUses.Unlimited"/> 表示无限制。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步邀请创建操作的任务。任务的结果包含所创建的邀请链接的元数据，其中包含有关邀请链接的信息。 </returns>
     Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800,

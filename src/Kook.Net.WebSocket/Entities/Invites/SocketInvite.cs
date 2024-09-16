@@ -13,13 +13,13 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     /// <inheritdoc />
     public ulong? ChannelId { get; private set; }
 
-    /// <inheritdoc cref="P:Kook.IInvite.Channel" />
+    /// <inheritdoc cref="Kook.IInvite.Channel" />
     public SocketGuildChannel Channel { get; }
 
     /// <inheritdoc />
     public ulong? GuildId { get; private set; }
 
-    /// <inheritdoc cref="P:Kook.IInvite.Guild" />
+    /// <inheritdoc cref="Kook.IInvite.Guild" />
     public SocketGuild Guild { get; }
 
     /// <inheritdoc />
@@ -43,7 +43,7 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     /// <inheritdoc />
     public int InvitedUsersCount { get; private set; }
 
-    /// <inheritdoc cref="P:Kook.IInvite.Inviter" />
+    /// <inheritdoc cref="Kook.IInvite.Inviter" />
     public SocketGuildUser Inviter { get; private set; }
 
     /// <inheritdoc />
@@ -90,7 +90,7 @@ public class SocketInvite : SocketEntity<uint>, IInvite
     public Task DeleteAsync(RequestOptions? options = null) =>
         InviteHelper.DeleteAsync(this, Kook, options);
 
-    /// <inheritdoc cref="P:Kook.WebSocket.SocketInvite.Url" />
+    /// <inheritdoc cref="Kook.WebSocket.SocketInvite.Url" />
     public override string ToString() => Url;
 
     private string DebuggerDisplay => $"{Url} ({Guild?.Name} / {Channel.Name})";

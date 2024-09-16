@@ -28,9 +28,9 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     /// <param name="value"> 按钮的值。 </param>
     /// <param name="click"> 按钮的点击事件类型。 </param>
     /// <remarks>
-    ///     如果 <paramref name="click"/> 设置为 <see cref="F:Kook.ButtonClickEventType.ReturnValue"/>，
+    ///     如果 <paramref name="click"/> 设置为 <see cref="Kook.ButtonClickEventType.ReturnValue"/>，
     ///     则在用户点击按钮时，KOOK 会通过网关下发按钮点击事件，并携带 <paramref name="value" /> 的值。<br />
-    ///     如果 <paramref name="click"/> 设置为 <see cref="F:Kook.ButtonClickEventType.Link"/>，
+    ///     如果 <paramref name="click"/> 设置为 <see cref="Kook.ButtonClickEventType.Link"/>，
     ///     则在用户点击按钮时，KOOK 会将用户重定向到 <paramref name="value" /> 指定的 URL。
     /// </remarks>
     public ButtonElementBuilder(string text, ButtonTheme theme = ButtonTheme.Primary,
@@ -54,9 +54,9 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     ///     获取或设置按钮的值。
     /// </summary>
     /// <remarks>
-    ///     如果 <see cref="Click"/> 设置为 <see cref="F:Kook.ButtonClickEventType.ReturnValue"/>，
+    ///     如果 <see cref="Click"/> 设置为 <see cref="Kook.ButtonClickEventType.ReturnValue"/>，
     ///     则在用户点击按钮时，KOOK 会通过网关下发按钮点击事件，并携带此属性的值。<br />
-    ///     如果 <see cref="Click"/> 设置为 <see cref="F:Kook.ButtonClickEventType.Link"/>，
+    ///     如果 <see cref="Click"/> 设置为 <see cref="Kook.ButtonClickEventType.Link"/>，
     ///     则在用户点击按钮时，KOOK 会将用户重定向到此属性指定的 URL。
     /// </remarks>
     public string? Value { get; set; }
@@ -65,9 +65,9 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     ///     获取或设置按钮被点击时触发的事件类型。
     /// </summary>
     /// <remarks>
-    ///     如果此属性设置为 <see cref="F:Kook.ButtonClickEventType.ReturnValue"/>，
+    ///     如果此属性设置为 <see cref="Kook.ButtonClickEventType.ReturnValue"/>，
     ///     则在用户点击按钮时，KOOK 会通过网关下发按钮点击事件，并携带 <see cref="Value"/> 的值。<br />
-    ///     如果此属性设置为 <see cref="F:Kook.ButtonClickEventType.Link"/>，
+    ///     如果此属性设置为 <see cref="Kook.ButtonClickEventType.Link"/>，
     ///     则在用户点击按钮时，KOOK 会将用户重定向到 <see cref="Value"/> 指定的 URL。
     /// </remarks>
     public ButtonClickEventType Click { get; set; }
@@ -190,7 +190,7 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     ///     文本的长度超过了 <see cref="MaxButtonTextLength"/>。
     /// </exception>
     /// <exception cref="ArgumentException">
-    ///     <see cref="Click"/> 为 <see cref="F:Kook.ButtonClickEventType.Link"/> 但 <see cref="Value"/> 为 <c>null</c> 或空。
+    ///     <see cref="Click"/> 为 <see cref="Kook.ButtonClickEventType.Link"/> 但 <see cref="Value"/> 为 <c>null</c> 或空。
     /// </exception>
     /// <exception cref="UriFormatException">
     ///     <see cref="Value"/> 不是有效的 URL。

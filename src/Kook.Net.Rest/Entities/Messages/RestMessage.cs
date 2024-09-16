@@ -29,7 +29,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     public string CleanContent => MessageHelper.SanitizeMessage(this);
 
-    /// <inheritdoc cref="P:Kook.IMessage.Attachments" />
+    /// <inheritdoc cref="Kook.IMessage.Attachments" />
     public virtual IReadOnlyCollection<Attachment> Attachments { get; private set; }
 
     /// <inheritdoc />
@@ -50,7 +50,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     public virtual IReadOnlyCollection<IEmbed> Embeds => ImmutableArray.Create<IEmbed>();
 
-    /// <inheritdoc cref="P:Kook.Rest.RestMessage.Pokes" />
+    /// <inheritdoc cref="Kook.Rest.RestMessage.Pokes" />
     public virtual IReadOnlyCollection<RestPokeAction> Pokes => ImmutableArray.Create<RestPokeAction>();
 
     /// <inheritdoc />
@@ -67,7 +67,7 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     /// <inheritdoc />
     public virtual bool? IsPinned { get; internal set; }
 
-    /// <inheritdoc cref="P:Kook.Rest.RestMessage.Content" />
+    /// <inheritdoc cref="Kook.Rest.RestMessage.Content" />
     /// <returns> 此消息的内容。 </returns>
     public override string ToString() => Content;
 

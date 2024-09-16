@@ -83,14 +83,14 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     获取在此服务内的语音频道上建立的语音客户端。
     /// </summary>
-    /// <seealso cref="P:Kook.IAudioChannel.AudioClient"/>
+    /// <seealso cref="Kook.IAudioChannel.AudioClient"/>
     [Obsolete("Use AudioClients instead.")]
     IAudioClient? AudioClient { get; }
 
     /// <summary>
     ///     获取在此服务内的语音频道上建立的所有语音客户端。
     /// </summary>
-    /// <seealso cref="P:Kook.IAudioChannel.AudioClient"/>
+    /// <seealso cref="Kook.IAudioChannel.AudioClient"/>
     IReadOnlyDictionary<ulong, IAudioClient> AudioClients { get; }
 
     /// <summary>
@@ -304,7 +304,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有具有文字聊天能力的频道。 </returns>
     /// <remarks>
     ///     语音频道也是一种文字频道，此方法本意用于获取所有具有文字聊天能力的频道，通过此方法获取到的文字频道列表中也包含了语音频道。
-    ///     如需获取频道的实际类型，请参考 <see cref="M:Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
+    ///     如需获取频道的实际类型，请参考 <see cref="Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
     /// </remarks>
     Task<IReadOnlyCollection<ITextChannel>> GetTextChannelsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
@@ -317,7 +317,7 @@ public interface IGuild : IEntity<ulong>
     /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
     /// <remarks>
     ///     语音频道也是一种文字频道，此方法本意用于获取具有文字聊天能力的频道。如果通过此方法传入的 ID 对应的频道是语音频道，那么也会返回对应的语音频道实体。
-    ///     如需获取频道的实际类型，请参考 <see cref="M:Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
+    ///     如需获取频道的实际类型，请参考 <see cref="Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
     /// </remarks>
     Task<ITextChannel?> GetTextChannelAsync(ulong id, CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
@@ -403,8 +403,8 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     创建一个到此服务器的新邀请。
     /// </summary>
-    /// <param name="maxAge"> 邀请链接的有效时长，<see cref="F:Kook.InviteMaxAge.NeverExpires"/> 表示永不过期。 </param>
-    /// <param name="maxUses"> 邀请链接的可用人次，<see cref="F:Kook.InviteMaxUses.Unlimited"/> 表示无限制。 </param>
+    /// <param name="maxAge"> 邀请链接的有效时长，<see cref="Kook.InviteMaxAge.NeverExpires"/> 表示永不过期。 </param>
+    /// <param name="maxUses"> 邀请链接的可用人次，<see cref="Kook.InviteMaxUses.Unlimited"/> 表示无限制。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步创建操作的任务。任务的结果包含新创建的邀请链接的元数据，其中包含有关邀请链接的信息。 </returns>
     Task<IInvite> CreateInviteAsync(InviteMaxAge maxAge = InviteMaxAge._604800, InviteMaxUses maxUses = InviteMaxUses.Unlimited, RequestOptions? options = null);
@@ -505,7 +505,7 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     /// <remarks>
     ///     此方法会通过网关下载此服务器内的所有服务器助力信息，并缓存它们。
-    ///     要下载所有服务器助力信息，当前用户必须具有 <see cref="F:Kook.GuildPermission.ManageGuild"/> 权限。
+    ///     要下载所有服务器助力信息，当前用户必须具有 <see cref="Kook.GuildPermission.ManageGuild"/> 权限。
     /// </remarks>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步下载操作的任务。 </returns>
@@ -515,7 +515,7 @@ public interface IGuild : IEntity<ulong>
     ///     搜索加入到此服务器内匹配指定搜索条件的所有用户。
     /// </summary>
     /// <remarks>
-    ///     此方法使用指定的属性搜索服务器用户。要查看可用的属性，请参考 <see cref="T:Kook.SearchGuildMemberProperties"/>。
+    ///     此方法使用指定的属性搜索服务器用户。要查看可用的属性，请参考 <see cref="Kook.SearchGuildMemberProperties"/>。
     /// </remarks>
     /// <param name="func"> 一个包含要搜索的用户属性及排序条件的委托。 </param>
     /// <param name="limit"> 搜索结果的最大数量。 </param>

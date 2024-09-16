@@ -6,7 +6,7 @@ namespace Kook.Commands;
 public enum RunMode
 {
     /// <summary>
-    ///     使用在 <see cref="T:Kook.Commands.CommandServiceConfig"/> 中设置的默认行为。
+    ///     使用在 <see cref="Kook.Commands.CommandServiceConfig"/> 中设置的默认行为。
     /// </summary>
     Default,
 

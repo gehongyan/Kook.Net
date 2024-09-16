@@ -32,7 +32,7 @@ public class Emote : IEmote
     public bool? Animated { get; }
 
     /// <summary>
-    ///     创建一个新的 <see cref="T:Kook.Emote" /> 实例。
+    ///     创建一个新的 <see cref="Kook.Emote" /> 实例。
     /// </summary>
     public Emote(string id, string name, bool? animated = null)
     {
@@ -51,14 +51,14 @@ public class Emote : IEmote
     }
 
     /// <summary>
-    ///     尝试从一个表情符号的原始格式中解析出一个 <see cref="T:Kook.Emote"/>。
+    ///     尝试从一个表情符号的原始格式中解析出一个 <see cref="Kook.Emote"/>。
     /// </summary>
     /// <param name="text">
-    ///     表情符号的原始格式。例如：<paramref name="tagMode"/> 为 <see cref="F:Kook.TagMode.PlainText"/> 时的
-    ///     <c>[:emotename:1991895624896587/hbCFVWhu923k03k]</c>；为 <see cref="F:Kook.TagMode.KMarkdown"/> 时的
+    ///     表情符号的原始格式。例如：<paramref name="tagMode"/> 为 <see cref="Kook.TagMode.PlainText"/> 时的
+    ///     <c>[:emotename:1991895624896587/hbCFVWhu923k03k]</c>；为 <see cref="Kook.TagMode.KMarkdown"/> 时的
     ///     <c>(emj)emotename(emj)[1991895624896587/hbCFVWhu923k03k]</c>。
     /// </param>
-    /// <param name="result"> 如果解析成功，则为解析出的 <see cref="T:Kook.Emote"/>；否则为 <c>null</c>。 </param>
+    /// <param name="result"> 如果解析成功，则为解析出的 <see cref="Kook.Emote"/>；否则为 <c>null</c>。 </param>
     /// <param name="tagMode"> 解析标签的语法模式。 </param>
     /// <returns> 如果解析成功，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
     public static bool TryParse([NotNullWhen(true)] string? text,
@@ -80,15 +80,15 @@ public class Emote : IEmote
     }
 
     /// <summary>
-    ///     从一个表情符号的原始格式中解析出一个 <see cref="T:Kook.Emote"/>。
+    ///     从一个表情符号的原始格式中解析出一个 <see cref="Kook.Emote"/>。
     /// </summary>
     /// <param name="text">
-    ///     表情符号的原始格式。例如：<paramref name="tagMode"/> 为 <see cref="F:Kook.TagMode.PlainText"/> 时的
-    ///     <c>[:emotename:1991895624896587/hbCFVWhu923k03k]</c>；为 <see cref="F:Kook.TagMode.KMarkdown"/> 时的
+    ///     表情符号的原始格式。例如：<paramref name="tagMode"/> 为 <see cref="Kook.TagMode.PlainText"/> 时的
+    ///     <c>[:emotename:1991895624896587/hbCFVWhu923k03k]</c>；为 <see cref="Kook.TagMode.KMarkdown"/> 时的
     ///     <c>(emj)emotename(emj)[1991895624896587/hbCFVWhu923k03k]</c>。
     /// </param>
     /// <param name="tagMode"> 解析标签的语法模式。 </param>
-    /// <returns> 解析出的 <see cref="T:Kook.Emote"/>。 </returns>
+    /// <returns> 解析出的 <see cref="Kook.Emote"/>。 </returns>
     /// <exception cref="ArgumentException">
     ///     无法以 <paramref name="tagMode"/> 的语法模式解析 <paramref name="text"/> 为一个有效的表情符号。
     /// </exception>
@@ -116,7 +116,7 @@ public class Emote : IEmote
 
     private string DebuggerDisplay => $"{Name} ({Id})";
 
-    /// <inheritdoc cref="M:Kook.Emote.ToKMarkdownString" />
+    /// <inheritdoc cref="Kook.Emote.ToKMarkdownString" />
     public override string ToString() => ToString(TagMode.KMarkdown);
 
     /// <summary>

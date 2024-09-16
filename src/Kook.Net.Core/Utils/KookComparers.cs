@@ -1,32 +1,32 @@
 ﻿namespace Kook;
 
 /// <summary>
-///     用于比较 KOOK 各种实体的 <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>。
+///     用于比较 KOOK 各种实体的 <see cref="System.Collections.Generic.IEqualityComparer{T}"/>。
 /// </summary>
 public static class KookComparers
 {
     /// <summary>
-    ///     获取一个用于比较 <see cref="T:Kook.IUser"/> 的 <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>。
+    ///     获取一个用于比较 <see cref="Kook.IUser"/> 的 <see cref="System.Collections.Generic.IEqualityComparer{T}"/>。
     /// </summary>
     public static IEqualityComparer<IUser> UserComparer { get; } = new EntityEqualityComparer<IUser, ulong>();
 
     /// <summary>
-    ///     获取一个用于比较 <see cref="T:Kook.IGuild"/> 的 <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>。
+    ///     获取一个用于比较 <see cref="Kook.IGuild"/> 的 <see cref="System.Collections.Generic.IEqualityComparer{T}"/>。
     /// </summary>
     public static IEqualityComparer<IGuild> GuildComparer { get; } = new EntityEqualityComparer<IGuild, ulong>();
 
     /// <summary>
-    ///    获取一个用于比较 <see cref="T:Kook.IChannel"/> 的 <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>。
+    ///    获取一个用于比较 <see cref="Kook.IChannel"/> 的 <see cref="System.Collections.Generic.IEqualityComparer{T}"/>。
     /// </summary>
     public static IEqualityComparer<IChannel> ChannelComparer { get; } = new EntityEqualityComparer<IChannel, ulong>();
 
     /// <summary>
-    ///     获取一个用于比较 <see cref="T:Kook.IRole"/> 的 <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>。
+    ///     获取一个用于比较 <see cref="Kook.IRole"/> 的 <see cref="System.Collections.Generic.IEqualityComparer{T}"/>。
     /// </summary>
     public static IEqualityComparer<IRole> RoleComparer { get; } = new EntityEqualityComparer<IRole, uint>();
 
     /// <summary>
-    ///     获取一个用于比较 <see cref="T:Kook.IMessage"/> 的 <see cref="T:System.Collections.Generic.IEqualityComparer`1"/>。
+    ///     获取一个用于比较 <see cref="Kook.IMessage"/> 的 <see cref="System.Collections.Generic.IEqualityComparer{T}"/>。
     /// </summary>
     public static IEqualityComparer<IMessage> MessageComparer { get; } = new EntityEqualityComparer<IMessage, Guid>();
 

@@ -65,9 +65,9 @@ public struct FileAttachment : IDisposable
     /// <param name="type"> 附件的类型。 </param>
     /// <remarks>
     ///     此构造函数不会校验文件路径的格式，<paramref name="path"/> 的值将会直接传递给
-    ///     <see cref="M:System.IO.File.OpenRead(System.String)"/> 方法。
+    ///     <see cref="System.IO.File.OpenRead(System.String)"/> 方法。
     /// </remarks>
-    /// <seealso cref="M:System.IO.File.OpenRead(System.String)"/>
+    /// <seealso cref="System.IO.File.OpenRead(System.String)"/>
     public FileAttachment(string path, string? filename = null, AttachmentType type = AttachmentType.File)
     {
         _isDisposed = false;
@@ -88,7 +88,7 @@ public struct FileAttachment : IDisposable
     /// <param name="uri"> 文件的 URL。 </param>
     /// <param name="filename"> 文件名。 </param>
     /// <param name="type"> 附件的类型。 </param>
-    /// <seealso cref="M:Kook.Utils.UrlValidation.ValidateKookAssetUrl(System.String)"/>
+    /// <seealso cref="Kook.Utils.UrlValidation.ValidateKookAssetUrl(System.String)"/>
     public FileAttachment(Uri uri, string filename, AttachmentType type = AttachmentType.File)
     {
         _isDisposed = false;

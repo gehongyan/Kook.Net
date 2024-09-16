@@ -124,7 +124,7 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     ///     修改与此用户的亲密度信息。
     /// </summary>
     /// <remarks>
-    ///     此方法使用指定的属性修改与此用户的亲密度信息。要查看可用的属性，请参考 <see cref="T:Kook.IntimacyProperties"/>。
+    ///     此方法使用指定的属性修改与此用户的亲密度信息。要查看可用的属性，请参考 <see cref="Kook.IntimacyProperties"/>。
     /// </remarks>
     /// <param name="func"> 一个用于修改亲密度信息的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>

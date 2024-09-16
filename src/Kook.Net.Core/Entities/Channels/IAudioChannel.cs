@@ -25,7 +25,7 @@ public interface IAudioChannel : IChannel
     ///         对于语音频道区域设置功能发布之前创建的语音频道，该属性可能为空。
     ///     </note>
     /// </remarks>
-    /// <seealso cref="P:Kook.IGuild.Region"/>
+    /// <seealso cref="Kook.IGuild.Region"/>
     string? VoiceRegion { get; }
 
     /// <summary>

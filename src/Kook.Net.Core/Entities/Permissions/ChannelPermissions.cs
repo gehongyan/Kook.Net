@@ -54,58 +54,58 @@ public struct ChannelPermissions
     /// </summary>
     public ulong RawValue { get; }
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.CreateInvites" />
+    /// <inheritdoc cref="Kook.GuildPermissions.CreateInvites" />
     public bool CreateInvites => Permissions.GetValue(RawValue, ChannelPermission.CreateInvites);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.ManageChannels" />
+    /// <inheritdoc cref="Kook.GuildPermissions.ManageChannels" />
     public bool ManageChannels => Permissions.GetValue(RawValue, ChannelPermission.ManageChannels);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.ManageRoles" />
+    /// <inheritdoc cref="Kook.GuildPermissions.ManageRoles" />
     public bool ManageRoles => Permissions.GetValue(RawValue, ChannelPermission.ManageRoles);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.ViewChannel" />
+    /// <inheritdoc cref="Kook.GuildPermissions.ViewChannel" />
     public bool ViewChannel => Permissions.GetValue(RawValue, ChannelPermission.ViewChannel);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.SendMessages" />
+    /// <inheritdoc cref="Kook.GuildPermissions.SendMessages" />
     public bool SendMessages => Permissions.GetValue(RawValue, ChannelPermission.SendMessages);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.ManageMessages" />
+    /// <inheritdoc cref="Kook.GuildPermissions.ManageMessages" />
     public bool ManageMessages => Permissions.GetValue(RawValue, ChannelPermission.ManageMessages);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.AttachFiles" />
+    /// <inheritdoc cref="Kook.GuildPermissions.AttachFiles" />
     public bool AttachFiles => Permissions.GetValue(RawValue, ChannelPermission.AttachFiles);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.Connect" />
+    /// <inheritdoc cref="Kook.GuildPermissions.Connect" />
     public bool Connect => Permissions.GetValue(RawValue, ChannelPermission.Connect);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.ManageVoice" />
+    /// <inheritdoc cref="Kook.GuildPermissions.ManageVoice" />
     public bool ManageVoice => Permissions.GetValue(RawValue, ChannelPermission.ManageVoice);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.MentionEveryone" />
+    /// <inheritdoc cref="Kook.GuildPermissions.MentionEveryone" />
     public bool MentionEveryone => Permissions.GetValue(RawValue, ChannelPermission.MentionEveryone);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.AddReactions" />
+    /// <inheritdoc cref="Kook.GuildPermissions.AddReactions" />
     public bool AddReactions => Permissions.GetValue(RawValue, ChannelPermission.AddReactions);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.PassiveConnect" />
+    /// <inheritdoc cref="Kook.GuildPermissions.PassiveConnect" />
     public bool PassiveConnect => Permissions.GetValue(RawValue, ChannelPermission.PassiveConnect);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.UseVoiceActivity" />
+    /// <inheritdoc cref="Kook.GuildPermissions.UseVoiceActivity" />
     public bool UseVoiceActivity => Permissions.GetValue(RawValue, ChannelPermission.UseVoiceActivity);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.Speak" />
+    /// <inheritdoc cref="Kook.GuildPermissions.Speak" />
     public bool Speak => Permissions.GetValue(RawValue, ChannelPermission.Speak);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.DeafenMembers" />
+    /// <inheritdoc cref="Kook.GuildPermissions.DeafenMembers" />
     public bool DeafenMembers => Permissions.GetValue(RawValue, ChannelPermission.DeafenMembers);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.MuteMembers" />
+    /// <inheritdoc cref="Kook.GuildPermissions.MuteMembers" />
     public bool MuteMembers => Permissions.GetValue(RawValue, ChannelPermission.MuteMembers);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.PlaySoundtrack" />
+    /// <inheritdoc cref="Kook.GuildPermissions.PlaySoundtrack" />
     public bool PlaySoundtrack => Permissions.GetValue(RawValue, ChannelPermission.PlaySoundtrack);
 
-    /// <inheritdoc cref="P:Kook.GuildPermissions.ShareScreen" />
+    /// <inheritdoc cref="Kook.GuildPermissions.ShareScreen" />
     public bool ShareScreen => Permissions.GetValue(RawValue, ChannelPermission.ShareScreen);
 
     /// <summary>

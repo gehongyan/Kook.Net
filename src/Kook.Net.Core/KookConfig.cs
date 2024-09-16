@@ -102,15 +102,15 @@ public class KookConfig
     /// <summary>
     ///     获取或设置请求在出现错误时的默认行为。
     /// </summary>
-    /// <seealso cref="P:Kook.RequestOptions.RetryMode"/>
+    /// <seealso cref="Kook.RequestOptions.RetryMode"/>
     public RetryMode DefaultRetryMode { get; set; } = RetryMode.AlwaysRetry;
 
     /// <summary>
     ///     获取或设置默认的速率限制回调委托。
     /// </summary>
     /// <remarks>
-    ///     若同时设置了此属性与用于各个请求的 <see cref="P:Kook.RequestOptions.RatelimitCallback"/>，则将优先使用
-    ///     <see cref="P:Kook.RequestOptions.RatelimitCallback"/>。
+    ///     若同时设置了此属性与用于各个请求的 <see cref="Kook.RequestOptions.RatelimitCallback"/>，则将优先使用
+    ///     <see cref="Kook.RequestOptions.RatelimitCallback"/>。
     /// </remarks>
     public Func<IRateLimitInfo, Task>? DefaultRatelimitCallback { get; set; }
 
@@ -133,12 +133,12 @@ public class KookConfig
     internal const ulong SystemMessageAuthorID = 3900775823;
 
     /// <summary>
-    ///     获取或设置 Rest 或 Socket 用户实体的 <see cref="M:System.Object.ToString"/> 重写方法在格式化字符串时是否考虑双向 Unicode。
+    ///     获取或设置 Rest 或 Socket 用户实体的 <see cref="System.Object.ToString"/> 重写方法在格式化字符串时是否考虑双向 Unicode。
     /// </summary>
     /// <remarks>
     ///     默认地，为了支持双向用户名，格式化字符串中的用户名部分的左侧会插入左到右嵌入控制字符（<c>\u2066</c>），
     ///     右侧会插入嵌入段结束控制字符（<c>\u2069</c>），以确保在显示时不会出现混乱。如需禁用此行为，请将此属性设置为 <c>false</c>。
     /// </remarks>
-    /// <seealso cref="M:Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
+    /// <seealso cref="Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
     public bool FormatUsersInBidirectionalUnicode { get; set; } = true;
 }

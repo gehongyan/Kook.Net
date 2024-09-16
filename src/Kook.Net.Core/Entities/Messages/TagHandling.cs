@@ -3,7 +3,7 @@ namespace Kook;
 /// <summary>
 ///     表示在转换标签时应进行的操作类型。
 /// </summary>
-/// <seealso cref="M:Kook.IUserMessage.Resolve(Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling)"/>
+/// <seealso cref="Kook.IUserMessage.Resolve(Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling,Kook.TagHandling)"/>
 public enum TagHandling
 {
     /// <summary>

@@ -29,7 +29,7 @@ public enum RetryMode
     /// <summary>
     ///     如果请求因 HTTP 状态码 502 而失败，则重试。
     /// </summary>
-    /// <seealso cref="F:System.Net.HttpStatusCode.BadGateway"/>
+    /// <seealso cref="System.Net.HttpStatusCode.BadGateway"/>
     Retry502 = 0x8,
 
     /// <summary>

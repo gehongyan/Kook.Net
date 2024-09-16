@@ -12,15 +12,15 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
 {
     #region RestDMChannel
 
-    /// <inheritdoc cref="P:Kook.IDMChannel.Id" />
+    /// <inheritdoc cref="Kook.IDMChannel.Id" />
     /// <remarks>
-    ///     此属性的值与 <see cref="P:Kook.Rest.RestDMChannel.ChatCode"/> 相同。
+    ///     此属性的值与 <see cref="Kook.Rest.RestDMChannel.ChatCode"/> 相同。
     /// </remarks>
     public new Guid Id { get; }
 
     /// <inheritdoc />
     /// <remarks>
-    ///     此属性的值与 <see cref="P:Kook.Rest.RestDMChannel.Id"/> 相同。
+    ///     此属性的值与 <see cref="Kook.Rest.RestDMChannel.Id"/> 相同。
     /// </remarks>
     public Guid ChatCode => Id;
 
@@ -29,7 +29,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     /// </summary>
     public RestUser CurrentUser { get; }
 
-    /// <inheritdoc cref="P:Kook.IDMChannel.Recipient" />
+    /// <inheritdoc cref="Kook.IDMChannel.Recipient" />
     public RestUser Recipient { get; }
 
     /// <summary>
@@ -234,7 +234,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
     ///     获取此参与到此私聊频道的另外一位用户的包含 <c>@</c> 前缀的用户名及识别号格式化字符串。
     /// </summary>
     /// <returns> 一个表示此私聊频道的格式化字符串。 </returns>
-    /// <seealso cref="M:Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
+    /// <seealso cref="Kook.Format.UsernameAndIdentifyNumber(Kook.IUser,System.Boolean)"/>
     public override string ToString() => $"@{Recipient}";
 
     private string DebuggerDisplay => $"@{Recipient} ({Id}, DM)";

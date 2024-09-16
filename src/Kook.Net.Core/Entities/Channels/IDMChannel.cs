@@ -11,7 +11,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     ///     获取此私聊频道的唯一标识符。
     /// </summary>
     /// <remarks>
-    ///     此属性的值与 <see cref="P:Kook.IDMChannel.ChatCode"/> 相同。
+    ///     此属性的值与 <see cref="Kook.IDMChannel.ChatCode"/> 相同。
     /// </remarks>
     new Guid Id { get; }
 
@@ -19,7 +19,7 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     ///     获取此私聊频道的聊天代码。
     /// </summary>
     /// <remarks>
-    ///     此属性的值与 <see cref="P:Kook.IDMChannel.Id"/> 相同。
+    ///     此属性的值与 <see cref="Kook.IDMChannel.Id"/> 相同。
     /// </remarks>
     Guid ChatCode { get; }
 

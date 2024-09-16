@@ -5,6 +5,6 @@ namespace Kook.WebSocket;
 /// </summary>
 public interface ISocketPrivateChannel : IPrivateChannel
 {
-    /// <inheritdoc cref="P:Kook.IPrivateChannel.Recipients" />
+    /// <inheritdoc cref="Kook.IPrivateChannel.Recipients" />
     new IReadOnlyCollection<SocketUser> Recipients { get; }
 }
