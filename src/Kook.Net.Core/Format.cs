@@ -379,7 +379,7 @@ public static class Format
     /// <returns> 获取移除 KMarkdown 格式字符后的文本。 </returns>
     /// <remarks>
     ///     此方法不会过多地分析 KMarkdown 的复杂格式，只会简单地移除 KMarkdown 中的以下字符：<br />
-    ///     <c>*</c>、<c>(ins)</c>、<c>(spl)</c>、<c>`</c>、<c>~</c>、<c>&gt;</c>、<c>\</c>、连续两个或更多地 <c>-</c>。
+    ///     <c>*</c>、<c>(ins)</c>、<c>(spl)</c>、<c>`</c>、<c>~</c>、<c>&gt;</c>、<c>\</c>、连续两个或更多的 <c>-</c>。
     /// </remarks>
     public static string StripMarkdown(this string text) =>
         // Remove KOOK supported markdown

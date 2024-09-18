@@ -7,7 +7,7 @@ internal enum GatewayBucketType
     Unbucketed = 0
 }
 
-internal struct GatewayBucket
+internal record struct GatewayBucket
 {
     private static readonly ImmutableDictionary<GatewayBucketType, GatewayBucket> DefsByType;
     private static readonly ImmutableDictionary<BucketId, GatewayBucket> DefsById;

@@ -1,6 +1,5 @@
 using Kook.API;
 using Kook.API.Rest;
-using Kook.Utils;
 using System.Collections.Immutable;
 using Model = Kook.API.Channel;
 

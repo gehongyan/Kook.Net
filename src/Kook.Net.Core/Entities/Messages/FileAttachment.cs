@@ -88,7 +88,7 @@ public struct FileAttachment : IDisposable
     /// <param name="uri"> 文件的 URL。 </param>
     /// <param name="filename"> 文件名。 </param>
     /// <param name="type"> 附件的类型。 </param>
-    /// <seealso cref="Kook.Utils.UrlValidation.ValidateKookAssetUrl(System.String)"/>
+    /// <seealso cref="UrlValidation.ValidateKookAssetUrl(System.String)"/>
     public FileAttachment(Uri uri, string filename, AttachmentType type = AttachmentType.File)
     {
         _isDisposed = false;

@@ -144,9 +144,7 @@ internal class RequestBucket
                                 request,
                                 responseBase.Code,
                                 responseBase.Message,
-                                responseBase.Data is not null
-                                    ? [new KookJsonError("root", [new KookError(((int)responseBase.Code).ToString(), responseBase.Message)])]
-                                    : null
+                                [new KookJsonError("root", [new KookError(((int)responseBase.Code).ToString(), responseBase.Message)])]
                             );
                         }
 

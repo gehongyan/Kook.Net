@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace Kook.Utils;
+namespace Kook;
 
 internal static class UrlValidation
 {
