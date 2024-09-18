@@ -1,3 +1,5 @@
+using System.Net;
+
 namespace Kook.Net.Rest;
 
 /// <summary>
@@ -16,13 +18,14 @@ public static class DefaultRestClientProvider
     ///     创建一个新的 <see cref="Kook.Net.Rest.RestClientProvider"/> 委托。
     /// </summary>
     /// <param name="useProxy"> 是否使用系统代理。 </param>
+    /// <param name="webProxy"> 代理。 </param>
     /// <returns> 一个新的 <see cref="Kook.Net.Rest.RestClientProvider"/> 委托。 </returns>
-    public static RestClientProvider Create(bool useProxy = false) =>
+    public static RestClientProvider Create(bool useProxy = false, IWebProxy? webProxy = null) =>
         url =>
         {
             try
             {
-                return new DefaultRestClient(url, useProxy);
+                return new DefaultRestClient(url, useProxy, webProxy);
             }
             catch (PlatformNotSupportedException ex)
             {

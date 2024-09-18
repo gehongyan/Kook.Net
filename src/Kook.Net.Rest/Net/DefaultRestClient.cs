@@ -35,7 +35,7 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
     private static int _nextId;
 #endif
 
-    public DefaultRestClient(string baseUrl, bool useProxy = false)
+    public DefaultRestClient(string baseUrl, bool useProxy = false, IWebProxy? webProxy = null)
     {
         _baseUrl = baseUrl;
 
@@ -43,7 +43,8 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         {
             AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
             UseCookies = false,
-            UseProxy = useProxy
+            UseProxy = useProxy,
+            Proxy = webProxy
         });
         SetHeader("accept-encoding", "gzip, deflate");
 
