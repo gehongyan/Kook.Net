@@ -37,7 +37,7 @@
 - [.NET Framework 4.6.2](https://dotnet.microsoft.com/download/dotnet-framework/net462)
 
 > [!TIP]
-> .NET 之外的目标框架尚未完全测试。
+> .NET 8 之外的目标框架尚未完全测试。
 
 ---
 
