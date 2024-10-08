@@ -27,8 +27,9 @@
     <WarningLevel>6</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <DebugType>embedded</DebugType>
+    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
 
   <PropertyGroup>
