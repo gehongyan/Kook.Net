@@ -1311,7 +1311,7 @@ public partial class KookSocketClient
     /// <remarks>
     ///     "GROUP", "added_emoji"
     /// </remarks>
-    private async Task HandleAddedRmoji(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
+    private async Task HandleAddedEmoji(GatewayEvent<GatewaySystemEventExtraData> gatewayEvent)
     {
         if (DeserializePayload<GuildEmojiEvent>(gatewayEvent.ExtraData.Body) is not { } data) return;
         if (GetGuild(gatewayEvent.TargetId) is not { } guild)

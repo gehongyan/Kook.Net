@@ -129,6 +129,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         connectionManager.Disconnected += (ex, _) => TimedInvokeAsync(_disconnectedEvent, nameof(Disconnected), ex);
         Connection = connectionManager;
 
+        _nextAudioId = 1;
+
         _serializerOptions = new JsonSerializerOptions
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
@@ -695,7 +697,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
                     // 服务器表情新增
                     case (MessageTypeGroup, "added_emoji"):
-                        await HandleAddedRmoji(gatewayEvent).ConfigureAwait(false);
+                        await HandleAddedEmoji(gatewayEvent).ConfigureAwait(false);
                         break;
                     // 服务器表情更新
                     case (MessageTypeGroup, "updated_emoji"):

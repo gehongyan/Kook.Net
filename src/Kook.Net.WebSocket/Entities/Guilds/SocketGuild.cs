@@ -621,7 +621,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     {
         if (_members.TryGetValue(model.Id, out SocketGuildUser? cachedMember))
         {
-            cachedMember.GlobalUser?.Update(Kook.State, model);
+            cachedMember.GlobalUser.Update(Kook.State, model);
             cachedMember.UpdatePresence(model.Online, model.OperatingSystem);
             return cachedMember;
         }
