@@ -6,10 +6,9 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using UserModel = Kook.API.User;
 
 namespace Kook.Rest;
-
-using UserModel = User;
 
 internal static class MessageHelper
 {
