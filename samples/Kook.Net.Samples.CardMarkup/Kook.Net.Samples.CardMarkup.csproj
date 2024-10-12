@@ -3,8 +3,8 @@
   <Import Project="../../Kook.Net.Sample.targets" />
 
   <ItemGroup>
-    <PackageReference Include="Fluid.Core" Version="2.9.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Fluid.Core" Version="2.11.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
