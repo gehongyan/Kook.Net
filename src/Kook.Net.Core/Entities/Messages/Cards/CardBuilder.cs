@@ -120,16 +120,7 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     ///     构建当前构建器为一个 <see cref="Card"/>。
     /// </summary>
     /// <returns> 由当前构建器表示的属性构建的 <see cref="Card"/> 对象。 </returns>
-    /// <exception cref="InvalidOperationException">
-    ///     卡片的主题不能为 <see cref="Kook.CardTheme.Invisible"/>，该值保留用于图文混排消息，暂不支持手动构建。
-    /// </exception>
-    public Card Build()
-    {
-        if (Theme is CardTheme.Invisible)
-            throw new InvalidOperationException(
-                "The theme of the card cannot be invisible, which is reserved for text graphics mixed messages.");
-        return new Card(Theme, Size, Color, [..Modules.Select(m => m.Build())]);
-    }
+    public Card Build() => new(Theme, Size, Color, [..Modules.Select(m => m.Build())]);
 
     /// <inheritdoc />
     ICard ICardBuilder.Build() => Build();

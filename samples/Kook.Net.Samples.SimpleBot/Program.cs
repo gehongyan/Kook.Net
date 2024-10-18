@@ -144,6 +144,7 @@ async Task MessageReceivedAsync(SocketMessage message,
     {
         // 创建一个 CardBuilder，卡片将会包含一个文本模块和一个按钮模块
         CardBuilder builder = new CardBuilder()
+            .WithTheme(CardTheme.Invisible)
             .AddModule<SectionModuleBuilder>(s =>
                 s.WithText("pong!"))
             .AddModule<ActionGroupModuleBuilder>(a => a

@@ -1,7 +1,7 @@
 namespace Kook;
 
 /// <summary>
-///     表示可以为角色或用户设置的频道级别的服务器权限。
+///     表示可以为角色或用户设置的服务器级别的服务器权限。
 /// </summary>
 [Flags]
 public enum GuildPermission : uint

@@ -217,7 +217,8 @@ public static class MentionUtils
 
         foreach (ITag tag in tags)
         {
-            if (tag.Index < startIndex) continue;
+            if (tag.Index < startIndex)
+                continue;
 
             string newText;
             switch (tag.Type)
