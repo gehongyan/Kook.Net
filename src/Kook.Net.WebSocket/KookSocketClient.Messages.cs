@@ -860,7 +860,7 @@ public partial class KookSocketClient
 
         Cacheable<IMessage, Guid> cacheableBefore = new(before, data.MessageId, before is not null,
             () => Task.FromResult<IMessage?>(null));
-        Cacheable<IMessage, Guid> cacheableAfter = GetCacheableSocketMessage(cachedMsg, data.MessageId, channel);
+        Cacheable<IMessage, Guid> cacheableAfter = GetCacheableMessage(cachedMsg, data.MessageId, channel);
 
         await TimedInvokeAsync(_messagePinnedEvent, nameof(MessagePinned),
             cacheableBefore, cacheableAfter, channel, cacheableOperatorUser).ConfigureAwait(false);
@@ -905,7 +905,7 @@ public partial class KookSocketClient
 
         Cacheable<IMessage, Guid> cacheableBefore = new(before, data.MessageId, before is not null,
             () => Task.FromResult<IMessage?>(null));
-        Cacheable<IMessage, Guid> cacheableAfter = GetCacheableSocketMessage(cachedMsg, data.MessageId, channel);
+        Cacheable<IMessage, Guid> cacheableAfter = GetCacheableMessage(cachedMsg, data.MessageId, channel);
 
         await TimedInvokeAsync(_messageUnpinnedEvent, nameof(MessageUnpinned),
             cacheableBefore, cacheableAfter, channel, cacheableOperatorUser).ConfigureAwait(false);
@@ -1918,7 +1918,7 @@ public partial class KookSocketClient
             SocketGuildUser? user = channel.GetUser(data.UserId);
             Cacheable<SocketGuildUser, ulong> cacheableUser = GetCacheableSocketGuildUser(user, data.UserId, guild);
             SocketMessage? cachedMsg = channel.GetCachedMessage(data.MessageId);
-            Cacheable<IMessage, Guid> cacheableMessage = GetCacheableSocketMessage(cachedMsg, data.MessageId, channel);
+            Cacheable<IMessage, Guid> cacheableMessage = GetCacheableMessage(cachedMsg, data.MessageId, channel);
 
             await TimedInvokeAsync(_messageButtonClickedEvent, nameof(MessageButtonClicked),
                 data.Value, cacheableUser, cacheableMessage, channel).ConfigureAwait(false);
@@ -1937,7 +1937,7 @@ public partial class KookSocketClient
                 UserChat model = await ApiClient.CreateUserChatAsync(createUserChatParams).ConfigureAwait(false);
                 channel = CreateDMChannel(model.Code, model.Recipient, State);
             }
-            Cacheable<IMessage, Guid> cacheableMessage = GetCacheableSocketMessage(null, data.MessageId, channel);
+            Cacheable<IMessage, Guid> cacheableMessage = GetCacheableMessage(null, data.MessageId, channel);
             await TimedInvokeAsync(_directMessageButtonClickedEvent, nameof(DirectMessageButtonClicked),
                 data.Value, cacheableUser, cacheableMessage, channel).ConfigureAwait(false);
         }
@@ -2070,11 +2070,11 @@ public partial class KookSocketClient
             });
     }
 
-    private Cacheable<IMessage, Guid> GetCacheableSocketMessage(SocketMessage? value,
+    private Cacheable<IMessage, Guid> GetCacheableMessage(SocketMessage? value,
         Guid messageId, IMessageChannel channel)
     {
         return new Cacheable<IMessage, Guid>(value, messageId, value is not null,
-            async () => await channel.GetMessageAsync(messageId).ConfigureAwait(false) as SocketMessage);
+            async () => await channel.GetMessageAsync(messageId).ConfigureAwait(false));
     }
 
     #endregion
