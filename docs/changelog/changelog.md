@@ -5,6 +5,23 @@ title: 变更日志
 
 # 变更日志
 
+## v0.9.2 [2024-10-18]
+
+### 新增
+
+- 支持发送无边主题 `CardTheme.Invisible` 卡片
+- `DefaultRestClient` 支持传入 `IWebProxy` 实例
+- 为 `Color`、`AlphaColor`、`GradientColor` 实现 `IEquatable<T>` 接口
+
+### 修复
+
+- 修复部分 XML 文档中的符号引用错误
+- 修复尝试通过发送消息方法返回的可缓存对象获取消息实体时返回 `null` 的问题
+
+### 其它
+
+- 启用 SourceLink
+
 ## v0.9.1 [2024-09-07]
 
 ### Fixed

@@ -2,6 +2,24 @@
 
 ---
 
+## v0.9.2 [2024-10-18]
+
+### Added
+
+- Support sending borderless theme `CardTheme.Invisible` cards
+- `DefaultRestClient` supports passing an `IWebProxy` instance
+- Implemented `IEquatable<T>` interface for `Color`, `AlphaColor`, and `GradientColor`
+
+### Fixed
+
+- Fixed symbol reference errors in some XML documents
+- Fixed issue where attempting to get the message entity from a cacheable object returned by the send message method
+  resulted in null
+
+### Other
+
+- Enabled SourceLink
+
 ## v0.9.1 [2024-09-07]
 
 ### Fixed
