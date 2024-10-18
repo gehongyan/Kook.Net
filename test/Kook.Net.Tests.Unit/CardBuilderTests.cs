@@ -55,15 +55,12 @@ public class CardBuilderTests
     [Fact]
     public void WithTheme()
     {
-        foreach (CardTheme theme in Enum.GetValues<CardTheme>().Except([CardTheme.Invisible]))
+        foreach (CardTheme theme in Enum.GetValues<CardTheme>())
         {
             CardBuilder builder = new CardBuilder().WithTheme(theme);
             Assert.Equal(theme, builder.Theme);
             Assert.Equal(theme, builder.Build().Theme);
         }
-
-        CardBuilder invisibleThemeCard = new CardBuilder().WithTheme(CardTheme.Invisible);
-        Assert.Throws<InvalidOperationException>(() => invisibleThemeCard.Build());
     }
 
     /// <summary>
