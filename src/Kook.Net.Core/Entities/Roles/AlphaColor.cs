@@ -8,7 +8,7 @@ namespace Kook;
 ///     表示 KOOK 中使用的带有不透明度通道的颜色。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public readonly struct AlphaColor
+public readonly struct AlphaColor : IEquatable<AlphaColor>
 {
     /// <summary>
     ///     获取一个 KOOK 中带有不透明度通道的颜色的最大值的原始值。
@@ -206,11 +206,13 @@ public readonly struct AlphaColor
     public static implicit operator uint(AlphaColor color) => color.RawValue;
 
     /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is AlphaColor c && RawValue == c.RawValue;
+    public bool Equals(AlphaColor other) => RawValue == other.RawValue;
 
     /// <inheritdoc />
-    public override int GetHashCode() => RawValue.GetHashCode();
+    public override bool Equals([NotNullWhen(true)] object? obj) => obj is AlphaColor other && Equals(other);
+
+    /// <inheritdoc />
+    public override int GetHashCode() => (int) RawValue;
 
     /// <summary>
     ///     将由 Kook.Net 定义的 <see cref="Kook.Color"/> 颜色转换为 Kook.Net 定义的 <see cref="Kook.AlphaColor"/> 颜色。
