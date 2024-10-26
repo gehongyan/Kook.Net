@@ -40,11 +40,17 @@ public class SocketThreadChannel : SocketGuildChannel, IThreadChannel
     /// <inheritdoc />
     /// <remarks>
     ///     <note type="warning">
+    ///         此属性值仅在调用
+    ///         <see cref="Kook.WebSocket.SocketThreadChannel.ModifyAsync(System.Action{Kook.ModifyThreadChannelProperties},Kook.RequestOptions)"/>
+    ///         后才会被设置。
+    ///     </note>
+    ///     <br />
+    ///     <note type="warning">
     ///         网关目前不会下发有关帖子频道信息变更的事件，此实体的信息可能会过时。如需获取最新信息，请先调用
     ///         <see cref="Kook.WebSocket.SocketGuildChannel.UpdateAsync(Kook.RequestOptions)"/>
     ///     </note>
     /// </remarks>
-    public int ReplyInterval { get; private set; }
+    public int? ReplyInterval { get; private set; }
 
     /// <inheritdoc />
     /// <remarks>

@@ -28,7 +28,7 @@ public interface IThreadChannel : INestedChannel, IMentionable
     ///     <see cref="Kook.ChannelPermission.ManageChannels"/> 权限的用户不受慢速模式延迟的限制。
     /// </remarks>
     /// <returns> 一个 <c>int</c>，表示用户在可以对任意帖子发布另一条回复之前需要等待的时间（以秒为单位）；如果未启用，则为 <c>0</c>。 </returns>
-    int ReplyInterval { get; }
+    int? ReplyInterval { get; }
 
     /// <summary>
     ///     修改此频道的属性。

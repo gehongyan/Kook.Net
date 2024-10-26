@@ -17,7 +17,7 @@ public class RestThreadChannel : RestGuildChannel, IThreadChannel
     public virtual int PostCreationInterval { get; private set; }
 
     /// <inheritdoc />
-    public virtual int ReplyInterval { get; private set; }
+    public virtual int? ReplyInterval { get; private set; }
 
     /// <inheritdoc />
     public ulong? CategoryId { get; private set; }
