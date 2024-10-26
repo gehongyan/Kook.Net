@@ -201,7 +201,7 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
             Assert.Empty(channel.UserPermissionOverwrites);
 
             await channel.AddPermissionOverwriteAsync(role);
-            Assert.Single(channel.RolePermissionOverwrites.Where(overwrite => overwrite.Target > 0));
+            Assert.Single(channel.RolePermissionOverwrites, overwrite => overwrite.Target > 0);
             await channel.ModifyPermissionOverwriteAsync(role, permissions => permissions
                 .Modify(viewChannel: PermValue.Allow, sendMessages: PermValue.Deny, attachFiles: PermValue.Inherit));
             RolePermissionOverwrite rolePermissionOverwrite = channel.RolePermissionOverwrites.First(overwrite => overwrite.Target > 0);
