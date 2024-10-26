@@ -336,7 +336,7 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
 
     /// <inheritdoc />
     public Task RemoveRolesAsync(IEnumerable<IRole> roles, RequestOptions? options = null) =>
-        RemoveRolesAsync(roles.Select(x => x.Id));
+        RemoveRolesAsync(roles.Select(x => x.Id), options);
 
     /// <inheritdoc />
     public Task MuteAsync(RequestOptions? options = null) =>
