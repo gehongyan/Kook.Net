@@ -55,6 +55,16 @@ public class SocketRole : SocketEntity<uint>, IRole
     /// <inheritdoc />
     public string PlainTextMention => IsEveryone ? "@全体成员" : MentionUtils.PlainTextMentionRole(Id);
 
+    /// <summary>
+    ///     获取拥有此角色的所有用户。
+    /// </summary>
+    /// <remarks>
+    ///     此属性将从缓存中获取拥有此角色的所有用户。如果缓存中不存在用户，则此属性将返回一个空集合。
+    /// </remarks>
+    /// <seealso cref="Kook.WebSocket.SocketRole.GetUsersAsync(Kook.RequestOptions)"/>
+    public IEnumerable<SocketGuildUser> Members
+        => Guild.Users.Where(x => x.Roles.Any(r => r.Id == Id));
+
     internal SocketRole(SocketGuild guild, uint id)
         : base(guild.Kook, id)
     {
@@ -112,6 +122,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     /// </remarks>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 分页的用户集合的异步可枚举对象。 </returns>
+    /// <seealso cref="Kook.WebSocket.SocketRole.Members"/>
     public async IAsyncEnumerable<IReadOnlyCollection<SocketGuildUser>> GetUsersAsync(RequestOptions? options = null)
     {
         // From SocketGuild.Users
@@ -142,7 +153,7 @@ public class SocketRole : SocketEntity<uint>, IRole
     /// <inheritdoc cref="Kook.WebSocket.SocketRole.Name" />
     public override string ToString() => Name;
 
-    private string DebuggerDisplay => $"{Name} ({Id})";
+    private string DebuggerDisplay => $"{Name} ({Id}, {Type})";
     internal SocketRole Clone() => (SocketRole)MemberwiseClone();
 
     #region IRole
