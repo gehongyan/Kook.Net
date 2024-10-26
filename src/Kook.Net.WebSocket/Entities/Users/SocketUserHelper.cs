@@ -40,7 +40,8 @@ internal static class SocketUserHelper
             .Select(x => new AddOrRemoveRoleParams
             {
                 GuildId = user.Guild.Id,
-                RoleId = x, UserId = user.Id
+                RoleId = x,
+                UserId = user.Id
             });
         foreach (AddOrRemoveRoleParams arg in args)
         {
@@ -57,7 +58,8 @@ internal static class SocketUserHelper
             .Select(x => new AddOrRemoveRoleParams
             {
                 GuildId = user.Guild.Id,
-                RoleId = x, UserId = user.Id
+                RoleId = x,
+                UserId = user.Id
             });
         foreach (AddOrRemoveRoleParams arg in args)
         {

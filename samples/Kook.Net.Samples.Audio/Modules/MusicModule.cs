@@ -266,18 +266,18 @@ public class MusicModule : ModuleBase<SocketCommandContext>
             if (hasStarted)
                 return Task.CompletedTask;
             hasStarted = true;
-            Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 try
                 {
                     Console.WriteLine($"Stream created for SSRC: {ssrc}.");
-                    _ = Task.Run(async () => await PushStreamAsync(targetClient, stream, relayCancellationTokenSource.Token));
+                    await PushStreamAsync(targetClient, stream, relayCancellationTokenSource.Token);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
-            });
+            }, relayCancellationTokenSource.Token);
             return Task.CompletedTask;
         };
         sourceClient.StreamDestroyed += ssrc =>

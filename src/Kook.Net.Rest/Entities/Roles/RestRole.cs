@@ -134,5 +134,5 @@ public class RestRole : RestEntity<uint>, IRole
     /// <returns> 此角色的名称。 </returns>
     public override string ToString() => Name;
 
-    private string DebuggerDisplay => $"{Name} ({Id})";
+    private string DebuggerDisplay => $"{Name} ({Id}, {Type})";
 }
