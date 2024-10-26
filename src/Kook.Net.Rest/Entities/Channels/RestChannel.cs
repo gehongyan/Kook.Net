@@ -17,7 +17,7 @@ public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
     internal static RestChannel Create(BaseKookClient kook, Model model) =>
         model.Type switch
         {
-            ChannelType.Text or ChannelType.Voice => RestGuildChannel.Create(kook, new RestGuild(kook, model.GuildId), model),
+            ChannelType.Text or ChannelType.Voice or ChannelType.Thread => RestGuildChannel.Create(kook, new RestGuild(kook, model.GuildId), model),
             ChannelType.Category => RestCategoryChannel.Create(kook, new RestGuild(kook, model.GuildId), model),
             _ => new RestChannel(kook, model.Id)
         };
@@ -25,7 +25,7 @@ public class RestChannel : RestEntity<ulong>, IChannel, IUpdateable
     internal static RestChannel Create(BaseKookClient kook, Model model, IGuild guild) =>
         model.Type switch
         {
-            ChannelType.Text or ChannelType.Voice => RestGuildChannel.Create(kook, guild, model),
+            ChannelType.Text or ChannelType.Voice or ChannelType.Thread => RestGuildChannel.Create(kook, guild, model),
             ChannelType.Category => RestCategoryChannel.Create(kook, guild, model),
             _ => new RestChannel(kook, model.Id)
         };

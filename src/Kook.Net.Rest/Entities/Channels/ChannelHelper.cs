@@ -66,6 +66,24 @@ internal static class ChannelHelper
         return await client.ApiClient.ModifyGuildChannelAsync(channel.Id, apiArgs, options).ConfigureAwait(false);
     }
 
+    public static async Task<Model> ModifyAsync(IThreadChannel channel, BaseKookClient client,
+        Action<ModifyThreadChannelProperties> func, RequestOptions? options)
+    {
+        ModifyThreadChannelProperties args = new();
+        func(args);
+        ModifyThreadChannelParams apiArgs = new()
+        {
+            ChannelId = channel.Id,
+            Name = args.Name,
+            Position = args.Position,
+            CategoryId = args.CategoryId,
+            Topic = args.Topic,
+            SlowModeInternal = (int?)args.PostCreationInterval * 1000,
+            SlowModeReply = (int?)args.ReplyInterval * 1000
+        };
+        return await client.ApiClient.ModifyGuildChannelAsync(channel.Id, apiArgs, options).ConfigureAwait(false);
+    }
+
     public static async Task DeleteDMChannelAsync(IDMChannel channel, BaseKookClient client, RequestOptions? options) =>
         await client.ApiClient.DeleteUserChatAsync(channel.ChatCode, options).ConfigureAwait(false);
 

@@ -67,6 +67,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
             ChannelType.Category => SocketCategoryChannel.Create(guild, state, model),
             ChannelType.Text => SocketTextChannel.Create(guild, state, model),
             ChannelType.Voice => SocketVoiceChannel.Create(guild, state, model),
+            ChannelType.Thread => SocketThreadChannel.Create(guild, state, model),
             _ => new SocketGuildChannel(guild.Kook, model.Id, guild)
         };
 

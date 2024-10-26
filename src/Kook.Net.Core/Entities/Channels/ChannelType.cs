@@ -28,5 +28,10 @@ public enum ChannelType
     /// <summary>
     ///     私信频道。
     /// </summary>
-    DM = 3
+    DM = 3,
+
+    /// <summary>
+    ///     帖子频道。
+    /// </summary>
+    Thread = 4
 }

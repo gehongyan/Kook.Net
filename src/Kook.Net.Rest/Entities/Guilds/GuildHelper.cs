@@ -269,6 +269,22 @@ internal static class GuildHelper
         return RestVoiceChannel.Create(client, guild, model);
     }
 
+    public static async Task<RestThreadChannel> CreateThreadChannelAsync(IGuild guild, BaseKookClient client,
+        string name, Action<CreateThreadChannelProperties>? func, RequestOptions? options)
+    {
+        CreateThreadChannelProperties props = new();
+        func?.Invoke(props);
+        CreateGuildChannelParams args = new()
+        {
+            Name = name,
+            CategoryId = props.CategoryId,
+            GuildId = guild.Id,
+            Type = ChannelType.Text
+        };
+        Channel model = await client.ApiClient.CreateGuildChannelAsync(args, options).ConfigureAwait(false);
+        return RestThreadChannel.Create(client, guild, model);
+    }
+
     public static async Task<RestCategoryChannel> CreateCategoryChannelAsync(IGuild guild, BaseKookClient client,
         string name, Action<CreateCategoryChannelProperties>? func, RequestOptions? options)
     {

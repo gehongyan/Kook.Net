@@ -533,6 +533,11 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         Action<CreateVoiceChannelProperties>? func = null, RequestOptions? options = null) =>
         GuildHelper.CreateVoiceChannelAsync(this, Kook, name, func, options);
 
+    /// <inheritdoc cref="Kook.IGuild.CreateThreadChannelAsync(System.String,System.Action{Kook.CreateThreadChannelProperties},Kook.RequestOptions)" />
+    public Task<RestThreadChannel> CreateThreadChannelAsync(string name,
+        Action<CreateThreadChannelProperties>? func = null, RequestOptions? options = null) =>
+        GuildHelper.CreateThreadChannelAsync(this, Kook, name, func, options);
+
     /// <inheritdoc cref="Kook.IGuild.CreateCategoryChannelAsync(System.String,System.Action{Kook.CreateCategoryChannelProperties},Kook.RequestOptions)" />
     public Task<RestCategoryChannel> CreateCategoryChannelAsync(string name,
         Action<CreateCategoryChannelProperties>? func = null, RequestOptions? options = null) =>
@@ -976,6 +981,11 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     async Task<IVoiceChannel> IGuild.CreateVoiceChannelAsync(string name,
         Action<CreateVoiceChannelProperties>? func, RequestOptions? options) =>
         await CreateVoiceChannelAsync(name, func, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    async Task<IThreadChannel> IGuild.CreateThreadChannelAsync(string name,
+        Action<CreateThreadChannelProperties>? func, RequestOptions? options) =>
+        await CreateThreadChannelAsync(name, func, options).ConfigureAwait(false);
 
     /// <inheritdoc />
     async Task<ICategoryChannel> IGuild.CreateCategoryChannelAsync(string name,

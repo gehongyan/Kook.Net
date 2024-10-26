@@ -381,6 +381,15 @@ public interface IGuild : IEntity<ulong>
     Task<IVoiceChannel> CreateVoiceChannelAsync(string name, Action<CreateVoiceChannelProperties>? func = null, RequestOptions? options = null);
 
     /// <summary>
+    ///     在此服务器内创建一个新的帖子频道。
+    /// </summary>
+    /// <param name="name"> 频道的名称。 </param>
+    /// <param name="func"> 一个包含要应用到新创建频道的配置的委托。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步创建操作的任务。任务的结果包含新创建的帖子频道。 </returns>
+    Task<IThreadChannel> CreateThreadChannelAsync(string name, Action<CreateThreadChannelProperties>? func = null, RequestOptions? options = null);
+
+    /// <summary>
     ///     在此服务器内创建一个新的分组频道。
     /// </summary>
     /// <param name="name"> 频道的名称。 </param>

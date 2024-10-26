@@ -106,15 +106,15 @@ public enum GuildPermission : uint
     ///     发送文字消息。
     /// </summary>
     /// <remarks>
-    ///     拥有此权限的成员可以在文字频道中发送消息。
+    ///     拥有此权限的成员可以在文字频道中发送消息，也可以在帖子频道中发布帖子。
     /// </remarks>
     SendMessages = 1 << 12,
 
     /// <summary>
-    ///     消息管理。
+    ///     内容管理。
     /// </summary>
     /// <remarks>
-    ///     拥有此权限的成员可以删除其他成员发出的消息和置顶消息。
+    ///     拥有此权限的成员可以在文字频道帖子频道中管理其他成员所发出的内容，这通常包含删除其他成员发出的消息或帖子，以及置顶消息。
     /// </remarks>
     ManageMessages = 1 << 13,
 
@@ -236,5 +236,13 @@ public enum GuildPermission : uint
     /// <remarks>
     ///     拥有此权限的成员可在语音频道中共享计算机画面。
     /// </remarks>
-    ShareScreen = 1 << 28
+    ShareScreen = 1 << 28,
+
+    /// <summary>
+    ///     发布帖子回复。
+    /// </summary>
+    /// <remarks>
+    ///     拥有此权限的成员可在帖子频道中回复帖子。
+    /// </remarks>
+    ReplyToPost = 1 << 29
 }

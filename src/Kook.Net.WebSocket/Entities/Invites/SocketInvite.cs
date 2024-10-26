@@ -110,6 +110,7 @@ public class SocketInvite : SocketEntity<uint>, IInvite
         IVoiceChannel => ChannelType.Voice,
         ICategoryChannel => ChannelType.Category,
         ITextChannel => ChannelType.Text,
+        IThreadChannel => ChannelType.Thread,
         _ => throw new InvalidOperationException("Invalid channel type.")
     };
 

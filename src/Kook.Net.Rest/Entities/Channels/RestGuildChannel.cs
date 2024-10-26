@@ -51,6 +51,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         {
             ChannelType.Text => RestTextChannel.Create(kook, guild, model),
             ChannelType.Voice => RestVoiceChannel.Create(kook, guild, model),
+            ChannelType.Thread => RestThreadChannel.Create(kook, guild, model),
             ChannelType.Category => RestCategoryChannel.Create(kook, guild, model),
             _ => new RestGuildChannel(kook, guild, model.Id)
         };

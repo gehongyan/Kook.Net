@@ -52,6 +52,10 @@ internal class Channel
     [JsonPropertyName("slow_mode")]
     public int SlowMode { get; set; }
 
+    // Thread
+    [JsonPropertyName("slow_mode_reply")]
+    public int? SlowModeReply { get; set; }
+
     // Voice
     [JsonPropertyName("limit_amount")]
     public int? UserLimit { get; set; }

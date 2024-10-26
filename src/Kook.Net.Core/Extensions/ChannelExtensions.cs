@@ -17,6 +17,7 @@ public static class ChannelExtensions
             IDMChannel => ChannelType.DM,
             IVoiceChannel => ChannelType.Voice,
             ITextChannel => ChannelType.Text,
+            IThreadChannel => ChannelType.Thread,
             _ => null
         };
 
