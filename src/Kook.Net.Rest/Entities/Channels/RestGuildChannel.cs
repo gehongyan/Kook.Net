@@ -239,6 +239,8 @@ public class RestGuildChannel : RestChannel, IGuildChannel
 
     #region IChannel
 
+    string IChannel.Name => Name;
+
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options) =>
         AsyncEnumerable.Empty<IReadOnlyCollection<IUser>>(); //Overridden in Text/Voice
