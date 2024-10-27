@@ -169,7 +169,7 @@ public struct GuildPermissions
     public bool ShareScreen => Permissions.GetValue(RawValue, GuildPermission.ShareScreen);
 
     /// <summary>
-    ///     获取此权限集是否允许相关用户发布t帖子回复。
+    ///     获取此权限集是否允许相关用户发布帖子回复。
     /// </summary>
     public bool ReplyToPost => Permissions.GetValue(RawValue, GuildPermission.ReplyToPost);
 

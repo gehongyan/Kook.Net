@@ -128,6 +128,11 @@ public struct OverwritePermissions
     public PermValue ShareScreen => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ShareScreen);
 
     /// <summary>
+    ///     获取此权限重写配置对频道权限位 <see cref="Kook.ChannelPermission.ReplyToPost"/> 的重写配置。
+    /// </summary>
+    public PermValue ReplyToPost => Permissions.GetValue(AllowValue, DenyValue, ChannelPermission.ReplyToPost);
+
+    /// <summary>
     ///     使用指定的原始值初始化一个 <see cref="OverwritePermissions"/> 结构的新实例。
     /// </summary>
     /// <param name="allowValue"> 重写允许的权限的原始值。 </param>
@@ -156,7 +161,8 @@ public struct OverwritePermissions
         PermValue? deafenMembers = null,
         PermValue? muteMembers = null,
         PermValue? playSoundtrack = null,
-        PermValue? shareScreen = null)
+        PermValue? shareScreen = null,
+        PermValue? replyToPost = null)
     {
         Permissions.SetValue(ref allowValue, ref denyValue, createInvites, ChannelPermission.CreateInvites);
         Permissions.SetValue(ref allowValue, ref denyValue, manageChannels, ChannelPermission.ManageChannels);
@@ -176,6 +182,7 @@ public struct OverwritePermissions
         Permissions.SetValue(ref allowValue, ref denyValue, muteMembers, ChannelPermission.MuteMembers);
         Permissions.SetValue(ref allowValue, ref denyValue, playSoundtrack, ChannelPermission.PlaySoundtrack);
         Permissions.SetValue(ref allowValue, ref denyValue, shareScreen, ChannelPermission.ShareScreen);
+        Permissions.SetValue(ref allowValue, ref denyValue, replyToPost, ChannelPermission.ReplyToPost);
 
         AllowValue = allowValue;
         DenyValue = denyValue;
@@ -202,6 +209,7 @@ public struct OverwritePermissions
     /// <param name="muteMembers"> 服务器闭麦。 </param>
     /// <param name="playSoundtrack"> 共享计算机音频。 </param>
     /// <param name="shareScreen"> 屏幕分享。 </param>
+    /// <param name="replyToPost"> 发布帖子回复。 </param>
     public OverwritePermissions(
         PermValue createInvites = PermValue.Inherit,
         PermValue manageChannels = PermValue.Inherit,
@@ -220,10 +228,11 @@ public struct OverwritePermissions
         PermValue deafenMembers = PermValue.Inherit,
         PermValue muteMembers = PermValue.Inherit,
         PermValue playSoundtrack = PermValue.Inherit,
-        PermValue shareScreen = PermValue.Inherit)
+        PermValue shareScreen = PermValue.Inherit,
+        PermValue replyToPost = PermValue.Inherit)
         : this(0, 0, createInvites, manageChannels, manageRoles, viewChannel, sendMessages, manageMessages,
             attachFiles, connect, manageVoice, mentionEveryone, addReactions, passiveConnect, useVoiceActivity, speak,
-            deafenMembers, muteMembers, playSoundtrack, shareScreen)
+            deafenMembers, muteMembers, playSoundtrack, shareScreen, replyToPost)
     {
     }
 
@@ -248,6 +257,7 @@ public struct OverwritePermissions
     /// <param name="muteMembers"> 服务器闭麦。 </param>
     /// <param name="playSoundtrack"> 共享计算机音频。 </param>
     /// <param name="shareScreen"> 屏幕分享。 </param>
+    /// <param name="replyToPost"> 发布帖子回复。 </param>
     /// <returns> 更改了指定权限的新的权限集。 </returns>
     public OverwritePermissions Modify(
         PermValue? createInvites = null,
@@ -267,10 +277,11 @@ public struct OverwritePermissions
         PermValue? deafenMembers = null,
         PermValue? muteMembers = null,
         PermValue? playSoundtrack = null,
-        PermValue? shareScreen = null) =>
-        new(AllowValue, DenyValue, createInvites, manageChannels, manageRoles, viewChannel,
-            sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone, addReactions,
-            passiveConnect, useVoiceActivity, speak, deafenMembers, muteMembers, playSoundtrack, shareScreen);
+        PermValue? shareScreen = null,
+        PermValue? replyToPost = null) =>
+        new(AllowValue, DenyValue, createInvites, manageChannels, manageRoles, viewChannel, sendMessages,
+            manageMessages, attachFiles, connect, manageVoice, mentionEveryone, addReactions, passiveConnect,
+            useVoiceActivity, speak, deafenMembers, muteMembers, playSoundtrack, shareScreen, replyToPost);
 
     /// <summary>
     ///     获取一个包含当前权限重写配置所包含的所有重写允许的 <see cref="ChannelPermission"/> 独立位标志枚举值的集合。
