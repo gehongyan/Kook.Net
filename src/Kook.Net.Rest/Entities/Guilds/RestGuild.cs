@@ -110,6 +110,11 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     public IReadOnlyCollection<RestTextChannel> TextChannels => Channels.OfType<RestTextChannel>().ToImmutableArray();
 
     /// <summary>
+    ///     获取此服务器中的所有帖子频道。
+    /// </summary>
+    public IReadOnlyCollection<RestThreadChannel> ThreadChannels => Channels.OfType<RestThreadChannel>().ToImmutableArray();
+
+    /// <summary>
     ///     获取此服务器中所有具有语音聊天能力的频道。
     /// </summary>
     public IReadOnlyCollection<RestVoiceChannel> VoiceChannels => Channels.OfType<RestVoiceChannel>().ToImmutableArray();
@@ -443,6 +448,20 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     }
 
     /// <summary>
+    ///     获取此服务器内的指定帖子频道。
+    /// </summary>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
+    public async Task<RestThreadChannel?> GetThreadChannelAsync(ulong id, RequestOptions? options = null)
+    {
+        RestGuildChannel channel = await GuildHelper
+            .GetChannelAsync(this, Kook, id, options)
+            .ConfigureAwait(false);
+        return channel as RestThreadChannel;
+    }
+
+    /// <summary>
     ///     获取此服务器中所有具有文字聊天能力的频道。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
@@ -457,6 +476,19 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
             .GetChannelsAsync(this, Kook, options)
             .ConfigureAwait(false);
         return [..channels.OfType<RestTextChannel>()];
+    }
+
+    /// <summary>
+    ///     获取此服务器中的所有帖子频道。
+    /// </summary>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果包含此服务器的所有帖子频道。 </returns>
+    public async Task<IReadOnlyCollection<RestThreadChannel>> GetThreadChannelsAsync(RequestOptions? options = null)
+    {
+        IReadOnlyCollection<RestGuildChannel> channels = await GuildHelper
+            .GetChannelsAsync(this, Kook, options)
+            .ConfigureAwait(false);
+        return [..channels.OfType<RestThreadChannel>()];
     }
 
     /// <summary>
@@ -726,10 +758,23 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
             : TextChannels;
 
     /// <inheritdoc />
+    async Task<IReadOnlyCollection<IThreadChannel>> IGuild.GetThreadChannelsAsync(CacheMode mode,
+        RequestOptions? options) =>
+        mode == CacheMode.AllowDownload
+            ? await GetThreadChannelsAsync(options).ConfigureAwait(false)
+            : ThreadChannels;
+
+    /// <inheritdoc />
     async Task<ITextChannel?> IGuild.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
         mode == CacheMode.AllowDownload
             ? await GetTextChannelAsync(id, options).ConfigureAwait(false)
             : TextChannels.FirstOrDefault(x => x.Id == id);
+
+    /// <inheritdoc />
+    async Task<IThreadChannel?> IGuild.GetThreadChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        mode == CacheMode.AllowDownload
+            ? await GetThreadChannelAsync(id, options).ConfigureAwait(false)
+            : ThreadChannels.FirstOrDefault(x => x.Id == id);
 
     /// <inheritdoc />
     async Task<IReadOnlyCollection<IVoiceChannel>> IGuild.GetVoiceChannelsAsync(CacheMode mode,

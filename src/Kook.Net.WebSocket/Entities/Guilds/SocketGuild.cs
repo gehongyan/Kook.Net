@@ -190,6 +190,11 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     public IReadOnlyCollection<SocketCategoryChannel> CategoryChannels => [..Channels.OfType<SocketCategoryChannel>()];
 
     /// <summary>
+    ///     获取此服务器中的所有帖子频道。
+    /// </summary>
+    public IReadOnlyCollection<SocketThreadChannel> ThreadChannels => [..Channels.OfType<SocketThreadChannel>()];
+
+    /// <summary>
     ///     获取此服务器的所有频道。
     /// </summary>
     public IReadOnlyCollection<SocketGuildChannel> Channels => [.._channels.Values];
@@ -508,6 +513,13 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     ///     如需获取频道的实际类型，请参考 <see cref="Kook.ChannelExtensions.GetChannelType(Kook.IChannel)"/>。
     /// </remarks>
     public SocketTextChannel? GetTextChannel(ulong id) => GetChannel(id) as SocketTextChannel;
+
+    /// <summary>
+    ///     获取此服务器中的所有帖子频道。
+    /// </summary>
+    /// <param name="id"> 要获取的频道的 ID。 </param>
+    /// <returns> 与指定的 <paramref name="id"/> 关联的频道；如果未找到，则返回 <c>null</c>。 </returns>
+    public SocketThreadChannel? GetThreadChannel(ulong id) => GetChannel(id) as SocketThreadChannel;
 
     /// <summary>
     ///     获取此服务器内指定具有语音聊天能力的频道。
@@ -958,6 +970,14 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc />
     Task<ITextChannel?> IGuild.GetTextChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
         Task.FromResult<ITextChannel?>(GetTextChannel(id));
+
+    /// <inheritdoc />
+    Task<IReadOnlyCollection<IThreadChannel>> IGuild.GetThreadChannelsAsync(CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IReadOnlyCollection<IThreadChannel>>(ThreadChannels);
+
+    /// <inheritdoc />
+    Task<IThreadChannel?> IGuild.GetThreadChannelAsync(ulong id, CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IThreadChannel?>(GetThreadChannel(id));
 
     /// <inheritdoc />
     Task<IReadOnlyCollection<IVoiceChannel>> IGuild.GetVoiceChannelsAsync(CacheMode mode, RequestOptions? options) =>
