@@ -5,6 +5,21 @@ title: 变更日志
 
 # 变更日志
 
+## v0.9.3 [2024-10-27]
+
+### 新增
+
+- 新增对帖子频道的基本支持。新增帖子频道类型 `ChannelType.Thread`，新增帖子频道相关实体
+  `IThreadChannel`、`RestThreadChannel`、`SocketThreadChannel`，新增对帖子频道的获取、创建、修改、删除操作的支持。
+- 新增权限 `GuildPermission.ReplyToPost`、`ChannelPermission.ReplyToPost`
+  表示发布帖子回复的权限，并在各与权限相关的方法中添加对帖子频道权限的支持。
+- 新增 `SocketRole.Members`，可用于获取缓存中拥有指定角色的所有用户。
+
+### 修复
+
+- 修复 `SocketGuildUser.RemoveRolesAsync` 方法未能处理 `RequestOptions` 的问题。
+- 修复 `IChannel.Name` 可能为空的问题。
+
 ## v0.9.2 [2024-10-18]
 
 ### 新增

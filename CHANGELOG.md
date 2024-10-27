@@ -2,6 +2,22 @@
 
 ---
 
+## v0.9.3 [2024-10-27]
+
+### Added
+
+- Added basic support for thread channels. Introduced the thread channel type `ChannelType.Thread`, and related entities
+  `IThreadChannel`, `RestThreadChannel`, `SocketThreadChannel`. Added support for operations to get, create, modify,
+  and delete thread channels.
+- Added permissions `GuildPermission.ReplyToPost` and `ChannelPermission.ReplyToPost` to represent the permission to
+  reply to posts, and added support for post channel permissions in methods related to permissions.
+- Added `SocketRole.Members`, which can be used to retrieve all users with a specified role from the cache.
+
+### Fixed
+
+- Fixed the issue where the `SocketGuildUser.RemoveRolesAsync` method did not respect `RequestOptions`.
+- Fixed the issue where `IChannel.Name` may be null.
+
 ## v0.9.2 [2024-10-18]
 
 ### Added
