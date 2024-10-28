@@ -136,6 +136,7 @@ async Task MessageReceivedAsync(SocketMessage message,
     SocketGuildUser author,
     SocketTextChannel channel)
 {
+
     // Bot 永远不应该响应自己的消息
     if (author.Id == client.CurrentUser?.Id)
         return;

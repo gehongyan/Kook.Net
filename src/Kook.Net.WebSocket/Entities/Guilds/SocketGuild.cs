@@ -364,6 +364,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         Status = model.Status;
         AutoDeleteTime = model.AutoDeleteTime;
         RecommendInfo = model.RecommendInfo?.ToEntity();
+        AddOrUpdateCurrentUser(model);
     }
 
     internal void Update(ClientState state, Model model)
@@ -664,9 +665,27 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         return member;
     }
 
+    internal SocketGuildUser AddOrUpdateCurrentUser(ExtendedModel model)
+    {
+        if (Kook.CurrentUser is not null
+            && _members.TryGetValue(Kook.CurrentUser.Id, out SocketGuildUser? member))
+        {
+            member.Update(Kook.State, model);
+        }
+        else
+        {
+            member = SocketGuildUser.Create(this, Kook.State, model);
+            member.GlobalUser.AddRef();
+            _members[member.Id] = member;
+        }
+
+        return member;
+    }
+
     internal SocketGuildUser AddOrUpdateCurrentUser(RichModel model)
     {
-        if (Kook.CurrentUser is not null && _members.TryGetValue(Kook.CurrentUser.Id, out SocketGuildUser? member))
+        if (Kook.CurrentUser is not null
+            && _members.TryGetValue(Kook.CurrentUser.Id, out SocketGuildUser? member))
         {
             member.Update(Kook.State, model);
         }

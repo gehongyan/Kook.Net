@@ -224,6 +224,15 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         return entity;
     }
 
+    internal static SocketGuildUser Create(SocketGuild guild, ClientState state, ExtendedGuild model)
+    {
+        if (guild.Kook.CurrentUser is null)
+            throw new InvalidOperationException("The current user is not set well via login.");
+        SocketGuildUser entity = new(guild, guild.Kook.CurrentUser.GlobalUser);
+        entity.Update(state, model);
+        return entity;
+    }
+
     internal static SocketGuildUser Create(SocketGuild guild, ClientState state, RichGuild model)
     {
         if (guild.Kook.CurrentUser is null)
@@ -246,6 +255,12 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
         IsOwner = model.IsOwner ?? Guild.OwnerId == Id;
         if (model.Roles is not null)
             _roleIds = [..model.Roles];
+    }
+
+    internal void Update(ClientState state, ExtendedGuild guildModel)
+    {
+        if (guildModel.UserConfig is { } userConfig)
+            Nickname = userConfig.Nickname == Username ? null : userConfig.Nickname;
     }
 
     internal void Update(ClientState state, RichGuild guildModel)

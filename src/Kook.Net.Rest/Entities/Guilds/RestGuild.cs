@@ -217,6 +217,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         Status = model.Status;
         AutoDeleteTime = model.AutoDeleteTime;
         RecommendInfo = model.RecommendInfo?.ToEntity();
+        if (Kook.CurrentUser is null)
+            throw new InvalidOperationException("The current user is not set well via login.");
+        if (model.UserConfig is { } userConfig)
+            CurrentUserNickname = userConfig.Nickname == Kook.CurrentUser.Username ? null : userConfig.Nickname;
     }
 
     internal void Update(Model model)

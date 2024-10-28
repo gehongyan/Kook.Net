@@ -26,4 +26,7 @@ internal class ExtendedGuild : Guild
 
     [JsonPropertyName("recommend_info")]
     public RecommendInfo? RecommendInfo { get; set; }
+
+    [JsonPropertyName("user_config")]
+    public UserConfig? UserConfig { get; set; }
 }
