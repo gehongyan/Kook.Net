@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Kook.Commands;
 
@@ -18,12 +19,12 @@ internal static class ReflectionUtils
         return services =>
         {
             object[] args = parameters
-                .Select(x => GetMember(commands, services, x.ParameterType, typeInfo))
+                .Select(x => GetMember(commands, services, x.ParameterType, typeInfo, x.GetCustomAttributes()))
                 .ToArray();
 
             T obj = InvokeConstructor<T>(constructor, args, typeInfo);
             foreach (PropertyInfo property in properties)
-                property.SetValue(obj, GetMember(commands, services, property.PropertyType, typeInfo));
+                property.SetValue(obj, GetMember(commands, services, property.PropertyType, typeInfo, null));
             return obj;
         };
     }
@@ -68,11 +69,13 @@ internal static class ReflectionUtils
         return result.ToArray();
     }
 
-    private static object GetMember(CommandService commands, IServiceProvider services, Type memberType, TypeInfo ownerType)
+    private static object GetMember(CommandService commands, IServiceProvider services, Type memberType, TypeInfo ownerType, IEnumerable<object>? attributes)
     {
         if (memberType == typeof(CommandService)) return commands;
         if (memberType == typeof(IServiceProvider) || memberType == services.GetType()) return services;
-        object? service = services.GetService(memberType);
+        object? service = attributes?.FirstOrDefault(x => x.GetType() == typeof(FromKeyedServicesAttribute)) is { } keyedAttribute
+            ? services.GetKeyedServices(memberType, ((FromKeyedServicesAttribute)keyedAttribute).Key).First()
+            : services.GetService(memberType);
         if (service != null) return service;
         throw new InvalidOperationException($"Failed to create \"{ownerType.FullName}\", dependency \"{memberType.Name}\" was not found.");
     }
