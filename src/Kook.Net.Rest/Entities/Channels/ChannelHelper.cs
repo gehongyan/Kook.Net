@@ -1,6 +1,7 @@
 using Kook.API;
 using Kook.API.Rest;
 using System.Collections.Immutable;
+using System.Text.Json;
 using Model = Kook.API.Channel;
 
 namespace Kook.Rest;
@@ -221,11 +222,37 @@ internal static class ChannelHelper
             async () => await channel.GetMessageAsync(model.MessageId) as IUserMessage);
     }
 
+    public static async Task<Cacheable<IUserMessage, Guid>> SendMessageAsync<T>(IMessageChannel channel,
+        BaseKookClient client, MessageType messageType, int templateId, T parameters, IQuote? quote,
+        IUser? ephemeralUser, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
+    {
+        CreateMessageParams args = new()
+        {
+            Type = messageType,
+            ChannelId = channel.Id,
+            TemplateId = templateId,
+            Content = JsonSerializer.Serialize(parameters, jsonSerializerOptions),
+            QuotedMessageId = quote?.QuotedMessageId,
+            EphemeralUserId = ephemeralUser?.Id
+        };
+        CreateMessageResponse model = await client.ApiClient.CreateMessageAsync(args, options).ConfigureAwait(false);
+        return new Cacheable<IUserMessage, Guid>(null, model.MessageId, false,
+            async () => await channel.GetMessageAsync(model.MessageId) as IUserMessage);
+    }
+
     public static async Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IMessageChannel channel,
         BaseKookClient client, IEnumerable<ICard> cards, IQuote? quote, IUser? ephemeralUser, RequestOptions? options)
     {
         string json = MessageHelper.SerializeCards(cards);
         return await SendMessageAsync(channel, client, MessageType.Card, json, quote, ephemeralUser, options);
+    }
+
+    public static async Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(IMessageChannel channel,
+        BaseKookClient client, int templateId, T parameters, IQuote? quote, IUser? ephemeralUser,
+        JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
+    {
+        string json = JsonSerializer.Serialize(parameters, jsonSerializerOptions);
+        return await SendMessageAsync(channel, client, MessageType.Card, templateId, json, quote, ephemeralUser, jsonSerializerOptions, options);
     }
 
     public static Task<Cacheable<IUserMessage, Guid>> SendCardAsync(IMessageChannel channel,
@@ -405,11 +432,35 @@ internal static class ChannelHelper
             async () => await channel.GetMessageAsync(model.MessageId) as IUserMessage);
     }
 
+    public static async Task<Cacheable<IUserMessage, Guid>> SendDirectMessageAsync<T>(IDMChannel channel, BaseKookClient client,
+        MessageType messageType, int templateId, T parameters, IQuote? quote, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
+    {
+        CreateDirectMessageParams args = new()
+        {
+            Type = messageType,
+            UserId = channel.Recipient.Id,
+            TemplateId = templateId,
+            Content = JsonSerializer.Serialize(parameters, jsonSerializerOptions),
+            QuotedMessageId = quote?.QuotedMessageId
+        };
+        CreateDirectMessageResponse model = await client.ApiClient
+            .CreateDirectMessageAsync(args, options).ConfigureAwait(false);
+        return new Cacheable<IUserMessage, Guid>(null, model.MessageId, false,
+            async () => await channel.GetMessageAsync(model.MessageId) as IUserMessage);
+    }
+
     public static Task<Cacheable<IUserMessage, Guid>> SendDirectCardsAsync(IDMChannel channel,
         BaseKookClient client, IEnumerable<ICard> cards, IQuote? quote, RequestOptions? options)
     {
         string json = MessageHelper.SerializeCards(cards);
         return SendDirectMessageAsync(channel, client, MessageType.Card, json, quote, options);
+    }
+
+    public static Task<Cacheable<IUserMessage, Guid>> SendDirectCardsAsync<T>(IDMChannel channel, BaseKookClient client,
+        int templateId, T parameters, IQuote? quote, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
+    {
+        string json = JsonSerializer.Serialize(parameters, jsonSerializerOptions);
+        return SendDirectMessageAsync(channel, client, MessageType.Card, templateId, json, quote, jsonSerializerOptions, options);
     }
 
     public static Task<Cacheable<IUserMessage, Guid>> SendDirectCardAsync(IDMChannel channel,

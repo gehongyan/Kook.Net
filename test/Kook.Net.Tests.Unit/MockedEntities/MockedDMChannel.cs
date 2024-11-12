@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Kook;
@@ -41,6 +42,11 @@ internal sealed class MockedDMChannel : IDMChannel
         throw new NotImplementedException();
 
     /// <inheritdoc />
+    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync<T>(int templateId, T parameters, IQuote? quote = null,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(
         ICard card, IQuote? quote = null, RequestOptions? options = null) =>
         throw new NotImplementedException();
@@ -48,6 +54,11 @@ internal sealed class MockedDMChannel : IDMChannel
     /// <inheritdoc />
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(
         IEnumerable<ICard> cards, IQuote? quote = null, RequestOptions? options = null) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(int templateId, T parameters, IQuote? quote = null,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         throw new NotImplementedException();
 
     Guid IEntity<Guid>.Id => throw new NotImplementedException();
@@ -91,6 +102,11 @@ internal sealed class MockedDMChannel : IDMChannel
         throw new NotImplementedException();
 
     /// <inheritdoc />
+    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync<T>(int templateId, T parameters, IQuote? quote = null, IUser? ephemeralUser = null,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(
         ICard card, IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         throw new NotImplementedException();
@@ -98,6 +114,11 @@ internal sealed class MockedDMChannel : IDMChannel
     /// <inheritdoc />
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(
         IEnumerable<ICard> cards, IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(int templateId, T parameters, IQuote? quote = null, IUser? ephemeralUser = null,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         throw new NotImplementedException();
 
     /// <inheritdoc />

@@ -15,6 +15,15 @@ public class PublicModule : ModuleBase<SocketCommandContext>
     public Task PingAsync() =>
         ReplyTextAsync("pong!");
 
+    [Command("template")]
+    public Task TemplateAsync() =>
+        ReplyCardsAsync(62419125, new
+        {
+            guildname = "KOOK开发者中心",
+            username = "开发者",
+            roles = new[] { "role1", "role2", "role3" }
+        });
+
     [Command("cat")]
     public async Task CatAsync()
     {

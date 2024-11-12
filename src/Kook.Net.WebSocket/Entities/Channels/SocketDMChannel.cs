@@ -2,6 +2,7 @@ using Kook.API;
 using Kook.Rest;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace Kook.WebSocket;
 
@@ -205,32 +206,42 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     public IReadOnlyCollection<SocketMessage> GetCachedMessages(IMessage referenceMessage,
         Direction dir, int limit = KookConfig.MaxMessagesPerBatch) => [];
 
-    /// <inheritdoc cref="Kook.IMessageChannel.SendFileAsync(System.String,System.String,Kook.AttachmentType,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IDMChannel.SendFileAsync(System.String,System.String,Kook.AttachmentType,Kook.IQuote,Kook.RequestOptions)" />
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path, string? filename = null,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, path, filename, type, quote, options);
 
-    /// <inheritdoc cref="Kook.IMessageChannel.SendFileAsync(System.IO.Stream,System.String,Kook.AttachmentType,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IDMChannel.SendFileAsync(System.IO.Stream,System.String,Kook.AttachmentType,Kook.IQuote,Kook.RequestOptions)" />
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(Stream stream, string filename,
         AttachmentType type = AttachmentType.File, IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, stream, filename, type, quote, options);
 
-    /// <inheritdoc cref="Kook.IMessageChannel.SendFileAsync(Kook.FileAttachment,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IDMChannel.SendFileAsync(Kook.FileAttachment,Kook.IQuote,Kook.RequestOptions)" />
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(FileAttachment attachment,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectFileAsync(this, Kook, attachment, quote, options);
 
-    /// <inheritdoc cref="Kook.IMessageChannel.SendTextAsync(System.String,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IDMChannel.SendTextAsync(System.String,Kook.IQuote,Kook.RequestOptions)" />
     public Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, quote, options);
 
-    /// <inheritdoc cref="Kook.IMessageChannel.SendCardsAsync(System.Collections.Generic.IEnumerable{Kook.ICard},Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IDMChannel.SendTextAsync{T}(System.Int32,T,Kook.IQuote,System.Text.Json.JsonSerializerOptions,Kook.RequestOptions)"/>
+    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync<T>(int templateId, T parameters, IQuote? quote = null,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, templateId, parameters, quote, jsonSerializerOptions, options);
+
+    /// <inheritdoc cref="Kook.IDMChannel.SendCardsAsync(System.Collections.Generic.IEnumerable{Kook.ICard},Kook.IQuote,Kook.RequestOptions)" />
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardsAsync(this, Kook, cards, quote, options);
 
-    /// <inheritdoc cref="Kook.IMessageChannel.SendCardAsync(Kook.ICard,Kook.IQuote,Kook.IUser,Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IDMChannel.SendCardsAsync{T}(System.Int32,T,Kook.IQuote,System.Text.Json.JsonSerializerOptions,Kook.RequestOptions)" />
+    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(int templateId, T parameters, IQuote? quote = null,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        ChannelHelper.SendDirectCardsAsync(this, Kook, templateId, parameters, quote, jsonSerializerOptions, options);
+
+    /// <inheritdoc cref="Kook.IDMChannel.SendCardAsync(Kook.ICard,Kook.IQuote,Kook.RequestOptions)" />
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardAsync(this, Kook, card, quote, options);
@@ -325,6 +336,11 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         SendTextAsync(text, quote, options);
 
     /// <inheritdoc />
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendTextAsync<T>(int templateId, T parameters,
+        IQuote? quote, IUser? ephemeralUser, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options) =>
+        SendTextAsync(templateId, parameters, quote, jsonSerializerOptions, options);
+
+    /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendCardAsync(ICard card,
         IQuote? quote, RequestOptions? options) =>
         SendCardAsync(card, quote, options);
@@ -333,6 +349,11 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     Task<Cacheable<IUserMessage, Guid>> IDMChannel.SendCardsAsync(IEnumerable<ICard> cards,
         IQuote? quote, RequestOptions? options) =>
         SendCardsAsync(cards, quote, options);
+
+    /// <inheritdoc />
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardsAsync<T>(int templateId, T parameters,
+        IQuote? quote, IUser? ephemeralUser, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options) =>
+        SendCardsAsync(templateId, parameters, quote, jsonSerializerOptions, options);
 
     /// <inheritdoc />
     async Task<IMessage?> IMessageChannel.GetMessageAsync(Guid id, CacheMode mode, RequestOptions? options) =>

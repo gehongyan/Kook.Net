@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Kook.Commands.Builders;
 
 namespace Kook.Commands;
@@ -36,7 +37,8 @@ public abstract class ModuleBase<T> : IModuleBase
         RequestOptions? options = null) =>
         await Context.Channel.SendFileAsync(path, filename, type,
                 isQuote ? new MessageReference(Context.Message.Id) : null,
-                isEphemeral ? Context.User : null, options)
+                isEphemeral ? Context.User : null,
+                options)
             .ConfigureAwait(false);
 
     /// <summary>
@@ -54,7 +56,8 @@ public abstract class ModuleBase<T> : IModuleBase
         RequestOptions? options = null) =>
         await Context.Channel.SendFileAsync(stream, filename, type,
                 isQuote ? new MessageReference(Context.Message.Id) : null,
-                isEphemeral ? Context.User : null, options)
+                isEphemeral ? Context.User : null,
+                options)
             .ConfigureAwait(false);
 
     /// <summary>
@@ -69,7 +72,8 @@ public abstract class ModuleBase<T> : IModuleBase
         bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendFileAsync(attachment,
                 isQuote ? new MessageReference(Context.Message.Id) : null,
-                isEphemeral ? Context.User : null, options)
+                isEphemeral ? Context.User : null,
+                options)
             .ConfigureAwait(false);
 
     /// <summary>
@@ -84,7 +88,28 @@ public abstract class ModuleBase<T> : IModuleBase
         bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendTextAsync(text,
                 isQuote ? new MessageReference(Context.Message.Id) : null,
-                isEphemeral ? Context.User : null, options)
+                isEphemeral ? Context.User : null,
+                options)
+            .ConfigureAwait(false);
+
+    /// <summary>
+    ///     发送文本消息到此命令消息所在的频道。
+    /// </summary>
+    /// <param name="templateId"> 消息模板的 ID。 </param>
+    /// <param name="parameters"> 传入消息模板的参数。 </param>
+    /// <param name="isQuote"> 是否引用源消息。 </param>
+    /// <param name="isEphemeral"> 是否以临时消息的形式发送给命令调用者。如果设置为 <c>true</c>，则仅该用户可以看到此消息，否则所有人都可以看到此消息。 </param>
+    /// <param name="jsonSerializerOptions"> 序列化模板参数时要使用的序列化选项。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <typeparam name="TParams"> 参数的类型。 </typeparam>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync<TParams>(
+        int templateId, TParams parameters, bool isQuote = false, bool isEphemeral = false,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        await Context.Channel.SendTextAsync(templateId, parameters,
+                isQuote ? new MessageReference(Context.Message.Id) : null,
+                isEphemeral ? Context.User : null,
+                jsonSerializerOptions, options)
             .ConfigureAwait(false);
 
     /// <summary>
@@ -99,7 +124,28 @@ public abstract class ModuleBase<T> : IModuleBase
         bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendCardsAsync(cards,
                 isQuote ? new MessageReference(Context.Message.Id) : null,
-                isEphemeral ? Context.User : null, options)
+                isEphemeral ? Context.User : null,
+                options)
+            .ConfigureAwait(false);
+
+    /// <summary>
+    ///     发送卡片消息到此命令消息所在的频道。
+    /// </summary>
+    /// <param name="templateId"> 消息模板的 ID。 </param>
+    /// <param name="parameters"> 传入消息模板的参数。 </param>
+    /// <param name="isQuote"> 是否引用源消息。 </param>
+    /// <param name="isEphemeral"> 是否以临时消息的形式发送给命令调用者。如果设置为 <c>true</c>，则仅该用户可以看到此消息，否则所有人都可以看到此消息。 </param>
+    /// <param name="jsonSerializerOptions"> 序列化模板参数时要使用的序列化选项。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <typeparam name="TParams"> 参数的类型。 </typeparam>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync<TParams>(
+        int templateId, TParams parameters, bool isQuote = true, bool isEphemeral = false,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        await Context.Channel.SendCardsAsync(templateId, parameters,
+                isQuote ? new MessageReference(Context.Message.Id) : null,
+                isEphemeral ? Context.User : null,
+                jsonSerializerOptions, options)
             .ConfigureAwait(false);
 
     /// <summary>
@@ -114,7 +160,8 @@ public abstract class ModuleBase<T> : IModuleBase
         bool isQuote = true, bool isEphemeral = false, RequestOptions? options = null) =>
         await Context.Channel.SendCardAsync(card,
                 isQuote ? new MessageReference(Context.Message.Id) : null,
-                isEphemeral ? Context.User : null, options)
+                isEphemeral ? Context.User : null,
+                options)
             .ConfigureAwait(false);
 
     /// <inheritdoc cref="Kook.Commands.IModuleBase.BeforeExecuteAsync(Kook.Commands.CommandInfo)" />

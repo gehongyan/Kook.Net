@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace Kook;
 
 /// <summary>
@@ -82,6 +84,19 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     Task<Cacheable<IUserMessage, Guid>> SendTextAsync(string text, IQuote? quote = null, RequestOptions? options = null);
 
     /// <summary>
+    ///     发送文本消息到此消息频道。
+    /// </summary>
+    /// <param name="templateId"> 消息模板的 ID。 </param>
+    /// <param name="parameters"> 传入消息模板的参数。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="jsonSerializerOptions"> 序列化模板参数时要使用的序列化选项。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <typeparam name="T"> 参数的类型。 </typeparam>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    Task<Cacheable<IUserMessage, Guid>> SendTextAsync<T>(int templateId, T parameters, IQuote? quote = null,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null);
+
+    /// <summary>
     ///     发送卡片消息到此消息频道。
     /// </summary>
     /// <param name="card"> 要发送的卡片。 </param>
@@ -98,6 +113,19 @@ public interface IDMChannel : IMessageChannel, IPrivateChannel, IEntity<Guid>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards, IQuote? quote = null, RequestOptions? options = null);
+
+    /// <summary>
+    ///     发送卡片消息到此消息频道。
+    /// </summary>
+    /// <param name="templateId"> 消息模板的 ID。 </param>
+    /// <param name="parameters"> 传入消息模板的参数。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="jsonSerializerOptions"> 序列化模板参数时要使用的序列化选项。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <typeparam name="T"> 参数的类型。 </typeparam>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(int templateId, T parameters, IQuote? quote = null,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null);
 
     #endregion
 }

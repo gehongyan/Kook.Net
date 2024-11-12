@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Kook;
@@ -117,6 +118,11 @@ internal sealed class MockedTextChannel : ITextChannel
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         throw new NotImplementedException();
 
+    /// <inheritdoc />
+    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync<T>(int templateId, T parameters, IQuote? quote = null, IUser? ephemeralUser = null,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        throw new NotImplementedException();
+
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
         IQuote? quote = null, IUser? ephemeralUser = null,
         RequestOptions? options = null) =>
@@ -124,6 +130,11 @@ internal sealed class MockedTextChannel : ITextChannel
 
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(int templateId, T parameters, IQuote? quote = null, IUser? ephemeralUser = null,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         throw new NotImplementedException();
 
     public Task<IMessage?> GetMessageAsync(Guid id,

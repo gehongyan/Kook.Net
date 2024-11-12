@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace Kook;
 
 /// <summary>
@@ -68,6 +70,7 @@ public static class MessageExtensions
     /// <param name="isQuote"> 是否在回复消息时引用被回复的消息。 </param>
     /// <param name="isEphemeral"> 是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
         string path, string? filename = null, AttachmentType type = AttachmentType.File, bool isQuote = false,
         bool isEphemeral = false, RequestOptions? options = null) =>
@@ -87,6 +90,7 @@ public static class MessageExtensions
     /// <param name="isQuote"> 是否在回复消息时引用被回复的消息。 </param>
     /// <param name="isEphemeral"> 是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
         Stream stream, string filename, AttachmentType type = AttachmentType.File, bool isQuote = false,
         bool isEphemeral = false, RequestOptions? options = null) =>
@@ -104,6 +108,7 @@ public static class MessageExtensions
     /// <param name="isQuote"> 是否在回复消息时引用被回复的消息。 </param>
     /// <param name="isEphemeral"> 是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
         FileAttachment attachment, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendFileAsync(attachment,
@@ -116,16 +121,38 @@ public static class MessageExtensions
     ///     向消息所属的频道回复文字消息。
     /// </summary>
     /// <param name="message"> 要回复的消息。 </param>
-    /// <param name="content">Contents of the message.</param>
-    /// <param name="isQuote">是否在回复消息时引用被回复的消息。 </param>
-    /// <param name="isEphemeral">是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
+    /// <param name="content"> 要发送的文本。 </param>
+    /// <param name="isQuote"> 是否在回复消息时引用被回复的消息。 </param>
+    /// <param name="isEphemeral"> 是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(this IUserMessage message,
         string content, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendTextAsync(content,
                 isQuote ? new MessageReference(message.Id) : null,
                 isEphemeral ? message.Author : null,
                 options)
+            .ConfigureAwait(false);
+
+    /// <summary>
+    ///     向消息所属的频道回复文字消息。
+    /// </summary>
+    /// <param name="message"> 要回复的消息。 </param>
+    /// <param name="templateId"> 消息模板的 ID。 </param>
+    /// <param name="parameters"> 传入消息模板的参数。 </param>
+    /// <param name="isQuote"> 是否在回复消息时引用被回复的消息。 </param>
+    /// <param name="isEphemeral"> 是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
+    /// <param name="jsonSerializerOptions"> 序列化模板参数时要使用的序列化选项。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <typeparam name="T"> 参数的类型。 </typeparam>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    public static async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync<T>(this IUserMessage message,
+        int templateId, T parameters, bool isQuote = false, bool isEphemeral = false,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        await message.Channel.SendTextAsync(templateId, parameters,
+                isQuote ? new MessageReference(message.Id) : null,
+                isEphemeral ? message.Author : null,
+                jsonSerializerOptions, options)
             .ConfigureAwait(false);
 
     /// <summary>
@@ -136,6 +163,7 @@ public static class MessageExtensions
     /// <param name="isQuote">是否在回复消息时引用被回复的消息。 </param>
     /// <param name="isEphemeral">是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(this IUserMessage message,
         IEnumerable<ICard> cards, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendCardsAsync(cards,
@@ -148,10 +176,32 @@ public static class MessageExtensions
     ///     向消息所属的频道回复卡片消息。
     /// </summary>
     /// <param name="message"> 要回复的消息。 </param>
+    /// <param name="templateId"> 消息模板的 ID。 </param>
+    /// <param name="parameters"> 传入消息模板的参数。 </param>
+    /// <param name="isQuote">是否在回复消息时引用被回复的消息。 </param>
+    /// <param name="isEphemeral">是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
+    /// <param name="jsonSerializerOptions"> 序列化模板参数时要使用的序列化选项。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <typeparam name="T"> 参数的类型。 </typeparam>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
+    public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync<T>(this IUserMessage message,
+        int templateId, T parameters, bool isQuote = false, bool isEphemeral = false,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        await message.Channel.SendCardsAsync(templateId, parameters,
+                isQuote ? new MessageReference(message.Id) : null,
+                isEphemeral ? message.Author : null,
+                jsonSerializerOptions, options)
+            .ConfigureAwait(false);
+
+    /// <summary>
+    ///     向消息所属的频道回复卡片消息。
+    /// </summary>
+    /// <param name="message"> 要回复的消息。 </param>
     /// <param name="card"> 要发送的卡片。 </param>
     /// <param name="isQuote">是否在回复消息时引用被回复的消息。 </param>
     /// <param name="isEphemeral">是否以临时消息的方式回复。如果设置为 <c>true</c>，则仅该被回复的消息的作者可以看到此回复消息，否则所有人都可以看到此回复消息。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardAsync(this IUserMessage message,
         ICard card, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendCardAsync(card,

@@ -1,6 +1,7 @@
 using Kook.Rest;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Text.Json;
 using Model = Kook.API.Channel;
 
 namespace Kook.WebSocket;
@@ -237,10 +238,20 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         ChannelHelper.SendMessageAsync(this, Kook, MessageType.KMarkdown, text, quote, ephemeralUser, options);
 
+    /// <inheritdoc cref="Kook.IMessageChannel.SendTextAsync{T}(System.Int32,T,Kook.IQuote,Kook.IUser,System.Text.Json.JsonSerializerOptions,Kook.RequestOptions)"/>
+    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync<T>(int templateId, T parameters, IQuote? quote = null,
+        IUser? ephemeralUser = null, JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        ChannelHelper.SendMessageAsync(this, Kook, MessageType.KMarkdown, templateId, parameters, quote, ephemeralUser, jsonSerializerOptions, options);
+
     /// <inheritdoc cref="Kook.IMessageChannel.SendCardsAsync(System.Collections.Generic.IEnumerable{Kook.ICard},Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync(IEnumerable<ICard> cards,
         IQuote? quote = null, IUser? ephemeralUser = null, RequestOptions? options = null) =>
         ChannelHelper.SendCardsAsync(this, Kook, cards, quote, ephemeralUser, options);
+
+    /// <inheritdoc cref="Kook.IMessageChannel.SendCardsAsync{T}(System.Int32,T,Kook.IQuote,Kook.IUser,System.Text.Json.JsonSerializerOptions,Kook.RequestOptions)"/>
+    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(int templateId, T parameters, IQuote? quote = null,
+        IUser? ephemeralUser = null, JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        ChannelHelper.SendCardsAsync(this, Kook, templateId, parameters, quote, ephemeralUser, jsonSerializerOptions, options);
 
     /// <inheritdoc cref="Kook.IMessageChannel.SendCardAsync(Kook.ICard,Kook.IQuote,Kook.IUser,Kook.RequestOptions)"/>
     public Task<Cacheable<IUserMessage, Guid>> SendCardAsync(ICard card,
@@ -341,6 +352,11 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
         SendTextAsync(text, quote, ephemeralUser, options);
 
     /// <inheritdoc />
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendTextAsync<T>(int templateId, T parameters,
+        IQuote? quote, IUser? ephemeralUser, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options) =>
+        SendTextAsync(templateId, parameters, quote, ephemeralUser, jsonSerializerOptions, options);
+
+    /// <inheritdoc />
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardAsync(ICard card,
         IQuote? quote, IUser? ephemeralUser, RequestOptions? options) =>
         SendCardAsync(card, quote, ephemeralUser, options);
@@ -349,6 +365,11 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardsAsync(IEnumerable<ICard> cards,
         IQuote? quote, IUser? ephemeralUser, RequestOptions? options) =>
         SendCardsAsync(cards, quote, ephemeralUser, options);
+
+    /// <inheritdoc />
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardsAsync<T>(int templateId, T parameters,
+        IQuote? quote, IUser? ephemeralUser, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options) =>
+        SendCardsAsync(templateId, parameters, quote, ephemeralUser, jsonSerializerOptions, options);
 
     /// <inheritdoc />
     async Task<IMessage?> IMessageChannel.GetMessageAsync(Guid id, CacheMode mode, RequestOptions? options) =>
