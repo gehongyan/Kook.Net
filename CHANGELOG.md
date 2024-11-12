@@ -19,9 +19,6 @@
 ### Fixed
 
 - Fixed the issue where `SocketGuild.CurrentUser` was null.
-
-### Misc
-
 - Fixed an issue where direct messages might not be edited correctly.
 
 ## v0.9.3 [2024-10-27]
