@@ -105,13 +105,20 @@ POST `/api/v3/direct-message/update`
 string content = null; // 要更新的消息的文本
 IEnumerable<ICard> cards = null; // 要更新的消息的卡片
 IQuote quote = null; // 要更新的消息的引用
+int templateId = default; // 要发送的模板消息的模板 ID
+T parameters = default; // 要发送的模板消息的参数
+JsonSerializerOptions jsonSerializerOptions = null; // 要发送的模板消息的参数的序列化选项
 
 // API 请求
+// 在更新模板消息时，指定泛型参数 T 可以提高序列化性能，省略泛型参数 T 时，序列化器将以序列化 object 的方式进行序列化
 await userMessage.ModifyAsync(x =>
 {
     x.Content = content;
     x.Cards = cards;
     x.Quote = quote; // 要清除引用，请设置为 Quote.Empty
+    x.TemplateId = templateId;
+    x.Parameters = parameters;
+    x.JsonSerializerOptions = jsonSerializerOptions;
 });
 ```
 
