@@ -241,5 +241,16 @@ public interface IMessageChannel : IChannel
     /// <seealso cref="Kook.MessageProperties"/>
     Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions? options = null);
 
+    /// <summary>
+    ///     修改一条消息。
+    /// </summary>
+    /// <param name="messageId"> 要修改的消息的 ID。 </param>
+    /// <param name="func"> 一个包含修改消息属性的委托。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <typeparam name="T"> 模板参数的类型。 </typeparam>
+    /// <returns> 一个表示异步修改操作的任务。 </returns>
+    /// <seealso cref="Kook.MessageProperties"/>
+    Task ModifyMessageAsync<T>(Guid messageId, Action<MessageProperties<T>> func, RequestOptions? options = null);
+
     #endregion
 }

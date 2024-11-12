@@ -208,8 +208,29 @@ public class RestUserMessage : RestMessage, IUserMessage
     /// <inheritdoc />
     public async Task ModifyAsync(Action<MessageProperties> func, RequestOptions? options = null)
     {
-        await MessageHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
+        if (Channel is ITextChannel)
+            await MessageHelper.ModifyAsync<object>(this, Kook, func, options).ConfigureAwait(false);
+        else if (Channel is IDMChannel)
+            await MessageHelper.ModifyDirectAsync<object>(this, Kook, func, options).ConfigureAwait(false);
+        else
+            throw new NotSupportedException("Unsupported channel type.");
         MessageProperties properties = new() { Content = Content, Cards = [..Cards], Quote = Quote };
+        func(properties);
+        Content = properties.Content;
+        _cards = properties.Cards?.ToImmutableArray() ?? ImmutableArray<ICard>.Empty;
+        Quote = properties.Quote?.QuotedMessageId == Guid.Empty ? null : properties.Quote;
+    }
+
+    /// <inheritdoc />
+    public async Task ModifyAsync<T>(Action<MessageProperties<T>> func, RequestOptions? options = null)
+    {
+        if (Channel is ITextChannel)
+            await MessageHelper.ModifyAsync(this, Kook, func, options).ConfigureAwait(false);
+        else if (Channel is IDMChannel)
+            await MessageHelper.ModifyDirectAsync(this, Kook, func, options).ConfigureAwait(false);
+        else
+            throw new NotSupportedException("Unsupported channel type.");
+        MessageProperties<T> properties = new() { Content = Content, Cards = [..Cards], Quote = Quote };
         func(properties);
         Content = properties.Content;
         _cards = properties.Cards?.ToImmutableArray() ?? ImmutableArray<ICard>.Empty;

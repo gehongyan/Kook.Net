@@ -155,6 +155,10 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
 
     /// <inheritdoc />
     public Task ModifyMessageAsync(Guid messageId, Action<MessageProperties> func, RequestOptions? options = null) =>
+        ChannelHelper.ModifyDirectMessageAsync<object>(this, messageId, func, Kook, options);
+
+    /// <inheritdoc />
+    public Task ModifyMessageAsync<T>(Guid messageId, Action<MessageProperties<T>> func, RequestOptions? options = null) =>
         ChannelHelper.ModifyDirectMessageAsync(this, messageId, func, Kook, options);
 
     #endregion

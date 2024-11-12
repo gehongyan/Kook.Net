@@ -15,14 +15,31 @@ public class PublicModule : ModuleBase<SocketCommandContext>
     public Task PingAsync() =>
         ReplyTextAsync("pong!");
 
-    [Command("template")]
-    public Task TemplateAsync() =>
-        ReplyCardsAsync(62419125, new
+    [Command("template", RunMode = RunMode.Async)]
+    public async Task TemplateAsync()
+    {
+        Cacheable<IUserMessage, Guid> msgInfo = await ReplyCardsAsync(62419125, new
         {
             guildname = "KOOK开发者中心",
             username = "开发者",
             roles = new[] { "role1", "role2", "role3" }
         });
+        IUserMessage? msg = await msgInfo.GetOrDownloadAsync();
+        if (msg is not null)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            await msg.ModifyAsync(x =>
+            {
+                x.TemplateId = 62419125;
+                x.Parameters = new
+                {
+                    guildname = "KOOK开发者中心111",
+                    username = "开发者111",
+                    roles = new[] { "role21", "role22", "role23" }
+                };
+            });
+        }
+    }
 
     [Command("cat")]
     public async Task CatAsync()

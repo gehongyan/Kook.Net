@@ -209,6 +209,10 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
         throw new NotImplementedException();
 
     /// <inheritdoc />
+    public Task ModifyMessageAsync<T>(Guid messageId, Action<MessageProperties<T>> func, RequestOptions? options = null) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
     public string Topic => throw new NotImplementedException();
 
     /// <inheritdoc />

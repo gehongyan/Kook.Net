@@ -159,17 +159,24 @@ internal static class MessageHelper
         return [..models.Select(x => RestUser.Create(client, x))];
     }
 
-    public static async Task ModifyAsync(IUserMessage msg, BaseKookClient client, Action<MessageProperties> func,
+    public static async Task ModifyAsync<T>(IUserMessage msg, BaseKookClient client, Action<MessageProperties<T>> func,
         RequestOptions? options)
     {
         if (msg.Type == MessageType.KMarkdown)
         {
-            MessageProperties args = new()
+            MessageProperties<T> args = new()
             {
                 Content = msg.Content,
                 Quote = msg.Quote
             };
             func(args);
+            if (args.TemplateId.HasValue)
+            {
+                Preconditions.EnsureMessageProperties(args);
+                await ModifyAsync(msg.Id, client, args.TemplateId.Value, args.Parameters,
+                    args.Quote, args.EphemeralUser, args.JsonSerializerOptions, options);
+                return;
+            }
             Preconditions.NotNullOrEmpty(args.Content, nameof(args.Content));
             await ModifyAsync(msg.Id, client, args.Content, args.Quote, args.EphemeralUser, options);
             return;
@@ -177,12 +184,19 @@ internal static class MessageHelper
 
         if (msg.Type == MessageType.Card)
         {
-            MessageProperties args = new()
+            MessageProperties<T> args = new()
             {
                 Cards = [..msg.Cards],
                 Quote = msg.Quote
             };
             func(args);
+            if (args.TemplateId.HasValue)
+            {
+                Preconditions.EnsureMessageProperties(args);
+                await ModifyAsync(msg.Id, client, args.TemplateId.Value, args.Parameters,
+                    args.Quote, args.EphemeralUser, args.JsonSerializerOptions, options);
+                return;
+            }
             if (args.Cards is null || !args.Cards.Any())
                 throw new ArgumentNullException(nameof(args.Cards), "CardMessage must contains cards.");
             string json = SerializeCards(args.Cards);
@@ -193,13 +207,19 @@ internal static class MessageHelper
         throw new NotSupportedException("Only the modification of KMarkdown and CardMessage are supported.");
     }
 
-    public static async Task ModifyAsync(Guid msgId, BaseKookClient client,
-        Action<MessageProperties> func, RequestOptions? options)
+    public static async Task ModifyAsync<T>(Guid msgId, BaseKookClient client,
+        Action<MessageProperties<T>> func, RequestOptions? options)
     {
-        MessageProperties properties = new();
+        MessageProperties<T> properties = new();
         func(properties);
-        if (string.IsNullOrEmpty(properties.Content) ^ (properties.Cards is not null && properties.Cards.Any()))
-            throw new InvalidOperationException("Only one of arguments can be set between Content and Cards");
+        Preconditions.EnsureMessageProperties(properties);
+
+        if (properties.TemplateId.HasValue)
+        {
+            await ModifyAsync(msgId, client, properties.TemplateId.Value, properties.Parameters,
+                properties.Quote, properties.EphemeralUser, properties.JsonSerializerOptions, options);
+            return;
+        }
 
         string content;
         if (properties.Content != null && !string.IsNullOrEmpty(properties.Content))
@@ -225,13 +245,81 @@ internal static class MessageHelper
         await client.ApiClient.ModifyMessageAsync(args, options).ConfigureAwait(false);
     }
 
-    public static async Task ModifyDirectAsync(Guid msgId, BaseKookClient client,
-        Action<MessageProperties> func, RequestOptions? options)
+    public static async Task ModifyAsync<T>(Guid msgId, BaseKookClient client, int templateId, T parameters,
+        IQuote? quote, IUser? ephemeralUser, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
     {
-        MessageProperties properties = new();
+        ModifyMessageParams args = new()
+        {
+            MessageId = msgId,
+            TemplateId = templateId,
+            Content = JsonSerializer.Serialize(parameters, jsonSerializerOptions),
+            QuotedMessageId = quote?.QuotedMessageId,
+            EphemeralUserId = ephemeralUser?.Id
+        };
+        await client.ApiClient.ModifyMessageAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task ModifyDirectAsync<T>(IUserMessage msg, BaseKookClient client, Action<MessageProperties<T>> func,
+        RequestOptions? options)
+    {
+        if (msg.Type == MessageType.KMarkdown)
+        {
+            MessageProperties<T> args = new()
+            {
+                Content = msg.Content,
+                Quote = msg.Quote
+            };
+            func(args);
+            if (args.TemplateId.HasValue)
+            {
+                Preconditions.EnsureMessageProperties(args);
+                await ModifyDirectAsync(msg.Id, client, args.TemplateId.Value, args.Parameters,
+                    args.Quote, args.JsonSerializerOptions, options);
+                return;
+            }
+            Preconditions.NotNullOrEmpty(args.Content, nameof(args.Content));
+            await ModifyDirectAsync(msg.Id, client, args.Content, args.Quote, options);
+            return;
+        }
+
+        if (msg.Type == MessageType.Card)
+        {
+            MessageProperties<T> args = new()
+            {
+                Cards = [..msg.Cards],
+                Quote = msg.Quote
+            };
+            func(args);
+            if (args.TemplateId.HasValue)
+            {
+                Preconditions.EnsureMessageProperties(args);
+                await ModifyDirectAsync(msg.Id, client, args.TemplateId.Value, args.Parameters,
+                    args.Quote, args.JsonSerializerOptions, options);
+                return;
+            }
+            if (args.Cards is null || !args.Cards.Any())
+                throw new ArgumentNullException(nameof(args.Cards), "CardMessage must contains cards.");
+            string json = SerializeCards(args.Cards);
+            await ModifyDirectAsync(msg.Id, client, json, args.Quote, options);
+            return;
+        }
+
+        throw new NotSupportedException("Only the modification of KMarkdown and CardMessage are supported.");
+    }
+
+    public static async Task ModifyDirectAsync<T>(Guid msgId, BaseKookClient client,
+        Action<MessageProperties<T>> func, RequestOptions? options)
+    {
+        MessageProperties<T> properties = new();
         func(properties);
-        if (string.IsNullOrEmpty(properties.Content) ^ (properties.Cards is not null && properties.Cards.Any()))
-            throw new InvalidOperationException("Only one of arguments can be set between Content and Cards");
+        Preconditions.EnsureMessageProperties(properties);
+
+        if (properties.TemplateId.HasValue)
+        {
+            await ModifyDirectAsync(msgId, client, properties.TemplateId.Value, properties.Parameters,
+                properties.Quote, properties.JsonSerializerOptions, options);
+            return;
+        }
 
         string content;
         if (properties.Content != null && !string.IsNullOrEmpty(properties.Content))
@@ -251,6 +339,19 @@ internal static class MessageHelper
         {
             MessageId = msgId,
             Content = content,
+            QuotedMessageId = quote?.QuotedMessageId
+        };
+        await client.ApiClient.ModifyDirectMessageAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task ModifyDirectAsync<T>(Guid msgId, BaseKookClient client,
+        int? templateId, T parameters, IQuote? quote, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
+    {
+        ModifyDirectMessageParams args = new()
+        {
+            TemplateId = templateId,
+            MessageId = msgId,
+            Content = JsonSerializer.Serialize(parameters, jsonSerializerOptions),
             QuotedMessageId = quote?.QuotedMessageId
         };
         await client.ApiClient.ModifyDirectMessageAsync(args, options).ConfigureAwait(false);

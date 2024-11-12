@@ -22,6 +22,21 @@ internal static class Preconditions
     private static ArgumentNullException CreateNotNullException(string name, string? msg) =>
         new(paramName: name, message: msg);
 
+    public static void EnsureMessageProperties<T>(MessageProperties<T> properties)
+    {
+        if (properties is null)
+            throw new ArgumentNullException(nameof(properties));
+        bool contentSet = !string.IsNullOrEmpty(properties.Content);
+        bool cardsSet = properties.Cards?.Count > 0;
+        bool templateSet = properties.TemplateId.HasValue;
+        if (contentSet && cardsSet)
+            throw new ArgumentException("Content and Cards cannot be set at the same time.");
+        if (!contentSet && !cardsSet && !templateSet)
+            throw new ArgumentException("If neither Content nor Cards are set, TemplateId must be set.");
+        if (templateSet && properties.Parameters is null)
+            throw new ArgumentException("When TemplateId is set, Parameters must also be set.");
+    }
+
     #endregion
 
     #region Strings

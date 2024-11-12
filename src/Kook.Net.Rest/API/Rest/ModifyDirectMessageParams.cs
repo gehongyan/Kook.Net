@@ -8,6 +8,10 @@ internal class ModifyDirectMessageParams
     [JsonPropertyName("msg_id")]
     public required Guid MessageId { get; set; }
 
+    [JsonPropertyName("template_id")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? TemplateId { get; set; }
+
     [JsonPropertyName("content")]
     public required string Content { get; set; }
 

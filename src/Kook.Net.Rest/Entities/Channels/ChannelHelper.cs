@@ -331,8 +331,8 @@ internal static class ChannelHelper
         Guid messageId, BaseKookClient client, RequestOptions? options) =>
         MessageHelper.DeleteDirectAsync(messageId, client, options);
 
-    public static async Task ModifyMessageAsync(IMessageChannel channel, Guid messageId,
-        Action<MessageProperties> func, BaseKookClient client, RequestOptions? options) =>
+    public static async Task ModifyMessageAsync<T>(IMessageChannel channel, Guid messageId,
+        Action<MessageProperties<T>> func, BaseKookClient client, RequestOptions? options) =>
         await MessageHelper.ModifyAsync(messageId, client, func, options).ConfigureAwait(false);
 
     #endregion
@@ -531,8 +531,8 @@ internal static class ChannelHelper
             SendDirectMessageAsync(channel, client, messageType, attachment.Uri.OriginalString, quote, options);
     }
 
-    public static Task ModifyDirectMessageAsync(IDMChannel channel, Guid messageId,
-        Action<MessageProperties> func, BaseKookClient client, RequestOptions? options) =>
+    public static Task ModifyDirectMessageAsync<T>(IDMChannel channel, Guid messageId,
+        Action<MessageProperties<T>> func, BaseKookClient client, RequestOptions? options) =>
         MessageHelper.ModifyDirectAsync(messageId, client, func, options);
 
     #endregion

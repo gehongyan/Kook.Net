@@ -261,6 +261,11 @@ public class SocketTextChannel : SocketGuildChannel, ITextChannel, ISocketMessag
     /// <inheritdoc />
     public async Task ModifyMessageAsync(Guid messageId,
         Action<MessageProperties> func, RequestOptions? options = null) =>
+        await ChannelHelper.ModifyMessageAsync<object>(this, messageId, func, Kook, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task ModifyMessageAsync<T>(Guid messageId,
+        Action<MessageProperties<T>> func, RequestOptions? options = null) =>
         await ChannelHelper.ModifyMessageAsync(this, messageId, func, Kook, options).ConfigureAwait(false);
 
     /// <inheritdoc />

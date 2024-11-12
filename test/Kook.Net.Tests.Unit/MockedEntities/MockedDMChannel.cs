@@ -156,5 +156,9 @@ internal sealed class MockedDMChannel : IDMChannel
         throw new NotImplementedException();
 
     /// <inheritdoc />
+    public Task ModifyMessageAsync<T>(Guid messageId, Action<MessageProperties<T>> func, RequestOptions? options = null) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
     public IReadOnlyCollection<IUser> Recipients => throw new NotImplementedException();
 }

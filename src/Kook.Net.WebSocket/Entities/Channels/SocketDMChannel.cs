@@ -249,6 +249,11 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
     /// <inheritdoc />
     public async Task ModifyMessageAsync(Guid messageId,
         Action<MessageProperties> func, RequestOptions? options = null) =>
+        await ChannelHelper.ModifyDirectMessageAsync<object>(this, messageId, func, Kook, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task ModifyMessageAsync<T>(Guid messageId,
+        Action<MessageProperties<T>> func, RequestOptions? options = null) =>
         await ChannelHelper.ModifyDirectMessageAsync(this, messageId, func, Kook, options).ConfigureAwait(false);
 
     /// <inheritdoc />

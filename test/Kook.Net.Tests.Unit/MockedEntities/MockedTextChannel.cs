@@ -168,6 +168,10 @@ internal sealed class MockedTextChannel : ITextChannel
         RequestOptions? options = null) =>
         throw new NotImplementedException();
 
+    /// <inheritdoc />
+    public Task ModifyMessageAsync<T>(Guid messageId, Action<MessageProperties<T>> func, RequestOptions? options = null) =>
+        throw new NotImplementedException();
+
     public string Topic => throw new NotImplementedException();
 
     public int SlowModeInterval => throw new NotImplementedException();

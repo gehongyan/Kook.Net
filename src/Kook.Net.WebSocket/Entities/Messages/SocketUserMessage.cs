@@ -391,7 +391,21 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
     /// <inheritdoc />
     public Task ModifyAsync(Action<MessageProperties> func, RequestOptions? options = null) =>
-        MessageHelper.ModifyAsync(this, Kook, func, options);
+        Channel switch
+        {
+            ITextChannel => MessageHelper.ModifyAsync<object>(this, Kook, func, options),
+            IDMChannel => MessageHelper.ModifyDirectAsync<object>(this, Kook, func, options),
+            _ => Task.FromException<NotSupportedException>(new NotSupportedException("Unsupported channel type."))
+        };
+
+    /// <inheritdoc />
+    public Task ModifyAsync<T>(Action<MessageProperties<T>> func, RequestOptions? options = null) =>
+        Channel switch
+        {
+            ITextChannel => MessageHelper.ModifyAsync(this, Kook, func, options),
+            IDMChannel => MessageHelper.ModifyDirectAsync(this, Kook, func, options),
+            _ => Task.FromException<NotSupportedException>(new NotSupportedException("Unsupported channel type."))
+        };
 
     /// <summary>
     ///     转换消息文本中的提及与表情符号为可读形式。

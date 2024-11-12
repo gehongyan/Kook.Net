@@ -20,6 +20,16 @@ public interface IUserMessage : IMessage
     Task ModifyAsync(Action<MessageProperties> func, RequestOptions? options = null);
 
     /// <summary>
+    ///     修改此消息。
+    /// </summary>
+    /// <param name="func"> 一个包含修改消息属性的委托。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <typeparam name="T"> 消息的内容类型。 </typeparam>
+    /// <returns> 一个表示异步修改操作的任务。 </returns>
+    /// <seealso cref="Kook.MessageProperties"/>
+    Task ModifyAsync<T>(Action<MessageProperties<T>> func, RequestOptions? options = null);
+
+    /// <summary>
     ///     转换消息文本中的提及与表情符号为可读形式。
     /// </summary>
     /// <param name="userHandling"> 指定用户提及标签的处理方式。 </param>
