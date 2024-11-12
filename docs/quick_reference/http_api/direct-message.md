@@ -79,17 +79,22 @@ Stream stream = null; // 要发送的文件的流
 FileAttachment attachment = default; // 要发送的文件的附件
 ICard card = null; // 要发送的卡片
 IEnumerable<ICard> cards = null; // 要发送的卡片列表
+int templateId = default; // 要发送的模板消息的模板 ID
+T parameters = default; // 要发送的模板消息的参数
+JsonSerializerOptions jsonSerializerOptions = null; // 要发送的模板消息的参数的序列化选项
 
 // API 请求，发送文本消息
-Cacheable<IUserMessage,Guid> textMessage = await dmChannel.SendTextAsync(text, quote);
+Cacheable<IUserMessage, Guid> textMessage = await dmChannel.SendTextAsync(text, quote);
+Cacheable<IUserMessage, Guid> textMessageFromTemplate = await dmChannel.SendTextAsync(templateId, parameters, quote, jsonSerializerOptions);
 // API 请求，发送文件消息
-Cacheable<IUserMessage,Guid> fileMessageFromPath = await dmChannel.SendFileAsync(filePath, fileName, fileType, quote);
-Cacheable<IUserMessage,Guid> fileMessageFromStream = await dmChannel.SendFileAsync(stream, fileName, fileType, quote);
-Cacheable<IUserMessage,Guid> fileMessageFromAttachment = await dmChannel.SendFileAsync(attachment, quote);
+Cacheable<IUserMessage, Guid> fileMessageFromPath = await dmChannel.SendFileAsync(filePath, fileName, fileType, quote);
+Cacheable<IUserMessage, Guid> fileMessageFromStream = await dmChannel.SendFileAsync(stream, fileName, fileType, quote);
+Cacheable<IUserMessage, Guid> fileMessageFromAttachment = await dmChannel.SendFileAsync(attachment, quote);
 // API 请求，发送单卡片消息
-Cacheable<IUserMessage,Guid> cardMessage = await dmChannel.SendCardAsync(card, quote);
+Cacheable<IUserMessage, Guid> cardMessage = await dmChannel.SendCardAsync(card, quote);
 // API 请求，发送多卡片消息
-Cacheable<IUserMessage,Guid> cardsMessage = await dmChannel.SendCardsAsync(cards, quote);
+Cacheable<IUserMessage, Guid> cardsMessage = await dmChannel.SendCardsAsync(cards, quote);
+Cacheable<IUserMessage, Guid> cardsMessageFromTemplate = await dmChannel.SendCardsAsync(templateId, parameters, quote, jsonSerializerOptions);
 ```
 
 ### [更新私信聊天消息]

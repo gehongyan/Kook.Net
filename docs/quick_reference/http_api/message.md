@@ -82,17 +82,22 @@ Stream stream = null; // 要发送的文件的流
 FileAttachment attachment = default; // 要发送的文件的附件
 ICard card = null; // 要发送的卡片
 IEnumerable<ICard> cards = null; // 要发送的卡片列表
+int templateId = default; // 要发送的模板消息的模板 ID
+T parameters = default; // 要发送的模板消息的参数
+JsonSerializerOptions jsonSerializerOptions = null; // 要发送的模板消息的参数的序列化选项
 
 // API 请求，发送文本消息
-Cacheable<IUserMessage,Guid> textMessage = await textChannel.SendTextAsync(text, quote, ephemeralUser);
+Cacheable<IUserMessage, Guid> textMessage = await textChannel.SendTextAsync(text, quote, ephemeralUser);
+Cacheable<IUserMessage, Guid> textMessageFromTemplate = await textChannel.SendTextAsync(templateId, parameters, quote, ephemeralUser, jsonSerializerOptions);
 // API 请求，发送文件消息
-Cacheable<IUserMessage,Guid> fileMessageFromPath = await textChannel.SendFileAsync(filePath, fileName, fileType, quote, ephemeralUser);
-Cacheable<IUserMessage,Guid> fileMessageFromStream = await textChannel.SendFileAsync(stream, fileName, fileType, quote, ephemeralUser);
-Cacheable<IUserMessage,Guid> fileMessageFromAttachment = await textChannel.SendFileAsync(attachment, quote, ephemeralUser);
+Cacheable<IUserMessage, Guid> fileMessageFromPath = await textChannel.SendFileAsync(filePath, fileName, fileType, quote, ephemeralUser);
+Cacheable<IUserMessage, Guid> fileMessageFromStream = await textChannel.SendFileAsync(stream, fileName, fileType, quote, ephemeralUser);
+Cacheable<IUserMessage, Guid> fileMessageFromAttachment = await textChannel.SendFileAsync(attachment, quote, ephemeralUser);
 // API 请求，发送单卡片消息
-Cacheable<IUserMessage,Guid> cardMessage = await textChannel.SendCardAsync(card, quote, ephemeralUser);
+Cacheable<IUserMessage, Guid> cardMessage = await textChannel.SendCardAsync(card, quote, ephemeralUser);
 // API 请求，发送多卡片消息
-Cacheable<IUserMessage,Guid> cardsMessage = await textChannel.SendCardsAsync(cards, quote, ephemeralUser);
+Cacheable<IUserMessage, Guid> cardsMessage = await textChannel.SendCardsAsync(cards, quote, ephemeralUser);
+Cacheable<IUserMessage, Guid> cardsMessageFromTemplate = await textChannel.SendCardsAsync(templateId, parameters, quote, ephemeralUser, jsonSerializerOptions);
 ```
 
 ### [更新频道聊天消息]
