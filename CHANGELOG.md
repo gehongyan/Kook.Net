@@ -2,6 +2,28 @@
 
 ---
 
+## v0.9.4 [2024-11-12]
+
+### Added
+
+- Added support for sending and modifying template messages.
+    - Overloads for `IMessageChannel.SendTextAsync`, `IMessageChannel.SendCardsAsync`, `IDMChannel.SendTextAsync`,
+      and `IDMChannel.SendCardsAsync` methods now accept parameters `templateId`, `parameters`, and
+      `jsonSerializerOptions` for sending template messages.
+    - Added `TemplateId`, `Parameters`, and `JsonSerializerOptions` properties to `MessageProperties` for modifying
+      template messages.
+    - Added `MessageProperties<T>` class to support passing generic-typed `parameters` arguments.
+- Text command framework now supports keyed services. The `FromKeyedServicesAttribute` can be used to obtain keyed
+  service instances.
+
+### Fixed
+
+- Fixed the issue where `SocketGuild.CurrentUser` was null.
+
+### Misc
+
+- Fixed an issue where direct messages might not be edited correctly.
+
 ## v0.9.3 [2024-10-27]
 
 ### Added

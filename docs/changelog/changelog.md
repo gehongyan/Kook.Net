@@ -5,6 +5,26 @@ title: 变更日志
 
 # 变更日志
 
+## v0.9.4 [2024-11-12]
+
+### 新增
+
+- 新增支持发送与修改模板消息。
+  - `IMessageChannel.SendTextAsync`、`IMessageChannel.SendCardsAsync`、`IDMChannel.SendTextAsync`
+    及 `IDMChannel.SendCardsAsync` 方法新增接收参数 `templateId`、`parameters` 及 `jsonSerializerOptions`
+    的重载，可用于发送模板消息。
+  - `MessageProperties` 新增 `TemplateId`、`Parameters` 及 `JsonSerializerOptions` 属性，用于修改模板消息。
+  - 新增 `MessageProperties<T>` 类，用于支持传递泛型 `parameters` 参数。
+- 文本命令框架支持注入键控服务，`FromKeyedServicesAttribute` 可用于从键控服务中获取服务实例。
+
+### 修复
+
+- 修复 `SocketGuild.CurrentUser` 为空的问题。
+
+### 其它
+
+- 修复私聊消息可能无法正确编辑的问题。
+
 ## v0.9.3 [2024-10-27]
 
 ### 新增
