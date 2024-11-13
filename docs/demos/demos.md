@@ -29,6 +29,12 @@ title: 示例项目
 
 该示例项目演示了如何使用 HttpListener 来创建一个 Webhook 服务，以接收来自 Kook.Net 的事件。
 
+## 管道消息
+
+### [Kook.Net.Samples.Pipe](https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.Pipe)
+
+该示例项目演示了如何发送管道消息。
+
 ## 文本命令框架
 
 ### [Kook.Net.Samples.TextCommands](https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.TextCommands)

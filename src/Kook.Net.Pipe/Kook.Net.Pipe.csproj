@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <RootNamespace>Kook.Pipe</RootNamespace>
-    <IsPackable>false</IsPackable>
+    <IsPackable>true</IsPackable>
     <PackageId>Kook.Net.Pipe</PackageId>
     <Description>The Pipe API implementation for Kook.Net.</Description>
   </PropertyGroup>

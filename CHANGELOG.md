@@ -2,6 +2,18 @@
 
 ---
 
+## v0.9.5 [2024-11-13]
+
+### Added
+
+- Added the Kook.Net.Pipe package, which provides `KookPipeClient` for sending pipe messages.
+- Added `TokenType.Pipe`, but it is only used to indicate the internal API client to log in with a pipe token type
+  and should not be used for client login in user code.
+
+### Misc
+
+- Removed the target framework .NET 7.0, added the target framework .NET 9.0.
+
 ## v0.9.4 [2024-11-12]
 
 ### Added
