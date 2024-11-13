@@ -15,7 +15,7 @@ readonly KookRestClient _restClient;
 // 使用默认配置创建 Rest 客户端
 _restClient = new KookRestClient();
 // 使用自定义配置创建 Rest 客户端
-_restClient = new KookRestClient(new KookRestConfig()
+_restClient = new KookRestClient(new KookRestConfig
 {
     // 请求头 Accept-Language
     AcceptLanguage = "zh-CN",

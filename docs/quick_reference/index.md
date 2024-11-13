@@ -13,6 +13,7 @@ title: 快速参考指南
   - @Guides.QuickReference.Startup.Rest
   - @Guides.QuickReference.Startup.WebSocket
   - @Guides.QuickReference.Startup.Webhook
+  - @Guides.QuickReference.Startup.Pipe
 - HTTP 接口
   - @Guides.QuickReference.Http.Guild
   - @Guides.QuickReference.Http.Channel

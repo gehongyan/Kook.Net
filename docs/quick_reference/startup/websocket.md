@@ -15,7 +15,7 @@ readonly KookSocketClient _socketClient;
 // 使用默认配置创建 WebSocket 客户端
 _socketClient = new KookRestClient();
 // 使用自定义配置创建 WebSocket 客户端
-_socketClient = new KookSocketClient(new KookSocketConfig()
+_socketClient = new KookSocketClient(new KookSocketConfig
 {
     // 包含 KookRestConfig 的全部配置项，此处略
 

@@ -8,6 +8,8 @@
       topicUid: Guides.QuickReference.Startup.WebSocket
     - name: Webhook 服务端
       topicUid: Guides.QuickReference.Startup.Webhook
+    - name: Pipe 客户端
+      topicUid: Guides.QuickReference.Startup.Pipe
 - name: HTTP 接口
   items:
     - name: 服务器相关接口
