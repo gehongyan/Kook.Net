@@ -42,7 +42,12 @@ let ReadyAsync () : Task =
 // 请参阅 Kook.Net.Samples.TextCommands 示例项目及其文档
 let MessageReceivedAsync (message: SocketMessage) (author: SocketGuildUser) (channel: SocketTextChannel) : Task =
     task {
-        if author.Id = client.CurrentUser.Id then
+        let currentUserId: Nullable<uint64> =
+            match client.CurrentUser with
+            | null -> Nullable()
+            | s -> Nullable s.Id
+
+        if currentUserId.HasValue && author.Id = currentUserId.Value then
             ()
 
         if message.Content = "!ping" then
@@ -162,10 +167,9 @@ client.add_DirectMessageButtonClicked (fun value user message channel -> Task.Co
 // 例如本地 .json、.yaml、.xml、.txt 文件、环境变量或密钥管理系统
 // 这样可以避免将敏感信息直接暴露在代码中，以防止令牌被滥用或泄露
 let token =
-    Environment.GetEnvironmentVariable("KookDebugToken", EnvironmentVariableTarget.User)
-
-if token = null then
-    raise (ArgumentNullException("KookDebugToken"))
+    match Environment.GetEnvironmentVariable("KookDebugToken", EnvironmentVariableTarget.User) with
+    | null -> raise (ArgumentNullException("KookDebugToken"))
+    | x -> x
 
 // 阻塞程序直到关闭
 async {
