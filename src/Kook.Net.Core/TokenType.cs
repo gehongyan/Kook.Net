@@ -13,5 +13,10 @@ public enum TokenType
     /// <summary>
     ///     Bot 令牌类型。
     /// </summary>
-    Bot
+    Bot,
+
+    /// <summary>
+    ///     管道令牌类型。
+    /// </summary>
+    Pipe,
 }

@@ -17,6 +17,14 @@ public static class TokenUtils
     internal const int MinBotTokenLength = 33;
 
     /// <summary>
+    ///     管道访问令牌的长度。
+    /// </summary>
+    /// <remarks>
+    ///     此值是通过与 KOOK 文档和现有令牌的示例进行比较确定的。
+    /// </remarks>
+    internal const int PipeAccessTokenLength = 24;
+
+    /// <summary>
     ///     Bot 令牌的标准长度。
     /// </summary>
     /// <remarks>
@@ -166,9 +174,16 @@ public static class TokenUtils
 
                 // check the validity of the bot token by decoding the ulong userid from the jwt
                 if (!CheckBotTokenValidity(token))
-                    throw new ArgumentException("The Bot token was invalid. " + "Ensure that the Bot Token provided is not an OAuth client secret.",
+                    throw new ArgumentException(
+                        "The Bot token was invalid. "
+                        + "Ensure that the Bot Token provided is not an OAuth client secret.",
                         nameof(token));
-
+                break;
+            case TokenType.Pipe:
+                if (token.Length != PipeAccessTokenLength)
+                    throw new ArgumentException(
+                        $"A Pipe access token must be exactly {PipeAccessTokenLength} characters in length. "
+                        + "Ensure that the access token provided is correct.", nameof(token));
                 break;
             default:
                 // All unrecognized TokenTypes (including User tokens) are considered to be invalid.

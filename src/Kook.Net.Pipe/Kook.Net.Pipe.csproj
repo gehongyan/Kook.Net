@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../Kook.Net.targets"/>
+
+  <PropertyGroup>
+    <RootNamespace>Kook.Pipe</RootNamespace>
+    <IsPackable>false</IsPackable>
+    <PackageId>Kook.Net.Pipe</PackageId>
+    <Description>The Pipe API implementation for Kook.Net.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kook.Net.Rest\Kook.Net.Rest.csproj" />
+  </ItemGroup>
+
+</Project>

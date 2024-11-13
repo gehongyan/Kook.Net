@@ -13,7 +13,7 @@ internal static class Preconditions
     #region Objects
 
     /// <exception cref="ArgumentNullException"> <paramref name="obj"/> 不可为 <c>null</c>. </exception>
-    public static void NotNull<T>([NotNull] T? obj, string name, string? msg = null) where T : class
+    public static void NotNull<T>([NotNull] T? obj, string name, string? msg = null)
     {
         if (obj == null)
             throw CreateNotNullException(name, msg);

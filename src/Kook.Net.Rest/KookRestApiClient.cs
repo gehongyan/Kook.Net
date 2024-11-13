@@ -24,6 +24,8 @@ internal class KookRestApiClient : IDisposable
 {
     #region KookRestApiClient
 
+    protected static readonly JsonElement EmptyJsonElement = JsonDocument.Parse("{}").RootElement;
+
     private static readonly ConcurrentDictionary<string, Func<BucketIds, BucketId>> _bucketIdGenerators = new();
 
     public event Func<HttpMethod, string, double, Task> SentRequest
@@ -131,7 +133,8 @@ internal class KookRestApiClient : IDisposable
 
             AuthTokenType = tokenType;
             AuthToken = token.TrimEnd();
-            RestClient.SetHeader("authorization", GetPrefixedToken(AuthTokenType, AuthToken));
+            if (AuthTokenType is not TokenType.Pipe)
+                RestClient.SetHeader("authorization", GetPrefixedToken(AuthTokenType, AuthToken));
 
             LoginState = LoginState.LoggedIn;
         }
@@ -204,19 +207,19 @@ internal class KookRestApiClient : IDisposable
         await SendInternalAsync(method, endpoint, request).ConfigureAwait(false);
     }
 
-    internal Task SendJsonAsync(HttpMethod method, Expression<Func<string>> endpointExpr, object payload, BucketIds ids,
-        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions? options = null,
+    internal Task SendJsonAsync(HttpMethod method, Expression<Func<string>> endpointExpr, object? payload, BucketIds ids,
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null,
         [CallerMemberName] string? funcName = null) =>
         SendJsonAsync(method, GetEndpoint(endpointExpr), payload,
-            GetBucketId(method, ids, endpointExpr, funcName), clientBucket, options);
+            GetBucketId(method, ids, endpointExpr, funcName), clientBucket, jsonSerializerOptions, options);
 
-    public async Task SendJsonAsync(HttpMethod method, string endpoint, object payload, BucketId? bucketId = null,
-        ClientBucketType clientBucket = ClientBucketType.Unbucketed, RequestOptions? options = null)
+    public async Task SendJsonAsync(HttpMethod method, string endpoint, object? payload, BucketId? bucketId = null,
+        ClientBucketType clientBucket = ClientBucketType.Unbucketed, JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null)
     {
         options ??= new RequestOptions();
         options.BucketId = bucketId;
 
-        string? json = SerializeJson(payload);
+        string json = SerializeJson(payload ?? EmptyJsonElement, jsonSerializerOptions);
         JsonRestRequest request = new(RestClient, method, endpoint, json, options);
         await SendInternalAsync(method, endpoint, request).ConfigureAwait(false);
     }
@@ -272,23 +275,23 @@ internal class KookRestApiClient : IDisposable
     }
 
     internal async Task<TResponse> SendJsonAsync<TResponse>(HttpMethod method,
-        Expression<Func<string>> endpointExpr, object payload,
+        Expression<Func<string>> endpointExpr, object? payload,
         BucketIds ids, ClientBucketType clientBucket = ClientBucketType.Unbucketed,
-        bool bypassDeserialization = false, RequestOptions? options = null,
-        [CallerMemberName] string? funcName = null)
+        bool bypassDeserialization = false, JsonSerializerOptions? jsonSerializerOptions = null,
+        RequestOptions? options = null, [CallerMemberName] string? funcName = null)
         where TResponse : class =>
         await SendJsonAsync<TResponse>(method, GetEndpoint(endpointExpr), payload,
-            GetBucketId(method, ids, endpointExpr, funcName), clientBucket, bypassDeserialization, options);
+            GetBucketId(method, ids, endpointExpr, funcName), clientBucket, bypassDeserialization, jsonSerializerOptions, options);
 
-    public async Task<TResponse> SendJsonAsync<TResponse>(HttpMethod method, string endpoint, object payload,
+    public async Task<TResponse> SendJsonAsync<TResponse>(HttpMethod method, string endpoint, object? payload,
         BucketId? bucketId = null, ClientBucketType clientBucket = ClientBucketType.Unbucketed,
-        bool bypassDeserialization = false, RequestOptions? options = null)
+        bool bypassDeserialization = false, JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null)
         where TResponse : class
     {
         options ??= new RequestOptions();
         options.BucketId = bucketId;
 
-        string json = SerializeJson(payload);
+        string json = SerializeJson(payload ?? EmptyJsonElement, jsonSerializerOptions);
         JsonRestRequest request = new(RestClient, method, endpoint, json, options);
         Stream response = await SendInternalAsync(method, endpoint, request).ConfigureAwait(false);
         return bypassDeserialization && response is TResponse responseObj
@@ -457,7 +460,7 @@ internal class KookRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         BucketIds ids = new(args.GuildId);
-        await SendJsonAsync(HttpMethod.Post, () => $"guild/nickname", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"guild/nickname", args, ids, ClientBucketType.SendEdit, null, options).ConfigureAwait(false);
     }
 
     public async Task LeaveGuildAsync(LeaveGuildParams args, RequestOptions? options = null)
@@ -467,7 +470,7 @@ internal class KookRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         BucketIds ids = new(args.GuildId);
-        await SendJsonAsync(HttpMethod.Post, () => $"guild/leave", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"guild/leave", args, ids, ClientBucketType.SendEdit, null, options).ConfigureAwait(false);
     }
 
     public async Task KickOutGuildMemberAsync(KickOutGuildMemberParams args, RequestOptions? options = null)
@@ -478,7 +481,7 @@ internal class KookRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         BucketIds ids = new(args.GuildId);
-        await SendJsonAsync(HttpMethod.Post, () => $"guild/kickout", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"guild/kickout", args, ids, ClientBucketType.SendEdit, null, options).ConfigureAwait(false);
     }
 
     public async Task<GetGuildMuteDeafListResponse> GetGuildMutedDeafenedUsersAsync(ulong guildId, RequestOptions? options = null)
@@ -500,7 +503,7 @@ internal class KookRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         BucketIds ids = new(args.GuildId);
-        await SendJsonAsync(HttpMethod.Post, () => $"guild-mute/create", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"guild-mute/create", args, ids, ClientBucketType.SendEdit, null, options).ConfigureAwait(false);
     }
 
     public async Task RemoveGuildMuteDeafAsync(CreateOrRemoveGuildMuteDeafParams args, RequestOptions? options = null)
@@ -511,7 +514,7 @@ internal class KookRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         BucketIds ids = new(args.GuildId);
-        await SendJsonAsync(HttpMethod.Post, () => $"guild-mute/delete", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"guild-mute/delete", args, ids, ClientBucketType.SendEdit, null, options).ConfigureAwait(false);
     }
 
     public IAsyncEnumerable<IReadOnlyCollection<BoostSubscription>> GetGuildBoostSubscriptionsAsync(ulong guildId,
@@ -570,7 +573,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(args.GuildId);
         return await SendJsonAsync<Channel>(HttpMethod.Post,
-                () => $"channel/create", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"channel/create", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -585,7 +588,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(channelId: channelId);
         return await SendJsonAsync<Channel>(HttpMethod.Post,
-                () => $"channel/update", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"channel/update", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -601,7 +604,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(channelId: channelId);
         return await SendJsonAsync<Channel>(HttpMethod.Post,
-                () => $"channel/update", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"channel/update", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -622,7 +625,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(channelId: channelId);
         return await SendJsonAsync<Channel>(HttpMethod.Post,
-                () => $"channel/update", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"channel/update", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -633,7 +636,7 @@ internal class KookRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         BucketIds ids = new(channelId: args.ChannelId);
-        await SendJsonAsync(HttpMethod.Post, () => $"channel/delete", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"channel/delete", args, ids, ClientBucketType.SendEdit, null, options).ConfigureAwait(false);
     }
 
     public async Task<IReadOnlyCollection<User>>GetConnectedUsersAsync(ulong channelId, RequestOptions? options = null)
@@ -654,7 +657,7 @@ internal class KookRestApiClient : IDisposable
         options = RequestOptions.CreateOrClone(options);
 
         BucketIds ids = new(channelId: args.ChannelId);
-        await SendJsonAsync(HttpMethod.Post, () => $"channel/move-user", args, ids, ClientBucketType.SendEdit, options).ConfigureAwait(false);
+        await SendJsonAsync(HttpMethod.Post, () => $"channel/move-user", args, ids, ClientBucketType.SendEdit, null, options).ConfigureAwait(false);
     }
 
     #endregion
@@ -683,7 +686,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(channelId: args.ChannelId);
         return await SendJsonAsync<CreateOrModifyChannelPermissionOverwriteResponse>(HttpMethod.Post,
-                () => $"channel-role/create", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"channel-role/create", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -698,7 +701,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(channelId: args.ChannelId);
         return await SendJsonAsync<CreateOrModifyChannelPermissionOverwriteResponse>(HttpMethod.Post,
-                () => $"channel-role/update", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"channel-role/update", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -710,7 +713,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(channelId: args.ChannelId);
         await SendJsonAsync(HttpMethod.Post,
-                () => $"channel-role/sync", args, ids, clientBucket: ClientBucketType.SendEdit, options)
+                () => $"channel-role/sync", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -723,7 +726,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(channelId: args.ChannelId);
         await SendJsonAsync(HttpMethod.Post,
-                () => $"channel-role/delete", args, ids, ClientBucketType.SendEdit, options)
+                () => $"channel-role/delete", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -731,7 +734,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Messages
 
-    public async Task<IReadOnlyCollection<Message>>QueryMessagesAsync(ulong channelId, Guid? referenceMessageId = null,
+    public async Task<IReadOnlyCollection<Message>> QueryMessagesAsync(ulong channelId, Guid? referenceMessageId = null,
         bool? queryPin = null, Direction dir = Direction.Unspecified, int count = 50, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
@@ -787,7 +790,31 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(channelId: args.ChannelId);
         return await SendJsonAsync<CreateMessageResponse>(HttpMethod.Post,
-                () => $"message/create", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"message/create", args, ids, ClientBucketType.SendEdit, false, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<CreateMessageResponse> CreatePipeMessageAsync<T>(T? args, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotNullOrEmpty(AuthToken, nameof(AuthToken));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(pipeId: AuthToken);
+        return await SendJsonAsync<CreateMessageResponse>(HttpMethod.Post,
+                () => $"message/send-pipemsg?access_token={AuthToken}", args, ids, ClientBucketType.SendEdit, false, jsonSerializerOptions, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<CreateMessageResponse> CreatePipeMessageAsync(CreatePipeMessageParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotNullOrEmpty(AuthToken, nameof(AuthToken));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(pipeId: AuthToken);
+        return await SendJsonAsync<CreateMessageResponse>(HttpMethod.Post,
+                () => $"message/send-pipemsg?access_token={AuthToken}", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -799,7 +826,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => $"message/update", args, ids, ClientBucketType.SendEdit, options)
+                () => $"message/update", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -810,7 +837,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => $"message/delete", args, ids, ClientBucketType.SendEdit, options)
+                () => $"message/delete", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -833,7 +860,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => $"message/add-reaction", args, ids, ClientBucketType.SendEdit, options)
+                () => $"message/add-reaction", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -846,7 +873,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => $"message/delete-reaction", args, ids, ClientBucketType.SendEdit, options)
+                () => $"message/delete-reaction", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -902,7 +929,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         return await SendJsonAsync<UserChat>(HttpMethod.Post,
-                () => $"user-chat/create", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"user-chat/create", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -913,7 +940,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => $"user-chat/delete", args, ids, ClientBucketType.SendEdit, options)
+                () => $"user-chat/delete", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -993,7 +1020,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         return await SendJsonAsync<CreateDirectMessageResponse>(HttpMethod.Post,
-                () => $"direct-message/create", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"direct-message/create", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1005,7 +1032,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => $"direct-message/update", args, ids, ClientBucketType.SendEdit, options)
+                () => $"direct-message/update", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1016,7 +1043,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => $"direct-message/delete", args, ids, ClientBucketType.SendEdit, options)
+                () => $"direct-message/delete", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1039,7 +1066,7 @@ internal class KookRestApiClient : IDisposable
         Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
 
         BucketIds ids = new();
-        await SendJsonAsync(HttpMethod.Post, () => $"direct-message/add-reaction", args, ids, ClientBucketType.SendEdit, options)
+        await SendJsonAsync(HttpMethod.Post, () => $"direct-message/add-reaction", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1050,7 +1077,7 @@ internal class KookRestApiClient : IDisposable
         if (args.UserId is not null) Preconditions.NotEqual(args.UserId, 0, nameof(args.MessageId));
 
         BucketIds ids = new();
-        await SendJsonAsync(HttpMethod.Post, () => $"direct-message/delete-reaction", args, ids, ClientBucketType.SendEdit, options)
+        await SendJsonAsync(HttpMethod.Post, () => $"direct-message/delete-reaction", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1200,7 +1227,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(args.GuildId ?? 0);
         await SendJsonAsync(HttpMethod.Post,
-                () => "friend/request", args, ids, ClientBucketType.SendEdit, options)
+                () => "friend/request", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1212,7 +1239,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => "friend/handle-request", args, ids, ClientBucketType.SendEdit, options)
+                () => "friend/handle-request", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1224,7 +1251,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => "friend/delete", args, ids, ClientBucketType.SendEdit, options)
+                () => "friend/delete", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1236,7 +1263,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => "friend/block", args, ids, ClientBucketType.SendEdit, options)
+                () => "friend/block", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1248,7 +1275,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => "friend/unblock", args, ids, ClientBucketType.SendEdit, options)
+                () => "friend/unblock", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1291,7 +1318,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(args.GuildId);
         return await SendJsonAsync<Role>(HttpMethod.Post,
-                () => $"guild-role/create", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"guild-role/create", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1303,7 +1330,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(args.GuildId);
         return await SendJsonAsync<Role>(HttpMethod.Post,
-                () => $"guild-role/update", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"guild-role/update", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1315,7 +1342,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(args.GuildId);
         await SendJsonAsync(HttpMethod.Post,
-                () => $"guild-role/delete", args, ids, ClientBucketType.SendEdit, options)
+                () => $"guild-role/delete", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1327,7 +1354,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(args.GuildId);
         return await SendJsonAsync<AddOrRemoveRoleResponse>(HttpMethod.Post,
-                () => $"guild-role/grant", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"guild-role/grant", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1339,7 +1366,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(args.GuildId);
         return await SendJsonAsync<AddOrRemoveRoleResponse>(HttpMethod.Post,
-                () => $"guild-role/revoke", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"guild-role/revoke", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1369,7 +1396,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => $"intimacy/update", args, ids, ClientBucketType.SendEdit, options)
+                () => $"intimacy/update", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1417,7 +1444,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => $"guild-emoji/update", args, ids, ClientBucketType.SendEdit, options)
+                () => $"guild-emoji/update", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1428,7 +1455,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => $"guild-emoji/delete", args, ids, ClientBucketType.SendEdit, options)
+                () => $"guild-emoji/delete", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1476,7 +1503,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(args.GuildId ?? 0, args.ChannelId ?? 0);
         return await SendJsonAsync<CreateGuildInviteResponse>(HttpMethod.Post,
-                () => $"invite/create", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"invite/create", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1492,7 +1519,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(args.GuildId ?? 0, args.ChannelId ?? 0);
         await SendJsonAsync(HttpMethod.Post,
-                () => $"invite/delete", args, ids, ClientBucketType.SendEdit, options)
+                () => $"invite/delete", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1525,7 +1552,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(args.GuildId);
         await SendJsonAsync(HttpMethod.Post,
-                () => $"blacklist/create", args, ids, ClientBucketType.SendEdit, options)
+                () => $"blacklist/create", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1538,7 +1565,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new(args.GuildId);
         await SendJsonAsync(HttpMethod.Post,
-                () => $"blacklist/delete", args, ids, ClientBucketType.SendEdit, options)
+                () => $"blacklist/delete", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1581,7 +1608,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         return await SendJsonAsync<Game>(HttpMethod.Post,
-                () => $"game/create", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"game/create", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1593,7 +1620,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         return await SendJsonAsync<Game>(HttpMethod.Post,
-                () => $"game/update", args, ids, ClientBucketType.SendEdit, false, options)
+                () => $"game/update", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1605,7 +1632,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => $"game/delete", args, ids, ClientBucketType.SendEdit, options)
+                () => $"game/delete", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1628,7 +1655,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => $"game/activity", args, ids, ClientBucketType.SendEdit, options)
+                () => $"game/activity", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1639,7 +1666,7 @@ internal class KookRestApiClient : IDisposable
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
-                () => $"game/delete-activity", args, ids, ClientBucketType.SendEdit, options)
+                () => $"game/delete-activity", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1667,8 +1694,8 @@ internal class KookRestApiClient : IDisposable
         Math.Round((double)stopwatch.ElapsedTicks / Stopwatch.Frequency * 1000.0, 2);
 
     [return: NotNullIfNotNull(nameof(payload))]
-    protected string? SerializeJson(object? payload) =>
-        payload is null ? null : JsonSerializer.Serialize(payload, _serializerOptions);
+    protected string? SerializeJson(object? payload, JsonSerializerOptions? options = null) =>
+        payload is null ? null : JsonSerializer.Serialize(payload, options ?? _serializerOptions);
 
     protected async Task<T> DeserializeJsonAsync<T>(Stream jsonStream)
     {
@@ -1695,16 +1722,18 @@ internal class KookRestApiClient : IDisposable
     {
         public ulong GuildId { get; internal set; }
         public ulong ChannelId { get; internal set; }
+        public string PipeId { get; internal set; }
         public HttpMethod? HttpMethod { get; internal set; }
 
-        internal BucketIds(ulong guildId = 0, ulong channelId = 0)
+        internal BucketIds(ulong guildId = 0, ulong channelId = 0, string pipeId = "")
         {
             GuildId = guildId;
             ChannelId = channelId;
+            PipeId = pipeId;
         }
 
         internal object?[] ToArray() =>
-            [HttpMethod, GuildId, ChannelId];
+            [HttpMethod, GuildId, ChannelId, PipeId];
 
         internal Dictionary<string, string> ToMajorParametersDictionary()
         {
@@ -1713,6 +1742,8 @@ internal class KookRestApiClient : IDisposable
                 dict["GuildId"] = GuildId.ToString();
             if (ChannelId != 0)
                 dict["ChannelId"] = ChannelId.ToString();
+            if (!string.IsNullOrEmpty(PipeId))
+                dict["PipeId"] = PipeId;
             return dict;
         }
 
@@ -1722,6 +1753,7 @@ internal class KookRestApiClient : IDisposable
                 "httpMethod" => 0,
                 "guildId" => 1,
                 "channelId" => 2,
+                "pipeId" => 3,
                 _ => null
             };
     }

@@ -16,7 +16,6 @@ namespace Kook.API;
 
 internal class KookSocketApiClient : KookRestApiClient
 {
-    protected static readonly JsonElement EmptyJsonElement = JsonDocument.Parse("{}").RootElement;
     public event Func<GatewaySocketFrameType, Task> SentGatewayMessage
     {
         add => _sentGatewayMessageEvent.Add(value);

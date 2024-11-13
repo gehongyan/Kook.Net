@@ -35,7 +35,7 @@ internal static class KookRestApiClientExperimentalExtensions
 
         KookRestApiClient.BucketIds ids = new();
         await client.SendJsonAsync(HttpMethod.Post,
-                () => $"message/check-card", args, ids, ClientBucketType.Unbucketed, options)
+                () => $"message/check-card", args, ids, ClientBucketType.Unbucketed, null, options)
             .ConfigureAwait(false);
     }
 
