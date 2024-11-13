@@ -17,13 +17,13 @@ jobs:
     uses: ./.github/workflows/build-test.yml
     with:
       target: ${{ matrix.target }}
-      dotnet-version: 8.0.x
+      dotnet-version: 9.0.x
 
   call_doc:
     name: Generate Documentation
     needs: build_and_test
     uses: ./.github/workflows/doc.yml
     with:
-      dotnet-version: 8.0.x
+      dotnet-version: 9.0.x
     secrets:
       DOC_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}

@@ -22,7 +22,7 @@
     <PackageReleaseNotes>See https://github.com/gehongyan/Kook.Net/releases</PackageReleaseNotes>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>Logo_Small.png</PackageIcon>
-    <TargetFrameworks>net8.0;net7.0;net6.0;net462;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>net9.0;net8.0;net6.0;net462;netstandard2.0;netstandard2.1</TargetFrameworks>
     <NoWarn>$(NoWarn);NU1803</NoWarn>
     <WarningLevel>6</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

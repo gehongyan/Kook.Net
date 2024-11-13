@@ -13,14 +13,14 @@ jobs:
     uses: ./.github/workflows/build-test.yml
     with:
       target: ${{ matrix.target }}
-      dotnet-version: 8.0.x
+      dotnet-version: 9.0.x
 
   call_push_packages:
     name: Push Packages
     needs: build_and_test
     uses: ./.github/workflows/packages.yml
     with:
-      dotnet-version: 8.0.x
+      dotnet-version: 9.0.x
     secrets:
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       GITHUB_PACKAGES_KEY: ${{ secrets.GITHUB_TOKEN }}
