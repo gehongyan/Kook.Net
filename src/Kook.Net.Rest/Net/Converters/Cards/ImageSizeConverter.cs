@@ -12,7 +12,7 @@ internal class ImageSizeConverter : JsonConverter<ImageSize>
         {
             "sm" => ImageSize.Small,
             "lg" => ImageSize.Large,
-            _ => throw new ArgumentOutOfRangeException(nameof(CardSize))
+            _ => throw new ArgumentOutOfRangeException(nameof(ImageSize))
         };
     }
 

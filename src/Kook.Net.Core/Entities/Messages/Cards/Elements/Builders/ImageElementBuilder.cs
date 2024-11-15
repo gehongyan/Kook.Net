@@ -27,7 +27,7 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     /// <param name="size"> 图片的大小。 </param>
     /// <param name="circle"> 图片是否应渲染为圆形。 </param>
     /// <remarks>
-    ///     <paramref name="size"/> 仅在 <see cref="ContextModuleBuilder"/> 中生效，<see cref="ContainerModule"/> 中不生效。
+    ///     <paramref name="size"/> 仅在 <see cref="ContextModuleBuilder"/> 中生效，<see cref="ContainerModuleBuilder"/> 中不生效。
     /// </remarks>
     public ImageElementBuilder(string source, string? alternative = null, ImageSize? size = null, bool circle = false)
     {
@@ -57,7 +57,7 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     ///     获取或设置 <see cref="ImageElementBuilder"/> 的图片大小。
     /// </summary>
     /// <remarks>
-    ///     当前属性仅在 <see cref="ContextModuleBuilder"/> 中生效，<see cref="ContainerModule"/> 中不生效。
+    ///     当前属性仅在 <see cref="ContextModuleBuilder"/> 中生效，<see cref="ContainerModuleBuilder"/> 中不生效。
     /// </remarks>
     public ImageSize? Size { get; set; }
 
