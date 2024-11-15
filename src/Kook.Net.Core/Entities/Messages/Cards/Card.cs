@@ -83,4 +83,7 @@ public class Card : ICard, IEquatable<Card>, IEquatable<ICard>
 
     bool IEquatable<ICard>.Equals([NotNullWhen(true)] ICard? card) =>
         Equals(card as Card);
+
+    /// <inheritdoc />
+    IReadOnlyCollection<IModule> ICard.Modules => Modules;
 }

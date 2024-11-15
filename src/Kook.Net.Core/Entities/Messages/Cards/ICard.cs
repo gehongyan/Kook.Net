@@ -11,6 +11,11 @@ public interface ICard
     CardType Type { get; }
 
     /// <summary>
+    ///     获取卡片中的模块。
+    /// </summary>
+    IReadOnlyCollection<IModule> Modules { get; }
+
+    /// <summary>
     ///     获取卡片中模块的数量。
     /// </summary>
     int ModuleCount { get; }
