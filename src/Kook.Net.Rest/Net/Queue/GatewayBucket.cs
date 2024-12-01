@@ -16,8 +16,8 @@ internal record struct GatewayBucket
     {
         GatewayBucket[] buckets =
         [
-            // Limit is 120/60s, but 3 will be reserved for heartbeats (2 for possible heartbeats in the same timeframe and a possible failure)
-            new GatewayBucket(GatewayBucketType.Unbucketed, BucketId.Create(null, "<gateway-unbucketed>", null), 117, 60)
+            // Limit is 240/60s, but 3 will be reserved for heartbeats (2 for possible heartbeats in the same timeframe and a possible failure)
+            new GatewayBucket(GatewayBucketType.Unbucketed, BucketId.Create(null, "<gateway-unbucketed>", null), 237, 60)
         ];
 
         ImmutableDictionary<GatewayBucketType, GatewayBucket>.Builder typeBuilder =
