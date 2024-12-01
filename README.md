@@ -61,6 +61,8 @@ Individual components of the main package can be installed separately. These pac
   [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.WebSocket)
 - Kook.Net.Webhook: [NuGet](https://www.nuget.org/packages/Kook.Net.Webhook/),
   [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Webhook)
+- Kook.Net.Pipe: [NuGet](https://www.nuget.org/packages/Kook.Net.Pipe/),
+  [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Pipe)
 - Kook.Net.Commands: [NuGet](https://www.nuget.org/packages/Kook.Net.Commands/),
   [GitHub Packages](https://github.com/gehongyan/Kook.Net/pkgs/nuget/Kook.Net.Commands)
 
