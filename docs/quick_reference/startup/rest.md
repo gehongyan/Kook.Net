@@ -25,6 +25,8 @@ _restClient = new KookRestClient(new KookRestConfig
     DefaultRatelimitCallback = info => Task.CompletedTask,
     // 日志级别
     LogLevel = LogSeverity.Info,
+    // 是否打印初次启动日志
+    DisplayInitialLog = true,
     // 双向文稿格式化用户名
     FormatUsersInBidirectionalUnicode = true,
     // Rest 客户端提供程序

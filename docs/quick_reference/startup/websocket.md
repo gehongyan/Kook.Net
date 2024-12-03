@@ -19,7 +19,7 @@ _socketClient = new KookSocketClient(new KookSocketConfig
 {
     // 包含 KookRestConfig 的全部配置项，此处略
 
-    // 显示指定网关地址
+    // 显式指定网关地址
     GatewayHost = null,
     // 连接超时（毫秒）
     ConnectionTimeout = 6000,
@@ -37,18 +37,24 @@ _socketClient = new KookSocketClient(new KookSocketConfig
     UdpSocketProvider = DefaultUdpSocketProvider.Instance,
     // 启动缓存数据获取模式
     StartupCacheFetchMode = StartupCacheFetchMode.Auto,
+    // 音频客户端被视为空闲的超时时间间隔（毫秒）
+    AudioClientIdleTimeout = 15000,
     // 自动下载服务器用户信息
     AlwaysDownloadUsers = false,
     // 自动下载服务器用户语音状态信息
     AlwaysDownloadVoiceStates = false,
     // 自动下载服务器助力信息
     AlwaysDownloadBoostSubscriptions = false,
-    // 等待服务器可用状态超时（毫秒）
-    MaxWaitBetweenGuildAvailablesBeforeReady = 10000,
     // 最大获取新加入服务器信息重试次数
     MaxJoinedGuildDataFetchingRetryTimes = 10,
     // 获取新加入服务器信息重试延迟（毫秒）
-    JoinedGuildDataFetchingRetryDelay = 500
+    JoinedGuildDataFetchingRetryDelay = 500,
+    // 服务器更新时是否主动通过 API 更新服务器角色排序
+    AutoUpdateRolePositions = false,
+    // 频道排序事件是否主动通过 API 更新服务器频道
+    AutoUpdateChannelPositions = false,
+    // 消息队列提供程序
+    MessageQueueProvider = SynchronousImmediateMessageQueueProvider.Instance
 });
 
 // Token
