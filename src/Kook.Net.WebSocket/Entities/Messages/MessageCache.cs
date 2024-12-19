@@ -14,7 +14,8 @@ internal class MessageCache
     public MessageCache(KookSocketClient kook)
     {
         _size = kook.MessageCacheSize;
-        _messages = new ConcurrentDictionary<Guid, SocketMessage>(ConcurrentHashSet.DefaultConcurrencyLevel, (int)(_size * 1.05));
+        int dictSize = _size * 1.05 > int.MaxValue ? int.MaxValue : (int)(_size * 1.05);
+        _messages = new ConcurrentDictionary<Guid, SocketMessage>(ConcurrentHashSet.DefaultConcurrencyLevel, dictSize);
         _orderedMessages = new ConcurrentQueue<(Guid MsgId, DateTimeOffset Timestamp)>();
     }
 
