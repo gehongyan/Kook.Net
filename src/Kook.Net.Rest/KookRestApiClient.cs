@@ -639,7 +639,7 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"channel/delete", args, ids, ClientBucketType.SendEdit, null, options).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyCollection<User>>GetConnectedUsersAsync(ulong channelId, RequestOptions? options = null)
+    public async Task<IReadOnlyCollection<User>> GetConnectedUsersAsync(ulong channelId, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         options = RequestOptions.CreateOrClone(options);
@@ -1276,6 +1276,42 @@ internal class KookRestApiClient : IDisposable
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post,
                 () => "friend/unblock", args, ids, ClientBucketType.SendEdit, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task RequestIntimacyAsync(RequestIntimacyParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotNullOrWhitespace(args.FullQualification, nameof(args.FullQualification));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        await SendJsonAsync(HttpMethod.Post,
+                () => "friend/create-relation", args, ids, ClientBucketType.SendEdit, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task HandleIntimacyRequestAsync(HandleFriendRequestParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.Id, 0, nameof(args.Id));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        await SendJsonAsync(HttpMethod.Post,
+                () => "friend/handle-relation", args, ids, ClientBucketType.SendEdit, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task UnravelIntimacyAsync(UnravelRelationParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        await SendJsonAsync(HttpMethod.Post,
+                () => "friend/unravel-relation", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 

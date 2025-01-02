@@ -151,6 +151,14 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     public Task RemoveFriendAsync(RequestOptions? options = null) =>
         UserHelper.RemoveFriendAsync(this, Kook, options);
 
+    /// <inheritdoc />
+    public Task RequestIntimacyRelationAsync(IntimacyRelationType relationType, RequestOptions? options = null) =>
+        UserHelper.RequestIntimacyRelationAsync(this, relationType, Kook, options);
+
+    /// <inheritdoc />
+    public Task UnravelIntimacyRelationAsync(bool removeFriend, RequestOptions? options = null) =>
+        UserHelper.UnravelIntimacyRelationAsync(this, removeFriend, Kook, options);
+
     /// <summary>
     ///     获取此用户的包含用户名及识别号的格式化字符串。
     /// </summary>

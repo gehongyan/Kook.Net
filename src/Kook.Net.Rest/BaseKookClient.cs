@@ -272,6 +272,14 @@ public abstract class BaseKookClient : IKookClient
         Task.FromResult<IReadOnlyCollection<IUser>>(ImmutableArray.Create<IUser>());
 
     /// <inheritdoc />
+    Task<IReadOnlyCollection<IIntimacyRelation>> IKookClient.GetIntimacyRelationsAsync(CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IReadOnlyCollection<IIntimacyRelation>>(ImmutableArray.Create<IIntimacyRelation>());
+
+    /// <inheritdoc />
+    Task<IReadOnlyCollection<IFriendRequest>> IKookClient.GetIntimacyRelationRequestsAsync(CacheMode mode, RequestOptions? options) =>
+        Task.FromResult<IReadOnlyCollection<IFriendRequest>>(ImmutableArray.Create<IFriendRequest>());
+
+    /// <inheritdoc />
     Task IKookClient.StartAsync() =>
         Task.CompletedTask;
 

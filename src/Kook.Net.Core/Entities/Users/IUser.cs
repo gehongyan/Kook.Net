@@ -158,4 +158,20 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步移除操作的任务。 </returns>
     Task RemoveFriendAsync(RequestOptions? options = null);
+
+    /// <summary>
+    ///     请求与此用户建立亲密关系。
+    /// </summary>
+    /// <param name="relationType"> 要请求的亲密关系类型。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步请求操作的任务。 </returns>
+    Task RequestIntimacyRelationAsync(IntimacyRelationType relationType, RequestOptions? options = null);
+
+    /// <summary>
+    ///     解除与此用户的亲密关系。
+    /// </summary>
+    /// <param name="removeFriend"> 是否同时移除与此用户的好友关系。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步解除操作的任务。 </returns>
+    Task UnravelIntimacyRelationAsync(bool removeFriend, RequestOptions? options = null);
 }

@@ -205,6 +205,22 @@ public class KookRestClient : BaseKookClient, IKookClient
     public Task<IReadOnlyCollection<RestUser>> GetBlockedUsersAsync(RequestOptions? options = null) =>
         ClientHelper.GetBlockedUsersAsync(this, options);
 
+    /// <summary>
+    ///     获取所有与当前用于建立了的亲密关系。
+    /// </summary>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是所有与当前用户建立了的亲密关系。 </returns>
+    public Task<IReadOnlyCollection<RestIntimacyRelation>> GetIntimacyRelationsAsync(RequestOptions? options = null) =>
+        ClientHelper.GetIntimacyUsersAsync(this, options);
+
+    /// <summary>
+    ///     获取所有请求与当前用户建立亲密关系的用户。
+    /// </summary>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是所有请求与当前用户建立亲密关系的用户。 </returns>
+    public Task<IReadOnlyCollection<RestFriendRequest>> GetIntimacyRelationRequestsAsync(RequestOptions? options = null) =>
+        ClientHelper.GetIntimacyRequestsAsync(this, options);
+
     #endregion
 
     #region Reactions
@@ -373,6 +389,23 @@ public class KookRestClient : BaseKookClient, IKookClient
     {
         if (mode == CacheMode.AllowDownload)
             return await GetBlockedUsersAsync(options).ConfigureAwait(false);
+        return [];
+    }
+
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IIntimacyRelation>> IKookClient.GetIntimacyRelationsAsync(CacheMode mode, RequestOptions? options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetIntimacyRelationsAsync(options).ConfigureAwait(false);
+        return [];
+    }
+
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IFriendRequest>> IKookClient.GetIntimacyRelationRequestsAsync(CacheMode mode,
+        RequestOptions? options)
+    {
+        if (mode == CacheMode.AllowDownload)
+            return await GetIntimacyRelationRequestsAsync(options).ConfigureAwait(false);
         return [];
     }
 

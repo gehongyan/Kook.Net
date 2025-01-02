@@ -79,8 +79,20 @@ internal static class ClientHelper
 
     public static async Task<IReadOnlyCollection<RestUser>> GetBlockedUsersAsync(BaseKookClient client, RequestOptions? options)
     {
-        GetFriendStatesResponse? models = await client.ApiClient.GetFriendStatesAsync(FriendState.Blocked, options).ConfigureAwait(false);
-        return models?.BlockedUsers.Select(x => RestUser.Create(client, x.User)).ToImmutableArray() ?? [];
+        GetFriendStatesResponse models = await client.ApiClient.GetFriendStatesAsync(FriendState.Blocked, options).ConfigureAwait(false);
+        return [..models.BlockedUsers.Select(x => RestUser.Create(client, x.User))];
+    }
+
+    public static async Task<IReadOnlyCollection<RestIntimacyRelation>> GetIntimacyUsersAsync(BaseKookClient client, RequestOptions? options)
+    {
+        GetFriendStatesResponse models = await client.ApiClient.GetFriendStatesAsync(null, options).ConfigureAwait(false);
+        return [..models.Relations.Select(x => RestIntimacyRelation.Create(client, x))];
+    }
+
+    public static async Task<IReadOnlyCollection<RestFriendRequest>> GetIntimacyRequestsAsync(BaseKookClient client, RequestOptions? options)
+    {
+        GetFriendStatesResponse models = await client.ApiClient.GetFriendStatesAsync(null, options).ConfigureAwait(false);
+        return [..models.FriendRequests.Select(x => RestFriendRequest.Create(client, x))];
     }
 
     public static async Task<string> CreateAssetAsync(BaseKookClient client, Stream stream, string filename, RequestOptions? options)

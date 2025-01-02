@@ -179,6 +179,17 @@ internal static class UserHelper
         await client.ApiClient.RequestFriendAsync(args, options).ConfigureAwait(false);
     }
 
+    public static async Task RequestIntimacyRelationAsync(IUser user,
+        IntimacyRelationType relationType, BaseKookClient client, RequestOptions? options)
+    {
+        RequestIntimacyParams args = new()
+        {
+            FullQualification = user.UsernameAndIdentifyNumber(false),
+            RelationType = relationType
+        };
+        await client.ApiClient.RequestIntimacyAsync(args, options).ConfigureAwait(false);
+    }
+
     public static async Task RemoveFriendAsync(IUser user, BaseKookClient client, RequestOptions? options)
     {
         RemoveFriendParams args = new()
@@ -186,6 +197,17 @@ internal static class UserHelper
             UserId = user.Id
         };
         await client.ApiClient.RemoveFriendAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task UnravelIntimacyRelationAsync(IUser user,
+        bool removeFriend, BaseKookClient client, RequestOptions? options)
+    {
+        UnravelRelationParams args = new()
+        {
+            UserId = user.Id,
+            RemoveFriend = removeFriend
+        };
+        await client.ApiClient.UnravelIntimacyAsync(args, options).ConfigureAwait(false);
     }
 
     public static async Task HandleFriendRequestAsync(IFriendRequest request,
@@ -197,5 +219,16 @@ internal static class UserHelper
             HandleResult = handleResult
         };
         await client.ApiClient.HandleFriendRequestAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task HandleIntimacyRequestAsync(IFriendRequest request,
+        bool handleResult, BaseKookClient client, RequestOptions? options)
+    {
+        HandleFriendRequestParams args = new()
+        {
+            Id = request.Id,
+            HandleResult = handleResult
+        };
+        await client.ApiClient.HandleIntimacyRequestAsync(args, options).ConfigureAwait(false);
     }
 }

@@ -10,13 +10,16 @@ namespace Kook.Rest;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestFriendRequest : RestEntity<ulong>, IFriendRequest
 {
+    private readonly bool _isIntimacyRelation;
+
     /// <inheritdoc />
     public IUser User { get; internal set; }
 
     /// <inheritdoc />
-    internal RestFriendRequest(BaseKookClient kook, Model model) :
-        base(kook, model.Id)
+    internal RestFriendRequest(BaseKookClient kook, Model model)
+        : base(kook, model.Id)
     {
+        _isIntimacyRelation = model.IntimacyState is IntimacyState.Pending;
         Update(model);
     }
 
@@ -33,10 +36,12 @@ public class RestFriendRequest : RestEntity<ulong>, IFriendRequest
             (User.IsBot ?? false ? ", Bot" : "")}{(User.IsSystemUser ? ", System" : "")})";
 
     /// <inheritdoc />
-    public Task AcceptAsync(RequestOptions? options = null) =>
-        UserHelper.HandleFriendRequestAsync(this, true, Kook, options);
+    public Task AcceptAsync(RequestOptions? options = null) => _isIntimacyRelation
+        ? UserHelper.HandleIntimacyRequestAsync(this, true, Kook, options)
+        : UserHelper.HandleFriendRequestAsync(this, true, Kook, options);
 
     /// <inheritdoc />
-    public Task DeclineAsync(RequestOptions? options = null) =>
-        UserHelper.HandleFriendRequestAsync(this, false, Kook, options);
+    public Task DeclineAsync(RequestOptions? options = null) => _isIntimacyRelation
+        ? UserHelper.HandleIntimacyRequestAsync(this, false, Kook, options)
+        : UserHelper.HandleFriendRequestAsync(this, false, Kook, options);
 }

@@ -10,7 +10,23 @@ internal class FriendState
 
     [JsonPropertyName("type")]
     [JsonConverter(typeof(FriendStateConverter))]
-    private Kook.FriendState State { get; set; }
+    public Kook.FriendState Type { get; set; }
+
+    [JsonPropertyName("relation_type")]
+    [JsonConverter(typeof(IntimacyRelationTypeConverter))]
+    public IntimacyRelationType? IntimacyType { get; set; }
+
+    [JsonPropertyName("relation_time")]
+    [JsonConverter(typeof(NullableDateTimeOffsetUnixTimeMillisecondsConverter))]
+    public DateTimeOffset? RelationTime { get; set; }
+
+    [JsonPropertyName("relation_status")]
+    [JsonConverter(typeof(IntimacyStateConverter))]
+    public IntimacyState? IntimacyState { get; set; }
+
+    [JsonPropertyName("friend_status")]
+    [JsonConverter(typeof(FriendStateConverter))]
+    public int FriendStatus { get; set; }
 
     [JsonPropertyName("friend_info")]
     public required User User { get; set; }

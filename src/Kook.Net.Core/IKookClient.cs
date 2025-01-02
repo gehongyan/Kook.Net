@@ -168,5 +168,21 @@ public interface IKookClient : IDisposable
     /// <returns> 一个表示异步获取操作的任务。任务的结果是所有被当前用户屏蔽的用户。 </returns>
     Task<IReadOnlyCollection<IUser>> GetBlockedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
 
+    /// <summary>
+    ///     获取所有与当前用于建立了的亲密关系
+    /// </summary>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是所有与当前用户建立了的亲密关系。 </returns>
+    Task<IReadOnlyCollection<IIntimacyRelation>> GetIntimacyRelationsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+
+    /// <summary>
+    ///     获取所有请求与当前用户建立亲密关系的用户。
+    /// </summary>
+    /// <param name="mode"> 指示当前方法是否应该仅从缓存中获取结果，还是可以通过 API 请求获取数据。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是所有请求与当前用户建立亲密关系的用户。 </returns>
+    Task<IReadOnlyCollection<IFriendRequest>> GetIntimacyRelationRequestsAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+
     #endregion
 }
