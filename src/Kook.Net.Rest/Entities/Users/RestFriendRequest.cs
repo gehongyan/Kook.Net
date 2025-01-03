@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using Model = Kook.API.Rest.FriendState;
 
 namespace Kook.Rest;
@@ -10,23 +9,24 @@ namespace Kook.Rest;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestFriendRequest : RestEntity<ulong>, IFriendRequest
 {
-    private readonly bool _isIntimacyRelation;
-
     /// <inheritdoc />
     public IUser User { get; internal set; }
 
     /// <inheritdoc />
-    internal RestFriendRequest(BaseKookClient kook, Model model)
-        : base(kook, model.Id)
+    internal RestFriendRequest(BaseKookClient kook, ulong id)
+        : base(kook, id)
     {
-        _isIntimacyRelation = model.IntimacyState is IntimacyState.Pending;
-        Update(model);
+        User = null!;
     }
 
-    internal static RestFriendRequest Create(BaseKookClient kook, Model model) => new(kook, model);
+    internal static RestFriendRequest Create(BaseKookClient kook, Model model)
+    {
+        RestFriendRequest entity = new(kook, model.Id);
+        entity.Update(model);
+        return entity;
+    }
 
-    [MemberNotNull(nameof(User))]
-    internal void Update(Model model)
+    internal virtual void Update(Model model)
     {
         User = RestUser.Create(Kook, model.User);
     }
@@ -36,12 +36,10 @@ public class RestFriendRequest : RestEntity<ulong>, IFriendRequest
             (User.IsBot ?? false ? ", Bot" : "")}{(User.IsSystemUser ? ", System" : "")})";
 
     /// <inheritdoc />
-    public Task AcceptAsync(RequestOptions? options = null) => _isIntimacyRelation
-        ? UserHelper.HandleIntimacyRequestAsync(this, true, Kook, options)
-        : UserHelper.HandleFriendRequestAsync(this, true, Kook, options);
+    public virtual Task AcceptAsync(RequestOptions? options = null) =>
+        UserHelper.HandleFriendRequestAsync(this, true, Kook, options);
 
     /// <inheritdoc />
-    public Task DeclineAsync(RequestOptions? options = null) => _isIntimacyRelation
-        ? UserHelper.HandleIntimacyRequestAsync(this, false, Kook, options)
-        : UserHelper.HandleFriendRequestAsync(this, false, Kook, options);
+    public virtual Task DeclineAsync(RequestOptions? options = null) =>
+        UserHelper.HandleFriendRequestAsync(this, false, Kook, options);
 }

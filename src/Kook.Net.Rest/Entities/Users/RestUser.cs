@@ -172,7 +172,7 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
         UserHelper.RequestIntimacyRelationAsync(this, relationType, Kook, options);
 
     /// <inheritdoc />
-    public Task UnravelIntimacyRelationAsync(bool removeFriend, RequestOptions? options = null) =>
+    public Task UnravelIntimacyRelationAsync(bool removeFriend = false, RequestOptions? options = null) =>
         UserHelper.UnravelIntimacyRelationAsync(this, removeFriend, Kook, options);
 
     #endregion

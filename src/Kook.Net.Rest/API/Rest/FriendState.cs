@@ -17,7 +17,7 @@ internal class FriendState
     public IntimacyRelationType? IntimacyType { get; set; }
 
     [JsonPropertyName("relation_time")]
-    [JsonConverter(typeof(NullableDateTimeOffsetUnixTimeMillisecondsConverter))]
+    [JsonConverter(typeof(NullableDateTimeOffsetUnixTimeSecondsConverter))]
     public DateTimeOffset? RelationTime { get; set; }
 
     [JsonPropertyName("relation_status")]
@@ -25,8 +25,7 @@ internal class FriendState
     public IntimacyState? IntimacyState { get; set; }
 
     [JsonPropertyName("friend_status")]
-    [JsonConverter(typeof(FriendStateConverter))]
-    public int FriendStatus { get; set; }
+    public Kook.FriendState FriendStatus { get; set; }
 
     [JsonPropertyName("friend_info")]
     public required User User { get; set; }

@@ -44,6 +44,6 @@ public class RestIntimacyRelation : RestEntity<ulong>, IIntimacyRelation
             (User.IsBot ?? false ? ", Bot" : "")}{(User.IsSystemUser ? ", System" : "")}, {RelationType})";
 
     /// <inheritdoc />
-    public Task UnravelAsync(bool removeFriend,  RequestOptions? options = null) =>
+    public Task UnravelAsync(bool removeFriend = false, RequestOptions? options = null) =>
         User.UnravelIntimacyRelationAsync(removeFriend, options);
 }

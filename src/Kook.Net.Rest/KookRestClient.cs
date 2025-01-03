@@ -218,7 +218,7 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步获取操作的任务。任务的结果是所有请求与当前用户建立亲密关系的用户。 </returns>
-    public Task<IReadOnlyCollection<RestFriendRequest>> GetIntimacyRelationRequestsAsync(RequestOptions? options = null) =>
+    public Task<IReadOnlyCollection<RestIntimacyRelationRequest>> GetIntimacyRelationRequestsAsync(RequestOptions? options = null) =>
         ClientHelper.GetIntimacyRequestsAsync(this, options);
 
     #endregion

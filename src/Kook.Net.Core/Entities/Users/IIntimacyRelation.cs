@@ -26,5 +26,5 @@ public interface IIntimacyRelation : IEntity<ulong>
     /// <param name="removeFriend"> 是否同时解除好友关系。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步解除操作的任务。 </returns>
-    Task UnravelAsync(bool removeFriend, RequestOptions? options = null);
+    Task UnravelAsync(bool removeFriend = false, RequestOptions? options = null);
 }

@@ -89,10 +89,10 @@ internal static class ClientHelper
         return [..models.Relations.Select(x => RestIntimacyRelation.Create(client, x))];
     }
 
-    public static async Task<IReadOnlyCollection<RestFriendRequest>> GetIntimacyRequestsAsync(BaseKookClient client, RequestOptions? options)
+    public static async Task<IReadOnlyCollection<RestIntimacyRelationRequest>> GetIntimacyRequestsAsync(BaseKookClient client, RequestOptions? options)
     {
         GetFriendStatesResponse models = await client.ApiClient.GetFriendStatesAsync(null, options).ConfigureAwait(false);
-        return [..models.FriendRequests.Select(x => RestFriendRequest.Create(client, x))];
+        return [..models.RelationRequests.Select(x => RestIntimacyRelationRequest.Create(client, x))];
     }
 
     public static async Task<string> CreateAssetAsync(BaseKookClient client, Stream stream, string filename, RequestOptions? options)
