@@ -688,13 +688,12 @@ public partial class KookSocketClient
             return;
         }
 
-        if (GetChannel(data.ChannelId) is not { } channel)
+        if (guild.RemoveChannel(State, data.ChannelId) is not { } channel)
         {
             await UnknownChannelAsync(gatewayEvent.ExtraData.Type, data.ChannelId, gatewayEvent).ConfigureAwait(false);
             return;
         }
 
-        State.RemoveChannel(channel.Id);
         if (channel is SocketVoiceChannel voiceChannel)
         {
             IEnumerable<Cacheable<SocketGuildUser, ulong>> connectedUsers = voiceChannel.Guild.VoiceStates
