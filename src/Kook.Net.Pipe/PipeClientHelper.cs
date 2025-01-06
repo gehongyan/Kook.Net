@@ -28,7 +28,6 @@ internal static class PipeClientHelper
     public static async Task<Guid> SendCardsAsync(KookPipeClient client, IEnumerable<ICard> cards, RequestOptions? options)
     {
         string json = MessageHelper.SerializeCards(cards);
-
         CreatePipeMessageParams args = new()
         {
             Content = json

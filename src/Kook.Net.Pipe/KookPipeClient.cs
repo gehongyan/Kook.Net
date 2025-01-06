@@ -134,6 +134,11 @@ public class KookPipeClient : IDisposable
         new(config.RestClientProvider, KookConfig.UserAgent, config.AcceptLanguage,
             config.DefaultRetryMode, SerializerOptions);
 
+    /// <inheritdoc cref="Kook.Pipe.KookPipeClient.SendTextAsync(System.String,Kook.RequestOptions)" />
+    [Obsolete("This method is obsolete. Use SendTextAsync instead.")]
+    public Task<Guid> SendContentAsync(string text, RequestOptions? options = null) =>
+        SendTextAsync(text, options);
+
     /// <summary>
     ///     发送文本消息内容到管道。
     /// </summary>
