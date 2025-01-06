@@ -794,15 +794,16 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<CreateMessageResponse> CreatePipeMessageAsync<T>(T? args, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options = null)
+    public async Task<CreateMessageResponse> CreatePipeMessageAsync<T>(T? args, JsonSerializerOptions? jsonSerializerOptions, MessageType type, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotNullOrEmpty(AuthToken, nameof(AuthToken));
         options = RequestOptions.CreateOrClone(options);
 
         BucketIds ids = new(pipeId: AuthToken);
+        int typeInt = (int)type;
         return await SendJsonAsync<CreateMessageResponse>(HttpMethod.Post,
-                () => $"message/send-pipemsg?access_token={AuthToken}", args, ids, ClientBucketType.SendEdit, false, jsonSerializerOptions, options)
+                () => $"message/send-pipemsg?access_token={AuthToken}&type={typeInt}", args, ids, ClientBucketType.SendEdit, false, jsonSerializerOptions, options)
             .ConfigureAwait(false);
     }
 

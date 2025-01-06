@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -139,14 +140,32 @@ public class KookPipeClient : IDisposable
     public Task<Guid> SendContentAsync(string text, RequestOptions? options = null) =>
         SendTextAsync(text, options);
 
+    /// <inheritdoc cref="Kook.Pipe.KookPipeClient.SendTextAsync{T}(T,System.Text.Json.JsonSerializerOptions,Kook.RequestOptions)" />
+    [Obsolete("This method is obsolete. Use SendTextAsync instead.")]
+    public Task<Guid> SendTemplateAsync<T>(T? parameters = default,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        SendTextAsync(parameters, jsonSerializerOptions, options);
+
     /// <summary>
     ///     发送文本消息内容到管道。
     /// </summary>
     /// <param name="text"> 要发送的消息文本。 </param>
     /// <param name="options"> 用于配置请求的选项。 </param>
     /// <returns> 返回一个表示异步操作的任务，任务的结果是消息的 ID。 </returns>
+    [OverloadResolutionPriority(1)]
     public Task<Guid> SendTextAsync(string text, RequestOptions? options = null) =>
         PipeClientHelper.SendTextAsync(this, text, options);
+
+    /// <summary>
+    ///     发送文本消息内容到管道。
+    /// </summary>
+    /// <param name="parameters"> 要应用到消息管道所使用的消息模板的参数。 </param>
+    /// <param name="jsonSerializerOptions"> 序列化模板参数时要使用的序列化选项。 </param>
+    /// <param name="options"> 用于配置请求的选项。 </param>
+    /// <returns> 返回一个表示异步操作的任务，任务的结果是消息的 ID。 </returns>
+    public Task<Guid> SendTextAsync<T>(T? parameters = default,
+        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        PipeClientHelper.SendTextAsync(this, parameters, jsonSerializerOptions, options);
 
     /// <summary>
     ///     发送卡片消息内容到管道。
@@ -163,20 +182,20 @@ public class KookPipeClient : IDisposable
     /// <param name="cards"> 要发送的卡片。 </param>
     /// <param name="options"> 用于配置请求的选项。 </param>
     /// <returns> 返回一个表示异步操作的任务，任务的结果是消息的 ID。 </returns>
+    [OverloadResolutionPriority(1)]
     public Task<Guid> SendCardsAsync(IEnumerable<ICard> cards, RequestOptions? options = null) =>
         PipeClientHelper.SendCardsAsync(this, cards, options);
 
     /// <summary>
-    ///     发送消息模板的参数到管道。
+    ///     发送卡片消息内容到管道。
     /// </summary>
     /// <param name="parameters"> 要应用到消息管道所使用的消息模板的参数。 </param>
     /// <param name="jsonSerializerOptions"> 序列化模板参数时要使用的序列化选项。 </param>
     /// <param name="options"> 用于配置请求的选项。 </param>
-    /// <typeparam name="T"> 要发送的消息的参数类型。 </typeparam>
     /// <returns> 返回一个表示异步操作的任务，任务的结果是消息的 ID。 </returns>
-    public Task<Guid> SendTemplateAsync<T>(T? parameters = default,
+    public Task<Guid> SendCardsAsync<T>(T? parameters = default,
         JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
-        PipeClientHelper.SendMessageAsync(this, parameters, jsonSerializerOptions, options);
+        PipeClientHelper.SendCardsAsync(this, parameters, jsonSerializerOptions, options);
 
     private static bool ParsePipeUrl(Uri pipeUrl, [NotNullWhen(true)] out string? accessToken)
     {

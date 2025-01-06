@@ -8,6 +8,8 @@ client.SentRequest += (method, endpoint, millis) =>
     Console.WriteLine($"[{DateTimeOffset.Now}] [{method}] {endpoint} ({millis}ms)");
     return Task.CompletedTask;
 };
+await client.SendTextAsync("ss");
+await client.SendCardsAsync([]);
 await client.SendTemplateAsync(new
 {
     guildname = "KOOK开发者中心",
