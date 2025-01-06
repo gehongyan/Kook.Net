@@ -135,13 +135,31 @@ public class KookPipeClient : IDisposable
             config.DefaultRetryMode, SerializerOptions);
 
     /// <summary>
-    ///     发送消息内容到管道。
+    ///     发送文本消息内容到管道。
     /// </summary>
     /// <param name="text"> 要发送的消息文本。 </param>
     /// <param name="options"> 用于配置请求的选项。 </param>
     /// <returns> 返回一个表示异步操作的任务，任务的结果是消息的 ID。 </returns>
-    public Task<Guid> SendContentAsync(string text, RequestOptions? options = null) =>
-        PipeClientHelper.SendMessageAsync(this, text, options);
+    public Task<Guid> SendTextAsync(string text, RequestOptions? options = null) =>
+        PipeClientHelper.SendTextAsync(this, text, options);
+
+    /// <summary>
+    ///     发送卡片消息内容到管道。
+    /// </summary>
+    /// <param name="card"> 要发送的卡片。 </param>
+    /// <param name="options"> 用于配置请求的选项。 </param>
+    /// <returns> 返回一个表示异步操作的任务，任务的结果是消息的 ID。 </returns>
+    public Task<Guid> SendCardAsync(ICard card, RequestOptions? options = null) =>
+        PipeClientHelper.SendCardsAsync(this, [card], options);
+
+    /// <summary>
+    ///     发送卡片消息内容到管道。
+    /// </summary>
+    /// <param name="cards"> 要发送的卡片。 </param>
+    /// <param name="options"> 用于配置请求的选项。 </param>
+    /// <returns> 返回一个表示异步操作的任务，任务的结果是消息的 ID。 </returns>
+    public Task<Guid> SendCardsAsync(IEnumerable<ICard> cards, RequestOptions? options = null) =>
+        PipeClientHelper.SendCardsAsync(this, cards, options);
 
     /// <summary>
     ///     发送消息模板的参数到管道。
