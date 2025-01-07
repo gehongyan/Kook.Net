@@ -60,7 +60,6 @@ public class KookPipeClient : IDisposable
 
     internal readonly AsyncEvent<Func<HttpMethod, string, double, Task>> _sentRequest = new();
 
-    private readonly Logger _restLogger;
     private readonly string _accessToken;
 
     internal API.KookRestApiClient ApiClient { get; }
@@ -117,16 +116,16 @@ public class KookPipeClient : IDisposable
         LogManager = new LogManager(config.LogLevel);
         LogManager.Message += async msg => await _logEvent.InvokeAsync(msg).ConfigureAwait(false);
 
-        _restLogger = LogManager.CreateLogger("Rest");
+        Logger restLogger = LogManager.CreateLogger("Rest");
         ApiClient.RequestQueue.RateLimitTriggered += async (id, info, endpoint) =>
         {
             if (info == null)
-                await _restLogger.VerboseAsync($"Preemptive Rate limit triggered: {endpoint} {(id.IsHashBucket ? $"(Bucket: {id.BucketHash})" : "")}").ConfigureAwait(false);
+                await restLogger.VerboseAsync($"Preemptive Rate limit triggered: {endpoint} {(id.IsHashBucket ? $"(Bucket: {id.BucketHash})" : "")}").ConfigureAwait(false);
             else
-                await _restLogger.WarningAsync($"Rate limit triggered: {endpoint} {(id.IsHashBucket ? $"(Bucket: {id.BucketHash})" : "")}").ConfigureAwait(false);
+                await restLogger.WarningAsync($"Rate limit triggered: {endpoint} {(id.IsHashBucket ? $"(Bucket: {id.BucketHash})" : "")}").ConfigureAwait(false);
         };
         ApiClient.SentRequest += async (method, endpoint, millis) =>
-            await _restLogger.VerboseAsync($"{method} {endpoint}: {millis} ms").ConfigureAwait(false);
+            await restLogger.VerboseAsync($"{method} {endpoint}: {millis} ms").ConfigureAwait(false);
         ApiClient.SentRequest += (method, endpoint, millis) =>
             _sentRequest.InvokeAsync(method, endpoint, millis);
     }
@@ -135,26 +134,15 @@ public class KookPipeClient : IDisposable
         new(config.RestClientProvider, KookConfig.UserAgent, config.AcceptLanguage,
             config.DefaultRetryMode, SerializerOptions);
 
-    /// <inheritdoc cref="Kook.Pipe.KookPipeClient.SendTextAsync(System.String,Kook.RequestOptions)" />
-    [Obsolete("This method is obsolete. Use SendTextAsync instead.")]
-    public Task<Guid> SendContentAsync(string text, RequestOptions? options = null) =>
-        SendTextAsync(text, options);
-
-    /// <inheritdoc cref="Kook.Pipe.KookPipeClient.SendTextAsync{T}(T,System.Text.Json.JsonSerializerOptions,Kook.RequestOptions)" />
-    [Obsolete("This method is obsolete. Use SendTextAsync instead.")]
-    public Task<Guid> SendTemplateAsync<T>(T? parameters = default,
-        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
-        SendTextAsync(parameters, jsonSerializerOptions, options);
-
     /// <summary>
     ///     发送文本消息内容到管道。
     /// </summary>
     /// <param name="text"> 要发送的消息文本。 </param>
     /// <param name="options"> 用于配置请求的选项。 </param>
     /// <returns> 返回一个表示异步操作的任务，任务的结果是消息的 ID。 </returns>
-    [OverloadResolutionPriority(1)]
-    public Task<Guid> SendTextAsync(string text, RequestOptions? options = null) =>
-        PipeClientHelper.SendTextAsync(this, text, options);
+    [Obsolete("This method is obsolete. Use SendTextAsync instead.")]
+    public Task<Guid> SendContentAsync(string text, RequestOptions? options = null) =>
+        SendTextAsync(text, null, null, options);
 
     /// <summary>
     ///     发送文本消息内容到管道。
@@ -163,39 +151,74 @@ public class KookPipeClient : IDisposable
     /// <param name="jsonSerializerOptions"> 序列化模板参数时要使用的序列化选项。 </param>
     /// <param name="options"> 用于配置请求的选项。 </param>
     /// <returns> 返回一个表示异步操作的任务，任务的结果是消息的 ID。 </returns>
-    public Task<Guid> SendTextAsync<T>(T? parameters = default,
+    [Obsolete("This method is obsolete. Use SendTextAsync instead.")]
+    public Task<Guid> SendTemplateAsync<T>(T? parameters = default,
         JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
-        PipeClientHelper.SendTextAsync(this, parameters, jsonSerializerOptions, options);
+        SendTextAsync(parameters, null, null, jsonSerializerOptions, options);
+
+    /// <summary>
+    ///     发送文本消息内容到管道。
+    /// </summary>
+    /// <param name="text"> 要发送的消息文本。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="ephemeralUserId"> 临时消息的接收者的用户 ID。如果设置为指定的用户 ID，则仅该 ID 所关联的用户可以看到此消息，否则所有人都可以看到此消息。 </param>
+    /// <param name="options"> 用于配置请求的选项。 </param>
+    /// <returns> 返回一个表示异步操作的任务，任务的结果是消息的 ID。 </returns>
+    [OverloadResolutionPriority(1)]
+    public Task<Guid> SendTextAsync(string text, IQuote? quote = null,
+        ulong? ephemeralUserId = null, RequestOptions? options = null) =>
+        PipeClientHelper.SendTextAsync(this, text, quote, ephemeralUserId, options);
+
+    /// <summary>
+    ///     发送文本消息内容到管道。
+    /// </summary>
+    /// <param name="parameters"> 要应用到消息管道所使用的消息模板的参数。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="ephemeralUserId"> 临时消息的接收者的用户 ID。如果设置为指定的用户 ID，则仅该 ID 所关联的用户可以看到此消息，否则所有人都可以看到此消息。 </param>
+    /// <param name="jsonSerializerOptions"> 序列化模板参数时要使用的序列化选项。 </param>
+    /// <param name="options"> 用于配置请求的选项。 </param>
+    /// <returns> 返回一个表示异步操作的任务，任务的结果是消息的 ID。 </returns>
+    public Task<Guid> SendTextAsync<T>(T? parameters = default, IQuote? quote = null,
+        ulong? ephemeralUserId = null, JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        PipeClientHelper.SendTextAsync(this, parameters, quote, ephemeralUserId, jsonSerializerOptions, options);
 
     /// <summary>
     ///     发送卡片消息内容到管道。
     /// </summary>
     /// <param name="card"> 要发送的卡片。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="ephemeralUserId"> 临时消息的接收者的用户 ID。如果设置为指定的用户 ID，则仅该 ID 所关联的用户可以看到此消息，否则所有人都可以看到此消息。 </param>
     /// <param name="options"> 用于配置请求的选项。 </param>
     /// <returns> 返回一个表示异步操作的任务，任务的结果是消息的 ID。 </returns>
-    public Task<Guid> SendCardAsync(ICard card, RequestOptions? options = null) =>
-        PipeClientHelper.SendCardsAsync(this, [card], options);
+    public Task<Guid> SendCardAsync(ICard card, IQuote? quote = null,
+        ulong? ephemeralUserId = null, RequestOptions? options = null) =>
+        PipeClientHelper.SendCardsAsync(this, [card], quote, ephemeralUserId, options);
 
     /// <summary>
     ///     发送卡片消息内容到管道。
     /// </summary>
     /// <param name="cards"> 要发送的卡片。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="ephemeralUserId"> 临时消息的接收者的用户 ID。如果设置为指定的用户 ID，则仅该 ID 所关联的用户可以看到此消息，否则所有人都可以看到此消息。 </param>
     /// <param name="options"> 用于配置请求的选项。 </param>
     /// <returns> 返回一个表示异步操作的任务，任务的结果是消息的 ID。 </returns>
     [OverloadResolutionPriority(1)]
-    public Task<Guid> SendCardsAsync(IEnumerable<ICard> cards, RequestOptions? options = null) =>
-        PipeClientHelper.SendCardsAsync(this, cards, options);
+    public Task<Guid> SendCardsAsync(IEnumerable<ICard> cards, IQuote? quote = null,
+        ulong? ephemeralUserId = null, RequestOptions? options = null) =>
+        PipeClientHelper.SendCardsAsync(this, cards, quote, ephemeralUserId, options);
 
     /// <summary>
     ///     发送卡片消息内容到管道。
     /// </summary>
     /// <param name="parameters"> 要应用到消息管道所使用的消息模板的参数。 </param>
+    /// <param name="quote"> 消息引用，用于回复消息。 </param>
+    /// <param name="ephemeralUserId"> 临时消息的接收者的用户 ID。如果设置为指定的用户 ID，则仅该 ID 所关联的用户可以看到此消息，否则所有人都可以看到此消息。 </param>
     /// <param name="jsonSerializerOptions"> 序列化模板参数时要使用的序列化选项。 </param>
     /// <param name="options"> 用于配置请求的选项。 </param>
     /// <returns> 返回一个表示异步操作的任务，任务的结果是消息的 ID。 </returns>
-    public Task<Guid> SendCardsAsync<T>(T? parameters = default,
-        JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
-        PipeClientHelper.SendCardsAsync(this, parameters, jsonSerializerOptions, options);
+    public Task<Guid> SendCardsAsync<T>(T? parameters = default, IQuote? quote = null,
+        ulong? ephemeralUserId = null, JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
+        PipeClientHelper.SendCardsAsync(this, parameters, quote, ephemeralUserId, jsonSerializerOptions, options);
 
     private static bool ParsePipeUrl(Uri pipeUrl, [NotNullWhen(true)] out string? accessToken)
     {

@@ -794,29 +794,43 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
-    public async Task<CreateMessageResponse> CreatePipeMessageAsync<T>(T? args, JsonSerializerOptions? jsonSerializerOptions, MessageType type, RequestOptions? options = null)
+    public async Task<CreateMessageResponse> CreatePipeMessageAsync<T>(T? args, JsonSerializerOptions? jsonSerializerOptions,
+        MessageType type, IQuote? quote, ulong? ephemeralUserId = null, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotNullOrEmpty(AuthToken, nameof(AuthToken));
-        options = RequestOptions.CreateOrClone(options);
+        Preconditions.NotEqual(quote?.QuotedMessageId, Guid.Empty, nameof(quote.QuotedMessageId));
+        Preconditions.NotEqual(ephemeralUserId, 0, nameof(ephemeralUserId));
 
+        options = RequestOptions.CreateOrClone(options);
         BucketIds ids = new(pipeId: AuthToken);
-        int typeInt = (int)type;
+        string query = $"?access_token={AuthToken}&type={(int)type}";
+        if (quote is not null)
+            query += $"&quote={quote.QuotedMessageId}";
+        if (ephemeralUserId.HasValue)
+            query += $"&temp_target_id={ephemeralUserId}";
         return await SendJsonAsync<CreateMessageResponse>(HttpMethod.Post,
-                () => $"message/send-pipemsg?access_token={AuthToken}&type={typeInt}", args, ids, ClientBucketType.SendEdit, false, jsonSerializerOptions, options)
+                () => $"message/send-pipemsg{query}", args, ids, ClientBucketType.SendEdit, false, jsonSerializerOptions, options)
             .ConfigureAwait(false);
     }
 
-    public async Task<CreateMessageResponse> CreatePipeMessageAsync(CreatePipeMessageParams args, MessageType type, RequestOptions? options = null)
+    public async Task<CreateMessageResponse> CreatePipeMessageAsync(CreatePipeMessageParams args,
+        MessageType type, IQuote? quote, ulong? ephemeralUserId = null, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotNullOrEmpty(AuthToken, nameof(AuthToken));
-        options = RequestOptions.CreateOrClone(options);
+        Preconditions.NotEqual(quote?.QuotedMessageId, Guid.Empty, nameof(quote.QuotedMessageId));
+        Preconditions.NotEqual(ephemeralUserId, 0, nameof(ephemeralUserId));
 
+        options = RequestOptions.CreateOrClone(options);
         BucketIds ids = new(pipeId: AuthToken);
-        int typeInt = (int)type;
+        string query = $"?access_token={AuthToken}&type={(int)type}";
+        if (quote is not null)
+            query += $"&quote={quote.QuotedMessageId}";
+        if (ephemeralUserId.HasValue)
+            query += $"&temp_target_id={ephemeralUserId}";
         return await SendJsonAsync<CreateMessageResponse>(HttpMethod.Post,
-                () => $"message/send-pipemsg?access_token={AuthToken}&type={typeInt}", args, ids, ClientBucketType.SendEdit, false, null, options)
+                () => $"message/send-pipemsg{query}", args, ids, ClientBucketType.SendEdit, false, null, options)
             .ConfigureAwait(false);
     }
 
@@ -1076,7 +1090,7 @@ internal class KookRestApiClient : IDisposable
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
-        if (args.UserId is not null) Preconditions.NotEqual(args.UserId, 0, nameof(args.MessageId));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.MessageId));
 
         BucketIds ids = new();
         await SendJsonAsync(HttpMethod.Post, () => $"direct-message/delete-reaction", args, ids, ClientBucketType.SendEdit, null, options)
