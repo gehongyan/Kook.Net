@@ -3,7 +3,7 @@
   <Import Project="../../Kook.Net.Sample.targets" />
 
   <ItemGroup>
-    <PackageReference Include="AspNet.Security.OAuth.Kook" Version="8.2.0" />
+    <PackageReference Include="AspNet.Security.OAuth.Kook" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>

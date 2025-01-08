@@ -18,7 +18,7 @@ HostApplicationBuilder builder = Host.CreateEmptyApplicationBuilder(new HostAppl
 
 builder.Services.AddSingleton<KookSocketConfig>(_ => new KookSocketConfig
 {
-    AlwaysDownloadUsers = true,
+    AlwaysDownloadUsers = false,
     LogLevel = LogSeverity.Debug,
     AcceptLanguage = "en-US"
 });
