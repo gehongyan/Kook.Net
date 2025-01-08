@@ -21,54 +21,55 @@ let config =
         AlwaysDownloadVoiceStates = false,
         AlwaysDownloadBoostSubscriptions = false,
         MessageCacheSize = 100,
-        LogLevel = LogSeverity.Debug
+        LogLevel = LogSeverity.Debug,
+        AutoUpdateChannelPositions = true,
+        AutoUpdateRolePositions = true,
+        StartupCacheFetchMode = StartupCacheFetchMode.Lazy,
+        LargeNumberOfGuildsThreshold = 50u
     )
 
 // 在使用完 Kook.Net 的客户端后，建议在应用程序的生命周期结束时进行 Dispose 操作
 // 由于 F# 中 use 绑定在模块中被视为 let 绑定，此处使用 let 来创建一个作用域
 let client = new KookSocketClient(config)
 
+// 此处列举了 Kook.Net 的 KookSocketClient 的所有事件
+
 // Log 事件，此处以直接输出到控制台为例
-let LogAsync (log: LogMessage) : Task =
+let LogAsync (log: LogMessage) =
     Console.WriteLine(log.ToString())
     Task.CompletedTask
 
 // Ready 事件表示客户端已经建立了连接，现在可以安全地访问缓存
-let ReadyAsync () : Task =
-    Console.WriteLine($"{client.CurrentUser} is connected!")
-    Task.CompletedTask
+let ReadyAsync () =
+    async { Console.WriteLine($"{client.CurrentUser} 已连接！") } |> Async.StartAsTask :> Task
 
 // 并不建议以这样的方式实现 Bot 的命令交互功能
 // 请参阅 Kook.Net.Samples.TextCommands 示例项目及其文档
 let MessageReceivedAsync (message: SocketMessage) (author: SocketGuildUser) (channel: SocketTextChannel) : Task =
-    task {
-        let currentUserId: Nullable<uint64> =
-            match client.CurrentUser with
-            | null -> Nullable()
-            | s -> Nullable s.Id
-
-        if currentUserId.HasValue && author.Id = currentUserId.Value then
-            ()
-
-        if message.Content = "!ping" then
-            // 创建一个 CardBuilder，卡片将会包含一个文本模块和一个按钮模块
-            let builder =
-                CardBuilder()
-                    .AddModule<SectionModuleBuilder>(fun s -> s.WithText("Pong!") |> ignore)
-                    .AddModule<ActionGroupModuleBuilder>(fun a ->
-                        a.AddElement(fun b ->
-                            b
-                                .WithClick(ButtonClickEventType.ReturnValue)
-                                .WithText("点我！")
-                                .WithValue("unique-id")
-                                .WithTheme(ButtonTheme.Primary)
+    async {
+        // Bot 永远不应该响应自己的消息
+        if author.Id <> client.CurrentUser.Id then
+            if message.Content = "!ping" then
+                // 创建一个 CardBuilder，卡片将会包含一个文本模块和一个按钮模块
+                let builder =
+                    CardBuilder()
+                        .WithTheme(CardTheme.Invisible)
+                        .AddModule<SectionModuleBuilder>(fun s -> s.WithText("pong!") |> ignore)
+                        .AddModule<ActionGroupModuleBuilder>(fun a ->
+                            a.AddElement(fun b ->
+                                b
+                                    .WithClick(ButtonClickEventType.ReturnValue)
+                                    .WithText("点我！")
+                                    .WithValue("unique-id")
+                                    .WithTheme(ButtonTheme.Primary)
+                                |> ignore)
                             |> ignore)
-                        |> ignore)
 
-            // 发送一条卡片形式的消息，内容包含文本 pong!，以及一个按钮
-            // 在调用时，需要先调用 .Build() 方法来构建卡片
-            do! channel.SendCardAsync(builder.Build()) |> Async.AwaitTask |> Async.Ignore
+                // 发送一条卡片形式的消息，内容包含文本 pong!，以及一个按钮
+                do! channel.SendCardAsync(builder.Build()) |> Async.AwaitTask |> Async.Ignore
     }
+    |> Async.StartAsTask
+    :> Task
 
 // 当按钮被点击时，会触发 MessageButtonClicked 事件
 let MessageButtonClickedAsync
@@ -76,11 +77,11 @@ let MessageButtonClickedAsync
     (user: Cacheable<SocketGuildUser, uint64>)
     (message: Cacheable<IMessage, Guid>)
     (channel: SocketTextChannel)
-    : Task =
-    task {
+    =
+    async {
         // 检查按钮的值是否为之前的代码中设置的值
         if value = "unique-id" then
-            let! messageEntity = message.GetOrDownloadAsync()
+            let! messageEntity = message.GetOrDownloadAsync() |> Async.AwaitTask
 
             match messageEntity with
             | :? IUserMessage as userMessage ->
@@ -93,8 +94,8 @@ let MessageButtonClickedAsync
         else
             Console.WriteLine("接收到了一个没有对应处理程序的按钮值！")
     }
-
-// 此处列举了 Kook.Net 的 KookSocketClient 的所有事件
+    |> Async.StartAsTask
+    :> Task
 
 // BaseKookClient
 
