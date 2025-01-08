@@ -1,5 +1,4 @@
 using Kook;
-using Kook.Rest;
 using Kook.WebSocket;
 
 // 这是一个使用 Kook.Net 的 C# 简单示例
@@ -127,9 +126,7 @@ Task LogAsync(LogMessage log)
 // Ready 事件表示客户端已经建立了连接，现在可以安全地访问缓存
 async Task ReadyAsync()
 {
-    IReadOnlyCollection<RestIntimacyRelationRequest> relations = await client.Rest.GetIntimacyRelationRequestsAsync();
-    if (relations.FirstOrDefault() is { } relation)
-        await relation.AcceptAsync();
+    await Task.Yield();
     Console.WriteLine($"{client.CurrentUser} 已连接！");
 }
 
