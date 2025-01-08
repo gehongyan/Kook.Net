@@ -36,17 +36,16 @@ let client = new KookSocketClient(config)
 
 // Log 事件，此处以直接输出到控制台为例
 let LogAsync (log: LogMessage) =
-    Console.WriteLine(log.ToString())
-    Task.CompletedTask
+    task { printfn $"{log.ToString()}" } :> Task
 
 // Ready 事件表示客户端已经建立了连接，现在可以安全地访问缓存
 let ReadyAsync () =
-    async { Console.WriteLine($"{client.CurrentUser} 已连接！") } |> Async.StartAsTask :> Task
+    task { printfn $"{client.CurrentUser} 已连接！" } :> Task
 
 // 并不建议以这样的方式实现 Bot 的命令交互功能
 // 请参阅 Kook.Net.Samples.TextCommands 示例项目及其文档
 let MessageReceivedAsync (message: SocketMessage) (author: SocketGuildUser) (channel: SocketTextChannel) : Task =
-    async {
+    task {
         // Bot 永远不应该响应自己的消息
         if author.Id <> client.CurrentUser.Id then
             if message.Content = "!ping" then
@@ -68,8 +67,6 @@ let MessageReceivedAsync (message: SocketMessage) (author: SocketGuildUser) (cha
                 // 发送一条卡片形式的消息，内容包含文本 pong!，以及一个按钮
                 do! channel.SendCardAsync(builder.Build()) |> Async.AwaitTask |> Async.Ignore
     }
-    |> Async.StartAsTask
-    :> Task
 
 // 当按钮被点击时，会触发 MessageButtonClicked 事件
 let MessageButtonClickedAsync
@@ -78,7 +75,7 @@ let MessageButtonClickedAsync
     (message: Cacheable<IMessage, Guid>)
     (channel: SocketTextChannel)
     =
-    async {
+    task {
         // 检查按钮的值是否为之前的代码中设置的值
         if value = "unique-id" then
             let! messageEntity = message.GetOrDownloadAsync() |> Async.AwaitTask
@@ -92,9 +89,8 @@ let MessageButtonClickedAsync
                     |> Async.Ignore
             | _ -> ()
         else
-            Console.WriteLine("接收到了一个没有对应处理程序的按钮值！")
+            printfn "接收到了一个没有对应处理程序的按钮值！"
     }
-    |> Async.StartAsTask
     :> Task
 
 // BaseKookClient
