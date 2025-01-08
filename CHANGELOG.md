@@ -2,6 +2,26 @@
 
 ---
 
+## v0.9.6 [2025-01-05]
+
+### New Features
+
+- Added support for managing intimate relationships.
+- The pipe message client now supports sending card messages, as well as quoting messages and ephemeral user.
+- Added the `Modules` property to the `ICard` interface.
+
+### Fixes
+
+- Corrected the rate value for preemptive rate limiting.
+- Fixed an issue where the maximum capacity of the message cache could overflow.
+- Fixed an issue where the cache was not properly updated when a guild channel was deleted.
+
+## Other Changes
+
+- Removed support for the .NET 6.0 target framework. Updated the target framework for dependency injection, message
+  queue, and host hosting extension packages to .NET 9.0.
+- Updated all externally referenced NuGet packages to their latest versions.
+
 ## v0.9.5 [2024-11-13]
 
 ### Added
