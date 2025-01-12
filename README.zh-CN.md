@@ -31,7 +31,6 @@
 
 - [.NET 9.0](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
 - [.NET Standard 2.1](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-1)
 - [.NET Standard 2.0](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-0)
 - [.NET Framework 4.6.2](https://dotnet.microsoft.com/download/dotnet-framework/net462)
