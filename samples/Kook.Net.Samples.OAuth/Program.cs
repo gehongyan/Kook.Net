@@ -5,11 +5,15 @@ using Kook;
 using Kook.Rest;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddAuthentication(options =>
+builder.Services.AddMemoryCache();
+builder.Services
+    .AddAuthentication(options =>
     {
         options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     })
@@ -20,8 +24,8 @@ builder.Services.AddAuthentication(options =>
     })
     .AddKook(options =>
     {
-        options.ClientId = string.Empty;
-        options.ClientSecret = string.Empty;
+        options.ClientId = "";     // Your client ID
+        options.ClientSecret = ""; // Your client secret
         // get_user_info is added by default
         options.Scope.Add("get_user_guilds");
         options.Events.OnCreatingTicket = async context =>
@@ -30,9 +34,12 @@ builder.Services.AddAuthentication(options =>
                 return;
             KookRestClient kookRestClient = new();
             await kookRestClient.LoginAsync(TokenType.Bearer, accessToken);
-            RestSelfUser? currentUser = kookRestClient.CurrentUser;
-            IReadOnlyCollection<RestGuild> guilds = await kookRestClient.GetGuildsAsync();
-            IReadOnlyCollection<RestGuild> adminGuilds = await kookRestClient.GetAdminGuildsAsync();
+            IMemoryCache memoryCache = context.HttpContext.RequestServices.GetRequiredService<IMemoryCache>();
+            if (kookRestClient.CurrentUser is null)
+                return;
+            memoryCache.Set($"{kookRestClient.CurrentUser.Id}_CurrentUser", kookRestClient.CurrentUser);
+            memoryCache.Set($"{kookRestClient.CurrentUser.Id}_Guilds", await kookRestClient.GetGuildsAsync());
+            memoryCache.Set($"{kookRestClient.CurrentUser.Id}_AdminGuilds", await kookRestClient.GetAdminGuildsAsync());
         };
     });
 WebApplication app = builder.Build();
@@ -43,10 +50,22 @@ app.MapGet("/signin",
     () => Results.Challenge(new AuthenticationProperties { RedirectUri = "/" },
         [KookAuthenticationDefaults.AuthenticationScheme]));
 app.MapGet("/signout",
-    () => Results.SignOut(new AuthenticationProperties { RedirectUri = "/" },
-        [CookieAuthenticationDefaults.AuthenticationScheme]));
+    (HttpContext context, [FromServices] IMemoryCache memoryCache) =>
+    {
+        if (context.User is { Identity.IsAuthenticated: true } claimsPrincipal
+            && claimsPrincipal.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)
+                is { Value: { } nameIdentifier })
+        {
+            memoryCache.Remove($"{nameIdentifier}_CurrentUser");
+            memoryCache.Remove($"{nameIdentifier}_Guilds");
+            memoryCache.Remove($"{nameIdentifier}_AdminGuilds");
+        }
+
+        return Results.SignOut(new AuthenticationProperties { RedirectUri = "/" },
+            [CookieAuthenticationDefaults.AuthenticationScheme]);
+    });
 app.MapGet("/",
-    (HttpContext context) =>
+    (HttpContext context, [FromServices] IMemoryCache memoryCache) =>
     {
         if (context.User is { Identity.IsAuthenticated: true } claimsPrincipal)
         {
@@ -69,6 +88,24 @@ app.MapGet("/",
                 contentBuilder.AppendLine($"Banner URL: {bannerUrl}<br />");
             if (claims.TryGetValue(KookAuthenticationConstants.Claims.IsMobileVerified, out string? isMobileVerified))
                 contentBuilder.AppendLine($"Mobile verified: {isMobileVerified}<br />");
+
+            if (memoryCache.TryGetValue($"{nameIdentifier}_CurrentUser", out RestSelfUser? currentUser)
+                && currentUser is not null)
+                contentBuilder.AppendLine($"CurrentUser: {currentUser.ToString()}<br />");
+            if (memoryCache.TryGetValue($"{nameIdentifier}_Guilds", out IReadOnlyCollection<RestGuild>? guilds)
+                && guilds is not null)
+            {
+                _ = memoryCache.TryGetValue($"{nameIdentifier}_AdminGuilds",
+                    out IReadOnlyCollection<RestGuild>? adminGuilds);
+                contentBuilder.AppendLine("Guilds:<br />");
+                foreach (RestGuild restGuild in guilds)
+                {
+                    bool isAdmin = adminGuilds?.Any(x => x.Id == restGuild.Id) ?? false;
+                    contentBuilder.AppendLine(
+                        $"- {restGuild.Name} ({restGuild.Id}{(isAdmin ? ", Admin" : string.Empty)})<br />");
+                }
+            }
+
             contentBuilder.AppendLine("<a href=\"/signout\">Sign out</a>");
             return Results.Content(contentBuilder.ToString(), "text/html", Encoding.Default);
         }
