@@ -1,4 +1,3 @@
-using FluentAssertions;
 using Kook.API;
 using Kook.API.Rest;
 using Kook.Net;
@@ -33,13 +32,13 @@ public class KookRestApiClientTests : IClassFixture<KookRestClientFixture>, IAsy
                 File = stream,
                 FileName = "test.file"
             });
-        response.Url.Should().NotBeNullOrWhiteSpace();
+        Assert.False(string.IsNullOrWhiteSpace(response.Url));
     }
 
     [Fact]
     public async Task CreateAsset_WithOverSize_ThrowsException()
     {
-        Func<Task> upload = async () =>
+        HttpException exception = await Assert.ThrowsAsync<HttpException>(async () =>
         {
             ulong fileSize = (ulong)(30 * Math.Pow(2, 20)) + 1;
             using MemoryStream stream = new(new byte[fileSize]);
@@ -48,9 +47,7 @@ public class KookRestApiClientTests : IClassFixture<KookRestClientFixture>, IAsy
                 File = stream,
                 FileName = "test.file"
             });
-        };
-
-        await upload.Should().ThrowExactlyAsync<HttpException>()
-            .Where(e => e.KookCode == KookErrorCode.RequestEntityTooLarge);
+        });
+        Assert.Equal(KookErrorCode.RequestEntityTooLarge, exception.KookCode);
     }
 }

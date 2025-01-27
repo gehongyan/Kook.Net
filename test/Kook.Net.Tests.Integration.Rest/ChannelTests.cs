@@ -1,4 +1,3 @@
-using FluentAssertions;
 using Kook.Rest;
 using System;
 using System.Linq;
@@ -226,7 +225,7 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
             Assert.NotNull(invite);
             Assert.Equal(TimeSpan.FromSeconds(86400), invite.MaxAge);
             Assert.Equal(50, invite.MaxUses);
-            invite.Code.Should().NotBeNullOrWhiteSpace();
+            Assert.False(string.IsNullOrWhiteSpace(invite.Code));
         }
         finally
         {

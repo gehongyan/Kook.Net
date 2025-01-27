@@ -27,7 +27,7 @@ public interface IGuildUser : IUser, IVoiceState
     ///     获取此用户在该服务器内拥有的所有角色的 ID。
     /// </summary>
     /// <remarks>
-    ///     此属性返回此用户所拥有的所有角色的 ID。对于 WebSocket 服务器用户实体，`Roles` 属性可以用来获取所有角色对象；对于 REST
+    ///     此属性返回此用户所拥有的所有角色的 ID。对于 WebSocket 服务器用户实体，<c>Roles</c> 属性可以用来获取所有角色对象；对于 REST
     ///     服务器用户实体，受限于 KOOK API，在服务器用户实体上仅能直接获取其所拥有的所有角色的 ID。
     /// </remarks>
     IReadOnlyCollection<uint> RoleIds { get; }

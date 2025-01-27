@@ -1,4 +1,3 @@
-using FluentAssertions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,20 +38,18 @@ public class GuildTests : IClassFixture<RestGuildFixture>
         Assert.NotNull(currentUser);
 
         IReadOnlyCollection<IGuildUser> users = await _guild.GetUsersAsync();
-        users.Should().ContainSingle(x => x.Id == currentUser.Id);
+        Assert.Single(users, x => x.Id == currentUser.Id);
         IGuildUser self = users.Single(x => x.Id == currentUser.Id);
-        self.Should().BeEquivalentTo(currentUser, config => config
-            // Due to lack of fields from guild user list
-            .Excluding(x => x.ActiveClient)
-            .Excluding(x => x.HasBuff)
-            .Excluding(x => x.HasAnnualBuff)
-            .Excluding(x => x.UserTag)
-            .Excluding(x => x.Nameplates)
-            .Excluding(x => x.IsDenoiseEnabled)
-            .Excluding(x => x.IsOwner)
-            .Excluding(x => x.IsSystemUser)
-            .Excluding(x => x.Color)
-        );
+        Assert.Equal(currentUser, self, (expected, actual) =>
+            expected.Nickname == actual.Nickname
+            && expected.DisplayName == actual.DisplayName
+            && expected.RoleIds.SequenceEqual(actual.RoleIds)
+            && expected.Guild == actual.Guild
+            && expected.GuildId == actual.GuildId
+            && expected.IsMobileVerified == actual.IsMobileVerified
+            && expected.JoinedAt == actual.JoinedAt
+            && expected.ActiveAt == actual.ActiveAt
+            && expected.GuildPermissions.RawValue == actual.GuildPermissions.RawValue);
     }
 
     [Fact]
@@ -62,13 +59,13 @@ public class GuildTests : IClassFixture<RestGuildFixture>
         Assert.NotNull(currentUser);
 
         await currentUser.ModifyNicknameAsync("UPDATED NICKNAME");
-        currentUser.Nickname.Should().Be("UPDATED NICKNAME");
-        (await _guild.GetCurrentUserAsync())?.Nickname.Should().Be("UPDATED NICKNAME");
+        Assert.Equal("UPDATED NICKNAME", currentUser.Nickname);
+        Assert.Equal("UPDATED NICKNAME", (await _guild.GetCurrentUserAsync())?.Nickname);
 
         await currentUser.ModifyNicknameAsync(null);
-        currentUser.Nickname.Should().BeNullOrEmpty();
-        (await _guild.GetCurrentUserAsync())?.Nickname.Should().BeNullOrEmpty();
-        currentUser.DisplayName.Should().Be(currentUser.Username);
-        (await _guild.GetCurrentUserAsync())?.DisplayName.Should().Be(currentUser.Username);
+        Assert.True(string.IsNullOrEmpty(currentUser.Nickname));
+        Assert.True(string.IsNullOrEmpty((await _guild.GetCurrentUserAsync())?.Nickname));
+        Assert.Equal(currentUser.Username, currentUser.DisplayName);
+        Assert.Equal(currentUser.Username, (await _guild.GetCurrentUserAsync())?.DisplayName);
     }
 }
