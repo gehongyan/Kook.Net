@@ -49,7 +49,7 @@ title: 示例项目
 
 ## 消息队列
 
-### [Kook.Net.Samples.MessageQueue]((https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.MessageQueue)
+### [Kook.Net.Samples.MessageQueue](https://github.com/gehongyan/Kook.Net/tree/master/samples/Kook.Net.Samples.MessageQueue)
 
 该示例项目演示了如何使用 Kook.Net 所提供的消息队列扩展，利用消息队列来实现 KOOK 网关事件的异步处理。
 
