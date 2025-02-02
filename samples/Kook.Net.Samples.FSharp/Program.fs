@@ -3,6 +3,7 @@ open System.Threading
 open System.Threading.Tasks
 open Kook
 open Kook.WebSocket
+open Microsoft.FSharp.Linq.NullableOperators
 
 // 这是一个使用 Kook.Net 的 F# 简单示例
 // Kook.Net 的所有文档均以 C# 编写，但是 Kook.Net 也支持 F#
@@ -47,7 +48,11 @@ let ReadyAsync () =
 let MessageReceivedAsync (message: SocketMessage) (author: SocketGuildUser) (channel: SocketTextChannel) : Task =
     task {
         // Bot 永远不应该响应自己的消息
-        if author.Id <> client.CurrentUser.Id then
+        let currentUserId: Nullable<uint64> =
+            match client.CurrentUser with
+                | null -> Nullable()
+                | x -> Nullable x.Id
+        if author.Id <>? currentUserId then
             if message.Content = "!ping" then
                 // 创建一个 CardBuilder，卡片将会包含一个文本模块和一个按钮模块
                 let builder =
