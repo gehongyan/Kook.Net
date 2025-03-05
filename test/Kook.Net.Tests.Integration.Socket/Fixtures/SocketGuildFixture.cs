@@ -10,13 +10,9 @@ public class SocketGuildFixture : KookSocketClientFixture
 {
     public SocketGuild Guild { get; private set; } = null!;
 
-    public SocketGuildFixture()
+    public override async Task InitializeAsync()
     {
-        InitializeAsync().GetAwaiter().GetResult();
-    }
-
-    private async Task InitializeAsync()
-    {
+        await base.InitializeAsync();
         const string guildName = "KOOK NET INTEGRATION TEST";
         // Find any existing guilds created by this bot
         // If there are more than one, delete all but the first one

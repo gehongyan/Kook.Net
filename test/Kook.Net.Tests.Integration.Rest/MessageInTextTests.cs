@@ -40,48 +40,54 @@ public class MessageInTextTests : IClassFixture<RestChannelFixture>
     {
         IGuildUser? selfUser = await _guild.GetCurrentUserAsync();
         Assert.NotNull(selfUser);
-        string kMarkdownSourceContent = @$"*TEST* **KMARKDOWN** ~~MESSAGE~~
-> NOTHING
-[INLINE LINK](https://kooknet.dev)
-(ins)UNDERLINE(ins)(spl)SPOLIER(spl)
-:maple_leaf:
-{_channel.KMarkdownMention}
-{selfUser.KMarkdownMention}
-{_guild.EveryoneRole.KMarkdownMention}
-(met)here(met)
-`INLINE CODE`
-```csharp
-CODE BLOCK
-```";
+        string kMarkdownSourceContent = $"""
+            *TEST* **KMARKDOWN** ~~MESSAGE~~
+            > NOTHING
+            [INLINE LINK](https://kooknet.dev)
+            (ins)UNDERLINE(ins)(spl)SPOLIER(spl)
+            :maple_leaf:
+            {_channel.KMarkdownMention}
+            {selfUser.KMarkdownMention}
+            {_guild.EveryoneRole.KMarkdownMention}
+            (met)here(met)
+            `INLINE CODE`
+            ```csharp
+            CODE BLOCK
+            ```
+            """;
         //  Emoji will be replaced with unicode emoji instead of the name.
-        string kMarkdownParsedContent = @$"*TEST* **KMARKDOWN** ~~MESSAGE~~
-> NOTHING
-[INLINE LINK](https://kooknet.dev)
-(ins)UNDERLINE(ins)(spl)SPOLIER(spl)
-🍁
-{_channel.KMarkdownMention}
-{selfUser.KMarkdownMention}
-{_guild.EveryoneRole.KMarkdownMention}
-(met)here(met)
-`INLINE CODE`
-```csharp
-CODE BLOCK
-```";
+        string kMarkdownParsedContent = $"""
+            *TEST* **KMARKDOWN** ~~MESSAGE~~
+            > NOTHING
+            [INLINE LINK](https://kooknet.dev)
+            (ins)UNDERLINE(ins)(spl)SPOLIER(spl)
+            🍁
+            {_channel.KMarkdownMention}
+            {selfUser.KMarkdownMention}
+            {_guild.EveryoneRole.KMarkdownMention}
+            (met)here(met)
+            `INLINE CODE`
+            ```csharp
+            CODE BLOCK
+            ```
+            """;
         // Due to the client is REST, the channel name will not be parsed.
         // Hence, the channel name will be displayed as empty string.
-        string kMarkdownCleanContent = @"TEST KMARKDOWN MESSAGE
- NOTHING
-[INLINE LINK](https://kooknet.dev)
-UNDERLINESPOLIER
-🍁
+        string kMarkdownCleanContent = """
+            TEST KMARKDOWN MESSAGE
+             NOTHING
+            [INLINE LINK](https://kooknet.dev)
+            UNDERLINESPOLIER
+            🍁
 
-@Kook.Net Test#0721
-@全体成员
-@在线成员
-INLINE CODE
-csharp
-CODE BLOCK
-";
+            @Kook.Net Test#0721
+            @全体成员
+            @在线成员
+            INLINE CODE
+            csharp
+            CODE BLOCK
+
+            """;
         Cacheable<IUserMessage, Guid> cacheable = await _channel.SendTextAsync(kMarkdownSourceContent);
         IUserMessage? message = await cacheable.GetOrDownloadAsync();
         try

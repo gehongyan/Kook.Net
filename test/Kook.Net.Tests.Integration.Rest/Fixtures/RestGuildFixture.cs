@@ -13,13 +13,9 @@ public class RestGuildFixture : KookRestClientFixture
 {
     public RestGuild Guild { get; private set; } = null!;
 
-    public RestGuildFixture()
+    public override async Task InitializeAsync()
     {
-        InitializeAsync().GetAwaiter().GetResult();
-    }
-
-    private async Task InitializeAsync()
-    {
+        await base.InitializeAsync();
         const string guildName = "KOOK NET INTEGRATION TEST";
         List<RestGuild> guilds = Client.GetGuildsAsync().GetAwaiter().GetResult()
             .Where(x => x.Name == guildName)

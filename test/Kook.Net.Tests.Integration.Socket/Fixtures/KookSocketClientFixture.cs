@@ -1,23 +1,17 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Kook.WebSocket;
+using Xunit;
 
 namespace Kook;
 
-public class KookSocketClientFixture : IDisposable, IAsyncDisposable
+public class KookSocketClientFixture : IAsyncLifetime
 {
     private readonly TaskCompletionSource _readyPromise = new();
 
-    public KookSocketClient Client { get; private set; }
+    public KookSocketClient Client { get; private set; } = null!;
 
-    public KookSocketClientFixture()
-    {
-        InitializeAsync().GetAwaiter().GetResult();
-    }
-
-    [MemberNotNull(nameof(Client))]
-    private async Task InitializeAsync()
+    public virtual async Task InitializeAsync()
     {
         string? token = Environment.GetEnvironmentVariable("KOOK_NET_TEST_TOKEN");
         if (string.IsNullOrWhiteSpace(token))
@@ -48,14 +42,10 @@ public class KookSocketClientFixture : IDisposable, IAsyncDisposable
     }
 
     /// <inheritdoc />
-    public virtual async ValueTask DisposeAsync()
+    public virtual async Task DisposeAsync()
     {
-        GC.SuppressFinalize(this);
         await Client.StopAsync();
         await Client.LogoutAsync();
         Client.Dispose();
     }
-
-    /// <inheritdoc />
-    public virtual void Dispose() => DisposeAsync().AsTask().GetAwaiter().GetResult();
 }

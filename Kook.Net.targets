@@ -23,7 +23,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>Logo_Small.png</PackageIcon>
     <TargetFrameworks>net9.0;net8.0;net462;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <NoWarn>$(NoWarn);NU1803</NoWarn>
+    <NoWarn>$(NoWarn);NU1803;NU1900</NoWarn>
     <WarningLevel>6</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

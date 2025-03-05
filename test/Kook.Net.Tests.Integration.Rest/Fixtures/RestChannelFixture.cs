@@ -12,24 +12,17 @@ public class RestChannelFixture : RestGuildFixture
 
     public RestVoiceChannel VoiceChannel { get; private set; } = null!;
 
-    public RestChannelFixture()
+    public override async Task InitializeAsync()
     {
-        InitializeAsync().GetAwaiter().GetResult();
-    }
-
-    private async Task InitializeAsync()
-    {
+        await base.InitializeAsync();
         TextChannel = await Guild.CreateTextChannelAsync("TEST TEXT CHANNEL");
         VoiceChannel = await Guild.CreateVoiceChannelAsync("TEST VOICE CHANNEL");
     }
 
-    public override async ValueTask DisposeAsync()
+    public override async Task DisposeAsync()
     {
         await TextChannel.DeleteAsync();
         await VoiceChannel.DeleteAsync();
         await base.DisposeAsync();
     }
-
-    /// <inheritdoc />
-    public override void Dispose() => DisposeAsync().AsTask().GetAwaiter().GetResult();
 }
