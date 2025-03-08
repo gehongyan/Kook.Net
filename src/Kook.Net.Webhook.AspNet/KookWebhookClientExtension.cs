@@ -24,6 +24,7 @@ public static class KookWebhookClientExtension
     public static IServiceCollection AddKookAspNetWebhookClient(this IServiceCollection services, KookAspNetWebhookConfig config)
     {
         services.AddSingleton(config);
+        services.AddKookWebhookClient(provider => new KookAspNetWebhookClient(provider.GetRequiredService<KookAspNetWebhookConfig>()));
         services.AddSingleton<IHostedService>(provider => provider.GetRequiredService<KookAspNetWebhookClient>());
         services.AddControllers();
         return services;
