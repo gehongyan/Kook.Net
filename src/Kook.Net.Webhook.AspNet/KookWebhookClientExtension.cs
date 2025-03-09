@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Kook.Net.DependencyInjection.Microsoft;
 using Kook.Net.Webhooks.AspNet;
-using Kook.WebSocket;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +12,7 @@ namespace Kook.Webhook.AspNet;
 /// <summary>
 ///     提供用于与 ASP.NET 集成，注册与配置 <see cref="Kook.Webhook.AspNet.KookAspNetWebhookClient"/> 的扩展方法。
 /// </summary>
-public static class KookWebhookClientExtension
+public static partial class KookWebhookClientExtension
 {
     /// <summary>
     ///     向指定的 <see cref="IServiceCollection" /> 添加 <see cref="Kook.Webhook.AspNet.KookAspNetWebhookClient"/> 客户端。
@@ -123,7 +122,7 @@ public static class KookWebhookClientExtension
     public static T UseKookEndpoint<T>(this T builder, string? routePattern = null)
         where T: IHost, IEndpointRouteBuilder
     {
-        KookAspNetWebhookClient? kookWebhookClient = builder.Services.GetService<KookAspNetWebhookClient>();
+        KookWebhookClient? kookWebhookClient = builder.Services.GetService<KookWebhookClient>();
         if (kookWebhookClient is null)
             throw new InvalidOperationException("The KOOK webhook client is not found in the service provider. Please make sure to add it using AddKookAspNetWebhookClient.");
         if (kookWebhookClient.ApiClient.WebhookClient is not IAspNetWebhookClient aspNetWebhookClient)

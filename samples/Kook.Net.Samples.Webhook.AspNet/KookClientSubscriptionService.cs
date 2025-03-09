@@ -5,19 +5,20 @@ namespace Kook.Net.Samples.Webhook.AspNet;
 public class KookClientSubscriptionService : IHostedService
 {
     private readonly ILogger<KookClientSubscriptionService> _logger;
-    private readonly KookWebhookClient _kookWebhookClient;
 
-    public KookClientSubscriptionService(ILogger<KookClientSubscriptionService> logger, KookWebhookClient kookWebhookClient)
+    public KookClientSubscriptionService(IServiceProvider provider, params ReadOnlySpan<string> clientNames)
     {
-        _logger = logger;
-        _kookWebhookClient = kookWebhookClient;
-
-        SubscribeToEvents();
+        _logger = provider.GetRequiredService<ILogger<KookClientSubscriptionService>>();
+        foreach (string clientName in clientNames)
+        {
+            KookWebhookClient client = provider.GetRequiredKeyedService<KookWebhookClient>(clientName);
+            SubscribeToEvents(clientName, client);
+        }
     }
 
-    private void SubscribeToEvents()
+    private void SubscribeToEvents(string clientName, KookWebhookClient client)
     {
-        _kookWebhookClient.Log += message =>
+        client.Log += message =>
         {
             _logger.Log(message.Severity switch
             {
@@ -28,17 +29,18 @@ public class KookClientSubscriptionService : IHostedService
                 LogSeverity.Verbose => LogLevel.Debug,
                 LogSeverity.Debug => LogLevel.Trace,
                 _ => throw new ArgumentOutOfRangeException(nameof(message.Severity), message.Severity, null)
-            }, message.Exception, "Kook.Webhook: {Message}", message.Message);
+            }, message.Exception, "Kook.Webhook [{ClientName}] {Message}", clientName, message.Message);
             return Task.CompletedTask;
         };
-        _kookWebhookClient.MessageReceived += (message, author, channel) =>
+        client.MessageReceived += (message, author, channel) =>
         {
-            _logger.LogInformation("Message received: {Message}", message);
+            _logger.LogInformation("Message received [{ClientName}] {Message}", clientName, message);
             return Task.CompletedTask;
         };
-        _kookWebhookClient.Ready += () =>
+        client.Ready += () =>
         {
-            _logger.LogInformation("Ready!");
+            _logger.LogInformation("Kook.Webhook [{ClientName}] {CurrentUser} is ready!",
+                clientName, client.CurrentUser?.UsernameAndIdentifyNumber(false));
             return Task.CompletedTask;
         };
     }

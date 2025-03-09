@@ -18,12 +18,13 @@ public static partial class KookClientDependencyInjectionExtensions
     ///     添加 <see cref="Kook.Rest.KookRestClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK REST 客户端的服务集合。 </param>
+    /// <param name="serviceKey"> 服务的键。 </param>
     /// <param name="configure"> 用于配置 KOOK REST 客户端的配置委托。 </param>
     /// <returns> 添加了 KOOK REST 客户端的服务集合。 </returns>
-    public static IServiceCollection AddKookRestClient(this IServiceCollection services, Action<KookRestConfig> configure)
+    public static IServiceCollection AddKeyedKookRestClient(this IServiceCollection services, string? serviceKey, Action<KookRestConfig> configure)
     {
-        services.Configure(configure);
-        services.AddKookRestClient();
+        services.Configure(serviceKey, configure);
+        services.AddKeyedKookRestClient(serviceKey);
         return services;
     }
 
@@ -32,12 +33,13 @@ public static partial class KookClientDependencyInjectionExtensions
     ///     添加 <see cref="Kook.Rest.KookRestClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK REST 客户端的服务集合。 </param>
+    /// <param name="serviceKey"> 服务的键。 </param>
     /// <param name="config"> 用于配置 KOOK REST 客户端的配置。 </param>
     /// <returns> 添加了 KOOK REST 客户端的服务集合。 </returns>
-    public static IServiceCollection AddKookRestClient(this IServiceCollection services, KookRestConfig config)
+    public static IServiceCollection AddKeyedKookRestClient(this IServiceCollection services, string? serviceKey, KookRestConfig config)
     {
-        services.AddSingleton(config);
-        services.AddKookRestClient();
+        services.AddKeyedSingleton(serviceKey, config);
+        services.AddKeyedKookRestClient(serviceKey);
         return services;
     }
 
@@ -46,14 +48,15 @@ public static partial class KookClientDependencyInjectionExtensions
     ///     添加 <see cref="Kook.Rest.KookRestClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK REST 客户端的服务集合。 </param>
+    /// <param name="serviceKey"> 服务的键。 </param>
     /// <returns> 添加了 KOOK REST 客户端的服务集合。 </returns>
-    public static IServiceCollection AddKookRestClient(this IServiceCollection services)
+    public static IServiceCollection AddKeyedKookRestClient(this IServiceCollection services, string? serviceKey)
     {
-        services.AddSingleton<KookRestClient>(provider => provider.GetService<IOptions<KookRestConfig>>()?.Value is { } config
+        services.AddKeyedSingleton<KookRestClient>(serviceKey, (provider, key) => provider.GetKeyedService<IOptionsMonitor<KookRestConfig>>(key)?.Get(serviceKey) is { } config
             ? new KookRestClient(config)
             : new KookRestClient());
-        services.AddSingleton<IKookClient, KookRestClient>(provider => provider.GetRequiredService<KookRestClient>());
-        services.AddSingleton<BaseKookClient, KookRestClient>(provider => provider.GetRequiredService<KookRestClient>());
+        services.AddKeyedSingleton<IKookClient, KookRestClient>(serviceKey, (provider, key) => provider.GetRequiredKeyedService<KookRestClient>(key));
+        services.AddKeyedSingleton<BaseKookClient, KookRestClient>(serviceKey, (provider, key) => provider.GetRequiredKeyedService<KookRestClient>(key));
         return services;
     }
 
@@ -66,12 +69,13 @@ public static partial class KookClientDependencyInjectionExtensions
     ///     添加 <see cref="Kook.WebSocket.KookSocketClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK 网关客户端的服务集合。 </param>
+    /// <param name="serviceKey"> 服务的键。 </param>
     /// <param name="configure"> 用于配置 KOOK 网关客户端的配置委托。 </param>
     /// <returns> 添加了 KOOK 网关客户端的服务集合。 </returns>
-    public static IServiceCollection AddKookSocketClient(this IServiceCollection services, Action<KookSocketConfig> configure)
+    public static IServiceCollection AddKeyedKookSocketClient(this IServiceCollection services, string? serviceKey, Action<KookSocketConfig> configure)
     {
-        services.Configure(configure);
-        services.AddKookSocketClient();
+        services.Configure(serviceKey, configure);
+        services.AddKeyedKookSocketClient(serviceKey);
         return services;
     }
 
@@ -80,12 +84,13 @@ public static partial class KookClientDependencyInjectionExtensions
     ///     添加 <see cref="Kook.WebSocket.KookSocketClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK 网关客户端的服务集合。 </param>
+    /// <param name="serviceKey"> 服务的键。 </param>
     /// <param name="config"> 用于配置 KOOK 网关客户端的配置。 </param>
     /// <returns> 添加了 KOOK 网关客户端的服务集合。 </returns>
-    public static IServiceCollection AddKookSocketClient(this IServiceCollection services, KookSocketConfig config)
+    public static IServiceCollection AddKeyedKookSocketClient(this IServiceCollection services, string? serviceKey, KookSocketConfig config)
     {
-        services.AddSingleton(config);
-        services.AddKookSocketClient();
+        services.AddKeyedSingleton(serviceKey, config);
+        services.AddKeyedKookSocketClient(serviceKey);
         return services;
     }
 
@@ -94,15 +99,16 @@ public static partial class KookClientDependencyInjectionExtensions
     ///     添加 <see cref="Kook.WebSocket.KookSocketClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK 网关客户端的服务集合。 </param>
+    /// <param name="serviceKey"> 服务的键。 </param>
     /// <returns> 添加了 KOOK 网关客户端的服务集合。 </returns>
-    public static IServiceCollection AddKookSocketClient(this IServiceCollection services)
+    public static IServiceCollection AddKeyedKookSocketClient(this IServiceCollection services, string? serviceKey)
     {
-        services.AddSingleton<KookSocketClient>(provider => provider.GetService<IOptions<KookSocketConfig>>()?.Value is { } config
+        services.AddKeyedSingleton<KookSocketClient>(serviceKey, (provider, key) => provider.GetKeyedService<IOptionsMonitor<KookSocketConfig>>(key)?.Get(serviceKey) is { } config
             ? new KookSocketClient(config)
             : new KookSocketClient());
-        services.AddSingleton<IKookClient, KookSocketClient>(provider => provider.GetRequiredService<KookSocketClient>());
-        services.AddSingleton<BaseKookClient, KookSocketClient>(provider => provider.GetRequiredService<KookSocketClient>());
-        services.AddSingleton<BaseSocketClient, KookSocketClient>(provider => provider.GetRequiredService<KookSocketClient>());
+        services.AddKeyedSingleton<IKookClient, KookSocketClient>(serviceKey, (provider, key) => provider.GetRequiredKeyedService<KookSocketClient>(key));
+        services.AddKeyedSingleton<BaseKookClient, KookSocketClient>(serviceKey, (provider, key) => provider.GetRequiredKeyedService<KookSocketClient>(key));
+        services.AddKeyedSingleton<BaseSocketClient, KookSocketClient>(serviceKey, (provider, key) => provider.GetRequiredKeyedService<KookSocketClient>(key));
         return services;
     }
 
@@ -115,38 +121,19 @@ public static partial class KookClientDependencyInjectionExtensions
     ///     添加 <see cref="Kook.Webhook.KookWebhookClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
-    /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>
-    /// <param name="configure"> 用于配置 KOOK Webhook 客户端的配置委托。 </param>
-    /// <typeparam name="TClient"> Webhook 客户端的类型。 </typeparam>
-    /// <typeparam name="TConfig"> Webhook 客户端的配置类型。 </typeparam>
-    /// <returns> 添加了 KOOK Webhook 客户端的服务集合。 </returns>
-    public static IServiceCollection AddKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
-        Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<TConfig> configure)
-        where TClient: KookWebhookClient
-        where TConfig: KookWebhookConfig
-    {
-        services.Configure(configure);
-        services.AddKookWebhookClient(clientFactory);
-        return services;
-    }
-
-    /// <summary>
-    ///     向指定的 <see cref="global::Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
-    ///     添加 <see cref="Kook.Webhook.KookWebhookClient"/> 客户端。
-    /// </summary>
-    /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
+    /// <param name="serviceKey"> 服务的键。 </param>
     /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>
     /// <param name="config"> 用于配置 KOOK Webhook 客户端的配置。 </param>
     /// <typeparam name="TClient"> Webhook 客户端的类型。 </typeparam>
     /// <typeparam name="TConfig"> Webhook 客户端的配置类型。 </typeparam>
     /// <returns> 添加了 KOOK Webhook 客户端的服务集合。 </returns>
-    public static IServiceCollection AddKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
-        Func<IServiceProvider, TConfig, TClient> clientFactory, TConfig config)
+    public static IServiceCollection AddKeyedKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
+        string? serviceKey, Func<IServiceProvider, TConfig, TClient> clientFactory, TConfig config)
         where TClient: KookWebhookClient
         where TConfig: KookWebhookConfig
     {
-        services.AddSingleton(config);
-        services.AddKookWebhookClient(clientFactory);
+        services.AddKeyedSingleton(serviceKey, config);
+        services.AddKeyedKookWebhookClient<TClient>(serviceKey, (provider, _) => clientFactory(provider, config));
         return services;
     }
 
@@ -155,17 +142,19 @@ public static partial class KookClientDependencyInjectionExtensions
     ///     添加 <see cref="Kook.Webhook.KookWebhookClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
+    /// <param name="serviceKey"> 服务的键。 </param>
     /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>
     /// <typeparam name="TClient"> Webhook 客户端的类型。 </typeparam>
     /// <typeparam name="TConfig"> Webhook 客户端的配置类型。 </typeparam>
     /// <returns> 添加了 KOOK Webhook 客户端的服务集合。 </returns>
-    public static IServiceCollection AddKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
-        Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory)
+    public static IServiceCollection AddKeyedKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
+        string? serviceKey, Func<IServiceProvider, TConfig, TClient> clientFactory)
         where TClient: KookWebhookClient
         where TConfig: KookWebhookConfig
     {
-        services.AddSingleton<TClient>(provider => clientFactory(provider, provider.GetRequiredService<IOptions<TConfig>>()));
-        services.AddKookWebhookClient<TClient>();
+
+        services.AddKeyedSingleton<TClient>(serviceKey, (provider, _) => clientFactory(provider, provider.GetRequiredService<IOptionsMonitor<TConfig>>().Get(serviceKey)));
+        services.AddKeyedKookWebhookClient<TClient>(serviceKey);
         return services;
     }
 
@@ -174,45 +163,27 @@ public static partial class KookClientDependencyInjectionExtensions
     ///     添加 <see cref="Kook.Webhook.KookWebhookClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
-    /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>
-    /// <typeparam name="TClient"> Webhook 客户端的类型。 </typeparam>
-    /// <typeparam name="TConfig"> Webhook 客户端的配置类型。 </typeparam>
-    /// <returns> 添加了 KOOK Webhook 客户端的服务集合。 </returns>
-    public static IServiceCollection AddKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
-        Func<IServiceProvider, TConfig, TClient> clientFactory)
-        where TClient: KookWebhookClient
-        where TConfig: KookWebhookConfig
-    {
-        services.AddSingleton<TClient>(provider => clientFactory(provider, provider.GetRequiredService<TConfig>()));
-        services.AddKookWebhookClient<TClient>();
-        return services;
-    }
-
-    /// <summary>
-    ///     向指定的 <see cref="global::Microsoft.Extensions.DependencyInjection.IServiceCollection"/>
-    ///     添加 <see cref="Kook.Webhook.KookWebhookClient"/> 客户端。
-    /// </summary>
-    /// <param name="services"> 要向其添加 KOOK Webhook 客户端的服务集合。 </param>
+    /// <param name="serviceKey"> 服务的键。 </param>
     /// <param name="clientFactory"> 用于创建 KOOK Webhook 客户端的委托。 </param>
     /// <typeparam name="TClient"> Webhook 客户端的类型。 </typeparam>
     /// <returns> 添加了 KOOK Webhook 客户端的服务集合。 </returns>
-    public static IServiceCollection AddKookWebhookClient<TClient>(this IServiceCollection services,
-        Func<IServiceProvider, TClient> clientFactory)
+    public static IServiceCollection AddKeyedKookWebhookClient<TClient>(this IServiceCollection services,
+        string? serviceKey, Func<IServiceProvider, string?, TClient> clientFactory)
         where TClient: KookWebhookClient
     {
-        services.AddSingleton(clientFactory);
-        services.AddKookWebhookClient<TClient>();
+        services.AddKeyedSingleton<TClient>(serviceKey, (provider, _) => clientFactory(provider, serviceKey));
+        services.AddKeyedKookWebhookClient<TClient>(serviceKey);
         return services;
     }
 
-    internal static void AddKookWebhookClient<TClient>(this IServiceCollection services)
+    internal static void AddKeyedKookWebhookClient<TClient>(this IServiceCollection services, string? serviceKey)
         where TClient: KookWebhookClient
     {
-        services.AddSingleton<IKookClient, TClient>(provider => provider.GetRequiredService<TClient>());
-        services.AddSingleton<BaseKookClient, TClient>(provider => provider.GetRequiredService<TClient>());
-        services.AddSingleton<BaseSocketClient, TClient>(provider => provider.GetRequiredService<TClient>());
-        services.AddSingleton<KookSocketClient, TClient>(provider => provider.GetRequiredService<TClient>());
-        services.AddSingleton<KookWebhookClient, TClient>(provider => provider.GetRequiredService<TClient>());
+        services.AddKeyedSingleton<IKookClient, TClient>(serviceKey, (provider, key) => provider.GetRequiredKeyedService<TClient>(key));
+        services.AddKeyedSingleton<BaseKookClient, TClient>(serviceKey, (provider, key) => provider.GetRequiredKeyedService<TClient>(key));
+        services.AddKeyedSingleton<BaseSocketClient, TClient>(serviceKey, (provider, key) => provider.GetRequiredKeyedService<TClient>(key));
+        services.AddKeyedSingleton<KookSocketClient, TClient>(serviceKey, (provider, key) => provider.GetRequiredKeyedService<TClient>(key));
+        services.AddKeyedSingleton<KookWebhookClient, TClient>(serviceKey, (provider, key) => provider.GetRequiredKeyedService<TClient>(key));
     }
 
     #endregion

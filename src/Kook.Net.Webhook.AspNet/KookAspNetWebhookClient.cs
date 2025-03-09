@@ -33,7 +33,21 @@ public class KookAspNetWebhookClient : KookWebhookClient, IHostedService
         throw new NotSupportedException("Webhook client does not support stopping manually.");
 
     /// <inheritdoc />
+    protected override async Task OnWebhookChallengeAsync(string challenge)
+    {
+        if (!BaseConfig.AutoLogin && ConnectionState == ConnectionState.Disconnected)
+            await StartCoreAsync();
+        await base.OnWebhookChallengeAsync(challenge);
+    }
+
+    /// <inheritdoc />
     async Task IHostedService.StartAsync(CancellationToken cancellationToken)
+    {
+        if (BaseConfig.AutoLogin)
+            await StartCoreAsync();
+    }
+
+    private async Task StartCoreAsync()
     {
         if (!BaseConfig.TokenType.HasValue)
             throw new InvalidOperationException("The KOOK webhook client token type is not available.");
@@ -47,6 +61,8 @@ public class KookAspNetWebhookClient : KookWebhookClient, IHostedService
     async Task IHostedService.StopAsync(CancellationToken cancellationToken)
     {
         await base.StopAsync();
+        if (BaseConfig.AutoLogout)
+            await LogoutAsync();
         if (ApiClient.WebhookClient is AspNetWebhookClient aspNetWebhookClient)
             aspNetWebhookClient.OnClosed(new OperationCanceledException("The hosted service has been stopped."));
     }

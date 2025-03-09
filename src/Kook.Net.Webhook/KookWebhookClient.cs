@@ -110,7 +110,11 @@ public abstract class KookWebhookClient : KookSocketClient
                 await GuildUnavailableAsync(guild).ConfigureAwait(false);
     }
 
-    private async Task OnWebhookChallengeAsync(string challenge)
+    /// <summary>
+    ///     当 Webhook 认证时调用。
+    /// </summary>
+    /// <param name="challenge"> 认证的数据。 </param>
+    protected virtual async Task OnWebhookChallengeAsync(string challenge)
     {
         await WebhookLogger.DebugAsync($"Received Webhook challenge: {challenge}");
     }

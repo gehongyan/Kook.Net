@@ -3,17 +3,44 @@ using Kook.Net.Samples.Webhook.AspNet;
 using Kook.Webhook.AspNet;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-builder.Services.AddKookAspNetWebhookClient(config =>
+builder.Services.AddKeyedKookAspNetWebhookClient("Foo", new KookAspNetWebhookConfig
 {
-    config.TokenType = TokenType.Bot;
-    config.Token = default;
-    config.VerifyToken = default;
-    config.EncryptKey = default;
-    config.RoutePattern = "kook";
-    config.LogLevel = LogSeverity.Debug;
+    TokenType = TokenType.Bot,
+    Token = default,
+    VerifyToken = default,
+    EncryptKey = default,
+    RoutePattern = "kook-foo",
+    LogLevel = LogSeverity.Debug
 });
-builder.Services.AddHostedService<KookClientSubscriptionService>();
+builder.Services.AddKeyedKookAspNetWebhookClient("Bar", new KookAspNetWebhookConfig
+{
+    TokenType = TokenType.Bot,
+    Token = default,
+    VerifyToken = default,
+    EncryptKey = default,
+    RoutePattern = "kook-bar",
+    LogLevel = LogSeverity.Debug
+});
+builder.Services.AddHostedService<KookClientSubscriptionService>(provider =>
+    new KookClientSubscriptionService(provider, "Foo", "Bar"));
 
 WebApplication app = builder.Build();
-app.UseKookEndpoint();
+app.UseKeyedKookEndpoint("Foo");
+app.UseKeyedKookEndpoint("Bar");
 await app.RunAsync();
+
+// WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+// builder.Services.AddKookAspNetWebhookClient(x =>
+// {
+//     x.TokenType = TokenType.Bot;
+//     x.Token = default;
+//     x.VerifyToken = default;
+//     x.EncryptKey = default;
+//     x.RoutePattern = "kook";
+//     x.LogLevel = LogSeverity.Debug;
+// });
+// builder.Services.AddHostedService<KookClientSubscriptionService>();
+//
+// WebApplication app = builder.Build();
+// app.UseKookEndpoint();
+// await app.RunAsync();

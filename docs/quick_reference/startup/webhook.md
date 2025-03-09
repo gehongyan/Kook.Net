@@ -9,6 +9,8 @@ Webhook 客户端的抽象类是 `KookWebhookClient`。
 
 ## ASP.NET 实现
 
+### 单实例
+
 ```csharp
 // 创建服务主机构建器
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -46,6 +48,43 @@ WebApplication app = builder.Build();
 
 // 配置 Webhook 终结点
 app.UseKookEndpoint();
+
+// 启动服务主机
+await app.RunAsync();
+```
+
+### 多实例
+
+```csharp
+const string FooClientName = "Foo"; // 客户端名称，用于指定容器内多客户端实例的服务键及配置项的名称
+const string BarClientName = "Bar"; // 客户端名称，用于指定容器内多客户端实例的服务键及配置项的名称
+
+// 创建服务主机构建器
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+// 添加 KookAspNetWebhookClient 键控服务并进行必要的配置
+builder.Services.AddKeyedKookAspNetWebhookClient(FooClientName, new KookAspNetWebhookConfig
+{
+    // 为每个实例分别配置不同的请求路由终结点
+    RoutePattern = "kook-foo",
+
+    // 其他配置项参见单实例配置
+});
+builder.Services.AddKeyedKookAspNetWebhookClient(BarClientName, new KookAspNetWebhookConfig
+{
+    // 为每个实例分别配置不同的请求路由终结点
+    RoutePattern = "kook-bar",
+
+    // 其他配置项参见单实例配置
+});
+builder.Services.AddHostedService<KookClientSubscriptionService>();
+
+// 构建服务主机
+WebApplication app = builder.Build();
+
+// 为每个键控实例分别配置其 Webhook 终结点
+app.UseKeyedKookEndpoint(FooClientName);
+app.UseKeyedKookEndpoint(BarClientName);
 
 // 启动服务主机
 await app.RunAsync();
