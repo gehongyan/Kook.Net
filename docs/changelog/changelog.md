@@ -5,6 +5,23 @@ title: 变更日志
 
 # 变更日志
 
+## v0.9.7 [2025-03-09]
+
+### 新增
+
+- 新增 Webhook 客户端多实例注入的支持。
+
+### 修复
+
+- 修复 AddKookAspNetWebhookClient 接收 `KookAspNetWebhookConfig` 的重载未能正确注册客户端实例的问题。
+
+### 其他
+
+- 移除对 `FluentAssertions` 的依赖。
+- 修正 F# 示例代码中的空引用警告。
+- 优化集成测试项目中的实体创建过程，使用 `IAsyncLifetime`。
+- 改进 OAuth 示例项目，提供获取所加入服务器的示例代码。
+
 ## v0.9.6 [2025-01-05]
 
 ### 新增

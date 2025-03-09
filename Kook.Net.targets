@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <VersionPrefix>0.9.6</VersionPrefix>
+    <VersionPrefix>0.9.7</VersionPrefix>
 <!--    <VersionSuffix>beta5</VersionSuffix>-->
     <IsPackable>false</IsPackable>
     <IsTrimmable>false</IsTrimmable>

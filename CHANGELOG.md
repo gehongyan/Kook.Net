@@ -1,6 +1,23 @@
 # Changelog
 
 ---
+## v0.9.7 [2025-03-09]
+
+### Added
+
+- Added support for multi-instance injection of Webhook clients.
+
+### Fixed
+
+- Fixed an issue where the overload method of `AddKookAspNetWebhookClient` receiving `KookAspNetWebhookConfig` failed to
+  properly register client instances.
+
+### Misc
+
+- Removed dependency on `FluentAssertions`.
+- Fixed null reference warnings in F# sample code.
+- Optimized entity creation process in integration test projects by using `IAsyncLifetime`.
+- Improved the OAuth sample project by providing example code for retrieving joined guilds.
 
 ## v0.9.6 [2025-01-05]
 
