@@ -1,33 +1,31 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Xunit.Abstractions;
+using System.Reflection;
 using Xunit.Sdk;
+using Xunit.v3;
 
 namespace Kook;
 
 public class PriorityOrderer : ITestCaseOrderer
 {
-    public const string TypeName = "Kook.PriorityOrderer";
-    public const string AssemblyName = "Kook.Net.Tests.Integration.Socket";
-
-    public IEnumerable<TTestCase> OrderTestCases<TTestCase>(
-        IEnumerable<TTestCase> testCases) where TTestCase : ITestCase
+    public IReadOnlyCollection<TTestCase> OrderTestCases<TTestCase>(IReadOnlyCollection<TTestCase> testCases)
+        where TTestCase : ITestCase
     {
-        string assemblyName = typeof(TestPriorityAttribute).AssemblyQualifiedName!;
         SortedDictionary<int, List<TTestCase>> sortedMethods = new();
         foreach (TTestCase testCase in testCases)
         {
-            int priority = testCase.TestMethod.Method
-                .GetCustomAttributes(assemblyName)
-                .FirstOrDefault()
-                ?.GetNamedArgument<int>(nameof(TestPriorityAttribute.Priority)) ?? 0;
+            int priority = (testCase.TestMethod as XunitTestMethod)?
+                .Method?
+                .GetCustomAttribute<TestPriorityAttribute>()?.Priority
+                ?? 0;
 
             GetOrCreate(sortedMethods, priority).Add(testCase);
         }
 
         return sortedMethods.Keys
             .SelectMany(priority => sortedMethods[priority]
-                .OrderBy(testCase => testCase.TestMethod.Method.Name));
+                .OrderBy(testCase => testCase.TestMethod?.MethodName))
+            .ToArray();
     }
 
     private static TValue GetOrCreate<TKey, TValue>(

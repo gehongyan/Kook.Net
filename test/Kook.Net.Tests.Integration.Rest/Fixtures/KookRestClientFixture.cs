@@ -1,6 +1,5 @@
 using Kook.Rest;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -14,7 +13,7 @@ public class KookRestClientFixture : IAsyncLifetime
 {
     public KookRestClient Client { get; private set; } = null!;
 
-    public virtual async Task InitializeAsync()
+    public virtual async ValueTask InitializeAsync()
     {
         string? token = Environment.GetEnvironmentVariable("KOOK_NET_TEST_TOKEN");
         if (string.IsNullOrWhiteSpace(token))
@@ -29,7 +28,7 @@ public class KookRestClientFixture : IAsyncLifetime
     }
 
     /// <inheritdoc />
-    public virtual async Task DisposeAsync()
+    public virtual async ValueTask DisposeAsync()
     {
         await Client.LogoutAsync();
         Client.Dispose();

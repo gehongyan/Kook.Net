@@ -11,7 +11,7 @@ public class KookSocketClientFixture : IAsyncLifetime
 
     public KookSocketClient Client { get; private set; } = null!;
 
-    public virtual async Task InitializeAsync()
+    public virtual async ValueTask InitializeAsync()
     {
         string? token = Environment.GetEnvironmentVariable("KOOK_NET_TEST_TOKEN");
         if (string.IsNullOrWhiteSpace(token))
@@ -42,7 +42,7 @@ public class KookSocketClientFixture : IAsyncLifetime
     }
 
     /// <inheritdoc />
-    public virtual async Task DisposeAsync()
+    public virtual async ValueTask DisposeAsync()
     {
         await Client.StopAsync();
         await Client.LogoutAsync();

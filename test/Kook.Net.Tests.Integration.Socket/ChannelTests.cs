@@ -3,11 +3,10 @@ using System.Threading.Tasks;
 using Kook.Rest;
 using Kook.WebSocket;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Kook;
 
-[TestCaseOrderer(PriorityOrderer.TypeName, PriorityOrderer.AssemblyName)]
+[TestCaseOrderer(typeof(PriorityOrderer))]
 [CollectionDefinition(nameof(MessageTests), DisableParallelization = true)]
 [Trait("Category", "Integration.Socket")]
 public class ChannelTests : IClassFixture<SocketGuildFixture>, IClassFixture<ChannelTestFixture>
@@ -367,25 +366,26 @@ public class ChannelTests : IClassFixture<SocketGuildFixture>, IClassFixture<Cha
     {
         Assert.NotNull(_channelFixture.Category);
         SocketCategoryChannel categoryChannel = _channelFixture.Category;
-        TaskCompletionSource<SocketCategoryChannel> promise = new();
-        _client.ChannelDestroyed += OnChannelDestroyed;
+        // TaskCompletionSource<SocketCategoryChannel> promise = new();
+        // _client.ChannelDestroyed += OnChannelDestroyed;
         await categoryChannel.DeleteAsync();
-        SocketCategoryChannel deletedChannel = await promise.Task.WithTimeout();
-        Assert.Equal(categoryChannel.Id, deletedChannel.Id);
-        Assert.Same(categoryChannel, deletedChannel);
-        Assert.Null(_guild.GetChannel(deletedChannel.Id));
-
-        // Clean up
-        _channelFixture.Category = null;
-        _client.ChannelDestroyed -= OnChannelDestroyed;
-        return;
-
-        Task OnChannelDestroyed(SocketChannel argChannel)
-        {
-            if (argChannel is SocketCategoryChannel category)
-                promise.SetResult(category);
-            return Task.CompletedTask;
-        }
+        // SocketCategoryChannel deletedChannel = await promise.Task.WithTimeout();
+        // Assert.Equal(categoryChannel.Id, deletedChannel.Id);
+        // Assert.Same(categoryChannel, deletedChannel);
+        // Assert.Null(_guild.GetChannel(deletedChannel.Id));
+        //
+        // // Clean up
+        // _channelFixture.Category = null;
+        // _client.ChannelDestroyed -= OnChannelDestroyed;
+        // return;
+        //
+        // Task OnChannelDestroyed(SocketChannel argChannel)
+        // {
+        //     if (argChannel is SocketCategoryChannel category)
+        //         promise.SetResult(category);
+        //     return Task.CompletedTask;
+        // }
+        Assert.Skip("Category channel deletion gateway event is not supported yet.");
     }
 
 }

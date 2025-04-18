@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 using Kook.Rest;
 using Kook.WebSocket;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Kook;
 
-[TestCaseOrderer(PriorityOrderer.TypeName, PriorityOrderer.AssemblyName)]
+[TestCaseOrderer(typeof(PriorityOrderer))]
 [CollectionDefinition(nameof(MessageTests), DisableParallelization = true)]
 [Trait("Category", "Integration.Socket")]
 public class MessageTests : IClassFixture<SocketChannelFixture>, IClassFixture<MessageTestFixture>
@@ -93,7 +92,7 @@ public class MessageTests : IClassFixture<SocketChannelFixture>, IClassFixture<M
         const string filename = "7kr4FkWpLV0ku0ku.jpeg";
         TaskCompletionSource<SocketMessage> socketMessagePromise = new();
         _client.MessageReceived += ClientOnMessageReceived;
-        await using Stream imageStream = await new HttpClient().GetStreamAsync(rawUri);
+        await using Stream imageStream = await new HttpClient().GetStreamAsync(rawUri, TestContext.Current.CancellationToken);
         string assetUri = await _client.Rest.CreateAssetAsync(imageStream, filename);
         using FileAttachment fileAttachment = new(new Uri(assetUri), filename, AttachmentType.Image);
         Cacheable<IUserMessage, Guid> cacheableMessage = await _textChannel.SendFileAsync(fileAttachment);

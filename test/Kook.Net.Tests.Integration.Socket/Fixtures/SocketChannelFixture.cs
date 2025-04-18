@@ -15,7 +15,7 @@ public class SocketChannelFixture : SocketGuildFixture
 
     public SocketVoiceChannel VoiceChannel { get; private set; } = null!;
 
-    public override async Task InitializeAsync()
+    public override async ValueTask InitializeAsync()
     {
         await base.InitializeAsync();
         Client.ChannelCreated += OnChannelCreated;
@@ -35,7 +35,7 @@ public class SocketChannelFixture : SocketGuildFixture
         return Task.CompletedTask;
     }
 
-    public override async Task DisposeAsync()
+    public override async ValueTask DisposeAsync()
     {
         await TextChannel.DeleteAsync();
         await VoiceChannel.DeleteAsync();

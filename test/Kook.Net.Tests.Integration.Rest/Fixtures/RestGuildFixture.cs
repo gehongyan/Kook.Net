@@ -13,7 +13,7 @@ public class RestGuildFixture : KookRestClientFixture
 {
     public RestGuild Guild { get; private set; } = null!;
 
-    public override async Task InitializeAsync()
+    public override async ValueTask InitializeAsync()
     {
         await base.InitializeAsync();
         const string guildName = "KOOK NET INTEGRATION TEST";

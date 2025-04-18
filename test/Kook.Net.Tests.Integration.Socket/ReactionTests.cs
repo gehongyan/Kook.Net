@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Kook.WebSocket;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Kook;
 

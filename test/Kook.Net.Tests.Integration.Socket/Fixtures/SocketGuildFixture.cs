@@ -10,7 +10,7 @@ public class SocketGuildFixture : KookSocketClientFixture
 {
     public SocketGuild Guild { get; private set; } = null!;
 
-    public override async Task InitializeAsync()
+    public override async ValueTask InitializeAsync()
     {
         await base.InitializeAsync();
         const string guildName = "KOOK NET INTEGRATION TEST";
