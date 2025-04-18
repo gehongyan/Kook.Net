@@ -13,7 +13,7 @@ title: 变更日志
 
 ### 修复
 
-- 修复 AddKookAspNetWebhookClient 接收 `KookAspNetWebhookConfig` 的重载未能正确注册客户端实例的问题。
+- 修复 `AddKookAspNetWebhookClient` 接收 `KookAspNetWebhookConfig` 的重载未能正确注册客户端实例的问题。
 
 ### 其他
 
