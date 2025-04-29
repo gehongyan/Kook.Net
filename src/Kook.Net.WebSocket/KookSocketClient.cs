@@ -70,6 +70,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     internal bool AlwaysDownloadVoiceStates { get; private set; }
     internal bool AlwaysDownloadBoostSubscriptions { get; private set; }
     internal int? HandlerTimeout { get; private set; }
+    internal bool SuppressUnknownDispatchWarnings { get; private set; }
     internal new KookSocketApiClient ApiClient => base.ApiClient;
 
     /// <inheritdoc />
@@ -117,6 +118,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         AlwaysDownloadVoiceStates = config.AlwaysDownloadVoiceStates;
         AlwaysDownloadBoostSubscriptions = config.AlwaysDownloadBoostSubscriptions;
         HandlerTimeout = config.HandlerTimeout;
+        SuppressUnknownDispatchWarnings = config.SuppressUnknownDispatchWarnings;
         State = new ClientState(0, 0);
         Rest = new KookSocketRestClient(config, ApiClient);
         _heartbeatTimes = new ConcurrentQueue<long>();

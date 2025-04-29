@@ -178,6 +178,11 @@ public class KookSocketConfig : KookRestConfig
     public MessageQueueProvider MessageQueueProvider { get; set; }
 
     /// <summary>
+    ///     获取或设置是否不在接收到未知网关事件消息是输出警告。
+    /// </summary>
+    public bool SuppressUnknownDispatchWarnings { get; set; } = false;
+
+    /// <summary>
     ///     初始化一个 <see cref="KookSocketConfig"/> 类的新实例。
     /// </summary>
     public KookSocketConfig()

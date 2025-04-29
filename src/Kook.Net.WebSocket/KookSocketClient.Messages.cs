@@ -1948,9 +1948,13 @@ public partial class KookSocketClient
 
     private async Task HandleUnknownEvents(string channelType, string eventType, JsonElement payload)
     {
-        await _gatewayLogger
-            .WarningAsync($"Unknown SystemEventType ({channelType}, {eventType}). Payload: {SerializePayload(payload)}")
-            .ConfigureAwait(false);
+        if(!SuppressUnknownDispatchWarnings)
+        {
+            await _gatewayLogger
+                .WarningAsync(
+                    $"Unknown SystemEventType ({channelType}, {eventType}). Payload: {SerializePayload(payload)}")
+                .ConfigureAwait(false);
+        }
 
         await TimedInvokeAsync(_unknownDispatchReceived, nameof(UnknownDispatchReceived), channelType, eventType, payload);
     }

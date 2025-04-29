@@ -54,7 +54,9 @@ _socketClient = new KookSocketClient(new KookSocketConfig
     // 频道排序事件是否主动通过 API 更新服务器频道
     AutoUpdateChannelPositions = false,
     // 消息队列提供程序
-    MessageQueueProvider = SynchronousImmediateMessageQueueProvider.Instance
+    MessageQueueProvider = SynchronousImmediateMessageQueueProvider.Instance,
+    // 是否不在接收到未知网关事件消息是输出警告
+    SuppressUnknownDispatchWarnings = true
 });
 
 // Token
