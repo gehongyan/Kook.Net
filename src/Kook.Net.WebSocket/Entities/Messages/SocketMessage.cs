@@ -77,6 +77,11 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     /// </summary>
     public IReadOnlyCollection<SocketUser> MentionedUsers => _userMentions;
 
+    /// <summary>
+    ///     获取此消息中提及的所有用户的 ID。
+    /// </summary>
+    public IReadOnlyCollection<ulong> MentionedUserIds { get; private set; }
+
     /// <inheritdoc />
     public virtual IReadOnlyCollection<ITag> Tags => [];
 
@@ -101,6 +106,7 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         Content = string.Empty;
         RawContent = string.Empty;
         Attachments = [];
+        MentionedUserIds = [];
     }
 
     internal static SocketMessage Create(KookSocketClient kook, ClientState state,
@@ -123,12 +129,20 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         Timestamp = gatewayEvent.MessageTimestamp;
         Content = gatewayEvent.Content;
 
-        if (gatewayEvent.ExtraData.MentionedUsers is { } users)
+        if (gatewayEvent.ExtraData.MentionedUsers is { } userIds)
         {
-            _userMentions = users.Select(x =>
-                    Channel.GetUserAsync(x, CacheMode.CacheOnly).GetAwaiter().GetResult() as SocketUser
-                    ?? SocketUnknownUser.Create(Kook, state, x))
-                .ToImmutableArray();
+            if (userIds.Length == 0)
+            {
+                MentionedUserIds = ImmutableArray<ulong>.Empty;
+                _userMentions = ImmutableArray<SocketUser>.Empty;
+            }
+            else
+            {
+                MentionedUserIds = [..userIds];
+                IEnumerable<SocketUser> users = userIds.Select(x =>
+                    (Channel as SocketChannel)?.GetUser(x) ?? SocketUnknownUser.Create(Kook, state, x));
+                _userMentions = [..users];
+            }
         }
     }
 
@@ -138,12 +152,20 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         Timestamp = gatewayEvent.MessageTimestamp;
         Content = gatewayEvent.Content;
 
-        if (gatewayEvent.ExtraData.MentionedUsers is { } users)
+        if (gatewayEvent.ExtraData.MentionedUsers is { } userIds)
         {
-            _userMentions = users.Select(x =>
-                    Channel.GetUserAsync(x, CacheMode.CacheOnly).GetAwaiter().GetResult() as SocketUser
-                    ?? SocketUnknownUser.Create(Kook, state, x))
-                .ToImmutableArray();
+            if (userIds.Length == 0)
+            {
+                MentionedUserIds = ImmutableArray<ulong>.Empty;
+                _userMentions = ImmutableArray<SocketUser>.Empty;
+            }
+            else
+            {
+                MentionedUserIds = [..userIds];
+                IEnumerable<SocketUser> users = userIds.Select(x =>
+                    (Channel as SocketChannel)?.GetUser(x) ?? SocketUnknownUser.Create(Kook, state, x));
+                _userMentions = [..users];
+            }
         }
     }
 
@@ -166,12 +188,20 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         EditedTimestamp = model.UpdateAt;
         Content = model.Content;
 
-        if (model.MentionedUsers is { } users)
+        if (model.MentionedUsers is { } userIds)
         {
-            _userMentions = users.Select(x =>
-                    Channel.GetUserAsync(x, CacheMode.CacheOnly).GetAwaiter().GetResult() as SocketUser
-                    ?? SocketUnknownUser.Create(Kook, state, x))
-                .ToImmutableArray();
+            if (userIds.Length == 0)
+            {
+                MentionedUserIds = ImmutableArray<ulong>.Empty;
+                _userMentions = ImmutableArray<SocketUser>.Empty;
+            }
+            else
+            {
+                MentionedUserIds = [..userIds];
+                IEnumerable<SocketUser> users = userIds.Select(x =>
+                    (Channel as SocketChannel)?.GetUser(x) ?? SocketUnknownUser.Create(Kook, state, x));
+                _userMentions = [..users];
+            }
         }
     }
 
@@ -188,12 +218,20 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
         EditedTimestamp = model.UpdatedAt;
         Content = model.Content;
 
-        if (model.MentionedUsers is { } users)
+        if (model.MentionedUsers is { } userIds)
         {
-            _userMentions = users.Select(x =>
-                    Channel.GetUserAsync(x, CacheMode.CacheOnly).GetAwaiter().GetResult() as SocketUser
-                    ?? SocketUnknownUser.Create(Kook, state, x))
-                .ToImmutableArray();
+            if (userIds.Length == 0)
+            {
+                MentionedUserIds = ImmutableArray<ulong>.Empty;
+                _userMentions = ImmutableArray<SocketUser>.Empty;
+            }
+            else
+            {
+                MentionedUserIds = [..userIds];
+                IEnumerable<SocketUser> users = userIds.Select(x =>
+                    (Channel as SocketChannel)?.GetUser(x) ?? SocketUnknownUser.Create(Kook, state, x));
+                _userMentions = [..users];
+            }
         }
     }
 
