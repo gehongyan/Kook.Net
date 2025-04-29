@@ -780,11 +780,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                     #endregion
 
                     default:
-                    {
-                        await _gatewayLogger
-                            .WarningAsync($"Unknown SystemEventType ({channelType}, {extraData.Type}). Payload: {SerializePayload(payload)}")
-                            .ConfigureAwait(false);
-                    }
+                        await HandleUnknownEvents(channelType, extraData.Type, payload).ConfigureAwait(false);
                         break;
                 }
             }

@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace Kook.WebSocket;
 
 public abstract partial class BaseSocketClient
@@ -1005,6 +1007,29 @@ public abstract partial class BaseSocketClient
     }
 
     internal readonly AsyncEvent<Func<string, Cacheable<SocketUser, ulong>, Cacheable<IMessage, Guid>, SocketDMChannel, Task>> _directMessageButtonClickedEvent = new();
+
+    #endregion
+
+    #region Others
+
+    /// <summary>
+    ///     当接收到一个未知的事件类型时引发。
+    /// </summary>
+    /// <remarks>
+    ///     事件参数：
+    ///     <list type="number">
+    ///     <item> <see cref="System.String"/> 参数是未知事件的频道类型。 </item>
+    ///     <item> <see cref="System.String"/> 参数是未知事件的事件类型名称。 </item>
+    ///     <item> <see cref="System.Text.Json.JsonElement"/> 参数是未知事件中数据体部分的 JSON 元素。 </item>
+    ///     </list>
+    /// </remarks>
+    public event Func<string, string, JsonElement, Task> UnknownDispatchReceived
+    {
+        add => _unknownDispatchReceived.Add(value);
+        remove => _unknownDispatchReceived.Remove(value);
+    }
+
+    internal readonly AsyncEvent<Func<string, string, JsonElement, Task>> _unknownDispatchReceived = new();
 
     #endregion
 }

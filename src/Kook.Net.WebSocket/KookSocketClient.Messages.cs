@@ -1944,6 +1944,19 @@ public partial class KookSocketClient
 
     #endregion
 
+    #region Unknown Events
+
+    private async Task HandleUnknownEvents(string channelType, string eventType, JsonElement payload)
+    {
+        await _gatewayLogger
+            .WarningAsync($"Unknown SystemEventType ({channelType}, {eventType}). Payload: {SerializePayload(payload)}")
+            .ConfigureAwait(false);
+
+        await TimedInvokeAsync(_unknownDispatchReceived, nameof(UnknownDispatchReceived), channelType, eventType, payload);
+    }
+
+    #endregion
+
     #region Ensure Guild Available
 
     private async Task<bool> EnsureGuildAvailableAsync(SocketGuild guild)
