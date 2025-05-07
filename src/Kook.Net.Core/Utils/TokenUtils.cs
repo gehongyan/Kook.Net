@@ -50,7 +50,7 @@ public static class TokenUtils
     ///     如果 <paramref name="encodedBase64"/> 需要无效数量的填充字符，将引发异常。
     /// </exception>
     /// <exception cref="ArgumentNullException">
-    ///     如果 <paramref name="encodedBase64"/> 为 null、空字符串或仅包含空白字符，将引发异常。
+    ///     如果 <paramref name="encodedBase64"/> 为 <c>null</c>、空字符串或仅包含空白字符，将引发异常。
     /// </exception>
     internal static string PadBase64String(string encodedBase64)
     {

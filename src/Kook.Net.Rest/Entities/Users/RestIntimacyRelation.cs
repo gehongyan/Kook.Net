@@ -13,10 +13,10 @@ public class RestIntimacyRelation : RestEntity<ulong>, IIntimacyRelation
     public IUser User { get; internal set; }
 
     /// <inheritdoc />
-    public IntimacyRelationType RelationType { get; internal set; }
+    public IntimacyRelationType? RelationType { get; internal set; }
 
     /// <inheritdoc />
-    public DateTimeOffset CreatedAt { get; internal set; }
+    public DateTimeOffset? CreatedAt { get; internal set; }
 
     /// <inheritdoc />
     internal RestIntimacyRelation(BaseKookClient kook, API.Rest.FriendState model)
@@ -31,12 +31,8 @@ public class RestIntimacyRelation : RestEntity<ulong>, IIntimacyRelation
     internal void Update(API.Rest.FriendState model)
     {
         User = RestUser.Create(Kook, model.User);
-        if (!model.IntimacyType.HasValue)
-            throw new InvalidOperationException("Intimacy type is not provided.");
-        RelationType = model.IntimacyType.Value;
-        if (!model.RelationTime.HasValue)
-            throw new InvalidOperationException("Relation time is not provided.");
-        CreatedAt = model.RelationTime.Value;
+        RelationType = model.IntimacyType;
+        CreatedAt = model.RelationTime;
     }
 
     private string DebuggerDisplay =>

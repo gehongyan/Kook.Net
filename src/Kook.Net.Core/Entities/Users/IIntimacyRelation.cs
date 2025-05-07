@@ -13,12 +13,18 @@ public interface IIntimacyRelation : IEntity<ulong>
     /// <summary>
     ///     获取此亲密关系的关系类型。
     /// </summary>
-    IntimacyRelationType RelationType { get; }
+    /// <remarks>
+    ///     如果亲密关系的关系类型未知，则返回 <c>null</c>。
+    /// </remarks>
+    IntimacyRelationType? RelationType { get; }
 
     /// <summary>
     ///     获取此亲密关系的创建时间。
     /// </summary>
-    DateTimeOffset CreatedAt { get; }
+    /// <remarks>
+    ///     如果亲密关系的创建时间未知，则返回 <c>null</c>。
+    /// </remarks>
+    DateTimeOffset? CreatedAt { get; }
 
     /// <summary>
     ///     解除此亲密关系。
