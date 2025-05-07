@@ -221,7 +221,7 @@ internal static class UserHelper
         await client.ApiClient.HandleFriendRequestAsync(args, options).ConfigureAwait(false);
     }
 
-    public static async Task HandleIntimacyRequestAsync(IFriendRequest request,
+    public static async Task HandleIntimacyRequestAsync(IIntimacyRelationRequest request,
         bool handleResult, BaseKookClient client, RequestOptions? options)
     {
         HandleFriendRequestParams args = new()
