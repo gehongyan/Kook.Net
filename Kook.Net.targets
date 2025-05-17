@@ -52,7 +52,7 @@
   <ItemGroup>
     <None Include="../../README.md" Pack="true" PackagePath="\"/>
     <None Include="../../LICENSE" Pack="true" PackagePath="\"/>
-    <None Include="../../THIRD-PARTY-NOTICES.txt" Pack="true" PackagePath="\"/>
+    <None Include="../../THIRD-PARTY-NOTICES.md" Pack="true" PackagePath="\"/>
     <None Include="../../docs/logo/Logo_Small.png" Pack="true" PackagePath=""/>
   </ItemGroup>
 </Project>
