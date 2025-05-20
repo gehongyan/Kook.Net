@@ -1,6 +1,25 @@
 # Changelog
 
 ---
+
+## v0.9.8 [2025-05-20]
+
+### Added
+
+- Added `BaseSocketClient.UnknownDispatchReceived` for handling unknown event types.
+- Added `KookSocketConfig.SuppressUnknownDispatchWarnings` to suppress warnings for unknown event types.
+
+### Fixed
+
+- Fixed an issue where `RelationType` and `CreatedAt` on `IIntimacyRelation` could be null, causing problems retrieving
+  intimacy relation information. These properties are now nullable.
+- Fixed a potential issue where `SocketMessage.Update` could block asynchronous threads abnormally.
+
+### Others
+
+- Updated related dependency versions.
+- Migrated the test framework to xunit.v3.
+
 ## v0.9.7 [2025-03-09]
 
 ### Added
