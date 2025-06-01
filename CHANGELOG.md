@@ -2,6 +2,12 @@
 
 ---
 
+## v0.9.9 [2025-06-01]
+
+### Fixed
+
+- Fixed an issue where enum parameters are not correctly registered in the text command framework.
+
 ## v0.9.8 [2025-05-20]
 
 ### Added

@@ -5,22 +5,28 @@ title: 变更日志
 
 # 变更日志
 
+## v0.9.9 [2025-06-01]
+
+### 修复
+
+- 修复导致文本命令框架无法正确注册枚举类型参数的问题。
+
 ## v0.9.8 [2025-05-20]
 
 ### 新增
 
-- 新增 `BaseSocketClient.UnknownDispatchReceived`，用于处理未知的事件类型
-- 新增 `KookSocketConfig.SuppressUnknownDispatchWarnings` 用于绕过未知事件类型的警告
+- 新增 `BaseSocketClient.UnknownDispatchReceived`，用于处理未知的事件类型。
+- 新增 `KookSocketConfig.SuppressUnknownDispatchWarnings` 用于绕过未知事件类型的警告。
 
 ### 修复
 
-- 修复 `IIntimacyRelation` 上的 `RelationType` 及 `CreatedAt` 可能为空导致无法获取亲密关系信息的问题，相关属性已变更为可空属性
-- 修复 `SocketMessage.Update` 可能会异常阻塞异步线程的问题
+- 修复 `IIntimacyRelation` 上的 `RelationType` 及 `CreatedAt` 可能为空导致无法获取亲密关系信息的问题，相关属性已变更为可空属性。
+- 修复 `SocketMessage.Update` 可能会异常阻塞异步线程的问题。
 
 ### 其他
 
-- 更新相关依赖库版本
-- 迁移测试框架至 xunit.v3
+- 更新相关依赖库版本。
+- 迁移测试框架至 xunit.v3。
 
 ## v0.9.7 [2025-03-09]
 
