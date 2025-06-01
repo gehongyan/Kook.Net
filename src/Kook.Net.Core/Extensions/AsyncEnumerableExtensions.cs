@@ -6,7 +6,7 @@ namespace Kook;
 /// </summary>
 public static class AsyncEnumerableExtensions
 {
-    /// <inheritdoc cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
+    /// <inheritdoc cref="Kook.AsyncEnumerableExtensions.Flatten{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     public static async Task<IEnumerable<T>> FlattenAsync<T>(this IAsyncEnumerable<IEnumerable<T>> source) =>
         await source.Flatten().ToArrayAsync().ConfigureAwait(false);
 

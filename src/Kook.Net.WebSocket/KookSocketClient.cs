@@ -84,8 +84,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     ///         此属性不会包含在当前会话之外创建的私聊会话的私聊频道实体，如果此 Bot 刚刚启动，此属性可能会返回一个空集合。
     ///     </note>
     /// </remarks>
-    public IReadOnlyCollection<SocketDMChannel> DMChannels =>
-        State.DMChannels.Where(x => x is not null).ToImmutableArray();
+    public IReadOnlyCollection<SocketDMChannel> DMChannels => State.DMChannels.ToImmutableArray();
 
     /// <summary>
     ///     初始化一个 <see cref="KookSocketClient" /> 类的新实例。
