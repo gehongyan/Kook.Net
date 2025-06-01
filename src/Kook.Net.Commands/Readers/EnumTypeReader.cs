@@ -15,7 +15,7 @@ internal static class EnumTypeReader
 }
 
 internal class EnumTypeReader<T> : TypeReader
-    where T : struct, Enum
+    where T : struct
 {
     private readonly IReadOnlyDictionary<string, object> _enumsByName;
     private readonly IReadOnlyDictionary<T, object> _enumsByValue;
