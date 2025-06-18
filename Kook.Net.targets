@@ -2,8 +2,8 @@
   <PropertyGroup>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <VersionPrefix>0.9.10</VersionPrefix>
-<!--    <VersionSuffix>beta5</VersionSuffix>-->
+    <VersionPrefix>0.9.11</VersionPrefix>
+    <VersionSuffix>beta1</VersionSuffix>
     <IsPackable>false</IsPackable>
     <IsTrimmable>false</IsTrimmable>
     <IsAotCompatible>false</IsAotCompatible>
