@@ -72,7 +72,10 @@ public class PublicModule : ModuleBase<SocketCommandContext>
     }
 
     [Command("file")]
-    public async Task File(Uri file) => await ReplyTextAsync($"Received file: {file}");
+    public async Task File(Uri file) => await ReplyTextAsync($"Received Uri file: {file}");
+
+    [Command("file")]
+    public async Task File(string file) => await ReplyTextAsync($"Received text file: {file}");
 
     // Ban a user
     [Command("ban")]
