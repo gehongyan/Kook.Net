@@ -71,6 +71,9 @@ public class PublicModule : ModuleBase<SocketCommandContext>
             await ReplyFileAsync(new FileAttachment(image, "image.png", AttachmentType.Image));
     }
 
+    [Command("file")]
+    public async Task File(Uri file) => await ReplyTextAsync($"Received file: {file}");
+
     // Ban a user
     [Command("ban")]
     [RequireContext(ContextType.Guild)]

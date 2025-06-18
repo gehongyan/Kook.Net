@@ -223,6 +223,8 @@ public static class MessageExtensions
         if (card.Modules.Length == 0) return false;
         return card.Modules.All(x => x is
             SectionModule { Text: PlainTextElement or KMarkdownElement }
-            or ContainerModule { Elements: [not null] });
+            or ContainerModule { Elements: [not null] }
+            or IMediaModule { Source.Length: > 0 }
+        );
     }
 }

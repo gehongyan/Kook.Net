@@ -218,6 +218,7 @@ public static class MessageExtensions
             SectionModule { Text: PlainTextElement or KMarkdownElement } sectionModule =>
                 sectionModule.Text.ToString(),
             ContainerModule { Elements: [{ } element] } => element.Source,
+            IMediaModule { Source: { Length: > 0 } mediaSource } => mediaSource,
             _ => null
         })
         .OfType<string>()
