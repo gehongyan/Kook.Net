@@ -2,6 +2,13 @@
 
 ---
 
+## v0.9.10 [2025-06-18]
+
+### Fixed
+
+- Fixed an issue where the text command framework could not correctly parse file, audio, and video card modules as `Uri`
+  parameters.
+
 ## v0.9.9 [2025-06-01]
 
 ### Fixed
