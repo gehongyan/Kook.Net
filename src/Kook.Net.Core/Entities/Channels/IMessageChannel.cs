@@ -70,7 +70,7 @@ public interface IMessageChannel : IChannel
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <typeparam name="T"> 参数的类型。 </typeparam>
     /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendTextAsync<T>(int templateId, T parameters, IQuote? quote = null,
+    Task<Cacheable<IUserMessage, Guid>> SendTextAsync<T>(ulong templateId, T parameters, IQuote? quote = null,
         IUser? ephemeralUser = null, JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null);
 
     /// <summary>
@@ -106,7 +106,7 @@ public interface IMessageChannel : IChannel
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <typeparam name="T"> 参数的类型。 </typeparam>
     /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
-    Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(int templateId, T parameters, IQuote? quote = null,
+    Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(ulong templateId, T parameters, IQuote? quote = null,
         IUser? ephemeralUser = null, JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null);
 
     #endregion

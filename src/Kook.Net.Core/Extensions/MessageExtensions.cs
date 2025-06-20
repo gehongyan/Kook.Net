@@ -147,7 +147,7 @@ public static class MessageExtensions
     /// <typeparam name="T"> 参数的类型。 </typeparam>
     /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync<T>(this IUserMessage message,
-        int templateId, T parameters, bool isQuote = false, bool isEphemeral = false,
+        ulong templateId, T parameters, bool isQuote = false, bool isEphemeral = false,
         JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         await message.Channel.SendTextAsync(templateId, parameters,
                 isQuote ? new MessageReference(message.Id) : null,
@@ -185,7 +185,7 @@ public static class MessageExtensions
     /// <typeparam name="T"> 参数的类型。 </typeparam>
     /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync<T>(this IUserMessage message,
-        int templateId, T parameters, bool isQuote = false, bool isEphemeral = false,
+        ulong templateId, T parameters, bool isQuote = false, bool isEphemeral = false,
         JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         await message.Channel.SendCardsAsync(templateId, parameters,
                 isQuote ? new MessageReference(message.Id) : null,

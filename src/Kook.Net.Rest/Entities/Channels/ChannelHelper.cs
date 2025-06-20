@@ -223,7 +223,7 @@ internal static class ChannelHelper
     }
 
     public static async Task<Cacheable<IUserMessage, Guid>> SendMessageAsync<T>(IMessageChannel channel,
-        BaseKookClient client, MessageType messageType, int templateId, T parameters, IQuote? quote,
+        BaseKookClient client, MessageType messageType, ulong templateId, T parameters, IQuote? quote,
         IUser? ephemeralUser, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
     {
         CreateMessageParams args = new()
@@ -248,7 +248,7 @@ internal static class ChannelHelper
     }
 
     public static async Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(IMessageChannel channel,
-        BaseKookClient client, int templateId, T parameters, IQuote? quote, IUser? ephemeralUser,
+        BaseKookClient client, ulong templateId, T parameters, IQuote? quote, IUser? ephemeralUser,
         JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
     {
         string json = JsonSerializer.Serialize(parameters, jsonSerializerOptions);
@@ -433,7 +433,7 @@ internal static class ChannelHelper
     }
 
     public static async Task<Cacheable<IUserMessage, Guid>> SendDirectMessageAsync<T>(IDMChannel channel, BaseKookClient client,
-        MessageType messageType, int templateId, T parameters, IQuote? quote, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
+        MessageType messageType, ulong templateId, T parameters, IQuote? quote, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
     {
         CreateDirectMessageParams args = new()
         {
@@ -457,7 +457,7 @@ internal static class ChannelHelper
     }
 
     public static Task<Cacheable<IUserMessage, Guid>> SendDirectCardsAsync<T>(IDMChannel channel, BaseKookClient client,
-        int templateId, T parameters, IQuote? quote, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
+        ulong templateId, T parameters, IQuote? quote, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
     {
         string json = JsonSerializer.Serialize(parameters, jsonSerializerOptions);
         return SendDirectMessageAsync(channel, client, MessageType.Card, templateId, json, quote, jsonSerializerOptions, options);

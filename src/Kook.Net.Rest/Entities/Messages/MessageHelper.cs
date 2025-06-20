@@ -245,7 +245,7 @@ internal static class MessageHelper
         await client.ApiClient.ModifyMessageAsync(args, options).ConfigureAwait(false);
     }
 
-    public static async Task ModifyAsync<T>(Guid msgId, BaseKookClient client, int templateId, T parameters,
+    public static async Task ModifyAsync<T>(Guid msgId, BaseKookClient client, ulong templateId, T parameters,
         IQuote? quote, IUser? ephemeralUser, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
     {
         ModifyMessageParams args = new()
@@ -345,7 +345,7 @@ internal static class MessageHelper
     }
 
     public static async Task ModifyDirectAsync<T>(Guid msgId, BaseKookClient client,
-        int? templateId, T parameters, IQuote? quote, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
+        ulong templateId, T parameters, IQuote? quote, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
     {
         ModifyDirectMessageParams args = new()
         {

@@ -88,7 +88,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
         ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, quote, options);
 
     /// <inheritdoc />
-    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync<T>(int templateId, T parameters, IQuote? quote = null,
+    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync<T>(ulong templateId, T parameters, IQuote? quote = null,
         JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, templateId, parameters, quote, jsonSerializerOptions, options);
 
@@ -113,7 +113,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
         ChannelHelper.SendDirectCardsAsync(this, Kook, cards, quote, options);
 
     /// <inheritdoc />
-    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(int templateId, T parameters, IQuote? quote = null,
+    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(ulong templateId, T parameters, IQuote? quote = null,
         JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardsAsync(this, Kook, templateId, parameters, quote, jsonSerializerOptions, options);
 
@@ -234,7 +234,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
         SendTextAsync(text, quote, options);
 
     /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendTextAsync<T>(int templateId, T parameters,
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendTextAsync<T>(ulong templateId, T parameters,
         IQuote? quote, IUser? ephemeralUser, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options) =>
         SendTextAsync(templateId, parameters, quote, jsonSerializerOptions, options);
 
@@ -244,7 +244,7 @@ public class RestDMChannel : RestChannel, IDMChannel, IRestPrivateChannel, IRest
         SendCardsAsync(cards, quote, options);
 
     /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardsAsync<T>(int templateId, T parameters,
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardsAsync<T>(ulong templateId, T parameters,
         IQuote? quote, IUser? ephemeralUser, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options) =>
         SendCardsAsync(templateId, parameters, quote, jsonSerializerOptions, options);
 

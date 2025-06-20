@@ -226,8 +226,8 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, text, quote, options);
 
-    /// <inheritdoc cref="Kook.IDMChannel.SendTextAsync{T}(System.Int32,T,Kook.IQuote,System.Text.Json.JsonSerializerOptions,Kook.RequestOptions)"/>
-    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync<T>(int templateId, T parameters, IQuote? quote = null,
+    /// <inheritdoc cref="Kook.IDMChannel.SendTextAsync{T}(System.UInt64,T,Kook.IQuote,System.Text.Json.JsonSerializerOptions,Kook.RequestOptions)"/>
+    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync<T>(ulong templateId, T parameters, IQuote? quote = null,
         JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectMessageAsync(this, Kook, MessageType.KMarkdown, templateId, parameters, quote, jsonSerializerOptions, options);
 
@@ -236,8 +236,8 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         IQuote? quote = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardsAsync(this, Kook, cards, quote, options);
 
-    /// <inheritdoc cref="Kook.IDMChannel.SendCardsAsync{T}(System.Int32,T,Kook.IQuote,System.Text.Json.JsonSerializerOptions,Kook.RequestOptions)" />
-    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(int templateId, T parameters, IQuote? quote = null,
+    /// <inheritdoc cref="Kook.IDMChannel.SendCardsAsync{T}(System.UInt64,T,Kook.IQuote,System.Text.Json.JsonSerializerOptions,Kook.RequestOptions)" />
+    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(ulong templateId, T parameters, IQuote? quote = null,
         JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         ChannelHelper.SendDirectCardsAsync(this, Kook, templateId, parameters, quote, jsonSerializerOptions, options);
 
@@ -341,7 +341,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         SendTextAsync(text, quote, options);
 
     /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendTextAsync<T>(int templateId, T parameters,
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendTextAsync<T>(ulong templateId, T parameters,
         IQuote? quote, IUser? ephemeralUser, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options) =>
         SendTextAsync(templateId, parameters, quote, jsonSerializerOptions, options);
 
@@ -356,7 +356,7 @@ public class SocketDMChannel : SocketChannel, IDMChannel, ISocketPrivateChannel,
         SendCardsAsync(cards, quote, options);
 
     /// <inheritdoc />
-    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardsAsync<T>(int templateId, T parameters,
+    Task<Cacheable<IUserMessage, Guid>> IMessageChannel.SendCardsAsync<T>(ulong templateId, T parameters,
         IQuote? quote, IUser? ephemeralUser, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options) =>
         SendCardsAsync(templateId, parameters, quote, jsonSerializerOptions, options);
 

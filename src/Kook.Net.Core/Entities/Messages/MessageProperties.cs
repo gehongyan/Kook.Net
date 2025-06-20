@@ -51,7 +51,7 @@ public class MessageProperties
     ///     Kook.Net 无法通过网关或 API 获知消息是否使用了模板，无法获取消息的模板 ID。
     ///     因此如果要让新编辑的内容也使用模板，请在修改消息时手动设置此属性，且应重新为此属性赋值，不要尝试直接修改此属性中的成员。
     /// </remarks>
-    public int? TemplateId { get; set; }
+    public ulong? TemplateId { get; set; }
 
     /// <summary>
     ///     获取或设置要为更新此消息生成内容时使用的模板参数。

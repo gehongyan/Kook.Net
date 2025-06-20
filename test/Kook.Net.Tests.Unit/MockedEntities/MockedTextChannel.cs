@@ -119,7 +119,7 @@ internal sealed class MockedTextChannel : ITextChannel
         throw new NotImplementedException();
 
     /// <inheritdoc />
-    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync<T>(int templateId, T parameters, IQuote? quote = null, IUser? ephemeralUser = null,
+    public Task<Cacheable<IUserMessage, Guid>> SendTextAsync<T>(ulong templateId, T parameters, IQuote? quote = null, IUser? ephemeralUser = null,
         JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         throw new NotImplementedException();
 
@@ -133,7 +133,7 @@ internal sealed class MockedTextChannel : ITextChannel
         throw new NotImplementedException();
 
     /// <inheritdoc />
-    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(int templateId, T parameters, IQuote? quote = null, IUser? ephemeralUser = null,
+    public Task<Cacheable<IUserMessage, Guid>> SendCardsAsync<T>(ulong templateId, T parameters, IQuote? quote = null, IUser? ephemeralUser = null,
         JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         throw new NotImplementedException();
 

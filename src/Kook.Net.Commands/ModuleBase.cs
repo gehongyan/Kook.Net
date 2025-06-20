@@ -104,7 +104,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// <typeparam name="TParams"> 参数的类型。 </typeparam>
     /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync<TParams>(
-        int templateId, TParams parameters, bool isQuote = false, bool isEphemeral = false,
+        ulong templateId, TParams parameters, bool isQuote = false, bool isEphemeral = false,
         JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         await Context.Channel.SendTextAsync(templateId, parameters,
                 isQuote ? new MessageReference(Context.Message.Id) : null,
@@ -140,7 +140,7 @@ public abstract class ModuleBase<T> : IModuleBase
     /// <typeparam name="TParams"> 参数的类型。 </typeparam>
     /// <returns> 一个表示异步发送操作的任务。任务的结果包含所发送消息的可延迟加载的消息对象。 </returns>
     protected virtual async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync<TParams>(
-        int templateId, TParams parameters, bool isQuote = true, bool isEphemeral = false,
+        ulong templateId, TParams parameters, bool isQuote = true, bool isEphemeral = false,
         JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         await Context.Channel.SendCardsAsync(templateId, parameters,
                 isQuote ? new MessageReference(Context.Message.Id) : null,

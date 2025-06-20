@@ -83,7 +83,7 @@ Stream stream = null; // 要发送的文件的流
 FileAttachment attachment = default; // 要发送的文件的附件
 ICard card = null; // 要发送的卡片
 IEnumerable<ICard> cards = null; // 要发送的卡片列表
-int templateId = default; // 要发送的模板消息的模板 ID
+ulong templateId = default; // 要发送的模板消息的模板 ID
 T parameters = default; // 要发送的模板消息的参数
 JsonSerializerOptions jsonSerializerOptions = null; // 要发送的模板消息的参数的序列化选项
 
@@ -110,7 +110,7 @@ string content = null; // 要更新的消息的文本
 IEnumerable<ICard> cards = null; // 要更新的消息的卡片
 IQuote quote = null; // 要更新的消息的引用
 IUser ephemeralUser = null; // 要更新的瞬态消息的可见用户
-int templateId = default; // 要发送的模板消息的模板 ID
+ulong templateId = default; // 要发送的模板消息的模板 ID
 T parameters = default; // 要发送的模板消息的参数
 JsonSerializerOptions jsonSerializerOptions = null; // 要发送的模板消息的参数的序列化选项
 
