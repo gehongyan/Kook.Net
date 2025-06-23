@@ -9,6 +9,7 @@ internal class PagedResponseBase<TItem>
     public required TItem[] Items { get; set; }
 
     [JsonPropertyName("meta")]
+    [JsonConverter(typeof(PageMetaConverter))]
     public required PageMeta Meta { get; set; }
 
     [JsonPropertyName("sort")]
@@ -25,16 +26,9 @@ internal class PageMeta
         PageSize = pageSize;
     }
 
-    [JsonPropertyName("page")]
     public int Page { get; set; }
-
-    [JsonPropertyName("page_total")]
     public int PageTotal { get; set; }
-
-    [JsonPropertyName("page_size")]
     public int PageSize { get; set; }
-
-    [JsonPropertyName("total")]
     public int Total { get; set; }
 
     public static PageMeta Default => new();

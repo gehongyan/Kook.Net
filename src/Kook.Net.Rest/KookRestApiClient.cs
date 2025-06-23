@@ -732,6 +732,75 @@ internal class KookRestApiClient : IDisposable
 
     #endregion
 
+    #region Message Templates
+
+    public async Task<MessageTemplate> GetMessageTemplateAsync(ulong id, RequestOptions? options = null)
+    {
+        Preconditions.NotEqual(id, 0, nameof(id));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        IAsyncEnumerable<IReadOnlyCollection<MessageTemplate>> enumerator = SendPagedAsync<MessageTemplate>(HttpMethod.Get,
+            (pageSize, page) => $"template/list?page_size={KookConfig.MaxMessageTemplatesPerBatch}&page={page}",
+            ids, ClientBucketType.SendEdit, new PageMeta(1, KookConfig.MaxMessageTemplatesPerBatch), options);
+        MessageTemplate? foundItem = await enumerator
+            .TakeWhile(templates => templates is not null && templates.Count != 0)
+            .Select(templates => templates.FirstOrDefault(t => t.Id == id))
+            .OfType<MessageTemplate>()
+            .FirstOrDefaultAsync();
+        return foundItem ?? throw new InvalidOperationException($"Message template with ID {id} not found.");
+    }
+
+    public IAsyncEnumerable<IReadOnlyCollection<MessageTemplate>> GetMessageTemplatesAsync(
+        int limit = KookConfig.MaxMessageTemplatesPerBatch, int fromPage = 1, RequestOptions? options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        return SendPagedAsync<MessageTemplate>(HttpMethod.Get,
+            (pageSize, page) => $"template/list?page_size={KookConfig.MaxMessageTemplatesPerBatch}&page={page}",
+            ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
+    }
+
+    public async Task<CreateOrModifyMessageTemplateResponse> CreateMessageTemplateAsync(CreateMessageTemplateParams args,
+        RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        return await SendJsonAsync<CreateOrModifyMessageTemplateResponse>(HttpMethod.Post,
+                () => $"template/create", args, ids, ClientBucketType.SendEdit, false, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<CreateOrModifyMessageTemplateResponse> ModifyMessageTemplateAsync(ModifyMessageTemplateParams args,
+        RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.Id, 0, nameof(args.Id));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        return await SendJsonAsync<CreateOrModifyMessageTemplateResponse>(HttpMethod.Post,
+                () => $"template/update", args, ids, ClientBucketType.SendEdit, false, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task DeleteMessageTemplateAsync(DeleteMessageTemplateParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.Id, 0, nameof(args.Id));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        await SendJsonAsync(HttpMethod.Post,
+                () => $"template/delete", args, ids, ClientBucketType.SendEdit, null, options)
+            .ConfigureAwait(false);
+    }
+
+    #endregion
+
     #region Messages
 
     public async Task<IReadOnlyCollection<Message>> QueryMessagesAsync(ulong channelId, Guid? referenceMessageId = null,

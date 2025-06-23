@@ -70,6 +70,11 @@ public class KookConfig
     public const int MaxMessagesPerBatch = 50;
 
     /// <summary>
+    ///     获取 KOOK 允许在每个请求中获取的最大消息模板数。
+    /// </summary>
+    public const int MaxMessageTemplatesPerBatch = 20;
+
+    /// <summary>
     ///     获取默认情况下每个请求允许获取的最大项目数。
     /// </summary>
     public const int MaxItemsPerBatchByDefault = 100;

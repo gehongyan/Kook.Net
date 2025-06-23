@@ -223,6 +223,42 @@ public class KookRestClient : BaseKookClient, IKookClient
 
     #endregion
 
+    #region Message Templates
+
+    /// <summary>
+    ///     获取所有消息模板。
+    /// </summary>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是所有消息模板的只读集合。 </returns>
+    public Task<IReadOnlyCollection<RestMessageTemplate>> GetMessageTemplatesAsync(RequestOptions? options = null) =>
+        MessageTemplateHelper.GetMessageTemplatesAsync(this, options);
+
+    /// <summary>
+    ///     获取指定的消息模板。
+    /// </summary>
+    /// <param name="id"> 消息模板的 ID。</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是具有指定 ID 的消息模板。 </returns>
+    public Task<RestMessageTemplate> GetMessageTemplateAsync(ulong id, RequestOptions? options = null) =>
+        MessageTemplateHelper.GetMessageTemplateAsync(this, id, options);
+
+    /// <summary>
+    ///     创建一个新的消息模板。
+    /// </summary>
+    /// <param name="title"> 消息模板的标题。</param>
+    /// <param name="content"> 消息模板的内容。</param>
+    /// <param name="type"> 消息模板的类型。</param>
+    /// <param name="messageType"> 消息模板的消息类型。</param>
+    /// <param name="testChannelId"> 测试频道 ID。</param>
+    /// <param name="testData"> 测试数据。</param>
+    /// <returns> 一个表示异步创建操作的任务。任务的结果是所创建的消息模板。 </returns>
+    public Task<RestMessageTemplate> CreateMessageTemplateAsync(string title, string content,
+        TemplateType type = TemplateType.Twig, TemplateMessageType messageType = TemplateMessageType.KMarkdown,
+        ulong? testChannelId = null, JsonElement? testData = null) =>
+        MessageTemplateHelper.CreateAsync(this, title, content, type, messageType, testChannelId, testData);
+
+    #endregion
+
     #region Reactions
 
     /// <summary>
