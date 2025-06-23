@@ -24,6 +24,8 @@
       topicUid: Guides.QuickReference.Http.UserChat
     - name: 用户私聊消息接口
       topicUid: Guides.QuickReference.Http.DirectMessage
+    - name: 消息模板相关接口
+      topicUid: Guides.QuickReference.Http.Template
     - name: 好友相关接口
       topicUid: Guides.QuickReference.Http.Friend
     - name: Gateway 相关接口
