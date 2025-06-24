@@ -15,6 +15,11 @@ public enum KookErrorCode
     /// </summary>
     GeneralError = 40000,
 
+    /// <summary>
+    ///     操作失败，要求检查消息内容后重试。
+    /// </summary>
+    InvalidMessageContent = 40011,
+
     #region Hello
 
     /// <summary>

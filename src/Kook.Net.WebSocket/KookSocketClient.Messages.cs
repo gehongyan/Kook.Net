@@ -236,10 +236,8 @@ public partial class KookSocketClient
             _lastSeq = 0;
         }
 
-        string reason = reconnectPayload?.Message is not null && !string.IsNullOrWhiteSpace(reconnectPayload.Message)
-            ? $": {reconnectPayload.Message}"
-            : ".";
-        GatewayReconnectException exception = new($"Server requested a reconnect, resuming session failed{reason}");
+        GatewayReconnectException exception = new(
+            $"Server requested a reconnect, resuming session failed [Code] {reconnectPayload?.Code} [Reason] {reconnectPayload?.Message}");
         Connection.Error(exception);
     }
 
