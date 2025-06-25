@@ -11,8 +11,8 @@
 
 ### Changed
 
-- Changed the `messageId` parameter type in message sending methods from `int` to `ulong` to support a larger message ID
-  range.
+- Changed the `templateId` parameter type in message sending methods from `int` to `ulong` to support a larger message
+  ID range.
 
 ### Fixed
 
