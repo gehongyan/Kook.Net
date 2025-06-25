@@ -2,6 +2,26 @@
 
 ---
 
+## v0.9.11 [2025-06-25]
+
+### Added
+
+- Added support for message template related APIs.
+- `Debug` mode log level now outputs the gateway session ID.
+
+### Changed
+
+- Changed the `messageId` parameter type in message sending methods from `int` to `ulong` to support a larger message ID
+  range.
+
+### Fixed
+
+- Fixed an issue where changes in the gradient color data structure for roles caused application startup failures.
+
+### Others
+
+- Added a quick reference document for the message template API.
+
 ## v0.9.10 [2025-06-18]
 
 ### Fixed
