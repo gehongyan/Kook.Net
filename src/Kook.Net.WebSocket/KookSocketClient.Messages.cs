@@ -93,7 +93,9 @@ public partial class KookSocketClient
     private async Task HandleGatewayHelloAsync(JsonElement payload)
     {
         if (DeserializePayload<GatewayHelloPayload>(payload) is not { } gatewayHelloPayload) return;
-        await _gatewayLogger.DebugAsync("Received Hello").ConfigureAwait(false);
+        await _gatewayLogger
+            .DebugAsync($"Received Hello, session ID: {gatewayHelloPayload.SessionId}")
+            .ConfigureAwait(false);
         try
         {
             _sessionId = gatewayHelloPayload.SessionId;
@@ -228,6 +230,7 @@ public partial class KookSocketClient
     {
         GatewayReconnectPayload? reconnectPayload = DeserializePayload<GatewayReconnectPayload>(payload);
         await _gatewayLogger.DebugAsync("Received Reconnect").ConfigureAwait(false);
+        Guid? sessionId = _sessionId;
         if (reconnectPayload?.Code is KookErrorCode.MissingResumeArgument
             or KookErrorCode.SessionExpired
             or KookErrorCode.InvalidSequenceNumber)
@@ -237,7 +240,7 @@ public partial class KookSocketClient
         }
 
         GatewayReconnectException exception = new(
-            $"Server requested a reconnect, resuming session failed [Code] {reconnectPayload?.Code} [Reason] {reconnectPayload?.Message}");
+            $"Server requested a reconnect, resuming session failed [Session ID] {sessionId} [Error Code] {reconnectPayload?.Code} [Reason] {reconnectPayload?.Message}");
         Connection.Error(exception);
     }
 
