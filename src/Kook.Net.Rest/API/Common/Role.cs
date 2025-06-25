@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Kook.API.Rest;
 using Kook.Net.Converters;
 
 namespace Kook.API;
@@ -19,8 +20,7 @@ internal class Role
     public ColorType ColorType { get; set; }
 
     [JsonPropertyName("color_map")]
-    [JsonConverter(typeof(NullableGradientColorConverter))]
-    public GradientColor? GradientColor { get; set; }
+    public ColorMap? GradientColor { get; set; }
 
     [JsonPropertyName("position")]
     public int Position { get; set; }

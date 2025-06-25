@@ -85,7 +85,9 @@ public class SocketRole : SocketEntity<uint>, IRole
         Type = model.Type;
         Color = model.Color;
         ColorType = model.ColorType;
-        GradientColor = model.GradientColor;
+        GradientColor = model.GradientColor is { ColorList: [var left, var right] }
+            ? new GradientColor(new Color(left), new Color(right))
+            : null;
         Position = model.Position;
         IsHoisted = model.IsHoisted;
         IsMentionable = model.IsMentionable;
