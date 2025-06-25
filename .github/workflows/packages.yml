@@ -18,7 +18,7 @@ on:
 jobs:
   push_packages:
     name: Push Packages
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
