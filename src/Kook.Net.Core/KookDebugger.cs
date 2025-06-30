@@ -9,13 +9,7 @@ namespace Kook;
 [DebuggerStepThrough]
 public static class KookDebugger
 {
-    private static readonly Action<string> defaultDebugger = message =>
-    {
-        if (Debugger.IsAttached)
-            Debug.WriteLine(message);
-        else
-            Console.WriteLine(message);
-    };
+    private static readonly Action<string> defaultDebugger = Console.WriteLine;
 
     private static readonly Action<string> emptyDebugger = _ => { };
 
@@ -48,7 +42,8 @@ public static class KookDebugger
     ///     启用所有 Kook.Net 调试器。
     /// </summary>
     /// <remarks>
-    ///     当调试器附加到进程上时，Kook.Net 调试器日志将输出调试信息到调试器窗口，否则将输出到控制台。
+    ///     Kook.Net 调试器日志将输出到控制台，要输出到其他位置，请使用
+    ///     <see cref="Kook.KookDebugger.EnableAll(System.Action{Kook.KookDebuggerMessageSource,System.String})"/>。
     /// </remarks>
     public static void EnableAll()
     {
@@ -85,7 +80,8 @@ public static class KookDebugger
     ///     启用 Rest 调试器。
     /// </summary>
     /// <remarks>
-    ///     当调试器附加到进程上时，Kook.Net 调试器日志将输出调试信息到调试器窗口，否则将输出到控制台。
+    ///     Kook.Net 调试器日志将输出到控制台，要输出到其他位置，请使用
+    ///     <see cref="Kook.KookDebugger.EnableRest(System.Action{System.String})"/>。
     /// </remarks>
     public static void EnableRest() => EnableRest(defaultDebugger);
 
@@ -112,7 +108,8 @@ public static class KookDebugger
     ///     启用网关数据包调试器。
     /// </summary>
     /// <remarks>
-    ///     当调试器附加到进程上时，Kook.Net 调试器日志将输出调试信息到调试器窗口，否则将输出到控制台。
+    ///     Kook.Net 调试器日志将输出到控制台，要输出到其他位置，请使用
+    ///     <see cref="Kook.KookDebugger.EnablePacket(System.Action{System.String})"/>。
     /// </remarks>
     public static void EnablePacket() => EnablePacket(defaultDebugger);
 
@@ -139,7 +136,8 @@ public static class KookDebugger
     ///     启用速率限制调试器。
     /// </summary>
     /// <remarks>
-    ///     当调试器附加到进程上时，Kook.Net 调试器日志将输出调试信息到调试器窗口，否则将输出到控制台。
+    ///     Kook.Net 调试器日志将输出到控制台，要输出到其他位置，请使用
+    ///     <see cref="Kook.KookDebugger.EnableRatelimit(System.Action{System.String})"/>。
     /// </remarks>
     public static void EnableRatelimit() => EnableRatelimit(defaultDebugger);
 
@@ -166,7 +164,8 @@ public static class KookDebugger
     ///     启用音频调试器。
     /// </summary>
     /// <remarks>
-    ///     当调试器附加到进程上时，Kook.Net 调试器日志将输出调试信息到调试器窗口，否则将输出到控制台。
+    ///     Kook.Net 调试器日志将输出到控制台，要输出到其他位置，请使用
+    ///     <see cref="Kook.KookDebugger.EnableAudio(System.Action{System.String})"/>。
     /// </remarks>
     public static void EnableAudio() => EnableAudio(defaultDebugger);
 
