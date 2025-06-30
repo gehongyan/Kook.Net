@@ -1,9 +1,7 @@
 using System.IO.Compression;
 using System.Text;
-#if DEBUG_PACKETS
 using System.Diagnostics;
 using System.Text.Encodings.Web;
-#endif
 using System.Text.Json;
 using Kook.API.Gateway;
 using Kook.API.Rest;
@@ -46,13 +44,11 @@ internal class KookSocketApiClient : KookRestApiClient
     private Guid? _sessionId;
     private int _lastSeq;
 
-#if DEBUG_PACKETS
     private readonly JsonSerializerOptions _debugJsonSerializerOptions = new()
     {
         WriteIndented = true,
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
     };
-#endif
 
     public ConnectionState ConnectionState { get; private set; }
     internal IWebSocketClient WebSocketClient { get; }
@@ -75,9 +71,8 @@ internal class KookSocketApiClient : KookRestApiClient
         WebSocketClient.BinaryMessage += OnBinaryMessage;
         WebSocketClient.Closed += async ex =>
         {
-#if DEBUG_PACKETS
-            Debug.WriteLine(ex);
-#endif
+            if (KookDebugger.IsDebuggingPacket)
+                KookDebugger.DebugPacket(ex.ToString());
             await DisconnectAsync().ConfigureAwait(false);
             await _disconnectedEvent.InvokeAsync(ex).ConfigureAwait(false);
         };
@@ -105,17 +100,18 @@ internal class KookSocketApiClient : KookRestApiClient
             .Deserialize<GatewaySocketFrame>(decompressed, _serializerOptions);
         if (gatewaySocketFrame is not null)
         {
-#if DEBUG_PACKETS
-            string raw = Encoding.Default.GetString(decompressed.ToArray()).TrimEnd('\n');
-            string parsed = JsonSerializer
-                .Serialize(gatewaySocketFrame.Payload, _debugJsonSerializerOptions)
-                .TrimEnd('\n');
-            Debug.WriteLine($"""
-                [{DateTimeOffset.Now:HH:mm:ss}] <- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence}
-                [Raw] {raw}
-                [Parsed] {parsed}
-                """);
-#endif
+            if (KookDebugger.IsDebuggingPacket)
+            {
+                string raw = Encoding.Default.GetString(decompressed.ToArray()).TrimEnd('\n');
+                string parsed = JsonSerializer
+                    .Serialize(gatewaySocketFrame.Payload, _debugJsonSerializerOptions)
+                    .TrimEnd('\n');
+                KookDebugger.DebugPacket($"""
+                    [{DateTimeOffset.Now:HH:mm:ss}] <- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence}
+                    [Raw] {raw}
+                    [Parsed] {parsed}
+                    """);
+            }
             JsonElement payloadElement = gatewaySocketFrame.Payload as JsonElement? ?? EmptyJsonElement;
             await _receivedGatewayEvent
                 .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement)
@@ -128,16 +124,17 @@ internal class KookSocketApiClient : KookRestApiClient
         GatewaySocketFrame? gatewaySocketFrame = JsonSerializer.Deserialize<GatewaySocketFrame>(message, _serializerOptions);
         if (gatewaySocketFrame is null)
             return;
-#if DEBUG_PACKETS
-        string parsed = JsonSerializer
-            .Serialize(gatewaySocketFrame.Payload, _debugJsonSerializerOptions)
-            .TrimEnd('\n');
-        Debug.WriteLine($"""
-            [{DateTimeOffset.Now:HH:mm:ss}] <- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence}
-            [Raw] {message}
-            [Parsed] {parsed}
-            """);
-#endif
+        if (KookDebugger.IsDebuggingPacket)
+        {
+            string parsed = JsonSerializer
+                .Serialize(gatewaySocketFrame.Payload, _debugJsonSerializerOptions)
+                .TrimEnd('\n');
+            KookDebugger.DebugPacket($"""
+                [{DateTimeOffset.Now:HH:mm:ss}] <- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence}
+                [Raw] {message}
+                [Parsed] {parsed}
+                """);
+        }
         JsonElement payloadElement = gatewaySocketFrame.Payload as JsonElement? ?? EmptyJsonElement;
         await _receivedGatewayEvent
             .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement)
@@ -197,9 +194,7 @@ internal class KookSocketApiClient : KookRestApiClient
                     : string.Empty;
                 _gatewayUrl = $"{botGatewayResponse.Url}{resumeQuery}";
             }
-#if DEBUG_PACKETS
-            Debug.WriteLine("Connecting to gateway: " + _gatewayUrl);
-#endif
+            KookDebugger.DebugPacket("Connecting to gateway: " + _gatewayUrl);
             await WebSocketClient.ConnectAsync(_gatewayUrl).ConfigureAwait(false);
             ConnectionState = ConnectionState.Connected;
         }
@@ -288,10 +283,11 @@ internal class KookSocketApiClient : KookRestApiClient
             .SendAsync(new WebSocketRequest(WebSocketClient, bytes, true, ignoreLimit, options))
             .ConfigureAwait(false);
         await _sentGatewayMessageEvent.InvokeAsync(gatewaySocketFrameType).ConfigureAwait(false);
-
-#if DEBUG_PACKETS
-        string payloadString = JsonSerializer.Serialize(payload, _debugJsonSerializerOptions);
-        Debug.WriteLine($"[{DateTimeOffset.Now:HH:mm:ss}] -> [{gatewaySocketFrameType}] : #{sequence} \n{payloadString}".TrimEnd('\n'));
-#endif
+        if (KookDebugger.IsDebuggingPacket)
+        {
+            string payloadString = JsonSerializer.Serialize(payload, _debugJsonSerializerOptions);
+            KookDebugger.DebugPacket(
+                $"[{DateTimeOffset.Now:HH:mm:ss}] -> [{gatewaySocketFrameType}] : #{sequence} \n{payloadString}".TrimEnd('\n'));
+        }
     }
 }
