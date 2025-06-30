@@ -45,7 +45,7 @@ public static class KookDebugger
     /// <param name="packet"> 设置是否启用网关数据包调试器，当为 <c>null</c> 时不更改网关数据包调试器状态。</param>
     /// <param name="ratelimit"> 设置是否启用速率限制调试器，当为 <c>null</c> 时不更改速率限制调试器状态。</param>
     /// <param name="audio"> 设置是否启用音频调试器，当为 <c>null</c> 时不更改音频调试器状态。</param>
-    /// <param name="debugger"> 设置一个接受调试信息类型及字符串参数的调试器委托，用于处理调试信息，当为 <c>null</c> 时不更改调试器委托。</param>
+    /// <param name="debugger"> 设置一个接受调试信息类型及字符串参数的调试器委托，用于处理调试信息，当为 <c>null</c> 时，调试日志将输出到控制台。</param>
     public static void SetDebuggers(
         bool? rest = null,
         bool? packet = null,
