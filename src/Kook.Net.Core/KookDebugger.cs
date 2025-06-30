@@ -39,6 +39,74 @@ public static class KookDebugger
     public static bool IsDebuggingAudio { get; private set; }
 
     /// <summary>
+    ///     设置 Kook.Net 调试器。
+    /// </summary>
+    /// <param name="rest"> 设置是否启用 Rest 调试器，当为 <c>null</c> 时不更改 Rest 调试器状态。 </param>
+    /// <param name="packet"> 设置是否启用网关数据包调试器，当为 <c>null</c> 时不更改网关数据包调试器状态。</param>
+    /// <param name="ratelimit"> 设置是否启用速率限制调试器，当为 <c>null</c> 时不更改速率限制调试器状态。</param>
+    /// <param name="audio"> 设置是否启用音频调试器，当为 <c>null</c> 时不更改音频调试器状态。</param>
+    /// <param name="debugger"> 设置一个接受调试信息类型及字符串参数的调试器委托，用于处理调试信息，当为 <c>null</c> 时不更改调试器委托。</param>
+    public static void SetDebuggers(
+        bool? rest = null,
+        bool? packet = null,
+        bool? ratelimit = null,
+        bool? audio = null,
+        Action<KookDebuggerMessageSource, string>? debugger = null)
+    {
+        if (rest.HasValue)
+        {
+            if (rest.Value)
+            {
+                if (debugger is not null)
+                    EnableRest(x => debugger(KookDebuggerMessageSource.Rest, x));
+                else
+                    EnableRest();
+            }
+            else
+                DisableRest();
+        }
+
+        if (packet.HasValue)
+        {
+            if (packet.Value)
+            {
+                if (debugger is not null)
+                    EnablePacket(x => debugger(KookDebuggerMessageSource.Packet, x));
+                else
+                    EnablePacket();
+            }
+            else
+                DisablePacket();
+        }
+
+        if (ratelimit.HasValue)
+        {
+            if (ratelimit.Value)
+            {
+                if (debugger is not null)
+                    EnableRatelimit(x => debugger(KookDebuggerMessageSource.Ratelimit, x));
+                else
+                    EnableRatelimit();
+            }
+            else
+                DisableRatelimit();
+        }
+
+        if (audio.HasValue)
+        {
+            if (audio.Value)
+            {
+                if (debugger is not null)
+                    EnableAudio(x => debugger(KookDebuggerMessageSource.Audio, x));
+                else
+                    EnableAudio();
+            }
+            else
+                DisableAudio();
+        }
+    }
+
+    /// <summary>
     ///     启用所有 Kook.Net 调试器。
     /// </summary>
     /// <remarks>
@@ -190,21 +258,25 @@ public static class KookDebugger
 
     internal static void DebugRest(string message)
     {
-        if (IsDebuggingRest) restDebugger(message);
+        if (IsDebuggingRest)
+            restDebugger(message);
     }
 
     internal static void DebugPacket(string message)
     {
-        if (IsDebuggingPacket) packetDebugger(message);
+        if (IsDebuggingPacket)
+            packetDebugger(message);
     }
 
     internal static void DebugRatelimit(string message)
     {
-        if (IsDebuggingRatelimit) ratelimitDebugger(message);
+        if (IsDebuggingRatelimit)
+            ratelimitDebugger(message);
     }
 
     internal static void DebugAudio(string message)
     {
-        if (IsDebuggingAudio) audioDebugger(message);
+        if (IsDebuggingAudio)
+            audioDebugger(message);
     }
 }
