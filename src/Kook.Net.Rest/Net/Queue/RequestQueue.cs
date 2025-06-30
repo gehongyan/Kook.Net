@@ -1,7 +1,4 @@
 using System.Collections.Concurrent;
-#if DEBUG_LIMITS
-using System.Diagnostics;
-#endif
 
 namespace Kook.Net.Queue;
 
@@ -106,9 +103,7 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
         int millis = (int)Math.Ceiling((_waitUntil - DateTimeOffset.UtcNow).TotalMilliseconds);
         if (millis > 0)
         {
-#if DEBUG_LIMITS
-            Debug.WriteLine($"[{id}] Sleeping {millis} ms (Pre-emptive) [Global]");
-#endif
+            KookDebugger.DebugRatelimit($"[Ratelimit] [{id}] Sleeping {millis} ms (Pre-emptive) [Global]");
             await Task.Delay(millis, CancellationToken.None).ConfigureAwait(false);
         }
     }

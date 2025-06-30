@@ -10,10 +10,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <DefineConstants>DEBUG_PACKETS,DEBUG_AUDIO</DefineConstants>
-  </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj"/>
     <ProjectReference Include="..\Kook.Net.Rest\Kook.Net.Rest.csproj"/>

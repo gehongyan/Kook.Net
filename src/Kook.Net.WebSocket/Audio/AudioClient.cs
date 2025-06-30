@@ -247,9 +247,7 @@ internal partial class AudioClient : IAudioClient
                 try
                 {
                     await SendRtcpAsync(_ssrc, LastRtpTimestamp, SentPackets, SentOctets).ConfigureAwait(false);
-#if DEBUG
-                    _ = _audioLogger.DebugAsync("Sent RTCP").ConfigureAwait(false);
-#endif
+                    KookDebugger.DebugAudio($"[Audio] Sent RTCP [SSRC] {_ssrc} [RTP Timestamp] {LastRtpTimestamp} [Packets] {SentPackets} [Octets] {SentOctets}");
                 }
                 catch (Exception ex)
                 {

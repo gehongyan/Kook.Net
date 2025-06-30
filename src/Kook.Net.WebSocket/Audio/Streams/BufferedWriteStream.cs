@@ -97,10 +97,7 @@ public class BufferedWriteStream : AudioOutStream
                             _client.SentOctets += (uint)frame.Bytes;
                             _client.LastRtpActiveTick = Environment.TickCount;
                             // _silenceFrames = 0;
-#if DEBUG
-                            _ = _logger?.DebugAsync(
-                                $"Sent {frame.Bytes} bytes ({_queuedFrames.Count} frames buffered)");
-#endif
+                            KookDebugger.DebugAudio($"Sent {frame.Bytes} bytes ({_queuedFrames.Count} frames buffered)");
                         }
                         else
                         {
@@ -117,9 +114,7 @@ public class BufferedWriteStream : AudioOutStream
                             //     seq++;
                             //     _client._rtpTimestamp += OpusConverter.FrameSamplesPerChannel;
                             // }
-#if DEBUG
-                            _ = _logger?.DebugAsync("Buffer under run");
-#endif
+                            KookDebugger.DebugAudio("[Audio] Buffer under run");
                         }
                     }
                     else
@@ -154,9 +149,7 @@ public class BufferedWriteStream : AudioOutStream
         await _queueLock.WaitAsync(-1, cancellationToken).ConfigureAwait(false);
         if (!_bufferPool.TryDequeue(out byte[]? dstBuffer))
         {
-#if DEBUG
-            _ = _logger?.DebugAsync("Buffer overflow"); //Should never happen because of the queueLock
-#endif
+            KookDebugger.DebugAudio("[Audio] Buffer overflow"); //Should never happen because of the queueLock
             writeCancellationToken?.Dispose();
             return;
         }
@@ -164,9 +157,7 @@ public class BufferedWriteStream : AudioOutStream
         _queuedFrames.Enqueue(new Frame(dstBuffer, count));
         if (!_isPreloaded && _queuedFrames.Count == _queueLength)
         {
-#if DEBUG
-            _ = _logger?.DebugAsync("Preloaded");
-#endif
+            KookDebugger.DebugAudio("[Audio] Preloaded");
             _isPreloaded = true;
         }
         writeCancellationToken?.Dispose();

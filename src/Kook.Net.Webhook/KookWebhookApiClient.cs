@@ -50,9 +50,8 @@ internal class KookWebhookApiClient : KookSocketApiClient
         WebhookClient.TextMessage += OnTextMessage;
         WebhookClient.Closed += async ex =>
         {
-#if DEBUG_PACKETS
-            Debug.WriteLine(ex);
-#endif
+            if (KookDebugger.IsDebuggingPacket)
+                KookDebugger.DebugPacket(ex.ToString());
             await DisconnectAsync().ConfigureAwait(false);
         };
     }
