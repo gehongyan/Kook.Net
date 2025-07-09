@@ -189,8 +189,8 @@ internal class KookSocketApiClient : KookRestApiClient
             if (!_isExplicitUrl || _gatewayUrl == null)
             {
                 GetBotGatewayResponse botGatewayResponse = await GetBotGatewayAsync().ConfigureAwait(false);
-                string resumeQuery = _sessionId is not null
-                    ? $"&resume=1&sn={_lastSeq}&session_id={_sessionId}"
+                string resumeQuery = _sessionId.HasValue
+                    ? $"&resume=1&sn={_lastSeq}&session_id={_sessionId.Value}"
                     : string.Empty;
                 _gatewayUrl = $"{botGatewayResponse.Url}{resumeQuery}";
             }
