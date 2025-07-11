@@ -803,8 +803,9 @@ internal class KookRestApiClient : IDisposable
 
     #region Messages
 
-    public async Task<IReadOnlyCollection<Message>> QueryMessagesAsync(ulong channelId, Guid? referenceMessageId = null,
-        bool? queryPin = null, Direction dir = Direction.Unspecified, int count = 50, RequestOptions? options = null)
+    public async Task<IReadOnlyCollection<Message>> QueryMessagesAsync(ulong channelId,
+        Guid? referenceMessageId = null, bool? queryPin = null, Direction dir = Direction.Unspecified,
+        int count = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));
         if (referenceMessageId.HasValue)
