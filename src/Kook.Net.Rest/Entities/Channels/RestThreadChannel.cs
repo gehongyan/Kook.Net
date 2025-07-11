@@ -14,10 +14,16 @@ public class RestThreadChannel : RestGuildChannel, IThreadChannel
     public string Topic { get; private set; }
 
     /// <inheritdoc />
-    public virtual int PostCreationInterval { get; private set; }
+    public int PostCreationInterval { get; private set; }
 
     /// <inheritdoc />
-    public virtual int? ReplyInterval { get; private set; }
+    public int? ReplyInterval { get; private set; }
+
+    /// <inheritdoc />
+    public ThreadChannelLayout? DefaultLayout { get; private set; }
+
+    /// <inheritdoc />
+    public ThreadSortMode? DefaultSortMode { get; private set; }
 
     /// <inheritdoc />
     public ulong? CategoryId { get; private set; }
@@ -54,6 +60,10 @@ public class RestThreadChannel : RestGuildChannel, IThreadChannel
         PostCreationInterval = model.SlowMode / 1000;
         if (model.SlowModeReply.HasValue)
             ReplyInterval = model.SlowModeReply.Value / 1000;
+        if (model.DefaultLayout.HasValue)
+            DefaultLayout = model.DefaultLayout.Value;
+        if (model.SortOrder.HasValue)
+            DefaultSortMode = model.SortOrder.Value;
         IsPermissionSynced = model.PermissionSync;
     }
 

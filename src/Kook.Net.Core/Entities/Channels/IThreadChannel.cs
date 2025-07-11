@@ -31,6 +31,16 @@ public interface IThreadChannel : INestedChannel, IMentionable
     int? ReplyInterval { get; }
 
     /// <summary>
+    ///     获取此频道设置的帖子默认布局。
+    /// </summary>
+    ThreadChannelLayout? DefaultLayout { get; }
+
+    /// <summary>
+    ///     获取此频道设置的帖子默认排序。
+    /// </summary>
+    ThreadSortMode? DefaultSortMode { get; }
+
+    /// <summary>
     ///     修改此频道的属性。
     /// </summary>
     /// <param name="func"> 一个包含修改帖子频道的属性的委托。 </param>

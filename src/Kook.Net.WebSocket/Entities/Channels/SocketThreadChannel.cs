@@ -8,33 +8,15 @@ namespace Kook.WebSocket;
 /// <summary>
 ///     表示服务器中一个基于网关的帖子频道，可以浏览、发布和回复帖子。
 /// </summary>
-/// <remarks>
-///     <note type="warning">
-///         网关目前不会下发有关帖子频道信息变更的事件，此实体的信息可能会过时。如需获取最新信息，请先调用
-///         <see cref="Kook.WebSocket.SocketGuildChannel.UpdateAsync(Kook.RequestOptions)"/>
-///     </note>
-/// </remarks>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class SocketThreadChannel : SocketGuildChannel, IThreadChannel
 {
     #region SocketThreadChannel
 
     /// <inheritdoc />
-    /// <remarks>
-    ///     <note type="warning">
-    ///         网关目前不会下发有关帖子频道信息变更的事件，此实体的信息可能会过时。如需获取最新信息，请先调用
-    ///         <see cref="Kook.WebSocket.SocketGuildChannel.UpdateAsync(Kook.RequestOptions)"/>
-    ///     </note>
-    /// </remarks>
     public string Topic { get; private set; }
 
     /// <inheritdoc />
-    /// <remarks>
-    ///     <note type="warning">
-    ///         网关目前不会下发有关帖子频道信息变更的事件，此实体的信息可能会过时。如需获取最新信息，请先调用
-    ///         <see cref="Kook.WebSocket.SocketGuildChannel.UpdateAsync(Kook.RequestOptions)"/>
-    ///     </note>
-    /// </remarks>
     public int PostCreationInterval { get; private set; }
 
     /// <inheritdoc />
@@ -42,12 +24,7 @@ public class SocketThreadChannel : SocketGuildChannel, IThreadChannel
     ///     <note type="warning">
     ///         此属性值仅在调用
     ///         <see cref="Kook.WebSocket.SocketThreadChannel.ModifyAsync(System.Action{Kook.ModifyThreadChannelProperties},Kook.RequestOptions)"/>
-    ///         后才会被设置。
-    ///     </note>
-    ///     <br />
-    ///     <note type="warning">
-    ///         网关目前不会下发有关帖子频道信息变更的事件，此实体的信息可能会过时。如需获取最新信息，请先调用
-    ///         <see cref="Kook.WebSocket.SocketGuildChannel.UpdateAsync(Kook.RequestOptions)"/>
+    ///         后或网关下发变更后才会被设置。
     ///     </note>
     /// </remarks>
     public int? ReplyInterval { get; private set; }
@@ -55,33 +32,34 @@ public class SocketThreadChannel : SocketGuildChannel, IThreadChannel
     /// <inheritdoc />
     /// <remarks>
     ///     <note type="warning">
-    ///         网关目前不会下发有关帖子频道信息变更的事件，此实体的信息可能会过时。如需获取最新信息，请先调用
-    ///         <see cref="Kook.WebSocket.SocketGuildChannel.UpdateAsync(Kook.RequestOptions)"/>
+    ///         此属性值仅在调用
+    ///         <see cref="Kook.WebSocket.SocketThreadChannel.ModifyAsync(System.Action{Kook.ModifyThreadChannelProperties},Kook.RequestOptions)"/>
+    ///         后或网关下发变更后才会被设置。
     ///     </note>
     /// </remarks>
+    public ThreadChannelLayout? DefaultLayout { get; private set; }
+
+    /// <inheritdoc />
+    /// <remarks>
+    ///     <note type="warning">
+    ///         此属性值仅在调用
+    ///         <see cref="Kook.WebSocket.SocketThreadChannel.ModifyAsync(System.Action{Kook.ModifyThreadChannelProperties},Kook.RequestOptions)"/>
+    ///         后或网关下发变更后才会被设置。
+    ///     </note>
+    /// </remarks>
+    public ThreadSortMode? DefaultSortMode { get; private set; }
+
+    /// <inheritdoc />
     public ulong? CategoryId { get; private set; }
 
     /// <summary>
     ///     获取此嵌套频道在服务器频道列表中所属的分组频道的。
     /// </summary>
-    /// <remarks>
-    ///     如果当前频道不属于任何分组频道，则会返回 <c>null</c>。 <br />
-    ///     <note type="warning">
-    ///         网关目前不会下发有关帖子频道信息变更的事件，此实体的信息可能会过时。如需获取最新信息，请先调用
-    ///         <see cref="Kook.WebSocket.SocketGuildChannel.UpdateAsync(Kook.RequestOptions)"/>
-    ///     </note>
-    /// </remarks>
     public ICategoryChannel? Category => CategoryId.HasValue
         ? Guild.GetChannel(CategoryId.Value) as ICategoryChannel
         : null;
 
     /// <inheritdoc />
-    /// <remarks>
-    ///     <note type="warning">
-    ///         网关目前不会下发有关帖子频道信息变更的事件，此实体的信息可能会过时。如需获取最新信息，请先调用
-    ///         <see cref="Kook.WebSocket.SocketGuildChannel.UpdateAsync(Kook.RequestOptions)"/>
-    ///     </note>
-    /// </remarks>
     public bool? IsPermissionSynced { get; private set; }
 
     /// <inheritdoc />
@@ -119,6 +97,10 @@ public class SocketThreadChannel : SocketGuildChannel, IThreadChannel
         PostCreationInterval = model.SlowMode / 1000;
         if (model.SlowModeReply.HasValue)
             ReplyInterval = model.SlowModeReply.Value / 1000;
+        if (model.DefaultLayout.HasValue)
+            DefaultLayout = model.DefaultLayout.Value;
+        if (model.SortOrder.HasValue)
+            DefaultSortMode = model.SortOrder.Value;
         IsPermissionSynced = model.PermissionSync;
     }
 
