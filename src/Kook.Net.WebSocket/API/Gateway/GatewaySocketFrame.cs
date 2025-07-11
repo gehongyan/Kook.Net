@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Kook.API.Gateway;
@@ -12,5 +13,5 @@ internal class GatewaySocketFrame
 
     [JsonPropertyName("d")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public object? Payload { get; set; }
+    public JsonElement? Payload { get; set; }
 }

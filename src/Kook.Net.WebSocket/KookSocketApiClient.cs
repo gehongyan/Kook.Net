@@ -112,7 +112,7 @@ internal class KookSocketApiClient : KookRestApiClient
                     [Parsed] {parsed}
                     """);
             }
-            JsonElement payloadElement = gatewaySocketFrame.Payload as JsonElement? ?? EmptyJsonElement;
+            JsonElement payloadElement = gatewaySocketFrame.Payload ?? EmptyJsonElement;
             await _receivedGatewayEvent
                 .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement)
                 .ConfigureAwait(false);
@@ -135,7 +135,7 @@ internal class KookSocketApiClient : KookRestApiClient
                 [Parsed] {parsed}
                 """);
         }
-        JsonElement payloadElement = gatewaySocketFrame.Payload as JsonElement? ?? EmptyJsonElement;
+        JsonElement payloadElement = gatewaySocketFrame.Payload ?? EmptyJsonElement;
         await _receivedGatewayEvent
             .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement)
             .ConfigureAwait(false);
@@ -260,20 +260,20 @@ internal class KookSocketApiClient : KookRestApiClient
     }
 
     public Task SendGatewayAsync(GatewaySocketFrameType gatewaySocketFrameType,
-        object? payload, int? sequence, RequestOptions options) =>
+        JsonElement? payload, int? sequence, RequestOptions options) =>
         SendGatewayInternalAsync(gatewaySocketFrameType, payload, sequence, options);
 
     private async Task SendGatewayInternalAsync(GatewaySocketFrameType gatewaySocketFrameType,
-        object? payload, int? sequence, RequestOptions options)
+        JsonElement? payload, int? sequence, RequestOptions options)
     {
         CheckState();
-        payload = new GatewaySocketFrame
+        GatewaySocketFrame frame = new()
         {
             Type = gatewaySocketFrameType,
             Payload = payload,
             Sequence = sequence
         };
-        string json = SerializeJson(payload);
+        string json = SerializeJson(frame);
         byte[] bytes = Encoding.UTF8.GetBytes(json);
 
         options.IsGatewayBucket = true;

@@ -85,7 +85,7 @@ internal class KookWebhookApiClient : KookSocketApiClient
         GatewaySocketFrame? gatewaySocketFrame = JsonSerializer.Deserialize<GatewaySocketFrame>(decryptedFrame, _serializerOptions);
         if (gatewaySocketFrame is null)
             return null;
-        JsonElement payloadElement = gatewaySocketFrame.Payload as JsonElement? ?? EmptyJsonElement;
+        JsonElement payloadElement = gatewaySocketFrame.Payload ?? EmptyJsonElement;
 
         if (TryParseWebhookChallenge(gatewaySocketFrame.Type, payloadElement, out string? challenge))
         {
@@ -108,7 +108,7 @@ internal class KookWebhookApiClient : KookSocketApiClient
         GatewaySocketFrame? gatewaySocketFrame = JsonSerializer.Deserialize<GatewaySocketFrame>(decryptedFrame, _serializerOptions);
         if (gatewaySocketFrame is null)
             return null;
-        JsonElement payloadElement = gatewaySocketFrame.Payload as JsonElement? ?? EmptyJsonElement;
+        JsonElement payloadElement = gatewaySocketFrame.Payload ?? EmptyJsonElement;
 
         if (TryParseWebhookChallenge(gatewaySocketFrame.Type, payloadElement, out string? challenge))
         {
