@@ -68,6 +68,20 @@ internal static class Preconditions
 
     #endregion
 
+    #region Enums
+
+    public static void IsDefined<TEnum>(TEnum value, string name, string? msg = null)
+        where TEnum : struct, Enum
+    {
+        if (!Enum.IsDefined(typeof(TEnum), value))
+            throw CreateNotDefinedException(name, value, msg);
+    }
+
+    private static ArgumentException CreateNotDefinedException<T>(string name, T value, string? msg = null) =>
+        new ArgumentOutOfRangeException(name, value, msg ?? $"Value '{value}' is not defined in enum '{typeof(T)}'.");
+
+    #endregion
+
     #region Numerics
 
 #if NET7_0_OR_GREATER

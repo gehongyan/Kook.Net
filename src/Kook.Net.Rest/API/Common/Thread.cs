@@ -1,0 +1,61 @@
+﻿using System.Text.Json.Serialization;
+using Kook.API.Rest;
+
+namespace Kook.API;
+
+internal class Thread
+{
+    [JsonPropertyName("id")]
+    public ulong Id { get; set; }
+
+    [JsonPropertyName("status")]
+    public ThreadAuditState Status { get; set; }
+
+    [JsonPropertyName("title")]
+    public required string Title { get; set; }
+
+    [JsonPropertyName("cover")]
+    public required string Cover { get; set; }
+
+    [JsonPropertyName("post_id")]
+    public ulong PostId { get; set; }
+
+    [JsonPropertyName("medias")]
+    public required ThreadMedia[] Medias { get; set; }
+
+    [JsonPropertyName("preview_content")]
+    public required string PreviewContent { get; set; }
+
+    [JsonPropertyName("user")]
+    public required GuildMember User { get; set; }
+
+    [JsonPropertyName("category")]
+    public ThreadCategory? Category { get; set; }
+
+    [JsonPropertyName("tags")]
+    public required ThreadTag[] Tags { get; set; }
+
+    [JsonPropertyName("content")]
+    public required string Content { get; set; }
+
+    [JsonPropertyName("mention")]
+    public required ulong[] MentionedUserIds { get; set; }
+
+    [JsonPropertyName("mention_all")]
+    public bool MentionAll { get; set; }
+
+    [JsonPropertyName("mention_here")]
+    public bool MentionHere { get; set; }
+
+    [JsonPropertyName("mention_part")]
+    public required MentionedUser[] MentionedUsers { get; set; }
+
+    [JsonPropertyName("mention_role_part")]
+    public required Role[] MentionedRoles { get; set; }
+
+    [JsonPropertyName("channel_part")]
+    public required MentionedChannel[] MentionedChannels { get; set; }
+
+    [JsonPropertyName("item_part")]
+    public required Poke[] Pokes { get; set; }
+}

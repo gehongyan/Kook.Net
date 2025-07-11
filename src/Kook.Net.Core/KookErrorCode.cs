@@ -86,9 +86,18 @@ public enum KookErrorCode
     RequestFriendTooFast = 42008,
 
     /// <summary>
-    ///     操作操作由于当前用户不为 BUFF 用户而失败。
+    ///     操作由于当前用户不为 BUFF 用户而失败。
     /// </summary>
-    MissingBuffForRequestingIntimacyRelation = 42012
+    MissingBuffForRequestingIntimacyRelation = 42012,
+
+    #endregion
+
+    #region Threads
+
+    /// <summary>
+    ///     操作由于帖子的内容仍在审核中而失败。
+    /// </summary>
+    ThreadContentAuditing = 47001
 
     #endregion
 }

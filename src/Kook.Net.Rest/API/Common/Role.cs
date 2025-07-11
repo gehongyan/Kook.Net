@@ -38,4 +38,7 @@ internal class Role
 
     [JsonPropertyName("type")]
     public RoleType Type { get; set; }
+
+    [JsonPropertyName("op_permissions")]
+    public ulong OpPermissions { get; set; }
 }

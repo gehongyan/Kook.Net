@@ -965,6 +965,127 @@ internal class KookRestApiClient : IDisposable
 
     #endregion
 
+    #region Threads
+
+    public async Task<GetThreadCategoriesResponse> GetThreadCategoriesAsync(ulong channelId, RequestOptions? options = null)
+    {
+        Preconditions.NotEqual(channelId, 0, nameof(channelId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(channelId: channelId);
+        return await SendAsync<GetThreadCategoriesResponse>(HttpMethod.Get,
+                () => $"category/list?channel_id={channelId}", ids, ClientBucketType.SendEdit, false, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<Thread> CreateThreadAsync(CreateThreadParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
+        Preconditions.NotEqual(args.GuildId, 0, nameof(args.GuildId));
+        Preconditions.NotEqual(args.ThreadCategoryId, 0, nameof(args.ThreadCategoryId));
+        Preconditions.NotNullOrWhitespace(args.Title, nameof(args.Title));
+        Preconditions.NotNullOrWhitespace(args.Content, nameof(args.Content));
+
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(args.GuildId, args.ChannelId);
+        return await SendJsonAsync<Thread>(HttpMethod.Post,
+                () => $"thread/create", args, ids, ClientBucketType.SendEdit, false, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<ThreadPost> CreateThreadReplyAsync(CreateThreadReplyParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
+        Preconditions.NotEqual(args.ThreadId, 0, nameof(args.ThreadId));
+        Preconditions.NotEqual(args.ReplyId, 0, nameof(args.ReplyId));
+        Preconditions.NotNullOrWhitespace(args.Content, nameof(args.Content));
+
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(channelId: args.ChannelId);
+        return await SendJsonAsync<ThreadPost>(HttpMethod.Post,
+                () => $"thread/reply", args, ids, ClientBucketType.SendEdit, false, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<ExtendedThread> GetThreadAsync(ulong channelId, ulong threadId, RequestOptions? options = null)
+    {
+        Preconditions.NotEqual(channelId, 0, nameof(channelId));
+        Preconditions.NotEqual(threadId, 0, nameof(threadId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(channelId: channelId);
+        return await SendAsync<ExtendedThread>(HttpMethod.Get,
+                () => $"thread/view?channel_id={channelId}&thread_id={threadId}", ids, ClientBucketType.SendEdit, false, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task<QueryThreadsResponse> QueryThreadsAsync(ulong channelId, ulong? categoryId = null,
+        int limit = KookConfig.MaxThreadsPerBatch,
+        ThreadSortMode sorting = ThreadSortMode.Inherited,
+        DateTimeOffset? timestampBefore = null, RequestOptions? options = null)
+    {
+        Preconditions.NotEqual(channelId, 0, nameof(channelId));
+        Preconditions.NotEqual(categoryId, 0, nameof(categoryId));
+        Preconditions.GreaterThan(limit, 0, nameof(limit));
+        Preconditions.AtMost(limit, KookConfig.MaxItemsPerBatchByDefault, nameof(limit));
+        Preconditions.IsDefined(sorting, nameof(sorting));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(channelId: channelId);
+        string query = $"?channel_id={channelId}&sort={(int)sorting}&page_size={limit}";
+        if (categoryId.HasValue)
+            query += $"&categoryId={categoryId.Value}";
+        if (timestampBefore.HasValue)
+            query += $"&time={timestampBefore.Value.ToUnixTimeMilliseconds()}";
+        return await SendAsync<QueryThreadsResponse>(HttpMethod.Get,
+                () => $"thread/list{query}", ids, ClientBucketType.SendEdit, false, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task DeleteThreadPostAsync(DeleteThreadPostReplyParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
+        Preconditions.NotEqual(args.ThreadId, 0, nameof(args.ThreadId));
+        Preconditions.NotEqual(args.PostId, 0, nameof(args.PostId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(channelId: args.ChannelId);
+        await SendJsonAsync(HttpMethod.Post,
+                () => $"thread/delete", args, ids, ClientBucketType.SendEdit, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public IAsyncEnumerable<IReadOnlyCollection<ExtendedThreadPost>> QueryThreadPostsAsync(ulong channelId,
+        ulong threadId, ulong? postId = null, int limit = KookConfig.MaxThreadsPerBatch, int fromPage = 1,
+        SortMode sorting = SortMode.Ascending, DateTimeOffset? referenceTimestamp = null,
+        RequestOptions? options = null)
+    {
+        Preconditions.NotEqual(channelId, 0, nameof(channelId));
+        Preconditions.NotEqual(threadId, 0, nameof(threadId));
+        Preconditions.NotEqual(postId, 0, nameof(postId));
+        Preconditions.GreaterThan(limit, 0, nameof(limit));
+        Preconditions.AtMost(limit, KookConfig.MaxItemsPerBatchByDefault, nameof(limit));
+        Preconditions.IsDefined(sorting, nameof(sorting));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(channelId: channelId);
+        string query = $"?channel_id={channelId}&thread_id={threadId}&order={(int)sorting}";
+        if (postId.HasValue)
+            query += $"&post_id={postId.Value}";
+        if (referenceTimestamp.HasValue)
+            query += $"&time={referenceTimestamp.Value.ToUnixTimeMilliseconds()}";
+        return SendPagedAsync<ExtendedThreadPost>(HttpMethod.Get,
+            (pageSize, page) => $"thread/post?{query}&page_size={pageSize}&page={page}",
+            ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
+    }
+
+    #endregion
+
     #region Guild Users
 
     public IAsyncEnumerable<IReadOnlyCollection<Channel>> GetAudioChannelsUserConnectsAsync(ulong guildId, ulong userId,
@@ -1034,7 +1155,7 @@ internal class KookRestApiClient : IDisposable
 
     #region Direct Messages
 
-    public async Task<IReadOnlyCollection<DirectMessage>>QueryDirectMessagesAsync(
+    public async Task<IReadOnlyCollection<DirectMessage>> QueryDirectMessagesAsync(
         Guid? chatCode = null, ulong? userId = null,
         Guid? referenceMessageId = null, Direction dir = Direction.Unspecified,
         int count = KookConfig.MaxMessagesPerBatch, RequestOptions? options = null)

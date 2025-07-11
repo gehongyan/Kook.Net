@@ -12,6 +12,8 @@ using Kook.WebSocket;
 // - 这里可以看基于文本的命令框架的指南与示例
 // - https://kooknet.dev/guides/text_commands/intro.html
 
+KookDebugger.SetDebuggers(true, true);
+
 // KookSocketConfig 是 KookSocketClient 的配置类
 KookSocketConfig config = new()
 {
