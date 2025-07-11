@@ -96,8 +96,8 @@ internal class KookSocketApiClient : KookRestApiClient
         await decompressor.CopyToAsync(decompressed);
         decompressed.Position = 0;
 
-        GatewaySocketFrame? gatewaySocketFrame = JsonSerializer
-            .Deserialize<GatewaySocketFrame>(decompressed, _serializerOptions);
+        GatewaySocketFrame? gatewaySocketFrame = await JsonSerializer
+            .DeserializeAsync<GatewaySocketFrame>(decompressed, _serializerOptions);
         if (gatewaySocketFrame is not null)
         {
             if (KookDebugger.IsDebuggingPacket)
