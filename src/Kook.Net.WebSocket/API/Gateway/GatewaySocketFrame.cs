@@ -14,4 +14,8 @@ internal class GatewaySocketFrame
     [JsonPropertyName("d")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public JsonElement? Payload { get; set; }
+
+    [JsonPropertyName("extra")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public JsonElement? Extra { get; set; }
 }

@@ -54,6 +54,11 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     /// <inheritdoc />
     public override int Latency { get; protected set; }
 
+    /// <summary>
+    ///     获取当前客户端的网关意图。
+    /// </summary>
+    public GatewayIntents? GatewayIntents { get; private set; }
+
     #endregion
 
     // From KookSocketConfig
@@ -431,7 +436,8 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
     #region ProcessMessageAsync
 
-    internal virtual async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType, int? sequence, JsonElement payload)
+    internal virtual async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType,
+        int? sequence, JsonElement payload, JsonElement extra)
     {
         if (sequence.HasValue)
         {
@@ -441,6 +447,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         }
 
         _lastMessageTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+        if (extra.TryGetProperty("intent", out JsonElement intentProperty)
+            && intentProperty.TryGetInt32(out int intents))
+            GatewayIntents = (GatewayIntents)intents;
 
         try
         {

@@ -154,7 +154,8 @@ public abstract class KookWebhookClient : KookSocketClient
         base.Dispose(disposing);
     }
 
-    internal override async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType, int? sequence, JsonElement payload)
+    internal override async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType,
+        int? sequence, JsonElement payload, JsonElement extra)
     {
         if (gatewaySocketFrameType is GatewaySocketFrameType.Event)
         {
@@ -173,7 +174,7 @@ public abstract class KookWebhookClient : KookSocketClient
             }
         }
 
-        await base.ProcessMessageAsync(gatewaySocketFrameType, sequence, payload).ConfigureAwait(false);
+        await base.ProcessMessageAsync(gatewaySocketFrameType, sequence, payload, extra).ConfigureAwait(false);
     }
 
     private async Task RunHeartbeatAsync(CancellationToken cancellationToken)

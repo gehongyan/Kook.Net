@@ -22,13 +22,13 @@ internal class KookSocketApiClient : KookRestApiClient
 
     internal readonly AsyncEvent<Func<GatewaySocketFrameType, Task>> _sentGatewayMessageEvent = new();
 
-    public event Func<GatewaySocketFrameType, int?, JsonElement, Task> ReceivedGatewayEvent
+    public event Func<GatewaySocketFrameType, int?, JsonElement, JsonElement, Task> ReceivedGatewayEvent
     {
         add => _receivedGatewayEvent.Add(value);
         remove => _receivedGatewayEvent.Remove(value);
     }
 
-    internal readonly AsyncEvent<Func<GatewaySocketFrameType, int?, JsonElement, Task>> _receivedGatewayEvent = new();
+    internal readonly AsyncEvent<Func<GatewaySocketFrameType, int?, JsonElement, JsonElement, Task>> _receivedGatewayEvent = new();
 
     public event Func<Exception, Task> Disconnected
     {
@@ -113,8 +113,9 @@ internal class KookSocketApiClient : KookRestApiClient
                     """);
             }
             JsonElement payloadElement = gatewaySocketFrame.Payload ?? EmptyJsonElement;
+            JsonElement extraElement = gatewaySocketFrame.Extra ?? EmptyJsonElement;
             await _receivedGatewayEvent
-                .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement)
+                .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement, extraElement)
                 .ConfigureAwait(false);
         }
     }
@@ -136,8 +137,9 @@ internal class KookSocketApiClient : KookRestApiClient
                 """);
         }
         JsonElement payloadElement = gatewaySocketFrame.Payload ?? EmptyJsonElement;
+        JsonElement extraElement = gatewaySocketFrame.Extra ?? EmptyJsonElement;
         await _receivedGatewayEvent
-            .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement)
+            .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement, extraElement)
             .ConfigureAwait(false);
     }
 

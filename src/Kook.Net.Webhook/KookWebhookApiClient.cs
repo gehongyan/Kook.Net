@@ -86,6 +86,7 @@ internal class KookWebhookApiClient : KookSocketApiClient
         if (gatewaySocketFrame is null)
             return null;
         JsonElement payloadElement = gatewaySocketFrame.Payload ?? EmptyJsonElement;
+        JsonElement extraElement = gatewaySocketFrame.Extra ?? EmptyJsonElement;
 
         if (TryParseWebhookChallenge(gatewaySocketFrame.Type, payloadElement, out string? challenge))
         {
@@ -94,7 +95,7 @@ internal class KookWebhookApiClient : KookSocketApiClient
         }
 
         await _receivedGatewayEvent
-            .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement)
+            .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement, extraElement)
             .ConfigureAwait(false);
         return null;
     }
@@ -109,6 +110,7 @@ internal class KookWebhookApiClient : KookSocketApiClient
         if (gatewaySocketFrame is null)
             return null;
         JsonElement payloadElement = gatewaySocketFrame.Payload ?? EmptyJsonElement;
+        JsonElement extraElement = gatewaySocketFrame.Extra ?? EmptyJsonElement;
 
         if (TryParseWebhookChallenge(gatewaySocketFrame.Type, payloadElement, out string? challenge))
         {
@@ -117,7 +119,7 @@ internal class KookWebhookApiClient : KookSocketApiClient
         }
 
         await _receivedGatewayEvent
-            .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement)
+            .InvokeAsync(gatewaySocketFrame.Type, gatewaySocketFrame.Sequence, payloadElement, extraElement)
             .ConfigureAwait(false);
         return null;
     }
