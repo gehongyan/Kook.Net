@@ -3,7 +3,7 @@
 /// <summary>
 ///     表示一个帖子的审核状态。
 /// </summary>
-public enum ThreadAuditState
+public enum ThreadAuditStatus
 {
     /// <summary>
     ///     帖子正在审核中。

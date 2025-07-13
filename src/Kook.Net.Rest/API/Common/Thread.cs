@@ -9,13 +9,13 @@ internal class Thread
     public ulong Id { get; set; }
 
     [JsonPropertyName("status")]
-    public ThreadAuditState Status { get; set; }
+    public ThreadAuditStatus Status { get; set; }
 
     [JsonPropertyName("title")]
     public required string Title { get; set; }
 
     [JsonPropertyName("cover")]
-    public required string Cover { get; set; }
+    public string? Cover { get; set; }
 
     [JsonPropertyName("post_id")]
     public ulong PostId { get; set; }

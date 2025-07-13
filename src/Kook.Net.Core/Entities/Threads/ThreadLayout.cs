@@ -3,7 +3,7 @@
 /// <summary>
 ///     表示帖子频道的布局。
 /// </summary>
-public enum ThreadChannelLayout
+public enum ThreadLayout
 {
     /// <summary>
     ///     列表模式。

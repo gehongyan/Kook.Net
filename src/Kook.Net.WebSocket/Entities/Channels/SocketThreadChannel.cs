@@ -37,7 +37,7 @@ public class SocketThreadChannel : SocketGuildChannel, IThreadChannel
     ///         后或网关下发变更后才会被设置。
     ///     </note>
     /// </remarks>
-    public ThreadChannelLayout? DefaultLayout { get; private set; }
+    public ThreadLayout? DefaultLayout { get; private set; }
 
     /// <inheritdoc />
     /// <remarks>
@@ -47,7 +47,7 @@ public class SocketThreadChannel : SocketGuildChannel, IThreadChannel
     ///         后或网关下发变更后才会被设置。
     ///     </note>
     /// </remarks>
-    public ThreadSortMode? DefaultSortMode { get; private set; }
+    public ThreadSortOrder? DefaultSortOrder { get; private set; }
 
     /// <inheritdoc />
     public ulong? CategoryId { get; private set; }
@@ -100,7 +100,7 @@ public class SocketThreadChannel : SocketGuildChannel, IThreadChannel
         if (model.DefaultLayout.HasValue)
             DefaultLayout = model.DefaultLayout.Value;
         if (model.SortOrder.HasValue)
-            DefaultSortMode = model.SortOrder.Value;
+            DefaultSortOrder = model.SortOrder.Value;
         IsPermissionSynced = model.PermissionSync;
     }
 

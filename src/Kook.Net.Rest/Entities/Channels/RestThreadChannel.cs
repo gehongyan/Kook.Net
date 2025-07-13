@@ -20,10 +20,10 @@ public class RestThreadChannel : RestGuildChannel, IThreadChannel
     public int? ReplyInterval { get; private set; }
 
     /// <inheritdoc />
-    public ThreadChannelLayout? DefaultLayout { get; private set; }
+    public ThreadLayout? DefaultLayout { get; private set; }
 
     /// <inheritdoc />
-    public ThreadSortMode? DefaultSortMode { get; private set; }
+    public ThreadSortOrder? DefaultSortOrder { get; private set; }
 
     /// <inheritdoc />
     public ulong? CategoryId { get; private set; }
@@ -63,7 +63,7 @@ public class RestThreadChannel : RestGuildChannel, IThreadChannel
         if (model.DefaultLayout.HasValue)
             DefaultLayout = model.DefaultLayout.Value;
         if (model.SortOrder.HasValue)
-            DefaultSortMode = model.SortOrder.Value;
+            DefaultSortOrder = model.SortOrder.Value;
         IsPermissionSynced = model.PermissionSync;
     }
 
