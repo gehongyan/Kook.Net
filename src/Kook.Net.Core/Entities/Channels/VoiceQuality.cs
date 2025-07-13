@@ -6,49 +6,86 @@ namespace Kook;
 public enum VoiceQuality
 {
     /// <summary>
+    ///     流畅。
+    /// </summary>
+    /// <remarks>
     ///     等效于约 18 kbps。
-    /// </summary>
-    _18kbps = 1,
+    /// </remarks>
+    Smooth = 1,
+
+    /// <inheritdoc cref="Smooth" />
+    [Obsolete("Use VoiceQuality.Smooth instead.")]
+    _18kbps = Smooth,
 
     /// <summary>
-    ///     等效于约 48 kbps。
-    /// </summary>
-    _48kbps = 2,
-
-    /// <summary>
-    ///     等效于约 96 kbps。
-    /// </summary>
-    _96kbps = 3,
-
-    /// <summary>
-    ///     等效于约 128 kbps。
+    ///     正常。
     /// </summary>
     /// <remarks>
-    ///     此质量需要服务器助力等级达到 <see cref="Kook.BoostLevel.Level1"/>。
+    ///     等效于约 32 kbps。
     /// </remarks>
-    _128kbps = 4,
+    Normal = 2,
+
+    /// <inheritdoc cref="Normal" />
+    [Obsolete("Use VoiceQuality.Normal instead.")]
+    _48kbps = Normal,
 
     /// <summary>
-    ///     等效于约 192 kbps。
+    ///     质量。
     /// </summary>
     /// <remarks>
-    ///     此质量需要服务器助力等级达到 <see cref="Kook.BoostLevel.Level2"/>。
+    ///     等效于约 64 kbps。
     /// </remarks>
-    _192kbps = 5,
+    Standard = 3,
+
+    /// <inheritdoc cref="Standard" />
+    [Obsolete("Use VoiceQuality.Standard instead.")]
+    _96kbps = Standard,
 
     /// <summary>
-    ///     等效于约 256 kbps。
+    ///     高质量。
     /// </summary>
     /// <remarks>
-    ///     此质量需要服务器助力等级达到 <see cref="Kook.BoostLevel.Level3"/>。
+    ///     等效于约 128 kbps，此质量需要服务器助力等级达到 <see cref="Kook.BoostLevel.Level1"/>。
     /// </remarks>
-    _256kbps = 6,
+    High = 4,
+
+    /// <inheritdoc cref="High" />
+    [Obsolete("Use VoiceQuality.High instead.")]
+    _128kbps = High,
 
     /// <summary>
-    ///     等效于约 320 kbps。
+    ///     更高质量。
     /// </summary>
     /// <remarks>
-    ///     此质量需要服务器助力等级达到 <see cref="Kook.BoostLevel.Level5"/>。
+    ///     等效于约 192 kbps，此质量需要服务器助力等级达到 <see cref="Kook.BoostLevel.Level2"/>。
     /// </remarks>
-    _320kbps = 7
+    Higher = 5,
+
+    /// <inheritdoc cref="Higher" />
+    [Obsolete("Use VoiceQuality.Higher instead.")]
+    _192kbps = Higher,
+
+    /// <summary>
+    ///     卓越质量。
+    /// </summary>
+    /// <remarks>
+    ///     等效于约 256 kbps，此质量需要服务器助力等级达到 <see cref="Kook.BoostLevel.Level3"/>。
+    /// </remarks>
+    Excellent = 6,
+
+    /// <inheritdoc cref="Excellent" />
+    [Obsolete("Use VoiceQuality.Excellent instead.")]
+    _256kbps = Excellent,
+
+    /// <summary>
+    ///     极致质量。
+    /// </summary>
+    /// <remarks>
+    ///     等效于约 320 kbps，此质量需要服务器助力等级达到 <see cref="Kook.BoostLevel.Level5"/>。
+    /// </remarks>
+    Ultimate = 7,
+
+    /// <inheritdoc cref="Ultimate" />
+    [Obsolete("Use VoiceQuality.Ultimate instead.")]
+    _320kbps = Ultimate
 }

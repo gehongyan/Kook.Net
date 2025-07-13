@@ -9,7 +9,7 @@ namespace Kook;
 public class GuildHelperTests
 {
     [Theory]
-    [InlineData(BoostLevel.None, 96)]
+    [InlineData(BoostLevel.None, 64)]
     [InlineData(BoostLevel.Level1, 128)]
     [InlineData(BoostLevel.Level2, 192)]
     [InlineData(BoostLevel.Level3, 256)]
