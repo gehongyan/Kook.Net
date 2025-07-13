@@ -184,43 +184,9 @@ public static class MessageExtensions
         return false;
     }
 
-    /// <summary>
-    ///     尝试将卡片的内容展开为单个字符串。
-    /// </summary>
-    /// <param name="msg"> 要展开的消息。 </param>
-    /// <param name="expandedContent"> 展开的内容。 </param>
-    /// <returns> 如果成功展开，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
+    /// <inheritdoc cref="Kook.MessageExtensions.TryExtractCardContent" />
+    [Obsolete("Use `Kook.MessageExtensions.TryExtractCardContent(IUserMessage, out string)` instead.")]
     public static bool TryExpandCardContent(this IUserMessage msg,
-        [NotNullWhen(true)] out string? expandedContent)
-    {
-        if (!msg.MaybeTextImageMixedMessage())
-        {
-            expandedContent = null;
-            return false;
-        }
-
-        string result = string.Join(" ", EnumerateCardModuleContents(msg.Cards));
-        if (string.IsNullOrWhiteSpace(result))
-        {
-            expandedContent = null;
-            return false;
-        }
-
-        expandedContent = result;
-        return true;
-    }
-
-    private static IEnumerable<string> EnumerateCardModuleContents(IEnumerable<ICard> cards) => cards
-        .OfType<Card>()
-        .SelectMany(x => x.Modules)
-        .Select(x => x switch
-        {
-            SectionModule { Text: PlainTextElement or KMarkdownElement } sectionModule =>
-                sectionModule.Text.ToString(),
-            ContainerModule { Elements: [{ } element] } => element.Source,
-            IMediaModule { Source: { Length: > 0 } mediaSource } => mediaSource,
-            _ => null
-        })
-        .OfType<string>()
-        .Where(x => !string.IsNullOrWhiteSpace(x));
+        [NotNullWhen(true)] out string? expandedContent) =>
+        msg.TryExtractCardContent(out expandedContent);
 }

@@ -545,7 +545,7 @@ public class CommandService : IDisposable
     public Task<IResult> ExecuteAsync(ICommandContext context, int argPos, IServiceProvider services,
         MultiMatchHandling multiMatchHandling = MultiMatchHandling.Exception)
     {
-        string input = context.Message.TryExpandCardContent(out string? expandedContent)
+        string input = context.Message.TryExtractCardContent(out string? expandedContent)
             ? expandedContent[argPos..]
             : context.Message.Content[argPos..];
         return ExecuteAsync(context, input, services, multiMatchHandling);

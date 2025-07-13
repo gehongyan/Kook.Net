@@ -182,9 +182,14 @@ public class RestUserMessage : RestMessage, IUserMessage
     /// <param name="everyoneHandling"> 指定全体成员与在线成员提及标签的处理方式。 </param>
     /// <param name="emojiHandling"> 指定表情符号标签的处理方式。 </param>
     /// <returns> 转换后的消息文本。 </returns>
+    /// <remarks>
+    ///     此方法推荐适用于消息类型为 <see cref="Kook.MessageType.Text"/> 或
+    ///     <see cref="Kook.MessageType.KMarkdown"/>，对于 <see cref="Kook.MessageType.Card"/> 类型的消息，参见
+    ///     <see cref="Kook.MessageExtensions.TryExtractCardContent(Kook.IUserMessage,out System.String)"/>。
+    /// </remarks>
     public string Resolve(int startIndex, TagHandling userHandling = TagHandling.Name,
         TagHandling channelHandling = TagHandling.Name, TagHandling roleHandling = TagHandling.Name,
-        TagHandling everyoneHandling = TagHandling.Ignore, TagHandling emojiHandling = TagHandling.Name) =>
+        TagHandling everyoneHandling = TagHandling.Name, TagHandling emojiHandling = TagHandling.Name) =>
         MentionUtils.Resolve(this, startIndex,
             userHandling, channelHandling, roleHandling, everyoneHandling, emojiHandling);
 

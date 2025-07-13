@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 namespace Kook;
@@ -227,4 +228,45 @@ public static class MessageExtensions
             or IMediaModule { Source.Length: > 0 }
         );
     }
+
+    /// <summary>
+    ///     尝试将卡片的内容展开为单个字符串。
+    /// </summary>
+    /// <param name="msg"> 要展开的消息。 </param>
+    /// <param name="expandedContent"> 展开的内容。 </param>
+    /// <returns> 如果成功展开，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
+    public static bool TryExtractCardContent(this IUserMessage msg,
+        [NotNullWhen(true)] out string? expandedContent)
+    {
+        // TODO: 移动到 MessageUtils，并支持设置 TagHandling
+        if (!msg.MaybeTextImageMixedMessage())
+        {
+            expandedContent = null;
+            return false;
+        }
+
+        string result = string.Join(" ", EnumerateCardModuleContents(msg.Cards));
+        if (string.IsNullOrWhiteSpace(result))
+        {
+            expandedContent = null;
+            return false;
+        }
+
+        expandedContent = result;
+        return true;
+    }
+
+    private static IEnumerable<string> EnumerateCardModuleContents(IEnumerable<ICard> cards) => cards
+        .OfType<Card>()
+        .SelectMany(x => x.Modules)
+        .Select(x => x switch
+        {
+            SectionModule { Text: PlainTextElement or KMarkdownElement } sectionModule =>
+                sectionModule.Text.ToString(),
+            ContainerModule { Elements: [{ } element] } => element.Source,
+            IMediaModule { Source: { Length: > 0 } mediaSource } => mediaSource,
+            _ => null
+        })
+        .OfType<string>()
+        .Where(x => !string.IsNullOrWhiteSpace(x));
 }
