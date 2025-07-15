@@ -4,21 +4,21 @@ using System.Text.Json.Serialization;
 
 namespace Kook.Net.Converters;
 
-internal class TypeIdPermissionOverwriteTargetTypeConverter : JsonConverter<PermissionOverwriteTargetType>
+internal class TypeIdPermissionOverwriteTargetTypeConverter : JsonConverter<PermissionOverwriteTarget>
 {
-    public override PermissionOverwriteTargetType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+    public override PermissionOverwriteTarget Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
         reader.GetString() switch
         {
-            "role_id" => PermissionOverwriteTargetType.Role,
-            "user_id" => PermissionOverwriteTargetType.User,
-            _ => PermissionOverwriteTargetType.User
+            "role_id" => PermissionOverwriteTarget.Role,
+            "user_id" => PermissionOverwriteTarget.User,
+            _ => PermissionOverwriteTarget.User
         };
 
-    public override void Write(Utf8JsonWriter writer, PermissionOverwriteTargetType value, JsonSerializerOptions options) =>
+    public override void Write(Utf8JsonWriter writer, PermissionOverwriteTarget value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
-            PermissionOverwriteTargetType.Role => "role_id",
-            PermissionOverwriteTargetType.User => "user_id",
+            PermissionOverwriteTarget.Role => "role_id",
+            PermissionOverwriteTarget.User => "user_id",
             _ => "user_id"
         });
 }

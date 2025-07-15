@@ -695,7 +695,7 @@ internal class KookRestApiClient : IDisposable
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
-        if (args.TargetType != PermissionOverwriteTargetType.Role)
+        if (args.TargetType != PermissionOverwriteTarget.Role)
             Preconditions.NotEqual(args.TargetId, 0, nameof(args.TargetId));
         options = RequestOptions.CreateOrClone(options);
 

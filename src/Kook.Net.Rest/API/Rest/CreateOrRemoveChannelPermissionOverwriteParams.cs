@@ -10,7 +10,7 @@ internal class CreateOrRemoveChannelPermissionOverwriteParams
 
     [JsonPropertyName("type")]
     [JsonConverter(typeof(TypeIdPermissionOverwriteTargetTypeConverter))]
-    public required PermissionOverwriteTargetType TargetType { get; set; }
+    public required PermissionOverwriteTarget TargetType { get; set; }
 
     [JsonPropertyName("value")]
     public required ulong TargetId { get; set; }

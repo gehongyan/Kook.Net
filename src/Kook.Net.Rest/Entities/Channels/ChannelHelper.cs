@@ -545,7 +545,7 @@ internal static class ChannelHelper
         CreateOrRemoveChannelPermissionOverwriteParams args = new()
         {
             ChannelId = channel.Id,
-            TargetType = PermissionOverwriteTargetType.User,
+            TargetType = PermissionOverwriteTarget.User,
             TargetId = user.Id
         };
         CreateOrModifyChannelPermissionOverwriteResponse response = await client.ApiClient
@@ -560,13 +560,13 @@ internal static class ChannelHelper
         CreateOrRemoveChannelPermissionOverwriteParams args = new()
         {
             ChannelId = channel.Id,
-            TargetType = PermissionOverwriteTargetType.Role,
+            TargetType = PermissionOverwriteTarget.Role,
             TargetId = role.Id
         };
         CreateOrModifyChannelPermissionOverwriteResponse resp = await client.ApiClient
             .CreateChannelPermissionOverwriteAsync(args, options)
             .ConfigureAwait(false);
-        return new RolePermissionOverwrite(role.Id, new OverwritePermissions(resp.Allow, resp.Deny));
+        return new RolePermissionOverwrite(role, new OverwritePermissions(resp.Allow, resp.Deny));
     }
 
     public static async Task RemovePermissionOverwriteAsync(IGuildChannel channel,
@@ -575,7 +575,7 @@ internal static class ChannelHelper
         CreateOrRemoveChannelPermissionOverwriteParams args = new()
         {
             ChannelId = channel.Id,
-            TargetType = PermissionOverwriteTargetType.User,
+            TargetType = PermissionOverwriteTarget.User,
             TargetId = user.Id
         };
         await client.ApiClient.RemoveChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
@@ -587,7 +587,7 @@ internal static class ChannelHelper
         CreateOrRemoveChannelPermissionOverwriteParams args = new()
         {
             ChannelId = channel.Id,
-            TargetType = PermissionOverwriteTargetType.Role,
+            TargetType = PermissionOverwriteTarget.Role,
             TargetId = role.Id
         };
         await client.ApiClient.RemoveChannelPermissionOverwriteAsync(args, options).ConfigureAwait(false);
@@ -597,14 +597,14 @@ internal static class ChannelHelper
         BaseKookClient client, IGuildUser user, Func<OverwritePermissions, OverwritePermissions> func,
         RequestOptions? options)
     {
-        OverwritePermissions? perms = channel.UserPermissionOverwrites.SingleOrDefault(x => x.Target.Id == user.Id)?.Permissions;
+        OverwritePermissions? perms = channel.UserPermissionOverwrites.SingleOrDefault(x => x.TargetId == user.Id)?.Permissions;
         if (!perms.HasValue)
             throw new ArgumentNullException(nameof(user), "The user does not have any permission overwrites on this channel.");
         perms = func(perms.Value);
         ModifyChannelPermissionOverwriteParams args = new()
         {
             ChannelId = channel.Id,
-            TargetType = PermissionOverwriteTargetType.User,
+            TargetType = PermissionOverwriteTarget.User,
             TargetId = user.Id,
             Allow = perms.Value.AllowValue,
             Deny = perms.Value.DenyValue
@@ -619,14 +619,14 @@ internal static class ChannelHelper
         BaseKookClient client, IRole role, Func<OverwritePermissions, OverwritePermissions> func,
         RequestOptions? options)
     {
-        OverwritePermissions? perms = channel.RolePermissionOverwrites.SingleOrDefault(x => x.Target == role.Id)?.Permissions;
+        OverwritePermissions? perms = channel.RolePermissionOverwrites.SingleOrDefault(x => x.TargetId == role.Id)?.Permissions;
         if (!perms.HasValue)
             throw new ArgumentNullException(nameof(role), "The role does not have any permission overwrites on this channel.");
         perms = func(perms.Value);
         ModifyChannelPermissionOverwriteParams args = new()
         {
             ChannelId = channel.Id,
-            TargetType = PermissionOverwriteTargetType.Role,
+            TargetType = PermissionOverwriteTarget.Role,
             TargetId = role.Id,
             Allow = perms.Value.AllowValue,
             Deny = perms.Value.DenyValue
@@ -634,7 +634,7 @@ internal static class ChannelHelper
         CreateOrModifyChannelPermissionOverwriteResponse resp = await client.ApiClient
             .ModifyChannelPermissionOverwriteAsync(args, options)
             .ConfigureAwait(false);
-        return new RolePermissionOverwrite(role.Id, new OverwritePermissions(resp.Allow, resp.Deny));
+        return new RolePermissionOverwrite(role, new OverwritePermissions(resp.Allow, resp.Deny));
     }
 
     #endregion

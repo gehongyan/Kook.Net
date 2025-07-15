@@ -72,12 +72,12 @@ public class RestGuildChannel : RestChannel, IGuildChannel
 
         IEnumerable<UserPermissionOverwrite> userPermissionOverwrites = model
             .UserPermissionOverwrites
-            .Select(x => x.ToEntity(Kook));
+            .Select(x => x.ToEntity(RestUser.Create(Kook, x.User)));
         _userPermissionOverwrites = [..userPermissionOverwrites];
 
         IEnumerable<RolePermissionOverwrite> rolePermissionOverwrites = model
             .RolePermissionOverwrites
-            .Select(x => x.ToEntity());
+            .Select(x => x.ToEntity(Guild.GetRole(x.RoleId)));
         _rolePermissionOverwrites = [..rolePermissionOverwrites];
     }
 
@@ -120,11 +120,11 @@ public class RestGuildChannel : RestChannel, IGuildChannel
 
     /// <inheritdoc cref="Kook.IGuildChannel.GetPermissionOverwrite(Kook.IUser)" />
     public OverwritePermissions? GetPermissionOverwrite(IUser user) =>
-        _userPermissionOverwrites.FirstOrDefault(x => x.Target.Id == user.Id)?.Permissions;
+        _userPermissionOverwrites.FirstOrDefault(x => x.TargetId == user.Id)?.Permissions;
 
     /// <inheritdoc cref="Kook.IGuildChannel.GetPermissionOverwrite(Kook.IRole)" />
     public OverwritePermissions? GetPermissionOverwrite(IRole role) =>
-        _rolePermissionOverwrites.FirstOrDefault(x => x.Target == role.Id)?.Permissions;
+        _rolePermissionOverwrites.FirstOrDefault(x => x.TargetId == role.Id)?.Permissions;
 
     /// <inheritdoc cref="Kook.IGuildChannel.AddPermissionOverwriteAsync(Kook.IGuildUser,Kook.RequestOptions)" />
     public async Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null)
@@ -148,14 +148,14 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     public async Task RemovePermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null)
     {
         await ChannelHelper.RemovePermissionOverwriteAsync(this, Kook, user, options).ConfigureAwait(false);
-        _userPermissionOverwrites = [.._userPermissionOverwrites.Where(x => x.Target.Id != user.Id)];
+        _userPermissionOverwrites = [.._userPermissionOverwrites.Where(x => x.TargetId != user.Id)];
     }
 
     /// <inheritdoc cref="Kook.IGuildChannel.RemovePermissionOverwriteAsync(Kook.IRole,Kook.RequestOptions)" />
     public async Task RemovePermissionOverwriteAsync(IRole role, RequestOptions? options = null)
     {
         await ChannelHelper.RemovePermissionOverwriteAsync(this, Kook, role, options).ConfigureAwait(false);
-        _rolePermissionOverwrites = [.._rolePermissionOverwrites.Where(x => x.Target != role.Id)];
+        _rolePermissionOverwrites = [.._rolePermissionOverwrites.Where(x => x.TargetId != role.Id)];
     }
 
     /// <inheritdoc cref="Kook.IGuildChannel.ModifyPermissionOverwriteAsync(Kook.IGuildUser,System.Func{Kook.OverwritePermissions,Kook.OverwritePermissions},Kook.RequestOptions)" />
@@ -165,7 +165,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         UserPermissionOverwrite permission = await ChannelHelper
             .ModifyPermissionOverwriteAsync(this, Kook, user, func, options)
             .ConfigureAwait(false);
-        _userPermissionOverwrites = [.._userPermissionOverwrites.Where(x => x.Target.Id != user.Id), permission];
+        _userPermissionOverwrites = [.._userPermissionOverwrites.Where(x => x.TargetId != user.Id), permission];
     }
 
     /// <inheritdoc cref="Kook.IGuildChannel.ModifyPermissionOverwriteAsync(Kook.IRole,System.Func{Kook.OverwritePermissions,Kook.OverwritePermissions},Kook.RequestOptions)" />
@@ -175,7 +175,7 @@ public class RestGuildChannel : RestChannel, IGuildChannel
         RolePermissionOverwrite permission = await ChannelHelper
             .ModifyPermissionOverwriteAsync(this, Kook, role, func, options)
             .ConfigureAwait(false);
-        _rolePermissionOverwrites = [.._rolePermissionOverwrites.Where(x => x.Target != role.Id), permission];
+        _rolePermissionOverwrites = [.._rolePermissionOverwrites.Where(x => x.TargetId != role.Id), permission];
     }
 
     /// <inheritdoc cref="Kook.Rest.RestGuildChannel.Name" />
@@ -239,8 +239,6 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     #endregion
 
     #region IChannel
-
-    string IChannel.Name => Name;
 
     /// <inheritdoc />
     IAsyncEnumerable<IReadOnlyCollection<IUser>> IChannel.GetUsersAsync(CacheMode mode, RequestOptions? options) =>
