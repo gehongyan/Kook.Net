@@ -12,22 +12,6 @@ internal class CreateOrModifyChannelPermissionOverwriteResponse
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public User? User { get; set; }
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-    public PermissionOverwriteTargetType TargetType => this switch
-    {
-        { User: not null } => PermissionOverwriteTargetType.Role,
-        { RoleId: not null } => PermissionOverwriteTargetType.Role,
-        _ => PermissionOverwriteTargetType.Unspecified,
-    };
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-    public ulong TargetId => TargetType switch
-    {
-        PermissionOverwriteTargetType.Role => RoleId ?? 0,
-        PermissionOverwriteTargetType.User => User?.Id ?? 0,
-        _ => 0
-    };
-
     [JsonPropertyName("allow")]
     public ulong Allow { get; set; }
 

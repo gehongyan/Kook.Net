@@ -339,11 +339,11 @@ internal static class EntityExtensions
 
     #region Overwrites
 
-    public static UserPermissionOverwrite ToEntity(this API.UserPermissionOverwrite model, BaseKookClient kook) =>
-        new(RestUser.Create(kook, model.User), new OverwritePermissions(model.Allow, model.Deny));
+    public static UserPermissionOverwrite ToEntity(this API.UserPermissionOverwrite model, IUser? entity) =>
+        new(model.User.Id, entity, new OverwritePermissions(model.Allow, model.Deny));
 
-    public static RolePermissionOverwrite ToEntity(this API.RolePermissionOverwrite model) =>
-        new(model.RoleId, new OverwritePermissions(model.Allow, model.Deny));
+    public static RolePermissionOverwrite ToEntity(this API.RolePermissionOverwrite model, IRole? entity) =>
+        new(model.RoleId, entity, new OverwritePermissions(model.Allow, model.Deny));
 
     #endregion
 

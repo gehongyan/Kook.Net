@@ -191,7 +191,7 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
             await channel.ModifyPermissionOverwriteAsync(selfUser, permissions => permissions
                 .Modify(viewChannel: PermValue.Allow, sendMessages: PermValue.Deny, attachFiles: PermValue.Inherit));
             UserPermissionOverwrite userPermissionOverwrite = channel.UserPermissionOverwrites.First();
-            Assert.Equal(selfUser.Id, userPermissionOverwrite.Target.Id);
+            Assert.Equal(selfUser.Id, userPermissionOverwrite.TargetId);
             Assert.Equal(PermValue.Allow, userPermissionOverwrite.Permissions.ViewChannel);
             Assert.Equal(PermValue.Deny, userPermissionOverwrite.Permissions.SendMessages);
             Assert.Equal(PermValue.Inherit, userPermissionOverwrite.Permissions.AttachFiles);
@@ -199,16 +199,16 @@ public class ChannelTests : IClassFixture<RestGuildFixture>
             Assert.Empty(channel.UserPermissionOverwrites);
 
             await channel.AddPermissionOverwriteAsync(role);
-            Assert.Single(channel.RolePermissionOverwrites, overwrite => overwrite.Target > 0);
+            Assert.Single(channel.RolePermissionOverwrites, overwrite => overwrite.TargetId > 0);
             await channel.ModifyPermissionOverwriteAsync(role, permissions => permissions
                 .Modify(viewChannel: PermValue.Allow, sendMessages: PermValue.Deny, attachFiles: PermValue.Inherit));
-            RolePermissionOverwrite rolePermissionOverwrite = channel.RolePermissionOverwrites.First(overwrite => overwrite.Target > 0);
-            Assert.Equal(role.Id, rolePermissionOverwrite.Target);
+            RolePermissionOverwrite rolePermissionOverwrite = channel.RolePermissionOverwrites.First(overwrite => overwrite.TargetId > 0);
+            Assert.Equal(role.Id, rolePermissionOverwrite.TargetId);
             Assert.Equal(PermValue.Allow, rolePermissionOverwrite.Permissions.ViewChannel);
             Assert.Equal(PermValue.Deny, rolePermissionOverwrite.Permissions.SendMessages);
             Assert.Equal(PermValue.Inherit, rolePermissionOverwrite.Permissions.AttachFiles);
             await channel.RemovePermissionOverwriteAsync(role);
-            Assert.DoesNotContain(channel.RolePermissionOverwrites, overwrite => overwrite.Target > 0);
+            Assert.DoesNotContain(channel.RolePermissionOverwrites, overwrite => overwrite.TargetId > 0);
 
             // check permission sync
             Assert.True(channel.IsPermissionSynced);

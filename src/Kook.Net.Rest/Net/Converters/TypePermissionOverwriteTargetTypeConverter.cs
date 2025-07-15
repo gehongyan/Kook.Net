@@ -4,21 +4,21 @@ using Kook.API.Rest;
 
 namespace Kook.Net.Converters;
 
-internal class TypePermissionOverwriteTargetTypeConverter : JsonConverter<PermissionOverwriteTargetType>
+internal class TypePermissionOverwriteTargetTypeConverter : JsonConverter<PermissionOverwriteTarget>
 {
-    public override PermissionOverwriteTargetType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+    public override PermissionOverwriteTarget Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
         reader.GetString() switch
         {
-            "role" => PermissionOverwriteTargetType.Role,
-            "user" => PermissionOverwriteTargetType.User,
-            _ => PermissionOverwriteTargetType.User
+            "role" => PermissionOverwriteTarget.Role,
+            "user" => PermissionOverwriteTarget.User,
+            _ => PermissionOverwriteTarget.User
         };
 
-    public override void Write(Utf8JsonWriter writer, PermissionOverwriteTargetType value, JsonSerializerOptions options) =>
+    public override void Write(Utf8JsonWriter writer, PermissionOverwriteTarget value, JsonSerializerOptions options) =>
         writer.WriteStringValue(value switch
         {
-            PermissionOverwriteTargetType.Role => "role",
-            PermissionOverwriteTargetType.User => "user",
+            PermissionOverwriteTarget.Role => "role",
+            PermissionOverwriteTarget.User => "user",
             _ => "user"
         });
 }

@@ -3,24 +3,39 @@ namespace Kook;
 /// <summary>
 ///     表示一个为角色设置的频道权限重写设置。
 /// </summary>
-public class RolePermissionOverwrite : IPermissionOverwrite<uint>
+public class RolePermissionOverwrite : IPermissionOverwrite<IRole, uint>
 {
+    /// <summary>
+    ///     获取此重写所应用的角色的。
+    /// </summary>
+    public IRole? Target { get; }
+
     /// <summary>
     ///     获取此重写所应用的角色的 ID。
     /// </summary>
-    public uint Target { get; }
+    public uint TargetId { get; }
+
+    /// <inheritdoc />
+    public PermissionOverwriteTarget TargetType => PermissionOverwriteTarget.Role;
 
     /// <inheritdoc />
     public OverwritePermissions Permissions { get; }
 
-    /// <summary>
-    ///     初始化一个 <see cref="RolePermissionOverwrite"/> 类的新实例。
-    /// </summary>
-    /// <param name="targetId"> 角色的 ID。 </param>
-    /// <param name="permissions"> 角色的权限重写配置。 </param>
-    public RolePermissionOverwrite(uint targetId, OverwritePermissions permissions)
+    internal RolePermissionOverwrite(uint targetId, OverwritePermissions permissions)
     {
-        Target = targetId;
+        TargetId = targetId;
         Permissions = permissions;
+    }
+
+    internal RolePermissionOverwrite(IRole target, OverwritePermissions permissions)
+        : this(target.Id, permissions)
+    {
+        Target = target;
+    }
+
+    internal RolePermissionOverwrite(uint targetId, IRole? target, OverwritePermissions permissions)
+        : this(targetId, permissions)
+    {
+        Target = target;
     }
 }
