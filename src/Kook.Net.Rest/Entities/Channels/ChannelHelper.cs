@@ -140,7 +140,7 @@ internal static class ChannelHelper
             async (info, _) =>
             {
                 IReadOnlyCollection<Message> models = await client.ApiClient
-                    .QueryMessagesAsync(channel.Id, info.Position, null, direction, limit, options)
+                    .QueryMessagesAsync(channel.Id, info.Position, null, direction, info.PageSize, options)
                     .ConfigureAwait(false);
                 ImmutableArray<RestMessage>.Builder builder = ImmutableArray.CreateBuilder<RestMessage>();
 
