@@ -78,6 +78,69 @@ public class RestThreadChannel : RestGuildChannel, IThreadChannel
     public override Task UpdateAsync(RequestOptions? options = null) =>
         ChannelHelper.UpdateAsync(this, Kook, options);
 
+    /// <inheritdoc cref="Kook.IThreadChannel.GetThreadCategoriesAsync(Kook.RequestOptions)" />
+    public async Task<IReadOnlyCollection<IThreadCategory>> GetThreadCategoriesAsync(RequestOptions? options = null) =>
+        await ThreadHelper.GetThreadCategoriesAsync(this, Kook, options);
+
+    /// <inheritdoc cref="Kook.IThreadChannel.GetThreadAsync(System.UInt64,Kook.RequestOptions)" />
+    public async Task<RestThread> GetThreadAsync(ulong id, RequestOptions? options = null) =>
+        await ThreadHelper.GetThreadAsync(this, Kook, id, options).ConfigureAwait(false);
+
+    /// <inheritdoc cref="Kook.IThreadChannel.GetThreadsAsync(System.Int32,Kook.IThreadCategory,Kook.RequestOptions)" />
+    public IAsyncEnumerable<IReadOnlyCollection<RestThread>> GetThreadsAsync(
+        int limit = KookConfig.MaxThreadsPerBatch, IThreadCategory? category = null, RequestOptions? options = null) =>
+        ThreadHelper.GetThreadsAsync(this, Kook, null, ThreadSortOrder.Inherited, limit, category, options);
+
+    /// <inheritdoc cref="Kook.IThreadChannel.GetThreadsAsync(System.DateTimeOffset,Kook.ThreadSortOrder,System.Int32,Kook.IThreadCategory,Kook.RequestOptions)" />
+    public IAsyncEnumerable<IReadOnlyCollection<RestThread>> GetThreadsAsync(DateTimeOffset referenceTimestamp,
+        ThreadSortOrder sortOrder = ThreadSortOrder.CreationTime, int limit = KookConfig.MaxThreadsPerBatch,
+        IThreadCategory? category = null, RequestOptions? options = null) =>
+        ThreadHelper.GetThreadsAsync(this, Kook, referenceTimestamp, sortOrder, limit, category, options);
+
+    /// <inheritdoc cref="Kook.IThreadChannel.GetThreadsAsync(Kook.IThread,Kook.ThreadSortOrder,System.Int32,Kook.IThreadCategory,Kook.RequestOptions)" />
+    public IAsyncEnumerable<IReadOnlyCollection<RestThread>> GetThreadsAsync(IThread referenceThread,
+        ThreadSortOrder sortOrder = ThreadSortOrder.CreationTime, int limit = KookConfig.MaxThreadsPerBatch,
+        IThreadCategory? category = null, RequestOptions? options = null) =>
+        ThreadHelper.GetThreadsAsync(this, Kook, sortOrder switch
+        {
+            ThreadSortOrder.LatestActivity => referenceThread.LatestActiveTimestamp,
+            ThreadSortOrder.CreationTime => referenceThread.Timestamp,
+            ThreadSortOrder.Inherited when DefaultSortOrder is ThreadSortOrder.LatestActivity => referenceThread.LatestActiveTimestamp,
+            ThreadSortOrder.Inherited when DefaultSortOrder is ThreadSortOrder.CreationTime => referenceThread.Timestamp,
+            _ => null
+        }, sortOrder, limit, category, options);
+
+    /// <inheritdoc cref="Kook.IThreadChannel.CreateThreadAsync(System.String,System.String,System.String,Kook.IThreadCategory,Kook.ThreadTag[],Kook.RequestOptions)" />
+    public async Task<RestThread> CreateThreadAsync(string title, string content, string? cover = null,
+        IThreadCategory? category = null, ThreadTag[]? tags = null, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadAsync(this, Kook, title, content, cover, category, tags, options);
+
+    /// <inheritdoc cref="Kook.IThreadChannel.CreateThreadAsync(System.String,Kook.ICard,System.String,Kook.IThreadCategory,Kook.ThreadTag[],Kook.RequestOptions)" />
+    public async Task<RestThread> CreateThreadAsync(string title, ICard card, string? cover = null,
+        IThreadCategory? category = null, ThreadTag[]? tags = null, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadAsync(this, Kook, title, card, cover, category, tags, options);
+
+    /// <inheritdoc cref="Kook.IThreadChannel.CreateThreadAsync(System.String,System.Collections.Generic.IEnumerable{Kook.ICard},System.String,Kook.IThreadCategory,Kook.ThreadTag[],Kook.RequestOptions)" />
+    public async Task<RestThread> CreateThreadAsync(string title, IEnumerable<ICard> cards, string? cover = null,
+        IThreadCategory? category = null, ThreadTag[]? tags = null, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadAsync(this, Kook, title, cards, cover, category, tags, options);
+
+    /// <inheritdoc />
+    public async Task DeleteThreadAsync(ulong threadId, RequestOptions? options = null) =>
+        await ThreadHelper.DeleteThreadAsync(this, Kook, threadId, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task DeleteThreadAsync(IThread thread, RequestOptions? options = null) =>
+        await ThreadHelper.DeleteThreadAsync(this, Kook, thread, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task DeleteThreadContentAsync(ulong threadId, RequestOptions? options = null) =>
+        await ThreadHelper.DeleteThreadContentAsync(this, Kook, threadId, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task DeleteThreadContentAsync(IThread thread, RequestOptions? options = null) =>
+        await ThreadHelper.DeleteThreadContentAsync(this, Kook, thread, options).ConfigureAwait(false);
+
     /// <summary>
     ///     获取此频道中的用户。
     /// </summary>
@@ -153,6 +216,48 @@ public class RestThreadChannel : RestGuildChannel, IThreadChannel
         mode == CacheMode.AllowDownload
             ? GetUsersAsync(options)
             : AsyncEnumerable.Empty<IReadOnlyCollection<IGuildUser>>();
+
+    #endregion
+
+    #region IThreadChannel
+
+    /// <inheritdoc />
+    async Task<IReadOnlyCollection<IThreadCategory>> IThreadChannel.GetThreadCategoriesAsync(RequestOptions? options) =>
+        await GetThreadCategoriesAsync(options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    async Task<IThread> IThreadChannel.GetThreadAsync(ulong id, RequestOptions? options) =>
+        await GetThreadAsync(id, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IThread>> IThreadChannel.GetThreadsAsync(int limit,
+        IThreadCategory? category, RequestOptions? options) =>
+        GetThreadsAsync(limit, category, options);
+
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IThread>> IThreadChannel.GetThreadsAsync(DateTimeOffset referenceTimestamp,
+        ThreadSortOrder sortOrder, int limit, IThreadCategory? category, RequestOptions? options) =>
+        GetThreadsAsync(referenceTimestamp, sortOrder, limit, category, options);
+
+    /// <inheritdoc />
+    IAsyncEnumerable<IReadOnlyCollection<IThread>> IThreadChannel.GetThreadsAsync(IThread referenceThread,
+        ThreadSortOrder sortOrder, int limit, IThreadCategory? category, RequestOptions? options) =>
+        GetThreadsAsync(referenceThread, sortOrder, limit, category, options);
+
+    /// <inheritdoc />
+    async Task<IThread> IThreadChannel.CreateThreadAsync(string title, string content, string? cover, IThreadCategory? category,
+        ThreadTag[]? tags, RequestOptions? options) =>
+        await CreateThreadAsync(title, content, cover, category, tags, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    async Task<IThread> IThreadChannel.CreateThreadAsync(string title, ICard card, string? cover, IThreadCategory? category,
+        ThreadTag[]? tags, RequestOptions? options) =>
+        await CreateThreadAsync(title, card, cover, category, tags, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    async Task<IThread> IThreadChannel.CreateThreadAsync(string title, IEnumerable<ICard> cards, string? cover, IThreadCategory? category,
+        ThreadTag[]? tags, RequestOptions? options) =>
+        await CreateThreadAsync(title, cards, cover, category, tags, options).ConfigureAwait(false);
 
     #endregion
 

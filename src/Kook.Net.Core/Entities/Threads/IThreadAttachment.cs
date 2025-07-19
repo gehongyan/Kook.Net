@@ -27,15 +27,4 @@ public interface IThreadAttachment
     ///     仅当 <see cref="Type"/> 为 <see cref="ThreadAttachmentType.Video"/> 时有效。
     /// </remarks>
     string? Cover { get; }
-
-    /// <summary>
-    ///     获取此帖子分区的角色的所有权限重写配置。
-    /// </summary>
-    IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites { get; }
-
-    /// <summary>
-    ///     获取此帖子分区的用户的所有权限重写配置。
-    /// </summary>
-    IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites { get; }
-
 }

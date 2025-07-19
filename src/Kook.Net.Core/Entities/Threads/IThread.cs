@@ -54,6 +54,11 @@ public interface IThread : IEntity<ulong>, IDeletable
     IThreadCategory? Category { get; }
 
     /// <summary>
+    ///     获取此帖子所包含的所有话题标签。
+    /// </summary>
+    IReadOnlyCollection<ThreadTag> ThreadTags { get; }
+
+    /// <summary>
     ///     获取此帖子的内容。
     /// </summary>
     /// <remarks>
@@ -244,6 +249,9 @@ public interface IThread : IEntity<ulong>, IDeletable
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示帖子主楼内容删除操作的异步任务。 </returns>
+    /// <remarks>
+    ///     当帖子无任何评论时，删除主楼内容会导致帖子被删除。
+    /// </remarks>
     Task DeleteContentAsync(RequestOptions? options = null);
 
     /// <summary>
@@ -252,6 +260,9 @@ public interface IThread : IEntity<ulong>, IDeletable
     /// <param name="postId"> 要删除的帖子评论的 ID。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示帖子评论删除操作的异步任务。 </returns>
+    /// <remarks>
+    ///     如果帖子的主楼内容已被删除，且此帖子评论是所属帖子的唯一一条评论，则删除此帖子评论会导致该帖子也被删除。
+    /// </remarks>
     Task DeletePostAsync(ulong postId, RequestOptions? options = null);
 
     /// <summary>
@@ -260,6 +271,9 @@ public interface IThread : IEntity<ulong>, IDeletable
     /// <param name="post"> 要删除的帖子评论。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示帖子评论删除操作的异步任务。 </returns>
+    /// <remarks>
+    ///     如果帖子的主楼内容已被删除，且此帖子评论是所属帖子的唯一一条评论，则删除此帖子评论会导致该帖子也被删除。
+    /// </remarks>
     Task DeletePostAsync(IThreadPost post, RequestOptions? options = null);
 
     /// <summary>

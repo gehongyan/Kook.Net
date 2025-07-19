@@ -56,49 +56,6 @@ public interface IThreadChannel : INestedChannel, IMentionable
     /// <returns> 一个表示异步修改操作的任务。任务的结果包含此帖子频道的所有帖子分区。 </returns>
     Task<IReadOnlyCollection<IThreadCategory>> GetThreadCategoriesAsync(RequestOptions? options = null);
 
-    #region Create Threads
-
-    /// <summary>
-    ///     发布一个新的帖子到此帖子频道。
-    /// </summary>
-    /// <param name="title"> 帖子标题。 </param>
-    /// <param name="content"> 帖子文本内容，文本将会被包装在无侧边卡片内发送。 </param>
-    /// <param name="cover"> 帖子封面的图片链接。 </param>
-    /// <param name="category"> 帖子的分区。 </param>
-    /// <param name="tags"> 帖子的话题标签。 </param>
-    /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步修改操作的任务。任务的结果包含新创建的帖子。 </returns>
-    Task<IThread> CreateThreadAsync(string title, string content, string? cover = null,
-        IThreadCategory? category = null, ThreadTag[]? tags = null, RequestOptions? options = null);
-
-    /// <summary>
-    ///     发布一个新的帖子到此帖子频道。
-    /// </summary>
-    /// <param name="title"> 帖子标题。 </param>
-    /// <param name="card"> 帖子的卡片内容。 </param>
-    /// <param name="cover"> 帖子封面的图片链接。 </param>
-    /// <param name="category"> 帖子的分区。 </param>
-    /// <param name="tags"> 帖子的话题标签。 </param>
-    /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步修改操作的任务。任务的结果包含新创建的帖子。 </returns>
-    Task<IThread> CreateThreadAsync(string title, ICard card, string? cover = null,
-        IThreadCategory? category = null, ThreadTag[]? tags = null, RequestOptions? options = null);
-
-    /// <summary>
-    ///     发布一个新的帖子到此帖子频道。
-    /// </summary>
-    /// <param name="title"> 帖子标题。 </param>
-    /// <param name="cards"> 帖子的卡片内容。 </param>
-    /// <param name="cover"> 帖子封面的图片链接。 </param>
-    /// <param name="category"> 帖子的分区。 </param>
-    /// <param name="tags"> 帖子的话题标签。 </param>
-    /// <param name="options"> 发送请求时要使用的选项。 </param>
-    /// <returns> 一个表示异步修改操作的任务。任务的结果包含新创建的帖子。 </returns>
-    Task<IThread> CreateThreadAsync(string title, IEnumerable<ICard> cards, string? cover = null,
-        IThreadCategory? category = null, ThreadTag[]? tags = null, RequestOptions? options = null);
-
-    #endregion
-
     #region Get Threads
 
     /// <summary>
@@ -198,6 +155,49 @@ public interface IThreadChannel : INestedChannel, IMentionable
 
     #endregion
 
+    #region Create Threads
+
+    /// <summary>
+    ///     发布一个新的帖子到此帖子频道。
+    /// </summary>
+    /// <param name="title"> 帖子标题。 </param>
+    /// <param name="content"> 帖子文本内容，文本将会被包装在无侧边卡片内发送。 </param>
+    /// <param name="cover"> 帖子封面的图片链接。 </param>
+    /// <param name="category"> 帖子的分区。 </param>
+    /// <param name="tags"> 帖子的话题标签。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步修改操作的任务。任务的结果包含新创建的帖子。 </returns>
+    Task<IThread> CreateThreadAsync(string title, string content, string? cover = null,
+        IThreadCategory? category = null, ThreadTag[]? tags = null, RequestOptions? options = null);
+
+    /// <summary>
+    ///     发布一个新的帖子到此帖子频道。
+    /// </summary>
+    /// <param name="title"> 帖子标题。 </param>
+    /// <param name="card"> 帖子的卡片内容。 </param>
+    /// <param name="cover"> 帖子封面的图片链接。 </param>
+    /// <param name="category"> 帖子的分区。 </param>
+    /// <param name="tags"> 帖子的话题标签。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步修改操作的任务。任务的结果包含新创建的帖子。 </returns>
+    Task<IThread> CreateThreadAsync(string title, ICard card, string? cover = null,
+        IThreadCategory? category = null, ThreadTag[]? tags = null, RequestOptions? options = null);
+
+    /// <summary>
+    ///     发布一个新的帖子到此帖子频道。
+    /// </summary>
+    /// <param name="title"> 帖子标题。 </param>
+    /// <param name="cards"> 帖子的卡片内容。 </param>
+    /// <param name="cover"> 帖子封面的图片链接。 </param>
+    /// <param name="category"> 帖子的分区。 </param>
+    /// <param name="tags"> 帖子的话题标签。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步修改操作的任务。任务的结果包含新创建的帖子。 </returns>
+    Task<IThread> CreateThreadAsync(string title, IEnumerable<ICard> cards, string? cover = null,
+        IThreadCategory? category = null, ThreadTag[]? tags = null, RequestOptions? options = null);
+
+    #endregion
+
     #region Delete Threads
 
     /// <summary>
@@ -222,6 +222,9 @@ public interface IThreadChannel : INestedChannel, IMentionable
     /// <param name="threadId"> 要删除其主楼内容的帖子的 ID。</param>
     /// <param name="options"> 发送请求时要使用的选项。</param>
     /// <returns> 一个表示异步删除操作的任务。 </returns>
+    /// <remarks>
+    ///     当帖子无任何评论时，删除主楼内容会导致帖子被删除。
+    /// </remarks>
     Task DeleteThreadContentAsync(ulong threadId, RequestOptions? options = null);
 
     /// <summary>
@@ -230,6 +233,9 @@ public interface IThreadChannel : INestedChannel, IMentionable
     /// <param name="thread"> 要删除其主楼内容的帖子。</param>
     /// <param name="options"> 发送请求时要使用的选项。</param>
     /// <returns> 一个表示异步删除操作的任务。 </returns>
+    /// <remarks>
+    ///     当帖子无任何评论时，删除主楼内容会导致帖子被删除。
+    /// </remarks>
     Task DeleteThreadContentAsync(IThread thread, RequestOptions? options = null);
 
     #endregion

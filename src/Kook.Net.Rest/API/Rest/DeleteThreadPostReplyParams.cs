@@ -8,8 +8,8 @@ internal class DeleteThreadPostReplyParams
     public required ulong ChannelId { get; set; }
 
     [JsonPropertyName("thread_id")]
-    public required ulong? ThreadId { get; set; }
+    public ulong? ThreadId { get; set; }
 
     [JsonPropertyName("post_id")]
-    public required ulong? PostId { get; set; }
+    public ulong? PostId { get; set; }
 }

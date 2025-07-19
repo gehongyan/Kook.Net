@@ -6,6 +6,11 @@ namespace Kook;
 public interface IThreadCategory : IEntity<ulong>
 {
     /// <summary>
+    ///     获取此帖子分区所在的帖子频道。
+    /// </summary>
+    IThreadChannel Channel { get; }
+
+    /// <summary>
     ///     获取帖子分区的名称。
     /// </summary>
     string Name { get; }
@@ -21,7 +26,6 @@ public interface IThreadCategory : IEntity<ulong>
     IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites { get; }
 
     #region Get Threads
-
 
     /// <summary>
     ///     获取此帖子分区中的最新的一些帖子。
@@ -64,8 +68,8 @@ public interface IThreadCategory : IEntity<ulong>
     ///     </note>
     ///     <br />
     ///     此方法将尝试获取此分区最新的 <paramref name="limit"/> 条帖子。此方法会根据 <see cref="Kook.KookConfig.MaxThreadsPerBatch"/>
-    ///     将请求拆分。换句话说，如果要获取 500 条帖子，而 <see cref="Kook.KookConfig.MaxThreadsPerBatch"/> 的常量为
-    ///     <c>50</c>，则请求将被拆分为 10 个单独请求，因此异步枚举器会异步枚举返回 10 个响应。
+    ///     将请求拆分。换句话说，如果要获取 300 条帖子，而 <see cref="Kook.KookConfig.MaxThreadsPerBatch"/> 的常量为
+    ///     <c>30</c>，则请求将被拆分为 10 个单独请求，因此异步枚举器会异步枚举返回 10 个响应。
     ///     <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///     方法可以展开这 10 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
@@ -92,9 +96,9 @@ public interface IThreadCategory : IEntity<ulong>
     ///         请勿一次性获取过多帖子，这可能会导致抢占式速率限制，甚至触发实际的速率限制，从而导致 Bot 服务暂停。
     ///     </note>
     ///     <br />
-    ///     此方法将尝试获取此分区最新的 <paramref name="limit"/> 条帖子。此方法会根据 <see cref="Kook.KookConfig.MaxMessagesPerBatch"/>
-    ///     将请求拆分。换句话说，如果要获取 500 条帖子，而 <see cref="Kook.KookConfig.MaxMessagesPerBatch"/> 的常量为
-    ///     <c>50</c>，则请求将被拆分为 10 个单独请求，因此异步枚举器会异步枚举返回 10 个响应。
+    ///     此方法将尝试获取此分区最新的 <paramref name="limit"/> 条帖子。此方法会根据 <see cref="Kook.KookConfig.MaxThreadsPerBatch"/>
+    ///     将请求拆分。换句话说，如果要获取 300 条帖子，而 <see cref="Kook.KookConfig.MaxThreadsPerBatch"/> 的常量为
+    ///     <c>30</c>，则请求将被拆分为 10 个单独请求，因此异步枚举器会异步枚举返回 10 个响应。
     ///     <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///     方法可以展开这 10 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
