@@ -1025,7 +1025,7 @@ internal class KookRestApiClient : IDisposable
 
     public async Task<QueryThreadsResponse> QueryThreadsAsync(ulong channelId, ulong? categoryId = null,
         int limit = KookConfig.MaxThreadsPerBatch,
-        ThreadSortMode sorting = ThreadSortMode.Inherited,
+        ThreadSortOrder sorting = ThreadSortOrder.Inherited,
         DateTimeOffset? timestampBefore = null, RequestOptions? options = null)
     {
         Preconditions.NotEqual(channelId, 0, nameof(channelId));

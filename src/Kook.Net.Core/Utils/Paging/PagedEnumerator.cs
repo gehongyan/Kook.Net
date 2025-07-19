@@ -1,17 +1,17 @@
 namespace Kook;
 
-internal class PagedAsyncEnumerable<T> : IAsyncEnumerable<IReadOnlyCollection<T>>
+internal class PagedAsyncEnumerable<T, TRef> : IAsyncEnumerable<IReadOnlyCollection<T>>
 {
     public int PageSize { get; }
 
-    private readonly Guid? _start;
+    private readonly TRef? _start;
     private readonly int? _count;
-    private readonly Func<PageInfo, CancellationToken, Task<IReadOnlyCollection<T>>> _getPage;
-    private readonly Func<PageInfo, IReadOnlyCollection<T>, bool> _nextPage;
+    private readonly Func<PageInfo<TRef>, CancellationToken, Task<IReadOnlyCollection<T>>> _getPage;
+    private readonly Func<PageInfo<TRef>, IReadOnlyCollection<T>, bool> _nextPage;
 
-    public PagedAsyncEnumerable(int pageSize, Func<PageInfo, CancellationToken, Task<IReadOnlyCollection<T>>> getPage,
-        Func<PageInfo, IReadOnlyCollection<T>, bool>? nextPage,
-        Guid? start = null, int? count = null)
+    public PagedAsyncEnumerable(int pageSize, Func<PageInfo<TRef>, CancellationToken, Task<IReadOnlyCollection<T>>> getPage,
+        Func<PageInfo<TRef>, IReadOnlyCollection<T>, bool>? nextPage,
+        TRef? start = default, int? count = null)
     {
         PageSize = pageSize;
         _start = start;
@@ -26,18 +26,18 @@ internal class PagedAsyncEnumerable<T> : IAsyncEnumerable<IReadOnlyCollection<T>
 
     internal class Enumerator : IAsyncEnumerator<IReadOnlyCollection<T>>
     {
-        private readonly PagedAsyncEnumerable<T> _source;
+        private readonly PagedAsyncEnumerable<T, TRef> _source;
         private readonly CancellationToken _token;
-        private readonly PageInfo _info;
+        private readonly PageInfo<TRef> _info;
 
         public IReadOnlyCollection<T> Current { get; private set; }
 
-        public Enumerator(PagedAsyncEnumerable<T> source, CancellationToken token)
+        public Enumerator(PagedAsyncEnumerable<T, TRef> source, CancellationToken token)
         {
             Current = [];
             _source = source;
             _token = token;
-            _info = new PageInfo(source._start, source._count, source.PageSize);
+            _info = new PageInfo<TRef>(source._start, source._count, source.PageSize);
         }
 
         public async ValueTask<bool> MoveNextAsync()

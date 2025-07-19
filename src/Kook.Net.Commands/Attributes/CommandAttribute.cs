@@ -46,7 +46,7 @@ public class CommandAttribute : Attribute
     ///     获取或设置命令的备注。
     /// </summary>
     /// <remarks>
-    ///     <see cref="Kook.Commands.RemainderAttribute"/> 特性重写此属性的值。
+    ///     <see cref="Kook.Commands.RemarksAttribute"/> 特性重写此属性的值。
     /// </remarks>
     public string? Remarks { get; set; }
 

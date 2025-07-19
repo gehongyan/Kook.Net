@@ -36,12 +36,12 @@ public interface IGuildChannel : IChannel, IDeletable
     ulong? CreatorId { get; }
 
     /// <summary>
-    ///     获取此频道的角色的权限重写集合。
+    ///     获取此频道的角色的所有权限重写配置。
     /// </summary>
     IReadOnlyCollection<RolePermissionOverwrite> RolePermissionOverwrites { get; }
 
     /// <summary>
-    ///     获取此频道的用户的权限重写集合。
+    ///     获取此频道的用户的所有权限重写配置。
     /// </summary>
     IReadOnlyCollection<UserPermissionOverwrite> UserPermissionOverwrites { get; }
 

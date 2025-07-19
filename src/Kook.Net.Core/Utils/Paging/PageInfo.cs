@@ -1,14 +1,10 @@
 namespace Kook;
 
-internal class PageInfo
+internal class PageInfo<T> : PageInfo
 {
-    public int Page { get; set; }
-    public Guid? Position { get; set; }
-    public int? Count { get; set; }
-    public int PageSize { get; set; }
-    public int? Remaining { get; set; }
+    public T? Position { get; set; }
 
-    internal PageInfo(Guid? pos, int? count, int pageSize)
+    internal PageInfo(T? pos, int? count, int pageSize)
     {
         Page = 1;
         Position = pos;
@@ -16,6 +12,15 @@ internal class PageInfo
         Remaining = count;
         PageSize = pageSize;
 
-        if (Count != null && Count.Value < PageSize) PageSize = Count.Value;
+        if (Count < PageSize)
+            PageSize = Count.Value;
     }
+}
+
+internal class PageInfo
+{
+    public int Page { get; set; }
+    public int? Count { get; set; }
+    public int PageSize { get; set; }
+    public int? Remaining { get; set; }
 }

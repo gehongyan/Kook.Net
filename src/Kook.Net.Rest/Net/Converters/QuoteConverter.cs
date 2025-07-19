@@ -12,7 +12,7 @@ internal class QuoteConverter : JsonConverter<API.Quote>
             JsonTokenType.Null or JsonTokenType.String => null,
             JsonTokenType.StartObject => JsonSerializer.Deserialize<API.Quote>(ref reader, options),
             _ => throw new JsonException(
-                $"{nameof(NumberBooleanConverter)} expects boolean, string or number token, but got {reader.TokenType}")
+                $"{nameof(QuoteConverter)} expects boolean, string or number token, but got {reader.TokenType}")
         };
 
     /// <inheritdoc />
