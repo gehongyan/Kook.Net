@@ -67,6 +67,15 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     public bool? Circle { get; set; }
 
     /// <summary>
+    ///     获取或设置图片的备用 URL。
+    /// </summary>
+    /// <remarks>
+    ///     当位于站外的图片无法成功转存时，KOOK 将使用此备用图片地址作为图片的源，这可以尽可能避免站外图片转存失败时，卡片消息不会因此问题而发送失败。
+    ///     因此，建议在使用站外图片时，设置此备用 URL，并确保此备用 URL 指向的图片位于 KOOK 对象存储服务器。
+    /// </remarks>
+    public string? FallbackUrl { get; set; }
+
+    /// <summary>
     ///     设置图片的源，值将被设置到 <see cref="Source"/> 属性上。
     /// </summary>
     /// <param name="source"> 图片的源。 </param>
@@ -114,6 +123,21 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     }
 
     /// <summary>
+    ///     设置图片的备用 URL，值将被设置到 <see cref="FallbackUrl"/> 属性上。
+    /// </summary>
+    /// <param name="fallbackUrl"> 图片的备用 URL。</param>
+    /// <returns> 当前构建器。 </returns>
+    /// <remarks>
+    ///     当位于站外的图片无法成功转存时，KOOK 将使用此备用图片地址作为图片的源，这可以尽可能避免站外图片转存失败时，卡片消息不会因此问题而发送失败。
+    ///     因此，建议在使用站外图片时，设置此备用 URL，并确保此备用 URL 指向的图片位于 KOOK 对象存储服务器。
+    /// </remarks>
+    public ImageElementBuilder WithFallbackUrl(string? fallbackUrl)
+    {
+        FallbackUrl = fallbackUrl;
+        return this;
+    }
+
+    /// <summary>
     ///     构建当前构建器为一个 <see cref="ImageElement"/>。
     /// </summary>
     /// <returns> 由当前构建器表示的属性构建的 <see cref="ImageElement"/> 对象。 </returns>
@@ -128,6 +152,9 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     /// </exception>
     /// <exception cref="ArgumentException">
     ///     <see cref="Alternative"/> 的长度超过了 <see cref="MaxAlternativeLength"/>。
+    /// </exception>
+    /// <exception cref="UriFormatException">
+    ///     <see cref="FallbackUrl"/> 不是有效的 URL，或不是指向 KOOK 对象存储服务器的 URL。
     /// </exception>
     [MemberNotNull(nameof(Source))]
     public ImageElement Build()
@@ -146,7 +173,14 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
                 nameof(Alternative));
         }
 
-        return new ImageElement(Source, Alternative, Size, Circle);
+        if (FallbackUrl != null)
+        {
+            UrlValidation.Validate(FallbackUrl);
+            if (!UrlValidation.ValidateKookAssetUrl(FallbackUrl))
+                throw new UriFormatException($"The fallback url {FallbackUrl} is not a valid KOOK asset URL.");
+        }
+
+        return new ImageElement(Source, Alternative, Size, Circle, FallbackUrl);
     }
 
     /// <summary>
@@ -187,7 +221,8 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
             && Source == imageElementBuilder.Source
             && Alternative == imageElementBuilder.Alternative
             && Size == imageElementBuilder.Size
-            && Circle == imageElementBuilder.Circle;
+            && Circle == imageElementBuilder.Circle
+            && FallbackUrl == imageElementBuilder.FallbackUrl;
     }
 
     /// <inheritdoc />

@@ -35,7 +35,7 @@ internal static class EntityExtensions
         new(model.Content);
 
     public static ImageElement ToEntity(this API.ImageElement model) =>
-        new(model.Source, model.Alternative, model.Size, model.Circle);
+        new(model.Source, model.Alternative, model.Size, model.Circle, model.FallbackUrl);
 
     public static ButtonElement ToEntity(this API.ButtonElement model) =>
         new(model.Theme, model.Value, model.Click, model.Text.ToEntity());
@@ -75,7 +75,8 @@ internal static class EntityExtensions
         Circle = entity.Circle,
         Size = entity.Size,
         Source = entity.Source,
-        Type = entity.Type
+        Type = entity.Type,
+        FallbackUrl = entity.FallbackUrl
     };
 
     public static API.ButtonElement ToModel(this ButtonElement entity) => new()

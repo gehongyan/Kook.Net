@@ -53,7 +53,8 @@ public static class CardExtensions
             Source = entity.Source,
             Alternative = entity.Alternative,
             Size = entity.Size,
-            Circle = entity.Circle
+            Circle = entity.Circle,
+            FallbackUrl = entity.FallbackUrl
         };
     }
 

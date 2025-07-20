@@ -17,4 +17,7 @@ internal class ImageElement : ElementBase
 
     [JsonPropertyName("circle")]
     public bool? Circle { get; set; }
+
+    [JsonPropertyName("fallbackUrl")]
+    public string? FallbackUrl { get; set; }
 }
