@@ -274,7 +274,7 @@ public class ChannelTests : IClassFixture<SocketGuildFixture>, IClassFixture<Cha
         // const int newPosition = 500;
         const string newTopic = "MODIFIED TOPIC";
         const SlowModeInterval newSlowModeInterval = SlowModeInterval._1800;
-        const VoiceQuality newVoiceQuality = VoiceQuality._96kbps;
+        const VoiceQuality newVoiceQuality = VoiceQuality.Standard;
         const int newUserLimit = 10;
         const string newPassword = "12345678";
         const bool newOverwriteVoiceRegion = true;
