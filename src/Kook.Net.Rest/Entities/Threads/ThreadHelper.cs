@@ -12,7 +12,7 @@ internal static class ThreadHelper
     #region Thread Categories
 
     public static async Task<IReadOnlyCollection<IThreadCategory>> GetThreadCategoriesAsync(
-        RestThreadChannel channel, BaseKookClient client, RequestOptions? options)
+        IThreadChannel channel, BaseKookClient client, RequestOptions? options)
     {
         GetThreadCategoriesResponse response = await client.ApiClient
             .GetThreadCategoriesAsync(channel.Id).ConfigureAwait(false);

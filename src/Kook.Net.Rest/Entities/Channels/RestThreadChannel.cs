@@ -78,6 +78,8 @@ public class RestThreadChannel : RestGuildChannel, IThreadChannel
     public override Task UpdateAsync(RequestOptions? options = null) =>
         ChannelHelper.UpdateAsync(this, Kook, options);
 
+    #region Threads
+
     /// <inheritdoc cref="Kook.IThreadChannel.GetThreadCategoriesAsync(Kook.RequestOptions)" />
     public async Task<IReadOnlyCollection<IThreadCategory>> GetThreadCategoriesAsync(RequestOptions? options = null) =>
         await ThreadHelper.GetThreadCategoriesAsync(this, Kook, options);
@@ -140,6 +142,8 @@ public class RestThreadChannel : RestGuildChannel, IThreadChannel
     /// <inheritdoc />
     public async Task DeleteThreadContentAsync(IThread thread, RequestOptions? options = null) =>
         await ThreadHelper.DeleteThreadContentAsync(this, Kook, thread, options).ConfigureAwait(false);
+
+    #endregion
 
     /// <summary>
     ///     获取此频道中的用户。
