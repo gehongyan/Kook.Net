@@ -120,7 +120,35 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
     ///     构建当前构建器为一个 <see cref="Card"/>。
     /// </summary>
     /// <returns> 由当前构建器表示的属性构建的 <see cref="Card"/> 对象。 </returns>
-    public Card Build() => new(Theme, Size, Color, [..Modules.Select(m => m.Build())]);
+    public Card Build()
+    {
+        if (Theme is CardTheme.Invisible)
+        {
+            foreach (IModuleBuilder module in Modules)
+            {
+                switch (module)
+                {
+                    case ContextModuleBuilder
+                        or ActionGroupModuleBuilder
+                        or DividerModuleBuilder
+                        or HeaderModuleBuilder
+                        or ContainerModuleBuilder
+                        or FileModuleBuilder
+                        or AudioModuleBuilder
+                        or VideoModuleBuilder:
+                        break;
+                    case SectionModuleBuilder section:
+                        if (section.Accessory is not null)
+                            throw new InvalidOperationException("SectionModule cannot have an accessory in an card with invisible theme.");
+                        break;
+                    default:
+                        throw new InvalidOperationException($"{module.Type}Module is not supported in an card with invisible theme.");
+                }
+            }
+        }
+
+        return new Card(Theme, Size, Color, [..Modules.Select(m => m.Build())]);
+    }
 
     /// <inheritdoc />
     ICard ICardBuilder.Build() => Build();
