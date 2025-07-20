@@ -21,6 +21,11 @@ public interface IAttachment
     string? Filename { get; }
 
     /// <summary>
+    ///     获取此附件的封面图像的 URL。
+    /// </summary>
+    string? Cover { get; }
+
+    /// <summary>
     ///     获取此附件的文件大小。
     /// </summary>
     int? Size { get; }

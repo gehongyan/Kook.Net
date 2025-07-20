@@ -19,6 +19,16 @@ public interface IThreadPost : IEntity<ulong>, IDeletable
     string Content { get; }
 
     /// <summary>
+    ///     获取此帖子评论中包含的所有卡片。
+    /// </summary>
+    IReadOnlyCollection<ICard> Cards { get; }
+
+    /// <summary>
+    ///     获取此帖子评论所包含的所有附件。
+    /// </summary>
+    IReadOnlyCollection<IAttachment> Attachments { get; }
+
+    /// <summary>
     ///     获取此帖子评论中提及的所有用户的 ID。
     /// </summary>
     IReadOnlyCollection<ulong> MentionedUserIds { get; }
@@ -42,11 +52,6 @@ public interface IThreadPost : IEntity<ulong>, IDeletable
     ///     获取此帖子评论是否提及了在线成员。
     /// </summary>
     bool MentionedHere { get; }
-
-    /// <summary>
-    ///     获取此帖子评论中包含的所有卡片。
-    /// </summary>
-    IReadOnlyCollection<ICard> Cards { get; }
 
     /// <summary>
     ///     获取此帖子评论的作者。
@@ -119,12 +124,12 @@ public interface IThreadPost : IEntity<ulong>, IDeletable
     ///     <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///     方法可以展开这 10 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
-    /// <param name="referenceReplyId"> 要开始获取回复的参考位置的回复的 ID，获取的结果不包含此回复。 </param>
+    /// <param name="referenceTimestamp"> </param>
     /// <param name="sortMode"> 要以参考位置为基准，获取回复的排序方式。 </param>
     /// <param name="limit"> 要获取的回复数量。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 分页的回复集合的异步可枚举对象。 </returns>
-    IAsyncEnumerable<IReadOnlyCollection<IThreadReply>> GetRepliesAsync(ulong referenceReplyId,
+    IAsyncEnumerable<IReadOnlyCollection<IThreadReply>> GetRepliesAsync(DateTimeOffset referenceTimestamp,
         SortMode sortMode = SortMode.Ascending, int limit = KookConfig.MaxThreadsPerBatch,
         RequestOptions? options = null);
 
@@ -153,7 +158,7 @@ public interface IThreadPost : IEntity<ulong>, IDeletable
     /// <param name="limit"> 要获取的回复数量。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 分页的回复集合的异步可枚举对象。 </returns>
-    IAsyncEnumerable<IReadOnlyCollection<IThreadReply>> GetRepliesAsync(IThreadPost referenceReply,
+    IAsyncEnumerable<IReadOnlyCollection<IThreadReply>> GetRepliesAsync(IThreadReply referenceReply,
         SortMode sortMode = SortMode.Ascending, int limit = KookConfig.MaxThreadsPerBatch,
         RequestOptions? options = null);
 
@@ -161,9 +166,10 @@ public interface IThreadPost : IEntity<ulong>, IDeletable
     ///     在此帖子评论中创建一条帖子回复。
     /// </summary>
     /// <param name="content"> 要发布的文本内容。 </param>
+    /// <param name="referenceReplyId"> 在发布回复时要回复的帖子回复的 ID。如果未指定，则不会回复任何帖子回复。</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示新创建帖子评论的回复操作的异步任务。 </returns>
-    Task<IThreadReply> CreateReplyAsync(string content, RequestOptions? options = null);
+    Task<IThreadReply> CreateReplyAsync(string content, ulong? referenceReplyId = null, RequestOptions? options = null);
 
     /// <summary>
     ///     在此帖子评论中删除一条帖子回复。

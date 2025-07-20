@@ -147,7 +147,9 @@ internal static class EntityExtensions
         new(model.Source, model.Title, model.Cover);
 
     public static VideoModule ToEntity(this API.VideoModule model) =>
-        new(model.Source, model.Title);
+        new(model.Source, model.Title, model.Cover, model.Size,
+            model.Duration.HasValue ? TimeSpan.FromSeconds(model.Duration.Value) : null,
+            model.Width, model.Height);
 
     public static CountdownModule ToEntity(this API.CountdownModule model) =>
         new(model.Mode, model.EndTime, model.StartTime);

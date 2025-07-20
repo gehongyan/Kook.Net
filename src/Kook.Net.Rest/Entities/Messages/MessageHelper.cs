@@ -388,7 +388,7 @@ internal static class MessageHelper
         return JsonSerializer.Serialize(enumerable.Select(c => c.ToModel()), serializerOptions);
     }
 
-    public static IReadOnlyCollection<Attachment> ParseAttachments(IEnumerable<Card> cards)
+    public static IReadOnlyCollection<Attachment> ParseAttachments(IEnumerable<ICard> cards)
     {
         List<Attachment> attachments = [];
         IEnumerable<IModule> modules = cards.SelectMany(x => x.Modules);
@@ -397,7 +397,7 @@ internal static class MessageHelper
             switch (module)
             {
                 case FileModule fileModule:
-                    Attachment file = new(AttachmentType.File, fileModule.Source, fileModule.Title, fileModule.Size);
+                    Attachment file = new(AttachmentType.File, fileModule.Source, fileModule.Title, null, fileModule.Size);
                     attachments.Add(file);
                     break;
                 case AudioModule audioModule:
@@ -405,7 +405,8 @@ internal static class MessageHelper
                     attachments.Add(audio);
                     break;
                 case VideoModule videoModule:
-                    Attachment video = new(AttachmentType.Video, videoModule.Source, videoModule.Title);
+                    Attachment video = new(AttachmentType.Video, videoModule.Source, videoModule.Title, videoModule.Cover,
+                        videoModule.Size, null, videoModule.Duration, videoModule.Width, videoModule.Height);
                     attachments.Add(video);
                     break;
                 case ContainerModule containerModule:

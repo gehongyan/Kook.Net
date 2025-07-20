@@ -151,7 +151,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         if (Type == MessageType.Card)
         {
             _cards = MessageHelper.ParseCards(gatewayEvent.Content);
-            _attachments = [.._attachments, ..MessageHelper.ParseAttachments(_cards.OfType<Card>())];
+            _attachments = [.._attachments, ..MessageHelper.ParseAttachments(_cards)];
         }
 
         if (Type == MessageType.Poke && model.KMarkdownInfo is { Pokes: { } pokes })
@@ -189,7 +189,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         if (Type == MessageType.Card)
         {
             _cards = MessageHelper.ParseCards(gatewayEvent.Content);
-            _attachments = [.._attachments, ..MessageHelper.ParseAttachments(_cards.OfType<Card>())];
+            _attachments = [.._attachments, ..MessageHelper.ParseAttachments(_cards)];
         }
 
         if (Type == MessageType.Poke && model.KMarkdownInfo is { Pokes: { } pokes })
@@ -240,7 +240,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         if (Type == MessageType.Card)
         {
             _cards = MessageHelper.ParseCards(model.Content);
-            _attachments = _attachments.AddRange(MessageHelper.ParseAttachments(_cards.OfType<Card>()));
+            _attachments = _attachments.AddRange(MessageHelper.ParseAttachments(_cards));
         }
 
         _embeds = [..model.Embeds.Select(x => x.ToEntity())];
@@ -283,7 +283,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         if (Type == MessageType.Card)
         {
             _cards = MessageHelper.ParseCards(model.Content);
-            _attachments = _attachments.AddRange(MessageHelper.ParseAttachments(_cards.OfType<Card>()));
+            _attachments = _attachments.AddRange(MessageHelper.ParseAttachments(_cards));
         }
 
         _embeds = [..model.Embeds.Select(x => x.ToEntity())];
@@ -335,7 +335,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         if (Type == MessageType.Card)
         {
             _cards = MessageHelper.ParseCards(model.Content);
-            _attachments = [.._attachments, ..MessageHelper.ParseAttachments(_cards.OfType<Card>())];
+            _attachments = [.._attachments, ..MessageHelper.ParseAttachments(_cards)];
         }
 
         if (Type == MessageType.Poke && model.MentionInfo is { Pokes: { } pokes })
@@ -382,7 +382,7 @@ public class SocketUserMessage : SocketMessage, IUserMessage
         if (Type == MessageType.Card)
         {
             _cards = MessageHelper.ParseCards(model.Content);
-            _attachments = [.._attachments, ..MessageHelper.ParseAttachments(_cards.OfType<Card>())];
+            _attachments = [.._attachments, ..MessageHelper.ParseAttachments(_cards)];
         }
 
         if (Type == MessageType.Poke && model.MentionInfo is { Pokes: { } pokes })

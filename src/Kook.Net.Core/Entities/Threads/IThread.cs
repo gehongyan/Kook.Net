@@ -41,7 +41,7 @@ public interface IThread : IEntity<ulong>, IDeletable
     /// <summary>
     ///     获取此帖子所包含的所有附件。
     /// </summary>
-    IReadOnlyCollection<IThreadAttachment> Attachments { get; }
+    IReadOnlyCollection<IAttachment> Attachments { get; }
 
     /// <summary>
     ///     获取此帖子的作者。
@@ -182,12 +182,12 @@ public interface IThread : IEntity<ulong>, IDeletable
     ///     <see cref="Kook.AsyncEnumerableExtensions.FlattenAsync{T}(System.Collections.Generic.IAsyncEnumerable{System.Collections.Generic.IEnumerable{T}})" />
     ///     方法可以展开这 10 个响应返回的集合，并将其合并为一个集合。
     /// </remarks>
-    /// <param name="referencePostId"> 要开始获取评论的参考位置的评论的 ID，获取的结果不包含此评论。 </param>
+    /// <param name="referenceTimestamp"> </param>
     /// <param name="sortMode"> 要以参考位置为基准，获取评论的排序方式。 </param>
     /// <param name="limit"> 要获取的评论数量。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 分页的评论集合的异步可枚举对象。 </returns>
-    IAsyncEnumerable<IReadOnlyCollection<IThreadPost>> GetPostsAsync(ulong referencePostId,
+    IAsyncEnumerable<IReadOnlyCollection<IThreadPost>> GetPostsAsync(DateTimeOffset referenceTimestamp,
         SortMode sortMode = SortMode.Ascending, int limit = KookConfig.MaxThreadsPerBatch,
         RequestOptions? options = null);
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Model = Kook.API.Thread;
+using ExtendedModel = Kook.API.ExtendedThread;
 
 namespace Kook.Rest;
 
@@ -10,14 +11,13 @@ public class RestThread : RestEntity<ulong>, IThread
 {
     private bool _isMentioningEveryone;
     private bool _isMentioningHere;
-    private ImmutableArray<ThreadAttachment> _attachments = [];
+    private ImmutableArray<IAttachment> _attachments = [];
     private ImmutableArray<ICard> _cards = [];
     private ImmutableArray<RestUser> _userMentions = [];
     private ImmutableArray<ulong> _userMentionIds = [];
     private ImmutableArray<uint> _roleMentionIds = [];
     private ImmutableArray<ulong> _channelMentionIds = [];
     private ImmutableArray<ThreadTag> _threadTags = [];
-
 
     /// <inheritdoc />
     public IGuild Guild { get; }
@@ -38,7 +38,7 @@ public class RestThread : RestEntity<ulong>, IThread
     public ulong PostId { get; private set; }
 
     /// <inheritdoc />
-    public IReadOnlyCollection<IThreadAttachment> Attachments => _attachments;
+    public IReadOnlyCollection<IAttachment> Attachments => _attachments;
 
     /// <inheritdoc cref="Kook.IThread.Author" />
     public IUser Author { get; }
@@ -113,7 +113,14 @@ public class RestThread : RestEntity<ulong>, IThread
 
     internal static RestThread Create(BaseKookClient kook, IThreadChannel channel, IUser author, Model model)
     {
-        RestThread entity = new(kook, model.Id, channel, RestUser.Create(kook, model.User));
+        RestThread entity = new(kook, model.Id, channel, author);
+        entity.Update(model);
+        return entity;
+    }
+
+    internal static RestThread Create(BaseKookClient kook, IThreadChannel channel, IUser author, ExtendedModel model)
+    {
+        RestThread entity = new(kook, model.Id, channel, author);
         entity.Update(model);
         return entity;
     }
@@ -124,13 +131,15 @@ public class RestThread : RestEntity<ulong>, IThread
         Title = model.Title;
         Cover = model.Cover;
         PostId = model.PostId;
-        _attachments = [..model.Medias.Select(ThreadAttachment.Create)];
+        _cards = MessageHelper.ParseCards(model.Content);
+        _attachments = [..model.Medias.Select(Attachment.Create)];
         PreviewContent = model.PreviewContent;
         Category = model.Category is not null
             ? RestThreadCategory.Create(Kook, Channel, model.Category)
             : null;
         _threadTags = [..model.Tags.Select(x => new ThreadTag(x.Id, x.Name, x.Icon))];
         Content = model.Content;
+        _userMentionIds = [..model.MentionedUserIds];
         _userMentions = [..model.MentionedUsers.Select(x => RestUser.Create(Kook, x))];
         _isMentioningEveryone = model.MentionAll;
         _isMentioningHere = model.MentionHere;
@@ -138,28 +147,46 @@ public class RestThread : RestEntity<ulong>, IThread
         _channelMentionIds = [..model.MentionedChannels.Select(x => x.Id)];
     }
 
-    /// <inheritdoc />
-    public IAsyncEnumerable<IReadOnlyCollection<IThreadPost>> GetPostsAsync(int limit = KookConfig.MaxThreadsPerBatch, RequestOptions? options = null) =>
-        throw new NotImplementedException();
+    internal void Update(ExtendedModel model)
+    {
+        Update(model as Model);
+        LatestActiveTimestamp = model.LatestActiveTime;
+        Timestamp = model.CreateTime;
+        IsEdited = model.IsUpdated;
+        IsContentDeleted = model.ContentDeleted;
+        ContentDeletedBy = model.ContentDeletedType;
+        FavoriteCount = model.CollectNum;
+        PostCount = model.PostCount;
+    }
 
     /// <inheritdoc />
-    public IAsyncEnumerable<IReadOnlyCollection<IThreadPost>> GetPostsAsync(ulong referencePostId, SortMode sortMode = SortMode.Ascending,
-        int limit = KookConfig.MaxThreadsPerBatch, RequestOptions? options = null) =>
-        throw new NotImplementedException();
+    public IAsyncEnumerable<IReadOnlyCollection<IThreadPost>> GetPostsAsync(int limit = KookConfig.MaxThreadsPerBatch,
+        RequestOptions? options = null) =>
+        ThreadHelper.GetThreadPostsAsync(this, Kook, limit, options);
 
     /// <inheritdoc />
-    public IAsyncEnumerable<IReadOnlyCollection<IThreadPost>> GetPostsAsync(IThreadPost referencePost, SortMode sortMode = SortMode.Ascending,
-        int limit = KookConfig.MaxThreadsPerBatch, RequestOptions? options = null) =>
-        throw new NotImplementedException();
+    public IAsyncEnumerable<IReadOnlyCollection<IThreadPost>> GetPostsAsync(DateTimeOffset referenceTimestamp,
+        SortMode sortMode = SortMode.Ascending, int limit = KookConfig.MaxThreadsPerBatch,
+        RequestOptions? options = null) =>
+        ThreadHelper.GetThreadPostsAsync(this, Kook, referenceTimestamp, sortMode, limit, options);
 
     /// <inheritdoc />
-    public Task<IThreadPost> CreatePostAsync(string content, RequestOptions? options = null) => throw new NotImplementedException();
+    public IAsyncEnumerable<IReadOnlyCollection<IThreadPost>> GetPostsAsync(IThreadPost referencePost,
+        SortMode sortMode = SortMode.Ascending, int limit = KookConfig.MaxThreadsPerBatch,
+        RequestOptions? options = null) =>
+        ThreadHelper.GetThreadPostsAsync(this, Kook, referencePost, sortMode, limit, options);
 
-    /// <inheritdoc />
-    public Task<IThreadPost> CreatePostAsync(ICard card, RequestOptions? options = null) => throw new NotImplementedException();
+    /// <inheritdoc cref="Kook.IThread.CreatePostAsync(System.String,Kook.RequestOptions)" />
+    public async Task<IThreadPost> CreatePostAsync(string content, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadPostAsync(this, Kook, content, options).ConfigureAwait(false);
 
-    /// <inheritdoc />
-    public Task<IThreadPost> CreatePostAsync(IEnumerable<ICard> cards, RequestOptions? options = null) => throw new NotImplementedException();
+    /// <inheritdoc cref="Kook.IThread.CreatePostAsync(Kook.ICard,Kook.RequestOptions)" />
+    public async Task<IThreadPost> CreatePostAsync(ICard card, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadPostAsync(this, Kook, card, options).ConfigureAwait(false);
+
+    /// <inheritdoc cref="Kook.IThread.CreatePostAsync(System.Collections.Generic.IEnumerable{Kook.ICard},Kook.RequestOptions)" />
+    public async Task<IThreadPost> CreatePostAsync(IEnumerable<ICard> cards, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadPostAsync(this, Kook, cards, options).ConfigureAwait(false);
 
     /// <inheritdoc />
     public async Task DeleteAsync(RequestOptions? options = null) =>
@@ -192,6 +219,18 @@ public class RestThread : RestEntity<ulong>, IThread
 
     /// <inheritdoc />
     IThreadCategory? IThread.Category => Category;
+
+    /// <inheritdoc />
+    async Task<IThreadPost> IThread.CreatePostAsync(string content, RequestOptions? options) =>
+        await CreatePostAsync(content, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    async Task<IThreadPost> IThread.CreatePostAsync(ICard card, RequestOptions? options) =>
+        await CreatePostAsync(card, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    async Task<IThreadPost> IThread.CreatePostAsync(IEnumerable<ICard> cards, RequestOptions? options) =>
+        await CreatePostAsync(cards, options).ConfigureAwait(false);
 
     #endregion
 }

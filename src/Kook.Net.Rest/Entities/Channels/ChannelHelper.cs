@@ -184,8 +184,7 @@ internal static class ChannelHelper
     }
 
     public static async Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(IMessageChannel channel,
-        BaseKookClient client,
-        RequestOptions? options)
+        BaseKookClient client, RequestOptions? options)
     {
         IGuild? guild = channel is IGuildChannel { GuildId: var guildId }
             ? await (client as IKookClient).GetGuildAsync(guildId, CacheMode.CacheOnly)

@@ -83,7 +83,7 @@ public class VideoModuleBuilder : IModuleBuilder, IEquatable<VideoModuleBuilder>
 
         UrlValidation.Validate(Source);
 
-        return new VideoModule(Source, Title);
+        return new VideoModule(Source, Title, null, null, null, null, null);
     }
 
     /// <inheritdoc />

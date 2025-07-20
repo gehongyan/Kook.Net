@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Collections.Immutable;
+using System.Runtime.CompilerServices;
+using System.Text.Json;
 using Kook.API;
 using Kook.API.Rest;
 using Thread = Kook.API.Thread;
@@ -7,6 +9,8 @@ namespace Kook.Rest;
 
 internal static class ThreadHelper
 {
+    #region Thread Categories
+
     public static async Task<IReadOnlyCollection<IThreadCategory>> GetThreadCategoriesAsync(
         RestThreadChannel channel, BaseKookClient client, RequestOptions? options)
     {
@@ -17,6 +21,10 @@ internal static class ThreadHelper
             .Select(x => RestThreadCategory.Create(client, channel, x));
         return [..entities];
     }
+
+    #endregion
+
+    #region Threads
 
     public static async Task<RestThread> GetThreadAsync(IThreadChannel channel, BaseKookClient kook,
         ulong id, RequestOptions? options)
@@ -120,6 +128,68 @@ internal static class ThreadHelper
         await DeleteThreadPostReplyCoreAsync(client, channel.Id, threadId, thread.PostId, options).ConfigureAwait(false);
     }
 
+    #endregion
+
+    #region Thread Posts
+
+    public static IAsyncEnumerable<IReadOnlyCollection<RestThreadPost>> GetThreadPostsAsync(IThread thread,
+        BaseKookClient client, int limit, RequestOptions? options = null) =>
+        GetThreadPostsAsync(thread, client, referenceTimestamp: null, SortMode.Ascending, limit, options);
+
+    public static IAsyncEnumerable<IReadOnlyCollection<RestThreadPost>> GetThreadPostsAsync(IThread thread,
+        BaseKookClient client, IThreadPost referencePost, SortMode sortMode, int limit, RequestOptions? options) =>
+        GetThreadPostsAsync(thread, client, referencePost.Timestamp, sortMode, limit, options);
+
+    public static IAsyncEnumerable<IReadOnlyCollection<RestThreadPost>> GetThreadPostsAsync(IThread thread,
+        BaseKookClient client, DateTimeOffset? referenceTimestamp, SortMode sortMode, int limit, RequestOptions? options)
+    {
+        IAsyncEnumerable<IReadOnlyCollection<ExtendedThreadPost>> models = client.ApiClient.QueryThreadPostsAsync(
+            thread.Channel.Id, thread.Id, null, limit, 1, sortMode, referenceTimestamp, options);
+        return models.Select<IReadOnlyCollection<ExtendedThreadPost>, IReadOnlyCollection<RestThreadPost>>(x =>
+        {
+            ImmutableArray<RestThreadPost>.Builder builder = ImmutableArray.CreateBuilder<RestThreadPost>(x.Count);
+            foreach (ExtendedThreadPost items in x)
+            {
+                RestGuildUser author = RestGuildUser.Create(client, thread.Channel.Guild, items.User);
+                RestThreadPost entity = RestThreadPost.Create(client, thread, author, items);
+                builder.Add(entity);
+            }
+            return builder.ToImmutable();
+        });
+    }
+
+    public static async Task<RestThreadPost> CreateThreadPostAsync(IThread thread, BaseKookClient client,
+        string content, RequestOptions? options)
+    {
+        Card card = new CardBuilder(CardTheme.Invisible)
+            .AddModule(new SectionModuleBuilder(content))
+            .Build();
+        return await CreateThreadPostAsync(thread, client, [card], options);
+    }
+
+    public static async Task<RestThreadPost> CreateThreadPostAsync(IThread thread, BaseKookClient client,
+        ICard card, RequestOptions? options) =>
+        await CreateThreadPostAsync(thread, client, [card], options);
+
+    public static async Task<RestThreadPost> CreateThreadPostAsync(IThread thread, BaseKookClient client,
+        IEnumerable<ICard> cards, RequestOptions? options)
+    {
+        string json = MessageHelper.SerializeCards(cards);
+        CreateThreadReplyParams args = new()
+        {
+            ChannelId = thread.Channel.Id,
+            ThreadId = thread.Channel.GuildId,
+            ReplyId = null,
+            Content = json,
+        };
+        ThreadPost model = await client.ApiClient.CreateThreadReplyAsync(args, options).ConfigureAwait(false);
+        IUser author = await thread.Guild.GetCurrentUserAsync(CacheMode.CacheOnly)
+            ?? (IUser?)client.CurrentUser
+            ?? throw new InvalidOperationException("The client does not have a current user.");
+        RestThreadPost entity = RestThreadPost.Create(client, thread, author, model);
+        return entity;
+    }
+
     public static async Task DeleteThreadPostAsync(IThreadChannel channel, BaseKookClient client,
         IThreadPost post, RequestOptions? options) =>
         await DeleteThreadPostReplyCoreAsync(client, channel.Id, post.Thread.Id, post.Id, options).ConfigureAwait(false);
@@ -128,6 +198,54 @@ internal static class ThreadHelper
         ulong threadId, ulong postId, RequestOptions? options) =>
         await DeleteThreadPostReplyCoreAsync(client, channel.Id, threadId, postId, options).ConfigureAwait(false);
 
+    #endregion
+
+    #region Thread Replies
+
+    public static IAsyncEnumerable<IReadOnlyCollection<RestThreadReply>> GetThreadRepliesAsync(IThreadPost post,
+        BaseKookClient client, int limit, RequestOptions? options = null) =>
+        GetThreadRepliesAsync(post, client, referenceTimestamp: null, SortMode.Ascending, limit, options);
+
+    public static IAsyncEnumerable<IReadOnlyCollection<RestThreadReply>> GetThreadRepliesAsync(IThreadPost post,
+        BaseKookClient client, IThreadReply referenceReply, SortMode sortMode, int limit, RequestOptions? options) =>
+        GetThreadRepliesAsync(post, client, referenceReply.Timestamp, sortMode, limit, options);
+
+    public static IAsyncEnumerable<IReadOnlyCollection<RestThreadReply>> GetThreadRepliesAsync(IThreadPost post,
+        BaseKookClient client, DateTimeOffset? referenceTimestamp, SortMode sortMode, int limit, RequestOptions? options)
+    {
+        IAsyncEnumerable<IReadOnlyCollection<ExtendedThreadPost>> models = client.ApiClient.QueryThreadPostsAsync(
+            post.Thread.Channel.Id, post.Thread.Id, post.Id, limit, 1, sortMode, referenceTimestamp, options);
+        return models.Select<IReadOnlyCollection<ExtendedThreadPost>, IReadOnlyCollection<RestThreadReply>>(x =>
+        {
+            ImmutableArray<RestThreadReply>.Builder builder = ImmutableArray.CreateBuilder<RestThreadReply>(x.Count);
+            foreach (ExtendedThreadPost items in x)
+            {
+                RestGuildUser author = RestGuildUser.Create(client, post.Thread.Channel.Guild, items.User);
+                RestThreadReply entity = RestThreadReply.Create(client, post, author, items);
+                builder.Add(entity);
+            }
+            return builder.ToImmutable();
+        });
+    }
+
+    public static async Task<RestThreadReply> CreateThreadReplyAsync(IThreadPost post, BaseKookClient client,
+        string content, ulong? referenceReplyId, RequestOptions? options)
+    {
+        CreateThreadReplyParams args = new()
+        {
+            ChannelId = post.Thread.Channel.Id,
+            ThreadId = post.Thread.Channel.GuildId,
+            ReplyId = referenceReplyId,
+            Content = content,
+        };
+        ThreadPost model = await client.ApiClient.CreateThreadReplyAsync(args, options).ConfigureAwait(false);
+        IUser author = await post.Thread.Guild.GetCurrentUserAsync(CacheMode.CacheOnly)
+            ?? (IUser?)client.CurrentUser
+            ?? throw new InvalidOperationException("The client does not have a current user.");
+        RestThreadReply entity = RestThreadReply.Create(client, post, author, model);
+        return entity;
+    }
+
     public static async Task DeleteThreadReplyAsync(IThreadChannel channel, BaseKookClient client,
         IThreadReply reply, RequestOptions? options) =>
         await DeleteThreadPostReplyCoreAsync(client, channel.Id, reply.Thread.Id, reply.Id, options).ConfigureAwait(false);
@@ -135,6 +253,9 @@ internal static class ThreadHelper
     public static async Task DeleteThreadReplyAsync(IThreadChannel channel, BaseKookClient client,
         ulong threadId, ulong replyId, RequestOptions? options) =>
         await DeleteThreadPostReplyCoreAsync(client, channel.Id, threadId, replyId, options).ConfigureAwait(false);
+
+
+    #endregion
 
     public static async Task DeleteThreadPostReplyCoreAsync(BaseKookClient client,
         ulong channelId, ulong? threadId, ulong? postId, RequestOptions? options)
@@ -147,4 +268,5 @@ internal static class ThreadHelper
         };
         await client.ApiClient.DeleteThreadPostAsync(args, options).ConfigureAwait(false);
     }
+
 }
