@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using Model = Kook.API.ThreadPost;
 using ExtendedModel = Kook.API.ExtendedThreadPost;
 
@@ -7,6 +8,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     表示一个基于 REST 的帖子评论。
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestThreadReply : RestEntity<ulong>, IThreadReply
 {
     private bool _isMentioningEveryone;
@@ -101,18 +103,33 @@ public class RestThreadReply : RestEntity<ulong>, IThreadReply
         Author = RestUser.Create(Kook, model.User);
     }
 
-    /// <inheritdoc cref="Kook.IThreadReply.ReplyAsync(System.String,Kook.RequestOptions)" />
-    public async Task<RestThreadReply> ReplyAsync(string content, RequestOptions? options = null)
-    {
-        return await ThreadHelper.CreateThreadReplyAsync(
-            Post, Kook, content, Id, options).ConfigureAwait(false);
-    }
+    /// <inheritdoc cref="Kook.IThreadReply.ReplyAsync(System.String,System.Boolean,Kook.RequestOptions)" />
+    public async Task<RestThreadReply> ReplyAsync(string content, bool isKMarkdown = false, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadReplyAsync(Post, Kook, content, isKMarkdown, Id, options).ConfigureAwait(false);
+
+    /// <inheritdoc cref="Kook.IThreadReply.ReplyAsync(Kook.ICard,Kook.RequestOptions)" />
+    public async Task<RestThreadReply> ReplyAsync(ICard card, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadReplyAsync(Post, Kook, card, Id, options).ConfigureAwait(false);
+
+    /// <inheritdoc cref="Kook.IThreadReply.ReplyAsync(System.Collections.Generic.IEnumerable{Kook.ICard},Kook.RequestOptions)" />
+    public async Task<RestThreadReply> ReplyAsync(IEnumerable<ICard> cards, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadReplyAsync(Post, Kook, cards, Id, options).ConfigureAwait(false);
+
+    private string DebuggerDisplay => $"{Author}: {Content} ({Id})";
 
     #region IThreadReply
 
     /// <inheritdoc />
-    async Task<IThreadReply> IThreadReply.ReplyAsync(string content, RequestOptions? options) =>
-        await ReplyAsync(content, options).ConfigureAwait(false);
+    async Task<IThreadReply> IThreadReply.ReplyAsync(string content, bool isKMarkdown, RequestOptions? options) =>
+        await ReplyAsync(content, isKMarkdown, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    async Task<IThreadReply> IThreadReply.ReplyAsync(ICard card, RequestOptions? options) =>
+        await ReplyAsync(card, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    async Task<IThreadReply> IThreadReply.ReplyAsync(IEnumerable<ICard> cards, RequestOptions? options) =>
+        await ReplyAsync(cards, options).ConfigureAwait(false);
 
     #endregion
 }

@@ -67,7 +67,30 @@ public interface IThreadReply : IEntity<ulong>, IDeletable
     ///     在此帖子回复所属的帖子评论中回复此帖子回复。
     /// </summary>
     /// <param name="content"> 要发布的文本内容。 </param>
+    /// <param name="isKMarkdown"> 是否为 KMarkdown 格式。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示新创建帖子评论的回复操作的异步任务。 </returns>
-    Task<IThreadReply> ReplyAsync(string content, RequestOptions? options = null);
+    Task<IThreadReply> ReplyAsync(string content, bool isKMarkdown = false, RequestOptions? options = null);
+
+    /// <summary>
+    ///     在此帖子回复所属的帖子评论中回复此帖子回复。
+    /// </summary>
+    /// <param name="card"> 要发布的卡片内容。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示新创建帖子评论的回复操作的异步任务。 </returns>
+    /// <remarks>
+    ///     卡片内仅允许包含文本内容。
+    /// </remarks>
+    Task<IThreadReply> ReplyAsync(ICard card, RequestOptions? options = null);
+
+    /// <summary>
+    ///     在此帖子回复所属的帖子评论中回复此帖子回复。
+    /// </summary>
+    /// <param name="cards"> 要发布的卡片内容。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示新创建帖子评论的回复操作的异步任务。 </returns>
+    /// <remarks>
+    ///     卡片内仅允许包含文本内容。
+    /// </remarks>
+    Task<IThreadReply> ReplyAsync(IEnumerable<ICard> cards, RequestOptions? options = null);
 }

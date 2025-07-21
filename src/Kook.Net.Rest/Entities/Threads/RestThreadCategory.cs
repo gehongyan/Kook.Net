@@ -56,6 +56,7 @@ public class RestThreadCategory : RestEntity<ulong>, IThreadCategory
                 {
                     rolePermissions.Add(new RolePermissionOverwrite(
                         overwrite.RoleId.Value,
+                        Channel.Guild.GetRole(overwrite.RoleId.Value),
                         new OverwritePermissions(overwrite.Allow, 0)));
                 }
                 else if (overwrite is { Type: PermissionOverwriteTarget.User, UserId: not null }
@@ -63,12 +64,14 @@ public class RestThreadCategory : RestEntity<ulong>, IThreadCategory
                 {
                     userPermissions.Add(new UserPermissionOverwrite(
                         userId,
+                        Channel.Guild.GetUserAsync(userId, CacheMode.CacheOnly).GetAwaiter().GetResult(),
                         new OverwritePermissions(overwrite.Allow, 0)));
                 }
             }
         }
         rolePermissions.Add(new RolePermissionOverwrite(
             Channel.Guild.EveryoneRole.Id,
+            Channel.Guild.EveryoneRole,
             new OverwritePermissions(model.Allow, model.Deny)));
         _rolePermissionOverwrites = rolePermissions.ToImmutable();
         _userPermissionOverwrites = userPermissions.ToImmutable();
@@ -98,10 +101,10 @@ public class RestThreadCategory : RestEntity<ulong>, IThreadCategory
             _ => null
         }, sortOrder, limit, this, options);
 
-    /// <inheritdoc cref="Kook.IThreadCategory.CreateThreadAsync(System.String,System.String,System.String,Kook.ThreadTag[],Kook.RequestOptions)" />
-    public async Task<RestThread> CreateThreadAsync(string title, string content, string? cover = null,
-        ThreadTag[]? tags = null, RequestOptions? options = null) =>
-        await ThreadHelper.CreateThreadAsync(Channel, Kook, title, content, cover, this, tags, options).ConfigureAwait(false);
+    /// <inheritdoc cref="Kook.IThreadCategory.CreateThreadAsync(System.String,System.String,System.Boolean,System.String,Kook.ThreadTag[],Kook.RequestOptions)" />
+    public async Task<RestThread> CreateThreadAsync(string title, string content, bool isKMarkdown = false,
+        string? cover = null, ThreadTag[]? tags = null, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadAsync(Channel, Kook, title, content, isKMarkdown, cover, this, tags, options).ConfigureAwait(false);
 
     /// <inheritdoc cref="Kook.IThreadCategory.CreateThreadAsync(System.String,Kook.ICard,System.String,Kook.ThreadTag[],Kook.RequestOptions)" />
     public async Task<RestThread> CreateThreadAsync(string title, ICard card, string? cover = null,
@@ -112,6 +115,8 @@ public class RestThreadCategory : RestEntity<ulong>, IThreadCategory
     public async Task<RestThread> CreateThreadAsync(string title, IEnumerable<ICard> cards, string? cover = null,
         ThreadTag[]? tags = null, RequestOptions? options = null) =>
         await ThreadHelper.CreateThreadAsync(Channel, Kook, title, cards, cover, this, tags, options).ConfigureAwait(false);
+
+    private string DebuggerDisplay => $"{Name} ({Id})";
 
     #region IThraedCategory
 
@@ -127,9 +132,9 @@ public class RestThreadCategory : RestEntity<ulong>, IThreadCategory
         GetThreadsAsync(referenceThread, sortOrder, limit, options);
 
     /// <inheritdoc />
-    async Task<IThread> IThreadCategory.CreateThreadAsync(string title, string content, string? cover,
-        ThreadTag[]? tags, RequestOptions? options) =>
-        await CreateThreadAsync(title, content, cover, tags, options).ConfigureAwait(false);
+    async Task<IThread> IThreadCategory.CreateThreadAsync(string title, string content, bool isKMarkdown,
+        string? cover, ThreadTag[]? tags, RequestOptions? options) =>
+        await CreateThreadAsync(title, content, isKMarkdown, cover, tags, options).ConfigureAwait(false);
 
     /// <inheritdoc />
     async Task<IThread> IThreadCategory.CreateThreadAsync(string title, ICard card, string? cover,

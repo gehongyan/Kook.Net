@@ -36,10 +36,10 @@ internal class Thread
     public required ThreadTag[] Tags { get; set; }
 
     [JsonPropertyName("content")]
-    public required string Content { get; set; }
+    public string? Content { get; set; }
 
     [JsonPropertyName("mention")]
-    public required ulong[] MentionedUserIds { get; set; }
+    public ulong[]? MentionedUserIds { get; set; }
 
     [JsonPropertyName("mention_all")]
     public bool MentionAll { get; set; }
@@ -48,14 +48,14 @@ internal class Thread
     public bool MentionHere { get; set; }
 
     [JsonPropertyName("mention_part")]
-    public required MentionedUser[] MentionedUsers { get; set; }
+    public MentionedUser[]? MentionedUsers { get; set; }
 
     [JsonPropertyName("mention_role_part")]
-    public required Role[] MentionedRoles { get; set; }
+    public Role[]? MentionedRoles { get; set; }
 
     [JsonPropertyName("channel_part")]
-    public required MentionedChannel[] MentionedChannels { get; set; }
+    public MentionedChannel[]? MentionedChannels { get; set; }
 
     [JsonPropertyName("item_part")]
-    public required Poke[] Pokes { get; set; }
+    public Poke[]? Pokes { get; set; }
 }

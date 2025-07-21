@@ -64,7 +64,7 @@ public interface IThread : IEntity<ulong>, IDeletable
     /// <remarks>
     ///     此属性为卡片内容的原始代码。
     /// </remarks>
-    string Content { get; }
+    string? Content { get; }
 
     /// <summary>
     ///     获取此帖子内容的预览文本。
@@ -224,9 +224,10 @@ public interface IThread : IEntity<ulong>, IDeletable
     ///     在此帖子中创建一条帖子评论。
     /// </summary>
     /// <param name="content"> 要发布的文本内容。 </param>
+    /// <param name="isKMarkdown"> 是否为 KMarkdown 格式。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示新创建帖子评论操作的异步任务。 </returns>
-    Task<IThreadPost> CreatePostAsync(string content, RequestOptions? options = null);
+    Task<IThreadPost> CreatePostAsync(string content, bool isKMarkdown = false, RequestOptions? options = null);
 
     /// <summary>
     ///     在此帖子中创建一条帖子评论。

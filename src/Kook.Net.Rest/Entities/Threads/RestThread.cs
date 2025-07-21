@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using Model = Kook.API.Thread;
 using ExtendedModel = Kook.API.ExtendedThread;
 
@@ -7,7 +8,8 @@ namespace Kook.Rest;
 /// <summary>
 ///     表示一个基于 REST 的帖子。
 /// </summary>
-public class RestThread : RestEntity<ulong>, IThread
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
+public class RestThread : RestEntity<ulong>, IThread, IUpdateable
 {
     private bool _isMentioningEveryone;
     private bool _isMentioningHere;
@@ -50,7 +52,13 @@ public class RestThread : RestEntity<ulong>, IThread
     public IReadOnlyCollection<ThreadTag> ThreadTags => _threadTags;
 
     /// <inheritdoc />
-    public string Content { get; private set; }
+    /// <remarks>
+    ///     <note type="warning">
+    ///         受限于 KOOK API，由 <see cref="Kook.IThreadChannel.GetThreadsAsync(System.Int32,Kook.IThreadCategory,Kook.RequestOptions)"/>
+    ///         及其重载方法返回的帖子实体的此属性为 <c>null</c>。要想获取此属性的值，请先在当前实体上调用 <see cref="IUpdateable.UpdateAsync"/> 方法。
+    ///     </note>
+    /// </remarks>
+    public string? Content { get; private set; }
 
     /// <inheritdoc />
     public string PreviewContent { get; private set; }
@@ -58,15 +66,39 @@ public class RestThread : RestEntity<ulong>, IThread
     /// <summary>
     ///     获取此帖子中提及的所有用户。
     /// </summary>
+    /// <remarks>
+    ///     <note type="warning">
+    ///         受限于 KOOK API，由 <see cref="Kook.IThreadChannel.GetThreadsAsync(System.Int32,Kook.IThreadCategory,Kook.RequestOptions)"/>
+    ///         及其重载方法返回的帖子实体的此属性为 <c>null</c>。要想获取此属性的值，请先在当前实体上调用 <see cref="IUpdateable.UpdateAsync"/> 方法。
+    ///     </note>
+    /// </remarks>
     public IReadOnlyCollection<RestUser> MentionedUsers => _userMentions;
 
     /// <inheritdoc />
+    /// <remarks>
+    ///     <note type="warning">
+    ///         受限于 KOOK API，由 <see cref="Kook.IThreadChannel.GetThreadsAsync(System.Int32,Kook.IThreadCategory,Kook.RequestOptions)"/>
+    ///         及其重载方法返回的帖子实体的此属性为 <c>null</c>。要想获取此属性的值，请先在当前实体上调用 <see cref="IUpdateable.UpdateAsync"/> 方法。
+    ///     </note>
+    /// </remarks>
     public IReadOnlyCollection<ulong> MentionedUserIds => _userMentionIds;
 
     /// <inheritdoc />
+    /// <remarks>
+    ///     <note type="warning">
+    ///         受限于 KOOK API，由 <see cref="Kook.IThreadChannel.GetThreadsAsync(System.Int32,Kook.IThreadCategory,Kook.RequestOptions)"/>
+    ///         及其重载方法返回的帖子实体的此属性为 <c>null</c>。要想获取此属性的值，请先在当前实体上调用 <see cref="IUpdateable.UpdateAsync"/> 方法。
+    ///     </note>
+    /// </remarks>
     public IReadOnlyCollection<uint> MentionedRoleIds => _roleMentionIds;
 
     /// <inheritdoc />
+    /// <remarks>
+    ///     <note type="warning">
+    ///         受限于 KOOK API，由 <see cref="Kook.IThreadChannel.GetThreadsAsync(System.Int32,Kook.IThreadCategory,Kook.RequestOptions)"/>
+    ///         及其重载方法返回的帖子实体的此属性为 <c>null</c>。要想获取此属性的值，请先在当前实体上调用 <see cref="IUpdateable.UpdateAsync"/> 方法。
+    ///     </note>
+    /// </remarks>
     public IReadOnlyCollection<ulong> MentionedChannelIds => _channelMentionIds;
 
     /// <inheritdoc />
@@ -76,6 +108,12 @@ public class RestThread : RestEntity<ulong>, IThread
     public bool MentionedHere => _isMentioningHere;
 
     /// <inheritdoc />
+    /// <remarks>
+    ///     <note type="warning">
+    ///         受限于 KOOK API，由 <see cref="Kook.IThreadChannel.GetThreadsAsync(System.Int32,Kook.IThreadCategory,Kook.RequestOptions)"/>
+    ///         及其重载方法返回的帖子实体的此属性为 <c>null</c>。要想获取此属性的值，请先在当前实体上调用 <see cref="IUpdateable.UpdateAsync"/> 方法。
+    ///     </note>
+    /// </remarks>
     public IReadOnlyCollection<ICard> Cards => _cards;
 
     /// <inheritdoc />
@@ -131,7 +169,8 @@ public class RestThread : RestEntity<ulong>, IThread
         Title = model.Title;
         Cover = model.Cover;
         PostId = model.PostId;
-        _cards = MessageHelper.ParseCards(model.Content);
+        if (model.Content is not null && !string.IsNullOrWhiteSpace(model.Content))
+            _cards = MessageHelper.ParseCards(model.Content);
         _attachments = [..model.Medias.Select(Attachment.Create)];
         PreviewContent = model.PreviewContent;
         Category = model.Category is not null
@@ -139,12 +178,16 @@ public class RestThread : RestEntity<ulong>, IThread
             : null;
         _threadTags = [..model.Tags.Select(x => new ThreadTag(x.Id, x.Name, x.Icon))];
         Content = model.Content;
-        _userMentionIds = [..model.MentionedUserIds];
-        _userMentions = [..model.MentionedUsers.Select(x => RestUser.Create(Kook, x))];
+        if (model.MentionedUserIds is not null)
+            _userMentionIds = [..model.MentionedUserIds];
+        if (model.MentionedUsers is not null)
+            _userMentions = [..model.MentionedUsers.Select(x => RestUser.Create(Kook, x))];
         _isMentioningEveryone = model.MentionAll;
         _isMentioningHere = model.MentionHere;
-        _roleMentionIds = [..model.MentionedRoles.Select(x => x.Id)];
-        _channelMentionIds = [..model.MentionedChannels.Select(x => x.Id)];
+        if (model.MentionedRoles is not null)
+            _roleMentionIds = [..model.MentionedRoles.Select(x => x.Id)];
+        if (model.MentionedChannels is not null)
+            _channelMentionIds = [..model.MentionedChannels.Select(x => x.Id)];
     }
 
     internal void Update(ExtendedModel model)
@@ -157,6 +200,13 @@ public class RestThread : RestEntity<ulong>, IThread
         ContentDeletedBy = model.ContentDeletedType;
         FavoriteCount = model.CollectNum;
         PostCount = model.PostCount;
+    }
+
+    /// <inheritdoc />
+    public async Task UpdateAsync(RequestOptions? options = null)
+    {
+        ExtendedModel model = await Kook.ApiClient.GetThreadAsync(Channel.Id, Id, options).ConfigureAwait(false);
+        Update(model);
     }
 
     /// <inheritdoc />
@@ -176,9 +226,9 @@ public class RestThread : RestEntity<ulong>, IThread
         RequestOptions? options = null) =>
         ThreadHelper.GetThreadPostsAsync(this, Kook, referencePost, sortMode, limit, options);
 
-    /// <inheritdoc cref="Kook.IThread.CreatePostAsync(System.String,Kook.RequestOptions)" />
-    public async Task<IThreadPost> CreatePostAsync(string content, RequestOptions? options = null) =>
-        await ThreadHelper.CreateThreadPostAsync(this, Kook, content, options).ConfigureAwait(false);
+    /// <inheritdoc cref="Kook.IThread.CreatePostAsync(System.String,System.Boolean,Kook.RequestOptions)" />
+    public async Task<IThreadPost> CreatePostAsync(string content, bool isKMarkdown = false, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadPostAsync(this, Kook, content, isKMarkdown, options).ConfigureAwait(false);
 
     /// <inheritdoc cref="Kook.IThread.CreatePostAsync(Kook.ICard,Kook.RequestOptions)" />
     public async Task<IThreadPost> CreatePostAsync(ICard card, RequestOptions? options = null) =>
@@ -212,6 +262,20 @@ public class RestThread : RestEntity<ulong>, IThread
     public async Task DeleteReplyAsync(IThreadReply reply, RequestOptions? options = null) =>
         await ThreadHelper.DeleteThreadReplyAsync(Channel, Kook, reply, options).ConfigureAwait(false);
 
+    private string DebuggerDisplay => $"{Author}: [{Title}] {PreviewContent} ({Id}{
+        Attachments.Count switch
+        {
+            0 => string.Empty,
+            1 => ", 1 Attachment",
+            _ => $", {Attachments.Count} Attachments"
+        }}{
+        PostCount switch
+        {
+            0 => string.Empty,
+            1 => ", 1 Post",
+            _ => $", {PostCount} Posts"
+        }})";
+
     #region IThread
 
     /// <inheritdoc />
@@ -221,8 +285,8 @@ public class RestThread : RestEntity<ulong>, IThread
     IThreadCategory? IThread.Category => Category;
 
     /// <inheritdoc />
-    async Task<IThreadPost> IThread.CreatePostAsync(string content, RequestOptions? options) =>
-        await CreatePostAsync(content, options).ConfigureAwait(false);
+    async Task<IThreadPost> IThread.CreatePostAsync(string content, bool isKMarkdown, RequestOptions? options) =>
+        await CreatePostAsync(content, isKMarkdown, options).ConfigureAwait(false);
 
     /// <inheritdoc />
     async Task<IThreadPost> IThread.CreatePostAsync(ICard card, RequestOptions? options) =>

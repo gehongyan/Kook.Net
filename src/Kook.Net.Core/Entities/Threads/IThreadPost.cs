@@ -166,10 +166,37 @@ public interface IThreadPost : IEntity<ulong>, IDeletable
     ///     在此帖子评论中创建一条帖子回复。
     /// </summary>
     /// <param name="content"> 要发布的文本内容。 </param>
+    /// <param name="isKMarkdown"> 是否为 KMarkdown 格式。 </param>
     /// <param name="referenceReplyId"> 在发布回复时要回复的帖子回复的 ID。如果未指定，则不会回复任何帖子回复。</param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示新创建帖子评论的回复操作的异步任务。 </returns>
-    Task<IThreadReply> CreateReplyAsync(string content, ulong? referenceReplyId = null, RequestOptions? options = null);
+    Task<IThreadReply> CreateReplyAsync(string content, bool isKMarkdown = false,
+        ulong? referenceReplyId = null, RequestOptions? options = null);
+
+    /// <summary>
+    ///     在此帖子评论中创建一条帖子回复。
+    /// </summary>
+    /// <param name="card"> 要发布的卡片内容。 </param>
+    /// <param name="referenceReplyId"> 在发布回复时要回复的帖子回复的 ID。如果未指定，则不会回复任何帖子回复。</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示新创建帖子评论的回复操作的异步任务。 </returns>
+    /// <remarks>
+    ///     卡片内仅允许包含文本内容。
+    /// </remarks>
+    Task<IThreadReply> CreateReplyAsync(ICard card, ulong? referenceReplyId = null, RequestOptions? options = null);
+
+    /// <summary>
+    ///     在此帖子评论中创建一条帖子回复。
+    /// </summary>
+    /// <param name="cards"> 要发布的卡片内容。 </param>
+    /// <param name="referenceReplyId"> 在发布回复时要回复的帖子回复的 ID。如果未指定，则不会回复任何帖子回复。</param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示新创建帖子评论的回复操作的异步任务。 </returns>
+    /// <remarks>
+    ///     卡片内仅允许包含文本内容。
+    /// </remarks>
+    Task<IThreadReply> CreateReplyAsync(IEnumerable<ICard> cards,
+        ulong? referenceReplyId = null, RequestOptions? options = null);
 
     /// <summary>
     ///     在此帖子评论中删除一条帖子回复。

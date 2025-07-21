@@ -138,7 +138,7 @@ public class SocketThreadChannel : SocketGuildChannel, IThreadChannel
     #region Threads
 
     /// <inheritdoc cref="Kook.IThreadChannel.GetThreadCategoriesAsync(Kook.RequestOptions)" />
-    public async Task<IReadOnlyCollection<IThreadCategory>> GetThreadCategoriesAsync(RequestOptions? options = null) =>
+    public async Task<IReadOnlyCollection<RestThreadCategory>> GetThreadCategoriesAsync(RequestOptions? options = null) =>
         await ThreadHelper.GetThreadCategoriesAsync(this, Kook, options);
 
     /// <inheritdoc cref="Kook.IThreadChannel.GetThreadAsync(System.UInt64,Kook.RequestOptions)" />
@@ -169,10 +169,10 @@ public class SocketThreadChannel : SocketGuildChannel, IThreadChannel
             _ => null
         }, sortOrder, limit, category, options);
 
-    /// <inheritdoc cref="Kook.IThreadChannel.CreateThreadAsync(System.String,System.String,System.String,Kook.IThreadCategory,Kook.ThreadTag[],Kook.RequestOptions)" />
-    public async Task<RestThread> CreateThreadAsync(string title, string content, string? cover = null,
-        IThreadCategory? category = null, ThreadTag[]? tags = null, RequestOptions? options = null) =>
-        await ThreadHelper.CreateThreadAsync(this, Kook, title, content, cover, category, tags, options);
+    /// <inheritdoc cref="Kook.IThreadChannel.CreateThreadAsync(System.String,System.String,System.Boolean,System.String,Kook.IThreadCategory,Kook.ThreadTag[],Kook.RequestOptions)" />
+    public async Task<RestThread> CreateThreadAsync(string title, string content, bool isKMarkdown = false,
+        string? cover = null, IThreadCategory? category = null, ThreadTag[]? tags = null, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadAsync(this, Kook, title, content, isKMarkdown, cover, category, tags, options);
 
     /// <inheritdoc cref="Kook.IThreadChannel.CreateThreadAsync(System.String,Kook.ICard,System.String,Kook.IThreadCategory,Kook.ThreadTag[],Kook.RequestOptions)" />
     public async Task<RestThread> CreateThreadAsync(string title, ICard card, string? cover = null,
@@ -241,9 +241,9 @@ public class SocketThreadChannel : SocketGuildChannel, IThreadChannel
         GetThreadsAsync(referenceThread, sortOrder, limit, category, options);
 
     /// <inheritdoc />
-    async Task<IThread> IThreadChannel.CreateThreadAsync(string title, string content, string? cover, IThreadCategory? category,
-        ThreadTag[]? tags, RequestOptions? options) =>
-        await CreateThreadAsync(title, content, cover, category, tags, options).ConfigureAwait(false);
+    async Task<IThread> IThreadChannel.CreateThreadAsync(string title, string content, bool isKMarkdown,
+        string? cover, IThreadCategory? category, ThreadTag[]? tags, RequestOptions? options) =>
+        await CreateThreadAsync(title, content, isKMarkdown, cover, category, tags, options).ConfigureAwait(false);
 
     /// <inheritdoc />
     async Task<IThread> IThreadChannel.CreateThreadAsync(string title, ICard card, string? cover, IThreadCategory? category,

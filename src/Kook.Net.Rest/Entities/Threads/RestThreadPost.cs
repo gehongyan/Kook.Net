@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using Model = Kook.API.ThreadPost;
 using ExtendedModel = Kook.API.ExtendedThreadPost;
 
@@ -7,6 +8,7 @@ namespace Kook.Rest;
 /// <summary>
 ///     表示一个基于 REST 的帖子评论。
 /// </summary>
+[DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class RestThreadPost : RestEntity<ulong>, IThreadPost
 {
     private bool _isMentioningEveryone;
@@ -64,40 +66,6 @@ public class RestThreadPost : RestEntity<ulong>, IThreadPost
     public IReadOnlyCollection<RestThreadReply> Replies => _replies;
 
     /// <inheritdoc />
-    public async Task DeleteAsync(RequestOptions? options = null) =>
-        await ThreadHelper.DeleteThreadPostAsync(Thread.Channel, Kook, this, options).ConfigureAwait(false);
-
-    /// <inheritdoc />
-    public IAsyncEnumerable<IReadOnlyCollection<IThreadReply>> GetRepliesAsync(
-        int limit = KookConfig.MaxThreadsPerBatch, RequestOptions? options = null) =>
-        ThreadHelper.GetThreadRepliesAsync(this, Kook, limit, options);
-
-    /// <inheritdoc />
-    public IAsyncEnumerable<IReadOnlyCollection<IThreadReply>> GetRepliesAsync(DateTimeOffset referenceTimestamp,
-        SortMode sortMode = SortMode.Ascending,
-        int limit = KookConfig.MaxThreadsPerBatch, RequestOptions? options = null) =>
-        ThreadHelper.GetThreadRepliesAsync(this, Kook, referenceTimestamp, sortMode, limit, options);
-
-    /// <inheritdoc />
-    public IAsyncEnumerable<IReadOnlyCollection<IThreadReply>> GetRepliesAsync(IThreadReply referenceReply,
-        SortMode sortMode = SortMode.Ascending,
-        int limit = KookConfig.MaxThreadsPerBatch, RequestOptions? options = null) =>
-        ThreadHelper.GetThreadRepliesAsync(this, Kook, referenceReply, sortMode, limit, options);
-
-    /// <inheritdoc cref="Kook.IThreadPost.CreateReplyAsync(System.String,System.Nullable{System.UInt64},Kook.RequestOptions)" />
-    public async Task<RestThreadReply> CreateReplyAsync(string content, ulong? referenceReplyId = null,
-        RequestOptions? options = null) =>
-        await ThreadHelper.CreateThreadReplyAsync(this, Kook, content, referenceReplyId, options).ConfigureAwait(false);
-
-    /// <inheritdoc />
-    public async Task DeleteReplyAsync(ulong replyId, RequestOptions? options = null) =>
-        await ThreadHelper.DeleteThreadReplyAsync(Thread.Channel, Kook, Thread.Id, replyId, options).ConfigureAwait(false);
-
-    /// <inheritdoc />
-    public async Task DeleteReplyAsync(IThreadReply reply, RequestOptions? options = null) =>
-        await ThreadHelper.DeleteThreadReplyAsync(Thread.Channel, Kook, reply, options).ConfigureAwait(false);
-
-    /// <inheritdoc />
     internal RestThreadPost(BaseKookClient kook, ulong id, IThread thread, IUser author)
         : base(kook, id)
     {
@@ -152,15 +120,73 @@ public class RestThreadPost : RestEntity<ulong>, IThreadPost
         }
     }
 
+    /// <inheritdoc />
+    public async Task DeleteAsync(RequestOptions? options = null) =>
+        await ThreadHelper.DeleteThreadPostAsync(Thread.Channel, Kook, this, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public IAsyncEnumerable<IReadOnlyCollection<IThreadReply>> GetRepliesAsync(
+        int limit = KookConfig.MaxThreadsPerBatch, RequestOptions? options = null) =>
+        ThreadHelper.GetThreadRepliesAsync(this, Kook, limit, options);
+
+    /// <inheritdoc />
+    public IAsyncEnumerable<IReadOnlyCollection<IThreadReply>> GetRepliesAsync(DateTimeOffset referenceTimestamp,
+        SortMode sortMode = SortMode.Ascending,
+        int limit = KookConfig.MaxThreadsPerBatch, RequestOptions? options = null) =>
+        ThreadHelper.GetThreadRepliesAsync(this, Kook, referenceTimestamp, sortMode, limit, options);
+
+    /// <inheritdoc />
+    public IAsyncEnumerable<IReadOnlyCollection<IThreadReply>> GetRepliesAsync(IThreadReply referenceReply,
+        SortMode sortMode = SortMode.Ascending,
+        int limit = KookConfig.MaxThreadsPerBatch, RequestOptions? options = null) =>
+        ThreadHelper.GetThreadRepliesAsync(this, Kook, referenceReply, sortMode, limit, options);
+
+    /// <inheritdoc cref="Kook.IThreadPost.CreateReplyAsync(System.String,System.Boolean,System.Nullable{System.UInt64},Kook.RequestOptions)" />
+    public async Task<RestThreadReply> CreateReplyAsync(string content, bool isKMarkdown = false,
+        ulong? referenceReplyId = null, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadReplyAsync(this, Kook, content, isKMarkdown, referenceReplyId, options).ConfigureAwait(false);
+
+    /// <inheritdoc cref="Kook.IThreadPost.CreateReplyAsync(Kook.ICard,System.Nullable{System.UInt64},Kook.RequestOptions)" />
+    public async Task<RestThreadReply> CreateReplyAsync(ICard card, ulong? referenceReplyId = null, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadReplyAsync(this, Kook, card, referenceReplyId, options).ConfigureAwait(false);
+
+    /// <inheritdoc cref="Kook.IThreadPost.CreateReplyAsync(System.Collections.Generic.IEnumerable{Kook.ICard},System.Nullable{System.UInt64},Kook.RequestOptions)" />
+    public async Task<RestThreadReply> CreateReplyAsync(IEnumerable<ICard> cards, ulong? referenceReplyId = null, RequestOptions? options = null) =>
+        await ThreadHelper.CreateThreadReplyAsync(this, Kook, cards, referenceReplyId, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task DeleteReplyAsync(ulong replyId, RequestOptions? options = null) =>
+        await ThreadHelper.DeleteThreadReplyAsync(Thread.Channel, Kook, Thread.Id, replyId, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task DeleteReplyAsync(IThreadReply reply, RequestOptions? options = null) =>
+        await ThreadHelper.DeleteThreadReplyAsync(Thread.Channel, Kook, reply, options).ConfigureAwait(false);
+
+    private string DebuggerDisplay => $"{Author}: {Content} ({Id}{
+        Attachments.Count switch
+        {
+            0 => string.Empty,
+            1 => ", 1 Attachment",
+            _ => $", {Attachments.Count} Attachments"
+        }})";
+
     #region IThreadPost
 
     /// <inheritdoc />
     IReadOnlyCollection<IThreadReply> IThreadPost.Replies => _replies;
 
     /// <inheritdoc />
-    async Task<IThreadReply> IThreadPost.CreateReplyAsync(string content, ulong? referenceReplyId,
+    async Task<IThreadReply> IThreadPost.CreateReplyAsync(string content, bool isKMarkdown, ulong? referenceReplyId,
         RequestOptions? options) =>
-        await CreateReplyAsync(content, referenceReplyId, options).ConfigureAwait(false);
+        await CreateReplyAsync(content, isKMarkdown, referenceReplyId, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    async Task<IThreadReply> IThreadPost.CreateReplyAsync(ICard card, ulong? referenceReplyId, RequestOptions? options) =>
+        await CreateReplyAsync(card, referenceReplyId, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    async Task<IThreadReply> IThreadPost.CreateReplyAsync(IEnumerable<ICard> cards, ulong? referenceReplyId, RequestOptions? options) =>
+        await CreateReplyAsync(cards, referenceReplyId, options).ConfigureAwait(false);
 
     #endregion
 }

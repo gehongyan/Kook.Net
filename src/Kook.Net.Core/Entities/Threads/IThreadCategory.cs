@@ -120,11 +120,12 @@ public interface IThreadCategory : IEntity<ulong>
     /// </summary>
     /// <param name="title"> 帖子标题。 </param>
     /// <param name="content"> 帖子文本内容，文本将会被包装在无侧边卡片内发送。 </param>
+    /// <param name="isKMarkdown"> 是否为 KMarkdown 格式。 </param>
     /// <param name="cover"> 帖子封面的图片链接。 </param>
     /// <param name="tags"> 帖子的话题标签。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步修改操作的任务。任务的结果包含新创建的帖子。 </returns>
-    Task<IThread> CreateThreadAsync(string title, string content, string? cover = null,
+    Task<IThread> CreateThreadAsync(string title, string content, bool isKMarkdown = false, string? cover = null,
         ThreadTag[]? tags = null, RequestOptions? options = null);
 
     /// <summary>

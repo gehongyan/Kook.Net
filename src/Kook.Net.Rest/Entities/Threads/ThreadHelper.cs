@@ -11,7 +11,7 @@ internal static class ThreadHelper
 {
     #region Thread Categories
 
-    public static async Task<IReadOnlyCollection<IThreadCategory>> GetThreadCategoriesAsync(
+    public static async Task<IReadOnlyCollection<RestThreadCategory>> GetThreadCategoriesAsync(
         IThreadChannel channel, BaseKookClient client, RequestOptions? options)
     {
         GetThreadCategoriesResponse response = await client.ApiClient
@@ -29,7 +29,7 @@ internal static class ThreadHelper
     public static async Task<RestThread> GetThreadAsync(IThreadChannel channel, BaseKookClient kook,
         ulong id, RequestOptions? options)
     {
-        Thread model = await kook.ApiClient.GetThreadAsync(channel.Id, id, options).ConfigureAwait(false);
+        ExtendedThread model = await kook.ApiClient.GetThreadAsync(channel.Id, id, options).ConfigureAwait(false);
         RestGuildUser author = RestGuildUser.Create(kook, channel.Guild, model.User);
         RestThread entity = RestThread.Create(kook, channel, author, model);
         return entity;
@@ -74,11 +74,11 @@ internal static class ThreadHelper
     }
 
     public static async Task<RestThread> CreateThreadAsync(IThreadChannel channel, BaseKookClient client,
-        string title, string content, string? cover, IThreadCategory? category, ThreadTag[]? tags,
+        string title, string content, bool isKMarkdown, string? cover, IThreadCategory? category, ThreadTag[]? tags,
         RequestOptions? options)
     {
         Card card = new CardBuilder(CardTheme.Invisible)
-            .AddModule(new SectionModuleBuilder(content))
+            .AddModule(new SectionModuleBuilder(content, isKMarkdown))
             .Build();
         return await CreateThreadAsync(channel, client, title, [card], cover, category, tags, options);
     }
@@ -159,10 +159,10 @@ internal static class ThreadHelper
     }
 
     public static async Task<RestThreadPost> CreateThreadPostAsync(IThread thread, BaseKookClient client,
-        string content, RequestOptions? options)
+        string content, bool isKMarkdown, RequestOptions? options)
     {
         Card card = new CardBuilder(CardTheme.Invisible)
-            .AddModule(new SectionModuleBuilder(content))
+            .AddModule(new SectionModuleBuilder(content, isKMarkdown))
             .Build();
         return await CreateThreadPostAsync(thread, client, [card], options);
     }
@@ -178,7 +178,7 @@ internal static class ThreadHelper
         CreateThreadReplyParams args = new()
         {
             ChannelId = thread.Channel.Id,
-            ThreadId = thread.Channel.GuildId,
+            ThreadId = thread.Id,
             ReplyId = null,
             Content = json,
         };
@@ -229,16 +229,30 @@ internal static class ThreadHelper
     }
 
     public static async Task<RestThreadReply> CreateThreadReplyAsync(IThreadPost post, BaseKookClient client,
-        string content, ulong? referenceReplyId, RequestOptions? options)
+        string content, bool isKMarkdown, ulong? referenceReplyId, RequestOptions? options)
     {
+        Card card = new CardBuilder(CardTheme.Invisible)
+            .AddModule(new SectionModuleBuilder(content, isKMarkdown))
+            .Build();
+        return await CreateThreadReplyAsync(post, client, [card], referenceReplyId, options);
+    }
+
+    public static async Task<RestThreadReply> CreateThreadReplyAsync(IThreadPost post, BaseKookClient client,
+        ICard card, ulong? referenceReplyId, RequestOptions? options) =>
+        await CreateThreadReplyAsync(post, client, [card], referenceReplyId, options);
+
+    public static async Task<RestThreadReply> CreateThreadReplyAsync(IThreadPost post, BaseKookClient client,
+        IEnumerable<ICard> cards, ulong? referenceReplyId, RequestOptions? options)
+    {
+        string json = MessageHelper.SerializeCards(cards);
         CreateThreadReplyParams args = new()
         {
             ChannelId = post.Thread.Channel.Id,
-            ThreadId = post.Thread.Channel.GuildId,
-            ReplyId = referenceReplyId,
-            Content = content,
+            ThreadId = post.Thread.Id,
+            ReplyId = referenceReplyId ?? post.Id,
+            Content = json
         };
-        ThreadPost model = await client.ApiClient.CreateThreadReplyAsync(args, options).ConfigureAwait(false);
+        ThreadPost? model = await client.ApiClient.CreateThreadReplyAsync(args, options).ConfigureAwait(false);
         IUser author = await post.Thread.Guild.GetCurrentUserAsync(CacheMode.CacheOnly)
             ?? (IUser?)client.CurrentUser
             ?? throw new InvalidOperationException("The client does not have a current user.");
