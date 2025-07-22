@@ -13,6 +13,7 @@ public class RestThreadReply : RestEntity<ulong>, IThreadReply
 {
     private bool _isMentioningEveryone;
     private bool _isMentioningHere;
+    private ImmutableArray<ICard> _cards = [];
     private ImmutableArray<RestUser> _userMentions = [];
     private ImmutableArray<ulong> _userMentionIds = [];
     private ImmutableArray<uint> _roleMentionIds = [];
@@ -26,6 +27,9 @@ public class RestThreadReply : RestEntity<ulong>, IThreadReply
 
     /// <inheritdoc />
     public string Content { get; private set; }
+
+    /// <inheritdoc />
+    public IReadOnlyCollection<ICard> Cards => _cards;
 
     /// <summary>
     ///     获取此帖子中提及的所有用户。
@@ -87,6 +91,7 @@ public class RestThreadReply : RestEntity<ulong>, IThreadReply
     internal void Update(Model model)
     {
         Content = model.Content;
+        _cards = MessageHelper.ParseCards(model.Content);
         _userMentionIds = [..model.MentionedUserIds];
         _userMentions = [..model.MentionedUsers.Select(x => RestUser.Create(Kook, x))];
         _isMentioningEveryone = model.MentionAll;

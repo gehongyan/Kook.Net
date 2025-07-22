@@ -24,7 +24,6 @@ public static class ThreadExtensions
     public static bool TryExtractCardContent(this IThread thread,
         [NotNullWhen(true)] out string? extractedContent)
     {
-        // TODO: 支持设置 TagHandling
         string result = string.Join(" ", MessageExtensions.EnumerateCardModuleContents(thread.Cards));
         if (string.IsNullOrWhiteSpace(result))
         {
@@ -45,8 +44,27 @@ public static class ThreadExtensions
     public static bool TryExtractCardContent(this IThreadPost post,
         [NotNullWhen(true)] out string? extractedContent)
     {
-        // TODO: 支持设置 TagHandling
         string result = string.Join(" ", MessageExtensions.EnumerateCardModuleContents(post.Cards));
+        if (string.IsNullOrWhiteSpace(result))
+        {
+            extractedContent = null;
+            return false;
+        }
+
+        extractedContent = result;
+        return true;
+    }
+
+    /// <summary>
+    ///     尝试将帖子评论内卡片的内容展开为单个字符串。
+    /// </summary>
+    /// <param name="reply"> 要展开的帖子评论。 </param>
+    /// <param name="extractedContent"> 展开的内容。 </param>
+    /// <returns> 如果成功展开，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
+    public static bool TryExtractCardContent(this IThreadReply reply,
+        [NotNullWhen(true)] out string? extractedContent)
+    {
+        string result = string.Join(" ", MessageExtensions.EnumerateCardModuleContents(reply.Cards));
         if (string.IsNullOrWhiteSpace(result))
         {
             extractedContent = null;

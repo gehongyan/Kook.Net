@@ -24,6 +24,11 @@ public interface IThreadReply : IEntity<ulong>, IDeletable
     string Content { get; }
 
     /// <summary>
+    ///     获取此帖子评论中包含的所有卡片。
+    /// </summary>
+    IReadOnlyCollection<ICard> Cards { get; }
+
+    /// <summary>
     ///     获取此帖子回复中提及的所有用户的 ID。
     /// </summary>
     IReadOnlyCollection<ulong> MentionedUserIds { get; }
