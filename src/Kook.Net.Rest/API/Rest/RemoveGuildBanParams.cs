@@ -8,5 +8,6 @@ internal class RemoveGuildBanParams
     public required ulong GuildId { get; set; }
 
     [JsonPropertyName("target_id")]
+    [JsonNumberHandling(JsonNumberHandling.WriteAsString)]
     public required ulong UserId { get; set; }
 }
