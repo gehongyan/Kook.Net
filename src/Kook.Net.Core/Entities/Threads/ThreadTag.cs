@@ -14,19 +14,32 @@ public readonly record struct ThreadTag : IEntity<uint>
     /// <summary>
     ///     获取话题标签的名称。
     /// </summary>
-    public string Name { get; }
+    public string? Name { get; }
 
     /// <summary>
     ///     获取话题标签图标的链接。
     /// </summary>
     public string? Icon { get; }
 
+    /// <summary>
+    ///     初始化一个新的 <see cref="ThreadTag"/> 实例。
+    /// </summary>
+    /// <param name="id"> 话题标签的 ID。</param>
+    public ThreadTag(uint id)
+    {
+        Id = id;
+    }
+
     internal ThreadTag(uint id, string name, string? icon = null)
+        : this(id)
     {
         Id = id;
         Name = name;
         Icon = icon;
     }
 
-    private string DebuggerDisplay => $"{nameof(ThreadTag)}: {Name} ({Id})";
+    /// <inheritdoc cref="Kook.ThreadTag(System.UInt32)" />
+    public static implicit operator ThreadTag(uint id) => new(id);
+
+    private string DebuggerDisplay => Name is not null ? $"{Name} ({Id})" : Id.ToString();
 }
