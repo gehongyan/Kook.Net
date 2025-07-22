@@ -61,5 +61,8 @@ public enum ChannelPermission : uint
     ShareScreen = 1 << 28,
 
     /// <inheritdoc cref="Kook.GuildPermission.ReplyToPost" />
-    ReplyToPost = 1 << 29
+    ReplyToPost = 1 << 29,
+
+    /// <inheritdoc cref="Kook.GuildPermission.RecordAudio" />
+    RecordAudio = 1 << 30,
 }

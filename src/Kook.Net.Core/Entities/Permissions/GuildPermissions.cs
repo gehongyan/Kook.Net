@@ -16,7 +16,7 @@ public struct GuildPermissions
     /// <summary>
     ///     获取一个包含所有可以为服务器设置的权限的 <see cref="GuildPermissions"/>。
     /// </summary>
-    public static readonly GuildPermissions All = new(0b11_1111_1111_1111_1111_1111_1111_1111);
+    public static readonly GuildPermissions All = new(0b111_1111_1111_1111_1111_1111_1111_1111);
 
     /// <summary>
     ///     获取此权限集的原始值。
@@ -174,6 +174,11 @@ public struct GuildPermissions
     public bool ReplyToPost => Permissions.GetValue(RawValue, GuildPermission.ReplyToPost);
 
     /// <summary>
+    ///     获取此权限集是否允许相关用户开启录音。
+    /// </summary>
+    public bool RecordAudio => Permissions.GetValue(RawValue, GuildPermission.RecordAudio);
+
+    /// <summary>
     ///     使用指定的权限原始值创建一个 <see cref="GuildPermissions"/> 结构的新实例。
     /// </summary>
     /// <param name="rawValue"> 权限原始值。 </param>
@@ -212,7 +217,8 @@ public struct GuildPermissions
         bool? manageNicknames = null,
         bool? playSoundtrack = null,
         bool? shareScreen = null,
-        bool? replyToPost = null
+        bool? replyToPost = null,
+        bool? recordAudio = null
     )
     {
         ulong value = initialValue;
@@ -247,6 +253,7 @@ public struct GuildPermissions
         Permissions.SetValue(ref value, playSoundtrack, GuildPermission.PlaySoundtrack);
         Permissions.SetValue(ref value, shareScreen, GuildPermission.ShareScreen);
         Permissions.SetValue(ref value, replyToPost, GuildPermission.ReplyToPost);
+        Permissions.SetValue(ref value, recordAudio, GuildPermission.RecordAudio);
 
         RawValue = value;
     }
@@ -284,6 +291,7 @@ public struct GuildPermissions
     /// <param name="playSoundtrack"> 共享计算机音频。 </param>
     /// <param name="shareScreen"> 屏幕分享。 </param>
     /// <param name="replyToPost"> 发布帖子回复。 </param>
+    /// <param name="recordAudio"> 开启录音。 </param>
     public GuildPermissions(
         bool administrator = false,
         bool manageGuild = false,
@@ -314,11 +322,12 @@ public struct GuildPermissions
         bool manageNicknames = false,
         bool playSoundtrack = false,
         bool shareScreen = false,
-        bool replyToPost = false)
+        bool replyToPost = false,
+        bool recordAudio = false)
         : this(0, administrator, manageGuild, viewAuditLog, createInvites, manageInvites, manageChannels, kickMembers,
             banMembers, manageEmojis, changeNickname, manageRoles, viewChannel, sendMessages, manageMessages, attachFiles,
-            connect, manageVoice, mentionEveryone, addReactions, followReactions, passiveConnect, onlyPushToTalk,
-            useVoiceActivity, speak, deafenMembers, muteMembers, manageNicknames, playSoundtrack, shareScreen, replyToPost)
+            connect, manageVoice, mentionEveryone, addReactions, followReactions, passiveConnect, onlyPushToTalk, useVoiceActivity,
+            speak, deafenMembers, muteMembers, manageNicknames, playSoundtrack, shareScreen, replyToPost, recordAudio)
     {
     }
 
@@ -355,6 +364,7 @@ public struct GuildPermissions
     /// <param name="playSoundtrack"> 共享计算机音频。 </param>
     /// <param name="shareScreen"> 屏幕分享。 </param>
     /// <param name="replyToPost"> 发布帖子回复。 </param>
+    /// <param name="recordAudio"> 开启录音。 </param>
     /// <returns> 更改了指定权限的新的权限集。 </returns>
     public GuildPermissions Modify(
         bool? administrator = null,
@@ -386,12 +396,13 @@ public struct GuildPermissions
         bool? manageNicknames = null,
         bool? playSoundtrack = null,
         bool? shareScreen = null,
-        bool? replyToPost = null) =>
+        bool? replyToPost = null,
+        bool? recordAudio = null) =>
         new(RawValue, administrator, manageGuild, viewAuditLog, createInvites, manageInvites,
             manageChannels, kickMembers, banMembers, manageEmojis, changeNickname, manageRoles, viewChannel,
             sendMessages, manageMessages, attachFiles, connect, manageVoice, mentionEveryone, addReactions,
             followReactions, passiveConnect, onlyPushToTalk, useVoiceActivity, speak, deafenMembers, muteMembers,
-            manageNicknames, playSoundtrack, shareScreen, replyToPost);
+            manageNicknames, playSoundtrack, shareScreen, replyToPost, recordAudio);
 
     /// <summary>
     ///     获取当前权限集是否包含指定的权限。

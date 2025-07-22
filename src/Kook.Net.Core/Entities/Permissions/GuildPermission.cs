@@ -244,5 +244,13 @@ public enum GuildPermission : uint
     /// <remarks>
     ///     拥有此权限的成员可在帖子频道中回复帖子。
     /// </remarks>
-    ReplyToPost = 1 << 29
+    ReplyToPost = 1 << 29,
+
+    /// <summary>
+    ///     开启录音。
+    /// </summary>
+    /// <remarks>
+    ///     拥有此权限的成员可在频道中开启录音。
+    /// </remarks>
+    RecordAudio = 1 << 30,
 }

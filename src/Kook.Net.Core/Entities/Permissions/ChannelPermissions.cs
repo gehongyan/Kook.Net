@@ -16,27 +16,27 @@ public struct ChannelPermissions
     /// <summary>
     ///     获取一个包含所有可以为文字频道设置的权限的 <see cref="ChannelPermissions"/>。
     /// </summary>
-    public static readonly ChannelPermissions Text = new(0b00_0000_0000_0110_0111_1100_0010_1000);
+    public static readonly ChannelPermissions Text = new(0b000_0000_0000_0110_0111_1100_0010_1000);
 
     /// <summary>
     ///     获取一个包含所有可以为语音频道设置的权限的 <see cref="ChannelPermissions"/>。
     /// </summary>
-    public static readonly ChannelPermissions Voice = new(0b01_1011_1101_0111_1111_1100_0010_1000);
+    public static readonly ChannelPermissions Voice = new(0b101_1011_1101_0111_1111_1100_0010_1000);
 
     /// <summary>
     ///     获取一个包含所有可以为分组频道设置的权限的 <see cref="ChannelPermissions"/>。
     /// </summary>
-    public static readonly ChannelPermissions Category = new(0b11_1011_1101_0111_1111_1100_0010_1000);
+    public static readonly ChannelPermissions Category = new(0b111_1011_1101_0111_1111_1100_0010_1000);
 
     /// <summary>
     ///     获取一个包含所有可以为私聊频道设置的权限的 <see cref="ChannelPermissions"/>。
     /// </summary>
-    public static readonly ChannelPermissions DM = new(0b00_0000_0000_0100_0101_1000_0000_0000);
+    public static readonly ChannelPermissions DM = new(0b000_0000_0000_0100_0101_1000_0000_0000);
 
     /// <summary>
     ///     获取一个包含所有可以为帖子频道设权限的 <see cref="ChannelPermissions"/>。
     /// </summary>
-    public static readonly ChannelPermissions Thread = new(0b10_0000_0000_0110_0111_1100_0010_1000);
+    public static readonly ChannelPermissions Thread = new(0b010_0000_0000_0110_0111_1100_0010_1000);
 
     /// <summary>
     ///     为指定的频道根据其类型获取一个包含所有权限的 <see cref="ChannelPermissions"/>。
@@ -117,6 +117,9 @@ public struct ChannelPermissions
     /// <inheritdoc cref="Kook.GuildPermissions.ReplyToPost" />
     public bool ReplyToPost => Permissions.GetValue(RawValue, ChannelPermission.ReplyToPost);
 
+    /// <inheritdoc cref="Kook.GuildPermissions.RecordAudio" />
+    public bool RecordAudio => Permissions.GetValue(RawValue, ChannelPermission.RecordAudio);
+
     /// <summary>
     ///     使用指定的权限原始值创建一个 <see cref="ChannelPermissions"/> 结构的新实例。
     /// </summary>
@@ -145,7 +148,8 @@ public struct ChannelPermissions
         bool? muteMembers = null,
         bool? playSoundtrack = null,
         bool? shareScreen = null,
-        bool? replyToPost = null)
+        bool? replyToPost = null,
+        bool? recordAudio = null)
     {
         ulong value = initialValue;
 
@@ -168,6 +172,7 @@ public struct ChannelPermissions
         Permissions.SetValue(ref value, playSoundtrack, ChannelPermission.PlaySoundtrack);
         Permissions.SetValue(ref value, shareScreen, ChannelPermission.ShareScreen);
         Permissions.SetValue(ref value, replyToPost, ChannelPermission.ReplyToPost);
+        Permissions.SetValue(ref value, recordAudio, ChannelPermission.RecordAudio);
 
         RawValue = value;
     }
@@ -194,6 +199,7 @@ public struct ChannelPermissions
     /// <param name="playSoundtrack"> 共享计算机音频。 </param>
     /// <param name="shareScreen"> 屏幕分享。 </param>
     /// <param name="replyToPost"> 发布帖子回复。 </param>
+    /// <param name="recordAudio"> 开启录音。 </param>
     public ChannelPermissions(
         bool? createInvites = false,
         bool? manageChannels = false,
@@ -213,10 +219,11 @@ public struct ChannelPermissions
         bool? muteMembers = false,
         bool? playSoundtrack = false,
         bool? shareScreen = false,
-        bool? replyToPost = false)
+        bool? replyToPost = false,
+        bool? recordAudio = false)
         : this(0, createInvites, manageChannels, manageRoles, viewChannel, sendMessages, manageMessages, attachFiles,
             connect, manageVoice, mentionEveryone, addReactions, passiveConnect, useVoiceActivity, speak, deafenMembers,
-            muteMembers, playSoundtrack, shareScreen, replyToPost)
+            muteMembers, playSoundtrack, shareScreen, replyToPost, recordAudio)
     {
     }
 
@@ -242,6 +249,7 @@ public struct ChannelPermissions
     /// <param name="playSoundtrack"> 共享计算机音频。 </param>
     /// <param name="shareScreen"> 屏幕分享。 </param>
     /// <param name="replyToPost"> 发布帖子回复。 </param>
+    /// <param name="recordAudio"> 开启录音。 </param>
     /// <returns> 更改了指定权限的新的权限集。 </returns>
     public ChannelPermissions Modify(
         bool? createInvites = null,
@@ -262,7 +270,8 @@ public struct ChannelPermissions
         bool? muteMembers = null,
         bool? playSoundtrack = null,
         bool? shareScreen = null,
-        bool? replyToPost = null) =>
+        bool? replyToPost = null,
+        bool? recordAudio = null) =>
         new(RawValue,
             createInvites,
             manageChannels,
@@ -282,7 +291,8 @@ public struct ChannelPermissions
             muteMembers,
             playSoundtrack,
             shareScreen,
-            replyToPost);
+            replyToPost,
+            recordAudio);
 
     /// <summary>
     ///     获取当前权限集是否包含指定的权限。

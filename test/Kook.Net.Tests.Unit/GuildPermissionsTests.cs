@@ -90,11 +90,12 @@ public class GuildPermissionsTests
         AssertFlag(() => new GuildPermissions(playSoundtrack: true), GuildPermission.PlaySoundtrack);
         AssertFlag(() => new GuildPermissions(shareScreen: true), GuildPermission.ShareScreen);
         AssertFlag(() => new GuildPermissions(replyToPost: true), GuildPermission.ReplyToPost);
+        AssertFlag(() => new GuildPermissions(recordAudio: true), GuildPermission.RecordAudio);
     }
 
     /// <summary>
     ///     Tests the behavior of
-    ///     <see cref="Kook.GuildPermissions.Modify(System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean})"/>
+    ///     <see cref="Kook.GuildPermissions.Modify(bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?,bool?)"/>
     ///     with each of the parameters.
     /// </summary>
     [Fact]
@@ -163,5 +164,6 @@ public class GuildPermissionsTests
         AssertUtil(GuildPermission.PlaySoundtrack, x => x.PlaySoundtrack, (p, enable) => p.Modify(playSoundtrack: enable));
         AssertUtil(GuildPermission.ShareScreen, x => x.ShareScreen, (p, enable) => p.Modify(shareScreen: enable));
         AssertUtil(GuildPermission.ReplyToPost, x => x.ReplyToPost, (p, enable) => p.Modify(replyToPost: enable));
+        AssertUtil(GuildPermission.RecordAudio, x => x.RecordAudio, (p, enable) => p.Modify(recordAudio: enable));
     }
 }
