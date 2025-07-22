@@ -135,12 +135,12 @@ internal static class ChannelHelper
                 around + 1, includeReferenceMessage, options);
         }
 
-        return new PagedAsyncEnumerable<RestMessage>(
+        return new PagedAsyncEnumerable<RestMessage, Guid?>(
             KookConfig.MaxMessagesPerBatch,
             async (info, _) =>
             {
                 IReadOnlyCollection<Message> models = await client.ApiClient
-                    .QueryMessagesAsync(channel.Id, info.Position, null, direction, limit, options)
+                    .QueryMessagesAsync(channel.Id, info.Position, null, direction, info.PageSize, options)
                     .ConfigureAwait(false);
                 ImmutableArray<RestMessage>.Builder builder = ImmutableArray.CreateBuilder<RestMessage>();
 
@@ -170,13 +170,13 @@ internal static class ChannelHelper
             },
             (info, lastPage) =>
             {
-                if (lastPage.Count != KookConfig.MaxMessagesPerBatch)
+                if (lastPage.Count < KookConfig.MaxMessagesPerBatch)
                     return false;
 
                 info.Position = direction == Direction.Before
                     ? lastPage.MinBy(x => x.Timestamp)?.Id
                     : lastPage.MaxBy(x => x.Timestamp)?.Id;
-                return true;
+                return info.Position.HasValue;
             },
             referenceMessageId,
             limit
@@ -184,8 +184,7 @@ internal static class ChannelHelper
     }
 
     public static async Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(IMessageChannel channel,
-        BaseKookClient client,
-        RequestOptions? options)
+        BaseKookClient client, RequestOptions? options)
     {
         IGuild? guild = channel is IGuildChannel { GuildId: var guildId }
             ? await (client as IKookClient).GetGuildAsync(guildId, CacheMode.CacheOnly)
@@ -368,7 +367,7 @@ internal static class ChannelHelper
                 around + 1, includeReferenceMessage, options);
         }
 
-        return new PagedAsyncEnumerable<RestMessage>(
+        return new PagedAsyncEnumerable<RestMessage, Guid?>(
             KookConfig.MaxMessagesPerBatch,
             async (info, _) =>
             {
@@ -409,7 +408,7 @@ internal static class ChannelHelper
                 info.Position = direction == Direction.Before
                     ? lastPage.MinBy(x => x.Timestamp)?.Id
                     : lastPage.MaxBy(x => x.Timestamp)?.Id;
-                return true;
+                return info.Position.HasValue;
             },
             referenceMessageId,
             limit

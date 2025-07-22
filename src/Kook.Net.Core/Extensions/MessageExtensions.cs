@@ -230,33 +230,36 @@ public static class MessageExtensions
     }
 
     /// <summary>
-    ///     尝试将卡片的内容展开为单个字符串。
+    ///     尝试将消息内卡片的内容展开为单个字符串。
     /// </summary>
     /// <param name="msg"> 要展开的消息。 </param>
-    /// <param name="expandedContent"> 展开的内容。 </param>
+    /// <param name="extractedContent"> 展开的内容。 </param>
     /// <returns> 如果成功展开，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
+    /// <remarks>
+    ///     仅图文混排消息可以用于内容展开，参见 <see cref="MaybeTextImageMixedMessage"/>。
+    /// </remarks>
     public static bool TryExtractCardContent(this IUserMessage msg,
-        [NotNullWhen(true)] out string? expandedContent)
+        [NotNullWhen(true)] out string? extractedContent)
     {
-        // TODO: 移动到 MessageUtils，并支持设置 TagHandling
+        // TODO: 支持设置 TagHandling
         if (!msg.MaybeTextImageMixedMessage())
         {
-            expandedContent = null;
+            extractedContent = null;
             return false;
         }
 
         string result = string.Join(" ", EnumerateCardModuleContents(msg.Cards));
         if (string.IsNullOrWhiteSpace(result))
         {
-            expandedContent = null;
+            extractedContent = null;
             return false;
         }
 
-        expandedContent = result;
+        extractedContent = result;
         return true;
     }
 
-    private static IEnumerable<string> EnumerateCardModuleContents(IEnumerable<ICard> cards) => cards
+    internal static IEnumerable<string> EnumerateCardModuleContents(IEnumerable<ICard> cards) => cards
         .OfType<Card>()
         .SelectMany(x => x.Modules)
         .Select(x => x switch

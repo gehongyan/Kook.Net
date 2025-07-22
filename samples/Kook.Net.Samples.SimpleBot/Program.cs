@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Json;
 using Kook;
 using Kook.Rest;
@@ -12,7 +13,7 @@ using Kook.WebSocket;
 // - 这里可以看基于文本的命令框架的指南与示例
 // - https://kooknet.dev/guides/text_commands/intro.html
 
-KookDebugger.SetDebuggers(true, true);
+KookDebugger.SetDebuggers(true, true, debugger: (source, x) => Debug.WriteLine(x));
 
 // KookSocketConfig 是 KookSocketClient 的配置类
 KookSocketConfig config = new()
@@ -24,7 +25,7 @@ KookSocketConfig config = new()
     LogLevel = LogSeverity.Debug,
     AutoUpdateChannelPositions = true,
     AutoUpdateRolePositions = true,
-    StartupCacheFetchMode = StartupCacheFetchMode.Lazy,
+    StartupCacheFetchMode = StartupCacheFetchMode.Synchronous,
     LargeNumberOfGuildsThreshold = 50
 };
 
@@ -130,8 +131,12 @@ Task LogAsync(LogMessage log)
 // Ready 事件表示客户端已经建立了连接，现在可以安全地访问缓存
 async Task ReadyAsync()
 {
-    await Task.Yield();
-    Console.WriteLine($"{client.CurrentUser} 已连接！");
+    SocketThreadChannel? channel = client.GetGuild(7557797319758285)?.GetThreadChannel(6031149767370647);
+    if (channel is null) return;
+    RestThread thread = await channel.GetThreadAsync(80980144805643008);
+    IThreadPost post = await thread.CreatePostAsync("回复啊回复");
+    IThreadReply threadReply = await post.CreateReplyAsync("内回复！");
+    IThreadReply replyAsync = await threadReply.ReplyAsync("这是一个回复！");
 }
 
 // 并不建议以这样的方式实现 Bot 的命令交互功能
@@ -140,7 +145,6 @@ async Task MessageReceivedAsync(SocketMessage message,
     SocketGuildUser author,
     SocketTextChannel channel)
 {
-
     // Bot 永远不应该响应自己的消息
     if (author.Id == client.CurrentUser?.Id)
         return;

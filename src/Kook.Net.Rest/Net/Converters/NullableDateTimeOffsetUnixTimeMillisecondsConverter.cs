@@ -16,7 +16,7 @@ internal class NullableDateTimeOffsetUnixTimeMillisecondsConverter : JsonConvert
         if (tick == 0)
             return null;
 
-        return DateTimeOffset.FromUnixTimeMilliseconds(tick);
+        return DateTimeOffset.FromUnixTimeMilliseconds(tick).ToLocalTime();
     }
 
     public override void Write(Utf8JsonWriter writer, DateTimeOffset? value, JsonSerializerOptions options)

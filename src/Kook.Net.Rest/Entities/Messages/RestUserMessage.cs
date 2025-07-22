@@ -126,7 +126,7 @@ public class RestUserMessage : RestMessage, IUserMessage
         if (Type == MessageType.Card)
         {
             _cards = MessageHelper.ParseCards(model.Content);
-            _attachments = [.._attachments, ..MessageHelper.ParseAttachments(_cards.OfType<Card>())];
+            _attachments = [.._attachments, ..MessageHelper.ParseAttachments(_cards)];
         }
 
         _embeds = [..model.Embeds.Select(x => x.ToEntity())];
@@ -163,7 +163,7 @@ public class RestUserMessage : RestMessage, IUserMessage
         if (Type == MessageType.Card)
         {
             _cards = MessageHelper.ParseCards(model.Content);
-            _attachments = [.._attachments, ..MessageHelper.ParseAttachments(_cards.OfType<Card>())];
+            _attachments = [.._attachments, ..MessageHelper.ParseAttachments(_cards)];
         }
 
         _embeds = [..model.Embeds.Select(x => x.ToEntity())];

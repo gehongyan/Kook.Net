@@ -23,4 +23,7 @@ internal class CreateThreadParams
 
     [JsonPropertyName("content")]
     public required string Content { get; set; }
+
+    [JsonPropertyName("tag_ids")]
+    public uint[]? TagIds { get; set; }
 }

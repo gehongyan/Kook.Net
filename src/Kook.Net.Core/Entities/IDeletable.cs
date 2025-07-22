@@ -6,7 +6,7 @@ namespace Kook;
 public interface IDeletable
 {
     /// <summary>
-    ///     删除此对实体象及其所有子实体对象。
+    ///     删除此实体对象及其所有子实体对象。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     Task DeleteAsync(RequestOptions? options = null);

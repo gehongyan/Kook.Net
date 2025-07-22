@@ -5,7 +5,7 @@ namespace Kook.API;
 internal class ThreadMedia
 {
     [JsonPropertyName("type")]
-    public ThreadAttachmentType Type { get; set; }
+    public AttachmentType Type { get; set; }
 
     [JsonPropertyName("src")]
     public required string Source { get; set; }

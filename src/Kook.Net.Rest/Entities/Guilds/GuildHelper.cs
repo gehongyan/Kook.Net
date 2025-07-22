@@ -45,7 +45,7 @@ internal static class GuildHelper
             BoostLevel.Level2 => 192,
             BoostLevel.Level3 or BoostLevel.Level4 => 256,
             BoostLevel.Level5 or BoostLevel.Level6 => 320,
-            _ => 96
+            _ => 64
         };
 
         return tierFactor * 1000;

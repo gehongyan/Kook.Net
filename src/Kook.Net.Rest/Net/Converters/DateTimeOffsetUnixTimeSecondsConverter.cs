@@ -6,7 +6,7 @@ namespace Kook.Net.Converters;
 internal class DateTimeOffsetUnixTimeSecondsConverter : JsonConverter<DateTimeOffset>
 {
     public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
-        DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64());
+        DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64()).ToLocalTime();
 
     public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
     {

@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Model = Kook.API.Attachment;
+using ThreadMediaModel = Kook.API.ThreadMedia;
 
 namespace Kook.Rest;
 
@@ -19,6 +20,9 @@ public class Attachment : IAttachment
     public string? Filename { get; }
 
     /// <inheritdoc />
+    public string? Cover { get; }
+
+    /// <inheritdoc />
     public int? Size { get; }
 
     /// <inheritdoc />
@@ -33,12 +37,13 @@ public class Attachment : IAttachment
     /// <inheritdoc />
     public int? Height { get; }
 
-    internal Attachment(AttachmentType type, string url, string? filename,
+    internal Attachment(AttachmentType type, string url, string? filename, string? cover = null,
         int? size = null, string? fileType = null, TimeSpan? duration = null, int? width = null, int? height = null)
     {
         Type = type;
         Url = url;
         Filename = filename;
+        Cover = cover;
         Size = size;
         FileType = fileType;
         Duration = duration;
@@ -58,8 +63,14 @@ public class Attachment : IAttachment
         TimeSpan? duration = model.Duration.HasValue
             ? TimeSpan.FromSeconds(model.Duration.Value)
             : null;
-        return new Attachment(type, model.Url, model.Name,
+        return new Attachment(type, model.Url, model.Name, null,
             model.Size, model.FileType, duration, model.Width, model.Height);
+    }
+
+    internal static Attachment Create(ThreadMediaModel model)
+    {
+        AttachmentType type = model.Type;
+        return new Attachment(type, model.Source, model.Title, model.Cover);
     }
 
     /// <inheritdoc cref="Kook.Rest.Attachment.Filename" />

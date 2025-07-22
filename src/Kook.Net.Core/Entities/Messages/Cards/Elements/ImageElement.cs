@@ -9,12 +9,14 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class ImageElement : IElement, IEquatable<ImageElement>, IEquatable<IElement>
 {
-    internal ImageElement(string source, string? alternative = null, ImageSize? size = null, bool? circle = null)
+    internal ImageElement(string source, string? alternative = null,
+        ImageSize? size = null, bool? circle = null, string? fallbackUrl = null)
     {
         Source = source;
         Alternative = alternative;
         Size = size;
         Circle = circle;
+        FallbackUrl = fallbackUrl;
     }
 
     /// <inheritdoc />
@@ -39,6 +41,14 @@ public class ImageElement : IElement, IEquatable<ImageElement>, IEquatable<IElem
     ///     获取图片是否渲染为圆形。
     /// </summary>
     public bool? Circle { get; }
+
+    /// <summary>
+    ///     获取图像的备用 URL。
+    /// </summary>
+    /// <remarks>
+    ///     当位于站外的图片无法成功转存时，KOOK 将使用此备用图片地址作为图片的源。
+    /// </remarks>
+    public string? FallbackUrl { get; }
 
     private string DebuggerDisplay => $"{Type}: {Source}";
 
@@ -66,7 +76,7 @@ public class ImageElement : IElement, IEquatable<ImageElement>, IEquatable<IElem
 
     /// <inheritdoc />
     public override int GetHashCode() =>
-        (Type, Source, Alternative, Size, Circle).GetHashCode();
+        (Type, Source, Alternative, Size, Circle, FallbackUrl).GetHashCode();
 
     bool IEquatable<IElement>.Equals([NotNullWhen(true)] IElement? element) =>
         Equals(element as ImageElement);

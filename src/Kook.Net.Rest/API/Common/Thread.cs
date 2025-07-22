@@ -9,13 +9,13 @@ internal class Thread
     public ulong Id { get; set; }
 
     [JsonPropertyName("status")]
-    public ThreadAuditState Status { get; set; }
+    public ThreadAuditStatus Status { get; set; }
 
     [JsonPropertyName("title")]
     public required string Title { get; set; }
 
     [JsonPropertyName("cover")]
-    public required string Cover { get; set; }
+    public string? Cover { get; set; }
 
     [JsonPropertyName("post_id")]
     public ulong PostId { get; set; }
@@ -36,10 +36,10 @@ internal class Thread
     public required ThreadTag[] Tags { get; set; }
 
     [JsonPropertyName("content")]
-    public required string Content { get; set; }
+    public string? Content { get; set; }
 
     [JsonPropertyName("mention")]
-    public required ulong[] MentionedUserIds { get; set; }
+    public ulong[]? MentionedUserIds { get; set; }
 
     [JsonPropertyName("mention_all")]
     public bool MentionAll { get; set; }
@@ -48,14 +48,14 @@ internal class Thread
     public bool MentionHere { get; set; }
 
     [JsonPropertyName("mention_part")]
-    public required MentionedUser[] MentionedUsers { get; set; }
+    public MentionedUser[]? MentionedUsers { get; set; }
 
     [JsonPropertyName("mention_role_part")]
-    public required Role[] MentionedRoles { get; set; }
+    public Role[]? MentionedRoles { get; set; }
 
     [JsonPropertyName("channel_part")]
-    public required MentionedChannel[] MentionedChannels { get; set; }
+    public MentionedChannel[]? MentionedChannels { get; set; }
 
     [JsonPropertyName("item_part")]
-    public required Poke[] Pokes { get; set; }
+    public Poke[]? Pokes { get; set; }
 }

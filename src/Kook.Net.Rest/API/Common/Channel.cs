@@ -57,10 +57,10 @@ internal class Channel
     public int? SlowModeReply { get; set; }
 
     [JsonPropertyName("default_layout")]
-    public ThreadChannelLayout? DefaultLayout { get; set; }
+    public ThreadLayout? DefaultLayout { get; set; }
 
     [JsonPropertyName("sort_order")]
-    public ThreadSortMode? SortOrder { get; set; }
+    public ThreadSortOrder? SortOrder { get; set; }
 
     // Voice
     [JsonPropertyName("limit_amount")]
