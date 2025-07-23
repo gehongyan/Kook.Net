@@ -48,6 +48,8 @@
       topicUid: Guides.QuickReference.Http.Badge
     - name: 用户动态相关接口
       topicUid: Guides.QuickReference.Http.Game
+    - name: 帖子相关接口
+      topicUid: Guides.QuickReference.Http.Thread
     - name: OAuth 2.0 相关接口
       topicUid: Guides.QuickReference.Http.OAuth
 - name: 网关事件

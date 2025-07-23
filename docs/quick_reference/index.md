@@ -32,6 +32,7 @@ title: 快速参考指南
   - @Guides.QuickReference.Http.Blacklist
   - @Guides.QuickReference.Http.Badge
   - @Guides.QuickReference.Http.Game
+  - @Guides.QuickReference.Http.Thread
   - @Guides.QuickReference.Http.OAuth
 - 网关事件
   - @Guides.QuickReference.Event.Channel
