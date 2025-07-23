@@ -5,6 +5,46 @@ title: 变更日志
 
 # 变更日志
 
+## v0.10.0 [2025-07-23]
+
+### 更新路线
+
+### 新增
+
+- 新增静态类 `KookDebugger`，用于支持输出 Kook.Net 底层与 KOOK 服务端有关 API 请求、网关数据报、速率限制、语音日志的调试信息。
+- 新增对帖子频道 `IThreadChannel` 内发布、获取与删除帖子、评论、回复的支持，新增支持获取帖子频道的默认布局 `DefaultLayout`
+  与默认排序模式 `DefaultSortMode` 。
+- `ThreadExtensions` 新增对帖子相关实体获取跳转链接的扩展方法 `GetJumpUrl`。
+- 新增支持获取网关连接当前生效的网关意图 `KookSocketClient.GatewayIntents`。
+- 新增错误代码枚举值 `KookErrorCode.ThreadContentAuditing`。
+- `ImageElement` 与 `ImageElementBuidler` 现在支持属性 `FallbackUrl`。
+- 新增支持服务器与频道权限枚举值 `RecordAudio`。
+- （实验性功能）新增支持通过关键字搜索帖子话题标签 `QueryThreadTagsAsync`。
+
+### 变更
+
+- 变更语音质量枚举 `VoiceQuality` 的枚举值，使用与具体码率值无关的名称。
+- 移动 `Kook.Commands.MessageExtensions.TryExpandCardContent` 至 `Kook.MessageExtensions.TryExtractCardContent`。
+- `IPermissionOverwrite<TTarget>` 变更为 `IPermissionOverwrite<TTarget, TId>`，现在 `TTarget Target`
+  表示权限覆盖的目标实体类型，`TId TargetId` 表示目标实体的 ID 的类型，`PermissionOverwriteTarget TargetType` 为目标的类型。
+- 由 KOOK API 返回或由网关下发的实体或数据类型中，接口或类为 `IThread`、`IThreadPost`、`IThreadReply`、`IMessage`、`IGuildUser`、
+  `IIntimacy`、`IIntimacyRelation`、`IInvite`、`CountModule`、`Quote`、`BoostSubscriptionMetadata` 中类型为
+  `DateTimeOffset` 的属性值，其时区现在默认为本机时区。
+
+### 修复
+
+- 修复添加与移除服务器封禁的方法失败的问题。
+
+### 优化
+
+- 网关数据报的类型变更为 JsonElement，避免一层额外的装箱。
+- 网关数据报反序列化使用异步方法。
+- `Card.Build` 方法现在会校验 `Theme` 为 `Invisible` 应为无边卡片所支持的模块类型。
+
+### 其他
+
+- 增加帖子相关接口的快速指南文档。
+
 ## v0.9.11 [2025-06-25]
 
 ### 新增

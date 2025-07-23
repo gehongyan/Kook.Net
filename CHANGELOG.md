@@ -2,6 +2,51 @@
 
 ---
 
+## v0.10.0 [2025-07-23]
+
+### Roadmap
+
+### Added
+
+- Added static class `KookDebugger` to support outputting debugging information related to Kook.Net's underlying API
+  requests, gateway payloads, rate limiting, and voice logs for interactions with the KOOK server.
+- Added support for publishing, retrieving, and deleting threads, posts, and replies within thread channels
+  (`IThreadChannel`). Also added support for retrieving the default layout (`DefaultLayout`) and default sort mode
+  (`DefaultSortMode`) of thread channels.
+- `ThreadExtensions` now includes the extension method `GetJumpUrl` to retrieve jump links for thread-related entities.
+- Added support for retrieving the currently effective gateway intents via `KookSocketClient.GatewayIntents`.
+- Added the error code enum value `KookErrorCode.ThreadContentAuditing`.
+- `ImageElement` and `ImageElementBuidler` now support the `FallbackUrl` property.
+- Added support for the `RecordAudio` permission value in server and channel permission enums.
+- (Experimental Feature) Added support for searching thread topic tags by keyword via `QueryThreadTagsAsync`.
+
+### Changed
+
+- Changed the enum values of `VoiceQuality` to use names that are independent of specific bitrate values.
+- Moved `Kook.Commands.MessageExtensions.TryExpandCardContent` to `Kook.MessageExtensions.TryExtractCardContent`.
+- `IPermissionOverwrite<TTarget>` has been changed to `IPermissionOverwrite<TTarget, TId>`. Now, `TTarget Target`
+  represents the target entity type for the permission overwrite, `TId TargetId` represents the type of the target
+  entity's ID, and `PermissionOverwriteTarget TargetType` indicates the type of the target.
+- For entities or data types returned by the KOOK API or delivered by the gateway, properties of type `DateTimeOffset`
+  within interfaces or classes such as `IThread`, `IThreadPost`, `IThreadReply`, `IMessage`, `IGuildUser`, `IIntimacy`,
+  `IIntimacyRelation`, `IInvite`, `CountModule`, `Quote`, and `BoostSubscriptionMetadata` now default to the local
+  machine's time zone.
+
+### Fixed
+
+- Fixed issues with methods for adding and removing guild bans failing.
+
+### Optimized
+
+- The type for gateway payloads has been changed to `JsonElement` to avoid an extra level of boxing.
+- Gateway payload deserialization now uses asynchronous methods.
+- The `Card.Build` method now validates that the `Theme` is `Invisible` only for module types that support borderless
+  cards.
+
+### Misc
+
+- Added quick reference documentation for thread-related interfaces.
+
 ## v0.9.11 [2025-06-25]
 
 ### Added
@@ -18,7 +63,7 @@
 
 - Fixed an issue where changes in the gradient color data structure for roles caused application startup failures.
 
-### Others
+### Misc
 
 - Added a quick reference document for the message template API.
 
@@ -48,7 +93,7 @@
   intimacy relation information. These properties are now nullable.
 - Fixed a potential issue where `SocketMessage.Update` could block asynchronous threads abnormally.
 
-### Others
+### Misc
 
 - Updated related dependency versions.
 - Migrated the test framework to xunit.v3.
