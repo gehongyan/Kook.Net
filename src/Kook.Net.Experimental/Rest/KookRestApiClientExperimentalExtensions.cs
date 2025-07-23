@@ -40,4 +40,22 @@ internal static class KookRestApiClientExperimentalExtensions
     }
 
     #endregion
+
+    #region Threads
+
+    public static async Task<IReadOnlyCollection<API.Rest.ThreadTag>> QueryThreadTagsAsync(this KookRestApiClient client,
+        string keyword, RequestOptions? options = null)
+    {
+        Preconditions.NotNullOrEmpty(keyword, nameof(keyword));
+        options = RequestOptions.CreateOrClone(options);
+
+        KookRestApiClient.BucketIds ids = new();
+        string escapedKeyword = Uri.EscapeDataString(keyword);
+        return await client.SendAsync<IReadOnlyCollection<API.Rest.ThreadTag>>(HttpMethod.Get,
+                () => $"guild-recommend-tag/thread-index?name={escapedKeyword}",
+                ids, ClientBucketType.Unbucketed, false, options)
+            .ConfigureAwait(false);
+    }
+
+    #endregion
 }

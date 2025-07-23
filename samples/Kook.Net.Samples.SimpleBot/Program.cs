@@ -131,12 +131,7 @@ Task LogAsync(LogMessage log)
 // Ready 事件表示客户端已经建立了连接，现在可以安全地访问缓存
 async Task ReadyAsync()
 {
-    SocketThreadChannel? channel = client.GetGuild(7557797319758285)?.GetThreadChannel(6031149767370647);
-    if (channel is null) return;
-    RestThread thread = await channel.GetThreadAsync(80980144805643008);
-    IThreadPost post = await thread.CreatePostAsync("回复啊回复");
-    IThreadReply threadReply = await post.CreateReplyAsync("内回复！");
-    IThreadReply replyAsync = await threadReply.ReplyAsync("这是一个回复！");
+    IReadOnlyCollection<ThreadTag> tags = await client.Rest.QueryThreadTagsAsync("o");
 }
 
 // 并不建议以这样的方式实现 Bot 的命令交互功能

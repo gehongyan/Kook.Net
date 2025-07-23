@@ -38,4 +38,17 @@ internal static class ExperimentalClientHelper
     }
 
     #endregion
+
+    #region MyRegion
+
+    public static async Task<IReadOnlyCollection<ThreadTag>> QueryThreadTagsAsync(KookRestClient client,
+        string keyword, RequestOptions? options)
+    {
+        Preconditions.NotNullOrEmpty(keyword, nameof(keyword));
+        IReadOnlyCollection<API.Rest.ThreadTag> models = await client.ApiClient
+            .QueryThreadTagsAsync(keyword, options).ConfigureAwait(false);
+        return [..models.Select(x => new ThreadTag(x.TagId, x.Name, x.Icon))];
+    }
+
+    #endregion
 }

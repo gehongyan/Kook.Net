@@ -43,4 +43,15 @@ public static class KookRestClientExperimentalExtensions
     /// <returns> 一个表示异步验证操作的任务。 </returns>
     public static Task ValidateCardsAsync(this KookRestClient client, string cardsJson, RequestOptions? options = null) =>
         ExperimentalClientHelper.ValidateCardsAsync(client, cardsJson, options);
+
+    /// <summary>
+    ///     查询与指定关键字相关的帖子话题标签。
+    /// </summary>
+    /// <param name="client"> KOOK REST 客户端实例。</param>
+    /// <param name="keyword"> 要查询的关键字。</param>
+    /// <param name="options"> 发送请求时要使用的选项。</param>
+    /// <returns> 一个表示异步操作的任务，任务的结果包含与指定关键字相关的帖子话题标签集合。</returns>
+    public static Task<IReadOnlyCollection<ThreadTag>> QueryThreadTagsAsync(this KookRestClient client,
+        string keyword, RequestOptions? options = null) =>
+        ExperimentalClientHelper.QueryThreadTagsAsync(client, keyword, options);
 }

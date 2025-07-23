@@ -2,4 +2,8 @@
 
   <Import Project="../../Kook.Net.Sample.targets" />
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Kook.Net.Experimental\Kook.Net.Experimental.csproj" />
+  </ItemGroup>
+
 </Project>
