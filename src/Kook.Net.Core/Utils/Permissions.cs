@@ -4,7 +4,7 @@ namespace Kook;
 
 internal static class Permissions
 {
-    public const int MaxBits = 30;
+    public const int MaxBits = 31;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static PermValue GetValue(ulong allow, ulong deny, ChannelPermission flag) =>
