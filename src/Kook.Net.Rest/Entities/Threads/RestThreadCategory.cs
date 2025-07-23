@@ -101,19 +101,19 @@ public class RestThreadCategory : RestEntity<ulong>, IThreadCategory
             _ => null
         }, sortOrder, limit, this, options);
 
-    /// <inheritdoc cref="Kook.IThreadCategory.CreateThreadAsync(System.String,System.String,System.Boolean,System.String,Kook.ThreadTag[],Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IThreadCategory.CreateThreadAsync(System.String,System.String,System.Boolean,System.String,System.Collections.Generic.IEnumerable{Kook.ThreadTag},Kook.RequestOptions)" />
     public async Task<RestThread> CreateThreadAsync(string title, string content, bool isKMarkdown = false,
-        string? cover = null, ThreadTag[]? tags = null, RequestOptions? options = null) =>
+        string? cover = null, IEnumerable<ThreadTag>? tags = null, RequestOptions? options = null) =>
         await ThreadHelper.CreateThreadAsync(Channel, Kook, title, content, isKMarkdown, cover, this, tags, options).ConfigureAwait(false);
 
-    /// <inheritdoc cref="Kook.IThreadCategory.CreateThreadAsync(System.String,Kook.ICard,System.String,Kook.ThreadTag[],Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IThreadCategory.CreateThreadAsync(System.String,Kook.ICard,System.String,System.Collections.Generic.IEnumerable{Kook.ThreadTag},Kook.RequestOptions)" />
     public async Task<RestThread> CreateThreadAsync(string title, ICard card, string? cover = null,
-        ThreadTag[]? tags = null, RequestOptions? options = null) =>
+        IEnumerable<ThreadTag>? tags = null, RequestOptions? options = null) =>
         await ThreadHelper.CreateThreadAsync(Channel, Kook, title, card, cover, this, tags, options).ConfigureAwait(false);
 
-    /// <inheritdoc cref="Kook.IThreadCategory.CreateThreadAsync(System.String,System.Collections.Generic.IEnumerable{Kook.ICard},System.String,Kook.ThreadTag[],Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IThreadCategory.CreateThreadAsync(System.String,System.Collections.Generic.IEnumerable{Kook.ICard},System.String,System.Collections.Generic.IEnumerable{Kook.ThreadTag},Kook.RequestOptions)" />
     public async Task<RestThread> CreateThreadAsync(string title, IEnumerable<ICard> cards, string? cover = null,
-        ThreadTag[]? tags = null, RequestOptions? options = null) =>
+        IEnumerable<ThreadTag>? tags = null, RequestOptions? options = null) =>
         await ThreadHelper.CreateThreadAsync(Channel, Kook, title, cards, cover, this, tags, options).ConfigureAwait(false);
 
     private string DebuggerDisplay => $"{Name} ({Id})";
@@ -133,17 +133,17 @@ public class RestThreadCategory : RestEntity<ulong>, IThreadCategory
 
     /// <inheritdoc />
     async Task<IThread> IThreadCategory.CreateThreadAsync(string title, string content, bool isKMarkdown,
-        string? cover, ThreadTag[]? tags, RequestOptions? options) =>
+        string? cover, IEnumerable<ThreadTag>? tags, RequestOptions? options) =>
         await CreateThreadAsync(title, content, isKMarkdown, cover, tags, options).ConfigureAwait(false);
 
     /// <inheritdoc />
     async Task<IThread> IThreadCategory.CreateThreadAsync(string title, ICard card, string? cover,
-        ThreadTag[]? tags, RequestOptions? options) =>
+        IEnumerable<ThreadTag>? tags, RequestOptions? options) =>
         await CreateThreadAsync(title, card, cover, tags, options).ConfigureAwait(false);
 
     /// <inheritdoc />
     async Task<IThread> IThreadCategory.CreateThreadAsync(string title, IEnumerable<ICard> cards, string? cover,
-        ThreadTag[]? tags, RequestOptions? options) =>
+        IEnumerable<ThreadTag>? tags, RequestOptions? options) =>
         await CreateThreadAsync(title, cards, cover, tags, options).ConfigureAwait(false);
 
     #endregion

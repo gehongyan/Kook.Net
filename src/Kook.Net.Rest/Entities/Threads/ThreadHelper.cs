@@ -74,7 +74,7 @@ internal static class ThreadHelper
     }
 
     public static async Task<RestThread> CreateThreadAsync(IThreadChannel channel, BaseKookClient client,
-        string title, string content, bool isKMarkdown, string? cover, IThreadCategory? category, ThreadTag[]? tags,
+        string title, string content, bool isKMarkdown, string? cover, IThreadCategory? category, IEnumerable<ThreadTag>? tags,
         RequestOptions? options)
     {
         Card card = new CardBuilder(CardTheme.Invisible)
@@ -84,12 +84,12 @@ internal static class ThreadHelper
     }
 
     public static async Task<RestThread> CreateThreadAsync(IThreadChannel channel, BaseKookClient client,
-        string title, ICard card, string? cover, IThreadCategory? category, ThreadTag[]? tags,
+        string title, ICard card, string? cover, IThreadCategory? category, IEnumerable<ThreadTag>? tags,
         RequestOptions? options) =>
         await CreateThreadAsync(channel, client, title, [card], cover, category, tags, options);
 
     public static async Task<RestThread> CreateThreadAsync(IThreadChannel channel, BaseKookClient client,
-        string title, IEnumerable<ICard> cards, string? cover, IThreadCategory? category, ThreadTag[]? tags,
+        string title, IEnumerable<ICard> cards, string? cover, IThreadCategory? category, IEnumerable<ThreadTag>? tags,
         RequestOptions? options)
     {
         string json = MessageHelper.SerializeCards(cards);

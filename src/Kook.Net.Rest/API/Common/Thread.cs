@@ -33,7 +33,7 @@ internal class Thread
     public ThreadCategory? Category { get; set; }
 
     [JsonPropertyName("tags")]
-    public required ThreadTag[] Tags { get; set; }
+    public required IEnumerable<ThreadTag> Tags { get; set; }
 
     [JsonPropertyName("content")]
     public string? Content { get; set; }

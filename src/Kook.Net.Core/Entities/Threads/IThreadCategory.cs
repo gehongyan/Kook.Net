@@ -126,7 +126,7 @@ public interface IThreadCategory : IEntity<ulong>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步修改操作的任务。任务的结果包含新创建的帖子。 </returns>
     Task<IThread> CreateThreadAsync(string title, string content, bool isKMarkdown = false, string? cover = null,
-        ThreadTag[]? tags = null, RequestOptions? options = null);
+        IEnumerable<ThreadTag>? tags = null, RequestOptions? options = null);
 
     /// <summary>
     ///     发布一个新的帖子到此帖子分区。
@@ -138,7 +138,7 @@ public interface IThreadCategory : IEntity<ulong>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步修改操作的任务。任务的结果包含新创建的帖子。 </returns>
     Task<IThread> CreateThreadAsync(string title, ICard card, string? cover = null,
-        ThreadTag[]? tags = null, RequestOptions? options = null);
+        IEnumerable<ThreadTag>? tags = null, RequestOptions? options = null);
 
     /// <summary>
     ///     发布一个新的帖子到此帖子分区。
@@ -150,7 +150,7 @@ public interface IThreadCategory : IEntity<ulong>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步修改操作的任务。任务的结果包含新创建的帖子。 </returns>
     Task<IThread> CreateThreadAsync(string title, IEnumerable<ICard> cards, string? cover = null,
-        ThreadTag[]? tags = null, RequestOptions? options = null);
+        IEnumerable<ThreadTag>? tags = null, RequestOptions? options = null);
 
     #endregion
 }

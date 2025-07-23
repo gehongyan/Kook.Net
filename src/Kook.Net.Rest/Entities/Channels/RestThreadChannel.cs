@@ -112,19 +112,19 @@ public class RestThreadChannel : RestGuildChannel, IThreadChannel
             _ => null
         }, sortOrder, limit, category, options);
 
-    /// <inheritdoc cref="Kook.IThreadChannel.CreateThreadAsync(System.String,System.String,System.Boolean,System.String,Kook.IThreadCategory,Kook.ThreadTag[],Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IThreadChannel.CreateThreadAsync(System.String,System.String,System.Boolean,System.String,Kook.IThreadCategory,System.Collections.Generic.IEnumerable{Kook.ThreadTag},Kook.RequestOptions)" />
     public async Task<RestThread> CreateThreadAsync(string title, string content, bool isKMarkdown = false,
-        string? cover = null, IThreadCategory? category = null, ThreadTag[]? tags = null, RequestOptions? options = null) =>
+        string? cover = null, IThreadCategory? category = null, IEnumerable<ThreadTag>? tags = null, RequestOptions? options = null) =>
         await ThreadHelper.CreateThreadAsync(this, Kook, title, content, isKMarkdown, cover, category, tags, options);
 
-    /// <inheritdoc cref="Kook.IThreadChannel.CreateThreadAsync(System.String,Kook.ICard,System.String,Kook.IThreadCategory,Kook.ThreadTag[],Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IThreadChannel.CreateThreadAsync(System.String,Kook.ICard,System.String,Kook.IThreadCategory,System.Collections.Generic.IEnumerable{Kook.ThreadTag},Kook.RequestOptions)" />
     public async Task<RestThread> CreateThreadAsync(string title, ICard card, string? cover = null,
-        IThreadCategory? category = null, ThreadTag[]? tags = null, RequestOptions? options = null) =>
+        IThreadCategory? category = null, IEnumerable<ThreadTag>? tags = null, RequestOptions? options = null) =>
         await ThreadHelper.CreateThreadAsync(this, Kook, title, card, cover, category, tags, options);
 
-    /// <inheritdoc cref="Kook.IThreadChannel.CreateThreadAsync(System.String,System.Collections.Generic.IEnumerable{Kook.ICard},System.String,Kook.IThreadCategory,Kook.ThreadTag[],Kook.RequestOptions)" />
+    /// <inheritdoc cref="Kook.IThreadChannel.CreateThreadAsync(System.String,System.Collections.Generic.IEnumerable{Kook.ICard},System.String,Kook.IThreadCategory,System.Collections.Generic.IEnumerable{Kook.ThreadTag},Kook.RequestOptions)" />
     public async Task<RestThread> CreateThreadAsync(string title, IEnumerable<ICard> cards, string? cover = null,
-        IThreadCategory? category = null, ThreadTag[]? tags = null, RequestOptions? options = null) =>
+        IThreadCategory? category = null, IEnumerable<ThreadTag>? tags = null, RequestOptions? options = null) =>
         await ThreadHelper.CreateThreadAsync(this, Kook, title, cards, cover, category, tags, options);
 
     /// <inheritdoc />
@@ -250,17 +250,17 @@ public class RestThreadChannel : RestGuildChannel, IThreadChannel
 
     /// <inheritdoc />
     async Task<IThread> IThreadChannel.CreateThreadAsync(string title, string content, bool isKMarkdown,
-        string? cover, IThreadCategory? category, ThreadTag[]? tags, RequestOptions? options) =>
+        string? cover, IThreadCategory? category, IEnumerable<ThreadTag>? tags, RequestOptions? options) =>
         await CreateThreadAsync(title, content, isKMarkdown, cover, category, tags, options).ConfigureAwait(false);
 
     /// <inheritdoc />
     async Task<IThread> IThreadChannel.CreateThreadAsync(string title, ICard card, string? cover, IThreadCategory? category,
-        ThreadTag[]? tags, RequestOptions? options) =>
+        IEnumerable<ThreadTag>? tags, RequestOptions? options) =>
         await CreateThreadAsync(title, card, cover, category, tags, options).ConfigureAwait(false);
 
     /// <inheritdoc />
     async Task<IThread> IThreadChannel.CreateThreadAsync(string title, IEnumerable<ICard> cards, string? cover, IThreadCategory? category,
-        ThreadTag[]? tags, RequestOptions? options) =>
+        IEnumerable<ThreadTag>? tags, RequestOptions? options) =>
         await CreateThreadAsync(title, cards, cover, category, tags, options).ConfigureAwait(false);
 
     #endregion
