@@ -4,7 +4,9 @@
 
 ## v0.10.0 [2025-07-23]
 
-### Roadmap
+### Update Path
+
+This update includes some breaking changes. Please review the "Changed" section carefully.
 
 ### Added
 
