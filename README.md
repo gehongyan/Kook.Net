@@ -6,6 +6,7 @@
 [![Nuget](https://img.shields.io/nuget/dt/Kook.Net?color=%230099ff)](https://www.nuget.org/packages/Kook.Net)
 [![License](https://img.shields.io/github/license/gehongyan/Kook.Net)](https://github.com/gehongyan/Kook.Net/blob/master/LICENSE)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgehongyan%2FKook.Net?ref=badge_shield)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/gehongyan/Kook.Net)
 [![Chat on Kook](https://www.kookapp.cn/api/v3/badge/guild?guild_id=1591057729615250)](https://kook.top/EvxnOb)
 
 ---
@@ -24,6 +25,10 @@ Source code is available on [GitHub](https://github.com/gehongyan/Kook.Net),
 [Gitee](https://gitee.com/gehongyan/Kook.Net), and [GitCode](https://gitcode.com/gehongyan/Kook.Net).
 
 Documents are available on [kooknet.dev](https://kooknet.dev). (Simplified Chinese available only)
+
+You can also review and ask [DeepWiki](https://deepwiki.com/gehongyan/Kook.Net) or
+[OpenDeepWiki (Simplified Chinese)](https://opendeep.wiki/gehongyan/Kook.Net) for help with the source code or
+documentation.
 
 ---
 
