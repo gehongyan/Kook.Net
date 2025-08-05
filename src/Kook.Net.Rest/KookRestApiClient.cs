@@ -98,7 +98,8 @@ internal class KookRestApiClient : IDisposable
 
     internal virtual void Dispose(bool disposing)
     {
-        if (!_isDisposed) _isDisposed = true;
+        if (!_isDisposed)
+            _isDisposed = true;
     }
 
     public void Dispose() => Dispose(true);
@@ -118,7 +119,8 @@ internal class KookRestApiClient : IDisposable
 
     private async Task LoginInternalAsync(TokenType tokenType, string token)
     {
-        if (LoginState != LoginState.LoggedOut) await LogoutInternalAsync().ConfigureAwait(false);
+        if (LoginState != LoginState.LoggedOut)
+            await LogoutInternalAsync().ConfigureAwait(false);
 
         LoginState = LoginState.LoggingIn;
 
