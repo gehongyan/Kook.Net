@@ -95,6 +95,8 @@ public abstract class BaseKookClient : IKookClient
 
     internal bool FormatUsersInBidirectionalUnicode { get; private set; }
 
+    internal bool AutoLogoutBeforeLogin { get; }
+
     internal BaseKookClient(KookRestConfig config, API.KookRestApiClient client)
     {
         ApiClient = client;
@@ -104,6 +106,7 @@ public abstract class BaseKookClient : IKookClient
         _stateLock = new SemaphoreSlim(1, 1);
         _restLogger = LogManager.CreateLogger("Rest");
         _isFirstLogin = config.DisplayInitialLog;
+        AutoLogoutBeforeLogin = config.AutoLogoutBeforeLogin;
 
         FormatUsersInBidirectionalUnicode = config.FormatUsersInBidirectionalUnicode;
 
@@ -187,6 +190,9 @@ public abstract class BaseKookClient : IKookClient
             throw;
         }
 
+        if (AutoLogoutBeforeLogin)
+            await LogoutTokenAsync();
+
         await _loggedInEvent.InvokeAsync().ConfigureAwait(false);
     }
 
@@ -198,6 +204,7 @@ public abstract class BaseKookClient : IKookClient
         await _stateLock.WaitAsync().ConfigureAwait(false);
         try
         {
+            await LogoutTokenAsync();
             await LogoutInternalAsync().ConfigureAwait(false);
         }
         finally
@@ -208,7 +215,6 @@ public abstract class BaseKookClient : IKookClient
 
     internal virtual async Task LogoutInternalAsync()
     {
-        await ApiClient.GoOfflineAsync();
         if (LoginState == LoginState.LoggedOut)
             return;
         LoginState = LoginState.LoggingOut;
@@ -217,6 +223,13 @@ public abstract class BaseKookClient : IKookClient
         CurrentUser = null;
         LoginState = LoginState.LoggedOut;
         await _loggedOutEvent.InvokeAsync().ConfigureAwait(false);
+    }
+
+    private async Task LogoutTokenAsync()
+    {
+        await ApiClient
+            .GoOfflineAsync(new RequestOptions { IgnoreState = true})
+            .ConfigureAwait(false);
     }
 
     internal virtual Task OnLogoutAsync() => Task.CompletedTask;
