@@ -6,7 +6,7 @@ namespace Kook;
 public interface IQuote
 {
     /// <summary>
-    ///     获取此引用所指向的消息的 ID。
+    ///     获取此消息引用所引用的消息的 ID。
     /// </summary>
     Guid QuotedMessageId { get; }
 }

@@ -43,7 +43,7 @@ public class Quote : IQuote
     ///     使用指定的消息 ID 创建一个新的 <see cref="Quote"/> 实例。
     /// </summary>
     /// <param name="quotedMessageId"> 要引用的消息的 ID。 </param>
-    /// <seealso cref="Kook.MessageReference(System.Guid)"/>
+    /// <seealso cref="Kook.MessageReference(System.Guid,System.Nullable{System.Guid})"/>
     [Obsolete("Use MessageReference instead.")]
     public Quote(Guid quotedMessageId)
     {

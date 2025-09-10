@@ -76,7 +76,7 @@ public static class MessageExtensions
         string path, string? filename = null, AttachmentType type = AttachmentType.File, bool isQuote = false,
         bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendFileAsync(path, filename, type,
-                isQuote ? new MessageReference(message.Id) : null,
+                new MessageReference(isQuote ? message.Id : Guid.Empty, message.Id),
                 isEphemeral ? message.Author : null,
                 options)
             .ConfigureAwait(false);
@@ -96,7 +96,7 @@ public static class MessageExtensions
         Stream stream, string filename, AttachmentType type = AttachmentType.File, bool isQuote = false,
         bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendFileAsync(stream, filename, type,
-                isQuote ? new MessageReference(message.Id) : null,
+                new MessageReference(isQuote ? message.Id : Guid.Empty, message.Id),
                 isEphemeral ? message.Author : null,
                 options)
             .ConfigureAwait(false);
@@ -113,7 +113,7 @@ public static class MessageExtensions
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyFileAsync(this IUserMessage message,
         FileAttachment attachment, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendFileAsync(attachment,
-                isQuote ? new MessageReference(message.Id) : null,
+                new MessageReference(isQuote ? message.Id : Guid.Empty, message.Id),
                 isEphemeral ? message.Author : null,
                 options)
             .ConfigureAwait(false);
@@ -130,7 +130,7 @@ public static class MessageExtensions
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyTextAsync(this IUserMessage message,
         string content, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendTextAsync(content,
-                isQuote ? new MessageReference(message.Id) : null,
+                new MessageReference(isQuote ? message.Id : Guid.Empty, message.Id),
                 isEphemeral ? message.Author : null,
                 options)
             .ConfigureAwait(false);
@@ -151,7 +151,7 @@ public static class MessageExtensions
         ulong templateId, T parameters, bool isQuote = false, bool isEphemeral = false,
         JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         await message.Channel.SendTextAsync(templateId, parameters,
-                isQuote ? new MessageReference(message.Id) : null,
+                new MessageReference(isQuote ? message.Id : Guid.Empty, message.Id),
                 isEphemeral ? message.Author : null,
                 jsonSerializerOptions, options)
             .ConfigureAwait(false);
@@ -168,7 +168,7 @@ public static class MessageExtensions
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardsAsync(this IUserMessage message,
         IEnumerable<ICard> cards, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendCardsAsync(cards,
-                isQuote ? new MessageReference(message.Id) : null,
+                new MessageReference(isQuote ? message.Id : Guid.Empty, message.Id),
                 isEphemeral ? message.Author : null,
                 options)
             .ConfigureAwait(false);
@@ -189,7 +189,7 @@ public static class MessageExtensions
         ulong templateId, T parameters, bool isQuote = false, bool isEphemeral = false,
         JsonSerializerOptions? jsonSerializerOptions = null, RequestOptions? options = null) =>
         await message.Channel.SendCardsAsync(templateId, parameters,
-                isQuote ? new MessageReference(message.Id) : null,
+                new MessageReference(isQuote ? message.Id : Guid.Empty, message.Id),
                 isEphemeral ? message.Author : null,
                 jsonSerializerOptions, options)
             .ConfigureAwait(false);
@@ -206,7 +206,7 @@ public static class MessageExtensions
     public static async Task<Cacheable<IUserMessage, Guid>> ReplyCardAsync(this IUserMessage message,
         ICard card, bool isQuote = false, bool isEphemeral = false, RequestOptions? options = null) =>
         await message.Channel.SendCardAsync(card,
-                isQuote ? new MessageReference(message.Id) : null,
+                new MessageReference(isQuote ? message.Id : Guid.Empty, message.Id),
                 isEphemeral ? message.Author : null,
                 options)
             .ConfigureAwait(false);

@@ -32,4 +32,8 @@ internal class CreateDirectMessageParams
     [JsonPropertyName("nonce")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Nonce { get; set; }
+
+    [JsonPropertyName("reply_msg_id")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Guid? ReplyMessageId { get; set; }
 }
