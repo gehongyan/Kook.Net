@@ -110,6 +110,11 @@ public class KookConfig
     public static readonly TimeSpan BoostPackDuration = TimeSpan.FromDays(30);
 
     /// <summary>
+    ///     对每条消息首次回复时累计每日消息可发送条数总量消耗折扣的时间跨度。
+    /// </summary>
+    public static readonly TimeSpan MessageReplyDiscountTimeSpan = TimeSpan.FromMinutes(5);
+
+    /// <summary>
     ///     获取或设置请求在出现错误时的默认行为。
     /// </summary>
     /// <seealso cref="Kook.RequestOptions.RetryMode"/>
