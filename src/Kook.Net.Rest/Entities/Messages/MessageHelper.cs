@@ -357,6 +357,40 @@ internal static class MessageHelper
         await client.ApiClient.ModifyDirectMessageAsync(args, options).ConfigureAwait(false);
     }
 
+    public static async Task PinAsync(IUserMessage message, BaseKookClient client, RequestOptions? options)
+    {
+        if (message.Channel.GetChannelType() is not ChannelType.Text)
+            throw new NotSupportedException("Only messages in text channels can be pinned.");
+        await PinAsync(message.Id, message.Channel.Id, client, options).ConfigureAwait(false);
+    }
+
+    public static async Task PinAsync(Guid messageId, ulong channelId, BaseKookClient client, RequestOptions? options)
+    {
+        PinUnpinMessageParams args = new()
+        {
+            TargetId = channelId,
+            MessageId = messageId
+        };
+        await client.ApiClient.PinAsync(args, options).ConfigureAwait(false);
+    }
+
+    public static async Task UnpinAsync(IUserMessage message, BaseKookClient client, RequestOptions? options)
+    {
+        if (message.Channel.GetChannelType() is not ChannelType.Text)
+            throw new NotSupportedException("Only messages in text channels can be pinned.");
+        await UnpinAsync(message.Id, message.Channel.Id, client, options).ConfigureAwait(false);
+    }
+
+    public static async Task UnpinAsync(Guid messageId, ulong channelId, BaseKookClient client, RequestOptions? options)
+    {
+        PinUnpinMessageParams args = new()
+        {
+            TargetId = channelId,
+            MessageId = messageId
+        };
+        await client.ApiClient.UnpinAsync(args, options).ConfigureAwait(false);
+    }
+
     public static ImmutableArray<ICard> ParseCards(string json)
     {
         JsonSerializerOptions serializerOptions = new()

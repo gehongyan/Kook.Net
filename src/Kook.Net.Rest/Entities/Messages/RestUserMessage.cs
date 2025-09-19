@@ -242,5 +242,13 @@ public class RestUserMessage : RestMessage, IUserMessage
         Quote = properties.Quote?.QuotedMessageId == Guid.Empty ? null : properties.Quote;
     }
 
+    /// <inheritdoc />
+    public async Task PinAsync(RequestOptions? options = null) =>
+        await MessageHelper.PinAsync(this, Kook, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task UnpinAsync(RequestOptions? options = null) =>
+        await MessageHelper.UnpinAsync(this, Kook, options).ConfigureAwait(false);
+
     #endregion
 }

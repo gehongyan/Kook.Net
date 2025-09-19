@@ -30,6 +30,20 @@ public interface IUserMessage : IMessage
     Task ModifyAsync<T>(Action<MessageProperties<T>> func, RequestOptions? options = null);
 
     /// <summary>
+    ///     置顶此消息到其频道的置顶消息列表中。
+    /// </summary>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步置顶操作的任务。 </returns>
+    Task PinAsync(RequestOptions? options = null);
+
+    /// <summary>
+    ///     从其频道的置顶消息列表中移除此消息。
+    /// </summary>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步移除操作的任务。 </returns>
+    Task UnpinAsync(RequestOptions? options = null);
+
+    /// <summary>
     ///     转换消息文本中的提及与表情符号为可读形式。
     /// </summary>
     /// <param name="userHandling"> 指定用户提及标签的处理方式。 </param>
