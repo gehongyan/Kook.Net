@@ -2,6 +2,20 @@
 
 ---
 
+## v0.10.1 [2025-09-19]
+
+### Added
+
+- Added `KookRestConfig.AutoLogoutBeforeLogin`, which configures whether to force logout other clients connected to the
+  KOOK gateway when logging into the `BaseKookClient` client. This ensures that the current client's connection will not
+  miss any business events due to connections from other clients.
+- Added support for pinning and unpinning messages in text channels. You can use methods such as
+  `IUserMessage.PinAsync`, `IUserMessage.UnpinAsync`, `ITextChannel.PinMessageAsync`, and
+  `ITextChannel.UnpinMessageAsync` to perform these operations.
+- `MessageReference` has a new property `ReplyMessageId`, which is used for daily message send limit discount. If the
+  `replyMessageId` parameter is left empty in the constructor, it will automatically use the value of the
+  `quotedMessageId` parameter.
+
 ## v0.10.0 [2025-07-23]
 
 ### Update Path

@@ -5,6 +5,17 @@ title: 变更日志
 
 # 变更日志
 
+## v0.10.1 [2025-09-19]
+
+### 新增
+
+- 新增 `KookRestConfig.AutoLogoutBeforeLogin`，用于配置在登录到 `BaseKookClient` 客户端时是否强制登出其他与 KOOK
+  网关建立连接的客户端，这可以保证当前客户端的连接不会因为其他客户端的连接而无法接收到任何业务事件。
+- 新增支持在文字频道内置顶与取消置顶消息，可以通过 `IUserMessage.PinAsync`、`IUserMessage.UnpinAsync`、
+  `ITextChannel.PinMessageAsync`、`ITextChannel.UnpinMessageAsync` 等方法操作。
+- `MessageReference` 新增属性 `ReplyMessageId`，用于每日消息可发送条数总量消耗折扣。构造函数中如果 `replyMessageId` 留空，
+  则会自动使用参数 `quotedMessageId` 的值。
+
 ## v0.10.0 [2025-07-23]
 
 ### 更新路线
