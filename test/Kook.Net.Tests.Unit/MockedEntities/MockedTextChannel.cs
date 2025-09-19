@@ -181,4 +181,16 @@ internal sealed class MockedTextChannel : ITextChannel
 
     public Task<IReadOnlyCollection<IMessage>> GetPinnedMessagesAsync(RequestOptions? options = null) =>
         throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task PinMessageAsync(IUserMessage message, RequestOptions? options = null) => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task PinMessageAsync(Guid messageId, RequestOptions? options = null) => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task UnpinMessageAsync(IUserMessage message, RequestOptions? options = null) => throw new NotImplementedException();
+
+    /// <inheritdoc />
+    public Task UnpinMessageAsync(Guid messageId, RequestOptions? options = null) => throw new NotImplementedException();
 }

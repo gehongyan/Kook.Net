@@ -407,6 +407,14 @@ public class SocketUserMessage : SocketMessage, IUserMessage
             _ => Task.FromException<NotSupportedException>(new NotSupportedException("Unsupported channel type."))
         };
 
+    /// <inheritdoc />
+    public async Task PinAsync(RequestOptions? options = null) =>
+        await MessageHelper.PinAsync(this, Kook, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task UnpinAsync(RequestOptions? options = null) =>
+        await MessageHelper.UnpinAsync(this, Kook, options).ConfigureAwait(false);
+
     /// <summary>
     ///     转换消息文本中的提及与表情符号为可读形式。
     /// </summary>

@@ -106,6 +106,22 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
     public override Task<IReadOnlyCollection<RestMessage>> GetPinnedMessagesAsync(RequestOptions? options = null) =>
         throw new NotSupportedException("Getting messages from a voice channel is not supported.");
 
+    /// <inheritdoc />
+    public override Task PinMessageAsync(IUserMessage message, RequestOptions? options = null) =>
+        Task.FromException(new NotSupportedException("Pinning messages in a voice channel is not supported."));
+
+    /// <inheritdoc />
+    public override Task PinMessageAsync(Guid messageId, RequestOptions? options = null) =>
+        Task.FromException(new NotSupportedException("Pinning messages in a voice channel is not supported."));
+
+    /// <inheritdoc />
+    public override Task UnpinMessageAsync(IUserMessage message, RequestOptions? options = null) =>
+        Task.FromException(new NotSupportedException("Unpinning messages in a voice channel is not supported."));
+
+    /// <inheritdoc />
+    public override Task UnpinMessageAsync(Guid messageId, RequestOptions? options = null) =>
+        Task.FromException(new NotSupportedException("Unpinning messages in a voice channel is not supported."));
+
     #endregion
 
     #region IAudioChannel

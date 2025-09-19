@@ -965,6 +965,32 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
+    public async Task PinAsync(PinUnpinMessageParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.TargetId, 0, nameof(args.TargetId));
+        Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        await SendJsonAsync(HttpMethod.Post,
+                () => "message/pin", args, ids, ClientBucketType.SendEdit, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public async Task UnpinAsync(PinUnpinMessageParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.TargetId, 0, nameof(args.TargetId));
+        Preconditions.NotEqual(args.MessageId, Guid.Empty, nameof(args.MessageId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        await SendJsonAsync(HttpMethod.Post,
+                () => "message/unpin", args, ids, ClientBucketType.SendEdit, null, options)
+            .ConfigureAwait(false);
+    }
+
     #endregion
 
     #region Threads

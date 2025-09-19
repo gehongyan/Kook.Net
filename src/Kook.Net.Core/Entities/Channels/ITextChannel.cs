@@ -39,4 +39,36 @@ public interface ITextChannel : INestedChannel, IMentionable, IMessageChannel
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步获取操作的任务。任务的结果包含此频道中找到的所有置顶消息。 </returns>
     Task<IReadOnlyCollection<IMessage>> GetPinnedMessagesAsync(RequestOptions? options = null);
+
+    /// <summary>
+    ///     置顶该频道内的指定消息。
+    /// </summary>
+    /// <param name="message"> 要置顶的消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步置顶操作的任务。 </returns>
+    Task PinMessageAsync(IUserMessage message, RequestOptions? options = null);
+
+    /// <summary>
+    ///     置顶该频道内的指定消息。
+    /// </summary>
+    /// <param name="messageId"> 要置顶的消息的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步置顶操作的任务。 </returns>
+    Task PinMessageAsync(Guid messageId, RequestOptions? options = null);
+
+    /// <summary>
+    ///     取消置顶该频道内的指定消息。
+    /// </summary>
+    /// <param name="message"> 要取消置顶的消息。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步取消置顶操作的任务。 </returns>
+    Task UnpinMessageAsync(IUserMessage message, RequestOptions? options = null);
+
+    /// <summary>
+    ///     取消置顶该频道内的指定消息。
+    /// </summary>
+    /// <param name="messageId"> 要取消置顶的消息的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步取消置顶操作的任务。 </returns>
+    Task UnpinMessageAsync(Guid messageId, RequestOptions? options = null);
 }

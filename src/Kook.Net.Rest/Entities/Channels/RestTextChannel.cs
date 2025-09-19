@@ -323,6 +323,22 @@ public class RestTextChannel : RestGuildChannel, IRestMessageChannel, ITextChann
         Action<MessageProperties<T>> func, RequestOptions? options = null) =>
         await ChannelHelper.ModifyMessageAsync(this, messageId, func, Kook, options).ConfigureAwait(false);
 
+    /// <inheritdoc />
+    public virtual async Task PinMessageAsync(IUserMessage message, RequestOptions? options = null) =>
+        await MessageHelper.PinAsync(message.Id, Id, Kook, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public virtual async Task PinMessageAsync(Guid messageId, RequestOptions? options = null) =>
+        await MessageHelper.PinAsync(messageId, Id, Kook, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public virtual async Task UnpinMessageAsync(IUserMessage message, RequestOptions? options = null) =>
+        await MessageHelper.UnpinAsync(message.Id, Id, Kook, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public virtual async Task UnpinMessageAsync(Guid messageId, RequestOptions? options = null) =>
+        await MessageHelper.UnpinAsync(messageId, Id, Kook, options).ConfigureAwait(false);
+
     #endregion
 
     #region INestedChannel
