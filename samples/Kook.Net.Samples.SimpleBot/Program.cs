@@ -26,7 +26,8 @@ KookSocketConfig config = new()
     AutoUpdateChannelPositions = true,
     AutoUpdateRolePositions = true,
     StartupCacheFetchMode = StartupCacheFetchMode.Synchronous,
-    LargeNumberOfGuildsThreshold = 50
+    LargeNumberOfGuildsThreshold = 50,
+    AutoLogoutBeforeLogin = true
 };
 
 // 在使用完 Kook.Net 的客户端后，建议在应用程序的生命周期结束时进行 Dispose 操作

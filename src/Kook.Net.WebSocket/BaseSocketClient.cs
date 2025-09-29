@@ -99,6 +99,28 @@ public abstract partial class BaseSocketClient : BaseKookClient, IKookClient
     public abstract SocketGuild? GetGuild(ulong id);
 
     /// <inheritdoc />
+    internal override async Task OnLoginAsync(TokenType tokenType, string token)
+    {
+        if (BaseConfig.AutoLogoutBeforeLogin)
+            await LogoutTokenAsync();
+        await base.OnLoginAsync(tokenType, token);
+    }
+
+    /// <inheritdoc />
+    internal override async Task OnLogoutAsync()
+    {
+        await LogoutTokenAsync();
+        await base.OnLogoutAsync();
+    }
+
+    private async Task LogoutTokenAsync()
+    {
+        await ApiClient
+            .GoOfflineAsync(new RequestOptions { IgnoreState = true})
+            .ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
     public abstract Task StartAsync();
 
     /// <inheritdoc />
