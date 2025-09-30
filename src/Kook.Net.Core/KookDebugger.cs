@@ -259,24 +259,36 @@ public static class KookDebugger
     internal static void DebugRest(string message)
     {
         if (IsDebuggingRest)
-            restDebugger(message);
+            SafeInvoke(restDebugger, message);
     }
 
     internal static void DebugPacket(string message)
     {
         if (IsDebuggingPacket)
-            packetDebugger(message);
+            SafeInvoke(packetDebugger, message);
     }
 
     internal static void DebugRatelimit(string message)
     {
         if (IsDebuggingRatelimit)
-            ratelimitDebugger(message);
+            SafeInvoke(ratelimitDebugger, message);
     }
 
     internal static void DebugAudio(string message)
     {
         if (IsDebuggingAudio)
-            audioDebugger(message);
+            SafeInvoke(audioDebugger, message);
+    }
+
+    private static void SafeInvoke(Action<string> debugger, string message)
+    {
+        try
+        {
+            debugger(message);
+        }
+        catch
+        {
+            // ignore
+        }
     }
 }
