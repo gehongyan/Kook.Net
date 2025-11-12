@@ -15,7 +15,7 @@
     <ProjectReference Include="..\Kook.Net.Rest\Kook.Net.Rest.csproj"/>
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition=" !$(TargetFramework.StartsWith('net10.0')) ">
     <PackageReference Include="System.Linq.Async" Version="6.0.1"/>
   </ItemGroup>
 

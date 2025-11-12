@@ -34,6 +34,7 @@ documentation.
 
 ## Targets
 
+- [.NET 10.0](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [.NET 9.0](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [.NET Standard 2.1](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-1)
@@ -41,7 +42,7 @@ documentation.
 - [.NET Framework 4.6.2](https://dotnet.microsoft.com/download/dotnet-framework/net462)
 
 > [!TIP]
-> Targets other than .NET 9.0 have not been fully tested.
+> Targets other than .NET 10.0 have not been fully tested.
 
 ---
 
