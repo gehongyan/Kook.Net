@@ -21,6 +21,7 @@ _layout: landing
 
 Kook.Net 是一个对 [KOOK（原开黑啦）API] 进行功能封装的类库，以 C# 编写，编译所采用的目标框架包括
 
+- [.NET 10.0](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [.NET 9.0](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [.NET Standard 2.1](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-1)
@@ -28,7 +29,7 @@ Kook.Net 是一个对 [KOOK（原开黑啦）API] 进行功能封装的类库，
 - [.NET Framework 4.6.2](https://dotnet.microsoft.com/download/dotnet-framework/net462)
 
 > [!TIP]
-> 除 .NET 9.0 外的其他目标框架未经完全测试。
+> 除 .NET 10.0 外的其他目标框架未经完全测试。
 
 [KOOK（原开黑啦）API]: https://developer.kookapp.cn/doc
 

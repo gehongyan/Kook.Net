@@ -33,6 +33,7 @@
 
 ## 目标框架
 
+- [.NET 10.0](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [.NET 9.0](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
 - [.NET Standard 2.1](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-1)
@@ -40,7 +41,7 @@
 - [.NET Framework 4.6.2](https://dotnet.microsoft.com/download/dotnet-framework/net462)
 
 > [!TIP]
-> .NET 9 之外的目标框架尚未完全测试。
+> .NET 10 之外的目标框架尚未完全测试。
 
 ---
 
