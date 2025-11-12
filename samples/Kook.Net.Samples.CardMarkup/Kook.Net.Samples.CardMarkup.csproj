@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="../../Kook.Net.Sample.targets" />
+  <Import Project="../../props/samples.props"/>
 
   <ItemGroup>
     <PackageReference Include="Fluid.Core" Version="2.24.0" />

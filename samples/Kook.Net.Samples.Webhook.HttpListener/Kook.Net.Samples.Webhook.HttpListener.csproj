@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="../../Kook.Net.Sample.targets" />
+  <Import Project="../../props/samples.props"/>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Kook.Net.Webhook.HttpListener\Kook.Net.Webhook.HttpListener.csproj" />
