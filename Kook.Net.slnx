@@ -1,37 +1,37 @@
-﻿<Solution>
+<Solution>
   <Folder Name="/Experimental/">
-    <Project Path="src\Kook.Net.Experimental\Kook.Net.Experimental.csproj" Type="Classic C#" />
+    <Project Path="src\Kook.Net.Experimental\Kook.Net.Experimental.csproj" />
   </Folder>
   <Folder Name="/Extensions/">
-    <Project Path="src\Kook.Net.CardMarkup\Kook.Net.CardMarkup.csproj" Type="Classic C#" />
-    <Project Path="src\Kook.Net.Commands\Kook.Net.Commands.csproj" Type="Classic C#" />
-    <Project Path="src\Kook.Net.DependencyInjection.Microsoft\Kook.Net.DependencyInjection.Microsoft.csproj" Type="Classic C#" />
-    <Project Path="src\Kook.Net.Hosting\Kook.Net.Hosting.csproj" Type="Classic C#" />
-    <Project Path="src\Kook.Net.MessageQueue.InMemory\Kook.Net.MessageQueue.InMemory.csproj" Type="Classic C#" />
-    <Project Path="src\Kook.Net.MessageQueue.MassTransit\Kook.Net.MessageQueue.MassTransit.csproj" Type="Classic C#" />
-    <Project Path="src\Kook.Net.Webhook.AspNet\Kook.Net.Webhook.AspNet.csproj" Type="Classic C#" />
-    <Project Path="src\Kook.Net.Webhook.HttpListener\Kook.Net.Webhook.HttpListener.csproj" Type="Classic C#" />
+    <Project Path="src\Kook.Net.CardMarkup\Kook.Net.CardMarkup.csproj" />
+    <Project Path="src\Kook.Net.Commands\Kook.Net.Commands.csproj" />
+    <Project Path="src\Kook.Net.DependencyInjection.Microsoft\Kook.Net.DependencyInjection.Microsoft.csproj" />
+    <Project Path="src\Kook.Net.Hosting\Kook.Net.Hosting.csproj" />
+    <Project Path="src\Kook.Net.MessageQueue.InMemory\Kook.Net.MessageQueue.InMemory.csproj" />
+    <Project Path="src\Kook.Net.MessageQueue.MassTransit\Kook.Net.MessageQueue.MassTransit.csproj" />
+    <Project Path="src\Kook.Net.Webhook.AspNet\Kook.Net.Webhook.AspNet.csproj" />
+    <Project Path="src\Kook.Net.Webhook.HttpListener\Kook.Net.Webhook.HttpListener.csproj" />
   </Folder>
   <Folder Name="/Implementations/">
-    <Project Path="src\Kook.Net.Pipe\Kook.Net.Pipe.csproj" Type="Classic C#" />
-    <Project Path="src\Kook.Net.Rest\Kook.Net.Rest.csproj" Type="Classic C#" />
-    <Project Path="src\Kook.Net.Webhook\Kook.Net.Webhook.csproj" Type="Classic C#" />
-    <Project Path="src\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj" Type="Classic C#" />
+    <Project Path="src\Kook.Net.Pipe\Kook.Net.Pipe.csproj" />
+    <Project Path="src\Kook.Net.Rest\Kook.Net.Rest.csproj" />
+    <Project Path="src\Kook.Net.Webhook\Kook.Net.Webhook.csproj" />
+    <Project Path="src\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj" />
   </Folder>
   <Folder Name="/Samples/">
-    <Project Path="samples\Kook.Net.Samples.Audio\Kook.Net.Samples.Audio.csproj" Type="Classic C#" />
-    <Project Path="samples\Kook.Net.Samples.CardMarkup\Kook.Net.Samples.CardMarkup.csproj" Type="Classic C#" />
-    <Project Path="samples\Kook.Net.Samples.Docker\Kook.Net.Samples.Docker.csproj" Type="Classic C#" />
-    <Project Path="samples\Kook.Net.Samples.FSharp\Kook.Net.Samples.FSharp.fsproj" Type="Classic F#" />
-    <Project Path="samples\Kook.Net.Samples.MessageQueue\Kook.Net.Samples.MessageQueue.csproj" Type="Classic C#" />
-    <Project Path="samples\Kook.Net.Samples.OAuth\Kook.Net.Samples.OAuth.csproj" Type="Classic C#" />
-    <Project Path="samples\Kook.Net.Samples.Pipe\Kook.Net.Samples.Pipe.csproj" Type="Classic C#" />
-    <Project Path="samples\Kook.Net.Samples.ReactionRoleBot\Kook.Net.Samples.ReactionRoleBot.csproj" Type="Classic C#" />
-    <Project Path="samples\Kook.Net.Samples.SimpleBot\Kook.Net.Samples.SimpleBot.csproj" Type="Classic C#" />
-    <Project Path="samples\Kook.Net.Samples.TextCommands\Kook.Net.Samples.TextCommands.csproj" Type="Classic C#" />
-    <Project Path="samples\Kook.Net.Samples.VisualBasic\Kook.Net.Samples.VisualBasic.vbproj" Type="Classic VB" />
-    <Project Path="samples\Kook.Net.Samples.Webhook.AspNet\Kook.Net.Samples.Webhook.AspNet.csproj" Type="Classic C#" />
-    <Project Path="samples\Kook.Net.Samples.Webhook.HttpListener\Kook.Net.Samples.Webhook.HttpListener.csproj" Type="Classic C#" />
+    <Project Path="samples\Kook.Net.Samples.Audio\Kook.Net.Samples.Audio.csproj" />
+    <Project Path="samples\Kook.Net.Samples.CardMarkup\Kook.Net.Samples.CardMarkup.csproj" />
+    <Project Path="samples\Kook.Net.Samples.Docker\Kook.Net.Samples.Docker.csproj" />
+    <Project Path="samples\Kook.Net.Samples.FSharp\Kook.Net.Samples.FSharp.fsproj" />
+    <Project Path="samples\Kook.Net.Samples.MessageQueue\Kook.Net.Samples.MessageQueue.csproj" />
+    <Project Path="samples\Kook.Net.Samples.OAuth\Kook.Net.Samples.OAuth.csproj" />
+    <Project Path="samples\Kook.Net.Samples.Pipe\Kook.Net.Samples.Pipe.csproj" />
+    <Project Path="samples\Kook.Net.Samples.ReactionRoleBot\Kook.Net.Samples.ReactionRoleBot.csproj" />
+    <Project Path="samples\Kook.Net.Samples.SimpleBot\Kook.Net.Samples.SimpleBot.csproj" />
+    <Project Path="samples\Kook.Net.Samples.TextCommands\Kook.Net.Samples.TextCommands.csproj" />
+    <Project Path="samples\Kook.Net.Samples.VisualBasic\Kook.Net.Samples.VisualBasic.vbproj" />
+    <Project Path="samples\Kook.Net.Samples.Webhook.AspNet\Kook.Net.Samples.Webhook.AspNet.csproj" />
+    <Project Path="samples\Kook.Net.Samples.Webhook.HttpListener\Kook.Net.Samples.Webhook.HttpListener.csproj" />
   </Folder>
   <Folder Name="/SolutionItems/">
     <File Path=".editorconfig" />
@@ -46,10 +46,10 @@
     <File Path="props\tests.props" />
   </Folder>
   <Folder Name="/Tests/">
-    <Project Path="test\Kook.Net.Tests.Integration.Rest\Kook.Net.Tests.Integration.Rest.csproj" Type="Classic C#" />
-    <Project Path="test\Kook.Net.Tests.Integration.Socket\Kook.Net.Tests.Integration.Socket.csproj" Type="Classic C#" />
-    <Project Path="test\Kook.Net.Tests.Unit\Kook.Net.Tests.Unit.csproj" Type="Classic C#" />
+    <Project Path="test\Kook.Net.Tests.Integration.Rest\Kook.Net.Tests.Integration.Rest.csproj" />
+    <Project Path="test\Kook.Net.Tests.Integration.Socket\Kook.Net.Tests.Integration.Socket.csproj" />
+    <Project Path="test\Kook.Net.Tests.Unit\Kook.Net.Tests.Unit.csproj" />
   </Folder>
-  <Project Path="src\Kook.Net.Core\Kook.Net.Core.csproj" Type="Classic C#" />
-  <Project Path="src\Kook.Net\Kook.Net.csproj" Type="Classic C#" />
+  <Project Path="src\Kook.Net.Core\Kook.Net.Core.csproj" />
+  <Project Path="src\Kook.Net\Kook.Net.csproj" />
 </Solution>
