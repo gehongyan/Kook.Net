@@ -41,6 +41,7 @@
     <File Path="CHANGELOG.md" />
     <File Path="LICENSE" />
     <File Path="THIRD-PARTY-NOTICES.md" />
+    <File Path="nuget.config" />
     <File Path="props\common.props" />
     <File Path="props\samples.props" />
     <File Path="props\tests.props" />
