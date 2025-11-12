@@ -2,6 +2,24 @@
 
 ---
 
+## v0.10.2 [2025-11-11]
+
+### Fixes
+
+- Resolved an issue where injected debugging methods in `KookDebuggers` caused application crashes when exceptions were
+  thrown.
+
+### Changes
+
+- Moved the configuration option `AutoLogoutBeforeLogin` to `KookSocketConfig`.
+
+### Others
+
+- Added builds targeting .NET 10 and upgraded the target framework of the sample and test projects to .NET 10.
+- Migrated to the `slnx` solution format.
+- Migrated to CPM (centralized package management).
+- Updated NuGet dependencies.
+
 ## v0.10.1 [2025-09-19]
 
 ### Added
