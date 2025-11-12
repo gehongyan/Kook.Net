@@ -1,7 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <Import Project="../../props/common.props"/>
-
+  <Import Project="../../props/common.props" />
   <PropertyGroup>
     <RootNamespace>Kook.WebSocket</RootNamespace>
     <IsPackable>true</IsPackable>
@@ -9,14 +7,11 @@
     <Description>The WebSocket API implementation for Kook.Net.</Description>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj"/>
-    <ProjectReference Include="..\Kook.Net.Rest\Kook.Net.Rest.csproj"/>
+    <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj" />
+    <ProjectReference Include="..\Kook.Net.Rest\Kook.Net.Rest.csproj" />
   </ItemGroup>
-
   <ItemGroup Condition=" !$(TargetFramework.StartsWith('net10.0')) ">
-    <PackageReference Include="System.Linq.Async" Version="6.0.1"/>
+    <PackageReference Include="System.Linq.Async" />
   </ItemGroup>
-
 </Project>

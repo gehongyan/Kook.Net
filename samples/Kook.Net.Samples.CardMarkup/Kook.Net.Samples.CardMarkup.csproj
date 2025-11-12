@@ -1,12 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <Import Project="../../props/samples.props"/>
-
+  <Import Project="../../props/samples.props" />
   <ItemGroup>
-    <PackageReference Include="Fluid.Core" Version="2.24.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5" />
+    <PackageReference Include="Fluid.Core" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="Cards\vote.xml.liquid">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -18,7 +15,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\Kook.Net.CardMarkup\Kook.Net.CardMarkup.csproj" />
   </ItemGroup>

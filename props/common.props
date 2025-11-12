@@ -3,7 +3,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <VersionPrefix>0.10.1</VersionPrefix>
-<!--    <VersionSuffix>beta2</VersionSuffix>-->
+    <!--    <VersionSuffix>beta2</VersionSuffix>-->
     <IsPackable>false</IsPackable>
     <IsTrimmable>false</IsTrimmable>
     <IsAotCompatible>false</IsAotCompatible>
@@ -31,28 +31,23 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
-
   <PropertyGroup>
     <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
-
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4')) AND '$(MSBuildRuntimeType)' == 'Core' AND '$(OS)' != 'Windows_NT'">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" PrivateAssets="All" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
-
   <ItemGroup>
-    <None Include="../../README.md" Pack="true" PackagePath="\"/>
-    <None Include="../../LICENSE" Pack="true" PackagePath="\"/>
-    <None Include="../../THIRD-PARTY-NOTICES.md" Pack="true" PackagePath="\"/>
-    <None Include="../../docs/logo/Logo_Small.png" Pack="true" PackagePath=""/>
+    <None Include="../../README.md" Pack="true" PackagePath="\" />
+    <None Include="../../LICENSE" Pack="true" PackagePath="\" />
+    <None Include="../../THIRD-PARTY-NOTICES.md" Pack="true" PackagePath="\" />
+    <None Include="../../docs/logo/Logo_Small.png" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>

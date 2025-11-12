@@ -1,20 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <Import Project="../../props/common.props"/>
-
+  <Import Project="../../props/common.props" />
   <PropertyGroup>
     <RootNamespace>Kook.Commands</RootNamespace>
     <IsPackable>true</IsPackable>
     <PackageId>Kook.Net.Commands</PackageId>
     <Description>The text message based command framework extension for Kook.Net.</Description>
   </PropertyGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj"/>
+    <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
   </ItemGroup>
-
 </Project>
