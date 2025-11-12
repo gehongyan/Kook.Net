@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="../../Kook.Net.Test.targets" />
+  <Import Project="../../props/tests.props"/>
 
 </Project>

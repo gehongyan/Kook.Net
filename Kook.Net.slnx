@@ -34,16 +34,16 @@
     <Project Path="samples\Kook.Net.Samples.Webhook.HttpListener\Kook.Net.Samples.Webhook.HttpListener.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/SolutionItems/">
-    <File Path="Kook.Net.targets" />
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
     <File Path="global.json" />
+    <File Path="README.md" />
     <File Path="CHANGELOG.md" />
     <File Path="LICENSE" />
-    <File Path="README.md" />
     <File Path="THIRD-PARTY-NOTICES.md" />
-    <File Path="Kook.Net.Test.targets" />
-    <File Path="Kook.Net.Sample.targets" />
+    <File Path="props\common.props" />
+    <File Path="props\samples.props" />
+    <File Path="props\tests.props" />
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="test\Kook.Net.Tests.Integration.Rest\Kook.Net.Tests.Integration.Rest.csproj" Type="Classic C#" />
