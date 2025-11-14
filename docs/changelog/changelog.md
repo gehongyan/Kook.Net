@@ -5,6 +5,16 @@ title: 变更日志
 
 # 变更日志
 
+## v0.10.3 [2025-11-15]
+
+### 修复
+
+- 修复 `AddPermissionOverwriteAsync` 在特定情况下可能会 `ModifyPermissionOverwriteAsync` 失败的问题。
+
+### 其他
+
+- 修复示例代码中的 `Dockerfile`。
+
 ## v0.10.2 [2025-11-11]
 
 ### 修复

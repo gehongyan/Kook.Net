@@ -2,18 +2,29 @@
 
 ---
 
+## v0.10.3 [2025-11-15]
+
+### Fixed
+
+- Resolved and issue where `ModifyPermissionOverwriteAsync` could fail in certain scenarios resulting from
+  `AddPermissionOverwriteAsync`.
+
+### Misc
+
+- Fixed base image versions in `Dockerfile`s in sample projects.
+
 ## v0.10.2 [2025-11-11]
 
-### Fixes
+### Fixed
 
 - Resolved an issue where injected debugging methods in `KookDebuggers` caused application crashes when exceptions were
   thrown.
 
-### Changes
+### Changed
 
 - Moved the configuration option `AutoLogoutBeforeLogin` to `KookSocketConfig`.
 
-### Others
+### Misc
 
 - Added builds targeting .NET 10 and upgraded the target framework of the sample and test projects to .NET 10.
 - Migrated to the `slnx` solution format.
