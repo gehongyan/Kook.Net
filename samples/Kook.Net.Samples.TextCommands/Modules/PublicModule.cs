@@ -116,13 +116,10 @@ public class PublicModule : ModuleBase<SocketCommandContext>
         await guildChannel.AddPermissionOverwriteAsync((IGuildUser)Context.User);
         if (guildChannel is SocketChannel socketChannel)
             await socketChannel.UpdateAsync();
-        if (guild.GetChannel(Context.Channel.Id) is { } socketGuildChannel)
-        {
-            await socketGuildChannel.ModifyPermissionOverwriteAsync((IGuildUser)Context.User,
-                permissions => permissions.Modify(
-                    viewChannel: PermValue.Allow,
-                    sendMessages: PermValue.Deny,
-                    attachFiles: PermValue.Allow));
-        }
+        await guildChannel.ModifyPermissionOverwriteAsync((IGuildUser)Context.User,
+            permissions => permissions.Modify(
+                viewChannel: PermValue.Allow,
+                sendMessages: PermValue.Deny,
+                attachFiles: PermValue.Allow));
     }
 }

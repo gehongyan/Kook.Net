@@ -118,7 +118,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
         UserPermissionOverwrite perms = await ChannelHelper
             .AddPermissionOverwriteAsync(this, Kook, user, options)
             .ConfigureAwait(false);
-        _userPermissionOverwrites = [.._userPermissionOverwrites, perms];
+        _userPermissionOverwrites = [.._userPermissionOverwrites.Where(x => x.TargetId != perms.TargetId), perms];
     }
 
     /// <inheritdoc cref="Kook.IGuildChannel.AddPermissionOverwriteAsync(Kook.IRole,Kook.RequestOptions)" />
@@ -127,7 +127,7 @@ public class SocketGuildChannel : SocketChannel, IGuildChannel
         RolePermissionOverwrite perms = await ChannelHelper
             .AddPermissionOverwriteAsync(this, Kook, role, options)
             .ConfigureAwait(false);
-        _rolePermissionOverwrites = [.._rolePermissionOverwrites, perms];
+        _rolePermissionOverwrites = [.._rolePermissionOverwrites.Where(x => x.TargetId != perms.TargetId), perms];
     }
 
     /// <inheritdoc cref="Kook.IGuildChannel.RemovePermissionOverwriteAsync(Kook.IGuildUser,Kook.RequestOptions)" />
