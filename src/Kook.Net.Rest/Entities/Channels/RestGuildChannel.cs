@@ -129,19 +129,19 @@ public class RestGuildChannel : RestChannel, IGuildChannel
     /// <inheritdoc cref="Kook.IGuildChannel.AddPermissionOverwriteAsync(Kook.IGuildUser,Kook.RequestOptions)" />
     public async Task AddPermissionOverwriteAsync(IGuildUser user, RequestOptions? options = null)
     {
-        UserPermissionOverwrite permissionOverwrite = await ChannelHelper
+        UserPermissionOverwrite perms = await ChannelHelper
             .AddPermissionOverwriteAsync(this, Kook, user, options)
             .ConfigureAwait(false);
-        _userPermissionOverwrites = [.._userPermissionOverwrites, permissionOverwrite];
+        _userPermissionOverwrites = [.._userPermissionOverwrites.Where(x => x.TargetId != perms.TargetId), perms];
     }
 
     /// <inheritdoc cref="Kook.IGuildChannel.AddPermissionOverwriteAsync(Kook.IRole,Kook.RequestOptions)" />
     public async Task AddPermissionOverwriteAsync(IRole role, RequestOptions? options = null)
     {
-        RolePermissionOverwrite permissionOverwrite = await ChannelHelper
+        RolePermissionOverwrite perms = await ChannelHelper
             .AddPermissionOverwriteAsync(this, Kook, role, options)
             .ConfigureAwait(false);
-        _rolePermissionOverwrites = [.._rolePermissionOverwrites, permissionOverwrite];
+        _rolePermissionOverwrites = [.._rolePermissionOverwrites.Where(x => x.TargetId != perms.TargetId), perms];
     }
 
     /// <inheritdoc cref="Kook.IGuildChannel.RemovePermissionOverwriteAsync(Kook.IGuildUser,Kook.RequestOptions)" />
