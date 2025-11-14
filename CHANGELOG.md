@@ -6,7 +6,7 @@
 
 ### Fixed
 
-- Resolved and issue where `ModifyPermissionOverwriteAsync` could fail in certain scenarios resulting from
+- Resolved an issue where `ModifyPermissionOverwriteAsync` could fail in certain scenarios resulting from
   `AddPermissionOverwriteAsync`.
 
 ### Misc
