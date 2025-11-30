@@ -24,4 +24,8 @@ internal class ModifyMessageParams
     [JsonConverter(typeof(NullableUInt64Converter))]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public ulong? EphemeralUserId { get; set; }
+
+    [JsonPropertyName("reply_msg_id")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Guid? ReplyMessageId { get; set; }
 }
