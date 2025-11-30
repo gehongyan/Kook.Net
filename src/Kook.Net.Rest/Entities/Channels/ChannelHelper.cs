@@ -213,8 +213,8 @@ internal static class ChannelHelper
             Type = messageType,
             ChannelId = channel.Id,
             Content = content,
-            QuotedMessageId = QuoteToReferenceMessageId(quote),
-            ReplyMessageId = QuoteToReplyMessageId(quote),
+            QuotedMessageId = MessageHelper.QuoteToReferenceMessageId(quote),
+            ReplyMessageId = MessageHelper.QuoteToReplyMessageId(quote),
             EphemeralUserId = ephemeralUser?.Id
         };
         CreateMessageResponse model = await client.ApiClient.CreateMessageAsync(args, options).ConfigureAwait(false);
@@ -232,8 +232,8 @@ internal static class ChannelHelper
             ChannelId = channel.Id,
             TemplateId = templateId,
             Content = JsonSerializer.Serialize(parameters, jsonSerializerOptions),
-            QuotedMessageId = QuoteToReferenceMessageId(quote),
-            ReplyMessageId = QuoteToReplyMessageId(quote),
+            QuotedMessageId = MessageHelper.QuoteToReferenceMessageId(quote),
+            ReplyMessageId = MessageHelper.QuoteToReplyMessageId(quote),
             EphemeralUserId = ephemeralUser?.Id
         };
         CreateMessageResponse model = await client.ApiClient.CreateMessageAsync(args, options).ConfigureAwait(false);
@@ -425,8 +425,8 @@ internal static class ChannelHelper
             Type = messageType,
             UserId = channel.Recipient.Id,
             Content = content,
-            QuotedMessageId = QuoteToReferenceMessageId(quote),
-            ReplyMessageId = QuoteToReplyMessageId(quote),
+            QuotedMessageId = MessageHelper.QuoteToReferenceMessageId(quote),
+            ReplyMessageId = MessageHelper.QuoteToReplyMessageId(quote)
         };
         CreateDirectMessageResponse model = await client.ApiClient
             .CreateDirectMessageAsync(args, options).ConfigureAwait(false);
@@ -443,8 +443,8 @@ internal static class ChannelHelper
             UserId = channel.Recipient.Id,
             TemplateId = templateId,
             Content = JsonSerializer.Serialize(parameters, jsonSerializerOptions),
-            QuotedMessageId = QuoteToReferenceMessageId(quote),
-            ReplyMessageId = QuoteToReplyMessageId(quote),
+            QuotedMessageId = MessageHelper.QuoteToReferenceMessageId(quote),
+            ReplyMessageId = MessageHelper.QuoteToReplyMessageId(quote)
         };
         CreateDirectMessageResponse model = await client.ApiClient
             .CreateDirectMessageAsync(args, options).ConfigureAwait(false);
@@ -537,18 +537,6 @@ internal static class ChannelHelper
     public static Task ModifyDirectMessageAsync<T>(IDMChannel channel, Guid messageId,
         Action<MessageProperties<T>> func, BaseKookClient client, RequestOptions? options) =>
         MessageHelper.ModifyDirectAsync(messageId, client, func, options);
-
-    private static Guid? QuoteToReferenceMessageId(IQuote? quote) =>
-        quote?.QuotedMessageId == Guid.Empty ? null : quote?.QuotedMessageId;
-
-    private static Guid? QuoteToReplyMessageId(IQuote? quote)
-    {
-        if (quote is not MessageReference mr)
-            return quote?.QuotedMessageId;
-        if (mr.ReplyMessageId == Guid.Empty)
-            return null;
-        return mr.ReplyMessageId;
-    }
 
     #endregion
 

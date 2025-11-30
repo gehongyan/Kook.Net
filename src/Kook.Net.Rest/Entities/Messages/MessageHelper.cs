@@ -239,7 +239,8 @@ internal static class MessageHelper
         {
             MessageId = msgId,
             Content = content,
-            QuotedMessageId = quote?.QuotedMessageId,
+            QuotedMessageId = QuoteToReferenceMessageId(quote),
+            ReplyMessageId = QuoteToReplyMessageId(quote),
             EphemeralUserId = ephemeralUser?.Id
         };
         await client.ApiClient.ModifyMessageAsync(args, options).ConfigureAwait(false);
@@ -253,7 +254,8 @@ internal static class MessageHelper
             MessageId = msgId,
             TemplateId = templateId,
             Content = JsonSerializer.Serialize(parameters, jsonSerializerOptions),
-            QuotedMessageId = quote?.QuotedMessageId,
+            QuotedMessageId = QuoteToReferenceMessageId(quote),
+            ReplyMessageId = QuoteToReplyMessageId(quote),
             EphemeralUserId = ephemeralUser?.Id
         };
         await client.ApiClient.ModifyMessageAsync(args, options).ConfigureAwait(false);
@@ -339,7 +341,8 @@ internal static class MessageHelper
         {
             MessageId = msgId,
             Content = content,
-            QuotedMessageId = quote?.QuotedMessageId
+            QuotedMessageId = QuoteToReferenceMessageId(quote),
+            ReplyMessageId = QuoteToReplyMessageId(quote)
         };
         await client.ApiClient.ModifyDirectMessageAsync(args, options).ConfigureAwait(false);
     }
@@ -352,7 +355,8 @@ internal static class MessageHelper
             TemplateId = templateId,
             MessageId = msgId,
             Content = JsonSerializer.Serialize(parameters, jsonSerializerOptions),
-            QuotedMessageId = quote?.QuotedMessageId
+            QuotedMessageId = QuoteToReferenceMessageId(quote),
+            ReplyMessageId = QuoteToReplyMessageId(quote)
         };
         await client.ApiClient.ModifyDirectMessageAsync(args, options).ConfigureAwait(false);
     }
@@ -695,5 +699,17 @@ internal static class MessageHelper
         return model.AuthorId == channel.Recipient.Id
             ? channel.Recipient
             : client.CurrentUser;
+    }
+
+    internal static Guid? QuoteToReferenceMessageId(IQuote? quote) =>
+        quote?.QuotedMessageId == Guid.Empty ? null : quote?.QuotedMessageId;
+
+    internal static Guid? QuoteToReplyMessageId(IQuote? quote)
+    {
+        if (quote is not MessageReference mr)
+            return quote?.QuotedMessageId;
+        if (mr.ReplyMessageId == Guid.Empty)
+            return null;
+        return mr.ReplyMessageId;
     }
 }

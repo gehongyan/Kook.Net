@@ -19,4 +19,8 @@ internal class ModifyDirectMessageParams
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     [JsonConverter(typeof(NullableGuidConverter))]
     public Guid? QuotedMessageId { get; set; }
+
+    [JsonPropertyName("reply_msg_id")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Guid? ReplyMessageId { get; set; }
 }
