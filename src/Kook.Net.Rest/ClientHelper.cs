@@ -68,15 +68,17 @@ internal static class ClientHelper
     public static async Task DisconnectVoiceChannelUserAsync(BaseKookClient client, IEnumerable<ulong> channelIds,
         ulong userId, RequestOptions? options)
     {
-        IEnumerable<Task> tasks = channelIds.Select(async x =>
-        {
-            KickOutVoiceChannelUserParams args = new()
+        Task[] tasks = channelIds
+            .Select(async x =>
             {
-                ChannelId = x,
-                UserId = userId
-            };
-            await client.ApiClient.KickOutVoiceChannelUserAsync(args, options).ConfigureAwait(false);
-        });
+                KickOutVoiceChannelUserParams args = new()
+                {
+                    ChannelId = x,
+                    UserId = userId
+                };
+                await client.ApiClient.KickOutVoiceChannelUserAsync(args, options).ConfigureAwait(false);
+            })
+            .ToArray();
         await Task.WhenAll(tasks).ConfigureAwait(false);
     }
 
