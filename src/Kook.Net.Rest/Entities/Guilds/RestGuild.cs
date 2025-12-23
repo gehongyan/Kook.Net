@@ -606,6 +606,10 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         RequestOptions? options = null) =>
         ClientHelper.MoveUsersAsync(Kook, users, targetChannel, options);
 
+    /// <inheritdoc />
+    public async Task DisconnectUserAsync(IGuildUser user, IVoiceChannel? channel, RequestOptions? options = null) =>
+        await user.DisconnectAsync(channel, options);
+
     #endregion
 
     #region Emotes

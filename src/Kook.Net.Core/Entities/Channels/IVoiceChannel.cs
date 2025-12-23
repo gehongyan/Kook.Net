@@ -37,4 +37,12 @@ public interface IVoiceChannel : ITextChannel, IAudioChannel
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步获取操作的任务。任务的结果包含连接到此频道的所有服务器用户。 </returns>
     Task<IReadOnlyCollection<IGuildUser>> GetConnectedUsersAsync(CacheMode mode = CacheMode.AllowDownload, RequestOptions? options = null);
+
+    /// <summary>
+    ///     将指定的用户从此语音频道断开连接。
+    /// </summary>
+    /// <param name="user"> 要断开连接的用户。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步断开连接操作的任务。 </returns>
+    Task DisconnectUserAsync(IGuildUser user, RequestOptions? options = null);
 }
