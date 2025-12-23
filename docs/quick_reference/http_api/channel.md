@@ -207,6 +207,27 @@ IEnumerable<IGuildUser> guildUsers = null;
 await guild.MoveUsersAsync(guildUsers, voiceChannel);
 ```
 
+### [踢出语音频道中的用户]
+
+POST `/api/v3/channel/kickout`
+
+```csharp
+IGuildUser guildUser = null; // 要断开连接的服务器用户
+
+// API 请求，通过服务器对象断开指定用户在指定语音频道的连接
+await guild.DisconnectUserAsync(guildUser, voiceChannel);
+// API 请求，通过服务器对象断开指定用户在所有语音频道的连接
+await guild.DisconnectUserAsync(guildUser);
+
+// API 请求，通过语音频道对象断开指定用户的连接
+await voiceChannel.DisconnectUserAsync(guildUser);
+
+// API 请求，通过服务器用户对象断开自身在指定语音频道的连接
+await guildUser.DisconnectAsync(voiceChannel);
+// API 请求，通过服务器用户对象断开自身在所有语音频道的连接
+await guildUser.DisconnectAsync();
+```
+
 ### [获取频道角色权限详情]
 
 GET `/api/v3/channel-role/index`
@@ -275,6 +296,7 @@ await guildChannel.RemovePermissionOverwriteAsync(guildUser);
 [删除频道]: https://developer.kookapp.cn/doc/http/channel#删除频道
 [语音频道用户列表]: https://developer.kookapp.cn/doc/http/channel#语音频道用户列表
 [语音频道之间移动用户]: https://developer.kookapp.cn/doc/http/channel#语音频道之间移动用户
+[踢出语音频道中的用户]: https://developer.kookapp.cn/doc/http/channel#踢出语音频道中的用户
 [获取频道角色权限详情]: https://developer.kookapp.cn/doc/http/channel#频道角色权限详情
 [创建频道角色权限]: https://developer.kookapp.cn/doc/http/channel#创建频道角色权限
 [更新频道角色权限]: https://developer.kookapp.cn/doc/http/channel#更新频道角色权限
