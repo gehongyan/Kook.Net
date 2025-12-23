@@ -2,6 +2,14 @@
 
 ---
 
+## v0.10.4 [2025-12-23]
+
+### Added
+
+- Added support for disconnecting guild users from voice channels.
+- Added support for automatically passing the `reply_msg_id` parameter when modifying messages, used for daily message
+  send count quota consumption discount.
+
 ## v0.10.3 [2025-11-15]
 
 ### Fixed
