@@ -65,6 +65,23 @@ internal static class ClientHelper
         await client.ApiClient.MoveUsersAsync(args, options).ConfigureAwait(false);
     }
 
+    public static async Task DisconnectVoiceChannelUserAsync(BaseKookClient client, IEnumerable<ulong> channelIds,
+        ulong userId, RequestOptions? options)
+    {
+        Task[] tasks = channelIds
+            .Select(async x =>
+            {
+                KickOutVoiceChannelUserParams args = new()
+                {
+                    ChannelId = x,
+                    UserId = userId
+                };
+                await client.ApiClient.KickOutVoiceChannelUserAsync(args, options).ConfigureAwait(false);
+            })
+            .ToArray();
+        await Task.WhenAll(tasks).ConfigureAwait(false);
+    }
+
     public static async Task<IReadOnlyCollection<RestUser>> GetFriendsAsync(BaseKookClient client, RequestOptions? options)
     {
         GetFriendStatesResponse models = await client.ApiClient.GetFriendStatesAsync(FriendState.Accepted, options).ConfigureAwait(false);

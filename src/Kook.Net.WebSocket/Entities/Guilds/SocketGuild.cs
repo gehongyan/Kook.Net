@@ -779,6 +779,10 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         RequestOptions? options = null) =>
         ClientHelper.MoveUsersAsync(Kook, users, targetChannel, options);
 
+    /// <inheritdoc />
+    public Task DisconnectUserAsync(IGuildUser user, IVoiceChannel? channel = null, RequestOptions? options = null) =>
+        user.DisconnectAsync(channel, options);
+
     #endregion
 
     #region Emotes
