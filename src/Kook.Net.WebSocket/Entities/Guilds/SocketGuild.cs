@@ -780,7 +780,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         ClientHelper.MoveUsersAsync(Kook, users, targetChannel, options);
 
     /// <inheritdoc />
-    public Task DisconnectUserAsync(IGuildUser user, IVoiceChannel? channel, RequestOptions? options = null) =>
+    public Task DisconnectUserAsync(IGuildUser user, IVoiceChannel? channel = null, RequestOptions? options = null) =>
         user.DisconnectAsync(channel, options);
 
     #endregion

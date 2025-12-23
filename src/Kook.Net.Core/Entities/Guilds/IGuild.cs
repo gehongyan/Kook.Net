@@ -616,7 +616,7 @@ public interface IGuild : IEntity<ulong>
     /// <param name="channel"> 要断开连接的语音频道。如果为 <c>null</c>，则会将用户从当前连接的所有语音频道中断开连接。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步断开连接操作的任务。 </returns>
-    Task DisconnectUserAsync(IGuildUser user, IVoiceChannel? channel, RequestOptions? options = null);
+    Task DisconnectUserAsync(IGuildUser user, IVoiceChannel? channel = null, RequestOptions? options = null);
 
     #endregion
 
