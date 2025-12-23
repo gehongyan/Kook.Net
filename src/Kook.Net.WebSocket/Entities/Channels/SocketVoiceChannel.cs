@@ -108,8 +108,8 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
             : ConnectedUsers;
 
     /// <inheritdoc />
-    public async Task DisconnectUserAsync(IGuildUser user, RequestOptions? options = null) =>
-        await user.DisconnectAsync(this, options);
+    public Task DisconnectUserAsync(IGuildUser user, RequestOptions? options = null) =>
+        user.DisconnectAsync(this, options);
 
     #endregion
 

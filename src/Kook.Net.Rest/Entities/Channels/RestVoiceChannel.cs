@@ -76,8 +76,8 @@ public class RestVoiceChannel : RestTextChannel, IVoiceChannel, IRestAudioChanne
         await ChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false);
 
     /// <inheritdoc />
-    public async Task DisconnectUserAsync(IGuildUser user, RequestOptions? options = null) =>
-        await user.DisconnectAsync(this, options);
+    public Task DisconnectUserAsync(IGuildUser user, RequestOptions? options = null) =>
+        user.DisconnectAsync(this, options);
 
     #endregion
 

@@ -607,8 +607,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         ClientHelper.MoveUsersAsync(Kook, users, targetChannel, options);
 
     /// <inheritdoc />
-    public async Task DisconnectUserAsync(IGuildUser user, IVoiceChannel? channel, RequestOptions? options = null) =>
-        await user.DisconnectAsync(channel, options);
+    public Task DisconnectUserAsync(IGuildUser user, IVoiceChannel? channel, RequestOptions? options = null) =>
+        user.DisconnectAsync(channel, options);
 
     #endregion
 
