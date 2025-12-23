@@ -379,6 +379,22 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     }
 
     /// <inheritdoc />
+    public async Task DisconnectAsync(IVoiceChannel? channel = null, RequestOptions? options = null)
+    {
+        ulong[] channelIds;
+        if (channel is not null)
+            channelIds = [channel.Id];
+        else if (Kook.AlwaysDownloadVoiceStates && Kook.GatewayIntents?.HasFlag(GatewayIntents.GuildMembers) is true)
+            channelIds = VoiceState?.VoiceChannels.Select(x => x.Id).ToArray() ?? [];
+        else
+        {
+            IReadOnlyCollection<IVoiceChannel> channels = await GetConnectedVoiceChannelsAsync(options);
+            channelIds = channels.Select(x => x.Id).ToArray();
+        }
+        await ClientHelper.DisconnectVoiceChannelUserAsync(Kook, channelIds, Id, options);
+    }
+
+    /// <inheritdoc />
     public Task UpdateAsync(RequestOptions? options = null) =>
         SocketUserHelper.UpdateAsync(this, Kook, options);
 

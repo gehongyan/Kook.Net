@@ -250,5 +250,13 @@ public interface IGuildUser : IUser, IVoiceState
     /// <returns> 一个表示异步获取操作的任务。任务的结果包含此用户当前所连接到的所有语音频道。 </returns>
     Task<IReadOnlyCollection<IVoiceChannel>> GetConnectedVoiceChannelsAsync(RequestOptions? options = null);
 
+    /// <summary>
+    ///     将此用户从语音频道中断开连接。
+    /// </summary>
+    /// <param name="channel"> 要断开连接的语音频道。如果为 <c>null</c>，则会将用户从当前连接的所有语音频道中断开连接。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步断开连接操作的任务。 </returns>
+    Task DisconnectAsync(IVoiceChannel? channel = null, RequestOptions? options = null);
+
     #endregion
 }

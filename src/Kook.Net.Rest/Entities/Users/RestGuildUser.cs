@@ -191,6 +191,20 @@ public class RestGuildUser : RestUser, IGuildUser
         UserHelper.GetConnectedChannelAsync(this, Kook, options);
 
     /// <inheritdoc />
+    public async Task DisconnectAsync(IVoiceChannel? channel = null, RequestOptions? options = null)
+    {
+        ulong[] channelIds;
+        if (channel is not null)
+            channelIds = [channel.Id];
+        else
+        {
+            IReadOnlyCollection<IVoiceChannel> channels = await GetConnectedVoiceChannelsAsync(options);
+            channelIds = channels.Select(x => x.Id).ToArray();
+        }
+        await ClientHelper.DisconnectVoiceChannelUserAsync(Kook, channelIds, Id, options);
+    }
+
+    /// <inheritdoc />
     public ChannelPermissions GetPermissions(IGuildChannel channel)
     {
         GuildPermissions guildPerms = GuildPermissions;

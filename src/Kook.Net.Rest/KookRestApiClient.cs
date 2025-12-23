@@ -662,6 +662,17 @@ internal class KookRestApiClient : IDisposable
         await SendJsonAsync(HttpMethod.Post, () => $"channel/move-user", args, ids, ClientBucketType.SendEdit, null, options).ConfigureAwait(false);
     }
 
+    public async Task KickOutVoiceChannelUserAsync(KickOutVoiceChannelUserParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(args.ChannelId, 0, nameof(args.ChannelId));
+        Preconditions.NotEqual(args.UserId, 0, nameof(args.UserId));
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new(channelId: args.ChannelId);
+        await SendJsonAsync(HttpMethod.Post, () => $"channel/kickout", args, ids, ClientBucketType.SendEdit, null, options).ConfigureAwait(false);
+    }
+
     #endregion
 
     #region Channel Permissions

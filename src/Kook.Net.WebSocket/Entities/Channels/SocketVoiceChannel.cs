@@ -107,6 +107,10 @@ public class SocketVoiceChannel : SocketTextChannel, IVoiceChannel, ISocketAudio
             ? await SocketChannelHelper.GetConnectedUsersAsync(this, Guild, Kook, options).ConfigureAwait(false)
             : ConnectedUsers;
 
+    /// <inheritdoc />
+    public Task DisconnectUserAsync(IGuildUser user, RequestOptions? options = null) =>
+        user.DisconnectAsync(this, options);
+
     #endregion
 
     #region TextOverrides

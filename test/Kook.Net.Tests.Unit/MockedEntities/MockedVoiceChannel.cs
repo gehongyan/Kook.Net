@@ -131,6 +131,10 @@ internal sealed class MockedVoiceChannel : IVoiceChannel
         throw new NotImplementedException();
 
     /// <inheritdoc />
+    public Task DisconnectUserAsync(IGuildUser user, RequestOptions? options = null) =>
+        throw new NotImplementedException();
+
+    /// <inheritdoc />
     public Task<Cacheable<IUserMessage, Guid>> SendFileAsync(string path,
         string? filename = null, AttachmentType type = AttachmentType.File, IQuote? quote = null,
         IUser? ephemeralUser = null, RequestOptions? options = null) =>
