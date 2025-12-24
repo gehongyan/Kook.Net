@@ -39,8 +39,10 @@ public struct NotImplementedPokeResource : IPokeResource
     /// <remarks>
     ///     此方法使用运行时类型解析，不支持 NativeAOT。对于 NativeAOT 应用程序，请使用带有 <see cref="Func{TResult}"/> 参数的重载。
     /// </remarks>
+#if NET5_0_OR_GREATER
     [RequiresUnreferencedCode("JSON serialization and deserialization might require types that cannot be statically analyzed. Use the overload that takes a resolving function for AOT applications.")]
     [RequiresDynamicCode("JSON serialization and deserialization might require types that cannot be statically analyzed and might need runtime code generation. Use the overload that takes a resolving function for AOT applications.")]
+#endif
     public T? Resolve<T>(JsonSerializerOptions? options = null)
         where T : IPokeResource
     {
