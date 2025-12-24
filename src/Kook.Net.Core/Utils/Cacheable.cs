@@ -37,7 +37,7 @@ public readonly struct Cacheable<TEntity, TId>
 
     private Func<Task<TEntity?>> DownloadFunc { get; }
 
-    internal Cacheable(TEntity? value, TId id, bool hasValue, Func<Task<TEntity?>> downloadFunc)
+    public Cacheable(TEntity? value, TId id, bool hasValue, Func<Task<TEntity?>> downloadFunc)
     {
         Value = value;
         Id = id;
@@ -105,7 +105,7 @@ public readonly struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationsh
 
     private Func<Task<TDownloadableEntity?>> DownloadFunc { get; }
 
-    internal Cacheable(TCachedEntity? value, TId id, bool hasValue, Func<Task<TDownloadableEntity?>> downloadFunc)
+    public Cacheable(TCachedEntity? value, TId id, bool hasValue, Func<Task<TDownloadableEntity?>> downloadFunc)
     {
         Value = value;
         Id = id;
