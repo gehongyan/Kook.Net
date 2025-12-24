@@ -13,7 +13,7 @@ public static class ThreadExtensions
     /// <param name="thread"> 要获取跳转 URL 的帖子。 </param>
     /// <returns> 一个包含用于在聊天中跳转到帖子的 URL 的字符串。 </returns>
     public static string GetJumpUrl(this IThread thread) =>
-        $"https://www.kookapp.cn/direct/anchor/{thread.Guild.Id}/{thread.Channel.Id}/{thread.Id}";
+        DirectLinks.MessageAnchor(thread.Guild.Id, thread.Channel.Id, thread.Id);
 
     /// <summary>
     ///     获取一个跳转到帖子回复的 URL。
@@ -21,7 +21,7 @@ public static class ThreadExtensions
     /// <param name="post"> 要获取跳转 URL 的帖子回复。 </param>
     /// <returns> 一个包含用于在聊天中跳转到帖子的 URL 的字符串。 </returns>
     public static string GetJumpUrl(this IThreadPost post) =>
-        $"https://www.kookapp.cn/direct/anchor/{post.Thread.Guild.Id}/{post.Thread.Channel.Id}/{post.Thread.Id}/{post.Id}";
+        DirectLinks.MessageAnchor(post.Thread.Guild.Id, post.Thread.Channel.Id, post.Thread.Id, post.Id);
 
     /// <summary>
     ///     获取一个跳转到帖子回复评论的 URL。
@@ -29,7 +29,7 @@ public static class ThreadExtensions
     /// <param name="reply"> 要获取跳转 URL 的帖子回复评论。 </param>
     /// <returns> 一个包含用于在聊天中跳转到帖子的 URL 的字符串。 </returns>
     public static string GetJumpUrl(this IThreadReply reply) =>
-        $"https://www.kookapp.cn/direct/anchor/{reply.Thread.Guild.Id}/{reply.Thread.Channel.Id}/{reply.Thread.Id}/{reply.Id}";
+        DirectLinks.MessageAnchor(reply.Thread.Guild.Id, reply.Thread.Channel.Id, reply.Thread.Id, reply.Id);
 
     /// <summary>
     ///     尝试将帖子内卡片的内容展开为单个字符串。
