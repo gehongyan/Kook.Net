@@ -137,10 +137,9 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
         _nextAudioId = 1;
 
-        _serializerOptions = new JsonSerializerOptions
+        _serializerOptions = new JsonSerializerOptions(KookJsonSerializerContext.Default.Options)
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            NumberHandling = JsonNumberHandling.AllowReadingFromString,
             Converters = { CardConverterFactory.Instance }
         };
 

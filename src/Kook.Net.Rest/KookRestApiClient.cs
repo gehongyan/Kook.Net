@@ -62,10 +62,9 @@ internal class KookRestApiClient : IDisposable
         UserAgent = userAgent;
         DefaultRetryMode = defaultRetryMode;
         _serializerOptions = serializerOptions
-            ?? new JsonSerializerOptions
+            ?? new JsonSerializerOptions(KookJsonSerializerContext.Default.Options)
             {
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                NumberHandling = JsonNumberHandling.AllowReadingFromString,
                 Converters = { CardConverterFactory.Instance }
             };
         DefaultRatelimitCallback = defaultRatelimitCallback;

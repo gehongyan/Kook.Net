@@ -5,8 +5,6 @@
     <VersionPrefix>0.10.4</VersionPrefix>
     <!--    <VersionSuffix>beta2</VersionSuffix>-->
     <IsPackable>false</IsPackable>
-    <IsTrimmable>false</IsTrimmable>
-    <IsAotCompatible>false</IsAotCompatible>
     <LangVersion>latest</LangVersion>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -30,6 +28,11 @@
     <DebugSymbols>true</DebugSymbols>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <DebugType>pdbonly</DebugType>
+  </PropertyGroup>
+  <!-- Enable trimming and AOT for .NET 8 and later -->
+  <PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">
+    <IsTrimmable>true</IsTrimmable>
+    <IsAotCompatible>true</IsAotCompatible>
   </PropertyGroup>
   <PropertyGroup>
     <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>

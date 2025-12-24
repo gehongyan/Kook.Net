@@ -12,10 +12,9 @@ namespace Kook.Rest;
 /// </summary>
 public static class CardJsonExtension
 {
-    private static readonly Lazy<JsonSerializerOptions> _options = new(() => new JsonSerializerOptions
+    private static readonly Lazy<JsonSerializerOptions> _options = new(() => new JsonSerializerOptions(KookJsonSerializerContext.Default.Options)
     {
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-        NumberHandling = JsonNumberHandling.AllowReadingFromString,
         Converters = { CardConverterFactory.Instance }
     });
 
@@ -118,13 +117,11 @@ public static class CardJsonExtension
     /// <returns> 包含来自 <paramref name="card"/> 的数据的 JSON 字符串。 </returns>
     public static string ToJsonString(this ICard card, bool writeIndented = true)
     {
-        JsonSerializerOptions options = new()
+        JsonSerializerOptions options = new(KookJsonSerializerContext.Default.Options)
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            NumberHandling = JsonNumberHandling.AllowReadingFromString,
             WriteIndented = writeIndented,
-            Converters = { CardConverterFactory.Instance },
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            Converters = { CardConverterFactory.Instance }
         };
         return JsonSerializer.Serialize(card.ToModel(), options);
     }

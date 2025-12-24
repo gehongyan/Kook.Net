@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Kook.Net.Converters;
 using Kook.Net.Rest;
 
 namespace Kook.Net.Queue;
@@ -24,10 +25,9 @@ internal class RequestBucket
 
     public RequestBucket(RequestQueue queue, IRequest request, BucketId id)
     {
-        _serializerOptions = new JsonSerializerOptions
+        _serializerOptions = new JsonSerializerOptions(KookJsonSerializerContext.Default.Options)
         {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            NumberHandling = JsonNumberHandling.AllowReadingFromString
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
         _queue = queue;
         Id = id;
