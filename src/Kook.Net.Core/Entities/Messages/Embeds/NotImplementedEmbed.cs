@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -35,6 +36,11 @@ public struct NotImplementedEmbed : IEmbed
     /// <param name="options"> 用于反序列化操作的选项。 </param>
     /// <typeparam name="T"> 要解析为的具体类型。 </typeparam>
     /// <returns> 解析后的嵌入式内容。 </returns>
+    /// <remarks>
+    ///     此方法使用运行时类型解析，不支持 NativeAOT。对于 NativeAOT 应用程序，请使用带有 <see cref="Func{TResult}"/> 参数的重载。
+    /// </remarks>
+    [RequiresUnreferencedCode("JSON serialization and deserialization might require types that cannot be statically analyzed. Use the overload that takes a resolving function for AOT applications.")]
+    [RequiresDynamicCode("JSON serialization and deserialization might require types that cannot be statically analyzed and might need runtime code generation. Use the overload that takes a resolving function for AOT applications.")]
     public T? Resolve<T>(JsonSerializerOptions? options = null)
         where T : IEmbed
     {
