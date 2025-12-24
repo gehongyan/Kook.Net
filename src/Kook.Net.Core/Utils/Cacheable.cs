@@ -37,6 +37,13 @@ public readonly struct Cacheable<TEntity, TId>
 
     private Func<Task<TEntity?>> DownloadFunc { get; }
 
+    /// <summary>
+    ///     创建一个新的可延迟加载的缓存实体。
+    /// </summary>
+    /// <param name="value"> 如果可以从缓存中获取实体，则为该实体；否则为 <c>null</c>。 </param>
+    /// <param name="id"> 实体的唯一标识符。 </param>
+    /// <param name="hasValue"> 指示实体是否已缓存的值。 </param>
+    /// <param name="downloadFunc"> 用于下载实体的异步函数。 </param>
     public Cacheable(TEntity? value, TId id, bool hasValue, Func<Task<TEntity?>> downloadFunc)
     {
         Value = value;
@@ -105,6 +112,13 @@ public readonly struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationsh
 
     private Func<Task<TDownloadableEntity?>> DownloadFunc { get; }
 
+    /// <summary>
+    ///     创建一个新的可延迟加载的缓存实体。
+    /// </summary>
+    /// <param name="value"> 如果可以从缓存中获取实体，则为该实体；否则为 <c>null</c>。 </param>
+    /// <param name="id"> 实体的唯一标识符。 </param>
+    /// <param name="hasValue"> 指示实体是否已缓存的值。 </param>
+    /// <param name="downloadFunc"> 用于下载实体的异步函数。 </param>
     public Cacheable(TCachedEntity? value, TId id, bool hasValue, Func<Task<TDownloadableEntity?>> downloadFunc)
     {
         Value = value;
