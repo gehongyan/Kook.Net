@@ -30,7 +30,7 @@ public static class ChannelExtensions
         channel switch
         {
             IDMChannel dmChannel => $"https://www.kookapp.cn/app/home/privatemessage/{dmChannel.Recipient.Id}",
-            IGuildChannel guildChannel => $"https://www.kookapp.cn/app/channels/{guildChannel.GuildId}/{channel.Id}",
+            IGuildChannel guildChannel => $"https://www.kookapp.cn/direct/channel?g={guildChannel.Guild.Id}&c={guildChannel.Id}",
             _ => throw new ArgumentException("Channel must be a guild or a DM channel.", nameof(channel))
         };
 }
