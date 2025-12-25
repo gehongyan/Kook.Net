@@ -106,7 +106,7 @@ namespace Kook.Net.Converters;
 [JsonSerializable(typeof(Kook.API.Rest.DisposeVoiceGatewayParams))]
 [JsonSerializable(typeof(Kook.API.Rest.EndGameActivityParams))]
 [JsonSerializable(typeof(Kook.API.Rest.ExtendedGuild))]
-[JsonSerializable(typeof(Kook.API.Rest.FriendState))]
+[JsonSerializable(typeof(Kook.API.Rest.FriendState), TypeInfoPropertyName = "ApiFriendState")]
 [JsonSerializable(typeof(Kook.API.Rest.GetBotGatewayResponse))]
 [JsonSerializable(typeof(Kook.API.Rest.GetChannelPermissionOverwritesResponse))]
 [JsonSerializable(typeof(Kook.API.Rest.GetFriendStatesResponse))]
