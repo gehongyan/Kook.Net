@@ -97,8 +97,8 @@ internal class RequestBucket
                             if (response.Stream != null)
                                 try
                                 {
-                                    responseBase = await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream,
-                                        _serializerOptions);
+                                    responseBase = await JsonSerializer.DeserializeAsync(
+                                        response.Stream, _serializerOptions.GetTypedTypeInfo<API.Rest.RestResponseBase>());
                                 }
                                 catch
                                 {
@@ -120,8 +120,8 @@ internal class RequestBucket
                     KookDebugger.DebugRatelimit($"[Ratelimit] [{id}] Success");
                     if (response.MediaTypeHeader?.MediaType == "application/json")
                     {
-                        API.Rest.RestResponseBase? responseBase =
-                            await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream, _serializerOptions);
+                        API.Rest.RestResponseBase? responseBase = await JsonSerializer.DeserializeAsync(
+                            response.Stream, _serializerOptions.GetTypedTypeInfo<API.Rest.RestResponseBase>());
                         if (responseBase?.Code > (KookErrorCode)0)
                         {
                             throw new HttpException(

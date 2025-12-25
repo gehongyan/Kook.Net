@@ -41,9 +41,9 @@ try
 {
     await client.LoginAsync(TokenType.Bot, token);
     await client.StartAsync();
-    
+
     Console.WriteLine("Bot is running. Press Ctrl+C to exit.");
-    
+
     // 保持程序运行
     await Task.Delay(Timeout.Infinite);
 }
@@ -69,10 +69,10 @@ static Task ReadyAsync()
     return Task.CompletedTask;
 }
 
-static Task MessageReceivedAsync(SocketMessage message)
+static Task MessageReceivedAsync(SocketMessage message, SocketGuildUser user, SocketTextChannel channel)
 {
     // 忽略系统消息和 Bot 自己的消息
-    if (message.Author.IsBot == true || message.Author.IsSystemUser == true)
+    if (message.Author.IsBot == true || message.Author.IsSystemUser)
         return Task.CompletedTask;
 
     // 简单的 ping 命令

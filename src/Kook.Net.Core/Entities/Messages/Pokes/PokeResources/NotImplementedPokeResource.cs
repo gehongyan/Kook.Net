@@ -3,6 +3,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Kook;
 
@@ -36,9 +37,6 @@ public struct NotImplementedPokeResource : IPokeResource
     /// <param name="options"> 用于反序列化操作的选项。 </param>
     /// <typeparam name="T"> 要解析为的具体类型。 </typeparam>
     /// <returns> 解析后的 POKE 资源。 </returns>
-    /// <remarks>
-    ///     此方法使用运行时类型解析，不支持 NativeAOT。对于 NativeAOT 应用程序，请使用带有 <see cref="Func{TResult}"/> 参数的重载。
-    /// </remarks>
 #if NET5_0_OR_GREATER
     [RequiresUnreferencedCode("JSON serialization and deserialization might require types that cannot be statically analyzed. Use the overload that takes a resolving function for AOT applications.")]
     [RequiresDynamicCode("JSON serialization and deserialization might require types that cannot be statically analyzed and might need runtime code generation. Use the overload that takes a resolving function for AOT applications.")]
@@ -52,6 +50,34 @@ public struct NotImplementedPokeResource : IPokeResource
             NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
         T? pokeResource = JsonNode.Deserialize<T>(options);
+        return pokeResource;
+    }
+
+    /// <summary>
+    ///     通过 JSON 反序列化将 POKE 资源解析为具体类型。
+    /// </summary>
+    /// <param name="jsonTypeInfo"> 用于反序列化操作的类型信息。 </param>
+    /// <typeparam name="T"> 要解析为的具体类型。 </typeparam>
+    /// <returns> 解析后的 POKE 资源。 </returns>
+    public T? Resolve<T>(JsonTypeInfo jsonTypeInfo)
+        where T : IPokeResource
+    {
+        if (jsonTypeInfo is not JsonTypeInfo<T> typedJsonTypeInfo)
+            throw new ArgumentException($"The provided JsonTypeInfo is not of the expected type {typeof(T).FullName}.", nameof(jsonTypeInfo));
+        T? pokeResource = JsonNode.Deserialize(typedJsonTypeInfo);
+        return pokeResource;
+    }
+
+    /// <summary>
+    ///     通过 JSON 反序列化将 POKE 资源解析为具体类型。
+    /// </summary>
+    /// <param name="jsonTypeInfo"> 用于反序列化操作的类型信息。 </param>
+    /// <typeparam name="T"> 要解析为的具体类型。 </typeparam>
+    /// <returns> 解析后的 POKE 资源。 </returns>
+    public T? Resolve<T>(JsonTypeInfo<T> jsonTypeInfo)
+        where T : IPokeResource
+    {
+        T? pokeResource = JsonNode.Deserialize(jsonTypeInfo);
         return pokeResource;
     }
 

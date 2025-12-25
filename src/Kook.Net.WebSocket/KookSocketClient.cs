@@ -11,6 +11,7 @@ using Kook.Logging;
 using Kook.Net;
 using Kook.Net.Converters;
 using Kook.Net.Queue;
+using Kook.Net.Rest;
 using Kook.Net.Udp;
 using Kook.Net.WebSockets;
 using Kook.Rest;
@@ -528,7 +529,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                     case MessageTypeGroup:
                     {
                         GatewayEvent<GatewayGroupMessageExtraData>? gatewayEvent =
-                            payload.Deserialize<GatewayEvent<GatewayGroupMessageExtraData>>(_serializerOptions);
+                            payload.Deserialize(_serializerOptions.GetTypedTypeInfo<GatewayEvent<GatewayGroupMessageExtraData>>());
                         if (gatewayEvent is null)
                         {
                             await _gatewayLogger
@@ -542,7 +543,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                     case MessageTypePerson:
                     {
                         GatewayEvent<GatewayPersonMessageExtraData>? gatewayEvent =
-                            payload.Deserialize<GatewayEvent<GatewayPersonMessageExtraData>>(_serializerOptions);
+                            payload.Deserialize(_serializerOptions.GetTypedTypeInfo<GatewayEvent<GatewayPersonMessageExtraData>>());
                         if (gatewayEvent is null)
                         {
                             await _gatewayLogger
@@ -566,7 +567,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             case MessageType.System:
             {
                 GatewayEvent<GatewaySystemEventExtraData>? gatewayEvent =
-                    payload.Deserialize<GatewayEvent<GatewaySystemEventExtraData>>(_serializerOptions);
+                    payload.Deserialize(_serializerOptions.GetTypedTypeInfo<GatewayEvent<GatewaySystemEventExtraData>>());
                 if (gatewayEvent is not { ExtraData: { } extraData })
                 {
                     await _gatewayLogger

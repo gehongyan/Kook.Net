@@ -2,6 +2,7 @@ using Kook.API;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using Kook.Net.Rest;
 
 namespace Kook.Net.Converters;
 
@@ -15,29 +16,29 @@ internal class EmbedConverter : JsonConverter<EmbedBase>
         if (rawType == null) return null;
         return rawType switch
         {
-            "link" => JsonSerializer.Deserialize<API.LinkEmbed>(jsonNode.ToJsonString(), options),
-            "image" => JsonSerializer.Deserialize<API.ImageEmbed>(jsonNode.ToJsonString(), options),
-            "bili-video" => JsonSerializer.Deserialize<API.BilibiliVideoEmbed>(jsonNode.ToJsonString(), options),
-            "card" => JsonSerializer.Deserialize<API.CardEmbed>(jsonNode.ToJsonString(), options),
+            "link" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.LinkEmbed>()),
+            "image" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.ImageEmbed>()),
+            "bili-video" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.BilibiliVideoEmbed>()),
+            "card" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.CardEmbed>()),
             _ => new API.NotImplementedEmbed(rawType, jsonNode)
         };
     }
 
     public override void Write(Utf8JsonWriter writer, EmbedBase value, JsonSerializerOptions options)
     {
-        switch (value.Type)
+        switch (value)
         {
-            case EmbedType.Link:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.LinkEmbed, options));
+            case API.LinkEmbed { Type: EmbedType.Link } link:
+                writer.WriteRawValue(JsonSerializer.Serialize(link, options.GetTypedTypeInfo<API.LinkEmbed>()));
                 break;
-            case EmbedType.Image:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.ImageEmbed, options));
+            case API.ImageEmbed { Type: EmbedType.Image } image:
+                writer.WriteRawValue(JsonSerializer.Serialize(image, options.GetTypedTypeInfo<API.ImageEmbed>()));
                 break;
-            case EmbedType.BilibiliVideo:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.BilibiliVideoEmbed, options));
+            case API.BilibiliVideoEmbed { Type: EmbedType.BilibiliVideo } bilibiliVideo:
+                writer.WriteRawValue(JsonSerializer.Serialize(bilibiliVideo, options.GetTypedTypeInfo<API.BilibiliVideoEmbed>()));
                 break;
-            case EmbedType.Card:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.CardEmbed, options));
+            case API.CardEmbed { Type: EmbedType.Card } card:
+                writer.WriteRawValue(JsonSerializer.Serialize(card, options.GetTypedTypeInfo<API.CardEmbed>()));
                 break;
             default:
                 writer.WriteRawValue((value as API.NotImplementedEmbed)!.RawJsonNode.ToString());

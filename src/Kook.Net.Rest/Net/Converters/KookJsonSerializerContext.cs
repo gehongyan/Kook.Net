@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+// ReSharper disable RedundantNameQualifier
 
 namespace Kook.Net.Converters;
 
@@ -174,6 +175,4 @@ namespace Kook.Net.Converters;
 [JsonSerializable(typeof(System.Collections.Generic.IList<string>))]
 [JsonSerializable(typeof(System.Collections.Generic.List<string>))]
 [JsonSerializable(typeof(string[]))]
-internal partial class KookJsonSerializerContext : JsonSerializerContext
-{
-}
+internal partial class KookJsonSerializerContext : JsonSerializerContext;

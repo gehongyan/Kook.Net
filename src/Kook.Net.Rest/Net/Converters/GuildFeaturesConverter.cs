@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Kook.Net.Rest;
 
 namespace Kook.Net.Converters;
 
@@ -7,7 +8,7 @@ internal class GuildFeaturesConverter : JsonConverter<GuildFeatures>
 {
     public override GuildFeatures Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        IList<string> rawValues = JsonSerializer.Deserialize<IList<string>>(ref reader, options) ?? [];
+        IList<string> rawValues = JsonSerializer.Deserialize(ref reader, options.GetTypedTypeInfo<IList<string>>()) ?? [];
         GuildFeature features = rawValues.Aggregate(GuildFeature.None,
             (current, item) => current | ApiStringToFeature(item));
         return new GuildFeatures(features, rawValues);
@@ -15,12 +16,15 @@ internal class GuildFeaturesConverter : JsonConverter<GuildFeatures>
 
     public override void Write(Utf8JsonWriter writer, GuildFeatures value, JsonSerializerOptions options)
     {
-        Array enumValues = Enum.GetValues(typeof(GuildFeature));
+#if NET8_0_OR_GREATER
+        IEnumerable<GuildFeature> values = Enum.GetValues<GuildFeature>();
+#else
+        IEnumerable<GuildFeature> values = Enum.GetValues(typeof(GuildFeature)).Cast<GuildFeature>();
+#endif
 
         writer.WriteStartArray();
-        foreach (object enumValue in enumValues)
+        foreach (GuildFeature val in values)
         {
-            GuildFeature val = (GuildFeature)enumValue;
             if (val is GuildFeature.None)
                 continue;
 

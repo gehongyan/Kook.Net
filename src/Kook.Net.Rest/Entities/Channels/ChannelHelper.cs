@@ -3,6 +3,7 @@ using Kook.API.Rest;
 using System.Collections.Immutable;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using Model = Kook.API.Channel;
 
@@ -234,7 +235,7 @@ internal static class ChannelHelper
             NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
         JsonTypeInfo typeInfo = serializerOptions.GetTypeInfo(typeof(T));
-        
+
         CreateMessageParams args = new()
         {
             Type = messageType,
@@ -458,7 +459,7 @@ internal static class ChannelHelper
             NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
         JsonTypeInfo typeInfo = serializerOptions.GetTypeInfo(typeof(T));
-        
+
         CreateDirectMessageParams args = new()
         {
             Type = messageType,

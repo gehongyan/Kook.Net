@@ -1,10 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using Kook.API;
 using Kook.Net.Converters;
+using Kook.Net.Rest;
 
 namespace Kook.Rest;
 
@@ -29,7 +29,7 @@ public static class CardJsonExtension
     {
         try
         {
-            CardBase? model = JsonSerializer.Deserialize<CardBase>(json, _options.Value);
+            CardBase? model = JsonSerializer.Deserialize(json, _options.Value.GetTypedTypeInfo<CardBase>());
 
             if (model is not null)
             {
@@ -57,7 +57,7 @@ public static class CardJsonExtension
     {
         try
         {
-            IEnumerable<CardBase>? models = JsonSerializer.Deserialize<IEnumerable<CardBase>>(json, _options.Value);
+            IEnumerable<CardBase>? models = JsonSerializer.Deserialize(json, _options.Value.GetTypedTypeInfo<IEnumerable<CardBase>>());
 
             if (models is not null)
             {
@@ -83,7 +83,7 @@ public static class CardJsonExtension
     /// <exception cref="InvalidOperationException"> 如果无法将 JSON 解析为单个卡片构造器。 </exception>
     public static ICardBuilder ParseSingle(string json)
     {
-        CardBase model = JsonSerializer.Deserialize<CardBase>(json, _options.Value)
+        CardBase model = JsonSerializer.Deserialize(json, _options.Value.GetTypedTypeInfo<CardBase>())
             ?? throw new JsonException("Unable to parse json into card.");
         return model.ToEntity().ToBuilder();
     }
@@ -96,7 +96,7 @@ public static class CardJsonExtension
     /// <exception cref="InvalidOperationException"> 如果无法将 JSON 解析为多个卡片构造器。 </exception>
     public static IEnumerable<ICardBuilder> ParseMany(string json)
     {
-        JsonTypeInfo<IEnumerable<CardBase>> typeInfo = _options.Value.GetTypeInfo<IEnumerable<CardBase>>();
+        JsonTypeInfo<IEnumerable<CardBase>> typeInfo = _options.Value.GetTypedTypeInfo<IEnumerable<CardBase>>();
         IEnumerable<CardBase> models = JsonSerializer.Deserialize(json, typeInfo)
             ?? throw new JsonException("Unable to parse json into cards.");
         return models.Select(x => x.ToEntity().ToBuilder());

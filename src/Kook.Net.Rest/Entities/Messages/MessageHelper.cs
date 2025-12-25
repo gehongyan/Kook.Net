@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using System.Text.RegularExpressions;
+using Kook.Net.Rest;
 using UserModel = Kook.API.User;
 
 namespace Kook.Rest;
@@ -256,7 +257,7 @@ internal static class MessageHelper
             NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
         JsonTypeInfo typeInfo = serializerOptions.GetTypeInfo(typeof(T));
-        
+
         ModifyMessageParams args = new()
         {
             MessageId = msgId,
@@ -364,7 +365,7 @@ internal static class MessageHelper
             NumberHandling = JsonNumberHandling.AllowReadingFromString
         };
         JsonTypeInfo typeInfo = serializerOptions.GetTypeInfo(typeof(T));
-        
+
         ModifyDirectMessageParams args = new()
         {
             TemplateId = templateId,
@@ -417,7 +418,7 @@ internal static class MessageHelper
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             Converters = { CardConverterFactory.Instance }
         };
-        JsonTypeInfo<CardBase[]> typeInfo = serializerOptions.GetTypeInfo<CardBase[]>();
+        JsonTypeInfo<CardBase[]> typeInfo = serializerOptions.GetTypedTypeInfo<CardBase[]>();
         CardBase[]? cardBases = JsonSerializer.Deserialize(json, typeInfo);
         if (cardBases is null)
             throw new InvalidOperationException("Failed to parse cards from the provided JSON.");
@@ -436,10 +437,10 @@ internal static class MessageHelper
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             Converters = { CardConverterFactory.Instance }
         };
-        
+
         // Materialize the enumerable to a list for serialization
         List<CardBase> cardBases = enumerable.Select(c => c.ToModel()).ToList();
-        JsonTypeInfo<List<CardBase>> typeInfo = serializerOptions.GetTypeInfo<List<CardBase>>();
+        JsonTypeInfo<List<CardBase>> typeInfo = serializerOptions.GetTypedTypeInfo<List<CardBase>>();
         return JsonSerializer.Serialize(cardBases, typeInfo);
     }
 

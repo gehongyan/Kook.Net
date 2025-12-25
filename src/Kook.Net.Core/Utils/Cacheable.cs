@@ -9,9 +9,6 @@ namespace Kook;
 /// </summary>
 /// <typeparam name="TEntity"> 可延迟加载的缓存实体的类型。 </typeparam>
 /// <typeparam name="TId"> 可延迟加载的缓存实体的 ID 的类型。 </typeparam>
-#if DEBUG
-[DebuggerDisplay("{DebuggerDisplay,nq}")]
-#endif
 public readonly struct Cacheable<TEntity, TId>
     where TEntity : IEntity<TId>
     where TId : IEquatable<TId>
@@ -70,11 +67,6 @@ public readonly struct Cacheable<TEntity, TId>
     /// </returns>
     public async Task<TEntity?> GetOrDownloadAsync() => HasValue ? Value : await DownloadAsync().ConfigureAwait(false);
 
-#if DEBUG
-    private string DebuggerDisplay => HasValue && Value != null
-        ? $"{Value.GetType().GetProperty("DebuggerDisplay", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(Value) ?? Value.ToString()} (Cacheable)"
-        : $"{Id} (Cacheable, {typeof(TEntity).Name})";
-#endif
 }
 
 /// <summary>
@@ -84,9 +76,6 @@ public readonly struct Cacheable<TEntity, TId>
 /// <typeparam name="TDownloadableEntity"> 可从 API 请求下载的实体的类型。 </typeparam>
 /// <typeparam name="TRelationship"> 由 <typeparamref name="TCachedEntity" /> 和 <typeparamref name="TDownloadableEntity" /> 共同继承或实现的类型。 </typeparam>
 /// <typeparam name="TId"> 可延迟加载的缓存实体的 ID 的类型。 </typeparam>
-#if DEBUG
-[DebuggerDisplay("{DebuggerDisplay,nq}")]
-#endif
 public readonly struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationship, TId>
     where TCachedEntity : IEntity<TId>, TRelationship
     where TDownloadableEntity : IEntity<TId>, TRelationship
@@ -145,9 +134,4 @@ public readonly struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationsh
     /// </returns>
     public async Task<TRelationship?> GetOrDownloadAsync() => HasValue ? Value : await DownloadAsync().ConfigureAwait(false);
 
-#if DEBUG
-    private string DebuggerDisplay => HasValue && Value != null
-        ? $"{Value.GetType().GetProperty("DebuggerDisplay", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(Value) ?? Value.ToString()} (Cacheable)"
-        : $"{Id} (Cacheable, {typeof(TRelationship).Name})";
-#endif
 }

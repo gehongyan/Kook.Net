@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using Kook.API.Rest;
 using Kook.Net;
 using Kook.Net.Converters;
@@ -1979,17 +1980,18 @@ internal class KookRestApiClient : IDisposable
     {
         if (payload is null)
             return null;
-        
+
         JsonSerializerOptions serializerOptions = options ?? _serializerOptions;
         JsonTypeInfo typeInfo = serializerOptions.GetTypeInfo(payload.GetType());
         return JsonSerializer.Serialize(payload, typeInfo);
     }
 
     protected async Task<T> DeserializeJsonAsync<T>(Stream jsonStream)
+        where T : class
     {
         try
         {
-            JsonTypeInfo<T> typeInfo = _serializerOptions.GetTypeInfo<T>();
+            JsonTypeInfo<T> typeInfo = _serializerOptions.GetTypedTypeInfo<T>();
             T? jsonObject = await JsonSerializer.DeserializeAsync(jsonStream, typeInfo).ConfigureAwait(false);
             if (jsonObject is null)
                 throw new JsonException($"Failed to deserialize JSON to type {typeof(T).FullName}");
