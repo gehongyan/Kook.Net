@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Kook.API;
+using Kook.Rest;
 
 namespace Kook.Net.Converters;
 
@@ -12,7 +13,7 @@ internal class NullableChannelConverter : JsonConverter<API.Channel?>
         switch (reader.TokenType)
         {
             case JsonTokenType.StartObject:
-                return JsonSerializer.Deserialize<Channel>(ref reader, options);
+                return JsonSerializer.Deserialize(ref reader, options.GetTypedTypeInfo<Channel>());
             case JsonTokenType.Null or JsonTokenType.StartArray:
                 reader.Skip();
                 return null;
@@ -30,6 +31,6 @@ internal class NullableChannelConverter : JsonConverter<API.Channel?>
             return;
         }
 
-        JsonSerializer.Serialize(writer, value, options);
+        JsonSerializer.Serialize(writer, value, options.GetTypedTypeInfo<Channel>());
     }
 }

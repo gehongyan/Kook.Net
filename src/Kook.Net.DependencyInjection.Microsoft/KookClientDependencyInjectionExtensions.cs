@@ -1,4 +1,5 @@
-﻿using Kook.Rest;
+﻿using System.Diagnostics.CodeAnalysis;
+using Kook.Rest;
 using Kook.Webhook;
 using Kook.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -120,10 +121,12 @@ public static partial class KookClientDependencyInjectionExtensions
     /// <typeparam name="TClient"> Webhook 客户端的类型。 </typeparam>
     /// <typeparam name="TConfig"> Webhook 客户端的配置类型。 </typeparam>
     /// <returns> 添加了 KOOK Webhook 客户端的服务集合。 </returns>
-    public static IServiceCollection AddKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
+    public static IServiceCollection AddKookWebhookClient<TClient,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TConfig>(
+        this IServiceCollection services,
         Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<TConfig> configure)
-        where TClient: KookWebhookClient
-        where TConfig: KookWebhookConfig
+        where TClient : KookWebhookClient
+        where TConfig : KookWebhookConfig
     {
         services.Configure(configure);
         services.AddKookWebhookClient(clientFactory);
@@ -159,12 +162,15 @@ public static partial class KookClientDependencyInjectionExtensions
     /// <typeparam name="TClient"> Webhook 客户端的类型。 </typeparam>
     /// <typeparam name="TConfig"> Webhook 客户端的配置类型。 </typeparam>
     /// <returns> 添加了 KOOK Webhook 客户端的服务集合。 </returns>
-    public static IServiceCollection AddKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
+    public static IServiceCollection AddKookWebhookClient<TClient,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TConfig>(
+        this IServiceCollection services,
         Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory)
-        where TClient: KookWebhookClient
-        where TConfig: KookWebhookConfig
+        where TClient : KookWebhookClient
+        where TConfig : KookWebhookConfig
     {
-        services.AddSingleton<TClient>(provider => clientFactory(provider, provider.GetRequiredService<IOptions<TConfig>>()));
+        services.AddSingleton<TClient>(provider =>
+            clientFactory(provider, provider.GetRequiredService<IOptions<TConfig>>()));
         services.AddKookWebhookClient<TClient>();
         return services;
     }

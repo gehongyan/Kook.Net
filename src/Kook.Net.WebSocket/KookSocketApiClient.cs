@@ -1,13 +1,15 @@
 using System.IO.Compression;
 using System.Text;
-using System.Diagnostics;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Kook.API.Gateway;
 using Kook.API.Rest;
+using Kook.Net.Contexts;
+using Kook.Net.Converters;
 using Kook.Net.Queue;
 using Kook.Net.Rest;
 using Kook.Net.WebSockets;
+using Kook.Rest;
 using Kook.WebSocket;
 
 namespace Kook.API;
@@ -44,12 +46,6 @@ internal class KookSocketApiClient : KookRestApiClient
     private Guid? _sessionId;
     private int _lastSeq;
 
-    private readonly JsonSerializerOptions _debugJsonSerializerOptions = new()
-    {
-        WriteIndented = true,
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-    };
-
     public ConnectionState ConnectionState { get; private set; }
     internal IWebSocketClient WebSocketClient { get; }
 
@@ -59,9 +55,10 @@ internal class KookSocketApiClient : KookRestApiClient
         RetryMode defaultRetryMode = RetryMode.AlwaysRetry,
         JsonSerializerOptions? serializerOptions = null,
         Func<IRateLimitInfo, Task>? defaultRatelimitCallback = null)
-        : base(restClientProvider, userAgent, acceptLanguage,
-            defaultRetryMode, serializerOptions, defaultRatelimitCallback)
+        : base(restClientProvider, userAgent, acceptLanguage, defaultRetryMode,
+            serializerOptions, defaultRatelimitCallback)
     {
+        InjectJsonTypeInfos(KookWebSocketJsonSerializerContext.Default.Options.TypeInfoResolverChain);
         _gatewayUrl = url;
         if (url != null)
             _isExplicitUrl = true;
@@ -97,19 +94,15 @@ internal class KookSocketApiClient : KookRestApiClient
         decompressed.Position = 0;
 
         GatewaySocketFrame? gatewaySocketFrame = await JsonSerializer
-            .DeserializeAsync<GatewaySocketFrame>(decompressed, _serializerOptions);
+            .DeserializeAsync(decompressed, _serializerOptions.GetTypedTypeInfo<GatewaySocketFrame>());
         if (gatewaySocketFrame is not null)
         {
             if (KookDebugger.IsDebuggingPacket)
             {
                 string raw = Encoding.Default.GetString(decompressed.ToArray()).TrimEnd('\n');
-                string parsed = JsonSerializer
-                    .Serialize(gatewaySocketFrame.Payload, _debugJsonSerializerOptions)
-                    .TrimEnd('\n');
                 KookDebugger.DebugPacket($"""
                     [{DateTimeOffset.Now:HH:mm:ss}] <- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence}
                     [Raw] {raw}
-                    [Parsed] {parsed}
                     """);
             }
             JsonElement payloadElement = gatewaySocketFrame.Payload ?? EmptyJsonElement;
@@ -122,18 +115,14 @@ internal class KookSocketApiClient : KookRestApiClient
 
     private async Task OnTextMessage(string message)
     {
-        GatewaySocketFrame? gatewaySocketFrame = JsonSerializer.Deserialize<GatewaySocketFrame>(message, _serializerOptions);
+        GatewaySocketFrame? gatewaySocketFrame = JsonSerializer.Deserialize(message, _serializerOptions.GetTypedTypeInfo<GatewaySocketFrame>());
         if (gatewaySocketFrame is null)
             return;
         if (KookDebugger.IsDebuggingPacket)
         {
-            string parsed = JsonSerializer
-                .Serialize(gatewaySocketFrame.Payload, _debugJsonSerializerOptions)
-                .TrimEnd('\n');
             KookDebugger.DebugPacket($"""
                 [{DateTimeOffset.Now:HH:mm:ss}] <- [{gatewaySocketFrame.Type}] : #{gatewaySocketFrame.Sequence}
                 [Raw] {message}
-                [Parsed] {parsed}
                 """);
         }
         JsonElement payloadElement = gatewaySocketFrame.Payload ?? EmptyJsonElement;
@@ -287,7 +276,7 @@ internal class KookSocketApiClient : KookRestApiClient
         await _sentGatewayMessageEvent.InvokeAsync(gatewaySocketFrameType).ConfigureAwait(false);
         if (KookDebugger.IsDebuggingPacket)
         {
-            string payloadString = JsonSerializer.Serialize(payload, _debugJsonSerializerOptions);
+            string payloadString = JsonSerializer.Serialize(payload, _serializerOptions.GetTypedTypeInfo<JsonElement?>());
             KookDebugger.DebugPacket(
                 $"[{DateTimeOffset.Now:HH:mm:ss}] -> [{gatewaySocketFrameType}] : #{sequence} \n{payloadString}".TrimEnd('\n'));
         }

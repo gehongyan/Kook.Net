@@ -435,9 +435,13 @@ public struct GuildPermissions
     {
         if (!Has(permissions))
         {
+#if NET8_0_OR_GREATER
+            IEnumerable<GuildPermission> vals = Enum.GetValues<GuildPermission>();
+#else
             IEnumerable<GuildPermission> vals = Enum
                 .GetValues(typeof(GuildPermission))
                 .Cast<GuildPermission>();
+#endif
             ulong currentValues = RawValue;
             IEnumerable<GuildPermission> missingValues = vals
                 .Where(x => permissions.HasFlag(x) && !Permissions.GetValue(currentValues, x))
