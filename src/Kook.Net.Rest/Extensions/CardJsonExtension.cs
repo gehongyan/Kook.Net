@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using Kook.API;
 using Kook.Net.Converters;
 
@@ -95,7 +96,8 @@ public static class CardJsonExtension
     /// <exception cref="InvalidOperationException"> 如果无法将 JSON 解析为多个卡片构造器。 </exception>
     public static IEnumerable<ICardBuilder> ParseMany(string json)
     {
-        IEnumerable<CardBase> models = JsonSerializer.Deserialize<IEnumerable<CardBase>>(json, _options.Value)
+        JsonTypeInfo<IEnumerable<CardBase>> typeInfo = _options.Value.GetTypeInfo<IEnumerable<CardBase>>();
+        IEnumerable<CardBase> models = JsonSerializer.Deserialize(json, typeInfo)
             ?? throw new JsonException("Unable to parse json into cards.");
         return models.Select(x => x.ToEntity().ToBuilder());
     }
@@ -123,6 +125,8 @@ public static class CardJsonExtension
             WriteIndented = writeIndented,
             Converters = { CardConverterFactory.Instance }
         };
-        return JsonSerializer.Serialize(card.ToModel(), options);
+        CardBase model = card.ToModel();
+        JsonTypeInfo typeInfo = options.GetTypeInfo(model.GetType());
+        return JsonSerializer.Serialize(model, typeInfo);
     }
 }

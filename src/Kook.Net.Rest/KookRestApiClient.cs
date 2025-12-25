@@ -1975,14 +1975,22 @@ internal class KookRestApiClient : IDisposable
         Math.Round((double)stopwatch.ElapsedTicks / Stopwatch.Frequency * 1000.0, 2);
 
     [return: NotNullIfNotNull(nameof(payload))]
-    protected string? SerializeJson(object? payload, JsonSerializerOptions? options = null) =>
-        payload is null ? null : JsonSerializer.Serialize(payload, payload.GetType(), options ?? _serializerOptions);
+    protected string? SerializeJson(object? payload, JsonSerializerOptions? options = null)
+    {
+        if (payload is null)
+            return null;
+        
+        JsonSerializerOptions serializerOptions = options ?? _serializerOptions;
+        JsonTypeInfo typeInfo = serializerOptions.GetTypeInfo(payload.GetType());
+        return JsonSerializer.Serialize(payload, typeInfo);
+    }
 
     protected async Task<T> DeserializeJsonAsync<T>(Stream jsonStream)
     {
         try
         {
-            T? jsonObject = await JsonSerializer.DeserializeAsync(jsonStream, typeof(T), _serializerOptions).ConfigureAwait(false) as T;
+            JsonTypeInfo<T> typeInfo = _serializerOptions.GetTypeInfo<T>();
+            T? jsonObject = await JsonSerializer.DeserializeAsync(jsonStream, typeInfo).ConfigureAwait(false);
             if (jsonObject is null)
                 throw new JsonException($"Failed to deserialize JSON to type {typeof(T).FullName}");
             return jsonObject;

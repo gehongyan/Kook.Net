@@ -5,6 +5,7 @@ using System.Collections.Immutable;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using System.Text.RegularExpressions;
 using UserModel = Kook.API.User;
 
@@ -249,11 +250,18 @@ internal static class MessageHelper
     public static async Task ModifyAsync<T>(Guid msgId, BaseKookClient client, ulong templateId, T parameters,
         IQuote? quote, IUser? ephemeralUser, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
     {
+        JsonSerializerOptions serializerOptions = jsonSerializerOptions ?? new JsonSerializerOptions
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString
+        };
+        JsonTypeInfo typeInfo = serializerOptions.GetTypeInfo(typeof(T));
+        
         ModifyMessageParams args = new()
         {
             MessageId = msgId,
             TemplateId = templateId,
-            Content = JsonSerializer.Serialize(parameters, jsonSerializerOptions),
+            Content = JsonSerializer.Serialize(parameters, typeInfo),
             QuotedMessageId = QuoteToReferenceMessageId(quote),
             ReplyMessageId = QuoteToReplyMessageId(quote),
             EphemeralUserId = ephemeralUser?.Id
@@ -350,11 +358,18 @@ internal static class MessageHelper
     public static async Task ModifyDirectAsync<T>(Guid msgId, BaseKookClient client,
         ulong templateId, T parameters, IQuote? quote, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
     {
+        JsonSerializerOptions serializerOptions = jsonSerializerOptions ?? new JsonSerializerOptions
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            NumberHandling = JsonNumberHandling.AllowReadingFromString
+        };
+        JsonTypeInfo typeInfo = serializerOptions.GetTypeInfo(typeof(T));
+        
         ModifyDirectMessageParams args = new()
         {
             TemplateId = templateId,
             MessageId = msgId,
-            Content = JsonSerializer.Serialize(parameters, jsonSerializerOptions),
+            Content = JsonSerializer.Serialize(parameters, typeInfo),
             QuotedMessageId = QuoteToReferenceMessageId(quote),
             ReplyMessageId = QuoteToReplyMessageId(quote)
         };
@@ -397,13 +412,13 @@ internal static class MessageHelper
 
     public static ImmutableArray<ICard> ParseCards(string json)
     {
-        JsonSerializerOptions serializerOptions = new()
+        JsonSerializerOptions serializerOptions = new(KookJsonSerializerContext.Default.Options)
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            NumberHandling = JsonNumberHandling.AllowReadingFromString,
             Converters = { CardConverterFactory.Instance }
         };
-        CardBase[]? cardBases = JsonSerializer.Deserialize<CardBase[]>(json, serializerOptions);
+        JsonTypeInfo<CardBase[]> typeInfo = serializerOptions.GetTypeInfo<CardBase[]>();
+        CardBase[]? cardBases = JsonSerializer.Deserialize(json, typeInfo);
         if (cardBases is null)
             throw new InvalidOperationException("Failed to parse cards from the provided JSON.");
         return [..cardBases.Select(x => x.ToEntity())];
@@ -416,14 +431,16 @@ internal static class MessageHelper
         Preconditions.AtMost(enumerable.Sum(c => c.ModuleCount), maxModuleCount, nameof(cards),
             $"A max of {maxModuleCount} modules can be included in a card.");
 
-        JsonSerializerOptions serializerOptions = new()
+        JsonSerializerOptions serializerOptions = new(KookJsonSerializerContext.Default.Options)
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            NumberHandling = JsonNumberHandling.AllowReadingFromString,
-            Converters = { CardConverterFactory.Instance },
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            Converters = { CardConverterFactory.Instance }
         };
-        return JsonSerializer.Serialize(enumerable.Select(c => c.ToModel()), serializerOptions);
+        
+        // Materialize the enumerable to a list for serialization
+        List<CardBase> cardBases = enumerable.Select(c => c.ToModel()).ToList();
+        JsonTypeInfo<List<CardBase>> typeInfo = serializerOptions.GetTypeInfo<List<CardBase>>();
+        return JsonSerializer.Serialize(cardBases, typeInfo);
     }
 
     public static IReadOnlyCollection<Attachment> ParseAttachments(IEnumerable<ICard> cards)
