@@ -1,6 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Runtime.CompilerServices;
-using System.Text.Json;
 using Kook.API;
 using Kook.API.Rest;
 using Thread = Kook.API.Thread;

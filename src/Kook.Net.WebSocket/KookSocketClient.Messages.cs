@@ -4,9 +4,7 @@ using System.Text.Json;
 using Kook.API;
 using Kook.API.Gateway;
 using Kook.API.Rest;
-using Kook.Audio;
 using Kook.Net;
-using Kook.Net.Rest;
 using Kook.Rest;
 
 namespace Kook.WebSocket;

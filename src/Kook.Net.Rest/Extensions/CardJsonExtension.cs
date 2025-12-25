@@ -3,8 +3,8 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using Kook.API;
+using Kook.Net.Contexts;
 using Kook.Net.Converters;
-using Kook.Net.Rest;
 
 namespace Kook.Rest;
 
@@ -13,11 +13,13 @@ namespace Kook.Rest;
 /// </summary>
 public static class CardJsonExtension
 {
-    private static readonly Lazy<JsonSerializerOptions> _options = new(() => new JsonSerializerOptions(KookJsonSerializerContext.Default.Options)
-    {
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-        Converters = { CardConverterFactory.Instance }
-    });
+    private static readonly Lazy<JsonSerializerOptions> _options = new(() =>
+        new JsonSerializerOptions(KookRestJsonSerializerContext.Default.Options)
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Converters = { CardConverterFactory.Instance }
+        }
+    );
 
     /// <summary>
     ///     尝试将字符串解析为单个卡片构造器 <see cref="ICardBuilder"/>。
@@ -119,7 +121,7 @@ public static class CardJsonExtension
     /// <returns> 包含来自 <paramref name="card"/> 的数据的 JSON 字符串。 </returns>
     public static string ToJsonString(this ICard card, bool writeIndented = true)
     {
-        JsonSerializerOptions options = new(KookJsonSerializerContext.Default.Options)
+        JsonSerializerOptions options = new(KookRestJsonSerializerContext.Default.Options)
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             WriteIndented = writeIndented,

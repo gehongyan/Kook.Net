@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using Kook.API.Gateway;
 
-namespace Kook.Net.Converters;
+namespace Kook.Net.Contexts;
 
 /// <summary>
 ///     Provides JSON serialization context for Gateway models for Native AOT compatibility.
@@ -10,10 +10,10 @@ namespace Kook.Net.Converters;
     WriteIndented = false,
     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
     NumberHandling = JsonNumberHandling.AllowReadingFromString)]
+// Gateway Models
 [JsonSerializable(typeof(ChannelBatchDeleteEventItem))]
 [JsonSerializable(typeof(ChannelBatchUpdateEvent))]
 [JsonSerializable(typeof(ChannelDeleteEvent))]
-[JsonSerializable(typeof(ChannelSortCategory))]
 [JsonSerializable(typeof(ChannelSortEvent))]
 [JsonSerializable(typeof(DirectMessageButtonClickEvent))]
 [JsonSerializable(typeof(DirectMessageDeleteEvent))]
@@ -24,6 +24,7 @@ namespace Kook.Net.Converters;
 [JsonSerializable(typeof(GatewayPersonMessageExtraData))]
 [JsonSerializable(typeof(GatewayReconnectPayload))]
 [JsonSerializable(typeof(GatewaySocketFrame))]
+[JsonSerializable(typeof(GatewaySocketFrameType))]
 [JsonSerializable(typeof(GatewaySystemEventExtraData))]
 [JsonSerializable(typeof(GuildBanEvent))]
 [JsonSerializable(typeof(GuildEmojiEvent))]
@@ -47,6 +48,8 @@ namespace Kook.Net.Converters;
 [JsonSerializable(typeof(SelfGuildEvent))]
 [JsonSerializable(typeof(UserUpdateEvent))]
 [JsonSerializable(typeof(UserVoiceEvent))]
-internal partial class KookWebSocketJsonSerializerContext : JsonSerializerContext
-{
-}
+// Gateway Events
+[JsonSerializable(typeof(GatewayEvent<GatewayGroupMessageExtraData>))]
+[JsonSerializable(typeof(GatewayEvent<GatewayPersonMessageExtraData>))]
+[JsonSerializable(typeof(GatewayEvent<GatewaySystemEventExtraData>))]
+internal partial class KookWebSocketJsonSerializerContext : JsonSerializerContext;

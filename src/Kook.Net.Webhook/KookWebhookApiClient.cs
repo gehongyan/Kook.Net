@@ -4,13 +4,14 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Kook.API.Gateway;
 using Kook.API.Webhook;
+using Kook.Net.Contexts;
 using Kook.Net.Converters;
 using Kook.Net.Rest;
 using Kook.Net.Webhooks;
 using Kook.Net.WebSockets;
+using Kook.Rest;
 
 namespace Kook.API;
 
@@ -43,6 +44,7 @@ internal class KookWebhookApiClient : KookSocketApiClient
         : base(restClientProvider, webSocketProvider, userAgent,
             acceptLanguage, null, defaultRetryMode, serializerOptions, defaultRatelimitCallback)
     {
+        InjectJsonTypeInfos(KookWebhookJsonSerializerContext.Default.Options.TypeInfoResolverChain);
         _encryptKey = encryptKey;
         _verifyToken = verifyToken;
         WebhookClient = webhookProvider();

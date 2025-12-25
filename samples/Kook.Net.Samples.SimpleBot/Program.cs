@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Text.Json;
 using Kook;
 using Kook.Rest;
 using Kook.WebSocket;

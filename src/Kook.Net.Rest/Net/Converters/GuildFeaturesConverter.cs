@@ -1,6 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Kook.Net.Rest;
+using Kook.Rest;
 
 namespace Kook.Net.Converters;
 

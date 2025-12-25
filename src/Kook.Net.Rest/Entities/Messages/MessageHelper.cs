@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 using System.Text.RegularExpressions;
-using Kook.Net.Rest;
+using Kook.Net.Contexts;
 using UserModel = Kook.API.User;
 
 namespace Kook.Rest;
@@ -411,13 +411,15 @@ internal static class MessageHelper
         await client.ApiClient.UnpinAsync(args, options).ConfigureAwait(false);
     }
 
+    private static readonly JsonSerializerOptions serializerOptions = new(KookRestJsonSerializerContext.Default.Options)
+    {
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        WriteIndented = false,
+        Converters = { CardConverterFactory.Instance }
+    };
+
     public static ImmutableArray<ICard> ParseCards(string json)
     {
-        JsonSerializerOptions serializerOptions = new(KookJsonSerializerContext.Default.Options)
-        {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            Converters = { CardConverterFactory.Instance }
-        };
         JsonTypeInfo<CardBase[]> typeInfo = serializerOptions.GetTypedTypeInfo<CardBase[]>();
         CardBase[]? cardBases = JsonSerializer.Deserialize(json, typeInfo);
         if (cardBases is null)
@@ -432,15 +434,8 @@ internal static class MessageHelper
         Preconditions.AtMost(enumerable.Sum(c => c.ModuleCount), maxModuleCount, nameof(cards),
             $"A max of {maxModuleCount} modules can be included in a card.");
 
-        JsonSerializerOptions serializerOptions = new(KookJsonSerializerContext.Default.Options)
-        {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            Converters = { CardConverterFactory.Instance }
-        };
-
-        // Materialize the enumerable to a list for serialization
-        List<CardBase> cardBases = enumerable.Select(c => c.ToModel()).ToList();
-        JsonTypeInfo<List<CardBase>> typeInfo = serializerOptions.GetTypedTypeInfo<List<CardBase>>();
+        CardBase[] cardBases = enumerable.Select(c => c.ToModel()).ToArray();
+        JsonTypeInfo<CardBase[]> typeInfo = serializerOptions.GetTypedTypeInfo<CardBase[]>();
         return JsonSerializer.Serialize(cardBases, typeInfo);
     }
 

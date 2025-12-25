@@ -4,17 +4,27 @@ using System.Net.Http;
 
 using Kook.API;
 using Kook.API.Rest;
+using Kook.Net.Contexts;
 using Kook.Net.Queue;
 
 namespace Kook.Rest.Extensions;
 
 internal static class KookRestApiClientExperimentalExtensions
 {
+    private static readonly ConcurrentHashSet<int> _injectedInstances = [];
+
+    private static void EnsureJsonTypeInfosInjection(this KookRestApiClient client)
+    {
+        if (_injectedInstances.TryAdd(client.GetHashCode()))
+            client.InjectJsonTypeInfos(KookExperimentalJsonSerializerContexts.Default.Options.TypeInfoResolverChain);
+    }
+
     #region Guilds
 
     public static IAsyncEnumerable<IReadOnlyCollection<Guild>> GetAdminGuildsAsync(this KookRestApiClient client,
         int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions? options = null)
     {
+        client.EnsureJsonTypeInfosInjection();
         options = RequestOptions.CreateOrClone(options);
         KookRestApiClient.BucketIds ids = new();
         return client.SendPagedAsync<Guild>(HttpMethod.Get,
@@ -29,6 +39,7 @@ internal static class KookRestApiClientExperimentalExtensions
     public static async Task ValidateCardsAsync(this KookRestApiClient client,
         ValidateCardsParams args, RequestOptions? options = null)
     {
+        client.EnsureJsonTypeInfosInjection();
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotNullOrEmpty(args.Content, nameof(args.Content));
         options = RequestOptions.CreateOrClone(options);
@@ -46,6 +57,7 @@ internal static class KookRestApiClientExperimentalExtensions
     public static async Task<IReadOnlyCollection<API.Rest.ThreadTag>> QueryThreadTagsAsync(this KookRestApiClient client,
         string keyword, RequestOptions? options = null)
     {
+        client.EnsureJsonTypeInfosInjection();
         Preconditions.NotNullOrEmpty(keyword, nameof(keyword));
         options = RequestOptions.CreateOrClone(options);
 

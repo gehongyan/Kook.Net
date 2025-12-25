@@ -1,10 +1,13 @@
-﻿using Kook.Webhook;
+﻿using System.Diagnostics.CodeAnalysis;
+using Kook.Webhook;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace Kook.Net.DependencyInjection.Microsoft;
 
-internal class KookWebhookClientConfigurator<TClient, TConfig> : KookClientConfigurator<TClient, TConfig>
+internal class KookWebhookClientConfigurator<TClient,
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TConfig> :
+    KookClientConfigurator<TClient, TConfig>
     where TClient : KookWebhookClient
     where TConfig : KookWebhookConfig
 {

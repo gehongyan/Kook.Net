@@ -3,15 +3,14 @@ using System.Collections.Immutable;
 using System.Net;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Kook.API;
 using Kook.API.Gateway;
 using Kook.API.Rest;
 using Kook.Logging;
 using Kook.Net;
+using Kook.Net.Contexts;
 using Kook.Net.Converters;
 using Kook.Net.Queue;
-using Kook.Net.Rest;
 using Kook.Net.Udp;
 using Kook.Net.WebSockets;
 using Kook.Rest;
@@ -144,7 +143,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             Converters = { CardConverterFactory.Instance }
         };
         // Also add Rest context for API models
-        _serializerOptions.TypeInfoResolverChain.Insert(0, KookJsonSerializerContext.Default);
+        _serializerOptions.TypeInfoResolverChain.Insert(0, KookRestJsonSerializerContext.Default);
 
         ApiClient.SentGatewayMessage += async socketFrameType =>
             await _gatewayLogger.DebugAsync($"Sent {socketFrameType}").ConfigureAwait(false);

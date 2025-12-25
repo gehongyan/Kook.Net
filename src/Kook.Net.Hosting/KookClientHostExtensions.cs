@@ -1,4 +1,5 @@
-﻿using Kook.Net.DependencyInjection.Microsoft;
+﻿using System.Diagnostics.CodeAnalysis;
+using Kook.Net.DependencyInjection.Microsoft;
 using Kook.Rest;
 using Kook.Webhook;
 using Kook.WebSocket;
@@ -195,7 +196,8 @@ public static class KookClientHostExtensions
     /// <typeparam name="TClient"> 客户端的类型。 </typeparam>
     /// <typeparam name="TConfig"> 配置的类型。 </typeparam>
     /// <returns> 添加了基于 Webhook 的 KOOK 网关客户端及服务的服务集合。 </returns>
-    public static IServiceCollection AddHostedKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
+    public static IServiceCollection AddHostedKookWebhookClient<TClient,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TConfig>(this IServiceCollection services,
         Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<TConfig> configure,
         Func<IServiceProvider, TokenType> tokenType, Func<IServiceProvider, string> token,
         Func<IServiceProvider, bool>? validateToken = null)
@@ -255,7 +257,8 @@ public static class KookClientHostExtensions
     /// <typeparam name="TClient"> 客户端的类型。 </typeparam>
     /// <typeparam name="TConfig"> 配置的类型。 </typeparam>
     /// <returns> 添加了基于 Webhook 的 KOOK 网关客户端及服务的服务集合。 </returns>
-    public static IServiceCollection AddHostedKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
+    public static IServiceCollection AddHostedKookWebhookClient<TClient,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TConfig>(this IServiceCollection services,
         Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<TConfig> configure,
         TokenType tokenType, string token, bool validateToken = true)
         where TClient : KookWebhookClient

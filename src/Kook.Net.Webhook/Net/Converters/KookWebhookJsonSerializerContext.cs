@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using Kook.API.Webhook;
 
-namespace Kook.Net.Converters;
+namespace Kook.Net.Contexts;
 
 /// <summary>
 ///     Provides JSON serialization context for Webhook models for Native AOT compatibility.
@@ -12,6 +12,4 @@ namespace Kook.Net.Converters;
     NumberHandling = JsonNumberHandling.AllowReadingFromString)]
 [JsonSerializable(typeof(GatewayChallengeFrame))]
 [JsonSerializable(typeof(GatewayEncryptedFrame))]
-internal partial class KookWebhookJsonSerializerContext : JsonSerializerContext
-{
-}
+internal partial class KookWebhookJsonSerializerContext : JsonSerializerContext;

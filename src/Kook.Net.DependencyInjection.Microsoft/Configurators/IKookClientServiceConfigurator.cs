@@ -1,4 +1,5 @@
-﻿using Kook.Rest;
+﻿using System.Diagnostics.CodeAnalysis;
+using Kook.Rest;
 using Kook.Webhook;
 using Kook.WebSocket;
 using Microsoft.Extensions.Options;
@@ -32,7 +33,8 @@ public interface IKookClientServiceConfigurator : IKookClientConfiguratorComplet
     /// <typeparam name="TClient"> 客户端的类型。 </typeparam>
     /// <typeparam name="TConfig"> 配置的类型。 </typeparam>
     /// <returns> 配置了基于 Webhook 的网关客户端的配置器。 </returns>
-    IKookClientConfigurator<TClient, TConfig> UseWebhookClient<TClient, TConfig>(
+    IKookClientConfigurator<TClient, TConfig> UseWebhookClient<TClient,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TConfig>(
         Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<TConfig> configure)
         where TClient : KookWebhookClient
         where TConfig : KookWebhookConfig;
