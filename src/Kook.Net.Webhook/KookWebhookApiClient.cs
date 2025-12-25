@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Kook.API.Gateway;
 using Kook.API.Webhook;
+using Kook.Net.Converters;
 using Kook.Net.Rest;
 using Kook.Net.Webhooks;
 using Kook.Net.WebSockets;
@@ -23,10 +24,9 @@ internal class KookWebhookApiClient : KookSocketApiClient
 
     private readonly AsyncEvent<Func<string, Task>> _webhookChallenge = new();
 
-    private static readonly JsonSerializerOptions SerializerOptions = new()
+    private static readonly JsonSerializerOptions SerializerOptions = new(KookWebhookJsonSerializerContext.Default.Options)
     {
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-        NumberHandling = JsonNumberHandling.AllowReadingFromString
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
     };
 
     private readonly string _encryptKey;
@@ -75,14 +75,14 @@ internal class KookWebhookApiClient : KookSocketApiClient
         decompressed.Position = 0;
 
 #if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-        GatewayEncryptedFrame? gatewayEncryptedFrame = await JsonSerializer.DeserializeAsync<GatewayEncryptedFrame>(decompressed, _serializerOptions);
+        GatewayEncryptedFrame? gatewayEncryptedFrame = await JsonSerializer.DeserializeAsync(decompressed, _serializerOptions.GetTypedTypeInfo<GatewayEncryptedFrame>());
 #else
-        GatewayEncryptedFrame? gatewayEncryptedFrame = JsonSerializer.Deserialize<GatewayEncryptedFrame>(decompressed, _serializerOptions);
+        GatewayEncryptedFrame? gatewayEncryptedFrame = JsonSerializer.Deserialize(decompressed, _serializerOptions.GetTypedTypeInfo<GatewayEncryptedFrame>());
 #endif
         if (gatewayEncryptedFrame is null)
             return null;
         string decryptedFrame = Decrypt(gatewayEncryptedFrame.Encrypted, _encryptKey);
-        GatewaySocketFrame? gatewaySocketFrame = JsonSerializer.Deserialize<GatewaySocketFrame>(decryptedFrame, _serializerOptions);
+        GatewaySocketFrame? gatewaySocketFrame = JsonSerializer.Deserialize(decryptedFrame, _serializerOptions.GetTypedTypeInfo<GatewaySocketFrame>());
         if (gatewaySocketFrame is null)
             return null;
         JsonElement payloadElement = gatewaySocketFrame.Payload ?? EmptyJsonElement;
@@ -91,7 +91,7 @@ internal class KookWebhookApiClient : KookSocketApiClient
         if (TryParseWebhookChallenge(gatewaySocketFrame.Type, payloadElement, out string? challenge))
         {
             await _webhookChallenge.InvokeAsync(challenge);
-            return JsonSerializer.Serialize(new GatewayChallengeFrame { Challenge = challenge }, SerializerOptions);
+            return JsonSerializer.Serialize(new GatewayChallengeFrame { Challenge = challenge }, SerializerOptions.GetTypedTypeInfo<GatewayChallengeFrame>());
         }
 
         await _receivedGatewayEvent
@@ -102,11 +102,11 @@ internal class KookWebhookApiClient : KookSocketApiClient
 
     private async Task<string?> OnTextMessage(string message)
     {
-        GatewayEncryptedFrame? gatewayEncryptedFrame = JsonSerializer.Deserialize<GatewayEncryptedFrame>(message, _serializerOptions);
+        GatewayEncryptedFrame? gatewayEncryptedFrame = JsonSerializer.Deserialize(message, _serializerOptions.GetTypedTypeInfo<GatewayEncryptedFrame>());
         if (gatewayEncryptedFrame is null)
             return null;
         string decryptedFrame = Decrypt(gatewayEncryptedFrame.Encrypted, _encryptKey);
-        GatewaySocketFrame? gatewaySocketFrame = JsonSerializer.Deserialize<GatewaySocketFrame>(decryptedFrame, _serializerOptions);
+        GatewaySocketFrame? gatewaySocketFrame = JsonSerializer.Deserialize(decryptedFrame, _serializerOptions.GetTypedTypeInfo<GatewaySocketFrame>());
         if (gatewaySocketFrame is null)
             return null;
         JsonElement payloadElement = gatewaySocketFrame.Payload ?? EmptyJsonElement;
@@ -115,7 +115,7 @@ internal class KookWebhookApiClient : KookSocketApiClient
         if (TryParseWebhookChallenge(gatewaySocketFrame.Type, payloadElement, out string? challenge))
         {
             await _webhookChallenge.InvokeAsync(challenge);
-            return JsonSerializer.Serialize(new GatewayChallengeFrame { Challenge = challenge }, SerializerOptions);
+            return JsonSerializer.Serialize(new GatewayChallengeFrame { Challenge = challenge }, SerializerOptions.GetTypedTypeInfo<GatewayChallengeFrame>());
         }
 
         await _receivedGatewayEvent

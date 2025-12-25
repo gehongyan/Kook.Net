@@ -138,11 +138,13 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
         _nextAudioId = 1;
 
-        _serializerOptions = new JsonSerializerOptions(KookJsonSerializerContext.Default.Options)
+        _serializerOptions = new JsonSerializerOptions(KookWebSocketJsonSerializerContext.Default.Options)
         {
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             Converters = { CardConverterFactory.Instance }
         };
+        // Also add Rest context for API models
+        _serializerOptions.TypeInfoResolverChain.Insert(0, KookJsonSerializerContext.Default);
 
         ApiClient.SentGatewayMessage += async socketFrameType =>
             await _gatewayLogger.DebugAsync($"Sent {socketFrameType}").ConfigureAwait(false);

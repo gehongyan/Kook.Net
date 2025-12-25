@@ -45,7 +45,7 @@ internal class KookSocketApiClient : KookRestApiClient
     private Guid? _sessionId;
     private int _lastSeq;
 
-    private readonly JsonSerializerOptions _debugJsonSerializerOptions = new(KookJsonSerializerContext.Default.Options)
+    private readonly JsonSerializerOptions _debugJsonSerializerOptions = new(KookWebSocketJsonSerializerContext.Default.Options)
     {
         WriteIndented = true,
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
