@@ -2082,8 +2082,12 @@ internal class KookRestApiClient : IDisposable
         ids.HttpMethod = httpMethod;
         Func<BucketIds, BucketId> func = _bucketIdGenerators.GetOrAdd(
             callingMethod,
+#if NETSTANDARD2_1_OR_GREATER || NET6_0_OR_GREATER
             static (_, arg) => CreateBucketId(arg),
             endpointExpr
+#else
+            _ => CreateBucketId(endpointExpr)
+#endif
         );
         return func(ids);
     }
@@ -2095,7 +2099,12 @@ internal class KookRestApiClient : IDisposable
         ids.HttpMethod = httpMethod;
         Func<BucketIds, BucketId> func = _bucketIdGenerators.GetOrAdd(
             callingMethod,
-            static (_, arg) => CreateBucketId(arg.endpointExpr, arg.arg1, arg.arg2), (endpointExpr, arg1, arg2)
+#if NETSTANDARD2_1_OR_GREATER || NET6_0_OR_GREATER
+            static (_, arg) => CreateBucketId(arg.endpointExpr, arg.arg1, arg.arg2),
+            (endpointExpr, arg1, arg2)
+#else
+            _ => CreateBucketId(endpointExpr, arg1, arg2)
+#endif
         );
         return func(ids);
     }
