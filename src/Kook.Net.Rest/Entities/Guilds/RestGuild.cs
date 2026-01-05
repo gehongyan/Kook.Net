@@ -242,7 +242,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
         WelcomeChannelId = model.WelcomeChannelId != 0 ? model.WelcomeChannelId : null;
         IsAvailable = true;
 
-        if (model.Roles is { Length: 0 })
+        if (model.Roles is { Length: > 0 })
         {
             ImmutableDictionary<uint, RestRole>.Builder roles =
                 ImmutableDictionary.CreateBuilder<uint, RestRole>();
