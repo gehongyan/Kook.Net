@@ -1,0 +1,27 @@
+name: Publish Test Results
+
+on:
+  workflow_call:
+
+jobs:
+  publish_test_results:
+    name: Publish Test Results
+    runs-on: ubuntu-latest
+    if: always()
+    permissions:
+      checks: write
+      pull-requests: write
+    steps:
+      - name: Download Test Results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: test-results-*
+          merge-multiple: true
+          path: test-results
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: 'test-results/**/*.trx'
+          check_name: 'Test Results (All Platforms)'
+

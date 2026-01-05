@@ -19,6 +19,11 @@ jobs:
       target: ${{ matrix.target }}
       dotnet-version: 10.0.x
 
+  publish_test_results:
+    name: Publish Test Results
+    needs: build_and_test
+    uses: ./.github/workflows/publish-test-results.yml
+
   call_doc:
     name: Generate Documentation
     needs: build_and_test
