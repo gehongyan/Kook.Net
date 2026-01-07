@@ -50,10 +50,10 @@ public class SocketRole : SocketEntity<uint>, IRole
     public bool IsEveryone => Id == 0;
 
     /// <inheritdoc />
-    public string KMarkdownMention => IsEveryone ? MentionUtils.KMarkdownMentionRole("all") : MentionUtils.KMarkdownMentionRole(Id);
+    public string KMarkdownMention => IsEveryone ? MentionUtils.KMarkdownMentionEveryone() : MentionUtils.KMarkdownMentionRole(Id);
 
     /// <inheritdoc />
-    public string PlainTextMention => IsEveryone ? "@全体成员" : MentionUtils.PlainTextMentionRole(Id);
+    public string PlainTextMention => IsEveryone ? MentionUtils.PlainTextMentionEveryone() : MentionUtils.PlainTextMentionRole(Id);
 
     /// <summary>
     ///     获取拥有此角色的所有用户。
