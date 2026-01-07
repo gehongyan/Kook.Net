@@ -61,6 +61,18 @@ public static class MentionUtils
     /// <returns> 格式化为 KMarkdown 的角色提及字符串。 </returns>
     public static string KMarkdownMentionRole(uint id) => KMarkdownMentionRole(id.ToString());
 
+    /// <summary>
+    ///     返回 KMarkdown 格式化全体成员提及字符串。
+    /// </summary>
+    /// <returns> 格式化为 KMarkdown 的全体成员提及字符串。 </returns>
+    public static string KMarkdownMentionEveryone() => "(met)all(met)";
+
+    /// <summary>
+    ///     返回 KMarkdown 格式化在线成员提及字符串。
+    /// </summary>
+    /// <returns> 格式化为 KMarkdown 的在线成员提及字符串。 </returns>
+    public static string KMarkdownMentionHere() => "(met)here(met)";
+
     internal static string PlainTextMentionUser(string username, string id) => $"@{username}#{id}";
 
     /// <summary>
@@ -85,6 +97,18 @@ public static class MentionUtils
     /// </summary>
     /// <returns> 格式化为纯文本的角色提及字符串。 </returns>
     public static string PlainTextMentionRole(uint id) => PlainTextMentionRole(id.ToString());
+
+    /// <summary>
+    ///     返回纯文本格式化全体成员提及字符串。
+    /// </summary>
+    /// <returns> 格式化为纯文本的全体成员提及字符串。 </returns>
+    public static string PlainTextMentionEveryone() => "@全体成员";
+
+    /// <summary>
+    ///     返回纯文本格式化在线成员提及字符串。
+    /// </summary>
+    /// <returns> 格式化为纯文本的在线成员提及字符串。 </returns>
+    public static string PlainTextMentionHere() => "@在线成员";
 
     /// <summary>
     ///     将指定的用户提及字符串解析为用户 ID。
