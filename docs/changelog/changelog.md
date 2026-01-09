@@ -5,6 +5,27 @@ title: 变更日志
 
 # 变更日志
 
+## v0.10.5 [2026-01-09]
+
+### 新增
+
+- 新增 `DirectLinks`，提供了一组 KOOK 客户端所支持的跳转链接。
+
+### 修复
+
+- 修复 `RestGuild.Roles` 为空的问题。
+- 修复 `RestRole` 及 `SocketRole` 的 `KMarkdownMention` 格式不正确的问题。
+
+### 变更
+
+- `Cacheable` 构造函数的可访问性变更为 `public`
+- `ChannelExtensions.GetJumpUrl` 对于 `IGuildChannel` 获取的链接现在使用官方支持的跳转链接格式。
+
+### 其他
+
+- 优化工作流，在提交检查与合并请求中上传测试结果。
+- .NET 9.0 及以上的版本中，互斥锁使用 `System.Threading.Lock`。
+
 ## v0.10.4 [2025-12-23]
 
 ### 新增
