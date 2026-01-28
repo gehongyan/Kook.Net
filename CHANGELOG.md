@@ -2,6 +2,27 @@
 
 ---
 
+## v0.10.5 [2026-01-09]
+
+### Added
+
+- Added `DirectLinks`, which provides a set of jump links supported by the KOOK client.
+
+### Fixed
+
+- Fixed an issue where `RestGuild.Roles` was empty.
+- Fixed an issue where the `KMarkdownMention` format of `RestRole` and `SocketRole` was incorrect.
+
+### Changed
+
+- Changed the accessibility of the `Cacheable` constructor to `public`.
+- `ChannelExtensions.GetJumpUrl` now uses the officially supported jump link format for links obtained from `IGuildChannel`.
+
+### Misc
+
+- Optimized workflows to upload test results during commit checks and pull requests.
+- Mutex now uses `System.Threading.Lock` in .NET 9.0 and above.
+
 ## v0.10.4 [2025-12-23]
 
 ### Added

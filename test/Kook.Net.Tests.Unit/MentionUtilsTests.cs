@@ -48,6 +48,28 @@ public class MentionUtilsTests
         Assert.Equal("(rol)123(rol)", MentionUtils.KMarkdownMentionRole("123"));
     }
 
+    /// <summary>
+    ///     Tests <see cref="MentionUtils.PlainTextMentionEveryone"/>
+    ///     and <see cref="MentionUtils.KMarkdownMentionEveryone"/>
+    /// </summary>
+    [Fact]
+    public void MentionEveryone()
+    {
+        Assert.Equal("@全体成员", MentionUtils.PlainTextMentionEveryone());
+        Assert.Equal("(met)all(met)", MentionUtils.KMarkdownMentionEveryone());
+    }
+
+    /// <summary>
+    ///     Tests <see cref="MentionUtils.PlainTextMentionHere"/>
+    ///     and <see cref="MentionUtils.KMarkdownMentionHere"/>
+    /// </summary>
+    [Fact]
+    public void MentionHere()
+    {
+        Assert.Equal("@在线成员", MentionUtils.PlainTextMentionHere());
+        Assert.Equal("(met)here(met)", MentionUtils.KMarkdownMentionHere());
+    }
+
     [Theory]
     [InlineData("@test_username#123", TagMode.PlainText, 123)]
     [InlineData("(met)123(met)", TagMode.KMarkdown, 123)]

@@ -13,7 +13,11 @@ internal class RequestBucket
 {
     private const int MinimumSleepTimeMs = 750;
 
-    private readonly object _lock;
+#if NET9_0_OR_GREATER
+    private readonly Lock _lock = new();
+#else
+    private readonly object _lock = new();
+#endif
     private readonly RequestQueue _queue;
     private int _semaphore;
     private DateTimeOffset? _resetTick;
@@ -32,8 +36,6 @@ internal class RequestBucket
         };
         _queue = queue;
         Id = id;
-
-        _lock = new object();
 
         if (request.Options.IsClientBucket && request.Options.BucketId != null)
             WindowCount = ClientBucket.Get(request.Options.BucketId).WindowCount;
