@@ -2,6 +2,7 @@ using Kook.API;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using Kook.Rest;
 
 namespace Kook.Net.Converters;
 
@@ -15,7 +16,7 @@ internal class CardConverter : JsonConverter<CardBase>
         switch (jsonNode?["type"]?.GetValue<string>())
         {
             case "card":
-                return JsonSerializer.Deserialize<API.Card>(jsonNode.ToJsonString(), options);
+                return JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.Card>());
             default:
                 throw new ArgumentOutOfRangeException(nameof(CardType));
         }
@@ -23,10 +24,10 @@ internal class CardConverter : JsonConverter<CardBase>
 
     public override void Write(Utf8JsonWriter writer, CardBase value, JsonSerializerOptions options)
     {
-        switch (value.Type)
+        switch (value)
         {
-            case CardType.Card:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.Card, options));
+            case API.Card { Type: CardType.Card } card:
+                writer.WriteRawValue(JsonSerializer.Serialize(card, options.GetTypedTypeInfo<API.Card>()));
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(CardType));
