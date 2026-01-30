@@ -19,7 +19,7 @@ public record KpmVipInfo
     ///     获取价格倍率。
     /// </summary>
     /// <remarks>
-    ///     示折扣后的金额与原价的比例，当值为 1.0 时表示无折扣。
+    ///     表示折扣后的金额与原价的比例，当值为 1.0 时表示无折扣。
     /// </remarks>
     public decimal PriceRate { get; init; }
 
