@@ -26,8 +26,7 @@ Source code is available on [GitHub](https://github.com/gehongyan/Kook.Net),
 
 Documents are available on [kooknet.dev](https://kooknet.dev). (Simplified Chinese available only)
 
-You can also review and ask [DeepWiki](https://deepwiki.com/gehongyan/Kook.Net) or
-[OpenDeepWiki (Simplified Chinese)](https://opendeep.wiki/gehongyan/Kook.Net) for help with the source code or
+You can also review and ask [DeepWiki](https://deepwiki.com/gehongyan/Kook.Net) for help with the source code or
 documentation.
 
 ---

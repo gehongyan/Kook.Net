@@ -26,8 +26,7 @@
 
 可在 [kooknet.dev](https://kooknet.dev) 上查看文档。
 
-也可查阅与询问 [DeepWiki (英语)](https://deepwiki.com/gehongyan/Kook.Net) 或
-[OpenDeepWiki](https://opendeep.wiki/gehongyan/Kook.Net)，来寻求与源代码及文档相关的帮助。
+也可查阅与询问 [DeepWiki (英语)](https://deepwiki.com/gehongyan/Kook.Net) 来寻求与源代码及文档相关的帮助。
 
 ---
 
