@@ -7,7 +7,7 @@ namespace Kook;
 ///     表示一个用户的铭牌。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class Nameplate : IEquatable<Nameplate>
+public record Nameplate
 {
     /// <summary>
     ///     获取此铭牌的名称。
@@ -43,49 +43,4 @@ public class Nameplate : IEquatable<Nameplate>
     }
 
     private string DebuggerDisplay => Name;
-
-    #region IEquatable
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] Nameplate? other)
-    {
-        if (ReferenceEquals(null, other))
-            return false;
-        if (ReferenceEquals(this, other))
-            return true;
-
-        return Name == other.Name
-            && Type == other.Type
-            && Icon == other.Icon
-            && Tips == other.Tips;
-    }
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj)
-    {
-        if (ReferenceEquals(null, obj))
-            return false;
-        if (ReferenceEquals(this, obj))
-            return true;
-        if (obj.GetType() != GetType())
-            return false;
-
-        return Equals((Nameplate)obj);
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode()
-    {
-        unchecked
-        {
-            int hash = (int)2166136261;
-            hash = (hash * 16777619) ^ Name.GetHashCode();
-            hash = (hash * 16777619) ^ Type.GetHashCode();
-            hash = (hash * 16777619) ^ Icon.GetHashCode();
-            hash = (hash * 16777619) ^ Tips.GetHashCode();
-            return hash;
-        }
-    }
-
-    #endregion
 }

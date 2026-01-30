@@ -107,6 +107,16 @@ public interface IUser : IEntity<ulong>, IMentionable, IPresence
     bool IsSystemUser { get; }
 
     /// <summary>
+    ///     获取此用户在 KPM 官方陪玩服务器内的会员信息。
+    /// </summary>
+    KpmVipInfo? KpmVipInfo { get; }
+
+    /// <summary>
+    ///     获取此用户在语音房间的财富等级。
+    /// </summary>
+    int VoiceWealthLevel { get; }
+
+    /// <summary>
     ///     创建一个用于与此用户收发私信的频道。
     /// </summary>
     /// <param name="options"> 发送请求时要使用的选项。 </param>

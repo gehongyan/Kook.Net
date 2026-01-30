@@ -51,6 +51,12 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
     /// <inheritdoc />
     public bool IsSystemUser { get; internal set; }
 
+    /// <inheritdoc />
+    public abstract KpmVipInfo? KpmVipInfo { get; internal set; }
+
+    /// <inheritdoc />
+    public abstract int VoiceWealthLevel { get; internal set; }
+
     internal abstract SocketGlobalUser GlobalUser { get; }
 
     internal abstract SocketPresence Presence { get; set; }
@@ -110,6 +116,8 @@ public abstract class SocketUser : SocketEntity<ulong>, IUser
             (x, y) => x.SequenceEqual(y));
         if (model.IsSystemUser.HasValue)
             hasChanges |= ValueHelper.SetIfChanged(() => IsSystemUser, x => IsSystemUser = x, model.IsSystemUser.Value);
+        hasChanges |= ValueHelper.SetIfChanged(() => KpmVipInfo, x => KpmVipInfo = x, model.KpmVip?.ToEntity());
+        hasChanges |= ValueHelper.SetIfChanged(() => VoiceWealthLevel, x => VoiceWealthLevel = x, model.WealthLevel);
         return hasChanges;
     }
 

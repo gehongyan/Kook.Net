@@ -53,6 +53,12 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
     public bool IsSystemUser { get; internal set; }
 
     /// <inheritdoc />
+    public KpmVipInfo? KpmVipInfo { get; internal set; }
+
+    /// <inheritdoc />
+    public int VoiceWealthLevel { get; internal set; }
+
+    /// <inheritdoc />
     public string IdentifyNumber => IdentifyNumberValue.ToString("D4");
 
     /// <inheritdoc />
@@ -111,6 +117,8 @@ public class RestUser : RestEntity<ulong>, IUser, IUpdateable
             Nameplates = [..model.Nameplates.Select(x => x.ToEntity())];
         if (model.IsSystemUser.HasValue)
             IsSystemUser = model.IsSystemUser.Value;
+        KpmVipInfo = model.KpmVip?.ToEntity();
+        VoiceWealthLevel = model.WealthLevel;
         UpdatePresence(model.Online, model.OperatingSystem);
     }
 

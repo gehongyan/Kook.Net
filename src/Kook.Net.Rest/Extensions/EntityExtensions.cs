@@ -381,4 +381,11 @@ internal static class EntityExtensions
     }
 
     #endregion
+
+    #region KPM VIP
+
+    public static KpmVipInfo ToEntity(this API.KpmVipInfo model) =>
+        KpmVipInfo.Create(model.Level, model.Exp, model.Discount / 100M, model.Icon, model.Text);
+
+    #endregion
 }
