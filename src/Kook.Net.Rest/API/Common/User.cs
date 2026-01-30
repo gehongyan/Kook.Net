@@ -51,4 +51,10 @@ internal class User
 
     [JsonPropertyName("is_sys")]
     public bool? IsSystemUser { get; set; }
+
+    [JsonPropertyName("kpm_vip")]
+    public KpmVipInfo? KpmVip { get; set; }
+
+    [JsonPropertyName("wealth_level")]
+    public int WealthLevel { get; set; }
 }

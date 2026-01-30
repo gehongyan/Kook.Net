@@ -97,6 +97,20 @@ public class SocketSelfUser : SocketUser, ISelfUser, IUpdateable
     }
 
     /// <inheritdoc />
+    public override KpmVipInfo? KpmVipInfo
+    {
+        get => GlobalUser.KpmVipInfo;
+        internal set => GlobalUser.KpmVipInfo = value;
+    }
+
+    /// <inheritdoc />
+    public override int VoiceWealthLevel
+    {
+        get => GlobalUser.VoiceWealthLevel;
+        internal set => GlobalUser.VoiceWealthLevel = value;
+    }
+
+    /// <inheritdoc />
     internal override SocketPresence Presence
     {
         get => GlobalUser.Presence;

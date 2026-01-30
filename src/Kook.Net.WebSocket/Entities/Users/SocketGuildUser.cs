@@ -132,6 +132,20 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     }
 
     /// <inheritdoc />
+    public override KpmVipInfo? KpmVipInfo
+    {
+        get => GlobalUser.KpmVipInfo;
+        internal set => GlobalUser.KpmVipInfo = value;
+    }
+
+    /// <inheritdoc />
+    public override int VoiceWealthLevel
+    {
+        get => GlobalUser.VoiceWealthLevel;
+        internal set => GlobalUser.VoiceWealthLevel = value;
+    }
+
+    /// <inheritdoc />
     public GuildPermissions GuildPermissions => new(Permissions.ResolveGuild(Guild, this));
 
     /// <inheritdoc />

@@ -50,6 +50,12 @@ internal sealed class SocketGlobalUser : SocketUser
     public override IReadOnlyCollection<Nameplate> Nameplates { get; internal set; }
 
     /// <inheritdoc />
+    public override KpmVipInfo? KpmVipInfo { get; internal set; }
+
+    /// <inheritdoc />
+    public override int VoiceWealthLevel { get; internal set; }
+
+    /// <inheritdoc />
     internal override SocketPresence Presence { get; set; }
 
     /// <inheritdoc />

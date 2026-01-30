@@ -47,6 +47,12 @@ public class SocketUnknownUser : SocketUser
     /// <inheritdoc />
     public override IReadOnlyCollection<Nameplate> Nameplates { get; internal set; } = [];
 
+    /// <inheritdoc />
+    public override KpmVipInfo? KpmVipInfo { get; internal set; }
+
+    /// <inheritdoc />
+    public override int VoiceWealthLevel { get; internal set; }
+
     internal override SocketPresence Presence
     {
         get => new();
