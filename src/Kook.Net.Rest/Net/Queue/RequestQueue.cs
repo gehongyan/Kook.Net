@@ -164,7 +164,11 @@ internal class RequestQueue : IDisposable, IAsyncDisposable
 
     public void ClearGatewayBuckets()
     {
-        foreach (GatewayBucketType gwBucket in (GatewayBucketType[])Enum.GetValues(typeof(GatewayBucketType)))
+#if NET6_0_OR_GREATER
+        foreach (GatewayBucketType gwBucket in Enum.GetValues<GatewayBucketType>())
+#else
+        foreach (GatewayBucketType gwBucket in Enum.GetValues(typeof(GatewayBucketType)).Cast<GatewayBucketType>())
+#endif
             _buckets.TryRemove(GatewayBucket.Get(gwBucket).Id, out _);
     }
 

@@ -2,8 +2,10 @@ using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using Kook.Net.Contexts;
+using Kook.Net.Converters;
 using Kook.Net.Rest;
+using Kook.Rest;
 
 namespace Kook.Net.Queue;
 
@@ -28,10 +30,9 @@ internal class RequestBucket
 
     public RequestBucket(RequestQueue queue, IRequest request, BucketId id)
     {
-        _serializerOptions = new JsonSerializerOptions
+        _serializerOptions = new JsonSerializerOptions(KookRestJsonSerializerContext.Default.Options)
         {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            NumberHandling = JsonNumberHandling.AllowReadingFromString
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
         _queue = queue;
         Id = id;
@@ -99,8 +100,8 @@ internal class RequestBucket
                             if (response.Stream != null)
                                 try
                                 {
-                                    responseBase = await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream,
-                                        _serializerOptions);
+                                    responseBase = await JsonSerializer.DeserializeAsync(
+                                        response.Stream, _serializerOptions.GetTypedTypeInfo<API.Rest.RestResponseBase>());
                                 }
                                 catch
                                 {
@@ -122,8 +123,8 @@ internal class RequestBucket
                     KookDebugger.DebugRatelimit($"[Ratelimit] [{id}] Success");
                     if (response.MediaTypeHeader?.MediaType == "application/json")
                     {
-                        API.Rest.RestResponseBase? responseBase =
-                            await JsonSerializer.DeserializeAsync<API.Rest.RestResponseBase>(response.Stream, _serializerOptions);
+                        API.Rest.RestResponseBase? responseBase = await JsonSerializer.DeserializeAsync(
+                            response.Stream, _serializerOptions.GetTypedTypeInfo<API.Rest.RestResponseBase>());
                         if (responseBase?.Code > (KookErrorCode)0)
                         {
                             throw new HttpException(

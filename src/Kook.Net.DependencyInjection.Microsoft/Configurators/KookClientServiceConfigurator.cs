@@ -1,4 +1,5 @@
-﻿using Kook.Rest;
+﻿using System.Diagnostics.CodeAnalysis;
+using Kook.Rest;
 using Kook.Webhook;
 using Kook.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +37,8 @@ public class KookClientServiceConfigurator : IKookClientServiceConfigurator
     }
 
     /// <inheritdoc />
-    public IKookClientConfigurator<TClient, TConfig> UseWebhookClient<TClient, TConfig>(
+    public IKookClientConfigurator<TClient, TConfig> UseWebhookClient<TClient,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TConfig>(
         Func<IServiceProvider, IOptions<TConfig>, TClient> clientFactory, Action<TConfig> configure)
         where TClient : KookWebhookClient
         where TConfig : KookWebhookConfig

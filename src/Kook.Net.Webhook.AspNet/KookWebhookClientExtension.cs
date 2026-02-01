@@ -15,11 +15,12 @@ namespace Kook.Webhook.AspNet;
 public static partial class KookWebhookClientExtension
 {
     /// <summary>
-    ///     向指定的 <see cref="IServiceCollection" /> 添加 <see cref="Kook.Webhook.AspNet.KookAspNetWebhookClient"/> 客户端。
+    ///     向指定的 <see cref="IServiceCollection" /> 添加 <see cref="KookAspNetWebhookClient"/> 客户端。
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK ASP.NET Webhook 客户端的服务集合。 </param>
     /// <param name="config"> 用于配置 KOOK ASP.NET Webhook 客户端的配置。 </param>
     /// <returns> 添加了 KOOK ASP.NET Webhook 客户端的服务集合。 </returns>
+    [RequiresUnreferencedCode("MVC does not currently support trimming or native AOT.")]
     public static IServiceCollection AddKookAspNetWebhookClient(this IServiceCollection services, KookAspNetWebhookConfig config)
     {
         services.AddSingleton(config);
@@ -35,6 +36,7 @@ public static partial class KookWebhookClientExtension
     /// <param name="services"> 要向其添加 KOOK ASP.NET Webhook 客户端的服务集合。 </param>
     /// <param name="configure"> 用于配置 KOOK ASP.NET Webhook 客户端的配置委托。 </param>
     /// <returns> 添加了 KOOK ASP.NET Webhook 客户端的服务集合。 </returns>
+    [RequiresUnreferencedCode("MVC does not currently support trimming or native AOT.")]
     public static IServiceCollection AddKookAspNetWebhookClient(this IServiceCollection services, Action<KookAspNetWebhookConfig> configure)
     {
         services.AddKookWebhookClient((_, config) => new KookAspNetWebhookClient(config), configure);
@@ -48,6 +50,7 @@ public static partial class KookWebhookClientExtension
     /// </summary>
     /// <param name="services"> 要向其添加 KOOK ASP.NET Webhook 客户端的服务集合。 </param>
     /// <returns> 添加了 KOOK ASP.NET Webhook 客户端的服务集合。 </returns>
+    [RequiresUnreferencedCode("MVC does not currently support trimming or native AOT.")]
     public static IServiceCollection AddKookAspNetWebhookClient(this IServiceCollection services)
     {
         services.AddKookWebhookClient<KookAspNetWebhookClient>(provider =>
@@ -70,6 +73,7 @@ public static partial class KookWebhookClientExtension
     /// <param name="configurator"> KOOK 服务配置器。 </param>
     /// <param name="configure"> 用于配置 KOOK ASP.NET Webhook 客户端的配置委托。 </param>
     /// <returns> 配置了  KOOK ASP.NET Webhook 客户端的配置器。 </returns>
+    [RequiresUnreferencedCode("MVC does not currently support trimming or native AOT.")]
     public static IKookClientConfigurator<KookAspNetWebhookClient, KookAspNetWebhookConfig> UseAspNetWebhookClient
         (this IKookClientServiceConfigurator configurator, Action<KookAspNetWebhookConfig> configure)
     {
