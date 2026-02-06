@@ -126,8 +126,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
         _tags = model.Type switch
         {
-            MessageType.Text => MessageHelper.ParseTags(gatewayEvent.Content, Channel, Guild, MentionedUsers, TagMode.PlainText),
-            MessageType.KMarkdown => MessageHelper.ParseTags(gatewayEvent.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown),
+            MessageType.Text => MessageHelper.ParseTags(gatewayEvent.Content, Channel, Guild, MentionedUsers, model.InteractRes, TagMode.PlainText),
+            MessageType.KMarkdown => MessageHelper.ParseTags(gatewayEvent.Content, Channel, Guild, MentionedUsers, model.InteractRes, TagMode.KMarkdown),
             _ => _tags
         };
 
@@ -215,8 +215,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
         _tags = model.Type switch
         {
-            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText),
-            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown),
+            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, null, TagMode.PlainText),
+            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, null, TagMode.KMarkdown),
             _ => _tags
         };
 
@@ -258,8 +258,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
         _tags = model.Type switch
         {
-            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText),
-            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown),
+            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, null, TagMode.PlainText),
+            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, null, TagMode.KMarkdown),
             _ => _tags
         };
 
@@ -310,8 +310,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
         _tags = Type switch
         {
-            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText),
-            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown),
+            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, null, TagMode.PlainText),
+            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, null, TagMode.KMarkdown),
             _ => _tags
         };
 
@@ -357,8 +357,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
         _tags = Type switch
         {
-            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.PlainText),
-            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, TagMode.KMarkdown),
+            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, null, TagMode.PlainText),
+            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, null, TagMode.KMarkdown),
             _ => _tags
         };
 

@@ -89,6 +89,13 @@ public interface IMessage : IEntity<Guid>, IDeletable
     /// <summary>
     ///     获取此消息中解析出的所有标签。
     /// </summary>
+    /// <remarks>
+    ///     标签通常包含消息内容解析出的频道提及、角色提及、用户提及、全体成员提及、在线成员提及、表情符号。<br />
+    ///     <note type="warning">
+    ///         KOOK 客户端仅支持在消息中发送一个互动表情符号，但如果通过富文本编辑器或 API 发送了包含了多个互动表情符号的消息，KOOK
+    ///         服务端仅计算最后一个互动表情符号的随机结果，并在消息内容中的所有互动表情符号位置显示该结果，无论前面的互动表情符号实际内容为何。
+    ///     </note>
+    /// </remarks>
     IReadOnlyCollection<ITag> Tags { get; }
 
     /// <summary>

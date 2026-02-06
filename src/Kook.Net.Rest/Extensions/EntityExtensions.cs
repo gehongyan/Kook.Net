@@ -1,3 +1,5 @@
+using Kook.API;
+
 namespace Kook.Rest;
 
 internal static class EntityExtensions
@@ -5,11 +7,30 @@ internal static class EntityExtensions
     #region Emotes
 
     public static GuildEmote ToEntity(this API.Emoji model, ulong guildId) =>
-        new(model.Id,
-            model.Name,
-            model.Type == EmojiType.Animated,
-            guildId,
-            model.UploadedBy?.Id);
+        new(model.Id, model.Name, model.Type, guildId, model.UploadedBy?.Id);
+
+    public static IReadOnlyCollection<InteractiveEmoteRollResult>? ToResults(this InteractionResource resource)
+    {
+        return resource switch
+        {
+            {
+                EmojiId: InteractiveEmoteType.SingleDie,
+                Result: [var value],
+                ResultImg: [var image]
+            } => [new InteractiveEmoteDiceResult(value, image)],
+            {
+                EmojiId: InteractiveEmoteType.DualDice,
+                Result: [var value1, var value2],
+                ResultImg: [var image1, var image2]
+            } => [new InteractiveEmoteDiceResult(value1, image1), new InteractiveEmoteDiceResult(value2, image2)],
+            {
+                EmojiId: InteractiveEmoteType.RockPaperScissors,
+                Result: [var value],
+                ResultImg: [var image]
+            } => [new InteractiveEmoteRockPaperScissorsResult(value, image)],
+            _ => null
+        };
+    }
 
     #endregion
 

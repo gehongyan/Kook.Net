@@ -13,5 +13,10 @@ public enum EmojiType
     /// <summary>
     ///     动态表情符号。
     /// </summary>
-    Animated = 2
+    Animated = 2,
+
+    /// <summary>
+    ///     交互式表情符号。
+    /// </summary>
+    Interactive = 3,
 }

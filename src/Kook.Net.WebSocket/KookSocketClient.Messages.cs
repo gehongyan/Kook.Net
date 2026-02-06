@@ -1384,7 +1384,7 @@ public partial class KookSocketClient
         }
 
         GuildEmote emote = guild.RemoveEmote(data.Id)
-            ?? new GuildEmote(data.Id, data.Name, data.Type is EmojiType.Animated, guild.Id, null);
+            ?? new GuildEmote(data.Id, data.Name, data.Type, guild.Id, null);
         await TimedInvokeAsync(_emoteDeletedEvent, nameof(EmoteDeleted), emote, guild).ConfigureAwait(false);
     }
 

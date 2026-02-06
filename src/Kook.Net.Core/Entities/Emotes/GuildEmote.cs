@@ -8,8 +8,8 @@ namespace Kook;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 public class GuildEmote : Emote
 {
-    internal GuildEmote(string id, string name, bool? animated, ulong guildId, ulong? creatorId)
-        : base(id, name, animated)
+    internal GuildEmote(string id, string name, EmojiType? type, ulong guildId, ulong? creatorId)
+        : base(id, name, type)
     {
         GuildId = guildId;
         CreatorId = creatorId;
@@ -28,7 +28,7 @@ public class GuildEmote : Emote
     /// </remarks>
     public ulong? CreatorId { get; }
 
-    private string DebuggerDisplay => $"{Name} ({Id}{(Animated == true ? ", Animated" : "")})";
+    private string DebuggerDisplay => $"{Name} ({Id}{(Type.HasValue ? $", {Type}" : "")})";
 
     internal GuildEmote Clone() => (GuildEmote) MemberwiseClone();
 }
