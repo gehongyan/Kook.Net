@@ -99,7 +99,7 @@ public interface IMessage : IEntity<Guid>, IDeletable
     IReadOnlyCollection<ITag> Tags { get; }
 
     /// <summary>
-    ///     获取此消息中包含的交互式表情符号的随机结果。
+    ///     获取此消息中包含的互动表情符号的随机结果。
     /// </summary>
     /// <remarks>
     ///     <note type="warning">
