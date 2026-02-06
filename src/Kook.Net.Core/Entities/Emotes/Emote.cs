@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace Kook;
@@ -29,16 +30,47 @@ public class Emote : IEmote
     /// <summary>
     ///     获取此表情符号是否为动态表情。如果无法确定此表情符号是否为动态表情，则为 <c>null</c>。
     /// </summary>
-    public bool? Animated { get; }
+    [Obsolete("Use the 'Type' property instead.")]
+    public bool? Animated => Type switch
+    {
+        EmojiType.Static => false,
+        EmojiType.Animated => true,
+        _ => null
+    };
+
+    /// <summary>
+    ///     获取此表情符号的类型。
+    /// </summary>
+    /// <remarks>
+    ///     如果无法确定此表情符号的具体类型，则为 <c>null</c>。
+    /// </remarks>
+    public EmojiType? Type { get; }
 
     /// <summary>
     ///     创建一个新的 <see cref="Kook.Emote" /> 实例。
     /// </summary>
+    [Obsolete("Use the constructor with 'EmojiType?' parameter instead.")]
     public Emote(string id, string name, bool? animated = null)
     {
         Id = id;
         Name = name;
-        Animated = animated;
+        Type = animated switch
+        {
+            true => EmojiType.Animated,
+            false => EmojiType.Static,
+            null => null
+        };
+    }
+
+    /// <summary>
+    ///     创建一个新的 <see cref="Kook.Emote" /> 实例。
+    /// </summary>
+    [OverloadResolutionPriority(1)]
+    public Emote(string id, string name, EmojiType? type = null)
+    {
+        Id = id;
+        Name = name;
+        Type = type;
     }
 
     /// <inheritdoc />
@@ -75,7 +107,14 @@ public class Emote : IEmote
         };
         if (!match.Success)
             return false;
-        result = new Emote(match.Groups["id"].Value, match.Groups["name"].Value);
+        string id = match.Groups["id"].Value;
+        string name = match.Groups["name"].Value;
+        result = id.Split('/') switch
+        {
+            ["0", var interactiveId, _] when Enum.TryParse(interactiveId, out InteractiveEmoteType type) => new InteractiveEmote(id, name, type),
+            [var guildId, _] when ulong.TryParse(guildId, out ulong gId) => new GuildEmote(id, name, null, gId, null),
+            _ => new Emote(id, name)
+        };
         return true;
     }
 

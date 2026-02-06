@@ -42,4 +42,7 @@ internal class GatewayGroupMessageExtraData
     [JsonPropertyName("attachments")]
     [JsonConverter(typeof(SafeAttachmentConverter))]
     public Attachment? Attachment { get; set; }
+
+    [JsonPropertyName("interact_res")]
+    public InteractionResource? InteractRes { get; set; }
 }

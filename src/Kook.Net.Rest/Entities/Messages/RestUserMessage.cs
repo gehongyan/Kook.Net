@@ -91,8 +91,8 @@ public class RestUserMessage : RestMessage, IUserMessage
         IGuild? guild = (Channel as IGuildChannel)?.Guild;
         _tags = model.Type switch
         {
-            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, guild, MentionedUsers, TagMode.PlainText),
-            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, guild, MentionedUsers, TagMode.KMarkdown),
+            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, guild, MentionedUsers, null, TagMode.PlainText),
+            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, guild, MentionedUsers, null, TagMode.KMarkdown),
             _ => _tags
         };
 
@@ -140,8 +140,8 @@ public class RestUserMessage : RestMessage, IUserMessage
         base.Update(model);
         _tags = model.Type switch
         {
-            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, null, MentionedUsers, TagMode.PlainText),
-            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, null, MentionedUsers, TagMode.KMarkdown),
+            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, null, MentionedUsers, null, TagMode.PlainText),
+            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, null, MentionedUsers, null, TagMode.KMarkdown),
             _ => _tags
         };
 

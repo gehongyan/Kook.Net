@@ -478,7 +478,7 @@ internal static class MessageHelper
     }
 
     public static ImmutableArray<ITag> ParseTags(string text, IMessageChannel? channel, IGuild? guild,
-        IReadOnlyCollection<IUser> userMentions, TagMode tagMode)
+        IReadOnlyCollection<IUser> userMentions, InteractionResource? interactionResource, TagMode tagMode)
     {
         ImmutableArray<ITag>.Builder tags = ImmutableArray.CreateBuilder<ITag>();
         int index;
@@ -590,6 +590,23 @@ internal static class MessageHelper
                     tags.Insert(tagIndex.Value, hereMention);
                 }
                 index++;
+            }
+        }
+
+        // Wrap the last interactive emote tag with rolled interactive emote tag
+        if (interactionResource is not null)
+        {
+            for (int i = tags.Count - 1; i >= 0; i--)
+            {
+                if (tags[i] is not Tag<string, IEmote> { Value: Emote { Type: EmojiType.Interactive } } emoteTag)
+                    continue;
+                if (emoteTag.Value is InteractiveEmote emote && interactionResource.ToResults() is { } results)
+                {
+                    RolledInteractiveEmote rolledEmote = new(emote, results);
+                    tags[i] = new Tag<string, IEmote>(TagType.Emoji, emoteTag.Index, emoteTag.Length, emoteTag.Key, rolledEmote);
+                }
+
+                break;
             }
         }
 
