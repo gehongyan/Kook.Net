@@ -42,9 +42,9 @@ public class Emote : IEmote
     ///     获取此表情符号的类型。
     /// </summary>
     /// <remarks>
-    ///     如果无法确定此表情符号是的具体类型，则为 <c>null</c>。
+    ///     如果无法确定此表情符号的具体类型，则为 <c>null</c>。
     /// </remarks>
-    public EmojiType? Type { get; set; }
+    public EmojiType? Type { get; }
 
     /// <summary>
     ///     创建一个新的 <see cref="Kook.Emote" /> 实例。

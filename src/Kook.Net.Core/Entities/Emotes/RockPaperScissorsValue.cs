@@ -11,12 +11,12 @@ public enum RockPaperScissorsValue
     Rock = 1,
 
     /// <summary>
-    ///     剪刀
+    ///     布
     /// </summary>
     Paper = 2,
 
     /// <summary>
-    ///     布
+    ///     剪刀
     /// </summary>
     Scissor = 3
 }
