@@ -12,7 +12,7 @@ public class RolledInteractiveEmote : InteractiveEmote
     ///     使用指定的互动表情符号和随机结果集合初始化 <see cref="RolledInteractiveEmote"/> 类的新实例。
     /// </summary>
     internal RolledInteractiveEmote(InteractiveEmote emote, IReadOnlyCollection<InteractiveEmoteRollResult> rolls)
-        : base(emote.Id, emote.Name, emote.InteractiveEmoteType)
+        : base(emote.Id, emote.Name, emote.InteractiveEmoteType, emote.DynamicImage)
     {
         Rolls = rolls;
     }

@@ -50,6 +50,11 @@ public class KookConfig
     public static readonly string APIUrl = $"https://www.kookapp.cn/api/v{APIVersion}/";
 
     /// <summary>
+    ///     获取 KOOK 互动表情资源的根 URL。
+    /// </summary>
+    public static readonly string InteractiveEmoteResourceUrl = "https://img.kookapp.cn/emojis/touzi/";
+
+    /// <summary>
     ///     获取请求超时的默认时间，以毫秒为单位。
     /// </summary>
     public const int DefaultRequestTimeout = 6000;

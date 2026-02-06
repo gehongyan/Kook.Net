@@ -61,6 +61,10 @@ public class RestUserMessage : RestMessage, IUserMessage
     /// <inheritdoc />
     public override IReadOnlyCollection<ITag> Tags => _tags;
 
+    /// <inheritdoc />
+    public override RolledInteractiveEmote? InteractiveEmote =>
+        Tags.LastOrDefault(x => x.Type is TagType.Emoji)?.AsEmojiTag().Value as RolledInteractiveEmote;
+
     internal RestUserMessage(BaseKookClient kook, Guid id, MessageType messageType,
         IMessageChannel channel, IUser author, MessageSource source)
         : base(kook, id, messageType, channel, author, source)
@@ -91,8 +95,8 @@ public class RestUserMessage : RestMessage, IUserMessage
         IGuild? guild = (Channel as IGuildChannel)?.Guild;
         _tags = model.Type switch
         {
-            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, guild, MentionedUsers, null, TagMode.PlainText),
-            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, guild, MentionedUsers, null, TagMode.KMarkdown),
+            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, guild, MentionedUsers, model.InteractRes, TagMode.PlainText),
+            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, guild, MentionedUsers, model.InteractRes, TagMode.KMarkdown),
             _ => _tags
         };
 

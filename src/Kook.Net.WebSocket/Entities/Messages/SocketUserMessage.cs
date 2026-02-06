@@ -61,6 +61,10 @@ public class SocketUserMessage : SocketMessage, IUserMessage
     /// <inheritdoc />
     public override IReadOnlyCollection<ITag> Tags => _tags;
 
+    /// <inheritdoc />
+    public override RolledInteractiveEmote? InteractiveEmote =>
+        Tags.LastOrDefault(x => x.Type is TagType.Emoji)?.AsEmojiTag().Value as RolledInteractiveEmote;
+
     internal SocketUserMessage(KookSocketClient kook, Guid id,
         ISocketMessageChannel channel, SocketUser author, MessageSource source)
         : base(kook, id, channel, author, source)
@@ -215,8 +219,8 @@ public class SocketUserMessage : SocketMessage, IUserMessage
 
         _tags = model.Type switch
         {
-            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, null, TagMode.PlainText),
-            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, null, TagMode.KMarkdown),
+            MessageType.Text => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, model.InteractRes, TagMode.PlainText),
+            MessageType.KMarkdown => MessageHelper.ParseTags(model.Content, Channel, Guild, MentionedUsers, model.InteractRes, TagMode.KMarkdown),
             _ => _tags
         };
 

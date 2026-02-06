@@ -65,6 +65,9 @@ public abstract class RestMessage : RestEntity<Guid>, IMessage, IUpdateable
     public virtual IReadOnlyCollection<ITag> Tags => ImmutableArray.Create<ITag>();
 
     /// <inheritdoc />
+    public virtual RolledInteractiveEmote? InteractiveEmote => null;
+
+    /// <inheritdoc />
     public virtual bool? IsPinned { get; internal set; }
 
     /// <inheritdoc cref="Kook.Rest.RestMessage.Content" />

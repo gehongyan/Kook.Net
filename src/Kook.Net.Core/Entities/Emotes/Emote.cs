@@ -111,8 +111,10 @@ public class Emote : IEmote
         string name = match.Groups["name"].Value;
         result = id.Split('/') switch
         {
-            ["0", var interactiveId, _] when Enum.TryParse(interactiveId, out InteractiveEmoteType type) => new InteractiveEmote(id, name, type),
-            [var guildId, _] when ulong.TryParse(guildId, out ulong gId) => new GuildEmote(id, name, null, gId, null),
+            ["0", var interactiveId, _] when Enum.TryParse(interactiveId, out InteractiveEmoteType type) =>
+                new InteractiveEmote(id, name, type, null), // dynamicImage will be set later if available
+            [var guildId, _] when ulong.TryParse(guildId, out ulong gId) =>
+                new GuildEmote(id, name, null, gId, null),
             _ => new Emote(id, name)
         };
         return true;
