@@ -1,14 +1,48 @@
+using System.Collections.Frozen;
+using System.Diagnostics.CodeAnalysis;
+
 namespace Kook.Commands;
 
 internal static class PrimitiveTypeReader
 {
+    private static readonly FrozenDictionary<Type, Func<TypeReader>> PrimitiveReaders =
+        new Dictionary<Type, Func<TypeReader>>
+            {
+                [typeof(bool)] = () => new PrimitiveTypeReader<bool>(),
+                [typeof(byte)] = () => new PrimitiveTypeReader<byte>(),
+                [typeof(sbyte)] = () => new PrimitiveTypeReader<sbyte>(),
+                [typeof(short)] = () => new PrimitiveTypeReader<short>(),
+                [typeof(ushort)] = () => new PrimitiveTypeReader<ushort>(),
+                [typeof(int)] = () => new PrimitiveTypeReader<int>(),
+                [typeof(uint)] = () => new PrimitiveTypeReader<uint>(),
+                [typeof(long)] = () => new PrimitiveTypeReader<long>(),
+                [typeof(ulong)] = () => new PrimitiveTypeReader<ulong>(),
+                [typeof(float)] = () => new PrimitiveTypeReader<float>(),
+                [typeof(double)] = () => new PrimitiveTypeReader<double>(),
+                [typeof(decimal)] = () => new PrimitiveTypeReader<decimal>(),
+                [typeof(DateTime)] = () => new PrimitiveTypeReader<DateTime>(),
+                [typeof(DateTimeOffset)] = () => new PrimitiveTypeReader<DateTimeOffset>(),
+                [typeof(Guid)] = () => new PrimitiveTypeReader<Guid>(),
+#if NET6_0_OR_GREATER
+                [typeof(DateOnly)] = () => new PrimitiveTypeReader<DateOnly>(),
+                [typeof(TimeOnly)] = () => new PrimitiveTypeReader<TimeOnly>(),
+#endif
+                [typeof(char)] = () => new PrimitiveTypeReader<char>(),
+            }
+            .ToFrozenDictionary();
+
     public static TypeReader? Create(Type type)
     {
+        if (PrimitiveReaders.TryGetValue(type, out Func<TypeReader>? factory))
+            return factory();
         type = typeof(PrimitiveTypeReader<>).MakeGenericType(type);
         return Activator.CreateInstance(type) as TypeReader;
     }
 }
 
+#if NET6_0_OR_GREATER
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+#endif
 internal class PrimitiveTypeReader<T> : TypeReader
 {
     private readonly TryParseDelegate<T> _tryParse;

@@ -1,4 +1,5 @@
-﻿using Kook.Rest;
+﻿using System.Diagnostics.CodeAnalysis;
+using Kook.Rest;
 using Kook.Webhook;
 using Kook.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -147,13 +148,15 @@ public static partial class KookClientDependencyInjectionExtensions
     /// <typeparam name="TClient"> Webhook 客户端的类型。 </typeparam>
     /// <typeparam name="TConfig"> Webhook 客户端的配置类型。 </typeparam>
     /// <returns> 添加了 KOOK Webhook 客户端的服务集合。 </returns>
-    public static IServiceCollection AddKeyedKookWebhookClient<TClient, TConfig>(this IServiceCollection services,
+    public static IServiceCollection AddKeyedKookWebhookClient<TClient,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)] TConfig>(this IServiceCollection services,
         string? serviceKey, Func<IServiceProvider, TConfig, TClient> clientFactory)
         where TClient: KookWebhookClient
         where TConfig: KookWebhookConfig
     {
 
-        services.AddKeyedSingleton<TClient>(serviceKey, (provider, _) => clientFactory(provider, provider.GetRequiredService<IOptionsMonitor<TConfig>>().Get(serviceKey)));
+        services.AddKeyedSingleton<TClient>(serviceKey, (provider, _) =>
+            clientFactory(provider, provider.GetRequiredService<IOptionsMonitor<TConfig>>().Get(serviceKey)));
         services.AddKeyedKookWebhookClient<TClient>(serviceKey);
         return services;
     }
