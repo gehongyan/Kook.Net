@@ -602,6 +602,7 @@ internal static class MessageHelper
                     continue;
                 if (emoteTag.Value is InteractiveEmote emote && interactionResource.ToResults() is { } results)
                 {
+                    emote.DynamicImage = interactionResource.DynamicUrl;
                     RolledInteractiveEmote rolledEmote = new(emote, results);
                     tags[i] = new Tag<string, IEmote>(TagType.Emoji, emoteTag.Index, emoteTag.Length, emoteTag.Key, rolledEmote);
                 }

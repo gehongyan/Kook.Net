@@ -16,10 +16,18 @@ public record InteractiveEmoteRollResult
 
     private string DebuggerDisplay => $"Roll: {RawValue}";
 
-    /// <summary> 获取随机结果的原始数值。 </summary>
+    /// <summary>
+    ///     获取随机结果的原始数值。
+    /// </summary>
     public int RawValue { get; }
 
-    /// <summary> 获取随机结果对应的图片 URL。 </summary>
+    /// <summary>
+    ///     获取随机结果对应的图像资源名称。
+    /// </summary>
+    /// <remarks>
+    ///     要获取完整的资源 URL，请使用扩展方法
+    ///     <see cref="Kook.EmoteExtensions.GetResourceUrl(Kook.InteractiveEmoteRollResult)" />。
+    /// </remarks>
     public string Image { get; }
 
     /// <inheritdoc />

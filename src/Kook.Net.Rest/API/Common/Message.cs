@@ -60,6 +60,9 @@ internal class Message
     [JsonPropertyName("mention_info")]
     public GuildMentionInfo? MentionInfo { get; set; }
 
+    [JsonPropertyName("interact_res")]
+    public InteractionResource? InteractRes { get; set; }
+
     [JsonPropertyName("editable")]
     public bool? Editable { get; set; }
 }

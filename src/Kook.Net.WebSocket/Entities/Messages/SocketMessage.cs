@@ -86,6 +86,9 @@ public abstract class SocketMessage : SocketEntity<Guid>, IMessage, IUpdateable
     public virtual IReadOnlyCollection<ITag> Tags => [];
 
     /// <inheritdoc />
+    public virtual RolledInteractiveEmote? InteractiveEmote => null;
+
+    /// <inheritdoc />
     public IReadOnlyDictionary<IEmote, ReactionMetadata> Reactions => _reactions
         .GroupBy(r => r.Emote)
         .ToDictionary(
