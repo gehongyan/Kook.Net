@@ -32,7 +32,7 @@ internal static class KookRestApiClientExperimentalExtensions
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
-    public static async Task<GuildSecurityItem> CreateGuildSecurityItemAsync(this KookRestApiClient client, GuildSecurityItemCreateParams args,
+    public static async Task<GuildSecurityItem> CreateGuildSecurityItemAsync(this KookRestApiClient client, CreateGuildSecurityItemParams args,
         RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
@@ -45,16 +45,30 @@ internal static class KookRestApiClientExperimentalExtensions
             .ConfigureAwait(false);
     }
 
-    public static async Task<GuildSecurityItem> UpdateGuildSecurityItemAsync(this KookRestApiClient client, GuildSecurityItemUpdateParams args,
+    public static async Task<GuildSecurityItem> UpdateGuildSecurityItemAsync(this KookRestApiClient client, UpdateGuildSecurityItemParams args,
         RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));
         Preconditions.NotEqual(0, args.GuildId, nameof(args.GuildId));
+        Preconditions.NotNullOrWhitespace(args.Id, nameof(args.Id));
         options = RequestOptions.CreateOrClone(options);
 
         KookRestApiClient.BucketIds ids = new(args.GuildId);
         return await client.SendJsonAsync<GuildSecurityItem>(HttpMethod.Post,
                 () => $"guild-security/update", args, ids, ClientBucketType.SendEdit, false, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public static async Task DeleteGuildSecurityItemAsync(this KookRestApiClient client, DeleteGuildSecurityItemParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(0, args.GuildId, nameof(args.GuildId));
+        Preconditions.NotNullOrWhitespace(args.Id, nameof(args.Id));
+        options = RequestOptions.CreateOrClone(options);
+
+        KookRestApiClient.BucketIds ids = new(args.GuildId);
+        await client.SendJsonAsync(HttpMethod.Post,
+                () => $"guild-security/delete", args, ids, ClientBucketType.SendEdit, null, options)
             .ConfigureAwait(false);
     }
 

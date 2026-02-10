@@ -2,7 +2,7 @@
 
 namespace Kook.API.Rest;
 
-internal class GuildSecurityItemUpdateParams
+internal class UpdateGuildSecurityItemParams
 {
     [JsonPropertyName("guild_id")]
     [JsonNumberHandling(JsonNumberHandling.WriteAsString)]

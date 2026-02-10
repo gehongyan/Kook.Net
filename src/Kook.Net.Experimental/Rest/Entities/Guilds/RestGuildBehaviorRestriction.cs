@@ -63,4 +63,21 @@ public class RestGuildBehaviorRestriction : RestEntity<string>, IGuildBehaviorRe
     }
 
     private string DebuggerDisplay => $"BehaviorRestriction: {Name} ({Id}, if {string.Join(" and ", Conditions.Select(x => x.Type))}, disallow {RestrictionType} for {Duration}, {(IsEnabled ? "Enabled" : "Disabled")})";
+
+    /// <inheritdoc />
+    public async Task ModifyAsync(Action<ModifyGuildBehaviorRestrictionProperties> func, RequestOptions? options = null) =>
+        await ExperimentalGuildHelper.ModifyBehaviorRestrictionAsync(Kook, this, func, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task EnableAsync(RequestOptions? options = null) =>
+        await ExperimentalGuildHelper.EnableBehaviorRestrictionAsync(Kook, this, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task DisableAsync(RequestOptions? options = null) =>
+        await ExperimentalGuildHelper.DisableBehaviorRestrictionAsync(Kook, this, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task DeleteAsync(RequestOptions? options = null) =>
+        await ExperimentalGuildHelper.DeleteGuildBehaviorRestrictionAsync(Kook, this, options).ConfigureAwait(false);
 }
+

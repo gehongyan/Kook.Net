@@ -3,7 +3,7 @@
 /// <summary>
 ///     提供用于修改 <see cref="IGuildBehaviorRestriction"/> 的属性。
 /// </summary>
-/// <seealso cref="Kook.GuildBehaviorRestrictionExtensions.ModifyAsync(Kook.IGuildBehaviorRestriction,System.Action{ModifyGuildBehaviorRestrictionProperties},Kook.RequestOptions)"/>
+/// <seealso cref="Kook.IGuildBehaviorRestriction.ModifyAsync(System.Action{ModifyGuildBehaviorRestrictionProperties},Kook.RequestOptions)"/>
 public class ModifyGuildBehaviorRestrictionProperties
 {
     /// <summary>

@@ -21,6 +21,23 @@ internal static class ExperimentalGuildHelper
         return restrictions.ToImmutable();
     }
 
+    public static async Task<RestGuildBehaviorRestriction> CreateBehaviorRestrictionAsync(BaseKookClient client,
+        IGuild guild, string name, IReadOnlyCollection<IGuildBehaviorRestrictionCondition> conditions,
+        TimeSpan duration, GuildBehaviorRestrictionType restrictionType, bool isEnabled, RequestOptions? options)
+    {
+        CreateGuildSecurityItemParams args = new()
+        {
+            GuildId = guild.Id,
+            Action = restrictionType,
+            Conditions = conditions.Select(x => x.ToModel()).ToArray(),
+            LimitTime = (int)duration.TotalMinutes,
+            Name = name,
+            Switch = isEnabled
+        };
+        GuildSecurityItem created = await client.ApiClient.CreateGuildSecurityItemAsync(args, options);
+        return RestGuildBehaviorRestriction.Create(client, guild.Id, created);
+    }
+
     public static async Task ModifyBehaviorRestrictionAsync(BaseKookClient client,
         RestGuildBehaviorRestriction restriction, Action<ModifyGuildBehaviorRestrictionProperties> func,
         RequestOptions? options)
@@ -28,7 +45,7 @@ internal static class ExperimentalGuildHelper
         ModifyGuildBehaviorRestrictionProperties properties = new();
         func(properties);
         IEnumerable<GuildSecurityCondition>? conditions = properties.Conditions?.Select(x => x.ToModel());
-        GuildSecurityItemUpdateParams args = new()
+        UpdateGuildSecurityItemParams args = new()
         {
             GuildId = restriction.GuildId,
             Id = restriction.Id,
@@ -41,20 +58,22 @@ internal static class ExperimentalGuildHelper
         await client.ApiClient.UpdateGuildSecurityItemAsync(args, options);
     }
 
-    public static async Task<RestGuildBehaviorRestriction> CreateBehaviorRestrictionAsync(BaseKookClient client,
-        IGuild guild, string name, IReadOnlyCollection<IGuildBehaviorRestrictionCondition> conditions,
-        TimeSpan duration, GuildBehaviorRestrictionType restrictionType, bool isEnabled, RequestOptions? options)
+    public static async Task EnableBehaviorRestrictionAsync(BaseKookClient client,
+        RestGuildBehaviorRestriction restriction, RequestOptions? options) =>
+        await ModifyBehaviorRestrictionAsync(client, restriction, x => x.IsEnabled = true, options);
+
+    public static async Task DisableBehaviorRestrictionAsync(BaseKookClient client,
+        RestGuildBehaviorRestriction restriction, RequestOptions? options) =>
+        await ModifyBehaviorRestrictionAsync(client, restriction, x => x.IsEnabled = false, options);
+
+    public static async Task DeleteGuildBehaviorRestrictionAsync(BaseKookClient client,
+        RestGuildBehaviorRestriction restriction, RequestOptions? options)
     {
-        GuildSecurityItemCreateParams args = new()
+        DeleteGuildSecurityItemParams args = new()
         {
-            GuildId = guild.Id,
-            Action = restrictionType,
-            Conditions = conditions.Select(x => x.ToModel()).ToArray(),
-            LimitTime = (int)duration.TotalMinutes,
-            Name = name,
-            Switch = isEnabled
+            GuildId = restriction.GuildId,
+            Id = restriction.Id,
         };
-        GuildSecurityItem created = await client.ApiClient.CreateGuildSecurityItemAsync(args, options);
-        return RestGuildBehaviorRestriction.Create(client, guild.Id, created);
+        await client.ApiClient.DeleteGuildSecurityItemAsync(args, options);
     }
 }
