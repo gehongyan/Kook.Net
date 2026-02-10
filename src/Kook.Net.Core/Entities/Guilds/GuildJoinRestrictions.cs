@@ -12,7 +12,7 @@ public enum GuildJoinRestrictions
     None = 0,
 
     /// <summary>
-    ///     禁止未实名的用户加入服务器
+    ///     禁止未实名的用户加入服务器。
     /// </summary>
     DisableUnverified = 1 << 0,
 
@@ -24,5 +24,5 @@ public enum GuildJoinRestrictions
     /// <summary>
     ///     禁止未实名且近期有严重违规记录的用户加入服务器。
     /// </summary>
-    DisableUnverifiedAndViolation = 1 << 2
+    DisableUnverifiedAndViolation = 1 << 2,
 }
