@@ -21,6 +21,20 @@ internal static class ExperimentalClientHelper
         return guilds.ToImmutable();
     }
 
+    public static async Task<IReadOnlyCollection<RestGuildBehaviorRestriction>> GetBehaviorRestrictionsAsync(
+        BaseKookClient client, ulong guildId, RequestOptions? options)
+    {
+        ImmutableArray<RestGuildBehaviorRestriction>.Builder restrictions = ImmutableArray
+            .CreateBuilder<RestGuildBehaviorRestriction>();
+        IEnumerable<GuildSecurityItem> models = await client.ApiClient
+            .GetGuildSecurityItemsAsync(guildId, options: options)
+            .FlattenAsync()
+            .ConfigureAwait(false);
+        foreach (GuildSecurityItem model in models)
+            restrictions.Add(RestGuildBehaviorRestriction.Create(client, guildId, model));
+        return restrictions.ToImmutable();
+    }
+
     #endregion
 
     #region Messages
@@ -39,7 +53,7 @@ internal static class ExperimentalClientHelper
 
     #endregion
 
-    #region MyRegion
+    #region Tags
 
     public static async Task<IReadOnlyCollection<ThreadTag>> QueryThreadTagsAsync(KookRestClient client,
         string keyword, RequestOptions? options)

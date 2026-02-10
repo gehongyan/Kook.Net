@@ -22,6 +22,16 @@ internal static class KookRestApiClientExperimentalExtensions
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
+    public static IAsyncEnumerable<IReadOnlyCollection<GuildSecurityItem>> GetGuildSecurityItemsAsync(this KookRestApiClient client,
+        ulong guildId, int limit = 50, int fromPage = 1, RequestOptions? options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+        KookRestApiClient.BucketIds ids = new(guildId);
+        return client.SendPagedAsync<GuildSecurityItem>(HttpMethod.Get,
+            (pageSize, page) => $"guild-security?guild_id={guildId}&page_size={pageSize}&page={page}",
+            ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
+    }
+
     #endregion
 
     #region Messages

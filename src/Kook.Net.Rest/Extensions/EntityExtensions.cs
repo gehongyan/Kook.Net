@@ -6,15 +6,15 @@ internal static class EntityExtensions
 {
     #region Guilds
 
-    public static GuildJoinRestrictions ToEntity(this API.Rest.JoinRestrictions model)
+    public static GuildJoinRestrictionTypes ToEntity(this API.Rest.JoinRestrictions model)
     {
-        GuildJoinRestrictions entity = GuildJoinRestrictions.None;
+        GuildJoinRestrictionTypes entity = GuildJoinRestrictionTypes.None;
         if (model.DisableUnverified)
-            entity |= GuildJoinRestrictions.DisableUnverified;
+            entity |= GuildJoinRestrictionTypes.DisableUnverified;
         if (model.DisableViolation)
-            entity |= GuildJoinRestrictions.DisableViolation;
+            entity |= GuildJoinRestrictionTypes.DisableViolation;
         if (model.DisableUnverifiedAndViolation)
-            entity |= GuildJoinRestrictions.DisableUnverifiedAndViolation;
+            entity |= GuildJoinRestrictionTypes.DisableUnverifiedAndViolation;
         return entity;
     }
 

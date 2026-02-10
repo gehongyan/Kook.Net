@@ -188,7 +188,7 @@ public interface IGuild : IEntity<ulong>
     /// <summary>
     ///     获取此服务器的加入限制信息。
     /// </summary>
-    GuildJoinRestrictions? JoinRestrictions { get; }
+    GuildJoinRestrictionTypes? JoinRestrictions { get; }
 
     #endregion
 

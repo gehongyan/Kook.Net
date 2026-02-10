@@ -4,7 +4,7 @@
 ///     表示服务器的加入限制。
 /// </summary>
 [Flags]
-public enum GuildJoinRestrictions
+public enum GuildJoinRestrictionTypes
 {
     /// <summary>
     ///     没有加入限制。
