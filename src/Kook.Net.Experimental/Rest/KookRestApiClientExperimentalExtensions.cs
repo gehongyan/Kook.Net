@@ -32,6 +32,32 @@ internal static class KookRestApiClientExperimentalExtensions
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
+    public static async Task<GuildSecurityItem> CreateGuildSecurityItemAsync(this KookRestApiClient client, GuildSecurityItemCreateParams args,
+        RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(0, args.GuildId, nameof(args.GuildId));
+        options = RequestOptions.CreateOrClone(options);
+
+        KookRestApiClient.BucketIds ids = new(args.GuildId);
+        return await client.SendJsonAsync<GuildSecurityItem>(HttpMethod.Post,
+                () => $"guild-security/create", args, ids, ClientBucketType.SendEdit, false, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public static async Task<GuildSecurityItem> UpdateGuildSecurityItemAsync(this KookRestApiClient client, GuildSecurityItemUpdateParams args,
+        RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(0, args.GuildId, nameof(args.GuildId));
+        options = RequestOptions.CreateOrClone(options);
+
+        KookRestApiClient.BucketIds ids = new(args.GuildId);
+        return await client.SendJsonAsync<GuildSecurityItem>(HttpMethod.Post,
+                () => $"guild-security/update", args, ids, ClientBucketType.SendEdit, false, null, options)
+            .ConfigureAwait(false);
+    }
+
     #endregion
 
     #region Messages

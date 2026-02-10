@@ -2,6 +2,7 @@ using Kook.API.Rest;
 using Kook.Rest.Extensions;
 using System.Collections.Immutable;
 using Kook.API;
+using Kook.WebSocket;
 
 namespace Kook.Rest;
 
@@ -19,20 +20,6 @@ internal static class ExperimentalClientHelper
         foreach (Guild model in models)
             guilds.Add(RestGuild.Create(client, model));
         return guilds.ToImmutable();
-    }
-
-    public static async Task<IReadOnlyCollection<RestGuildBehaviorRestriction>> GetBehaviorRestrictionsAsync(
-        BaseKookClient client, ulong guildId, RequestOptions? options)
-    {
-        ImmutableArray<RestGuildBehaviorRestriction>.Builder restrictions = ImmutableArray
-            .CreateBuilder<RestGuildBehaviorRestriction>();
-        IEnumerable<GuildSecurityItem> models = await client.ApiClient
-            .GetGuildSecurityItemsAsync(guildId, options: options)
-            .FlattenAsync()
-            .ConfigureAwait(false);
-        foreach (GuildSecurityItem model in models)
-            restrictions.Add(RestGuildBehaviorRestriction.Create(client, guildId, model));
-        return restrictions.ToImmutable();
     }
 
     #endregion

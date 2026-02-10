@@ -18,5 +18,30 @@ internal static class ExperimentalEntityExtensions
         };
     }
 
+    public static API.Rest.GuildSecurityCondition ToModel(this IGuildBehaviorRestrictionCondition entity)
+    {
+        return entity switch
+        {
+            GuildRegistrationDurationBehaviorRestrictionCondition regCondition => new API.Rest.GuildSecurityCondition
+            {
+                Type = "reg",
+                Duration = (int?)regCondition.MinimumDuration.TotalMinutes
+            },
+            GuildOverseasBehaviorRestrictionCondition => new API.Rest.GuildSecurityCondition
+            {
+                Type = "overseas"
+            },
+            GuildViolationBehaviorRestrictionCondition => new API.Rest.GuildSecurityCondition
+            {
+                Type = "banned"
+            },
+            GuildUnverifiedBehaviorRestrictionCondition => new API.Rest.GuildSecurityCondition
+            {
+                Type = "real_auth"
+            },
+            _ => throw new ArgumentOutOfRangeException(nameof(entity), "Unknown restriction condition type.")
+        };
+    }
+
     #endregion
 }

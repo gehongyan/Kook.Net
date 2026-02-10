@@ -33,7 +33,7 @@ public interface IGuildBehaviorRestriction : IEntity<string>
     /// <summary>
     ///     获取此行为限制是否启用。
     /// </summary>
-    bool Enabled { get; }
+    bool IsEnabled { get; }
 
     /// <summary>
     ///     获取规则创建的时间。

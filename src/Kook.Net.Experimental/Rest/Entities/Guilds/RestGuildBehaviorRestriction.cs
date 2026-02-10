@@ -24,7 +24,7 @@ public class RestGuildBehaviorRestriction : RestEntity<string>, IGuildBehaviorRe
     public GuildBehaviorRestrictionType RestrictionType { get; private set; }
 
     /// <inheritdoc />
-    public bool Enabled { get; private set; }
+    public bool IsEnabled { get; private set; }
 
     /// <inheritdoc />
     public DateTimeOffset CreatedAt { get; private set; }
@@ -55,12 +55,12 @@ public class RestGuildBehaviorRestriction : RestEntity<string>, IGuildBehaviorRe
             .Select(x => x.ToEntity())
             .OfType<IGuildBehaviorRestrictionCondition>();
         Conditions = [..conditions];
-        Duration = TimeSpan.FromSeconds(model.LimitTime);
+        Duration = TimeSpan.FromMinutes(model.LimitTime);
         RestrictionType = model.Action;
-        Enabled = model.Switch;
+        IsEnabled = model.Switch;
         CreatedAt = model.CreatedAt;
         UpdatedAt = model.UpdatedAt;
     }
 
-    private string DebuggerDisplay => $"BehaviorRestriction: {Name} ({Id}, if {string.Join(" and ", Conditions.Select(x => x.Type))}, disallow {RestrictionType} for {Duration}, {(Enabled ? "Enabled" : "Disabled")})";
+    private string DebuggerDisplay => $"BehaviorRestriction: {Name} ({Id}, if {string.Join(" and ", Conditions.Select(x => x.Type))}, disallow {RestrictionType} for {Duration}, {(IsEnabled ? "Enabled" : "Disabled")})";
 }
