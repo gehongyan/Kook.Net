@@ -100,6 +100,9 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     /// <inheritdoc cref="IGuild.RecommendInfo"/>
     public RecommendInfo? RecommendInfo { get; private set; }
 
+    /// <inheritdoc />
+    public GuildJoinRestrictions? JoinRestrictions { get; private set; }
+
     /// <summary>
     ///     获取此服务器的成员数。
     /// </summary>
@@ -364,6 +367,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         Status = model.Status;
         AutoDeleteTime = model.AutoDeleteTime;
         RecommendInfo = model.RecommendInfo?.ToEntity();
+        if (model.JoinRestrictions is not null)
+            JoinRestrictions = model.JoinRestrictions.ToEntity();
         AddOrUpdateCurrentUser(model);
     }
 
@@ -429,7 +434,8 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
         BufferBoostSubscriptionCount = model.BufferBoostSubscriptionCount;
         BoostLevel = model.BoostLevel;
         Status = model.Status;
-
+        if (model.JoinRestrictions is not null)
+            JoinRestrictions = model.JoinRestrictions.ToEntity();
         IsAvailable = true;
     }
 

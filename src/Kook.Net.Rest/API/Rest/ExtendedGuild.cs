@@ -29,4 +29,7 @@ internal class ExtendedGuild : Guild
 
     [JsonPropertyName("user_config")]
     public UserConfig? UserConfig { get; set; }
+
+    [JsonPropertyName("join_restrictions")]
+    public JoinRestrictions? JoinRestrictions { get; set; }
 }

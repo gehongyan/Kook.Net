@@ -154,6 +154,9 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     /// <inheritdoc cref="Kook.IGuild.RecommendInfo"/>
     public RecommendInfo? RecommendInfo { get; private set; }
 
+    /// <inheritdoc />
+    public GuildJoinRestrictions? JoinRestrictions { get; private set; }
+
     internal RestGuild(BaseKookClient client, ulong id)
         : base(client, id)
     {
@@ -221,6 +224,8 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
             throw new InvalidOperationException("The current user is not set well via login.");
         if (model.UserConfig is { } userConfig)
             CurrentUserNickname = userConfig.Nickname == Kook.CurrentUser.Username ? null : userConfig.Nickname;
+        if (model.JoinRestrictions is not null)
+            JoinRestrictions = model.JoinRestrictions.ToEntity();
     }
 
     internal void Update(Model model)
