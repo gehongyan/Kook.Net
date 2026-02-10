@@ -4,6 +4,22 @@ namespace Kook.Rest;
 
 internal static class EntityExtensions
 {
+    #region Guilds
+
+    public static GuildJoinRestrictions ToEntity(this API.Rest.JoinRestrictions model)
+    {
+        GuildJoinRestrictions entity = GuildJoinRestrictions.None;
+        if (model.DisableUnverified)
+            entity |= GuildJoinRestrictions.DisableUnverified;
+        if (model.DisableViolation)
+            entity |= GuildJoinRestrictions.DisableViolation;
+        if (model.DisableUnverifiedAndViolation)
+            entity |= GuildJoinRestrictions.DisableUnverifiedAndViolation;
+        return entity;
+    }
+
+    #endregion
+
     #region Emotes
 
     public static GuildEmote ToEntity(this API.Emoji model, ulong guildId) =>

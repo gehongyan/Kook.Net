@@ -185,6 +185,11 @@ public interface IGuild : IEntity<ulong>
     /// </summary>
     IRecommendInfo? RecommendInfo { get; }
 
+    /// <summary>
+    ///     获取此服务器的加入限制信息。
+    /// </summary>
+    GuildJoinRestrictions? JoinRestrictions { get; }
+
     #endregion
 
     #region Guilds

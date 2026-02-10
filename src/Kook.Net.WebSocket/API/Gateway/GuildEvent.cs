@@ -1,5 +1,6 @@
 using Kook.Net.Converters;
 using System.Text.Json.Serialization;
+using Kook.API.Rest;
 
 namespace Kook.API.Gateway;
 
@@ -60,4 +61,7 @@ internal class GuildEvent
 
     [JsonPropertyName("auto_delete_time")]
     public string? AutoDeleteTime { get; set; }
+
+    [JsonPropertyName("join_restrictions")]
+    public JoinRestrictions? JoinRestrictions { get; set; }
 }
