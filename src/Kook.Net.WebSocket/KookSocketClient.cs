@@ -458,9 +458,9 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             switch (gatewaySocketFrameType)
             {
                 case GatewaySocketFrameType.Event:
+                    if (!MessageQueue.HandleSequence && sequence.HasValue)
+                        await HandleSequenceAsync(sequence.Value);
                     int lastSeq = sequence ?? _lastSeq;
-                    if (!MessageQueue.HandleSequence)
-                        await HandleSequenceAsync(lastSeq);
                     await MessageQueue.EnqueueAsync(payload, lastSeq).ConfigureAwait(false);
                     break;
                 case GatewaySocketFrameType.Hello:
