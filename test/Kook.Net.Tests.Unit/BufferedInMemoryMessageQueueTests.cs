@@ -201,6 +201,66 @@ public class BufferedInMemoryMessageQueueTests
     }
 
     [Fact]
+    public async Task BufferOverflowStrategy_ReconnectGateway_raises_ReconnectRequested_when_buffer_full()
+    {
+        ConcurrentQueue<int> order = [];
+        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        TaskCompletionSource<ReconnectRequestedEventArgs> reconnectTcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
+        {
+            EnableBuffering = true,
+            BufferCapacity = 2,
+            BufferOverflowStrategy = BufferOverflowStrategy.ReconnectGateway,
+        });
+
+        BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 1));
+        queue.ReconnectRequested += (_, e) => reconnectTcs.TrySetResult(e);
+
+        await queue.StartAsync(TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(10), 1, TestContext.Current.CancellationToken);
+        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(30), 3, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(40), 4, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(99), 5, TestContext.Current.CancellationToken);
+        ReconnectRequestedEventArgs e = await reconnectTcs.Task.WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
+        await queue.StopAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(ReconnectRequestedReason.BufferOverflow, e.Reason);
+        Assert.Contains("Buffer overflow", e.Exception.Message);
+        Assert.Equal([10], order.ToArray());
+    }
+
+    [Fact]
+    public async Task BufferWaitTimeoutStrategy_ReconnectGateway_raises_ReconnectRequested_on_timeout()
+    {
+        ConcurrentQueue<int> order = [];
+        TaskCompletionSource<ReconnectRequestedEventArgs> reconnectTcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
+        {
+            EnableBuffering = true,
+            BufferCapacity = 16,
+            WaitForMissingTimeout = TimeSpan.FromMilliseconds(80),
+            BufferWaitTimeoutStrategy = BufferWaitTimeoutStrategy.ReconnectGateway,
+        });
+
+        BaseMessageQueue queue = provider(CreateHandler(order));
+        queue.ReconnectRequested += (_, e) => reconnectTcs.TrySetResult(e);
+
+        await queue.StartAsync(TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(20), 2, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(40), 4, TestContext.Current.CancellationToken);
+        ReconnectRequestedEventArgs e = await reconnectTcs.Task.WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
+        await queue.StopAsync(TestContext.Current.CancellationToken);
+
+        Assert.Equal(ReconnectRequestedReason.WaitTimeout, e.Reason);
+        Assert.Contains("Wait for missing sequence timeout", e.Exception.Message);
+        // 仅 seq 2 在初始化时被当作 next 直接处理，seq 4 在 buffer 中；超时后 ReconnectGateway 不排空 buffer，故只处理了 20
+        Assert.Equal([20], order.ToArray());
+    }
+
+    [Fact]
     public async Task BufferWaitTimeoutStrategy_SkipMissingAndProcessBuffered_processes_buffered_on_timeout()
     {
         ConcurrentQueue<int> order = [];
