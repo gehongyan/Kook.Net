@@ -137,7 +137,6 @@ Task LogAsync(LogMessage log)
 // Ready 事件表示客户端已经建立了连接，现在可以安全地访问缓存
 async Task ReadyAsync()
 {
-    IReadOnlyCollection<ThreadTag> tags = await client.Rest.QueryThreadTagsAsync("o");
 }
 
 // 并不建议以这样的方式实现 Bot 的命令交互功能
