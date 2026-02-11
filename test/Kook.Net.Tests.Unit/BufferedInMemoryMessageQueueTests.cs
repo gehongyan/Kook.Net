@@ -18,26 +18,41 @@ public class BufferedInMemoryMessageQueueTests
         return doc.RootElement.Clone();
     }
 
+    /// <summary>
+    /// 创建将 payload 中 "v" 入队到 order，并在 count 达到阈值时 signal 的 handler。
+    /// </summary>
+    private static Func<int, JsonElement, Task> CreateHandler(
+        ConcurrentQueue<int> order,
+        TaskCompletionSource? tcs = null,
+        int signalWhenCount = 0)
+    {
+        return (_, payload) =>
+        {
+            if (payload.TryGetProperty("v", out JsonElement p) && p.TryGetInt32(out int v))
+                order.Enqueue(v);
+            if (signalWhenCount > 0 && order.Count >= signalWhenCount)
+                tcs?.TrySetResult();
+            return Task.CompletedTask;
+        };
+    }
+
+    private static MessageQueueProvider CreateBufferedProvider(InMemoryMessageQueueOptions? options = null)
+    {
+        return InMemoryMessageQueueProvider.Create(options ?? new InMemoryMessageQueueOptions
+        {
+            EnableBuffering = true,
+            BufferCapacity = 16,
+        });
+    }
+
     [Fact]
     public async Task Processes_messages_in_sequence_order()
     {
         var order = new ConcurrentQueue<int>();
         var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
-        {
-            EnableBuffering = true,
-            BufferCapacity = 16,
-        });
-
-        BaseMessageQueue queue = provider((_, payload) =>
-        {
-            if (payload.TryGetProperty("v", out JsonElement p) && p.TryGetInt32(out int v))
-                order.Enqueue(v);
-            if (order.Count >= 3)
-                tcs.TrySetResult();
-            return Task.CompletedTask;
-        });
+        MessageQueueProvider provider = CreateBufferedProvider();
+        BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 3));
 
         await queue.StartAsync();
         await queue.EnqueueAsync(CreatePayload(10), 1);
@@ -55,20 +70,8 @@ public class BufferedInMemoryMessageQueueTests
         var order = new ConcurrentQueue<int>();
         var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
-        {
-            EnableBuffering = true,
-            BufferCapacity = 16,
-        });
-
-        BaseMessageQueue queue = provider((_, payload) =>
-        {
-            if (payload.TryGetProperty("v", out JsonElement p) && p.TryGetInt32(out int v))
-                order.Enqueue(v);
-            if (order.Count >= 3)
-                tcs.TrySetResult();
-            return Task.CompletedTask;
-        });
+        MessageQueueProvider provider = CreateBufferedProvider();
+        BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 3));
 
         await queue.StartAsync();
         await queue.EnqueueAsync(CreatePayload(10), 1);
@@ -86,20 +89,8 @@ public class BufferedInMemoryMessageQueueTests
         var order = new ConcurrentQueue<int>();
         var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
-        {
-            EnableBuffering = true,
-            BufferCapacity = 16,
-        });
-
-        BaseMessageQueue queue = provider((_, payload) =>
-        {
-            if (payload.TryGetProperty("v", out JsonElement p) && p.TryGetInt32(out int v))
-                order.Enqueue(v);
-            if (order.Count >= 2)
-                tcs.TrySetResult();
-            return Task.CompletedTask;
-        });
+        MessageQueueProvider provider = CreateBufferedProvider();
+        BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 2));
 
         await queue.StartAsync();
         await queue.EnqueueAsync(CreatePayload(10), 1);
@@ -118,13 +109,7 @@ public class BufferedInMemoryMessageQueueTests
         var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
         MessageQueueProvider fromCreate = InMemoryMessageQueueProvider.Create(null);
-        BaseMessageQueue queue = fromCreate((_, payload) =>
-        {
-            if (payload.TryGetProperty("v", out JsonElement p) && p.TryGetInt32(out int v))
-                received.Enqueue(v);
-            tcs.TrySetResult();
-            return Task.CompletedTask;
-        });
+        BaseMessageQueue queue = fromCreate(CreateHandler(received, tcs, signalWhenCount: 1));
 
         await queue.StartAsync();
         await queue.EnqueueAsync(CreatePayload(42), 1);
@@ -147,14 +132,7 @@ public class BufferedInMemoryMessageQueueTests
             BufferOverflowStrategy = BufferOverflowStrategy.DropIncoming,
         });
 
-        BaseMessageQueue queue = provider((_, payload) =>
-        {
-            if (payload.TryGetProperty("v", out JsonElement p) && p.TryGetInt32(out int v))
-                order.Enqueue(v);
-            if (order.Count >= 5)
-                tcs.TrySetResult();
-            return Task.CompletedTask;
-        });
+        BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 5));
 
         await queue.StartAsync();
         await queue.EnqueueAsync(CreatePayload(10), 1);
@@ -181,12 +159,7 @@ public class BufferedInMemoryMessageQueueTests
             BufferOverflowStrategy = BufferOverflowStrategy.ThrowException,
         });
 
-        BaseMessageQueue queue = provider((_, payload) =>
-        {
-            if (payload.TryGetProperty("v", out JsonElement p) && p.TryGetInt32(out int v))
-                order.Enqueue(v);
-            return Task.CompletedTask;
-        });
+        BaseMessageQueue queue = provider(CreateHandler(order));
 
         await queue.StartAsync();
         await queue.EnqueueAsync(CreatePayload(10), 1);
@@ -213,14 +186,7 @@ public class BufferedInMemoryMessageQueueTests
             BufferWaitTimeoutStrategy = BufferWaitTimeoutStrategy.SkipMissing,
         });
 
-        BaseMessageQueue queue = provider((_, payload) =>
-        {
-            if (payload.TryGetProperty("v", out JsonElement p) && p.TryGetInt32(out int v))
-                order.Enqueue(v);
-            if (order.Count >= 2)
-                tcs.TrySetResult();
-            return Task.CompletedTask;
-        });
+        BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 2));
 
         await queue.StartAsync();
         await queue.EnqueueAsync(CreatePayload(20), 2);
@@ -244,14 +210,7 @@ public class BufferedInMemoryMessageQueueTests
             WaitForMissingTimeout = null,
         });
 
-        BaseMessageQueue queue = provider((_, payload) =>
-        {
-            if (payload.TryGetProperty("v", out JsonElement p) && p.TryGetInt32(out int v))
-                order.Enqueue(v);
-            if (order.Count >= 3)
-                tcs.TrySetResult();
-            return Task.CompletedTask;
-        });
+        BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 3));
 
         await queue.StartAsync();
         await queue.EnqueueAsync(CreatePayload(20), 2);
@@ -278,14 +237,7 @@ public class BufferedInMemoryMessageQueueTests
             WaitForMissingTimeout = Timeout.InfiniteTimeSpan,
         });
 
-        BaseMessageQueue queue = provider((_, payload) =>
-        {
-            if (payload.TryGetProperty("v", out JsonElement p) && p.TryGetInt32(out int v))
-                order.Enqueue(v);
-            if (order.Count >= 3)
-                tcs.TrySetResult();
-            return Task.CompletedTask;
-        });
+        BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 3));
 
         await queue.StartAsync();
         await queue.EnqueueAsync(CreatePayload(20), 2);

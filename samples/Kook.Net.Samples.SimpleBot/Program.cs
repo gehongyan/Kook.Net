@@ -1,8 +1,6 @@
 using System.Diagnostics;
-using System.Text.Json;
 using Kook;
 using Kook.Net.Queue.InMemory;
-using Kook.Rest;
 using Kook.WebSocket;
 
 // 这是一个使用 Kook.Net 的 C# 简单示例
