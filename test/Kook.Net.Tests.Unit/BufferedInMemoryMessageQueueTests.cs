@@ -26,6 +26,7 @@ public class BufferedInMemoryMessageQueueTests
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
+            EnableBuffering = true,
             BufferCapacity = 16,
         });
 
@@ -56,6 +57,7 @@ public class BufferedInMemoryMessageQueueTests
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
+            EnableBuffering = true,
             BufferCapacity = 16,
         });
 
@@ -86,6 +88,7 @@ public class BufferedInMemoryMessageQueueTests
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
+            EnableBuffering = true,
             BufferCapacity = 16,
         });
 
@@ -139,6 +142,7 @@ public class BufferedInMemoryMessageQueueTests
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
+            EnableBuffering = true,
             BufferCapacity = 3,
             BufferOverflowStrategy = BufferOverflowStrategy.DropIncoming,
         });
@@ -172,6 +176,7 @@ public class BufferedInMemoryMessageQueueTests
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
+            EnableBuffering = true,
             BufferCapacity = 2,
             BufferOverflowStrategy = BufferOverflowStrategy.ThrowException,
         });
@@ -202,6 +207,7 @@ public class BufferedInMemoryMessageQueueTests
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
+            EnableBuffering = true,
             BufferCapacity = 16,
             WaitForMissingTimeout = TimeSpan.FromMilliseconds(80),
             BufferWaitTimeoutStrategy = BufferWaitTimeoutStrategy.SkipMissing,
@@ -233,6 +239,7 @@ public class BufferedInMemoryMessageQueueTests
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
+            EnableBuffering = true,
             BufferCapacity = 16,
             WaitForMissingTimeout = null,
         });
@@ -266,6 +273,7 @@ public class BufferedInMemoryMessageQueueTests
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
+            EnableBuffering = true,
             BufferCapacity = 16,
             WaitForMissingTimeout = Timeout.InfiniteTimeSpan,
         });

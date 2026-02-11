@@ -33,7 +33,7 @@ KookSocketConfig config = new()
     {
         EnableBuffering = true,
         BufferCapacity = 3,
-        BufferOverflowStrategy = BufferOverflowStrategy.ReconnectGateway
+        BufferOverflowStrategy = BufferOverflowStrategy.DropIncoming
     })
 };
 
