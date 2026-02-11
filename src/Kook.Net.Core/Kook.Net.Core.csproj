@@ -12,9 +12,5 @@
   </ItemGroup>
   <ItemGroup Condition=" !$(TargetFramework.StartsWith('net10.0')) ">
     <PackageReference Include="System.Linq.Async" />
-    <PackageReference Include="PolySharp">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 </Project>

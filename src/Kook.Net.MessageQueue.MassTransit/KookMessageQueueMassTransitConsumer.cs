@@ -15,6 +15,6 @@ internal class KookMessageQueueMassTransitConsumer : IConsumer<GatewayMessageWra
     /// <inheritdoc />
     public async Task Consume(ConsumeContext<GatewayMessageWrapper> context)
     {
-        await _client.ProcessGatewayEventAsync(context.Message.Payload).ConfigureAwait(false);
+        await _client.ProcessGatewayEventAsync(context.Message.Sequence, context.Message.Payload).ConfigureAwait(false);
     }
 }

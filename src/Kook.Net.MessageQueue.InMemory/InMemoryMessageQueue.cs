@@ -1,17 +1,22 @@
-﻿using System.Collections.Concurrent;
+﻿using System.Threading.Channels;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace Kook.Net.Queue.InMemory;
 
 internal class InMemoryMessageQueue : BaseMessageQueue
 {
-    private readonly BlockingCollection<JsonElement> _queue;
+    private readonly Channel<QueueItem> _channel;
     private CancellationTokenSource? _cancellationTokenSource;
 
-    internal InMemoryMessageQueue(Func<JsonElement, Task> eventHandler)
+    internal InMemoryMessageQueue(Func<int, JsonElement, Task> eventHandler)
         : base(eventHandler)
     {
-        _queue = [];
+        _channel = Channel.CreateUnbounded<QueueItem>(new UnboundedChannelOptions
+        {
+            SingleReader = true,
+            SingleWriter = true,
+        });
     }
 
     /// <inheritdoc />
@@ -19,25 +24,36 @@ internal class InMemoryMessageQueue : BaseMessageQueue
     {
         _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        Task.Factory.StartNew(async () =>
+
+        Task.Run(async () =>
         {
-            foreach (JsonElement gatewayEvent in _queue.GetConsumingEnumerable(_cancellationTokenSource.Token))
-                await EventHandler(gatewayEvent).ConfigureAwait(false);
-        }, _cancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            await foreach (QueueItem gatewayEvent in _channel.Reader.ReadAllAsync(_cancellationTokenSource.Token))
+            {
+                try
+                {
+                    await EventHandler(gatewayEvent.Sequence, gatewayEvent.Payload).ConfigureAwait(false);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error processing message: {ex}");
+                }
+            }
+        }, _cancellationTokenSource.Token);
+
         return Task.CompletedTask;
     }
 
     /// <inheritdoc />
     public override Task StopAsync(CancellationToken cancellationToken = default)
     {
-        _queue.CompleteAdding();
+        _channel.Writer.Complete();
         return Task.CompletedTask;
     }
 
-    public override Task EnqueueAsync(JsonElement payload, int sequence,
+    /// <inheritdoc />
+    public override async Task EnqueueAsync(JsonElement payload, int sequence,
         CancellationToken cancellationToken = default)
     {
-        _queue.Add(payload, cancellationToken);
-        return Task.CompletedTask;
+        await _channel.Writer.WriteAsync(new QueueItem(sequence, payload), cancellationToken).ConfigureAwait(false);
     }
 }

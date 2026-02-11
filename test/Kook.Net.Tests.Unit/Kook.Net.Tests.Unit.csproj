@@ -4,6 +4,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Kook.Net.CardMarkup\Kook.Net.CardMarkup.csproj" />
+    <ProjectReference Include="..\..\src\Kook.Net.MessageQueue.InMemory\Kook.Net.MessageQueue.InMemory.csproj" />
   </ItemGroup>
 
 </Project>
