@@ -95,7 +95,7 @@ internal sealed class BufferedInMemoryMessageQueue : BaseMessageQueue
                 DrainBufferLocked(toProcess);
             }
             // 序号大于期望值，放入缓冲区
-            else if (_buffer.Count < _options.BufferCapacity)
+            else if (_buffer.Count < _options.BufferCapacity || _buffer.ContainsKey(sequence))
                 _buffer[sequence] = payload;
             // 缓冲区已满，按策略处理
             else
