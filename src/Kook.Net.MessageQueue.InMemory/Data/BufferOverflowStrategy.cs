@@ -11,9 +11,9 @@ public enum BufferOverflowStrategy
     DropIncoming,
 
     /// <summary>
-    ///     立即处理缓冲中序号最小的一项，并将当前入队消息写入缓冲。
+    ///     忽略缺失序号，将下一期望序号推进到当前缓冲中的最小序号，并顺序处理缓冲中的连续消息。
     /// </summary>
-    ShiftOne,
+    SkipMissing,
 
     /// <summary>
     ///     抛出异常。

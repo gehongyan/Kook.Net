@@ -105,12 +105,20 @@ internal sealed class BufferedInMemoryMessageQueue : BaseMessageQueue
                     // 丢弃新到的消息
                     case BufferOverflowStrategy.DropIncoming:
                         return Task.CompletedTask;
-                    case BufferOverflowStrategy.ShiftOne:
+                    // 跳过缺失的消息
+                    case BufferOverflowStrategy.SkipMissing:
                         int minSn = _buffer.Keys.MinBy(x => (x - _nextExpectedSn + mod) % mod);
-                        JsonElement minPayload = _buffer[minSn];
-                        _buffer.Remove(minSn);
-                        toProcess = [new QueueItem(minSn, minPayload)];
-                        _buffer[sequence] = payload;
+                        _nextExpectedSn = minSn;
+                        toProcess = [];
+                        DrainBufferLocked(toProcess);
+                        if (sequence == _nextExpectedSn)
+                        {
+                            toProcess.Add(new QueueItem(sequence, payload));
+                            _nextExpectedSn = NextSn(sequence, mod);
+                            DrainBufferLocked(toProcess);
+                        }
+                        else
+                            _buffer[sequence] = payload;
                         break;
                     // 抛出异常
                     case BufferOverflowStrategy.ThrowException:

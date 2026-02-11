@@ -148,27 +148,29 @@ public class BufferedInMemoryMessageQueueTests
     }
 
     [Fact]
-    public async Task BufferOverflowStrategy_ShiftOne_throws_when_buffer_full()
+    public async Task BufferOverflowStrategy_SkipMissing_skips_missing_and_processes_buffered_when_buffer_full()
     {
-        ConcurrentQueue<int> order = [];
+        var order = new ConcurrentQueue<int>();
+        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
             EnableBuffering = true,
             BufferCapacity = 2,
-            BufferOverflowStrategy = BufferOverflowStrategy.ShiftOne,
+            BufferOverflowStrategy = BufferOverflowStrategy.SkipMissing,
         });
 
-        BaseMessageQueue queue = provider(CreateHandler(order));
+        BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 4));
 
         await queue.StartAsync(TestContext.Current.CancellationToken);
         await queue.EnqueueAsync(CreatePayload(10), 1, TestContext.Current.CancellationToken);
         await queue.EnqueueAsync(CreatePayload(30), 3, TestContext.Current.CancellationToken);
         await queue.EnqueueAsync(CreatePayload(40), 4, TestContext.Current.CancellationToken);
         await queue.EnqueueAsync(CreatePayload(50), 5, TestContext.Current.CancellationToken);
+        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
         await queue.StopAsync(TestContext.Current.CancellationToken);
 
-        Assert.Equal([10, 30], order.ToArray());
+        Assert.Equal([10, 30, 40, 50], order.ToArray());
     }
 
     [Fact]
