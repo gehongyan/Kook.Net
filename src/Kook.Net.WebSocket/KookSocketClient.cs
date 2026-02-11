@@ -437,10 +437,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
     #region ProcessMessageAsync
 
-    private void HandleSequence(int sequence)
+    private async Task HandleSequenceAsync(int sequence)
     {
         if (sequence != _lastSeq + 1)
-            _gatewayLogger.WarningAsync($"Missed a sequence number. Expected {_lastSeq + 1}, got {sequence}.").GetAwaiter().GetResult();
+            await _gatewayLogger.WarningAsync($"Missed a sequence number. Expected {_lastSeq + 1}, got {sequence}.");
         _lastSeq = sequence;
     }
 
@@ -460,7 +460,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
                 case GatewaySocketFrameType.Event:
                     int lastSeq = sequence ?? _lastSeq;
                     if (!MessageQueue.HandleSequence)
-                        HandleSequence(lastSeq);
+                        await HandleSequenceAsync(lastSeq);
                     await MessageQueue.EnqueueAsync(payload, lastSeq).ConfigureAwait(false);
                     break;
                 case GatewaySocketFrameType.Hello:
@@ -495,7 +495,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
     internal async Task ProcessGatewayEventAsync(int sequence, JsonElement payload)
     {
         if (MessageQueue.HandleSequence)
-            HandleSequence(sequence);
+            await HandleSequenceAsync(sequence);
 
         if (!payload.TryGetProperty("type", out JsonElement typeProperty)
             || !typeProperty.TryGetInt32(out int typeValue)
