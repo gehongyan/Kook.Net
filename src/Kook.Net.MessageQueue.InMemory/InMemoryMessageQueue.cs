@@ -25,7 +25,7 @@ internal class InMemoryMessageQueue : BaseMessageQueue
         _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
-        Task.Factory.StartNew(async () =>
+        Task.Run(async () =>
         {
             await foreach (QueueItem gatewayEvent in _channel.Reader.ReadAllAsync(_cancellationTokenSource.Token))
             {
@@ -38,7 +38,7 @@ internal class InMemoryMessageQueue : BaseMessageQueue
                     Debug.WriteLine($"Error processing message: {ex}");
                 }
             }
-        }, _cancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+        }, _cancellationTokenSource.Token);
 
         return Task.CompletedTask;
     }
