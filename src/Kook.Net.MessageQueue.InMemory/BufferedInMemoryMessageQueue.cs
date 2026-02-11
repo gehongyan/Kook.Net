@@ -112,7 +112,7 @@ internal sealed class BufferedInMemoryMessageQueue : BaseMessageQueue
                     case BufferOverflowStrategy.DropIncoming:
                         return Task.CompletedTask;
                     case BufferOverflowStrategy.ShiftOne:
-                        int minSn = _buffer.Keys.Min();
+                        int minSn = _buffer.Keys.MinBy(x => (x - _nextExpectedSn + mod) % mod);
                         JsonElement minPayload = _buffer[minSn];
                         _buffer.Remove(minSn);
                         toProcess = [new QueueItem(minSn, minPayload)];
@@ -200,7 +200,8 @@ internal sealed class BufferedInMemoryMessageQueue : BaseMessageQueue
             switch (_options.BufferWaitTimeoutStrategy)
             {
                 case BufferWaitTimeoutStrategy.SkipMissing:
-                    int minSn = _buffer.Keys.Min();
+                    int mod = _maxSeq + 1;
+                    int minSn = _buffer.Keys.MinBy(x => (x - _nextExpectedSn + mod) % mod);
                     _nextExpectedSn = minSn;
                     toProcess = [];
                     DrainBufferLocked(toProcess);
