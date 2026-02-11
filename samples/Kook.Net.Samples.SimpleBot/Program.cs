@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Text.Json;
 using Kook;
+using Kook.Net.Queue.InMemory;
 using Kook.Rest;
 using Kook.WebSocket;
 
@@ -27,7 +28,13 @@ KookSocketConfig config = new()
     AutoUpdateRolePositions = true,
     StartupCacheFetchMode = StartupCacheFetchMode.Synchronous,
     LargeNumberOfGuildsThreshold = 50,
-    AutoLogoutBeforeLogin = true
+    AutoLogoutBeforeLogin = true,
+    MessageQueueProvider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
+    {
+        EnableBuffering = true,
+        BufferCapacity = 3,
+        BufferOverflowStrategy = BufferOverflowStrategy.ReconnectGateway
+    })
 };
 
 // 在使用完 Kook.Net 的客户端后，建议在应用程序的生命周期结束时进行 Dispose 操作

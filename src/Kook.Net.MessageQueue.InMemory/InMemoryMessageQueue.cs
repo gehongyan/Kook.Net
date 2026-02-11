@@ -6,13 +6,13 @@ namespace Kook.Net.Queue.InMemory;
 
 internal class InMemoryMessageQueue : BaseMessageQueue
 {
-    private readonly Channel<JsonElement> _channel;
+    private readonly Channel<QueueItem> _channel;
     private CancellationTokenSource? _cancellationTokenSource;
 
-    internal InMemoryMessageQueue(Func<JsonElement, Task> eventHandler)
+    internal InMemoryMessageQueue(Func<int, JsonElement, Task> eventHandler)
         : base(eventHandler)
     {
-        _channel = Channel.CreateUnbounded<JsonElement>(new UnboundedChannelOptions
+        _channel = Channel.CreateUnbounded<QueueItem>(new UnboundedChannelOptions
         {
             SingleReader = true,
             SingleWriter = true,
@@ -27,11 +27,11 @@ internal class InMemoryMessageQueue : BaseMessageQueue
 
         Task.Factory.StartNew(async () =>
         {
-            await foreach (JsonElement gatewayEvent in _channel.Reader.ReadAllAsync(_cancellationTokenSource.Token))
+            await foreach (QueueItem gatewayEvent in _channel.Reader.ReadAllAsync(_cancellationTokenSource.Token))
             {
                 try
                 {
-                    await EventHandler(gatewayEvent).ConfigureAwait(false);
+                    await EventHandler(gatewayEvent.Sequence, gatewayEvent.Payload).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
@@ -57,6 +57,6 @@ internal class InMemoryMessageQueue : BaseMessageQueue
     public override async Task EnqueueAsync(JsonElement payload, int sequence,
         CancellationToken cancellationToken = default)
     {
-        await _channel.Writer.WriteAsync(payload, cancellationToken).ConfigureAwait(false);
+        await _channel.Writer.WriteAsync(new QueueItem(sequence, payload), cancellationToken).ConfigureAwait(false);
     }
 }

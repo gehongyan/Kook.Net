@@ -134,6 +134,7 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         connectionManager.Connected += () => TimedInvokeAsync(_connectedEvent, nameof(Connected));
         connectionManager.Disconnected += (ex, _) => TimedInvokeAsync(_disconnectedEvent, nameof(Disconnected), ex);
         Connection = connectionManager;
+        MessageQueue.ReconnectRequested += (_, e) => Connection.Error(e.Exception);
 
         _nextAudioId = 1;
 
@@ -436,16 +437,16 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
 
     #region ProcessMessageAsync
 
+    private void HandleSequence(int sequence)
+    {
+        if (sequence != _lastSeq + 1)
+            _gatewayLogger.WarningAsync($"Missed a sequence number. Expected {_lastSeq + 1}, got {sequence}.").GetAwaiter().GetResult();
+        _lastSeq = sequence;
+    }
+
     internal virtual async Task ProcessMessageAsync(GatewaySocketFrameType gatewaySocketFrameType,
         int? sequence, JsonElement payload, JsonElement extra)
     {
-        if (sequence.HasValue)
-        {
-            if (sequence.Value != _lastSeq + 1)
-                await _gatewayLogger.WarningAsync($"Missed a sequence number. Expected {_lastSeq + 1}, got {sequence.Value}.");
-            _lastSeq = sequence.Value;
-        }
-
         _lastMessageTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
         if (extra.TryGetProperty("intent", out JsonElement intentProperty)
@@ -457,7 +458,10 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
             switch (gatewaySocketFrameType)
             {
                 case GatewaySocketFrameType.Event:
-                    await MessageQueue.EnqueueAsync(payload, sequence ?? _lastSeq).ConfigureAwait(false);
+                    int lastSeq = sequence ?? _lastSeq;
+                    if (!MessageQueue.HandleSequence)
+                        HandleSequence(lastSeq);
+                    await MessageQueue.EnqueueAsync(payload, lastSeq).ConfigureAwait(false);
                     break;
                 case GatewaySocketFrameType.Hello:
                     await HandleGatewayHelloAsync(payload).ConfigureAwait(false);
@@ -488,8 +492,11 @@ public partial class KookSocketClient : BaseSocketClient, IKookClient
         }
     }
 
-    internal async Task ProcessGatewayEventAsync(JsonElement payload)
+    internal async Task ProcessGatewayEventAsync(int sequence, JsonElement payload)
     {
+        if (MessageQueue.HandleSequence)
+            HandleSequence(sequence);
+
         if (!payload.TryGetProperty("type", out JsonElement typeProperty)
             || !typeProperty.TryGetInt32(out int typeValue)
             || !Enum.IsDefined(typeof(MessageType), typeValue))
