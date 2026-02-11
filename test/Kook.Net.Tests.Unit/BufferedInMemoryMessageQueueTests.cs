@@ -48,8 +48,8 @@ public class BufferedInMemoryMessageQueueTests
     [Fact]
     public async Task Processes_messages_in_sequence_order()
     {
-        var order = new ConcurrentQueue<int>();
-        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        ConcurrentQueue<int> order = [];
+        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         MessageQueueProvider provider = CreateBufferedProvider();
         BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 3));
@@ -67,8 +67,8 @@ public class BufferedInMemoryMessageQueueTests
     [Fact]
     public async Task Reorders_buffered_messages_and_processes_in_sequence()
     {
-        var order = new ConcurrentQueue<int>();
-        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        ConcurrentQueue<int> order = [];
+        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         MessageQueueProvider provider = CreateBufferedProvider();
         BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 3));
@@ -86,8 +86,8 @@ public class BufferedInMemoryMessageQueueTests
     [Fact]
     public async Task Discards_duplicate_sequence_already_processed()
     {
-        var order = new ConcurrentQueue<int>();
-        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        ConcurrentQueue<int> order = [];
+        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         MessageQueueProvider provider = CreateBufferedProvider();
         BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 2));
@@ -105,10 +105,10 @@ public class BufferedInMemoryMessageQueueTests
     [Fact]
     public async Task Create_with_null_options_returns_working_unbuffered_queue()
     {
-        var received = new ConcurrentQueue<int>();
-        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        ConcurrentQueue<int> received = [];
+        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        MessageQueueProvider fromCreate = InMemoryMessageQueueProvider.Create(null);
+        MessageQueueProvider fromCreate = InMemoryMessageQueueProvider.Create();
         BaseMessageQueue queue = fromCreate(CreateHandler(received, tcs, signalWhenCount: 1));
 
         await queue.StartAsync(TestContext.Current.CancellationToken);
@@ -122,8 +122,8 @@ public class BufferedInMemoryMessageQueueTests
     [Fact]
     public async Task BufferOverflowStrategy_DropIncoming_drops_new_message_when_buffer_full()
     {
-        var order = new ConcurrentQueue<int>();
-        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        ConcurrentQueue<int> order = [];
+        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
@@ -150,7 +150,7 @@ public class BufferedInMemoryMessageQueueTests
     [Fact]
     public async Task BufferOverflowStrategy_Throw_throws_when_buffer_full()
     {
-        var order = new ConcurrentQueue<int>();
+        ConcurrentQueue<int> order = [];
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
@@ -175,8 +175,8 @@ public class BufferedInMemoryMessageQueueTests
     [Fact]
     public async Task BufferWaitTimeoutStrategy_SkipMissingAndProcessBuffered_processes_buffered_on_timeout()
     {
-        var order = new ConcurrentQueue<int>();
-        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        ConcurrentQueue<int> order = [];
+        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
@@ -200,8 +200,8 @@ public class BufferedInMemoryMessageQueueTests
     [Fact]
     public async Task When_WaitForMissingTimeout_null_never_fires_timeout_keeps_waiting()
     {
-        var order = new ConcurrentQueue<int>();
-        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        ConcurrentQueue<int> order = [];
+        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
@@ -227,8 +227,8 @@ public class BufferedInMemoryMessageQueueTests
     [Fact]
     public async Task When_WaitForMissingTimeout_InfiniteTimeSpan_never_fires_timeout_keeps_waiting()
     {
-        var order = new ConcurrentQueue<int>();
-        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        ConcurrentQueue<int> order = [];
+        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
