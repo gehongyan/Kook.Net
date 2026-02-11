@@ -45,13 +45,7 @@ internal sealed class BufferedInMemoryMessageQueue : BaseMessageQueue
     {
         _cts?.Dispose();
         _cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-
-        _ = Task.Factory.StartNew(
-            RunOutputReaderAsync,
-            _cts.Token,
-            TaskCreationOptions.LongRunning,
-            TaskScheduler.Default);
-
+        _ = Task.Run(RunOutputReaderAsync, _cts.Token);
         return Task.CompletedTask;
     }
 
