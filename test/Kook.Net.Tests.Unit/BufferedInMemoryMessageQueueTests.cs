@@ -177,6 +177,7 @@ public class BufferedInMemoryMessageQueueTests
     public async Task BufferOverflowStrategy_ThrowException_throws_when_buffer_full()
     {
         ConcurrentQueue<int> order = [];
+        TaskCompletionSource tcs = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
         MessageQueueProvider provider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
         {
@@ -185,7 +186,7 @@ public class BufferedInMemoryMessageQueueTests
             BufferOverflowStrategy = BufferOverflowStrategy.ThrowException,
         });
 
-        BaseMessageQueue queue = provider(CreateHandler(order));
+        BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 1));
 
         await queue.StartAsync(TestContext.Current.CancellationToken);
         await queue.EnqueueAsync(CreatePayload(10), 1, TestContext.Current.CancellationToken);
@@ -193,6 +194,7 @@ public class BufferedInMemoryMessageQueueTests
         await queue.EnqueueAsync(CreatePayload(40), 4, TestContext.Current.CancellationToken);
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             await queue.EnqueueAsync(CreatePayload(99), 5, TestContext.Current.CancellationToken));
+        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
         await queue.StopAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal([10], order.ToArray());
