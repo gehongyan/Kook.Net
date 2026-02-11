@@ -11,14 +11,36 @@ public class InMemoryMessageQueueOptions
     public bool EnableBuffering { get; set; } = false;
 
     /// <summary>
-    ///     序号上限（含），用于序号回绕计算。有效序号范围为 [0, <see cref="MaxSequenceNumber"/>]。默认 <see cref="ushort.MaxValue"/>。
+    ///     序号上限（含），用于序号回绕计算。有效序号范围为 [0, <see cref="MaxSequenceNumber"/>]。默认
+    ///     <see cref="ushort.MaxValue"/>，最小 <c>1</c>。
     /// </summary>
-    public int MaxSequenceNumber { get; set; } = ushort.MaxValue;
+    public int MaxSequenceNumber
+    {
+        get;
+        set
+        {
+            Preconditions.AtLeast(
+                value, 1, nameof(MaxSequenceNumber),
+                $"{nameof(MaxSequenceNumber)} is required to be non-negative.");
+            field = value;
+        }
+    } = ushort.MaxValue;
 
     /// <summary>
-    ///     缓冲最大条数。当缓冲已满且新消息需要入缓冲时，按 <see cref="BufferOverflowStrategy"/> 处理。默认 50。
+    ///     缓冲最大条数。当缓冲已满且新消息需要入缓冲时，按 <see cref="BufferOverflowStrategy"/> 处理。默认
+    ///     <c>50</c>，最小 <c>1</c>。
     /// </summary>
-    public int BufferCapacity { get; set; } = 50;
+    public int BufferCapacity
+    {
+        get;
+        set
+        {
+            Preconditions.AtLeast(
+                value, 1, nameof(BufferCapacity),
+                $"{nameof(BufferCapacity)} is required to be at least 1.");
+            field = value;
+        }
+    } = 50;
 
     /// <summary>
     ///     缓冲溢出时的处理策略。

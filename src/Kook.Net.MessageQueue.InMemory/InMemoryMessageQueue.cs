@@ -47,9 +47,6 @@ internal class InMemoryMessageQueue : BaseMessageQueue
     public override Task StopAsync(CancellationToken cancellationToken = default)
     {
         _channel.Writer.Complete();
-        _cancellationTokenSource?.Cancel();
-        _cancellationTokenSource?.Dispose();
-        _cancellationTokenSource = null;
         return Task.CompletedTask;
     }
 

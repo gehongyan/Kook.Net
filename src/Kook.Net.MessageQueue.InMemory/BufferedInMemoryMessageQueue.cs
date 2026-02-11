@@ -220,7 +220,13 @@ internal sealed class BufferedInMemoryMessageQueue : BaseMessageQueue
         {
             case BufferWaitTimeoutStrategy.SkipMissing:
                 if (toProcess is { Count: > 0 })
-                    _ = WriteToOutputChannelAsync(toProcess, CancellationToken.None);
+                {
+                    WriteToOutputChannelAsync(toProcess, CancellationToken.None)
+                        .ContinueWith(
+                            x => Debug.WriteLine($"Error writing to output channel: {x.Exception}"),
+                            TaskContinuationOptions.OnlyOnFaulted);
+                }
+
                 break;
             case BufferWaitTimeoutStrategy.ReconnectGateway:
                 OnReconnectRequested(new ReconnectRequestedEventArgs(
