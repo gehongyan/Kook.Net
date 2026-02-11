@@ -54,12 +54,12 @@ public class BufferedInMemoryMessageQueueTests
         MessageQueueProvider provider = CreateBufferedProvider();
         BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 3));
 
-        await queue.StartAsync();
-        await queue.EnqueueAsync(CreatePayload(10), 1);
-        await queue.EnqueueAsync(CreatePayload(20), 2);
-        await queue.EnqueueAsync(CreatePayload(30), 3);
-        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2));
-        await queue.StopAsync();
+        await queue.StartAsync(TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(10), 1, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(20), 2, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(30), 3, TestContext.Current.CancellationToken);
+        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
+        await queue.StopAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal([10, 20, 30], order.ToArray());
     }
@@ -73,12 +73,12 @@ public class BufferedInMemoryMessageQueueTests
         MessageQueueProvider provider = CreateBufferedProvider();
         BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 3));
 
-        await queue.StartAsync();
-        await queue.EnqueueAsync(CreatePayload(10), 1);
-        await queue.EnqueueAsync(CreatePayload(30), 3);
-        await queue.EnqueueAsync(CreatePayload(20), 2);
-        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2));
-        await queue.StopAsync();
+        await queue.StartAsync(TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(10), 1, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(30), 3, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(20), 2, TestContext.Current.CancellationToken);
+        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
+        await queue.StopAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal([10, 20, 30], order.ToArray());
     }
@@ -92,12 +92,12 @@ public class BufferedInMemoryMessageQueueTests
         MessageQueueProvider provider = CreateBufferedProvider();
         BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 2));
 
-        await queue.StartAsync();
-        await queue.EnqueueAsync(CreatePayload(10), 1);
-        await queue.EnqueueAsync(CreatePayload(20), 2);
-        await queue.EnqueueAsync(CreatePayload(99), 1);
-        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2));
-        await queue.StopAsync();
+        await queue.StartAsync(TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(10), 1, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(20), 2, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(99), 1, TestContext.Current.CancellationToken);
+        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
+        await queue.StopAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal([10, 20], order.ToArray());
     }
@@ -111,10 +111,10 @@ public class BufferedInMemoryMessageQueueTests
         MessageQueueProvider fromCreate = InMemoryMessageQueueProvider.Create(null);
         BaseMessageQueue queue = fromCreate(CreateHandler(received, tcs, signalWhenCount: 1));
 
-        await queue.StartAsync();
-        await queue.EnqueueAsync(CreatePayload(42), 1);
-        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2));
-        await queue.StopAsync();
+        await queue.StartAsync(TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(42), 1, TestContext.Current.CancellationToken);
+        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
+        await queue.StopAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal([42], received.ToArray());
     }
@@ -134,15 +134,15 @@ public class BufferedInMemoryMessageQueueTests
 
         BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 5));
 
-        await queue.StartAsync();
-        await queue.EnqueueAsync(CreatePayload(10), 1);
-        await queue.EnqueueAsync(CreatePayload(30), 3);
-        await queue.EnqueueAsync(CreatePayload(40), 4);
-        await queue.EnqueueAsync(CreatePayload(50), 5);
-        await queue.EnqueueAsync(CreatePayload(99), 6);
-        await queue.EnqueueAsync(CreatePayload(20), 2);
-        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2));
-        await queue.StopAsync();
+        await queue.StartAsync(TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(10), 1, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(30), 3, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(40), 4, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(50), 5, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(99), 6, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(20), 2, TestContext.Current.CancellationToken);
+        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
+        await queue.StopAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal([10, 20, 30, 40, 50], order.ToArray());
     }
@@ -161,13 +161,13 @@ public class BufferedInMemoryMessageQueueTests
 
         BaseMessageQueue queue = provider(CreateHandler(order));
 
-        await queue.StartAsync();
-        await queue.EnqueueAsync(CreatePayload(10), 1);
-        await queue.EnqueueAsync(CreatePayload(30), 3);
-        await queue.EnqueueAsync(CreatePayload(40), 4);
+        await queue.StartAsync(TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(10), 1, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(30), 3, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(40), 4, TestContext.Current.CancellationToken);
         await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await queue.EnqueueAsync(CreatePayload(99), 5));
-        await queue.StopAsync();
+            await queue.EnqueueAsync(CreatePayload(99), 5, TestContext.Current.CancellationToken));
+        await queue.StopAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal([10], order.ToArray());
     }
@@ -188,11 +188,11 @@ public class BufferedInMemoryMessageQueueTests
 
         BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 2));
 
-        await queue.StartAsync();
-        await queue.EnqueueAsync(CreatePayload(20), 2);
-        await queue.EnqueueAsync(CreatePayload(40), 4);
-        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2));
-        await queue.StopAsync();
+        await queue.StartAsync(TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(20), 2, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(40), 4, TestContext.Current.CancellationToken);
+        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
+        await queue.StopAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal([20, 40], order.ToArray());
     }
@@ -212,14 +212,14 @@ public class BufferedInMemoryMessageQueueTests
 
         BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 3));
 
-        await queue.StartAsync();
-        await queue.EnqueueAsync(CreatePayload(20), 2);
-        await queue.EnqueueAsync(CreatePayload(40), 4);
-        await Task.Delay(120);
+        await queue.StartAsync(TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(20), 2, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(40), 4, TestContext.Current.CancellationToken);
+        await Task.Delay(120, TestContext.Current.CancellationToken);
         Assert.Equal([20], order.ToArray());
-        await queue.EnqueueAsync(CreatePayload(30), 3);
-        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2));
-        await queue.StopAsync();
+        await queue.EnqueueAsync(CreatePayload(30), 3, TestContext.Current.CancellationToken);
+        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
+        await queue.StopAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal([20, 30, 40], order.ToArray());
     }
@@ -239,14 +239,14 @@ public class BufferedInMemoryMessageQueueTests
 
         BaseMessageQueue queue = provider(CreateHandler(order, tcs, signalWhenCount: 3));
 
-        await queue.StartAsync();
-        await queue.EnqueueAsync(CreatePayload(20), 2);
-        await queue.EnqueueAsync(CreatePayload(40), 4);
-        await Task.Delay(120);
+        await queue.StartAsync(TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(20), 2, TestContext.Current.CancellationToken);
+        await queue.EnqueueAsync(CreatePayload(40), 4, TestContext.Current.CancellationToken);
+        await Task.Delay(120, TestContext.Current.CancellationToken);
         Assert.Equal([20], order.ToArray());
-        await queue.EnqueueAsync(CreatePayload(30), 3);
-        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2));
-        await queue.StopAsync();
+        await queue.EnqueueAsync(CreatePayload(30), 3, TestContext.Current.CancellationToken);
+        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
+        await queue.StopAsync(TestContext.Current.CancellationToken);
 
         Assert.Equal([20, 30, 40], order.ToArray());
     }
