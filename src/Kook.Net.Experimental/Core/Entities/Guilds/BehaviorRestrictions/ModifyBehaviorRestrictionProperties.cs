@@ -3,7 +3,7 @@
 /// <summary>
 ///     提供用于修改 <see cref="IBehaviorRestriction"/> 的属性。
 /// </summary>
-/// <seealso cref="IBehaviorRestriction.ModifyAsync(SystModifyBehaviorRestrictionPropertiesProperties},Kook.RequestOptions)"/>
+/// <seealso cref="Kook.IBehaviorRestriction.ModifyAsync(System.Action{Kook.ModifyBehaviorRestrictionProperties},Kook.RequestOptions)"/>
 public class ModifyBehaviorRestrictionProperties
 {
     /// <summary>

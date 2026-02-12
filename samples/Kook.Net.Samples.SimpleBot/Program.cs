@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Kook;
 using Kook.Net.Queue.InMemory;
+using Kook.Rest;
 using Kook.WebSocket;
 
 // 这是一个使用 Kook.Net 的 C# 简单示例
@@ -148,6 +149,30 @@ async Task MessageReceivedAsync(SocketMessage message,
     // Bot 永远不应该响应自己的消息
     if (author.Id == client.CurrentUser?.Id)
         return;
+
+    RestContentFilter created = await channel.Guild.CreateContentFilterAsync(
+        new WordFilterTarget
+        {
+            Words = ["aa", "bb"]
+        },
+        [
+            new ContentFilterInterceptHandler
+            {
+                Enabled = true,
+                CustomErrorMessage = "别调皮哦"
+            }
+        ],
+        [
+            new ContentFilterExemption(channel),
+            new ContentFilterExemption(ContentFilterExemptionType.Role, 367092)
+        ],
+        true
+    );
+    IReadOnlyCollection<RestContentFilter> filters = await channel.Guild.GetContentFiltersAsync();
+    foreach (RestContentFilter filter in filters)
+    {
+        await filter.DeleteAsync();
+    }
 
     if (message.Content == "!ping")
     {

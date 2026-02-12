@@ -28,7 +28,7 @@ public interface IBehaviorRestriction : IEntity<string>, IDeletable
     /// <summary>
     ///     获取限制的行为类型。
     /// </summary>
-    BehaviorRestrictionType RestrictionType { get; }
+    BehaviorRestrictionType Type { get; }
 
     /// <summary>
     ///     获取此行为限制是否启用。

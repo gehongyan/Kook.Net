@@ -21,7 +21,7 @@ public class RestBehaviorRestriction : RestEntity<string>, IBehaviorRestriction
     public TimeSpan Duration { get; private set; }
 
     /// <inheritdoc />
-    public BehaviorRestrictionType RestrictionType { get; private set; }
+    public BehaviorRestrictionType Type { get; private set; }
 
     /// <inheritdoc />
     public bool IsEnabled { get; private set; }
@@ -56,13 +56,13 @@ public class RestBehaviorRestriction : RestEntity<string>, IBehaviorRestriction
             .OfType<IBehaviorRestrictionCondition>();
         Conditions = [..conditions];
         Duration = TimeSpan.FromMinutes(model.LimitTime);
-        RestrictionType = model.Action;
+        Type = model.Action;
         IsEnabled = model.Switch;
         CreatedAt = model.CreatedAt;
         UpdatedAt = model.UpdatedAt;
     }
 
-    private string DebuggerDisplay => $"BehaviorRestriction: {Name} ({Id}, if {string.Join(" and ", Conditions.Select(x => x.Type))}, disallow {RestrictionType} for {Duration}, {(IsEnabled ? "Enabled" : "Disabled")})";
+    private string DebuggerDisplay => $"BehaviorRestriction: {Name} ({Id}, if {string.Join(" and ", Conditions.Select(x => x.Type))}, disallow {Type} for {Duration}, {(IsEnabled ? "Enabled" : "Disabled")})";
 
     /// <inheritdoc />
     public async Task ModifyAsync(Action<ModifyBehaviorRestrictionProperties> func, RequestOptions? options = null) =>
@@ -78,6 +78,6 @@ public class RestBehaviorRestriction : RestEntity<string>, IBehaviorRestriction
 
     /// <inheritdoc />
     public async Task DeleteAsync(RequestOptions? options = null) =>
-        await ExperimentalGuildHelper.DeleteGuildBehaviorRestrictionAsync(Kook, this, options).ConfigureAwait(false);
+        await ExperimentalGuildHelper.DeleteBehaviorRestrictionAsync(Kook, this, options).ConfigureAwait(false);
 }
 
