@@ -13,7 +13,7 @@ namespace Kook.Net.Queue.SynchronousImmediate;
 public class SynchronousImmediateMessageQueue : BaseMessageQueue
 {
     /// <inheritdoc />
-    public SynchronousImmediateMessageQueue(Func<JsonElement, Task> eventHandler)
+    public SynchronousImmediateMessageQueue(Func<int, JsonElement, Task> eventHandler)
         : base(eventHandler)
     {
     }
@@ -22,7 +22,7 @@ public class SynchronousImmediateMessageQueue : BaseMessageQueue
     public override async Task EnqueueAsync(JsonElement payload, int sequence,
         CancellationToken cancellationToken = default)
     {
-        await EventHandler(payload).ConfigureAwait(false);
+        await EventHandler(sequence, payload).ConfigureAwait(false);
     }
 
     /// <inheritdoc />

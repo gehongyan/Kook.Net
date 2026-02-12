@@ -7,7 +7,7 @@ internal class MassTransitMessageQueue : BaseMessageQueue
 {
     private readonly IBus _bus;
 
-    internal MassTransitMessageQueue(Func<JsonElement, Task> eventHandler, IBus bus)
+    internal MassTransitMessageQueue(Func<int, JsonElement, Task> eventHandler, IBus bus)
         : base(eventHandler)
     {
         _bus = bus;
