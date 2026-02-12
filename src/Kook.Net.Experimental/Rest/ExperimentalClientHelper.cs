@@ -39,7 +39,7 @@ internal static class ExperimentalClientHelper
 
     #endregion
 
-    #region MyRegion
+    #region ThreadTag
 
     public static async Task<IReadOnlyCollection<ThreadTag>> QueryThreadTagsAsync(KookRestClient client,
         string keyword, RequestOptions? options)

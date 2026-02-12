@@ -13,7 +13,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using Kook.Net.Contexts;
+using Kook.Net.Converters;
 
 namespace Kook.Net.Rest;
 
@@ -44,10 +45,9 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
 
         _cancellationToken = CancellationToken.None;
 
-        _serializerOptions = new JsonSerializerOptions
+        _serializerOptions = new JsonSerializerOptions(KookRestJsonSerializerContext.Default.Options)
         {
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            NumberHandling = JsonNumberHandling.AllowReadingFromString
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
     }
 

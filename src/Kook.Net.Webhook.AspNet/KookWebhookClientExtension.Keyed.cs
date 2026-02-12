@@ -1,4 +1,5 @@
-﻿using Kook.Net.DependencyInjection.Microsoft;
+﻿using System.Diagnostics.CodeAnalysis;
+using Kook.Net.DependencyInjection.Microsoft;
 using Kook.Net.Webhooks.AspNet;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
@@ -20,6 +21,7 @@ public static partial class KookWebhookClientExtension
     /// <param name="serviceKey"> 服务的键。 </param>
     /// <param name="config"> 用于配置 KOOK ASP.NET Webhook 客户端的配置。 </param>
     /// <returns> 添加了 KOOK ASP.NET Webhook 客户端的服务集合。 </returns>
+    [RequiresUnreferencedCode("MVC does not currently support trimming or native AOT.")]
     public static IServiceCollection AddKeyedKookAspNetWebhookClient(this IServiceCollection services, string? serviceKey, KookAspNetWebhookConfig config)
     {
         services.AddKeyedSingleton(serviceKey, config);
@@ -35,6 +37,7 @@ public static partial class KookWebhookClientExtension
     /// <param name="services"> 要向其添加 KOOK ASP.NET Webhook 客户端的服务集合。 </param>
     /// <param name="serviceKey"> 服务的键。 </param>
     /// <returns> 添加了 KOOK ASP.NET Webhook 客户端的服务集合。 </returns>
+    [RequiresUnreferencedCode("MVC does not currently support trimming or native AOT.")]
     public static IServiceCollection AddKeyedKookAspNetWebhookClient(this IServiceCollection services, string? serviceKey)
     {
         services.AddKeyedKookWebhookClient<KookAspNetWebhookClient>(serviceKey, (provider, key) =>

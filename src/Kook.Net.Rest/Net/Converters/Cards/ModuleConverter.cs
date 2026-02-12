@@ -2,6 +2,7 @@ using Kook.API;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using Kook.Rest;
 
 namespace Kook.Net.Converters;
 
@@ -14,61 +15,61 @@ internal class ModuleConverter : JsonConverter<ModuleBase>
         JsonNode? jsonNode = JsonNode.Parse(ref reader);
         return jsonNode?["type"]?.GetValue<string>() switch
         {
-            "header" => JsonSerializer.Deserialize<API.HeaderModule>(jsonNode.ToJsonString(), options),
-            "section" => JsonSerializer.Deserialize<API.SectionModule>(jsonNode.ToJsonString(), options),
-            "image-group" => JsonSerializer.Deserialize<API.ImageGroupModule>(jsonNode.ToJsonString(), options),
-            "container" => JsonSerializer.Deserialize<API.ContainerModule>(jsonNode.ToJsonString(), options),
-            "action-group" => JsonSerializer.Deserialize<API.ActionGroupModule>(jsonNode.ToJsonString(), options),
-            "context" => JsonSerializer.Deserialize<API.ContextModule>(jsonNode.ToJsonString(), options),
-            "divider" => JsonSerializer.Deserialize<API.DividerModule>(jsonNode.ToJsonString(), options),
-            "file" => JsonSerializer.Deserialize<API.FileModule>(jsonNode.ToJsonString(), options),
-            "audio" => JsonSerializer.Deserialize<API.AudioModule>(jsonNode.ToJsonString(), options),
-            "video" => JsonSerializer.Deserialize<API.VideoModule>(jsonNode.ToJsonString(), options),
-            "countdown" => JsonSerializer.Deserialize<API.CountdownModule>(jsonNode.ToJsonString(), options),
-            "invite" => JsonSerializer.Deserialize<API.InviteModule>(jsonNode.ToJsonString(), options),
+            "header" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.HeaderModule>()),
+            "section" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.SectionModule>()),
+            "image-group" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.ImageGroupModule>()),
+            "container" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.ContainerModule>()),
+            "action-group" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.ActionGroupModule>()),
+            "context" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.ContextModule>()),
+            "divider" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.DividerModule>()),
+            "file" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.FileModule>()),
+            "audio" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.AudioModule>()),
+            "video" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.VideoModule>()),
+            "countdown" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.CountdownModule>()),
+            "invite" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.InviteModule>()),
             _ => throw new ArgumentOutOfRangeException(nameof(CardType))
         };
     }
 
     public override void Write(Utf8JsonWriter writer, ModuleBase value, JsonSerializerOptions options)
     {
-        switch (value.Type)
+        switch (value)
         {
-            case ModuleType.Header:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.HeaderModule, options));
+            case API.HeaderModule { Type: ModuleType.Header } header:
+                writer.WriteRawValue(JsonSerializer.Serialize(header, options.GetTypedTypeInfo<API.HeaderModule>()));
                 break;
-            case ModuleType.Section:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.SectionModule, options));
+            case API.SectionModule { Type: ModuleType.Section } section:
+                writer.WriteRawValue(JsonSerializer.Serialize(section, options.GetTypedTypeInfo<API.SectionModule>()));
                 break;
-            case ModuleType.ImageGroup:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.ImageGroupModule, options));
+            case API.ImageGroupModule { Type: ModuleType.ImageGroup } imageGroup:
+                writer.WriteRawValue(JsonSerializer.Serialize(imageGroup, options.GetTypedTypeInfo<API.ImageGroupModule>()));
                 break;
-            case ModuleType.Container:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.ContainerModule, options));
+            case API.ContainerModule { Type: ModuleType.Container } container:
+                writer.WriteRawValue(JsonSerializer.Serialize(container, options.GetTypedTypeInfo<API.ContainerModule>()));
                 break;
-            case ModuleType.ActionGroup:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.ActionGroupModule, options));
+            case API.ActionGroupModule { Type: ModuleType.ActionGroup } actionGroup:
+                writer.WriteRawValue(JsonSerializer.Serialize(actionGroup, options.GetTypedTypeInfo<API.ActionGroupModule>()));
                 break;
-            case ModuleType.Context:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.ContextModule, options));
+            case API.ContextModule { Type: ModuleType.Context } context:
+                writer.WriteRawValue(JsonSerializer.Serialize(context, options.GetTypedTypeInfo<API.ContextModule>()));
                 break;
-            case ModuleType.Divider:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.DividerModule, options));
+            case API.DividerModule { Type: ModuleType.Divider } divider:
+                writer.WriteRawValue(JsonSerializer.Serialize(divider, options.GetTypedTypeInfo<API.DividerModule>()));
                 break;
-            case ModuleType.File:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.FileModule, options));
+            case API.FileModule { Type: ModuleType.File } file:
+                writer.WriteRawValue(JsonSerializer.Serialize(file, options.GetTypedTypeInfo<API.FileModule>()));
                 break;
-            case ModuleType.Audio:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.AudioModule, options));
+            case API.AudioModule { Type: ModuleType.Audio } audio:
+                writer.WriteRawValue(JsonSerializer.Serialize(audio, options.GetTypedTypeInfo<API.AudioModule>()));
                 break;
-            case ModuleType.Video:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.VideoModule, options));
+            case API.VideoModule { Type: ModuleType.Video } video:
+                writer.WriteRawValue(JsonSerializer.Serialize(video, options.GetTypedTypeInfo<API.VideoModule>()));
                 break;
-            case ModuleType.Countdown:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.CountdownModule, options));
+            case API.CountdownModule { Type: ModuleType.Countdown } countdown:
+                writer.WriteRawValue(JsonSerializer.Serialize(countdown, options.GetTypedTypeInfo<API.CountdownModule>()));
                 break;
-            case ModuleType.Invite:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.InviteModule, options));
+            case API.InviteModule { Type: ModuleType.Invite } invite:
+                writer.WriteRawValue(JsonSerializer.Serialize(invite, options.GetTypedTypeInfo<API.InviteModule>()));
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(ModuleType));

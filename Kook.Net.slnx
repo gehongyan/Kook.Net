@@ -19,6 +19,7 @@
     <Project Path="src\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj" />
   </Folder>
   <Folder Name="/Samples/">
+    <Project Path="samples/Kook.Net.Samples.NativeAOT/Kook.Net.Samples.NativeAOT.csproj" />
     <Project Path="samples\Kook.Net.Samples.Audio\Kook.Net.Samples.Audio.csproj" />
     <Project Path="samples\Kook.Net.Samples.CardMarkup\Kook.Net.Samples.CardMarkup.csproj" />
     <Project Path="samples\Kook.Net.Samples.Docker\Kook.Net.Samples.Docker.csproj" />
