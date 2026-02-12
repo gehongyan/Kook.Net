@@ -18,7 +18,7 @@ public static class GuildExperimentalExtensions
     ///     当 <paramref name="guild"/> 不是 <see cref="Kook.Rest.RestGuild"/> 或
     ///     <see cref="Kook.WebSocket.SocketGuild"/> 时引发。
     /// </exception>
-    public static async Task<IReadOnlyCollection<RestGuildBehaviorRestriction>> GetBehaviorRestrictionsAsync(
+    public static async Task<IReadOnlyCollection<RestBehaviorRestriction>> GetBehaviorRestrictionsAsync(
         this IGuild guild, RequestOptions? options = null) => guild switch
     {
         RestGuild restGuild => await RestGuildExperimentalExtensions.GetBehaviorRestrictionsAsync(restGuild, options),
@@ -39,9 +39,9 @@ public static class GuildExperimentalExtensions
     /// <param name="isEnabled"> 是否启用行为限制。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步操作的任务，任务的结果是创建的行为限制。 </returns>
-    public static async Task<RestGuildBehaviorRestriction> CreateBehaviorRestrictionAsync(
-        this IGuild guild, string name, IReadOnlyCollection<IGuildBehaviorRestrictionCondition> conditions,
-        TimeSpan duration, GuildBehaviorRestrictionType restrictionType, bool isEnabled,
+    public static async Task<RestBehaviorRestriction> CreateBehaviorRestrictionAsync(
+        this IGuild guild, string name, IReadOnlyCollection<IBehaviorRestrictionCondition> conditions,
+        TimeSpan duration, BehaviorRestrictionType restrictionType, bool isEnabled,
         RequestOptions? options = null) => guild switch
     {
         RestGuild restGuild => await RestGuildExperimentalExtensions.CreateBehaviorRestrictionAsync(

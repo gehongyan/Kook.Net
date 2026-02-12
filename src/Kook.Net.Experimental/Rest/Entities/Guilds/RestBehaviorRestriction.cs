@@ -6,7 +6,7 @@ namespace Kook.Rest;
 ///     表示一个基于 REST 的服务器行为限制。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class RestGuildBehaviorRestriction : RestEntity<string>, IGuildBehaviorRestriction
+public class RestBehaviorRestriction : RestEntity<string>, IBehaviorRestriction
 {
     /// <inheritdoc />
     public ulong GuildId { get; }
@@ -15,13 +15,13 @@ public class RestGuildBehaviorRestriction : RestEntity<string>, IGuildBehaviorRe
     public string Name { get; private set; }
 
     /// <inheritdoc />
-    public IReadOnlyCollection<IGuildBehaviorRestrictionCondition> Conditions { get; private set; }
+    public IReadOnlyCollection<IBehaviorRestrictionCondition> Conditions { get; private set; }
 
     /// <inheritdoc />
     public TimeSpan Duration { get; private set; }
 
     /// <inheritdoc />
-    public GuildBehaviorRestrictionType RestrictionType { get; private set; }
+    public BehaviorRestrictionType RestrictionType { get; private set; }
 
     /// <inheritdoc />
     public bool IsEnabled { get; private set; }
@@ -33,7 +33,7 @@ public class RestGuildBehaviorRestriction : RestEntity<string>, IGuildBehaviorRe
     public DateTimeOffset UpdatedAt { get; private set; }
 
     /// <inheritdoc />
-    private RestGuildBehaviorRestriction(BaseKookClient kook, ulong guildId, string id)
+    private RestBehaviorRestriction(BaseKookClient kook, ulong guildId, string id)
         : base(kook, id)
     {
         GuildId = guildId;
@@ -41,9 +41,9 @@ public class RestGuildBehaviorRestriction : RestEntity<string>, IGuildBehaviorRe
         Conditions = [];
     }
 
-    internal static RestGuildBehaviorRestriction Create(BaseKookClient kook, ulong guildId, API.Rest.GuildSecurityItem model)
+    internal static RestBehaviorRestriction Create(BaseKookClient kook, ulong guildId, API.Rest.GuildSecurityItem model)
     {
-        RestGuildBehaviorRestriction entity = new(kook, guildId, model.Id);
+        RestBehaviorRestriction entity = new(kook, guildId, model.Id);
         entity.Update(model);
         return entity;
     }
@@ -51,9 +51,9 @@ public class RestGuildBehaviorRestriction : RestEntity<string>, IGuildBehaviorRe
     private void Update(API.Rest.GuildSecurityItem model)
     {
         Name = model.Name;
-        IEnumerable<IGuildBehaviorRestrictionCondition> conditions = model.Conditions
+        IEnumerable<IBehaviorRestrictionCondition> conditions = model.Conditions
             .Select(x => x.ToEntity())
-            .OfType<IGuildBehaviorRestrictionCondition>();
+            .OfType<IBehaviorRestrictionCondition>();
         Conditions = [..conditions];
         Duration = TimeSpan.FromMinutes(model.LimitTime);
         RestrictionType = model.Action;
@@ -65,7 +65,7 @@ public class RestGuildBehaviorRestriction : RestEntity<string>, IGuildBehaviorRe
     private string DebuggerDisplay => $"BehaviorRestriction: {Name} ({Id}, if {string.Join(" and ", Conditions.Select(x => x.Type))}, disallow {RestrictionType} for {Duration}, {(IsEnabled ? "Enabled" : "Disabled")})";
 
     /// <inheritdoc />
-    public async Task ModifyAsync(Action<ModifyGuildBehaviorRestrictionProperties> func, RequestOptions? options = null) =>
+    public async Task ModifyAsync(Action<ModifyBehaviorRestrictionProperties> func, RequestOptions? options = null) =>
         await ExperimentalGuildHelper.ModifyBehaviorRestrictionAsync(Kook, this, func, options).ConfigureAwait(false);
 
     /// <inheritdoc />

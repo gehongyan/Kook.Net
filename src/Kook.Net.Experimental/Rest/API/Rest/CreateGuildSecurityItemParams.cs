@@ -9,7 +9,7 @@ internal class CreateGuildSecurityItemParams
     public required ulong GuildId { get; set; }
 
     [JsonPropertyName("action")]
-    public required GuildBehaviorRestrictionType Action { get; set; }
+    public required BehaviorRestrictionType Action { get; set; }
 
     [JsonPropertyName("conditions")]
     public required GuildSecurityCondition[] Conditions { get; set; }

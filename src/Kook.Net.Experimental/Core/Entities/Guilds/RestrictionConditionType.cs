@@ -3,7 +3,7 @@
 /// <summary>
 ///     表示服务器行为限制的条件类型。
 /// </summary>
-public enum GuildRestrictionConditionType
+public enum RestrictionConditionType
 {
     /// <summary>
     ///     注册不满指定的时长。

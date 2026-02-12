@@ -3,7 +3,7 @@
 /// <summary>
 ///     表示一个通用的服务器行为限制。
 /// </summary>
-public interface IGuildBehaviorRestriction : IEntity<string>, IDeletable
+public interface IBehaviorRestriction : IEntity<string>, IDeletable
 {
     /// <summary>
     ///     获取此行为限制所属的服务器的 ID。
@@ -18,7 +18,7 @@ public interface IGuildBehaviorRestriction : IEntity<string>, IDeletable
     /// <summary>
     ///     获取限制条件类型。
     /// </summary>
-    IReadOnlyCollection<IGuildBehaviorRestrictionCondition> Conditions { get; }
+    IReadOnlyCollection<IBehaviorRestrictionCondition> Conditions { get; }
 
     /// <summary>
     ///     获取限制持续时长。
@@ -28,7 +28,7 @@ public interface IGuildBehaviorRestriction : IEntity<string>, IDeletable
     /// <summary>
     ///     获取限制的行为类型。
     /// </summary>
-    GuildBehaviorRestrictionType RestrictionType { get; }
+    BehaviorRestrictionType RestrictionType { get; }
 
     /// <summary>
     ///     获取此行为限制是否启用。
@@ -51,7 +51,7 @@ public interface IGuildBehaviorRestriction : IEntity<string>, IDeletable
     /// <param name="func"> 用于修改行为限制属性的委托。 </param>
     /// <param name="options"> 发送请求时要使用的选项。 </param>
     /// <returns> 一个表示异步修改操作的任务。 </returns>
-    Task ModifyAsync(Action<ModifyGuildBehaviorRestrictionProperties> func, RequestOptions? options = null);
+    Task ModifyAsync(Action<ModifyBehaviorRestrictionProperties> func, RequestOptions? options = null);
 
     /// <summary>
     ///     启用此行为限制。

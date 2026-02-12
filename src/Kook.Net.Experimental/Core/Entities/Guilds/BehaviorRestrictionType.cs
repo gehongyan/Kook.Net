@@ -3,7 +3,7 @@
 /// <summary>
 ///     表示服务器行为限制的类型。
 /// </summary>
-public enum GuildBehaviorRestrictionType
+public enum BehaviorRestrictionType
 {
     /// <summary>
     ///     消息操作行为限制。

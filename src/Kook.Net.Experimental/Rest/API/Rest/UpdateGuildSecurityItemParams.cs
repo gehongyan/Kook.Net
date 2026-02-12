@@ -13,7 +13,7 @@ internal class UpdateGuildSecurityItemParams
 
     [JsonPropertyName("action")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public GuildBehaviorRestrictionType? Action { get; set; }
+    public BehaviorRestrictionType? Action { get; set; }
 
     [JsonPropertyName("conditions")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

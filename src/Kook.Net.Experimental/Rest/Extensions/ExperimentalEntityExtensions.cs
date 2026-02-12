@@ -4,38 +4,38 @@ internal static class ExperimentalEntityExtensions
 {
     #region Guild Restrictions
 
-    public static IGuildBehaviorRestrictionCondition? ToEntity(this API.Rest.GuildSecurityCondition model)
+    public static IBehaviorRestrictionCondition? ToEntity(this API.Rest.GuildSecurityCondition model)
     {
         return model.Type switch
         {
             "reg" when model.Duration.HasValue =>
-                new GuildRegistrationDurationBehaviorRestrictionCondition
+                new RegistrationDurationBehaviorRestrictionCondition
                     { MinimumDuration = TimeSpan.FromMinutes(model.Duration.Value) },
-            "overseas" => new GuildOverseasBehaviorRestrictionCondition(),
-            "banned" => new GuildViolationBehaviorRestrictionCondition(),
-            "real_auth" => new GuildUnverifiedBehaviorRestrictionCondition(),
+            "overseas" => new OverseasBehaviorRestrictionCondition(),
+            "banned" => new ViolationBehaviorRestrictionCondition(),
+            "real_auth" => new UnverifiedBehaviorRestrictionCondition(),
             _ => null
         };
     }
 
-    public static API.Rest.GuildSecurityCondition ToModel(this IGuildBehaviorRestrictionCondition entity)
+    public static API.Rest.GuildSecurityCondition ToModel(this IBehaviorRestrictionCondition entity)
     {
         return entity switch
         {
-            GuildRegistrationDurationBehaviorRestrictionCondition regCondition => new API.Rest.GuildSecurityCondition
+            RegistrationDurationBehaviorRestrictionCondition regCondition => new API.Rest.GuildSecurityCondition
             {
                 Type = "reg",
                 Duration = (int?)regCondition.MinimumDuration.TotalMinutes
             },
-            GuildOverseasBehaviorRestrictionCondition => new API.Rest.GuildSecurityCondition
+            OverseasBehaviorRestrictionCondition => new API.Rest.GuildSecurityCondition
             {
                 Type = "overseas"
             },
-            GuildViolationBehaviorRestrictionCondition => new API.Rest.GuildSecurityCondition
+            ViolationBehaviorRestrictionCondition => new API.Rest.GuildSecurityCondition
             {
                 Type = "banned"
             },
-            GuildUnverifiedBehaviorRestrictionCondition => new API.Rest.GuildSecurityCondition
+            UnverifiedBehaviorRestrictionCondition => new API.Rest.GuildSecurityCondition
             {
                 Type = "real_auth"
             },
