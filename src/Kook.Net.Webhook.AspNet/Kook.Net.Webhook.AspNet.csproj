@@ -3,7 +3,7 @@
   <Import Project="../../props/common.props"/>
 
   <PropertyGroup>
-    <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>
     <RootNamespace>Kook.Webhook.AspNet</RootNamespace>
     <IsPackable>true</IsPackable>
     <PackageId>Kook.Net.Webhook.AspNet</PackageId>
