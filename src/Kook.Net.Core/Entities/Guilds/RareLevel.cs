@@ -16,7 +16,7 @@ public enum RareLevel
     Primary = 1,
 
     /// <summary>
-    ///     中级靓号
+    ///     中级靓号。
     /// </summary>
     Intermediate = 2,
 
