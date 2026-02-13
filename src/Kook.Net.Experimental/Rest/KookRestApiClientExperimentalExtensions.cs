@@ -22,6 +22,110 @@ internal static class KookRestApiClientExperimentalExtensions
             ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
     }
 
+    public static IAsyncEnumerable<IReadOnlyCollection<GuildSecurityItem>> GetGuildSecurityItemsAsync(this KookRestApiClient client,
+        ulong guildId, int limit = 50, int fromPage = 1, RequestOptions? options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+        KookRestApiClient.BucketIds ids = new(guildId);
+        return client.SendPagedAsync<GuildSecurityItem>(HttpMethod.Get,
+            (pageSize, page) => $"guild-security?guild_id={guildId}&page_size={pageSize}&page={page}",
+            ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
+    }
+
+    public static async Task<GuildSecurityItem> CreateGuildSecurityItemAsync(this KookRestApiClient client,
+        CreateGuildSecurityItemParams args,
+        RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(0, args.GuildId, nameof(args.GuildId));
+        options = RequestOptions.CreateOrClone(options);
+
+        KookRestApiClient.BucketIds ids = new(args.GuildId);
+        return await client.SendJsonAsync<GuildSecurityItem>(HttpMethod.Post,
+                () => $"guild-security/create", args, ids, ClientBucketType.SendEdit, false, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public static async Task<GuildSecurityItem> UpdateGuildSecurityItemAsync(this KookRestApiClient client,
+        UpdateGuildSecurityItemParams args,
+        RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(0, args.GuildId, nameof(args.GuildId));
+        Preconditions.NotNullOrWhitespace(args.Id, nameof(args.Id));
+        options = RequestOptions.CreateOrClone(options);
+
+        KookRestApiClient.BucketIds ids = new(args.GuildId);
+        return await client.SendJsonAsync<GuildSecurityItem>(HttpMethod.Post,
+                () => $"guild-security/update", args, ids, ClientBucketType.SendEdit, false, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public static async Task DeleteGuildSecurityItemAsync(this KookRestApiClient client,
+        DeleteGuildSecurityItemParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(0, args.GuildId, nameof(args.GuildId));
+        Preconditions.NotNullOrWhitespace(args.Id, nameof(args.Id));
+        options = RequestOptions.CreateOrClone(options);
+
+        KookRestApiClient.BucketIds ids = new(args.GuildId);
+        await client.SendJsonAsync(HttpMethod.Post,
+                () => $"guild-security/delete", args, ids, ClientBucketType.SendEdit, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public static IAsyncEnumerable<IReadOnlyCollection<GuildSecurityWordfilterItem>> GetGuildSecurityWordfilterItemsAsync(
+        this KookRestApiClient client, ulong guildId, int limit = 50, int fromPage = 1, RequestOptions? options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+        KookRestApiClient.BucketIds ids = new();
+        return client.SendPagedAsync<GuildSecurityWordfilterItem>(HttpMethod.Get,
+            (pageSize, page) => $"guild-security/word-filter-list?guild_id={guildId}&page_size={pageSize}&page={page}",
+            ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
+    }
+
+    public static async Task<GuildSecurityWordfilterItem> CreateGuildWordfilterItemAsync(this KookRestApiClient client,
+        CreateGuildWordfilterItemParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(0, args.GuildId, nameof(args.GuildId));
+        options = RequestOptions.CreateOrClone(options);
+
+        KookRestApiClient.BucketIds ids = new(args.GuildId);
+        return await client.SendJsonAsync<GuildSecurityWordfilterItem>(HttpMethod.Post,
+                () => $"guild-security/word-filter-create", args, ids, ClientBucketType.SendEdit, false, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public static async Task<GuildSecurityWordfilterItem> UpdateGuildWordfilterItemAsync(this KookRestApiClient client,
+        UpdateGuildWordfilterItemParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(0, args.GuildId, nameof(args.GuildId));
+        Preconditions.NotNullOrWhitespace(args.Id, nameof(args.Id));
+        options = RequestOptions.CreateOrClone(options);
+
+        KookRestApiClient.BucketIds ids = new(args.GuildId);
+        return await client.SendJsonAsync<GuildSecurityWordfilterItem>(HttpMethod.Post,
+                () => $"guild-security/word-filter-update", args, ids, ClientBucketType.SendEdit, false, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public static async Task DeleteGuildWordfilterAsync(this KookRestApiClient client,
+        DeleteGuildContentFilterParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(0, args.GuildId, nameof(args.GuildId));
+        Preconditions.NotNullOrWhitespace(args.Id, nameof(args.Id));
+        options = RequestOptions.CreateOrClone(options);
+
+        KookRestApiClient.BucketIds ids = new(args.GuildId);
+        await client.SendJsonAsync(HttpMethod.Post,
+                () => $"guild-security/word-filter-delete", args, ids, ClientBucketType.SendEdit, null, options)
+            .ConfigureAwait(false);
+    }
+
     #endregion
 
     #region Messages

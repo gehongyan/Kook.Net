@@ -101,7 +101,7 @@ public class SocketGuild : SocketEntity<ulong>, IGuild, IDisposable, IUpdateable
     public RecommendInfo? RecommendInfo { get; private set; }
 
     /// <inheritdoc />
-    public GuildJoinRestrictions? JoinRestrictions { get; private set; }
+    public GuildJoinRestrictionTypes? JoinRestrictions { get; private set; }
 
     /// <summary>
     ///     获取此服务器的成员数。

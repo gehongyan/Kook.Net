@@ -155,7 +155,7 @@ public class RestGuild : RestEntity<ulong>, IGuild, IUpdateable
     public RecommendInfo? RecommendInfo { get; private set; }
 
     /// <inheritdoc />
-    public GuildJoinRestrictions? JoinRestrictions { get; private set; }
+    public GuildJoinRestrictionTypes? JoinRestrictions { get; private set; }
 
     internal RestGuild(BaseKookClient client, ulong id)
         : base(client, id)
