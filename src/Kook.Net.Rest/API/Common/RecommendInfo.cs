@@ -46,6 +46,15 @@ internal class RecommendInfo
     [JsonPropertyName("custom_id")]
     public required string CustomId { get; set; }
 
+    [JsonPropertyName("rare_level")]
+    public required RareLevel RareLevel { get; set; }
+
+    [JsonPropertyName("rare_guild_setting")]
+    public RareGuildSettings? RareGuildSettings { get; set; }
+
+    [JsonPropertyName("rare_id")]
+    public required string RareId { get; set; }
+
     [JsonPropertyName("is_official_partner")]
     [JsonConverter(typeof(NumberBooleanConverter))]
     public bool IsOfficialPartner { get; set; }

@@ -48,6 +48,15 @@ public class RecommendInfo : IRecommendInfo
     public string CustomId { get; private set; }
 
     /// <inheritdoc />
+    public string RareId { get; private set; }
+
+    /// <inheritdoc />
+    public RareLevel RareLevel { get; private set; }
+
+    /// <inheritdoc />
+    public RareGuildResources? Resources { get; private set; }
+
+    /// <inheritdoc />
     public bool IsOfficialPartner { get; private set; }
 
     /// <inheritdoc />
@@ -67,6 +76,8 @@ public class RecommendInfo : IRecommendInfo
         Description = string.Empty;
         Tag = string.Empty;
         CustomId = string.Empty;
+        RareId = string.Empty;
+        RareLevel = RareLevel.None;
     }
 
     internal static RecommendInfo Create(Model model)
@@ -103,6 +114,8 @@ public class RecommendInfo : IRecommendInfo
             : null;
         BoostLevel = model.BoostLevel;
         CustomId = model.CustomId;
+        RareId = model.RareId;
+        Resources = model.RareGuildSettings?.ToEntity();
         IsOfficialPartner = model.IsOfficialPartner;
         Sort = model.Sort;
         AuditStatus = model.AuditStatus;
