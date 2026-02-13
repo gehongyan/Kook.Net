@@ -1,7 +1,7 @@
 ﻿namespace Kook;
 
 /// <summary>
-///     表示一个服务器行为限制条件
+///     表示一个服务器行为限制条件。
 /// </summary>
 public interface IBehaviorRestrictionCondition
 {

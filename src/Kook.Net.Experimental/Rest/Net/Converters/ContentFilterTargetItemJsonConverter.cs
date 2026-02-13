@@ -41,7 +41,7 @@ internal class ContentFilterTargetItemJsonConverter : JsonConverter<ContentFilte
         {
             return new ContentFilterTargetItem
             {
-                Id = reader.TokenType is JsonTokenType.Number ? reader.GetUInt64() : ulong.Parse(reader.GetString()!)
+                Id = ulong.Parse(reader.GetString()!)
             };
         }
 
