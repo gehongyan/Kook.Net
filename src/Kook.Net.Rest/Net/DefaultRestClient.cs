@@ -29,18 +29,25 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
     private readonly JsonSerializerOptions _serializerOptions;
     private static int _nextId;
 
-    public DefaultRestClient(string baseUrl, bool useProxy = false, IWebProxy? webProxy = null)
+    public DefaultRestClient(string baseUrl,
+        bool useProxy = false, IWebProxy? webProxy = null,
+        Func<HttpClient>? httpClientFactory = null)
     {
         _baseUrl = baseUrl;
 
-        _client = new HttpClient(new HttpClientHandler
+        if (httpClientFactory is not null)
+            _client = httpClientFactory();
+        else
         {
-            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-            UseCookies = false,
-            UseProxy = useProxy,
-            Proxy = webProxy
-        });
-        SetHeader("accept-encoding", "gzip, deflate");
+            _client = new HttpClient(new HttpClientHandler
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                UseCookies = false,
+                UseProxy = useProxy,
+                Proxy = webProxy
+            });
+            SetHeader("accept-encoding", "gzip, deflate");
+        }
 
         _cancellationToken = CancellationToken.None;
 
