@@ -98,7 +98,21 @@ internal static class KookRestApiClientExperimentalExtensions
             .ConfigureAwait(false);
     }
 
-    public static async Task DeleteGuildContentFilterAsync(this KookRestApiClient client,
+    public static async Task<GuildSecurityWordfilterItem> UpdateGuildWordfilterItemAsync(this KookRestApiClient client,
+        UpdateGuildWordfilterItemParams args, RequestOptions? options = null)
+    {
+        Preconditions.NotNull(args, nameof(args));
+        Preconditions.NotEqual(0, args.GuildId, nameof(args.GuildId));
+        Preconditions.NotNullOrWhitespace(args.Id, nameof(args.Id));
+        options = RequestOptions.CreateOrClone(options);
+
+        KookRestApiClient.BucketIds ids = new(args.GuildId);
+        return await client.SendJsonAsync<GuildSecurityWordfilterItem>(HttpMethod.Post,
+                () => $"guild-security/word-filter-update", args, ids, ClientBucketType.SendEdit, false, null, options)
+            .ConfigureAwait(false);
+    }
+
+    public static async Task DeleteGuildWordfilterAsync(this KookRestApiClient client,
         DeleteGuildContentFilterParams args, RequestOptions? options = null)
     {
         Preconditions.NotNull(args, nameof(args));

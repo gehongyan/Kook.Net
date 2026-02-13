@@ -53,45 +53,25 @@ public class RestContentFilter : RestEntity<string>, IContentFilter
     private void Update(API.Rest.GuildSecurityWordfilterItem model)
     {
         Name = model.Name;
-        Target = model.Type switch
-        {
-            ContentFilterType.Word => new WordFilterTarget
-            {
-                Words = model.Targets.StringItems ?? []
-            },
-            ContentFilterType.Invite => new InviteFilterTarget
-            {
-                Mode = model.Targets.Enabled,
-                GuildIds = [..model.Targets.TargetItems?.Select(x => x.Id) ?? []]
-            },
-            _ => new UnknownFilterTarget(),
-        };
-        Exemptions = [..model.Exemptions.Select(x => new ContentFilterExemption(x.Type, x.Id))];
-        Handlers = [..model.Handlers.Select(IContentFilterHandler (x) => x.Type switch
-        {
-            ContentFilterHandlerType.Intercept => new ContentFilterInterceptHandler
-            {
-                Name = x.Name,
-                Enabled = x.Enabled,
-                CustomErrorMessage = string.IsNullOrWhiteSpace(x.CustomErrorMessage) ? null : x.CustomErrorMessage,
-            },
-            ContentFilterHandlerType.LogToChannel => new ContentFilterLogToChannelHandler
-            {
-                Name = x.Name,
-                Enabled = x.Enabled,
-                ChannelId = x.AlertChannelId
-                    ?? throw new InvalidOperationException("Log channel ID cannot be null for LogToChannel handler."),
-            },
-            _ => new ContentFilterUnknownHandler
-            {
-                Name = x.Name,
-                Enabled = x.Enabled,
-            }
-        })];
+        Target = model.Targets.ToEntity(model.Type);
+        Exemptions = [..model.Exemptions.Select(x => x.ToEntity())];
+        Handlers = [..model.Handlers.Select(x => x.ToEntity())];
         IsEnabled = model.Switch;
         CreatedAt = model.CreatedAt;
         UpdatedAt = model.UpdatedAt;
     }
+
+    /// <inheritdoc />
+    public async Task ModifyAsync(Action<ModifyContentFilterProperties> func, RequestOptions? options = null) =>
+        await ExperimentalGuildHelper.ModifyContentFilterAsync(Kook, this, func, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task EnableAsync(RequestOptions? options = null) =>
+        await ExperimentalGuildHelper.EnableContentFilterAsync(Kook, this, options).ConfigureAwait(false);
+
+    /// <inheritdoc />
+    public async Task DisableAsync(RequestOptions? options = null) =>
+        await ExperimentalGuildHelper.DisableContentFilterAsync(Kook, this, options).ConfigureAwait(false);
 
     /// <inheritdoc />
     public async Task DeleteAsync(RequestOptions? options = null) =>

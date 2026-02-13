@@ -91,17 +91,6 @@ internal static class ExperimentalGuildHelper
         return restrictions.ToImmutable();
     }
 
-    public static async Task DeleteContentFilterAsync(BaseKookClient client,
-        RestContentFilter filter, RequestOptions? options)
-    {
-        DeleteGuildContentFilterParams args = new()
-        {
-            GuildId = filter.GuildId,
-            Id = filter.Id,
-        };
-        await client.ApiClient.DeleteGuildContentFilterAsync(args, options);
-    }
-
     public static async Task<RestContentFilter> CreateContentFilterAsync(BaseKookClient client, IGuild guild,
         IContentFilterTarget target, IReadOnlyCollection<IContentFilterHandler>? handlers,
         IReadOnlyCollection<ContentFilterExemption>? exemptions, bool isEnabled, RequestOptions? options)
@@ -110,41 +99,50 @@ internal static class ExperimentalGuildHelper
         {
             GuildId = guild.Id,
             Type = target.Type,
-            Targets = new ContentFilterTarget
-            {
-                Enabled = target.Mode,
-                TargetItems = (target as InviteFilterTarget?)?.GuildIds
-                    .Select(x =>
-                        new ContentFilterTargetItem
-                        {
-                            Id = x
-                        })
-                    .ToArray(),
-                StringItems = (target as WordFilterTarget?)?.Words.ToArray()
-            },
-            Handlers = handlers?
-                    .Select(x =>
-                        new ContentFilterHandler
-                        {
-                            Type = x.Type,
-                            Enabled = x.Enabled,
-                            Name = x.Name,
-                            CustomErrorMessage = (x as ContentFilterInterceptHandler?)?.CustomErrorMessage,
-                            AlertChannelId = (x as ContentFilterLogToChannelHandler?)?.ChannelId,
-                        })
-                    .ToArray()
-                ?? [],
-            Exemptions = exemptions?
-                    .Select(x => new API.Rest.ContentFilterExemption
-                    {
-                        Type = x.Type,
-                        Id = x.Id
-                    })
-                    .ToArray()
-                ?? [],
+            Targets = target.ToModel(),
+            Handlers = [..handlers?.Select(x => x.ToModel()) ?? []],
+            Exemptions = [..exemptions?.Select(x => x.ToModel()) ?? []],
             Switch = isEnabled
         };
         GuildSecurityWordfilterItem created = await client.ApiClient.CreateGuildWordfilterItemAsync(args, options);
         return RestContentFilter.Create(client, guild.Id, created);
+    }
+
+    public static async Task ModifyContentFilterAsync(BaseKookClient client,
+        RestContentFilter filter, Action<ModifyContentFilterProperties> func, RequestOptions? options)
+    {
+        ModifyContentFilterProperties properties = new();
+        func(properties);
+        if (properties.Target?.Type is { } modifiedType && modifiedType != filter.Target.Type)
+            throw new InvalidOperationException("Cannot change the type of the content filter target.");
+        UpdateGuildWordfilterItemParams args = new()
+        {
+            GuildId = filter.GuildId,
+            Id = filter.Id,
+            Targets = properties.Target?.ToModel(),
+            Handlers = properties.Handlers?.Select(x => x.ToModel()).ToArray(),
+            Exemptions = properties.Exemptions?.Select(x => x.ToModel()).ToArray(),
+            Switch = properties.IsEnabled
+        };
+        await client.ApiClient.UpdateGuildWordfilterItemAsync(args, options);
+    }
+
+    public static async Task EnableContentFilterAsync(BaseKookClient client,
+        RestContentFilter filter, RequestOptions? options) =>
+        await ModifyContentFilterAsync(client, filter, x => x.IsEnabled = true, options);
+
+    public static async Task DisableContentFilterAsync(BaseKookClient client,
+        RestContentFilter filter, RequestOptions? options) =>
+        await ModifyContentFilterAsync(client, filter, x => x.IsEnabled = false, options);
+
+    public static async Task DeleteContentFilterAsync(BaseKookClient client,
+        RestContentFilter filter, RequestOptions? options)
+    {
+        DeleteGuildContentFilterParams args = new()
+        {
+            GuildId = filter.GuildId,
+            Id = filter.Id,
+        };
+        await client.ApiClient.DeleteGuildWordfilterAsync(args, options);
     }
 }

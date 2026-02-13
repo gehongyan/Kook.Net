@@ -1,7 +1,9 @@
 ﻿using System.Text.Json.Serialization;
+using Kook.Net.Converters;
 
 namespace Kook.API.Rest;
 
+[JsonConverter(typeof(ContentFilterTargetItemJsonConverter))]
 internal class ContentFilterTargetItem
 {
     [JsonPropertyName("id")]

@@ -22,7 +22,10 @@ public readonly struct ContentFilterLogToChannelHandler : IContentFilterHandler
     /// <summary>
     ///     获取日志频道的标识。
     /// </summary>
-    public ulong ChannelId { get; init; }
+    /// <remarks>
+    ///     如果 <see cref="Enabled"/> 为 <see langword="false"/>，则该值可能为 <see langword="null"/>。
+    /// </remarks>
+    public ulong? ChannelId { get; init; }
 
     private string DebuggerDisplay => $"LogToChannel: {Name} ({ChannelId}{(!Enabled ? ", Disabled" : string.Empty)})";
 }

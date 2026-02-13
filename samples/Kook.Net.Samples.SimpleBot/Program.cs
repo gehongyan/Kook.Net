@@ -168,6 +168,17 @@ async Task MessageReceivedAsync(SocketMessage message,
         ],
         true
     );
+    await created.ModifyAsync(x =>
+    {
+        x.Handlers =
+        [
+            new ContentFilterInterceptHandler
+            {
+                Enabled = true,
+                CustomErrorMessage = "不要发送违规内容！"
+            }
+        ];
+    });
     IReadOnlyCollection<RestContentFilter> filters = await channel.Guild.GetContentFiltersAsync();
     foreach (RestContentFilter filter in filters)
     {
