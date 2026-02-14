@@ -10,10 +10,6 @@
     <Description>The dependency injection implementations using Microsoft.Extensions.DependencyInjection. </Description>
   </PropertyGroup>
 
-<!--  <ItemGroup>-->
-<!--    <FrameworkReference Include="Microsoft.AspNetCore.App" />-->
-<!--  </ItemGroup>-->
-
   <ItemGroup>
     <ProjectReference Include="..\Kook.Net\Kook.Net.csproj" />
   </ItemGroup>
