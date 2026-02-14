@@ -16,6 +16,7 @@ public static class DefaultRestClientProvider
     ///     <see cref="Kook.Net.Rest.IRestClient"/> 的默认实现的实例。
     /// </summary>
     /// <seealso cref="Kook.Net.Rest.DefaultRestClientProvider.Create(System.Boolean,System.Net.IWebProxy)"/>
+    /// <seealso cref="Kook.Net.Rest.DefaultRestClientProvider.Create(System.Func{System.Net.Http.HttpClient})"/>
     public static readonly RestClientProvider Instance = Create();
 
     /// <summary>
@@ -26,7 +27,7 @@ public static class DefaultRestClientProvider
     /// <returns> 一个新的 <see cref="Kook.Net.Rest.RestClientProvider"/> 委托。 </returns>
     /// <remarks>
     ///     此方式创建的 <see cref="IRestClient"/> 实例将使用默认的 HTTP 客户端实现，并根据提供的参数配置代理设置。内部创建的
-    ///     <seealso cref="HttpClient"/> 实例会启用 <see cref="System.Net.DecompressionMethods.GZip"/>
+    ///     <see cref="HttpClient"/> 实例会启用 <see cref="System.Net.DecompressionMethods.GZip"/>
     ///     及 <see cref="System.Net.DecompressionMethods.Deflate"/>，并设置请求头
     ///     <see cref="System.Net.Http.Headers.HttpRequestHeaders.AcceptEncoding"/> 为
     ///     <c>gzip, deflate</c>，以启用对压缩响应的支持。
