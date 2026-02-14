@@ -115,6 +115,7 @@ public class RecommendInfo : IRecommendInfo
         BoostLevel = model.BoostLevel;
         CustomId = model.CustomId;
         RareId = model.RareId;
+        RareLevel = model.RareLevel;
         Resources = model.RareGuildSettings?.ToEntity();
         IsOfficialPartner = model.IsOfficialPartner;
         Sort = model.Sort;

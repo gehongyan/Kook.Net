@@ -36,7 +36,12 @@ public readonly struct RareGuildResources
     public required string Description { get; init; }
 
     /// <summary>
-    ///     获取服务器靓号标签的北京图像。
+    ///     获取服务器靓号标签的背景图像。
     /// </summary>
     public required string IdIcon { get; init; }
+
+    /// <summary>
+    ///     获取服务器靓号关联的语音频道链接。
+    /// </summary>
+    public string? VoiceChannelLink { get; init; }
 }

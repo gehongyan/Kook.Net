@@ -77,7 +77,7 @@ public interface IRecommendInfo
     ///     获取推荐服务器的靓号 ID。
     /// </summary>
     /// <remarks>
-    ///     当无自定义 ID 时为空字符串。
+    ///     当无靓号 ID 时为空字符串。
     /// </remarks>
     string RareId { get; }
 

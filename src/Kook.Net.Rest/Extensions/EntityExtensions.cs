@@ -409,7 +409,8 @@ internal static class EntityExtensions
             CoverImage = model.CoverImage,
             Summary = model.BriefText,
             Description = model.Description,
-            IdIcon = model.IdIcon
+            IdIcon = model.IdIcon,
+            VoiceChannelLink = model.VoiceChannelLink
         };
     }
 
