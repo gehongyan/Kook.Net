@@ -89,7 +89,7 @@ public interface IRecommendInfo
     /// <summary>
     ///     获取推荐服务器的靓号设置。
     /// </summary>
-    RareGuildResources? Resources { get; }
+    RareGuildResources? RareResources { get; }
 
     /// <summary>
     ///     获取推荐服务器是否是官方合作伙伴。

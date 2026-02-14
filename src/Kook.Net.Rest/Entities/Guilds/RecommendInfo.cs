@@ -54,7 +54,7 @@ public class RecommendInfo : IRecommendInfo
     public RareLevel RareLevel { get; private set; }
 
     /// <inheritdoc />
-    public RareGuildResources? Resources { get; private set; }
+    public RareGuildResources? RareResources { get; private set; }
 
     /// <inheritdoc />
     public bool IsOfficialPartner { get; private set; }
@@ -116,7 +116,7 @@ public class RecommendInfo : IRecommendInfo
         CustomId = model.CustomId;
         RareId = model.RareId;
         RareLevel = model.RareLevel;
-        Resources = model.RareGuildSettings?.ToEntity();
+        RareResources = model.RareGuildSettings?.ToEntity();
         IsOfficialPartner = model.IsOfficialPartner;
         Sort = model.Sort;
         AuditStatus = model.AuditStatus;
