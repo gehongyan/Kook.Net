@@ -168,7 +168,7 @@ public abstract class BaseKookClient : IKookClient
                 }
                 catch (ArgumentException ex)
                 {
-                    // log these ArgumentExceptions and allow for the client to attempt to log in any ways
+                    // log these ArgumentExceptions and allow for the client to attempt to log in anyway
                     await LogManager.WarningAsync("Kook", "A supplied token was invalid.", ex).ConfigureAwait(false);
                 }
             }
