@@ -1,11 +1,3 @@
-#if NET462
-using System.Net.Http;
-#endif
-
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-using System.Net.Mime;
-#endif
-
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Net;

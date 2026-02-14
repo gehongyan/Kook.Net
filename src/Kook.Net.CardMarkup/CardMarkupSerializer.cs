@@ -22,11 +22,10 @@ public static class CardMarkupSerializer
     /// <returns> 一个表示异步解析操作的任务。任务的结果包含一个可用于枚举 <see cref="ICard"/> 成员的 <see cref="System.Collections.Generic.IEnumerable{T}"/>。 </returns>
     public static async Task<IEnumerable<ICard>> DeserializeAsync(FileInfo file, CancellationToken token = default)
     {
-#if NETSTANDARD2_0 || NET462
-        using FileStream fs = file.OpenRead();
-#else
-        await using FileStream fs = file.OpenRead();
+#if SUPPORTS_ASYNC_DISPOSABLE
+        await
 #endif
+        using FileStream fs = file.OpenRead();
         return await DeserializeAsync(fs, token);
     }
 

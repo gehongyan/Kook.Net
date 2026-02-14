@@ -1,7 +1,3 @@
-#if NET462
-using System.Net.Http;
-#endif
-
 using Kook.API;
 using Kook.API.Rest;
 using Kook.Net.Queue;

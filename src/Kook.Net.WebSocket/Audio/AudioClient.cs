@@ -188,11 +188,7 @@ internal partial class AudioClient : IAudioClient
             StreamPair streamPair = _streams.TryGetValue(ssrc, out StreamPair resolvedStreamPair)
                 ? resolvedStreamPair
                 : await CreateInputStreamAsync(ssrc);
-#if NET6_0_OR_GREATER
             await streamPair.Writer.WriteAsync(packet).ConfigureAwait(false);
-#else
-            await streamPair.Writer.WriteAsync(packet, 0, packet.Length).ConfigureAwait(false);
-#endif
             await _audioLogger.DebugAsync($"Received {packet.Length} Bytes").ConfigureAwait(false);
         }
         catch (Exception ex)

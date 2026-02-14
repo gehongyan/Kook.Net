@@ -6,11 +6,7 @@ namespace Kook.WebSocket;
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
 internal sealed class SocketGlobalUser : SocketUser
 {
-#if NET9_0_OR_GREATER
     private readonly Lock _lockObj = new();
-#else
-    private readonly object _lockObj = new();
-#endif
     private ushort _references;
 
     /// <inheritdoc />

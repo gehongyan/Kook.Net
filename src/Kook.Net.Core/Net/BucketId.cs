@@ -1,7 +1,4 @@
 using System.Diagnostics.CodeAnalysis;
-#if NET462
-using System.Net.Http;
-#endif
 
 namespace Kook.Net;
 

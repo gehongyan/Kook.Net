@@ -316,12 +316,12 @@ public class KookRestClient : BaseKookClient, IKookClient
     /// <returns> 一个表示异步创建操作的任务。任务的结果是上传文件后的资源地址 URL。 </returns>
     public async Task<string> CreateAssetAsync(string path, string? filename = null, RequestOptions? options = null)
     {
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-        await using FileStream fileStream = File.OpenRead(path);
-#else
-        using FileStream fileStream = File.OpenRead(path);
+#if SUPPORTS_ASYNC_DISPOSABLE
+        await
 #endif
-        return await ClientHelper.CreateAssetAsync(this, fileStream, filename ?? Path.GetFileName(path), options)
+        using FileStream fileStream = File.OpenRead(path);
+        return await ClientHelper
+            .CreateAssetAsync(this, fileStream, filename ?? Path.GetFileName(path), options)
             .ConfigureAwait(false);
     }
 
