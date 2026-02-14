@@ -69,9 +69,27 @@ public interface IRecommendInfo
     ///     获取推荐服务器的自定义 ID。
     /// </summary>
     /// <remarks>
-    ///     自定义 ID 可能是一个自定义字符串，也可能是服务器靓号 ID，当无自定义 ID 时为空字符串。
+    ///     自定义 ID 可能是一个自定义字符串，当服务器拥有靓号 ID 时，自定义 ID 与靓号 ID 相同，当无自定义 ID 时为空字符串。
     /// </remarks>
     string CustomId { get; }
+
+    /// <summary>
+    ///     获取推荐服务器的靓号 ID。
+    /// </summary>
+    /// <remarks>
+    ///     当无靓号 ID 时为空字符串。
+    /// </remarks>
+    string RareId { get; }
+
+    /// <summary>
+    ///     获取服务器的靓号等级。
+    /// </summary>
+    RareLevel RareLevel { get; }
+
+    /// <summary>
+    ///     获取推荐服务器的靓号设置。
+    /// </summary>
+    RareGuildResources? RareResources { get; }
 
     /// <summary>
     ///     获取推荐服务器是否是官方合作伙伴。

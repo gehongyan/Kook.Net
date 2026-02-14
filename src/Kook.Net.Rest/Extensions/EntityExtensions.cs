@@ -399,6 +399,21 @@ internal static class EntityExtensions
         return GuildCertification.Create(model.Type, model.Title, model.Picture, model.Description);
     }
 
+    public static RareGuildResources ToEntity(this RareGuildSettings model)
+    {
+        return new RareGuildResources
+        {
+            FrameImages = model.Frame,
+            FrameColor = model.FrameColor,
+            NameplateImages = model.RareNameplate,
+            CoverImage = model.CoverImage,
+            Summary = model.BriefText,
+            Description = model.Description,
+            IdIcon = model.IdIcon,
+            VoiceChannelLink = model.VoiceChannelLink
+        };
+    }
+
     #endregion
 
     #region User Tags
