@@ -1,11 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Kook;
 
 /// <summary>
 ///     用来构建 <see cref="ContextModule"/> 模块的构建器。
 /// </summary>
-public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuilder>, IEquatable<IModuleBuilder>
+public record ContextModuleBuilder : IModuleBuilder
 {
     /// <summary>
     ///     元素的最大数量。
@@ -121,45 +119,4 @@ public class ContextModuleBuilder : IModuleBuilder, IEquatable<ContextModuleBuil
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
-
-    /// <summary>
-    ///     判定两个 <see cref="ContextModuleBuilder"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="ContextModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(ContextModuleBuilder? left, ContextModuleBuilder? right) =>
-        left?.Equals(right) ?? right is null;
-
-    /// <summary>
-    ///     判定两个 <see cref="ContextModuleBuilder"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="ContextModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(ContextModuleBuilder? left, ContextModuleBuilder? right) =>
-        !(left == right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is ContextModuleBuilder builder && Equals(builder);
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] ContextModuleBuilder? contextModuleBuilder)
-    {
-        if (contextModuleBuilder is null)
-            return false;
-
-        if (Elements.Count != contextModuleBuilder.Elements.Count)
-            return false;
-
-        if (Elements
-            .Zip(contextModuleBuilder.Elements, (x, y) => (x, y))
-            .Any(pair => pair.x != pair.y))
-            return false;
-
-        return Type == contextModuleBuilder.Type;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => base.GetHashCode();
-
-    bool IEquatable<IModuleBuilder>.Equals([NotNullWhen(true)] IModuleBuilder? moduleBuilder) =>
-        Equals(moduleBuilder as ContextModuleBuilder);
 }
