@@ -53,6 +53,9 @@ public static class DefaultRestClientProvider
     ///     在使用自定义的 <see cref="HttpClient"/> 工厂方法时，请确保返回的 <see cref="HttpClient"/>
     ///     实例具有适当的配置，例如正确的超时设置、代理设置等，以确保与 KOOK API 的通信正常进行。Kook.Net
     ///     不会为此方式创建的 <see cref="HttpClient"/> 实例进行任何管理或处理，因此需要开发者自行负责这些实例的生命周期和配置。
+    ///     <note type="warning">
+    ///         此方式创建的 <see cref="HttpClient"/> 不应设置其 <see cref="HttpClient.BaseAddress"/> 属性。
+    ///     </note>
     /// </remarks>
     /// <example>
     ///     以下示例代码，在依赖注入环境中，展示了如何使用自定义的 <see cref="HttpClient"/> 工厂方法来创建一个

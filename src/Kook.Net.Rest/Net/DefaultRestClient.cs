@@ -36,7 +36,11 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
         _baseUrl = baseUrl;
 
         if (httpClientFactory is not null)
+        {
             _client = httpClientFactory();
+            if (_client.BaseAddress is not null)
+                throw new ArgumentException("The HttpClient provided by the factory must not have a BaseAddress set.", nameof(httpClientFactory));
+        }
         else
         {
             _client = new HttpClient(new HttpClientHandler
