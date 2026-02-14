@@ -124,6 +124,13 @@ Licensed under the Apache License, Version 2.0.
 Available at
 https://github.com/MassTransit/MassTransit/blob/develop/LICENSE
 
+License notice for MassTransit.Extensions.Hosting
+------------------------------------
+
+Licensed under the Apache License, Version 2.0.
+Available at
+https://github.com/NCodeGroup/MassTransit.Extensions.Hosting/blob/master/LICENSE.txt
+
 License notice for Meziantou.Polyfill
 ------------------------------------
 
