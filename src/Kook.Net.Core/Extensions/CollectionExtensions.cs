@@ -37,6 +37,7 @@ internal static class CollectionExtensions
         public IReadOnlyCollection<TValue> ToReadOnlyCollection(Func<int> countFunc) =>
             new CollectionWrapper<TValue>(query, countFunc);
 
+#if NETSTANDARD || NETFRAMEWORK
         public IEnumerable<TValue[]> Chunk(int size)
         {
             if (query is null)
@@ -103,10 +104,8 @@ internal static class CollectionExtensions
                 }
             }
         }
-    }
-
-#if NETSTANDARD || NETFRAMEWORK
 #endif
+    }
 }
 
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
