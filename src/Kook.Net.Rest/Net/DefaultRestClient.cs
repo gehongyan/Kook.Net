@@ -24,23 +24,37 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
     private readonly HttpClient _client;
     private readonly string _baseUrl;
     private CancellationToken _cancellationToken;
+    private readonly bool _shouldDisposeHttpClient;
     private bool _isDisposed;
 
     private readonly JsonSerializerOptions _serializerOptions;
     private static int _nextId;
 
-    public DefaultRestClient(string baseUrl, bool useProxy = false, IWebProxy? webProxy = null)
+    public DefaultRestClient(string baseUrl,
+        bool useProxy = false, IWebProxy? webProxy = null,
+        Func<HttpClient>? httpClientFactory = null)
     {
         _baseUrl = baseUrl;
 
-        _client = new HttpClient(new HttpClientHandler
+        if (httpClientFactory is not null)
         {
-            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-            UseCookies = false,
-            UseProxy = useProxy,
-            Proxy = webProxy
-        });
-        SetHeader("accept-encoding", "gzip, deflate");
+            _client = httpClientFactory();
+            if (_client.BaseAddress is not null)
+                throw new ArgumentException("The HttpClient provided by the factory must not have a BaseAddress set.", nameof(httpClientFactory));
+            _shouldDisposeHttpClient = false;
+        }
+        else
+        {
+            _client = new HttpClient(new HttpClientHandler
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                UseCookies = false,
+                UseProxy = useProxy,
+                Proxy = webProxy
+            });
+            SetHeader("accept-encoding", "gzip, deflate");
+            _shouldDisposeHttpClient = true;
+        }
 
         _cancellationToken = CancellationToken.None;
 
@@ -55,7 +69,7 @@ internal sealed class DefaultRestClient : IRestClient, IDisposable
     {
         if (!_isDisposed)
         {
-            if (disposing)
+            if (disposing && _shouldDisposeHttpClient)
                 _client.Dispose();
             _isDisposed = true;
         }

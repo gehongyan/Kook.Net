@@ -1,5 +1,9 @@
+using System.Globalization;
+using System.Net;
+using System.Net.Http.Headers;
 using Kook;
 using Kook.Commands;
+using Kook.Net.Rest;
 using Kook.Net.Samples.TextCommands.Services;
 using Kook.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,11 +20,27 @@ using Microsoft.Extensions.Hosting;
 
 HostApplicationBuilder builder = Host.CreateEmptyApplicationBuilder(new HostApplicationBuilderSettings());
 
-builder.Services.AddSingleton<KookSocketConfig>(_ => new KookSocketConfig
+builder.Services.AddHttpClient("KookOAuth")
+    .ConfigureHttpClient(x =>
+    {
+        x.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+        x.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
+    })
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+    {
+        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+        UseCookies = false,
+    });
+builder.Services.AddSingleton<KookSocketConfig>(provider =>
 {
-    AlwaysDownloadUsers = false,
-    LogLevel = LogSeverity.Debug,
-    AcceptLanguage = "en-US"
+    IHttpClientFactory httpClientFactory = provider.GetRequiredService<IHttpClientFactory>();
+    return new KookSocketConfig
+    {
+        AlwaysDownloadUsers = false,
+        LogLevel = LogSeverity.Debug,
+        AcceptLanguage = CultureInfo.CurrentUICulture.Name,
+        RestClientProvider = DefaultRestClientProvider.Create(() => httpClientFactory.CreateClient("KookOAuth"))
+    };
 });
 builder.Services.AddSingleton<KookSocketClient>(provider =>
 {
