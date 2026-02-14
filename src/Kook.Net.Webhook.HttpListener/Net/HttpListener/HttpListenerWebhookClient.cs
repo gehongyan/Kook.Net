@@ -197,20 +197,16 @@ internal class HttpListenerWebhookClient : IHttpListenerWebhookClient
             if (context.Request.QueryString["compress"]?.Split(',').Any(x => x.StartsWith("0")) is true)
             {
                 using StreamReader streamReader = new(context.Request.InputStream);
-#if NET7_0_OR_GREATER
                 string requestBody = await streamReader.ReadToEndAsync(_cancellationToken);
-#else
-                string requestBody = await streamReader.ReadToEndAsync();
-#endif
                 messageResponse = await HandleTextMessageAsync(requestBody);
             }
             else
             {
                 using MemoryStream stream = new();
-#if NET7_0_OR_GREATER
-                await context.Request.InputStream.CopyToAsync(stream, _cancellationToken);
-#else
+#if NETSTANDARD2_0 || NETFRAMEWORK
                 await context.Request.InputStream.CopyToAsync(stream);
+#else
+                await context.Request.InputStream.CopyToAsync(stream, _cancellationToken);
 #endif
                 byte[] bytes = stream.ToArray();
                 messageResponse = await HandleBinaryMessageAsync(bytes, 0, bytes.Length);
@@ -218,21 +214,16 @@ internal class HttpListenerWebhookClient : IHttpListenerWebhookClient
 
             if (messageResponse is not null)
             {
-#if NETSTANDARD2_0 || NET462
-                using StreamWriter writer = new(context.Response.OutputStream);
-#else
-                await using StreamWriter writer = new(context.Response.OutputStream);
+#if SUPPORTS_ASYNC_DISPOSABLE
+                await
 #endif
+                using StreamWriter writer = new(context.Response.OutputStream);
                 await writer.WriteAsync(messageResponse);
             }
             else
             {
                 context.Response.StatusCode = (int)HttpStatusCode.NoContent;
-#if NETSTANDARD2_0 || NET462
-                await context.Response.OutputStream.WriteAsync([], 0, 0, _cancellationToken);
-#else
                 await context.Response.OutputStream.WriteAsync(ReadOnlyMemory<byte>.Empty, _cancellationToken);
-#endif
             }
         }
         catch

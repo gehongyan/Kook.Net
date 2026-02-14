@@ -9,11 +9,7 @@ internal class CommandMapNode
 
     private readonly ConcurrentDictionary<string, CommandMapNode> _nodes;
     private readonly string _name;
-#if NET9_0_OR_GREATER
     private readonly Lock _lockObj = new();
-#else
-    private readonly object _lockObj = new();
-#endif
     private ImmutableArray<CommandInfo> _commands;
 
     // ReSharper disable InconsistentlySynchronizedField

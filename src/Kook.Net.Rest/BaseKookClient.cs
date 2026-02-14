@@ -1,7 +1,3 @@
-#if NET462
-using System.Net.Http;
-#endif
-
 using System.Collections.Immutable;
 using Kook.Logging;
 
@@ -172,7 +168,7 @@ public abstract class BaseKookClient : IKookClient
                 }
                 catch (ArgumentException ex)
                 {
-                    // log these ArgumentExceptions and allow for the client to attempt to log in anyways
+                    // log these ArgumentExceptions and allow for the client to attempt to log in any ways
                     await LogManager.WarningAsync("Kook", "A supplied token was invalid.", ex).ConfigureAwait(false);
                 }
             }

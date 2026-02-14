@@ -581,11 +581,7 @@ public class ModuleBuilderTests
             yield return (CountdownMode.Day, DateTimeOffset.Now.AddDays(-1), null);
             yield return (CountdownMode.Hour, DateTimeOffset.Now.AddDays(-1), null);
             // StartTime must be equal or later than Unix Epoch
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
             yield return (CountdownMode.Second, DateTimeOffset.Now.AddMinutes(1), DateTimeOffset.UnixEpoch.AddTicks(-1));
-#else
-            yield return (CountdownMode.Second, DateTimeOffset.Now.AddMinutes(1), new DateTimeOffset(621355968000000000L, TimeSpan.Zero).AddTicks(-1));
-#endif
             // EndTime must be later than StartTime
             yield return (CountdownMode.Second, DateTimeOffset.Now.AddMinutes(1), DateTimeOffset.Now.AddMinutes(1));
             yield return (CountdownMode.Second, DateTimeOffset.Now.AddMinutes(1), DateTimeOffset.Now.AddMinutes(2));

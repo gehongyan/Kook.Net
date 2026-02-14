@@ -491,10 +491,10 @@ internal static class MessageHelper
             _ => throw new ArgumentOutOfRangeException(nameof(tagMode), tagMode, null)
         };
 
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-        foreach (Match match in matchCollection.Where(m => m.Success))
-#else
+#if NETSTANDARD2_0 || NETFRAMEWORK
         foreach (Match match in matchCollection.Cast<Match>().Where(m => m.Success))
+#else
+        foreach (Match match in matchCollection.Where(m => m.Success))
 #endif
         {
             index = match.Index;

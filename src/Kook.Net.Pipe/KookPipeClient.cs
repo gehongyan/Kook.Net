@@ -7,10 +7,6 @@ using System.Text.Json.Serialization;
 using Kook.Logging;
 using Kook.Rest;
 
-#if NET462
-using System.Net.Http;
-#endif
-
 namespace Kook.Pipe;
 
 /// <summary>
@@ -232,7 +228,7 @@ public class KookPipeClient : IDisposable
         if (string.IsNullOrWhiteSpace(url.Query))
             throw new ArgumentNullException(nameof(url), "The given pipe URL does not contain a query string.");
 
-#if NET462
+#if NETFRAMEWORK
         NameValueCollection collection = [];
         foreach (string queryItem in url.Query.TrimStart('?').Split('&'))
         {

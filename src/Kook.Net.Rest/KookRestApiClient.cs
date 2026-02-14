@@ -1,7 +1,3 @@
-#if NET462
-using System.Net.Http;
-#endif
-
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -1965,7 +1961,7 @@ internal class KookRestApiClient : IDisposable
     [return: NotNullIfNotNull(nameof(content))]
     protected static string? UrlEncode(string? content)
     {
-#if NET462
+#if NETFRAMEWORK
         return System.Net.WebUtility.UrlEncode(content);
 #else
         return System.Web.HttpUtility.UrlEncode(content);

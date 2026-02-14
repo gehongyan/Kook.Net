@@ -28,7 +28,7 @@ internal static class PrimitiveParsers
         parserBuilder[typeof(DateTime)] = (TryParseDelegate<DateTime>)DateTime.TryParse;
         parserBuilder[typeof(DateTimeOffset)] = (TryParseDelegate<DateTimeOffset>)DateTimeOffset.TryParse;
         parserBuilder[typeof(Guid)] = (TryParseDelegate<Guid>)Guid.TryParse;
-#if NET6_0_OR_GREATER
+#if NET
         parserBuilder[typeof(DateOnly)] = (TryParseDelegate<DateOnly>)DateOnly.TryParse;
         parserBuilder[typeof(TimeOnly)] = (TryParseDelegate<TimeOnly>)TimeOnly.TryParse;
 #endif

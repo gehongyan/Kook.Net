@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../../props/common.props" />
+  <Import Project="../../props/common.props"/>
   <PropertyGroup>
     <RootNamespace>Kook.Rest</RootNamespace>
     <IsPackable>true</IsPackable>
@@ -7,15 +7,6 @@
     <Description>The REST API implementation for Kook.Net.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" />
-  </ItemGroup>
-  <ItemGroup Condition=" !$(TargetFramework.StartsWith('net10.0')) ">
-    <PackageReference Include="System.Linq.Async" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
-    <Reference Include="System.Net.Http" />
+    <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj"/>
   </ItemGroup>
 </Project>

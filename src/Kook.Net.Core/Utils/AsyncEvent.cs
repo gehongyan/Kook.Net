@@ -5,11 +5,7 @@ namespace Kook;
 internal class AsyncEvent<T>
     where T : class
 {
-#if NET9_0_OR_GREATER
     private readonly Lock _subLock = new();
-#else
-    private readonly object _subLock = new();
-#endif
     internal ImmutableArray<T> _subscriptions = [];
 
     // ReSharper disable once InconsistentlySynchronizedField

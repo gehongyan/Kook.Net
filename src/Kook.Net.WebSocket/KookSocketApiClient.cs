@@ -80,19 +80,17 @@ internal class KookSocketApiClient : KookRestApiClient
 
     private async Task OnBinaryMessage(byte[] data, int index, int count)
     {
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-        await using MemoryStream decompressed = new();
-#else
-        using MemoryStream decompressed = new();
+#if SUPPORTS_ASYNC_DISPOSABLE
+        await
 #endif
+        using MemoryStream decompressed = new();
         using MemoryStream compressed = data[0] == 0x78
             ? new MemoryStream(data, index + 2, count - 2)
             : new MemoryStream(data, index, count);
-#if NETSTANDARD2_1_OR_GREATER || NET5_0_OR_GREATER
-        await using DeflateStream decompressor = new(compressed, CompressionMode.Decompress);
-#else
-        using DeflateStream decompressor = new(compressed, CompressionMode.Decompress);
+#if SUPPORTS_ASYNC_DISPOSABLE
+        await
 #endif
+        using DeflateStream decompressor = new(compressed, CompressionMode.Decompress);
         await decompressor.CopyToAsync(decompressed);
         decompressed.Position = 0;
 

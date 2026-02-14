@@ -10,11 +10,7 @@ namespace Kook.Net.Queue.InMemory;
 internal sealed class BufferedInMemoryMessageQueue : BaseMessageQueue
 {
     private readonly InMemoryMessageQueueOptions _options;
-#if NET9_0_OR_GREATER
     private readonly Lock _lock = new();
-#else
-    private readonly object _lock = new();
-#endif
     private readonly SortedDictionary<int, JsonElement> _buffer = new();
     private readonly Channel<QueueItem> _outputChannel;
     private readonly int _maxSeq;
