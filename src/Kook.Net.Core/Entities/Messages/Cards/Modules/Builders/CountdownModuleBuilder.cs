@@ -1,11 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Kook;
 
 /// <summary>
 ///     用来构建 <see cref="CountdownModule"/> 模块的构建器。
 /// </summary>
-public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModuleBuilder>, IEquatable<IModuleBuilder>
+public record CountdownModuleBuilder : IModuleBuilder
 {
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Countdown;
@@ -126,39 +124,4 @@ public class CountdownModuleBuilder : IModuleBuilder, IEquatable<CountdownModule
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
-
-    /// <summary>
-    ///     判定两个 <see cref="CountdownModuleBuilder"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="CountdownModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(CountdownModuleBuilder? left, CountdownModuleBuilder? right) =>
-        left?.Equals(right) ?? right is null;
-
-    /// <summary>
-    ///     判定两个 <see cref="CountdownModuleBuilder"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="CountdownModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(CountdownModuleBuilder? left, CountdownModuleBuilder? right) =>
-        !(left == right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is CountdownModuleBuilder builder && Equals(builder);
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] CountdownModuleBuilder? countdownModuleBuilder)
-    {
-        if (countdownModuleBuilder is null) return false;
-
-        return Type == countdownModuleBuilder.Type
-            && EndTime == countdownModuleBuilder.EndTime
-            && StartTime == countdownModuleBuilder.StartTime
-            && Mode == countdownModuleBuilder.Mode;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => base.GetHashCode();
-
-    bool IEquatable<IModuleBuilder>.Equals([NotNullWhen(true)] IModuleBuilder? moduleBuilder) =>
-        Equals(moduleBuilder as CountdownModuleBuilder);
 }

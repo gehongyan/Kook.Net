@@ -4,7 +4,6 @@ using System.Text.Json;
 using Kook.API;
 using Kook.API.Gateway;
 using Kook.API.Rest;
-using Kook.Audio;
 using Kook.Net;
 using Kook.Rest;
 
