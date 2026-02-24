@@ -12,7 +12,7 @@
 - Added support for retrieving user KPM VIP information and voice channel wealth level.
 - Added support for parsing `Guid` type parameters in the text command framework.
 - Added support for retrieving guild join restrictions.
-- Added support for retrieving recommended guild vanity (nice number) information.
+- Added support for retrieving recommended guild rare ID (vanity) information.
 - `DefaultRestClientProvider` used by `KookRestConfig` now supports construction with an `HttpClient` factory.
 - Added .NET 10 target framework to service and hosting related extension packages.
 - In-memory queue extension package now supports a buffered queue that corrects message sequence numbers.
