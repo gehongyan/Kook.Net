@@ -2,6 +2,38 @@
 
 ---
 
+## v0.11.0 [2026-02-24]
+
+### Added
+
+- Added support for parsing interactive emotes `InteractiveEmote` and rolled interactive emotes with results
+  `RolledInteractiveEmote`.
+- Added `EmoteExtensions` with utility methods for obtaining interactive emote resource URLs.
+- Added support for retrieving user KPM VIP information and voice channel wealth level.
+- Added support for parsing `Guid` type parameters in the text command framework.
+- Added support for retrieving guild join restrictions.
+- Added support for retrieving recommended guild rare ID (vanity) information.
+- `DefaultRestClientProvider` used by `KookRestConfig` now supports construction with an `HttpClient` factory.
+- Added .NET 10 target framework to service and hosting related extension packages.
+- In-memory queue extension package now supports a buffered queue that corrects message sequence numbers.
+- (Experimental) Added guild security management related methods, including behavior restrictions and content filtering.
+
+### Changed
+
+- The delegate parameter of the `BaseMessageQueue` constructor now receives an additional `int` parameter representing
+  the message sequence number.
+
+### Optimized
+
+- Refactored in-memory queue implementation, using `Channel` instead of `BlockingCollection` for better performance.
+- Replaced PolySharp with Meziantou.Polyfill source generator approach for multi-target framework method
+  implementations.
+
+### Misc
+
+- Optimized target frameworks and package references.
+- Added license declaration for `MassTransit.Extensions.Hosting` and `Meziantou.Polyfill`.
+
 ## v0.10.5 [2026-01-09]
 
 ### Added
