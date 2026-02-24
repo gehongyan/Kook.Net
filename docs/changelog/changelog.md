@@ -5,6 +5,35 @@ title: 变更日志
 
 # 变更日志
 
+## v0.11.0 [2026-02-24]
+
+### 新增
+
+- 新增支持解析互动表情符号 `InteractiveEmote` 及包含结果的互动表情符号 `RolledInteractiveEmote`。
+- 新增 `EmoteExtensions`，提供获取互动表情符号资源地址的实用方法。
+- 新增支持获取用户的 KPM VIP 信息与语音频道财富等级。
+- 新增支持在文本命令框架中解析 `Guid` 类型参数。
+- 新增支持获取服务器加入限制。
+- 新增支持获取推荐服务器的靓号信息。
+- 添加 `KookRestConfig` 所使用的 `DefaultRestClientProvider` 新增支持接收 `HttpClient` 工厂进行构造。
+- 在服务与托管相关扩展包中添加 .NET 10 目标框架。
+- 内存队列扩展包添加支持修正消息序号的缓冲队列。
+- （实验性功能）新增服务器安全管理相关方法，包括对行为限制与内容过滤。
+
+### 变更
+
+- `BaseMessageQueue` 的构造函数参数所接收的委托增加 `int` 参数，表示消息的顺序号。
+
+### 优化
+
+- 重构内存队列的实现，使用 `Channel` 替代 `BlockingCollection` 以提高性能。
+- 使用 Meziantou.Polyfill 的源生成器方式代替 PolySharp，优化多目标框架相关方法的实现。
+
+### 其他
+
+- 优化目标框架和包引用。
+- 为 `MassTransit.Extensions.Hosting` 和 `Meziantou.Polyfill` 添加许可证声明。
+
 ## v0.10.5 [2026-01-09]
 
 ### 新增
