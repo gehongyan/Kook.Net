@@ -7,7 +7,7 @@ namespace Kook;
 ///     表示一个渐变色。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public readonly struct GradientColor : IEquatable<GradientColor>
+public readonly record struct GradientColor
 {
     /// <summary>
     ///     初始化一个 <see cref="GradientColor"/> 结构的新实例。
@@ -56,20 +56,4 @@ public readonly struct GradientColor : IEquatable<GradientColor>
     public static implicit operator GradientColor((Color Left, Color Right) gradient) => new(gradient.Left, gradient.Right);
 
     private string DebuggerDisplay => $"{Left} -> {Right}";
-
-    /// <inheritdoc />
-    public bool Equals(GradientColor other) => Left.Equals(other.Left) && Right.Equals(other.Right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is GradientColor other && Equals(other);
-
-    /// <inheritdoc />
-    public override int GetHashCode()
-    {
-        unchecked
-        {
-            return (Left.GetHashCode() * 397) ^ Right.GetHashCode();
-        }
-    }
 }

@@ -1,6 +1,5 @@
 using System.IO.Compression;
 using System.Text;
-using System.Diagnostics;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using Kook.API.Gateway;

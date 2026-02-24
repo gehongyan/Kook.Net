@@ -1,11 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Kook;
 
 /// <summary>
 ///     用来构建 <see cref="ActionGroupModule"/> 模块的构建器。
 /// </summary>
-public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupModuleBuilder>, IEquatable<IModuleBuilder>
+public record ActionGroupModuleBuilder : IModuleBuilder
 {
     /// <summary>
     ///     元素的最大数量。
@@ -90,45 +88,4 @@ public class ActionGroupModuleBuilder : IModuleBuilder, IEquatable<ActionGroupMo
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
-
-    /// <summary>
-    ///     判定两个 <see cref="ActionGroupModuleBuilder"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="ActionGroupModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(ActionGroupModuleBuilder? left, ActionGroupModuleBuilder? right) =>
-        left?.Equals(right) ?? right is null;
-
-    /// <summary>
-    ///     判定两个 <see cref="ActionGroupModuleBuilder"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="ActionGroupModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(ActionGroupModuleBuilder? left, ActionGroupModuleBuilder? right) =>
-        !(left == right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is ActionGroupModuleBuilder builder && Equals(builder);
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] ActionGroupModuleBuilder? actionGroupModuleBuilder)
-    {
-        if (actionGroupModuleBuilder is null)
-            return false;
-
-        if (Elements.Count != actionGroupModuleBuilder.Elements.Count)
-            return false;
-
-        if (Elements
-            .Zip(actionGroupModuleBuilder.Elements, (x, y) => (x, y))
-            .Any(pair => pair.x != pair.y))
-            return false;
-
-        return Type == actionGroupModuleBuilder.Type;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => base.GetHashCode();
-
-    bool IEquatable<IModuleBuilder>.Equals([NotNullWhen(true)] IModuleBuilder? moduleBuilder) =>
-        Equals(moduleBuilder as ActionGroupModuleBuilder);
 }

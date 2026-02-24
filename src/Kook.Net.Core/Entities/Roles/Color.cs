@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using StandardColor = System.Drawing.Color;
 
 namespace Kook;
@@ -8,7 +7,7 @@ namespace Kook;
 ///     表示 KOOK 中使用的颜色。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public readonly struct Color : IEquatable<Color>
+public readonly record struct Color
 {
     /// <summary>
     ///     获取一个 KOOK 颜色的最大值的原始值。
@@ -307,18 +306,6 @@ public readonly struct Color : IEquatable<Color>
     }
 
     /// <summary>
-    ///     判定两个 <see cref="Color"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="Color"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(Color lhs, Color rhs) => lhs.RawValue == rhs.RawValue;
-
-    /// <summary>
-    ///     判定两个 <see cref="Color"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="Color"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(Color lhs, Color rhs) => lhs.RawValue != rhs.RawValue;
-
-    /// <summary>
     ///     使用指定的 24 位无符号整型值初始化一个 <see cref="Color"/> 结构的新实例。
     /// </summary>
     /// <example>
@@ -333,16 +320,6 @@ public readonly struct Color : IEquatable<Color>
 
     /// <inheritdoc cref="Kook.Color.RawValue" />
     public static implicit operator uint(Color color) => color.RawValue;
-
-    /// <inheritdoc />
-    public bool Equals(Color other) => RawValue == other.RawValue;
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is Color other && Equals(other);
-
-    /// <inheritdoc />
-    public override int GetHashCode() => (int) RawValue;
 
     /// <summary>
     ///     将由 Kook.Net 定义的 <see cref="Kook.Color"/> 颜色转换为由 .NET 定义的 <see cref="System.Drawing.Color"/> 颜色。

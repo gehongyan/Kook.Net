@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     用来构建 <see cref="ImageElement"/> 元素的构建器。
 /// </summary>
-public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuilder>, IEquatable<IElementBuilder>
+public record ImageElementBuilder : IElementBuilder
 {
     /// <summary>
     ///     图片替代文本的最大长度。
@@ -193,41 +193,4 @@ public class ImageElementBuilder : IElementBuilder, IEquatable<ImageElementBuild
     /// <inheritdoc />
     [MemberNotNull(nameof(Source))]
     IElement IElementBuilder.Build() => Build();
-
-    /// <summary>
-    ///     判定两个 <see cref="ImageElementBuilder"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="ImageElementBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(ImageElementBuilder? left, ImageElementBuilder? right) =>
-        left?.Equals(right) ?? right is null;
-
-    /// <summary>
-    ///     判定两个 <see cref="ImageElementBuilder"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="ImageElementBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(ImageElementBuilder? left, ImageElementBuilder? right) =>
-        !(left == right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is ImageElementBuilder builder && Equals(builder);
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] ImageElementBuilder? imageElementBuilder)
-    {
-        if (imageElementBuilder is null) return false;
-
-        return Type == imageElementBuilder.Type
-            && Source == imageElementBuilder.Source
-            && Alternative == imageElementBuilder.Alternative
-            && Size == imageElementBuilder.Size
-            && Circle == imageElementBuilder.Circle
-            && FallbackUrl == imageElementBuilder.FallbackUrl;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => base.GetHashCode();
-
-    bool IEquatable<IElementBuilder>.Equals([NotNullWhen(true)] IElementBuilder? elementBuilder) =>
-        Equals(elementBuilder as ImageElementBuilder);
 }

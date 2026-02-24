@@ -1,11 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Kook;
 
 /// <summary>
 ///     用来构建 <see cref="ImageGroupModule"/> 模块的构建器。
 /// </summary>
-public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModuleBuilder>, IEquatable<IModuleBuilder>
+public record ImageGroupModuleBuilder : IModuleBuilder
 {
     /// <summary>
     ///     元素的最大数量。
@@ -97,45 +95,4 @@ public class ImageGroupModuleBuilder : IModuleBuilder, IEquatable<ImageGroupModu
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
-
-    /// <summary>
-    ///     判定两个 <see cref="ImageGroupModuleBuilder"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="ImageGroupModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(ImageGroupModuleBuilder? left, ImageGroupModuleBuilder? right) =>
-        left?.Equals(right) ?? right is null;
-
-    /// <summary>
-    ///     判定两个 <see cref="ImageGroupModuleBuilder"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="ImageGroupModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(ImageGroupModuleBuilder? left, ImageGroupModuleBuilder? right) =>
-        !(left == right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is ImageGroupModuleBuilder builder && Equals(builder);
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] ImageGroupModuleBuilder? imageGroupModuleBuilder)
-    {
-        if (imageGroupModuleBuilder is null)
-            return false;
-
-        if (Elements.Count != imageGroupModuleBuilder.Elements.Count)
-            return false;
-
-        if (Elements
-            .Zip(imageGroupModuleBuilder.Elements, (x, y) => (x, y))
-            .Any(pair => pair.x != pair.y))
-            return false;
-
-        return Type == imageGroupModuleBuilder.Type;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => base.GetHashCode();
-
-    bool IEquatable<IModuleBuilder>.Equals([NotNullWhen(true)] IModuleBuilder? moduleBuilder) =>
-        Equals(moduleBuilder as ImageGroupModuleBuilder);
 }
