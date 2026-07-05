@@ -3,6 +3,7 @@ using Kook.API.Rest;
 using Kook.Rest;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Globalization;
 using MemberModel = Kook.API.Rest.GuildMember;
 using UserModel = Kook.API.User;
 
@@ -187,12 +188,6 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
     /// <summary>
     ///     获取此用户在该服务器内拥有的所有角色。
     /// </summary>
-    /// <remarks>
-    ///     <note type="warning">
-    ///         由于网关不会发布有关服务器用户角色变更的事件，此属性值可能并不准确。要获取准确的角色信息，请在使用此属性前调用
-    ///         <see cref="Kook.WebSocket.SocketGuildUser.UpdateAsync(Kook.RequestOptions)"/>。
-    ///     </note>
-    /// </remarks>
     public IReadOnlyCollection<SocketRole> Roles => _roleIds
         .Select(x => Guild.GetRole(x) ?? new SocketRole(Guild, x))
         .Where(x => x != null)
@@ -298,6 +293,18 @@ public class SocketGuildUser : SocketUser, IGuildUser, IUpdateable
                 ? null
                 : model.Nickname;
         }
+
+        IdentifyNumberValue = ushort.Parse(model.IdentifyNumber, NumberStyles.None, CultureInfo.InvariantCulture);
+        Presence.Update(model.Online);
+        if (model.Bot.HasValue)
+            IsBot = model.Bot;
+        if (model.Status.HasValue)
+            IsBanned = model.Status == 10;
+        Avatar = model.Avatar;
+        BuffAvatar = model.BuffAvatar;
+        IsMobileVerified = model.MobileVerified;
+        if (model.Roles is not null)
+            _roleIds = [..model.Roles];
     }
 
     internal bool Update(ClientState state, GuildUpdateSelfEvent model)
