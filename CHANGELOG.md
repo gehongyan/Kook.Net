@@ -2,6 +2,13 @@
 
 ---
 
+## v0.11.1 [2026-07-05]
+
+### Optimized
+
+- Thanks to the KOOK server's support, `SocketGuildUser`'s `RoleIds` and `Roles` properties will now update when a
+  server user is granted or revoked roles.
+
 ## v0.11.0 [2026-02-24]
 
 ### Added
