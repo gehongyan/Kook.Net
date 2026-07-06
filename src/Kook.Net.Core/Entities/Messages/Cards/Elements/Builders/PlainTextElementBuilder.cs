@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     用来构建 <see cref="PlainTextElement"/> 元素的构建器。
 /// </summary>
-public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElementBuilder>, IEquatable<IElementBuilder>
+public class PlainTextElementBuilder : IElementBuilder
 {
     /// <summary>
     ///     纯文本的最大长度。
@@ -103,38 +103,4 @@ public class PlainTextElementBuilder : IElementBuilder, IEquatable<PlainTextElem
     /// <inheritdoc />
     [MemberNotNull(nameof(Content))]
     IElement IElementBuilder.Build() => Build();
-
-    /// <summary>
-    ///     判定两个 <see cref="PlainTextElementBuilder"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="PlainTextElementBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(PlainTextElementBuilder? left, PlainTextElementBuilder? right) =>
-        left?.Equals(right) ?? right is null;
-
-    /// <summary>
-    ///     判定两个 <see cref="PlainTextElementBuilder"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="PlainTextElementBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(PlainTextElementBuilder? left, PlainTextElementBuilder? right) =>
-        !(left == right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is PlainTextElementBuilder builder && Equals(builder);
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] PlainTextElementBuilder? plainTextElementBuilder)
-    {
-        if (plainTextElementBuilder is null) return false;
-
-        return Type == plainTextElementBuilder.Type
-            && Content == plainTextElementBuilder.Content
-            && Emoji == plainTextElementBuilder.Emoji;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => base.GetHashCode();
-
-    bool IEquatable<IElementBuilder>.Equals([NotNullWhen(true)] IElementBuilder? elementBuilder) =>
-        Equals(elementBuilder as PlainTextElementBuilder);
 }

@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     用来构建 <see cref="Card"/> 卡片的构建器。
 /// </summary>
-public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICardBuilder>
+public record CardBuilder : ICardBuilder
 {
     /// <summary>
     ///     初始化一个 <see cref="CardBuilder"/> 类的新实例。
@@ -152,48 +152,4 @@ public class CardBuilder : ICardBuilder, IEquatable<CardBuilder>, IEquatable<ICa
 
     /// <inheritdoc />
     ICard ICardBuilder.Build() => Build();
-
-    /// <summary>
-    ///     判定两个 <see cref="CardBuilder"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="CardBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(CardBuilder? left, CardBuilder? right) =>
-        left?.Equals(right) ?? right is null;
-
-    /// <summary>
-    ///     判定两个 <see cref="CardBuilder"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="CardBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(CardBuilder? left, CardBuilder? right) =>
-        !(left == right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is CardBuilder builder && Equals(builder);
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] CardBuilder? cardBuilder)
-    {
-        if (cardBuilder is null)
-            return false;
-
-        if (Modules.Count != cardBuilder.Modules.Count)
-            return false;
-
-        if (Modules
-            .Zip(cardBuilder.Modules, (x, y) => (x, y))
-            .Any(pair => pair.x != pair.y))
-            return false;
-
-        return Type == cardBuilder.Type
-            && Theme == cardBuilder.Theme
-            && Color == cardBuilder.Color
-            && Size == cardBuilder.Size;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => base.GetHashCode();
-
-    bool IEquatable<ICardBuilder>.Equals([NotNullWhen(true)] ICardBuilder? cardBuilder) =>
-        Equals(cardBuilder as CardBuilder);
 }

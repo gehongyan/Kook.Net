@@ -1,11 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Kook;
 
 /// <summary>
 ///     用来构建 <see cref="SectionModule"/> 模块的构建器。
 /// </summary>
-public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuilder>, IEquatable<IModuleBuilder>
+public record SectionModuleBuilder : IModuleBuilder
 {
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Section;
@@ -206,39 +204,4 @@ public class SectionModuleBuilder : IModuleBuilder, IEquatable<SectionModuleBuil
 
     /// <inheritdoc />
     IModule IModuleBuilder.Build() => Build();
-
-    /// <summary>
-    ///     判定两个 <see cref="SectionModuleBuilder"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="SectionModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(SectionModuleBuilder? left, SectionModuleBuilder? right) =>
-        left?.Equals(right) ?? right is null;
-
-    /// <summary>
-    ///     判定两个 <see cref="SectionModuleBuilder"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="SectionModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(SectionModuleBuilder? left, SectionModuleBuilder? right) =>
-        !(left == right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is SectionModuleBuilder builder && Equals(builder);
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] SectionModuleBuilder? sectionModuleBuilder)
-    {
-        if (sectionModuleBuilder is null) return false;
-
-        return Type == sectionModuleBuilder.Type
-            && Mode == sectionModuleBuilder.Mode
-            && Text == sectionModuleBuilder.Text
-            && Accessory == sectionModuleBuilder.Accessory;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => base.GetHashCode();
-
-    bool IEquatable<IModuleBuilder>.Equals([NotNullWhen(true)] IModuleBuilder? moduleBuilder) =>
-        Equals(moduleBuilder as SectionModuleBuilder);
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Xunit;
 
 namespace Kook;
@@ -80,7 +79,7 @@ public class CardBuilderTests
     [Fact]
     public void WithSize()
     {
-        foreach (CardSize size in (CardSize[])Enum.GetValues(typeof(CardSize)))
+        foreach (CardSize size in Enum.GetValues<CardSize>())
         {
             CardBuilder builder = new CardBuilder().WithSize(size);
             Assert.Equal(size, builder.Size);
