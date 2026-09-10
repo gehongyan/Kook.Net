@@ -97,6 +97,11 @@ public interface IRecommendInfo
     bool IsOfficialPartner { get; }
 
     /// <summary>
+    ///     获取推荐服务器是否是陪玩服务器。
+    /// </summary>
+    bool IsPlayFellow { get; }
+
+    /// <summary>
     ///     TODO: To be documented.
     /// </summary>
     int Sort { get; }
@@ -105,6 +110,11 @@ public interface IRecommendInfo
     ///     TODO: To be documented.
     /// </summary>
     int AuditStatus { get; }
+
+    /// <summary>
+    ///     获取用户可以如何搜索到该推荐服务器
+    /// </summary>
+    GuildSearchSetting GuildSearch { get; }
 
     /// <summary>
     ///     获取推荐服务器要等待多少天才能再次修改推荐信息。

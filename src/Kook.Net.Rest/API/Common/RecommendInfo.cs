@@ -59,11 +59,18 @@ internal class RecommendInfo
     [JsonConverter(typeof(NumberBooleanConverter))]
     public bool IsOfficialPartner { get; set; }
 
+    [JsonPropertyName("is_play_fellow")]
+    [JsonConverter(typeof(NumberBooleanConverter))]
+    public bool IsPlayFellow { get; set; }
+
     [JsonPropertyName("sort")]
     public int Sort { get; set; }
 
     [JsonPropertyName("audit_status")]
     public int AuditStatus { get; set; }
+
+    [JsonPropertyName("guild_search_setting")]
+    public GuildSearchSetting GuildSearch { get; set; }
 
     [JsonPropertyName("update_day_gap")]
     public int UpdateDayInterval { get; set; }

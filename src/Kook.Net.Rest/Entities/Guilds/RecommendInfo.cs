@@ -60,10 +60,16 @@ public class RecommendInfo : IRecommendInfo
     public bool IsOfficialPartner { get; private set; }
 
     /// <inheritdoc />
+    public bool IsPlayFellow { get; private set; }
+
+    /// <inheritdoc />
     public int Sort { get; private set; }
 
     /// <inheritdoc />
     public int AuditStatus { get; private set; }
+
+    /// <inheritdoc />
+    public GuildSearchSetting GuildSearch { get; private set; }
 
     /// <inheritdoc />
     public int DaysBeforeModify { get; private set; }
@@ -78,6 +84,7 @@ public class RecommendInfo : IRecommendInfo
         CustomId = string.Empty;
         RareId = string.Empty;
         RareLevel = RareLevel.None;
+        GuildSearch = GuildSearchSetting.Private;
     }
 
     internal static RecommendInfo Create(Model model)
@@ -118,8 +125,10 @@ public class RecommendInfo : IRecommendInfo
         RareLevel = model.RareLevel;
         RareResources = model.RareGuildSettings?.ToEntity();
         IsOfficialPartner = model.IsOfficialPartner;
+        IsPlayFellow = model.IsPlayFellow;
         Sort = model.Sort;
         AuditStatus = model.AuditStatus;
+        GuildSearch = model.GuildSearch;
         DaysBeforeModify = model.UpdateDayInterval;
     }
 }
