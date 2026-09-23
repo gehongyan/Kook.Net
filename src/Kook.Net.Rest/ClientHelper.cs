@@ -82,6 +82,13 @@ internal static class ClientHelper
         await Task.WhenAll(tasks).ConfigureAwait(false);
     }
 
+    public static async Task<IReadOnlyCollection<ulong>> GetJoinedVoiceChannelIdsAsync(BaseKookClient client, RequestOptions? options)
+    {
+        IEnumerable<JoinedVoiceChannel> models = await client.ApiClient
+            .GetJoinedVoiceChannelsAsync(options: options).FlattenAsync().ConfigureAwait(false);
+        return [..models.Select(x => x.Id)];
+    }
+
     public static async Task<IReadOnlyCollection<RestUser>> GetFriendsAsync(BaseKookClient client, RequestOptions? options)
     {
         GetFriendStatesResponse models = await client.ApiClient.GetFriendStatesAsync(FriendState.Accepted, options).ConfigureAwait(false);

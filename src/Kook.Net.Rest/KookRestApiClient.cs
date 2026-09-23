@@ -1365,6 +1365,17 @@ internal class KookRestApiClient : IDisposable
             .ConfigureAwait(false);
     }
 
+    public IAsyncEnumerable<IReadOnlyCollection<JoinedVoiceChannel>> GetJoinedVoiceChannelsAsync(
+        int limit = KookConfig.MaxItemsPerBatchByDefault, int fromPage = 1, RequestOptions? options = null)
+    {
+        options = RequestOptions.CreateOrClone(options);
+
+        BucketIds ids = new();
+        return SendPagedAsync<JoinedVoiceChannel>(HttpMethod.Get,
+            (pageSize, page) => $"voice/list?page_size={pageSize}&page={page}",
+            ids, ClientBucketType.SendEdit, new PageMeta(fromPage, limit), options);
+    }
+
     #endregion
 
     #region Users

@@ -128,6 +128,14 @@ public class KookRestClient : BaseKookClient, IKookClient
     public Task<IReadOnlyCollection<RestDMChannel>> GetDMChannelsAsync(RequestOptions? options = null) =>
         ClientHelper.GetDMChannelsAsync(this, options);
 
+    /// <summary>
+    ///     获取当前机器人已加入的所有语音频道的 ID。
+    /// </summary>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步获取操作的任务。任务的结果是当前机器人已加入的所有语音频道的 ID 的只读集合。 </returns>
+    public Task<IReadOnlyCollection<ulong>> GetJoinedVoiceChannelIdsAsync(RequestOptions? options = null) =>
+        ClientHelper.GetJoinedVoiceChannelIdsAsync(this, options);
+
     #endregion
 
     #region Roles
