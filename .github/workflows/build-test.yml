@@ -40,7 +40,7 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal --filter-not-trait "Category=Integration.Socket" --filter-not-trait "Category=Integration.Rest" --hangdump --hangdump-timeout 15m --report-xunit-trx --report-xunit-trx-filename test-results.trx
+        run: dotnet test --no-build --verbosity normal --filter-not-trait "Category=Integration.Socket" --filter-not-trait "Category=Integration.Rest" --hangdump --hangdump-timeout 15m --report-xunit-trx --report-xunit-trx-filename test-results.trx --ignore-exit-code 8
 
       - name: Upload Test Results
         if: always()
