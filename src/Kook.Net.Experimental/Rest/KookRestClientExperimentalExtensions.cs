@@ -62,6 +62,8 @@ public static class KookRestClientExperimentalExtensions
     /// </summary>
     /// <remarks>
     ///     此接口并非官方文档化的接口，行为可能随时变化。返回的令牌包含临时鉴权信息，请勿将其写入日志。
+    ///     Bot 需要被授权才能获取令牌：实测中，没有任何服务器角色的 Bot 会被拒绝（HTTP 403）。
+    ///     通常不需要直接调用此方法，使用 <see cref="Kook.Audio.WebRtc.SocketVoiceChannelExperimentalExtensions.ConnectWebRtcAsync(Kook.WebSocket.SocketVoiceChannel,System.Action{Kook.Audio.WebRtc.IWebRtcAudioClient})"/> 即可。
     /// </remarks>
     /// <param name="client"> KOOK REST 客户端实例。 </param>
     /// <param name="channelId"> 语音频道的 ID。 </param>
@@ -76,6 +78,8 @@ public static class KookRestClientExperimentalExtensions
     /// </summary>
     /// <remarks>
     ///     此接口并非官方文档化的接口，行为可能随时变化。返回的令牌包含临时鉴权信息，请勿将其写入日志。
+    ///     Bot 需要被授权才能获取令牌：实测中，没有任何服务器角色的 Bot 会被拒绝（HTTP 403）。
+    ///     通常不需要直接调用此方法，使用 <see cref="Kook.Audio.WebRtc.SocketVoiceChannelExperimentalExtensions.ConnectWebRtcAsync(Kook.WebSocket.SocketVoiceChannel,System.Action{Kook.Audio.WebRtc.IWebRtcAudioClient})"/> 即可。
     /// </remarks>
     /// <param name="client"> KOOK REST 客户端实例。 </param>
     /// <param name="channel"> 语音频道。 </param>

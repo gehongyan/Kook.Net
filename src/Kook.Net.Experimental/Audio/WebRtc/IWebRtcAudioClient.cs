@@ -14,6 +14,80 @@ namespace Kook.Audio.WebRtc;
 ///         取消静音后，通过 <see cref="Kook.Audio.IAudioClient.CreatePcmStream(Kook.Audio.AudioApplication,System.Nullable{System.Int32},System.Int32,System.Int32)"/>
 ///         等方法所创建的音频流写入的音频才会被发送。
 ///     </para>
+///     <para>
+///         <b>同时存在多个语音连接时的行为。</b>
+///         <note type="warning">
+///             下列行为均来自对同一个 Bot 账号的实测，每种组合只测过少数几次，不是 KOOK 的文档化保证，之后可能变化。
+///         </note>
+///         <list type="bullet">
+///         <item>
+///             同一个账号同一时间只能有一个 WebRTC 会话。用 WebRTC 连接第二个频道（即使在另一个服务器）时，
+///             先连接的客户端会被服务端断开，它会先引发 <see cref="ServerDisconnected"/>（错误码 <c>41106</c>），
+///             随后引发 <see cref="Kook.Audio.IAudioClient.Disconnected"/>。
+///         </item>
+///         <item>
+///             官方的基于 UDP 的语音方案（<see cref="Kook.WebSocket.SocketVoiceChannel.ConnectAsync(System.Boolean,System.Boolean,System.String)"/>）
+///             可以让同一个账号同时连接多个频道，不受上一条限制。需要让一个 Bot 同时在多个频道里推流时，请使用 UDP 方案。
+///         </item>
+///         <item>
+///             UDP 与 WebRTC 在不同的频道里可以同时存在，互不影响。在同一个频道里则会冲突，UDP 优先：
+///             UDP 已经连接时，WebRTC 的加入会被服务端拒绝；WebRTC 已经连接时，随后加入的 UDP 会让它被断开
+///             （<see cref="ServerDisconnected"/> 的错误码为 <c>41106</c>，错误原因为空）。
+///         </item>
+///         </list>
+///     </para>
+///     <para>
+///         <b>权限。</b>
+///         Bot 需要被授权才能连接语音频道。实测中，一个没有任何服务器角色的 Bot 获取语音网关令牌时会被服务端拒绝（HTTP 403），
+///         授予角色后可以正常加入。Bot 无法访问频道所属的服务器时（例如不在该服务器，或者该服务器已不可用），
+///         服务端返回 HTTP 400，错误信息为 <c>guild_id does not exist or you do not have permission to access.</c>，
+///         不区分「不存在」和「没有权限」。
+///     </para>
+///     <para>
+///         <b>发送音频。</b>
+///         <list type="bullet">
+///         <item> 写入音频流的 PCM 应为 48 kHz、16 位、双声道交错。 </item>
+///         <item>
+///             编码码率默认取服务端在加入时下发的上限，实测在不同频道里见过 32 kbps 和 64 kbps。每个 Opus 包的时长为 60 毫秒。
+///         </item>
+///         <item>
+///             <see cref="Kook.Audio.IAudioClient.CreatePcmStream(Kook.Audio.AudioApplication,System.Nullable{System.Int32},System.Int32,System.Int32)"/>
+///             的 <c>packetLoss</c> 参数默认为 <c>30</c>。此客户端在 <c>packetLoss</c> 大于 <c>0</c> 时会启用 Opus 带内 FEC，
+///             并为丢包补偿预留码率。在 32 kbps 下对同一段音乐做的离线对比（Concentus 编码后再解码）中，
+///             预期丢包 10% 以上并启用 FEC 会使信噪比下降约 2.4 dB，高频能量只剩约一半。网络状况良好时，建议传入
+///             <c>packetLoss: 0</c>，此时不会启用 FEC。
+///         </item>
+///         <item> 麦克风处于静音状态时，写入音频流的音频会被丢弃，不会缓存到取消静音之后。 </item>
+///         </list>
+///     </para>
+///     <para>
+///         <b>接收音频。</b>
+///         <list type="bullet">
+///         <item>
+///             只有开着麦克风的成员才有音频流。成员静音入会、还没有开过麦时没有音频流，他第一次开麦时才会创建。
+///         </item>
+///         <item>
+///             成员开关麦克风时，服务端下发的是静音状态变化的通知（<see cref="PeerMicrophoneMuteChanged"/>），实测中他的音频流并没有被销毁。
+///             成员离开频道后再加入，会得到新的音频流和新的 SSRC，同一个用户在两次会话里的 SSRC 不同。
+///             因此应当以用户 ID（<see cref="TryGetStreamUserId(System.UInt32,out System.UInt64)"/>）而不是 SSRC 来识别说话的人。
+///         </item>
+///         <item>
+///             <see cref="Kook.Audio.AudioInStream"/> 提供的是解码后的 48 kHz、16 位、双声道 PCM；
+///             对方使用单声道的设备（实测的 Android 客户端）时，同样会被解码为双声道。每一帧的时长取决于对方的设备。
+///         </item>
+///         <item>
+///             没有被读取的音频流最多缓存 100 帧（约 1 到 2 秒），缓冲区满之后新到的帧会被直接丢弃，所以不会无限占用内存；
+///             需要这些音频的话，请及时读取。
+///         </item>
+///         </list>
+///     </para>
+///     <para>
+///         <b>不支持自动重连。</b>
+///         服务端断开（<see cref="ServerDisconnected"/>、<see cref="ClosedByOtherDevice"/>、<see cref="ReloadRequested"/>）
+///         或信令连接关闭后，客户端会引发 <see cref="Kook.Audio.IAudioClient.Disconnected"/>，需要调用方自行重新连接。
+///         通过 <c>ConnectWebRtcAsync</c> 创建的客户端不会赋给 <see cref="Kook.WebSocket.SocketVoiceChannel.AudioClient"/>，
+///         需要调用方自己持有，并在不再使用时释放。
+///     </para>
 /// </remarks>
 public interface IWebRtcAudioClient : IAudioClient
 {

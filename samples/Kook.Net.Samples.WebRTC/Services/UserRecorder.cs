@@ -7,7 +7,7 @@ namespace Kook.Net.Samples.WebRTC.Services;
 /// </summary>
 /// <remarks>
 ///     <see cref="AudioInStream"/> 提供的是已经解码好的 48 kHz、16 位、双声道 PCM。对端静音或停止说话时服务端不会下发数据，
-///     这里按 RTP 时间戳补齐静音，使文件的时间轴与真实时间一致。同一用户的 SSRC 变化时（例如重新开麦），
+///     这里按 RTP 时间戳补齐静音，使文件的时间轴与真实时间一致。同一用户的 SSRC 变化时（例如离开频道后重新加入），
 ///     新的音频流会继续写入同一个文件。
 /// </remarks>
 public sealed class UserRecorder : IDisposable

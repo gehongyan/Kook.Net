@@ -20,9 +20,34 @@ public static class SocketVoiceChannelExperimentalExtensions
     /// </param>
     /// <returns> 一个表示异步连接操作的任务，任务的结果是已连接的音频客户端。 </returns>
     /// <remarks>
-    ///     此方法使用 KOOK 非官方文档化的语音通道，行为可能随时变化。使用 <see cref="Kook.Audio.IAudioClient.StopAsync"/>
-    ///     与 <see cref="System.IDisposable.Dispose"/> 断开连接并释放资源。
+    ///     <para>
+    ///         此方法使用 KOOK 非官方文档化的语音通道，行为可能随时变化。使用 <see cref="Kook.Audio.IAudioClient.StopAsync"/>
+    ///         与 <see cref="System.IDisposable.Dispose"/> 断开连接并释放资源。
+    ///     </para>
+    ///     <para>
+    ///         返回的客户端不会赋给 <see cref="Kook.WebSocket.SocketVoiceChannel.AudioClient"/>，该属性仍然只表示基于 UDP 的官方语音连接，
+    ///         因此需要调用方自己持有返回的客户端。此方法不会断开该频道上已有的 UDP 连接，
+    ///         但同一个频道里 UDP 与 WebRTC 不能同时在线，同一个账号同一时间也只能有一个 WebRTC 会话，详见
+    ///         <see cref="Kook.Audio.WebRtc.IWebRtcAudioClient"/> 的说明。
+    ///     </para>
+    ///     <para>
+    ///         连接失败时，下列情形是实测中见过的：
+    ///         <list type="bullet">
+    ///         <item>
+    ///             获取语音网关令牌时被服务端拒绝，会抛出 <see cref="Kook.Net.HttpException"/>。实测中，没有任何服务器角色的 Bot
+    ///             得到的是 HTTP 403（<c>你没有权限进行此操作</c>）。Bot 无法访问该频道所属的服务器时，服务端返回的是 HTTP 400，
+    ///             这一种情形只用 REST 探针确认过，没有经过 .NET 代码验证，异常类型是按同一条请求路径推断的。
+    ///         </item>
+    ///         <item>
+    ///             服务端在加入时拒绝了请求，例如同一个频道里已经有该账号的 UDP 连接（实测为 <c>401 peerId error!</c>），
+    ///             会抛出异常，其类型目前没有公开，只能通过 <see cref="System.Exception"/> 捕获，错误信息中包含服务端给出的原因。
+    ///         </item>
+    ///         <item> 超过 15 秒仍未连接成功，会抛出 <see cref="System.TimeoutException"/>。 </item>
+    ///         </list>
+    ///         连接失败时，此方法已经释放了所创建的客户端，调用方不需要再处理。
+    ///     </para>
     /// </remarks>
+    /// <exception cref="Kook.Net.HttpException"> 获取语音网关令牌失败，例如 Bot 没有权限。 </exception>
     /// <exception cref="System.TimeoutException"> 音频客户端未能在 15 秒内连接成功。 </exception>
     public static async Task<IWebRtcAudioClient> ConnectWebRtcAsync(this SocketVoiceChannel channel,
         Action<IWebRtcAudioClient>? configure = null)
