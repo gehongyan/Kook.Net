@@ -1,3 +1,5 @@
+using Kook.Audio.WebRtc;
+
 namespace Kook.Rest;
 
 /// <summary>
@@ -54,4 +56,32 @@ public static class KookRestClientExperimentalExtensions
     public static Task<IReadOnlyCollection<ThreadTag>> QueryThreadTagsAsync(this KookRestClient client,
         string keyword, RequestOptions? options = null) =>
         ExperimentalClientHelper.QueryThreadTagsAsync(client, keyword, options);
+
+    /// <summary>
+    ///     获取指定语音频道的语音信令网关令牌。
+    /// </summary>
+    /// <remarks>
+    ///     此接口并非官方文档化的接口，行为可能随时变化。返回的令牌包含临时鉴权信息，请勿将其写入日志。
+    /// </remarks>
+    /// <param name="client"> KOOK REST 客户端实例。 </param>
+    /// <param name="channelId"> 语音频道的 ID。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步操作的任务，任务的结果包含语音信令网关令牌。 </returns>
+    public static Task<VoiceGatewayToken> GetVoiceGatewayTokenAsync(this KookRestClient client,
+        ulong channelId, RequestOptions? options = null) =>
+        ExperimentalClientHelper.GetVoiceGatewayTokenAsync(client, channelId, options);
+
+    /// <summary>
+    ///     获取指定语音频道的语音信令网关令牌。
+    /// </summary>
+    /// <remarks>
+    ///     此接口并非官方文档化的接口，行为可能随时变化。返回的令牌包含临时鉴权信息，请勿将其写入日志。
+    /// </remarks>
+    /// <param name="client"> KOOK REST 客户端实例。 </param>
+    /// <param name="channel"> 语音频道。 </param>
+    /// <param name="options"> 发送请求时要使用的选项。 </param>
+    /// <returns> 一个表示异步操作的任务，任务的结果包含语音信令网关令牌。 </returns>
+    public static Task<VoiceGatewayToken> GetVoiceGatewayTokenAsync(this KookRestClient client,
+        IVoiceChannel channel, RequestOptions? options = null) =>
+        ExperimentalClientHelper.GetVoiceGatewayTokenAsync(client, channel.Id, options);
 }

@@ -30,6 +30,7 @@
     <Project Path="samples\Kook.Net.Samples.SimpleBot\Kook.Net.Samples.SimpleBot.csproj" />
     <Project Path="samples\Kook.Net.Samples.TextCommands\Kook.Net.Samples.TextCommands.csproj" />
     <Project Path="samples\Kook.Net.Samples.VisualBasic\Kook.Net.Samples.VisualBasic.vbproj" />
+    <Project Path="samples\Kook.Net.Samples.WebRTC\Kook.Net.Samples.WebRTC.csproj" />
     <Project Path="samples\Kook.Net.Samples.Webhook.AspNet\Kook.Net.Samples.Webhook.AspNet.csproj" />
     <Project Path="samples\Kook.Net.Samples.Webhook.HttpListener\Kook.Net.Samples.Webhook.HttpListener.csproj" />
   </Folder>

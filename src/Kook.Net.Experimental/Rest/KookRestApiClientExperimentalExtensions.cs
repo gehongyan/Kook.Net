@@ -158,4 +158,21 @@ internal static class KookRestApiClientExperimentalExtensions
     }
 
     #endregion
+
+    #region Voice
+
+    public static async Task<GetVoiceGatewayResponse> GetVoiceGatewayAsync(this KookRestApiClient client,
+        ulong channelId, RequestOptions? options = null)
+    {
+        Preconditions.NotEqual(channelId, 0, nameof(channelId));
+        options = RequestOptions.CreateOrClone(options);
+
+        KookRestApiClient.BucketIds ids = new();
+        return await client.SendAsync<GetVoiceGatewayResponse>(HttpMethod.Get,
+                () => $"gateway/voice?channel_id={channelId}",
+                ids, ClientBucketType.Unbucketed, false, options)
+            .ConfigureAwait(false);
+    }
+
+    #endregion
 }
