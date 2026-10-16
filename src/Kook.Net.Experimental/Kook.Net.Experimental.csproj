@@ -13,4 +13,9 @@
     <ProjectReference Include="..\Kook.Net\Kook.Net.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Concentus" />
+    <PackageReference Include="SIPSorcery" />
+  </ItemGroup>
+
 </Project>
