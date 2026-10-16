@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     用来构建 <see cref="KMarkdownElement"/> 元素的构建器。
 /// </summary>
-public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElementBuilder>, IEquatable<IElementBuilder>
+public record KMarkdownElementBuilder : IElementBuilder
 {
     /// <summary>
     ///     KMarkdown 文本的最大长度。
@@ -81,37 +81,4 @@ public class KMarkdownElementBuilder : IElementBuilder, IEquatable<KMarkdownElem
     /// <inheritdoc />
     [MemberNotNull(nameof(Content))]
     IElement IElementBuilder.Build() => Build();
-
-    /// <summary>
-    ///     判定两个 <see cref="KMarkdownElementBuilder"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="KMarkdownElementBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(KMarkdownElementBuilder? left, KMarkdownElementBuilder? right) =>
-        left?.Equals(right) ?? right is null;
-
-    /// <summary>
-    ///     判定两个 <see cref="KMarkdownElementBuilder"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="KMarkdownElementBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(KMarkdownElementBuilder? left, KMarkdownElementBuilder? right) =>
-        !(left == right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is KMarkdownElementBuilder builder && Equals(builder);
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] KMarkdownElementBuilder? kMarkdownElementBuilder)
-    {
-        if (kMarkdownElementBuilder is null)
-            return false;
-        return Type == kMarkdownElementBuilder.Type
-            && Content == kMarkdownElementBuilder.Content;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => base.GetHashCode();
-
-    bool IEquatable<IElementBuilder>.Equals([NotNullWhen(true)] IElementBuilder? elementBuilder) =>
-        Equals(elementBuilder as KMarkdownElementBuilder);
 }

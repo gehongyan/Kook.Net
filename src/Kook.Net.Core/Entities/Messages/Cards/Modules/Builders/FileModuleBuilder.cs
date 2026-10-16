@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     用来构建 <see cref="FileModule"/> 模块的构建器。
 /// </summary>
-public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>, IEquatable<IModuleBuilder>
+public record FileModuleBuilder : IModuleBuilder
 {
     /// <inheritdoc />
     public ModuleType Type => ModuleType.File;
@@ -89,38 +89,4 @@ public class FileModuleBuilder : IModuleBuilder, IEquatable<FileModuleBuilder>, 
     /// <inheritdoc />
     [MemberNotNull(nameof(Source))]
     IModule IModuleBuilder.Build() => Build();
-
-    /// <summary>
-    ///     判定两个 <see cref="FileModuleBuilder"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="FileModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(FileModuleBuilder? left, FileModuleBuilder? right) =>
-        left?.Equals(right) ?? right is null;
-
-    /// <summary>
-    ///     判定两个 <see cref="FileModuleBuilder"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="FileModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(FileModuleBuilder? left, FileModuleBuilder? right) =>
-        !(left == right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is FileModuleBuilder builder && Equals(builder);
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] FileModuleBuilder? fileModuleBuilder)
-    {
-        if (fileModuleBuilder is null) return false;
-
-        return Type == fileModuleBuilder.Type
-            && Source == fileModuleBuilder.Source
-            && Title == fileModuleBuilder.Title;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => base.GetHashCode();
-
-    bool IEquatable<IModuleBuilder>.Equals([NotNullWhen(true)] IModuleBuilder? moduleBuilder) =>
-        Equals(moduleBuilder as FileModuleBuilder);
 }

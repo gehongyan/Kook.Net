@@ -1,11 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace Kook;
 
 /// <summary>
 ///     用来构建 <see cref="ParagraphStruct"/> 元素的构建器。
 /// </summary>
-public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStructBuilder>, IEquatable<IElementBuilder>
+public record ParagraphStructBuilder : IElementBuilder
 {
     /// <summary>
     ///     区域文本内文本块的最大数量。
@@ -165,46 +163,4 @@ public class ParagraphStructBuilder : IElementBuilder, IEquatable<ParagraphStruc
 
     /// <inheritdoc />
     IElement IElementBuilder.Build() => Build();
-
-    /// <summary>
-    ///     判定两个 <see cref="ParagraphStructBuilder"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="ParagraphStructBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(ParagraphStructBuilder? left, ParagraphStructBuilder? right) =>
-        left?.Equals(right) ?? right is null;
-
-    /// <summary>
-    ///     判定两个 <see cref="ParagraphStructBuilder"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="ParagraphStructBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(ParagraphStructBuilder? left, ParagraphStructBuilder? right) =>
-        !(left == right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is ParagraphStructBuilder builder && Equals(builder);
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] ParagraphStructBuilder? paragraphStructBuilder)
-    {
-        if (paragraphStructBuilder is null)
-            return false;
-
-        if (Fields.Count != paragraphStructBuilder.Fields.Count)
-            return false;
-
-        if (Fields
-            .Zip(paragraphStructBuilder.Fields, (x, y) => (x, y))
-            .Any(pair => pair.x != pair.y))
-            return false;
-
-        return Type == paragraphStructBuilder.Type
-            && ColumnCount == paragraphStructBuilder.ColumnCount;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => base.GetHashCode();
-
-    bool IEquatable<IElementBuilder>.Equals([NotNullWhen(true)] IElementBuilder? elementBuilder) =>
-        Equals(elementBuilder as ParagraphStructBuilder);
 }
