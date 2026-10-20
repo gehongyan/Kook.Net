@@ -76,3 +76,5 @@
       topicUid: Guides.Emoji.EmojiList
 - name: 语音推流
   topicUid: Guides.Voice.SendingVoice
+- name: 文档 MCP 服务
+  topicUid: Guides.Mcp.Intro

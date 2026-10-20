@@ -51,6 +51,9 @@
     <Project Path="test\Kook.Net.Tests.Integration.Socket\Kook.Net.Tests.Integration.Socket.csproj" />
     <Project Path="test\Kook.Net.Tests.Unit\Kook.Net.Tests.Unit.csproj" />
   </Folder>
+  <Folder Name="/Tools/">
+    <Project Path="tools/Kook.Net.Docs.Mcp/Kook.Net.Docs.Mcp.csproj" />
+  </Folder>
   <Project Path="src\Kook.Net.Core\Kook.Net.Core.csproj" />
   <Project Path="src\Kook.Net\Kook.Net.csproj" />
 </Solution>
