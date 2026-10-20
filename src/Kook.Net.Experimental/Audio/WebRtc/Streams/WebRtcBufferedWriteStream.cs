@@ -168,10 +168,14 @@ internal sealed class WebRtcBufferedWriteStream : AudioOutStream
     /// <inheritdoc />
     public override Task ClearAsync(CancellationToken cancellationToken)
     {
-        do
+        while (true)
         {
             cancellationToken.ThrowIfCancellationRequested();
-        } while (_queuedFrames.TryDequeue(out _));
+            if (!_queuedFrames.TryDequeue(out Frame frame))
+                break;
+            _bufferPool.Enqueue(frame.Buffer);
+            _queueLock.Release();
+        }
         return Task.CompletedTask;
     }
 }
