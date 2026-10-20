@@ -2,6 +2,17 @@
 
 ---
 
+## v0.11.2 [2026-10-20]
+
+### Added
+
+- `RecommendInfo` now exposes the `IsPlayFellow` and `GuildSearch` properties for recommended guilds.
+- (Experimental) Added WebRTC-based voice support.
+
+### Misc
+
+- Deployed Kook.Net documentation MCP server.
+
 ## v0.11.1 [2026-07-05]
 
 ### Optimized

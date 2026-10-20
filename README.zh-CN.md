@@ -26,6 +26,9 @@
 
 可在 [kooknet.dev](https://kooknet.dev) 上查看文档。
 
+要在 AI 工具中通过 MCP（Model Context Protocol）使用 Kook.Net，可以参考
+[文档 MCP 服务](https://kooknet.dev/guides/mcp/intro.html)。
+
 也可查阅与询问 [DeepWiki (英语)](https://deepwiki.com/gehongyan/Kook.Net) 来寻求与源代码及文档相关的帮助。
 
 ---

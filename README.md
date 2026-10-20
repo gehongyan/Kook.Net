@@ -26,6 +26,9 @@ Source code is available on [GitHub](https://github.com/gehongyan/Kook.Net),
 
 Documents are available on [kooknet.dev](https://kooknet.dev). (Simplified Chinese available only)
 
+To use Kook.Net in AI tools via the MCP (Model Context Protocol), see the
+[docs MCP server](https://kooknet.dev/guides/mcp/intro.html).
+
 You can also review and ask [DeepWiki](https://deepwiki.com/gehongyan/Kook.Net) for help with the source code or
 documentation.
 
