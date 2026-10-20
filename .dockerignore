@@ -1,0 +1,26 @@
+# 构建上下文为仓库根。排除构建无关的大目录，缩小上下文、加快构建。
+# 注意：MCP 镜像需要 src/ 与 docs/（api-mcp、_site/index.json、guides 等），故不排除它们。
+
+**/bin/
+**/obj/
+**/.git/
+**/.vs/
+**/.vscode/
+**/.idea/
+**/node_modules/
+
+# docfx 的静态站点整站很大，镜像只需要其中的 index.json（Dockerfile 单独 COPY 该文件），
+# 其余 _site 内容不进上下文。
+docs/_site/**
+!docs/_site/index.json
+
+# 公开 API 产物不需要（MCP 用含私有成员的 api-mcp）。
+docs/api/
+
+# 测试、示例与其它无关项目。
+test/
+samples/
+
+# 本机临时与日志。
+**/*.user
+**/*.log

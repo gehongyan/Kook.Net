@@ -1,0 +1,113 @@
+name: Kook.Net Docs MCP Image
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      dotnet-version:
+        description: '.NET version'
+        required: false
+        default: 10.0.x
+        type: string
+    secrets:
+      TCR_REGISTRY:
+        required: true
+      TCR_NAMESPACE:
+        required: true
+      TCR_USERNAME:
+        required: true
+      TCR_PASSWORD:
+        required: true
+      DEPLOY_SSH_HOST:
+        required: true
+      DEPLOY_SSH_USER:
+        required: true
+      DEPLOY_SSH_KEY:
+        required: true
+      DEPLOY_SSH_PORT:
+        required: false
+      DEPLOY_DIR:
+        required: true
+
+env:
+  DOTNET_VERSION: ${{ inputs.dotnet-version || '10.0.x' }}
+  IMAGE_NAME: kook-net-docs-mcp
+
+jobs:
+  build_push_deploy:
+    name: Build, Push and Deploy MCP Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Cache Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Kook.Net.targets') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget
+
+      - name: Resolve image version
+        id: ver
+        run: |
+          if [ "${{ github.event_name }}" = "release" ] && [ -n "${{ github.event.release.tag_name }}" ]; then
+            v="${{ github.event.release.tag_name }}"
+            v="${v#v}"
+          else
+            v="$(git rev-parse --short HEAD)"
+          fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          echo "Resolved image version: $v"
+
+      - name: Setup DocFX
+        run: dotnet tool install -g docfx
+
+      - name: Generate private API metadata
+        run: docfx metadata docs/docfx.mcp.json
+
+      - name: Build docs site (search index)
+        run: docfx docs/docfx.json
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Tencent TCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.TCR_REGISTRY }}
+          username: ${{ secrets.TCR_USERNAME }}
+          password: ${{ secrets.TCR_PASSWORD }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: tools/Kook.Net.Docs.Mcp/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ secrets.TCR_REGISTRY }}/${{ secrets.TCR_NAMESPACE }}/${{ env.IMAGE_NAME }}:latest
+            ${{ secrets.TCR_REGISTRY }}/${{ secrets.TCR_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ steps.ver.outputs.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Deploy to server over SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_SSH_HOST }}
+          username: ${{ secrets.DEPLOY_SSH_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          port: ${{ secrets.DEPLOY_SSH_PORT || 22 }}
+          script: |
+            set -e
+            cd ${{ secrets.DEPLOY_DIR }}
+            docker compose pull
+            docker compose up -d
+            docker compose ps
