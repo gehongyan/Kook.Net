@@ -32,3 +32,19 @@ jobs:
       dotnet-version: 10.0.x
     secrets:
       DOC_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+
+  call_mcp_image:
+    name: Build and Deploy MCP Image
+    needs: call_doc
+    uses: ./.github/workflows/docs-mcp.yml
+    with:
+      dotnet-version: 10.0.x
+    secrets:
+      TCR_REGISTRY: ${{ secrets.TCR_REGISTRY }}
+      TCR_NAMESPACE: ${{ secrets.TCR_NAMESPACE }}
+      TCR_USERNAME: ${{ secrets.TCR_USERNAME }}
+      TCR_PASSWORD: ${{ secrets.TCR_PASSWORD }}
+      DEPLOY_SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}
+      DEPLOY_SSH_USER: ${{ secrets.DEPLOY_SSH_USER }}
+      DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+      DEPLOY_SSH_PORT: ${{ secrets.DEPLOY_SSH_PORT }}

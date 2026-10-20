@@ -1,0 +1,21 @@
+{
+    "metadata": [
+        {
+            "src": [
+                {
+                    "src": "../src",
+                    "exclude": [
+                        "**/bin/**",
+                        "**/obj/**"
+                    ],
+                    "files": [
+                        "**.csproj"
+                    ]
+                }
+            ],
+            "dest": "api-mcp",
+            "includePrivateMembers": true,
+            "includeExplicitInterfaceImplementations": true
+        }
+    ]
+}
