@@ -26,8 +26,6 @@ on:
         required: true
       DEPLOY_SSH_PORT:
         required: false
-      DEPLOY_DIR:
-        required: true
 
 env:
   DOTNET_VERSION: ${{ inputs.dotnet-version || '10.0.x' }}
@@ -98,7 +96,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Deploy to server over SSH
+      - name: Deploy to k3s over SSH
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.DEPLOY_SSH_HOST }}
@@ -107,7 +105,7 @@ jobs:
           port: ${{ secrets.DEPLOY_SSH_PORT || 22 }}
           script: |
             set -e
-            cd ${{ secrets.DEPLOY_DIR }}
-            docker compose pull
-            docker compose up -d
-            docker compose ps
+            sudo kubectl set image deployment/${{ env.IMAGE_NAME }} \
+              ${{ env.IMAGE_NAME }}=${{ secrets.TCR_REGISTRY }}/${{ secrets.TCR_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ steps.ver.outputs.version }} \
+              -n kooknet
+            sudo kubectl rollout status deployment/${{ env.IMAGE_NAME }} -n kooknet --timeout=120s

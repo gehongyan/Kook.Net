@@ -66,7 +66,7 @@ public sealed class SourceService
         // docfx 的 startLine 为 0 基，转成 1 基的数组下标参考。
         int startIndex = Math.Clamp(item.Source.StartLine, 0, Math.Max(0, lines.Length - 1));
 
-        int endIndexExclusive = ResolveEndExclusive(item, relativePath, item.Source.StartLine, lines.Length);
+        int endIndexExclusive = ResolveEndExclusive(item, relativePath, item.Source.StartLine, lines);
 
         // fullBody 直接用硬上限；否则用显式 maxLines 或默认值，并一律收敛到 1..硬上限。
         int requested = fullBody ? MaxLinesHardCap : (maxLines ?? DefaultMaxLines);
@@ -131,8 +131,9 @@ public sealed class SourceService
     ///     目标是「成员」时，沿用原逻辑：取同一文件内起始行严格大于目标的最小条目起始行。
     ///     没有这样的后继条目时读到文件末尾。
     /// </remarks>
-    private int ResolveEndExclusive(ApiItem target, string relativePath, int startLine, int fileLineCount)
+    private int ResolveEndExclusive(ApiItem target, string relativePath, int startLine, string[] lines)
     {
+        int fileLineCount = lines.Length;
         bool targetIsType = target.Type is { Length: > 0 } t && TypeKinds.Contains(t);
 
         int next = int.MaxValue;
@@ -152,7 +153,50 @@ public sealed class SourceService
             next = src.StartLine;
         }
 
-        return next == int.MaxValue ? fileLineCount : Math.Min(next, fileLineCount);
+        if (next == int.MaxValue)
+            return fileLineCount;
+
+        next = Math.Min(next, fileLineCount);
+
+        // docfx 的 startLine 指向声明行，不含其上方的 XML 文档注释；若直接以后继条目的
+        // 声明行为边界，会把后继成员的前导 /// 文档注释尾随进当前片段。从后继条目声明行
+        // 向上回退紧邻的连续 /// 行（可含夹在其间的空行），使其归属后继成员而非当前片段。
+        return TrimTrailingDocComment(lines, next, startLine);
+    }
+
+    /// <summary>
+    ///     把结束边界 <paramref name="endExclusive" />（0 基、独占，指向后继条目声明行）向上回退，
+    ///     剥离紧邻其上、连续的 XML 文档注释块（<c>///</c>，允许其间夹空行），使这些注释归属后继成员。
+    ///     回退不会越过 <paramref name="lowerBound" />（当前目标的起始行），且遇到首个非 <c>///</c>、
+    ///     非空行即停。无前导文档注释时原样返回。
+    /// </summary>
+    private static int TrimTrailingDocComment(string[] lines, int endExclusive, int lowerBound)
+    {
+        int cut = endExclusive;
+        int firstDoc = -1;
+
+        // 从后继声明行的上一行向上扫，越过连续的 /// 与夹在其间的空行。
+        for (int i = endExclusive - 1; i > lowerBound; i--)
+        {
+            string trimmed = lines[i].Trim();
+            if (trimmed.StartsWith("///", StringComparison.Ordinal))
+            {
+                firstDoc = i;
+                continue;
+            }
+
+            // 允许 /// 注释块内部的空行；但仅当其上方仍是 /// 时才继续。
+            if (trimmed.Length == 0 && firstDoc >= 0)
+                continue;
+
+            break;
+        }
+
+        // 仅当确实找到紧贴后继声明的前导 /// 块时才回退，回退到该块首行。
+        if (firstDoc >= 0)
+            cut = firstDoc;
+
+        return cut;
     }
 
     /// <summary>
