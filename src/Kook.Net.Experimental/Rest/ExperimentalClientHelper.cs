@@ -1,5 +1,6 @@
 using Kook.API.Rest;
 using Kook.Rest.Extensions;
+using Kook.Audio.WebRtc;
 using System.Collections.Immutable;
 using Kook.API;
 
@@ -48,6 +49,18 @@ internal static class ExperimentalClientHelper
         IReadOnlyCollection<API.Rest.ThreadTag> models = await client.ApiClient
             .QueryThreadTagsAsync(keyword, options).ConfigureAwait(false);
         return [..models.Select(x => new ThreadTag(x.TagId, x.Name, x.Icon))];
+    }
+
+    #endregion
+
+    #region Voice
+
+    public static async Task<VoiceGatewayToken> GetVoiceGatewayTokenAsync(BaseKookClient client,
+        ulong channelId, RequestOptions? options)
+    {
+        GetVoiceGatewayResponse model = await client.ApiClient
+            .GetVoiceGatewayAsync(channelId, options).ConfigureAwait(false);
+        return VoiceGatewayToken.Create(model);
     }
 
     #endregion
