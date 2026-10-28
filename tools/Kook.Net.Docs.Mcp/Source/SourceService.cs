@@ -64,7 +64,11 @@ public sealed class SourceService
         string[] lines = File.ReadAllLines(fullPath);
 
         // docfx 的 startLine 为 0 基，转成 1 基的数组下标参考。
-        int startIndex = Math.Clamp(item.Source.StartLine, 0, Math.Max(0, lines.Length - 1));
+        int declarationIndex = Math.Clamp(item.Source.StartLine, 0, Math.Max(0, lines.Length - 1));
+
+        // docfx 的 startLine 指向声明行，不含其上方属于该成员自身的 XML 文档注释（及紧贴的特性）。
+        // 这些注释是描述该 API 的关键信息，向上回溯把它们纳入片段；回溯不越过上一个同文件兄弟条目。
+        int startIndex = BacktrackLeadingDocComment(item, relativePath, declarationIndex, lines);
 
         int endIndexExclusive = ResolveEndExclusive(item, relativePath, item.Source.StartLine, lines);
 
@@ -197,6 +201,57 @@ public sealed class SourceService
             cut = firstDoc;
 
         return cut;
+    }
+
+    /// <summary>
+    ///     把起始边界 <paramref name="declarationIndex" />（0 基，指向成员声明行）向上回溯，
+    ///     纳入紧邻其上、属于该成员自身的 XML 文档注释（<c>///</c>）及紧贴声明的特性行（<c>[...]</c>），
+    ///     允许其间夹空行。回溯不会越过上一个同文件兄弟条目的声明行，且遇到首个不属于前导块的行
+    ///     （普通代码、上一成员的结束括号等）即停。无前导文档注释 / 特性时原样返回声明行下标。
+    /// </summary>
+    private int BacktrackLeadingDocComment(ApiItem target, string relativePath, int declarationIndex, string[] lines)
+    {
+        // 下界：同一文件内起始行严格小于目标声明行的最大条目起始行（上一个兄弟声明行）。
+        // 回溯不得越过它，避免把上一个成员的尾随内容错纳入本片段。前导文档注释永远位于
+        // 目标声明行与上一兄弟声明行之间，故此下界不会误伤目标自身的注释。
+        int lowerBound = -1;
+        foreach (ApiItem other in _api.GetAll())
+        {
+            ApiSource? src = other.Source;
+            if (src?.Path is null || !string.Equals(src.Path, relativePath, StringComparison.OrdinalIgnoreCase))
+                continue;
+            if (src.StartLine < declarationIndex && src.StartLine > lowerBound)
+                lowerBound = src.StartLine;
+        }
+
+        int start = declarationIndex;
+        int firstLead = -1;
+        bool seenLead = false;
+
+        // 从声明行上一行向上扫，越过连续的 /// 文档注释、紧贴声明的特性行，以及夹在其间的空行。
+        for (int i = declarationIndex - 1; i > lowerBound; i--)
+        {
+            string trimmed = lines[i].Trim();
+
+            if (trimmed.StartsWith("///", StringComparison.Ordinal)
+                || (trimmed.StartsWith('[') && trimmed.EndsWith(']')))
+            {
+                firstLead = i;
+                seenLead = true;
+                continue;
+            }
+
+            // 允许前导块内部的空行；仅当已进入前导块时才跨越。
+            if (trimmed.Length == 0 && seenLead)
+                continue;
+
+            break;
+        }
+
+        if (firstLead >= 0)
+            start = firstLead;
+
+        return Math.Clamp(start, 0, Math.Max(0, lines.Length - 1));
     }
 
     /// <summary>
