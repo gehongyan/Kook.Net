@@ -248,6 +248,7 @@ License notice for SIPSorcery
 ------------------------------------
 
 Licensed under the BSD 3-Clause "New" or "Revised" License with Additional Use Restriction.
+
 Available at
 https://github.com/sipsorcery-org/sipsorcery/blob/master/LICENSE.md
 
