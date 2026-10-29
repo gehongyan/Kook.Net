@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     用来构建 <see cref="ButtonElement"/> 元素的构建器。
 /// </summary>
-public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBuilder>, IEquatable<IElementBuilder>
+public record ButtonElementBuilder : IElementBuilder
 {
     /// <summary>
     ///     按钮文本的最大长度。
@@ -233,41 +233,4 @@ public class ButtonElementBuilder : IElementBuilder, IEquatable<ButtonElementBui
     /// <inheritdoc />
     [MemberNotNull(nameof(Text))]
     IElement IElementBuilder.Build() => Build();
-
-    /// <summary>
-    ///     判定两个 <see cref="ButtonElementBuilder"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="ButtonElementBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(ButtonElementBuilder? left, ButtonElementBuilder? right) =>
-        left?.Equals(right) ?? right is null;
-
-    /// <summary>
-    ///     判定两个 <see cref="ButtonElementBuilder"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="ButtonElementBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(ButtonElementBuilder? left, ButtonElementBuilder? right) =>
-        !(left == right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is ButtonElementBuilder builder && Equals(builder);
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] ButtonElementBuilder? buttonElementBuilder)
-    {
-        if (buttonElementBuilder is null)
-            return false;
-
-        return Type == buttonElementBuilder.Type
-            && Theme == buttonElementBuilder.Theme
-            && Value == buttonElementBuilder.Value
-            && Click == buttonElementBuilder.Click
-            && Text == buttonElementBuilder.Text;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => base.GetHashCode();
-
-    bool IEquatable<IElementBuilder>.Equals([NotNullWhen(true)] IElementBuilder? elementBuilder) =>
-        Equals(elementBuilder as ButtonElementBuilder);
 }
