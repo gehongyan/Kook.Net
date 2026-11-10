@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 
 namespace Kook;
 
@@ -72,7 +71,7 @@ public readonly struct Cacheable<TEntity, TId>
 
 #if DEBUG
     private string DebuggerDisplay => HasValue && Value != null
-        ? $"{Value.GetType().GetProperty("DebuggerDisplay", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(Value) ?? Value.ToString()} (Cacheable)"
+        ? $"{Value} (Cacheable)"
         : $"{Id} (Cacheable, {typeof(TEntity).Name})";
 #endif
 }
@@ -147,7 +146,7 @@ public readonly struct Cacheable<TCachedEntity, TDownloadableEntity, TRelationsh
 
 #if DEBUG
     private string DebuggerDisplay => HasValue && Value != null
-        ? $"{Value.GetType().GetProperty("DebuggerDisplay", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(Value) ?? Value.ToString()} (Cacheable)"
+        ? $"{Value} (Cacheable)"
         : $"{Id} (Cacheable, {typeof(TRelationship).Name})";
 #endif
 }

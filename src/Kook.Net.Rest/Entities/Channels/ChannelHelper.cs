@@ -2,6 +2,7 @@ using Kook.API;
 using Kook.API.Rest;
 using System.Collections.Immutable;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using Model = Kook.API.Channel;
 
 namespace Kook.Rest;
@@ -226,12 +227,15 @@ internal static class ChannelHelper
         BaseKookClient client, MessageType messageType, ulong templateId, T parameters, IQuote? quote,
         IUser? ephemeralUser, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
     {
+        JsonSerializerOptions serializerOptions = JsonSerializerOptionsExtensions.GetUserSerializerOptions(jsonSerializerOptions);
+        JsonTypeInfo typeInfo = serializerOptions.GetTypeInfo(typeof(T));
+
         CreateMessageParams args = new()
         {
             Type = messageType,
             ChannelId = channel.Id,
             TemplateId = templateId,
-            Content = JsonSerializer.Serialize(parameters, jsonSerializerOptions),
+            Content = JsonSerializer.Serialize(parameters, typeInfo),
             QuotedMessageId = MessageHelper.QuoteToReferenceMessageId(quote),
             ReplyMessageId = MessageHelper.QuoteToReplyMessageId(quote),
             EphemeralUserId = ephemeralUser?.Id
@@ -252,7 +256,9 @@ internal static class ChannelHelper
         BaseKookClient client, ulong templateId, T parameters, IQuote? quote, IUser? ephemeralUser,
         JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
     {
-        string json = JsonSerializer.Serialize(parameters, jsonSerializerOptions);
+        JsonSerializerOptions serializerOptions = JsonSerializerOptionsExtensions.GetUserSerializerOptions(jsonSerializerOptions);
+        JsonTypeInfo typeInfo = serializerOptions.GetTypeInfo(typeof(T));
+        string json = JsonSerializer.Serialize(parameters, typeInfo);
         return await SendMessageAsync(channel, client, MessageType.Card, templateId, json, quote, ephemeralUser, jsonSerializerOptions, options);
     }
 
@@ -437,12 +443,15 @@ internal static class ChannelHelper
     public static async Task<Cacheable<IUserMessage, Guid>> SendDirectMessageAsync<T>(IDMChannel channel, BaseKookClient client,
         MessageType messageType, ulong templateId, T parameters, IQuote? quote, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
     {
+        JsonSerializerOptions serializerOptions = JsonSerializerOptionsExtensions.GetUserSerializerOptions(jsonSerializerOptions);
+        JsonTypeInfo typeInfo = serializerOptions.GetTypeInfo(typeof(T));
+
         CreateDirectMessageParams args = new()
         {
             Type = messageType,
             UserId = channel.Recipient.Id,
             TemplateId = templateId,
-            Content = JsonSerializer.Serialize(parameters, jsonSerializerOptions),
+            Content = JsonSerializer.Serialize(parameters, typeInfo),
             QuotedMessageId = MessageHelper.QuoteToReferenceMessageId(quote),
             ReplyMessageId = MessageHelper.QuoteToReplyMessageId(quote)
         };
@@ -462,7 +471,9 @@ internal static class ChannelHelper
     public static Task<Cacheable<IUserMessage, Guid>> SendDirectCardsAsync<T>(IDMChannel channel, BaseKookClient client,
         ulong templateId, T parameters, IQuote? quote, JsonSerializerOptions? jsonSerializerOptions, RequestOptions? options)
     {
-        string json = JsonSerializer.Serialize(parameters, jsonSerializerOptions);
+        JsonSerializerOptions serializerOptions = JsonSerializerOptionsExtensions.GetUserSerializerOptions(jsonSerializerOptions);
+        JsonTypeInfo typeInfo = serializerOptions.GetTypeInfo(typeof(T));
+        string json = JsonSerializer.Serialize(parameters, typeInfo);
         return SendDirectMessageAsync(channel, client, MessageType.Card, templateId, json, quote, jsonSerializerOptions, options);
     }
 

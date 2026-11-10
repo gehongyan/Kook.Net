@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Deliberately isolated from props/tests.props and its reflection-based dependencies. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net9.0;net10.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsAotCompatible>true</IsAotCompatible>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <PublishAot Condition="'$(NativeAotXunit)' == 'true'">true</PublishAot>
+    <DefineConstants Condition="'$(NativeAotXunit)' == 'true'">$(DefineConstants);EXPECT_NATIVE_AOT</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.v3.aot" />
+    <ProjectReference Include="../../src/Kook.Net.Webhook/Kook.Net.Webhook.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,63 @@
+name: NativeAOT core protocol smoke
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    strategy:
+      fail-fast: false
+      matrix:
+        framework: [net8.0, net10.0]
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            rid: linux-x64
+          - os: windows-latest
+            rid: win-x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Publish native executable
+        run: dotnet publish test/Kook.Net.Tests.NativeAot -f ${{ matrix.framework }} -c Release -r ${{ matrix.rid }} -p:NativeAotSmoke=true -p:TrimmerSingleWarn=false -o artifacts/nativeaot
+      - name: Run native executable (Unix)
+        if: runner.os != 'Windows'
+        run: ./artifacts/nativeaot/Kook.Net.Tests.NativeAot
+      - name: Run native executable (Windows)
+        if: runner.os == 'Windows'
+        run: ./artifacts/nativeaot/Kook.Net.Tests.NativeAot.exe
+
+  xunit_native:
+    name: xUnit NativeAOT (${{ matrix.framework }}, ${{ matrix.rid }})
+    strategy:
+      fail-fast: false
+      matrix:
+        framework: [net9.0, net10.0]
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            rid: linux-x64
+          - os: windows-latest
+            rid: win-x64
+    runs-on: ${{ matrix.os }}
+    env:
+      TESTINGPLATFORM_TELEMETRY_OPTOUT: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Publish xUnit native tests
+        run: dotnet publish test/Kook.Net.Tests.NativeAot.Xunit -f ${{ matrix.framework }} -c Release -r ${{ matrix.rid }} -p:NativeAotXunit=true -p:TrimmerSingleWarn=false -o artifacts/xunit-native
+      - name: Run xUnit native executable (Unix)
+        if: runner.os != 'Windows'
+        run: ./artifacts/xunit-native/Kook.Net.Tests.NativeAot.Xunit
+      - name: Run xUnit native executable (Windows)
+        if: runner.os == 'Windows'
+        run: ./artifacts/xunit-native/Kook.Net.Tests.NativeAot.Xunit.exe
