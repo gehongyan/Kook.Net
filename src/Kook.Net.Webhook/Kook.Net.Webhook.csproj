@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="../../props/common.props"/>
 
@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj"/>
   </ItemGroup>
 
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net')) AND '$(TargetFramework)' != 'net462' AND !$(TargetFramework.StartsWith('netstandard'))">
+    <IsAotCompatible>true</IsAotCompatible>
+    <IsTrimmable>true</IsTrimmable>
+  </PropertyGroup>
 </Project>

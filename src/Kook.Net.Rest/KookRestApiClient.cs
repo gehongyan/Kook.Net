@@ -8,11 +8,14 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using Kook.API.Rest;
 using Kook.Net;
+using Kook.Net.Contexts;
 using Kook.Net.Converters;
 using Kook.Net.Queue;
 using Kook.Net.Rest;
+using Kook.Rest;
 
 namespace Kook.API;
 
@@ -32,7 +35,7 @@ internal class KookRestApiClient : IDisposable
 
     private readonly AsyncEvent<Func<HttpMethod, string, double, Task>> _sentRequestEvent = new();
 
-    protected readonly JsonSerializerOptions _serializerOptions;
+    protected JsonSerializerOptions _serializerOptions;
     protected readonly SemaphoreSlim _stateLock;
     private readonly RestClientProvider _restClientProvider;
 
@@ -57,13 +60,8 @@ internal class KookRestApiClient : IDisposable
         _restClientProvider = restClientProvider;
         UserAgent = userAgent;
         DefaultRetryMode = defaultRetryMode;
-        _serializerOptions = serializerOptions
-            ?? new JsonSerializerOptions
-            {
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                NumberHandling = JsonNumberHandling.AllowReadingFromString,
-                Converters = { CardConverterFactory.Instance }
-            };
+        _serializerOptions = EnsureJsonSerializerOptions(serializerOptions);
+        InjectJsonTypeInfos(KookRestJsonSerializerContext.Default.Options.TypeInfoResolverChain);
         DefaultRatelimitCallback = defaultRatelimitCallback;
 
         RequestQueue = new RequestQueue();
@@ -91,6 +89,31 @@ internal class KookRestApiClient : IDisposable
             TokenType.Bearer => $"Bearer {token}",
             _ => throw new ArgumentException("Unknown OAuth token type.", nameof(tokenType))
         };
+
+    protected static JsonSerializerOptions EnsureJsonSerializerOptions(JsonSerializerOptions? jsonSerializerOptions)
+    {
+        JsonSerializerOptions options = jsonSerializerOptions is not null
+            ? new JsonSerializerOptions(jsonSerializerOptions)
+            : new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                NumberHandling = JsonNumberHandling.AllowReadingFromString,
+                Converters = { CardConverterFactory.Instance }
+            };
+
+        options.TypeInfoResolver ??= JsonSerializerOptionsExtensions.CreateReflectionResolver();
+        return options;
+    }
+
+    protected internal void InjectJsonTypeInfos(IList<IJsonTypeInfoResolver> typeInfoResolvers)
+    {
+        JsonSerializerOptions serializerOptions = _serializerOptions.IsReadOnly
+            ? new JsonSerializerOptions(_serializerOptions)
+            : _serializerOptions;
+        foreach (IJsonTypeInfoResolver typeInfoResolver in typeInfoResolvers)
+            serializerOptions.TypeInfoResolverChain.Insert(0, typeInfoResolver);
+        Interlocked.Exchange(ref _serializerOptions, serializerOptions);
+    }
 
     internal virtual void Dispose(bool disposing)
     {
@@ -269,7 +292,7 @@ internal class KookRestApiClient : IDisposable
         Stream response = await SendInternalAsync(method, endpoint, request).ConfigureAwait(false);
         return bypassDeserialization && response is TResponse responseObj
             ? responseObj
-            : await DeserializeJsonAsync<TResponse>(response).ConfigureAwait(false);
+            : await DeserializeJsonAsync<TResponse>(response, _serializerOptions).ConfigureAwait(false);
     }
 
     internal async Task<TResponse> SendJsonAsync<TResponse>(HttpMethod method,
@@ -294,7 +317,7 @@ internal class KookRestApiClient : IDisposable
         Stream response = await SendInternalAsync(method, endpoint, request).ConfigureAwait(false);
         return bypassDeserialization && response is TResponse responseObj
             ? responseObj
-            : await DeserializeJsonAsync<TResponse>(response).ConfigureAwait(false);
+            : await DeserializeJsonAsync<TResponse>(response, _serializerOptions).ConfigureAwait(false);
     }
 
     internal Task<TResponse> SendMultipartAsync<TResponse>(HttpMethod method,
@@ -319,7 +342,7 @@ internal class KookRestApiClient : IDisposable
         Stream response = await SendInternalAsync(method, endpoint, request).ConfigureAwait(false);
         return bypassDeserialization && response is TResponse responseObj
             ? responseObj
-            : await DeserializeJsonAsync<TResponse>(response).ConfigureAwait(false);
+            : await DeserializeJsonAsync<TResponse>(response, _serializerOptions).ConfigureAwait(false);
     }
 
     private async Task<Stream> SendInternalAsync(HttpMethod method, string endpoint, RestRequest request)
@@ -1983,14 +2006,23 @@ internal class KookRestApiClient : IDisposable
         Math.Round((double)stopwatch.ElapsedTicks / Stopwatch.Frequency * 1000.0, 2);
 
     [return: NotNullIfNotNull(nameof(payload))]
-    protected string? SerializeJson(object? payload, JsonSerializerOptions? options = null) =>
-        payload is null ? null : JsonSerializer.Serialize(payload, options ?? _serializerOptions);
+    protected string? SerializeJson(object? payload, JsonSerializerOptions? options = null)
+    {
+        if (payload is null)
+            return null;
 
-    protected async Task<T> DeserializeJsonAsync<T>(Stream jsonStream)
+        JsonSerializerOptions serializerOptions = options ?? _serializerOptions;
+        JsonTypeInfo typeInfo = serializerOptions.GetTypeInfo(payload.GetType());
+        return JsonSerializer.Serialize(payload, typeInfo);
+    }
+
+    protected static async Task<T> DeserializeJsonAsync<T>(Stream jsonStream, JsonSerializerOptions jsonSerializerOptions)
+        where T : class
     {
         try
         {
-            T? jsonObject = await JsonSerializer.DeserializeAsync<T>(jsonStream, _serializerOptions).ConfigureAwait(false);
+            JsonTypeInfo<T> typeInfo = jsonSerializerOptions.GetTypedTypeInfo<T>();
+            T? jsonObject = await JsonSerializer.DeserializeAsync(jsonStream, typeInfo).ConfigureAwait(false);
             if (jsonObject is null)
                 throw new JsonException($"Failed to deserialize JSON to type {typeof(T).FullName}");
             return jsonObject;
@@ -2047,15 +2079,32 @@ internal class KookRestApiClient : IDisposable
             };
     }
 
-    private static string GetEndpoint(Expression<Func<string>> endpointExpr) => endpointExpr.Compile()();
+    private static TDelegate CompileEndpoint<TDelegate>(Expression<TDelegate> expression)
+        where TDelegate : Delegate =>
+#if NET8_0_OR_GREATER
+        expression.Compile(preferInterpretation: true);
+#else
+        expression.Compile();
+#endif
 
-    private static string GetEndpoint<T1, T2>(Expression<Func<T1, T2, string>> endpointExpr, T1 arg1, T2 arg2) => endpointExpr.Compile()(arg1, arg2);
+    private static string GetEndpoint(Expression<Func<string>> endpointExpr) => CompileEndpoint(endpointExpr)();
+
+    private static string GetEndpoint<T1, T2>(Expression<Func<T1, T2, string>> endpointExpr, T1 arg1, T2 arg2) => CompileEndpoint(endpointExpr)(arg1, arg2);
 
     private static BucketId GetBucketId(HttpMethod httpMethod, BucketIds ids, Expression<Func<string>> endpointExpr, string? callingMethod)
     {
         Preconditions.NotNull(callingMethod, nameof(callingMethod));
         ids.HttpMethod = httpMethod;
-        return _bucketIdGenerators.GetOrAdd(callingMethod, x => CreateBucketId(endpointExpr))(ids);
+        Func<BucketIds, BucketId> func = _bucketIdGenerators.GetOrAdd(
+            callingMethod,
+#if NETSTANDARD2_1_OR_GREATER || NET6_0_OR_GREATER
+            static (_, arg) => CreateBucketId(arg),
+            endpointExpr
+#else
+            _ => CreateBucketId(endpointExpr)
+#endif
+        );
+        return func(ids);
     }
 
     private static BucketId GetBucketId<TArg1, TArg2>(HttpMethod httpMethod, BucketIds ids, Expression<Func<TArg1, TArg2, string>> endpointExpr,
@@ -2063,11 +2112,20 @@ internal class KookRestApiClient : IDisposable
     {
         Preconditions.NotNull(callingMethod, nameof(callingMethod));
         ids.HttpMethod = httpMethod;
-        return _bucketIdGenerators.GetOrAdd(callingMethod, x => CreateBucketId(endpointExpr, arg1, arg2))(ids);
+        Func<BucketIds, BucketId> func = _bucketIdGenerators.GetOrAdd(
+            callingMethod,
+#if NETSTANDARD2_1_OR_GREATER || NET6_0_OR_GREATER
+            static (_, arg) => CreateBucketId(arg.endpointExpr, arg.arg1, arg.arg2),
+            (endpointExpr, arg1, arg2)
+#else
+            _ => CreateBucketId(endpointExpr, arg1, arg2)
+#endif
+        );
+        return func(ids);
     }
 
     private static Func<BucketIds, BucketId> CreateBucketId<TArg1, TArg2>(Expression<Func<TArg1, TArg2, string>> endpoint, TArg1 arg1, TArg2 arg2) =>
-        CreateBucketId(() => endpoint.Compile().Invoke(arg1, arg2));
+        CreateBucketId(() => CompileEndpoint(endpoint).Invoke(arg1, arg2));
 
     private static Func<BucketIds, BucketId> CreateBucketId(Expression<Func<string>> endpoint)
     {
@@ -2083,7 +2141,7 @@ internal class KookRestApiClient : IDisposable
             Expression[] methodArgs = methodCall.Arguments.ToArray();
             string format = methodArgs[0].NodeType == ExpressionType.Constant
                 ? ((ConstantExpression) methodArgs[0]).Value!.ToString()!
-                : endpoint.Compile()();
+                : CompileEndpoint(endpoint)();
 
             //Unpack the array, if one exists (happens with 4+ parameters)
             if (methodArgs.Length > 1 && methodArgs[1].NodeType == ExpressionType.NewArrayInit)
