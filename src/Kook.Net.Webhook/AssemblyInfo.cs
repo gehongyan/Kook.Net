@@ -3,3 +3,4 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Kook.Net.Webhook.AspNet")]
 [assembly: InternalsVisibleTo("Kook.Net.Webhook.HttpListener")]
 [assembly: InternalsVisibleTo("Kook.Net.Tests.NativeAot")]
+[assembly: InternalsVisibleTo("Kook.Net.Tests.NativeAot.Xunit")]
