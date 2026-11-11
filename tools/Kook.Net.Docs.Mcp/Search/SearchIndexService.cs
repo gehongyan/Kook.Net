@@ -9,12 +9,10 @@ namespace Kook.Net.Docs.Mcp.Search;
 ///     文档全文检索服务。
 /// </summary>
 /// <remarks>
-///     docfx 的 <c>ExtractSearchIndex</c> 后处理器在当前版本下只生成 <c>href -&gt; { title }</c>，
-///     <c>keywords</c> 字段为空，不足以支撑正文检索。因此本服务以 <c>_site/index.json</c>
-///     的 <c>href</c> / <c>title</c> 列表为锚，再从对应的 <c>_site/&lt;href&gt;</c> 静态 HTML 页面
-///     提取 <c>&lt;article&gt;</c> 正文纯文本，建立内存全文索引。
-///     索引在首次使用时惰性加载，并随 <c>index.json</c> 的修改时间失效重建
-///     （HTML 与 index.json 同一次 docfx 构建产出，故以后者的写时间为缓存键）。
+///     以 <c>_site/index.json</c> 的 href/title 为入口，优先使用 DocFX 已提取的
+///     <c>summary</c> 正文；兼容旧索引的 <c>keywords</c>，两者缺失时才读取对应 HTML。
+///     部署含完整正文的索引即可支持全文检索，无需在运行时携带整个静态站点。
+///     首次查询惰性加载，并根据 index.json 的最后写入时间失效重建。
 /// </remarks>
 public sealed class SearchIndexService
 {
@@ -40,13 +38,14 @@ public sealed class SearchIndexService
 
         List<IndexedPage> pages = EnsureLoaded();
         string[] terms = Tokenize(query);
+        string phrase = WhitespaceRegex.Replace(query, " ").Trim();
         if (terms.Length == 0)
             return [];
 
         List<SearchResult> results = [];
         foreach (IndexedPage page in pages)
         {
-            double score = Score(page, terms, out string? snippet);
+            double score = Score(page, terms, phrase, out string? snippet);
             if (score > 0)
                 results.Add(new SearchResult(page.Title, page.Href, score, snippet));
         }
@@ -71,7 +70,7 @@ public sealed class SearchIndexService
             .Distinct()
             .ToArray();
 
-    private static double Score(IndexedPage page, string[] terms, out string? snippet)
+    private static double Score(IndexedPage page, string[] terms, string phrase, out string? snippet)
     {
         snippet = null;
         double score = 0;
@@ -85,12 +84,19 @@ public sealed class SearchIndexService
                     score += 10;
             }
 
-            // 正文（从 HTML 提取）命中：计分并提取片段。
+            // 正文命中：计分并提取片段。
             if (page.ContentLower.Contains(term))
             {
                 score += 2;
                 snippet ??= ExtractSnippet(page.Content, term);
             }
+        }
+
+        // 保留原有 OR / 子串匹配，仅让完整多词或版本查询优先于零散词命中。
+        if (terms.Length > 1 && page.Content.Contains(phrase, StringComparison.OrdinalIgnoreCase))
+        {
+            score += 20;
+            snippet = ExtractSnippet(page.Content, phrase);
         }
 
         return score;
@@ -133,8 +139,8 @@ public sealed class SearchIndexService
     }
 
     /// <summary>
-    ///     读取 <c>index.json</c> 的 href/title 列表，并从各自对应的 <c>_site</c> HTML 页面
-    ///     提取正文纯文本，构建内存全文索引。无法读取或解析的页面以标题占位，仍可按标题检索。
+    ///     读取 <c>index.json</c> 中的标题与正文，缺少正文时才从对应 HTML 提取。
+    ///     无法获取正文的页面保留标题检索，以兼容旧索引。
     /// </summary>
     private List<IndexedPage> BuildIndex()
     {
@@ -149,7 +155,7 @@ public sealed class SearchIndexService
         foreach ((string href, SearchIndexEntry entry) in parsed)
         {
             string title = entry.Title ?? href;
-            string content = ExtractPageContent(href);
+            string content = entry.Content ?? ExtractPageContent(href);
             pages.Add(new IndexedPage(href, title, content));
         }
 
@@ -218,7 +224,7 @@ public sealed class SearchIndexService
     }
 
     /// <summary>
-    ///     内存中的单页索引记录：链接、标题、从 HTML 提取的正文，及二者的小写缓存。
+    ///     内存中的单页索引记录：链接、标题、正文，及二者的小写缓存。
     /// </summary>
     private sealed class IndexedPage
     {

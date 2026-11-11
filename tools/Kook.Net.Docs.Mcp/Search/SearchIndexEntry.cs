@@ -11,7 +11,17 @@ public sealed class SearchIndexEntry
     [JsonPropertyName("title")]
     public string? Title { get; set; }
 
-    /// <summary>页面正文提取的关键字文本。</summary>
+    /// <summary>DocFX 已提取的正文搜索文本，保留原始文本中的泛型等符号。</summary>
+    [JsonPropertyName("summary")]
+    public string? Summary { get; set; }
+
+    /// <summary>旧版索引的正文 / 关键字文本。</summary>
     [JsonPropertyName("keywords")]
     public string? Keywords { get; set; }
+
+    internal string? Content => !string.IsNullOrWhiteSpace(Summary)
+        ? Summary
+        : !string.IsNullOrWhiteSpace(Keywords)
+            ? Keywords
+            : null;
 }
