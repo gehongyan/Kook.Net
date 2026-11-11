@@ -7,4 +7,3 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("Kook.Net.Tests.Unit")]
 [assembly: InternalsVisibleTo("Kook.Net.Tests.Integration.Rest")]
 [assembly: InternalsVisibleTo("Kook.Net.Tests.NativeAot")]
-[assembly: InternalsVisibleTo("Kook.Net.Tests.NativeAot.Xunit")]

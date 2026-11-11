@@ -9,7 +9,7 @@ using Kook.Net.Converters;
 using Kook.Rest;
 using Xunit;
 
-namespace Kook.NativeAot.Xunit;
+namespace Kook.NativeAot;
 
 public class JsonProtocolTests
 {
