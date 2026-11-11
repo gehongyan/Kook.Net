@@ -1,26 +1,20 @@
 # xUnit NativeAOT tests
 
-This is an additional test project. `../Kook.Net.Tests.NativeAot/Program.cs` and
-its .NET 8/10 smoke coverage remain unchanged.
+This project complements the protocol smoke executable in `../Kook.Net.Tests.NativeAot`.
 
-The repository uses `xunit.v3` **4.0.0**, MTP v2 and a .NET 10 SDK. According to
+The repository uses `xunit.v3` **4.0.3**, MTP v2 and a .NET 11 SDK. According to
 [xUnit's NativeAOT guidance](https://xunit.net/docs/getting-started/v3/native-aot),
 NativeAOT requires the separate **`xunit.v3.aot`** package and **.NET 9 or later**.
-This project uses the same 4.0.0 release and targets .NET 9 and .NET 10. Its restored
-AOT runner graph selects `xunit.v3.core.aot.mtp-v2` and
-`xunit.v3.runner.inproc.console.aot` 4.0.0, plus MTP/Telemetry/TrxReport.Abstractions/
-Platform.MSBuild 2.3.3. Test discovery and inline theory rows use xUnit source
+This project uses `xunit.v3.aot` 4.0.3 and targets .NET 9, .NET 10, and .NET 11.
+Test discovery and inline theory rows use xUnit source
 generation, rather than assembly scanning or reflection roots.
 
 The project deliberately does not import `props/tests.props`: that file pulls in
 the reflection-mode xUnit package, NSubstitute, HangDump, the umbrella package and
 Experimental. Those dependencies are unnecessary for these protocol assertions;
 the new native executable references only the core Webhook dependency chain.
-The regular unit tests and their existing runner/dependencies are unchanged.
-This standalone project is intentionally outside the main solution: the existing
-solution-wide test command passes HangDump/reporting extension flags that this
-isolated runner does not import. Its dedicated CI job runs the published executable
-directly, and does not require a managed .NET 9 runtime on the .NET 10 CI image.
+This standalone project runs in a dedicated CI job that executes the published
+native binary directly.
 
 These tests adapt representative existing card/JSON checks with explicit
 assertions for nested cards, known/unknown embeds, custom embed/poke metadata,
@@ -37,16 +31,16 @@ prerequisites are the same as for the existing smoke project.
 
 ```powershell
 # Managed source-generated xUnit/MTP runner (not evidence of native execution):
-dotnet run --project test/Kook.Net.Tests.NativeAot.Xunit -f net10.0
+dotnet run --project test/Kook.Net.Tests.NativeAot.Xunit -f net11.0
 # Actual native publication and execution on Windows x64:
-dotnet publish test/Kook.Net.Tests.NativeAot.Xunit -f net10.0 -c Release -r win-x64 -p:NativeAotXunit=true -p:TrimmerSingleWarn=false -o artifacts/xunit-native
+dotnet publish test/Kook.Net.Tests.NativeAot.Xunit -f net11.0 -c Release -r win-x64 -p:NativeAotXunit=true -p:TrimmerSingleWarn=false -o artifacts/xunit-native
 ./artifacts/xunit-native/Kook.Net.Tests.NativeAot.Xunit.exe
-# Repeat with -f net9.0 for the minimum supported xUnit AOT target.
+# Repeat with -f net9.0 and -f net10.0 for the other CI targets.
 ```
 
 On Linux use `-r linux-x64` and execute the binary without `.exe`. The CI workflow
-adds a separate publish-and-execute xUnit matrix for Windows/Linux and .NET 9/10,
-leaving the existing .NET 8/10 smoke job in place. Nonzero native runner exit codes
+runs the xUnit suite on Windows and Linux for .NET 9, .NET 10, and .NET 11,
+alongside the .NET 8, .NET 10, and .NET 11 smoke job. Nonzero native runner exit codes
 fail CI. No new trim/AOT warning suppressions are introduced.
 
 `NativeAotXunit=true` enables `PublishAot` only inside this test project, avoiding
@@ -56,8 +50,8 @@ It also defines `EXPECT_NATIVE_AOT`; an executed xUnit fact then requires both
 All modes require JSON reflection to be disabled. Managed execution is separately
 identified and is never reported as a native pass.
 
-This is representative protocol coverage, not native certification of the entire
-488-test managed suite. .NET 8 is below xUnit's supported AOT target floor and is
+This suite covers representative protocol behavior. .NET 8 is below xUnit's
+supported AOT target floor and is
 still validated by the original smoke executable. Live KOOK connectivity, complete
 gateway/cache lifecycle, optional packages, macOS and ARM64 remain outside scope.
 

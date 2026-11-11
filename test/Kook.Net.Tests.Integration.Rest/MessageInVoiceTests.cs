@@ -10,7 +10,7 @@ namespace Kook;
 /// <summary>
 ///     Tests that channels can be created and modified.
 /// </summary>
-[CollectionDefinition(nameof(MessageInVoiceTests), DisableParallelization = true)]
+[Collection(typeof(RestIntegrationCollection))]
 [Trait("Category", "Integration.Rest")]
 public class MessageInVoiceTests : IClassFixture<RestChannelFixture>
 {

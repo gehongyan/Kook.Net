@@ -13,7 +13,7 @@ jobs:
     uses: ./.github/workflows/build-test.yml
     with:
       target: ${{ matrix.target }}
-      dotnet-version: 10.0.x
+      dotnet-version: 11.0.x
 
   publish_test_results:
     name: Publish Test Results
@@ -25,7 +25,7 @@ jobs:
     needs: build_and_test
     uses: ./.github/workflows/packages.yml
     with:
-      dotnet-version: 10.0.x
+      dotnet-version: 11.0.x
     secrets:
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
       GITHUB_PACKAGES_KEY: ${{ secrets.GITHUB_TOKEN }}

@@ -28,7 +28,7 @@ public class ProtooPeerTests
         FakeProtooTransport transport = new();
         using ProtooPeer peer = new(transport, heartbeatInterval: LongInterval);
 
-        await peer.ConnectAsync(new Uri("wss://example.invalid/gateway/v1"));
+        await peer.ConnectAsync(new Uri("wss://example.invalid/gateway/v1"), TestContext.Current.CancellationToken);
 
         Assert.Equal("protoo", transport.SubProtocol);
         Assert.Equal("wss://example.invalid/gateway/v1", transport.ConnectedUri!.ToString());
@@ -40,7 +40,7 @@ public class ProtooPeerTests
         FakeProtooTransport transport = new();
         using ProtooPeer peer = new(transport, heartbeatInterval: LongInterval);
 
-        Task<JsonElement?> pending = peer.RequestAsync("pauseProducer", new ProducerParams { ProducerId = "p1" });
+        Task<JsonElement?> pending = peer.RequestAsync("pauseProducer", new ProducerParams { ProducerId = "p1" }, cancellationToken: TestContext.Current.CancellationToken);
         long id = await WaitForRequestIdAsync(transport, "pauseProducer");
         await transport.ReceiveAsync($$$"""{"response":true,"id":{{{id}}},"ok":true,"data":{"x":"y"}}""");
 
@@ -54,7 +54,7 @@ public class ProtooPeerTests
         FakeProtooTransport transport = new();
         using ProtooPeer peer = new(transport, heartbeatInterval: LongInterval);
 
-        _ = peer.RequestAsync("closeProducer", new ProducerParams { ProducerId = "abc" });
+        _ = peer.RequestAsync("closeProducer", new ProducerParams { ProducerId = "abc" }, cancellationToken: TestContext.Current.CancellationToken);
         string frame = await transport.WaitForSentAsync();
 
         ProtooRequest request = Assert.IsType<ProtooRequest>(ProtooMessageCodec.Decode(frame));
@@ -67,7 +67,7 @@ public class ProtooPeerTests
         FakeProtooTransport transport = new();
         using ProtooPeer peer = new(transport, heartbeatInterval: LongInterval);
 
-        Task<JsonElement?> pending = peer.RequestAsync("initSpeaking");
+        Task<JsonElement?> pending = peer.RequestAsync("initSpeaking", cancellationToken: TestContext.Current.CancellationToken);
         long id = await WaitForRequestIdAsync(transport, "initSpeaking");
         await transport.ReceiveAsync($$"""{"response":true,"id":{{id}},"ok":false,"errorCode":403,"errorReason":"denied"}""");
 
@@ -83,7 +83,7 @@ public class ProtooPeerTests
         using ProtooPeer peer = new(transport, heartbeatInterval: LongInterval);
 
         await Assert.ThrowsAsync<TimeoutException>(() =>
-            peer.RequestAsync("quickJoin", timeout: TimeSpan.FromMilliseconds(50)));
+            peer.RequestAsync("quickJoin", timeout: TimeSpan.FromMilliseconds(50), cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -204,7 +204,7 @@ public class ProtooPeerTests
             return Task.CompletedTask;
         };
 
-        Task<JsonElement?> pending = peer.RequestAsync("quickJoin");
+        Task<JsonElement?> pending = peer.RequestAsync("quickJoin", cancellationToken: TestContext.Current.CancellationToken);
         await WaitForRequestIdAsync(transport, "quickJoin");
         await transport.CloseFromServerAsync(4000, "bye");
         await transport.CloseFromServerAsync(4000, "bye");
@@ -223,7 +223,7 @@ public class ProtooPeerTests
         using ProtooPeer peer = new(transport, heartbeatInterval: LongInterval);
         await transport.CloseFromServerAsync(1006, "abnormal");
 
-        await Assert.ThrowsAsync<ProtooException>(() => peer.RequestAsync("quickJoin"));
+        await Assert.ThrowsAsync<ProtooException>(() => peer.RequestAsync("quickJoin", cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -232,7 +232,7 @@ public class ProtooPeerTests
         FakeProtooTransport transport = new();
         using ProtooPeer peer = new(transport, heartbeatInterval: TimeSpan.FromMilliseconds(30));
 
-        await peer.ConnectAsync(new Uri("wss://example.invalid/"));
+        await peer.ConnectAsync(new Uri("wss://example.invalid/"), TestContext.Current.CancellationToken);
         string frame = await transport.WaitForSentAsync(text => text == "ping");
 
         // 心跳是纯文本，不是 protoo 的 JSON 帧

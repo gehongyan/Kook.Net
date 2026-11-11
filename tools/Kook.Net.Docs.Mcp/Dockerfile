@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:11.0 AS build
 WORKDIR /repo
 
 # 先还原（利用 Docker 层缓存）：只拷工程、中央包版本与 NuGet 源配置。
@@ -12,7 +12,7 @@ COPY ["tools/Kook.Net.Docs.Mcp/", "tools/Kook.Net.Docs.Mcp/"]
 RUN dotnet publish "tools/Kook.Net.Docs.Mcp/Kook.Net.Docs.Mcp.csproj" \
     -c Release -o /app/publish /p:UseAppHost=false
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:11.0 AS final
 WORKDIR /app
 
 # 运行配置。

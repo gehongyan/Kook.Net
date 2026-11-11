@@ -14,11 +14,11 @@ NuGet restore requires access to the configured feeds.
 
 ```sh
 # Managed execution with JSON reflection explicitly disabled:
-dotnet run --project test/Kook.Net.Tests.NativeAot -f net8.0
+dotnet run --project test/Kook.Net.Tests.NativeAot -f net11.0
 # Publish and run an actual native executable; use win-x64 on Windows:
-dotnet publish test/Kook.Net.Tests.NativeAot -f net8.0 -c Release -r linux-x64 -p:NativeAotSmoke=true -p:TrimmerSingleWarn=false -o artifacts/nativeaot
+dotnet publish test/Kook.Net.Tests.NativeAot -f net11.0 -c Release -r linux-x64 -p:NativeAotSmoke=true -p:TrimmerSingleWarn=false -o artifacts/nativeaot
 ./artifacts/nativeaot/Kook.Net.Tests.NativeAot
-# Repeat with -f net10.0 to verify the current main target.
+# Repeat with -f net8.0 and -f net10.0 for the other CI targets.
 # Existing regression tests:
 dotnet run --project test/Kook.Net.Tests.Unit
 # All retained library targets:
@@ -29,7 +29,7 @@ dotnet build src/Kook.Net.Webhook -c Release
 `-p:PublishAot=true` globally also affects referenced legacy target frameworks
 while restoring this multi-target repository and can produce NETSDK1207.
 The dedicated workflow publishes and executes the app on Windows and Linux for
-.NET 8 and .NET 10. This executable deliberately does not import the regular
+.NET 8, .NET 10, and .NET 11. This executable deliberately does not import the regular
 xUnit test props or reference the umbrella package and Commands framework.
 
 The smoke checks cover:
