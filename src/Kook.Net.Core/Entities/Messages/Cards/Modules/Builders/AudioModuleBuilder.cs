@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     用来构建 <see cref="AudioModuleBuilder"/> 模块的构建器。
 /// </summary>
-public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>, IEquatable<IModuleBuilder>
+public record AudioModuleBuilder : IModuleBuilder
 {
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Audio;
@@ -107,40 +107,4 @@ public class AudioModuleBuilder : IModuleBuilder, IEquatable<AudioModuleBuilder>
     /// <inheritdoc />
     [MemberNotNull(nameof(Source))]
     IModule IModuleBuilder.Build() => Build();
-
-    /// <summary>
-    ///     判定两个 <see cref="AudioModuleBuilder"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="AudioModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(AudioModuleBuilder? left, AudioModuleBuilder? right) =>
-        left?.Equals(right) ?? right is null;
-
-    /// <summary>
-    ///     判定两个 <see cref="AudioModuleBuilder"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="AudioModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(AudioModuleBuilder? left, AudioModuleBuilder? right) =>
-        !(left == right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is AudioModuleBuilder builder && Equals(builder);
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] AudioModuleBuilder? audioModuleBuilder)
-    {
-        if (audioModuleBuilder is null)
-            return false;
-
-        return Type == audioModuleBuilder.Type
-            && Source == audioModuleBuilder.Source
-            && Title == audioModuleBuilder.Title
-            && Cover == audioModuleBuilder.Cover;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => base.GetHashCode();
-
-    bool IEquatable<IModuleBuilder>.Equals([NotNullWhen(true)] IModuleBuilder? moduleBuilder) =>
-        Equals(moduleBuilder as AudioModuleBuilder);
 }

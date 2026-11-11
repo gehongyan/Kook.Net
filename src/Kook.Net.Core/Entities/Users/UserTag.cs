@@ -7,7 +7,7 @@ namespace Kook;
 ///     表示一个用户的标签。
 /// </summary>
 [DebuggerDisplay("{DebuggerDisplay,nq}")]
-public class UserTag : IEquatable<UserTag>
+public record UserTag
 {
     /// <summary>
     ///     获取此用户标签的颜色。
@@ -37,34 +37,4 @@ public class UserTag : IEquatable<UserTag>
     }
 
     private string DebuggerDisplay => Text;
-
-    #region IEquatable
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] UserTag? other)
-    {
-        if (ReferenceEquals(null, other))
-            return false;
-        if (ReferenceEquals(this, other))
-            return true;
-        return Text == other.Text;
-    }
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj)
-    {
-        if (ReferenceEquals(null, obj))
-            return false;
-        if (ReferenceEquals(this, obj))
-            return true;
-        if (obj.GetType() != GetType())
-            return false;
-
-        return Equals((UserTag)obj);
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => Text != null ? Text.GetHashCode() : 0;
-
-    #endregion
 }

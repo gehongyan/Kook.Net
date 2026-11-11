@@ -5,7 +5,7 @@ namespace Kook;
 /// <summary>
 ///     用来构建 <see cref="InviteModule"/> 模块的构建器。
 /// </summary>
-public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilder>, IEquatable<IModuleBuilder>
+public record InviteModuleBuilder : IModuleBuilder
 {
     /// <inheritdoc />
     public ModuleType Type => ModuleType.Invite;
@@ -68,37 +68,4 @@ public class InviteModuleBuilder : IModuleBuilder, IEquatable<InviteModuleBuilde
     /// <inheritdoc />
     [MemberNotNull(nameof(Code))]
     IModule IModuleBuilder.Build() => Build();
-
-    /// <summary>
-    ///     判定两个 <see cref="InviteModuleBuilder"/> 是否相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="InviteModuleBuilder"/> 相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator ==(InviteModuleBuilder? left, InviteModuleBuilder? right) =>
-        left?.Equals(right) ?? right is null;
-
-    /// <summary>
-    ///     判定两个 <see cref="InviteModuleBuilder"/> 是否不相等。
-    /// </summary>
-    /// <returns> 如果两个 <see cref="InviteModuleBuilder"/> 不相等，则为 <c>true</c>；否则为 <c>false</c>。 </returns>
-    public static bool operator !=(InviteModuleBuilder? left, InviteModuleBuilder? right) =>
-        !(left == right);
-
-    /// <inheritdoc />
-    public override bool Equals([NotNullWhen(true)] object? obj) =>
-        obj is InviteModuleBuilder builder && Equals(builder);
-
-    /// <inheritdoc />
-    public bool Equals([NotNullWhen(true)] InviteModuleBuilder? inviteModuleBuilder)
-    {
-        if (inviteModuleBuilder is null) return false;
-
-        return Type == inviteModuleBuilder.Type
-            && Code == inviteModuleBuilder.Code;
-    }
-
-    /// <inheritdoc />
-    public override int GetHashCode() => base.GetHashCode();
-
-    bool IEquatable<IModuleBuilder>.Equals([NotNullWhen(true)] IModuleBuilder? moduleBuilder) =>
-        Equals(moduleBuilder as InviteModuleBuilder);
 }

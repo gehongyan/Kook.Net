@@ -1,7 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Kook.API.Rest;
 using Kook.Rest.Extensions;
-using Kook.WebSocket;
 
 namespace Kook.Rest;
 
