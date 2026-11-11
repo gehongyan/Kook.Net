@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Kook;
 
-[CollectionDefinition(nameof(MessageTests), DisableParallelization = true)]
+[Collection(typeof(SocketIntegrationCollection))]
 [Trait("Category", "Integration.Socket")]
 public class ReactionTests : IClassFixture<SocketChannelFixture>, IClassFixture<ReactionTestFixture>
 {

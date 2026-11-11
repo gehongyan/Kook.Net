@@ -12,9 +12,10 @@ Kook.Net 通过 NuGet 分发，推荐通过 NuGet 包管理工具安装，
 
 Kook.Net 目前支持的目标框架包括
 
+- [.NET 11.0](https://dotnet.microsoft.com/download/dotnet/11.0)
+- [.NET 10.0](https://dotnet.microsoft.com/download/dotnet/10.0)
+- [.NET 9.0](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [.NET 7.0](https://dotnet.microsoft.com/download/dotnet/7.0)
-- [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0)
 - [.NET Standard 2.1](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-1)
 - [.NET Standard 2.0](https://learn.microsoft.com/dotnet/standard/net-standard?tabs=net-standard-2-0)
 - [.NET Framework 4.6.2](https://dotnet.microsoft.com/download/dotnet-framework/net462)
@@ -81,18 +82,18 @@ Kook.Net 目前支持的目标框架包括
 
 ### 使用 Visual Studio
 
-- [Visual Studio 2022](https://visualstudio.microsoft.com/zh-hans/vs/) 或更新版本。
-- [.NET 8 SDK]
+- [Visual Studio](https://visualstudio.microsoft.com/zh-hans/vs/)，请选择支持 .NET 11 SDK 的版本。
+- [.NET 11 SDK]
 
-安装 Visual Studio 期间需选择 .NET 8 工作负载。
+安装 Visual Studio 期间需选择“.NET 桌面开发”工作负载。
 
 ### 使用 JetBrains Rider
 
-- [JetBrains 2021.3](https://www.jetbrains.com.cn/rider/) 或更新版本。
-- [.NET 8 SDK]
+- [JetBrains Rider](https://www.jetbrains.com.cn/rider/)，请选择支持 .NET 11 SDK 的版本。
+- [.NET 11 SDK]
 
 ### 使用 Command Line
 
-* [.NET 8 SDK]
+* [.NET 11 SDK]
 
-[.NET 8 SDK]: https://dotnet.microsoft.com/download
+[.NET 11 SDK]: https://dotnet.microsoft.com/download/dotnet/11.0

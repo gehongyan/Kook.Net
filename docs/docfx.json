@@ -13,6 +13,9 @@
                     ]
                 }
             ],
+            "properties": {
+                "TargetFramework": "net11.0"
+            },
             "dest": "api"
         }
     ],

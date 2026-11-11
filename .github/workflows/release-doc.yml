@@ -17,7 +17,7 @@ jobs:
     uses: ./.github/workflows/build-test.yml
     with:
       target: ${{ matrix.target }}
-      dotnet-version: 10.0.x
+      dotnet-version: 11.0.x
 
   publish_test_results:
     name: Publish Test Results
@@ -29,7 +29,7 @@ jobs:
     needs: build_and_test
     uses: ./.github/workflows/doc.yml
     with:
-      dotnet-version: 10.0.x
+      dotnet-version: 11.0.x
     secrets:
       DOC_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
 
@@ -38,7 +38,7 @@ jobs:
     needs: call_doc
     uses: ./.github/workflows/docs-mcp.yml
     with:
-      dotnet-version: 10.0.x
+      dotnet-version: 11.0.x
     secrets:
       TCR_REGISTRY: ${{ secrets.TCR_REGISTRY }}
       TCR_NAMESPACE: ${{ secrets.TCR_NAMESPACE }}

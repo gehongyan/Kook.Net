@@ -2,6 +2,21 @@
 
 ---
 
+## v0.11.3 [2026-11-11]
+
+### Added
+
+- Added .NET 11 as a library target and upgraded the documentation, samples, and test baseline to .NET 11.
+- Enabled Runtime Async feature for the `net11.0` library target.
+
+### Changed
+
+- Updated NuGet dependencies and selected compatible versions of Microsoft.Extensions packages for each target framework.
+
+### Fixed
+
+- Fixed xUnit analyzer warnings and isolated CI test reports to prevent TRX file collisions.
+
 ## v0.11.2 [2026-10-20]
 
 ### Added
