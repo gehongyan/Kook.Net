@@ -11,7 +11,7 @@ using Xunit;
 namespace Kook;
 
 [TestCaseOrderer(typeof(PriorityOrderer))]
-[CollectionDefinition(nameof(MessageTests), DisableParallelization = true)]
+[Collection(typeof(SocketIntegrationCollection))]
 [Trait("Category", "Integration.Socket")]
 public class MessageTests : IClassFixture<SocketChannelFixture>, IClassFixture<MessageTestFixture>
 {

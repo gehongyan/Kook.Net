@@ -2,6 +2,11 @@
 
 ---
 
+## Unreleased
+
+- Added .NET 11 as a library target and upgraded the documentation, samples, and test baseline to .NET 11.
+- Enabled Runtime Async feature for the `net11.0` library target.
+
 ## v0.11.2 [2026-10-20]
 
 ### Added

@@ -54,7 +54,7 @@ public class WebRtcOpusStreamTests
         using WebRtcOpusEncodeStream encoder = new(sink, 32000, AudioApplication.Music, 30);
         byte[] pcm = CreateTone(5, 440);
 
-        await encoder.WriteAsync(pcm, 0, pcm.Length);
+        await encoder.WriteAsync(pcm, 0, pcm.Length, TestContext.Current.CancellationToken);
 
         Assert.Equal(5, sink.Writes.Count);
         Assert.All(sink.Writes, packet => Assert.InRange(packet.Length, 1, WebRtcAudioFormat.MaxPacketBytes));
@@ -70,7 +70,7 @@ public class WebRtcOpusStreamTests
         // 以不是整帧的块写入，应当只在凑满一帧时才编码
         int chunk = WebRtcAudioFormat.FrameBytes / 3 + 7;
         for (int offset = 0; offset < pcm.Length; offset += chunk)
-            await encoder.WriteAsync(pcm, offset, Math.Min(chunk, pcm.Length - offset));
+            await encoder.WriteAsync(pcm, offset, Math.Min(chunk, pcm.Length - offset), TestContext.Current.CancellationToken);
 
         Assert.Equal(2, sink.Writes.Count);
     }
@@ -83,7 +83,7 @@ public class WebRtcOpusStreamTests
         const int frames = 50;
         byte[] pcm = CreateTone(frames, 440);
 
-        await encoder.WriteAsync(pcm, 0, pcm.Length);
+        await encoder.WriteAsync(pcm, 0, pcm.Length, TestContext.Current.CancellationToken);
 
         long totalBytes = 0;
         foreach (byte[] packet in sink.Writes)
@@ -115,7 +115,7 @@ public class WebRtcOpusStreamTests
         CollectingStream encoded = new();
         using WebRtcOpusEncodeStream encoder = new(encoded, 64000, AudioApplication.Music, 0);
         byte[] pcm = CreateTone(10, 440);
-        await encoder.WriteAsync(pcm, 0, pcm.Length);
+        await encoder.WriteAsync(pcm, 0, pcm.Length, TestContext.Current.CancellationToken);
 
         CollectingStream decoded = new();
         using WebRtcOpusDecodeStream decoder = new(decoded);
@@ -123,7 +123,7 @@ public class WebRtcOpusStreamTests
         foreach (byte[] packet in encoded.Writes)
         {
             decoder.WriteHeader(sequence++, 0, false);
-            await decoder.WriteAsync(packet, 0, packet.Length);
+            await decoder.WriteAsync(packet, 0, packet.Length, TestContext.Current.CancellationToken);
         }
 
         Assert.Equal(encoded.Writes.Count, decoded.Writes.Count);
@@ -156,7 +156,7 @@ public class WebRtcOpusStreamTests
         CollectingStream decoded = new();
         using WebRtcOpusDecodeStream decoder = new(decoded);
         decoder.WriteHeader(1, 0, false);
-        await decoder.WriteAsync(packet, 0, length);
+        await decoder.WriteAsync(packet, 0, length, TestContext.Current.CancellationToken);
 
         byte[] frame = Assert.Single(decoded.Writes);
         // 60 毫秒的单声道包会被解码成 60 毫秒的双声道 PCM
@@ -168,7 +168,7 @@ public class WebRtcOpusStreamTests
     {
         using WebRtcOpusDecodeStream decoder = new(new CollectingStream());
 
-        await Assert.ThrowsAsync<InvalidOperationException>(() => decoder.WriteAsync(new byte[10], 0, 10));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => decoder.WriteAsync(new byte[10], 0, 10, TestContext.Current.CancellationToken));
     }
 
     [Fact]

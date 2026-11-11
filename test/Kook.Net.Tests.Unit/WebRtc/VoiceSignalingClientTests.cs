@@ -36,7 +36,7 @@ public class VoiceSignalingClientTests
         using VoiceSignalingClient _ = client;
         VoiceGatewayToken token = new("wss://example.invalid/gateway/v1?token=secret", null, null);
 
-        await client.ConnectAsync(token);
+        await client.ConnectAsync(token, TestContext.Current.CancellationToken);
 
         Assert.Equal("protoo", transport.SubProtocol);
         Assert.Equal("wss://example.invalid/gateway/v1?token=secret", transport.ConnectedUri!.ToString());
@@ -48,7 +48,7 @@ public class VoiceSignalingClientTests
         (VoiceSignalingClient client, FakeProtooTransport transport) = CreateClient();
         using VoiceSignalingClient _ = client;
 
-        Task<QuickJoinResponse> pending = client.QuickJoinAsync(new QuickJoinParams { ForceRelay = false });
+        Task<QuickJoinResponse> pending = client.QuickJoinAsync(new QuickJoinParams { ForceRelay = false }, TestContext.Current.CancellationToken);
         ProtooRequest request = await WaitForRequestAsync(transport, "quickJoin");
         Assert.Equal("webrtc", request.Data!.Value.GetProperty("transport").GetString());
         Assert.False(request.Data!.Value.GetProperty("forceTcp").GetBoolean());
@@ -75,9 +75,9 @@ public class VoiceSignalingClientTests
 
         foreach ((string method, Func<string, Task> call) in new (string, Func<string, Task>)[]
                  {
-                     ("pauseProducer", id => client.PauseProducerAsync(id)),
-                     ("resumeProducer", id => client.ResumeProducerAsync(id)),
-                     ("closeProducer", id => client.CloseProducerAsync(id))
+                     ("pauseProducer", id => client.PauseProducerAsync(id, TestContext.Current.CancellationToken)),
+                     ("resumeProducer", id => client.ResumeProducerAsync(id, TestContext.Current.CancellationToken)),
+                     ("closeProducer", id => client.CloseProducerAsync(id, TestContext.Current.CancellationToken))
                  })
         {
             Task pending = call("producer-1");

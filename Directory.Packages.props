@@ -5,35 +5,44 @@
     <NoWarn>$(NoWarn);NU1507</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="AspNet.Security.OAuth.Kook" Version="10.0.0" />
+    <PackageVersion Include="AspNet.Security.OAuth.Kook" Version="11.0.0" />
     <PackageVersion Include="Concentus" Version="2.2.2" />
-    <PackageVersion Include="Fluid.Core" Version="2.40.0" />
-    <PackageVersion Include="MassTransit" Version="8.5.10" />
+    <PackageVersion Include="Fluid.Core" Version="2.41.1" />
+    <PackageVersion Include="MassTransit" Version="8.5.12" />
     <PackageVersion Include="MassTransit.Extensions.DependencyInjection" Version="7.3.1" />
-    <PackageVersion Include="Meziantou.Polyfill" Version="1.0.165" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="10.0.12" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.12" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.12" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.12" />
-    <PackageVersion Include="Microsoft.Extensions.Http" Version="10.0.12" />
-    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.12" />
+    <PackageVersion Include="Meziantou.Polyfill" Version="1.0.171" />
     <PackageVersion Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.401" />
-    <PackageVersion Include="Microsoft.Testing.Extensions.HangDump" Version="2.4.1" />
-    <PackageVersion Include="ModelContextProtocol" Version="2.2.0" />
-    <PackageVersion Include="ModelContextProtocol.AspNetCore" Version="2.2.0" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub">
+      <Version>10.0.404</Version>
+      <Version Condition="'$(TargetFramework)' == 'net10.0' Or '$(TargetFramework)' == 'net11.0'">11.0.100</Version>
+    </PackageVersion>
+    <PackageVersion Include="Microsoft.Testing.Extensions.HangDump" Version="2.5.2" />
+    <PackageVersion Include="ModelContextProtocol" Version="2.4.0" />
+    <PackageVersion Include="ModelContextProtocol.AspNetCore" Version="2.4.0" />
     <PackageVersion Include="NSubstitute" Version="6.2.0" />
     <PackageVersion Include="Serilog" Version="4.4.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageVersion Include="Serilog.Extensions.Hosting" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
     <PackageVersion Include="SIPSorcery" Version="10.0.17" />
-    <PackageVersion Include="System.Collections.Immutable" Version="10.0.12" />
+    <PackageVersion Include="System.Collections.Immutable" Version="11.0.0" />
     <PackageVersion Include="System.Linq.Async" Version="7.0.1" />
-    <PackageVersion Include="System.Text.Json" Version="10.0.12" />
-    <PackageVersion Include="System.Threading.Channels" Version="10.0.12" />
-    <PackageVersion Include="xunit.v3" Version="4.0.0" />
-    <PackageVersion Include="YamlDotNet" Version="16.3.0" />
+    <PackageVersion Include="System.Text.Json" Version="11.0.0" />
+    <PackageVersion Include="System.Threading.Channels" Version="11.0.0" />
+    <PackageVersion Include="xunit.v3" Version="4.0.3" />
+    <PackageVersion Include="YamlDotNet" Version="18.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Extensions 11 ships .NET-specific assemblies for .NET 10 and later. -->
+    <PackageVersion Include="Microsoft.Extensions.Configuration;
+                             Microsoft.Extensions.DependencyInjection;
+                             Microsoft.Extensions.DependencyInjection.Abstractions;
+                             Microsoft.Extensions.Hosting;
+                             Microsoft.Extensions.Hosting.Abstractions;
+                             Microsoft.Extensions.Http;
+                             Microsoft.Extensions.Options.ConfigurationExtensions">
+      <Version>10.0.15</Version>
+      <Version Condition="'$(TargetFramework)' == 'net10.0' Or '$(TargetFramework)' == 'net11.0'">11.0.0</Version>
+    </PackageVersion>
   </ItemGroup>
 </Project>

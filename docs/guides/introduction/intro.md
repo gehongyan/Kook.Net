@@ -28,4 +28,4 @@ title: Kook.Net 简介
 - [C# 编程指南](https://docs.microsoft.com/zh-cn/dotnet/csharp/programming-guide/)
 - [C# 文档](https://docs.microsoft.com/zh-cn/dotnet/csharp/)
 - [C# 语言参考](https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/)
-- [.NET API](https://docs.microsoft.com/zh-cn/dotnet/api/?view=net-6.0)
+- [.NET API](https://docs.microsoft.com/zh-cn/dotnet/api/?view=net-11.0)

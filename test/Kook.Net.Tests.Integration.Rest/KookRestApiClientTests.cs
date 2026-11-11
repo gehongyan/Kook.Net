@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Kook;
 
-[CollectionDefinition(nameof(KookRestApiClientTests), DisableParallelization = true)]
+[Collection(typeof(RestIntegrationCollection))]
 [Trait("Category", "Integration.Rest")]
 public class KookRestApiClientTests : IClassFixture<KookRestClientFixture>, IAsyncDisposable
 {

@@ -40,12 +40,12 @@ jobs:
         run: dotnet build --no-restore
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal --filter-not-trait "Category=Integration.Socket" --filter-not-trait "Category=Integration.Rest" --hangdump --hangdump-timeout 15m --report-xunit-trx --report-xunit-trx-filename test-results.trx --ignore-exit-code 8
+        run: dotnet test --project test/Kook.Net.Tests.Unit --no-build --verbosity normal --results-directory test-results --hangdump --hangdump-timeout 15m --report-xunit-trx --report-xunit-trx-filename test-results.trx
 
       - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results-${{ inputs.target }}
-          path: '**/*.trx'
+          path: test-results/*.trx
           retention-days: 7
