@@ -11,4 +11,8 @@
     <ProjectReference Include="..\Kook.Net.Core\Kook.Net.Core.csproj" />
     <ProjectReference Include="..\Kook.Net.Rest\Kook.Net.Rest.csproj" />
   </ItemGroup>
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net')) AND '$(TargetFramework)' != 'net462' AND !$(TargetFramework.StartsWith('netstandard'))">
+    <IsAotCompatible>true</IsAotCompatible>
+    <IsTrimmable>true</IsTrimmable>
+  </PropertyGroup>
 </Project>

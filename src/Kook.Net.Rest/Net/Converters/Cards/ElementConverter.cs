@@ -2,6 +2,7 @@ using Kook.API;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using Kook.Rest;
 
 namespace Kook.Net.Converters;
 
@@ -14,33 +15,33 @@ internal class ElementConverter : JsonConverter<ElementBase>
         JsonNode? jsonNode = JsonNode.Parse(ref reader);
         return jsonNode?["type"]?.GetValue<string>() switch
         {
-            "plain-text" => JsonSerializer.Deserialize<API.PlainTextElement>(jsonNode.ToJsonString(), options),
-            "kmarkdown" => JsonSerializer.Deserialize<API.KMarkdownElement>(jsonNode.ToJsonString(), options),
-            "image" => JsonSerializer.Deserialize<API.ImageElement>(jsonNode.ToJsonString(), options),
-            "button" => JsonSerializer.Deserialize<API.ButtonElement>(jsonNode.ToJsonString(), options),
-            "paragraph" => JsonSerializer.Deserialize<API.ParagraphStruct>(jsonNode.ToJsonString(), options),
+            "plain-text" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.PlainTextElement>()),
+            "kmarkdown" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.KMarkdownElement>()),
+            "image" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.ImageElement>()),
+            "button" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.ButtonElement>()),
+            "paragraph" => JsonSerializer.Deserialize(jsonNode.ToJsonString(), options.GetTypedTypeInfo<API.ParagraphStruct>()),
             _ => throw new ArgumentOutOfRangeException(nameof(ElementType))
         };
     }
 
     public override void Write(Utf8JsonWriter writer, ElementBase value, JsonSerializerOptions options)
     {
-        switch (value.Type)
+        switch (value)
         {
-            case ElementType.PlainText:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.PlainTextElement, options));
+            case API.PlainTextElement { Type: ElementType.PlainText } plaintext:
+                writer.WriteRawValue(JsonSerializer.Serialize(plaintext, options.GetTypedTypeInfo<API.PlainTextElement>()));
                 break;
-            case ElementType.KMarkdown:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.KMarkdownElement, options));
+            case API.KMarkdownElement { Type: ElementType.KMarkdown } kMarkdown:
+                writer.WriteRawValue(JsonSerializer.Serialize(kMarkdown, options.GetTypedTypeInfo<API.KMarkdownElement>()));
                 break;
-            case ElementType.Image:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.ImageElement, options));
+            case API.ImageElement { Type: ElementType.Image } image:
+                writer.WriteRawValue(JsonSerializer.Serialize(image, options.GetTypedTypeInfo<API.ImageElement>()));
                 break;
-            case ElementType.Button:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.ButtonElement, options));
+            case API.ButtonElement { Type: ElementType.Button } button:
+                writer.WriteRawValue(JsonSerializer.Serialize(button, options.GetTypedTypeInfo<API.ButtonElement>()));
                 break;
-            case ElementType.Paragraph:
-                writer.WriteRawValue(JsonSerializer.Serialize(value as API.ParagraphStruct, options));
+            case API.ParagraphStruct { Type: ElementType.Paragraph } paragraph:
+                writer.WriteRawValue(JsonSerializer.Serialize(paragraph, options.GetTypedTypeInfo<API.ParagraphStruct>()));
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(ElementType));

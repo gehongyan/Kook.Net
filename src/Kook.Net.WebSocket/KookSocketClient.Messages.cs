@@ -4,7 +4,6 @@ using System.Text.Json;
 using Kook.API;
 using Kook.API.Gateway;
 using Kook.API.Rest;
-using Kook.Audio;
 using Kook.Net;
 using Kook.Rest;
 
@@ -2100,14 +2099,14 @@ public partial class KookSocketClient
 
     private T? DeserializePayload<T>(JsonElement jsonElement)
     {
-        if (jsonElement.Deserialize<T>(_serializerOptions) is { } x) return x;
+        if (jsonElement.Deserialize(_serializerOptions.GetTypedTypeInfo<T>()) is { } x) return x;
         string payloadJson = SerializePayload(jsonElement);
         _gatewayLogger.ErrorAsync($"Failed to deserialize JSON element to type {typeof(T).Name}: {payloadJson}");
         return default;
     }
 
-    private string SerializePayload(object jsonElement) =>
-        JsonSerializer.Serialize(jsonElement, _serializerOptions);
+    private string SerializePayload<T>(T jsonElement) =>
+        JsonSerializer.Serialize(jsonElement, _serializerOptions.GetTypedTypeInfo<T>());
 
     #endregion
 

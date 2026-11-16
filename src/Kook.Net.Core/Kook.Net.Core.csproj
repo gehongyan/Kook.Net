@@ -29,4 +29,8 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
     <PackageReference Include="System.Linq.Async" />
   </ItemGroup>
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net')) AND '$(TargetFramework)' != 'net462' AND !$(TargetFramework.StartsWith('netstandard'))">
+    <IsAotCompatible>true</IsAotCompatible>
+    <IsTrimmable>true</IsTrimmable>
+  </PropertyGroup>
 </Project>
