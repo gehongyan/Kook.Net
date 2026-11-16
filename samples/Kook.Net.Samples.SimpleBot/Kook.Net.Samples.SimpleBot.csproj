@@ -2,8 +2,18 @@
 
   <Import Project="../../props/samples.props"/>
 
+  <!-- Keep NativeAOT scoped to this executable, not the referenced legacy targets. -->
+  <PropertyGroup Condition="'$(SimpleBotNativeAot)' == 'true'">
+    <PublishAot>true</PublishAot>
+    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+  </PropertyGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Kook.Net.Experimental\Kook.Net.Experimental.csproj" />
+    <!-- Preserve the managed sample's references; limit the native publish graph. -->
+    <ProjectReference Remove="..\..\src\Kook.Net\Kook.Net.csproj" Condition="'$(SimpleBotNativeAot)' == 'true'" />
+    <ProjectReference Include="..\..\src\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj" Condition="'$(SimpleBotNativeAot)' == 'true'" />
+    <ProjectReference Include="..\..\src\Kook.Net.Experimental\Kook.Net.Experimental.csproj" Condition="'$(SimpleBotNativeAot)' != 'true'" />
     <ProjectReference Include="..\..\src\Kook.Net.MessageQueue.InMemory\Kook.Net.MessageQueue.InMemory.csproj" />
   </ItemGroup>
 
