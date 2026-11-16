@@ -126,6 +126,20 @@ public class JsonProtocolTests
         Assert.Equal(API.Rest.SortMode.Ascending, page.PageSortInfo.SortMode);
     }
 
+    [Fact]
+    public void ClosedRestCollectionResponsesHaveGeneratedMetadata()
+    {
+        JsonSerializerOptions options = ProtocolOptions();
+        Assert.Empty(JsonSerializer.Deserialize("[]", options.GetTypedTypeInfo<IReadOnlyCollection<API.User>>())!);
+        Assert.Empty(JsonSerializer.Deserialize("[]", options.GetTypedTypeInfo<IReadOnlyCollection<ReactionUserResponse>>())!);
+        Assert.Empty(JsonSerializer.Deserialize("[]", options.GetTypedTypeInfo<IReadOnlyCollection<API.Ban>>())!);
+        PagedResponseBase<JoinedVoiceChannel>? page = JsonSerializer.Deserialize(
+            "{\"items\":[],\"meta\":{\"page\":1,\"page_total\":1,\"page_size\":50,\"total\":0}}",
+            options.GetTypedTypeInfo<PagedResponseBase<JoinedVoiceChannel>>());
+        Assert.NotNull(page);
+        Assert.Empty(page.Items);
+    }
+
     [Theory]
     [InlineData("[]")]
     [InlineData("null")]

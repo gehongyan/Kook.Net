@@ -179,7 +179,12 @@ namespace Kook.Net.Contexts;
 [JsonSerializable(typeof(Kook.API.Rest.UnravelRelationParams))]
 [JsonSerializable(typeof(Kook.API.Rest.UpdateIntimacyValueParams))]
 [JsonSerializable(typeof(Kook.API.Rest.UserConfig))]
+// Closed REST response roots (element registrations do not cover collection metadata)
+[JsonSerializable(typeof(IReadOnlyCollection<Kook.API.User>))]
+[JsonSerializable(typeof(IReadOnlyCollection<Kook.API.Rest.ReactionUserResponse>))]
+[JsonSerializable(typeof(IReadOnlyCollection<Kook.API.Ban>))]
 // Pages Models
+[JsonSerializable(typeof(Kook.API.Rest.PagedResponseBase<Kook.API.Rest.JoinedVoiceChannel>))]
 [JsonSerializable(typeof(Kook.API.Rest.PagedResponseBase<Kook.API.Channel>))]
 [JsonSerializable(typeof(Kook.API.Rest.PagedResponseBase<Kook.API.Emoji>))]
 [JsonSerializable(typeof(Kook.API.Rest.PagedResponseBase<Kook.API.ExtendedThreadPost>))]
