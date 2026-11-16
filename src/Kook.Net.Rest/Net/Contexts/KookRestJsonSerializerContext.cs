@@ -210,6 +210,7 @@ namespace Kook.Net.Contexts;
 [JsonSerializable(typeof(Kook.API.Rest.PageMeta), TypeInfoPropertyName = "ProtocolPageMeta")]
 [JsonSerializable(typeof(Kook.API.Rest.PageSortInfo), TypeInfoPropertyName = "ProtocolPageSortInfo")]
 [JsonSerializable(typeof(IEnumerable<Kook.API.CardBase>))]
+[JsonSerializable(typeof(object))]
 [JsonSerializable(typeof(string))]
 [JsonSerializable(typeof(System.Text.Json.JsonElement))]
 [JsonSerializable(typeof(System.Text.Json.JsonElement?))]
