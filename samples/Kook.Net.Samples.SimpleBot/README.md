@@ -1,7 +1,9 @@
 # SimpleBot NativeAOT 发布
 
 此示例是实际的 WebSocket Bot，登录后可响应 `!ping` 并处理卡片按钮。
-NativeAOT 模式直接引用 WebSocket 与 InMemory 消息队列，不引入未使用的 Commands、Pipe 或 Experimental；普通托管模式的依赖保持不变。
+托管与 NativeAOT 模式均固定直接引用 `Kook.Net.WebSocket` 和 `Kook.Net.Experimental`，不按发布模式切换引用。示例移除了自定义 InMemory 缓冲队列配置，使用客户端默认的同步即时队列。
+
+注意：这里只移除 `samples.props` 导入的直接 `Kook.Net` 引用；Experimental 目前仍传递引用 umbrella 包及 Commands、Pipe 等组件。保留 Experimental 不代表这些组件已获得 NativeAOT 兼容保证，应检查最终应用发布时的全部诊断。
 普通 `dotnet run` 保持托管运行；`SimpleBotNativeAot=true` 仅为此可执行项目启用 NativeAOT。
 不要把 `PublishAot=true` 全局传给多目标框架的整个仓库。
 

@@ -10,11 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Preserve the managed sample's references; limit the native publish graph. -->
-    <ProjectReference Remove="..\..\src\Kook.Net\Kook.Net.csproj" Condition="'$(SimpleBotNativeAot)' == 'true'" />
-    <ProjectReference Include="..\..\src\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj" Condition="'$(SimpleBotNativeAot)' == 'true'" />
-    <ProjectReference Include="..\..\src\Kook.Net.Experimental\Kook.Net.Experimental.csproj" Condition="'$(SimpleBotNativeAot)' != 'true'" />
-    <ProjectReference Include="..\..\src\Kook.Net.MessageQueue.InMemory\Kook.Net.MessageQueue.InMemory.csproj" />
+    <!-- Replace the umbrella reference imported by samples.props in every mode. -->
+    <ProjectReference Remove="..\..\src\Kook.Net\Kook.Net.csproj" />
+    <ProjectReference Include="..\..\src\Kook.Net.WebSocket\Kook.Net.WebSocket.csproj" />
+    <ProjectReference Include="..\..\src\Kook.Net.Experimental\Kook.Net.Experimental.csproj" />
   </ItemGroup>
 
 </Project>

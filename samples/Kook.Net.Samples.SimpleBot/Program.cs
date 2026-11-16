@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Kook;
-using Kook.Net.Queue.InMemory;
 using Kook.WebSocket;
 
 // 这是一个使用 Kook.Net 的 C# 简单示例
@@ -26,13 +25,7 @@ KookSocketConfig config = new()
     AutoUpdateRolePositions = true,
     StartupCacheFetchMode = StartupCacheFetchMode.Synchronous,
     LargeNumberOfGuildsThreshold = 50,
-    AutoLogoutBeforeLogin = true,
-    MessageQueueProvider = InMemoryMessageQueueProvider.Create(new InMemoryMessageQueueOptions
-    {
-        EnableBuffering = true,
-        BufferCapacity = 3,
-        BufferOverflowStrategy = BufferOverflowStrategy.DropIncoming
-    })
+    AutoLogoutBeforeLogin = true
 };
 
 // 在使用完 Kook.Net 的客户端后，建议在应用程序的生命周期结束时进行 Dispose 操作
