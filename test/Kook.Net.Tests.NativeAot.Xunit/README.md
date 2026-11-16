@@ -1,16 +1,15 @@
 # xUnit NativeAOT tests
 
-This is an additional test project. `../Kook.Net.Tests.NativeAot/Program.cs` and
-its .NET 8/10 smoke coverage remain unchanged.
+This is an additional test project. `../Kook.Net.Tests.NativeAot/Program.cs` is
+retained with its existing smoke coverage; stub parameter names now match their interfaces.
 
-The repository uses `xunit.v3` **4.0.0**, MTP v2 and a .NET 10 SDK. According to
+The repository uses `xunit.v3` **4.0.3**, MTP v2 and a .NET 11 SDK. According to
 [xUnit's NativeAOT guidance](https://xunit.net/docs/getting-started/v3/native-aot),
 NativeAOT requires the separate **`xunit.v3.aot`** package and **.NET 9 or later**.
-This project uses the same 4.0.0 release and targets .NET 9 and .NET 10. Its restored
-AOT runner graph selects `xunit.v3.core.aot.mtp-v2` and
-`xunit.v3.runner.inproc.console.aot` 4.0.0, plus MTP/Telemetry/TrxReport.Abstractions/
-Platform.MSBuild 2.3.3. Test discovery and inline theory rows use xUnit source
-generation, rather than assembly scanning or reflection roots.
+This project uses the matching 4.0.3 release and targets .NET 9, .NET 10 and .NET 11.
+Test discovery and inline theory rows use xUnit source generation, rather than
+assembly scanning or reflection roots. The dependency versions in the historical
+validation below describe that run, not the updated dependency graph.
 
 The project deliberately does not import `props/tests.props`: that file pulls in
 the reflection-mode xUnit package, NSubstitute, HangDump, the umbrella package and
@@ -20,7 +19,7 @@ The regular unit tests and their existing runner/dependencies are unchanged.
 This standalone project is intentionally outside the main solution: the existing
 solution-wide test command passes HangDump/reporting extension flags that this
 isolated runner does not import. Its dedicated CI job runs the published executable
-directly, and does not require a managed .NET 9 runtime on the .NET 10 CI image.
+directly, and does not require a managed .NET 9 runtime on the .NET 11 CI image.
 
 These tests adapt representative existing card/JSON checks with explicit
 assertions for nested cards, known/unknown embeds, custom embed/poke metadata,
@@ -45,8 +44,8 @@ dotnet publish test/Kook.Net.Tests.NativeAot.Xunit -f net10.0 -c Release -r win-
 ```
 
 On Linux use `-r linux-x64` and execute the binary without `.exe`. The CI workflow
-adds a separate publish-and-execute xUnit matrix for Windows/Linux and .NET 9/10,
-leaving the existing .NET 8/10 smoke job in place. Nonzero native runner exit codes
+adds a separate publish-and-execute xUnit matrix for Windows/Linux and .NET 9/10/11,
+leaving the existing .NET 8/10/11 smoke job in place. Nonzero native runner exit codes
 fail CI. No new trim/AOT warning suppressions are introduced.
 
 `NativeAotXunit=true` enables `PublishAot` only inside this test project, avoiding
@@ -80,7 +79,8 @@ runs execute `RuntimeUsesExpectedExecutionMode`, including its no-dynamic-code
 assertions. The .NET 8 smoke row above is explicitly a managed regression run;
 its earlier native validation remains separate.
 
-Original `test/Kook.Net.Tests.NativeAot/Program.cs` SHA-256 before and after:
+At the original 2026-11-10 validation, `test/Kook.Net.Tests.NativeAot/Program.cs`
+was unchanged with SHA-256:
 `0BE6883FB6BBDFD2D9B3A7D5EA26878D02F0B1FC3B2977C63021B3DE585CFFBA`.
 
 Linux CI is added but has not been executed locally. macOS, ARM64, live KOOK,

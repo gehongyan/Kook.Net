@@ -195,11 +195,11 @@ internal sealed class StubSocket : IWebSocketClient
     public Task EmitText(string text) => TextMessage!(text);
     public Task EmitBinary(byte[] bytes) => BinaryMessage!(bytes, 0, bytes.Length);
     public void SetHeader(string key, string value) { }
-    public void SetKeepAliveInterval(TimeSpan interval) { }
-    public void SetCancellationToken(CancellationToken token) { }
+    public void SetKeepAliveInterval(TimeSpan keepAliveInterval) { }
+    public void SetCancellationToken(CancellationToken cancellationToken) { }
     public Task ConnectAsync(string host) => Task.CompletedTask;
     public Task DisconnectAsync(int closeCode = 1000) => Task.CompletedTask;
-    public Task SendAsync(byte[] bytes, int index, int count, bool isText) { LastSent = Encoding.UTF8.GetString(bytes, index, count); return Task.CompletedTask; }
+    public Task SendAsync(byte[] data, int index, int count, bool isText) { LastSent = Encoding.UTF8.GetString(data, index, count); return Task.CompletedTask; }
     public void Dispose() { }
 }
 internal sealed class StubWebhook : IWebhookClient
@@ -207,7 +207,7 @@ internal sealed class StubWebhook : IWebhookClient
     public event Func<byte[], int, int, Task<string?>>? BinaryMessage;
     public event Func<string, Task<string?>>? TextMessage;
     public event Func<Exception, Task>? Closed { add { } remove { } }
-    public Task<string?> HandleTextMessageAsync(string text) => TextMessage!(text);
-    public Task<string?> HandleBinaryMessageAsync(byte[] bytes, int index, int count) => BinaryMessage!(bytes, index, count);
+    public Task<string?> HandleTextMessageAsync(string requestBody) => TextMessage!(requestBody);
+    public Task<string?> HandleBinaryMessageAsync(byte[] data, int index, int count) => BinaryMessage!(data, index, count);
     public void Dispose() { }
 }

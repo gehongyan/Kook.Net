@@ -7,7 +7,7 @@ on:
       dotnet-version:
         description: '.NET version'
         required: false
-        default: 10.0.x
+        default: 11.0.x
         type: string
     secrets:
       TCR_REGISTRY:
@@ -28,7 +28,7 @@ on:
         required: false
 
 env:
-  DOTNET_VERSION: ${{ inputs.dotnet-version || '10.0.x' }}
+  DOTNET_VERSION: ${{ inputs.dotnet-version || '11.0.x' }}
   IMAGE_NAME: kook-net-docs-mcp
 
 jobs:
